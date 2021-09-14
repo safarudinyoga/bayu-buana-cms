@@ -60,7 +60,7 @@ berisi konfigurasi yang berkaitan dengan API.
 
 ### ***\*redux\****
 
-berisi konfigurasi untuk state management di react.
+berisi konfigurasi untuk state management di react. folder actions untuk koneksi ke api, reducers untuk membuat reducer, store untuk mendaftarkan reducers
 
 ### ***\*views\****
 
