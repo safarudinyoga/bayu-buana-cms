@@ -18,7 +18,7 @@ export default function BreadCrummb({ data }) {
 								{location.pathname === item.pageHref ? (
 									item.pageTitle
 								) : (
-									<Button type="link" href={item.pageHref}>
+									<Button type="link" linkHref={item.pageHref}>
 										{item.pageTitle}
 									</Button>
 								)}

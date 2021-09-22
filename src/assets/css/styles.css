@@ -8,6 +8,9 @@
 .logo {
 	width: 150px;
 }
+.dropdown-toggle::after {
+	display: none !important;
+}
 /* // Small devices (landscape phones, 576px and up) */
 @media (min-width: 576px) {
 	.display-bar {
