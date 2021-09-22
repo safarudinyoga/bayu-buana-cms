@@ -1,13 +1,9 @@
-.m-content {
-	margin-top: 80px !important;
-	margin-left: 250px !important;
-}
-.h-screen {
+.leftBar {
+	position: fixed;
 	height: 100vh;
+	z-index: 30;
 }
-.logo {
-	width: 150px;
-}
+
 /* // Small devices (landscape phones, 576px and up) */
 @media (min-width: 576px) {
 	.display-bar {
