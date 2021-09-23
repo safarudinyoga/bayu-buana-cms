@@ -3,13 +3,16 @@ import { Bookmark, Home, Storefront } from '@material-ui/icons';
 const useStyles = makeStyles((theme) => ({
 	container: {
 		height: '100vh',
-		color: 'white',
+		backgroundColor: 'white',
+		color: '#555',
+		border: '1px solid #ece7e7',
+		width: '210px',
+		position: 'fixed',
 		paddingTop: theme.spacing(10),
-		backgroundColor: theme.palette.primary.main,
-		[theme.breakpoints.up('sm')]: {
-			backgroundColor: 'white',
-			color: '#555',
-			border: '1px solid #ece7e7',
+		[theme.breakpoints.down('sm')]: {
+			color: 'white',
+			backgroundColor: theme.palette.primary.main,
+			width: '70px',
 		},
 	},
 	item: {
