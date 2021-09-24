@@ -1,18 +1,31 @@
-import { Container, makeStyles, Typography } from '@material-ui/core';
+import { Container, Grid, makeStyles, Typography } from '@material-ui/core';
 import { Bookmark, Home, Storefront } from '@material-ui/icons';
 const useStyles = makeStyles((theme) => ({
-	container: {
+	containerGrid: {
 		height: '100vh',
+		width: '100%',
 		backgroundColor: 'white',
 		color: '#555',
 		border: '1px solid #ece7e7',
-		width: '210px',
-		position: 'fixed',
 		paddingTop: theme.spacing(10),
+		position: 'fixed',
 		[theme.breakpoints.down('sm')]: {
 			color: 'white',
 			backgroundColor: theme.palette.primary.main,
-			width: '70px',
+			position: 'fixed',
+		},
+	},
+	divGrid: {
+		width: '100%',
+		paddingLeft: '16px',
+		paddingRight: '16px',
+		[theme.breakpoints.down('sm')]: {
+			display: 'flex',
+			flexDirection: 'column',
+			alignItems: 'center',
+
+			paddingLeft: '0px',
+			paddingRight: '0px',
 		},
 	},
 	item: {
@@ -40,20 +53,22 @@ const useStyles = makeStyles((theme) => ({
 function Leftbar() {
 	const classes = useStyles();
 	return (
-		<Container className={classes.container}>
-			<div className={classes.item}>
-				<Home className={classes.icon} />
-				<Typography className={classes.text}>Home</Typography>
+		<Grid item sm={1} xs={2} md={2} className={classes.containerGrid}>
+			<div className={classes.divGrid}>
+				<div className={classes.item}>
+					<Home className={classes.icon} />
+					<Typography className={classes.text}>Home</Typography>
+				</div>
+				<div className={classes.item}>
+					<Bookmark className={classes.icon} />
+					<Typography className={classes.text}>Collections</Typography>
+				</div>
+				<div className={classes.item}>
+					<Storefront className={classes.icon} />
+					<Typography className={classes.text}>Market</Typography>
+				</div>
 			</div>
-			<div className={classes.item}>
-				<Bookmark className={classes.icon} />
-				<Typography className={classes.text}>Collections</Typography>
-			</div>
-			<div className={classes.item}>
-				<Storefront className={classes.icon} />
-				<Typography className={classes.text}>Market</Typography>
-			</div>
-		</Container>
+		</Grid>
 	);
 }
 
