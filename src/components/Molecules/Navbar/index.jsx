@@ -9,6 +9,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'space-between',
   },
   logoLg: {
+    marginLeft: '75px',
     display: 'block',
     width: 150,
     // tidak berlaku di sm

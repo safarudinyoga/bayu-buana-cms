@@ -7,7 +7,7 @@ function DekstopLayout({ children }) {
     <>
       <Navbar />
       <Grid container>
-        <Grid item sm={2} xs={2}>
+        <Grid item sm={1} xs={1}>
           <Leftbar />
         </Grid>
         <Grid item sm={10} xs={10}>

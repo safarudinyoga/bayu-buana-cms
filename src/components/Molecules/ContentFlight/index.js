@@ -96,6 +96,18 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     backgroundColor: theme.palette.background.paper,
   },
+  appBar: {
+    backgroundColor: '#f5f5f5',
+  },
+  tab: {
+    '&:focus': {
+      borderTop: '3px solid white',
+      backgroundColor: '#f1f1f1',
+    },
+    boxShadow: '4px 0 8px #00000029;',
+    flexDirection: 'row',
+    color: '#333',
+  },
 }));
 
 function Content() {
@@ -122,19 +134,30 @@ function Content() {
       </div>
       <div className={classes.containerTable}>
         <div className={classes.rootTab}>
-          <AppBar position="static">
+          <AppBar className={classes.appBar} position="static">
             <Tabs
               value={value}
               onChange={handleChange}
               aria-label="simple tabs example"
             >
               <Tab
+                className={classes.tab}
                 icon={<FlightTakeoff />}
                 label="Flight"
                 {...a11yProps(0)}
-              ></Tab>
-              <Tab icon={<Hotel />} label="Hotel" {...a11yProps(1)} />
-              <Tab icon={<Chat />} label="Other" {...a11yProps(2)} />
+              />
+              <Tab
+                className={classes.tab}
+                icon={<Hotel />}
+                label="Hotel"
+                {...a11yProps(1)}
+              />
+              <Tab
+                className={classes.tab}
+                icon={<Chat />}
+                label="Other"
+                {...a11yProps(2)}
+              />
             </Tabs>
           </AppBar>
           <TabPanel value={value} index={0}>
