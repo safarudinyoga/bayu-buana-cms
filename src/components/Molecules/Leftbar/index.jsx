@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
-import { Container, Grid, makeStyles, Typography } from '@material-ui/core';
-import { Bookmark, Home, Storefront } from '@material-ui/icons';
+import { Grid, makeStyles, Typography } from '@material-ui/core';
+import { Storefront } from '@material-ui/icons';
 import useOnClickOutside from '../../../hooks/useOnClickOutside';
 import HomeIcon from '../../../assets/icons/home-run.svg';
 import { colors } from '../../../utils/colors';

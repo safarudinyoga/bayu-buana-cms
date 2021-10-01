@@ -4,14 +4,14 @@ import {
   Link,
   makeStyles,
   Typography,
-  AppBar,
-  Tabs,
-  Tab,
   Box,
 } from '@material-ui/core';
 import PropTypes from 'prop-types';
-import { Chat, FlightTakeoff, Hotel } from '@material-ui/icons';
 import Uitable from '../../Atoms/UItable';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import UiTableDekstop from './dekstop/UiTableDekstop';
+import UiTableMobile from './mobile/UiTableMobile';
+
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -47,6 +47,14 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(11),
     marginRight: theme.spacing(7),
     marginLeft: theme.spacing(3),
+    [theme.breakpoints.down('sm')]: {
+      display: 'flex',
+      flexDirection: 'column',
+      paddingTop: theme.spacing(11),
+      marginRight: theme.spacing(4),
+      marginLeft: theme.spacing(4),
+      justifyContent: 'center',
+    },
   },
   titleBread: {
     [theme.breakpoints.down('sm')]: {
@@ -60,6 +68,10 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(6),
     border: '0.5px solid #E6E6E6',
     boxShadow: '2px 2px #F0F0F0',
+    [theme.breakpoints.down('sm')]: {
+      border: 'none',
+      boxShadow: '0 0 #F0F0F0',
+    },
   },
   // hapus
   HeaderTable: {
@@ -82,6 +94,15 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 650,
   },
   containerBodyTable: {
+    [theme.breakpoints.down('sm')]: {
+      border: '0.5px solid #E6E6E6',
+      boxShadow: '2px 2px #F0F0F0',
+      paddingTop: theme.spacing(4),
+      paddingLeft: theme.spacing(2),
+      paddingRight: theme.spacing(2),
+      marginLeft: theme.spacing(-3),
+      marginRight: theme.spacing(-3)
+    },
     [theme.breakpoints.up('sm')]: {
       margin: theme.spacing(0),
     },
@@ -95,6 +116,10 @@ const useStyles = makeStyles((theme) => ({
   rootTab: {
     flexGrow: 1,
     backgroundColor: theme.palette.background.paper,
+    [theme.breakpoints.down('sm')]: {
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
   },
   appBar: {
     backgroundColor: '#f5f5f5',
@@ -108,12 +133,29 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'row',
     color: '#333',
   },
+  tabCircle: {
+    display: 'flex',
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    borderColor: '#FDC300',
+    borderStyle: 'solid',
+    borderWidth: '3px',
+  },
+  tabsMobile: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    border: 'none',
+    boxShadow: '2px 2px #F0F0F0',
+    padding: 5
+  },
 }));
 
 function Content() {
   const classes = useStyles();
   const [value, setValue] = useState(0);
-
+  const dekstop = useMediaQuery('(min-width:600px)');
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -134,47 +176,27 @@ function Content() {
       </div>
       <div className={classes.containerTable}>
         <div className={classes.rootTab}>
-          <AppBar className={classes.appBar} position="static">
-            <Tabs
+        {dekstop ? (
+            <UiTableDekstop
               value={value}
-              onChange={handleChange}
-              aria-label="simple tabs example"
-            >
-              <Tab
-                className={classes.tab}
-                icon={<FlightTakeoff />}
-                label="Flight"
-                {...a11yProps(0)}
-              />
-              <Tab
-                className={classes.tab}
-                icon={<Hotel />}
-                label="Hotel"
-                {...a11yProps(1)}
-              />
-              <Tab
-                className={classes.tab}
-                icon={<Chat />}
-                label="Other"
-                {...a11yProps(2)}
-              />
-            </Tabs>
-          </AppBar>
-          <TabPanel value={value} index={0}>
-            <div className={classes.containerBodyTable}>
-              <Uitable />
-            </div>
-          </TabPanel>
-          <TabPanel value={value} index={1}>
-            <div className={classes.containerBodyTable}>
-              <Uitable />
-            </div>
-          </TabPanel>
-          <TabPanel value={value} index={2}>
-            <div className={classes.containerBodyTable}>
-              <Uitable />
-            </div>
-          </TabPanel>
+              TabPanel={TabPanel}
+              Uitable={Uitable}
+              handleChange={handleChange}
+              a11yProps={a11yProps}
+              classes={classes}
+              dekstop={dekstop}
+            />
+          ) : (
+            <UiTableMobile
+              value={value}
+              TabPanel={TabPanel}
+              Uitable={Uitable}
+              handleChange={handleChange}
+              a11yProps={a11yProps}
+              classes={classes}
+              dekstop={dekstop}
+            />
+          )}
         </div>
       </div>
     </div>

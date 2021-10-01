@@ -16,7 +16,7 @@ function MobileLayout({ children }) {
         <Grid item sm={2} xs={2}>
           {openSidebar ? <Leftbar /> : null}
         </Grid>
-        <Grid item sm={10} xs={10}>
+        <Grid item sm={12} xs={12}>
           {children}
         </Grid>
       </Grid>
