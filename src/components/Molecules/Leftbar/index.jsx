@@ -1,22 +1,29 @@
-import React, { useState, useRef } from 'react';
-import { Container, Grid, makeStyles, Typography } from '@material-ui/core';
-import { Bookmark, Home, Storefront } from '@material-ui/icons';
+import React, { useState, useRef, useEffect } from 'react';
+import { Grid, makeStyles, Typography } from '@material-ui/core';
+import { Storefront } from '@material-ui/icons';
 import useOnClickOutside from '../../../hooks/useOnClickOutside';
 import HomeIcon from '../../../assets/icons/home-run.svg';
 import { colors } from '../../../utils/colors';
 
 function Leftbar() {
+  const [closelistBar, setCloseListBar] = useState(false);
   const [showLeftBar, setShowLeftBar] = useState(false);
-  console.log(showLeftBar);
+
   const onShowLeftBar = useRef();
-  useOnClickOutside(onShowLeftBar, () => setShowLeftBar(false));
+
+  useOnClickOutside(
+    onShowLeftBar,
+    () => setCloseListBar(false) || setShowLeftBar(false),
+  );
+  // useOnClickOutside(onShowListBar, () => setListBar(false));
 
   // styling
   const useStyles = makeStyles((theme) => ({
+    // container
     containerGrid: {
       top: '-55px',
       zIndex: 9999,
-      height: '100vh',
+      height: '150vh',
       width: `${showLeftBar ? '280px' : '75px'}`,
       opacity: 0.85,
       backgroundColor: colors.navbar.primary,
@@ -56,6 +63,9 @@ function Leftbar() {
         marginBottom: theme.spacing(3),
         cursor: 'pointer',
       },
+      '&:click': {
+        color: '#FDC300',
+      },
     },
     icon: {
       color: 'white',
@@ -68,15 +78,50 @@ function Leftbar() {
       },
     },
     text: {
-      fontSize: '13px',
+      fontSize: '15px',
       color: colors.navbar.text,
       fontWeight: 'bold',
       [theme.breakpoints.down('sm')]: {
         display: 'none',
       },
+      '&:hover': {
+        color: '#FDC300',
+      },
+    },
+    textlistBar: {
+      fontSize: '15px',
+      color: colors.navbar.text,
+      cursor: 'pointer',
+      fontWeight: 'bold',
+
+      '&:hover': {
+        color: '#FDC300',
+      },
+      padding: '15px 0 0 20px',
+      textDecoration: 'none',
+      // marginTop: '15px',
+    },
+    listBar: {
+      display: 'flex',
+      flexDirection: 'column',
+      // marginTop: '-10px',
     },
   }));
 
+  const HandleCloseListBar = () => {
+    setCloseListBar(!closelistBar);
+  };
+  const listBarData = [
+    'Standard Mark up',
+    'Standard Service fee',
+    'Free Type',
+    'Frequent Traveler Program',
+    'Standar Ancillary fee',
+    'Rating type',
+    'Setup Flight Commision',
+    'Special Date',
+    'Corporate Rating',
+  ];
   const classes = useStyles();
   return (
     <Grid
@@ -94,18 +139,24 @@ function Leftbar() {
             <Typography className={classes.text}>DashBoard</Typography>
           )}
         </div>
-        <div className={classes.item}>
-          {/* <Bookmark className={classes.icon} /> */}
-          {/* <Typography className={classes.text}>Collections</Typography> */}
-        </div>
         <div className={classes.item} ref={onShowLeftBar}>
           <Storefront className={classes.icon} />
           {showLeftBar && (
-            <Typography className={classes.text}>
-              Master Data Management {'>'}
+            <Typography className={classes.text} onClick={HandleCloseListBar}>
+              Master Data Management
             </Typography>
           )}
         </div>
+        {closelistBar &&
+          listBarData.map((data) => {
+            return (
+              <div className={classes.listBar}>
+                <a href="#" className={classes.textlistBar}>
+                  {data}
+                </a>
+              </div>
+            );
+          })}
       </div>
     </Grid>
   );
