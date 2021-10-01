@@ -15,40 +15,36 @@ import {
 } from '@material-ui/core';
 import { AddCircle, Search } from '@material-ui/icons';
 import React, { useState } from 'react';
+import ModalEditMarkUp from './ModalEditMarkUp';
 
-function createData(name, code, population, size) {
-  const density = population / size;
-  return { name, code, population, size, density };
+function createData(destination, airlineServiceType, applyCondition, markUp) {
+  return {
+    destination,
+    airlineServiceType,
+    applyCondition,
+    markUp,
+  };
 }
 
 const columns = [
-  { id: 'name', label: 'Name', minWidth: 170 },
-  { id: 'code', label: 'ISO\u00a0Code', minWidth: 100 },
-  {
-    id: 'population',
-    label: 'Population',
-    minWidth: 170,
-    align: 'right',
-    format: (value) => value.toLocaleString('en-US'),
-  },
-  {
-    id: 'size',
-    label: 'Size\u00a0(km\u00b2)',
-    minWidth: 170,
-    align: 'right',
-    format: (value) => value.toLocaleString('en-US'),
-  },
-  {
-    id: 'density',
-    label: 'Density',
-    minWidth: 170,
-    align: 'right',
-    format: (value) => value.toFixed(2),
-  },
+  { id: 'destination', label: 'Destination', minWidth: 170 },
+  { id: 'airlineServiceType', label: 'Airline Service Type', minWidth: 170 },
+  { id: 'applyCondition', label: 'Apply Condition', minWidth: 170 },
+  { id: 'markUp', label: 'Mark Up', minWidth: 170 },
 ];
 
 const rows = [
-  createData('India', 'IN', 1324171354, 3287263),
+  createData(
+    'India',
+    'IN',
+    1324171354,
+    3287263,
+    <>
+      <Button variant="outlined" size="small" color="primary">
+        Edit
+      </Button>
+    </>,
+  ),
   createData('China', 'CN', 1403500365, 9596961),
   createData('Italy', 'IT', 60483973, 301340),
   createData('United States', 'US', 327167434, 9833520),
@@ -83,7 +79,6 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: 0,
     width: '100%',
     [theme.breakpoints.up('sm')]: {
-      marginLeft: theme.spacing(3),
       width: 'auto',
     },
     border: '1px solid #D9DFE7',
@@ -125,10 +120,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Feed() {
+function UiTableMarkUp({ titleButton, linkButton }) {
   const classes = useStyles();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => {
+    setOpen(true);
+  };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -157,9 +156,15 @@ function Feed() {
           </div>
         </Grid>
         <Grid item sm={3} className={classes.itemEnd}>
-          <Button startIcon={<AddCircle />} variant="contained" color="primary">
-            Create New
+          <Button
+            onClick={handleOpen}
+            startIcon={<AddCircle />}
+            variant="contained"
+            color="primary"
+          >
+            {titleButton}
           </Button>
+          <ModalEditMarkUp setFunc={setOpen} open={open} />
         </Grid>
       </div>
 
@@ -220,4 +225,4 @@ function Feed() {
   );
 }
 
-export default Feed;
+export default UiTableMarkUp;

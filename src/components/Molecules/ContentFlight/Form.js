@@ -30,7 +30,6 @@ const useStyles = makeStyles((theme) => ({
   inputGroup: {
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'center',
     margin: '40px 34px',
   },
   labelForm: {
@@ -51,8 +50,12 @@ const useStyles = makeStyles((theme) => ({
   textAreaStyle: {
     width: '416px',
   },
+  childRadio: {
+    display: 'flex',
+    marginLeft: theme.spacing(4),
+  },
 }));
-export default function Form() {
+export default function Form({ handleForm, stateForm }) {
   const classes = useStyles();
   return (
     <>
@@ -68,6 +71,9 @@ export default function Form() {
               Preset Name <span style={{ color: 'red' }}>*</span>
             </Typography>
             <TextField
+              onChange={handleForm}
+              name="presetName"
+              required
               className={classes.fieldTag}
               id="outlined-basic"
               variant="outlined"
@@ -84,6 +90,8 @@ export default function Form() {
               Description
             </Typography>
             <TextareaAutosize
+              onChange={handleForm}
+              name="description"
               className={classes.textAreaStyle}
               aria-label="minimum height"
               minRows={4}
@@ -109,41 +117,69 @@ export default function Form() {
                   <div>
                     {' '}
                     <FormControlLabel
-                      value="fixedAmount"
+                      onChange={handleForm}
+                      checked={stateForm.typeDomestic === 'fixedAmountDomestic'}
+                      name="typeDomestic"
+                      value="fixedAmountDomestic"
                       control={<Radio color="primary" />}
                       label="Fixed Amount"
                     />
-                    <div style={{ display: 'flex' }}>
+                    <div className={classes.childRadio}>
                       <div style={{ marginRight: 10 }}>
-                        <Typography
-                          className={classes.labelForm}
-                          color="textPrimary"
-                          variant="h6"
-                          component="label"
-                          style={{ marginRight: 10 }}
+                        <div
+                          style={{
+                            marginRight: 10,
+                            display: 'flex',
+                            alignItems: 'center',
+                          }}
                         >
-                          IDR
-                        </Typography>
-                        <TextField
-                          className={classes.fieldTagRadio}
-                          id="outlined-basic"
-                          variant="outlined"
-                          size="small"
-                        />
+                          <Typography
+                            className={classes.labelForm}
+                            color="textPrimary"
+                            variant="h6"
+                            component="label"
+                            style={{ marginRight: 10 }}
+                          >
+                            IDR
+                          </Typography>
+                          <TextField
+                            onChange={handleForm}
+                            name="idrDomestic"
+                            className={classes.fieldTagRadio}
+                            id="outlined-basic"
+                            variant="outlined"
+                            size="small"
+                          />
+                        </div>
                       </div>
                       <div style={{ display: 'flex', flexDirection: 'column' }}>
                         <FormControlLabel
-                          value="ticket"
+                          onChange={handleForm}
+                          checked={
+                            stateForm.typeIdrDomestic === 'ticketDomestic'
+                          }
+                          name="typeIdrDomestic"
+                          value="ticketDomestic"
                           control={<Radio color="primary" />}
                           label="Ticket"
                         />
                         <FormControlLabel
-                          value="person"
+                          onChange={handleForm}
+                          checked={
+                            stateForm.typeIdrDomestic === 'personDomestic'
+                          }
+                          name="typeIdrDomestic"
+                          value="personDomestic"
                           control={<Radio color="primary" />}
                           label="Person"
                         />
                         <FormControlLabel
-                          value="transaction"
+                          onChange={handleForm}
+                          checked={
+                            stateForm.typeIdrDomestic === 'transactionDomestic'
+                          }
+                          name="typeIdrDomestic"
+                          value="transactionDomestic"
                           control={<Radio color="primary" />}
                           label="Transaction"
                         />
@@ -152,22 +188,48 @@ export default function Form() {
                   </div>
                   <div>
                     <FormControlLabel
-                      value="fixedAmount"
+                      onChange={handleForm}
+                      checked={stateForm.typeDomestic === 'percentageDomestic'}
+                      name="typeDomestic"
+                      value="percentageDomestic"
                       control={<Radio color="primary" />}
-                      label="Fixed Amount"
+                      label="Percentage"
                     />
-                    <div style={{ display: 'flex' }}>
-                      <div style={{ marginRight: 10 }}>
+                    <div className={classes.childRadio}>
+                      <div
+                        style={{
+                          marginRight: 10,
+                          display: 'flex',
+                          alignItems: 'center',
+                        }}
+                      >
                         <TextField
+                          onChange={handleForm}
+                          name="percentDomestic"
                           className={classes.fieldTagRadio}
                           id="outlined-basic"
                           variant="outlined"
                           size="small"
                         />
+                        <Typography
+                          className={classes.labelForm}
+                          color="textPrimary"
+                          variant="h6"
+                          component="label"
+                          style={{ marginLeft: 10 }}
+                        >
+                          %
+                        </Typography>
                       </div>
                       <div style={{ display: 'flex', flexDirection: 'column' }}>
                         <FormControlLabel
-                          value="includeTaxes"
+                          onChange={handleForm}
+                          checked={
+                            stateForm.includeTaxesDomestics ===
+                            'includeTaxesDomestic'
+                          }
+                          name="includeTaxesDomestic"
+                          value="includeTaxesDomestic"
                           control={<Radio color="primary" />}
                           label="Include Taxes"
                         />
@@ -199,41 +261,75 @@ export default function Form() {
                   <div>
                     {' '}
                     <FormControlLabel
-                      value="fixedAmount"
+                      onChange={handleForm}
+                      checked={
+                        stateForm.typeInternational ===
+                        'fixedAmountInternational'
+                      }
+                      name="typeInternational"
+                      value="fixedAmountInternational"
                       control={<Radio color="primary" />}
                       label="Fixed Amount"
                     />
-                    <div style={{ display: 'flex' }}>
+                    <div className={classes.childRadio}>
                       <div style={{ marginRight: 10 }}>
-                        <Typography
-                          className={classes.labelForm}
-                          color="textPrimary"
-                          variant="h6"
-                          component="label"
-                          style={{ marginRight: 10 }}
+                        <div
+                          style={{
+                            marginRight: 10,
+                            display: 'flex',
+                            alignItems: 'center',
+                          }}
                         >
-                          IDR
-                        </Typography>
-                        <TextField
-                          className={classes.fieldTagRadio}
-                          id="outlined-basic"
-                          variant="outlined"
-                          size="small"
-                        />
+                          <Typography
+                            className={classes.labelForm}
+                            color="textPrimary"
+                            variant="h6"
+                            component="label"
+                            style={{ marginRight: 10 }}
+                          >
+                            IDR
+                          </Typography>
+                          <TextField
+                            onChange={handleForm}
+                            name="idrInternational"
+                            className={classes.fieldTagRadio}
+                            id="outlined-basic"
+                            variant="outlined"
+                            size="small"
+                          />
+                        </div>
                       </div>
                       <div style={{ display: 'flex', flexDirection: 'column' }}>
                         <FormControlLabel
-                          value="ticket"
+                          onChange={handleForm}
+                          checked={
+                            stateForm.typeIdrInternational ===
+                            'ticketInternational'
+                          }
+                          name="typeIdrInternational"
+                          value="ticketInternational"
                           control={<Radio color="primary" />}
                           label="Ticket"
                         />
                         <FormControlLabel
-                          value="person"
+                          onChange={handleForm}
+                          checked={
+                            stateForm.typeIdrInternational ===
+                            'personInternational'
+                          }
+                          name="typeIdrInternational"
+                          value="personInternational"
                           control={<Radio color="primary" />}
                           label="Person"
                         />
                         <FormControlLabel
-                          value="transaction"
+                          onChange={handleForm}
+                          checked={
+                            stateForm.typeIdrInternational ===
+                            'transactionInternational'
+                          }
+                          name="typeIdrInternational"
+                          value="transactionInternational"
                           control={<Radio color="primary" />}
                           label="Transaction"
                         />
@@ -242,22 +338,51 @@ export default function Form() {
                   </div>
                   <div>
                     <FormControlLabel
-                      value="fixedAmount"
+                      onChange={handleForm}
+                      checked={
+                        stateForm.typeInternational ===
+                        'percentageInternational'
+                      }
+                      name="typeInternational"
+                      value="percentageInternational"
                       control={<Radio color="primary" />}
-                      label="Fixed Amount"
+                      label="Percentage"
                     />
-                    <div style={{ display: 'flex' }}>
-                      <div style={{ marginRight: 10 }}>
+                    <div className={classes.childRadio}>
+                      <div
+                        style={{
+                          marginRight: 10,
+                          display: 'flex',
+                          alignItems: 'center',
+                        }}
+                      >
                         <TextField
+                          onChange={handleForm}
+                          name="percentInternational"
                           className={classes.fieldTagRadio}
                           id="outlined-basic"
                           variant="outlined"
                           size="small"
                         />
+                        <Typography
+                          className={classes.labelForm}
+                          color="textPrimary"
+                          variant="h6"
+                          component="label"
+                          style={{ marginLeft: 10 }}
+                        >
+                          %
+                        </Typography>
                       </div>
                       <div style={{ display: 'flex', flexDirection: 'column' }}>
                         <FormControlLabel
-                          value="includeTaxes"
+                          onChange={handleForm}
+                          checked={
+                            stateForm.includeTaxesInternational ===
+                            'includeTaxesInternational'
+                          }
+                          name="includeTaxesInternational"
+                          value="includeTaxesInternational"
                           control={<Radio color="primary" />}
                           label="Include Taxes"
                         />

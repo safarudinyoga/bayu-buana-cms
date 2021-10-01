@@ -11,7 +11,7 @@ import {
 } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import { Chat, FlightTakeoff, Hotel } from '@material-ui/icons';
-import Uitable from '../../Atoms/UItable';
+import UiTableFlight from './UiTableFlight';
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -162,17 +162,26 @@ function Content() {
           </AppBar>
           <TabPanel value={value} index={0}>
             <div className={classes.containerBodyTable}>
-              <Uitable />
+              <UiTableFlight
+                titleButton="Create New"
+                linkButton="/master/create-flight"
+              />
             </div>
           </TabPanel>
           <TabPanel value={value} index={1}>
             <div className={classes.containerBodyTable}>
-              <Uitable />
+              <UiTableFlight
+                titleButton="Create New"
+                linkButton="/master/create-flight"
+              />
             </div>
           </TabPanel>
           <TabPanel value={value} index={2}>
             <div className={classes.containerBodyTable}>
-              <Uitable />
+              <UiTableFlight
+                titleButton="Create New"
+                linkButton="/master/create-flight"
+              />
             </div>
           </TabPanel>
         </div>

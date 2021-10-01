@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Breadcrumbs,
   makeStyles,
@@ -7,7 +7,7 @@ import {
   Button,
 } from '@material-ui/core';
 import Form from './Form';
-import Uitable from '../../Atoms/UItable';
+import UiTableMarkUp from './UiTableMarkUp';
 const useStyles = makeStyles((theme) => ({
   container: {
     paddingTop: theme.spacing(11),
@@ -25,6 +25,16 @@ const useStyles = makeStyles((theme) => ({
 }));
 function ContentEditFlight() {
   const classes = useStyles();
+  const [dataFlight, setDataFlight] = useState({});
+  const handleForm = (event) => {
+    setDataFlight((prevState) => ({
+      ...prevState,
+      [event.target.name]: event.target.value,
+    }));
+  };
+  useEffect(() => {
+    console.log(dataFlight, 'flight');
+  }, [dataFlight]);
   return (
     <div className={classes.container}>
       <div>
@@ -44,9 +54,12 @@ function ContentEditFlight() {
             Edit Flight Standard Mark-Up
           </Typography>
         </div>
-        <Form />
+        <Form handleForm={handleForm} stateForm={dataFlight} />
         <div style={{ marginTop: '20px' }}>
-          <Uitable />
+          <UiTableMarkUp
+            titleButton="Add Override Mark-up"
+            linkButton="/master/create-flight"
+          />
         </div>
       </div>
       <div display="flex" flexDirection="row" style={{ marginTop: '10px' }}>

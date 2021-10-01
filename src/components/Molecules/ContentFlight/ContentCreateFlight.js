@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Breadcrumbs,
   makeStyles,
@@ -12,6 +12,7 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(11),
     marginRight: theme.spacing(7),
     marginLeft: theme.spacing(3),
+    marginBottom: theme.spacing(10),
   },
   titleBread: {
     [theme.breakpoints.down('sm')]: {
@@ -24,6 +25,16 @@ const useStyles = makeStyles((theme) => ({
 }));
 function ContentCreateFlight() {
   const classes = useStyles();
+  const [dataFlight, setDataFlight] = useState({});
+  const handleForm = (event) => {
+    setDataFlight((prevState) => ({
+      ...prevState,
+      [event.target.name]: event.target.value,
+    }));
+  };
+  useEffect(() => {
+    console.log(dataFlight, 'flight');
+  }, [dataFlight]);
   return (
     <div className={classes.container}>
       <div>
@@ -43,15 +54,17 @@ function ContentCreateFlight() {
             Create Flight Standard Mark-Up
           </Typography>
         </div>
-        <Form />
+        <Form handleForm={handleForm} stateForm={dataFlight} />
       </div>
-      <div display="flex" flexDirection="row" style={{ marginTop: '10px' }}>
-        <Button variant="contained" style={{ marginRight: '34px' }}>
-          Cancel
+      <div display="flex" flexDirection="row" style={{ marginTop: '20px' }}>
+        <Button
+          variant="contained"
+          color="primary"
+          style={{ marginRight: '34px' }}
+        >
+          Save
         </Button>
-        <Button variant="contained" color="primary">
-          Primary
-        </Button>
+        <Button variant="contained">Cancel</Button>
       </div>
     </div>
   );
