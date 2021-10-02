@@ -31,17 +31,17 @@ function Leftbar() {
       border: '1px solid #ece7e7',
       paddingTop: theme.spacing(10),
       position: 'fixed',
-      [theme.breakpoints.down('sm')]: {
-        color: 'white',
-        backgroundColor: theme.palette.primary.main,
-        position: 'fixed',
-      },
+      paddingLeft: '25px',
+      paddingRight: '25px',
+      // [theme.breakpoints.down('sm')]: {
+      //   color: 'white',
+      //   backgroundColor: theme.palette.primary.main,
+      //   position: 'fixed',
+      // },
     },
     divGrid: {
       marginTop: 0,
       width: '100%',
-      paddingLeft: '16px',
-      paddingRight: '16px',
       [theme.breakpoints.down('sm')]: {
         display: 'flex',
         flexDirection: 'column',
@@ -104,7 +104,8 @@ function Leftbar() {
     listBar: {
       display: 'flex',
       flexDirection: 'column',
-      // marginTop: '-10px',
+      marginTop: '-25px',
+      marginLeft: '25px',
     },
   }));
 
@@ -147,16 +148,16 @@ function Leftbar() {
             </Typography>
           )}
         </div>
-        {closelistBar &&
-          listBarData.map((data) => {
-            return (
-              <div className={classes.listBar}>
+        <div className={classes.listBar}>
+          {closelistBar &&
+            listBarData.map((data) => {
+              return (
                 <a href="#" className={classes.textlistBar}>
                   {data}
                 </a>
-              </div>
-            );
-          })}
+              );
+            })}
+        </div>
       </div>
     </Grid>
   );
