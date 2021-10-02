@@ -42,11 +42,11 @@ const columns = [
 ];
 
 const rows = [
-  createData('India', 'IN', 1324171354, 3287263, <IconsUiTable />),
+  createData('India', 'IN', 1324171354, 3287263, <IconsUiTable id={1} />),
   createData('China', 'CN', 1403500365, 9596961, <IconsUiTable />),
   createData('Italy', 'IT', 60483973, 301340, <IconsUiTable />),
   createData('United States', 'US', 327167434, 9833520, <IconsUiTable />),
-  createData('Canada', 'CA', 37602103, 9984670, <IconsUiTable />),
+  createData('Canada', 'CA', 37602103, 9984670, <IconsUiTable id={1} />),
   createData('Australia', 'AU', 25475400, 7692024, <IconsUiTable />),
   createData('Germany', 'DE', 83019200, 357578, <IconsUiTable />),
   createData('Ireland', 'IE', 4857000, 70273, <IconsUiTable />),

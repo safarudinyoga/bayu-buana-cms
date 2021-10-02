@@ -62,13 +62,19 @@ function ContentEditFlight() {
           />
         </div>
       </div>
-      <div display="flex" flexDirection="row" style={{ marginTop: '10px' }}>
-        <Button variant="contained" style={{ marginRight: '34px' }}>
-          Cancel
+      <div
+        display="flex"
+        flexDirection="row"
+        style={{ marginTop: '20px', marginBottom: '50px' }}
+      >
+        <Button
+          variant="contained"
+          color="primary"
+          style={{ marginRight: '34px' }}
+        >
+          Save
         </Button>
-        <Button variant="contained" color="primary">
-          Primary
-        </Button>
+        <Button variant="contained">Cancel</Button>
       </div>
     </div>
   );
