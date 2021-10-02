@@ -15,7 +15,7 @@ function App() {
           <Route exact path="/" component={Login} />
           <Route exact path="/master" component={Master} />
           <Route exact path="/master/create-flight" component={CreateFlight} />
-          <Route exact path="/master/edit-flight" component={EditFlight} />
+          <Route exact path="/master/edit-flight/:id" component={EditFlight} />
         </Switch>
       </Router>
     </Provider>

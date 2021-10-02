@@ -71,6 +71,7 @@ export default function Form({ handleForm, stateForm }) {
               Preset Name <span style={{ color: 'red' }}>*</span>
             </Typography>
             <TextField
+              value={stateForm?.presetName || ''}
               onChange={handleForm}
               name="presetName"
               required
@@ -91,6 +92,7 @@ export default function Form({ handleForm, stateForm }) {
             </Typography>
             <TextareaAutosize
               onChange={handleForm}
+              value={stateForm?.description || ''}
               name="description"
               className={classes.textAreaStyle}
               aria-label="minimum height"
@@ -144,6 +146,7 @@ export default function Form({ handleForm, stateForm }) {
                           </Typography>
                           <TextField
                             onChange={handleForm}
+                            value={stateForm?.idrDomestic || ''}
                             name="idrDomestic"
                             className={classes.fieldTagRadio}
                             id="outlined-basic"
@@ -205,6 +208,7 @@ export default function Form({ handleForm, stateForm }) {
                       >
                         <TextField
                           onChange={handleForm}
+                          value={stateForm?.percentDomestic || ''}
                           name="percentDomestic"
                           className={classes.fieldTagRadio}
                           id="outlined-basic"
@@ -291,6 +295,7 @@ export default function Form({ handleForm, stateForm }) {
                           </Typography>
                           <TextField
                             onChange={handleForm}
+                            value={stateForm?.idrInternational || ''}
                             name="idrInternational"
                             className={classes.fieldTagRadio}
                             id="outlined-basic"
@@ -358,6 +363,7 @@ export default function Form({ handleForm, stateForm }) {
                       >
                         <TextField
                           onChange={handleForm}
+                          value={stateForm?.percentInternational || ''}
                           name="percentInternational"
                           className={classes.fieldTagRadio}
                           id="outlined-basic"
