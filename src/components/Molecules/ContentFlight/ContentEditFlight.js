@@ -14,6 +14,11 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(7),
     marginLeft: theme.spacing(3),
   },
+  form: {
+    [theme.breakpoints.down('sm')]: {
+      width: '100vw',
+    },
+  },
   titleBread: {
     [theme.breakpoints.down('sm')]: {
       fontSize: '12px',
@@ -54,7 +59,11 @@ function ContentEditFlight() {
             Edit Flight Standard Mark-Up
           </Typography>
         </div>
-        <Form handleForm={handleForm} stateForm={dataFlight} />
+        <Form
+          handleForm={handleForm}
+          stateForm={dataFlight}
+          className={classes.form}
+        />
         <div style={{ marginTop: '20px' }}>
           <UiTableMarkUp
             titleButton="Add Override Mark-up"
