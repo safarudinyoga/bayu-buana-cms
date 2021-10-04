@@ -31,6 +31,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ActionButton = ({ id }) => {
+  const [hoverIcon, setHoverIcons] = React.useState(false);
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
@@ -41,18 +42,30 @@ const ActionButton = ({ id }) => {
   const handleClose = () => {
     setOpen(false);
   };
+
+  const hoverModalIcons = () => {
+    return (
+      <div>
+        <p>Click to edit</p>
+      </div>
+    );
+  };
+  const handleHover = () => setHoverIcons(true);
+  const handleLeaveHover = () => setHoverIcons(false);
   return (
     <div>
       <Link href={`/master/edit-flight/${id}`}>
+        {hoverIcon && <hoverModalIcons />}
         <img
           id="editIcon"
           className={classes.editIcon}
           src={Edit}
+          onMouseEnter={handleHover}
+          onMouseLeave={handleLeaveHover}
           alt="edit icon"
           title="Click to edit"
         />
       </Link>
-
       <img
         onClick={handleOpen}
         id="removeIcon"

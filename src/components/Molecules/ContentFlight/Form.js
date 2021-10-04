@@ -9,11 +9,16 @@ import {
   Radio,
 } from '@material-ui/core';
 const useStyles = makeStyles((theme) => ({
-  container: {
-    paddingTop: theme.spacing(11),
-    marginRight: theme.spacing(7),
-    marginLeft: theme.spacing(3),
+  root: {
+    [theme.breakpoints.down('sm')]: {
+      paddingTop: '30px',
+    },
   },
+  // container: {
+  //   paddingTop: theme.spacing(11),
+  //   marginRight: theme.spacing(7),
+  //   marginLeft: theme.spacing(3),
+  // },
   titleBread: {
     [theme.breakpoints.down('sm')]: {
       fontSize: '12px',
@@ -26,33 +31,99 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(6),
     border: '0.5px solid #E6E6E6',
     boxShadow: '2px 2px #F0F0F0',
+    [theme.breakpoints.down('sm')]: {
+      width: '100%',
+      marginLeft: '-10px',
+      borderRadius: '8px',
+    },
   },
   inputGroup: {
     display: 'flex',
     flexDirection: 'row',
     margin: '40px 34px',
+    [theme.breakpoints.down('sm')]: {
+      display: 'flex',
+      flexDirection: 'column',
+      borderRadius: '8px',
+      margin: '10px 34px 0 34px',
+    },
   },
   labelForm: {
     width: '30%',
     fontWeight: '400',
     fontSize: '15px',
+    [theme.breakpoints.down('sm')]: {
+      width: '80%',
+      fontSize: '14px',
+    },
   },
   fieldTag: {
     width: '300px',
+    [theme.breakpoints.down('sm')]: {
+      width: '100%',
+    },
   },
   fieldTagRadio: {
     width: '120px',
+    [theme.breakpoints.down('sm')]: {
+      marginLeft: '0',
+      width: '120px',
+      height: '34px',
+    },
   },
   formRadioGroup: {
     display: 'flex',
     flexDirection: 'column',
+    [theme.breakpoints.down('sm')]: {
+      display: 'flex',
+      flexDirection: 'column',
+    },
   },
   textAreaStyle: {
     width: '416px',
+    [theme.breakpoints.down('sm')]: {
+      width: '100%',
+      height: '88px',
+    },
   },
   childRadio: {
     display: 'flex',
     marginLeft: theme.spacing(4),
+    [theme.breakpoints.down('sm')]: {
+      display: 'flex',
+      flexDirection: 'column',
+      marginLeft: '0',
+    },
+  },
+  wrapperFromControlLabel: {
+    [theme.breakpoints.down('sm')]: {
+      display: 'none',
+    },
+  },
+  textFixAmount: {
+    width: '30%',
+    fontWeight: '400',
+    fontSize: '15px',
+    [theme.breakpoints.down('sm')]: {
+      marginRight: '0',
+      width: '15%',
+    },
+  },
+  wrapAmount: {
+    display: 'flex',
+    flexDirection: 'row',
+    [theme.breakpoints.down('sm')]: {
+      display: 'flex',
+      flexDirection: 'column',
+    },
+  },
+  percentageField: {
+    width: '120px',
+    [theme.breakpoints.down('sm')]: {
+      marginLeft: '0',
+      width: '50px',
+      height: '34px',
+    },
   },
 }));
 export default function Form({ handleForm, stateForm }) {
@@ -108,14 +179,16 @@ export default function Form({ handleForm, stateForm }) {
             >
               Domestic Flight Mark Up <span style={{ color: 'red' }}>*</span>
             </Typography>
+            {/* Fixed Amount */}
             <RadioGroup
               row
               aria-label="position"
               name="position"
               defaultValue="top"
             >
-              <div width="100%" className={classes.formRadioGroup}>
-                <div style={{ display: 'flex', flexDirection: 'row' }}>
+              <div width="100vw" className={classes.formRadioGroup}>
+                {/* pembuka idr */}
+                <div className={classes.wrapAmount}>
                   <div>
                     {' '}
                     <FormControlLabel
@@ -126,8 +199,9 @@ export default function Form({ handleForm, stateForm }) {
                       control={<Radio color="primary" />}
                       label="Fixed Amount"
                     />
+                    {/* Idr dan percentage */}
                     <div className={classes.childRadio}>
-                      <div style={{ marginRight: 10 }}>
+                      <div>
                         <div
                           style={{
                             marginRight: 10,
@@ -136,11 +210,10 @@ export default function Form({ handleForm, stateForm }) {
                           }}
                         >
                           <Typography
-                            className={classes.labelForm}
+                            className={classes.textFixAmount}
                             color="textPrimary"
                             variant="h6"
                             component="label"
-                            style={{ marginRight: 10 }}
                           >
                             IDR
                           </Typography>
@@ -153,10 +226,14 @@ export default function Form({ handleForm, stateForm }) {
                             variant="outlined"
                             size="small"
                           />
+                          <p style={{ fontSize: '14px', marginLeft: '5px' }}>
+                            /Ticket
+                          </p>
                         </div>
                       </div>
                       <div style={{ display: 'flex', flexDirection: 'column' }}>
                         <FormControlLabel
+                          className={classes.wrapperFromControlLabel}
                           onChange={handleForm}
                           checked={
                             stateForm.typeIdrDomestic === 'ticketDomestic'
@@ -167,6 +244,7 @@ export default function Form({ handleForm, stateForm }) {
                           label="Ticket"
                         />
                         <FormControlLabel
+                          className={classes.wrapperFromControlLabel}
                           onChange={handleForm}
                           checked={
                             stateForm.typeIdrDomestic === 'personDomestic'
@@ -177,6 +255,7 @@ export default function Form({ handleForm, stateForm }) {
                           label="Person"
                         />
                         <FormControlLabel
+                          className={classes.wrapperFromControlLabel}
                           onChange={handleForm}
                           checked={
                             stateForm.typeIdrDomestic === 'transactionDomestic'
@@ -189,58 +268,63 @@ export default function Form({ handleForm, stateForm }) {
                       </div>
                     </div>
                   </div>
-                  <div>
-                    <FormControlLabel
-                      onChange={handleForm}
-                      checked={stateForm.typeDomestic === 'percentageDomestic'}
-                      name="typeDomestic"
-                      value="percentageDomestic"
-                      control={<Radio color="primary" />}
-                      label="Percentage"
-                    />
-                    <div className={classes.childRadio}>
-                      <div
-                        style={{
-                          marginRight: 10,
-                          display: 'flex',
-                          alignItems: 'center',
-                        }}
+                </div>
+                {/* penutup idr */}
+
+                {/* pembuka Percentage */}
+                <div className={classes.wrapAmount}>
+                  <FormControlLabel
+                    onChange={handleForm}
+                    checked={stateForm.typeDomestic === 'percentageDomestic'}
+                    name="typeDomestic"
+                    value="percentageDomestic"
+                    control={<Radio color="primary" />}
+                    label="Percentage"
+                  />
+
+                  <div className={classes.childRadio}>
+                    <div
+                      style={{
+                        marginRight: 10,
+                        display: 'flex',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <TextField
+                        onChange={handleForm}
+                        value={stateForm?.percentDomestic || ''}
+                        name="percentDomestic"
+                        className={classes.percentageField}
+                        id="outlined-basic"
+                        variant="outlined"
+                        size="small"
+                      />
+                      <Typography
+                        className={classes.textFixAmount}
+                        color="textPrimary"
+                        variant="h6"
+                        component="label"
+                        style={{ marginLeft: 10 }}
                       >
-                        <TextField
-                          onChange={handleForm}
-                          value={stateForm?.percentDomestic || ''}
-                          name="percentDomestic"
-                          className={classes.fieldTagRadio}
-                          id="outlined-basic"
-                          variant="outlined"
-                          size="small"
-                        />
-                        <Typography
-                          className={classes.labelForm}
-                          color="textPrimary"
-                          variant="h6"
-                          component="label"
-                          style={{ marginLeft: 10 }}
-                        >
-                          %
-                        </Typography>
-                      </div>
-                      <div style={{ display: 'flex', flexDirection: 'column' }}>
-                        <FormControlLabel
-                          onChange={handleForm}
-                          checked={
-                            stateForm.includeTaxesDomestics ===
-                            'includeTaxesDomestic'
-                          }
-                          name="includeTaxesDomestic"
-                          value="includeTaxesDomestic"
-                          control={<Radio color="primary" />}
-                          label="Include Taxes"
-                        />
-                      </div>
+                        %
+                      </Typography>
+
+                      <FormControlLabel
+                        onChange={handleForm}
+                        checked={
+                          stateForm.includeTaxesDomestics ===
+                          'includeTaxesDomestic'
+                        }
+                        name="includeTaxesDomestic"
+                        value="includeTaxesDomestic"
+                        control={<Radio color="primary" />}
+                        label="Include Taxes"
+                      />
                     </div>
                   </div>
                 </div>
+                {/* penutup tag percentage */}
+                {/* penutup domestic Amount */}
               </div>
             </RadioGroup>
           </div>
@@ -263,49 +347,52 @@ export default function Form({ handleForm, stateForm }) {
               <div width="100%" className={classes.formRadioGroup}>
                 <div style={{ display: 'flex', flexDirection: 'row' }}>
                   <div>
-                    {' '}
-                    <FormControlLabel
-                      onChange={handleForm}
-                      checked={
-                        stateForm.typeInternational ===
-                        'fixedAmountInternational'
-                      }
-                      name="typeInternational"
-                      value="fixedAmountInternational"
-                      control={<Radio color="primary" />}
-                      label="Fixed Amount"
-                    />
-                    <div className={classes.childRadio}>
-                      <div style={{ marginRight: 10 }}>
-                        <div
-                          style={{
-                            marginRight: 10,
-                            display: 'flex',
-                            alignItems: 'center',
-                          }}
-                        >
-                          <Typography
-                            className={classes.labelForm}
-                            color="textPrimary"
-                            variant="h6"
-                            component="label"
-                            style={{ marginRight: 10 }}
+                    {/* pembungkus international Flight Mark-up */}
+                    <div>
+                      <FormControlLabel
+                        onChange={handleForm}
+                        checked={
+                          stateForm.typeInternational ===
+                          'fixedAmountInternational'
+                        }
+                        name="typeInternational"
+                        value="fixedAmountInternational"
+                        control={<Radio color="primary" />}
+                        label="Fix Amount"
+                      />
+                      <div className={classes.childRadio}>
+                        <div style={{ marginRight: 10 }}>
+                          <div
+                            style={{
+                              marginRight: 10,
+                              display: 'flex',
+                              alignItems: 'center',
+                            }}
                           >
-                            IDR
-                          </Typography>
-                          <TextField
-                            onChange={handleForm}
-                            value={stateForm?.idrInternational || ''}
-                            name="idrInternational"
-                            className={classes.fieldTagRadio}
-                            id="outlined-basic"
-                            variant="outlined"
-                            size="small"
-                          />
+                            <Typography
+                              className={classes.labelForm}
+                              color="textPrimary"
+                              variant="h6"
+                              component="label"
+                              style={{ marginRight: 10 }}
+                            >
+                              IDR
+                            </Typography>
+                            <TextField
+                              onChange={handleForm}
+                              value={stateForm?.idrInternational || ''}
+                              name="idrInternational"
+                              className={classes.fieldTagRadio}
+                              id="outlined-basic"
+                              variant="outlined"
+                              size="small"
+                            />
+                          </div>
                         </div>
                       </div>
                       <div style={{ display: 'flex', flexDirection: 'column' }}>
                         <FormControlLabel
+                          className={classes.wrapperFromControlLabel}
                           onChange={handleForm}
                           checked={
                             stateForm.typeIdrInternational ===
@@ -317,6 +404,7 @@ export default function Form({ handleForm, stateForm }) {
                           label="Ticket"
                         />
                         <FormControlLabel
+                          className={classes.wrapperFromControlLabel}
                           onChange={handleForm}
                           checked={
                             stateForm.typeIdrInternational ===
@@ -328,6 +416,7 @@ export default function Form({ handleForm, stateForm }) {
                           label="Person"
                         />
                         <FormControlLabel
+                          className={classes.wrapperFromControlLabel}
                           onChange={handleForm}
                           checked={
                             stateForm.typeIdrInternational ===
@@ -339,6 +428,7 @@ export default function Form({ handleForm, stateForm }) {
                           label="Transaction"
                         />
                       </div>
+                      {/* penutup nya fix Amount  */}
                     </div>
                   </div>
                   <div>
