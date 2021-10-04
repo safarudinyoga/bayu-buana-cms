@@ -17,6 +17,7 @@ import UiTableFlight from './UiTableFlight';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import UiTableDekstop from './dekstop/UiTableDekstop';
 import UiTableMobile from './mobile/UiTableMobile';
+import UiTableHotel from './UiTableHotel';
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -106,7 +107,7 @@ const useStyles = makeStyles((theme) => ({
       paddingLeft: theme.spacing(2),
       paddingRight: theme.spacing(2),
       marginLeft: theme.spacing(-3),
-      marginRight: theme.spacing(-3)
+      marginRight: theme.spacing(-3),
     },
     [theme.breakpoints.up('sm')]: {
       margin: theme.spacing(0),
@@ -153,11 +154,11 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     border: 'none',
     boxShadow: '2px 2px #F0F0F0',
-    padding: 5
+    padding: 5,
   },
 }));
 
-function Content() {
+function ContentHotel() {
   const classes = useStyles();
   const [value, setValue] = useState(0);
 
@@ -205,7 +206,6 @@ function Content() {
           )}
         </div> */}
 
-        
         <div className={classes.rootTab}>
           <AppBar className={classes.appBar} position="static">
             <Tabs
@@ -243,9 +243,9 @@ function Content() {
           </TabPanel>
           <TabPanel value={value} index={1}>
             <div className={classes.containerBodyTable}>
-              <UiTableFlight
+              <UiTableHotel
                 titleButton="Create New"
-                linkButton="/master/create-flight"
+                linkButton="/master/create-hotel"
               />
             </div>
           </TabPanel>
@@ -263,4 +263,4 @@ function Content() {
   );
 }
 
-export default Content;
+export default ContentHotel;

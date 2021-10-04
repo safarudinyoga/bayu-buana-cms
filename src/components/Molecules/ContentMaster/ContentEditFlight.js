@@ -7,7 +7,8 @@ import {
   Button,
 } from '@material-ui/core';
 import Form from './Form';
-import UiTableMarkUp from './UiTableMarkUp';
+import UiTableMarkUp from './UiTableMarkUpFlight';
+import UiTableMarkUpFlight from './UiTableMarkUpFlight';
 const useStyles = makeStyles((theme) => ({
   container: {
     paddingTop: theme.spacing(11),
@@ -65,7 +66,7 @@ function ContentEditFlight() {
           className={classes.form}
         />
         <div style={{ marginTop: '20px' }}>
-          <UiTableMarkUp
+          <UiTableMarkUpFlight
             titleButton="Add Override Mark-up"
             linkButton="/master/create-flight"
           />
