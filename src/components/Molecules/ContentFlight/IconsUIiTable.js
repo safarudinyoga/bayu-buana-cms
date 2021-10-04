@@ -1,4 +1,11 @@
-import { Backdrop, Button, Fade, Link, makeStyles } from '@material-ui/core';
+import {
+  Backdrop,
+  Button,
+  Fade,
+  Link,
+  makeStyles,
+  Tooltip,
+} from '@material-ui/core';
 import React from 'react';
 import Edit from '../../../assets/icons/edit.svg';
 import Remove from '../../../assets/icons/remove.svg';
@@ -44,23 +51,28 @@ const ActionButton = ({ id }) => {
   return (
     <div>
       <Link href={`/master/edit-flight/${id}`}>
-        <img
-          id="editIcon"
-          className={classes.editIcon}
-          src={Edit}
-          alt="edit icon"
-          title="Click to edit"
-        />
+        <Tooltip title="Click to edit" arrow placement="top">
+          <img
+            id="editIcon"
+            className={classes.editIcon}
+            src={Edit}
+            alt="edit icon"
+            // title="Click to edit"
+          />
+        </Tooltip>
       </Link>
 
-      <img
-        onClick={handleOpen}
-        id="removeIcon"
-        className={classes.removeIcon}
-        src={Remove}
-        alt="edit icon"
-        title="Click to remove"
-      />
+      <Tooltip title="Click to remove" arrow placement="top">
+        <img
+          onClick={handleOpen}
+          id="removeIcon"
+          className={classes.removeIcon}
+          src={Remove}
+          alt="edit icon"
+          // title="Click to remove"
+        />
+      </Tooltip>
+
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"

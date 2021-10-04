@@ -12,8 +12,10 @@ import {
   TableRow,
   Grid,
   Button,
+  Tooltip,
 } from '@material-ui/core';
-import { AddCircle, Search } from '@material-ui/icons';
+import AddFile from '../../../assets/icons/file-plus.svg';
+import { Search } from '@material-ui/icons';
 import React, { useState } from 'react';
 import IconsUiTable from './IconsUIiTable';
 
@@ -116,6 +118,21 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'row-reverse',
   },
+  buttonAdd: {
+    backgroundColor: '#F3C244',
+    color: '#5E5E5E',
+    fontSize: '14px',
+    padding: '8px 10px',
+    borderRadius: '8px',
+    textTransform: 'capitalize',
+    '&:hover': {
+      backgroundColor: '#F3C244',
+      boxShadow: '0px 4px 4px #00000069',
+    },
+  },
+  startIcon: {
+    paddingLeft: '6px',
+  },
 }));
 
 function UiTableFlight({ titleButton, linkButton }) {
@@ -150,14 +167,16 @@ function UiTableFlight({ titleButton, linkButton }) {
           </div>
         </Grid>
         <Grid item sm={3} className={classes.itemEnd}>
-          <Button
-            startIcon={<AddCircle />}
-            variant="contained"
-            href={linkButton}
-            color="primary"
-          >
-            {titleButton}
-          </Button>
+          <Tooltip title="Click to create" arrow placement="top">
+            <Button
+              startIcon={<img src={AddFile} className={classes.startIcon} />}
+              variant="contained"
+              href={linkButton}
+              className={classes.buttonAdd}
+            >
+              {titleButton}
+            </Button>
+          </Tooltip>
         </Grid>
       </div>
 
