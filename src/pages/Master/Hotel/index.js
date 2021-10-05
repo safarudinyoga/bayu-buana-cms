@@ -1,11 +1,11 @@
-import ContentFlight from '../../../components/Molecules/ContentMaster/ContentFlight.js';
+import ContentHotel from '../../../components/Molecules/ContentMaster/ContentHotel.js';
 import Layout from '../../../components/Organisms/Layout/index';
 import React from 'react';
 
 export default function index() {
   return (
     <Layout>
-      <ContentFlight />
+      <ContentHotel />
     </Layout>
   );
 }

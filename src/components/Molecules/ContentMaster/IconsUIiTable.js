@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ActionButton = ({ id }) => {
+const ActionButton = ({ id, urlEdit }) => {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
@@ -51,7 +51,7 @@ const ActionButton = ({ id }) => {
 
   return (
     <div>
-      <Link href={`/master/edit-flight/${id}`}>
+      <Link href={`${urlEdit}/${id}`}>
         <Tooltip title="Click to edit" arrow placement="top">
           <img
             id="editIcon"

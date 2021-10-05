@@ -6,6 +6,10 @@ import Master from './pages/Master/Flight/index';
 import CreateFlight from './pages/Master/Flight/create';
 import EditFlight from './pages/Master/Flight/edit';
 import store from './redux/stores';
+import CreateHotel from './pages/Master/Hotel/create';
+import EditHotel from './pages/Master/Hotel/edit';
+import CreateOther from './pages/Master/Other/create';
+import EditOther from './pages/Master/Other/edit';
 
 function App() {
   return (
@@ -15,7 +19,11 @@ function App() {
           <Route exact path="/" component={Login} />
           <Route exact path="/master" component={Master} />
           <Route exact path="/master/create-flight" component={CreateFlight} />
+          <Route exact path="/master/create-hotel" component={CreateHotel} />
+          <Route exact path="/master/create-other" component={CreateOther} />
           <Route exact path="/master/edit-flight/:id" component={EditFlight} />
+          <Route exact path="/master/edit-hotel/:id" component={EditHotel} />
+          <Route exact path="/master/edit-other/:id" component={EditOther} />
         </Switch>
       </Router>
     </Provider>

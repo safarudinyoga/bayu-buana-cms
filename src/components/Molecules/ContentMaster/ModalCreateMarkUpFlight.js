@@ -73,7 +73,7 @@ const options = [
   { value: 'strawberry', label: 'Strawberry' },
   { value: 'vanilla', label: 'Vanilla' },
 ];
-function ModalEditMarkUp({ setFunc, open }) {
+function ModalCreateMarkUpFlight({ setFunc, open }) {
   const classes = useStyles();
   const [dataEditMarkUp, setDataEditMarkUp] = useState({});
 
@@ -115,7 +115,7 @@ function ModalEditMarkUp({ setFunc, open }) {
   const body = (
     <div style={modalStyle} className={classes.paper}>
       <h2 className={classes.titleModal} id="simple-modal-title">
-        EDIT FLIGHT OVERRIDE MARKUP
+        ADD FLIGHT OVERRIDE MARKUP
       </h2>
       <div>
         <div className={classes.inputGroup}>
@@ -353,7 +353,7 @@ function ModalEditMarkUp({ setFunc, open }) {
           </Button>
         </div>
       </div>
-      <ModalEditMarkUp />
+      <ModalCreateMarkUpFlight />
     </div>
   );
   return (
@@ -372,4 +372,4 @@ function ModalEditMarkUp({ setFunc, open }) {
   );
 }
 
-export default ModalEditMarkUp;
+export default ModalCreateMarkUpFlight;
