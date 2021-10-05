@@ -1,22 +1,16 @@
-import { Grid, makeStyles } from '@material-ui/core';
-import Leftbar from '../../../components/Molecules/Leftbar';
-import Navbar from '../../../components/Molecules/Navbar';
-
-const useStyles = makeStyles((theme) => ({}));
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import DekstopLayout from './dekstop';
+import MobileLayout from './mobile';
 
 function Layout({ children }) {
-  const classes = useStyles();
+  const dekstop = useMediaQuery('(min-width:600px)');
   return (
     <>
-      <Navbar />
-      <Grid container>
-        <Grid item sm={2} xs={2}>
-          <Leftbar />
-        </Grid>
-        <Grid item sm={10} xs={10}>
-          {children}
-        </Grid>
-      </Grid>
+      {dekstop ? (
+        <DekstopLayout>{children}</DekstopLayout>
+      ) : (
+        <MobileLayout>{children}</MobileLayout>
+      )}
     </>
   );
 }
