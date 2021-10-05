@@ -1,24 +1,19 @@
-import React, { useState } from 'react';
 import {
+  AppBar,
+  Box,
   Breadcrumbs,
   Link,
   makeStyles,
-  Typography,
-  AppBar,
-  Tabs,
   Tab,
-  Box,
+  Tabs,
+  Typography,
 } from '@material-ui/core';
-import PropTypes from 'prop-types';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { Chat, FlightTakeoff, Hotel } from '@material-ui/icons';
-import Uitable from '../../Atoms/UItable';
+import PropTypes from 'prop-types';
+import React, { useState } from 'react';
 import UiTableFlight from './UiTableFlight';
 
-import useMediaQuery from '@material-ui/core/useMediaQuery';
-import UiTableDekstop from './dekstop/UiTableDekstop';
-import UiTableMobile from './mobile/UiTableMobile';
-import UiTableHotel from './UiTableHotel';
-import UiTableOther from './UiTableOther';
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -159,7 +154,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function ContentFlight() {
+function Content() {
   const classes = useStyles();
   const [value, setValue] = useState(0);
 
@@ -245,17 +240,17 @@ function ContentFlight() {
           </TabPanel>
           <TabPanel value={value} index={1}>
             <div className={classes.containerBodyTable}>
-              <UiTableHotel
+              <UiTableFlight
                 titleButton="Create New"
-                linkButton="/master/create-hotel"
+                linkButton="/master/create-flight"
               />
             </div>
           </TabPanel>
           <TabPanel value={value} index={2}>
             <div className={classes.containerBodyTable}>
-              <UiTableOther
+              <UiTableFlight
                 titleButton="Create New"
-                linkButton="/master/create-other"
+                linkButton="/master/create-flight"
               />
             </div>
           </TabPanel>
@@ -265,4 +260,4 @@ function ContentFlight() {
   );
 }
 
-export default ContentFlight;
+export default Content;

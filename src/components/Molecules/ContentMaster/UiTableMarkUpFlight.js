@@ -199,6 +199,10 @@ const useStyles = makeStyles((theme) => ({
   controlTable: {
     display: 'flex',
     justifyContent: 'space-between',
+    [theme.breakpoints.down('sm')]: {
+      display: 'flex',
+      flexDirection: 'column-reverse',
+    },
     marginBottom: theme.spacing(3),
   },
   itemStart: {
@@ -219,6 +223,10 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       backgroundColor: '#F3C244',
       boxShadow: '0px 4px 4px #00000069',
+    },
+    [theme.breakpoints.down('sm')]: {
+      boxShadow: '0px 4px 4px #00000069',
+      marginBottom: '20px',
     },
   },
   startIcon: {
