@@ -38,9 +38,6 @@ function ContentEditHotel() {
       [event.target.name]: event.target.value,
     }));
   };
-  useEffect(() => {
-    console.log(dataHotel, 'hotel');
-  }, [dataHotel]);
   return (
     <div className={classes.container}>
       <div>

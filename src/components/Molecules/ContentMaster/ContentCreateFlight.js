@@ -32,9 +32,6 @@ function ContentCreateFlight() {
       [event.target.name]: event.target.value,
     }));
   };
-  useEffect(() => {
-    console.log(dataFlight, 'flight');
-  }, [dataFlight]);
   return (
     <div className={classes.container}>
       <div>

@@ -40,9 +40,6 @@ function ContentEditOther() {
       [event.target.name]: event.target.value,
     }));
   };
-  useEffect(() => {
-    console.log(dataOther, 'flight');
-  }, [dataOther]);
   return (
     <div className={classes.container}>
       <div>
