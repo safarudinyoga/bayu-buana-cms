@@ -9,11 +9,16 @@ import {
 import React from 'react';
 import Edit from '../../../assets/icons/edit.svg';
 import Remove from '../../../assets/icons/remove.svg';
+import view from '../../../assets/icons/view.svg';
 import Modal from '@material-ui/core/Modal';
 const useStyles = makeStyles((theme) => ({
   editIcon: {
     cursor: 'pointer',
-    marginRight: '10px',
+    marginRight: '4px',
+  },
+  viewIcon: {
+    cursor: 'pointer',
+    marginRight: '4px',
   },
   removeIcon: {
     cursor: 'pointer',
@@ -52,25 +57,41 @@ const ActionButton = ({ id, urlEdit }) => {
   return (
     <div>
       <Link href={`${urlEdit}/${id}`}>
-        <Tooltip title="Click to edit" arrow placement="top">
+        <Tooltip title="Edit" arrow placement="top">
           <img
             id="editIcon"
             className={classes.editIcon}
             src={Edit}
             alt="edit icon"
-            // title="Click to edit"
+            // title="Edit"
           />
         </Tooltip>
       </Link>
 
-      <Tooltip title="Click to remove" arrow placement="top">
+      <Tooltip title="View Details" arrow placement="top">
+        <img
+          onClick={handleOpen}
+          id="viewIcon"
+          className={classes.viewIcon}
+          src={view}
+          alt="view icon"
+          // title="View Details"
+        />
+      </Tooltip>
+
+      <Tooltip
+        title="Remove"
+        arrow
+        placement="top"
+        sx={{ backgroundColor: '#3E40AE' }}
+      >
         <img
           onClick={handleOpen}
           id="removeIcon"
           className={classes.removeIcon}
           src={Remove}
           alt="edit icon"
-          // title="Click to remove"
+          // title="Remove"
         />
       </Tooltip>
 

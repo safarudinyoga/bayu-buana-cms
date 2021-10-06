@@ -14,8 +14,10 @@ import {
   Button,
   Tooltip,
 } from '@material-ui/core';
+import Download from '../../../assets/icons/download.svg';
+import Printer from '../../../assets/icons/printer.svg';
 import AddFile from '../../../assets/icons/file-plus.svg';
-import { Search } from '@material-ui/icons';
+import { ExpandMore, Search } from '@material-ui/icons';
 import React, { useState } from 'react';
 import IconsUiTable from './IconsUIiTable';
 
@@ -148,6 +150,9 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up('sm')]: {
       width: 'auto',
     },
+    [theme.breakpoints.down('sm')]: {
+      marginTop: '20px',
+    },
     border: '1px solid #D9DFE7',
   },
   searchIcon: {
@@ -176,6 +181,9 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'space-between',
     marginBottom: theme.spacing(3),
+    [theme.breakpoints.down('sm')]: {
+      flexDirection: 'column-reverse',
+    },
   },
   itemStart: {
     display: 'flex',
@@ -198,18 +206,20 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   buttonRounded: {
-    backgroundColor: '#F3C244',
+    backgroundColor: '#5E5E5E',
     color: '#fff',
     padding: '14px 14px',
     borderRadius: '300px',
     width: 10,
     display: 'flex',
     alignItems: 'center',
+    justifyContent: 'center',
     height: 10,
     marginRight: 14,
     textTransform: 'capitalize',
+    cursor: 'pointer',
     '&:hover': {
-      backgroundColor: '#F3C244',
+      backgroundColor: '#5E5E5E',
       boxShadow: '0px 4px 4px #00000069',
     },
   },
@@ -257,10 +267,10 @@ function UiTableAircraft({ titleButton, linkButton }) {
         <Grid item sm={3} className={classes.itemEnd}>
           <div className={classes.divButton}>
             <div className={classes.buttonRounded}>
-              <img src={AddFile} />
+              <img src={Download} />
             </div>
             <div className={classes.buttonRounded}>
-              <img src={AddFile} />
+              <img src={Printer} />
             </div>
 
             <Tooltip title="Click to create" arrow placement="top">
