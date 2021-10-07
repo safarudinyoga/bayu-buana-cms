@@ -1,11 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
+import ReactExport from '@ibrahimrahmani/react-export-excel';
 import {
+  alpha,
+  Button,
+  Checkbox,
+  FormControl,
+  Grid,
   InputBase,
   makeStyles,
-  alpha,
+  MenuItem,
   Paper,
+  Select,
   Table,
   TableBody,
   TableCell,
@@ -13,24 +20,20 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  Grid,
-  Button,
   Tooltip,
-  FormControl,
-  MenuItem,
-  Select,
-  Checkbox,
 } from '@material-ui/core';
-import Download from '../../../assets/icons/download.svg';
-import Printer from '../../../assets/icons/printer.svg';
-import AddFile from '../../../assets/icons/file-plus.svg';
+import { Search } from '@material-ui/icons';
+import { useDispatch } from 'react-redux';
 import Change from '../../../assets/icons/change.svg';
-import Up from '../../../assets/icons/up.svg';
 import Down from '../../../assets/icons/down.svg';
-import { ExpandMore, Search } from '@material-ui/icons';
+import Download from '../../../assets/icons/download.svg';
+import AddFile from '../../../assets/icons/file-plus.svg';
+import Printer from '../../../assets/icons/printer.svg';
+import Up from '../../../assets/icons/up.svg';
 import IconsUiTable from './IconsUIiTable';
-import { useSelector, useDispatch } from 'react-redux';
-
+const ExcelFile = ReactExport.ExcelFile;
+const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
+const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
 const labelCheckbox = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
 function createData(checkBox, aircraft_code, aircraft_name, status, actions) {
@@ -58,6 +61,7 @@ const columns = [
 const useStyles = makeStyles((theme) => ({
   paperTable: {
     width: '100%',
+    backgroundColor: 'white',
   },
   TableContainer: {
     maxHeight: 440,
@@ -279,7 +283,10 @@ function UiTableAircraft({
 
     doc.text(title, marginLeft, 40);
     doc.autoTable(content);
-    doc.save('report.pdf');
+    // for save pdf
+    // doc.save('report.pdf');
+
+    doc.output('dataurlnewwindow');
   };
   useEffect(() => {
     let rows1 = [];
@@ -373,11 +380,23 @@ function UiTableAircraft({
         {/* <Grid item sm={3}></Grid> */}
         <Grid item sm={3} className={classes.itemEnd}>
           <div className={classes.divButton}>
-            <div className={classes.buttonRounded} onClick={exportPDF}>
-              <img src={Download} />
-            </div>
+            <ExcelFile
+              element={
+                <div className={classes.buttonRounded}>
+                  <img src={Download} />{' '}
+                </div>
+              }
+              filename="Aircraft"
+            >
+              <ExcelSheet data={rowsExport} name="Goods">
+                <ExcelColumn label="Aircraft Code" value="aircode" />
+                <ExcelColumn label="Aircraft Name" value="airname" />
+                <ExcelColumn label="Status" value="status" />
+              </ExcelSheet>
+            </ExcelFile>
+
             <div className={classes.buttonRounded}>
-              <img src={Printer} />
+              <img src={Printer} onClick={exportPDF} />
             </div>
 
             <Tooltip title="Click to create" arrow placement="top">
@@ -442,15 +461,27 @@ function UiTableAircraft({
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
               <TableRow>
-                {columns.map((column) => (
-                  <TableCell
-                    key={column.id}
-                    align={column.align}
-                    style={{ minWidth: column.minWidth }}
-                  >
-                    {column.label}
-                  </TableCell>
-                ))}
+                {columns.map((column) => {
+                  console.log(column.id);
+                  return (
+                    <TableCell
+                      key={column.id}
+                      align={column.align}
+                      className={classes.tableTitle}
+                      style={{
+                        width: column.minWidth,
+                        backgroundColor: '#5e5e5e',
+                        color: 'white',
+                        borderTopLeftRadius: `${
+                          column.id === 'airCraftCode' ? '8px' : 'none'
+                        } `,
+                        // borderTopRightRadius: '8px',
+                      }}
+                    >
+                      {column.label}
+                    </TableCell>
+                  );
+                })}
               </TableRow>
             </TableHead>
             <TableBody>
@@ -472,7 +503,14 @@ function UiTableAircraft({
                       {columns.map((column) => {
                         const value = item[column.id];
                         return (
-                          <TableCell key={column.id} align={column.align}>
+                          <TableCell
+                            key={column.id}
+                            className={classes.tableValue}
+                            align={column.align}
+                            style={{
+                              width: '20%',
+                            }}
+                          >
                             {column.format && typeof value === 'number'
                               ? column.format(value)
                               : value}

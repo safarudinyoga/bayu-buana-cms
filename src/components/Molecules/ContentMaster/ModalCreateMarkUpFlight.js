@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('sm')]: {
       width: '80%',
       height: '80%',
-      padding: '17px  ',
+      padding: '17px',
       overflow: 'scroll',
       borderRadius: '8px',
     },
