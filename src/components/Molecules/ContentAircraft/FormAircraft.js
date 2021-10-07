@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles, TextField, Typography, Button } from '@material-ui/core';
 
 import Warning from '../../../assets/icons/warning.svg';
@@ -25,9 +25,9 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(6),
     border: '0.5px solid #E6E6E6',
     boxShadow: '2px 2px #F0F0F0',
+    borderRadius: '8px',
     padding: '10px',
     width: '100%',
-    borderRadius: '8px',
     [theme.breakpoints.down('sm')]: {
       width: '100%',
       padding: '12px',
@@ -121,25 +121,26 @@ const useStyles = makeStyles((theme) => ({
   wrapperTranslation: {
     borderBottom: '1px solid #c7cdd6',
     borderTop: '1px solid #c7cdd6',
-    height: '400px',
+    height: '250px',
     width: '94%',
     margin: '30px 27px 0 22px',
   },
   wrapperTrans: {
     display: 'flex',
     flexDirection: 'row',
+    border: '0.5px solid #E6E6E6',
+    boxShadow: '2px 2px #F0F0F0',
+    borderRadius: '8px',
   },
   wrapperButton: {
     width: '25%',
     display: 'flex',
     flexDirection: 'column',
-    marginTop: '-30px',
-    marginLeft: '30px',
   },
   buttonIndonesia: {
+    height: '38px',
     fontSize: '14px',
     textTransform: 'capitalize',
-    backgroundColor: 'lightgray',
     color: 'gray',
     borderRadius: '10px',
     marginBottom: '10px',
@@ -154,7 +155,7 @@ const useStyles = makeStyles((theme) => ({
   buttonChinese: {
     fontSize: '14px',
     textTransform: 'capitalize',
-    backgroundColor: 'lightgray',
+    backgroundColor: '#e7e6efd9',
     color: 'gray',
     borderRadius: '10px',
     '&:focus': {
@@ -168,6 +169,8 @@ const useStyles = makeStyles((theme) => ({
   wrapperForm: {
     display: 'flex',
     flexDirection: 'row',
+    textAlign: 'center',
+    marginTop: '30px',
   },
   form: { widht: '200px', height: '50px', border: '1px solid gray' },
   noted: {
@@ -178,8 +181,35 @@ const useStyles = makeStyles((theme) => ({
     margin: 20,
     border: '1px solid #C7CDD6',
   },
+  titleAircraft: {
+    width: '50%',
+    fontSize: '14px',
+    fontWeight: 'bold',
+    [theme.breakpoints.down('sm')]: {
+      width: '80%',
+      fontSize: '14px',
+    },
+  },
+  contentTrans: {
+    margin: '30px 0 30px 0',
+    [theme.breakpoints.down('sm')]: {
+      margin: '30px 0 10px 0',
+    },
+  },
 }));
 export default function FormAircraft({ handleForm, stateForm }) {
+  const [changeBgind, setChangeBgInd] = useState(true);
+  const [changeBgCh, setChangeBgCh] = useState(false);
+
+  const handleChangeBgInd = (e) => {
+    setChangeBgInd(changeBgCh);
+    setChangeBgCh(changeBgind);
+  };
+  const handleChangeBgCh = (e) => {
+    setChangeBgCh(changeBgind);
+    setChangeBgInd(changeBgCh);
+  };
+
   const classes = useStyles();
   return (
     <>
@@ -282,7 +312,7 @@ export default function FormAircraft({ handleForm, stateForm }) {
 
         {/* form Translation */}
         <div className={classes.wrapperTranslation}>
-          <div>
+          <div className={classes.contentTrans}>
             <Typography
               color="textPrimary"
               variant="h5"
@@ -291,25 +321,58 @@ export default function FormAircraft({ handleForm, stateForm }) {
             >
               Translation
             </Typography>
-            <div className={classes.wrapperTrans}>
-              <div className={classes.wrapperButton}>
-                <Button variant="outlined" className={classes.buttonIndonesia}>
-                  Indonesia
-                </Button>
-                <Button variant="outlined" className={classes.buttonChinese}>
-                  Chinese Simplifield
-                  <img src={Warning} />
-                </Button>
+            <div>
+              <div className={classes.wrapperTrans}>
+                <div className={classes.wrapperButton}>
+                  <Button
+                    onClick={handleChangeBgInd}
+                    variant="outlined"
+                    className={classes.buttonIndonesia}
+                    style={{
+                      backgroundColor: changeBgind ? '#e7e6efd9' : 'white',
+                    }}
+                  >
+                    Indonesia
+                  </Button>
+                  <Button
+                    onClick={handleChangeBgCh}
+                    variant="outlined"
+                    className={classes.buttonChinese}
+                    style={{
+                      backgroundColor: changeBgCh ? '#e7e6efd9' : 'white',
+                    }}
+                  >
+                    Chinese Simplifield
+                    <img src={Warning} />
+                  </Button>
+                </div>
+                <div className={classes.wrapperForm}>
+                  <Typography
+                    className={classes.titleAircraft}
+                    color="textPrimary"
+                    variant="h6"
+                    component="label"
+                  >
+                    Aircraft Name
+                  </Typography>
+                  <TextField
+                    value={stateForm?.presetName || ''}
+                    onChange={handleForm}
+                    name="presetName"
+                    required
+                    className={classes.fieldTag}
+                    id="outlined-basic"
+                    variant="outlined"
+                    size="small"
+                  />
+                </div>
               </div>
-              <div className={classes.wrapperForm}>
-                <div className={classes.form}>Accessibility Feature Name</div>
-              </div>
+              <Typography className={classes.noted}>
+                <i>
+                  Note <img src={Warning} /> Incomplete data
+                </i>
+              </Typography>
             </div>
-            <Typography className={classes.noted}>
-              <i>
-                Note <img src={Warning} /> Incomplete data
-              </i>
-            </Typography>
           </div>
         </div>
       </div>
