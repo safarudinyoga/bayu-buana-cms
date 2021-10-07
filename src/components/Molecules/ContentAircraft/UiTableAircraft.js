@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
 import {
   InputBase,
   makeStyles,
@@ -249,16 +251,47 @@ function UiTableAircraft({
   setActiveButton,
 }) {
   const [rows, setRows] = useState([]);
+  const [rowsExport, setRowsExport] = useState([]);
+  const exportPDF = () => {
+    const unit = 'pt';
+    const size = 'A4'; // Use A1, A2, A3 or A4
+    const orientation = 'portrait'; // portrait or landscape
+
+    const marginLeft = 40;
+    const doc = new jsPDF(orientation, unit, size);
+
+    doc.setFontSize(15);
+
+    const title = 'Aircraft Report';
+    const headers = [['Air Craft Code', 'Air Craft Name', 'Status']];
+
+    const data = rowsExport.map((elt) => [
+      elt.aircode,
+      elt.airname,
+      elt.status,
+    ]);
+
+    let content = {
+      startY: 50,
+      head: headers,
+      body: data,
+    };
+
+    doc.text(title, marginLeft, 40);
+    doc.autoTable(content);
+    doc.save('report.pdf');
+  };
   useEffect(() => {
-    let rows3 = [];
+    let rows1 = [];
+    let rows2 = [];
     let dataItems = dataTable.items || [];
     dataItems.map((e) =>
-      rows3.push(
+      rows1.push(
         createData(
           e.checkBox,
           e.aircraft_code,
           e.aircraft_name,
-          e.status,
+          e.status === 1 ? 'Active' : 'Inactive',
           <IconsUiTable
             id={e.id}
             urlEdit="/master/edit-flight"
@@ -267,7 +300,16 @@ function UiTableAircraft({
         ),
       ),
     );
-    setRows(rows3);
+    dataItems.map((e) =>
+      rows2.push({
+        aircode: e.aircraft_code,
+        airname: e.aircraft_name,
+        status: +e.status === 1 ? 'Active' : 'Inactive',
+      }),
+    );
+    setRows(rows1);
+    console.log(rows2, 'rows4');
+    setRowsExport(rows2);
   }, [dataTable]);
 
   const classes = useStyles();
@@ -331,7 +373,7 @@ function UiTableAircraft({
         {/* <Grid item sm={3}></Grid> */}
         <Grid item sm={3} className={classes.itemEnd}>
           <div className={classes.divButton}>
-            <div className={classes.buttonRounded}>
+            <div className={classes.buttonRounded} onClick={exportPDF}>
               <img src={Download} />
             </div>
             <div className={classes.buttonRounded}>
@@ -414,7 +456,11 @@ function UiTableAircraft({
             <TableBody>
               {rows
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .filter((e) => e.aircraft_name.includes(keyword))
+                .filter(
+                  (e) =>
+                    e.aircraft_name.includes(keyword) ||
+                    e.aircraft_code.includes(keyword),
+                )
                 .map((item) => {
                   return (
                     <TableRow
