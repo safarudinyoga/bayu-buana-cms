@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Breadcrumbs,
   Link,
@@ -7,11 +7,16 @@ import {
   Box,
 } from '@material-ui/core';
 import PropTypes from 'prop-types';
+import { useSelector, useDispatch } from 'react-redux';
 
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import UiTableDekstop from './dekstop/UiTableDekstop';
 import UiTableMobile from './mobile/UiTableMobile';
 import UiTableAircraft from './UiTableAircraft';
+import {
+  fetchAircraft,
+  removeAircraft,
+} from '../../../store/actions/Reducers-Aircraft';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -126,9 +131,18 @@ const useStyles = makeStyles((theme) => ({
 
 function ContentAircraft() {
   const classes = useStyles();
-
+  const dispatch = useDispatch();
   const dekstop = useMediaQuery('(min-width:600px)');
 
+  const stateAircraft = useSelector((state) => state.airCraft);
+  useEffect(() => {
+    const promiseAircraft = dispatch(fetchAircraft());
+    Promise.allSettled([promiseAircraft]);
+  }, []);
+
+  const deleteAircraft = (id) => {
+    dispatch(removeAircraft({ id }));
+  };
   return (
     <div className={classes.container}>
       <Breadcrumbs aria-label="breadcrumb">
@@ -171,6 +185,8 @@ function ContentAircraft() {
 
         <div className={classes.rootTab}>
           <UiTableAircraft
+            removeFunction={deleteAircraft}
+            dataTable={stateAircraft.dataAircraft}
             titleButton="Create New"
             linkButton="/aircraft/create-aircraft"
           />

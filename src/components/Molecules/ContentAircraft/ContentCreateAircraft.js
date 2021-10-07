@@ -37,9 +37,6 @@ function ContentCreateAircraft() {
       [event.target.name]: event.target.value,
     }));
   };
-  useEffect(() => {
-    console.log(dataAircraft, 'flight');
-  }, [dataAircraft]);
   return (
     <div className={classes.container}>
       <div>

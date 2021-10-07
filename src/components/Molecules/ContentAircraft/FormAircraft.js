@@ -54,6 +54,14 @@ const useStyles = makeStyles((theme) => ({
       fontSize: '14px',
     },
   },
+  labelTitle: {
+    width: '20%',
+    fontWeight: '400',
+    [theme.breakpoints.down('sm')]: {
+      width: '80%',
+      fontSize: '14px',
+    },
+  },
   fieldTag: {
     width: '300px',
     backgroundColor: 'white',
@@ -165,6 +173,10 @@ const useStyles = makeStyles((theme) => ({
   noted: {
     margin: '20px 0 40px 30px',
     color: 'gray',
+  },
+  hr: {
+    margin: 20,
+    border: '1px solid #C7CDD6',
   },
 }));
 export default function FormAircraft({ handleForm, stateForm }) {
