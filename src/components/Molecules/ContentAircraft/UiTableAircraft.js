@@ -1,3 +1,4 @@
+import react, { useState, useEffect } from 'react';
 import {
   InputBase,
   makeStyles,
@@ -18,116 +19,22 @@ import Download from '../../../assets/icons/download.svg';
 import Printer from '../../../assets/icons/printer.svg';
 import AddFile from '../../../assets/icons/file-plus.svg';
 import { ExpandMore, Search } from '@material-ui/icons';
-import React, { useState } from 'react';
 import IconsUiTable from './IconsUIiTable';
-
-function createData(airCraftCode, airCraftName, status, actions) {
+import { useSelector, useDispatch } from 'react-redux';
+function createData(aircraft_code, aircraft_name, status, actions) {
   return {
-    airCraftCode,
-    airCraftName,
+    aircraft_code,
+    aircraft_name,
     status,
     actions,
   };
 }
 
 const columns = [
-  { id: 'airCraftCode', label: 'Air Craft Code', minWidth: 220 },
-  { id: 'airCraftName', label: 'Air Craft Name', minWidth: 220 },
+  { id: 'aircraft_code', label: 'Air Craft Code', minWidth: 220 },
+  { id: 'aircraft_name', label: 'Air Craft Name', minWidth: 220 },
   { id: 'status', label: 'Status', minWidth: 170 },
   { id: 'actions', label: 'Actions', minWidth: 170 },
-];
-
-const rows = [
-  createData(
-    'India',
-    'IN',
-    1324171354,
-    <IconsUiTable id={1} urlEdit="/master/edit-flight" />,
-  ),
-  createData(
-    'China',
-    'CN',
-    1403500365,
-    <IconsUiTable id={1} urlEdit="/master/edit-flight" />,
-  ),
-  createData(
-    'Italy',
-    'IT',
-    60483973,
-    <IconsUiTable id={1} urlEdit="/master/edit-flight" />,
-  ),
-  createData(
-    'United States',
-    'US',
-    327167434,
-    <IconsUiTable id={1} urlEdit="/master/edit-flight" />,
-  ),
-  createData(
-    'Canada',
-    'CA',
-    37602103,
-    <IconsUiTable id={1} urlEdit="/master/edit-flight" />,
-  ),
-  createData(
-    'Australia',
-    'AU',
-    25475400,
-    <IconsUiTable id={1} urlEdit="/master/edit-flight" />,
-  ),
-  createData(
-    'Germany',
-    'DE',
-    83019200,
-    <IconsUiTable id={1} urlEdit="/master/edit-flight" />,
-  ),
-  createData(
-    'Ireland',
-    'IE',
-    4857000,
-    <IconsUiTable id={1} urlEdit="/master/edit-flight" />,
-  ),
-  createData(
-    'Mexico',
-    'MX',
-    126577691,
-    <IconsUiTable id={1} urlEdit="/master/edit-flight" />,
-  ),
-  createData(
-    'Japan',
-    'JP',
-    126317000,
-    <IconsUiTable id={1} urlEdit="/master/edit-flight" />,
-  ),
-  createData(
-    'France',
-    'FR',
-    67022000,
-    <IconsUiTable id={1} urlEdit="/master/edit-flight" />,
-  ),
-  createData(
-    'United Kingdom',
-    'GB',
-    67545757,
-    <IconsUiTable id={1} urlEdit="/master/edit-flight" />,
-  ),
-  createData(
-    'Russia',
-    'RU',
-    146793744,
-    <IconsUiTable id={1} urlEdit="/master/edit-flight" />,
-  ),
-  createData(
-    'Nigeria',
-    'NG',
-    200962417,
-    <IconsUiTable id={1} urlEdit="/master/edit-flight" />,
-  ),
-  createData(
-    'Brazil',
-    'BR',
-    210147125,
-    <IconsUiTable id={1} urlEdit="/master/edit-flight" />,
-  ),
 ];
 
 const useStyles = makeStyles((theme) => ({
@@ -233,11 +140,38 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function UiTableAircraft({ titleButton, linkButton }) {
+function UiTableAircraft({
+  titleButton,
+  linkButton,
+  dataTable,
+  removeFunction,
+}) {
+  const [rows, setRows] = useState([]);
+  useEffect(() => {
+    let rows3 = [];
+    let dataItems = dataTable.items || [];
+    dataItems.map((e) =>
+      rows3.push(
+        createData(
+          e.aircraft_code,
+          e.aircraft_name,
+          e.status,
+          <IconsUiTable
+            id={e.id}
+            urlEdit="/master/edit-flight"
+            removeFunction={remove}
+          />,
+        ),
+      ),
+    );
+    setRows(rows3);
+  }, [dataTable]);
+
   const classes = useStyles();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-
+  const [keyword, setkeyword] = useState('');
+  const dispatch = useDispatch();
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -245,6 +179,13 @@ function UiTableAircraft({ titleButton, linkButton }) {
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
+  };
+
+  const handleSearch = (event) => {
+    setkeyword(event.target.value);
+  };
+  const remove = (id) => {
+    removeFunction(id);
   };
   return (
     <div>
@@ -255,6 +196,9 @@ function UiTableAircraft({ titleButton, linkButton }) {
               <Search />
             </div>
             <InputBase
+              onChange={(value) => {
+                handleSearch(value);
+              }}
               placeholder="Search…"
               classes={{
                 root: classes.inputRoot,
@@ -306,16 +250,17 @@ function UiTableAircraft({ titleButton, linkButton }) {
             <TableBody>
               {rows
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row) => {
+                .filter((e) => e.aircraft_name.includes(keyword))
+                .map((item) => {
                   return (
                     <TableRow
                       hover
                       role="checkbox"
                       tabIndex={-1}
-                      key={row.code}
+                      key={item.code}
                     >
                       {columns.map((column) => {
-                        const value = row[column.id];
+                        const value = item[column.id];
                         return (
                           <TableCell key={column.id} align={column.align}>
                             {column.format && typeof value === 'number'

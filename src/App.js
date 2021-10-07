@@ -1,11 +1,9 @@
-import { Provider } from 'react-redux';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 import Login from './pages/Login';
 import Master from './pages/Master/Flight/index';
 import CreateFlight from './pages/Master/Flight/create';
 import EditFlight from './pages/Master/Flight/edit';
-import store from './redux/stores';
 import CreateHotel from './pages/Master/Hotel/create';
 import CreateAircraft from './pages/AirCraft/create';
 import EditHotel from './pages/Master/Hotel/edit';
@@ -15,7 +13,7 @@ import AirCraft from './pages/AirCraft/index';
 
 function App() {
   return (
-    <Provider store={store}>
+    <div>
       <Router basename="/dashboard">
         <Switch>
           <Route exact path="/" component={Login} />
@@ -34,7 +32,7 @@ function App() {
           <Route exact path="/master/edit-other/:id" component={EditOther} />
         </Switch>
       </Router>
-    </Provider>
+    </div>
   );
 }
 

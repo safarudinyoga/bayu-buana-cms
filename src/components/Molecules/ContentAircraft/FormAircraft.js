@@ -56,6 +56,14 @@ const useStyles = makeStyles((theme) => ({
       fontSize: '14px',
     },
   },
+  labelTitle: {
+    width: '20%',
+    fontWeight: '400',
+    [theme.breakpoints.down('sm')]: {
+      width: '80%',
+      fontSize: '14px',
+    },
+  },
   fieldTag: {
     width: '300px',
     [theme.breakpoints.down('sm')]: {
@@ -133,110 +141,133 @@ const useStyles = makeStyles((theme) => ({
     padding: 1,
     margin: 30,
   },
+  hr: {
+    margin: 20,
+    border: '1px solid #C7CDD6',
+  },
 }));
 export default function FormAircraft({ handleForm, stateForm }) {
   const classes = useStyles();
   return (
     <>
       <div className={classes.containerForm}>
-        <form className={classes.root} noValidate autoComplete="off">
-          <Grid container>
-            <Grid item sm={1} md={6} xs={1}>
-              <div>
-                <div className={classes.inputGroup}>
-                  <Typography
-                    className={classes.labelForm}
-                    color="textPrimary"
-                    variant="h6"
-                    component="label"
-                  >
-                    Preset Name <span style={{ color: 'red' }}>*</span>
-                  </Typography>
-                  <TextField
-                    value={stateForm?.presetName || ''}
-                    onChange={handleForm}
-                    name="presetName"
-                    required
-                    className={classes.fieldTag}
-                    id="outlined-basic"
-                    variant="outlined"
-                    size="small"
-                  />
-                </div>
-                <div className={classes.inputGroup}>
-                  <Typography
-                    className={classes.labelForm}
-                    color="textPrimary"
-                    variant="h6"
-                    component="label"
-                  >
-                    Model
-                  </Typography>
-                  <TextField
-                    value={stateForm?.presetName || ''}
-                    onChange={handleForm}
-                    name="presetName"
-                    required
-                    className={classes.fieldTag}
-                    id="outlined-basic"
-                    variant="outlined"
-                    size="small"
-                  />
-                </div>
-              </div>
-            </Grid>
-            <Grid item sm={1} md={6} xs={1}>
-              <div className={classes.panelPurpose}>
+        <form noValidate autoComplete="off">
+          <div className={classes.root}>
+            <Grid container>
+              <Grid item sm={1} md={6} xs={1}>
                 <div>
                   <div className={classes.inputGroup}>
-                    <Typography color="textPrimary" variant="h5" component="h1">
-                      For Interface Purpose
+                    <Typography
+                      className={classes.labelForm}
+                      color="textPrimary"
+                      variant="h6"
+                      component="label"
+                    >
+                      Preset Name <span style={{ color: 'red' }}>*</span>
                     </Typography>
+                    <TextField
+                      value={stateForm?.presetName || ''}
+                      onChange={handleForm}
+                      name="presetName"
+                      required
+                      className={classes.fieldTag}
+                      id="outlined-basic"
+                      variant="outlined"
+                      size="small"
+                    />
+                  </div>
+                  <div className={classes.inputGroup}>
+                    <Typography
+                      className={classes.labelForm}
+                      color="textPrimary"
+                      variant="h6"
+                      component="label"
+                    >
+                      Model
+                    </Typography>
+                    <TextField
+                      value={stateForm?.presetName || ''}
+                      onChange={handleForm}
+                      name="presetName"
+                      required
+                      className={classes.fieldTag}
+                      id="outlined-basic"
+                      variant="outlined"
+                      size="small"
+                    />
                   </div>
                 </div>
-                <div className={classes.inputGroup}>
-                  <Typography
-                    className={classes.labelForm}
-                    color="textPrimary"
-                    variant="h6"
-                    component="label"
-                  >
-                    Aircraft Code
-                  </Typography>
-                  <TextField
-                    value={stateForm?.presetName || ''}
-                    onChange={handleForm}
-                    name="presetName"
-                    required
-                    className={classes.fieldTag}
-                    id="outlined-basic"
-                    variant="outlined"
-                    size="small"
-                  />
+              </Grid>
+              <Grid item sm={1} md={6} xs={1}>
+                <div className={classes.panelPurpose}>
+                  <div>
+                    <div className={classes.inputGroup}>
+                      <Typography
+                        color="textPrimary"
+                        variant="h5"
+                        component="h1"
+                      >
+                        For Interface Purpose
+                      </Typography>
+                    </div>
+                  </div>
+                  <div className={classes.inputGroup}>
+                    <Typography
+                      className={classes.labelForm}
+                      color="textPrimary"
+                      variant="h6"
+                      component="label"
+                    >
+                      Aircraft Code
+                    </Typography>
+                    <TextField
+                      value={stateForm?.presetName || ''}
+                      onChange={handleForm}
+                      name="presetName"
+                      required
+                      className={classes.fieldTag}
+                      id="outlined-basic"
+                      variant="outlined"
+                      size="small"
+                    />
+                  </div>
+                  <div className={classes.inputGroup}>
+                    <Typography
+                      className={classes.labelForm}
+                      color="textPrimary"
+                      variant="h6"
+                      component="label"
+                    >
+                      ICAO Code
+                    </Typography>
+                    <TextField
+                      value={stateForm?.presetName || ''}
+                      onChange={handleForm}
+                      name="presetName"
+                      required
+                      className={classes.fieldTag}
+                      id="outlined-basic"
+                      variant="outlined"
+                      size="small"
+                    />
+                  </div>
                 </div>
-                <div className={classes.inputGroup}>
-                  <Typography
-                    className={classes.labelForm}
-                    color="textPrimary"
-                    variant="h6"
-                    component="label"
-                  >
-                    ICAO Code
-                  </Typography>
-                  <TextField
-                    value={stateForm?.presetName || ''}
-                    onChange={handleForm}
-                    name="presetName"
-                    required
-                    className={classes.fieldTag}
-                    id="outlined-basic"
-                    variant="outlined"
-                    size="small"
-                  />
-                </div>
-              </div>
+              </Grid>
             </Grid>
-          </Grid>
+          </div>
+          <div>
+            <hr className={classes.hr} />
+            <div className={classes.inputGroup}>
+              <Typography
+                className={classes.labelTitle}
+                color="textPrimary"
+                variant="h5"
+                component="label"
+              >
+                Translation
+              </Typography>
+            </div>
+          </div>
         </form>
       </div>
     </>
