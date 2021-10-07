@@ -1,7 +1,9 @@
 import {
+  alpha,
+  Button,
+  Grid,
   InputBase,
   makeStyles,
-  alpha,
   Paper,
   Table,
   TableBody,
@@ -10,15 +12,13 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  Grid,
-  Button,
   Tooltip,
 } from '@material-ui/core';
-import Download from '../../../assets/icons/download.svg';
-import Printer from '../../../assets/icons/printer.svg';
-import AddFile from '../../../assets/icons/file-plus.svg';
-import { ExpandMore, Search } from '@material-ui/icons';
+import { Search } from '@material-ui/icons';
 import React, { useState } from 'react';
+import Download from '../../../assets/icons/download.svg';
+import AddFile from '../../../assets/icons/file-plus.svg';
+import Printer from '../../../assets/icons/printer.svg';
 import IconsUiTable from './IconsUIiTable';
 
 function createData(airCraftCode, airCraftName, status, actions) {
@@ -31,8 +31,8 @@ function createData(airCraftCode, airCraftName, status, actions) {
 }
 
 const columns = [
-  { id: 'airCraftCode', label: 'Air Craft Code', minWidth: 220 },
-  { id: 'airCraftName', label: 'Air Craft Name', minWidth: 220 },
+  { id: 'airCraftCode', label: 'AirCraft Code', minWidth: 220 },
+  { id: 'airCraftName', label: 'AirCraft Name', minWidth: 220 },
   { id: 'status', label: 'Status', minWidth: 170 },
   { id: 'actions', label: 'Actions', minWidth: 170 },
 ];
@@ -133,7 +133,7 @@ const rows = [
 const useStyles = makeStyles((theme) => ({
   paperTable: {
     width: '100%',
-    backgroundColor: 'blue',
+    backgroundColor: 'white',
   },
   TableContainer: {
     maxHeight: 440,
@@ -233,6 +233,23 @@ const useStyles = makeStyles((theme) => ({
     flex: 'row',
     alignItems: 'center',
   },
+  tableTitle: {
+    [theme.breakpoints.down('sm')]: {
+      width: '10%',
+      fontSize: '14px',
+      backgroundColor: '#5e5e5e',
+      padding: '10px',
+    },
+    tableValue: {
+      padding: '0',
+
+      [theme.breakpoints.down('sm')]: {
+        height: '15%',
+        backgroundColor: 'red ',
+        minHeight: '15%',
+      },
+    },
+  },
 }));
 
 function UiTableAircraft({ titleButton, linkButton }) {
@@ -294,24 +311,27 @@ function UiTableAircraft({ titleButton, linkButton }) {
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
               <TableRow>
-                {columns.map((column) => (
-
-                  // console.log(colomun.id)
-                  // tableHead
-                  <TableCell
-                    key={column.id}
-                    align={column.align}
-                    style={{
-                      minWidth: column.minWidth,
-                      backgroundColor: '#5e5e5e',
-                      color: 'white',
-                      borderTopLeftRadius: '8px',
-                      borderTopRightRadius: '8px',
-                    }}
-                  >
-                    {column.label}
-                  </TableCell>
-                )}
+                {columns.map((column) => {
+                  console.log(column.id);
+                  return (
+                    <TableCell
+                      key={column.id}
+                      align={column.align}
+                      className={classes.tableTitle}
+                      style={{
+                        width: column.minWidth,
+                        backgroundColor: '#5e5e5e',
+                        color: 'white',
+                        borderTopLeftRadius: `${
+                          column.id === 'airCraftCode' ? '8px' : 'none'
+                        } `,
+                        // borderTopRightRadius: '8px',
+                      }}
+                    >
+                      {column.label}
+                    </TableCell>
+                  );
+                })}
               </TableRow>
             </TableHead>
             <TableBody style={{ backgroundColor: 'green' }}>
@@ -324,15 +344,18 @@ function UiTableAircraft({ titleButton, linkButton }) {
                       role="checkbox"
                       tabIndex={-1}
                       key={row.code}
-                      style={{ backgroundColor: 'salmon' }}
+                      style={{ backgroundColor: 'salmon', minHeight: '15%' }}
                     >
                       {columns.map((column) => {
                         const value = row[column.id];
                         return (
                           <TableCell
                             key={column.id}
+                            className={classes.tableValue}
                             align={column.align}
-                            style={{ width: '20%' }}
+                            style={{
+                              width: '20%',
+                            }}
                           >
                             {column.format && typeof value === 'number'
                               ? column.format(value)
