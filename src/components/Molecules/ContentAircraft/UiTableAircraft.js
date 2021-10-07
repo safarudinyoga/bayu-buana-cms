@@ -131,9 +131,11 @@ const rows = [
 const useStyles = makeStyles((theme) => ({
   paperTable: {
     width: '100%',
+    backgroundColor: 'blue',
   },
   TableContainer: {
     maxHeight: 440,
+    backgroundColor: 'red',
   },
   search: {
     position: 'relative',
@@ -283,17 +285,26 @@ function UiTableAircraft({ titleButton, linkButton }) {
             <TableHead>
               <TableRow>
                 {columns.map((column) => (
+
+                  // console.log(colomun.id)
+                  // tableHead
                   <TableCell
                     key={column.id}
                     align={column.align}
-                    style={{ minWidth: column.minWidth }}
+                    style={{
+                      minWidth: column.minWidth,
+                      backgroundColor: '#5e5e5e',
+                      color: 'white',
+                      borderTopLeftRadius: '8px',
+                      borderTopRightRadius: '8px',
+                    }}
                   >
                     {column.label}
                   </TableCell>
-                ))}
+                )}
               </TableRow>
             </TableHead>
-            <TableBody>
+            <TableBody style={{ backgroundColor: 'green' }}>
               {rows
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row) => {
@@ -303,11 +314,16 @@ function UiTableAircraft({ titleButton, linkButton }) {
                       role="checkbox"
                       tabIndex={-1}
                       key={row.code}
+                      style={{ backgroundColor: 'salmon' }}
                     >
                       {columns.map((column) => {
                         const value = row[column.id];
                         return (
-                          <TableCell key={column.id} align={column.align}>
+                          <TableCell
+                            key={column.id}
+                            align={column.align}
+                            style={{ width: '20%' }}
+                          >
                             {column.format && typeof value === 'number'
                               ? column.format(value)
                               : value}
