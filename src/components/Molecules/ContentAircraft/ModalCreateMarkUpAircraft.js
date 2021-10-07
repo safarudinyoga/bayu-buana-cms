@@ -41,44 +41,23 @@ const useStyles = makeStyles((theme) => ({
     position: 'absolute',
     width: 760,
     backgroundColor: theme.palette.background.paper,
-    border: '1px solid #707070',
-    borderRadius: '8px',
+    border: '2px solid #000',
     boxShadow: theme.shadows[5],
     padding: theme.spacing(3, 6, 6),
-    [theme.breakpoints.down('sm')]: {
-      width: '80%',
-      height: '80%',
-      padding: '17px',
-      overflow: 'scroll',
-      borderRadius: '8px',
-    },
   },
   titleModal: {
     fontSize: '16px',
-    [theme.breakpoints.down('sm')]: {
-      textAlign: 'center',
-      fontSize: '20px ',
-    },
   },
   inputGroup: {
     display: 'flex',
     flexDirection: 'row',
     marginTop: 20,
-    [theme.breakpoints.down('sm')]: {
-      display: 'flex',
-      flexDirection: 'column',
-      marginTop: '5px',
-    },
   },
   labelForm: {
     width: '30%',
     fontWeight: '400',
     fontSize: '1rem',
     display: 'flex',
-    [theme.breakpoints.down('sm')]: {
-      fontSize: '14px',
-      width: '70%',
-    },
   },
   labelInput: {
     marginRight: 10,
@@ -87,18 +66,6 @@ const useStyles = makeStyles((theme) => ({
   },
   fieldTagInput: {
     width: '120px',
-  },
-  controlLabel: {
-    [theme.breakpoints.down('sm')]: {
-      display: 'none',
-    },
-  },
-  titleTicket: {
-    display: 'none',
-    [theme.breakpoints.down('sm')]: {
-      display: 'flex',
-      fontSize: '14px',
-    },
   },
 }));
 const options = [
@@ -148,7 +115,7 @@ function ModalCreateMarkUpFlight({ setFunc, open }) {
   const body = (
     <div style={modalStyle} className={classes.paper}>
       <h2 className={classes.titleModal} id="simple-modal-title">
-        ADD OVERRIDE FLIGHT MARKUP
+        ADD FLIGHT OVERRIDE MARKUP
       </h2>
       <div>
         <div className={classes.inputGroup}>
@@ -160,7 +127,6 @@ function ModalCreateMarkUpFlight({ setFunc, open }) {
           >
             Destination <span style={{ color: 'red' }}>*</span>
           </Typography>
-
           <Grid container>
             <Grid item md={6}>
               <Select
@@ -183,7 +149,6 @@ function ModalCreateMarkUpFlight({ setFunc, open }) {
           >
             Airline Service Type<span style={{ color: 'red' }}>*</span>
           </Typography>
-
           <Grid container>
             <Grid item md={6}>
               <Select
@@ -231,7 +196,6 @@ function ModalCreateMarkUpFlight({ setFunc, open }) {
           <Grid container>
             <Grid item md={6}>
               <Select
-                styles={classes.selectInput}
                 onChange={handleSpecifiedSource}
                 options={options}
                 isMulti
@@ -265,7 +229,7 @@ function ModalCreateMarkUpFlight({ setFunc, open }) {
                   name="typeDomestic"
                   value="fixedAmountDomestic"
                   control={<Radio color="primary" />}
-                  label="Fix Amount"
+                  label="Fixed Amount"
                 />
               </RadioGroup>
             </Grid>
@@ -290,11 +254,9 @@ function ModalCreateMarkUpFlight({ setFunc, open }) {
                     size="small"
                     style={{ marginRight: 14 }}
                   />
-                  <p className={classes.titleTicket}>/Ticket</p>
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column' }}>
                   <FormControlLabel
-                    className={classes.controlLabel}
                     onChange={handleInput}
                     checked={
                       dataEditMarkUp.typeIdrDomestic === 'ticketDomestic'
@@ -305,7 +267,6 @@ function ModalCreateMarkUpFlight({ setFunc, open }) {
                     label="Ticket"
                   />
                   <FormControlLabel
-                    className={classes.controlLabel}
                     onChange={handleInput}
                     checked={
                       dataEditMarkUp.typeIdrDomestic === 'personDomestic'
@@ -316,7 +277,6 @@ function ModalCreateMarkUpFlight({ setFunc, open }) {
                     label="Person"
                   />
                   <FormControlLabel
-                    className={classes.controlLabel}
                     onChange={handleInput}
                     checked={
                       dataEditMarkUp.typeIdrDomestic === 'transactionDomestic'

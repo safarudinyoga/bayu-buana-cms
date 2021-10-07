@@ -6,15 +6,20 @@ import {
   Typography,
   Button,
 } from '@material-ui/core';
-import Form from './Form';
+import FormAircraft from './FormAircraft';
 const useStyles = makeStyles((theme) => ({
   container: {
     paddingTop: theme.spacing(11),
     marginRight: theme.spacing(7),
     marginLeft: theme.spacing(3),
     marginBottom: theme.spacing(10),
+
+    [theme.breakpoints.down('sm')]: {
+      width: ' 80%',
+    },
   },
   titleBread: {
+    fontWeight: 'bold',
     [theme.breakpoints.down('sm')]: {
       fontSize: '12px',
     },
@@ -23,11 +28,11 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(2),
   },
 }));
-function ContentCreateFlight() {
+function ContentCreateAircraft() {
   const classes = useStyles();
-  const [dataFlight, setDataFlight] = useState({});
+  const [dataAircraft, setDataAircraft] = useState({});
   const handleForm = (event) => {
-    setDataFlight((prevState) => ({
+    setDataAircraft((prevState) => ({
       ...prevState,
       [event.target.name]: event.target.value,
     }));
@@ -40,18 +45,18 @@ function ContentCreateFlight() {
             Master Data Management
           </Link>
           <Link className={classes.titleBread} color="inherit" href="/">
-            Standard Mark-Up
+            Aircraft
           </Link>
           <Typography className={classes.titleBread} color="error">
-            Create Flight Standard Mark-Up
+            Create Aircraft
           </Typography>
         </Breadcrumbs>
         <div className={classes.title}>
           <Typography color="textPrimary" variant="h5" component="h1">
-            Create Flight Standard Mark-Up
+            Create Aircraft
           </Typography>
         </div>
-        <Form handleForm={handleForm} stateForm={dataFlight} />
+        <FormAircraft handleForm={handleForm} stateForm={dataAircraft} />
       </div>
       <div display="flex" flexDirection="row" style={{ marginTop: '20px' }}>
         <Button
@@ -66,4 +71,4 @@ function ContentCreateFlight() {
     </div>
   );
 }
-export default ContentCreateFlight;
+export default ContentCreateAircraft;
