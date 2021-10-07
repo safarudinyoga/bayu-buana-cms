@@ -1,4 +1,4 @@
-import react, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   InputBase,
   makeStyles,
@@ -14,15 +14,26 @@ import {
   Grid,
   Button,
   Tooltip,
+  FormControl,
+  MenuItem,
+  Select,
+  Checkbox,
 } from '@material-ui/core';
 import Download from '../../../assets/icons/download.svg';
 import Printer from '../../../assets/icons/printer.svg';
 import AddFile from '../../../assets/icons/file-plus.svg';
+import Change from '../../../assets/icons/change.svg';
+import Up from '../../../assets/icons/up.svg';
+import Down from '../../../assets/icons/down.svg';
 import { ExpandMore, Search } from '@material-ui/icons';
 import IconsUiTable from './IconsUIiTable';
 import { useSelector, useDispatch } from 'react-redux';
-function createData(aircraft_code, aircraft_name, status, actions) {
+
+const labelCheckbox = { inputProps: { 'aria-label': 'Checkbox demo' } };
+
+function createData(checkBox, aircraft_code, aircraft_name, status, actions) {
   return {
+    checkBox,
     aircraft_code,
     aircraft_name,
     status,
@@ -31,6 +42,11 @@ function createData(aircraft_code, aircraft_name, status, actions) {
 }
 
 const columns = [
+  {
+    id: 'checkBox',
+    label: <Checkbox color="black" {...labelCheckbox} />,
+    minWidth: 20,
+  },
   { id: 'aircraft_code', label: 'Air Craft Code', minWidth: 220 },
   { id: 'aircraft_name', label: 'Air Craft Name', minWidth: 220 },
   { id: 'status', label: 'Status', minWidth: 170 },
@@ -59,8 +75,19 @@ const useStyles = makeStyles((theme) => ({
     },
     [theme.breakpoints.down('sm')]: {
       marginTop: '20px',
+      marginBottom: '10px',
     },
     border: '1px solid #D9DFE7',
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  wrapperSearchDropdown: {
+    display: 'flex',
+    flexDirection: 'row',
+    [theme.breakpoints.down('sm')]: {
+      display: 'flex',
+      flexDirection: 'column',
+    },
   },
   searchIcon: {
     padding: theme.spacing(0, 2),
@@ -122,7 +149,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
     height: 10,
-    marginRight: 14,
+    marginRight: 8,
     textTransform: 'capitalize',
     cursor: 'pointer',
     '&:hover': {
@@ -138,6 +165,79 @@ const useStyles = makeStyles((theme) => ({
     flex: 'row',
     alignItems: 'center',
   },
+  dropdown: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    cursor: 'pointer',
+    minWidth: '300px',
+    [theme.breakpoints.down('sm')]: {
+      justifyContent: 'flex-end',
+    },
+  },
+  modal: {
+    width: 'auto',
+    height: '100px',
+    backgroundColor: '#f5f5f5',
+    borderRadius: '10px',
+    border: '2px solid lightGray',
+    display: 'flex',
+    flexDirection: 'column',
+    marginBottom: '20px',
+  },
+  modalHeader: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: '10px',
+    marginBottom: '10px',
+  },
+  statusActive: {
+    width: '60px',
+    height: '40px',
+    backgroundColor: 'white',
+    minWidth: 150,
+    marginLeft: '25px',
+    alignItems: 'center',
+    marginTop: '-20px',
+    fontSize: '14px',
+    borderRadius: '10px',
+  },
+  buttonActive: {
+    width: '60px',
+    height: '40px',
+    backgroundColor: '#5e5e5e',
+    color: 'white',
+    minWidth: 150,
+    marginLeft: '25px',
+    alignItems: 'center',
+    fontSize: '14px',
+    borderRadius: '10px',
+    [theme.breakpoints.down('sm')]: {
+      marginLeft: '0px',
+      marginBottom: '10px',
+    },
+  },
+  buttonSpace: {
+    marginBottom: '20px',
+    [theme.breakpoints.down('sm')]: {
+      display: 'flex',
+      flexDirection: 'column',
+    },
+  },
+  buttonRemove: {
+    width: '150px',
+    height: '40px',
+    backgroundColor: '#5e5e5e',
+    color: 'white',
+    borderRadius: '10px',
+    marginLeft: '10px',
+    fontSize: '14px',
+    textTransform: 'capitalize',
+    [theme.breakpoints.down('sm')]: {
+      marginLeft: '0px',
+    },
+  },
 }));
 
 function UiTableAircraft({
@@ -145,6 +245,8 @@ function UiTableAircraft({
   linkButton,
   dataTable,
   removeFunction,
+  activeButton,
+  setActiveButton,
 }) {
   const [rows, setRows] = useState([]);
   useEffect(() => {
@@ -153,6 +255,7 @@ function UiTableAircraft({
     dataItems.map((e) =>
       rows3.push(
         createData(
+          e.checkBox,
           e.aircraft_code,
           e.aircraft_name,
           e.status,
@@ -187,27 +290,45 @@ function UiTableAircraft({
   const remove = (id) => {
     removeFunction(id);
   };
+
+  const [activeModal, setActiveModal] = useState(false);
+
+  const [age, setAge] = useState('');
+
+  const handleChange = (event) => {
+    setAge(event.target.value);
+  };
   return (
     <div>
       <div className={classes.controlTable}>
         <Grid item sm={3}>
-          <div className={classes.search}>
-            <div className={classes.searchIcon}>
-              <Search />
+          <div className={classes.wrapperSearchDropdown}>
+            <div className={classes.search}>
+              <div className={classes.searchIcon}>
+                <Search />
+              </div>
+              <InputBase
+                onChange={(value) => {
+                  handleSearch(value);
+                }}
+                placeholder="Search…"
+                classes={{
+                  root: classes.inputRoot,
+                  input: classes.inputInput,
+                }}
+                inputProps={{ 'aria-label': 'search' }}
+              />
             </div>
-            <InputBase
-              onChange={(value) => {
-                handleSearch(value);
-              }}
-              placeholder="Search…"
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
-              inputProps={{ 'aria-label': 'search' }}
-            />
+            <div
+              className={classes.dropdown}
+              onClick={(e) => setActiveModal(!activeModal)}
+            >
+              <strong>Advanced options</strong>
+              <img src={activeModal ? Down : Up} />
+            </div>
           </div>
         </Grid>
+        {/* <Grid item sm={3}></Grid> */}
         <Grid item sm={3} className={classes.itemEnd}>
           <div className={classes.divButton}>
             <div className={classes.buttonRounded}>
@@ -230,6 +351,49 @@ function UiTableAircraft({
           </div>
         </Grid>
       </div>
+
+      {activeModal && (
+        <div className={classes.modal}>
+          <div className={classes.modalHeader}>
+            <strong style={{ marginLeft: '25px', fontSize: '14px' }}>
+              Status
+            </strong>
+            <div className={classes.buttonRounded}>
+              <img src={Change} />
+            </div>
+          </div>
+          <FormControl variant="outlined">
+            <Select
+              className={classes.statusActive}
+              value={age}
+              onChange={handleChange}
+              displayEmpty
+              inputProps={{ 'aria-label': 'Without label' }}
+            >
+              <MenuItem value="">Active</MenuItem>
+              <MenuItem value={10}>Inactive</MenuItem>
+            </Select>
+          </FormControl>
+        </div>
+      )}
+      {activeModal && (
+        <div className={classes.buttonSpace}>
+          <FormControl variant="outlined">
+            <Select
+              className={classes.buttonActive}
+              value={age}
+              onChange={handleChange}
+              displayEmpty
+              inputProps={{ 'aria-label': 'Without label' }}
+            >
+              <MenuItem value="">Update Status</MenuItem>
+              <MenuItem value={10}>Active</MenuItem>
+              <MenuItem value={20}>Inactive</MenuItem>
+            </Select>
+          </FormControl>
+          <Button className={classes.buttonRemove}>Remove Aircraft</Button>
+        </div>
+      )}
 
       <Paper className={classes.paperTable}>
         <TableContainer className={classes.TableContainer}>
