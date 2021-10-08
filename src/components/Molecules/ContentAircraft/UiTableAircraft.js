@@ -301,7 +301,8 @@ function UiTableAircraft({
           e.status === 1 ? 'Active' : 'Inactive',
           <IconsUiTable
             id={e.id}
-            urlEdit="/master/edit-flight"
+            urlDetail="/aircraft/detail-aircraft"
+            urlEdit="/aircraft/edit-aircraft"
             removeFunction={remove}
           />,
         ),
@@ -344,6 +345,9 @@ function UiTableAircraft({
 
   const [age, setAge] = useState('');
 
+  const reloadPage = () => {
+    window.location.reload();
+  };
   const handleChange = (event) => {
     setAge(event.target.value);
   };
@@ -419,7 +423,7 @@ function UiTableAircraft({
             <strong style={{ marginLeft: '25px', fontSize: '14px' }}>
               Status
             </strong>
-            <div className={classes.buttonRounded}>
+            <div onClick={reloadPage} className={classes.buttonRounded}>
               <img src={Change} />
             </div>
           </div>
