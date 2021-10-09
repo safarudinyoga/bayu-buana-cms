@@ -197,7 +197,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
-export default function FormAircraft({ handleForm, stateForm }) {
+export default function FormAircraft({ handleForm, stateForm, read = false }) {
   const [changeBgind, setChangeBgInd] = useState(true);
   const [changeBgCh, setChangeBgCh] = useState(false);
 
@@ -226,10 +226,13 @@ export default function FormAircraft({ handleForm, stateForm }) {
                 Aircraft Name <span style={{ color: 'red' }}>*</span>
               </Typography>
               <TextField
-                value={stateForm?.presetName || ''}
+                value={stateForm?.aircraft_name || ''}
                 onChange={handleForm}
-                name="presetName"
+                name="aircraft_name"
                 required
+                InputProps={{
+                  readOnly: read === true ? true : false,
+                }}
                 className={classes.fieldTag}
                 id="outlined-basic"
                 variant="outlined"
@@ -246,10 +249,13 @@ export default function FormAircraft({ handleForm, stateForm }) {
                 Model
               </Typography>
               <TextField
-                value={stateForm?.presetName || ''}
+                value={stateForm?.model || ''}
                 onChange={handleForm}
-                name="presetName"
+                name="model"
                 required
+                InputProps={{
+                  readOnly: read === true ? true : false,
+                }}
                 className={classes.fieldTag}
                 id="outlined-basic"
                 variant="outlined"
@@ -277,9 +283,12 @@ export default function FormAircraft({ handleForm, stateForm }) {
                 Aircraft Code <span style={{ color: 'red' }}>*</span>
               </Typography>
               <TextField
-                value={stateForm?.presetName || ''}
+                InputProps={{
+                  readOnly: read === true ? true : false,
+                }}
+                value={stateForm?.aircraft_code || ''}
                 onChange={handleForm}
-                name="presetName"
+                name="aircraft_code"
                 required
                 className={classes.inputTag}
                 id="outlined-basic"
@@ -287,7 +296,7 @@ export default function FormAircraft({ handleForm, stateForm }) {
                 size="small"
               />
             </div>
-            <div className={classes.inputGroup}>
+            {/* <div className={classes.inputGroup}>
               <Typography
                 className={classes.titleForm}
                 color="textPrimary"
@@ -306,7 +315,7 @@ export default function FormAircraft({ handleForm, stateForm }) {
                 variant="outlined"
                 size="small"
               />
-            </div>
+            </div> */}
           </div>
         </form>
 
@@ -346,7 +355,7 @@ export default function FormAircraft({ handleForm, stateForm }) {
                     <img src={Warning} />
                   </Button>
                 </div>
-                <div className={classes.wrapperForm}>
+                {/* <div className={classes.wrapperForm}>
                   <Typography
                     className={classes.titleAircraft}
                     color="textPrimary"
@@ -365,7 +374,7 @@ export default function FormAircraft({ handleForm, stateForm }) {
                     variant="outlined"
                     size="small"
                   />
-                </div>
+                </div> */}
               </div>
               <Typography className={classes.noted}>
                 <i>

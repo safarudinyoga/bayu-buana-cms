@@ -141,10 +141,15 @@ function ContentAircraft() {
   }, []);
 
   const deleteAircraft = (id) => {
-    dispatch(removeAircraft({ id }));
+    const removeItem = dispatch(removeAircraft({ id }));
+
+    Promise.allSettled([removeItem]).then((values) => {
+      dispatch(fetchAircraft());
+    });
   };
   return (
     <div className={classes.container}>
+      {console.log(stateAircraft, 'view')}
       <Breadcrumbs aria-label="breadcrumb">
         <Link className={classes.titleBread} color="inherit" href="/">
           Master Data Management

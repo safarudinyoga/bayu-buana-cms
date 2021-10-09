@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ActionButton = ({ id, urlEdit, removeFunction }) => {
+const ActionButton = ({ id, urlEdit, removeFunction, urlDetail }) => {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
@@ -72,15 +72,17 @@ const ActionButton = ({ id, urlEdit, removeFunction }) => {
         </Tooltip>
       </Link>
 
-      <Tooltip title="View Details" arrow placement="top">
-        <img
-          id="viewIcon"
-          className={classes.viewIcon}
-          src={view}
-          alt="view icon"
-          // title="View Details"
-        />
-      </Tooltip>
+      <Link href={`${urlDetail}/${id}`}>
+        <Tooltip title="View Details" arrow placement="top">
+          <img
+            id="viewIcon"
+            className={classes.viewIcon}
+            src={view}
+            alt="view icon"
+            // title="View Details"
+          />
+        </Tooltip>
+      </Link>
 
       <Tooltip
         title="Remove"
@@ -125,7 +127,7 @@ const ActionButton = ({ id, urlEdit, removeFunction }) => {
                 color="primary"
                 style={{ marginRight: '34px' }}
               >
-                Save
+                Remove
               </Button>
               <Button onClick={handleClose} variant="contained">
                 Cancel

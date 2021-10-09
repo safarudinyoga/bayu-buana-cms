@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import { useParams } from 'react-router';
 import {
   Breadcrumbs,
   makeStyles,
@@ -9,7 +9,11 @@ import {
   Button,
 } from '@material-ui/core';
 import FormAircraft from './FormAircraft';
-import { postAircraft } from '../../../store/actions/Reducers-Aircraft';
+import {
+  editAircraft,
+  getAircraftById,
+  postAircraft,
+} from '../../../store/actions/Reducers-Aircraft';
 const useStyles = makeStyles((theme) => ({
   container: {
     paddingTop: theme.spacing(11),
@@ -31,11 +35,19 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(2),
   },
 }));
-function ContentCreateAircraft() {
-  let history = useHistory();
+function ContentDetailAircraft() {
   const dispatch = useDispatch();
+  const params = useParams();
   const classes = useStyles();
+  const stateAircraft = useSelector((state) => state.airCraft);
   const [dataAircraft, setDataAircraft] = useState({});
+  useEffect(() => {
+    const promiseDetailAircraft = dispatch(getAircraftById(params.id));
+    Promise.allSettled([promiseDetailAircraft]).then((values) => {});
+  }, []);
+  useEffect(() => {
+    setDataAircraft(stateAircraft.detailAircraft);
+  }, [stateAircraft.detailAircraft]);
   const handleForm = (event) => {
     setDataAircraft((prevState) => ({
       ...prevState,
@@ -43,10 +55,7 @@ function ContentCreateAircraft() {
     }));
   };
   const submitAircraft = () => {
-    const promisePostAricraft = dispatch(postAircraft(dataAircraft));
-    Promise.allSettled([promisePostAricraft]).then((values) => {
-      history.push('/aircraft');
-    });
+    dispatch(editAircraft({ data: dataAircraft, id: params.id }));
   };
   return (
     <div className={classes.container}>
@@ -59,28 +68,26 @@ function ContentCreateAircraft() {
             Aircraft
           </Link>
           <Typography className={classes.titleBread} color="error">
-            Create Aircraft
+            Edit Aircraft
           </Typography>
         </Breadcrumbs>
         <div className={classes.title}>
           <Typography color="textPrimary" variant="h5" component="h1">
-            Create Aircraft
+            Edit Aircraft
           </Typography>
         </div>
-        <FormAircraft handleForm={handleForm} stateForm={dataAircraft} />
+        <FormAircraft
+          read={true}
+          handleForm={handleForm}
+          stateForm={dataAircraft}
+        />
       </div>
       <div display="flex" flexDirection="row" style={{ marginTop: '20px' }}>
-        <Button
-          onClick={submitAircraft}
-          variant="contained"
-          color="primary"
-          style={{ marginRight: '34px' }}
-        >
-          Save
+        <Button variant="contained" href="/aircraft">
+          Cancel
         </Button>
-        <Button variant="contained">Cancel</Button>
       </div>
     </div>
   );
 }
-export default ContentCreateAircraft;
+export default ContentDetailAircraft;

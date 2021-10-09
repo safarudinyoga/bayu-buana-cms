@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useParams } from 'react-router';
+import { useHistory } from 'react-router-dom';
 import {
   Breadcrumbs,
   makeStyles,
@@ -6,21 +9,25 @@ import {
   Typography,
   Button,
 } from '@material-ui/core';
-import Form from './Form';
-import UiTableMarkUp from './UiTableMarkUpFlight';
-import UiTableMarkUpFlight from './UiTableMarkUpFlight';
+import FormAircraft from './FormAircraft';
+import {
+  editAircraft,
+  getAircraftById,
+  postAircraft,
+} from '../../../store/actions/Reducers-Aircraft';
 const useStyles = makeStyles((theme) => ({
   container: {
     paddingTop: theme.spacing(11),
     marginRight: theme.spacing(7),
     marginLeft: theme.spacing(3),
-  },
-  form: {
+    marginBottom: theme.spacing(10),
+
     [theme.breakpoints.down('sm')]: {
-      width: '100vw',
+      width: ' 80%',
     },
   },
   titleBread: {
+    fontWeight: 'bold',
     [theme.breakpoints.down('sm')]: {
       fontSize: '12px',
     },
@@ -29,14 +36,34 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(2),
   },
 }));
-function ContentEditFlight() {
+function ContentEditAircraft() {
+  let history = useHistory();
+  const dispatch = useDispatch();
+  const params = useParams();
   const classes = useStyles();
-  const [dataFlight, setDataFlight] = useState({});
+  const stateAircraft = useSelector((state) => state.airCraft);
+  const [dataAircraft, setDataAircraft] = useState({});
+  useEffect(() => {
+    const promiseDetailAircraft = dispatch(getAircraftById(params.id));
+    Promise.allSettled([promiseDetailAircraft]).then((values) => {});
+  }, []);
+  useEffect(() => {
+    setDataAircraft(stateAircraft.detailAircraft);
+  }, [stateAircraft.detailAircraft]);
   const handleForm = (event) => {
-    setDataFlight((prevState) => ({
+    setDataAircraft((prevState) => ({
       ...prevState,
       [event.target.name]: event.target.value,
     }));
+  };
+  const submitAircraft = () => {
+    const promiseEditAircraft = dispatch(
+      editAircraft({ data: dataAircraft, id: params.id }),
+    );
+
+    Promise.allSettled([promiseEditAircraft]).then((values) => {
+      history.push('/aircraft');
+    });
   };
   return (
     <div className={classes.container}>
@@ -46,35 +73,22 @@ function ContentEditFlight() {
             Master Data Management
           </Link>
           <Link className={classes.titleBread} color="inherit" href="/">
-            Standard Mark-Up
+            Aircraft
           </Link>
           <Typography className={classes.titleBread} color="error">
-            Edit Flight Standard Mark-Up
+            Edit Aircraft
           </Typography>
         </Breadcrumbs>
         <div className={classes.title}>
           <Typography color="textPrimary" variant="h5" component="h1">
-            Edit Flight Standard Mark-Up
+            Edit Aircraft
           </Typography>
         </div>
-        <Form
-          handleForm={handleForm}
-          stateForm={dataFlight}
-          className={classes.form}
-        />
-        <div style={{ marginTop: '20px' }}>
-          <UiTableMarkUpFlight
-            titleButton="Add Override Mark-up"
-            linkButton="/master/create-flight"
-          />
-        </div>
+        <FormAircraft handleForm={handleForm} stateForm={dataAircraft} />
       </div>
-      <div
-        display="flex"
-        flexDirection="row"
-        style={{ marginTop: '20px', marginBottom: '50px' }}
-      >
+      <div display="flex" flexDirection="row" style={{ marginTop: '20px' }}>
         <Button
+          onClick={submitAircraft}
           variant="contained"
           color="primary"
           style={{ marginRight: '34px' }}
@@ -86,4 +100,4 @@ function ContentEditFlight() {
     </div>
   );
 }
-export default ContentEditFlight;
+export default ContentEditAircraft;

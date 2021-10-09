@@ -10,6 +10,8 @@ import EditHotel from './pages/Master/Hotel/edit';
 import CreateOther from './pages/Master/Other/create';
 import EditOther from './pages/Master/Other/edit';
 import AirCraft from './pages/AirCraft/index';
+import editAirCraft from './pages/AirCraft/edit';
+import detailAircraft from './pages/AirCraft/detail';
 
 function App() {
   return (
@@ -23,6 +25,16 @@ function App() {
             exact
             path="/aircraft/create-aircraft"
             component={CreateAircraft}
+          />
+          <Route
+            exact
+            path="/aircraft/edit-aircraft/:id"
+            component={editAirCraft}
+          />
+          <Route
+            exact
+            path="/aircraft/detail-aircraft/:id"
+            component={detailAircraft}
           />
           <Route exact path="/master/create-flight" component={CreateFlight} />
           <Route exact path="/master/create-hotel" component={CreateHotel} />
