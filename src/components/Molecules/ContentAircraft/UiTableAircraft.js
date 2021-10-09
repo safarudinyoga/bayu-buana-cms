@@ -1,3 +1,7 @@
+import React, { useEffect, useState } from 'react';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
+import ReactExport from '@ibrahimrahmani/react-export-excel';
 import {
   alpha,
   Button,
@@ -19,7 +23,6 @@ import {
   Tooltip,
 } from '@material-ui/core';
 import { Search } from '@material-ui/icons';
-import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import Change from '../../../assets/icons/change.svg';
 import Down from '../../../assets/icons/down.svg';
@@ -28,7 +31,9 @@ import AddFile from '../../../assets/icons/file-plus.svg';
 import Printer from '../../../assets/icons/printer.svg';
 import Up from '../../../assets/icons/up.svg';
 import IconsUiTable from './IconsUIiTable';
-
+const ExcelFile = ReactExport.ExcelFile;
+const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
+const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
 const labelCheckbox = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
 function createData(checkBox, aircraft_code, aircraft_name, status, actions) {
@@ -250,25 +255,69 @@ function UiTableAircraft({
   setActiveButton,
 }) {
   const [rows, setRows] = useState([]);
+  const [rowsExport, setRowsExport] = useState([]);
+  const exportPDF = () => {
+    const unit = 'pt';
+    const size = 'A4'; // Use A1, A2, A3 or A4
+    const orientation = 'portrait'; // portrait or landscape
+
+    const marginLeft = 40;
+    const doc = new jsPDF(orientation, unit, size);
+
+    doc.setFontSize(15);
+
+    const title = 'Aircraft Report';
+    const headers = [['Air Craft Code', 'Air Craft Name', 'Status']];
+
+    const data = rowsExport.map((elt) => [
+      elt.aircode,
+      elt.airname,
+      elt.status,
+    ]);
+
+    let content = {
+      startY: 50,
+      head: headers,
+      body: data,
+    };
+
+    doc.text(title, marginLeft, 40);
+    doc.autoTable(content);
+    // for save pdf
+    // doc.save('report.pdf');
+
+    doc.output('dataurlnewwindow');
+  };
   useEffect(() => {
-    let rows3 = [];
+    let rows1 = [];
+    let rows2 = [];
     let dataItems = dataTable.items || [];
     dataItems.map((e) =>
-      rows3.push(
+      rows1.push(
         createData(
           e.checkBox,
           e.aircraft_code,
           e.aircraft_name,
-          e.status,
+          e.status === 1 ? 'Active' : 'Inactive',
           <IconsUiTable
             id={e.id}
-            urlEdit="/master/edit-flight"
+            urlDetail="/aircraft/detail-aircraft"
+            urlEdit="/aircraft/edit-aircraft"
             removeFunction={remove}
           />,
         ),
       ),
     );
-    setRows(rows3);
+    dataItems.map((e) =>
+      rows2.push({
+        aircode: e.aircraft_code,
+        airname: e.aircraft_name,
+        status: +e.status === 1 ? 'Active' : 'Inactive',
+      }),
+    );
+    setRows(rows1);
+    console.log(rows2, 'rows4');
+    setRowsExport(rows2);
   }, [dataTable]);
 
   const classes = useStyles();
@@ -296,6 +345,9 @@ function UiTableAircraft({
 
   const [age, setAge] = useState('');
 
+  const reloadPage = () => {
+    window.location.reload();
+  };
   const handleChange = (event) => {
     setAge(event.target.value);
   };
@@ -332,11 +384,23 @@ function UiTableAircraft({
         {/* <Grid item sm={3}></Grid> */}
         <Grid item sm={3} className={classes.itemEnd}>
           <div className={classes.divButton}>
+            <ExcelFile
+              element={
+                <div className={classes.buttonRounded}>
+                  <img src={Download} />{' '}
+                </div>
+              }
+              filename="Aircraft"
+            >
+              <ExcelSheet data={rowsExport} name="Goods">
+                <ExcelColumn label="Aircraft Code" value="aircode" />
+                <ExcelColumn label="Aircraft Name" value="airname" />
+                <ExcelColumn label="Status" value="status" />
+              </ExcelSheet>
+            </ExcelFile>
+
             <div className={classes.buttonRounded}>
-              <img src={Download} />
-            </div>
-            <div className={classes.buttonRounded}>
-              <img src={Printer} />
+              <img src={Printer} onClick={exportPDF} />
             </div>
 
             <Tooltip title="Click to create" arrow placement="top">
@@ -359,7 +423,7 @@ function UiTableAircraft({
             <strong style={{ marginLeft: '25px', fontSize: '14px' }}>
               Status
             </strong>
-            <div className={classes.buttonRounded}>
+            <div onClick={reloadPage} className={classes.buttonRounded}>
               <img src={Change} />
             </div>
           </div>
@@ -427,7 +491,11 @@ function UiTableAircraft({
             <TableBody>
               {rows
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .filter((e) => e.aircraft_name.includes(keyword))
+                .filter(
+                  (e) =>
+                    e.aircraft_name.includes(keyword) ||
+                    e.aircraft_code.includes(keyword),
+                )
                 .map((item) => {
                   return (
                     <TableRow
