@@ -1,11 +1,11 @@
 import Layout from '../../components/Organisms/Layout/index';
 import React from 'react';
-import ContentCreateAircraft from '../../components/Organisms/ContentAircraft/ContentCreateAircraft';
+import ContentCreateRegion from '../../components/Organisms/ContentRegion/ContentCreateRegion';
 
 export default function CreateAircraft() {
   return (
     <Layout>
-      <ContentCreateAircraft />
+      <ContentCreateRegion />
     </Layout>
   );
 }

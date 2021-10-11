@@ -9,38 +9,19 @@ import {
   Typography,
   Button,
 } from '@material-ui/core';
-import FormAircraft from './FormAircraft';
+import FormAircraft from '../../Molecules/ContentAircraft/FormAircraft';
 import {
   editAircraft,
   getAircraftById,
   postAircraft,
 } from '../../../store/actions/Reducers-Aircraft';
-const useStyles = makeStyles((theme) => ({
-  container: {
-    paddingTop: theme.spacing(11),
-    marginRight: theme.spacing(7),
-    marginLeft: theme.spacing(3),
-    marginBottom: theme.spacing(10),
+import EditStyle from './Edit-Style';
 
-    [theme.breakpoints.down('sm')]: {
-      width: ' 80%',
-    },
-  },
-  titleBread: {
-    fontWeight: 'bold',
-    [theme.breakpoints.down('sm')]: {
-      fontSize: '12px',
-    },
-  },
-  title: {
-    marginTop: theme.spacing(2),
-  },
-}));
 function ContentEditAircraft() {
   let history = useHistory();
   const dispatch = useDispatch();
   const params = useParams();
-  const classes = useStyles();
+  const classes = EditStyle();
   const stateAircraft = useSelector((state) => state.airCraft);
   const [dataAircraft, setDataAircraft] = useState({});
   useEffect(() => {
@@ -95,7 +76,9 @@ function ContentEditAircraft() {
         >
           Save
         </Button>
-        <Button variant="contained">Cancel</Button>
+        <Button href="/aircraft" variant="contained">
+          Cancel
+        </Button>
       </div>
     </div>
   );

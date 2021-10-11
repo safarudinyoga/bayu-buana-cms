@@ -1,40 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import {
-  Breadcrumbs,
-  makeStyles,
-  Link,
-  Typography,
-  Button,
-} from '@material-ui/core';
-import FormAircraft from './FormAircraft';
+import { Breadcrumbs, Link, Typography, Button } from '@material-ui/core';
+import FormAircraft from '../../Molecules/ContentAircraft/FormAircraft';
 import { postAircraft } from '../../../store/actions/Reducers-Aircraft';
-const useStyles = makeStyles((theme) => ({
-  container: {
-    paddingTop: theme.spacing(11),
-    marginRight: theme.spacing(7),
-    marginLeft: theme.spacing(3),
-    marginBottom: theme.spacing(10),
-
-    [theme.breakpoints.down('sm')]: {
-      width: ' 80%',
-    },
-  },
-  titleBread: {
-    fontWeight: 'bold',
-    [theme.breakpoints.down('sm')]: {
-      fontSize: '12px',
-    },
-  },
-  title: {
-    marginTop: theme.spacing(2),
-  },
-}));
+import CreateStyle from './Create-Style';
 function ContentCreateAircraft() {
   let history = useHistory();
   const dispatch = useDispatch();
-  const classes = useStyles();
+  const classes = CreateStyle();
   const [dataAircraft, setDataAircraft] = useState({});
   const handleForm = (event) => {
     setDataAircraft((prevState) => ({
@@ -78,7 +52,9 @@ function ContentCreateAircraft() {
         >
           Save
         </Button>
-        <Button variant="contained">Cancel</Button>
+        <Button href="/aircraft" variant="contained">
+          Cancel
+        </Button>
       </div>
     </div>
   );
