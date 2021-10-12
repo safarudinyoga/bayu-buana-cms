@@ -1,0 +1,35 @@
+stages:
+  - build
+  - release
+
+build:production:
+  stage: build
+  image: node
+  script: 
+    - echo "Start building App..."
+    - cat $PRODUCTION_ENV > .env
+    - yarn install
+    - yarn build
+    - echo "Build successfully!"
+  artifacts:
+#    expire_in: 10 hour
+    paths:
+      - build
+      - node_modules/
+  only:
+    refs:
+      - master
+
+release:production:
+  stage: release
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
+  needs: ["build:production"]
+  only:
+    refs:
+      - master
+  script:
+    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
+    - cat $PRODUCTION_ENV > .env
+    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/Dockerfile --destination $CI_REGISTRY_IMAGE:$PRODUCTION_CONTAINER_TAG
