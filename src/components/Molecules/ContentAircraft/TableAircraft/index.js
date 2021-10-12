@@ -37,28 +37,6 @@ const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
 const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
 const labelCheckbox = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
-function createData(checkBox, aircraft_code, aircraft_name, status, actions) {
-  return {
-    checkBox,
-    aircraft_code,
-    aircraft_name,
-    status,
-    actions,
-  };
-}
-
-const columns = [
-  {
-    id: 'checkBox',
-    label: <Checkbox color="black" {...labelCheckbox} />,
-    minWidth: 20,
-  },
-  { id: 'aircraft_code', label: 'Air Craft Code', minWidth: 220 },
-  { id: 'aircraft_name', label: 'Air Craft Name', minWidth: 220 },
-  { id: 'status', label: 'Status', minWidth: 170 },
-  { id: 'actions', label: 'Actions', minWidth: 170 },
-];
-
 function TableAircraft({
   titleButton,
   linkButton,
@@ -69,6 +47,8 @@ function TableAircraft({
 }) {
   const [rows, setRows] = useState([]);
   const [rowsExport, setRowsExport] = useState([]);
+  const [boxCheck, setBoxCheck] = useState(false);
+  // export PDF
   const exportPDF = () => {
     const unit = 'pt';
     const size = 'A4'; // Use A1, A2, A3 or A4
@@ -101,6 +81,36 @@ function TableAircraft({
 
     doc.output('dataurlnewwindow');
   };
+
+  // percobaan Checckbox
+  function createData(checkBox, aircraft_code, aircraft_name, status, actions) {
+    return {
+      checkBox,
+      aircraft_code,
+      aircraft_name,
+      status,
+      actions,
+    };
+  }
+
+  const columns = [
+    {
+      id: 'checkBox',
+      label: (
+        <Checkbox
+          color="black"
+          {...labelCheckbox}
+          onChange={() => setBoxCheck(!boxCheck)}
+        />
+      ),
+      minWidth: 20,
+    },
+    { id: 'aircraft_code', label: 'Air Craft Code', minWidth: 220 },
+    { id: 'aircraft_name', label: 'Air Craft Name', minWidth: 220 },
+    { id: 'status', label: 'Status', minWidth: 170 },
+    { id: 'actions', label: 'Actions', minWidth: 170 },
+  ];
+
   useEffect(() => {
     let rows1 = [];
     let rows2 = [];
@@ -254,7 +264,7 @@ function TableAircraft({
           </FormControl>
         </div>
       )}
-      {activeModal && (
+      {boxCheck && (
         <div className={classes.buttonSpace}>
           <FormControl variant="outlined">
             <Select

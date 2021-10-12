@@ -9,12 +9,12 @@ export default function Form({ handleForm, stateForm, read = false }) {
   const [changeBgCh, setChangeBgCh] = useState(false);
 
   const handleChangeBgInd = (e) => {
-    setChangeBgInd(changeBgCh);
-    setChangeBgCh(changeBgind);
+    setChangeBgInd(true);
+    setChangeBgCh(false);
   };
   const handleChangeBgCh = (e) => {
-    setChangeBgCh(changeBgind);
-    setChangeBgInd(changeBgCh);
+    setChangeBgCh(true);
+    setChangeBgInd(false);
   };
 
   const classes = FormStyle();
