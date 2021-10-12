@@ -7,43 +7,13 @@ import {
   Tooltip,
 } from '@material-ui/core';
 import React from 'react';
-import Edit from '../../../assets/icons/edit.svg';
-import Remove from '../../../assets/icons/remove.svg';
-import view from '../../../assets/icons/view.svg';
+import Edit from '../../../../assets/icons/edit.svg';
+import Remove from '../../../../assets/icons/remove.svg';
+import view from '../../../../assets/icons/view.svg';
 import Modal from '@material-ui/core/Modal';
-const useStyles = makeStyles((theme) => ({
-  editIcon: {
-    cursor: 'pointer',
-    marginRight: '4px',
-  },
-  viewIcon: {
-    cursor: 'pointer',
-    marginRight: '4px',
-  },
-  removeIcon: {
-    cursor: 'pointer',
-  },
-  modal: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  paper: {
-    backgroundColor: theme.palette.background.paper,
-    border: '2px solid #000',
-    boxShadow: theme.shadows[5],
-    padding: theme.spacing(2, 4, 3),
-  },
-  btnPosition: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    marginTop: '20px',
-  },
-}));
-
-const ActionButton = ({ id, urlEdit, removeFunction, urlDetail }) => {
-  const classes = useStyles();
+import Iconstyle from './Iconstyle';
+const IconsRegion = ({ id, urlEdit, removeFunction, urlDetail }) => {
+  const classes = Iconstyle();
   const [open, setOpen] = React.useState(false);
 
   const handleOpen = () => {
@@ -115,10 +85,10 @@ const ActionButton = ({ id, urlEdit, removeFunction, urlDetail }) => {
         <Fade in={open}>
           <div className={classes.paper}>
             <h2 id="transition-modal-title" style={{ textAlign: 'center' }}>
-              DELETE MARKUP
+              DELETE REGION
             </h2>
             <p id="transition-modal-description">
-              Are you sure you want to delete 'Markup Destination: Domestic'?
+              Are you sure you want to delete?
             </p>
             <div className={classes.btnPosition}>
               <Button
@@ -140,4 +110,4 @@ const ActionButton = ({ id, urlEdit, removeFunction, urlDetail }) => {
   );
 };
 
-export default ActionButton;
+export default IconsRegion;

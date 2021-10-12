@@ -9,7 +9,7 @@ export const fetchAircraft = (payload) => {
     } catch (err) {
       dispatch({ type: 'aircraft/error', payload: err });
     }
-    dispatch({ type: 'aricraft/loading', payload: false });
+    dispatch({ type: 'aircraft/loading', payload: false });
   };
 };
 
@@ -22,7 +22,7 @@ export const removeAircraft = (payload) => {
     } catch (err) {
       dispatch({ type: 'aircraft/error', payload: err });
     }
-    dispatch({ type: 'aricraft/loading', payload: false });
+    dispatch({ type: 'aircraft/loading', payload: false });
   };
 };
 export const postAircraft = (payload) => {
@@ -35,7 +35,7 @@ export const postAircraft = (payload) => {
     } catch (err) {
       dispatch({ type: 'aircraft/error', payload: err });
     }
-    dispatch({ type: 'aricraft/loading', payload: false });
+    dispatch({ type: 'aircraft/loading', payload: false });
   };
 };
 
@@ -49,7 +49,7 @@ export const getAircraftById = (payload) => {
     } catch (err) {
       dispatch({ type: 'aircraft/error', payload: err });
     }
-    dispatch({ type: 'aricraft/loading', payload: false });
+    dispatch({ type: 'aircraft/loading', payload: false });
   };
 };
 export const editAircraft = (payload) => {
@@ -62,6 +62,6 @@ export const editAircraft = (payload) => {
     } catch (err) {
       dispatch({ type: 'aircraft/error', payload: err });
     }
-    dispatch({ type: 'aricraft/loading', payload: false });
+    dispatch({ type: 'aircraft/loading', payload: false });
   };
 };
