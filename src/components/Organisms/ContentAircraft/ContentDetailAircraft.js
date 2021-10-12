@@ -1,44 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router';
-import {
-  Breadcrumbs,
-  makeStyles,
-  Link,
-  Typography,
-  Button,
-} from '@material-ui/core';
-import FormAircraft from './FormAircraft';
+import DetailStyle from './Detail-Style';
+import { Breadcrumbs, Link, Typography, Button } from '@material-ui/core';
+import FormAircraft from '../../Molecules/ContentAircraft/FormAircraft';
 import {
   editAircraft,
   getAircraftById,
   postAircraft,
 } from '../../../store/actions/Reducers-Aircraft';
-const useStyles = makeStyles((theme) => ({
-  container: {
-    paddingTop: theme.spacing(11),
-    marginRight: theme.spacing(7),
-    marginLeft: theme.spacing(3),
-    marginBottom: theme.spacing(10),
 
-    [theme.breakpoints.down('sm')]: {
-      width: ' 80%',
-    },
-  },
-  titleBread: {
-    fontWeight: 'bold',
-    [theme.breakpoints.down('sm')]: {
-      fontSize: '12px',
-    },
-  },
-  title: {
-    marginTop: theme.spacing(2),
-  },
-}));
 function ContentDetailAircraft() {
   const dispatch = useDispatch();
   const params = useParams();
-  const classes = useStyles();
+  const classes = DetailStyle();
   const stateAircraft = useSelector((state) => state.airCraft);
   const [dataAircraft, setDataAircraft] = useState({});
   useEffect(() => {

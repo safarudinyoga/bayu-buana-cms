@@ -1,11 +1,11 @@
 import Layout from '../../components/Organisms/Layout/index';
 import React from 'react';
-import ContentEditAircraft from '../../components/Organisms/ContentAircraft/ContentEditAircraft';
+import ContentEditRegion from '../../components/Organisms/ContentRegion/ContentEditRegion';
 
 export default function EditAircraft() {
   return (
     <Layout>
-      <ContentEditAircraft />
+      <ContentEditRegion />
     </Layout>
   );
 }
