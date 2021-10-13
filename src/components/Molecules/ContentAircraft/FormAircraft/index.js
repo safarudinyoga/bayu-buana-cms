@@ -1,12 +1,30 @@
+import { Button, TextField, Typography } from '@material-ui/core';
 import React, { useState } from 'react';
-import { makeStyles, TextField, Typography, Button } from '@material-ui/core';
-
+import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import Warning from '../../../../assets/icons/warning.svg';
+import { postAircraft } from '../../../../store/actions/Reducers-Aircraft';
 import FormStyle from './Form-Style';
 
-export default function Form({ handleForm, stateForm, read = false }) {
+export default function Form({ read = false }) {
   const [changeBgind, setChangeBgInd] = useState(true);
   const [changeBgCh, setChangeBgCh] = useState(false);
+  const [dataAircraft, setDataAircraft] = useState({});
+  let history = useHistory();
+  const dispatch = useDispatch();
+  const handleForm = (event) => {
+    setDataAircraft((prevState) => ({
+      ...prevState,
+      [event.target.name]: event.target.value,
+    }));
+  };
+
+  const submitAircraft = () => {
+    const promisePostAricraft = dispatch(postAircraft(dataAircraft));
+    Promise.allSettled([promisePostAricraft]).then((values) => {
+      history.push('/aircraft');
+    });
+  };
 
   const handleChangeBgInd = (e) => {
     setChangeBgInd(true);
@@ -33,7 +51,7 @@ export default function Form({ handleForm, stateForm, read = false }) {
                 Aircraft Name <span style={{ color: 'red' }}>*</span>
               </Typography>
               <TextField
-                value={stateForm?.aircraft_name || ''}
+                value={dataAircraft?.aircraft_name || ''}
                 onChange={handleForm}
                 name="aircraft_name"
                 required
@@ -56,7 +74,7 @@ export default function Form({ handleForm, stateForm, read = false }) {
                 Model
               </Typography>
               <TextField
-                value={stateForm?.model || ''}
+                value={dataAircraft?.model || ''}
                 onChange={handleForm}
                 name="model"
                 required
@@ -93,7 +111,7 @@ export default function Form({ handleForm, stateForm, read = false }) {
                 InputProps={{
                   readOnly: read === true ? true : false,
                 }}
-                value={stateForm?.aircraft_code || ''}
+                value={dataAircraft?.aircraft_code || ''}
                 onChange={handleForm}
                 name="aircraft_code"
                 required
@@ -114,7 +132,7 @@ export default function Form({ handleForm, stateForm, read = false }) {
                 ICAO Code
               </Typography>
               <TextField
-                value={stateForm?.presetName || ''}
+                value={dataAircraft?.presetName || ''}
                 onChange={handleForm}
                 name="presetName"
                 required
@@ -173,7 +191,7 @@ export default function Form({ handleForm, stateForm, read = false }) {
                     Aircraft Name
                   </Typography>
                   <TextField
-                    value={stateForm?.presetName || ''}
+                    value={stateFdataAircraftorm?.presetName || ''}
                     onChange={handleForm}
                     name="presetName"
                     required
@@ -191,6 +209,26 @@ export default function Form({ handleForm, stateForm, read = false }) {
               </Typography>
             </div>
           </div>
+        </div>
+        <div
+          display="flex"
+          flexDirection="row"
+          style={{ marginTop: '20px', margin: '30px 27px 0 22px' }}
+        >
+          <Button
+            onClick={submitAircraft}
+            variant="contained"
+            className={classes.buttonSave}
+          >
+            Save
+          </Button>
+          <Button
+            href="/aircraft"
+            variant="contained"
+            className={classes.buttonCancel}
+          >
+            Cancel
+          </Button>
         </div>
       </div>
     </>

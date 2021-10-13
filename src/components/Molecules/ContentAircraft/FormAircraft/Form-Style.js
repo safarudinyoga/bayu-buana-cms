@@ -2,6 +2,7 @@ import { makeStyles } from '@material-ui/styles';
 export default makeStyles((theme) => ({
   root: {
     display: 'flex',
+    marginTop: '30px',
     flexDirection: 'row',
     [theme.breakpoints.down('sm')]: {
       paddingTop: '30px',
@@ -19,10 +20,11 @@ export default makeStyles((theme) => ({
   },
   containerForm: {
     marginTop: theme.spacing(6),
+
     border: '0.5px solid #E6E6E6',
     boxShadow: '2px 2px #F0F0F0',
     borderRadius: '8px',
-    padding: '10px',
+    padding: '10px 10px 30px 10px',
     width: '100%',
     [theme.breakpoints.down('sm')]: {
       width: '100%',
@@ -191,5 +193,24 @@ export default makeStyles((theme) => ({
     [theme.breakpoints.down('sm')]: {
       margin: '30px 0 10px 0',
     },
+  },
+  // button Save
+  buttonSave: {
+    marginRight: '10px',
+    backgroundColor: '#5e5e5e',
+    width: '90px',
+    height: '40px',
+    color: 'white',
+    textTransform: 'none',
+    fontSize: '16px',
+  },
+  buttonCancel: {
+    border: '1px solid #5e5e5e',
+    backgroundColor: 'white',
+    width: '90px',
+    height: '40px',
+    color: '#5e5e5e',
+    textTransform: 'none',
+    fontSize: '16px',
   },
 }));
