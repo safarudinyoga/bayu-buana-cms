@@ -3,13 +3,10 @@ import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import ReactExport from '@ibrahimrahmani/react-export-excel';
 import {
-  alpha,
   Button,
-  Checkbox,
   FormControl,
   Grid,
   InputBase,
-  makeStyles,
   MenuItem,
   Paper,
   Select,
@@ -32,19 +29,13 @@ import Printer from '../../../../assets/icons/printer.svg';
 import Up from '../../../../assets/icons/up.svg';
 import IconAircraft from '../IconAircraft';
 import TableStyle from './Table-style';
+import CheckBoxTable from './check-box-table';
 const ExcelFile = ReactExport.ExcelFile;
 const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
 const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
 const labelCheckbox = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
-function TableAircraft({
-  titleButton,
-  linkButton,
-  dataTable,
-  removeFunction,
-  activeButton,
-  setActiveButton,
-}) {
+function TableAircraft({ titleButton, linkButton, dataTable, removeFunction }) {
   const [rows, setRows] = useState([]);
   const [rowsExport, setRowsExport] = useState([]);
   const [boxCheck, setBoxCheck] = useState(false);
@@ -96,13 +87,7 @@ function TableAircraft({
   const columns = [
     {
       id: 'checkBox',
-      label: (
-        <Checkbox
-          color="black"
-          {...labelCheckbox}
-          onChange={() => setBoxCheck(!boxCheck)}
-        />
-      ),
+      label: <CheckBoxTable />,
       minWidth: 20,
     },
     { id: 'aircraft_code', label: 'Air Craft Code', minWidth: 220 },
@@ -118,7 +103,7 @@ function TableAircraft({
     dataItems.map((e) =>
       rows1.push(
         createData(
-          e.checkBox,
+          <CheckBoxTable />,
           e.aircraft_code,
           e.aircraft_name,
           e.status === 1 ? 'Active' : 'Inactive',
