@@ -65,21 +65,17 @@ function ContentEditAircraft() {
             Edit Aircraft
           </Typography>
         </div>
-        <FormAircraft handleForm={handleForm} stateForm={dataAircraft} />
-      </div>
-      <div display="flex" flexDirection="row" style={{ marginTop: '20px' }}>
-        <Button
+        <FormAircraft
+          handleForm={handleForm}
+          stateForm={dataAircraft}
           onClick={submitAircraft}
-          variant="contained"
-          color="primary"
-          style={{ marginRight: '34px' }}
-        >
-          Save
-        </Button>
-        <Button href="/aircraft" variant="contained">
-          Cancel
-        </Button>
+        />
       </div>
+      <div
+        display="flex"
+        flexDirection="row"
+        style={{ marginTop: '20px' }}
+      ></div>
     </div>
   );
 }

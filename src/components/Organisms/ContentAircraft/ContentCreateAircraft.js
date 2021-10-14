@@ -1,9 +1,28 @@
 import { Breadcrumbs, Link, Typography } from '@material-ui/core';
-import React from 'react';
+import React, { useState } from 'react';
 import FormAircraft from '../../Molecules/ContentAircraft/FormAircraft';
 import CreateStyle from './Create-Style';
+import { postAircraft } from '../../../store/actions/Reducers-Aircraft';
+import { useSelector, useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+
 function ContentCreateAircraft() {
   const classes = CreateStyle();
+  const [dataAircraft, setDataAircraft] = useState({});
+  let history = useHistory();
+  const dispatch = useDispatch();
+  const handleForm = (event) => {
+    setDataAircraft((prevState) => ({
+      ...prevState,
+      [event.target.name]: event.target.value,
+    }));
+  };
+  const submitAircraft = () => {
+    const promisePostAricraft = dispatch(postAircraft(dataAircraft));
+    Promise.allSettled([promisePostAricraft]).then((values) => {
+      history.push('/aircraft');
+    });
+  };
 
   return (
     <div className={classes.container}>
@@ -24,7 +43,11 @@ function ContentCreateAircraft() {
             Create Aircraft
           </Typography>
         </div>
-        <FormAircraft />
+        <FormAircraft
+          handleForm={submitAircraft}
+          stateForm={dataAircraft}
+          onClick={submitAircraft}
+        />
       </div>
     </div>
   );
