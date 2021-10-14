@@ -67,7 +67,6 @@ export const postAircraft = (payload) => {
 };
 
 export const postLanguageAircraft = (payload) => {
-  console.log(payload.id, 'id');
   return async (dispatch) => {
     dispatch({ type: 'aircraft/loading', payload: true });
     try {

@@ -106,7 +106,7 @@ export default function Form({
                 type="number"
               />
             </div>
-            {/* <div className={classes.inputGroup}>
+            <div className={classes.inputGroup}>
               <Typography
                 className={classes.titleForm}
                 color="textPrimary"
@@ -116,16 +116,16 @@ export default function Form({
                 ICAO Code
               </Typography>
               <TextField
-                value={stateForm?.presetName || ''}
+                value={stateForm?.icao_code || ''}
                 onChange={handleForm}
-                name="presetName"
+                name="icao_code"
                 required
                 className={classes.inputTag}
                 id="outlined-basic"
                 variant="outlined"
                 size="small"
               />
-            </div> */}
+            </div>
           </div>
         </form>
 
