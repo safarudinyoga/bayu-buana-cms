@@ -124,7 +124,6 @@ function TableAircraft({ titleButton, linkButton, dataTable, removeFunction }) {
       }),
     );
     setRows(rows1);
-    console.log(rows2, 'rows4');
     setRowsExport(rows2);
   }, [dataTable]);
 
@@ -274,7 +273,6 @@ function TableAircraft({ titleButton, linkButton, dataTable, removeFunction }) {
             <TableHead>
               <TableRow>
                 {columns.map((column) => {
-                  console.log(column.id);
                   return (
                     <TableCell
                       key={column.id}
@@ -301,7 +299,9 @@ function TableAircraft({ titleButton, linkButton, dataTable, removeFunction }) {
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .filter(
                   (e) =>
-                    e.aircraft_name.includes(keyword) ||
+                    e.aircraft_name
+                      .toLowerCase()
+                      .includes(keyword.toLowerCase()) ||
                     e.aircraft_code.includes(keyword),
                 )
                 .map((item) => {

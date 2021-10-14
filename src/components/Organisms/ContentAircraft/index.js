@@ -40,7 +40,6 @@ function ContentAircraft() {
   };
   return (
     <div className={classes.container}>
-      {console.log(stateAircraft, 'view')}
       <Breadcrumbs aria-label="breadcrumb">
         <Link className={classes.titleBread} color="inherit" href="/">
           Master Data Management

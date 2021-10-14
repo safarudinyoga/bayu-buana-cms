@@ -26,7 +26,6 @@ export const removeRegion = (payload) => {
   };
 };
 export const postRegion = (payload) => {
-  console.log(payload, 'payload form');
   return async (dispatch) => {
     dispatch({ type: 'region/loading', payload: true });
     try {
@@ -44,7 +43,7 @@ export const getRegionById = (payload) => {
     dispatch({ type: 'region/loading', payload: true });
     try {
       let { data } = await axios.get(`/regions/${payload}`);
-      console.log(data, 'data edit region');
+
       dispatch({ type: 'dataRegionDetail/fetch', payload: data });
     } catch (err) {
       dispatch({ type: 'region/error', payload: err });
@@ -53,7 +52,6 @@ export const getRegionById = (payload) => {
   };
 };
 export const editRegion = (payload) => {
-  console.log(payload, 'payload edit');
   return async (dispatch) => {
     dispatch({ type: 'region/loading', payload: true });
     try {
