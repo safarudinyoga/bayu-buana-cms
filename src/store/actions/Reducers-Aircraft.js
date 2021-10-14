@@ -25,6 +25,19 @@ export const removeAircraft = (payload) => {
     dispatch({ type: 'aircraft/loading', payload: false });
   };
 };
+// Put
+export const putAircraft = (payload) => {
+  return async (dispatch) => {
+    dispatch({ type: 'aircraft/loading', payload: true });
+    try {
+      let respon = await axios.put(`/aircraft/${payload.id}`, payload);
+      console.log(respon, 'respon');
+    } catch (err) {
+      dispatch({ type: 'aircraft/error', payload: err });
+    }
+    dispatch({ type: 'aircraft/loading', payload: false });
+  };
+};
 export const postAircraft = (payload) => {
   console.log(payload, 'payload form');
   return async (dispatch) => {

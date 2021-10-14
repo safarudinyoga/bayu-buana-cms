@@ -37,8 +37,10 @@ export default makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'row',
     [theme.breakpoints.down('sm')]: {
-      display: 'flex',
       flexDirection: 'column',
+    },
+    [theme.breakpoints.up('sm')]: {
+      flexDirection: 'row',
     },
   },
   searchIcon: {
@@ -69,6 +71,9 @@ export default makeStyles((theme) => ({
     marginBottom: theme.spacing(3),
     [theme.breakpoints.down('sm')]: {
       flexDirection: 'column-reverse',
+    },
+    [theme.breakpoints.up('sm')]: {
+      flexDirection: 'row',
     },
   },
   itemStart: {
@@ -125,6 +130,12 @@ export default makeStyles((theme) => ({
     minWidth: '300px',
     [theme.breakpoints.down('sm')]: {
       justifyContent: 'flex-end',
+      minWidth: '0',
+    },
+    [theme.breakpoints.up('sm')]: {
+      minWidth: '180px',
+      justifyContent: 'center',
+      // marginLeft: '100px',
     },
   },
   modal: {

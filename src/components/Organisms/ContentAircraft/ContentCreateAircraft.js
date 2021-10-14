@@ -1,15 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import { Breadcrumbs, Link, Typography } from '@material-ui/core';
+import React, { useState } from 'react';
+import FormAircraft from '../../Molecules/ContentAircraft/FormAircraft';
+import CreateStyle from './Create-Style';
+import { postAircraft } from '../../../store/actions/Reducers-Aircraft';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { Breadcrumbs, Link, Typography, Button } from '@material-ui/core';
-import FormAircraft from '../../Molecules/ContentAircraft/FormAircraft';
-import { postAircraft } from '../../../store/actions/Reducers-Aircraft';
-import CreateStyle from './Create-Style';
+
 function ContentCreateAircraft() {
-  let history = useHistory();
-  const dispatch = useDispatch();
   const classes = CreateStyle();
   const [dataAircraft, setDataAircraft] = useState({});
+  let history = useHistory();
+  const dispatch = useDispatch();
   const handleForm = (event) => {
     setDataAircraft((prevState) => ({
       ...prevState,
@@ -22,6 +23,7 @@ function ContentCreateAircraft() {
       history.push('/aircraft');
     });
   };
+
   return (
     <div className={classes.container}>
       <div>
@@ -41,20 +43,11 @@ function ContentCreateAircraft() {
             Create Aircraft
           </Typography>
         </div>
-        <FormAircraft handleForm={handleForm} stateForm={dataAircraft} />
-      </div>
-      <div display="flex" flexDirection="row" style={{ marginTop: '20px' }}>
-        <Button
+        <FormAircraft
+          handleForm={submitAircraft}
+          stateForm={dataAircraft}
           onClick={submitAircraft}
-          variant="contained"
-          color="primary"
-          style={{ marginRight: '34px' }}
-        >
-          Save
-        </Button>
-        <Button href="/aircraft" variant="contained">
-          Cancel
-        </Button>
+        />
       </div>
     </div>
   );

@@ -1,10 +1,12 @@
+import { Button, TextField, Typography } from '@material-ui/core';
 import React, { useState } from 'react';
-import { makeStyles, TextField, Typography, Button } from '@material-ui/core';
-
+import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import Warning from '../../../../assets/icons/warning.svg';
+import { postAircraft } from '../../../../store/actions/Reducers-Aircraft';
 import FormStyle from './Form-Style';
 
-export default function Form({ handleForm, stateForm, read = false }) {
+export default function Form({ handleForm, stateForm, onClick, read = false }) {
   const [changeBgind, setChangeBgInd] = useState(true);
   const [changeBgCh, setChangeBgCh] = useState(false);
 
@@ -173,7 +175,7 @@ export default function Form({ handleForm, stateForm, read = false }) {
                     Aircraft Name
                   </Typography>
                   <TextField
-                    value={stateForm?.presetName || ''}
+                    value={stateFdataAircraftorm?.presetName || ''}
                     onChange={handleForm}
                     name="presetName"
                     required
@@ -191,6 +193,26 @@ export default function Form({ handleForm, stateForm, read = false }) {
               </Typography>
             </div>
           </div>
+        </div>
+        <div
+          display="flex"
+          flexDirection="row"
+          style={{ marginTop: '20px', margin: '30px 27px 0 22px' }}
+        >
+          <Button
+            onClick={onClick}
+            variant="contained"
+            className={classes.buttonSave}
+          >
+            Save
+          </Button>
+          <Button
+            href="/aircraft"
+            variant="contained"
+            className={classes.buttonCancel}
+          >
+            Cancel
+          </Button>
         </div>
       </div>
     </>
