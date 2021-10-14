@@ -34,7 +34,7 @@ function ContentCreateAircraft() {
           <Link className={classes.titleBread} color="inherit" href="/">
             Aircraft
           </Link>
-          <Typography className={classes.titleBread} color="error">
+          <Typography className={classes.titleBreadAirCraft} color="error">
             Create Aircraft
           </Typography>
         </Breadcrumbs>

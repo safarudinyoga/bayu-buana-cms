@@ -45,7 +45,7 @@ function ContentAircraft() {
         <Link className={classes.titleBread} color="inherit" href="/">
           Master Data Management
         </Link>
-        <Typography className={classes.titleBread} color="textPrimary">
+        <Typography className={classes.titleBreadAirCraft} color="textPrimary">
           Aircraft
         </Typography>
       </Breadcrumbs>
