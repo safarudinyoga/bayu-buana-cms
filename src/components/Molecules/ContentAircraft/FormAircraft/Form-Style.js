@@ -20,7 +20,6 @@ export default makeStyles((theme) => ({
   },
   containerForm: {
     marginTop: theme.spacing(6),
-
     border: '0.5px solid #E6E6E6',
     boxShadow: '2px 2px #F0F0F0',
     borderRadius: '8px',
@@ -33,10 +32,33 @@ export default makeStyles((theme) => ({
       borderRadius: '8px',
     },
   },
+  inputGroupAirCraftName: {
+    display: 'flex',
+    flexDirection: 'row',
+    paddingTop: '20px',
+    margin: '20px 34px 0px 34px',
+    [theme.breakpoints.down('sm')]: {
+      display: 'flex',
+      flexDirection: 'column',
+      margin: '10px 27px 0 22px',
+    },
+  },
+  inputGroupModel: {
+    display: 'flex',
+    flexDirection: 'row',
+    paddingTop: '20px',
+    margin: '0px 34px 20px 34px',
+    [theme.breakpoints.down('sm')]: {
+      display: 'flex',
+      flexDirection: 'column',
+      margin: '10px 27px 0 22px',
+    },
+  },
   inputGroup: {
     display: 'flex',
     flexDirection: 'row',
-    margin: '40px 34px',
+    paddingTop: '20px',
+    margin: '20px 34px',
     [theme.breakpoints.down('sm')]: {
       display: 'flex',
       flexDirection: 'column',
@@ -46,7 +68,8 @@ export default makeStyles((theme) => ({
   labelForm: {
     width: '20%',
     fontWeight: '400',
-    fontSize: '15px',
+    fontSize: '15pt',
+    color: '#333',
     [theme.breakpoints.down('sm')]: {
       width: '80%',
       fontSize: '14px',
@@ -61,6 +84,9 @@ export default makeStyles((theme) => ({
     },
   },
   fieldTag: {
+    fontSize: '15pt',
+    color: '#818181',
+    fontWeight: '400',
     width: '300px',
     backgroundColor: 'white',
     [theme.breakpoints.down('sm')]: {
@@ -89,6 +115,9 @@ export default makeStyles((theme) => ({
   },
   inputTag: {
     width: '200px',
+    fontSize: '15pt',
+    color: '#818181',
+    fontWeight: '400',
     backgroundColor: 'white',
     borderRadius: '8px',
     marginLeft: '50px',
@@ -107,10 +136,12 @@ export default makeStyles((theme) => ({
       fontSize: '14px',
     },
   },
-  TitleInterface: {
-    fontSize: '1.32rem',
-    fontWeight: '500',
+  titleInterface: {
+    fontSize: '20pt',
+    color: '#333',
+    fontWeight: '600',
     marginLeft: '30px',
+    
     [theme.breakpoints.down('sm')]: {
       marginLeft: '15px',
     },
@@ -197,20 +228,21 @@ export default makeStyles((theme) => ({
   // button Save
   buttonSave: {
     marginRight: '10px',
-    backgroundColor: '#5e5e5e',
+    backgroundColor: '#027F71',
     width: '90px',
     height: '40px',
     color: 'white',
     textTransform: 'none',
-    fontSize: '16px',
+    fontWeight: '600',
+    fontSize: '13pt',
   },
   buttonCancel: {
-    border: '1px solid #5e5e5e',
+    border: '1px solid #ffffff',
     backgroundColor: 'white',
     width: '90px',
     height: '40px',
-    color: '#5e5e5e',
+    color: '#333333',
     textTransform: 'none',
-    fontSize: '16px',
+    fontSize: '13pt',
   },
 }));

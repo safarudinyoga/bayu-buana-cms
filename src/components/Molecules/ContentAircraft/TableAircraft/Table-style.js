@@ -201,4 +201,9 @@ export default makeStyles((theme) => ({
       marginLeft: '0px',
     },
   },
+  titleAdvanced: {
+    fontSize: '14pt',
+    fontWeight: 'bold',
+    color: '#333333',
+  },
 }));

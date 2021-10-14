@@ -12,6 +12,8 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: '75px',
     display: 'block',
     width: 150,
+    // transform: 'translate(-50%,-50%)',
+    // // transition: theme.transitions.create('transform'),
     // tidak berlaku di sm
     [theme.breakpoints.down('sm')]: {
       display: 'block',

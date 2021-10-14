@@ -184,7 +184,7 @@ function TableAircraft({ titleButton, linkButton, dataTable, removeFunction }) {
               className={classes.dropdown}
               onClick={(e) => setActiveModal(!activeModal)}
             >
-              <strong>Advanced options</strong>
+              <p className={classes.titleAdvanced}>Advanced options</p>
               <img src={activeModal ? Down : Up} />
             </div>
           </div>

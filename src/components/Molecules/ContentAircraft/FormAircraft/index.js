@@ -1,9 +1,6 @@
 import { Button, TextField, Typography } from '@material-ui/core';
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
 import Warning from '../../../../assets/icons/warning.svg';
-import { postAircraft } from '../../../../store/actions/Reducers-Aircraft';
 import FormStyle from './Form-Style';
 
 export default function Form({ handleForm, stateForm, onClick, read = false }) {
@@ -25,7 +22,7 @@ export default function Form({ handleForm, stateForm, onClick, read = false }) {
       <div className={classes.containerForm}>
         <form className={classes.root} noValidate autoComplete="off">
           <div className={classes.wrapInputAircraft}>
-            <div className={classes.inputGroup}>
+            <div className={classes.inputGroupAirCraftName}>
               <Typography
                 className={classes.labelForm}
                 color="textPrimary"
@@ -48,7 +45,7 @@ export default function Form({ handleForm, stateForm, onClick, read = false }) {
                 size="small"
               />
             </div>
-            <div className={classes.inputGroup}>
+            <div className={classes.inputGroupModel}>
               <Typography
                 className={classes.labelForm}
                 color="textPrimary"
@@ -78,7 +75,7 @@ export default function Form({ handleForm, stateForm, onClick, read = false }) {
               color="textPrimary"
               variant="h5"
               component="h1"
-              className={classes.TitleInterface}
+              className={classes.titleInterface}
             >
               For Interface Purpose
             </Typography>
