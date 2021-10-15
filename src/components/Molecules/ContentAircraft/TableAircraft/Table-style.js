@@ -9,19 +9,21 @@ export default makeStyles((theme) => ({
   },
   TableContainer: {
     maxHeight: 440,
+    borderRadius: '14px',
   },
   search: {
     position: 'relative',
-    borderRadius: theme.shape.borderRadius,
+    borderRadius: '10px',
     // eslint-disable-next-line no-undef
     backgroundColor: alpha(theme.palette.common.white, 0.15),
     '&:hover': {
       // eslint-disable-next-line no-undef
       backgroundColor: alpha(theme.palette.common.white, 0.25),
     },
-    marginRight: theme.spacing(2),
+    marginRight: theme.spacing(4),
     marginLeft: 0,
     width: '100%',
+    height: '35px',
     [theme.breakpoints.up('sm')]: {
       width: 'auto',
     },
@@ -31,11 +33,12 @@ export default makeStyles((theme) => ({
     },
     border: '1px solid #D9DFE7',
     display: 'flex',
-    flexDirection: 'row',
+    flexDirection: 'row-reverse',
   },
   wrapperSearchDropdown: {
     display: 'flex',
     flexDirection: 'row',
+    alignItems: 'center',
     [theme.breakpoints.down('sm')]: {
       flexDirection: 'column',
     },
@@ -46,6 +49,7 @@ export default makeStyles((theme) => ({
   searchIcon: {
     padding: theme.spacing(0, 2),
     height: '100%',
+    color: '#D8D8D8',
     position: 'absolute',
     pointerEvents: 'none',
     display: 'flex',
@@ -54,13 +58,17 @@ export default makeStyles((theme) => ({
   },
   inputRoot: {
     color: 'inherit',
+    width: '215px',
   },
   inputInput: {
     padding: theme.spacing(1, 1, 1, 0),
     // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
+    paddingRight: `calc(1em + ${theme.spacing(4)}px)`,
+    paddingLeft: '10px',
     transition: theme.transitions.create('width'),
     width: '100%',
+    fontWeight: '400',
+    fontSize: '14px',
     [theme.breakpoints.up('md')]: {
       width: '20ch',
     },
@@ -87,6 +95,7 @@ export default makeStyles((theme) => ({
   buttonAdd: {
     backgroundColor: '#F3C244',
     color: '#5E5E5E',
+    fontWeight: '600',
     fontSize: '14px',
     padding: '8px 10px',
     borderRadius: '8px',
@@ -105,13 +114,14 @@ export default makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    height: 10,
-    marginRight: 8,
+    height: '10px',
+    marginRight: '8px',
     textTransform: 'capitalize',
     cursor: 'pointer',
     '&:hover': {
+      boxShadow: '2px 3px 6px #999',
       backgroundColor: '#5E5E5E',
-      boxShadow: '0px 4px 4px #00000069',
+      transition: '0.2s',
     },
   },
   startIcon: {
@@ -155,6 +165,13 @@ export default makeStyles((theme) => ({
     marginTop: '10px',
     marginBottom: '10px',
   },
+  modalTitle: {
+    marginLeft: '25px',
+    marginTop: '0',
+    fontSize: '16px',
+    fontWeight: '600',
+    color: '#333333',
+  },
   statusActive: {
     width: '60px',
     height: '40px',
@@ -182,7 +199,11 @@ export default makeStyles((theme) => ({
     },
   },
   buttonSpace: {
+    display: 'flex',
+    flexDirection: 'row',
     marginBottom: '20px',
+    marginLeft: '-19px',
+    marginTop: '40px',
     [theme.breakpoints.down('sm')]: {
       display: 'flex',
       flexDirection: 'column',
@@ -191,19 +212,27 @@ export default makeStyles((theme) => ({
   buttonRemove: {
     width: '150px',
     height: '40px',
-    backgroundColor: '#5e5e5e',
+    backgroundColor: '#027F71',
     color: 'white',
     borderRadius: '10px',
     marginLeft: '10px',
     fontSize: '14px',
     textTransform: 'capitalize',
+    marginTop: '-20px',
     [theme.breakpoints.down('sm')]: {
       marginLeft: '0px',
     },
+    '&:hover': {
+      backgroundColor: '#027F71',
+      color: 'white',
+    },
   },
   titleAdvanced: {
-    fontSize: '14pt',
+    fontSize: '15px',
     fontWeight: 'bold',
     color: '#333333',
+  },
+  tableValue: {
+    backgroundColor: 'white',
   },
 }));
