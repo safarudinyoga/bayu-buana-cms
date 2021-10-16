@@ -16,6 +16,7 @@ import TableAircraft from '../../Molecules/ContentAircraft/TableAircraft';
 import {
   fetchAircraft,
   removeAircraft,
+  putAircraft,
 } from '../../../store/actions/Reducers-Aircraft';
 
 import ViewStyle from './View-Style';
@@ -38,6 +39,10 @@ function ContentAircraft() {
       dispatch(fetchAircraft());
     });
   };
+
+  // const handleEditAircraft = (id) => {
+  //   const editAircraft = dispatch()
+  // }
   return (
     <div className={classes.container}>
       {console.log(stateAircraft, 'view')}

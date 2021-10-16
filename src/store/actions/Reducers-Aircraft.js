@@ -30,7 +30,7 @@ export const putAircraft = (payload) => {
   return async (dispatch) => {
     dispatch({ type: 'aircraft/loading', payload: true });
     try {
-      let respon = await axios.put(`/aircraft/${payload.id}`, payload);
+      let respon = await axios.put(`/aircraft/${payload.id}`, payload.data);
       console.log(respon, 'respon');
     } catch (err) {
       dispatch({ type: 'aircraft/error', payload: err });
@@ -38,6 +38,7 @@ export const putAircraft = (payload) => {
     dispatch({ type: 'aircraft/loading', payload: false });
   };
 };
+
 export const postAircraft = (payload) => {
   console.log(payload, 'payload form');
   return async (dispatch) => {

@@ -7,19 +7,16 @@ const useStyles = makeStyles(() => ({
     backgroundColor: 'transparent',
     border: 'none',
   },
-  checkBox: {
-    // backgroundColor: 'white',
-    // color: 'white',
-  },
 }));
 
-const CheckBoxTable = ({ onChange, onClick }) => {
+const CheckBoxTable = ({ onChange, checked, onClick }) => {
   const labelCheckbox = { inputProps: { 'aria-label': 'Checkbox demo' } };
   const classes = useStyles();
   return (
     <button onClick={onClick} className={classes.button}>
       <Checkbox
         color="black"
+        checked={checked}
         {...labelCheckbox}
         onChange={onChange}
         className={classes.checkBox}

@@ -18,6 +18,7 @@ import {
   TablePagination,
   TableRow,
   Tooltip,
+  Checkbox,
 } from '@material-ui/core';
 import { Search } from '@material-ui/icons';
 import { useDispatch } from 'react-redux';
@@ -33,12 +34,19 @@ import CheckBoxTable from './check-box-table';
 const ExcelFile = ReactExport.ExcelFile;
 const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
 const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
-const labelCheckbox = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
-function TableAircraft({ titleButton, linkButton, dataTable, removeFunction }) {
+function TableAircraft({
+  titleButton,
+  linkButton,
+  dataTable,
+  removeFunction,
+  editFunction,
+  dataStatus,
+}) {
   const [rows, setRows] = useState([]);
   const [rowsExport, setRowsExport] = useState([]);
   const [boxCheck, setBoxCheck] = useState(false);
+
   // export PDF
   const exportPDF = () => {
     const unit = 'pt';

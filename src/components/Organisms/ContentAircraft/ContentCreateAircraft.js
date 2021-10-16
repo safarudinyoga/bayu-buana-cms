@@ -44,7 +44,7 @@ function ContentCreateAircraft() {
           </Typography>
         </div>
         <FormAircraft
-          handleForm={submitAircraft}
+          handleForm={handleForm}
           stateForm={dataAircraft}
           onClick={submitAircraft}
         />
