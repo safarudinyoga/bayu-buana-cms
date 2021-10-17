@@ -1,19 +1,22 @@
 import { Button, TextField, Typography } from '@material-ui/core';
+import { GRID_COLUMN_HEADER_SEPARATOR_RESIZABLE_CSS_CLASS } from '@material-ui/data-grid';
 import React, { useState } from 'react';
 import Warning from '../../../../assets/icons/warning.svg';
 import FormStyle from './Form-Style';
 
-export default function Form({ handleForm, stateForm, onClick, read = false }) {
-  const [changeBgind, setChangeBgInd] = useState(true);
-  const [changeBgCh, setChangeBgCh] = useState(false);
+export default function Form({
+  handleForm,
+  stateForm,
+  onClick,
+  read = false,
+  dataLanguage,
+  handleLanguage,
+  stateLanguage,
+}) {
+  const [nameLanguage, setNameLanguage] = useState('');
 
-  const handleChangeBgInd = (e) => {
-    setChangeBgInd(true);
-    setChangeBgCh(false);
-  };
-  const handleChangeBgCh = (e) => {
-    setChangeBgCh(true);
-    setChangeBgInd(false);
+  const changeLanguage = (value) => {
+    setNameLanguage(value);
   };
 
   const classes = FormStyle();
@@ -103,7 +106,7 @@ export default function Form({ handleForm, stateForm, onClick, read = false }) {
                 type="number"
               />
             </div>
-            {/* <div className={classes.inputGroup}>
+            <div className={classes.inputGroup}>
               <Typography
                 className={classes.titleForm}
                 color="textPrimary"
@@ -113,16 +116,16 @@ export default function Form({ handleForm, stateForm, onClick, read = false }) {
                 ICAO Code
               </Typography>
               <TextField
-                value={stateForm?.presetName || ''}
+                value={stateForm?.icao_code || ''}
                 onChange={handleForm}
-                name="presetName"
+                name="icao_code"
                 required
                 className={classes.inputTag}
                 id="outlined-basic"
                 variant="outlined"
                 size="small"
               />
-            </div> */}
+            </div>
           </div>
         </form>
 
@@ -140,27 +143,74 @@ export default function Form({ handleForm, stateForm, onClick, read = false }) {
             <div>
               <div className={classes.wrapperTrans}>
                 <div className={classes.wrapperButton}>
-                  <Button
-                    onClick={handleChangeBgInd}
-                    variant="outlined"
-                    className={classes.buttonIndonesia}
-                    style={{
-                      backgroundColor: changeBgind ? '#e7e6efd9' : 'white',
-                    }}
-                  >
-                    Indonesia
-                  </Button>
-                  <Button
-                    onClick={handleChangeBgCh}
-                    variant="outlined"
-                    className={classes.buttonChinese}
-                    style={{
-                      backgroundColor: changeBgCh ? '#e7e6efd9' : 'white',
-                    }}
-                  >
-                    Chinese Simplifield
-                    <img src={Warning} />
-                  </Button>
+                  <div className={classes.wrapperTransalation}>
+                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                      {dataLanguage?.map((e) => {
+                        return (
+                          <Button
+                            onClick={() => changeLanguage(e.language_code)}
+                            variant="outlined"
+                            className={classes.buttonIndonesia}
+                            style={{
+                              backgroundColor:
+                                nameLanguage === e.language_code
+                                  ? '#e7e6efd9'
+                                  : 'white',
+                            }}
+                          >
+                            {e.language_name}
+                          </Button>
+                        );
+                      })}
+                    </div>
+
+                    <div>
+                      {dataLanguage?.map((e) => {
+                        let indexElement = stateLanguage.findIndex(
+                          (element) => {
+                            // eslint-disable-next-line no-unused-expressions
+                            return element.languageCode === e.language_code;
+                          },
+                        );
+                        return nameLanguage === e.language_code ? (
+                          <TextField
+                            InputProps={{
+                              readOnly: read === true ? true : false,
+                            }}
+                            value={
+                              stateLanguage[indexElement]?.languageValue || ''
+                            }
+                            onChange={handleLanguage}
+                            name={e.language_code}
+                            required
+                            className={classes.inputTag}
+                            id="outlined-basic"
+                            variant="outlined"
+                            size="small"
+                            type="text"
+                            placeholder={e.language_code}
+                          />
+                        ) : (
+                          ''
+                        );
+                      })}
+
+                      {/* <TextField
+                        InputProps={{
+                          readOnly: read === true ? true : false,
+                        }}
+                        value={stateForm?.aircraft_code || ''}
+                        onChange={handleForm}
+                        name="aircraft_code"
+                        required
+                        className={classes.inputTag}
+                        id="outlined-basic"
+                        variant="outlined"
+                        size="small"
+                        type="number"
+                      /> */}
+                    </div>
+                  </div>
                 </div>
                 {/* <div className={classes.wrapperForm}>
                   <Typography
