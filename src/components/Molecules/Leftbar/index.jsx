@@ -24,7 +24,7 @@ function Leftbar() {
       top: '-55px',
       zIndex: 9999,
       height: '150vh',
-      width: `${showLeftBar ? '280px' : '75px'}`,
+      width: `${showLeftBar ? '320px' : '75px'}`,
       opacity: 0.85,
       backgroundColor: colors.navbar.primary,
       color: '#555',
@@ -81,6 +81,7 @@ function Leftbar() {
       fontSize: '15px',
       color: colors.navbar.text,
       fontWeight: 'bold',
+      // minWidth: '190px',
       [theme.breakpoints.down('sm')]: {
         display: 'none',
       },
@@ -137,7 +138,7 @@ function Leftbar() {
         <div className={classes.item}>
           <img src={HomeIcon} alt="iconHome" className={classes.icon} />
           {showLeftBar && (
-            <Typography className={classes.text}>DashBoard</Typography>
+            <Typography className={classes.text}>Dashboard</Typography>
           )}
         </div>
         <div className={classes.item} ref={onShowLeftBar}>

@@ -30,12 +30,21 @@ import Up from '../../../../assets/icons/up.svg';
 import IconAircraft from '../IconAircraft';
 import TableStyle from './Table-style';
 import CheckBoxTable from './check-box-table';
+import StatusDropdown from './statusDropdown';
+import ButtonDropdown from './buttonDropdown';
+import RegionDropdown from './regionDropdown';
 const ExcelFile = ReactExport.ExcelFile;
 const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
 const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
 const labelCheckbox = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
-function TableAircraft({ titleButton, linkButton, dataTable, removeFunction }) {
+function TableAircraft({
+  titleButton,
+  linkButton,
+  dataTable,
+  removeFunction,
+  checked,
+}) {
   const [rows, setRows] = useState([]);
   const [rowsExport, setRowsExport] = useState([]);
   const [boxCheck, setBoxCheck] = useState(false);
@@ -87,7 +96,7 @@ function TableAircraft({ titleButton, linkButton, dataTable, removeFunction }) {
   const columns = [
     {
       id: 'checkBox',
-      label: <CheckBoxTable />,
+      label: <CheckBoxTable onClick={() => setBoxCheck(!boxCheck)} />,
       minWidth: 20,
     },
     { id: 'aircraft_code', label: 'Air Craft Code', minWidth: 220 },
@@ -148,6 +157,10 @@ function TableAircraft({ titleButton, linkButton, dataTable, removeFunction }) {
   const remove = (id) => {
     removeFunction(id);
   };
+
+  const [selected, setSelected] = useState('');
+  const [picker, setPicker] = useState('');
+  const [select, setSelect] = useState('');
 
   const [activeModal, setActiveModal] = useState(false);
 
@@ -228,14 +241,17 @@ function TableAircraft({ titleButton, linkButton, dataTable, removeFunction }) {
       {activeModal && (
         <div className={classes.modal}>
           <div className={classes.modalHeader}>
-            <strong style={{ marginLeft: '25px', fontSize: '14px' }}>
-              Status
-            </strong>
+            <div>
+              <p className={classes.modalTitleRegion}>Region</p>
+              <RegionDropdown picker={picker} setPicker={setPicker} />
+              <p className={classes.modalTitleStatus}>Status</p>
+              <StatusDropdown selected={selected} setSelected={setSelected} />
+            </div>
             <div onClick={reloadPage} className={classes.buttonRounded}>
-              <img src={Change} />
+              <img src={Change} style={{ marginBottom: '1px' }} />
             </div>
           </div>
-          <FormControl variant="outlined">
+          {/* <FormControl variant="outlined">
             <Select
               className={classes.statusActive}
               value={age}
@@ -246,12 +262,13 @@ function TableAircraft({ titleButton, linkButton, dataTable, removeFunction }) {
               <MenuItem value="">Active</MenuItem>
               <MenuItem value={10}>Inactive</MenuItem>
             </Select>
-          </FormControl>
+          </FormControl> */}
         </div>
       )}
       {boxCheck && (
         <div className={classes.buttonSpace}>
-          <FormControl variant="outlined">
+          <ButtonDropdown select={select} setSelect={setSelect} />
+          {/* <FormControl variant="outlined">
             <Select
               className={classes.buttonActive}
               value={age}
@@ -263,7 +280,7 @@ function TableAircraft({ titleButton, linkButton, dataTable, removeFunction }) {
               <MenuItem value={10}>Active</MenuItem>
               <MenuItem value={20}>Inactive</MenuItem>
             </Select>
-          </FormControl>
+          </FormControl> */}
           <Button className={classes.buttonRemove}>Remove Aircraft</Button>
         </div>
       )}
@@ -272,14 +289,13 @@ function TableAircraft({ titleButton, linkButton, dataTable, removeFunction }) {
         <TableContainer className={classes.TableContainer}>
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
-              <TableRow>
+              <TableRow className={classes.tableTitle}>
                 {columns.map((column) => {
                   console.log(column.id);
                   return (
                     <TableCell
                       key={column.id}
                       align={column.align}
-                      className={classes.tableTitle}
                       style={{
                         width: column.minWidth,
                         backgroundColor: '#5e5e5e',
