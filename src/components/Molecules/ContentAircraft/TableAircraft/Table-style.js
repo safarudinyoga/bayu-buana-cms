@@ -28,8 +28,10 @@ export default makeStyles((theme) => ({
       width: 'auto',
     },
     [theme.breakpoints.down('sm')]: {
+      width: '100%',
       marginTop: '20px',
       marginBottom: '10px',
+      marginRight: '0px',
     },
     border: '1px solid #D9DFE7',
     display: 'flex',
@@ -41,6 +43,7 @@ export default makeStyles((theme) => ({
     alignItems: 'center',
     [theme.breakpoints.down('sm')]: {
       flexDirection: 'column',
+      alignItems: 'flex-end',
     },
     [theme.breakpoints.up('sm')]: {
       flexDirection: 'row',
@@ -139,8 +142,10 @@ export default makeStyles((theme) => ({
     cursor: 'pointer',
     minWidth: '300px',
     [theme.breakpoints.down('sm')]: {
+      display: 'flex',
+
       justifyContent: 'flex-end',
-      minWidth: '0',
+      minWidth: '0px',
     },
     [theme.breakpoints.up('sm')]: {
       minWidth: '180px',
@@ -150,13 +155,16 @@ export default makeStyles((theme) => ({
   },
   modal: {
     width: 'auto',
-    height: '100px',
+    height: '120px',
     backgroundColor: '#f5f5f5',
     borderRadius: '10px',
     border: '2px solid lightGray',
     display: 'flex',
     flexDirection: 'column',
     marginBottom: '20px',
+    [theme.breakpoints.down('sm')]: {
+      height: '170px',
+    },
   },
   modalHeader: {
     display: 'flex',
@@ -165,9 +173,23 @@ export default makeStyles((theme) => ({
     marginTop: '10px',
     marginBottom: '10px',
   },
-  modalTitle: {
+  modalTitleRegion: {
+    [theme.breakpoints.up('md')]: {
+      display: 'none',
+    },
+    [theme.breakpoints.down('sm')]: {
+      marginLeft: '25px',
+      marginBottom: '25px',
+      marginTop: '0',
+      fontSize: '16px',
+      fontWeight: '600',
+      color: '#333333',
+    },
+  },
+  modalTitleStatus: {
     marginLeft: '25px',
-    marginTop: '0',
+    marginBottom: '25px',
+    marginTop: '10px',
     fontSize: '16px',
     fontWeight: '600',
     color: '#333333',
@@ -213,6 +235,7 @@ export default makeStyles((theme) => ({
     width: '150px',
     height: '40px',
     backgroundColor: '#027F71',
+    fontWeight: '600',
     color: 'white',
     borderRadius: '10px',
     marginLeft: '10px',
