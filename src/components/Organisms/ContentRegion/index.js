@@ -39,7 +39,6 @@ function ContentRegion() {
   };
   return (
     <div className={classes.container}>
-      {console.log(stateRegion, 'view')}
       <Breadcrumbs aria-label="breadcrumb">
         <Link className={classes.titleBread} color="inherit" href="/">
           Master Data Management

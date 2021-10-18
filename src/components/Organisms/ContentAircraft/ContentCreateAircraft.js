@@ -1,14 +1,16 @@
 import { Breadcrumbs, Link, Typography } from '@material-ui/core';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import FormAircraft from '../../Molecules/ContentAircraft/FormAircraft';
 import CreateStyle from './Create-Style';
 import { postAircraft } from '../../../store/actions/Reducers-Aircraft';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { fetchLanguage } from '../../../store/actions/Reducers-Language';
 
 function ContentCreateAircraft() {
   const classes = CreateStyle();
   const [dataAircraft, setDataAircraft] = useState({});
+  const [collectLanguage, setCOllectLanguage] = useState([]);
   let history = useHistory();
   const dispatch = useDispatch();
   const handleForm = (event) => {
@@ -17,8 +19,43 @@ function ContentCreateAircraft() {
       [event.target.name]: event.target.value,
     }));
   };
+  const handleLanguage = (event) => {
+    let indexElement = collectLanguage.findIndex((e) => {
+      // eslint-disable-next-line no-unused-expressions
+      return e.languageCode === event.target.name;
+    });
+
+    if (indexElement === -1) {
+      setCOllectLanguage((prevState) => [
+        ...prevState,
+        { languageCode: event.target.name, languageValue: event.target.value },
+      ]);
+    } else if (indexElement !== -1) {
+      let g = collectLanguage[indexElement];
+      g.languageValue = event.target.value;
+      setCOllectLanguage([
+        ...collectLanguage.slice(0, indexElement),
+        g,
+        ...collectLanguage.slice(indexElement + 1),
+      ]);
+    }
+  };
+  const stateLanguage = useSelector((state) => state.language);
+  useEffect(() => {
+    const promiseLanguage = dispatch(fetchLanguage());
+    Promise.allSettled([promiseLanguage]).then((values) => {
+      console.log(values);
+    });
+  }, []);
+
   const submitAircraft = () => {
-    const promisePostAricraft = dispatch(postAircraft(dataAircraft));
+    const promisePostAricraft = dispatch(
+      postAircraft({
+        dataCraft: dataAircraft,
+        dataTransalations: collectLanguage,
+      }),
+    );
+
     Promise.allSettled([promisePostAricraft]).then((values) => {
       history.push('/aircraft');
     });
@@ -44,7 +81,10 @@ function ContentCreateAircraft() {
           </Typography>
         </div>
         <FormAircraft
-          handleForm={submitAircraft}
+          dataLanguage={stateLanguage.dataLanguage}
+          handleLanguage={handleLanguage}
+          stateLanguage={collectLanguage}
+          handleForm={handleForm}
           stateForm={dataAircraft}
           onClick={submitAircraft}
         />

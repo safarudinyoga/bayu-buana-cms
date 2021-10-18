@@ -38,13 +38,43 @@ export const putAircraft = (payload) => {
     dispatch({ type: 'aircraft/loading', payload: false });
   };
 };
+
 export const postAircraft = (payload) => {
-  console.log(payload, 'payload form');
   return async (dispatch) => {
     dispatch({ type: 'aircraft/loading', payload: true });
     try {
-      let respon = await axios.post('/aircraft', payload);
-      console.log(respon, 'respon form');
+      let responAircraft = await axios.post('/aircraft', payload.dataCraft);
+
+      if (responAircraft.data.id) {
+        payload.dataTransalations.map((e) => {
+          dispatch(
+            postLanguageAircraft({
+              payloadLanguage: {
+                aircraft_name: e.languageValue,
+                language_code: e.languageCode,
+                model: payload.dataCraft.model,
+              },
+              id: responAircraft.data.id,
+            }),
+          );
+        });
+      }
+    } catch (err) {
+      dispatch({ type: 'aircraft/error', payload: err });
+    }
+    dispatch({ type: 'aircraft/loading', payload: false });
+  };
+};
+
+export const postLanguageAircraft = (payload) => {
+  return async (dispatch) => {
+    dispatch({ type: 'aircraft/loading', payload: true });
+    try {
+      let responLanguage = await axios.post(
+        `/aircraft/${payload.id}/translations`,
+        payload.payloadLanguage,
+      );
+      console.log(responLanguage, 'respon language');
     } catch (err) {
       dispatch({ type: 'aircraft/error', payload: err });
     }
@@ -57,7 +87,7 @@ export const getAircraftById = (payload) => {
     dispatch({ type: 'aircraft/loading', payload: true });
     try {
       let { data } = await axios.get(`/aircraft/${payload}`);
-      console.log(data, 'data edit');
+
       dispatch({ type: 'dataAircraftDetail/fetch', payload: data });
     } catch (err) {
       dispatch({ type: 'aircraft/error', payload: err });
@@ -66,7 +96,6 @@ export const getAircraftById = (payload) => {
   };
 };
 export const editAircraft = (payload) => {
-  console.log(payload, 'payload edit');
   return async (dispatch) => {
     dispatch({ type: 'aircraft/loading', payload: true });
     try {
