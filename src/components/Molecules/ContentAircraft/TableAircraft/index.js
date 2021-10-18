@@ -31,6 +31,8 @@ import Up from '../../../../assets/icons/up.svg';
 import IconAircraft from '../IconAircraft';
 import TableStyle from './Table-style';
 import CheckBoxTable from './check-box-table';
+import Dropdown from './dropdown';
+import ButtonDropdown from './buttonDropdown';
 const ExcelFile = ReactExport.ExcelFile;
 const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
 const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
@@ -46,6 +48,7 @@ function TableAircraft({
   const [rows, setRows] = useState([]);
   const [rowsExport, setRowsExport] = useState([]);
   const [boxCheck, setBoxCheck] = useState(false);
+  const [openBox, setOpenBox] = useState(false);
 
   // export PDF
   const exportPDF = () => {
@@ -91,11 +94,14 @@ function TableAircraft({
       actions,
     };
   }
+  const handleCheckbox = () => {
+    setBoxCheck(!boxCheck);
+  };
 
   const columns = [
     {
       id: 'checkBox',
-      label: <CheckBoxTable />,
+      label: <CheckBoxTable onChange={handleCheckbox} />,
       minWidth: 20,
     },
     { id: 'aircraft_code', label: 'Air Craft Code', minWidth: 220 },
@@ -111,7 +117,10 @@ function TableAircraft({
     dataItems.map((e) =>
       rows1.push(
         createData(
-          <CheckBoxTable />,
+          <CheckBoxTable
+            // checked={boxCheck}
+            onClick={() => handleChildBox(e)}
+          />,
           e.aircraft_code,
           e.aircraft_name,
           e.status === 1 ? 'Active' : 'Inactive',
@@ -134,7 +143,23 @@ function TableAircraft({
     setRows(rows1);
     console.log(rows2, 'rows4');
     setRowsExport(rows2);
-  }, [dataTable]);
+  }, [dataTable, boxCheck]);
+
+  const handleChildBox = (e) => {
+    // let index = rows.findIndex((item, index) => {
+    //   return item.aircraft_code === e.aircraft_code ? true : false;
+    // });
+    // console.log(index, 'includex click');
+    // // console.log(e);
+    // // console.log(rows, 'handleClickx');
+    // if (e.aircraft_code === rows[index].aircraft_code) {
+    //   setOpenBox(true);
+    // } else {
+    //   setOpenBox(false);
+    // }
+    setOpenBox(!openBox);
+    console.log(openBox, 'click di handleBox');
+  };
 
   const classes = TableStyle();
   const [page, setPage] = useState(0);
@@ -156,6 +181,9 @@ function TableAircraft({
   const remove = (id) => {
     removeFunction(id);
   };
+
+  const [selected, setSelected] = useState('');
+  const [select, setSelect] = useState('');
 
   const [activeModal, setActiveModal] = useState(false);
 
@@ -193,7 +221,7 @@ function TableAircraft({
               onClick={(e) => setActiveModal(!activeModal)}
             >
               <p className={classes.titleAdvanced}>Advanced options</p>
-              <img src={activeModal ? Down : Up} />
+              <img src={activeModal ? Up : Down} />
             </div>
           </div>
         </Grid>
@@ -236,14 +264,13 @@ function TableAircraft({
       {activeModal && (
         <div className={classes.modal}>
           <div className={classes.modalHeader}>
-            <strong style={{ marginLeft: '25px', fontSize: '14px' }}>
-              Status
-            </strong>
+            <p className={classes.modalTitle}>Status</p>
             <div onClick={reloadPage} className={classes.buttonRounded}>
-              <img src={Change} />
+              <img src={Change} style={{ marginBottom: '1px' }} />
             </div>
           </div>
-          <FormControl variant="outlined">
+          <Dropdown selected={selected} setSelected={setSelected} />
+          {/* <FormControl variant="outlined">
             <Select
               className={classes.statusActive}
               value={age}
@@ -254,12 +281,13 @@ function TableAircraft({
               <MenuItem value="">Active</MenuItem>
               <MenuItem value={10}>Inactive</MenuItem>
             </Select>
-          </FormControl>
+          </FormControl> */}
         </div>
       )}
-      {boxCheck && (
+      {boxCheck || openBox ? (
         <div className={classes.buttonSpace}>
-          <FormControl variant="outlined">
+          <ButtonDropdown select={select} setSelect={setSelect} />
+          {/* <FormControl variant="outlined">
             <Select
               className={classes.buttonActive}
               value={age}
@@ -271,23 +299,24 @@ function TableAircraft({
               <MenuItem value={10}>Active</MenuItem>
               <MenuItem value={20}>Inactive</MenuItem>
             </Select>
-          </FormControl>
+          </FormControl> */}
           <Button className={classes.buttonRemove}>Remove Aircraft</Button>
         </div>
+      ) : (
+        ''
       )}
 
       <Paper className={classes.paperTable}>
         <TableContainer className={classes.TableContainer}>
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
-              <TableRow>
+              <TableRow className={classes.tableTitle}>
                 {columns.map((column) => {
                   console.log(column.id);
                   return (
                     <TableCell
                       key={column.id}
                       align={column.align}
-                      className={classes.tableTitle}
                       style={{
                         width: column.minWidth,
                         backgroundColor: '#5e5e5e',

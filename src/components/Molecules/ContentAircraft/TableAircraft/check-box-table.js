@@ -9,7 +9,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const CheckBoxTable = ({ onChange, checked, onClick }) => {
+const CheckBoxTable = ({ onChange, checked, indeterminate, onClick }) => {
   const labelCheckbox = { inputProps: { 'aria-label': 'Checkbox demo' } };
   const classes = useStyles();
   return (
@@ -20,6 +20,7 @@ const CheckBoxTable = ({ onChange, checked, onClick }) => {
         {...labelCheckbox}
         onChange={onChange}
         className={classes.checkBox}
+        indeterminate={indeterminate}
       />
     </button>
   );
