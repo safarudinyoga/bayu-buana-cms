@@ -9,9 +9,11 @@ export default function Form({
   stateForm,
   onClick,
   read = false,
+  detailPage = false,
   dataLanguage,
   handleLanguage,
   stateLanguage,
+  urlCancel,
 }) {
   const [nameLanguage, setNameLanguage] = useState('');
 
@@ -116,6 +118,9 @@ export default function Form({
                 ICAO Code
               </Typography>
               <TextField
+                InputProps={{
+                  readOnly: read === true ? true : false,
+                }}
                 value={stateForm?.icao_code || ''}
                 onChange={handleForm}
                 name="icao_code"
@@ -169,7 +174,7 @@ export default function Form({
                         let indexElement = stateLanguage.findIndex(
                           (element) => {
                             // eslint-disable-next-line no-unused-expressions
-                            return element.languageCode === e.language_code;
+                            return element.language_code === e.language_code;
                           },
                         );
                         return nameLanguage === e.language_code ? (
@@ -178,7 +183,7 @@ export default function Form({
                               readOnly: read === true ? true : false,
                             }}
                             value={
-                              stateLanguage[indexElement]?.languageValue || ''
+                              stateLanguage[indexElement]?.aircraft_name || ''
                             }
                             onChange={handleLanguage}
                             name={e.language_code}
@@ -246,15 +251,19 @@ export default function Form({
           flexDirection="row"
           style={{ marginTop: '20px', margin: '30px 27px 0 22px' }}
         >
+          {detailPage ? (
+            ''
+          ) : (
+            <Button
+              onClick={onClick}
+              variant="contained"
+              className={classes.buttonSave}
+            >
+              Save
+            </Button>
+          )}
           <Button
-            onClick={onClick}
-            variant="contained"
-            className={classes.buttonSave}
-          >
-            Save
-          </Button>
-          <Button
-            href="/aircraft"
+            href={urlCancel}
             variant="contained"
             className={classes.buttonCancel}
           >
