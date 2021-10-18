@@ -44,7 +44,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const Dropdown = ({ selected, setSelected }) => {
+const StatusDropdown = ({ selected, setSelected }) => {
   const [isActive, setIsActive] = useState(false);
   const classes = useStyles();
   const options = ['Active', 'Inactive'];
@@ -79,4 +79,4 @@ const Dropdown = ({ selected, setSelected }) => {
   );
 };
 
-export default Dropdown;
+export default StatusDropdown;

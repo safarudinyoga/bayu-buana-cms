@@ -129,7 +129,6 @@ function TableRegion({
       }),
     );
     setRows(rows1);
-    console.log(rows2, 'rows4');
     setRowsExport(rows2);
   }, [dataTable]);
 
@@ -279,7 +278,6 @@ function TableRegion({
             <TableHead>
               <TableRow>
                 {columns.map((column) => {
-                  console.log(column.id);
                   return (
                     <TableCell
                       key={column.id}

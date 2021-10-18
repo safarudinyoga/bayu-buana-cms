@@ -31,8 +31,9 @@ import Up from '../../../../assets/icons/up.svg';
 import IconAircraft from '../IconAircraft';
 import TableStyle from './Table-style';
 import CheckBoxTable from './check-box-table';
-import Dropdown from './dropdown';
+import StatusDropdown from './statusDropdown';
 import ButtonDropdown from './buttonDropdown';
+import RegionDropdown from './regionDropdown';
 const ExcelFile = ReactExport.ExcelFile;
 const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
 const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
@@ -141,7 +142,6 @@ function TableAircraft({
       }),
     );
     setRows(rows1);
-    console.log(rows2, 'rows4');
     setRowsExport(rows2);
   }, [dataTable, boxCheck]);
 
@@ -183,6 +183,7 @@ function TableAircraft({
   };
 
   const [selected, setSelected] = useState('');
+  const [picker, setPicker] = useState('');
   const [select, setSelect] = useState('');
 
   const [activeModal, setActiveModal] = useState(false);
@@ -264,12 +265,16 @@ function TableAircraft({
       {activeModal && (
         <div className={classes.modal}>
           <div className={classes.modalHeader}>
-            <p className={classes.modalTitle}>Status</p>
+            <div>
+              <p className={classes.modalTitleRegion}>Region</p>
+              <RegionDropdown picker={picker} setPicker={setPicker} />
+              <p className={classes.modalTitleStatus}>Status</p>
+              <StatusDropdown selected={selected} setSelected={setSelected} />
+            </div>
             <div onClick={reloadPage} className={classes.buttonRounded}>
               <img src={Change} style={{ marginBottom: '1px' }} />
             </div>
           </div>
-          <Dropdown selected={selected} setSelected={setSelected} />
           {/* <FormControl variant="outlined">
             <Select
               className={classes.statusActive}
@@ -312,7 +317,6 @@ function TableAircraft({
             <TableHead>
               <TableRow className={classes.tableTitle}>
                 {columns.map((column) => {
-                  console.log(column.id);
                   return (
                     <TableCell
                       key={column.id}
@@ -338,7 +342,9 @@ function TableAircraft({
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .filter(
                   (e) =>
-                    e.aircraft_name.includes(keyword) ||
+                    e.aircraft_name
+                      .toLowerCase()
+                      .includes(keyword.toLowerCase()) ||
                     e.aircraft_code.includes(keyword),
                 )
                 .map((item) => {

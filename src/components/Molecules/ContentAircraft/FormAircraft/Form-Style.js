@@ -141,7 +141,7 @@ export default makeStyles((theme) => ({
     color: '#333',
     fontWeight: '600',
     marginLeft: '30px',
-    
+
     [theme.breakpoints.down('sm')]: {
       marginLeft: '15px',
     },
@@ -162,9 +162,15 @@ export default makeStyles((theme) => ({
     borderRadius: '8px',
   },
   wrapperButton: {
+    padding: '20px',
     width: '25%',
     display: 'flex',
     flexDirection: 'column',
+  },
+  wrapperTransalation: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   buttonIndonesia: {
     height: '38px',
