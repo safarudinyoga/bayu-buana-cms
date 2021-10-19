@@ -89,6 +89,7 @@ function ContentCreateAircraft() {
           handleForm={handleForm}
           stateForm={dataAircraft}
           onClick={submitAircraft}
+          urlCancel="/aircraft"
         />
       </div>
     </div>
