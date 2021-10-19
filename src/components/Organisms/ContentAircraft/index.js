@@ -50,7 +50,7 @@ function ContentAircraft() {
       </Breadcrumbs>
       <div className={classes.title}>
         <Typography color="textPrimary" variant="h5" component="h1">
-          Standard Mark-Up
+          Master Aircraft
         </Typography>
       </div>
       <div className={classes.containerTable}>
