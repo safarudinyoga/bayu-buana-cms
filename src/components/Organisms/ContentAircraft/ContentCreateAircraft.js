@@ -22,17 +22,17 @@ function ContentCreateAircraft() {
   const handleLanguage = (event) => {
     let indexElement = collectLanguage.findIndex((e) => {
       // eslint-disable-next-line no-unused-expressions
-      return e.languageCode === event.target.name;
+      return e.language_code === event.target.name;
     });
 
     if (indexElement === -1) {
       setCOllectLanguage((prevState) => [
         ...prevState,
-        { languageCode: event.target.name, languageValue: event.target.value },
+        { language_code: event.target.name, aircraft_name: event.target.value },
       ]);
     } else if (indexElement !== -1) {
       let g = collectLanguage[indexElement];
-      g.languageValue = event.target.value;
+      g.aircraft_name = event.target.value;
       setCOllectLanguage([
         ...collectLanguage.slice(0, indexElement),
         g,
@@ -52,12 +52,14 @@ function ContentCreateAircraft() {
     const promisePostAricraft = dispatch(
       postAircraft({
         dataCraft: dataAircraft,
-        dataTransalations: collectLanguage,
+        dataTranslations: collectLanguage,
       }),
     );
 
     Promise.allSettled([promisePostAricraft]).then((values) => {
-      history.push('/aircraft');
+      if (values[0].value === 200) {
+        history.push('/aircraft');
+      }
     });
   };
 

@@ -1,6 +1,7 @@
 const initialState = {
   dataAircraft: {},
   detailAircraft: {},
+  detailAircraftLanguage: [],
   isLoading: false,
   error: null,
 };
@@ -11,6 +12,9 @@ const aircraftReducer = (state = initialState, { type, payload }) => {
 
     case 'dataAircraftDetail/fetch':
       return { ...state, detailAircraft: payload };
+
+    case 'dataAircraftLanguageDetail/fetch':
+      return { ...state, detailAircraftLanguage: payload };
 
     case 'aircraft/loading':
       return { ...state, isLoading: payload };
