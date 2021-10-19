@@ -99,8 +99,8 @@ function TableAircraft({
       label: <CheckBoxTable onClick={() => setBoxCheck(!boxCheck)} />,
       minWidth: 20,
     },
-    { id: 'aircraft_code', label: 'Air Craft Code', minWidth: 220 },
-    { id: 'aircraft_name', label: 'Air Craft Name', minWidth: 220 },
+    { id: 'aircraft_code', label: 'Aircraft Code', minWidth: 220 },
+    { id: 'aircraft_name', label: 'Aircraft Name', minWidth: 220 },
     { id: 'status', label: 'Status', minWidth: 170 },
     { id: 'actions', label: 'Actions', minWidth: 170 },
   ];
