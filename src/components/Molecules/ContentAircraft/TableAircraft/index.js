@@ -316,9 +316,9 @@ function TableAircraft({
                 .filter(
                   (e) =>
                     e.aircraft_name
-                      .toLowerCase()
+                      ?.toLowerCase()
                       .includes(keyword.toLowerCase()) ||
-                    e.aircraft_code.includes(keyword),
+                    e.aircraft_code?.includes(keyword),
                 )
                 .map((item) => {
                   return (
@@ -352,7 +352,7 @@ function TableAircraft({
           </Table>
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[10, 25, 100]}
+          rowsPerPageOptions={[10, 25, 50, 100, 125]}
           component="div"
           count={rows.length}
           rowsPerPage={rowsPerPage}
