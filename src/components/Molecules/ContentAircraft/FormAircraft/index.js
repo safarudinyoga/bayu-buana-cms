@@ -12,6 +12,8 @@ export default function Form({
   dataLanguage,
   handleLanguage,
   stateLanguage,
+  error,
+  helperText,
 }) {
   const [nameLanguage, setNameLanguage] = useState('');
 
@@ -39,6 +41,8 @@ export default function Form({
                 onChange={handleForm}
                 name="aircraft_name"
                 required
+                error={error}
+                helperText={helperText}
                 InputProps={{
                   readOnly: read === true ? true : false,
                 }}

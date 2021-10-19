@@ -49,7 +49,7 @@ function TableAircraft({
   const [rows, setRows] = useState([]);
   const [rowsExport, setRowsExport] = useState([]);
   const [boxCheck, setBoxCheck] = useState(false);
-  const [openBox, setOpenBox] = useState(false);
+  const [openBox, setOpenBox] = useState([]);
 
   // export PDF
   const exportPDF = () => {
@@ -120,6 +120,7 @@ function TableAircraft({
         createData(
           <CheckBoxTable
             // checked={boxCheck}
+            onChange={() => setOpenBox(e.id)}
             onClick={() => handleChildBox(e)}
           />,
           e.aircraft_code,
@@ -146,8 +147,9 @@ function TableAircraft({
   }, [dataTable, boxCheck]);
 
   const handleChildBox = (e) => {
+    // setOpenBox(e.id);
     // let index = rows.findIndex((item, index) => {
-    //   return item.aircraft_code === e.aircraft_code ? true : false;
+    //   return item.aircraft_code === e.aircraft_code ? true : false;-
     // });
     // console.log(index, 'includex click');
     // // console.log(e);
@@ -157,8 +159,9 @@ function TableAircraft({
     // } else {
     //   setOpenBox(false);
     // }
-    setOpenBox(!openBox);
-    console.log(openBox, 'click di handleBox');
+    // console.log(e);
+    // setOpenBox(!openBox);
+    // console.log(openBox, 'click di handleBox');
   };
 
   const classes = TableStyle();
@@ -343,7 +346,7 @@ function TableAircraft({
                 .filter(
                   (e) =>
                     e.aircraft_name
-                      .toLowerCase()
+                      // .toLowerCase()
                       .includes(keyword.toLowerCase()) ||
                     e.aircraft_code.includes(keyword),
                 )
