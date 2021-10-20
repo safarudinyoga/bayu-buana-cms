@@ -51,6 +51,11 @@ function TableAircraft({
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('id');
 
+  const [selected, setSelected] = useState('');
+  const [picker, setPicker] = useState('');
+  const [activeModal, setActiveModal] = useState(false);
+  const [age, setAge] = useState('');
+
 
 
   // export PDF
@@ -146,6 +151,8 @@ function TableAircraft({
     }
   }, [select]);
 
+
+
   useEffect(() => {
     let rows1 = [];
     let rows2 = [];
@@ -159,6 +166,12 @@ function TableAircraft({
         return a[orderBy] > b[orderBy] ? 1 : -1;
       }
     });
+
+    if (selected !== 'Select Status...' && selected !== '') {
+      // filter data items by status
+      let status = selected === 'Active' ? 1 : 3;
+      dataItems = dataItems.filter(e => e.status == status);
+    }
 
     dataItems.map((e) => {
       rows1.push(
@@ -186,7 +199,7 @@ function TableAircraft({
     );
     setRows(rows1);
     setRowsExport(rows2);
-  }, [dataTable, checkedList, order, orderBy]);
+  }, [dataTable, checkedList, order, orderBy, selected]);
 
   const classes = TableStyle();
   const [page, setPage] = useState(0);
@@ -213,13 +226,7 @@ function TableAircraft({
     removeFunction(id);
   };
 
-  const [selected, setSelected] = useState('');
-  const [picker, setPicker] = useState('');
 
-
-  const [activeModal, setActiveModal] = useState(false);
-
-  const [age, setAge] = useState('');
 
   const reloadPage = () => {
     window.location.reload();
