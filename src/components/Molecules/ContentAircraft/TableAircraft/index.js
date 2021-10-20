@@ -7,8 +7,7 @@ import {
   TableContainer,
   TableHead,
   TablePagination,
-  TableRow,
-  Tooltip
+  TableRow, TableSortLabel, Tooltip
 } from '@material-ui/core';
 import {Search} from '@material-ui/icons';
 import jsPDF from 'jspdf';
@@ -47,6 +46,12 @@ function TableAircraft({
   const [select, setSelect] = useState('');
   // state for checkbox
   const [checkedList, setCheckedList] = useState([]);
+
+  // state for ordering page : orderBy,order
+  const [order, setOrder] = useState('asc');
+  const [orderBy, setOrderBy] = useState('id');
+
+
 
   // export PDF
   const exportPDF = () => {
@@ -134,7 +139,6 @@ function TableAircraft({
   };
 
   useEffect(() => {
-    console.log({selectChanged: select});
     if (select == 'Active') {
       dispatch(postBatchAction({action: 'activate', 'ids': checkedList}));
     } else if (select == 'Inactive') {
@@ -146,6 +150,16 @@ function TableAircraft({
     let rows1 = [];
     let rows2 = [];
     let dataItems = dataTable.items || [];
+
+    // sort by state order and orderBy
+    dataItems.sort((a, b) => {
+      if (order === 'desc') {
+        return a[orderBy] < b[orderBy] ? 1 : -1;
+      } else {
+        return a[orderBy] > b[orderBy] ? 1 : -1;
+      }
+    });
+
     dataItems.map((e) => {
       rows1.push(
         createData(
@@ -172,7 +186,7 @@ function TableAircraft({
     );
     setRows(rows1);
     setRowsExport(rows2);
-  }, [dataTable, checkedList]);
+  }, [dataTable, checkedList, order, orderBy]);
 
   const classes = TableStyle();
   const [page, setPage] = useState(0);
@@ -213,6 +227,15 @@ function TableAircraft({
   const handleChange = (event) => {
     setAge(event.target.value);
   };
+
+  // handler for sorting
+  const createSortHandler = (property) => (event) => {
+    console.log({createSortHandler: property, order, orderBy});
+    const isAsc = orderBy === property && order === 'asc';
+    setOrder(isAsc ? 'desc' : 'asc');
+    setOrderBy(property);
+  };
+
   return (
     <div>
       <div className={classes.controlTable}>
@@ -344,7 +367,14 @@ function TableAircraft({
                         // borderTopRightRadius: '8px',
                       }}
                     >
-                      {column.label}
+                      {/* make column clickable */}
+                      <TableSortLabel
+                        active={orderBy === column.id}
+                        direction={order}
+                        onClick={createSortHandler(column.id)}
+                      >
+                        {column.label}
+                      </TableSortLabel>
                     </TableCell>
                   );
                 })}
