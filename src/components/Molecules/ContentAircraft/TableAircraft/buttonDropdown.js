@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/styles';
+import {makeStyles} from '@material-ui/styles';
+import React, {useState} from 'react';
 import arrowDownWhite from '../../../../assets/icons/arrowDownWhite.svg';
 import arrowUpWhite from '../../../../assets/icons/arrowUpWhite.svg';
 
@@ -48,7 +48,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const ButtonDropdown = ({ select, setSelect }) => {
+const ButtonDropdown = ({select, setSelect}) => {
   const [isActive, setIsActive] = useState(false);
   const classes = useStyles();
   const options = ['Active', 'Inactive'];
@@ -61,13 +61,14 @@ const ButtonDropdown = ({ select, setSelect }) => {
         Update Status
         <img
           src={isActive ? arrowUpWhite : arrowDownWhite}
-          style={{ width: '10px', marginTop: '4px', marginLeft: '8px' }}
+          style={{width: '10px', marginTop: '4px', marginLeft: '8px'}}
         />
       </div>
       {isActive && (
         <div className={classes.dropdownContent}>
           {options.map((option) => (
             <div
+              key={option}
               className={classes.dropdownItem}
               onClick={(e) => {
                 setSelect(option);
