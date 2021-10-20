@@ -167,7 +167,7 @@ export const postBatchAction = (payload) => {
     dispatch({type: 'aircraft/loading', payload: true});
     try {
       let ids = payload.ids;
-      await axios.post('/batch-actions/' + payload.action + '/airlines', ids);
+      await axios.post('/batch-actions/' + payload.action + '/aircraft', ids);
       // rahman
       // todo : apakah bisa langsung dispatch ke function lain?
       let {data} = await axios.get('/aircraft', {
