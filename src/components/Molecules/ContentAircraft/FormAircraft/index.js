@@ -1,6 +1,6 @@
 import { Button, TextField, Typography } from '@material-ui/core';
 import { GRID_COLUMN_HEADER_SEPARATOR_RESIZABLE_CSS_CLASS } from '@material-ui/data-grid';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Warning from '../../../../assets/icons/warning.svg';
 import FormStyle from './Form-Style';
 
@@ -16,7 +16,28 @@ export default function Form({
   urlCancel,
 }) {
   const [nameLanguage, setNameLanguage] = useState('');
-
+  const [errorForm, setErrorForm] = useState(false);
+  useEffect(() => {
+    let isAircraftName = stateForm?.aircraft_name || false;
+    let isAircraftCode = stateForm?.aircraft_code || false;
+    let isAircraftModel = stateForm?.model || false;
+    let isIcaoCode = stateForm?.icao_code || false;
+    let isFill = false;
+    stateLanguage.find((e) => {
+      e.aircraft_name === '' ? (isFill = false) : (isFill = true);
+    });
+    if (
+      isAircraftName &&
+      isAircraftCode &&
+      isAircraftModel &&
+      isIcaoCode &&
+      isFill
+    ) {
+      setErrorForm(true);
+    } else {
+      setErrorForm(false);
+    }
+  }, [stateForm, dataLanguage, stateLanguage]);
   const changeLanguage = (value) => {
     setNameLanguage(value);
   };
@@ -255,6 +276,7 @@ export default function Form({
               ''
             ) : (
               <Button
+                disabled={!errorForm ? true : false}
                 onClick={onClick}
                 variant="contained"
                 className={classes.buttonSave}
