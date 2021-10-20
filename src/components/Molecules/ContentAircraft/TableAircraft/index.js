@@ -1,42 +1,37 @@
-import React, { useEffect, useState } from 'react';
-import jsPDF from 'jspdf';
-import 'jspdf-autotable';
 import ReactExport from '@ibrahimrahmani/react-export-excel';
 import {
-  Button,
-  FormControl,
-  Grid,
-  InputBase,
-  MenuItem,
-  Paper,
-  Select,
-  Table,
+  Button, Grid,
+  InputBase, Paper, Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TablePagination,
-  TableRow,
-  Tooltip,
+  TableRow, TableSortLabel, Tooltip
 } from '@material-ui/core';
-import { Search } from '@material-ui/icons';
-import { useDispatch } from 'react-redux';
+import {Search} from '@material-ui/icons';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
+import React, {useEffect, useState} from 'react';
+import {useDispatch} from 'react-redux';
 import Change from '../../../../assets/icons/change.svg';
 import Down from '../../../../assets/icons/down.svg';
 import Download from '../../../../assets/icons/download.svg';
 import AddFile from '../../../../assets/icons/file-plus.svg';
 import Printer from '../../../../assets/icons/printer.svg';
 import Up from '../../../../assets/icons/up.svg';
+import {postBatchAction} from '../../../../store/actions/Reducers-Aircraft';
 import IconAircraft from '../IconAircraft';
-import TableStyle from './Table-style';
-import CheckBoxTable from './check-box-table';
-import StatusDropdown from './statusDropdown';
 import ButtonDropdown from './buttonDropdown';
+import CheckBoxTable from './check-box-table';
 import RegionDropdown from './regionDropdown';
+import StatusDropdown from './statusDropdown';
+import TableStyle from './Table-style';
 const ExcelFile = ReactExport.ExcelFile;
 const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
 const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
-const labelCheckbox = { inputProps: { 'aria-label': 'Checkbox demo' } };
+const labelCheckbox = {inputProps: {'aria-label': 'Checkbox demo'}};
+
 
 function TableAircraft({
   titleButton,
@@ -48,6 +43,16 @@ function TableAircraft({
   const [rows, setRows] = useState([]);
   const [rowsExport, setRowsExport] = useState([]);
   const [boxCheck, setBoxCheck] = useState(false);
+  const [select, setSelect] = useState('');
+  // state for checkbox
+  const [checkedList, setCheckedList] = useState([]);
+
+  // state for ordering page : orderBy,order
+  const [order, setOrder] = useState('asc');
+  const [orderBy, setOrderBy] = useState('id');
+
+
+
   // export PDF
   const exportPDF = () => {
     const unit = 'pt';
@@ -96,23 +101,69 @@ function TableAircraft({
   const columns = [
     {
       id: 'checkBox',
-      label: <CheckBoxTable onClick={() => setBoxCheck(!boxCheck)} />,
+      label: <CheckBoxTable checked={boxCheck} onClick={() => toggleCheckbox()} />,
       minWidth: 20,
     },
-    { id: 'aircraft_code', label: 'Aircraft Code', minWidth: 220 },
-    { id: 'aircraft_name', label: 'Aircraft Name', minWidth: 220 },
-    { id: 'status', label: 'Status', minWidth: 170 },
-    { id: 'actions', label: 'Actions', minWidth: 170 },
+    {id: 'aircraft_code', label: 'Aircraft Code', minWidth: 220},
+    {id: 'aircraft_name', label: 'Aircraft Name', minWidth: 220},
+    {id: 'status', label: 'Status', minWidth: 170},
+    {id: 'actions', label: 'Actions', minWidth: 170},
   ];
+
+  // click to select all and deselect all, not goog for using useEffect
+  const toggleCheckbox = () => {
+    setBoxCheck(!boxCheck);
+    let rows = dataTable.items || [];
+    if (!boxCheck) { // reverse because state is not changed yet
+      setCheckedList(rows.map((data) => data.id));
+    } else {
+      setCheckedList([]);
+    }
+  }
+
+  // check is selected or not
+  const isSelected = (id) => checkedList.indexOf(id) !== -1;
+  // function to handle checkbox item
+  const handleCheckBox = (id) => {
+    const selectedIndex = checkedList.indexOf(id);
+    let newChecked = [...checkedList];
+
+    if (selectedIndex === -1) {
+      newChecked.push(id);
+    } else {
+      newChecked.splice(selectedIndex, 1);
+    }
+
+    setCheckedList(newChecked);
+    setBoxCheck(newChecked.length !== 0);
+  };
+
+  useEffect(() => {
+    if (select == 'Active') {
+      dispatch(postBatchAction({action: 'activate', 'ids': checkedList}));
+    } else if (select == 'Inactive') {
+      dispatch(postBatchAction({action: 'deactivate', 'ids': checkedList}));
+    }
+  }, [select]);
 
   useEffect(() => {
     let rows1 = [];
     let rows2 = [];
     let dataItems = dataTable.items || [];
-    dataItems.map((e) =>
+
+    // sort by state order and orderBy
+    dataItems.sort((a, b) => {
+      if (order === 'desc') {
+        return a[orderBy] < b[orderBy] ? 1 : -1;
+      } else {
+        return a[orderBy] > b[orderBy] ? 1 : -1;
+      }
+    });
+
+    dataItems.map((e) => {
       rows1.push(
         createData(
-          <CheckBoxTable />,
+          <CheckBoxTable checked={isSelected(e.id)} onChange={() => handleCheckBox(e.id)} />,
           e.aircraft_code,
           e.aircraft_name,
           e.status === 1 ? 'Active' : 'Inactive',
@@ -123,7 +174,8 @@ function TableAircraft({
             removeFunction={remove}
           />,
         ),
-      ),
+      )
+    }
     );
     dataItems.map((e) =>
       rows2.push({
@@ -134,7 +186,7 @@ function TableAircraft({
     );
     setRows(rows1);
     setRowsExport(rows2);
-  }, [dataTable]);
+  }, [dataTable, checkedList, order, orderBy]);
 
   const classes = TableStyle();
   const [page, setPage] = useState(0);
@@ -150,6 +202,10 @@ function TableAircraft({
     setPage(0);
   };
 
+  const handleBatchRemoveAircraft = () => {
+    dispatch(postBatchAction({action: 'delete', 'ids': checkedList}));
+  }
+
   const handleSearch = (event) => {
     setkeyword(event.target.value);
   };
@@ -159,7 +215,7 @@ function TableAircraft({
 
   const [selected, setSelected] = useState('');
   const [picker, setPicker] = useState('');
-  const [select, setSelect] = useState('');
+
 
   const [activeModal, setActiveModal] = useState(false);
 
@@ -171,6 +227,15 @@ function TableAircraft({
   const handleChange = (event) => {
     setAge(event.target.value);
   };
+
+  // handler for sorting
+  const createSortHandler = (property) => (event) => {
+    console.log({createSortHandler: property, order, orderBy});
+    const isAsc = orderBy === property && order === 'asc';
+    setOrder(isAsc ? 'desc' : 'asc');
+    setOrderBy(property);
+  };
+
   return (
     <div>
       <div className={classes.controlTable}>
@@ -189,7 +254,7 @@ function TableAircraft({
                   root: classes.inputRoot,
                   input: classes.inputInput,
                 }}
-                inputProps={{ 'aria-label': 'search' }}
+                inputProps={{'aria-label': 'search'}}
               />
             </div>
             <div
@@ -247,7 +312,7 @@ function TableAircraft({
               <StatusDropdown selected={selected} setSelected={setSelected} />
             </div>
             <div onClick={reloadPage} className={classes.buttonRounded}>
-              <img src={Change} style={{ marginBottom: '1px' }} />
+              <img src={Change} style={{marginBottom: '1px'}} />
             </div>
           </div>
           {/* <FormControl variant="outlined">
@@ -280,7 +345,7 @@ function TableAircraft({
               <MenuItem value={20}>Inactive</MenuItem>
             </Select>
           </FormControl> */}
-          <Button className={classes.buttonRemove}>Remove Aircraft</Button>
+          <Button className={classes.buttonRemove} onClick={() => handleBatchRemoveAircraft()}>Remove Aircraft</Button>
         </div>
       )}
 
@@ -298,13 +363,18 @@ function TableAircraft({
                         width: column.minWidth,
                         backgroundColor: '#5e5e5e',
                         color: 'white',
-                        borderTopLeftRadius: `${
-                          column.id === 'airCraftCode' ? '8px' : 'none'
-                        } `,
+                        borderTopLeftRadius: `${column.id === 'airCraftCode' ? '8px' : 'none'} `,
                         // borderTopRightRadius: '8px',
                       }}
                     >
-                      {column.label}
+                      {/* make column clickable */}
+                      <TableSortLabel
+                        active={orderBy === column.id}
+                        direction={order}
+                        onClick={createSortHandler(column.id)}
+                      >
+                        {column.label}
+                      </TableSortLabel>
                     </TableCell>
                   );
                 })}
