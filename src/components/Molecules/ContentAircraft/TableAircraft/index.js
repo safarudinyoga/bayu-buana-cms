@@ -346,7 +346,7 @@ function TableAircraft({
                 .filter(
                   (e) =>
                     e.aircraft_name
-                      // .toLowerCase()
+                      .toLowerCase()
                       .includes(keyword.toLowerCase()) ||
                     e.aircraft_code.includes(keyword),
                 )

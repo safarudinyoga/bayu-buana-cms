@@ -13,9 +13,11 @@ import FormAircraft from '../../Molecules/ContentAircraft/FormAircraft';
 import {
   editAircraft,
   getAircraftById,
+  getAircraftLanguageById,
   postAircraft,
 } from '../../../store/actions/Reducers-Aircraft';
 import EditStyle from './Edit-Style';
+import { fetchLanguage } from '../../../store/actions/Reducers-Language';
 
 function ContentEditAircraft() {
   let history = useHistory();
@@ -24,9 +26,24 @@ function ContentEditAircraft() {
   const classes = EditStyle();
   const stateAircraft = useSelector((state) => state.airCraft);
   const [dataAircraft, setDataAircraft] = useState({});
+  const [collectLanguage, setCollectLanguage] = useState([]);
+  const stateLanguage = useSelector((state) => state.language);
   useEffect(() => {
     const promiseDetailAircraft = dispatch(getAircraftById(params.id));
-    Promise.allSettled([promiseDetailAircraft]).then((values) => {});
+    const promiseDetailAircraftLanguage = dispatch(
+      getAircraftLanguageById(params.id),
+    );
+
+    Promise.allSettled([
+      promiseDetailAircraft,
+      promiseDetailAircraftLanguage,
+    ]).then((values) => {});
+  }, []);
+  useEffect(() => {
+    const promiseLanguage = dispatch(fetchLanguage());
+    Promise.allSettled([promiseLanguage]).then((values) => {
+      console.log(values);
+    });
   }, []);
   useEffect(() => {
     setDataAircraft(stateAircraft.detailAircraft);
@@ -37,13 +54,43 @@ function ContentEditAircraft() {
       [event.target.name]: event.target.value,
     }));
   };
+  useEffect(() => {
+    setCollectLanguage(stateAircraft.detailAircraftLanguage);
+  }, [stateAircraft.detailAircraftLanguage]);
+  const handleLanguage = (event) => {
+    let indexElement = collectLanguage.findIndex((e) => {
+      // eslint-disable-next-line no-unused-expressions
+      return e.language_code === event.target.name;
+    });
+
+    if (indexElement === -1) {
+      setCollectLanguage((prevState) => [
+        ...prevState,
+        { language_code: event.target.name, aircraft_name: event.target.value },
+      ]);
+    } else if (indexElement !== -1) {
+      let g = collectLanguage[indexElement];
+      g.aircraft_name = event.target.value;
+      setCollectLanguage([
+        ...collectLanguage.slice(0, indexElement),
+        g,
+        ...collectLanguage.slice(indexElement + 1),
+      ]);
+    }
+  };
   const submitAircraft = () => {
     const promiseEditAircraft = dispatch(
-      editAircraft({ data: dataAircraft, id: params.id }),
+      editAircraft({
+        dataCraft: dataAircraft,
+        id: params.id,
+        dataTranslations: collectLanguage,
+      }),
     );
 
     Promise.allSettled([promiseEditAircraft]).then((values) => {
-      history.push('/aircraft');
+      if (values[0].value === 200) {
+        history.push('/aircraft');
+      }
     });
   };
   return (
@@ -66,6 +113,9 @@ function ContentEditAircraft() {
           </Typography>
         </div>
         <FormAircraft
+          dataLanguage={stateLanguage.dataLanguage}
+          handleLanguage={handleLanguage}
+          stateLanguage={collectLanguage}
           handleForm={handleForm}
           stateForm={dataAircraft}
           onClick={submitAircraft}
