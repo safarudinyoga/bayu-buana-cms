@@ -1,24 +1,18 @@
-import React, { useState, useEffect } from 'react';
 import {
   Breadcrumbs,
-  Link,
-  makeStyles,
-  Typography,
-  Box,
+  Link, Typography
 } from '@material-ui/core';
-import PropTypes from 'prop-types';
-import { useSelector, useDispatch } from 'react-redux';
-
 import useMediaQuery from '@material-ui/core/useMediaQuery';
-import UiTableDekstop from '../../Molecules/ContentAircraft/dekstop/UiTableDekstop';
-import UiTableMobile from '../../Molecules/ContentAircraft/mobile/UiTableMobile';
-import TableAircraft from '../../Molecules/ContentAircraft/TableAircraft';
+import React, {useEffect} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 import {
   fetchAircraft,
-  removeAircraft,
+  removeAircraft
 } from '../../../store/actions/Reducers-Aircraft';
-
+import TableAircraft from '../../Molecules/ContentAircraft/TableAircraft';
 import ViewStyle from './View-Style';
+
+
 
 function ContentAircraft() {
   const classes = ViewStyle();
@@ -32,7 +26,7 @@ function ContentAircraft() {
   }, []);
 
   const deleteAircraft = (id) => {
-    const removeItem = dispatch(removeAircraft({ id }));
+    const removeItem = dispatch(removeAircraft({id}));
 
     Promise.allSettled([removeItem]).then((values) => {
       dispatch(fetchAircraft());
