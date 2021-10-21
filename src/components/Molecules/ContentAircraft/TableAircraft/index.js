@@ -1,26 +1,31 @@
 import ReactExport from '@ibrahimrahmani/react-export-excel';
 import {
-  Button, Grid,
-  InputBase, Paper, Table,
+  Button,
+  Grid,
+  InputBase,
+  Paper,
+  Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TablePagination,
-  TableRow, TableSortLabel, Tooltip
+  TableRow,
+  TableSortLabel,
+  Tooltip,
 } from '@material-ui/core';
-import {Search} from '@material-ui/icons';
+import { Search } from '@material-ui/icons';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
-import React, {useEffect, useState} from 'react';
-import {useDispatch} from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import Change from '../../../../assets/icons/change.svg';
 import Down from '../../../../assets/icons/down.svg';
 import Download from '../../../../assets/icons/download.svg';
 import AddFile from '../../../../assets/icons/file-plus.svg';
 import Printer from '../../../../assets/icons/printer.svg';
 import Up from '../../../../assets/icons/up.svg';
-import {postBatchAction} from '../../../../store/actions/Reducers-Aircraft';
+import { postBatchAction } from '../../../../store/actions/Reducers-Aircraft';
 import IconAircraft from '../IconAircraft';
 import ButtonDropdown from './buttonDropdown';
 import CheckBoxTable from './check-box-table';
@@ -30,15 +35,15 @@ import TableStyle from './Table-style';
 const ExcelFile = ReactExport.ExcelFile;
 const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
 const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
-const labelCheckbox = {inputProps: {'aria-label': 'Checkbox demo'}};
-
+const labelCheckbox = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
 function TableAircraft({
   titleButton,
   linkButton,
   dataTable,
   removeFunction,
-  checked,
+  editFunction,
+  dataStatus,
 }) {
   const [rows, setRows] = useState([]);
   const [rowsExport, setRowsExport] = useState([]);
@@ -50,8 +55,6 @@ function TableAircraft({
   // state for ordering page : orderBy,order
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('id');
-
-
 
   // export PDF
   const exportPDF = () => {
@@ -97,29 +100,35 @@ function TableAircraft({
       actions,
     };
   }
+  const handleCheckbox = () => {
+    setBoxCheck(!boxCheck);
+  };
 
   const columns = [
     {
       id: 'checkBox',
-      label: <CheckBoxTable checked={boxCheck} onClick={() => toggleCheckbox()} />,
+      label: (
+        <CheckBoxTable checked={boxCheck} onClick={() => toggleCheckbox()} />
+      ),
       minWidth: 20,
     },
-    {id: 'aircraft_code', label: 'Aircraft Code', minWidth: 220},
-    {id: 'aircraft_name', label: 'Aircraft Name', minWidth: 220},
-    {id: 'status', label: 'Status', minWidth: 170},
-    {id: 'actions', label: 'Actions', minWidth: 170},
+    { id: 'aircraft_code', label: 'Aircraft Code', minWidth: 220 },
+    { id: 'aircraft_name', label: 'Aircraft Name', minWidth: 220 },
+    { id: 'status', label: 'Status', minWidth: 170 },
+    { id: 'actions', label: 'Actions', minWidth: 170 },
   ];
 
   // click to select all and deselect all, not goog for using useEffect
   const toggleCheckbox = () => {
     setBoxCheck(!boxCheck);
     let rows = dataTable.items || [];
-    if (!boxCheck) { // reverse because state is not changed yet
+    if (!boxCheck) {
+      // reverse because state is not changed yet
       setCheckedList(rows.map((data) => data.id));
     } else {
       setCheckedList([]);
     }
-  }
+  };
 
   // check is selected or not
   const isSelected = (id) => checkedList.indexOf(id) !== -1;
@@ -140,9 +149,9 @@ function TableAircraft({
 
   useEffect(() => {
     if (select == 'Active') {
-      dispatch(postBatchAction({action: 'activate', 'ids': checkedList}));
+      dispatch(postBatchAction({ action: 'activate', ids: checkedList }));
     } else if (select == 'Inactive') {
-      dispatch(postBatchAction({action: 'deactivate', 'ids': checkedList}));
+      dispatch(postBatchAction({ action: 'deactivate', ids: checkedList }));
     }
   }, [select]);
 
@@ -163,7 +172,10 @@ function TableAircraft({
     dataItems.map((e) => {
       rows1.push(
         createData(
-          <CheckBoxTable checked={isSelected(e.id)} onChange={() => handleCheckBox(e.id)} />,
+          <CheckBoxTable
+            checked={isSelected(e.id)}
+            onChange={() => handleCheckBox(e.id)}
+          />,
           e.aircraft_code,
           e.aircraft_name,
           e.status === 1 ? 'Active' : 'Inactive',
@@ -174,9 +186,8 @@ function TableAircraft({
             removeFunction={remove}
           />,
         ),
-      )
-    }
-    );
+      );
+    });
     dataItems.map((e) =>
       rows2.push({
         aircode: e.aircraft_code,
@@ -203,8 +214,8 @@ function TableAircraft({
   };
 
   const handleBatchRemoveAircraft = () => {
-    dispatch(postBatchAction({action: 'delete', 'ids': checkedList}));
-  }
+    dispatch(postBatchAction({ action: 'delete', ids: checkedList }));
+  };
 
   const handleSearch = (event) => {
     setkeyword(event.target.value);
@@ -215,7 +226,6 @@ function TableAircraft({
 
   const [selected, setSelected] = useState('');
   const [picker, setPicker] = useState('');
-
 
   const [activeModal, setActiveModal] = useState(false);
 
@@ -230,7 +240,7 @@ function TableAircraft({
 
   // handler for sorting
   const createSortHandler = (property) => (event) => {
-    console.log({createSortHandler: property, order, orderBy});
+    console.log({ createSortHandler: property, order, orderBy });
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
@@ -254,7 +264,7 @@ function TableAircraft({
                   root: classes.inputRoot,
                   input: classes.inputInput,
                 }}
-                inputProps={{'aria-label': 'search'}}
+                inputProps={{ 'aria-label': 'search' }}
               />
             </div>
             <div
@@ -262,7 +272,7 @@ function TableAircraft({
               onClick={(e) => setActiveModal(!activeModal)}
             >
               <p className={classes.titleAdvanced}>Advanced options</p>
-              <img src={activeModal ? Down : Up} />
+              <img src={activeModal ? Up : Down} />
             </div>
           </div>
         </Grid>
@@ -312,7 +322,7 @@ function TableAircraft({
               <StatusDropdown selected={selected} setSelected={setSelected} />
             </div>
             <div onClick={reloadPage} className={classes.buttonRounded}>
-              <img src={Change} style={{marginBottom: '1px'}} />
+              <img src={Change} style={{ marginBottom: '1px' }} />
             </div>
           </div>
           {/* <FormControl variant="outlined">
@@ -345,7 +355,12 @@ function TableAircraft({
               <MenuItem value={20}>Inactive</MenuItem>
             </Select>
           </FormControl> */}
-          <Button className={classes.buttonRemove} onClick={() => handleBatchRemoveAircraft()}>Remove Aircraft</Button>
+          <Button
+            className={classes.buttonRemove}
+            onClick={() => handleBatchRemoveAircraft()}
+          >
+            Remove Aircraft
+          </Button>
         </div>
       )}
 
@@ -363,7 +378,9 @@ function TableAircraft({
                         width: column.minWidth,
                         backgroundColor: '#5e5e5e',
                         color: 'white',
-                        borderTopLeftRadius: `${column.id === 'airCraftCode' ? '8px' : 'none'} `,
+                        borderTopLeftRadius: `${
+                          column.id === 'airCraftCode' ? '8px' : 'none'
+                        } `,
                         // borderTopRightRadius: '8px',
                       }}
                     >
@@ -386,9 +403,9 @@ function TableAircraft({
                 .filter(
                   (e) =>
                     e.aircraft_name
-                      ?.toLowerCase()
+                      .toLowerCase()
                       .includes(keyword.toLowerCase()) ||
-                    e.aircraft_code?.includes(keyword),
+                    e.aircraft_code.includes(keyword),
                 )
                 .map((item) => {
                   return (
@@ -422,7 +439,7 @@ function TableAircraft({
           </Table>
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[10, 25, 50, 100, 125]}
+          rowsPerPageOptions={[10, 25, 100]}
           component="div"
           count={rows.length}
           rowsPerPage={rowsPerPage}

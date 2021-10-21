@@ -18,6 +18,7 @@ function ContentCreateAircraft() {
       ...prevState,
       [event.target.name]: event.target.value,
     }));
+    console.log(collectLanguage[0].name, 'onChange Create-airCraft');
   };
   const handleLanguage = (event) => {
     let indexElement = collectLanguage.findIndex((e) => {
@@ -101,6 +102,7 @@ function ContentCreateAircraft() {
           </Typography>
         </div>
         <FormAircraft
+          helperText
           dataLanguage={stateLanguage.dataLanguage}
           handleLanguage={handleLanguage}
           stateLanguage={collectLanguage}
