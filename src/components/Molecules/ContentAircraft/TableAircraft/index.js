@@ -12,20 +12,20 @@ import {
   TablePagination,
   TableRow,
   TableSortLabel,
-  Tooltip,
+  Tooltip
 } from '@material-ui/core';
-import { Search } from '@material-ui/icons';
+import {Search} from '@material-ui/icons';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
-import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, {useEffect, useState} from 'react';
+import {useDispatch} from 'react-redux';
 import Change from '../../../../assets/icons/change.svg';
 import Down from '../../../../assets/icons/down.svg';
 import Download from '../../../../assets/icons/download.svg';
 import AddFile from '../../../../assets/icons/file-plus.svg';
 import Printer from '../../../../assets/icons/printer.svg';
 import Up from '../../../../assets/icons/up.svg';
-import { postBatchAction } from '../../../../store/actions/Reducers-Aircraft';
+import {postBatchAction} from '../../../../store/actions/Reducers-Aircraft';
 import IconAircraft from '../IconAircraft';
 import ButtonDropdown from './buttonDropdown';
 import CheckBoxTable from './check-box-table';
@@ -35,7 +35,7 @@ import TableStyle from './Table-style';
 const ExcelFile = ReactExport.ExcelFile;
 const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
 const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
-const labelCheckbox = { inputProps: { 'aria-label': 'Checkbox demo' } };
+const labelCheckbox = {inputProps: {'aria-label': 'Checkbox demo'}};
 
 function TableAircraft({
   titleButton,
@@ -55,6 +55,18 @@ function TableAircraft({
   // state for ordering page : orderBy,order
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('id');
+
+  const [activeModal, setActiveModal] = useState('');
+
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [keyword, setkeyword] = useState('');
+
+
+  const [selected, setSelected] = useState('');
+  const [picker, setPicker] = useState('');
+
+  const dispatch = useDispatch();
 
   // export PDF
   const exportPDF = () => {
@@ -112,10 +124,10 @@ function TableAircraft({
       ),
       minWidth: 20,
     },
-    { id: 'aircraft_code', label: 'Aircraft Code', minWidth: 220 },
-    { id: 'aircraft_name', label: 'Aircraft Name', minWidth: 220 },
-    { id: 'status', label: 'Status', minWidth: 170 },
-    { id: 'actions', label: 'Actions', minWidth: 170 },
+    {id: 'aircraft_code', label: 'Aircraft Code', minWidth: 220},
+    {id: 'aircraft_name', label: 'Aircraft Name', minWidth: 220},
+    {id: 'status', label: 'Status', minWidth: 170},
+    {id: 'actions', label: 'Actions', minWidth: 170},
   ];
 
   // click to select all and deselect all, not goog for using useEffect
@@ -149,9 +161,9 @@ function TableAircraft({
 
   useEffect(() => {
     if (select == 'Active') {
-      dispatch(postBatchAction({ action: 'activate', ids: checkedList }));
+      dispatch(postBatchAction({action: 'activate', ids: checkedList}));
     } else if (select == 'Inactive') {
-      dispatch(postBatchAction({ action: 'deactivate', ids: checkedList }));
+      dispatch(postBatchAction({action: 'deactivate', ids: checkedList}));
     }
   }, [select]);
 
@@ -208,10 +220,7 @@ function TableAircraft({
   }, [dataTable, checkedList, order, orderBy, selected]);
 
   const classes = TableStyle();
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [keyword, setkeyword] = useState('');
-  const dispatch = useDispatch();
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -222,7 +231,7 @@ function TableAircraft({
   };
 
   const handleBatchRemoveAircraft = () => {
-    dispatch(postBatchAction({ action: 'delete', ids: checkedList }));
+    dispatch(postBatchAction({action: 'delete', ids: checkedList}));
   };
 
   const handleSearch = (event) => {
@@ -232,21 +241,13 @@ function TableAircraft({
     removeFunction(id);
   };
 
-  const [selected, setSelected] = useState('');
-  const [picker, setPicker] = useState('');
-  const [pickShowing, setPickShowing] = useState('');
-
-
   const reloadPage = () => {
     window.location.reload();
-  };
-  const handleChange = (event) => {
-    setAge(event.target.value);
   };
 
   // handler for sorting
   const createSortHandler = (property) => (event) => {
-    console.log({ createSortHandler: property, order, orderBy });
+    console.log({createSortHandler: property, order, orderBy});
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
@@ -270,7 +271,7 @@ function TableAircraft({
                   root: classes.inputRoot,
                   input: classes.inputInput,
                 }}
-                inputProps={{ 'aria-label': 'search' }}
+                inputProps={{'aria-label': 'search'}}
               />
             </div>
             <div
@@ -328,7 +329,7 @@ function TableAircraft({
               <StatusDropdown selected={selected} setSelected={setSelected} />
             </div>
             <div onClick={reloadPage} className={classes.buttonRounded}>
-              <img src={Change} style={{ marginBottom: '1px' }} />
+              <img src={Change} style={{marginBottom: '1px'}} />
             </div>
           </div>
           {/* <FormControl variant="outlined">
@@ -384,20 +385,23 @@ function TableAircraft({
                         width: column.minWidth,
                         backgroundColor: '#5e5e5e',
                         color: 'white',
-                        borderTopLeftRadius: `${
-                          column.id === 'airCraftCode' ? '8px' : 'none'
-                        } `,
+                        borderTopLeftRadius: `${column.id === 'airCraftCode' ? '8px' : 'none'
+                          } `,
                         // borderTopRightRadius: '8px',
                       }}
                     >
-                      {/* make column clickable */}
-                      <TableSortLabel
-                        active={orderBy === column.id}
-                        direction={order}
-                        onClick={createSortHandler(column.id)}
-                      >
-                        {column.label}
-                      </TableSortLabel>
+                      {typeof column.label === 'string' && column.label !== 'Actions' ? (
+                        <TableSortLabel
+
+                          active={orderBy === column.id}
+                          direction={order}
+                          onClick={createSortHandler(column.id)}
+                        >
+                          {column.label}
+                        </TableSortLabel>
+                      ) : column.label
+                      }
+
                     </TableCell>
                   );
                 })}
