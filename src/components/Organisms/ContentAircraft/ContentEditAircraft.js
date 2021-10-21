@@ -79,19 +79,37 @@ function ContentEditAircraft() {
     }
   };
   const submitAircraft = () => {
-    const promiseEditAircraft = dispatch(
-      editAircraft({
-        dataCraft: dataAircraft,
-        id: params.id,
-        dataTranslations: collectLanguage,
-      }),
-    );
+    let isAircraftName = dataAircraft?.aircraft_name || false;
+    let isAircraftCode = dataAircraft?.aircraft_code || false;
+    let isAircraftModel = !dataAircraft?.model ? false : true;
+    let isIcaoCode = dataAircraft?.icao_code || false;
+    let dataLanguage = stateLanguage.dataLanguage;
+    let isDataTranslation =
+      dataLanguage.length === collectLanguage.length ? true : false;
+    console.log(isAircraftModel, 'MOD');
+    if (
+      isAircraftName &&
+      isAircraftCode &&
+      isAircraftModel &&
+      isIcaoCode &&
+      isDataTranslation
+    ) {
+      const promiseEditAircraft = dispatch(
+        editAircraft({
+          dataCraft: dataAircraft,
+          id: params.id,
+          dataTranslations: collectLanguage,
+        }),
+      );
 
-    Promise.allSettled([promiseEditAircraft]).then((values) => {
-      if (values[0].value === 200) {
-        history.push('/aircraft');
-      }
-    });
+      Promise.allSettled([promiseEditAircraft]).then((values) => {
+        if (values[0].value === 200) {
+          history.push('/aircraft');
+        }
+      });
+    } else {
+      window.alert('Mohon cek kembali');
+    }
   };
   return (
     <div className={classes.container}>
@@ -119,6 +137,7 @@ function ContentEditAircraft() {
           handleForm={handleForm}
           stateForm={dataAircraft}
           onClick={submitAircraft}
+          urlCancel="/aircraft"
         />
       </div>
       <div

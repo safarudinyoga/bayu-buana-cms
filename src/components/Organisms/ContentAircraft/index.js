@@ -1,24 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import {
-  Breadcrumbs,
-  Link,
-  makeStyles,
-  Typography,
-  Box,
-} from '@material-ui/core';
-import PropTypes from 'prop-types';
-import { useSelector, useDispatch } from 'react-redux';
-
+import { Breadcrumbs, Link, Typography } from '@material-ui/core';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
-import UiTableDekstop from '../../Molecules/ContentAircraft/dekstop/UiTableDekstop';
-import UiTableMobile from '../../Molecules/ContentAircraft/mobile/UiTableMobile';
-import TableAircraft from '../../Molecules/ContentAircraft/TableAircraft';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   fetchAircraft,
   removeAircraft,
-  putAircraft,
 } from '../../../store/actions/Reducers-Aircraft';
-
+import TableAircraft from '../../Molecules/ContentAircraft/TableAircraft';
 import ViewStyle from './View-Style';
 
 function ContentAircraft() {
@@ -55,7 +43,7 @@ function ContentAircraft() {
       </Breadcrumbs>
       <div className={classes.title}>
         <Typography color="textPrimary" variant="h5" component="h1">
-          Standard Mark-Up
+          Master Aircraft
         </Typography>
       </div>
       <div className={classes.containerTable}>

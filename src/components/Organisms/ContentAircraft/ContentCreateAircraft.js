@@ -50,18 +50,36 @@ function ContentCreateAircraft() {
   }, []);
 
   const submitAircraft = () => {
-    const promisePostAricraft = dispatch(
-      postAircraft({
-        dataCraft: dataAircraft,
-        dataTranslations: collectLanguage,
-      }),
-    );
+    let isAircraftName = dataAircraft?.aircraft_name || false;
+    let isAircraftCode = dataAircraft?.aircraft_code || false;
+    let isAircraftModel = dataAircraft?.model || false;
+    let isIcaoCode = dataAircraft?.icao_code || false;
+    let dataLanguage = stateLanguage.dataLanguage;
+    let isDataTranslation =
+      dataLanguage.length === collectLanguage.length ? true : false;
 
-    Promise.allSettled([promisePostAricraft]).then((values) => {
-      if (values[0].value === 200) {
-        history.push('/aircraft');
-      }
-    });
+    if (
+      isAircraftName &&
+      isAircraftCode &&
+      isAircraftModel &&
+      isIcaoCode &&
+      isDataTranslation
+    ) {
+      const promisePostAricraft = dispatch(
+        postAircraft({
+          dataCraft: dataAircraft,
+          dataTranslations: collectLanguage,
+        }),
+      );
+
+      Promise.allSettled([promisePostAricraft]).then((values) => {
+        if (values[0].value === 200) {
+          history.push('/aircraft');
+        }
+      });
+    } else {
+      window.alert('Mohon cek kembali');
+    }
   };
 
   return (
@@ -91,6 +109,7 @@ function ContentCreateAircraft() {
           handleForm={handleForm}
           stateForm={dataAircraft}
           onClick={submitAircraft}
+          urlCancel="/aircraft"
         />
       </div>
     </div>
