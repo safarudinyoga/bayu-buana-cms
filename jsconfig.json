@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "baseUrl": "src",
+        "include" : ["src"],
+        "paths": {
+            "@pages/*": ["pages/*"],
+            "@atoms/*": ["components/Atoms/*"],
+            "@molecules/*": ["components/Molecules/*"],
+            "@organisms/*": ["components/Organisms/*"],
+            "@icons/*": ["assets/icons/*"],
+            "@images/*": ["assets/images/*"],
+            "@actions/*": ["store/actions/*"],
+            "@reducers/*": ["store/reducers/*"]
+        },
+        "checkJs": true
+    }
+}
