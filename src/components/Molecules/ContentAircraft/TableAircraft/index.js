@@ -155,8 +155,6 @@ function TableAircraft({
     }
   }, [select]);
 
-
-
   useEffect(() => {
     let rows1 = [];
     let rows2 = [];
@@ -174,7 +172,7 @@ function TableAircraft({
     if (selected !== 'Select Status...' && selected !== '') {
       // filter data items by status
       let status = selected === 'Active' ? 1 : 3;
-      dataItems = dataItems.filter(e => e.status == status);
+      dataItems = dataItems.filter((e) => e.status == status);
     }
 
     dataItems.map((e) => {
@@ -235,7 +233,6 @@ function TableAircraft({
   const [selected, setSelected] = useState('');
   const [picker, setPicker] = useState('');
   const [pickShowing, setPickShowing] = useState('');
-
 
   const reloadPage = () => {
     window.location.reload();
