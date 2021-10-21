@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/styles';
+import {makeStyles} from '@material-ui/styles';
+import React, {useState} from 'react';
 import arrowDown from '../../../../assets/icons/arrowDown.svg';
 import arrowUp from '../../../../assets/icons/arrowUp.svg';
 
@@ -44,26 +44,24 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const StatusDropdown = ({ selected, setSelected }) => {
+const StatusDropdown = ({selected, setSelected}) => {
   const [isActive, setIsActive] = useState(false);
   const classes = useStyles();
-  const options = ['Active', 'Inactive'];
+  const options = ['Select Status...', 'Active', 'Inactive'];
   return (
     <div className={classes.dropdown}>
-      <div
-        className={classes.dropdownBtn}
-        onClick={() => setIsActive(!isActive)}
-      >
-        {selected ? `${selected}` : 'Active'}
+      <div className={classes.dropdownBtn} onClick={() => setIsActive(!isActive)}>
+        {selected ? `${selected}` : 'Select Status...'}
         <img
           src={isActive ? arrowUp : arrowDown}
-          style={{ width: '10px', marginTop: '4px' }}
+          style={{width: '10px', marginTop: '4px'}}
         />
       </div>
       {isActive && (
         <div className={classes.dropdownContent}>
           {options.map((option) => (
             <div
+              key={option}
               className={classes.dropdownItem}
               onClick={(e) => {
                 setSelected(option);
