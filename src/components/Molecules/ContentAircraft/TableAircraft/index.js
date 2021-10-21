@@ -32,6 +32,7 @@ import CheckBoxTable from './check-box-table';
 import RegionDropdown from './regionDropdown';
 import StatusDropdown from './statusDropdown';
 import TableStyle from './Table-style';
+import PaginationTable from './Pagination';
 const ExcelFile = ReactExport.ExcelFile;
 const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
 const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
@@ -226,6 +227,7 @@ function TableAircraft({
 
   const [selected, setSelected] = useState('');
   const [picker, setPicker] = useState('');
+  const [pickShowing, setPickShowing] = useState('');
 
   const [activeModal, setActiveModal] = useState(false);
 
@@ -438,7 +440,7 @@ function TableAircraft({
             </TableBody>
           </Table>
         </TableContainer>
-        <TablePagination
+        {/* <TablePagination
           rowsPerPageOptions={[10, 25, 100]}
           component="div"
           count={rows.length}
@@ -446,8 +448,12 @@ function TableAircraft({
           page={page}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
-        />
+        /> */}
       </Paper>
+      <PaginationTable
+        pickShowing={pickShowing}
+        setPickShowing={setPickShowing}
+      />
     </div>
   );
 }
