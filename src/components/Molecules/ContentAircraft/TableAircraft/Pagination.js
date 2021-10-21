@@ -87,7 +87,7 @@ const PaginationTable = ({ pickShowing, setPickShowing }) => {
       marginTop: '6px',
     },
     dropdownBtn: {
-      borderRadius: '10px',
+      borderRadius: '8px',
       border: '1px solid lightGray',
       padding: '10px',
       backgroundColor: 'white',
