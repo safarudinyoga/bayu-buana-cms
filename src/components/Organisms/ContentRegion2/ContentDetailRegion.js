@@ -5,18 +5,10 @@ import DetailStyle from './Detail-Style';
 import { Breadcrumbs, Link, Typography, Button } from '@material-ui/core';
 import FormRegion from '../../Molecules/ContentRegion/FormRegion';
 import {
-  editAircraft,
-  getAircraftById,
-  getAircraftLanguageById,
-  postAircraft,
-} from '../../../store/actions/Reducers-Aircraft';
-import {
   editRegion,
   getRegionById,
-  getRegionLanguageById,
   postRegion,
 } from '../../../store/actions/Reducers-Region';
-import { fetchLanguage } from '../../../store/actions/Reducers-Language';
 
 function ContentDetailRegion() {
   const dispatch = useDispatch();
@@ -24,22 +16,9 @@ function ContentDetailRegion() {
   const classes = DetailStyle();
   const stateRegion = useSelector((state) => state.region);
   const [dataRegion, setDataRegion] = useState({});
-  const [collectLanguage, setCollectLanguage] = useState([]);
-  const stateLanguage = useSelector((state) => state.language);
   useEffect(() => {
     const promiseDetailRegion = dispatch(getRegionById(params.id));
-    const promiseDetailRegionLanguage = dispatch(
-      getRegionLanguageById(params.id),
-    );
-    Promise.allSettled([promiseDetailRegion, promiseDetailRegionLanguage]).then(
-      (values) => {},
-    );
-  }, []);
-  useEffect(() => {
-    const promiseLanguage = dispatch(fetchLanguage());
-    Promise.allSettled([promiseLanguage]).then((values) => {
-      console.log(values);
-    });
+    Promise.allSettled([promiseDetailRegion]).then((values) => {});
   }, []);
   useEffect(() => {
     setDataRegion(stateRegion.detailRegion);
@@ -50,10 +29,9 @@ function ContentDetailRegion() {
       [event.target.name]: event.target.value,
     }));
   };
-  useEffect(() => {
-    setCollectLanguage(stateRegion.detailRegionLanguage);
-  }, [stateRegion.detailRegionLanguage]);
-
+  const submitRegion = () => {
+    dispatch(editRegion({ data: dataRegion, id: params.id }));
+  };
   return (
     <div className={classes.container}>
       <div>
@@ -65,7 +43,7 @@ function ContentDetailRegion() {
             Region
           </Link>
           <Typography className={classes.titleBread} color="error">
-            Edit Region
+            Region Details
           </Typography>
         </Breadcrumbs>
         <div className={classes.title}>
@@ -74,20 +52,16 @@ function ContentDetailRegion() {
           </Typography>
         </div>
         <FormRegion
-          detailPage={true}
-          dataLanguage={stateLanguage.dataLanguage}
-          stateLanguage={collectLanguage}
           read={true}
           handleForm={handleForm}
           stateForm={dataRegion}
-          urlCancel="/region"
         />
       </div>
-      {/* <div display="flex" flexDirection="row" style={{ marginTop: '20px' }}>
-        <Button variant="contained" href="/aircraft">
+      <div display="flex" flexDirection="row" style={{ marginTop: '20px' }}>
+        <Button variant="contained" href="/region">
           Cancel
         </Button>
-      </div> */}
+      </div>
     </div>
   );
 }

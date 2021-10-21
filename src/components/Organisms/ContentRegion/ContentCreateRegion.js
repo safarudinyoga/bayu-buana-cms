@@ -1,27 +1,79 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { Breadcrumbs, Link, Typography } from '@material-ui/core';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { Breadcrumbs, Link, Typography, Button } from '@material-ui/core';
-import FormRegion from '../../Molecules/ContentRegion/FormRegion';
 import { postRegion } from '../../../store/actions/Reducers-Region';
+import { fetchLanguage } from '../../../store/actions/Reducers-Language';
+import FormRegion from '../../Molecules/ContentRegion/FormRegion';
 import CreateStyle from './Create-Style';
+
 function ContentCreateRegion() {
-  let history = useHistory();
-  const dispatch = useDispatch();
   const classes = CreateStyle();
   const [dataRegion, setDataRegion] = useState({});
+  const [collectLanguage, setCOllectLanguage] = useState([]);
+  let history = useHistory();
+  const dispatch = useDispatch();
   const handleForm = (event) => {
     setDataRegion((prevState) => ({
       ...prevState,
       [event.target.name]: event.target.value,
     }));
+    // console.log(collectLanguage[0].name, 'onChange Create-airCraft');
   };
-  const submitRegion = () => {
-    const promisePostRegion = dispatch(postRegion(dataRegion));
-    Promise.allSettled([promisePostRegion]).then((values) => {
-      history.push('/region');
+  const handleLanguage = (event) => {
+    let indexElement = collectLanguage.findIndex((e) => {
+      // eslint-disable-next-line no-unused-expressions
+      return e.language_code === event.target.name;
     });
+
+    if (indexElement === -1) {
+      setCOllectLanguage((prevState) => [
+        ...prevState,
+        { language_code: event.target.name, region_name: event.target.value },
+      ]);
+    } else if (indexElement !== -1) {
+      let g = collectLanguage[indexElement];
+      g.region_name = event.target.value;
+      setCOllectLanguage([
+        ...collectLanguage.slice(0, indexElement),
+        g,
+        ...collectLanguage.slice(indexElement + 1),
+      ]);
+    }
   };
+  const stateLanguage = useSelector((state) => state.language);
+  useEffect(() => {
+    const promiseLanguage = dispatch(fetchLanguage());
+    Promise.allSettled([promiseLanguage]).then((values) => {
+      console.log(values);
+    });
+  }, []);
+
+  const submitRegion = () => {
+    let isRegionName = dataRegion?.region_name || false;
+    let isRegionCode = dataRegion?.region_code || false;
+    let dataLanguage = stateLanguage.dataLanguage;
+    let isDataTranslation =
+      dataLanguage.length === collectLanguage.length ? true : false;
+
+    if (isRegionName && isRegionCode && isDataTranslation) {
+      const promisePostRegion = dispatch(
+        postRegion({
+          dataRegion: dataRegion,
+          dataTranslations: collectLanguage,
+        }),
+      );
+
+      Promise.allSettled([promisePostRegion]).then((values) => {
+        if (values[0].value === 200) {
+          history.push('/region');
+        }
+      });
+    } else {
+      window.alert('Mohon cek kembali');
+    }
+  };
+
   return (
     <div className={classes.container}>
       <div>
@@ -32,7 +84,7 @@ function ContentCreateRegion() {
           <Link className={classes.titleBread} color="inherit" href="/">
             Region
           </Link>
-          <Typography className={classes.titleBread} color="error">
+          <Typography className={classes.titleBreadAirCraft} color="error">
             Create Region
           </Typography>
         </Breadcrumbs>
@@ -41,20 +93,16 @@ function ContentCreateRegion() {
             Create Region
           </Typography>
         </div>
-        <FormRegion handleForm={handleForm} stateForm={dataRegion} />
-      </div>
-      <div display="flex" flexDirection="row" style={{ marginTop: '20px' }}>
-        <Button
+        <FormRegion
+          helperText
+          dataLanguage={stateLanguage.dataLanguage}
+          handleLanguage={handleLanguage}
+          stateLanguage={collectLanguage}
+          handleForm={handleForm}
+          stateForm={dataRegion}
           onClick={submitRegion}
-          variant="contained"
-          color="primary"
-          style={{ marginRight: '34px' }}
-        >
-          Save
-        </Button>
-        <Button href="/region" variant="contained">
-          Cancel
-        </Button>
+          urlCancel="/region"
+        />
       </div>
     </div>
   );

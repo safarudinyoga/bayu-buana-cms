@@ -1,9 +1,9 @@
-import {Breadcrumbs, Link, Typography} from '@material-ui/core';
-import React, {useEffect, useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
-import {useHistory} from 'react-router-dom';
-import {postAircraft} from '../../../store/actions/Reducers-Aircraft';
-import {fetchLanguage} from '../../../store/actions/Reducers-Language';
+import { Breadcrumbs, Link, Typography } from '@material-ui/core';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { postAircraft } from '../../../store/actions/Reducers-Aircraft';
+import { fetchLanguage } from '../../../store/actions/Reducers-Language';
 import FormAircraft from '../../Molecules/ContentAircraft/FormAircraft';
 import CreateStyle from './Create-Style';
 
@@ -29,7 +29,7 @@ function ContentCreateAircraft() {
     if (indexElement === -1) {
       setCOllectLanguage((prevState) => [
         ...prevState,
-        {language_code: event.target.name, aircraft_name: event.target.value},
+        { language_code: event.target.name, aircraft_name: event.target.value },
       ]);
     } else if (indexElement !== -1) {
       let g = collectLanguage[indexElement];

@@ -9,50 +9,41 @@ export default makeStyles((theme) => ({
   },
   TableContainer: {
     maxHeight: 440,
-    borderRadius: '14px',
   },
   search: {
     position: 'relative',
-    borderRadius: '10px',
+    borderRadius: theme.shape.borderRadius,
     // eslint-disable-next-line no-undef
     backgroundColor: alpha(theme.palette.common.white, 0.15),
     '&:hover': {
       // eslint-disable-next-line no-undef
       backgroundColor: alpha(theme.palette.common.white, 0.25),
     },
-    marginRight: theme.spacing(4),
+    marginRight: theme.spacing(2),
     marginLeft: 0,
     width: '100%',
-    height: '35px',
     [theme.breakpoints.up('sm')]: {
       width: 'auto',
     },
     [theme.breakpoints.down('sm')]: {
-      width: '100%',
       marginTop: '20px',
       marginBottom: '10px',
-      marginRight: '0px',
     },
     border: '1px solid #D9DFE7',
     display: 'flex',
-    flexDirection: 'row-reverse',
+    flexDirection: 'row',
   },
   wrapperSearchDropdown: {
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'center',
     [theme.breakpoints.down('sm')]: {
+      display: 'flex',
       flexDirection: 'column',
-      alignItems: 'flex-end',
-    },
-    [theme.breakpoints.up('sm')]: {
-      flexDirection: 'row',
     },
   },
   searchIcon: {
     padding: theme.spacing(0, 2),
     height: '100%',
-    color: '#D8D8D8',
     position: 'absolute',
     pointerEvents: 'none',
     display: 'flex',
@@ -61,17 +52,13 @@ export default makeStyles((theme) => ({
   },
   inputRoot: {
     color: 'inherit',
-    width: '215px',
   },
   inputInput: {
     padding: theme.spacing(1, 1, 1, 0),
     // vertical padding + font size from searchIcon
-    paddingRight: `calc(1em + ${theme.spacing(4)}px)`,
-    paddingLeft: '10px',
+    paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
     transition: theme.transitions.create('width'),
     width: '100%',
-    fontWeight: '400',
-    fontSize: '14px',
     [theme.breakpoints.up('md')]: {
       width: '20ch',
     },
@@ -82,9 +69,6 @@ export default makeStyles((theme) => ({
     marginBottom: theme.spacing(3),
     [theme.breakpoints.down('sm')]: {
       flexDirection: 'column-reverse',
-    },
-    [theme.breakpoints.up('sm')]: {
-      flexDirection: 'row',
     },
   },
   itemStart: {
@@ -98,7 +82,6 @@ export default makeStyles((theme) => ({
   buttonAdd: {
     backgroundColor: '#F3C244',
     color: '#5E5E5E',
-    fontWeight: '600',
     fontSize: '14px',
     padding: '8px 10px',
     borderRadius: '8px',
@@ -117,14 +100,13 @@ export default makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    height: '10px',
-    marginRight: '8px',
+    height: 10,
+    marginRight: 8,
     textTransform: 'capitalize',
     cursor: 'pointer',
     '&:hover': {
-      boxShadow: '2px 3px 6px #999',
       backgroundColor: '#5E5E5E',
-      transition: '0.2s',
+      boxShadow: '0px 4px 4px #00000069',
     },
   },
   startIcon: {
@@ -142,29 +124,18 @@ export default makeStyles((theme) => ({
     cursor: 'pointer',
     minWidth: '300px',
     [theme.breakpoints.down('sm')]: {
-      display: 'flex',
-
       justifyContent: 'flex-end',
-      minWidth: '0px',
-    },
-    [theme.breakpoints.up('sm')]: {
-      minWidth: '180px',
-      justifyContent: 'center',
-      // marginLeft: '100px',
     },
   },
   modal: {
     width: 'auto',
-    height: '120px',
+    height: '100px',
     backgroundColor: '#f5f5f5',
     borderRadius: '10px',
     border: '2px solid lightGray',
     display: 'flex',
     flexDirection: 'column',
     marginBottom: '20px',
-    [theme.breakpoints.down('sm')]: {
-      height: '170px',
-    },
   },
   modalHeader: {
     display: 'flex',
@@ -172,27 +143,6 @@ export default makeStyles((theme) => ({
     justifyContent: 'space-between',
     marginTop: '10px',
     marginBottom: '10px',
-  },
-  modalTitleRegion: {
-    [theme.breakpoints.up('md')]: {
-      display: 'none',
-    },
-    [theme.breakpoints.down('sm')]: {
-      marginLeft: '25px',
-      marginBottom: '25px',
-      marginTop: '0',
-      fontSize: '16px',
-      fontWeight: '600',
-      color: '#333333',
-    },
-  },
-  modalTitleStatus: {
-    marginLeft: '25px',
-    marginBottom: '25px',
-    marginTop: '10px',
-    fontSize: '16px',
-    fontWeight: '600',
-    color: '#333333',
   },
   statusActive: {
     width: '60px',
@@ -221,11 +171,7 @@ export default makeStyles((theme) => ({
     },
   },
   buttonSpace: {
-    display: 'flex',
-    flexDirection: 'row',
     marginBottom: '20px',
-    marginLeft: '-19px',
-    marginTop: '40px',
     [theme.breakpoints.down('sm')]: {
       display: 'flex',
       flexDirection: 'column',
@@ -234,28 +180,14 @@ export default makeStyles((theme) => ({
   buttonRemove: {
     width: '150px',
     height: '40px',
-    backgroundColor: '#027F71',
-    fontWeight: '600',
+    backgroundColor: '#5e5e5e',
     color: 'white',
     borderRadius: '10px',
     marginLeft: '10px',
     fontSize: '14px',
     textTransform: 'capitalize',
-    marginTop: '-20px',
     [theme.breakpoints.down('sm')]: {
       marginLeft: '0px',
     },
-    '&:hover': {
-      backgroundColor: '#027F71',
-      color: 'white',
-    },
-  },
-  titleAdvanced: {
-    fontSize: '15px',
-    fontWeight: 'bold',
-    color: '#333333',
-  },
-  tableValue: {
-    backgroundColor: 'white',
   },
 }));
