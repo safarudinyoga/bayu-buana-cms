@@ -1,6 +1,7 @@
 import { Grid } from '@material-ui/core';
 import Leftbar from '../../../../components/Molecules/Leftbar';
 import Navbar from '../../../../components/Molecules/Navbar';
+import Footer from '../../../Molecules/Footer';
 
 function DekstopLayout({ children }) {
   return (
@@ -14,6 +15,7 @@ function DekstopLayout({ children }) {
           {children}
         </Grid>
       </Grid>
+      <Footer />
     </>
   );
 }

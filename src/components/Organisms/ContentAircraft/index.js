@@ -1,18 +1,13 @@
-import {
-  Breadcrumbs,
-  Link, Typography
-} from '@material-ui/core';
+import { Breadcrumbs, Link, Typography } from '@material-ui/core';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
-import React, {useEffect} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   fetchAircraft,
-  removeAircraft
+  removeAircraft,
 } from '../../../store/actions/Reducers-Aircraft';
 import TableAircraft from '../../Molecules/ContentAircraft/TableAircraft';
 import ViewStyle from './View-Style';
-
-
 
 function ContentAircraft() {
   const classes = ViewStyle();
@@ -26,12 +21,16 @@ function ContentAircraft() {
   }, []);
 
   const deleteAircraft = (id) => {
-    const removeItem = dispatch(removeAircraft({id}));
+    const removeItem = dispatch(removeAircraft({ id }));
 
     Promise.allSettled([removeItem]).then((values) => {
       dispatch(fetchAircraft());
     });
   };
+
+  // const handleEditAircraft = (id) => {
+  //   const editAircraft = dispatch()
+  // }
   return (
     <div className={classes.container}>
       <Breadcrumbs aria-label="breadcrumb">

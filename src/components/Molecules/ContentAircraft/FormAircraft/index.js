@@ -13,6 +13,8 @@ export default function Form({
   dataLanguage,
   handleLanguage,
   stateLanguage,
+  error,
+  helperText,
   urlCancel,
 }) {
   const [nameLanguage, setNameLanguage] = useState('');
