@@ -226,6 +226,7 @@ function TableAircraft({
 
   const [selected, setSelected] = useState('');
   const [picker, setPicker] = useState('');
+  const [pickShowing, setPickShowing] = useState('');
 
   const [activeModal, setActiveModal] = useState(false);
 
