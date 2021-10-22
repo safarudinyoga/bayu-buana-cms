@@ -11,11 +11,19 @@ import {
 } from '@material-ui/core';
 import FormRegion from '../../Molecules/ContentRegion/FormRegion';
 import {
+  editAircraft,
+  getAircraftById,
+  getAircraftLanguageById,
+  postAircraft,
+} from '../../../store/actions/Reducers-Aircraft';
+import {
   editRegion,
   getRegionById,
+  getRegionLanguageById,
   postRegion,
 } from '../../../store/actions/Reducers-Region';
 import EditStyle from './Edit-Style';
+import { fetchLanguage } from '../../../store/actions/Reducers-Language';
 
 function ContentEditRegion() {
   let history = useHistory();
@@ -24,9 +32,23 @@ function ContentEditRegion() {
   const classes = EditStyle();
   const stateRegion = useSelector((state) => state.region);
   const [dataRegion, setDataRegion] = useState({});
+  const [collectLanguage, setCollectLanguage] = useState([]);
+  const stateLanguage = useSelector((state) => state.language);
   useEffect(() => {
     const promiseDetailRegion = dispatch(getRegionById(params.id));
-    Promise.allSettled([promiseDetailRegion]).then((values) => {});
+    const promiseDetailRegionLanguage = dispatch(
+      getRegionLanguageById(params.id),
+    );
+
+    Promise.allSettled([promiseDetailRegion, promiseDetailRegionLanguage]).then(
+      (values) => {},
+    );
+  }, []);
+  useEffect(() => {
+    const promiseLanguage = dispatch(fetchLanguage());
+    Promise.allSettled([promiseLanguage]).then((values) => {
+      console.log(values);
+    });
   }, []);
   useEffect(() => {
     setDataRegion(stateRegion.detailRegion);
@@ -37,14 +59,53 @@ function ContentEditRegion() {
       [event.target.name]: event.target.value,
     }));
   };
-  const submitRegion = () => {
-    const promiseEditRegion = dispatch(
-      editRegion({ data: dataRegion, id: params.id }),
-    );
-
-    Promise.allSettled([promiseEditRegion]).then((values) => {
-      history.push('/region');
+  useEffect(() => {
+    setCollectLanguage(stateRegion.detailRegionLanguage);
+  }, [stateRegion.detailRegionLanguage]);
+  const handleLanguage = (event) => {
+    let indexElement = collectLanguage.findIndex((e) => {
+      // eslint-disable-next-line no-unused-expressions
+      return e.language_code === event.target.name;
     });
+
+    if (indexElement === -1) {
+      setCollectLanguage((prevState) => [
+        ...prevState,
+        { language_code: event.target.name, region_name: event.target.value },
+      ]);
+    } else if (indexElement !== -1) {
+      let g = collectLanguage[indexElement];
+      g.region_name = event.target.value;
+      setCollectLanguage([
+        ...collectLanguage.slice(0, indexElement),
+        g,
+        ...collectLanguage.slice(indexElement + 1),
+      ]);
+    }
+  };
+  const submitRegion = () => {
+    let isRegionName = dataRegion?.region_name || false;
+    let isRegionCode = dataRegion?.region_code || false;
+    let dataLanguage = stateLanguage.dataLanguage;
+    let isDataTranslation =
+      dataLanguage.length === collectLanguage.length ? true : false;
+    if (isRegionName && isRegionCode && isDataTranslation) {
+      const promiseEditRegion = dispatch(
+        editRegion({
+          dataRegion: dataRegion,
+          id: params.id,
+          dataTranslations: collectLanguage,
+        }),
+      );
+
+      Promise.allSettled([promiseEditRegion]).then((values) => {
+        if (values[0].value === 200) {
+          history.push('/region');
+        }
+      });
+    } else {
+      window.alert('Mohon cek kembali');
+    }
   };
   return (
     <div className={classes.container}>
@@ -65,21 +126,21 @@ function ContentEditRegion() {
             Edit Region
           </Typography>
         </div>
-        <FormRegion handleForm={handleForm} stateForm={dataRegion} />
-      </div>
-      <div display="flex" flexDirection="row" style={{ marginTop: '20px' }}>
-        <Button
+        <FormRegion
+          dataLanguage={stateLanguage.dataLanguage}
+          handleLanguage={handleLanguage}
+          stateLanguage={collectLanguage}
+          handleForm={handleForm}
+          stateForm={dataRegion}
           onClick={submitRegion}
-          variant="contained"
-          color="primary"
-          style={{ marginRight: '34px' }}
-        >
-          Save
-        </Button>
-        <Button href="/region" variant="contained">
-          Cancel
-        </Button>
+          urlCancel="/region"
+        />
       </div>
+      <div
+        display="flex"
+        flexDirection="row"
+        style={{ marginTop: '20px' }}
+      ></div>
     </div>
   );
 }

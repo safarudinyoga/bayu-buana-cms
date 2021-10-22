@@ -1,11 +1,11 @@
 import { Breadcrumbs, Link, Typography } from '@material-ui/core';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { postAircraft } from '../../../store/actions/Reducers-Aircraft';
+import { fetchLanguage } from '../../../store/actions/Reducers-Language';
 import FormAircraft from '../../Molecules/ContentAircraft/FormAircraft';
 import CreateStyle from './Create-Style';
-import { postAircraft } from '../../../store/actions/Reducers-Aircraft';
-import { useSelector, useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
-import { fetchLanguage } from '../../../store/actions/Reducers-Language';
 
 function ContentCreateAircraft() {
   const classes = CreateStyle();
@@ -18,7 +18,7 @@ function ContentCreateAircraft() {
       ...prevState,
       [event.target.name]: event.target.value,
     }));
-    console.log(collectLanguage[0].name, 'onChange Create-airCraft');
+    // console.log(collectLanguage[0].name, 'onChange Create-airCraft');
   };
   const handleLanguage = (event) => {
     let indexElement = collectLanguage.findIndex((e) => {

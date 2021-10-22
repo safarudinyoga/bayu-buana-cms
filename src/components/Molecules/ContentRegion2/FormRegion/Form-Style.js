@@ -2,7 +2,6 @@ import { makeStyles } from '@material-ui/styles';
 export default makeStyles((theme) => ({
   root: {
     display: 'flex',
-    marginTop: '30px',
     flexDirection: 'row',
     [theme.breakpoints.down('sm')]: {
       paddingTop: '30px',
@@ -23,7 +22,7 @@ export default makeStyles((theme) => ({
     border: '0.5px solid #E6E6E6',
     boxShadow: '2px 2px #F0F0F0',
     borderRadius: '8px',
-    padding: '10px 10px 30px 10px',
+    padding: '10px',
     width: '100%',
     [theme.breakpoints.down('sm')]: {
       width: '100%',
@@ -32,33 +31,10 @@ export default makeStyles((theme) => ({
       borderRadius: '8px',
     },
   },
-  inputGroupAirCraftName: {
-    display: 'flex',
-    flexDirection: 'row',
-    paddingTop: '20px',
-    margin: '20px 34px 0px 34px',
-    [theme.breakpoints.down('sm')]: {
-      display: 'flex',
-      flexDirection: 'column',
-      margin: '10px 27px 0 22px',
-    },
-  },
-  inputGroupModel: {
-    display: 'flex',
-    flexDirection: 'row',
-    paddingTop: '20px',
-    margin: '0px 34px 20px 34px',
-    [theme.breakpoints.down('sm')]: {
-      display: 'flex',
-      flexDirection: 'column',
-      margin: '10px 27px 0 22px',
-    },
-  },
   inputGroup: {
     display: 'flex',
     flexDirection: 'row',
-    paddingTop: '20px',
-    margin: '20px 34px',
+    margin: '40px 34px',
     [theme.breakpoints.down('sm')]: {
       display: 'flex',
       flexDirection: 'column',
@@ -68,8 +44,7 @@ export default makeStyles((theme) => ({
   labelForm: {
     width: '20%',
     fontWeight: '400',
-    fontSize: '15pt',
-    color: '#333',
+    fontSize: '15px',
     [theme.breakpoints.down('sm')]: {
       width: '80%',
       fontSize: '14px',
@@ -84,9 +59,6 @@ export default makeStyles((theme) => ({
     },
   },
   fieldTag: {
-    fontSize: '15pt',
-    color: '#818181',
-    fontWeight: '400',
     width: '300px',
     backgroundColor: 'white',
     [theme.breakpoints.down('sm')]: {
@@ -115,9 +87,6 @@ export default makeStyles((theme) => ({
   },
   inputTag: {
     width: '200px',
-    fontSize: '15pt',
-    color: '#818181',
-    fontWeight: '400',
     backgroundColor: 'white',
     borderRadius: '8px',
     marginLeft: '50px',
@@ -136,12 +105,10 @@ export default makeStyles((theme) => ({
       fontSize: '14px',
     },
   },
-  titleInterface: {
-    fontSize: '20pt',
-    color: '#333',
-    fontWeight: '600',
+  TitleInterface: {
+    fontSize: '1.32rem',
+    fontWeight: '500',
     marginLeft: '30px',
-
     [theme.breakpoints.down('sm')]: {
       marginLeft: '15px',
     },
@@ -162,15 +129,9 @@ export default makeStyles((theme) => ({
     borderRadius: '8px',
   },
   wrapperButton: {
-    padding: '20px',
     width: '25%',
     display: 'flex',
     flexDirection: 'column',
-  },
-  wrapperTransalation: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
   },
   buttonIndonesia: {
     height: '38px',
@@ -230,25 +191,5 @@ export default makeStyles((theme) => ({
     [theme.breakpoints.down('sm')]: {
       margin: '30px 0 10px 0',
     },
-  },
-  // button Save
-  buttonSave: {
-    marginRight: '10px',
-    backgroundColor: '#027F71',
-    width: '90px',
-    height: '40px',
-    color: 'white',
-    textTransform: 'none',
-    fontWeight: '600',
-    fontSize: '13pt',
-  },
-  buttonCancel: {
-    border: '1px solid #ffffff',
-    backgroundColor: 'white',
-    width: '90px',
-    height: '40px',
-    color: '#333333',
-    textTransform: 'none',
-    fontSize: '13pt',
   },
 }));

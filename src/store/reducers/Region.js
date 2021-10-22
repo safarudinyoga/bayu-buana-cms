@@ -2,6 +2,7 @@ const initialState = {
   dataRegion: {},
   detailRegion: {},
   isLoading: false,
+  detailRegionLanguage: [],
   error: null,
 };
 const regionReducer = (state = initialState, { type, payload }) => {
@@ -10,6 +11,8 @@ const regionReducer = (state = initialState, { type, payload }) => {
       return { ...state, dataRegion: payload };
     case 'dataRegionDetail/fetch':
       return { ...state, detailRegion: payload };
+    case 'dataRegionLanguageDetail/fetch':
+      return { ...state, detailRegionLanguage: payload };
     case 'region/loading':
       return { ...state, isLoading: payload };
     case 'region/error':
