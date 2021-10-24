@@ -1,0 +1,67 @@
+.dataTable-root .card > .card-body {
+  padding: 0;
+}
+
+.dataTable-root .card {
+  overflow: hidden;
+  border-radius: 0.3rem;
+  border: 1px solid #b7b7b7;
+}
+
+.dataTable-root .dataTables_info,
+.dataTable-root .dataTables_length {
+  display: inline-block;
+  margin-right: 4px;
+}
+
+.dataTable-root .dataTables_paginate {
+  margin-top: 10px !important;
+}
+
+.dataTable-root .dataTables_paginate .pagination .paginate_button.active a {
+  background-color: #5e5e5e;
+  border-color: #5e5e5e;
+  outline: none;
+}
+
+.dataTable-root table.dataTable {
+  margin-top: 0px !important;
+  margin-bottom: 0px !important;
+}
+
+.dataTable-root table.dataTable thead {
+  background-color: #5e5e5e;
+  color: #ffffff;
+}
+
+/* .dataTable-root table.dataTable thead > tr > th:nth-child(1) {
+  padding-left: 15px;
+}
+
+.dataTable-root table.dataTable thead > tr > th:last-child {
+  padding-right: 5px;
+} */
+
+.dataTable-root .select-checkbox {
+    width: 40px;
+    text-align: right;
+}
+
+.dataTable-root .select-checkbox .row-handle {
+    margin-left: 5px;
+    margin-top: 4px;
+    cursor: move;
+}
+.dataTable-root .table-row-action {
+    width: 100px;
+    text-align: center;
+}
+
+.dataTable-root .table-row-action-item {
+    padding-left: 3px;
+    padding-right: 3px;
+}
+
+.dataTables_processing {
+    display: none !important;
+}
