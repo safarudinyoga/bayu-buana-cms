@@ -166,6 +166,7 @@ export default class TranslationForm extends Component {
         <div className="row">
           <div className="col-xs-12 col-sm-4 col-md-3 translation-tab-container">
             <button
+              type="button"
               className="btn btn-default dropdown-toggle btn-block shadow"
               onClick={this.togglePills.bind(this)}
             >
