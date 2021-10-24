@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { Grid, makeStyles, Typography } from '@material-ui/core';
 import { Storefront } from '@material-ui/icons';
 import useOnClickOutside from '../../../hooks/useOnClickOutside';

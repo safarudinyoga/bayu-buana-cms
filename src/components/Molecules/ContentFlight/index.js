@@ -13,6 +13,14 @@ import { Chat, FlightTakeoff, Hotel } from '@material-ui/icons';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import UiTableFlight from './UiTableFlight';
+  Typography,
+  Box,
+} from '@material-ui/core';
+import PropTypes from 'prop-types';
+import Uitable from '../../Atoms/UItable';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import UiTableDekstop from './dekstop/UiTableDekstop';
+import UiTableMobile from './mobile/UiTableMobile';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -104,6 +112,7 @@ const useStyles = makeStyles((theme) => ({
       paddingRight: theme.spacing(2),
       marginLeft: theme.spacing(-3),
       marginRight: theme.spacing(-3),
+      marginRight: theme.spacing(-3)
     },
     [theme.breakpoints.up('sm')]: {
       margin: theme.spacing(0),
@@ -151,6 +160,7 @@ const useStyles = makeStyles((theme) => ({
     border: 'none',
     boxShadow: '2px 2px #F0F0F0',
     padding: 5,
+    padding: 5
   },
 }));
 
@@ -203,8 +213,18 @@ function Content() {
         </div> */}
 
         <div className={classes.rootTab}>
-          <AppBar className={classes.appBar} position="static">
-            <Tabs
+        {dekstop ? (
+            <UiTableDekstop
+              value={value}
+              TabPanel={TabPanel}
+              Uitable={Uitable}
+              handleChange={handleChange}
+              a11yProps={a11yProps}
+              classes={classes}
+              dekstop={dekstop}
+            />
+          ) : (
+            <UiTableMobile
               value={value}
               onChange={handleChange}
               aria-label="simple tabs example"
@@ -254,6 +274,14 @@ function Content() {
               />
             </div>
           </TabPanel>
+              TabPanel={TabPanel}
+              Uitable={Uitable}
+              handleChange={handleChange}
+              a11yProps={a11yProps}
+              classes={classes}
+              dekstop={dekstop}
+            />
+          )}
         </div>
       </div>
     </div>
