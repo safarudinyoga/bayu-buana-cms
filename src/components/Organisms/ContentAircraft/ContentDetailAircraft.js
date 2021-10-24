@@ -7,8 +7,10 @@ import FormAircraft from '../../Molecules/ContentAircraft/FormAircraft';
 import {
   editAircraft,
   getAircraftById,
+  getAircraftLanguageById,
   postAircraft,
 } from '../../../store/actions/Reducers-Aircraft';
+import { fetchLanguage } from '../../../store/actions/Reducers-Language';
 
 function ContentDetailAircraft() {
   const dispatch = useDispatch();
@@ -16,9 +18,23 @@ function ContentDetailAircraft() {
   const classes = DetailStyle();
   const stateAircraft = useSelector((state) => state.airCraft);
   const [dataAircraft, setDataAircraft] = useState({});
+  const [collectLanguage, setCollectLanguage] = useState([]);
+  const stateLanguage = useSelector((state) => state.language);
   useEffect(() => {
     const promiseDetailAircraft = dispatch(getAircraftById(params.id));
-    Promise.allSettled([promiseDetailAircraft]).then((values) => {});
+    const promiseDetailAircraftLanguage = dispatch(
+      getAircraftLanguageById(params.id),
+    );
+    Promise.allSettled([
+      promiseDetailAircraft,
+      promiseDetailAircraftLanguage,
+    ]).then((values) => {});
+  }, []);
+  useEffect(() => {
+    const promiseLanguage = dispatch(fetchLanguage());
+    Promise.allSettled([promiseLanguage]).then((values) => {
+      console.log(values);
+    });
   }, []);
   useEffect(() => {
     setDataAircraft(stateAircraft.detailAircraft);
@@ -29,9 +45,10 @@ function ContentDetailAircraft() {
       [event.target.name]: event.target.value,
     }));
   };
-  const submitAircraft = () => {
-    dispatch(editAircraft({ data: dataAircraft, id: params.id }));
-  };
+  useEffect(() => {
+    setCollectLanguage(stateAircraft.detailAircraftLanguage);
+  }, [stateAircraft.detailAircraftLanguage]);
+
   return (
     <div className={classes.container}>
       <div>
@@ -52,16 +69,20 @@ function ContentDetailAircraft() {
           </Typography>
         </div>
         <FormAircraft
+          detailPage={true}
+          dataLanguage={stateLanguage.dataLanguage}
+          stateLanguage={collectLanguage}
           read={true}
           handleForm={handleForm}
           stateForm={dataAircraft}
+          urlCancel="/aircraft"
         />
       </div>
-      <div display="flex" flexDirection="row" style={{ marginTop: '20px' }}>
+      {/* <div display="flex" flexDirection="row" style={{ marginTop: '20px' }}>
         <Button variant="contained" href="/aircraft">
           Cancel
         </Button>
-      </div>
+      </div> */}
     </div>
   );
 }

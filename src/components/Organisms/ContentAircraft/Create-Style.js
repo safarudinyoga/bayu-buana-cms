@@ -11,12 +11,22 @@ export default makeStyles((theme) => ({
     },
   },
   titleBread: {
-    fontWeight: 'bold',
+    fontSize: '11pt',
+    color: '#818181',
+    [theme.breakpoints.down('sm')]: {
+      fontSize: '12px',
+    },
+  },
+  titleBreadAirCraft: {
+    fontSize: '11pt',
+    color: '#E84D0E',
     [theme.breakpoints.down('sm')]: {
       fontSize: '12px',
     },
   },
   title: {
     marginTop: theme.spacing(2),
+    fontSize: '24pt',
+    color: '#333',
   },
 }));

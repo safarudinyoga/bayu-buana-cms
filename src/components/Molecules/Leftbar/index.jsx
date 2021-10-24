@@ -24,7 +24,7 @@ function Leftbar() {
       top: '-55px',
       zIndex: 9999,
       height: '150vh',
-      width: `${showLeftBar ? '280px' : '75px'}`,
+      width: `${showLeftBar ? '320px' : '75px'}`,
       opacity: 0.85,
       backgroundColor: colors.navbar.primary,
       color: '#555',
@@ -32,7 +32,7 @@ function Leftbar() {
       paddingTop: theme.spacing(10),
       position: 'fixed',
       paddingLeft: '25px',
-      paddingRight: '25px',
+      paddingRight: `${showLeftBar ? '320px' : '25px'}`,
       // [theme.breakpoints.down('sm')]: {
       //   color: 'white',
       //   backgroundColor: theme.palette.primary.main,
@@ -52,6 +52,8 @@ function Leftbar() {
       },
     },
     item: {
+      width: '300px',
+
       display: 'flex',
       alignItems: 'center',
       '&:focus': {
@@ -64,13 +66,19 @@ function Leftbar() {
         cursor: 'pointer',
       },
       '&:click': {
-        color: '#FDC300',
+        color: '#ffff',
+      },
+
+      '&:hover': {
+        backgroundColor: `${showLeftBar ? '#FDC300' : 'transparent'}`,
+        color: '#ffff',
+        borderRadius: '8px',
       },
     },
     icon: {
       color: 'white',
-      width: '22px',
-      height: '22px',
+      width: '15pt',
+      height: '15pt',
 
       marginRight: theme.spacing(1),
       [theme.breakpoints.up('sm')]: {
@@ -78,17 +86,19 @@ function Leftbar() {
       },
     },
     text: {
-      fontSize: '15px',
+      fontSize: '15pt',
       color: colors.navbar.text,
       fontWeight: 'bold',
       [theme.breakpoints.down('sm')]: {
         display: 'none',
       },
       '&:hover': {
-        color: '#FDC300',
+        color: '#ffff',
+        borderRadius: '8px',
       },
     },
     textlistBar: {
+      width: '180px',
       fontSize: '15px',
       color: colors.navbar.text,
       cursor: 'pointer',
@@ -137,14 +147,14 @@ function Leftbar() {
         <div className={classes.item}>
           <img src={HomeIcon} alt="iconHome" className={classes.icon} />
           {showLeftBar && (
-            <Typography className={classes.text}>DashBoard</Typography>
+            <Typography className={classes.text}>Dashboard</Typography>
           )}
         </div>
         <div className={classes.item} ref={onShowLeftBar}>
           <Storefront className={classes.icon} />
           {showLeftBar && (
             <Typography className={classes.text} onClick={HandleCloseListBar}>
-              Master Data Management
+              Master Data Management {'>'}
             </Typography>
           )}
         </div>
