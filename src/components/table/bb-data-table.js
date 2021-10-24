@@ -544,7 +544,7 @@ class BBDataTable extends Component {
 
   componentWillUnmount() {
     try {
-      this.state.dt.destroy()
+      this.dt.destroy()
     } catch (e) {}
   }
 
@@ -565,6 +565,8 @@ class BBDataTable extends Component {
     $(document)
       .off("change", ".select-checkbox-all")
       .on("change", ".select-checkbox-all", (e) => {
+        this.inProgress = true
+        console.log("change all")
         let table = $(e.target).closest("table")
         let selected = []
         $(".select-checkbox-item", table).prop(
@@ -579,11 +581,16 @@ class BBDataTable extends Component {
         this.setState({
           selected: selected,
         })
+        setTimeout(() => {
+            this.inProgress = false
+        }, 100)
       })
 
     $(document)
       .off("change", ".select-checkbox-item")
       .on("change", ".select-checkbox-item", (e) => {
+        console.log("change")
+        this.inProgress = true
         let table = $(e.target).closest("table")
         let selected = []
         let items = $(".select-checkbox-item:checked", table)
@@ -592,7 +599,7 @@ class BBDataTable extends Component {
         }
 
         try {
-          if (selected.length < this.state.dt.table().data().length) {
+          if (selected.length < this.dt.table().data().length) {
             $(".select-checkbox-all:checked", table).prop("checked", false)
           } else {
             $(".select-checkbox-all:not(:checked)", table).prop("checked", true)
@@ -602,6 +609,9 @@ class BBDataTable extends Component {
         this.setState({
           selected: selected,
         })
+        setTimeout(() => {
+            this.inProgress = false
+        }, 100)
       })
 
     let me = this
