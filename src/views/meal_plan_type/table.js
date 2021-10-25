@@ -1,0 +1,58 @@
+import React, { useEffect } from "react"
+import BBDataTable from "components/table/bb-data-table"
+import rowStatus from "lib/row-status"
+import { useDispatch } from "react-redux"
+import { setUIParams } from "redux/ui-store"
+import { renderColumn } from "lib/translation"
+
+export default function MealPlanTypeTable() {
+  let dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(
+      setUIParams({
+        title: "Meal Plan Type",
+        breadcrumbs: [
+          {
+            link: "/",
+            text: "Master Data Management",
+          },
+          {
+            text: "Meal Plan Type",
+          },
+        ],
+      }),
+    )
+  }, [])
+
+  let params = {
+    title: "Meal Plan Type",
+    baseRoute: "/master/meal-plan-types/form",
+    endpoint: "/master/meal-plan-types",
+    deleteEndpoint: "/master/batch-actions/delete/meal-plan-types",
+    activationEndpoint: "/master/batch-actions/activate/meal-plan-types",
+    deactivationEndpoint: "/master/batch-actions/deactivate/meal-plan-types",
+    columns: [
+      {
+        title: "Meal Plan Type Code",
+        data: "meal_plan_type_code",
+      },
+      {
+        title: "Meal Plan Type Name",
+        data: "meal_plan_type_name",
+        render: renderColumn("meal_plan_type", "meal_plan_type_name"),
+      },
+      {
+        searchable: false,
+        title: "Status",
+        data: "status",
+        render: rowStatus,
+      },
+      {
+        title: "Translated Meal Plan Type Name",
+        data: "meal_plan_type_translation.meal_plan_type_name",
+        visible: false,
+      },
+    ],
+  }
+  return <BBDataTable {...params} />
+}
