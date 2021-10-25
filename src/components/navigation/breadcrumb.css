@@ -1,0 +1,20 @@
+.breadcrumb-item {
+  font-size: 12px;
+}
+.breadcrumb-item > a {
+  color: #6c757d;
+}
+.breadcrumb-item.active {
+  color: #eb632c;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+  content: "\f105";
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  color: #6c757d;
+}
+
+.main-header-title {
+  margin-left: -2px;
+}
