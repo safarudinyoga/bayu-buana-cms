@@ -30,14 +30,14 @@ export default class Sidebar extends Component {
                 </Link>
                 <ul className="nav nav-treeview">
                   {/* all sidebar described here */}
-                  <li className="nav-item">
+                  {/* <li className="nav-item">
                     <Link
                       to="/master/age-qualifying-types"
                       className="nav-link"
                     >
                       <p>Age Qualifying Type</p>
                     </Link>
-                  </li>
+                  </li> */}
                   <li className="nav-item">
                     <Link to="/master/aircraft" className="nav-link">
                       <p>Aircraft</p>
@@ -53,12 +53,22 @@ export default class Sidebar extends Component {
                       <p>Airport</p>
                     </Link>
                   </li>
-                  <li className="nav-item">
+                  {/* <li className="nav-item">
                     <Link to="/master/cabin-types" className="nav-link">
                       <p>Cabin Type</p>
                     </Link>
+                  </li> */}
+                  {/* <li className="nav-item">
+                    <Link to="/master/cities" className="nav-link">
+                      <p>City</p>
+                    </Link>
                   </li>
                   <li className="nav-item">
+                    <Link to="/master/countries" className="nav-link">
+                      <p>Country</p>
+                    </Link>
+                  </li> */}
+                  {/* <li className="nav-item">
                     <Link to="/master/currencies" className="nav-link">
                       <p>Currency</p>
                     </Link>
@@ -82,13 +92,13 @@ export default class Sidebar extends Component {
                     <Link to="/master/hotel-suppliers" className="nav-link">
                       <p>Hotel Supplier</p>
                     </Link>
-                  </li>
-                  <li className="nav-item">
+                  </li> */}
+                  {/* <li className="nav-item">
                     <Link to="/master/languages" className="nav-link">
                       <p>Language</p>
                     </Link>
-                  </li>
-                  <li className="nav-item">
+                  </li> */}
+                  {/* <li className="nav-item">
                     <Link to="/master/location-categories" className="nav-link">
                       <p>Location Category</p>
                     </Link>
@@ -107,13 +117,18 @@ export default class Sidebar extends Component {
                     <Link to="/master/property-categories" className="nav-link">
                       <p>Property Category</p>
                     </Link>
-                  </li>
+                  </li> */}
                   <li className="nav-item">
                     <Link to="/master/regions" className="nav-link">
                       <p>Region</p>
                     </Link>
                   </li>
-                  <li className="nav-item">
+                  {/* <li className="nav-item">
+                    <Link to="/master/provinces" className="nav-link">
+                      <p>State / Province</p>
+                    </Link>
+                  </li> */}
+                  {/* <li className="nav-item">
                     <Link to="/master/room-location-types" className="nav-link">
                       <p>Room Location Type</p>
                     </Link>
@@ -128,6 +143,7 @@ export default class Sidebar extends Component {
                       <p>Special Request</p>
                     </Link>
                   </li>
+                  
                   <li className="nav-item">
                     <Link to="/master/travel-purposes" className="nav-link">
                       <p>Travel Purpose</p>
@@ -137,7 +153,7 @@ export default class Sidebar extends Component {
                     <Link to="/master/trip-types" className="nav-link">
                       <p>Trip Type</p>
                     </Link>
-                  </li>
+                  </li> */}
                 </ul>
               </li>
             </ul>
