@@ -67,7 +67,6 @@
     border-bottom-left-radius: 0.40rem;
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2) !important;
   }
-
   .translation-form .translation-tab-container .dropdown-toggle {
     border-bottom-left-radius: 0px;
     border-bottom-right-radius: 0px;
@@ -79,23 +78,22 @@
     margin-left: -8px;
     border-top-left-radius: 0px;
   }
-
   .translation-form .nav-link {
     border: 1px solid #dee2e6;
     margin-bottom: 4px;
     border-top-right-radius: 0px;
     border-bottom-right-radius: 0px;
   }
-
   .translation-form .nav-link.active {
     border-right: 0px;
   }
-
   .translation-form .translation-tab-container .dropdown-toggle {
     display: none;
   }
-
   .translation-form .nav.nav-pills {
     display: flex !important;
+  }
+  .translation-tab-container {
+    padding-bottom: 3rem !important;
   }
 }
