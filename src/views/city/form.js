@@ -19,11 +19,12 @@ function CityForm(props) {
   const [formBuilder, setFormBuilder] = useState(null)
   const [loading, setLoading] = useState(true)
   const [translations, setTranslations] = useState([])
+  const [countryData, setCountryData] = useState([])
   const [id, setId] = useState(null)
   const [form, setForm] = useState({
     city_code: "",
     city_name: "",
-    country_id: "",
+    country_id: ""
   })
   const translationFields = [
     {
@@ -81,6 +82,9 @@ function CityForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
+        if (res.data.country) {
+            setCountryData([{...res.data.country, text: res.data.country.country_name}])
+        }
       } catch (e) {}
 
       try {
@@ -155,13 +159,12 @@ function CityForm(props) {
           cr="6"
           endpoint="/master/countries"
           column="country_name"
+          data={countryData}
           onChange={(e) =>
             setForm({ ...form, country_id: e.target.value || null })
           }
           disabled={isView || loading}
           type="select"
-          minLength="0"
-          maxLength="9999"
         />
         
       </FormHorizontal>

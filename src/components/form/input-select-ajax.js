@@ -13,13 +13,19 @@ export default class FormInputSelectAjax extends Component {
     this.select = React.createRef()
     this.select2 = null
     this.api = new Api()
+    this.inProgress = false
   }
 
   componentDidMount() {
+    this.init()
+  }
+
+  init() {
     setTimeout(() => {
       try {
         let config = {
           theme: "bootstrap4",
+          data: this.props.data,
         }
         if (!this.props.children) {
           config.ajax = {
@@ -81,10 +87,30 @@ export default class FormInputSelectAjax extends Component {
     }, 300)
   }
 
+  componentDidUpdate() {
+    if (this.inProgress) {
+      return
+    }
+    setTimeout(() => {
+        this.inProgress = false
+        try {
+            this.select2.destroy()
+            this.init()
+        } catch (e) {}
+    }, 300)
+  }
+
   componentWillUnmount() {
+    this.destroy()
+  }
+
+  destroy() {
     try {
-      $(this.select.current.getInput()).off().select2("destroy")
-    } catch (e) {}
+        let el = $(this.select.current)
+        if (el.is(".select2-hidden-accessible")) {
+          el.off().select2("destroy")
+        }
+      } catch (e) {}
   }
 
   render() {
