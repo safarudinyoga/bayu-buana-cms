@@ -10,14 +10,13 @@ export default function AircraftTable() {
   useEffect(() => {
     dispatch(
       setUIParams({
-        title: "Aircraft",
+        title: "Aircrafts",
         breadcrumbs: [
           {
-            link: "/",
             text: "Master Data Management",
           },
           {
-            text: "Aircraft",
+            text: "Aircrafts",
           },
         ],
       }),
@@ -25,7 +24,7 @@ export default function AircraftTable() {
   }, [])
 
   let params = {
-    title: "Aircraft",
+    title: "Aircrafts",
     baseRoute: "/master/aircraft/form",
     endpoint: "/master/aircraft",
     deleteEndpoint: "/master/batch-actions/delete/aircraft",

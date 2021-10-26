@@ -44,17 +44,17 @@ function AirlineForm(props) {
   const validationRules = {
     airline_code: {
       required: true,
-      minlength: 0,
+      minlength: 2,
       maxlength: 2,
     },
     numeric_code: {
       required: false,
-      minlength: 0,
+      minlength: 3,
       maxlength: 3,
     },
     airline_name: {
       required: true,
-      minlength: 0,
+      minlength: 1,
       maxlength: 64,
     },
   }
@@ -75,12 +75,11 @@ function AirlineForm(props) {
         title: docTitle,
         breadcrumbs: [
           {
-            link: "/",
             text: "Master Data Management",
           },
           {
             link: backUrl,
-            text: "Airline",
+            text: "Airlines",
           },
           {
             text: docTitle,
@@ -173,7 +172,7 @@ function AirlineForm(props) {
           onChange={(e) => setForm({ ...form, airline_name: e.target.value })}
           disabled={isView || loading}
           type="text"
-          minLength="0"
+          minLength="1"
           maxLength="64"
         />
         <FormInputSelectAjax
@@ -203,11 +202,12 @@ function AirlineForm(props) {
         <FormInputWrapper label="Airline Logo" cl="3" cr="4">
           <label className="card card-default shadow-none border">
             <div className="card-body">
-              <i className="fas fa-edit text-muted img-edit-icon"></i>
+              {!isView ? <i className="fas fa-edit text-muted img-edit-icon"></i> : null}
               <input
                 type="file"
                 onChange={doUpload}
                 className="d-none"
+                disabled={isView}
                 accept=".png,.jpg,.jpeg"
               />
               {form.airline_asset &&
@@ -236,7 +236,7 @@ function AirlineForm(props) {
           onChange={(e) => setForm({ ...form, airline_code: e.target.value })}
           disabled={isView || loading}
           type="text"
-          minLength="0"
+          minLength="2"
           maxLength="2"
           hint="Airline code maximum 2 characters"
         />
@@ -249,7 +249,7 @@ function AirlineForm(props) {
           onChange={(e) => setForm({ ...form, numeric_code: e.target.value })}
           disabled={isView || loading}
           type="text"
-          minLength="0"
+          minLength="3"
           maxLength="3"
           hint="Numeric code maximum 3 characters"
         />

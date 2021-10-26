@@ -48,22 +48,22 @@ function LanguageForm(props) {
   const validationRules = {
     language_code: {
       required: true,
-      minlength: 0,
+      minlength: 2,
       maxlength: 2,
     },
     language_alpha_3_code: {
       required: false,
-      minlength: 0,
+      minlength: 3,
       maxlength: 3,
     },
     language_name: {
       required: true,
-      minlength: 0,
+      minlength: 1,
       maxlength: 256,
     },
     language_native_name: {
       required: true,
-      minlength: 0,
+      minlength: 1,
       maxlength: 256,
     },
   }
@@ -84,7 +84,6 @@ function LanguageForm(props) {
         title: docTitle,
         breadcrumbs: [
           {
-            link: "/",
             text: "Master Data Management",
           },
           {
@@ -179,7 +178,7 @@ function LanguageForm(props) {
           onChange={(e) => setForm({ ...form, language_name: e.target.value })}
           disabled={isView || loading}
           type="text"
-          minLength="0"
+          minLength="1"
           maxLength="256"
         />
         <FormInputControl
@@ -193,7 +192,7 @@ function LanguageForm(props) {
           }
           disabled={isView || loading}
           type="text"
-          minLength="0"
+          minLength="1"
           maxLength="256"
         />
         <FormInputWrapper label="Flag" cl="3" cr="4">
@@ -233,7 +232,7 @@ function LanguageForm(props) {
           onChange={(e) => setForm({ ...form, language_code: e.target.value })}
           disabled={isView || loading}
           type="text"
-          minLength="0"
+          minLength="2"
           maxLength="2"
           hint="Language code maximum 2 characters"
         />
@@ -248,7 +247,7 @@ function LanguageForm(props) {
           }
           disabled={isView || loading}
           type="text"
-          minLength="0"
+          minLength="3"
           maxLength="3"
           hint="Language Alpha 3 Code maximum 3 characters"
         />

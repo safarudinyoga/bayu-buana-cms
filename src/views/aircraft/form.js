@@ -37,14 +37,23 @@ function AircraftForm(props) {
   const validationRules = {
     aircraft_name: {
       required: true,
+      min: 1,
+      max: 64,
+    },
+    model: {
+      required: true,
+      min: 1,
+      max: 64,
     },
     icao_code: {
       required: true,
+      min: 4,
+      max: 4,
     },
     aircraft_code: {
       required: true,
-      min: 1,
-      max: 999,
+      min: 4,
+      max: 4,
     },
   }
 
@@ -64,12 +73,11 @@ function AircraftForm(props) {
         title: docTitle,
         breadcrumbs: [
           {
-            link: "/",
             text: "Master Data Management",
           },
           {
             link: backUrl,
-            text: "Aircraft",
+            text: "Aircrafts",
           },
           {
             text: docTitle,
@@ -139,6 +147,8 @@ function AircraftForm(props) {
           onChange={(e) => setForm({ ...form, aircraft_name: e.target.value })}
           disabled={isView || loading}
           type="text"
+          minLength="1"
+          maxLength="64"
         />
         <FormInputControl
           value={form.model}
@@ -147,6 +157,8 @@ function AircraftForm(props) {
           label="Model"
           disabled={isView || loading}
           type="text"
+          minLength="1"
+          maxLength="64"
         />
       </FormHorizontal>
 
@@ -161,6 +173,9 @@ function AircraftForm(props) {
           disabled={isView || loading}
           type="number"
           label="Aircraft Code *"
+          minLength="3"
+          maxLength="3"
+          hint="Aircraft code maximum 3 characters"
         />
         <FormInputControl
           value={form.icao_code}
@@ -172,6 +187,9 @@ function AircraftForm(props) {
           disabled={isView || loading}
           label="ICAO Code *"
           type="text"
+          minLength="4"
+          maxLength="4"
+          hint="ICAO Code maximum 4 characters"
         />
       </FormHorizontal>
     </FormBuilder>

@@ -36,13 +36,16 @@ function CityForm(props) {
   const validationRules = {
     city_code: {
       required: true,
-      minlength: 0,
+      minlength: 3,
       maxlength: 3,
     },
     city_name: {
       required: true,
-      minlength: 0,
+      minlength: 1,
       maxlength: 64,
+    },
+    country_id: {
+      required: true
     }
   }
 
@@ -62,12 +65,11 @@ function CityForm(props) {
         title: docTitle,
         breadcrumbs: [
           {
-            link: "/",
             text: "Master Data Management",
           },
           {
             link: backUrl,
-            text: "City",
+            text: "Cities",
           },
           {
             text: docTitle,
@@ -139,7 +141,7 @@ function CityForm(props) {
           onChange={(e) => setForm({ ...form, city_name: e.target.value })}
           disabled={isView || loading}
           type="text"
-          minLength="0"
+          minLength="1"
           maxLength="64"
         />
         <FormInputSelectAjax
@@ -148,7 +150,7 @@ function CityForm(props) {
           name="country_id"
           cl="3"
           cr="6"
-          endpoint="/master/country"
+          endpoint="/master/countries"
           column="country_name"
           onChange={(e) =>
             setForm({ ...form, country_id: e.target.value || null })
@@ -157,15 +159,7 @@ function CityForm(props) {
           type="select"
           minLength="0"
           maxLength="9999"
-        >
-          <option value="">None</option>
-          <option value="51d5cb0c-c29e-4682-af20-4b95bc5c6ee3">
-            Country 1
-          </option>
-          <option value="51d5cb0c-c29e-4682-af20-4b95bc5c6ee4">
-            Country 2
-          </option>
-        </FormInputSelectAjax>
+        />
         
       </FormHorizontal>
 
@@ -179,9 +173,9 @@ function CityForm(props) {
           onChange={(e) => setForm({ ...form, city_code: e.target.value })}
           disabled={isView || loading}
           type="text"
-          minLength="0"
-          maxLength="2"
-          hint="City code maximum 2 characters"
+          minLength="3"
+          maxLength="3"
+          hint="City code maximum 3 characters"
         />
       </FormHorizontal>
     </FormBuilder>

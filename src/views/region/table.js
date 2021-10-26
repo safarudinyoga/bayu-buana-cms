@@ -10,14 +10,13 @@ export default function RegionTable() {
   useEffect(() => {
     dispatch(
       setUIParams({
-        title: "Region",
+        title: "Regions",
         breadcrumbs: [
           {
-            link: "/",
             text: "Master Data Management",
           },
           {
-            text: "Region",
+            text: "Regions",
           },
         ],
       }),
@@ -25,7 +24,7 @@ export default function RegionTable() {
   }, [])
 
   let params = {
-    title: "Region",
+    title: "Regions",
     baseRoute: "/master/regions/form",
     endpoint: "/master/regions",
     deleteEndpoint: "/master/batch-actions/delete/regions",

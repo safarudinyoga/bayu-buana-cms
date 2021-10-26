@@ -10,14 +10,13 @@ export default function CityTable() {
   useEffect(() => {
     dispatch(
       setUIParams({
-        title: "City",
+        title: "Cities",
         breadcrumbs: [
           {
-            link: "/",
             text: "Master Data Management",
           },
           {
-            text: "City",
+            text: "Cities",
           },
         ],
       }),
@@ -25,7 +24,7 @@ export default function CityTable() {
   }, [])
 
   let params = {
-    title: "City",
+    title: "Cities",
     baseRoute: "/master/cities/form",
     endpoint: "/master/cities",
     deleteEndpoint: "/master/batch-actions/delete/cities",
@@ -43,8 +42,7 @@ export default function CityTable() {
       },
       {
         title: "Country",
-        data: "country_id",
-        render: renderColumn("country", "country_name"),
+        data: "country.country_name",
       },
       {
         searchable: false,

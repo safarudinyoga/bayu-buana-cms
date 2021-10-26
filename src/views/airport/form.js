@@ -37,17 +37,17 @@ function AirportForm(props) {
   const validationRules = {
     airport_code: {
       required: true,
-      minlength: 0,
+      minlength: 3,
       maxlength: 3,
     },
     icao_code: {
-      required: true,
-      minlength: 0,
+      required: false,
+      minlength: 4,
       maxlength: 4,
     },
     airport_name: {
       required: true,
-      minlength: 0,
+      minlength: 1,
       maxlength: 256,
     },
     city_id: {},
@@ -69,12 +69,11 @@ function AirportForm(props) {
         title: docTitle,
         breadcrumbs: [
           {
-            link: "/",
             text: "Master Data Management",
           },
           {
             link: backUrl,
-            text: "Airport",
+            text: "Airports",
           },
           {
             text: docTitle,
@@ -146,7 +145,7 @@ function AirportForm(props) {
           onChange={(e) => setForm({ ...form, airport_name: e.target.value })}
           disabled={isView || loading}
           type="text"
-          minLength="0"
+          minLength="1"
           maxLength="256"
         />
         <FormInputSelectAjax
@@ -173,12 +172,12 @@ function AirportForm(props) {
           onChange={(e) => setForm({ ...form, airport_code: e.target.value })}
           disabled={isView || loading}
           type="text"
-          minLength="0"
+          minLength="3"
           maxLength="3"
           hint="Airport code maximum 3 characters"
         />
         <FormInputControl
-          label="ICAO Code *"
+          label="ICAO Code"
           value={form.icao_code}
           name="icao_code"
           cl="4"
@@ -186,7 +185,7 @@ function AirportForm(props) {
           onChange={(e) => setForm({ ...form, icao_code: e.target.value })}
           disabled={isView || loading}
           type="text"
-          minLength="0"
+          minLength="4"
           maxLength="4"
           hint="ICAO Code maximum 4 characters"
         />

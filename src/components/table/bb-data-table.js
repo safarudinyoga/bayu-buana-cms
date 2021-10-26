@@ -102,6 +102,7 @@ class BBDataTable extends Component {
         processing: true,
         displayLength: 10,
         displayStart: 0,
+        lengthMenu: [[10, 25, 50, 100, -1],[10, 25, 50, 100, "All"]],
         keys: true,
         destroy: true,
         ajax: {

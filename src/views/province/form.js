@@ -37,13 +37,13 @@ function ProvinceForm(props) {
   const validationRules = {
     state_province_code: {
       required: true,
-      minlength: 0,
-      maxlength: 2,
+      minlength: 1,
+      maxlength: 8,
     },
     state_province_name: {
       required: true,
-      minlength: 0,
-      maxlength: 64,
+      minlength: 1,
+      maxlength: 256,
     }
   }
 
@@ -63,12 +63,11 @@ function ProvinceForm(props) {
         title: docTitle,
         breadcrumbs: [
           {
-            link: "/",
             text: "Master Data Management",
           },
           {
             link: backUrl,
-            text: "State / Province",
+            text: "States / Provinces",
           },
           {
             text: docTitle,
@@ -140,8 +139,8 @@ function ProvinceForm(props) {
           onChange={(e) => setForm({ ...form, state_province_name: e.target.value })}
           disabled={isView || loading}
           type="text"
-          minLength="0"
-          maxLength="64"
+          minLength="1"
+          maxLength="256"
         />
         <FormInputSelectAjax
           label="Subdivision Category"
@@ -196,8 +195,8 @@ function ProvinceForm(props) {
           onChange={(e) => setForm({ ...form, state_province_code: e.target.value })}
           disabled={isView || loading}
           type="text"
-          minLength="0"
-          maxLength="2"
+          minLength="1"
+          maxLength="8"
           hint="State / Province code maximum 2 characters"
         />
       </FormHorizontal>

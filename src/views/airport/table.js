@@ -11,14 +11,13 @@ export default function AirportTable() {
   useEffect(() => {
     dispatch(
       setUIParams({
-        title: "Airport",
+        title: "Airports",
         breadcrumbs: [
           {
-            link: "/",
             text: "Master Data Management",
           },
           {
-            text: "Airport",
+            text: "Airports",
           },
         ],
       }),
@@ -30,7 +29,7 @@ export default function AirportTable() {
 
   let [params, setParams] = useState({
     filters: [],
-    title: "Airport",
+    title: "Airports",
     baseRoute: "/master/airports/form",
     endpoint: "/master/airports",
     deleteEndpoint: "/master/batch-actions/delete/airports",

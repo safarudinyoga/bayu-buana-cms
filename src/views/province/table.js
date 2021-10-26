@@ -10,14 +10,13 @@ export default function ProvinceTable() {
   useEffect(() => {
     dispatch(
       setUIParams({
-        title: "State / Province",
+        title: "States / Provinces",
         breadcrumbs: [
           {
-            link: "/",
             text: "Master Data Management",
           },
           {
-            text: "State / Province",
+            text: "States / Provinces",
           },
         ],
       }),
@@ -25,7 +24,7 @@ export default function ProvinceTable() {
   }, [])
 
   let params = {
-    title: "State / Province",
+    title: "States / Provinces",
     baseRoute: "/master/provinces/form",
     endpoint: "/master/state-provinces",
     deleteEndpoint: "/master/batch-actions/delete/provinces",
@@ -43,8 +42,7 @@ export default function ProvinceTable() {
       },
       {
         title: "Country",
-        data: "country_id",
-        render: renderColumn("country", "country_name"),
+        data: "country.country_name"
       },
       {
         searchable: false,
