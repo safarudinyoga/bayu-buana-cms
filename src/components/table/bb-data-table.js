@@ -356,6 +356,7 @@ class BBDataTable extends Component {
         ],
         rowReorder: {
           selector: ".row-handle",
+          update: false
         },
         responsive: true,
         autoWidth: false,

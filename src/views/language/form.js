@@ -7,6 +7,7 @@ import FormBuilder from "components/form/builder"
 import useQuery from "lib/query"
 import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
+import FormInputWrapper from "components/form/input-wrapper"
 
 const endpoint = "/master/languages"
 const backUrl = "/master/languages"
@@ -24,6 +25,12 @@ function LanguageForm(props) {
     language_alpha_3_code: "",
     language_name: "",
     language_native_name: "",
+    language_asset: {
+      multimedia_description_id: null,
+      multimedia_description: {
+        url: "",
+      },
+    },
   })
   const translationFields = [
     {
@@ -132,6 +139,24 @@ function LanguageForm(props) {
     }
   }
 
+  const doUpload = async (e) => {
+    try {
+      let api = new Api()
+      let payload = new FormData()
+      payload.append("files", e.target.files[0])
+      let res = await api.post("/multimedia/files", payload)
+      if (res.data) {
+        setForm({
+          ...form,
+          language_asset: {
+            multimedia_description_id: res.data.id,
+            multimedia_description: res.data,
+          },
+        })
+      }
+    } catch (e) {}
+  }
+
   return (
     <FormBuilder
       onBuild={(el) => setFormBuilder(el)}
@@ -171,6 +196,31 @@ function LanguageForm(props) {
           minLength="0"
           maxLength="256"
         />
+        <FormInputWrapper label="Flag" cl="3" cr="4">
+          <label className="card card-default shadow-none border">
+            <div className="card-body">
+              {!isView ? <i className="fas fa-edit text-muted img-edit-icon"></i> : null}
+              <input
+                type="file"
+                onChange={doUpload}
+                className="d-none"
+                disabled={isView}
+                accept=".png,.jpg,.jpeg"
+              />
+              {form.language_asset &&
+              form.language_asset.multimedia_description &&
+              form.language_asset.multimedia_description.url ? (
+                <img
+                  src={form.language_asset.multimedia_description.url}
+                  className="img-fluid"
+                  alt="language"
+                />
+              ) : (
+                ""
+              )}
+            </div>
+          </label>
+        </FormInputWrapper>
       </FormHorizontal>
 
       <FormHorizontal>
