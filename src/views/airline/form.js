@@ -57,10 +57,6 @@ function AirlineForm(props) {
       minlength: 0,
       maxlength: 64,
     },
-    company_name: {
-      minlength: 0,
-      maxlength: 9999,
-    },
   }
 
   useEffect(async () => {
@@ -120,6 +116,9 @@ function AirlineForm(props) {
     setLoading(true)
     let api = new Api()
     try {
+      if (!form.company_id) {
+          form.company_id = null
+      }
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
       for (let i in translated) {
@@ -204,7 +203,7 @@ function AirlineForm(props) {
         <FormInputWrapper label="Airline Logo" cl="3" cr="4">
           <label className="card card-default shadow-none border">
             <div className="card-body">
-                <i className="fas fa-edit text-muted img-edit-icon"></i>
+              <i className="fas fa-edit text-muted img-edit-icon"></i>
               <input
                 type="file"
                 onChange={doUpload}
@@ -214,7 +213,11 @@ function AirlineForm(props) {
               {form.airline_asset &&
               form.airline_asset.multimedia_description &&
               form.airline_asset.multimedia_description.url ? (
-                <img src={form.airline_asset.multimedia_description.url} className="img-fluid" alt="airline" />
+                <img
+                  src={form.airline_asset.multimedia_description.url}
+                  className="img-fluid"
+                  alt="airline"
+                />
               ) : (
                 ""
               )}
