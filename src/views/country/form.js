@@ -128,6 +128,24 @@ function CountryForm(props) {
     setLoading(true)
     let api = new Api()
     try {
+      if (!form.country_alpha_3_code) {
+        form.country_alpha_3_code = null
+      }
+      if (!form.numeric_code) {
+        form.numeric_code = null
+      }
+      if (!form.timezone_id) {
+        form.timezone_id = null
+      }
+      if (!form.currency_id) {
+        form.currency_id = null
+      }
+      if (!form.nationality) {
+        form.nationality = null
+      }
+      if (!form.language_id) {
+        form.language_id = null
+      }
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
       for (let i in translated) {

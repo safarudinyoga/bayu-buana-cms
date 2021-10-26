@@ -45,7 +45,7 @@ function CityForm(props) {
       maxlength: 64,
     },
     country_id: {
-      required: true
+      required: false
     }
   }
 
@@ -105,6 +105,9 @@ function CityForm(props) {
     setLoading(true)
     let api = new Api()
     try {
+      if (!form.country_id) {
+        form.country_id = null
+      }
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
       for (let i in translated) {
