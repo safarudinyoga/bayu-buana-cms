@@ -167,7 +167,6 @@ function AircraftForm(props) {
           value={form.aircraft_code}
           name="aircraft_code"
           onChange={(e) => setForm({ ...form, aircraft_code: e.target.value })}
-          hint="Aircraft Code"
           cl="4"
           cr="6"
           disabled={isView || loading}
@@ -181,7 +180,6 @@ function AircraftForm(props) {
           value={form.icao_code}
           name="icao_code"
           onChange={(e) => setForm({ ...form, icao_code: e.target.value })}
-          hint="ICAO Code"
           cl="4"
           cr="6"
           disabled={isView || loading}
