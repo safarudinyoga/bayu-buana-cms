@@ -19,6 +19,10 @@ function CountryForm(props) {
   const [formBuilder, setFormBuilder] = useState(null)
   const [loading, setLoading] = useState(true)
   const [translations, setTranslations] = useState([])
+  const [timezoneData, setTimezoneData] = useState([])
+  const [currencyData, setCurrencyData] = useState([])
+  const [regionData, setRegionData] = useState([])
+  const [languageData, setLanguageData] = useState([])
   const [id, setId] = useState(null)
   const [form, setForm] = useState({
     country_access_code: "",
@@ -44,23 +48,31 @@ function CountryForm(props) {
   const validationRules = {
     country_code: {
       required: true,
-      minlength: 0,
+      minlength: 2,
       maxlength: 2,
     },
     country_alpha_3_code: {
       required: false,
-      minlength: 0,
+      minlength: 3,
       maxlength: 3,
     },
     numeric_code: {
       required: false,
-      minlength: 0,
+      minlength: 3,
       maxlength: 3,
     },
     country_name: {
       required: true,
-      minlength: 0,
+      minlength: 1,
       maxlength: 64,
+    },
+    nationality: {
+      required: false,
+      minlength: 1,
+      maxlength: 64,
+    },
+    region_id: {
+      required: true
     }
   }
 
@@ -80,12 +92,11 @@ function CountryForm(props) {
         title: docTitle,
         breadcrumbs: [
           {
-            link: "/",
             text: "Master Data Management",
           },
           {
             link: backUrl,
-            text: "Country",
+            text: "Countries",
           },
           {
             text: docTitle,
@@ -97,6 +108,18 @@ function CountryForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
+        if (res.data.timezone) {
+          setTimezoneData([{...res.data.timezone, text: res.data.timezone.timezone_name}])
+        }
+        if (res.data.currency) {
+          setCurrencyData([{...res.data.currency, text: res.data.currency.currency_name}])
+        }
+        if (res.data.region) {
+          setRegionData([{...res.data.region, text: res.data.region.region_name}])
+        }
+        if (res.data.language) {
+          setLanguageData([{...res.data.language, text: res.data.language.language_name}])
+        }
       } catch (e) {}
 
       try {
@@ -121,6 +144,24 @@ function CountryForm(props) {
     setLoading(true)
     let api = new Api()
     try {
+      if (!form.country_alpha_3_code) {
+        form.country_alpha_3_code = null
+      }
+      if (!form.numeric_code) {
+        form.numeric_code = null
+      }
+      if (!form.timezone_id) {
+        form.timezone_id = null
+      }
+      if (!form.currency_id) {
+        form.currency_id = null
+      }
+      if (!form.nationality) {
+        form.nationality = null
+      }
+      if (!form.language_id) {
+        form.language_id = null
+      }
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
       for (let i in translated) {
@@ -157,7 +198,7 @@ function CountryForm(props) {
           onChange={(e) => setForm({ ...form, country_name: e.target.value })}
           disabled={isView || loading}
           type="text"
-          minLength="0"
+          minLength="1"
           maxLength="64"
         />
         <FormInputSelectAjax
@@ -166,8 +207,9 @@ function CountryForm(props) {
           name="timezone_id"
           cl="3"
           cr="6"
-          endpoint="/master/time-zones"
+          endpoint="/master/timezones"
           column="zone_name"
+          data={timezoneData}
           onChange={(e) =>
             setForm({ ...form, timezone_id: e.target.value || null })
           }
@@ -175,23 +217,16 @@ function CountryForm(props) {
           type="select"
           minLength="0"
           maxLength="9999"
-        >
-          <option value="">None</option>
-          <option value="51d5cb0c-c29e-4682-af20-4b95bc5c6ee3">
-            Time Zone 1
-          </option>
-          <option value="51d5cb0c-c29e-4682-af20-4b95bc5c6ee4">
-            Time Zone 2
-          </option>
-        </FormInputSelectAjax>
+        />
         <FormInputSelectAjax
           label="Currency"
           value={form.currency_id}
           name="currency_id"
           cl="3"
           cr="6"
-          endpoint="/master/currency"
+          endpoint="/master/currencies"
           column="currency_name"
+          data={currencyData}
           onChange={(e) =>
             setForm({ ...form, currency_id: e.target.value || null })
           }
@@ -199,16 +234,7 @@ function CountryForm(props) {
           type="select"
           minLength="0"
           maxLength="9999"
-        >
-          <option value="">None</option>
-          <option value="51d5cb0c-c29e-4682-af20-4b95bc5c6ee3">
-            Currency 1
-          </option>
-          <option value="51d5cb0c-c29e-4682-af20-4b95bc5c6ee4">
-          Currency 2
-          </option>
-        </FormInputSelectAjax>
-
+        />
         <FormInputControl
           label="Nationality"
           value={form.nationality}
@@ -218,7 +244,7 @@ function CountryForm(props) {
           onChange={(e) => setForm({ ...form, nationality: e.target.value })}
           disabled={isView || loading}
           type="text"
-          minLength="0"
+          minLength="1"
           maxLength="64"
         />
         <FormInputSelectAjax
@@ -229,6 +255,7 @@ function CountryForm(props) {
           cr="6"
           endpoint="/master/regions"
           column="region_name"
+          data={regionData}
           onChange={(e) =>
             setForm({ ...form, region_id: e.target.value || null })
           }
@@ -239,14 +266,15 @@ function CountryForm(props) {
         />
         <FormInputSelectAjax
           label="Default Language"
-          value={form.country_access_code}
-          name="country_access_code"
+          value={form.language_id}
+          name="language_id"
           cl="3"
           cr="6"
           endpoint="/master/languages"
           column="language_name"
+          data={languageData}
           onChange={(e) =>
-            setForm({ ...form, country_access_code: e.target.value || null })
+            setForm({ ...form, language_id: e.target.value || null })
           }
           disabled={isView || loading}
           type="select"
@@ -266,7 +294,7 @@ function CountryForm(props) {
           onChange={(e) => setForm({ ...form, country_code: e.target.value })}
           disabled={isView || loading}
           type="text"
-          minLength="0"
+          minLength="2"
           maxLength="2"
           hint="Country code maximum 2 characters"
         />
@@ -279,7 +307,7 @@ function CountryForm(props) {
           onChange={(e) => setForm({ ...form, country_alpha_3_code: e.target.value })}
           disabled={isView || loading}
           type="text"
-          minLength="0"
+          minLength="3"
           maxLength="3"
           hint="Country Alpha 3 Code maximum 3 characters"
         />
@@ -292,7 +320,7 @@ function CountryForm(props) {
           onChange={(e) => setForm({ ...form, numeric_code: e.target.value })}
           disabled={isView || loading}
           type="text"
-          minLength="0"
+          minLength="3"
           maxLength="3"
           hint="Numeric code maximum 3 characters"
         />

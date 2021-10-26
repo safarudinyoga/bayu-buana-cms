@@ -66,6 +66,9 @@ function LanguageForm(props) {
       minlength: 1,
       maxlength: 256,
     },
+    language_asset: {
+      required: true
+    },
   }
 
   useEffect(async () => {
@@ -124,6 +127,12 @@ function LanguageForm(props) {
     setLoading(true)
     let api = new Api()
     try {
+      if (!form.language_alpha_3_code) {
+        form.language_alpha_3_code = null
+      }
+      if (form.language_asset.multimedia_description_id == null) {
+        form.language_asset = null
+      }
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
       for (let i in translated) {

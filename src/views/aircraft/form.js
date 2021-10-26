@@ -9,7 +9,7 @@ import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
 
 const endpoint = "/master/aircraft"
-const backUrl = "/master/aircraft"
+const backUrl = "/master/aircrafts"
 
 function AircraftForm(props) {
   let dispatch = useDispatch()
@@ -41,7 +41,7 @@ function AircraftForm(props) {
       max: 64,
     },
     model: {
-      required: true,
+      required: false,
       min: 1,
       max: 64,
     },
@@ -113,6 +113,9 @@ function AircraftForm(props) {
     setLoading(true)
     let api = new Api()
     try {
+      if (!form.model) {
+        form.model = null
+      }
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
       for (let i in translated) {
@@ -167,7 +170,6 @@ function AircraftForm(props) {
           value={form.aircraft_code}
           name="aircraft_code"
           onChange={(e) => setForm({ ...form, aircraft_code: e.target.value })}
-          hint="Aircraft Code"
           cl="4"
           cr="6"
           disabled={isView || loading}
@@ -181,7 +183,6 @@ function AircraftForm(props) {
           value={form.icao_code}
           name="icao_code"
           onChange={(e) => setForm({ ...form, icao_code: e.target.value })}
-          hint="ICAO Code"
           cl="4"
           cr="6"
           disabled={isView || loading}
