@@ -9,7 +9,7 @@ import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
 
 const endpoint = "/master/aircraft"
-const backUrl = "/master/aircraft"
+const backUrl = "/master/aircrafts"
 
 function AircraftForm(props) {
   let dispatch = useDispatch()
@@ -41,7 +41,7 @@ function AircraftForm(props) {
       max: 64,
     },
     model: {
-      required: true,
+      required: false,
       min: 1,
       max: 64,
     },
@@ -113,6 +113,9 @@ function AircraftForm(props) {
     setLoading(true)
     let api = new Api()
     try {
+      if (!form.model) {
+        form.model = null
+      }
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
       for (let i in translated) {

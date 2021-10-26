@@ -10,14 +10,13 @@ export default function CountryTable() {
   useEffect(() => {
     dispatch(
       setUIParams({
-        title: "Country",
+        title: "Countries",
         breadcrumbs: [
           {
-            link: "/",
             text: "Master Data Management",
           },
           {
-            text: "Country",
+            text: "Countries",
           },
         ],
       }),
@@ -25,7 +24,7 @@ export default function CountryTable() {
   }, [])
 
   let params = {
-    title: "Country",
+    title: "Countries",
     baseRoute: "/master/countries/form",
     endpoint: "/master/countries",
     deleteEndpoint: "/master/batch-actions/delete/countries",
@@ -43,8 +42,7 @@ export default function CountryTable() {
       },
       {
         title: "Region",
-        data: "region_id",
-        render: renderColumn("region", "region_name"),
+        data: "region.region_name"
       },
       {
         searchable: false,

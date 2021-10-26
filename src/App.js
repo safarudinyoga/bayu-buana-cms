@@ -186,10 +186,10 @@ function App() {
           <Route path="/master/airlines/form/:id?">
             <AirlineForm />
           </Route>
-          <Route exact path="/master/aircraft">
+          <Route exact path="/master/aircrafts">
             <AircraftTable />
           </Route>
-          <Route path="/master/aircraft/form/:id?">
+          <Route path="/master/aircrafts/form/:id?">
             <AircraftForm />
           </Route>
           <Route exact path="/master/countries">

@@ -25,11 +25,11 @@ export default function AircraftTable() {
 
   let params = {
     title: "Aircrafts",
-    baseRoute: "/master/aircraft/form",
+    baseRoute: "/master/aircrafts/form",
     endpoint: "/master/aircraft",
-    deleteEndpoint: "/master/batch-actions/delete/aircraft",
-    activationEndpoint: "/master/batch-actions/activate/aircraft",
-    deactivationEndpoint: "/master/batch-actions/deactivate/aircraft",
+    deleteEndpoint: "/master/batch-actions/delete/aircrafts",
+    activationEndpoint: "/master/batch-actions/activate/aircrafts",
+    deactivationEndpoint: "/master/batch-actions/deactivate/aircrafts",
     columns: [
       {
         title: "Aircraft Code",
