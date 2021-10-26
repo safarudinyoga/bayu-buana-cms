@@ -10,14 +10,13 @@ export default function LanguageTable() {
   useEffect(() => {
     dispatch(
       setUIParams({
-        title: "Language",
+        title: "Languages",
         breadcrumbs: [
           {
-            link: "/",
             text: "Master Data Management",
           },
           {
-            text: "Language",
+            text: "Languages",
           },
         ],
       }),
@@ -25,7 +24,7 @@ export default function LanguageTable() {
   }, [])
 
   let params = {
-    title: "Language",
+    title: "Languages",
     baseRoute: "/master/languages/form",
     endpoint: "/master/languages",
     deleteEndpoint: "/master/batch-actions/delete/languages",
@@ -40,6 +39,19 @@ export default function LanguageTable() {
         title: "Language Name",
         data: "language_name",
         render: renderColumn("language", "language_name"),
+      },
+      {
+        title: "Flag",
+        data: "language_asset.multimedia_description.url",
+        searchable: false,
+        orderable: false,
+        render: (val) => {
+          if (val) {
+            return '<img src="' + val + '" class="table-image"/>'
+          }
+
+          return ""
+        },
       },
       {
         searchable: false,

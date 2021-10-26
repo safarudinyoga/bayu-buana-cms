@@ -5,18 +5,18 @@ import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
 import { renderColumn } from "lib/translation"
 
-export default function AircraftTable() {
+export default function CityTable() {
   let dispatch = useDispatch()
   useEffect(() => {
     dispatch(
       setUIParams({
-        title: "Aircrafts",
+        title: "Cities",
         breadcrumbs: [
           {
             text: "Master Data Management",
           },
           {
-            text: "Aircrafts",
+            text: "Cities",
           },
         ],
       }),
@@ -24,21 +24,25 @@ export default function AircraftTable() {
   }, [])
 
   let params = {
-    title: "Aircrafts",
-    baseRoute: "/master/aircraft/form",
-    endpoint: "/master/aircraft",
-    deleteEndpoint: "/master/batch-actions/delete/aircraft",
-    activationEndpoint: "/master/batch-actions/activate/aircraft",
-    deactivationEndpoint: "/master/batch-actions/deactivate/aircraft",
+    title: "Cities",
+    baseRoute: "/master/cities/form",
+    endpoint: "/master/cities",
+    deleteEndpoint: "/master/batch-actions/delete/cities",
+    activationEndpoint: "/master/batch-actions/activate/cities",
+    deactivationEndpoint: "/master/batch-actions/deactivate/cities",
     columns: [
       {
-        title: "Aircraft Code",
-        data: "aircraft_code",
+        title: "City Code",
+        data: "city_code",
       },
       {
-        title: "Aircraft Name",
-        data: "aircraft_name",
-        render: renderColumn("aircraft", "aircraft_name")
+        title: "City Name",
+        data: "city_name",
+        render: renderColumn("city", "city_name"),
+      },
+      {
+        title: "Country",
+        data: "country.country_name",
       },
       {
         searchable: false,
@@ -47,8 +51,8 @@ export default function AircraftTable() {
         render: rowStatus,
       },
       {
-        title: "Translated Aircraft Name",
-        data: "aircraft_translation.aircraft_name",
+        title: "Translated City Name",
+        data: "city_translation.city_name",
         visible: false,
       },
     ],

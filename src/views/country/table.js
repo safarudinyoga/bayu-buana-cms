@@ -5,18 +5,19 @@ import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
 import { renderColumn } from "lib/translation"
 
-export default function RegionTable() {
+export default function CountryTable() {
   let dispatch = useDispatch()
   useEffect(() => {
     dispatch(
       setUIParams({
-        title: "Regions",
+        title: "Country",
         breadcrumbs: [
           {
+            link: "/",
             text: "Master Data Management",
           },
           {
-            text: "Regions",
+            text: "Country",
           },
         ],
       }),
@@ -24,20 +25,25 @@ export default function RegionTable() {
   }, [])
 
   let params = {
-    title: "Regions",
-    baseRoute: "/master/regions/form",
-    endpoint: "/master/regions",
-    deleteEndpoint: "/master/batch-actions/delete/regions",
-    activationEndpoint: "/master/batch-actions/activate/regions",
-    deactivationEndpoint: "/master/batch-actions/deactivate/regions",
+    title: "Country",
+    baseRoute: "/master/countries/form",
+    endpoint: "/master/countries",
+    deleteEndpoint: "/master/batch-actions/delete/countries",
+    activationEndpoint: "/master/batch-actions/activate/countries",
+    deactivationEndpoint: "/master/batch-actions/deactivate/countries",
     columns: [
       {
-        title: "Region Code",
-        data: "region_code",
+        title: "Country Code",
+        data: "country_code",
       },
       {
-        title: "Region Name",
-        data: "region_name",
+        title: "Country Name",
+        data: "country_name",
+        render: renderColumn("country", "country_name"),
+      },
+      {
+        title: "Region",
+        data: "region_id",
         render: renderColumn("region", "region_name"),
       },
       {
@@ -47,8 +53,8 @@ export default function RegionTable() {
         render: rowStatus,
       },
       {
-        title: "Translated Region Name",
-        data: "region_translation.region_name",
+        title: "Translated Country Name",
+        data: "country_translation.country_name",
         visible: false,
       },
     ],

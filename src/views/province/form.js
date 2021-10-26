@@ -4,14 +4,15 @@ import Api from "config/api"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
 import FormBuilder from "components/form/builder"
+import FormInputSelectAjax from "components/form/input-select-ajax"
 import useQuery from "lib/query"
 import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
 
-const endpoint = "/master/aircraft"
-const backUrl = "/master/aircraft"
+const endpoint = "/master/state-provinces"
+const backUrl = "/master/provinces"
 
-function AircraftForm(props) {
+function ProvinceForm(props) {
   let dispatch = useDispatch()
 
   const isView = useQuery().get("action") === "view"
@@ -20,52 +21,41 @@ function AircraftForm(props) {
   const [translations, setTranslations] = useState([])
   const [id, setId] = useState(null)
   const [form, setForm] = useState({
-    id: "",
-    aircraft_name: "",
-    model: "",
-    icao_code: "",
-    aircraft_code: "",
+    country_id: "",
+    state_province_category_id: "",
+    state_province_code: "",
+    state_province_name: ""
   })
   const translationFields = [
     {
-      label: "Aircraft Name",
-      name: "aircraft_name",
+      label: "State / Province Name",
+      name: "state_province_name",
       type: "text",
     },
   ]
 
   const validationRules = {
-    aircraft_name: {
+    state_province_code: {
       required: true,
-      min: 1,
-      max: 64,
+      minlength: 1,
+      maxlength: 8,
     },
-    model: {
+    state_province_name: {
       required: true,
-      min: 1,
-      max: 64,
-    },
-    icao_code: {
-      required: true,
-      min: 4,
-      max: 4,
-    },
-    aircraft_code: {
-      required: true,
-      min: 4,
-      max: 4,
-    },
+      minlength: 1,
+      maxlength: 256,
+    }
   }
 
   useEffect(async () => {
     let api = new Api()
     let formId = props.match.params.id
 
-    let docTitle = "Edit Aircraft"
+    let docTitle = "Edit State / Province"
     if (!formId) {
-      docTitle = "Create Aircraft"
+      docTitle = "Create State / Province"
     } else if (isView) {
-      docTitle = "Aircraft Details"
+      docTitle = "State / Province Details"
     }
 
     dispatch(
@@ -77,7 +67,7 @@ function AircraftForm(props) {
           },
           {
             link: backUrl,
-            text: "Aircrafts",
+            text: "States / Provinces",
           },
           {
             text: docTitle,
@@ -141,59 +131,77 @@ function AircraftForm(props) {
     >
       <FormHorizontal>
         <FormInputControl
-          label="Aircraft Name *"
-          value={form.aircraft_name}
-          name="aircraft_name"
-          onChange={(e) => setForm({ ...form, aircraft_name: e.target.value })}
+          label="State / Province Name *"
+          value={form.state_province_name}
+          name="state_province_name"
+          cl="3"
+          cr="6"
+          onChange={(e) => setForm({ ...form, state_province_name: e.target.value })}
           disabled={isView || loading}
           type="text"
           minLength="1"
-          maxLength="64"
+          maxLength="256"
         />
-        <FormInputControl
-          value={form.model}
-          name="model"
-          onChange={(e) => setForm({ ...form, model: e.target.value })}
-          label="Model"
+        <FormInputSelectAjax
+          label="Subdivision Category"
+          value={form.state_province_category_id}
+          name="state_province_category_id"
+          cl="3"
+          cr="6"
+          endpoint="/master/state-province-categories"
+          column="state_province_category_name"
+          onChange={(e) =>
+            setForm({ ...form, state_province_category_id: e.target.value || null })
+          }
           disabled={isView || loading}
-          type="text"
-          minLength="1"
-          maxLength="64"
+          type="select"
+          minLength="0"
+          maxLength="9999"
+        >
+          <option value="">None</option>
+          <option value="51d5cb0c-c29e-4682-af20-4b95bc5c6ee3">
+          Subdivision Category 1
+          </option>
+          <option value="51d5cb0c-c29e-4682-af20-4b95bc5c6ee4">
+          Subdivision Category 2
+          </option>
+        </FormInputSelectAjax>
+        <FormInputSelectAjax
+          label="Country"
+          value={form.country_id}
+          name="country_id"
+          cl="3"
+          cr="6"
+          endpoint="/master/countries"
+          column="country_name"
+          onChange={(e) =>
+            setForm({ ...form, country_id: e.target.value || null })
+          }
+          disabled={isView || loading}
+          type="select"
+          minLength="0"
+          maxLength="9999"
         />
+        
       </FormHorizontal>
 
       <FormHorizontal>
         <FormInputControl
-          value={form.aircraft_code}
-          name="aircraft_code"
-          onChange={(e) => setForm({ ...form, aircraft_code: e.target.value })}
-          hint="Aircraft Code"
+          label="State / Province Code *"
+          value={form.state_province_code}
+          name="state_province_code"
           cl="4"
           cr="6"
+          onChange={(e) => setForm({ ...form, state_province_code: e.target.value })}
           disabled={isView || loading}
-          type="number"
-          label="Aircraft Code *"
-          minLength="3"
-          maxLength="3"
-          hint="Aircraft code maximum 3 characters"
-        />
-        <FormInputControl
-          value={form.icao_code}
-          name="icao_code"
-          onChange={(e) => setForm({ ...form, icao_code: e.target.value })}
-          hint="ICAO Code"
-          cl="4"
-          cr="6"
-          disabled={isView || loading}
-          label="ICAO Code *"
           type="text"
-          minLength="4"
-          maxLength="4"
-          hint="ICAO Code maximum 4 characters"
+          minLength="1"
+          maxLength="8"
+          hint="State / Province code maximum 2 characters"
         />
       </FormHorizontal>
     </FormBuilder>
   )
 }
 
-export default withRouter(AircraftForm)
+export default withRouter(ProvinceForm)

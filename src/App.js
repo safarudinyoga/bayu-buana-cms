@@ -47,6 +47,12 @@ import AirlineForm from "views/airline/form"
 import AirlineTable from "views/airline/table"
 import AircraftTable from "views/aircraft/table"
 import AircraftForm from "views/aircraft/form"
+import CountryForm from "views/country/form"
+import CountryTable from "views/country/table"
+import ProvinceForm from "views/province/form"
+import ProvinceTable from "views/province/table"
+import CityForm from "views/city/form"
+import CityTable from "views/city/table"
 import DashboardWrapper from "components/wrapper/dashboard"
 import Dashboard from "views/dashboard"
 
@@ -185,6 +191,24 @@ function App() {
           </Route>
           <Route path="/master/aircraft/form/:id?">
             <AircraftForm />
+          </Route>
+          <Route exact path="/master/countries">
+            <CountryTable />
+          </Route>
+          <Route path="/master/countries/form/:id?">
+            <CountryForm />
+          </Route>
+          <Route exact path="/master/provinces">
+            <ProvinceTable />
+          </Route>
+          <Route path="/master/provinces/form/:id?">
+            <ProvinceForm />
+          </Route>
+          <Route exact path="/master/cities">
+            <CityTable />
+          </Route>
+          <Route path="/master/cities/form/:id?">
+            <CityForm />
           </Route>
         </Switch>
       </DashboardWrapper>

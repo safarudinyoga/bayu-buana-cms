@@ -34,12 +34,12 @@ function RegionForm(props) {
   const validationRules = {
     region_code: {
       required: true,
-      minlength: 0,
+      minlength: 2,
       maxlength: 2,
     },
     region_name: {
       required: true,
-      minlength: 0,
+      minlength: 1,
       maxlength: 256,
     },
   }
@@ -60,12 +60,11 @@ function RegionForm(props) {
         title: docTitle,
         breadcrumbs: [
           {
-            link: "/",
             text: "Master Data Management",
           },
           {
             link: backUrl,
-            text: "Region",
+            text: "Regions",
           },
           {
             text: docTitle,
@@ -137,7 +136,7 @@ function RegionForm(props) {
           onChange={(e) => setForm({ ...form, region_name: e.target.value })}
           disabled={isView || loading}
           type="text"
-          minLength="0"
+          minLength="1"
           maxLength="256"
         />
       </FormHorizontal>
@@ -152,7 +151,7 @@ function RegionForm(props) {
           onChange={(e) => setForm({ ...form, region_code: e.target.value })}
           disabled={isView || loading}
           type="text"
-          minLength="0"
+          minLength="2"
           maxLength="2"
           hint="Region code maximum 2 characters"
         />

@@ -4,14 +4,15 @@ import Api from "config/api"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
 import FormBuilder from "components/form/builder"
+import FormInputSelectAjax from "components/form/input-select-ajax"
 import useQuery from "lib/query"
 import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
 
-const endpoint = "/master/aircraft"
-const backUrl = "/master/aircraft"
+const endpoint = "/master/cities"
+const backUrl = "/master/cities"
 
-function AircraftForm(props) {
+function CityForm(props) {
   let dispatch = useDispatch()
 
   const isView = useQuery().get("action") === "view"
@@ -20,52 +21,43 @@ function AircraftForm(props) {
   const [translations, setTranslations] = useState([])
   const [id, setId] = useState(null)
   const [form, setForm] = useState({
-    id: "",
-    aircraft_name: "",
-    model: "",
-    icao_code: "",
-    aircraft_code: "",
+    city_code: "",
+    city_name: "",
+    country_id: "",
   })
   const translationFields = [
     {
-      label: "Aircraft Name",
-      name: "aircraft_name",
+      label: "City Name",
+      name: "city_name",
       type: "text",
     },
   ]
 
   const validationRules = {
-    aircraft_name: {
+    city_code: {
       required: true,
-      min: 1,
-      max: 64,
+      minlength: 3,
+      maxlength: 3,
     },
-    model: {
+    city_name: {
       required: true,
-      min: 1,
-      max: 64,
+      minlength: 1,
+      maxlength: 64,
     },
-    icao_code: {
-      required: true,
-      min: 4,
-      max: 4,
-    },
-    aircraft_code: {
-      required: true,
-      min: 4,
-      max: 4,
-    },
+    country_id: {
+      required: true
+    }
   }
 
   useEffect(async () => {
     let api = new Api()
     let formId = props.match.params.id
 
-    let docTitle = "Edit Aircraft"
+    let docTitle = "Edit City"
     if (!formId) {
-      docTitle = "Create Aircraft"
+      docTitle = "Create City"
     } else if (isView) {
-      docTitle = "Aircraft Details"
+      docTitle = "City Details"
     }
 
     dispatch(
@@ -77,7 +69,7 @@ function AircraftForm(props) {
           },
           {
             link: backUrl,
-            text: "Aircrafts",
+            text: "Cities",
           },
           {
             text: docTitle,
@@ -141,59 +133,53 @@ function AircraftForm(props) {
     >
       <FormHorizontal>
         <FormInputControl
-          label="Aircraft Name *"
-          value={form.aircraft_name}
-          name="aircraft_name"
-          onChange={(e) => setForm({ ...form, aircraft_name: e.target.value })}
+          label="City Name *"
+          value={form.city_name}
+          name="city_name"
+          cl="3"
+          cr="6"
+          onChange={(e) => setForm({ ...form, city_name: e.target.value })}
           disabled={isView || loading}
           type="text"
           minLength="1"
           maxLength="64"
         />
-        <FormInputControl
-          value={form.model}
-          name="model"
-          onChange={(e) => setForm({ ...form, model: e.target.value })}
-          label="Model"
+        <FormInputSelectAjax
+          label="Country"
+          value={form.country_id}
+          name="country_id"
+          cl="3"
+          cr="6"
+          endpoint="/master/countries"
+          column="country_name"
+          onChange={(e) =>
+            setForm({ ...form, country_id: e.target.value || null })
+          }
           disabled={isView || loading}
-          type="text"
-          minLength="1"
-          maxLength="64"
+          type="select"
+          minLength="0"
+          maxLength="9999"
         />
+        
       </FormHorizontal>
 
       <FormHorizontal>
         <FormInputControl
-          value={form.aircraft_code}
-          name="aircraft_code"
-          onChange={(e) => setForm({ ...form, aircraft_code: e.target.value })}
-          hint="Aircraft Code"
+          label="City Code *"
+          value={form.city_code}
+          name="city_code"
           cl="4"
           cr="6"
+          onChange={(e) => setForm({ ...form, city_code: e.target.value })}
           disabled={isView || loading}
-          type="number"
-          label="Aircraft Code *"
+          type="text"
           minLength="3"
           maxLength="3"
-          hint="Aircraft code maximum 3 characters"
-        />
-        <FormInputControl
-          value={form.icao_code}
-          name="icao_code"
-          onChange={(e) => setForm({ ...form, icao_code: e.target.value })}
-          hint="ICAO Code"
-          cl="4"
-          cr="6"
-          disabled={isView || loading}
-          label="ICAO Code *"
-          type="text"
-          minLength="4"
-          maxLength="4"
-          hint="ICAO Code maximum 4 characters"
+          hint="City code maximum 3 characters"
         />
       </FormHorizontal>
     </FormBuilder>
   )
 }
 
-export default withRouter(AircraftForm)
+export default withRouter(CityForm)

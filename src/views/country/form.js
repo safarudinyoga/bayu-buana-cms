@@ -8,12 +8,11 @@ import FormInputSelectAjax from "components/form/input-select-ajax"
 import useQuery from "lib/query"
 import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
-import FormInputWrapper from "components/form/input-wrapper"
 
-const endpoint = "/master/airlines"
-const backUrl = "/master/airlines"
+const endpoint = "/master/countries"
+const backUrl = "/master/countries"
 
-function AirlineForm(props) {
+function CountryForm(props) {
   let dispatch = useDispatch()
 
   const isView = useQuery().get("action") === "view"
@@ -22,52 +21,58 @@ function AirlineForm(props) {
   const [translations, setTranslations] = useState([])
   const [id, setId] = useState(null)
   const [form, setForm] = useState({
-    airline_code: "",
+    country_access_code: "",
+    country_alpha_3_code: "",
+    country_code: "",
+    country_name: "",
+    country_native_name: "",
+    currency_id: "",
+    language_id: "",
+    nationality: "",
     numeric_code: "",
-    airline_name: "",
-    company_id: "",
-    airline_asset: {
-      multimedia_description_id: null,
-      multimedia_description: {
-        url: "",
-      },
-    },
+    region_id: "",
+    timezone_id: ""
   })
   const translationFields = [
     {
-      label: "Airline Name",
-      name: "airline_name",
+      label: "Country Name",
+      name: "country_name",
       type: "text",
     },
   ]
 
   const validationRules = {
-    airline_code: {
+    country_code: {
       required: true,
-      minlength: 2,
+      minlength: 0,
       maxlength: 2,
+    },
+    country_alpha_3_code: {
+      required: false,
+      minlength: 0,
+      maxlength: 3,
     },
     numeric_code: {
       required: false,
-      minlength: 3,
+      minlength: 0,
       maxlength: 3,
     },
-    airline_name: {
+    country_name: {
       required: true,
-      minlength: 1,
+      minlength: 0,
       maxlength: 64,
-    },
+    }
   }
 
   useEffect(async () => {
     let api = new Api()
     let formId = props.match.params.id
 
-    let docTitle = "Edit Airline"
+    let docTitle = "Edit Country"
     if (!formId) {
-      docTitle = "Create Airline"
+      docTitle = "Create Country"
     } else if (isView) {
-      docTitle = "Airline Details"
+      docTitle = "Country Details"
     }
 
     dispatch(
@@ -75,11 +80,12 @@ function AirlineForm(props) {
         title: docTitle,
         breadcrumbs: [
           {
+            link: "/",
             text: "Master Data Management",
           },
           {
             link: backUrl,
-            text: "Airlines",
+            text: "Country",
           },
           {
             text: docTitle,
@@ -115,9 +121,6 @@ function AirlineForm(props) {
     setLoading(true)
     let api = new Api()
     try {
-      if (!form.company_id) {
-          form.company_id = null
-      }
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
       for (let i in translated) {
@@ -130,24 +133,6 @@ function AirlineForm(props) {
       setLoading(false)
       props.history.push(backUrl)
     }
-  }
-
-  const doUpload = async (e) => {
-    try {
-      let api = new Api()
-      let payload = new FormData()
-      payload.append("files", e.target.files[0])
-      let res = await api.post("/multimedia/files", payload)
-      if (res.data) {
-        setForm({
-          ...form,
-          airline_asset: {
-            multimedia_description_id: res.data.id,
-            multimedia_description: res.data,
-          },
-        })
-      }
-    } catch (e) {}
   }
 
   return (
@@ -164,27 +149,27 @@ function AirlineForm(props) {
     >
       <FormHorizontal>
         <FormInputControl
-          label="Airline Name *"
-          value={form.airline_name}
-          name="airline_name"
+          label="Country Name *"
+          value={form.country_name}
+          name="country_name"
           cl="3"
           cr="6"
-          onChange={(e) => setForm({ ...form, airline_name: e.target.value })}
+          onChange={(e) => setForm({ ...form, country_name: e.target.value })}
           disabled={isView || loading}
           type="text"
-          minLength="1"
+          minLength="0"
           maxLength="64"
         />
         <FormInputSelectAjax
-          label="Company Name"
-          value={form.company_id}
-          name="company_id"
+          label="Time Zone"
+          value={form.timezone_id}
+          name="timezone_id"
           cl="3"
           cr="6"
-          endpoint="/master/companies"
-          column="company_name"
+          endpoint="/master/time-zones"
+          column="zone_name"
           onChange={(e) =>
-            setForm({ ...form, company_id: e.target.value || null })
+            setForm({ ...form, timezone_id: e.target.value || null })
           }
           disabled={isView || loading}
           type="select"
@@ -193,52 +178,110 @@ function AirlineForm(props) {
         >
           <option value="">None</option>
           <option value="51d5cb0c-c29e-4682-af20-4b95bc5c6ee3">
-            Company 1
+            Time Zone 1
           </option>
           <option value="51d5cb0c-c29e-4682-af20-4b95bc5c6ee4">
-            Company 2
+            Time Zone 2
           </option>
         </FormInputSelectAjax>
-        <FormInputWrapper label="Airline Logo" cl="3" cr="4">
-          <label className="card card-default shadow-none border">
-            <div className="card-body">
-              {!isView ? <i className="fas fa-edit text-muted img-edit-icon"></i> : null}
-              <input
-                type="file"
-                onChange={doUpload}
-                className="d-none"
-                disabled={isView}
-                accept=".png,.jpg,.jpeg"
-              />
-              {form.airline_asset &&
-              form.airline_asset.multimedia_description &&
-              form.airline_asset.multimedia_description.url ? (
-                <img
-                  src={form.airline_asset.multimedia_description.url}
-                  className="img-fluid"
-                  alt="airline"
-                />
-              ) : (
-                ""
-              )}
-            </div>
-          </label>
-        </FormInputWrapper>
+        <FormInputSelectAjax
+          label="Currency"
+          value={form.currency_id}
+          name="currency_id"
+          cl="3"
+          cr="6"
+          endpoint="/master/currency"
+          column="currency_name"
+          onChange={(e) =>
+            setForm({ ...form, currency_id: e.target.value || null })
+          }
+          disabled={isView || loading}
+          type="select"
+          minLength="0"
+          maxLength="9999"
+        >
+          <option value="">None</option>
+          <option value="51d5cb0c-c29e-4682-af20-4b95bc5c6ee3">
+            Currency 1
+          </option>
+          <option value="51d5cb0c-c29e-4682-af20-4b95bc5c6ee4">
+          Currency 2
+          </option>
+        </FormInputSelectAjax>
+
+        <FormInputControl
+          label="Nationality"
+          value={form.nationality}
+          name="nationality"
+          cl="3"
+          cr="6"
+          onChange={(e) => setForm({ ...form, nationality: e.target.value })}
+          disabled={isView || loading}
+          type="text"
+          minLength="0"
+          maxLength="64"
+        />
+        <FormInputSelectAjax
+          label="Region *"
+          value={form.region_id}
+          name="region_id"
+          cl="3"
+          cr="6"
+          endpoint="/master/regions"
+          column="region_name"
+          onChange={(e) =>
+            setForm({ ...form, region_id: e.target.value || null })
+          }
+          disabled={isView || loading}
+          type="select"
+          minLength="0"
+          maxLength="9999"
+        />
+        <FormInputSelectAjax
+          label="Default Language"
+          value={form.country_access_code}
+          name="country_access_code"
+          cl="3"
+          cr="6"
+          endpoint="/master/languages"
+          column="language_name"
+          onChange={(e) =>
+            setForm({ ...form, country_access_code: e.target.value || null })
+          }
+          disabled={isView || loading}
+          type="select"
+          minLength="0"
+          maxLength="9999"
+        />
+        
       </FormHorizontal>
 
       <FormHorizontal>
         <FormInputControl
-          label="Airline Code *"
-          value={form.airline_code}
-          name="airline_code"
+          label="Country Code *"
+          value={form.country_code}
+          name="country_code"
           cl="4"
           cr="6"
-          onChange={(e) => setForm({ ...form, airline_code: e.target.value })}
+          onChange={(e) => setForm({ ...form, country_code: e.target.value })}
           disabled={isView || loading}
           type="text"
-          minLength="2"
+          minLength="0"
           maxLength="2"
-          hint="Airline code maximum 2 characters"
+          hint="Country code maximum 2 characters"
+        />
+        <FormInputControl
+          label="Country Alpha 3 Code"
+          value={form.country_alpha_3_code}
+          name="country_alpha_3_code"
+          cl="4"
+          cr="6"
+          onChange={(e) => setForm({ ...form, country_alpha_3_code: e.target.value })}
+          disabled={isView || loading}
+          type="text"
+          minLength="0"
+          maxLength="3"
+          hint="Country Alpha 3 Code maximum 3 characters"
         />
         <FormInputControl
           label="Numeric Code"
@@ -249,7 +292,7 @@ function AirlineForm(props) {
           onChange={(e) => setForm({ ...form, numeric_code: e.target.value })}
           disabled={isView || loading}
           type="text"
-          minLength="3"
+          minLength="0"
           maxLength="3"
           hint="Numeric code maximum 3 characters"
         />
@@ -258,4 +301,4 @@ function AirlineForm(props) {
   )
 }
 
-export default withRouter(AirlineForm)
+export default withRouter(CountryForm)

@@ -7,6 +7,7 @@ import FormBuilder from "components/form/builder"
 import useQuery from "lib/query"
 import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
+import FormInputWrapper from "components/form/input-wrapper"
 
 const endpoint = "/master/languages"
 const backUrl = "/master/languages"
@@ -24,6 +25,12 @@ function LanguageForm(props) {
     language_alpha_3_code: "",
     language_name: "",
     language_native_name: "",
+    language_asset: {
+      multimedia_description_id: null,
+      multimedia_description: {
+        url: "",
+      },
+    },
   })
   const translationFields = [
     {
@@ -41,22 +48,22 @@ function LanguageForm(props) {
   const validationRules = {
     language_code: {
       required: true,
-      minlength: 0,
+      minlength: 2,
       maxlength: 2,
     },
     language_alpha_3_code: {
       required: false,
-      minlength: 0,
+      minlength: 3,
       maxlength: 3,
     },
     language_name: {
       required: true,
-      minlength: 0,
+      minlength: 1,
       maxlength: 256,
     },
     language_native_name: {
       required: true,
-      minlength: 0,
+      minlength: 1,
       maxlength: 256,
     },
   }
@@ -77,7 +84,6 @@ function LanguageForm(props) {
         title: docTitle,
         breadcrumbs: [
           {
-            link: "/",
             text: "Master Data Management",
           },
           {
@@ -132,6 +138,24 @@ function LanguageForm(props) {
     }
   }
 
+  const doUpload = async (e) => {
+    try {
+      let api = new Api()
+      let payload = new FormData()
+      payload.append("files", e.target.files[0])
+      let res = await api.post("/multimedia/files", payload)
+      if (res.data) {
+        setForm({
+          ...form,
+          language_asset: {
+            multimedia_description_id: res.data.id,
+            multimedia_description: res.data,
+          },
+        })
+      }
+    } catch (e) {}
+  }
+
   return (
     <FormBuilder
       onBuild={(el) => setFormBuilder(el)}
@@ -154,7 +178,7 @@ function LanguageForm(props) {
           onChange={(e) => setForm({ ...form, language_name: e.target.value })}
           disabled={isView || loading}
           type="text"
-          minLength="0"
+          minLength="1"
           maxLength="256"
         />
         <FormInputControl
@@ -168,9 +192,34 @@ function LanguageForm(props) {
           }
           disabled={isView || loading}
           type="text"
-          minLength="0"
+          minLength="1"
           maxLength="256"
         />
+        <FormInputWrapper label="Flag" cl="3" cr="4">
+          <label className="card card-default shadow-none border">
+            <div className="card-body">
+              {!isView ? <i className="fas fa-edit text-muted img-edit-icon"></i> : null}
+              <input
+                type="file"
+                onChange={doUpload}
+                className="d-none"
+                disabled={isView}
+                accept=".png,.jpg,.jpeg"
+              />
+              {form.language_asset &&
+              form.language_asset.multimedia_description &&
+              form.language_asset.multimedia_description.url ? (
+                <img
+                  src={form.language_asset.multimedia_description.url}
+                  className="img-fluid"
+                  alt="language"
+                />
+              ) : (
+                ""
+              )}
+            </div>
+          </label>
+        </FormInputWrapper>
       </FormHorizontal>
 
       <FormHorizontal>
@@ -183,7 +232,7 @@ function LanguageForm(props) {
           onChange={(e) => setForm({ ...form, language_code: e.target.value })}
           disabled={isView || loading}
           type="text"
-          minLength="0"
+          minLength="2"
           maxLength="2"
           hint="Language code maximum 2 characters"
         />
@@ -198,7 +247,7 @@ function LanguageForm(props) {
           }
           disabled={isView || loading}
           type="text"
-          minLength="0"
+          minLength="3"
           maxLength="3"
           hint="Language Alpha 3 Code maximum 3 characters"
         />

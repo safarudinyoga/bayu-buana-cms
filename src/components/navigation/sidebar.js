@@ -58,12 +58,12 @@ export default class Sidebar extends Component {
                       <p>Cabin Type</p>
                     </Link>
                   </li> */}
-                  {/* <li className="nav-item">
+                  <li className="nav-item">
                     <Link to="/master/cities" className="nav-link">
                       <p>City</p>
                     </Link>
                   </li>
-                  <li className="nav-item">
+                  {/* <li className="nav-item">
                     <Link to="/master/countries" className="nav-link">
                       <p>Country</p>
                     </Link>
@@ -93,11 +93,11 @@ export default class Sidebar extends Component {
                       <p>Hotel Supplier</p>
                     </Link>
                   </li> */}
-                  {/* <li className="nav-item">
+                  <li className="nav-item">
                     <Link to="/master/languages" className="nav-link">
                       <p>Language</p>
                     </Link>
-                  </li> */}
+                  </li>
                   {/* <li className="nav-item">
                     <Link to="/master/location-categories" className="nav-link">
                       <p>Location Category</p>
@@ -119,15 +119,15 @@ export default class Sidebar extends Component {
                     </Link>
                   </li> */}
                   <li className="nav-item">
+                    <Link to="/master/provinces" className="nav-link">
+                      <p>State / Province</p>
+                    </Link>
+                  </li>
+                  <li className="nav-item">
                     <Link to="/master/regions" className="nav-link">
                       <p>Region</p>
                     </Link>
                   </li>
-                  {/* <li className="nav-item">
-                    <Link to="/master/provinces" className="nav-link">
-                      <p>State / Province</p>
-                    </Link>
-                  </li> */}
                   {/* <li className="nav-item">
                     <Link to="/master/room-location-types" className="nav-link">
                       <p>Room Location Type</p>
@@ -143,7 +143,6 @@ export default class Sidebar extends Component {
                       <p>Special Request</p>
                     </Link>
                   </li>
-                  
                   <li className="nav-item">
                     <Link to="/master/travel-purposes" className="nav-link">
                       <p>Travel Purpose</p>
