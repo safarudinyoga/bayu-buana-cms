@@ -19,6 +19,8 @@ function ProvinceForm(props) {
   const [formBuilder, setFormBuilder] = useState(null)
   const [loading, setLoading] = useState(true)
   const [translations, setTranslations] = useState([])
+  const [subdivisionData, setSubdivisionData] = useState([])
+  const [countryData, setCountryData] = useState([])
   const [id, setId] = useState(null)
   const [form, setForm] = useState({
     country_id: "",
@@ -79,6 +81,12 @@ function ProvinceForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
+        if (res.data.state_province_category) {
+          setSubdivisionData([{...res.data.state_province_category, text: res.data.state_province_category.state_province_category_name}])
+        }
+        if (res.data.country) {
+          setCountryData([{...res.data.country, text: res.data.country.country_name}])
+        }
       } catch (e) {}
 
       try {
@@ -157,22 +165,13 @@ function ProvinceForm(props) {
           cr="6"
           endpoint="/master/state-province-categories"
           column="state_province_category_name"
+          data={subdivisionData}
           onChange={(e) =>
             setForm({ ...form, state_province_category_id: e.target.value || null })
           }
           disabled={isView || loading}
           type="select"
-          minLength="0"
-          maxLength="9999"
-        >
-          <option value="">None</option>
-          <option value="51d5cb0c-c29e-4682-af20-4b95bc5c6ee3">
-          Subdivision Category 1
-          </option>
-          <option value="51d5cb0c-c29e-4682-af20-4b95bc5c6ee4">
-          Subdivision Category 2
-          </option>
-        </FormInputSelectAjax>
+        />
         <FormInputSelectAjax
           label="Country"
           value={form.country_id}
@@ -181,13 +180,12 @@ function ProvinceForm(props) {
           cr="6"
           endpoint="/master/countries"
           column="country_name"
+          data={countryData}
           onChange={(e) =>
             setForm({ ...form, country_id: e.target.value || null })
           }
           disabled={isView || loading}
           type="select"
-          minLength="0"
-          maxLength="9999"
         />
         
       </FormHorizontal>

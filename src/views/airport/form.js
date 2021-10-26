@@ -19,6 +19,7 @@ function AirportForm(props) {
   const [formBuilder, setFormBuilder] = useState(null)
   const [loading, setLoading] = useState(true)
   const [translations, setTranslations] = useState([])
+  const [cityData, setCityData] = useState([])
   const [id, setId] = useState(null)
   const [form, setForm] = useState({
     airport_code: "",
@@ -85,6 +86,9 @@ function AirportForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
+        if (res.data.city) {
+          setCityData([{...res.data.city, text: res.data.city.city_name}])
+        }
       } catch (e) {}
 
       try {
@@ -156,6 +160,7 @@ function AirportForm(props) {
           cr="6"
           endpoint="/master/cities"
           column="city_name"
+          data={cityData}
           onChange={(e) => setForm({ ...form, city_id: e.target.value || null })}
           disabled={isView || loading}
           type="select"
