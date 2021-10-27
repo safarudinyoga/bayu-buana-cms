@@ -3,7 +3,7 @@ import "bootstrap/dist/js/bootstrap.js"
 import "admin-lte/dist/css/adminlte.css"
 import "admin-lte"
 import "App.css"
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom"
+import {BrowserRouter as Router, Route, Switch} from "react-router-dom"
 // route list
 import TripTypeForm from "views/trip_type/form"
 import TripTypeTable from "views/trip_type/table"
@@ -55,6 +55,8 @@ import CityForm from "views/city/form"
 import CityTable from "views/city/table"
 import DashboardWrapper from "components/wrapper/dashboard"
 import Dashboard from "views/dashboard"
+import ZoneTable from "views/zone/table"
+import ZoneForm from "views/zone/form"
 
 function App() {
   document.title = "Bayu Buana"
@@ -209,6 +211,12 @@ function App() {
           </Route>
           <Route path="/master/cities/form/:id?">
             <CityForm />
+          </Route>
+          <Route exact path="/master/zones">
+            <ZoneTable />
+          </Route>
+          <Route path="/master/zones/form/:id?">
+            <ZoneForm />
           </Route>
         </Switch>
       </DashboardWrapper>
