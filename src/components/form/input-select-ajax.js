@@ -25,7 +25,6 @@ export default class FormInputSelectAjax extends Component {
       try {
         let config = {
           theme: "bootstrap4",
-          data: this.props.data,
         }
         if (!this.props.children) {
           config.ajax = {
@@ -66,19 +65,22 @@ export default class FormInputSelectAjax extends Component {
           .select2(config)
         if (this.select2) {
           this.select2.on("select2:select", (e) => {
-              if (!this.props.onChange) {
-                  return
-              }
+            if (!this.props.onChange) {
+              return
+            }
             if ($(input).attr("multiple")) {
-                this.props.onChange(e, this.select2.select2('data')[0])
+              this.props.onChange(e, this.select2.select2("data")[0])
             } else {
-                this.props.onChange(e, this.select2.select2('data'))
+              this.props.onChange(e, this.select2.select2("data"))
             }
           })
+
+          this.setInitialData()
+
           setTimeout(() => {
             if (this.props.value) {
-                this.select2.val(this.props.value).trigger("change")
-              }
+              this.select2.val(this.props.value).trigger("change")
+            }
           }, 200)
         }
       } catch (e) {
@@ -88,16 +90,22 @@ export default class FormInputSelectAjax extends Component {
   }
 
   componentDidUpdate() {
-    if (this.inProgress) {
-      return
-    }
-    setTimeout(() => {
-        this.inProgress = false
-        try {
-            this.select2.destroy()
-            this.init()
-        } catch (e) {}
-    }, 300)
+    this.setInitialData()
+  }
+
+  setInitialData() {
+    try {
+      if (this.props.data && this.props.data.length) {
+        this.select2.empty()
+        for (let i in this.props.data) {
+          let item = this.props.data[i]
+          this.select2.append(
+            '<option value="' + item.id + '">' + item.text + "</option>",
+          )
+        }
+        this.select2.trigger("change")
+      }
+    } catch (e) {}
   }
 
   componentWillUnmount() {
@@ -106,11 +114,11 @@ export default class FormInputSelectAjax extends Component {
 
   destroy() {
     try {
-        let el = $(this.select.current)
-        if (el.is(".select2-hidden-accessible")) {
-          el.off().select2("destroy")
-        }
-      } catch (e) {}
+      let el = $(this.select.current)
+      if (el.is(".select2-hidden-accessible")) {
+        el.off().select2("destroy")
+      }
+    } catch (e) {}
   }
 
   render() {

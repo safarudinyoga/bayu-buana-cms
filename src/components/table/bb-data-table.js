@@ -538,7 +538,7 @@ class BBDataTable extends Component {
 
   deleteAction(id) {
     this.api
-      .delete(this.api.env.endpoint(this.props.endpoint) + "/" + id)
+      .delete(this.props.endpoint + "/" + id)
       .finally(() => {
         this.dt.ajax.reload()
       })

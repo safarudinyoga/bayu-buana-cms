@@ -19,7 +19,7 @@ function CityForm(props) {
   const [formBuilder, setFormBuilder] = useState(null)
   const [loading, setLoading] = useState(true)
   const [translations, setTranslations] = useState([])
-  const [countryData, setCountryData] = useState([])
+  const [initialCountry, setInitialCountry] = useState([])
   const [id, setId] = useState(null)
   const [form, setForm] = useState({
     city_code: "",
@@ -83,7 +83,7 @@ function CityForm(props) {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
         if (res.data.country) {
-            setCountryData([{...res.data.country, text: res.data.country.country_name}])
+            setInitialCountry([{...res.data.country, text: res.data.country.country_name}])
         }
       } catch (e) {}
 
@@ -159,7 +159,7 @@ function CityForm(props) {
           cr="6"
           endpoint="/master/countries"
           column="country_name"
-          data={countryData}
+          data={initialCountry}
           onChange={(e) =>
             setForm({ ...form, country_id: e.target.value || null })
           }
