@@ -19,7 +19,6 @@ function AirportForm(props) {
   const [formBuilder, setFormBuilder] = useState(null)
   const [loading, setLoading] = useState(true)
   const [translations, setTranslations] = useState([])
-  const [cityData, setCityData] = useState([])
   const [id, setId] = useState(null)
   const [initialCity, setInitialCity] = useState([])
   const [form, setForm] = useState({
