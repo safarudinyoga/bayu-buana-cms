@@ -9,43 +9,62 @@ import useQuery from "lib/query"
 import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
 
-const endpoint = "/master/state-provinces"
-const backUrl = "/master/provinces"
+const endpoint = "/master/rating-types"
+const backUrl = "/master/rating-types"
 
-function ProvinceForm(props) {
+function CountryForm(props) {
   let dispatch = useDispatch()
 
   const isView = useQuery().get("action") === "view"
   const [formBuilder, setFormBuilder] = useState(null)
   const [loading, setLoading] = useState(true)
   const [translations, setTranslations] = useState([])
-  const [subdivisionData, setSubdivisionData] = useState([])
-  const [countryData, setCountryData] = useState([])
+
   const [id, setId] = useState(null)
   const [form, setForm] = useState({
-    country_id: "",
-    state_province_category_id: "",
-    state_province_code: "",
-    state_province_name: "",
+    provider: "",
+    rating_symbol: "",
+    rating_type_code: 0,
+    rating_type_name: "",
+    scale: 0,
   })
   const translationFields = [
     {
-      label: "State / Province Name",
-      name: "state_province_name",
+      label: "Rating Type Name",
+      name: "rating_type_name",
       type: "text",
     },
   ]
 
   const validationRules = {
-    state_province_code: {
+    provider: {
       required: true,
       minlength: 1,
-      maxlength: 8,
+      maxlength: 64,
     },
-    state_province_name: {
+
+    rating_symbol: {
       required: true,
       minlength: 1,
-      maxlength: 256,
+      maxlength: 64,
+    },
+
+    rating_type_code: {
+      required: true,
+      min: 0,
+      max: 99,
+    },
+
+    rating_type_name: {
+      required: true,
+      minlength: 1,
+      maxlength: 64,
+    },
+
+    scale: {
+      required: true,
+      min: 0,
+      max: 99,
     },
   }
 
@@ -53,11 +72,11 @@ function ProvinceForm(props) {
     let api = new Api()
     let formId = props.match.params.id
 
-    let docTitle = "Edit State / Province"
+    let docTitle = "Edit Rating Type"
     if (!formId) {
-      docTitle = "Create State / Province"
+      docTitle = "Create Rating Type"
     } else if (isView) {
-      docTitle = "State / Province Details"
+      docTitle = "Rating Type Details"
     }
 
     dispatch(
@@ -69,7 +88,7 @@ function ProvinceForm(props) {
           },
           {
             link: backUrl,
-            text: "States / Provinces",
+            text: "Rating Types",
           },
           {
             text: docTitle,
@@ -81,20 +100,6 @@ function ProvinceForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
-        if (res.data.state_province_category) {
-          setSubdivisionData([
-            {
-              ...res.data.state_province_category,
-              text: res.data.state_province_category
-                .state_province_category_name,
-            },
-          ])
-        }
-        if (res.data.country) {
-          setCountryData([
-            { ...res.data.country, text: res.data.country.country_name },
-          ])
-        }
       } catch (e) {}
 
       try {
@@ -119,12 +124,17 @@ function ProvinceForm(props) {
     setLoading(true)
     let api = new Api()
     try {
-      if (!form.country_id) {
-        form.country_id = null
+      if (!form.provider) {
+        form.provider = null
       }
-
-      if (!form.state_province_category_id) {
-        form.state_province_category_id = null
+      if (!form.rating_symbol) {
+        form.rating_symbol = null
+      }
+      if (!form.rating_type_code) {
+        form.rating_type_code = null
+      }
+      if (!form.rating_type_name) {
+        form.rating_type_name = null
       }
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
@@ -154,73 +164,86 @@ function ProvinceForm(props) {
     >
       <FormHorizontal>
         <FormInputControl
-          label="State / Province Name *"
-          value={form.state_province_name}
-          name="state_province_name"
+          label="Rating Type Name *"
+          value={form.rating_type_name}
+          name="rating_type_name"
           cl="3"
           cr="6"
           onChange={(e) =>
-            setForm({ ...form, state_province_name: e.target.value })
+            setForm({ ...form, rating_type_name: e.target.value })
           }
           disabled={isView || loading}
           type="text"
           minLength="1"
-          maxLength="256"
+          maxLength="64"
         />
-        <FormInputSelectAjax
-          label="Subdivision Category"
-          value={form.state_province_category_id}
-          name="state_province_category_id"
+
+        <FormInputControl
+          label="Provider"
+          value={form.provider}
+          name="provider"
           cl="3"
           cr="6"
-          endpoint="/master/state-province-categories"
-          column="state_province_category_name"
-          data={subdivisionData}
+          onChange={(e) => setForm({ ...form, provider: e.target.value })}
+          disabled={isView || loading}
+          type="text"
+          minLength="1"
+          maxLength="64"
+        />
+        <FormInputControl
+          label="Rating Symbol *"
+          value={form.rating_symbol}
+          name="rating_symbol"
+          cl="3"
+          cr="6"
+          column="name"
           onChange={(e) =>
-            setForm({
-              ...form,
-              state_province_category_id: e.target.value || null,
-            })
+            setForm({ ...form, rating_symbol: e.target.value || null })
           }
           disabled={isView || loading}
           type="select"
-        />
-        <FormInputSelectAjax
-          label="Country"
-          value={form.country_id}
-          name="country_id"
+          minLength="0"
+          maxLength="9999"
+        >
+          <option>Please Choose</option>
+          <option value="star">star</option>
+        </FormInputControl>
+
+        <FormInputControl
+          label="Scale *"
+          value={form.scale}
+          name="sclae"
           cl="3"
           cr="6"
-          endpoint="/master/countries"
-          column="country_name"
-          data={countryData}
           onChange={(e) =>
-            setForm({ ...form, country_id: e.target.value || null })
+            setForm({ ...form, scale: parseInt(e.target.value) })
           }
           disabled={isView || loading}
-          type="select"
+          type="number"
+          min="0"
+          max="99"
         />
       </FormHorizontal>
 
       <FormHorizontal>
         <FormInputControl
-          label="State / Province Code *"
-          value={form.state_province_code}
-          name="state_province_code"
+          label="Rating Type Code *"
+          value={form.rating_type_code}
+          name="rating_type_code"
           cl="4"
           cr="6"
           onChange={(e) =>
-            setForm({ ...form, state_province_code: e.target.value })
+            setForm({ ...form, rating_type_code: parseInt(e.target.value) })
           }
           disabled={isView || loading}
-          type="text"
-          minLength="1"
-          maxLength="8"
-          hint="State / Province code maximum 2 characters"
+          type="number"
+          min="0"
+          max="99"
+          hint="Rating type code maximum 2 characters"
         />
       </FormHorizontal>
     </FormBuilder>
   )
 }
 
-export default withRouter(ProvinceForm)
+export default withRouter(CountryForm)

@@ -53,6 +53,12 @@ import ProvinceForm from "views/province/form"
 import ProvinceTable from "views/province/table"
 import CityForm from "views/city/form"
 import CityTable from "views/city/table"
+import RatingTypeTable from "views/rating_type/table"
+import RatingTypeForm from "views/rating_type/form"
+
+import HotelAmenityTypeTable from "views/hotel_amenity_type/table"
+import HotelAmenityTypeForm from "views/hotel_amenity_type/form"
+
 import DashboardWrapper from "components/wrapper/dashboard"
 import Dashboard from "views/dashboard"
 
@@ -209,6 +215,20 @@ function App() {
           </Route>
           <Route path="/master/cities/form/:id?">
             <CityForm />
+          </Route>
+
+          <Route exact path="/master/rating-types">
+            <RatingTypeTable />
+          </Route>
+          <Route path="/master/rating-types/form/:id?">
+            <RatingTypeForm />
+          </Route>
+
+          <Route exact path="/master/hotel-amenity-types">
+            <HotelAmenityTypeTable />
+          </Route>
+          <Route path="/master/hotel-amenity-types/form/:id?">
+            <HotelAmenityTypeForm />
           </Route>
         </Switch>
       </DashboardWrapper>

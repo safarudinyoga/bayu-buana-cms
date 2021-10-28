@@ -42,7 +42,7 @@ export default function ProvinceTable() {
       },
       {
         title: "Country",
-        data: "country.country_name"
+        data: "country.country_name",
       },
       {
         searchable: false,

@@ -153,6 +153,16 @@ export default class Sidebar extends Component {
                       <p>Trip Type</p>
                     </Link>
                   </li> */}
+                  <li className="nav-item">
+                    <Link to="/master/rating-types" className="nav-link">
+                      <p>Rating Type</p>
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link to="/master/hotel-amenity-types" className="nav-link">
+                      <p>Hotel Amenity Type</p>
+                    </Link>
+                  </li>
                 </ul>
               </li>
             </ul>

@@ -35,7 +35,7 @@ function CountryForm(props) {
     nationality: "",
     numeric_code: "",
     region_id: "",
-    timezone_id: ""
+    timezone_id: "",
   })
   const translationFields = [
     {
@@ -72,8 +72,8 @@ function CountryForm(props) {
       maxlength: 64,
     },
     region_id: {
-      required: true
-    }
+      required: true,
+    },
   }
 
   useEffect(async () => {
@@ -109,16 +109,24 @@ function CountryForm(props) {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
         if (res.data.timezone) {
-          setTimezoneData([{...res.data.timezone, text: res.data.timezone.timezone_name}])
+          setTimezoneData([
+            { ...res.data.timezone, text: res.data.timezone.timezone_name },
+          ])
         }
         if (res.data.currency) {
-          setCurrencyData([{...res.data.currency, text: res.data.currency.currency_name}])
+          setCurrencyData([
+            { ...res.data.currency, text: res.data.currency.currency_name },
+          ])
         }
         if (res.data.region) {
-          setRegionData([{...res.data.region, text: res.data.region.region_name}])
+          setRegionData([
+            { ...res.data.region, text: res.data.region.region_name },
+          ])
         }
         if (res.data.language) {
-          setLanguageData([{...res.data.language, text: res.data.language.language_name}])
+          setLanguageData([
+            { ...res.data.language, text: res.data.language.language_name },
+          ])
         }
       } catch (e) {}
 
@@ -281,7 +289,6 @@ function CountryForm(props) {
           minLength="0"
           maxLength="9999"
         />
-        
       </FormHorizontal>
 
       <FormHorizontal>
@@ -304,7 +311,9 @@ function CountryForm(props) {
           name="country_alpha_3_code"
           cl="4"
           cr="6"
-          onChange={(e) => setForm({ ...form, country_alpha_3_code: e.target.value })}
+          onChange={(e) =>
+            setForm({ ...form, country_alpha_3_code: e.target.value })
+          }
           disabled={isView || loading}
           type="text"
           minLength="3"
