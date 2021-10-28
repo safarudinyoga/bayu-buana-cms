@@ -30,14 +30,14 @@ export default class Sidebar extends Component {
                 </Link>
                 <ul className="nav nav-treeview">
                   {/* all sidebar described here */}
-                  {/* <li className="nav-item">
+                  <li className="nav-item">
                     <Link
                       to="/master/age-qualifying-types"
                       className="nav-link"
                     >
                       <p>Age Qualifying Type</p>
                     </Link>
-                  </li> */}
+                  </li>
                   <li className="nav-item">
                     <Link to="/master/aircrafts" className="nav-link">
                       <p>Aircraft</p>

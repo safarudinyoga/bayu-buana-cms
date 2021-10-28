@@ -10,14 +10,13 @@ export default function AgeQualifyingTypeTable() {
   useEffect(() => {
     dispatch(
       setUIParams({
-        title: "Age Qualifying Type",
+        title: "Age Qualifying Types",
         breadcrumbs: [
           {
-            link: "/",
             text: "Master Data Management",
           },
           {
-            text: "Age Qualifying Type",
+            text: "Age Qualifying Types",
           },
         ],
       }),
@@ -25,7 +24,7 @@ export default function AgeQualifyingTypeTable() {
   }, [])
 
   let params = {
-    title: "Age Qualifying Type",
+    title: "Age Qualifying Types",
     baseRoute: "/master/age-qualifying-types/form",
     endpoint: "/master/age-qualifying-types",
     deleteEndpoint: "/master/batch-actions/delete/age-qualifying-types",
