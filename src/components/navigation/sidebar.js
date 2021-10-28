@@ -68,11 +68,12 @@ export default class Sidebar extends Component {
                       <p>Country</p>
                     </Link>
                   </li>
-                  {/* <li className="nav-item">
+                  <li className="nav-item">
                     <Link to="/master/currencies" className="nav-link">
                       <p>Currency</p>
                     </Link>
                   </li>
+                  {/* 
                   <li className="nav-item">
                     <Link to="/master/destination-groups" className="nav-link">
                       <p>Destination Group</p>
