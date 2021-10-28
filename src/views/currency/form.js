@@ -25,11 +25,11 @@ function CurrencyForm(props) {
     numeric_code: "",
     currency_name: "",
     currency_symbol: "",
-    position: "",
+    position: "Before",
     minor_unit_name: "",
-    minor_unit: 0,
-    standard_precision: 0,
-    price_precision: 0,
+    minor_unit: "",
+    standard_precision: "",
+    price_precision: "",
   })
   const translationFields = [
     {
@@ -47,22 +47,22 @@ function CurrencyForm(props) {
   const validationRules = {
     currency_code: {
       required: true,
-      minlength: 0,
+      minlength: 3,
       maxlength: 3,
     },
     numeric_code: {
       required: true,
-      minlength: 0,
+      minlength: 3,
       maxlength: 3,
     },
     currency_name: {
       required: true,
-      minlength: 0,
+      minlength: 1,
       maxlength: 64,
     },
     currency_symbol: {
       required: true,
-      minlength: 0,
+      minlength: 1,
       maxlength: 64,
     },
     position: {},
@@ -100,12 +100,11 @@ function CurrencyForm(props) {
         title: docTitle,
         breadcrumbs: [
           {
-            link: "/",
             text: "Master Data Management",
           },
           {
             link: backUrl,
-            text: "Currency",
+            text: "Currencies",
           },
           {
             text: docTitle,
@@ -141,6 +140,18 @@ function CurrencyForm(props) {
     setLoading(true)
     let api = new Api()
     try {
+      if (!form.minor_unit_name) {
+        form.minor_unit_name = null
+      }
+      if (!form.minor_unit) {
+        form.minor_unit = null
+      }
+      if (!form.standard_precision) {
+        form.standard_precision = null
+      }
+      if (!form.price_precision) {
+        form.price_precision = null
+      }
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
       for (let i in translated) {
@@ -177,7 +188,7 @@ function CurrencyForm(props) {
           onChange={(e) => setForm({ ...form, currency_name: e.target.value })}
           disabled={isView || loading}
           type="text"
-          minLength="0"
+          minLength="1"
           maxLength="64"
         />
         <FormInputControl
@@ -191,7 +202,7 @@ function CurrencyForm(props) {
           }
           disabled={isView || loading}
           type="text"
-          minLength="0"
+          minLength="1"
           maxLength="64"
         />
         <FormInputWrapper label="Symbol Position" cl="3" cr="6">
@@ -202,6 +213,7 @@ function CurrencyForm(props) {
               name="position"
               id="csp-1"
               value="Before"
+              disabled={isView}
               checked={form.position === "Before"}
               onChange={(e) => setForm({ ...form, position: e.target.value })}
             />
@@ -216,6 +228,7 @@ function CurrencyForm(props) {
               name="position"
               id="csp-2"
               value="After"
+              disabled={isView}
               checked={form.position === "After"}
               onChange={(e) => setForm({ ...form, position: e.target.value })}
             />
@@ -235,7 +248,7 @@ function CurrencyForm(props) {
           }
           disabled={isView || loading}
           type="text"
-          minLength="0"
+          minLength="1"
           maxLength="64"
         />
         <FormInputControl
@@ -290,7 +303,7 @@ function CurrencyForm(props) {
           onChange={(e) => setForm({ ...form, currency_code: e.target.value })}
           disabled={isView || loading}
           type="text"
-          minLength="0"
+          minLength="3"
           maxLength="3"
           hint="Currency code maximum 3 characters"
         />
@@ -303,7 +316,7 @@ function CurrencyForm(props) {
           onChange={(e) => setForm({ ...form, numeric_code: e.target.value })}
           disabled={isView || loading}
           type="text"
-          minLength="0"
+          minLength="3"
           maxLength="3"
           hint="Numeric Code maximum 3 characters"
         />
