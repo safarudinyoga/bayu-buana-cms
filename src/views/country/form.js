@@ -56,6 +56,11 @@ function CountryForm(props) {
       minlength: 3,
       maxlength: 3,
     },
+    country_access_code: {
+      required: false,
+      minlength: 3,
+      maxlength: 3,
+    },
     numeric_code: {
       required: false,
       minlength: 3,
@@ -319,6 +324,19 @@ function CountryForm(props) {
           minLength="3"
           maxLength="3"
           hint="Country Alpha 3 Code maximum 3 characters"
+        />
+        <FormInputControl
+          label="Country Access Code"
+          value={form.country_access_code}
+          name="country_access_code"
+          cl="4"
+          cr="6"
+          onChange={(e) => setForm({ ...form, country_access_code: e.target.value })}
+          disabled={isView || loading}
+          type="text"
+          minLength="3"
+          maxLength="3"
+          hint="Country Access Code maximum 3 characters"
         />
         <FormInputControl
           label="Numeric Code"
