@@ -120,13 +120,18 @@ export default class Sidebar extends Component {
                     </Link>
                   </li> */}
                   <li className="nav-item">
-                    <Link to="/master/provinces" className="nav-link">
-                      <p>State / Province</p>
+                    <Link to="/master/regions" className="nav-link">
+                      <p>Region</p>
                     </Link>
                   </li>
                   <li className="nav-item">
-                    <Link to="/master/regions" className="nav-link">
-                      <p>Region</p>
+                    <Link to="/master/special-requests" className="nav-link">
+                      <p>Special Request</p>
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link to="/master/provinces" className="nav-link">
+                      <p>State / Province</p>
                     </Link>
                   </li>
                   {/* <li className="nav-item">
@@ -137,11 +142,6 @@ export default class Sidebar extends Component {
                   <li className="nav-item">
                     <Link to="/master/room-view-types" className="nav-link">
                       <p>Room View Type</p>
-                    </Link>
-                  </li>
-                  <li className="nav-item">
-                    <Link to="/master/special-requests" className="nav-link">
-                      <p>Special Request</p>
                     </Link>
                   </li>
                   <li className="nav-item">
