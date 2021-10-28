@@ -116,7 +116,7 @@ class TableHeader extends Component {
                   type="button"
                   className="btn btn-link advanced-options-btn float-right-sm"
                 >
-                  Advanced Options <span className="raquo-down">&raquo;</span>
+                  Advanced Options {this.state.showFilter ? <span className="raquo-down"> &laquo;</span> : <span className="raquo-down"> &raquo;</span>}
                 </button>
               </div>
             </div>
