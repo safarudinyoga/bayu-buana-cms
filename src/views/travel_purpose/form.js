@@ -34,12 +34,12 @@ function TravelPurposeForm(props) {
   const validationRules = {
     travel_purpose_code: {
       required: true,
-      minlength: 0,
+      minlength: 1,
       maxlength: 36,
     },
     travel_purpose_name: {
       required: true,
-      minlength: 0,
+      minlength: 1,
       maxlength: 256,
     },
   }
@@ -60,12 +60,11 @@ function TravelPurposeForm(props) {
         title: docTitle,
         breadcrumbs: [
           {
-            link: "/",
             text: "Master Data Management",
           },
           {
             link: backUrl,
-            text: "Travel Purpose",
+            text: "Travel Purposes",
           },
           {
             text: docTitle,
@@ -139,7 +138,7 @@ function TravelPurposeForm(props) {
           }
           disabled={isView || loading}
           type="text"
-          minLength="0"
+          minLength="1"
           maxLength="256"
         />
       </FormHorizontal>
@@ -156,7 +155,7 @@ function TravelPurposeForm(props) {
           }
           disabled={isView || loading}
           type="text"
-          minLength="0"
+          minLength="1"
           maxLength="36"
           hint="Travel purpose code maximum 36 characters"
         />

@@ -134,6 +134,11 @@ export default class Sidebar extends Component {
                       <p>State / Province</p>
                     </Link>
                   </li>
+                  <li className="nav-item">
+                    <Link to="/master/travel-purposes" className="nav-link">
+                      <p>Travel Purpose</p>
+                    </Link>
+                  </li>
                   {/* <li className="nav-item">
                     <Link to="/master/room-location-types" className="nav-link">
                       <p>Room Location Type</p>
@@ -142,11 +147,6 @@ export default class Sidebar extends Component {
                   <li className="nav-item">
                     <Link to="/master/room-view-types" className="nav-link">
                       <p>Room View Type</p>
-                    </Link>
-                  </li>
-                  <li className="nav-item">
-                    <Link to="/master/travel-purposes" className="nav-link">
-                      <p>Travel Purpose</p>
                     </Link>
                   </li>
                   <li className="nav-item">
