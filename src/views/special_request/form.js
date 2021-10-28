@@ -34,12 +34,12 @@ function SpecialRequestForm(props) {
   const validationRules = {
     special_request_code: {
       required: true,
-      minlength: 0,
+      minlength: 1,
       maxlength: 36,
     },
     special_request_name: {
       required: true,
-      minlength: 0,
+      minlength: 1,
       maxlength: 256,
     },
   }
@@ -60,12 +60,11 @@ function SpecialRequestForm(props) {
         title: docTitle,
         breadcrumbs: [
           {
-            link: "/",
             text: "Master Data Management",
           },
           {
             link: backUrl,
-            text: "Special Request",
+            text: "Special Requests",
           },
           {
             text: docTitle,
@@ -139,7 +138,7 @@ function SpecialRequestForm(props) {
           }
           disabled={isView || loading}
           type="text"
-          minLength="0"
+          minLength="1"
           maxLength="256"
         />
       </FormHorizontal>
@@ -156,7 +155,7 @@ function SpecialRequestForm(props) {
           }
           disabled={isView || loading}
           type="text"
-          minLength="0"
+          minLength="1"
           maxLength="36"
           hint="Special request code maximum 36 characters"
         />

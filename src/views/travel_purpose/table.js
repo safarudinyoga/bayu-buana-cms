@@ -10,14 +10,13 @@ export default function TravelPurposeTable() {
   useEffect(() => {
     dispatch(
       setUIParams({
-        title: "Travel Purpose",
+        title: "Travel Purposes",
         breadcrumbs: [
           {
-            link: "/",
             text: "Master Data Management",
           },
           {
-            text: "Travel Purpose",
+            text: "Travel Purposes",
           },
         ],
       }),
@@ -25,7 +24,7 @@ export default function TravelPurposeTable() {
   }, [])
 
   let params = {
-    title: "Travel Purpose",
+    title: "Travel Purposes",
     baseRoute: "/master/travel-purposes/form",
     endpoint: "/master/travel-purposes",
     deleteEndpoint: "/master/batch-actions/delete/travel-purposes",

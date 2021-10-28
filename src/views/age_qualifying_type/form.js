@@ -20,7 +20,7 @@ function AgeQualifyingTypeForm(props) {
   const [translations, setTranslations] = useState([])
   const [id, setId] = useState(null)
   const [form, setForm] = useState({
-    age_qualifying_type_code: 0,
+    age_qualifying_type_code: "",
     age_qualifying_type_name: "",
   })
   const translationFields = [
@@ -39,7 +39,7 @@ function AgeQualifyingTypeForm(props) {
     },
     age_qualifying_type_name: {
       required: true,
-      minlength: 0,
+      minlength: 1,
       maxlength: 256,
     },
   }
@@ -60,12 +60,11 @@ function AgeQualifyingTypeForm(props) {
         title: docTitle,
         breadcrumbs: [
           {
-            link: "/",
             text: "Master Data Management",
           },
           {
             link: backUrl,
-            text: "Age Qualifying Type",
+            text: "Age Qualifying Types",
           },
           {
             text: docTitle,
@@ -139,7 +138,7 @@ function AgeQualifyingTypeForm(props) {
           }
           disabled={isView || loading}
           type="text"
-          minLength="0"
+          minLength="1"
           maxLength="256"
         />
       </FormHorizontal>
