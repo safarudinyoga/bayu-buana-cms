@@ -179,10 +179,11 @@ function LanguageForm(props) {
     >
       <FormHorizontal>
         <FormInputControl
-          label="Language Name *"
+          label="Language Name"
+          labelRequired="label-required" 
           value={form.language_name}
           name="language_name"
-          cl="3"
+          cl="4"
           cr="6"
           onChange={(e) => setForm({ ...form, language_name: e.target.value })}
           disabled={isView || loading}
@@ -191,10 +192,11 @@ function LanguageForm(props) {
           maxLength="256"
         />
         <FormInputControl
-          label="Language Native Name *"
+          label="Language Native Name"
+          labelRequired="label-required" 
           value={form.language_native_name}
           name="language_native_name"
-          cl="3"
+          cl="4"
           cr="6"
           onChange={(e) =>
             setForm({ ...form, language_native_name: e.target.value })
@@ -204,7 +206,7 @@ function LanguageForm(props) {
           minLength="1"
           maxLength="256"
         />
-        <FormInputWrapper label="Flag" cl="3" cr="4">
+        <FormInputWrapper label="Flag" cl="4" cr="4">
           <label className="card card-default shadow-none border">
             <div className="card-body">
               {!isView ? <i className="fas fa-edit text-muted img-edit-icon"></i> : null}
@@ -233,11 +235,12 @@ function LanguageForm(props) {
 
       <FormHorizontal>
         <FormInputControl
-          label="Language Code *"
+          label="Language Code"
+          labelRequired="label-required" 
           value={form.language_code}
           name="language_code"
-          cl="6"
-          cr="6"
+          cl="7"
+          cr="5"
           onChange={(e) => setForm({ ...form, language_code: e.target.value })}
           disabled={isView || loading}
           type="text"
@@ -249,8 +252,8 @@ function LanguageForm(props) {
           label="Language Alpha 3 Code"
           value={form.language_alpha_3_code}
           name="language_alpha_3_code"
-          cl="6"
-          cr="6"
+          cl="7"
+          cr="5"
           onChange={(e) =>
             setForm({ ...form, language_alpha_3_code: e.target.value })
           }

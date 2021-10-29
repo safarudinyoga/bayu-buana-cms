@@ -20,7 +20,6 @@ function AirportForm(props) {
   const [loading, setLoading] = useState(true)
   const [translations, setTranslations] = useState([])
   const [id, setId] = useState(null)
-  const [initialCity, setInitialCity] = useState([])
   const [form, setForm] = useState({
     airport_code: "",
     icao_code: "",
@@ -86,9 +85,6 @@ function AirportForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
-        if (res.data.city) {
-            setInitialCity([{...res.data.city, text: res.data.city.city_name}])
-        }
       } catch (e) {}
 
       try {
@@ -141,7 +137,8 @@ function AirportForm(props) {
     >
       <FormHorizontal>
         <FormInputControl
-          label="Airport Name *"
+          label="Airport Name"
+          labelRequired="label-required" 
           value={form.airport_name}
           name="airport_name"
           cl="3"
@@ -160,7 +157,6 @@ function AirportForm(props) {
           cr="6"
           endpoint="/master/cities"
           column="city_name"
-          data={initialCity}
           onChange={(e) => setForm({ ...form, city_id: e.target.value || null })}
           disabled={isView || loading}
           type="select"
@@ -169,7 +165,8 @@ function AirportForm(props) {
 
       <FormHorizontal>
         <FormInputControl
-          label="Airport Code *"
+          label="Airport Code"
+          labelRequired="label-required" 
           value={form.airport_code}
           name="airport_code"
           cl="4"

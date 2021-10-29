@@ -30,7 +30,7 @@ select.bg-dark-grey > option {
 .form-group label {
   font-weight: normal !important;
 }
-.form-group.required .lebel-required:after { 
+.form-group.required .label-required:after { 
   color: #D91C1C;
   content: "*";
   position: absolute;

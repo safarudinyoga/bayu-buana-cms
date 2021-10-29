@@ -128,10 +128,11 @@ function AgeQualifyingTypeForm(props) {
     >
       <FormHorizontal>
         <FormInputControl
-          label="Age Qualifying Type Name *"
+          label="Age Qualifying Type Name"
+          labelRequired="label-required" 
           value={form.age_qualifying_type_name}
           name="age_qualifying_type_name"
-          cl="4"
+          cl="5"
           cr="6"
           onChange={(e) =>
             setForm({ ...form, age_qualifying_type_name: e.target.value })
@@ -145,11 +146,12 @@ function AgeQualifyingTypeForm(props) {
 
       <FormHorizontal>
         <FormInputControl
-          label="Age Qualifying Type Code *"
+          label="Age Qualifying Type Code"
+          labelRequired="label-required" 
           value={form.age_qualifying_type_code}
           name="age_qualifying_type_code"
-          cl="6"
-          cr="6"
+          cl="7"
+          cr="5"
           onChange={(e) =>
             setForm({ ...form, age_qualifying_type_code: parseInt(e.target.value) })
           }

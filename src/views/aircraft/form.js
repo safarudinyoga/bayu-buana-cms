@@ -130,7 +130,6 @@ function AircraftForm(props) {
     }
   }
 
-  const newLocal = true
   return (
     <FormBuilder
       onBuild={(el) => setFormBuilder(el)}
@@ -146,7 +145,7 @@ function AircraftForm(props) {
       <FormHorizontal>
         <FormInputControl
           label={"Aircraft Name"}  
-          lebelRequired="lebel-required"       
+          labelRequired="label-required"       
           value={form.aircraft_name}
           name="aircraft_name"
           onChange={(e) => setForm({ ...form, aircraft_name: e.target.value })}
@@ -170,10 +169,10 @@ function AircraftForm(props) {
       <FormHorizontal>
         <FormInputControl
           value={form.aircraft_code}
-          lebelRequired="lebel-required"
+          labelRequired="label-required" 
           name="aircraft_code"
           onChange={(e) => setForm({ ...form, aircraft_code: e.target.value })}
-          cl="4"
+          cl="5"
           cr="6"
           disabled={isView || loading}
           type="number"
@@ -184,10 +183,10 @@ function AircraftForm(props) {
         />
         <FormInputControl
           value={form.icao_code}
-          lebelRequired="lebel-required"
+          labelRequired="label-required" 
           name="icao_code"
           onChange={(e) => setForm({ ...form, icao_code: e.target.value })}
-          cl="4"
+          cl="5"
           cr="6"
           disabled={isView || loading}
           label="ICAO Code"

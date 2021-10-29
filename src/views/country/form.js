@@ -19,10 +19,6 @@ function CountryForm(props) {
   const [formBuilder, setFormBuilder] = useState(null)
   const [loading, setLoading] = useState(true)
   const [translations, setTranslations] = useState([])
-  const [timezoneData, setTimezoneData] = useState([])
-  const [currencyData, setCurrencyData] = useState([])
-  const [regionData, setRegionData] = useState([])
-  const [languageData, setLanguageData] = useState([])
   const [id, setId] = useState(null)
   const [form, setForm] = useState({
     country_access_code: "",
@@ -113,18 +109,6 @@ function CountryForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
-        if (res.data.timezone) {
-          setTimezoneData([{...res.data.timezone, text: res.data.timezone.timezone_name}])
-        }
-        if (res.data.currency) {
-          setCurrencyData([{...res.data.currency, text: res.data.currency.currency_name}])
-        }
-        if (res.data.region) {
-          setRegionData([{...res.data.region, text: res.data.region.region_name}])
-        }
-        if (res.data.language) {
-          setLanguageData([{...res.data.language, text: res.data.language.language_name}])
-        }
       } catch (e) {}
 
       try {
@@ -195,7 +179,8 @@ function CountryForm(props) {
     >
       <FormHorizontal>
         <FormInputControl
-          label="Country Name *"
+          label="Country Name"
+          labelRequired="label-required" 
           value={form.country_name}
           name="country_name"
           cl="3"
@@ -214,7 +199,6 @@ function CountryForm(props) {
           cr="6"
           endpoint="/master/timezones"
           column="zone_name"
-          data={timezoneData}
           onChange={(e) =>
             setForm({ ...form, timezone_id: e.target.value || null })
           }
@@ -231,7 +215,6 @@ function CountryForm(props) {
           cr="6"
           endpoint="/master/currencies"
           column="currency_name"
-          data={currencyData}
           onChange={(e) =>
             setForm({ ...form, currency_id: e.target.value || null })
           }
@@ -253,14 +236,14 @@ function CountryForm(props) {
           maxLength="64"
         />
         <FormInputSelectAjax
-          label="Region *"
+          label="Region"
+          labelRequired="label-required" 
           value={form.region_id}
           name="region_id"
           cl="3"
           cr="6"
           endpoint="/master/regions"
           column="region_name"
-          data={regionData}
           onChange={(e) =>
             setForm({ ...form, region_id: e.target.value || null })
           }
@@ -277,7 +260,6 @@ function CountryForm(props) {
           cr="6"
           endpoint="/master/languages"
           column="language_name"
-          data={languageData}
           onChange={(e) =>
             setForm({ ...form, language_id: e.target.value || null })
           }
@@ -291,11 +273,12 @@ function CountryForm(props) {
 
       <FormHorizontal>
         <FormInputControl
-          label="Country Code *"
+          label="Country Code"
+          labelRequired="label-required" 
           value={form.country_code}
           name="country_code"
-          cl="4"
-          cr="6"
+          cl="7"
+          cr="5"
           onChange={(e) => setForm({ ...form, country_code: e.target.value })}
           disabled={isView || loading}
           type="text"
@@ -307,8 +290,8 @@ function CountryForm(props) {
           label="Country Alpha 3 Code"
           value={form.country_alpha_3_code}
           name="country_alpha_3_code"
-          cl="4"
-          cr="6"
+          cl="7"
+          cr="5"
           onChange={(e) => setForm({ ...form, country_alpha_3_code: e.target.value })}
           disabled={isView || loading}
           type="text"
@@ -320,8 +303,8 @@ function CountryForm(props) {
           label="Country Access Code"
           value={form.country_access_code}
           name="country_access_code"
-          cl="4"
-          cr="6"
+          cl="7"
+          cr="5"
           onChange={(e) => setForm({ ...form, country_access_code: e.target.value })}
           disabled={isView || loading}
           type="text"
@@ -333,8 +316,8 @@ function CountryForm(props) {
           label="Numeric Code"
           value={form.numeric_code}
           name="numeric_code"
-          cl="4"
-          cr="6"
+          cl="7"
+          cr="5"
           onChange={(e) => setForm({ ...form, numeric_code: e.target.value })}
           disabled={isView || loading}
           type="text"
