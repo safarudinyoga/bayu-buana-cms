@@ -53,6 +53,11 @@ export default class Sidebar extends Component {
                       <p>Airport</p>
                     </Link>
                   </li>
+                  <li className="nav-item">
+                    <Link to="/master/attraction-category" className="nav-link">
+                      <p>Attraction Category</p>
+                    </Link>
+                  </li>
                   {/* <li className="nav-item">
                     <Link to="/master/cabin-types" className="nav-link">
                       <p>Cabin Type</p>
@@ -95,6 +100,19 @@ export default class Sidebar extends Component {
                     </Link>
                   </li> */}
                   <li className="nav-item">
+                    <Link to="/master/hotel-amenity-types" className="nav-link">
+                      <p>Hotel Amenity Type</p>
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link
+                      to="/master/hotel-amenity-category"
+                      className="nav-link"
+                    >
+                      <p>Hotel Amenity Category</p>
+                    </Link>
+                  </li>
+                  <li className="nav-item">
                     <Link to="/master/languages" className="nav-link">
                       <p>Language</p>
                     </Link>
@@ -119,6 +137,11 @@ export default class Sidebar extends Component {
                       <p>Property Category</p>
                     </Link>
                   </li> */}
+                  <li className="nav-item">
+                    <Link to="/master/rating-types" className="nav-link">
+                      <p>Rating Type</p>
+                    </Link>
+                  </li>
                   <li className="nav-item">
                     <Link to="/master/regions" className="nav-link">
                       <p>Region</p>
@@ -154,16 +177,6 @@ export default class Sidebar extends Component {
                       <p>Trip Type</p>
                     </Link>
                   </li> */}
-                  <li className="nav-item">
-                    <Link to="/master/rating-types" className="nav-link">
-                      <p>Rating Type</p>
-                    </Link>
-                  </li>
-                  <li className="nav-item">
-                    <Link to="/master/hotel-amenity-types" className="nav-link">
-                      <p>Hotel Amenity Type</p>
-                    </Link>
-                  </li>
                 </ul>
               </li>
             </ul>

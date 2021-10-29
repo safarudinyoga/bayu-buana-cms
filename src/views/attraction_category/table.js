@@ -5,18 +5,18 @@ import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
 import { renderColumn } from "lib/translation"
 
-export default function HotelAmenityTable() {
+export default function AttractionCategoryTable() {
   let dispatch = useDispatch()
   useEffect(() => {
     dispatch(
       setUIParams({
-        title: "Hotel Amenity Type",
+        title: "Attraction Category",
         breadcrumbs: [
           {
             text: "Master Data Management",
           },
           {
-            text: "Hotel Amenity Type",
+            text: "Attraction Category",
           },
         ],
       }),
@@ -24,26 +24,22 @@ export default function HotelAmenityTable() {
   }, [])
 
   let params = {
-    title: "Hotel Amenity Type",
-    baseRoute: "/master/hotel-amenity-types/form",
-    endpoint: "/master/hotel-amenity-types",
-    deleteEndpoint: "/master/batch-actions/delete/hotel-amenity-types",
-    activationEndpoint: "/master/batch-actions/activate/hotel-amenity-types",
+    title: "Attraction Category",
+    baseRoute: "/master/attraction-category/form",
+    endpoint: "/master/attraction-categories",
+    deleteEndpoint: "/master/batch-actions/delete/attraction-categories",
+    activationEndpoint: "/master/batch-actions/activate/attraction-categories",
     deactivationEndpoint:
-      "/master/batch-actions/deactivate/hotel-amenity-types",
+      "/master/batch-actions/deactivate/attraction-categories",
     columns: [
       {
-        title: "Hotel Amenity Code",
-        data: "hotel_amenity_type_code",
-      },
-      {
-        title: "Hotel Amenity Name",
-        data: "hotel_amenity_type_name",
-        render: renderColumn("hotel_amenity_type", "hotel_amenity_type_name"),
+        title: "Attraction Category Name",
+        data: "attraction_category_name",
+        render: renderColumn("attraction_category", "attraction_category_name"),
       },
       {
         title: "Icon",
-        data: "airline_asset.multimedia_description.url",
+        data: "attraction_category_asset.multimedia_description.url",
         searchable: false,
         orderable: false,
         render: (val) => {
@@ -61,8 +57,8 @@ export default function HotelAmenityTable() {
         render: rowStatus,
       },
       {
-        title: "Translated Hotel Amenity Name",
-        data: "hotel_amenity_type_translation.hotel_amenity_type_name",
+        title: "Translated Currency Name",
+        data: "attraction_category_translation.attraction_category_name",
         visible: false,
       },
     ],

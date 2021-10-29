@@ -4,7 +4,6 @@ import Api from "config/api"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
 import FormBuilder from "components/form/builder"
-import FormInputSelectAjax from "components/form/input-select-ajax"
 import useQuery from "lib/query"
 import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
@@ -12,7 +11,7 @@ import { setUIParams } from "redux/ui-store"
 const endpoint = "/master/rating-types"
 const backUrl = "/master/rating-types"
 
-function CountryForm(props) {
+function RatingTypeForm(props) {
   let dispatch = useDispatch()
 
   const isView = useQuery().get("action") === "view"
@@ -246,4 +245,4 @@ function CountryForm(props) {
   )
 }
 
-export default withRouter(CountryForm)
+export default withRouter(RatingTypeForm)

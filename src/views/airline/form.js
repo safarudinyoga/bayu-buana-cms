@@ -116,7 +116,7 @@ function AirlineForm(props) {
     let api = new Api()
     try {
       if (!form.company_id) {
-          form.company_id = null
+        form.company_id = null
       }
       if (!form.numeric_code) {
         form.numeric_code = null
@@ -208,7 +208,9 @@ function AirlineForm(props) {
         <FormInputWrapper label="Airline Logo" cl="3" cr="4">
           <label className="card card-default shadow-none border">
             <div className="card-body">
-              {!isView ? <i className="fas fa-edit text-muted img-edit-icon"></i> : null}
+              {!isView ? (
+                <i className="fas fa-edit text-muted img-edit-icon"></i>
+              ) : null}
               <input
                 type="file"
                 onChange={doUpload}

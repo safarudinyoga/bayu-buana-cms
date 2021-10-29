@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
 import { renderColumn } from "lib/translation"
 
-export default function CountryTable() {
+export default function RatingTypeTable() {
   let dispatch = useDispatch()
   useEffect(() => {
     dispatch(

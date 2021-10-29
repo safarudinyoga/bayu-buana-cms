@@ -144,7 +144,12 @@ function TripTypeForm(props) {
           maxLength="256"
         />
 
-        <FormInputWrapper label="Is Default" cl="3" cr="6" hint="Set is default">
+        <FormInputWrapper
+          label="Is Default"
+          cl="3"
+          cr="6"
+          hint="Set is default"
+        >
           <div className="form-check form-check-inline">
             <input
               className="form-check-input"

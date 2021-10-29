@@ -4,14 +4,15 @@ import Api from "config/api"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
 import FormBuilder from "components/form/builder"
+import FormInputWrapper from "components/form/input-wrapper"
 import useQuery from "lib/query"
 import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
 
-const endpoint = "/master/hotel-amenity-types"
-const backUrl = "/master/hotel-amenity-types"
+const endpoint = "/master/attraction-categories"
+const backUrl = "/master/attraction-category"
 
-function HotelAmenityForm(props) {
+function AttractionCategoryForm(props) {
   let dispatch = useDispatch()
 
   const isView = useQuery().get("action") === "view"
@@ -20,27 +21,35 @@ function HotelAmenityForm(props) {
   const [translations, setTranslations] = useState([])
   const [id, setId] = useState(null)
   const [form, setForm] = useState({
-    hotel_amenity_type_code: 0,
-    hotel_amenity_type_name: "",
+    attraction_category_name: "",
+    is_default: false,
+    description: "",
+    attraction_category_asset: {
+      multimedia_description_id: null,
+      multimedia_description: {
+        url: "",
+      },
+    },
   })
   const translationFields = [
     {
-      label: "Hotel Amenity Type Name",
-      name: "hotel_amenity_type_name",
+      label: "Attraction Category Name",
+      name: "attraction_category_name",
       type: "text",
     },
   ]
 
   const validationRules = {
-    hotel_amenity_type_code: {
-      required: true,
-      min: 0,
-      max: 99,
-    },
-    hotel_amenity_type_name: {
+    attraction_category_name: {
       required: true,
       minlength: 1,
       maxlength: 64,
+    },
+    is_default: {},
+    description: {
+      required: true,
+      minlength: 0,
+      maxlength: 256,
     },
   }
 
@@ -48,11 +57,11 @@ function HotelAmenityForm(props) {
     let api = new Api()
     let formId = props.match.params.id
 
-    let docTitle = "Edit Hotel Amenity Type"
+    let docTitle = "Edit Attraction Category"
     if (!formId) {
-      docTitle = "Create Hotel Amenity Type"
+      docTitle = "Create Attraction Category"
     } else if (isView) {
-      docTitle = "Hotel Amenity Type Details"
+      docTitle = "Attraction Category Details"
     }
 
     dispatch(
@@ -64,7 +73,7 @@ function HotelAmenityForm(props) {
           },
           {
             link: backUrl,
-            text: "Hotel Amenity Type",
+            text: "Attraction Category",
           },
           {
             text: docTitle,
@@ -100,12 +109,16 @@ function HotelAmenityForm(props) {
     setLoading(true)
     let api = new Api()
     try {
-      if (!form.hotel_amenity_type_code) {
-        form.hotel_amenity_type_code = null
+      if (!form.attraction_category_name) {
+        form.attraction_category_name = null
       }
-      if (!form.hotel_amenity_type_name) {
-        form.hotel_amenity_type_name = null
+      if (!form.description) {
+        form.description = null
       }
+      if (!form.attraction_category_asset.multimedia_description_id) {
+        form.attraction_category_asset.multimedia_description_id = null
+      }
+
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
       for (let i in translated) {
@@ -119,7 +132,6 @@ function HotelAmenityForm(props) {
       props.history.push(backUrl)
     }
   }
-
   const doUpload = async (e) => {
     try {
       let api = new Api()
@@ -129,7 +141,7 @@ function HotelAmenityForm(props) {
       if (res.data) {
         setForm({
           ...form,
-          airline_asset: {
+          attraction_category_asset: {
             multimedia_description_id: res.data.id,
             multimedia_description: res.data,
           },
@@ -137,7 +149,6 @@ function HotelAmenityForm(props) {
       }
     } catch (e) {}
   }
-
   return (
     <FormBuilder
       onBuild={(el) => setFormBuilder(el)}
@@ -152,20 +163,80 @@ function HotelAmenityForm(props) {
     >
       <FormHorizontal>
         <FormInputControl
-          label="Hotel Amenity Type Name *"
-          value={form.hotel_amenity_type_name}
-          name="hotel_amenity_type_name"
-          cl="3"
-          cr="6"
+          label="Attraction Category Name *"
+          value={form.attraction_category_name}
+          name="attraction_category_name"
+          cl="7"
+          cr="5"
           onChange={(e) =>
-            setForm({ ...form, hotel_amenity_type_name: e.target.value })
+            setForm({ ...form, attraction_category_name: e.target.value })
           }
           disabled={isView || loading}
           type="text"
           minLength="1"
           maxLength="64"
         />
-        {/* <FormInputWrapper label="Icon" cl="3" cr="4">
+
+        <FormInputWrapper
+          label="Is Default"
+          cl="7"
+          cr="5"
+          hint="Set is default"
+        >
+          <div className="form-check form-check-inline">
+            <input
+              className="form-check-input"
+              type="radio"
+              name="is_default"
+              id="ac-1"
+              value={true}
+              disabled={isView || loading}
+              checked={form.is_default}
+              onChange={(e) =>
+                setForm({
+                  ...form,
+                  is_default: true,
+                })
+              }
+            />
+            <label className="form-check-label" htmlFor="ac-1">
+              Yes
+            </label>
+          </div>
+          <div className="form-check form-check-inline">
+            <input
+              className="form-check-input"
+              type="radio"
+              name="is_default"
+              id="ac-2"
+              value={false}
+              disabled={isView || loading}
+              checked={!form.is_default}
+              onChange={(e) =>
+                setForm({
+                  ...form,
+                  is_default: false,
+                })
+              }
+            />
+            <label className="form-check-label" htmlFor="ac-2">
+              No
+            </label>
+          </div>
+        </FormInputWrapper>
+        <FormInputControl
+          label="Description*"
+          value={form.description}
+          name="description"
+          cl="7"
+          cr="5"
+          onChange={(e) => setForm({ ...form, description: e.target.value })}
+          disabled={isView || loading}
+          type="textarea"
+          minLength="1"
+          maxLength="256"
+        />
+        <FormInputWrapper label="Icon" cl="7" cr="5">
           <label className="card card-default shadow-none border">
             <div className="card-body">
               {!isView ? (
@@ -178,44 +249,25 @@ function HotelAmenityForm(props) {
                 disabled={isView}
                 accept=".png,.jpg,.jpeg"
               />
-              {form.airline_asset &&
-              form.airline_asset.multimedia_description &&
-              form.airline_asset.multimedia_description.url ? (
+              {form.attraction_category_asset &&
+              form.attraction_category_asset.multimedia_description &&
+              form.attraction_category_asset.multimedia_description.url ? (
                 <img
-                  src={form.airline_asset.multimedia_description.url}
+                  src={
+                    form.attraction_category_asset.multimedia_description.url
+                  }
                   className="img-fluid"
-                  alt="airline"
+                  alt="attraction category"
                 />
               ) : (
                 ""
               )}
             </div>
           </label>
-        </FormInputWrapper> */}
-      </FormHorizontal>
-
-      <FormHorizontal>
-        <FormInputControl
-          label="Hotel Amenity Type Code *"
-          value={form.hotel_amenity_type_code}
-          name="hotel_amenity_type_code"
-          cl="4"
-          cr="6"
-          onChange={(e) =>
-            setForm({
-              ...form,
-              hotel_amenity_type_code: parseInt(e.target.value),
-            })
-          }
-          disabled={isView || loading}
-          type="number"
-          min="0"
-          max="99"
-          hint="Hotel Amenity type code maximum 2 characters"
-        />
+        </FormInputWrapper>
       </FormHorizontal>
     </FormBuilder>
   )
 }
 
-export default withRouter(HotelAmenityForm)
+export default withRouter(AttractionCategoryForm)

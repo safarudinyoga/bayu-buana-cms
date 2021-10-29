@@ -5,18 +5,18 @@ import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
 import { renderColumn } from "lib/translation"
 
-export default function HotelAmenityTable() {
+export default function HotelAmenityCategoryTable() {
   let dispatch = useDispatch()
   useEffect(() => {
     dispatch(
       setUIParams({
-        title: "Hotel Amenity Type",
+        title: "Hotel Amenity Category",
         breadcrumbs: [
           {
             text: "Master Data Management",
           },
           {
-            text: "Hotel Amenity Type",
+            text: "Hotel Amenity Category",
           },
         ],
       }),
@@ -24,26 +24,26 @@ export default function HotelAmenityTable() {
   }, [])
 
   let params = {
-    title: "Hotel Amenity Type",
-    baseRoute: "/master/hotel-amenity-types/form",
-    endpoint: "/master/hotel-amenity-types",
-    deleteEndpoint: "/master/batch-actions/delete/hotel-amenity-types",
-    activationEndpoint: "/master/batch-actions/activate/hotel-amenity-types",
+    title: "Hotel Amenity Category",
+    baseRoute: "/master/hotel-amenity-category/form",
+    endpoint: "/master/hotel-amenity-categories",
+    deleteEndpoint: "/master/batch-actions/delete/hotel-amenity-categories",
+    activationEndpoint:
+      "/master/batch-actions/activate/hotel-amenity-categories",
     deactivationEndpoint:
-      "/master/batch-actions/deactivate/hotel-amenity-types",
+      "/master/batch-actions/deactivate/hotel-amenity-categories",
     columns: [
       {
-        title: "Hotel Amenity Code",
-        data: "hotel_amenity_type_code",
-      },
-      {
-        title: "Hotel Amenity Name",
-        data: "hotel_amenity_type_name",
-        render: renderColumn("hotel_amenity_type", "hotel_amenity_type_name"),
+        title: "Hotel Amenity Category Name",
+        data: "hotel_amenity_category_name",
+        render: renderColumn(
+          "hotel_amenity_category",
+          "hotel_amenity_category_name",
+        ),
       },
       {
         title: "Icon",
-        data: "airline_asset.multimedia_description.url",
+        data: "attraction_category_asset.multimedia_description.url",
         searchable: false,
         orderable: false,
         render: (val) => {
@@ -61,8 +61,8 @@ export default function HotelAmenityTable() {
         render: rowStatus,
       },
       {
-        title: "Translated Hotel Amenity Name",
-        data: "hotel_amenity_type_translation.hotel_amenity_type_name",
+        title: "Translated Currency Name",
+        data: "hotel_amenity_category_translation.hotel_amenity_category_name",
         visible: false,
       },
     ],

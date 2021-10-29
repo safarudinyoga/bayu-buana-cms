@@ -55,10 +55,12 @@ import CityForm from "views/city/form"
 import CityTable from "views/city/table"
 import RatingTypeTable from "views/rating_type/table"
 import RatingTypeForm from "views/rating_type/form"
-
 import HotelAmenityTypeTable from "views/hotel_amenity_type/table"
 import HotelAmenityTypeForm from "views/hotel_amenity_type/form"
-
+import AttractionCategoryTable from "views/attraction_category/table"
+import AttractionCategoryForm from "views/attraction_category/form"
+import HotelAmenityCategoryTable from "views/hotel_amenity_category/table"
+import HotelAmenityCategoryForm from "views/hotel_amenity_category/form"
 import DashboardWrapper from "components/wrapper/dashboard"
 import Dashboard from "views/dashboard"
 
@@ -223,12 +225,23 @@ function App() {
           <Route path="/master/rating-types/form/:id?">
             <RatingTypeForm />
           </Route>
-
+          <Route exact path="/master/attraction-category">
+            <AttractionCategoryTable />
+          </Route>
+          <Route path="/master/attraction-category/form/:id?">
+            <AttractionCategoryForm />
+          </Route>
           <Route exact path="/master/hotel-amenity-types">
             <HotelAmenityTypeTable />
           </Route>
           <Route path="/master/hotel-amenity-types/form/:id?">
             <HotelAmenityTypeForm />
+          </Route>
+          <Route exact path="/master/hotel-amenity-category">
+            <HotelAmenityCategoryTable />
+          </Route>
+          <Route path="/master/hotel-amenity-category/form/:id?">
+            <HotelAmenityCategoryForm />
           </Route>
         </Switch>
       </DashboardWrapper>
