@@ -10,14 +10,13 @@ export default function SpecialRequestTable() {
   useEffect(() => {
     dispatch(
       setUIParams({
-        title: "Special Request",
+        title: "Special Requests",
         breadcrumbs: [
           {
-            link: "/",
             text: "Master Data Management",
           },
           {
-            text: "Special Request",
+            text: "Special Requests",
           },
         ],
       }),
@@ -25,7 +24,7 @@ export default function SpecialRequestTable() {
   }, [])
 
   let params = {
-    title: "Special Request",
+    title: "Special Requests",
     baseRoute: "/master/special-requests/form",
     endpoint: "/master/special-requests",
     deleteEndpoint: "/master/batch-actions/delete/special-requests",
