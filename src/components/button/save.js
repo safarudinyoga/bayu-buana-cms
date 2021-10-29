@@ -1,3 +1,4 @@
+import "./button.css"
 const { Component } = require("react")
 
 export default class SaveButton extends Component {
@@ -5,9 +6,9 @@ export default class SaveButton extends Component {
     return (
       <button
         type="submit"
-        className="btn btn-default bg-dark-grey border-dark-grey mr-2"
+        className="button-save mr-2"
       >
-        SAVE
+        <div className="text-button-save">SAVE</div>
       </button>
     )
   }

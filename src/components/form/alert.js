@@ -3,7 +3,10 @@ import { Component } from "react";
 export default class FormAlert extends Component {
     render() {
         return (
-            <em className={"text-danger "+(this.props.isValid ? "d-none": "")}>Note: <i className="fas fa-exclamation-triangle"></i> {this.props.message}</em>
+            <>
+            <span className="text-note">Note : </span>
+            <span className={"text-note-danger "+(this.props.isValid ? "d-none": "")}><i className="fas fa-exclamation-triangle"></i> {this.props.message}</span>
+        </>
         )
     }
 }

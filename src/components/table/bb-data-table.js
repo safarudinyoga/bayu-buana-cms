@@ -55,6 +55,7 @@ class BBDataTable extends Component {
           '<i class="fas fa-ellipsis-v float-left row-handle"></i> <input type="checkbox" data-id="' +
           row.id +
           '" class="select-checkbox-item"/>'
+          
         )
       },
     })
@@ -402,7 +403,7 @@ class BBDataTable extends Component {
         },
         fnDrawCallback: (t) => {
           let wrapper = $(".dataTables_paginate", t.nTableWrapper)
-          wrapper.append('<span class="float-right mt-2 mr-2">Page: </span>')
+          wrapper.append('<span class="float-right mt-2 mr-2 text-label-input">Page: </span>')
           $(".pagination", wrapper).addClass("float-right")
         },
       })

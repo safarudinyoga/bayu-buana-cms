@@ -109,7 +109,9 @@ export default class TranslationForm extends Component {
             aria-controls={"tab-content-" + lang.language_code}
             aria-selected="true"
           >
+            <span className="text-label-input">
             {lang.language_name}
+            </span>
           </button>
         )
       })
@@ -161,7 +163,7 @@ export default class TranslationForm extends Component {
             : "d-none"
         }
       >
-        <h4>Translation</h4>
+        <p className="text-sub-header">Translation</p>
         <hr />
         <div className="row">
           <div className="col-xs-12 col-sm-4 col-md-3 translation-tab-container">
@@ -170,7 +172,9 @@ export default class TranslationForm extends Component {
               className="btn btn-default dropdown-toggle btn-block shadow"
               onClick={this.togglePills.bind(this)}
             >
+              <span className="text-label-input">
               {this.state.currentLanguage}
+              </span>
             </button>
             <div
               className="nav flex-column nav-pills"
@@ -178,8 +182,8 @@ export default class TranslationForm extends Component {
               id="v-pills-tab"
               role="tablist"
               aria-orientation="vertical"
-            >
-              {tabPills}
+            >            
+              {tabPills}            
             </div>
           </div>
           <div className="col-xs-12 col-sm-8 col-md-9 translation-form-content card border shadow-none">
