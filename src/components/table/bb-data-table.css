@@ -14,7 +14,7 @@
   margin-right: 4px;
 }
 
-.dataTable-root .dataTables_paginate {
+.dataTable-root .dataTables_paginate {   
   margin-top: 10px !important;
 }
 
@@ -30,26 +30,37 @@
 }
 
 .dataTable-root table.dataTable thead {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+  font-size: 14px;
+  font-weight: 500;
   background-color: #5e5e5e;
-  color: #ffffff;
+  color: #ffffff; 
+}
+.dataTable-root table.dataTable tbody {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+  font-size: 11px;
+  font-weight: normal; 
+  color: #333333;   
+}
+.dataTable-root table.dataTable td {  
+  vertical-align:middle;     
 }
 
 /* .dataTable-root table.dataTable thead > tr > th:nth-child(1) {
-  padding-left: 15px;
-}
+  color: #333333;
+} */
 
-.dataTable-root table.dataTable thead > tr > th:last-child {
-  padding-right: 5px;
+/* .dataTable-root table.dataTable thead > tr > th:last-child {
+  padding-right: 50px;
 } */
 
 .dataTable-root .select-checkbox {
     width: 40px;
-    text-align: right;
+    text-align: right;    
 }
 
 .dataTable-root .select-checkbox .row-handle {
-    margin-left: 5px;
-    margin-top: 4px;
+    margin-left: 5px;    
     cursor: move;
 }
 .dataTable-root .table-row-action {

@@ -128,10 +128,11 @@ function RegionForm(props) {
     >
       <FormHorizontal>
         <FormInputControl
-          label="Region Name *"
+          label="Region Name"
+          labelRequired="label-required" 
           value={form.region_name}
           name="region_name"
-          cl="3"
+          cl="4"
           cr="6"
           onChange={(e) => setForm({ ...form, region_name: e.target.value })}
           disabled={isView || loading}
@@ -143,10 +144,11 @@ function RegionForm(props) {
 
       <FormHorizontal>
         <FormInputControl
-          label="Region Code *"
+          label="Region Code"
+          labelRequired="label-required" 
           value={form.region_code}
           name="region_code"
-          cl="4"
+          cl="5"
           cr="6"
           onChange={(e) => setForm({ ...form, region_code: e.target.value })}
           disabled={isView || loading}
