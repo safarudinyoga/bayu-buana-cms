@@ -57,7 +57,7 @@ export default function AttractionCategoryTable() {
         render: rowStatus,
       },
       {
-        title: "Translated Currency Name",
+        title: "Translated Attraction Category Name",
         data: "attraction_category_translation.attraction_category_name",
         visible: false,
       },

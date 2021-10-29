@@ -10,7 +10,7 @@ import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
 
 const endpoint = "/master/hotel-amenity-categories"
-const backUrl = "/master/hotel-amenity-category"
+const backUrl = "/master/hotel-amenity-categories"
 
 function HotelAmenityCategoryForm(props) {
   let dispatch = useDispatch()

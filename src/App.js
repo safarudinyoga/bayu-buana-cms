@@ -61,6 +61,10 @@ import AttractionCategoryTable from "views/attraction_category/table"
 import AttractionCategoryForm from "views/attraction_category/form"
 import HotelAmenityCategoryTable from "views/hotel_amenity_category/table"
 import HotelAmenityCategoryForm from "views/hotel_amenity_category/form"
+import OccupancyTypeTable from "views/occupancy_type/table"
+import OccupancyTypeForm from "views/occupancy_type/form"
+import ProductTypeTable from "views/product_type/table"
+import ProductTypeForm from "views/product_type/form"
 import DashboardWrapper from "components/wrapper/dashboard"
 import Dashboard from "views/dashboard"
 
@@ -237,12 +241,26 @@ function App() {
           <Route path="/master/hotel-amenity-types/form/:id?">
             <HotelAmenityTypeForm />
           </Route>
-          <Route exact path="/master/hotel-amenity-category">
+          <Route exact path="/master/hotel-amenity-categories">
             <HotelAmenityCategoryTable />
           </Route>
-          <Route path="/master/hotel-amenity-category/form/:id?">
+          <Route path="/master/hotel-amenity-categories/form/:id?">
             <HotelAmenityCategoryForm />
           </Route>
+          <Route exact path="/master/occupancy-types">
+            <OccupancyTypeTable />
+          </Route>
+          <Route path="/master/occupancy-types/form/:id?">
+            <OccupancyTypeForm />
+          </Route>
+          <Route exact path="/master/product-types">
+            <ProductTypeTable />
+          </Route>
+          <Route path="/master/product-types/form/:id?">
+            <ProductTypeForm />
+          </Route>
+
+
         </Switch>
       </DashboardWrapper>
     </Router>

@@ -4,66 +4,46 @@ import Api from "config/api"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
 import FormBuilder from "components/form/builder"
+import FormInputWrapper from "components/form/input-wrapper"
 import useQuery from "lib/query"
 import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
 
-const endpoint = "/master/rating-types"
-const backUrl = "/master/rating-types"
+const endpoint = "/master/product-types"
+const backUrl = "/master/product-types"
 
-function RatingTypeForm(props) {
+function ProductTypeForm(props) {
   let dispatch = useDispatch()
 
   const isView = useQuery().get("action") === "view"
   const [formBuilder, setFormBuilder] = useState(null)
   const [loading, setLoading] = useState(true)
   const [translations, setTranslations] = useState([])
-
   const [id, setId] = useState(null)
   const [form, setForm] = useState({
-    provider: "",
-    rating_symbol: "",
-    rating_type_code: 0,
-    rating_type_name: "",
-    scale: 0,
+    product_type_name: "",
+    product_type_code:1,
+    is_default: false,
   })
   const translationFields = [
     {
-      label: "Rating Type Name",
-      name: "rating_type_name",
+      label: "Product Type Name",
+      name: "product_type_name",
       type: "text",
     },
   ]
 
   const validationRules = {
-    provider: {
+    product_type_name: {
       required: true,
       minlength: 1,
       maxlength: 64,
     },
-
-    rating_symbol: {
+    is_default: {},
+    product_type_code: {
       required: true,
-      minlength: 1,
-      maxlength: 64,
-    },
-
-    rating_type_code: {
-      required: true,
-      min: 0,
-      max: 99,
-    },
-
-    rating_type_name: {
-      required: true,
-      minlength: 1,
-      maxlength: 64,
-    },
-
-    scale: {
-      required: true,
-      min: 0,
-      max: 99,
+      min: 1,
+      max: 4,
     },
   }
 
@@ -71,11 +51,11 @@ function RatingTypeForm(props) {
     let api = new Api()
     let formId = props.match.params.id
 
-    let docTitle = "Edit Rating Type"
+    let docTitle = "Edit Product Type"
     if (!formId) {
-      docTitle = "Create Rating Type"
+      docTitle = "Create Product Type"
     } else if (isView) {
-      docTitle = "Rating Type Details"
+      docTitle = "Product Type Details"
     }
 
     dispatch(
@@ -87,7 +67,7 @@ function RatingTypeForm(props) {
           },
           {
             link: backUrl,
-            text: "Rating Types",
+            text: "Product Types",
           },
           {
             text: docTitle,
@@ -123,17 +103,11 @@ function RatingTypeForm(props) {
     setLoading(true)
     let api = new Api()
     try {
-      if (!form.provider) {
-        form.provider = null
+      if (!form.product_type_name) {
+        form.product_type_name = null
       }
-      if (!form.rating_symbol) {
-        form.rating_symbol = null
-      }
-      if (!form.rating_type_code) {
-        form.rating_type_code = null
-      }
-      if (!form.rating_type_name) {
-        form.rating_type_name = null
+      if (!form.product_type_code) {
+        form.product_type_code = null
       }
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
@@ -148,7 +122,6 @@ function RatingTypeForm(props) {
       props.history.push(backUrl)
     }
   }
-
   return (
     <FormBuilder
       onBuild={(el) => setFormBuilder(el)}
@@ -163,13 +136,13 @@ function RatingTypeForm(props) {
     >
       <FormHorizontal>
         <FormInputControl
-          label="Rating Type Name *"
-          value={form.rating_type_name}
-          name="rating_type_name"
-          cl="3"
-          cr="6"
+          label="Product Type Name *"
+          value={form.product_type_name}
+          name="product_type_name"
+          cl="7"
+          cr="5"
           onChange={(e) =>
-            setForm({ ...form, rating_type_name: e.target.value })
+            setForm({ ...form, product_type_name: e.target.value })
           }
           disabled={isView || loading}
           type="text"
@@ -177,72 +150,71 @@ function RatingTypeForm(props) {
           maxLength="64"
         />
 
-        <FormInputControl
-          label="Provider"
-          value={form.provider}
-          name="provider"
-          cl="3"
-          cr="6"
-          onChange={(e) => setForm({ ...form, provider: e.target.value })}
-          disabled={isView || loading}
-          type="text"
-          minLength="1"
-          maxLength="64"
-        />
-        <FormInputControl
-          label="Rating Symbol *"
-          value={form.rating_symbol}
-          name="rating_symbol"
-          cl="3"
-          cr="6"
-          column="name"
-          onChange={(e) =>
-            setForm({ ...form, rating_symbol: e.target.value || null })
-          }
-          disabled={isView || loading}
-          type="select"
-          minLength="0"
-          maxLength="9999"
+        <FormInputWrapper
+          label="Is Default"
+          cl="7"
+          cr="5"
+          hint="Set is default"
         >
-          <option>Please Choose</option>
-          <option value="star">star</option>
-        </FormInputControl>
-
-        <FormInputControl
-          label="Scale *"
-          value={form.scale}
-          name="sclae"
-          cl="3"
-          cr="6"
-          onChange={(e) =>
-            setForm({ ...form, scale: parseInt(e.target.value) })
-          }
-          disabled={isView || loading}
-          type="number"
-          min="0"
-          max="99"
-        />
+          <div className="form-check form-check-inline">
+            <input
+              className="form-check-input"
+              type="radio"
+              name="is_default"
+              id="ha-1"
+              value={true}
+              disabled={isView || loading}
+              checked={form.is_default}
+              onChange={(e) =>
+                setForm({
+                  ...form,
+                  is_default: true,
+                })
+              }
+            />
+            <label className="form-check-label" htmlFor="ha-1">
+              Yes
+            </label>
+          </div>
+          <div className="form-check form-check-inline">
+            <input
+              className="form-check-input"
+              type="radio"
+              name="is_default"
+              id="ha-2"
+              value={false}
+              disabled={isView || loading}
+              checked={!form.is_default}
+              onChange={(e) =>
+                setForm({
+                  ...form,
+                  is_default: false,
+                })
+              }
+            />
+            <label className="form-check-label" htmlFor="ha-2">
+              No
+            </label>
+          </div>
+        </FormInputWrapper>
       </FormHorizontal>
-
       <FormHorizontal>
         <FormInputControl
-          label="Rating Type Code *"
-          value={form.rating_type_code}
-          name="rating_type_code"
-          cl="4"
-          cr="6"
-          onChange={(e) =>
-            setForm({ ...form, rating_type_code: parseInt(e.target.value) })
-          }
+          label="Product Type Code*"
+          value={form.product_type_code}
+          name="product_type_code"
+          cl="7"
+          cr="5"
+          onChange={(e) => setForm({ ...form, product_type_code: +e.target.value })}
           disabled={isView || loading}
           type="number"
-          min="0"
-          max="99"
-          hint="Rating type code maximum 99 characters"
+          min="1"
+          max="4"
+          hint="Product Type Code maximum 4 characters"
         />
       </FormHorizontal>
     </FormBuilder>
   )
 }
 
-export default withRouter(RatingTypeForm)
+export default withRouter(ProductTypeForm)

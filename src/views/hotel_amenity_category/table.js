@@ -25,7 +25,7 @@ export default function HotelAmenityCategoryTable() {
 
   let params = {
     title: "Hotel Amenity Category",
-    baseRoute: "/master/hotel-amenity-category/form",
+    baseRoute: "/master/hotel-amenity-categories/form",
     endpoint: "/master/hotel-amenity-categories",
     deleteEndpoint: "/master/batch-actions/delete/hotel-amenity-categories",
     activationEndpoint:
@@ -61,7 +61,7 @@ export default function HotelAmenityCategoryTable() {
         render: rowStatus,
       },
       {
-        title: "Translated Currency Name",
+        title: "Translated Hotel Amenity Category Name",
         data: "hotel_amenity_category_translation.hotel_amenity_category_name",
         visible: false,
       },
