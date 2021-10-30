@@ -57,6 +57,8 @@ import DashboardWrapper from "components/wrapper/dashboard"
 import Dashboard from "views/dashboard"
 import ZoneTable from "views/zone/table"
 import ZoneForm from "views/zone/form"
+import DestinationTable from "views/destination/table"
+import DestinationForm from "views/destination/form"
 
 function App() {
   document.title = "Bayu Buana"
@@ -217,6 +219,12 @@ function App() {
           </Route>
           <Route path="/master/zones/form/:id?">
             <ZoneForm />
+          </Route>
+          <Route exact path="/master/destinations">
+            <DestinationTable />
+          </Route>
+          <Route path="/master/destinations/form/:id?">
+            <DestinationForm />
           </Route>
         </Switch>
       </DashboardWrapper>
