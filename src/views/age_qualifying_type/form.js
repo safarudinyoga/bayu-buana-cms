@@ -20,7 +20,7 @@ function AgeQualifyingTypeForm(props) {
   const [translations, setTranslations] = useState([])
   const [id, setId] = useState(null)
   const [form, setForm] = useState({
-    age_qualifying_type_code: 0,
+    age_qualifying_type_code: "",
     age_qualifying_type_name: "",
   })
   const translationFields = [
@@ -39,7 +39,7 @@ function AgeQualifyingTypeForm(props) {
     },
     age_qualifying_type_name: {
       required: true,
-      minlength: 0,
+      minlength: 1,
       maxlength: 256,
     },
   }
@@ -60,12 +60,11 @@ function AgeQualifyingTypeForm(props) {
         title: docTitle,
         breadcrumbs: [
           {
-            link: "/",
             text: "Master Data Management",
           },
           {
             link: backUrl,
-            text: "Age Qualifying Type",
+            text: "Age Qualifying Types",
           },
           {
             text: docTitle,
@@ -129,28 +128,30 @@ function AgeQualifyingTypeForm(props) {
     >
       <FormHorizontal>
         <FormInputControl
-          label="Age Qualifying Type Name *"
+          label="Age Qualifying Type Name"
+          labelRequired="label-required" 
           value={form.age_qualifying_type_name}
           name="age_qualifying_type_name"
-          cl="4"
+          cl="5"
           cr="6"
           onChange={(e) =>
             setForm({ ...form, age_qualifying_type_name: e.target.value })
           }
           disabled={isView || loading}
           type="text"
-          minLength="0"
+          minLength="1"
           maxLength="256"
         />
       </FormHorizontal>
 
       <FormHorizontal>
         <FormInputControl
-          label="Age Qualifying Type Code *"
+          label="Age Qualifying Type Code"
+          labelRequired="label-required" 
           value={form.age_qualifying_type_code}
           name="age_qualifying_type_code"
-          cl="6"
-          cr="6"
+          cl="7"
+          cr="5"
           onChange={(e) =>
             setForm({ ...form, age_qualifying_type_code: parseInt(e.target.value) })
           }

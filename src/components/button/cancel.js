@@ -1,3 +1,4 @@
+import "./button.css"
 const { Component } = require("react")
 
 export default class CancelButton extends Component {
@@ -7,9 +8,9 @@ export default class CancelButton extends Component {
       <button
         onClick={this.props.onClick}
         type="button"
-        className={"btn btn-default bg-white border-dark-grey " + readOnlyClass}
+        className={"button-cancel" + readOnlyClass}
       >
-        {this.props.isView ? "BACK" : "CANCEL"}
+        <div className="text-button-cancel">{this.props.isView ? "BACK" : "CANCEL"}</div>
       </button>
     )
   }

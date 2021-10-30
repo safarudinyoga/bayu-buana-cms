@@ -34,12 +34,12 @@ function TravelPurposeForm(props) {
   const validationRules = {
     travel_purpose_code: {
       required: true,
-      minlength: 0,
+      minlength: 1,
       maxlength: 36,
     },
     travel_purpose_name: {
       required: true,
-      minlength: 0,
+      minlength: 1,
       maxlength: 256,
     },
   }
@@ -60,12 +60,11 @@ function TravelPurposeForm(props) {
         title: docTitle,
         breadcrumbs: [
           {
-            link: "/",
             text: "Master Data Management",
           },
           {
             link: backUrl,
-            text: "Travel Purpose",
+            text: "Travel Purposes",
           },
           {
             text: docTitle,
@@ -129,34 +128,36 @@ function TravelPurposeForm(props) {
     >
       <FormHorizontal>
         <FormInputControl
-          label="Travel Purpose Name *"
+          label="Travel Purpose Name"
+          labelRequired="label-required" 
           value={form.travel_purpose_name}
           name="travel_purpose_name"
-          cl="3"
+          cl="4"
           cr="6"
           onChange={(e) =>
             setForm({ ...form, travel_purpose_name: e.target.value })
           }
           disabled={isView || loading}
           type="text"
-          minLength="0"
+          minLength="1"
           maxLength="256"
         />
       </FormHorizontal>
 
       <FormHorizontal>
         <FormInputControl
-          label="Travel Purpose Code *"
+          label="Travel Purpose Code"
+          labelRequired="label-required" 
           value={form.travel_purpose_code}
           name="travel_purpose_code"
-          cl="6"
-          cr="6"
+          cl="7"
+          cr="5"
           onChange={(e) =>
             setForm({ ...form, travel_purpose_code: e.target.value })
           }
           disabled={isView || loading}
           type="text"
-          minLength="0"
+          minLength="1"
           maxLength="36"
           hint="Travel purpose code maximum 36 characters"
         />

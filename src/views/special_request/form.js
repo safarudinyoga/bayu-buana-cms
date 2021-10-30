@@ -34,12 +34,12 @@ function SpecialRequestForm(props) {
   const validationRules = {
     special_request_code: {
       required: true,
-      minlength: 0,
+      minlength: 1,
       maxlength: 36,
     },
     special_request_name: {
       required: true,
-      minlength: 0,
+      minlength: 1,
       maxlength: 256,
     },
   }
@@ -60,12 +60,11 @@ function SpecialRequestForm(props) {
         title: docTitle,
         breadcrumbs: [
           {
-            link: "/",
             text: "Master Data Management",
           },
           {
             link: backUrl,
-            text: "Special Request",
+            text: "Special Requests",
           },
           {
             text: docTitle,
@@ -129,34 +128,36 @@ function SpecialRequestForm(props) {
     >
       <FormHorizontal>
         <FormInputControl
-          label="Special Request Name *"
+          label="Special Request Name"
+          labelRequired="label-required" 
           value={form.special_request_name}
           name="special_request_name"
-          cl="3"
+          cl="4"
           cr="6"
           onChange={(e) =>
             setForm({ ...form, special_request_name: e.target.value })
           }
           disabled={isView || loading}
           type="text"
-          minLength="0"
+          minLength="1"
           maxLength="256"
         />
       </FormHorizontal>
 
       <FormHorizontal>
         <FormInputControl
-          label="Special Request Code *"
+          label="Special Request Code"
+          labelRequired="label-required" 
           value={form.special_request_code}
           name="special_request_code"
-          cl="6"
-          cr="6"
+          cl="7"
+          cr="5"
           onChange={(e) =>
             setForm({ ...form, special_request_code: e.target.value })
           }
           disabled={isView || loading}
           type="text"
-          minLength="0"
+          minLength="1"
           maxLength="36"
           hint="Special request code maximum 36 characters"
         />

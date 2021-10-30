@@ -1,6 +1,8 @@
 .translation-form .nav-link {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   border: 1px solid #dee2e6;
   text-align: left;
+  font-size: 15px;
   font-weight: bold;
 }
 

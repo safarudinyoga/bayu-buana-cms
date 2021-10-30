@@ -19,7 +19,6 @@ function CityForm(props) {
   const [formBuilder, setFormBuilder] = useState(null)
   const [loading, setLoading] = useState(true)
   const [translations, setTranslations] = useState([])
-  const [initialCountry, setInitialCountry] = useState([])
   const [id, setId] = useState(null)
   const [form, setForm] = useState({
     city_code: "",
@@ -82,9 +81,6 @@ function CityForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
-        if (res.data.country) {
-            setInitialCountry([{...res.data.country, text: res.data.country.country_name}])
-        }
       } catch (e) {}
 
       try {
@@ -140,7 +136,8 @@ function CityForm(props) {
     >
       <FormHorizontal>
         <FormInputControl
-          label="City Name *"
+          label="City Name"
+          labelRequired="label-required" 
           value={form.city_name}
           name="city_name"
           cl="3"
@@ -159,7 +156,6 @@ function CityForm(props) {
           cr="6"
           endpoint="/master/countries"
           column="country_name"
-          data={initialCountry}
           onChange={(e) =>
             setForm({ ...form, country_id: e.target.value || null })
           }
@@ -171,7 +167,8 @@ function CityForm(props) {
 
       <FormHorizontal>
         <FormInputControl
-          label="City Code *"
+          label="City Code"
+          labelRequired="label-required" 
           value={form.city_code}
           name="city_code"
           cl="4"

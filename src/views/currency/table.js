@@ -10,14 +10,13 @@ export default function CurrencyTable() {
   useEffect(() => {
     dispatch(
       setUIParams({
-        title: "Currency",
+        title: "Currencies",
         breadcrumbs: [
           {
-            link: "/",
             text: "Master Data Management",
           },
           {
-            text: "Currency",
+            text: "Currencies",
           },
         ],
       }),
@@ -25,7 +24,7 @@ export default function CurrencyTable() {
   }, [])
 
   let params = {
-    title: "Currency",
+    title: "Currencies",
     baseRoute: "/master/currencies/form",
     endpoint: "/master/currencies",
     deleteEndpoint: "/master/batch-actions/delete/currencies",
