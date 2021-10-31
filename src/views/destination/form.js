@@ -9,8 +9,8 @@ import {useDispatch} from "react-redux"
 import {withRouter} from "react-router"
 import {setUIParams} from "redux/ui-store"
 
-const endpoint = "/master/destination"
-const backUrl = "/master/destination"
+const endpoint = "/master/destinations"
+const backUrl = "/master/destinations"
 
 function DestinationForm(props) {
   let dispatch = useDispatch()
@@ -23,8 +23,8 @@ function DestinationForm(props) {
   const [form, setForm] = useState({
     id: "",
     destination_name: "",
-    country: "",
-    city: "",
+    country_id: "",
+    city_id: "",
     description: "",
     destination_code: "",
   })

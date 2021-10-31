@@ -52,11 +52,10 @@ function ZoneForm(props) {
       maxlength: 64,
     },
     description: {
-      required: true,
       minlength: 1,
       maxlength: 400,
     },
-    zone_code: {
+    destination_code: {
       required: true,
       minlength: 3,
       maxlength: 3,
@@ -162,7 +161,7 @@ function ZoneForm(props) {
           name="destination"
           cl="3"
           cr="6"
-          endpoint="/master/destination"
+          endpoint="/master/destinations"
           column="destination_name"
           onChange={(e) =>
             setForm({...form, destination: e.target.value || null})
@@ -172,13 +171,6 @@ function ZoneForm(props) {
           minLength="0"
           maxLength="9999"
         >
-          <option value="">None</option>
-          <option value="51d5cb0c-c29e-4682-af20-4b95bc5c6ee3">
-            Destination 1
-          </option>
-          <option value="51d5cb0c-c29e-4682-af20-4b95bc5c6ee4">
-            Destination 2
-          </option>
         </FormInputSelectAjax>
 
         <FormInputControl
