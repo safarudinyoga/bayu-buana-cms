@@ -22,10 +22,11 @@ function DestinationForm(props) {
   const [id, setId] = useState(null)
   const [form, setForm] = useState({
     id: "",
-    zone_name: "",
-    destination: "",
+    destination_name: "",
+    country: "",
+    city: "",
     description: "",
-    zone_code: "",
+    destination_code: "",
   })
   const translationFields = [
     {
@@ -47,6 +48,11 @@ function DestinationForm(props) {
       maxlength: 64,
     },
     country: {
+      required: false,
+      minlength: 1,
+      maxlength: 64,
+    },
+    city: {
       required: false,
       minlength: 1,
       maxlength: 64,
@@ -148,38 +154,45 @@ function DestinationForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Destination Name *"
-          value={form.zone_name}
+          value={form.destination_name}
           name="destination_name"
-          onChange={(e) => setForm({...form, zone_name: e.target.value})}
+          onChange={(e) => setForm({...form, destination_name: e.target.value})}
           disabled={isView || loading}
           type="text"
           minLength="1"
           maxLength="64"
         />
+
         <FormInputSelectAjax
           label="Country"
-          value={form.country}
-          name="country"
+          value={form.country_id}
+          name="country_id"
           cl="3"
           cr="6"
-          endpoint="/master/country"
+          endpoint="/master/countries"
           column="country_name"
           onChange={(e) =>
-            setForm({...form, country: e.target.value || null})
+            setForm({...form, country_id: e.target.value || null})
           }
           disabled={isView || loading}
           type="select"
-          minLength="0"
-          maxLength="9999"
-        >
-          <option value="">None</option>
-          <option value="51d5cb0c-c29e-4682-af20-4b95bc5c6ee3">
-            Country 1
-          </option>
-          <option value="51d5cb0c-c29e-4682-af20-4b95bc5c6ee4">
-            Country 2
-          </option>
-        </FormInputSelectAjax>
+        />
+
+        <FormInputSelectAjax
+          label="City"
+          value={form.country_id}
+          name="city_id"
+          cl="3"
+          cr="6"
+          endpoint="/master/cities"
+          filter={form.country_id}
+          column="city_name"
+          onChange={(e) =>
+            setForm({...form, city_id: e.target.value || null})
+          }
+          disabled={isView || loading}
+          type="select"
+        />
 
         <FormInputControl
           value={form.description}

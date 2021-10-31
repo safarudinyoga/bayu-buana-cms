@@ -10,13 +10,13 @@ export default function DestinationTable() {
   useEffect(() => {
     dispatch(
       setUIParams({
-        title: "Zones",
+        title: "Destinations",
         breadcrumbs: [
           {
             text: "Master Data Management",
           },
           {
-            text: "Zones",
+            text: "Destinations",
           },
         ],
       }),
@@ -25,24 +25,28 @@ export default function DestinationTable() {
 
   let params = {
     title: "Zones",
-    baseRoute: "/master/zones/form",
-    endpoint: "/master/zones",
-    deleteEndpoint: "/master/batch-actions/delete/zones",
-    activationEndpoint: "/master/batch-actions/activate/zones",
-    deactivationEndpoint: "/master/batch-actions/deactivate/zones",
+    baseRoute: "/master/destinations/form",
+    endpoint: "/master/destinations",
+    deleteEndpoint: "/master/batch-actions/delete/destinations",
+    activationEndpoint: "/master/batch-actions/activate/destinations",
+    deactivationEndpoint: "/master/batch-actions/deactivate/destinations",
     columns: [
       {
-        title: "Zone Code",
-        data: "zone_code",
+        title: "Destination Code",
+        data: "destination_code",
       },
       {
-        title: "Zone Name",
-        data: "zone_name",
-        render: renderColumn("zone", "zone_name")
+        title: "Destination Name",
+        data: "destination_name",
+        render: renderColumn("destination", "destination_name")
       },
       {
-        title: "Destination",
-        data: "destination",
+        title: "Country",
+        data: "country",
+      },
+      {
+        title: "City",
+        data: "city",
       },
       {
         searchable: false,
@@ -51,8 +55,8 @@ export default function DestinationTable() {
         render: rowStatus,
       },
       {
-        title: "Translated Zone Name",
-        data: "zone_translation.zone_name",
+        title: "Translated Destination Name",
+        data: "zone_translation.destination_name",
         visible: false,
       },
     ],
