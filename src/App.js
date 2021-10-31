@@ -59,6 +59,10 @@ import ZoneTable from "views/zone/table"
 import ZoneForm from "views/zone/form"
 import DestinationTable from "views/destination/table"
 import DestinationForm from "views/destination/form"
+import RoomAmenityTypeTable from "views/room_amenity_type/table"
+import RoomAmenityTypeForm from "views/room_amenity_type/form"
+import RoomAmenityCategoryTable from "views/room_amenity_category/table"
+import RoomAmenityCategoryForm from "views/room_amenity_category/form"
 
 function App() {
   document.title = "Bayu Buana"
@@ -225,6 +229,18 @@ function App() {
           </Route>
           <Route path="/master/destinations/form/:id?">
             <DestinationForm />
+          </Route>
+          <Route exact path="/master/room-amenity-types">
+            <RoomAmenityTypeTable />
+          </Route>
+          <Route path="/master/room-amenity-types/form/:id?">
+            <RoomAmenityTypeForm />
+          </Route>
+          <Route exact path="/master/room-amenity-categories">
+            <RoomAmenityCategoryTable />
+          </Route>
+          <Route path="/master/room-amenity-categories/form/:id?">
+            <RoomAmenityCategoryForm />
           </Route>
         </Switch>
       </DashboardWrapper>
