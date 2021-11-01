@@ -4,6 +4,7 @@ import printIcon from "assets/printer.svg"
 import resetIcon from "assets/reset.svg"
 import { Link, withRouter } from "react-router-dom"
 import "./table-header.css"
+import '../button/button.css'
 
 class TableHeader extends Component {
   constructor(props) {
@@ -126,11 +127,13 @@ class TableHeader extends Component {
             <button
               type="button"
               onClick={this.handleClick.bind(this)}
-              className="btn btn-warning float-right"
+              className="btn btn-warning float-right button-new"
               title="Click to create"
             >
+              <span className="text-button-new">
               <i className="fas fa-file-medical mr-2"></i>
               Create new
+              </span>
             </button>
             <Link
               to="#"
@@ -178,15 +181,15 @@ class TableHeader extends Component {
               <div className="col-xs-12 col-sm-12 col-md-6 col-lg-8">
                 <div className="row">
                   <div className="col-xs-4">
-                    <label>Status</label>
+                    <label className="text-label-filter">Status</label>
                     <select
-                      className="form-control"
+                      className="custom-select custom-select-md mb-3 text-input-select"
                       value={this.state.statusValue}
                       onChange={this.handleStatus.bind(this)}
                     >
-                      <option value="0">All</option>
-                      <option value="1">Active</option>
-                      <option value="3">Inactive</option>
+                      <option className="text-input-select" value="0">All</option>
+                      <option className="text-input-select" value="1">Active</option>
+                      <option className="text-input-select" value="3">Inactive</option>
                     </select>
                   </div>
                 </div>
@@ -209,7 +212,7 @@ class TableHeader extends Component {
             <div className="col-xs-12">
               <button
                 type="button"
-                className="btn btn-default dropdown-toggle btn-table-action-dropdown"
+                className="btn btn-default textButtonSave dropdown-toggle btn-table-action-dropdown py-2"
                 data-toggle="dropdown"
                 aria-expanded="false"
               >
@@ -234,7 +237,7 @@ class TableHeader extends Component {
               <button
                 onClick={this.handleRemove.bind(this)}
                 type="button"
-                className="btn btn-default bg-dark-grey ml-2"
+                className="btn btn-default textButtonSave bg-dark-green p-2 ml-2"
               >
                 REMOVE {(this.props.title || "selected").toUpperCase()}
               </button>

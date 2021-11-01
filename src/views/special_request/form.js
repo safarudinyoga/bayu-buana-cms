@@ -128,10 +128,11 @@ function SpecialRequestForm(props) {
     >
       <FormHorizontal>
         <FormInputControl
-          label="Special Request Name *"
+          label="Special Request Name"
+          labelRequired="label-required" 
           value={form.special_request_name}
           name="special_request_name"
-          cl="3"
+          cl="4"
           cr="6"
           onChange={(e) =>
             setForm({ ...form, special_request_name: e.target.value })
@@ -145,11 +146,12 @@ function SpecialRequestForm(props) {
 
       <FormHorizontal>
         <FormInputControl
-          label="Special Request Code *"
+          label="Special Request Code"
+          labelRequired="label-required" 
           value={form.special_request_code}
           name="special_request_code"
-          cl="6"
-          cr="6"
+          cl="7"
+          cr="5"
           onChange={(e) =>
             setForm({ ...form, special_request_code: e.target.value })
           }

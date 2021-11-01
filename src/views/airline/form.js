@@ -170,7 +170,8 @@ function AirlineForm(props) {
     >
       <FormHorizontal>
         <FormInputControl
-          label="Airline Name *"
+          label="Airline Name"
+          labelRequired="label-required" 
           value={form.airline_name}
           name="airline_name"
           cl="3"
@@ -236,7 +237,8 @@ function AirlineForm(props) {
 
       <FormHorizontal>
         <FormInputControl
-          label="Airline Code *"
+          label="Airline Code"
+          labelRequired="label-required" 
           value={form.airline_code}
           name="airline_code"
           cl="4"

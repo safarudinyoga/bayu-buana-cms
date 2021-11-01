@@ -154,10 +154,11 @@ function ProvinceForm(props) {
     >
       <FormHorizontal>
         <FormInputControl
-          label="State / Province Name *"
+          label="State / Province Name"
+          labelRequired="label-required" 
           value={form.state_province_name}
           name="state_province_name"
-          cl="3"
+          cl="4"
           cr="6"
           onChange={(e) =>
             setForm({ ...form, state_province_name: e.target.value })
@@ -171,7 +172,7 @@ function ProvinceForm(props) {
           label="Subdivision Category"
           value={form.state_province_category_id}
           name="state_province_category_id"
-          cl="3"
+          cl="4"
           cr="6"
           endpoint="/master/state-province-categories"
           column="state_province_category_name"
@@ -189,7 +190,7 @@ function ProvinceForm(props) {
           label="Country"
           value={form.country_id}
           name="country_id"
-          cl="3"
+          cl="4"
           cr="6"
           endpoint="/master/countries"
           column="country_name"
@@ -204,14 +205,21 @@ function ProvinceForm(props) {
 
       <FormHorizontal>
         <FormInputControl
-          label="State / Province Code *"
+          label="State / Province Code"
+          labelRequired="label-required" 
           value={form.state_province_code}
           name="state_province_code"
+<<<<<<< HEAD
           cl="4"
           cr="6"
           onChange={(e) =>
             setForm({ ...form, state_province_code: e.target.value })
           }
+=======
+          cl="7"
+          cr="5"
+          onChange={(e) => setForm({ ...form, state_province_code: e.target.value })}
+>>>>>>> b4e53090a278b46ea468ded576eda3a789dbe77d
           disabled={isView || loading}
           type="text"
           minLength="1"

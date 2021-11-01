@@ -5,13 +5,17 @@
   background-color: #5e5e5e !important;
   color: #ffffff !important;
 }
+.bg-dark-green {
+  background-color: #027F71 !important;
+  color: #ffffff !important;
+}
 
 .border-dark-grey {
-  border: 1px solid #5e5e5e !important;
+  border: 1px solid #707070 !important;
 }
 
 select.bg-dark-grey > option {
-  background: #ffffff !important;
+  background: #027F71 !important;
   color: #6c757d !important;
 }
 
@@ -25,6 +29,16 @@ select.bg-dark-grey > option {
 
 .form-group label {
   font-weight: normal !important;
+}
+.form-group.required .label-required:after { 
+  color: #D91C1C;
+  content: "*";
+  position: absolute;
+  margin-left: 5px;
+  top:7px;
+}
+.input:checked {
+  background: #027F71;
 }
 
 @media (max-width: 577px) {
@@ -69,3 +83,33 @@ select.bg-dark-grey > option {
   max-width: 80px;
   max-height: 40px;
 }
+
+/* Style TEXT */
+.text-sub-header {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: #333333;
+  margin-bottom: 32px;
+}
+.text-label-input {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 15px;
+  font-weight:500;
+  color: #333333; 
+}
+.text-note{
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 11px;
+  font-weight:normal;
+  font-style: italic;
+  color: #333333;
+}
+.text-note-danger{
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 11px;
+  font-weight:normal;
+  font-style: italic;
+  color: #D91C1C;
+}
+

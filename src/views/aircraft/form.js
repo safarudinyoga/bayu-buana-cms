@@ -144,7 +144,8 @@ function AircraftForm(props) {
     >
       <FormHorizontal>
         <FormInputControl
-          label="Aircraft Name *"
+          label={"Aircraft Name"}  
+          labelRequired="label-required"       
           value={form.aircraft_name}
           name="aircraft_name"
           onChange={(e) => setForm({ ...form, aircraft_name: e.target.value })}
@@ -168,25 +169,27 @@ function AircraftForm(props) {
       <FormHorizontal>
         <FormInputControl
           value={form.aircraft_code}
+          labelRequired="label-required" 
           name="aircraft_code"
           onChange={(e) => setForm({ ...form, aircraft_code: e.target.value })}
-          cl="4"
+          cl="5"
           cr="6"
           disabled={isView || loading}
           type="number"
-          label="Aircraft Code *"
+          label="Aircraft Code"
           minLength="3"
           maxLength="3"
           hint="Aircraft code maximum 3 characters"
         />
         <FormInputControl
           value={form.icao_code}
+          labelRequired="label-required" 
           name="icao_code"
           onChange={(e) => setForm({ ...form, icao_code: e.target.value })}
-          cl="4"
+          cl="5"
           cr="6"
           disabled={isView || loading}
-          label="ICAO Code *"
+          label="ICAO Code"
           type="text"
           minLength="4"
           maxLength="4"

@@ -15,7 +15,7 @@ export default class FormWrapper extends Component {
           <div className="col-xs-12 col-sm-6 col-md-5 order-sm-2">
             <div className="card card-default shadow-none border-none bg-block-card">
               <div className="card-body">
-                <h4>{this.props.rightTitle || "For Interface Purpose"}</h4>
+                <div className="text-sub-header">{this.props.rightTitle || "For Interface Purpose"}</div>
                 {this.props.children[1]}
               </div>
             </div>

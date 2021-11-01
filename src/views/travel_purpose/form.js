@@ -128,10 +128,11 @@ function TravelPurposeForm(props) {
     >
       <FormHorizontal>
         <FormInputControl
-          label="Travel Purpose Name *"
+          label="Travel Purpose Name"
+          labelRequired="label-required" 
           value={form.travel_purpose_name}
           name="travel_purpose_name"
-          cl="3"
+          cl="4"
           cr="6"
           onChange={(e) =>
             setForm({ ...form, travel_purpose_name: e.target.value })
@@ -145,11 +146,12 @@ function TravelPurposeForm(props) {
 
       <FormHorizontal>
         <FormInputControl
-          label="Travel Purpose Code *"
+          label="Travel Purpose Code"
+          labelRequired="label-required" 
           value={form.travel_purpose_code}
           name="travel_purpose_code"
-          cl="6"
-          cr="6"
+          cl="7"
+          cr="5"
           onChange={(e) =>
             setForm({ ...form, travel_purpose_code: e.target.value })
           }

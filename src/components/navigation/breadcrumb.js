@@ -25,8 +25,8 @@ function PageBreadcrumb() {
         const active = index + 1 === data.length
         const bcClass = active ? "breadcrumb-item active" : "breadcrumb-item"
         return (
-          <li className={bcClass} key={index}>
-            {active || !bc.link ? bc.text : <Link to={bc.link}>{bc.text}</Link>}
+          <li className={bcClass} key={index}>           
+            {active || !bc.link ? bc.text : <Link to={bc.link}>{bc.text}</Link>}           
           </li>
         )
       })}
@@ -43,9 +43,9 @@ export default class Breadcrumb extends Component {
             <PageBreadcrumb />
           </div>
         </div>
-        <h4 className="main-header-title">
+        <p className="main-header-title">
           <PageTitle />
-        </h4>
+        </p>
       </div>
     )
   }
