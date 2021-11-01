@@ -10,13 +10,13 @@ export default function HotelAmenityTable() {
   useEffect(() => {
     dispatch(
       setUIParams({
-        title: "Hotel Amenity Type",
+        title: "Hotel Amenity Types",
         breadcrumbs: [
           {
             text: "Master Data Management",
           },
           {
-            text: "Hotel Amenity Type",
+            text: "Hotel Amenity Types",
           },
         ],
       }),

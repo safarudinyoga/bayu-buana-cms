@@ -48,13 +48,13 @@ function HotelAmenityCategoryForm(props) {
     hotel_amenity_category_name: {
       required: true,
       minlength: 1,
-      maxlength: 64,
+      maxlength: 256,
     },
     is_default: {},
     description: {
       required: true,
       minlength: 0,
-      maxlength: 256,
+      maxlength: 4000,
     },
   }
 
@@ -78,7 +78,7 @@ function HotelAmenityCategoryForm(props) {
           },
           {
             link: backUrl,
-            text: "Hotel Amenity Category",
+            text: "Hotel Amenity Categories",
           },
           {
             text: docTitle,
@@ -168,7 +168,8 @@ function HotelAmenityCategoryForm(props) {
     >
       <FormHorizontal>
         <FormInputControl
-          label="Hotel Amenity Category Name *"
+          label="Hotel Amenity Category Name"
+          labelRequired="label-required"
           value={form.hotel_amenity_category_name}
           name="hotel_amenity_category_name"
           cl="7"
@@ -179,11 +180,12 @@ function HotelAmenityCategoryForm(props) {
           disabled={isView || loading}
           type="text"
           minLength="1"
-          maxLength="64"
+          maxLength="256"
         />
 
         <FormInputWrapper
           label="Is Default"
+          labelRequired="label-required"
           cl="7"
           cr="5"
           hint="Set is default"
@@ -239,7 +241,7 @@ function HotelAmenityCategoryForm(props) {
           disabled={isView || loading}
           type="textarea"
           minLength="1"
-          maxLength="256"
+          maxLength="4000"
         />
         <FormInputWrapper label="Icon" cl="7" cr="5">
           <label className="card card-default shadow-none border">

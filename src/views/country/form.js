@@ -31,7 +31,7 @@ function CountryForm(props) {
     nationality: "",
     numeric_code: "",
     region_id: "",
-    timezone_id: "",
+    timezone_id: ""
   })
   const translationFields = [
     {
@@ -73,8 +73,8 @@ function CountryForm(props) {
       maxlength: 64,
     },
     region_id: {
-      required: true,
-    },
+      required: true
+    }
   }
 
   useEffect(async () => {
@@ -109,29 +109,6 @@ function CountryForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
-<<<<<<< HEAD
-        if (res.data.timezone) {
-          setTimezoneData([
-            { ...res.data.timezone, text: res.data.timezone.timezone_name },
-          ])
-        }
-        if (res.data.currency) {
-          setCurrencyData([
-            { ...res.data.currency, text: res.data.currency.currency_name },
-          ])
-        }
-        if (res.data.region) {
-          setRegionData([
-            { ...res.data.region, text: res.data.region.region_name },
-          ])
-        }
-        if (res.data.language) {
-          setLanguageData([
-            { ...res.data.language, text: res.data.language.language_name },
-          ])
-        }
-=======
->>>>>>> b4e53090a278b46ea468ded576eda3a789dbe77d
       } catch (e) {}
 
       try {
@@ -203,7 +180,7 @@ function CountryForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Country Name"
-          labelRequired="label-required" 
+          labelRequired="label-required"
           value={form.country_name}
           name="country_name"
           cl="3"
@@ -260,7 +237,7 @@ function CountryForm(props) {
         />
         <FormInputSelectAjax
           label="Region"
-          labelRequired="label-required" 
+          labelRequired="label-required"
           value={form.region_id}
           name="region_id"
           cl="3"
@@ -291,12 +268,13 @@ function CountryForm(props) {
           minLength="0"
           maxLength="9999"
         />
+
       </FormHorizontal>
 
       <FormHorizontal>
         <FormInputControl
           label="Country Code"
-          labelRequired="label-required" 
+          labelRequired="label-required"
           value={form.country_code}
           name="country_code"
           cl="7"
@@ -312,17 +290,9 @@ function CountryForm(props) {
           label="Country Alpha 3 Code"
           value={form.country_alpha_3_code}
           name="country_alpha_3_code"
-<<<<<<< HEAD
-          cl="4"
-          cr="6"
-          onChange={(e) =>
-            setForm({ ...form, country_alpha_3_code: e.target.value })
-          }
-=======
           cl="7"
           cr="5"
           onChange={(e) => setForm({ ...form, country_alpha_3_code: e.target.value })}
->>>>>>> b4e53090a278b46ea468ded576eda3a789dbe77d
           disabled={isView || loading}
           type="text"
           minLength="3"

@@ -23,9 +23,9 @@ function RatingTypeForm(props) {
   const [form, setForm] = useState({
     provider: "",
     rating_symbol: "",
-    rating_type_code: 0,
+    rating_type_code: "",
     rating_type_name: "",
-    scale: 0,
+    scale: "",
   })
   const translationFields = [
     {
@@ -39,7 +39,7 @@ function RatingTypeForm(props) {
     provider: {
       required: true,
       minlength: 1,
-      maxlength: 64,
+      maxlength: 256,
     },
 
     rating_symbol: {
@@ -57,13 +57,13 @@ function RatingTypeForm(props) {
     rating_type_name: {
       required: true,
       minlength: 1,
-      maxlength: 64,
+      maxlength: 256,
     },
 
     scale: {
       required: true,
-      min: 0,
-      max: 99,
+      min: 1,
+      max: 3,
     },
   }
 
@@ -163,7 +163,8 @@ function RatingTypeForm(props) {
     >
       <FormHorizontal>
         <FormInputControl
-          label="Rating Type Name *"
+          label="Rating Type Name"
+          labelRequired="label-required"
           value={form.rating_type_name}
           name="rating_type_name"
           cl="3"
@@ -174,7 +175,7 @@ function RatingTypeForm(props) {
           disabled={isView || loading}
           type="text"
           minLength="1"
-          maxLength="64"
+          maxLength="256"
         />
 
         <FormInputControl
@@ -187,10 +188,11 @@ function RatingTypeForm(props) {
           disabled={isView || loading}
           type="text"
           minLength="1"
-          maxLength="64"
+          maxLength="256"
         />
         <FormInputControl
-          label="Rating Symbol *"
+          label="Rating Symbol"
+          labelRequired="label-required"
           value={form.rating_symbol}
           name="rating_symbol"
           cl="3"
@@ -205,11 +207,14 @@ function RatingTypeForm(props) {
           maxLength="9999"
         >
           <option>Please Choose</option>
-          <option value="star">star</option>
+          <option value="star">Star</option>
+          <option value="like">Like</option>
+          <option value="smiler">Smile</option>
         </FormInputControl>
 
         <FormInputControl
-          label="Scale *"
+          label="Scale"
+          labelRequired="label-required"
           value={form.scale}
           name="sclae"
           cl="3"
@@ -219,17 +224,18 @@ function RatingTypeForm(props) {
           }
           disabled={isView || loading}
           type="number"
-          min="0"
-          max="99"
+          min="1"
+          max="3"
         />
       </FormHorizontal>
 
       <FormHorizontal>
         <FormInputControl
-          label="Rating Type Code *"
+          label="Rating Type Code"
+          labelRequired="label-required"
           value={form.rating_type_code}
           name="rating_type_code"
-          cl="4"
+          cl="5"
           cr="6"
           onChange={(e) =>
             setForm({ ...form, rating_type_code: parseInt(e.target.value) })

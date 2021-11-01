@@ -26,7 +26,7 @@ function ProvinceForm(props) {
     country_id: "",
     state_province_category_id: "",
     state_province_code: "",
-    state_province_name: "",
+    state_province_name: ""
   })
   const translationFields = [
     {
@@ -46,7 +46,7 @@ function ProvinceForm(props) {
       required: true,
       minlength: 1,
       maxlength: 256,
-    },
+    }
   }
 
   useEffect(async () => {
@@ -82,18 +82,10 @@ function ProvinceForm(props) {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
         if (res.data.state_province_category) {
-          setSubdivisionData([
-            {
-              ...res.data.state_province_category,
-              text: res.data.state_province_category
-                .state_province_category_name,
-            },
-          ])
+          setSubdivisionData([{...res.data.state_province_category, text: res.data.state_province_category.state_province_category_name}])
         }
         if (res.data.country) {
-          setCountryData([
-            { ...res.data.country, text: res.data.country.country_name },
-          ])
+          setCountryData([{...res.data.country, text: res.data.country.country_name}])
         }
       } catch (e) {}
 
@@ -155,14 +147,12 @@ function ProvinceForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="State / Province Name"
-          labelRequired="label-required" 
+          labelRequired="label-required"
           value={form.state_province_name}
           name="state_province_name"
           cl="4"
           cr="6"
-          onChange={(e) =>
-            setForm({ ...form, state_province_name: e.target.value })
-          }
+          onChange={(e) => setForm({ ...form, state_province_name: e.target.value })}
           disabled={isView || loading}
           type="text"
           minLength="1"
@@ -178,10 +168,7 @@ function ProvinceForm(props) {
           column="state_province_category_name"
           data={subdivisionData}
           onChange={(e) =>
-            setForm({
-              ...form,
-              state_province_category_id: e.target.value || null,
-            })
+            setForm({ ...form, state_province_category_id: e.target.value || null })
           }
           disabled={isView || loading}
           type="select"
@@ -201,25 +188,18 @@ function ProvinceForm(props) {
           disabled={isView || loading}
           type="select"
         />
+
       </FormHorizontal>
 
       <FormHorizontal>
         <FormInputControl
           label="State / Province Code"
-          labelRequired="label-required" 
+          labelRequired="label-required"
           value={form.state_province_code}
           name="state_province_code"
-<<<<<<< HEAD
-          cl="4"
-          cr="6"
-          onChange={(e) =>
-            setForm({ ...form, state_province_code: e.target.value })
-          }
-=======
           cl="7"
           cr="5"
           onChange={(e) => setForm({ ...form, state_province_code: e.target.value })}
->>>>>>> b4e53090a278b46ea468ded576eda3a789dbe77d
           disabled={isView || loading}
           type="text"
           minLength="1"

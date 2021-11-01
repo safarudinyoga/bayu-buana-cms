@@ -7,7 +7,7 @@ import FormBuilder from "components/form/builder"
 import useQuery from "lib/query"
 import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
-
+import FormInputWrapper from "components/form/input-wrapper"
 const endpoint = "/master/hotel-amenity-types"
 const backUrl = "/master/hotel-amenity-types"
 
@@ -22,6 +22,13 @@ function HotelAmenityForm(props) {
   const [form, setForm] = useState({
     hotel_amenity_type_code: 0,
     hotel_amenity_type_name: "",
+    hotel_amenity_type_category: "",
+    attraction_category_asset: {
+      multimedia_description_id: null,
+      multimedia_description: {
+        url: "",
+      },
+    },
   })
   const translationFields = [
     {
@@ -37,10 +44,15 @@ function HotelAmenityForm(props) {
       min: 0,
       max: 99,
     },
-    hotel_amenity_type_name: {
+    hotel_amenity_type_category:{
       required: true,
       minlength: 1,
       maxlength: 64,
+    },
+    hotel_amenity_type_name: {
+      required: true,
+      minlength: 1,
+      maxlength: 256,
     },
   }
 
@@ -64,7 +76,7 @@ function HotelAmenityForm(props) {
           },
           {
             link: backUrl,
-            text: "Hotel Amenity Type",
+            text: "Hotel Amenity Types",
           },
           {
             text: docTitle,
@@ -106,6 +118,12 @@ function HotelAmenityForm(props) {
       if (!form.hotel_amenity_type_name) {
         form.hotel_amenity_type_name = null
       }
+      if (!form.hotel_amenity_type_category) {
+        form.hotel_amenity_type_category = null
+      }
+      if (!form.attraction_category_asset.multimedia_description_id) {
+        form.attraction_category_asset.multimedia_description_id = null
+      }
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
       for (let i in translated) {
@@ -129,7 +147,7 @@ function HotelAmenityForm(props) {
       if (res.data) {
         setForm({
           ...form,
-          airline_asset: {
+          attraction_category_asset: {
             multimedia_description_id: res.data.id,
             multimedia_description: res.data,
           },
@@ -152,10 +170,11 @@ function HotelAmenityForm(props) {
     >
       <FormHorizontal>
         <FormInputControl
-          label="Hotel Amenity Type Name *"
+          label="Hotel Amenity Type Name"
+          labelRequired="label-required"
           value={form.hotel_amenity_type_name}
           name="hotel_amenity_type_name"
-          cl="3"
+          cl="5"
           cr="6"
           onChange={(e) =>
             setForm({ ...form, hotel_amenity_type_name: e.target.value })
@@ -163,9 +182,23 @@ function HotelAmenityForm(props) {
           disabled={isView || loading}
           type="text"
           minLength="1"
+          maxLength="256"
+        />
+        <FormInputControl
+          label="Hotel Amenity Category"
+          value={form.hotel_amenity_type_category}
+          name="hotel_amenity_type_name"
+          cl="5"
+          cr="6"
+          onChange={(e) =>
+            setForm({ ...form, hotel_amenity_type_category: e.target.value })
+          }
+          disabled={isView || loading}
+          type="text"
+          minLength="1"
           maxLength="64"
         />
-        {/* <FormInputWrapper label="Icon" cl="3" cr="4">
+        <FormInputWrapper label="Icon" cl="5" cr="6">
           <label className="card card-default shadow-none border">
             <div className="card-body">
               {!isView ? (
@@ -178,28 +211,29 @@ function HotelAmenityForm(props) {
                 disabled={isView}
                 accept=".png,.jpg,.jpeg"
               />
-              {form.airline_asset &&
-              form.airline_asset.multimedia_description &&
-              form.airline_asset.multimedia_description.url ? (
+              {form.attraction_category_asset &&
+              form.attraction_category_asset.multimedia_description &&
+              form.attraction_category_asset.multimedia_description.url ? (
                 <img
-                  src={form.airline_asset.multimedia_description.url}
+                  src={form.attraction_category_asset.multimedia_description.url}
                   className="img-fluid"
-                  alt="airline"
+                  alt="attraction category"
                 />
               ) : (
                 ""
               )}
             </div>
           </label>
-        </FormInputWrapper> */}
+        </FormInputWrapper>
       </FormHorizontal>
 
       <FormHorizontal>
         <FormInputControl
-          label="Hotel Amenity Type Code *"
+          label="Hotel Amenity Type Code"
+          labelRequired="label-required"
           value={form.hotel_amenity_type_code}
           name="hotel_amenity_type_code"
-          cl="4"
+          cl="5"
           cr="6"
           onChange={(e) =>
             setForm({

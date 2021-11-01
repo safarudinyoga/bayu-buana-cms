@@ -229,7 +229,7 @@ function App() {
           <Route path="/master/rating-types/form/:id?">
             <RatingTypeForm />
           </Route>
-          <Route exact path="/master/attraction-category">
+          <Route exact path="/master/attraction-categories">
             <AttractionCategoryTable />
           </Route>
           <Route path="/master/attraction-category/form/:id?">

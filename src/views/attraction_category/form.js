@@ -10,7 +10,7 @@ import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
 
 const endpoint = "/master/attraction-categories"
-const backUrl = "/master/attraction-category"
+const backUrl = "/master/attraction-categories"
 
 function AttractionCategoryForm(props) {
   let dispatch = useDispatch()
@@ -43,13 +43,13 @@ function AttractionCategoryForm(props) {
     attraction_category_name: {
       required: true,
       minlength: 1,
-      maxlength: 64,
+      maxlength: 256,
     },
     is_default: {},
     description: {
       required: true,
       minlength: 0,
-      maxlength: 256,
+      maxlength: 4000,
     },
   }
 
@@ -73,7 +73,7 @@ function AttractionCategoryForm(props) {
           },
           {
             link: backUrl,
-            text: "Attraction Category",
+            text: "Attraction Categories",
           },
           {
             text: docTitle,
@@ -163,7 +163,8 @@ function AttractionCategoryForm(props) {
     >
       <FormHorizontal>
         <FormInputControl
-          label="Attraction Category Name *"
+          label="Attraction Category Name"
+          labelRequired="label-required"
           value={form.attraction_category_name}
           name="attraction_category_name"
           cl="7"
@@ -174,7 +175,7 @@ function AttractionCategoryForm(props) {
           disabled={isView || loading}
           type="text"
           minLength="1"
-          maxLength="64"
+          maxLength="256"
         />
 
         <FormInputWrapper
@@ -225,7 +226,7 @@ function AttractionCategoryForm(props) {
           </div>
         </FormInputWrapper>
         <FormInputControl
-          label="Description*"
+          label="Description"
           value={form.description}
           name="description"
           cl="7"
@@ -234,7 +235,7 @@ function AttractionCategoryForm(props) {
           disabled={isView || loading}
           type="textarea"
           minLength="1"
-          maxLength="256"
+          maxLength="4000"
         />
         <FormInputWrapper label="Icon" cl="7" cr="5">
           <label className="card card-default shadow-none border">

@@ -10,13 +10,13 @@ export default function AttractionCategoryTable() {
   useEffect(() => {
     dispatch(
       setUIParams({
-        title: "Attraction Category",
+        title: "Attraction Categories",
         breadcrumbs: [
           {
             text: "Master Data Management",
           },
           {
-            text: "Attraction Category",
+            text: "Attraction Categories",
           },
         ],
       }),
