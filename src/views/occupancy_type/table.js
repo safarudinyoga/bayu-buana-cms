@@ -11,13 +11,13 @@ export default function OccupancyTypeTable() {
   useEffect(() => {
     dispatch(
       setUIParams({
-        title: "Occupancy Type",
+        title: "Occupancy Types",
         breadcrumbs: [
           {
             text: "Master Data Management",
           },
           {
-            text: "Occupancy Type",
+            text: "Occupancy Types",
           },
         ],
       }),

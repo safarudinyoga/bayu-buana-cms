@@ -38,7 +38,7 @@ function OccupancyTypeForm(props) {
     occupancy_type_name: {
       required: true,
       minlength: 1,
-      maxlength: 64,
+      maxlength: 256,
     },
     is_default: {},
     occupancy: {
@@ -48,8 +48,8 @@ function OccupancyTypeForm(props) {
     },
     occupancy_type_code: {
       required: true,
-      minlength: 2,
-      maxlength: 2,
+      minlength: 1,
+      maxlength: 36,
     },
   }
 
@@ -73,7 +73,7 @@ function OccupancyTypeForm(props) {
           },
           {
             link: backUrl,
-            text: "Occupancy Type",
+            text: "Occupancy Types",
           },
           {
             text: docTitle,
@@ -145,7 +145,7 @@ function OccupancyTypeForm(props) {
     >
       <FormHorizontal>
         <FormInputControl
-          label="Occupancy Type Name *"
+          label="Occupancy Type Name"
           value={form.occupancy_type_name}
           name="occupancy_type_name"
           cl="7"
@@ -156,7 +156,7 @@ function OccupancyTypeForm(props) {
           disabled={isView || loading}
           type="text"
           minLength="1"
-          maxLength="64"
+          maxLength="256"
         />
 
         <FormInputWrapper
@@ -207,7 +207,8 @@ function OccupancyTypeForm(props) {
           </div>
         </FormInputWrapper>
         <FormInputControl
-          label="Occupancy*"
+          label="Occupancy"
+          labelRequired="label-required"
           value={form.occupancy}
           name="occupancy"
           cl="7"
@@ -222,18 +223,19 @@ function OccupancyTypeForm(props) {
       </FormHorizontal>
       <FormHorizontal>
         <FormInputControl
-          label="Occupancy Type Code *"
+          label="Occupancy Type Code"
+          labelRequired="label-required"
           value={form.occupancy_type_code}
           name="occupancy_type_code"
-          cl="4"
+          cl="5"
           cr="6"
           onChange={(e) =>
             setForm({ ...form, occupancy_type_code: e.target.value })
           }
           disabled={isView || loading}
           type="text"
-          minLength="2"
-          maxLength="2"
+          minLength="1"
+          maxLength="36"
           hint="Rating type code maximum 2 characters"
         />
       </FormHorizontal>

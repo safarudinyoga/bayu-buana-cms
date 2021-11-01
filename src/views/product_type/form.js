@@ -37,13 +37,13 @@ function ProductTypeForm(props) {
     product_type_name: {
       required: true,
       minlength: 1,
-      maxlength: 64,
+      maxlength: 256,
     },
     is_default: {},
     product_type_code: {
       required: true,
       min: 1,
-      max: 4,
+      max: 99,
     },
   }
 
@@ -136,7 +136,8 @@ function ProductTypeForm(props) {
     >
       <FormHorizontal>
         <FormInputControl
-          label="Product Type Name *"
+          label="Product Type Name"
+          labelRequired="label-required"
           value={form.product_type_name}
           name="product_type_name"
           cl="7"
@@ -146,8 +147,8 @@ function ProductTypeForm(props) {
           }
           disabled={isView || loading}
           type="text"
-          minLength="1"
-          maxLength="64"
+          min="1"
+          max="256"
         />
 
         <FormInputWrapper
@@ -200,7 +201,8 @@ function ProductTypeForm(props) {
       </FormHorizontal>
       <FormHorizontal>
         <FormInputControl
-          label="Product Type Code*"
+          label="Product Type Code"
+          labelRequired="label-required"
           value={form.product_type_code}
           name="product_type_code"
           cl="7"
@@ -209,7 +211,7 @@ function ProductTypeForm(props) {
           disabled={isView || loading}
           type="number"
           min="1"
-          max="4"
+          max="99"
           hint="Product Type Code maximum 4 characters"
         />
       </FormHorizontal>
