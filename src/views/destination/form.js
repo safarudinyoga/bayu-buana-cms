@@ -24,7 +24,7 @@ function DestinationForm(props) {
     id: "",
     destination_name: "",
     country_id: "",
-    city_id: "",
+    destination_city_id: "",
     description: "",
     destination_code: "",
   })
@@ -58,7 +58,7 @@ function DestinationForm(props) {
       maxlength: 64,
     },
     description: {
-      required: true,
+      required: false,
       minlength: 1,
       maxlength: 400,
     },
@@ -89,7 +89,7 @@ function DestinationForm(props) {
           },
           {
             link: backUrl,
-            text: "Destination",
+            text: "Destinations",
           },
           {
             text: docTitle,
@@ -153,7 +153,8 @@ function DestinationForm(props) {
     >
       <FormHorizontal>
         <FormInputControl
-          label="Destination Name *"
+          label="Destination Name"
+          labelRequired="label-required"
           value={form.destination_name}
           name="destination_name"
           onChange={(e) => setForm({...form, destination_name: e.target.value})}
@@ -181,14 +182,14 @@ function DestinationForm(props) {
         <FormInputSelectAjax
           label="City"
           value={form.country_id}
-          name="city_id"
+          name="destination_city_id"
           cl="3"
           cr="6"
           endpoint="/master/cities"
           filter={form.country_id}
           column="city_name"
           onChange={(e) =>
-            setForm({...form, city_id: e.target.value || null})
+            setForm({...form, destination_city_id: e.target.value || null})
           }
           disabled={isView || loading}
           type="select"
@@ -215,7 +216,8 @@ function DestinationForm(props) {
           cr="6"
           disabled={isView || loading}
           type="number"
-          label="Destination Code *"
+          label="Destination Code"
+          labelRequired="label-required"
           minLength="3"
           maxLength="3"
           hint="Destination code maximum 3 characters"

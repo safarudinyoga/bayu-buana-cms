@@ -21,7 +21,6 @@ function ZoneForm(props) {
   const [translations, setTranslations] = useState([])
   const [id, setId] = useState(null)
   const [form, setForm] = useState({
-    id: "",
     zone_name: "",
     destination: "",
     description: "",
@@ -146,7 +145,8 @@ function ZoneForm(props) {
     >
       <FormHorizontal>
         <FormInputControl
-          label="Zone Name *"
+          label="Zone Name"
+          labelRequired="label-required"
           value={form.zone_name}
           name="zone_name"
           onChange={(e) => setForm({...form, zone_name: e.target.value})}
@@ -194,7 +194,8 @@ function ZoneForm(props) {
           cr="6"
           disabled={isView || loading}
           type="number"
-          label="Zone Code *"
+          label="Zone Code"
+          labelRequired="label-required"
           minLength="3"
           maxLength="3"
           hint="Zone code maximum 3 characters"

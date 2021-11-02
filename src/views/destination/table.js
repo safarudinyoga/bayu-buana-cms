@@ -42,11 +42,11 @@ export default function DestinationTable() {
       },
       {
         title: "Country",
-        data: "country",
+        data: "json.country_name",
       },
       {
         title: "City",
-        data: "city",
+        data: "city.city_name",
       },
       {
         searchable: false,
