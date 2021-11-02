@@ -216,7 +216,7 @@ function RatingTypeForm(props) {
           label="Scale"
           labelRequired="label-required"
           value={form.scale}
-          name="sclae"
+          name="scale"
           cl="3"
           cr="6"
           onChange={(e) =>
