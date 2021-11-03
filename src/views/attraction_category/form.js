@@ -45,10 +45,12 @@ function AttractionCategoryForm(props) {
       minlength: 1,
       maxlength: 256,
     },
-    is_default: {},
+    is_default: {
+      required: true,
+    },
     description: {
       required: true,
-      minlength: 0,
+      minlength: 1,
       maxlength: 4000,
     },
   }
@@ -180,6 +182,7 @@ function AttractionCategoryForm(props) {
 
         <FormInputWrapper
           label="Is Default"
+          labelRequired="label-required"
           cl="7"
           cr="5"
           hint="Set is default"

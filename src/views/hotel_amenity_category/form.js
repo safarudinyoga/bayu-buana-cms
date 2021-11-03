@@ -50,10 +50,11 @@ function HotelAmenityCategoryForm(props) {
       minlength: 1,
       maxlength: 256,
     },
-    is_default: {},
-    description: {
+    is_default: {
       required: true,
-      minlength: 0,
+    },
+    description: {
+      minlength: 1,
       maxlength: 4000,
     },
   }
@@ -232,7 +233,7 @@ function HotelAmenityCategoryForm(props) {
           </div>
         </FormInputWrapper>
         <FormInputControl
-          label="Description*"
+          label="Description"
           value={form.description}
           name="description"
           cl="7"
@@ -243,7 +244,7 @@ function HotelAmenityCategoryForm(props) {
           minLength="1"
           maxLength="4000"
         />
-        <FormInputWrapper label="Icon" cl="7" cr="5">
+        <FormInputWrapper label="Icon" cl="7" cr="5" labelRequired="label-required">
           <label className="card card-default shadow-none border">
             <div className="card-body">
               {!isView ? (
