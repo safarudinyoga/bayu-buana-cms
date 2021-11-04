@@ -22,7 +22,7 @@ function ProductTypeForm(props) {
   const [id, setId] = useState(null)
   const [form, setForm] = useState({
     product_type_name: "",
-    product_type_code:1,
+    product_type_code: "",
     is_default: false,
   })
   const translationFields = [
@@ -140,21 +140,21 @@ function ProductTypeForm(props) {
           labelRequired="label-required"
           value={form.product_type_name}
           name="product_type_name"
-          cl="7"
-          cr="5"
+          cl="5"
+          cr="7"
           onChange={(e) =>
             setForm({ ...form, product_type_name: e.target.value })
           }
           disabled={isView || loading}
           type="text"
-          min="1"
-          max="256"
+          minLength="1"
+          maxLength="256"
         />
 
         <FormInputWrapper
           label="Is Default"
-          cl="7"
-          cr="5"
+          cl="5"
+          cr="7"
           hint="Set is default"
         >
           <div className="form-check form-check-inline">
@@ -205,8 +205,8 @@ function ProductTypeForm(props) {
           labelRequired="label-required"
           value={form.product_type_code}
           name="product_type_code"
-          cl="7"
-          cr="5"
+          cl="5"
+          cr="7"
           onChange={(e) => setForm({ ...form, product_type_code: +e.target.value })}
           disabled={isView || loading}
           type="number"

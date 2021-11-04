@@ -10,14 +10,13 @@ export default function PropertyCategoryTable() {
   useEffect(() => {
     dispatch(
       setUIParams({
-        title: "Property Category",
+        title: "Property Categories",
         breadcrumbs: [
           {
-            link: "/",
             text: "Master Data Management",
           },
           {
-            text: "Property Category",
+            text: "Property Categories",
           },
         ],
       }),
@@ -25,7 +24,7 @@ export default function PropertyCategoryTable() {
   }, [])
 
   let params = {
-    title: "Property Category",
+    title: "Property Categories",
     baseRoute: "/master/property-categories/form",
     endpoint: "/master/property-categories",
     deleteEndpoint: "/master/batch-actions/delete/property-categories",

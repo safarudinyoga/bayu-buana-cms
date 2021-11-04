@@ -10,14 +10,13 @@ export default function LocationCategoryTable() {
   useEffect(() => {
     dispatch(
       setUIParams({
-        title: "Location Category",
+        title: "Location Categories",
         breadcrumbs: [
           {
-            link: "/",
             text: "Master Data Management",
           },
           {
-            text: "Location Category",
+            text: "Location Categories",
           },
         ],
       }),
@@ -25,7 +24,7 @@ export default function LocationCategoryTable() {
   }, [])
 
   let params = {
-    title: "Location Category",
+    title: "Location Categories",
     baseRoute: "/master/location-categories/form",
     endpoint: "/master/location-categories",
     deleteEndpoint: "/master/batch-actions/delete/location-categories",
