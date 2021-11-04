@@ -9,10 +9,10 @@ import useQuery from "lib/query"
 import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
 
-const endpoint = "/master/trip-types"
-const backUrl = "/master/trip-types"
+const endpoint = "/master/product-types"
+const backUrl = "/master/product-types"
 
-function TripTypeForm(props) {
+function ProductTypeForm(props) {
   let dispatch = useDispatch()
 
   const isView = useQuery().get("action") === "view"
@@ -21,41 +21,41 @@ function TripTypeForm(props) {
   const [translations, setTranslations] = useState([])
   const [id, setId] = useState(null)
   const [form, setForm] = useState({
-    trip_type_code: "",
-    trip_type_name: "",
+    product_type_name: "",
+    product_type_code:1,
     is_default: false,
   })
   const translationFields = [
     {
-      label: "Trip Type Name",
-      name: "trip_type_name",
+      label: "Product Type Name",
+      name: "product_type_name",
       type: "text",
     },
   ]
 
   const validationRules = {
-    trip_type_code: {
+    product_type_name: {
       required: true,
-      minlength: 0,
-      maxlength: 36,
-    },
-    trip_type_name: {
-      required: true,
-      minlength: 0,
+      minlength: 1,
       maxlength: 256,
     },
     is_default: {},
+    product_type_code: {
+      required: true,
+      min: 1,
+      max: 99,
+    },
   }
 
   useEffect(async () => {
     let api = new Api()
     let formId = props.match.params.id
 
-    let docTitle = "Edit Trip Type"
+    let docTitle = "Edit Product Type"
     if (!formId) {
-      docTitle = "Create Trip Type"
+      docTitle = "Create Product Type"
     } else if (isView) {
-      docTitle = "Trip Type Details"
+      docTitle = "Product Type Details"
     }
 
     dispatch(
@@ -63,12 +63,11 @@ function TripTypeForm(props) {
         title: docTitle,
         breadcrumbs: [
           {
-            link: "/",
             text: "Master Data Management",
           },
           {
             link: backUrl,
-            text: "Trip Type",
+            text: "Product Types",
           },
           {
             text: docTitle,
@@ -104,6 +103,12 @@ function TripTypeForm(props) {
     setLoading(true)
     let api = new Api()
     try {
+      if (!form.product_type_name) {
+        form.product_type_name = null
+      }
+      if (!form.product_type_code) {
+        form.product_type_code = null
+      }
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
       for (let i in translated) {
@@ -117,7 +122,6 @@ function TripTypeForm(props) {
       props.history.push(backUrl)
     }
   }
-
   return (
     <FormBuilder
       onBuild={(el) => setFormBuilder(el)}
@@ -132,22 +136,25 @@ function TripTypeForm(props) {
     >
       <FormHorizontal>
         <FormInputControl
-          label="Trip Type Name *"
-          value={form.trip_type_name}
-          name="trip_type_name"
-          cl="3"
-          cr="6"
-          onChange={(e) => setForm({ ...form, trip_type_name: e.target.value })}
+          label="Product Type Name"
+          labelRequired="label-required"
+          value={form.product_type_name}
+          name="product_type_name"
+          cl="7"
+          cr="5"
+          onChange={(e) =>
+            setForm({ ...form, product_type_name: e.target.value })
+          }
           disabled={isView || loading}
           type="text"
-          minLength="0"
-          maxLength="256"
+          min="1"
+          max="256"
         />
 
         <FormInputWrapper
           label="Is Default"
-          cl="3"
-          cr="6"
+          cl="7"
+          cr="5"
           hint="Set is default"
         >
           <div className="form-check form-check-inline">
@@ -155,12 +162,18 @@ function TripTypeForm(props) {
               className="form-check-input"
               type="radio"
               name="is_default"
-              id="tt-1"
+              id="ha-1"
               value={true}
+              disabled={isView || loading}
               checked={form.is_default}
-              onChange={(e) => setForm({ ...form, is_default: true })}
+              onChange={(e) =>
+                setForm({
+                  ...form,
+                  is_default: true,
+                })
+              }
             />
-            <label className="form-check-label" htmlFor="tt-1">
+            <label className="form-check-label" htmlFor="ha-1">
               Yes
             </label>
           </div>
@@ -169,35 +182,41 @@ function TripTypeForm(props) {
               className="form-check-input"
               type="radio"
               name="is_default"
-              id="tt-2"
+              id="ha-2"
               value={false}
+              disabled={isView || loading}
               checked={!form.is_default}
-              onChange={(e) => setForm({ ...form, is_default: false })}
+              onChange={(e) =>
+                setForm({
+                  ...form,
+                  is_default: false,
+                })
+              }
             />
-            <label className="form-check-label" htmlFor="tt-2">
+            <label className="form-check-label" htmlFor="ha-2">
               No
             </label>
           </div>
         </FormInputWrapper>
       </FormHorizontal>
-
       <FormHorizontal>
         <FormInputControl
-          label="Trip Type Code *"
-          value={form.trip_type_code}
-          name="trip_type_code"
-          cl="4"
-          cr="6"
-          onChange={(e) => setForm({ ...form, trip_type_code: e.target.value })}
+          label="Product Type Code"
+          labelRequired="label-required"
+          value={form.product_type_code}
+          name="product_type_code"
+          cl="7"
+          cr="5"
+          onChange={(e) => setForm({ ...form, product_type_code: +e.target.value })}
           disabled={isView || loading}
-          type="text"
-          minLength="0"
-          maxLength="36"
-          hint="Trip Type Code maximum 36 characters"
+          type="number"
+          min="1"
+          max="99"
+          hint="Product Type Code maximum 4 characters"
         />
       </FormHorizontal>
     </FormBuilder>
   )
 }
 
-export default withRouter(TripTypeForm)
+export default withRouter(ProductTypeForm)

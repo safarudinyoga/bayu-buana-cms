@@ -53,11 +53,16 @@ export default class Sidebar extends Component {
                       <p>Airport</p>
                     </Link>
                   </li>
-                  {/* <li className="nav-item">
+                  <li className="nav-item">
+                    <Link to="/master/attraction-categories" className="nav-link">
+                      <p>Attraction Category</p>
+                    </Link>
+                  </li>
+                  <li className="nav-item">
                     <Link to="/master/cabin-types" className="nav-link">
                       <p>Cabin Type</p>
                     </Link>
-                  </li> */}
+                  </li>
                   <li className="nav-item">
                     <Link to="/master/cities" className="nav-link">
                       <p>City</p>
@@ -73,7 +78,6 @@ export default class Sidebar extends Component {
                       <p>Currency</p>
                     </Link>
                   </li>
-                  {/* 
                   <li className="nav-item">
                     <Link to="/master/destination-groups" className="nav-link">
                       <p>Destination Group</p>
@@ -85,6 +89,16 @@ export default class Sidebar extends Component {
                     </Link>
                   </li>
                   <li className="nav-item">
+                    <Link to="/master/hotel-amenity-categories" className="nav-link">
+                      <p>Hotel Amenity Category</p>
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link to="/master/hotel-amenity-types" className="nav-link">
+                      <p>Hotel Amenity Type</p>
+                    </Link>
+                  </li>
+                  <li className="nav-item">
                     <Link to="/master/hotel-brands" className="nav-link">
                       <p>Hotel Brand</p>
                     </Link>
@@ -93,7 +107,7 @@ export default class Sidebar extends Component {
                     <Link to="/master/hotel-suppliers" className="nav-link">
                       <p>Hotel Supplier</p>
                     </Link>
-                  </li> */}
+                  </li>
                   <li className="nav-item">
                     <Link to="/master/languages" className="nav-link">
                       <p>Language</p>
@@ -119,6 +133,21 @@ export default class Sidebar extends Component {
                       <p>Property Category</p>
                     </Link>
                   </li> */}
+                  <li className="nav-item">
+                    <Link to="/master/occupancy-types" className="nav-link">
+                      <p>Occupancy Type</p>
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link to="/master/product-types" className="nav-link">
+                      <p>Product Type</p>
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link to="/master/rating-types" className="nav-link">
+                      <p>Rating Type</p>
+                    </Link>
+                  </li>
                   <li className="nav-item">
                     <Link to="/master/regions" className="nav-link">
                       <p>Region</p>

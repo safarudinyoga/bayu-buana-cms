@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react"
 import Api from "config/api"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
+import FormInputSelectAjax from "../../components/form/input-select-ajax"
 import FormBuilder from "components/form/builder"
 import useQuery from "lib/query"
 import { useDispatch } from "react-redux"
@@ -35,12 +36,12 @@ function HotelSupplierForm(props) {
   const validationRules = {
     hotel_supplier_code: {
       required: true,
-      minlength: 0,
-      maxlength: 26,
+      minlength: 1,
+      maxlength: 36,
     },
     hotel_supplier_name: {
       required: true,
-      minlength: 0,
+      minlength: 1,
       maxlength: 256,
     },
     supplier_type_id: {},
@@ -62,12 +63,11 @@ function HotelSupplierForm(props) {
         title: docTitle,
         breadcrumbs: [
           {
-            link: "/",
             text: "Master Data Management",
           },
           {
             link: backUrl,
-            text: "Hotel Supplier",
+            text: "Hotel Suppliers",
           },
           {
             text: docTitle,
@@ -131,7 +131,8 @@ function HotelSupplierForm(props) {
     >
       <FormHorizontal>
         <FormInputControl
-          label="Hotel Supplier Name *"
+          label="Hotel Supplier Name"
+          labelRequired="label-required" 
           value={form.hotel_supplier_name}
           name="hotel_supplier_name"
           cl="3"
@@ -141,26 +142,31 @@ function HotelSupplierForm(props) {
           }
           disabled={isView || loading}
           type="text"
-          minLength="0"
+          minLength="1"
           maxLength="256"
         />
-        <FormInputControl
+        <FormInputSelectAjax
           label="Supplier Type"
           value={form.supplier_type_id}
           name="supplier_type_id"
           cl="3"
           cr="6"
+          endpoint="/master/supplier-types"
+          column="supplier_type_name"
           onChange={(e) =>
-            setForm({ ...form, supplier_type_id: e.target.value })
+            setForm({ ...form, supplier_type_id: e.target.value || null })
           }
           disabled={isView || loading}
           type="select"
+          minLength="0"
+          maxLength="9999"
         />
       </FormHorizontal>
 
       <FormHorizontal>
         <FormInputControl
-          label="Hotel Supplier Code *"
+          label="Hotel Supplier Code"
+          labelRequired="label-required" 
           value={form.hotel_supplier_code}
           name="hotel_supplier_code"
           cl="6"
@@ -170,7 +176,7 @@ function HotelSupplierForm(props) {
           }
           disabled={isView || loading}
           type="text"
-          minLength="0"
+          minLength="1"
           maxLength="26"
           hint="Hotel Supplier Code maximum 36 characters"
         />

@@ -10,14 +10,13 @@ export default function FlightTypeTable() {
   useEffect(() => {
     dispatch(
       setUIParams({
-        title: "Flight Type",
+        title: "Flight Types",
         breadcrumbs: [
           {
-            link: "/",
             text: "Master Data Management",
           },
           {
-            text: "Flight Type",
+            text: "Flight Types",
           },
         ],
       }),
@@ -25,7 +24,7 @@ export default function FlightTypeTable() {
   }, [])
 
   let params = {
-    title: "Flight Type",
+    title: "Flight Types",
     baseRoute: "/master/flight-types/form",
     endpoint: "/master/flight-types",
     deleteEndpoint: "/master/batch-actions/delete/flight-types",

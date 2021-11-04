@@ -13,7 +13,8 @@ export default class Api {
   initialize() {
     this.axios.defaults.headers.common["Accept"] = "application/json"
     this.axios.defaults.headers.common["Accept-Language"] = "en"
-    this.axios.defaults.headers.common["X-User-ID"] = "2e93596b-a8e1-4bb0-b7fd-1315cb37c7c3"
+    this.axios.defaults.headers.common["X-User-ID"] =
+      "2e93596b-a8e1-4bb0-b7fd-1315cb37c7c3"
   }
 
   get(path, params) {
@@ -43,9 +44,9 @@ export default class Api {
   }
 
   putOrPost(path, id, data) {
-      let suffix = id ? "/" + id : ""
-      let method = id ? "put": "post"
-      return this[method](path + suffix, data)
+    let suffix = id ? "/" + id : ""
+    let method = id ? "put" : "post"
+    return this[method](path + suffix, data)
   }
 
   delete(path, params) {
