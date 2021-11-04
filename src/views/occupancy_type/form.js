@@ -24,7 +24,7 @@ function OccupancyTypeForm(props) {
     occupancy_type_name: "",
     occupancy_type_code:"",
     is_default: false,
-    occupancy:1,
+    occupancy:"",
   })
   const translationFields = [
     {
@@ -146,10 +146,11 @@ function OccupancyTypeForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Occupancy Type Name"
+          labelRequired="label-required"
           value={form.occupancy_type_name}
           name="occupancy_type_name"
-          cl="7"
-          cr="5"
+          cl="5"
+          cr="7"
           onChange={(e) =>
             setForm({ ...form, occupancy_type_name: e.target.value })
           }
@@ -161,8 +162,8 @@ function OccupancyTypeForm(props) {
 
         <FormInputWrapper
           label="Is Default"
-          cl="7"
-          cr="5"
+          cl="5"
+          cr="7"
           hint="Set is default"
         >
           <div className="form-check form-check-inline">
@@ -211,8 +212,8 @@ function OccupancyTypeForm(props) {
           labelRequired="label-required"
           value={form.occupancy}
           name="occupancy"
-          cl="7"
-          cr="5"
+          cl="5"
+          cr="7"
           onChange={(e) => setForm({ ...form, occupancy: +e.target.value })}
           disabled={isView || loading}
           type="number"
@@ -227,7 +228,7 @@ function OccupancyTypeForm(props) {
           labelRequired="label-required"
           value={form.occupancy_type_code}
           name="occupancy_type_code"
-          cl="5"
+          cl="6"
           cr="6"
           onChange={(e) =>
             setForm({ ...form, occupancy_type_code: e.target.value })

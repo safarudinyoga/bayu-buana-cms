@@ -20,7 +20,7 @@ function PassengerTypeForm(props) {
   const [translations, setTranslations] = useState([])
   const [id, setId] = useState(null)
   const [form, setForm] = useState({
-    passenger_type_code: 0,
+    passenger_type_code: "",
     passenger_alpha_3_code: "",
     passenger_type_name: "",
   })
@@ -39,12 +39,12 @@ function PassengerTypeForm(props) {
       max: 99,
     },
     passenger_alpha_3_code: {
-      minlength: 0,
+      minlength: 3,
       maxlength: 3,
     },
     passenger_type_name: {
       required: true,
-      minlength: 0,
+      minlength: 1,
       maxlength: 256,
     },
   }
@@ -65,12 +65,11 @@ function PassengerTypeForm(props) {
         title: docTitle,
         breadcrumbs: [
           {
-            link: "/",
             text: "Master Data Management",
           },
           {
             link: backUrl,
-            text: "Passenger Type",
+            text: "Passenger Types",
           },
           {
             text: docTitle,
@@ -106,6 +105,9 @@ function PassengerTypeForm(props) {
     setLoading(true)
     let api = new Api()
     try {
+      if (!form.passenger_alpha_3_code) {
+        form.passenger_alpha_3_code = null
+      }
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
       for (let i in translated) {
@@ -134,24 +136,26 @@ function PassengerTypeForm(props) {
     >
       <FormHorizontal>
         <FormInputControl
-          label="Passenger Type Name *"
+          label="Passenger Type Name"
+          
           value={form.passenger_type_name}
           name="passenger_type_name"
-          cl="3"
+          cl="4"
           cr="6"
           onChange={(e) =>
             setForm({ ...form, passenger_type_name: e.target.value })
           }
           disabled={isView || loading}
           type="text"
-          minLength="0"
+          minLength="1"
           maxLength="256"
         />
       </FormHorizontal>
 
       <FormHorizontal>
         <FormInputControl
-          label="Passenger Type Code *"
+          label="Passenger Type Code"
+          labelRequired="label-required"
           value={form.passenger_type_code}
           name="passenger_type_code"
           cl="6"
@@ -176,7 +180,7 @@ function PassengerTypeForm(props) {
           }
           disabled={isView || loading}
           type="text"
-          minLength="0"
+          minLength="3"
           maxLength="3"
           hint="Passanger Alpha 3 Code maximum 3 characters"
         />

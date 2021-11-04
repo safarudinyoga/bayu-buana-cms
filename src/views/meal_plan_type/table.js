@@ -10,14 +10,13 @@ export default function MealPlanTypeTable() {
   useEffect(() => {
     dispatch(
       setUIParams({
-        title: "Meal Plan Type",
+        title: "Meal Plan Types",
         breadcrumbs: [
           {
-            link: "/",
             text: "Master Data Management",
           },
           {
-            text: "Meal Plan Type",
+            text: "Meal Plan Types",
           },
         ],
       }),
@@ -25,7 +24,7 @@ export default function MealPlanTypeTable() {
   }, [])
 
   let params = {
-    title: "Meal Plan Type",
+    title: "Meal Plan Types",
     baseRoute: "/master/meal-plan-types/form",
     endpoint: "/master/meal-plan-types",
     deleteEndpoint: "/master/batch-actions/delete/meal-plan-types",

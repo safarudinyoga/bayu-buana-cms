@@ -20,7 +20,7 @@ function PropertyCategoryForm(props) {
   const [translations, setTranslations] = useState([])
   const [id, setId] = useState(null)
   const [form, setForm] = useState({
-    property_category_code: 0,
+    property_category_code: "",
     property_category_name: "",
   })
   const translationFields = [
@@ -39,7 +39,7 @@ function PropertyCategoryForm(props) {
     },
     property_category_name: {
       required: true,
-      minlength: 0,
+      minlength: 1,
       maxlength: 256,
     },
   }
@@ -60,12 +60,11 @@ function PropertyCategoryForm(props) {
         title: docTitle,
         breadcrumbs: [
           {
-            link: "/",
             text: "Master Data Management",
           },
           {
             link: backUrl,
-            text: "Property Category",
+            text: "Property Categories",
           },
           {
             text: docTitle,
@@ -129,27 +128,29 @@ function PropertyCategoryForm(props) {
     >
       <FormHorizontal>
         <FormInputControl
-          label="Property Category Name *"
+          label="Property Category Name"
+          labelRequired="label-required"
           value={form.property_category_name}
           name="property_category_name"
-          cl="3"
+          cl="4"
           cr="6"
           onChange={(e) =>
             setForm({ ...form, property_category_name: e.target.value })
           }
           disabled={isView || loading}
           type="text"
-          minLength="0"
+          minLength="1"
           maxLength="256"
         />
       </FormHorizontal>
 
       <FormHorizontal>
         <FormInputControl
-          label="Property Category Code *"
+          label="Property Category Code"
+          labelRequired="label-required"
           value={form.property_category_code}
           name="property_category_code"
-          cl="5"
+          cl="6"
           cr="6"
           onChange={(e) =>
             setForm({ ...form, property_category_code: parseInt(e.target.value) })
