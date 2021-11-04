@@ -43,7 +43,7 @@ export default function HotelAmenityTable() {
       },
       {
         title: "Icon",
-        data: "airline_asset.multimedia_description.url",
+        data: "hotel_amenity_type_asset.multimedia_description.url",
         searchable: false,
         orderable: false,
         render: (val) => {

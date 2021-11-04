@@ -10,14 +10,13 @@ export default function HotelSupplierTable() {
   useEffect(() => {
     dispatch(
       setUIParams({
-        title: "Hotel Supplier",
+        title: "Hotel Suppliers",
         breadcrumbs: [
           {
-            link: "/",
             text: "Master Data Management",
           },
           {
-            text: "Hotel Supplier",
+            text: "Hotel Suppliers",
           },
         ],
       }),
@@ -25,7 +24,7 @@ export default function HotelSupplierTable() {
   }, [])
 
   let params = {
-    title: "Hotel Supplier",
+    title: "Hotel Suppliers",
     baseRoute: "/master/hotel-suppliers/form",
     endpoint: "/master/hotel-suppliers",
     deleteEndpoint: "/master/batch-actions/delete/hotel-suppliers",

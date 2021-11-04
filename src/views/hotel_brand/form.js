@@ -34,12 +34,12 @@ function HotelBrandForm(props) {
   const validationRules = {
     hotel_brand_code: {
       required: true,
-      minlength: 0,
+      minlength: 1,
       maxlength: 36,
     },
     hotel_brand_name: {
       required: true,
-      minlength: 0,
+      minlength: 1,
       maxlength: 256,
     },
   }
@@ -64,8 +64,7 @@ function HotelBrandForm(props) {
             text: "Master Data Management",
           },
           {
-            link: backUrl,
-            text: "Hotel Brand",
+            text: "Hotel Brands",
           },
           {
             text: docTitle,
@@ -129,7 +128,8 @@ function HotelBrandForm(props) {
     >
       <FormHorizontal>
         <FormInputControl
-          label="Hotel Brand Name *"
+          label="Hotel Brand Name"
+          labelRequired="label-required" 
           value={form.hotel_brand_name}
           name="hotel_brand_name"
           cl="3"
@@ -139,14 +139,15 @@ function HotelBrandForm(props) {
           }
           disabled={isView || loading}
           type="text"
-          minLength="0"
+          minLength="1"
           maxLength="256"
         />
       </FormHorizontal>
 
       <FormHorizontal>
         <FormInputControl
-          label="Hotel Brand Code *"
+          label="Hotel Brand Code"
+          labelRequired="label-required" 
           value={form.hotel_brand_code}
           name="hotel_brand_code"
           cl="5"
@@ -156,7 +157,7 @@ function HotelBrandForm(props) {
           }
           disabled={isView || loading}
           type="text"
-          minLength="0"
+          minLength="1"
           maxLength="36"
           hint="Hotel Brand Code maximum 36 characters"
         />

@@ -49,9 +49,14 @@ function AttractionCategoryForm(props) {
       required: true,
     },
     description: {
-      required: true,
+      required: false,
       minlength: 1,
       maxlength: 4000,
+    },
+    attraction_category_asset: {
+      multimedia_description_id: {
+        required: true,
+      },
     },
   }
 
@@ -169,8 +174,8 @@ function AttractionCategoryForm(props) {
           labelRequired="label-required"
           value={form.attraction_category_name}
           name="attraction_category_name"
-          cl="7"
-          cr="5"
+          cl="6"
+          cr="6"
           onChange={(e) =>
             setForm({ ...form, attraction_category_name: e.target.value })
           }
@@ -183,8 +188,8 @@ function AttractionCategoryForm(props) {
         <FormInputWrapper
           label="Is Default"
           labelRequired="label-required"
-          cl="7"
-          cr="5"
+          cl="6"
+          cr="6"
           hint="Set is default"
         >
           <div className="form-check form-check-inline">
@@ -232,15 +237,15 @@ function AttractionCategoryForm(props) {
           label="Description"
           value={form.description}
           name="description"
-          cl="7"
-          cr="5"
+          cl="6"
+          cr="6"
           onChange={(e) => setForm({ ...form, description: e.target.value })}
           disabled={isView || loading}
           type="textarea"
           minLength="1"
           maxLength="4000"
         />
-        <FormInputWrapper label="Icon" cl="7" cr="5">
+        <FormInputWrapper label="Icon" cl="6" cr="6" labelRequired="label-required">
           <label className="card card-default shadow-none border">
             <div className="card-body">
               {!isView ? (

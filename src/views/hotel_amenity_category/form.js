@@ -24,7 +24,7 @@ function HotelAmenityCategoryForm(props) {
     hotel_amenity_category_name: "",
     is_default: false,
     description: "",
-    attraction_category_asset: {
+    hotel_amenity_category_asset: {
       multimedia_description_id: null,
       multimedia_description: {
         url: "",
@@ -121,8 +121,8 @@ function HotelAmenityCategoryForm(props) {
       if (!form.description) {
         form.description = null
       }
-      if (!form.attraction_category_asset.multimedia_description_id) {
-        form.attraction_category_asset.multimedia_description_id = null
+      if (!form.hotel_amenity_category_asset.multimedia_description_id) {
+        form.hotel_amenity_category_asset.multimedia_description_id = null
       }
 
       let res = await api.putOrPost(endpoint, id, form)
@@ -147,7 +147,7 @@ function HotelAmenityCategoryForm(props) {
       if (res.data) {
         setForm({
           ...form,
-          attraction_category_asset: {
+          hotel_amenity_category_asset: {
             multimedia_description_id: res.data.id,
             multimedia_description: res.data,
           },
@@ -257,15 +257,15 @@ function HotelAmenityCategoryForm(props) {
                 disabled={isView}
                 accept=".png,.jpg,.jpeg"
               />
-              {form.attraction_category_asset &&
-              form.attraction_category_asset.multimedia_description &&
-              form.attraction_category_asset.multimedia_description.url ? (
+              {form.hotel_amenity_category_asset &&
+              form.hotel_amenity_category_asset.multimedia_description &&
+              form.hotel_amenity_category_asset.multimedia_description.url ? (
                 <img
                   src={
-                    form.attraction_category_asset.multimedia_description.url
+                    form.hotel_amenity_category_asset.multimedia_description.url
                   }
                   className="img-fluid"
-                  alt="attraction category"
+                  alt="hotel amenity category"
                 />
               ) : (
                 ""
