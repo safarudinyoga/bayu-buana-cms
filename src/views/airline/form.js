@@ -121,9 +121,14 @@ function AirlineForm(props) {
       if (!form.numeric_code) {
         form.numeric_code = null
       }
-      if (form.airline_asset.multimedia_description_id == null) {
+      if (!form.airline_asset) {
         form.airline_asset = null
+      }else{
+        if(!form.airline_asset.multimedia_description_id){
+          form.airline_asset = null
+        }
       }
+
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
       for (let i in translated) {

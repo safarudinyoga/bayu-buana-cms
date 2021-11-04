@@ -53,11 +53,6 @@ function AttractionCategoryForm(props) {
       minlength: 1,
       maxlength: 4000,
     },
-    attraction_category_asset: {
-      multimedia_description_id: {
-        required: true,
-      },
-    },
   }
 
   useEffect(async () => {
@@ -122,8 +117,13 @@ function AttractionCategoryForm(props) {
       if (!form.description) {
         form.description = null
       }
-      if (!form.attraction_category_asset.multimedia_description_id) {
-        form.attraction_category_asset.multimedia_description_id = null
+
+      if (!form.attraction_category_asset) {
+        form.attraction_category_asset = null
+      }else{
+        if(!form.attraction_category_asset.multimedia_description_id){
+          form.attraction_category_asset = null
+        }
       }
 
       let res = await api.putOrPost(endpoint, id, form)

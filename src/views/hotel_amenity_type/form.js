@@ -122,8 +122,12 @@ function HotelAmenityForm(props) {
       if (!form.hotel_amenity_type_category) {
         form.hotel_amenity_type_category = null
       }
-      if (!form.hotel_amenity_type_asset.multimedia_description_id) {
-        form.hotel_amenity_type_asset.multimedia_description_id = null
+      if (!form.hotel_amenity_type_asset) {
+        form.hotel_amenity_type_asset = null
+      }else{
+        if(!form.hotel_amenity_type_asset.multimedia_description_id){
+          form.hotel_amenity_type_asset = null
+        }
       }
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)

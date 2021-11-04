@@ -121,8 +121,13 @@ function HotelAmenityCategoryForm(props) {
       if (!form.description) {
         form.description = null
       }
-      if (!form.hotel_amenity_category_asset.multimedia_description_id) {
-        form.hotel_amenity_category_asset.multimedia_description_id = null
+
+      if (!form.hotel_amenity_category_asset) {
+        form.hotel_amenity_category_asset = null
+      }else{
+        if(!form.hotel_amenity_category_asset.multimedia_description_id){
+          form.hotel_amenity_category_asset = null
+        }
       }
 
       let res = await api.putOrPost(endpoint, id, form)
@@ -186,7 +191,6 @@ function HotelAmenityCategoryForm(props) {
 
         <FormInputWrapper
           label="Is Default"
-          labelRequired="label-required"
           cl="7"
           cr="5"
           hint="Set is default"
@@ -244,7 +248,7 @@ function HotelAmenityCategoryForm(props) {
           minLength="1"
           maxLength="4000"
         />
-        <FormInputWrapper label="Icon" cl="7" cr="5" labelRequired="label-required">
+        <FormInputWrapper label="Icon" cl="7" cr="5">
           <label className="card card-default shadow-none border">
             <div className="card-body">
               {!isView ? (

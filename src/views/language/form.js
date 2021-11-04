@@ -130,8 +130,12 @@ function LanguageForm(props) {
       if (!form.language_alpha_3_code) {
         form.language_alpha_3_code = null
       }
-      if (form.language_asset.multimedia_description_id == null) {
+      if (!form.language_asset) {
         form.language_asset = null
+      }else{
+        if(!form.language_asset.multimedia_description_id){
+          form.language_asset = null
+        }
       }
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
