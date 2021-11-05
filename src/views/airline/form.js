@@ -211,6 +211,7 @@ function AirlineForm(props) {
             Company 2
           </option>
         </FormInputSelectAjax>
+        {console.log(form,'fomr')}
         <FormInputWrapper label="Airline Logo" cl="3" cr="4">
           <label className="card card-default shadow-none border">
             <div className="card-body">

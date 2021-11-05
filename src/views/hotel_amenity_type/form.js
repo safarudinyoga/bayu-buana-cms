@@ -88,6 +88,7 @@ function HotelAmenityForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
+        console.log(res.data,'data')
       } catch (e) {}
 
       try {
@@ -196,9 +197,7 @@ function HotelAmenityForm(props) {
           cr="6"
           endpoint="/master/hotel-amenity-categories"
           column="hotel_amenity_category_name"
-          onChange={(e) =>
-            setForm({ ...form, hotel_amenity_category_hotel_amenity_type: e.target.value || null })
-          }
+          onChange={(e, values) => setForm(prev => ({...prev, hotel_amenity_category_hotel_amenity_type: values.map(value => ({hotel_amenity_category_id: value.id}))}))}
           disabled={isView || loading}
           type="select"
           minLength="0"
