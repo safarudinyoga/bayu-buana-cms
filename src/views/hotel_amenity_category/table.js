@@ -43,7 +43,7 @@ export default function HotelAmenityCategoryTable() {
       },
       {
         title: "Icon",
-        data: "attraction_category_asset.multimedia_description.url",
+        data: "hotel_amenity_category_asset.multimedia_description.url",
         searchable: false,
         orderable: false,
         render: (val) => {

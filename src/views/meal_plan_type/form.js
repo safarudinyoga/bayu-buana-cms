@@ -20,7 +20,7 @@ function MealPlanTypeForm(props) {
   const [translations, setTranslations] = useState([])
   const [id, setId] = useState(null)
   const [form, setForm] = useState({
-    meal_plan_type_code: 0,
+    meal_plan_type_code: "",
     meal_plan_type_name: "",
   })
   const translationFields = [
@@ -39,7 +39,7 @@ function MealPlanTypeForm(props) {
     },
     meal_plan_type_name: {
       required: true,
-      minlength: 0,
+      minlength: 1,
       maxlength: 256,
     },
   }
@@ -60,12 +60,11 @@ function MealPlanTypeForm(props) {
         title: docTitle,
         breadcrumbs: [
           {
-            link: "/",
             text: "Master Data Management",
           },
           {
             link: backUrl,
-            text: "Meal Plan Type",
+            text: "Meal Plan Types",
           },
           {
             text: docTitle,
@@ -129,24 +128,26 @@ function MealPlanTypeForm(props) {
     >
       <FormHorizontal>
         <FormInputControl
-          label="Meal Plan Type Name *"
+          label="Meal Plan Type Name"
+          labelRequired="label-required"
           value={form.meal_plan_type_name}
           name="meal_plan_type_name"
-          cl="3"
+          cl="4"
           cr="6"
           onChange={(e) =>
             setForm({ ...form, meal_plan_type_name: e.target.value })
           }
           disabled={isView || loading}
           type="text"
-          minLength="0"
+          minLength="1"
           maxLength="256"
         />
       </FormHorizontal>
 
       <FormHorizontal>
         <FormInputControl
-          label="Meal Plan Type Code *"
+          label="Meal Plan Type Code"
+          labelRequired="label-required"
           value={form.meal_plan_type_code}
           name="meal_plan_type_code"
           cl="6"

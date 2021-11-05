@@ -10,14 +10,13 @@ export default function CabinTypeTable() {
   useEffect(() => {
     dispatch(
       setUIParams({
-        title: "Cabin Type",
+        title: "Cabin Types",
         breadcrumbs: [
           {
-            link: "/",
             text: "Master Data Management",
           },
           {
-            text: "Cabin Type",
+            text: "Cabin Types",
           },
         ],
       }),
@@ -25,7 +24,7 @@ export default function CabinTypeTable() {
   }, [])
 
   let params = {
-    title: "Cabin Type",
+    title: "Cabin Types",
     baseRoute: "/master/cabin-types/form",
     endpoint: "/master/cabin-types",
     deleteEndpoint: "/master/batch-actions/delete/cabin-types",
@@ -33,14 +32,14 @@ export default function CabinTypeTable() {
     deactivationEndpoint: "/master/batch-actions/deactivate/cabin-types",
     columns: [
       {
-  "title": "Cabin Type Code",
-  "data": "cabin_type_code"
-},
-{
-  "title": "Cabin Type Name",
-  "data": "cabin_type_name",
-  "render": renderColumn('cabin_type','cabin_type_name')
-},
+        "title": "Cabin Type Code",
+        "data": "cabin_type_code"
+      },
+      {
+        "title": "Cabin Type Name",
+        "data": "cabin_type_name",
+        "render": renderColumn('cabin_type','cabin_type_name')
+      },
       {
         searchable: false,
         title: "Status",
@@ -48,10 +47,10 @@ export default function CabinTypeTable() {
         render: rowStatus,
       },
       {
-  "title": "Translated Cabin Type Name",
-  "data": "cabin_type_translation.cabin_type_name",
-  "visible": false
-}
+        "title": "Translated Cabin Type Name",
+        "data": "cabin_type_translation.cabin_type_name",
+        "visible": false
+      }
     ],
   }
   return <BBDataTable {...params} />

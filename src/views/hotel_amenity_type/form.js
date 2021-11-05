@@ -24,10 +24,15 @@ function HotelAmenityForm(props) {
   const [form, setForm] = useState({
     hotel_amenity_type_code: "",
     hotel_amenity_type_name: "",
+<<<<<<< HEAD
     hotel_amenity_type_category: [
       {hotel_amenity_category_id:"hotel_amenity_category_id"}
     ],
     attraction_category_asset: {
+=======
+    hotel_amenity_type_category: "",
+    hotel_amenity_type_asset: {
+>>>>>>> 147361bb9f7624d1c58670e60b00fac3b372080e
       multimedia_description_id: null,
       multimedia_description: {
         url: "",
@@ -49,7 +54,7 @@ function HotelAmenityForm(props) {
       max: 99,
     },
     hotel_amenity_type_category:{
-      required: true,
+      required: false,
       minlength: 1,
       maxlength: 64,
     },
@@ -125,8 +130,12 @@ function HotelAmenityForm(props) {
       if (!form.hotel_amenity_type_category) {
         form.hotel_amenity_type_category = null
       }
-      if (!form.attraction_category_asset.multimedia_description_id) {
-        form.attraction_category_asset.multimedia_description_id = null
+      if (!form.hotel_amenity_type_asset) {
+        form.hotel_amenity_type_asset = null
+      }else{
+        if(!form.hotel_amenity_type_asset.multimedia_description_id){
+          form.hotel_amenity_type_asset = null
+        }
       }
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
@@ -151,7 +160,7 @@ function HotelAmenityForm(props) {
       if (res.data) {
         setForm({
           ...form,
-          attraction_category_asset: {
+          hotel_amenity_type_asset: {
             multimedia_description_id: res.data.id,
             multimedia_description: res.data,
           },
@@ -236,13 +245,13 @@ function HotelAmenityForm(props) {
                 disabled={isView}
                 accept=".png,.jpg,.jpeg"
               />
-              {form.attraction_category_asset &&
-              form.attraction_category_asset.multimedia_description &&
-              form.attraction_category_asset.multimedia_description.url ? (
+              {form.hotel_amenity_type_asset &&
+              form.hotel_amenity_type_asset.multimedia_description &&
+              form.hotel_amenity_type_asset.multimedia_description.url ? (
                 <img
-                  src={form.attraction_category_asset.multimedia_description.url}
+                  src={form.hotel_amenity_type_asset.multimedia_description.url}
                   className="img-fluid"
-                  alt="attraction category"
+                  alt="hotel amenity type"
                 />
               ) : (
                 ""

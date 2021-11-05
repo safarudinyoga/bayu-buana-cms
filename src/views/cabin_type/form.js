@@ -34,12 +34,12 @@ function CabinTypeForm(props) {
   const validationRules = {
     cabin_type_code: {
       required: true,
-      minlength: 0,
+      minlength: 1,
       maxlength: 36,
     },
     cabin_type_name: {
       required: true,
-      minlength: 0,
+      minlength: 1,
       maxlength: 256,
     },
   }
@@ -60,12 +60,11 @@ function CabinTypeForm(props) {
         title: docTitle,
         breadcrumbs: [
           {
-            link: "/",
             text: "Master Data Management",
           },
           {
             link: backUrl,
-            text: "Cabin Type",
+            text: "Cabin Types",
           },
           {
             text: docTitle,
@@ -129,7 +128,8 @@ function CabinTypeForm(props) {
     >
       <FormHorizontal>
         <FormInputControl
-          label="Cabin Type Name *"
+          label="Cabin Type Name"
+          labelRequired="label-required" 
           value={form.cabin_type_name}
           name="cabin_type_name"
           cl="3"
@@ -139,14 +139,15 @@ function CabinTypeForm(props) {
           }
           disabled={isView || loading}
           type="text"
-          minLength="0"
+          minLength="1"
           maxLength="256"
         />
       </FormHorizontal>
 
       <FormHorizontal>
         <FormInputControl
-          label="Cabin Type Code *"
+          label="Cabin Type Code"
+          labelRequired="label-required" 
           value={form.cabin_type_code}
           name="cabin_type_code"
           cl="6"
@@ -156,7 +157,7 @@ function CabinTypeForm(props) {
           }
           disabled={isView || loading}
           type="text"
-          minLength="0"
+          minLength="1"
           maxLength="36"
           hint="Cabin Type Code maximum 36 characters"
         />
