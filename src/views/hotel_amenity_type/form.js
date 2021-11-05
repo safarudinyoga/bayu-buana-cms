@@ -9,6 +9,7 @@ import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
 import FormInputWrapper from "components/form/input-wrapper"
 import FormInputSelectAjax from "../../components/form/input-select-ajax"
+import TableDropdownFilter from "../../components/table/table-dropdown-filter"
 const endpoint = "/master/hotel-amenity-types"
 const backUrl = "/master/hotel-amenity-types"
 
@@ -23,7 +24,9 @@ function HotelAmenityForm(props) {
   const [form, setForm] = useState({
     hotel_amenity_type_code: "",
     hotel_amenity_type_name: "",
-    hotel_amenity_type_category: "",
+    hotel_amenity_type_category: [
+      {hotel_amenity_category_id:"hotel_amenity_category_id"}
+    ],
     attraction_category_asset: {
       multimedia_description_id: null,
       multimedia_description: {
@@ -201,6 +204,25 @@ function HotelAmenityForm(props) {
           minLength="0"
           maxLength="9999"
         />
+        <TableDropdownFilter
+          label="Hotel Amenity Category"
+          value={form.hotel_amenity_type_category}
+          name="hotel_amenity_type_category"
+          cl="5"
+          cr="6"
+          endpoint="/master/hotel-amenity-categories"
+          column="hotel_amenity_category_name"
+          onChange={(e) =>
+            setForm({ ...form, hotel_amenity_category_id: e.target.value || null })
+          }
+          disabled={isView || loading}
+          type="select"
+          minLength="0"
+          maxLength="9999"
+        />
+
+
+
         <FormInputWrapper label="Icon" cl="5" cr="6">
           <label className="card card-default shadow-none border">
             <div className="card-body">
