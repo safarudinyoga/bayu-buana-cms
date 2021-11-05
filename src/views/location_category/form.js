@@ -20,7 +20,7 @@ function LocationCategoryForm(props) {
   const [translations, setTranslations] = useState([])
   const [id, setId] = useState(null)
   const [form, setForm] = useState({
-    location_category_code: 0,
+    location_category_code: "",
     location_category_name: "",
   })
   const translationFields = [
@@ -39,7 +39,7 @@ function LocationCategoryForm(props) {
     },
     location_category_name: {
       required: true,
-      minlength: 0,
+      minlength: 1,
       maxlength: 256,
     },
   }
@@ -60,12 +60,11 @@ function LocationCategoryForm(props) {
         title: docTitle,
         breadcrumbs: [
           {
-            link: "/",
             text: "Master Data Management",
           },
           {
             link: backUrl,
-            text: "Location Category",
+            text: "Location Categories",
           },
           {
             text: docTitle,
@@ -129,24 +128,26 @@ function LocationCategoryForm(props) {
     >
       <FormHorizontal>
         <FormInputControl
-          label="Location Category Name *"
+          label="Location Category Name"
+          labelRequired="label-required"
           value={form.location_category_name}
           name="location_category_name"
-          cl="3"
+          cl="5"
           cr="6"
           onChange={(e) =>
             setForm({ ...form, location_category_name: e.target.value })
           }
           disabled={isView || loading}
           type="text"
-          minLength="0"
+          minLength="1"
           maxLength="256"
         />
       </FormHorizontal>
 
       <FormHorizontal>
         <FormInputControl
-          label="Location Category Code *"
+          label="Location Category Code"
+          labelRequired="label-required"
           value={form.location_category_code}
           name="location_category_code"
           cl="6"

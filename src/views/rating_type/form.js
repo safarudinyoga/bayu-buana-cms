@@ -8,39 +8,62 @@ import useQuery from "lib/query"
 import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
 
-const endpoint = "/master/property-categories"
-const backUrl = "/master/property-categories"
+const endpoint = "/master/rating-types"
+const backUrl = "/master/rating-types"
 
-function PropertyCategoryForm(props) {
+function RatingTypeForm(props) {
   let dispatch = useDispatch()
 
   const isView = useQuery().get("action") === "view"
   const [formBuilder, setFormBuilder] = useState(null)
   const [loading, setLoading] = useState(true)
   const [translations, setTranslations] = useState([])
+
   const [id, setId] = useState(null)
   const [form, setForm] = useState({
-    property_category_code: "",
-    property_category_name: "",
+    provider: "",
+    rating_symbol: "",
+    rating_type_code: "",
+    rating_type_name: "",
+    scale: "",
   })
   const translationFields = [
     {
-      label: "Property Category Name",
-      name: "property_category_name",
+      label: "Rating Type Name",
+      name: "rating_type_name",
       type: "text",
     },
   ]
 
   const validationRules = {
-    property_category_code: {
+    provider: {
+      required: true,
+      minlength: 1,
+      maxlength: 256,
+    },
+
+    rating_symbol: {
+      required: true,
+      minlength: 1,
+      maxlength: 64,
+    },
+
+    rating_type_code: {
       required: true,
       min: 0,
       max: 99,
     },
-    property_category_name: {
+
+    rating_type_name: {
       required: true,
       minlength: 1,
       maxlength: 256,
+    },
+
+    scale: {
+      required: true,
+      min: 1,
+      max: 3,
     },
   }
 
@@ -48,11 +71,11 @@ function PropertyCategoryForm(props) {
     let api = new Api()
     let formId = props.match.params.id
 
-    let docTitle = "Edit Property Category"
+    let docTitle = "Edit Rating Type"
     if (!formId) {
-      docTitle = "Create Property Category"
+      docTitle = "Create Rating Type"
     } else if (isView) {
-      docTitle = "Property Category Details"
+      docTitle = "Rating Type Details"
     }
 
     dispatch(
@@ -64,7 +87,7 @@ function PropertyCategoryForm(props) {
           },
           {
             link: backUrl,
-            text: "Property Categories",
+            text: "Rating Types",
           },
           {
             text: docTitle,
@@ -100,6 +123,18 @@ function PropertyCategoryForm(props) {
     setLoading(true)
     let api = new Api()
     try {
+      if (!form.provider) {
+        form.provider = null
+      }
+      if (!form.rating_symbol) {
+        form.rating_symbol = null
+      }
+      if (!form.rating_type_code) {
+        form.rating_type_code = null
+      }
+      if (!form.rating_type_name) {
+        form.rating_type_name = null
+      }
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
       for (let i in translated) {
@@ -128,42 +163,92 @@ function PropertyCategoryForm(props) {
     >
       <FormHorizontal>
         <FormInputControl
-          label="Property Category Name"
+          label="Rating Type Name"
           labelRequired="label-required"
-          value={form.property_category_name}
-          name="property_category_name"
-          cl="4"
+          value={form.rating_type_name}
+          name="rating_type_name"
+          cl="3"
           cr="6"
           onChange={(e) =>
-            setForm({ ...form, property_category_name: e.target.value })
+            setForm({ ...form, rating_type_name: e.target.value })
           }
           disabled={isView || loading}
           type="text"
           minLength="1"
           maxLength="256"
         />
+
+        <FormInputControl
+          label="Provider"
+          value={form.provider}
+          name="provider"
+          cl="3"
+          cr="6"
+          onChange={(e) => setForm({ ...form, provider: e.target.value })}
+          disabled={isView || loading}
+          type="text"
+          minLength="1"
+          maxLength="256"
+        />
+        <FormInputControl
+          label="Rating Symbol"
+          labelRequired="label-required"
+          value={form.rating_symbol}
+          name="rating_symbol"
+          cl="3"
+          cr="6"
+          column="name"
+          onChange={(e) =>
+            setForm({ ...form, rating_symbol: e.target.value || null })
+          }
+          disabled={isView || loading}
+          type="select"
+          minLength="0"
+          maxLength="9999"
+        >
+          <option>Please Choose</option>
+          <option value="star">Star</option>
+          <option value="like">Like</option>
+          <option value="smiler">Smile</option>
+        </FormInputControl>
+
+        <FormInputControl
+          label="Scale"
+          labelRequired="label-required"
+          value={form.scale}
+          name="scale"
+          cl="3"
+          cr="6"
+          onChange={(e) =>
+            setForm({ ...form, scale: parseInt(e.target.value) })
+          }
+          disabled={isView || loading}
+          type="number"
+          min="1"
+          max="3"
+        />
       </FormHorizontal>
 
       <FormHorizontal>
         <FormInputControl
-          label="Property Category Code"
+          label="Rating Type Code"
           labelRequired="label-required"
-          value={form.property_category_code}
-          name="property_category_code"
-          cl="6"
+          value={form.rating_type_code}
+          name="rating_type_code"
+          cl="5"
           cr="6"
           onChange={(e) =>
-            setForm({ ...form, property_category_code: parseInt(e.target.value) })
+            setForm({ ...form, rating_type_code: parseInt(e.target.value) })
           }
           disabled={isView || loading}
           type="number"
           min="0"
           max="99"
-          hint="Property Category Code is numeric"
+          hint="Rating type code maximum 99 characters"
         />
       </FormHorizontal>
     </FormBuilder>
   )
 }
 
-export default withRouter(PropertyCategoryForm)
+export default withRouter(RatingTypeForm)

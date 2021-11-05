@@ -34,12 +34,12 @@ function DestinationGroupForm(props) {
   const validationRules = {
     destination_group_code: {
       required: true,
-      minlength: 0,
+      minlength: 1,
       maxlength: 36,
     },
     destination_group_name: {
       required: true,
-      minlength: 0,
+      minlength: 1,
       maxlength: 256,
     },
   }
@@ -60,12 +60,11 @@ function DestinationGroupForm(props) {
         title: docTitle,
         breadcrumbs: [
           {
-            link: "/",
             text: "Master Data Management",
           },
           {
             link: backUrl,
-            text: "Destination Group",
+            text: "Destination Groups",
           },
           {
             text: docTitle,
@@ -129,7 +128,8 @@ function DestinationGroupForm(props) {
     >
       <FormHorizontal>
         <FormInputControl
-          label="Destination Group Name *"
+          label="Destination Group Name"
+          labelRequired="label-required" 
           value={form.destination_group_name}
           name="destination_group_name"
           cl="4"
@@ -139,14 +139,15 @@ function DestinationGroupForm(props) {
           }
           disabled={isView || loading}
           type="text"
-          minLength="0"
+          minLength="1"
           maxLength="256"
         />
       </FormHorizontal>
 
       <FormHorizontal>
         <FormInputControl
-          label="Destination Group Code *"
+          label="Destination Group Code"
+          labelRequired="label-required" 
           value={form.destination_group_code}
           name="destination_group_code"
           cl="6"

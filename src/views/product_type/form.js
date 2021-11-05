@@ -4,14 +4,15 @@ import Api from "config/api"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
 import FormBuilder from "components/form/builder"
+import FormInputWrapper from "components/form/input-wrapper"
 import useQuery from "lib/query"
 import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
 
-const endpoint = "/master/property-categories"
-const backUrl = "/master/property-categories"
+const endpoint = "/master/product-types"
+const backUrl = "/master/product-types"
 
-function PropertyCategoryForm(props) {
+function ProductTypeForm(props) {
   let dispatch = useDispatch()
 
   const isView = useQuery().get("action") === "view"
@@ -20,27 +21,29 @@ function PropertyCategoryForm(props) {
   const [translations, setTranslations] = useState([])
   const [id, setId] = useState(null)
   const [form, setForm] = useState({
-    property_category_code: "",
-    property_category_name: "",
+    product_type_name: "",
+    product_type_code: "",
+    is_default: false,
   })
   const translationFields = [
     {
-      label: "Property Category Name",
-      name: "property_category_name",
+      label: "Product Type Name",
+      name: "product_type_name",
       type: "text",
     },
   ]
 
   const validationRules = {
-    property_category_code: {
-      required: true,
-      min: 0,
-      max: 99,
-    },
-    property_category_name: {
+    product_type_name: {
       required: true,
       minlength: 1,
       maxlength: 256,
+    },
+    is_default: {},
+    product_type_code: {
+      required: true,
+      min: 1,
+      max: 99,
     },
   }
 
@@ -48,11 +51,11 @@ function PropertyCategoryForm(props) {
     let api = new Api()
     let formId = props.match.params.id
 
-    let docTitle = "Edit Property Category"
+    let docTitle = "Edit Product Type"
     if (!formId) {
-      docTitle = "Create Property Category"
+      docTitle = "Create Product Type"
     } else if (isView) {
-      docTitle = "Property Category Details"
+      docTitle = "Product Type Details"
     }
 
     dispatch(
@@ -64,7 +67,7 @@ function PropertyCategoryForm(props) {
           },
           {
             link: backUrl,
-            text: "Property Categories",
+            text: "Product Types",
           },
           {
             text: docTitle,
@@ -100,6 +103,12 @@ function PropertyCategoryForm(props) {
     setLoading(true)
     let api = new Api()
     try {
+      if (!form.product_type_name) {
+        form.product_type_name = null
+      }
+      if (!form.product_type_code) {
+        form.product_type_code = null
+      }
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
       for (let i in translated) {
@@ -113,7 +122,6 @@ function PropertyCategoryForm(props) {
       props.history.push(backUrl)
     }
   }
-
   return (
     <FormBuilder
       onBuild={(el) => setFormBuilder(el)}
@@ -128,42 +136,87 @@ function PropertyCategoryForm(props) {
     >
       <FormHorizontal>
         <FormInputControl
-          label="Property Category Name"
+          label="Product Type Name"
           labelRequired="label-required"
-          value={form.property_category_name}
-          name="property_category_name"
-          cl="4"
-          cr="6"
+          value={form.product_type_name}
+          name="product_type_name"
+          cl="5"
+          cr="7"
           onChange={(e) =>
-            setForm({ ...form, property_category_name: e.target.value })
+            setForm({ ...form, product_type_name: e.target.value })
           }
           disabled={isView || loading}
           type="text"
           minLength="1"
           maxLength="256"
         />
-      </FormHorizontal>
 
+        <FormInputWrapper
+          label="Is Default"
+          cl="5"
+          cr="7"
+          hint="Set is default"
+        >
+          <div className="form-check form-check-inline">
+            <input
+              className="form-check-input"
+              type="radio"
+              name="is_default"
+              id="ha-1"
+              value={true}
+              disabled={isView || loading}
+              checked={form.is_default}
+              onChange={(e) =>
+                setForm({
+                  ...form,
+                  is_default: true,
+                })
+              }
+            />
+            <label className="form-check-label" htmlFor="ha-1">
+              Yes
+            </label>
+          </div>
+          <div className="form-check form-check-inline">
+            <input
+              className="form-check-input"
+              type="radio"
+              name="is_default"
+              id="ha-2"
+              value={false}
+              disabled={isView || loading}
+              checked={!form.is_default}
+              onChange={(e) =>
+                setForm({
+                  ...form,
+                  is_default: false,
+                })
+              }
+            />
+            <label className="form-check-label" htmlFor="ha-2">
+              No
+            </label>
+          </div>
+        </FormInputWrapper>
+      </FormHorizontal>
       <FormHorizontal>
         <FormInputControl
-          label="Property Category Code"
+          label="Product Type Code"
           labelRequired="label-required"
-          value={form.property_category_code}
-          name="property_category_code"
-          cl="6"
-          cr="6"
-          onChange={(e) =>
-            setForm({ ...form, property_category_code: parseInt(e.target.value) })
-          }
+          value={form.product_type_code}
+          name="product_type_code"
+          cl="5"
+          cr="7"
+          onChange={(e) => setForm({ ...form, product_type_code: +e.target.value })}
           disabled={isView || loading}
           type="number"
-          min="0"
+          min="1"
           max="99"
-          hint="Property Category Code is numeric"
+          hint="Product Type Code maximum 4 characters"
         />
       </FormHorizontal>
     </FormBuilder>
   )
 }
 
-export default withRouter(PropertyCategoryForm)
+export default withRouter(ProductTypeForm)

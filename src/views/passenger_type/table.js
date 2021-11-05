@@ -10,14 +10,13 @@ export default function PassengerTypeTable() {
   useEffect(() => {
     dispatch(
       setUIParams({
-        title: "Passenger Type",
+        title: "Passenger Types",
         breadcrumbs: [
           {
-            link: "/",
             text: "Master Data Management",
           },
           {
-            text: "Passenger Type",
+            text: "Passenger Types",
           },
         ],
       }),
@@ -25,7 +24,7 @@ export default function PassengerTypeTable() {
   }, [])
 
   let params = {
-    title: "Passenger Type",
+    title: "Passenger Types",
     baseRoute: "/master/passenger-types/form",
     endpoint: "/master/passenger-types",
     deleteEndpoint: "/master/batch-actions/delete/passenger-types",

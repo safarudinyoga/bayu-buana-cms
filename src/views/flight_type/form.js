@@ -34,12 +34,12 @@ function FlightTypeForm(props) {
   const validationRules = {
     flight_type_code: {
       required: true,
-      minlength: 0,
+      minlength: 1,
       maxlength: 36,
     },
     flight_type_name: {
       required: true,
-      minlength: 0,
+      minlength: 1,
       maxlength: 256,
     },
   }
@@ -60,12 +60,11 @@ function FlightTypeForm(props) {
         title: docTitle,
         breadcrumbs: [
           {
-            link: "/",
             text: "Master Data Management",
           },
           {
             link: backUrl,
-            text: "Flight Type",
+            text: "Flight Types",
           },
           {
             text: docTitle,
@@ -129,7 +128,8 @@ function FlightTypeForm(props) {
     >
       <FormHorizontal>
         <FormInputControl
-          label="Flight Type Name *"
+          label="Flight Type Name"
+          labelRequired="label-required" 
           value={form.flight_type_name}
           name="flight_type_name"
           cl="3"
@@ -139,14 +139,15 @@ function FlightTypeForm(props) {
           }
           disabled={isView || loading}
           type="text"
-          minLength="0"
+          minLength="1"
           maxLength="256"
         />
       </FormHorizontal>
 
       <FormHorizontal>
         <FormInputControl
-          label="Flight Type Code *"
+          label="Flight Type Code"
+          labelRequired="label-required" 
           value={form.flight_type_code}
           name="flight_type_code"
           cl="5"
@@ -156,7 +157,7 @@ function FlightTypeForm(props) {
           }
           disabled={isView || loading}
           type="text"
-          minLength="0"
+          minLength="1"
           maxLength="36"
           hint="Flight Type Code maximum 36 characters"
         />

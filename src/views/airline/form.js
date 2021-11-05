@@ -116,14 +116,19 @@ function AirlineForm(props) {
     let api = new Api()
     try {
       if (!form.company_id) {
-          form.company_id = null
+        form.company_id = null
       }
       if (!form.numeric_code) {
         form.numeric_code = null
       }
-      if (form.airline_asset.multimedia_description_id == null) {
+      if (!form.airline_asset) {
         form.airline_asset = null
+      }else{
+        if(!form.airline_asset.multimedia_description_id){
+          form.airline_asset = null
+        }
       }
+
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
       for (let i in translated) {
@@ -209,7 +214,9 @@ function AirlineForm(props) {
         <FormInputWrapper label="Airline Logo" cl="3" cr="4">
           <label className="card card-default shadow-none border">
             <div className="card-body">
-              {!isView ? <i className="fas fa-edit text-muted img-edit-icon"></i> : null}
+              {!isView ? (
+                <i className="fas fa-edit text-muted img-edit-icon"></i>
+              ) : null}
               <input
                 type="file"
                 onChange={doUpload}

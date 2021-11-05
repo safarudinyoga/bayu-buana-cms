@@ -4,15 +4,15 @@ import Api from "config/api"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
 import FormBuilder from "components/form/builder"
+import FormInputWrapper from "components/form/input-wrapper"
 import useQuery from "lib/query"
 import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
-import FormInputWrapper from "components/form/input-wrapper"
 
-const endpoint = "/master/languages"
-const backUrl = "/master/languages"
+const endpoint = "/master/hotel-amenity-categories"
+const backUrl = "/master/hotel-amenity-categories"
 
-function LanguageForm(props) {
+function HotelAmenityCategoryForm(props) {
   let dispatch = useDispatch()
 
   const isView = useQuery().get("action") === "view"
@@ -21,11 +21,10 @@ function LanguageForm(props) {
   const [translations, setTranslations] = useState([])
   const [id, setId] = useState(null)
   const [form, setForm] = useState({
-    language_code: "",
-    language_alpha_3_code: "",
-    language_name: "",
-    language_native_name: "",
-    language_asset: {
+    hotel_amenity_category_name: "",
+    is_default: false,
+    description: "",
+    hotel_amenity_category_asset: {
       multimedia_description_id: null,
       multimedia_description: {
         url: "",
@@ -34,40 +33,29 @@ function LanguageForm(props) {
   })
   const translationFields = [
     {
-      label: "Language Name",
-      name: "language_name",
+      label: "Hotel Amenity Category Name",
+      name: "hotel_amenity_category_name",
       type: "text",
     },
     {
-      label: "Language Native Name",
-      name: "language_native_name",
-      type: "text",
+      label: "Description",
+      name: "description",
+      type: "textarea",
     },
   ]
 
   const validationRules = {
-    language_code: {
-      required: true,
-      minlength: 2,
-      maxlength: 2,
-    },
-    language_alpha_3_code: {
-      required: false,
-      minlength: 3,
-      maxlength: 3,
-    },
-    language_name: {
+    hotel_amenity_category_name: {
       required: true,
       minlength: 1,
       maxlength: 256,
     },
-    language_native_name: {
+    is_default: {
       required: true,
-      minlength: 1,
-      maxlength: 256,
     },
-    language_asset: {
-      required: true
+    description: {
+      minlength: 1,
+      maxlength: 4000,
     },
   }
 
@@ -75,11 +63,11 @@ function LanguageForm(props) {
     let api = new Api()
     let formId = props.match.params.id
 
-    let docTitle = "Edit Language"
+    let docTitle = "Edit Hotel Amenity Category"
     if (!formId) {
-      docTitle = "Create Language"
+      docTitle = "Create Hotel Amenity Category"
     } else if (isView) {
-      docTitle = "Language Details"
+      docTitle = "Hotel Amenity Category Details"
     }
 
     dispatch(
@@ -91,7 +79,7 @@ function LanguageForm(props) {
           },
           {
             link: backUrl,
-            text: "Language",
+            text: "Hotel Amenity Categories",
           },
           {
             text: docTitle,
@@ -127,16 +115,21 @@ function LanguageForm(props) {
     setLoading(true)
     let api = new Api()
     try {
-      if (!form.language_alpha_3_code) {
-        form.language_alpha_3_code = null
+      if (!form.hotel_amenity_category_name) {
+        form.hotel_amenity_category_name = null
       }
-      if (!form.language_asset) {
-        form.language_asset = null
+      if (!form.description) {
+        form.description = null
+      }
+
+      if (!form.hotel_amenity_category_asset) {
+        form.hotel_amenity_category_asset = null
       }else{
-        if(!form.language_asset.multimedia_description_id){
-          form.language_asset = null
+        if(!form.hotel_amenity_category_asset.multimedia_description_id){
+          form.hotel_amenity_category_asset = null
         }
       }
+
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
       for (let i in translated) {
@@ -150,7 +143,6 @@ function LanguageForm(props) {
       props.history.push(backUrl)
     }
   }
-
   const doUpload = async (e) => {
     try {
       let api = new Api()
@@ -160,7 +152,7 @@ function LanguageForm(props) {
       if (res.data) {
         setForm({
           ...form,
-          language_asset: {
+          hotel_amenity_category_asset: {
             multimedia_description_id: res.data.id,
             multimedia_description: res.data,
           },
@@ -168,7 +160,6 @@ function LanguageForm(props) {
       }
     } catch (e) {}
   }
-
   return (
     <FormBuilder
       onBuild={(el) => setFormBuilder(el)}
@@ -183,37 +174,86 @@ function LanguageForm(props) {
     >
       <FormHorizontal>
         <FormInputControl
-          label="Language Name"
-          labelRequired="label-required" 
-          value={form.language_name}
-          name="language_name"
-          cl="4"
-          cr="6"
-          onChange={(e) => setForm({ ...form, language_name: e.target.value })}
-          disabled={isView || loading}
-          type="text"
-          minLength="1"
-          maxLength="256"
-        />
-        <FormInputControl
-          label="Language Native Name"
-          labelRequired="label-required" 
-          value={form.language_native_name}
-          name="language_native_name"
-          cl="4"
-          cr="6"
+          label="Hotel Amenity Category Name"
+          labelRequired="label-required"
+          value={form.hotel_amenity_category_name}
+          name="hotel_amenity_category_name"
+          cl="7"
+          cr="5"
           onChange={(e) =>
-            setForm({ ...form, language_native_name: e.target.value })
+            setForm({ ...form, hotel_amenity_category_name: e.target.value })
           }
           disabled={isView || loading}
           type="text"
           minLength="1"
           maxLength="256"
         />
-        <FormInputWrapper label="Flag" cl="4" cr="4">
+
+        <FormInputWrapper
+          label="Is Default"
+          cl="7"
+          cr="5"
+          hint="Set is default"
+        >
+          <div className="form-check form-check-inline">
+            <input
+              className="form-check-input"
+              type="radio"
+              name="is_default"
+              id="ha-1"
+              value={true}
+              disabled={isView || loading}
+              checked={form.is_default}
+              onChange={(e) =>
+                setForm({
+                  ...form,
+                  is_default: true,
+                })
+              }
+            />
+            <label className="form-check-label" htmlFor="ha-1">
+              Yes
+            </label>
+          </div>
+          <div className="form-check form-check-inline">
+            <input
+              className="form-check-input"
+              type="radio"
+              name="is_default"
+              id="ha-2"
+              value={false}
+              disabled={isView || loading}
+              checked={!form.is_default}
+              onChange={(e) =>
+                setForm({
+                  ...form,
+                  is_default: false,
+                })
+              }
+            />
+            <label className="form-check-label" htmlFor="ha-2">
+              No
+            </label>
+          </div>
+        </FormInputWrapper>
+        <FormInputControl
+          label="Description"
+          value={form.description}
+          name="description"
+          cl="7"
+          cr="5"
+          onChange={(e) => setForm({ ...form, description: e.target.value })}
+          disabled={isView || loading}
+          type="textarea"
+          minLength="1"
+          maxLength="4000"
+        />
+        <FormInputWrapper label="Icon" cl="7" cr="5">
           <label className="card card-default shadow-none border">
             <div className="card-body">
-              {!isView ? <i className="fas fa-edit text-muted img-edit-icon"></i> : null}
+              {!isView ? (
+                <i className="fas fa-edit text-muted img-edit-icon"></i>
+              ) : null}
               <input
                 type="file"
                 onChange={doUpload}
@@ -221,13 +261,15 @@ function LanguageForm(props) {
                 disabled={isView}
                 accept=".png,.jpg,.jpeg"
               />
-              {form.language_asset &&
-              form.language_asset.multimedia_description &&
-              form.language_asset.multimedia_description.url ? (
+              {form.hotel_amenity_category_asset &&
+              form.hotel_amenity_category_asset.multimedia_description &&
+              form.hotel_amenity_category_asset.multimedia_description.url ? (
                 <img
-                  src={form.language_asset.multimedia_description.url}
+                  src={
+                    form.hotel_amenity_category_asset.multimedia_description.url
+                  }
                   className="img-fluid"
-                  alt="language"
+                  alt="hotel amenity category"
                 />
               ) : (
                 ""
@@ -236,40 +278,8 @@ function LanguageForm(props) {
           </label>
         </FormInputWrapper>
       </FormHorizontal>
-
-      <FormHorizontal>
-        <FormInputControl
-          label="Language Code"
-          labelRequired="label-required" 
-          value={form.language_code}
-          name="language_code"
-          cl="7"
-          cr="5"
-          onChange={(e) => setForm({ ...form, language_code: e.target.value })}
-          disabled={isView || loading}
-          type="text"
-          minLength="2"
-          maxLength="2"
-          hint="Language code maximum 2 characters"
-        />
-        <FormInputControl
-          label="Language Alpha 3 Code"
-          value={form.language_alpha_3_code}
-          name="language_alpha_3_code"
-          cl="7"
-          cr="5"
-          onChange={(e) =>
-            setForm({ ...form, language_alpha_3_code: e.target.value })
-          }
-          disabled={isView || loading}
-          type="text"
-          minLength="3"
-          maxLength="3"
-          hint="Language Alpha 3 Code maximum 3 characters"
-        />
-      </FormHorizontal>
     </FormBuilder>
   )
 }
 
-export default withRouter(LanguageForm)
+export default withRouter(HotelAmenityCategoryForm)

@@ -147,7 +147,7 @@ function ProvinceForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="State / Province Name"
-          labelRequired="label-required" 
+          labelRequired="label-required"
           value={form.state_province_name}
           name="state_province_name"
           cl="4"
@@ -188,13 +188,13 @@ function ProvinceForm(props) {
           disabled={isView || loading}
           type="select"
         />
-        
+
       </FormHorizontal>
 
       <FormHorizontal>
         <FormInputControl
           label="State / Province Code"
-          labelRequired="label-required" 
+          labelRequired="label-required"
           value={form.state_province_code}
           name="state_province_code"
           cl="7"

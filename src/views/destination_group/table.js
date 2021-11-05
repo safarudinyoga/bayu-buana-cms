@@ -10,14 +10,13 @@ export default function DestinationGroupTable() {
   useEffect(() => {
     dispatch(
       setUIParams({
-        title: "Destination Group",
+        title: "Destination Groups",
         breadcrumbs: [
           {
-            link: "/",
             text: "Master Data Management",
           },
           {
-            text: "Destination Group",
+            text: "Destination Groups",
           },
         ],
       }),
@@ -25,7 +24,7 @@ export default function DestinationGroupTable() {
   }, [])
 
   let params = {
-    title: "Destination Group",
+    title: "Destination Groups",
     baseRoute: "/master/destination-groups/form",
     endpoint: "/master/destination-groups",
     deleteEndpoint: "/master/batch-actions/delete/destination-groups",

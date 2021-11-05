@@ -180,7 +180,7 @@ function CountryForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Country Name"
-          labelRequired="label-required" 
+          labelRequired="label-required"
           value={form.country_name}
           name="country_name"
           cl="3"
@@ -237,7 +237,7 @@ function CountryForm(props) {
         />
         <FormInputSelectAjax
           label="Region"
-          labelRequired="label-required" 
+          labelRequired="label-required"
           value={form.region_id}
           name="region_id"
           cl="3"
@@ -268,13 +268,13 @@ function CountryForm(props) {
           minLength="0"
           maxLength="9999"
         />
-        
+
       </FormHorizontal>
 
       <FormHorizontal>
         <FormInputControl
           label="Country Code"
-          labelRequired="label-required" 
+          labelRequired="label-required"
           value={form.country_code}
           name="country_code"
           cl="7"
