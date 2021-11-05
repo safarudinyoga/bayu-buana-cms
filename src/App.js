@@ -63,6 +63,8 @@ import RoomAmenityTypeTable from "views/room_amenity_type/table"
 import RoomAmenityTypeForm from "views/room_amenity_type/form"
 import RoomAmenityCategoryTable from "views/room_amenity_category/table"
 import RoomAmenityCategoryForm from "views/room_amenity_category/form"
+import AttractionTable from "views/attraction/table"
+import AttractionForm from "views/attraction/form"
 
 function App() {
   document.title = "Bayu Buana"
@@ -241,6 +243,12 @@ function App() {
           </Route>
           <Route path="/master/room-amenity-categories/form/:id?">
             <RoomAmenityCategoryForm />
+          </Route>
+          <Route exact path="/master/attractions">
+            <AttractionTable />
+          </Route>
+          <Route path="/master/attractions/form/:id?">
+            <AttractionForm />
           </Route>
         </Switch>
       </DashboardWrapper>
