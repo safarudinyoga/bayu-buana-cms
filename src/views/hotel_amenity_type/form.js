@@ -88,7 +88,6 @@ function HotelAmenityForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
-        console.log(res.data,'data')
       } catch (e) {}
 
       try {
