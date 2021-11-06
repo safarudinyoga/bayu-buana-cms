@@ -38,18 +38,33 @@ export default function EmployeeTable() {
       {
         title: "Full Name",
         data: "full_name",
-        render: renderColumn("aircraft", "aircraft_name"),
+        render: renderColumn("full_name", "full_name"),
+      },
+      {
+        title: "Email",
+        data: "email",
+        render: renderColumn("email", "email"),
+      },
+      {
+        title: "Job Title",
+        data: "job_title",
+        render: renderColumn("job_title", "job_title"),
+      },
+      {
+        title: "Branch Office",
+        data: "branch_office",
+        render: renderColumn("branch_office", "branch_office"),
+      },
+      {
+        title: "Hire Date",
+        data: "hire_date",
+        render: renderColumn("hire_date", "hire_date"),
       },
       {
         searchable: false,
         title: "Status",
         data: "status",
         render: rowStatus,
-      },
-      {
-        title: "Translated Aircraft Name",
-        data: "aircraft_translation.aircraft_name",
-        visible: false,
       },
     ],
     emptyTable: "No employees found",
