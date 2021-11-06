@@ -22,7 +22,7 @@ function ZoneForm(props) {
   const [id, setId] = useState(null)
   const [form, setForm] = useState({
     zone_name: "",
-    destination: "",
+    destination_id: "",
     description: "",
     zone_code: "",
   })
@@ -43,21 +43,19 @@ function ZoneForm(props) {
     zone_name: {
       required: true,
       minlength: 1,
-      maxlength: 64,
+      maxlength: 256,
     },
     destination: {
-      required: false,
-      minlength: 1,
-      maxlength: 64,
+      required: true,
     },
     description: {
       minlength: 1,
-      maxlength: 400,
+      maxlength: 4000,
     },
-    destination_code: {
+    zone_code: {
       required: true,
-      minlength: 3,
-      maxlength: 3,
+      minlength: 1,
+      maxlength: 16,
     },
   }
 
@@ -153,18 +151,18 @@ function ZoneForm(props) {
           disabled={isView || loading}
           type="text"
           minLength="1"
-          maxLength="64"
+          maxLength="256"
         />
         <FormInputSelectAjax
           label="Destination"
-          value={form.destination}
+          value={form.destination_id}
           name="destination"
           cl="3"
           cr="6"
           endpoint="/master/destinations"
           column="destination_name"
           onChange={(e) =>
-            setForm({...form, destination: e.target.value || null})
+            setForm({...form, destination_id: e.target.value || null})
           }
           disabled={isView || loading}
           type="select"
@@ -181,7 +179,7 @@ function ZoneForm(props) {
           disabled={isView || loading}
           type="textarea"
           minLength="1"
-          maxLength="64"
+          maxLength="4000"
         />
       </FormHorizontal>
 
@@ -196,9 +194,9 @@ function ZoneForm(props) {
           type="number"
           label="Zone Code"
           labelRequired="label-required"
-          minLength="3"
-          maxLength="3"
-          hint="Zone code maximum 3 characters"
+          minLength="1"
+          maxLength="16"
+          hint="Zone code maximum 16 characters"
         />
 
       </FormHorizontal>

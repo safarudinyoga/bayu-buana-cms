@@ -1,13 +1,13 @@
-import { withRouter } from "react-router"
-import React, { useEffect, useState } from "react"
-import Api from "config/api"
+import FormBuilder from "components/form/builder"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
-import FormBuilder from "components/form/builder"
 import FormInputSelectAjax from "components/form/input-select-ajax"
+import Api from "config/api"
 import useQuery from "lib/query"
-import { useDispatch } from "react-redux"
-import { setUIParams } from "redux/ui-store"
+import React, {useEffect, useState} from "react"
+import {useDispatch} from "react-redux"
+import {withRouter} from "react-router"
+import {setUIParams} from "redux/ui-store"
 
 const endpoint = "/master/cities"
 const backUrl = "/master/cities"
@@ -81,14 +81,14 @@ function CityForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
-      } catch (e) {}
+      } catch (e) { }
 
       try {
         let res = await api.get(endpoint + "/" + formId + "/translations", {
           size: 50,
         })
         setTranslations(res.data.items)
-      } catch (e) {}
+      } catch (e) { }
       setLoading(false)
     }
   }, [])
@@ -137,12 +137,12 @@ function CityForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="City Name"
-          labelRequired="label-required" 
+          labelRequired="label-required"
           value={form.city_name}
           name="city_name"
           cl="3"
           cr="6"
-          onChange={(e) => setForm({ ...form, city_name: e.target.value })}
+          onChange={(e) => setForm({...form, city_name: e.target.value})}
           disabled={isView || loading}
           type="text"
           minLength="1"
@@ -157,23 +157,23 @@ function CityForm(props) {
           endpoint="/master/countries"
           column="country_name"
           onChange={(e) =>
-            setForm({ ...form, country_id: e.target.value || null })
+            setForm({...form, country_id: e.target.value || null})
           }
           disabled={isView || loading}
           type="select"
         />
-        
+
       </FormHorizontal>
 
       <FormHorizontal>
         <FormInputControl
           label="City Code"
-          labelRequired="label-required" 
+          labelRequired="label-required"
           value={form.city_code}
           name="city_code"
           cl="4"
           cr="6"
-          onChange={(e) => setForm({ ...form, city_code: e.target.value })}
+          onChange={(e) => setForm({...form, city_code: e.target.value})}
           disabled={isView || loading}
           type="text"
           minLength="3"

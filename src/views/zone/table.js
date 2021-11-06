@@ -1,7 +1,8 @@
 import BBDataTable from "components/table/bb-data-table"
+import TableDropdownFilter from "components/table/table-dropdown-filter"
 import rowStatus from "lib/row-status"
 import {renderColumn} from "lib/translation"
-import React, {useEffect} from "react"
+import React, {useEffect, useState} from "react"
 import {useDispatch} from "react-redux"
 import {setUIParams} from "redux/ui-store"
 
@@ -23,7 +24,45 @@ export default function ZoneTable() {
     )
   }, [])
 
-  let params = {
+  let [selectedDestinations, setSelectedDestinations] = useState([])
+  let [selectedDestinationIds, setSelectedDestinationIds] = useState([])
+
+  const onFilterChange = (e, values) => {
+    let ids = []
+    if (values && values.length > 0) {
+      for (let i in values) {
+        ids.push(values[i].id)
+      }
+    }
+    if (ids.length > 0) {
+      setParams({...params, filters: [["destination_id", "in", ids]]})
+    } else {
+      setParams({...params, filters: []})
+    }
+    setSelectedDestinations(values)
+    setSelectedDestinationIds(ids)
+  }
+
+  const extraFilter = () => {
+    return (
+      <TableDropdownFilter
+        label="Destination"
+        onChange={onFilterChange}
+        endpoint="/master/destinations"
+        column="destination_name"
+        value={selectedDestinationIds}
+        data={selectedDestinations}
+      />
+    )
+  }
+
+  const onReset = () => {
+    setParams({...params, filters: []})
+    setSelectedDestinations([])
+    setSelectedDestinationIds([])
+  }
+
+  let [params, setParams] = useState({
     title: "Zones",
     baseRoute: "/master/zones/form",
     endpoint: "/master/zones",
@@ -42,7 +81,7 @@ export default function ZoneTable() {
       },
       {
         title: "Destination",
-        data: "destination",
+        data: "destination.destination_name",
       },
       {
         searchable: false,
@@ -56,6 +95,7 @@ export default function ZoneTable() {
         visible: false,
       },
     ],
-  }
-  return <BBDataTable {...params} />
+  })
+
+  return <BBDataTable {...params} extraFilter={extraFilter} onReset={onReset} />
 }

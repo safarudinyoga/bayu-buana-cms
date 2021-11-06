@@ -45,27 +45,23 @@ function DestinationForm(props) {
     destination_name: {
       required: true,
       minlength: 1,
-      maxlength: 64,
+      maxlength: 256,
     },
     country: {
-      required: false,
-      minlength: 1,
-      maxlength: 64,
+      required: true,
     },
     city: {
-      required: false,
-      minlength: 1,
-      maxlength: 64,
+      required: true,
     },
     description: {
       required: false,
       minlength: 1,
-      maxlength: 400,
+      maxlength: 4000,
     },
     destination_code: {
       required: true,
-      minlength: 3,
-      maxlength: 3,
+      minlength: 1,
+      maxlength: 36,
     },
   }
 
