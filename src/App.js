@@ -68,6 +68,10 @@ import ProductTypeForm from "views/product_type/form"
 import DashboardWrapper from "components/wrapper/dashboard"
 import Dashboard from "views/dashboard"
 
+// Master Employee
+import EmployeeTable from "views/employee/table"
+import EmployeeForm from "views/employee/form"
+
 function App() {
   document.title = "Bayu Buana"
   return (
@@ -260,7 +264,13 @@ function App() {
             <ProductTypeForm />
           </Route>
 
-
+          {/* Master Employee */}
+          <Route exact path="/master/employee">
+            <EmployeeTable />
+          </Route>
+          <Route path="/master/employee/form/:id?">
+            <EmployeeForm />
+          </Route>
         </Switch>
       </DashboardWrapper>
     </Router>

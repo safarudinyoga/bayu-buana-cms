@@ -54,7 +54,10 @@ export default class Sidebar extends Component {
                     </Link>
                   </li>
                   <li className="nav-item">
-                    <Link to="/master/attraction-categories" className="nav-link">
+                    <Link
+                      to="/master/attraction-categories"
+                      className="nav-link"
+                    >
                       <p>Attraction Category</p>
                     </Link>
                   </li>
@@ -89,7 +92,10 @@ export default class Sidebar extends Component {
                     </Link>
                   </li>
                   <li className="nav-item">
-                    <Link to="/master/hotel-amenity-categories" className="nav-link">
+                    <Link
+                      to="/master/hotel-amenity-categories"
+                      className="nav-link"
+                    >
                       <p>Hotel Amenity Category</p>
                     </Link>
                   </li>
@@ -183,6 +189,22 @@ export default class Sidebar extends Component {
                       <p>Trip Type</p>
                     </Link>
                   </li> */}
+                </ul>
+              </li>
+              <li className="nav-item">
+                <Link to="#" className="nav-link">
+                  <img src="/img/icons/users.svg" alt="icon users" />
+                  <p>
+                    Employment Management
+                    <i className="right fas fa-angle-left"></i>
+                  </p>
+                </Link>
+                <ul className="nav nav-treeview">
+                  <li className="nav-item">
+                    <Link to="/master/employee" className="nav-link">
+                      <p>Master Employee</p>
+                    </Link>
+                  </li>
                 </ul>
               </li>
             </ul>

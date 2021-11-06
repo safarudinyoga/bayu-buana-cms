@@ -55,7 +55,6 @@ class BBDataTable extends Component {
           '<i class="fas fa-ellipsis-v float-left row-handle"></i> <input type="checkbox" data-id="' +
           row.id +
           '" class="select-checkbox-item"/>'
-          
         )
       },
     })
@@ -103,7 +102,10 @@ class BBDataTable extends Component {
         processing: true,
         displayLength: 10,
         displayStart: 0,
-        lengthMenu: [[10, 25, 50, 100, -1],[10, 25, 50, 100, "All"]],
+        lengthMenu: [
+          [10, 25, 50, 100, -1],
+          [10, 25, 50, 100, "All"],
+        ],
         keys: true,
         destroy: true,
         ajax: {
@@ -355,10 +357,16 @@ class BBDataTable extends Component {
               columns: visibleColumns,
             },
           },
+          {
+            extend: "csv",
+            exportOptions: {
+              columns: visibleColumns,
+            },
+          },
         ],
         rowReorder: {
           selector: ".row-handle",
-          update: false
+          update: false,
         },
         responsive: true,
         autoWidth: false,
@@ -398,13 +406,28 @@ class BBDataTable extends Component {
           loadingRecords: "Loading ...",
           processing: "<i class='fa fa-spin fa-circle-notch'></i> Loading...",
           zeroRecords: "No record found",
-          emptyTable: "No record found",
+          emptyTable: this.props.emptyTable
+            ? this.props.emptyTable
+            : "No record found",
           lengthMenu: "_MENU_",
         },
         fnDrawCallback: (t) => {
           let wrapper = $(".dataTables_paginate", t.nTableWrapper)
-          wrapper.append('<span class="float-right mt-2 mr-2 text-label-input">Page: </span>')
+          wrapper.append(
+            '<span class="float-right mt-2 mr-2 text-label-input">Page: </span>',
+          )
           $(".pagination", wrapper).addClass("float-right")
+
+          // Hide pagination if empty data
+          if (t._iDisplayLength > t.fnRecordsDisplay()) {
+            $(t.nTableWrapper).find(".dataTables_length").hide()
+            $(t.nTableWrapper).find(".dataTables_info").hide()
+            $(t.nTableWrapper).find(".dataTables_paginate").hide()
+          } else {
+            $(t.nTableWrapper).find(".dataTables_length").show()
+            $(t.nTableWrapper).find(".dataTables_info").show()
+            $(t.nTableWrapper).find(".dataTables_paginate").show()
+          }
         },
       })
 
@@ -481,7 +504,11 @@ class BBDataTable extends Component {
 
   onDownload() {
     try {
-      this.dt.buttons(".buttons-excel").trigger()
+      this.dt
+        .buttons(
+          this.props.btnDownload ? this.prop.btnDownload : ".buttons-excel",
+        )
+        .trigger()
     } catch (e) {
       console.log(e.message)
     }
@@ -538,11 +565,9 @@ class BBDataTable extends Component {
   }
 
   deleteAction(id) {
-    this.api
-      .delete(this.props.endpoint + "/" + id)
-      .finally(() => {
-        this.dt.ajax.reload()
-      })
+    this.api.delete(this.props.endpoint + "/" + id).finally(() => {
+      this.dt.ajax.reload()
+    })
   }
 
   componentWillUnmount() {
@@ -585,7 +610,7 @@ class BBDataTable extends Component {
           selected: selected,
         })
         setTimeout(() => {
-            this.inProgress = false
+          this.inProgress = false
         }, 100)
       })
 
@@ -613,7 +638,7 @@ class BBDataTable extends Component {
           selected: selected,
         })
         setTimeout(() => {
-            this.inProgress = false
+          this.inProgress = false
         }, 100)
       })
 
@@ -652,7 +677,9 @@ class BBDataTable extends Component {
           onToggleFilter={this.onToggleFilter.bind(this)}
           onStatusUpdate={this.onStatusUpdate.bind(this)}
           onRemove={this.onRemoveSelected.bind(this)}
-        />
+        >
+          {this.props.children}
+        </TableHeader>
         <div>
           <table ref={this.table} className="table table-sm"></table>
         </div>
