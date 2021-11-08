@@ -4,9 +4,15 @@ import Api from "config/api"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
 import FormBuilder from "components/form/builder"
+import { ReactSVG } from "react-svg"
+import { Row, Col, Tab, Nav } from "react-bootstrap"
 import useQuery from "lib/query"
 import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
+
+import GeneralInformation from "./general-information"
+import EmergencyContacts from "./emergency-contacts"
+import Employment from "./employment"
 
 const endpoint = "/master/employees"
 const backUrl = "/master/employee"
@@ -61,11 +67,11 @@ function EmployeeForm(props) {
     let api = new Api()
     let formId = props.match.params.id
 
-    let docTitle = "Edit Aircraft"
+    let docTitle = "Edit Employee"
     if (!formId) {
-      docTitle = "Create Aircraft"
+      docTitle = "Create Employee"
     } else if (isView) {
-      docTitle = "Aircraft Details"
+      docTitle = "Employee Details"
     }
 
     dispatch(
@@ -73,11 +79,11 @@ function EmployeeForm(props) {
         title: docTitle,
         breadcrumbs: [
           {
-            text: "Master Data Management",
+            text: "Employee Management",
           },
           {
             link: backUrl,
-            text: "Aircrafts",
+            text: "Master Employee",
           },
           {
             text: docTitle,
@@ -131,72 +137,54 @@ function EmployeeForm(props) {
   }
 
   return (
-    <FormBuilder
-      onBuild={(el) => setFormBuilder(el)}
-      isView={isView || loading}
-      onSave={onSave}
-      back={backUrl}
-      translations={translations}
-      translationFields={translationFields}
-      alertMessage={"Incomplete data"}
-      isValid={false}
-      rules={validationRules}
+    <Tab.Container
+      id="left-tabs-example"
+      defaultActiveKey="general-information"
     >
-      <FormHorizontal>
-        <FormInputControl
-          label={"Aircraft Name"}
-          labelRequired="label-required"
-          value={form.aircraft_name}
-          name="aircraft_name"
-          onChange={(e) => setForm({ ...form, aircraft_name: e.target.value })}
-          disabled={isView || loading}
-          type="text"
-          minLength="1"
-          maxLength="64"
-        />
-        <FormInputControl
-          value={form.model}
-          name="model"
-          onChange={(e) => setForm({ ...form, model: e.target.value })}
-          label="Model"
-          disabled={isView || loading}
-          type="text"
-          minLength="1"
-          maxLength="64"
-        />
-      </FormHorizontal>
-
-      <FormHorizontal>
-        <FormInputControl
-          value={form.aircraft_code}
-          labelRequired="label-required"
-          name="aircraft_code"
-          onChange={(e) => setForm({ ...form, aircraft_code: e.target.value })}
-          cl="5"
-          cr="6"
-          disabled={isView || loading}
-          type="number"
-          label="Aircraft Code"
-          minLength="3"
-          maxLength="3"
-          hint="Aircraft code maximum 3 characters"
-        />
-        <FormInputControl
-          value={form.icao_code}
-          labelRequired="label-required"
-          name="icao_code"
-          onChange={(e) => setForm({ ...form, icao_code: e.target.value })}
-          cl="5"
-          cr="6"
-          disabled={isView || loading}
-          label="ICAO Code"
-          type="text"
-          minLength="4"
-          maxLength="4"
-          hint="ICAO Code maximum 4 characters"
-        />
-      </FormHorizontal>
-    </FormBuilder>
+      <Row>
+        <Col sm={3}>
+          <Nav variant="pills" className="flex-column nav-side">
+            <Nav.Item>
+              <Nav.Link eventKey="general-information">
+                <div>
+                  <ReactSVG src="/img/icons/general-information.svg" />
+                  <span>General Information</span>
+                </div>
+              </Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link eventKey="emergency-contacts">
+                <div>
+                  <ReactSVG src="/img/icons/emergency-contacts.svg" />
+                  <span>Emergency Contacts</span>
+                </div>
+              </Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link eventKey="employment">
+                <div>
+                  <ReactSVG src="/img/icons/employment.svg" />
+                  <span>Employment</span>
+                </div>
+              </Nav.Link>
+            </Nav.Item>
+          </Nav>
+        </Col>
+        <Col sm={9}>
+          <Tab.Content>
+            <Tab.Pane eventKey="general-information">
+              <GeneralInformation />
+            </Tab.Pane>
+            <Tab.Pane eventKey="emergency-contacts">
+              <EmergencyContacts />
+            </Tab.Pane>
+            <Tab.Pane eventKey="employment">
+              <Employment />
+            </Tab.Pane>
+          </Tab.Content>
+        </Col>
+      </Row>
+    </Tab.Container>
   )
 }
 

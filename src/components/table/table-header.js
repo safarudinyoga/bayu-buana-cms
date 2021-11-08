@@ -3,7 +3,7 @@ import downloadIcon from "assets/download.svg"
 import printIcon from "assets/printer.svg"
 import resetIcon from "assets/reset.svg"
 import { Link, withRouter } from "react-router-dom"
-import { Tooltip } from "reactstrap"
+import { OverlayTrigger, Tooltip } from "react-bootstrap"
 import "./table-header.css"
 import "../button/button.css"
 
@@ -15,23 +15,8 @@ class TableHeader extends Component {
       showAdvancedOptions: true,
       searchValue: "",
       statusValue: "0",
-      isOpenTooltipPrint: false,
-      isOpenTooltipDownload: false,
-      isOpenTooltipCreateNew: false,
     }
     this.toggleFilter = this.toggleFilter.bind(this)
-  }
-
-  toggleTooltipPrint = () => {
-    this.setState({ isOpenTooltipPrint: !this.state.isOpenTooltipPrint })
-  }
-  toggleTooltipDownload = () => {
-    this.setState({ isOpenTooltipDownload: !this.state.isOpenTooltipDownload })
-  }
-  toggleTooltipCreateNew = () => {
-    this.setState({
-      isOpenTooltipCreateNew: !this.state.isOpenTooltipCreateNew,
-    })
   }
 
   toggleFilter() {
@@ -149,67 +134,52 @@ class TableHeader extends Component {
           </div>
 
           <div className="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 order-sm-2 mt-2">
-            <button
-              type="button"
-              onClick={this.handleClick.bind(this)}
-              className="btn btn-warning float-right button-new"
-              id="datatable-create-new"
+            <OverlayTrigger
+              placement="top"
+              overlay={<Tooltip>Click to create</Tooltip>}
             >
-              <span className="text-button-new">
-                <i className="fas fa-file-medical mr-2"></i>
-                Create new
-              </span>
-            </button>
+              <button
+                type="button"
+                onClick={this.handleClick.bind(this)}
+                className="btn btn-warning float-right button-new"
+              >
+                <span className="text-button-new">
+                  <i className="fas fa-file-medical mr-2"></i>
+                  Create new
+                </span>
+              </button>
+            </OverlayTrigger>
 
-            <Tooltip
-              target="datatable-create-new"
-              isOpen={this.state.isOpenTooltipCreateNew}
-              toggle={this.toggleTooltipCreateNew}
+            <OverlayTrigger
+              placement="top"
+              overlay={<Tooltip>Click to print</Tooltip>}
             >
-              Click to create
-            </Tooltip>
+              <Link
+                to="#"
+                onClick={this.handlePrint.bind(this)}
+                className="btn-table-action float-right"
+              >
+                <img src={printIcon} className="img-circle" alt="print" />
+              </Link>
+            </OverlayTrigger>
 
-            <Link
-              to="#"
-              onClick={this.handlePrint.bind(this)}
-              className="btn-table-action float-right"
+            <OverlayTrigger
+              placement="top"
+              overlay={<Tooltip>Click to download</Tooltip>}
             >
-              <img
-                src={printIcon}
-                className="img-circle"
-                alt="print"
-                id="datatable-print"
-              />
-            </Link>
-
-            <Tooltip
-              target="datatable-print"
-              isOpen={this.state.isOpenTooltipPrint}
-              toggle={this.toggleTooltipPrint}
-            >
-              Click to print
-            </Tooltip>
-
-            <Link
-              to="#"
-              onClick={this.handleDownload.bind(this)}
-              className="btn-table-action float-right"
-            >
-              <img
-                src={downloadIcon}
-                className="img-circle"
-                alt="download"
-                id="datatable-download"
-              />
-            </Link>
-
-            <Tooltip
-              target="datatable-download"
-              isOpen={this.state.isOpenTooltipDownload}
-              toggle={this.toggleTooltipDownload}
-            >
-              Click to download
-            </Tooltip>
+              <Link
+                to="#"
+                onClick={this.handleDownload.bind(this)}
+                className="btn-table-action float-right"
+              >
+                <img
+                  src={downloadIcon}
+                  className="img-circle"
+                  alt="download"
+                  id="datatable-download"
+                />
+              </Link>
+            </OverlayTrigger>
           </div>
         </div>
         <div

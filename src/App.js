@@ -2,7 +2,7 @@ import "@fortawesome/fontawesome-free/css/all.css"
 import "bootstrap/dist/js/bootstrap.js"
 import "admin-lte/dist/css/adminlte.css"
 import "admin-lte"
-import "App.css"
+import "App.scss"
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom"
 // route list
 import TripTypeForm from "views/trip_type/form"

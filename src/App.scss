@@ -1,3 +1,7 @@
+@import "./styles/components/_nav.scss";
+@import "./styles/components/_card.scss";
+@import "./styles/components/_form.scss";
+
 .content-wrapper {
   background-color: #ffffff;
 }
@@ -21,6 +25,7 @@ select.bg-dark-grey > option {
 
 .content-wrapper .content {
   overflow-x: hidden !important;
+  padding: 0 0.5rem;
 }
 
 .bg-block-card {
@@ -111,4 +116,9 @@ select.bg-dark-grey > option {
   font-weight: normal;
   font-style: italic;
   color: #d91c1c;
+}
+
+/* Layout */
+.content-header {
+  padding: 15px 0.5rem 0;
 }
