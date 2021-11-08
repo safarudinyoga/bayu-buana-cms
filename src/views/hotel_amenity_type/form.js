@@ -8,7 +8,7 @@ import useQuery from "lib/query"
 import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
 import FormInputWrapper from "components/form/input-wrapper"
-import FormInputSelectAjax from "../../components/form/input-select-ajax"
+import TableDropdownFilter from "../../components/table/table-dropdown-filter"
 const endpoint = "/master/hotel-amenity-types"
 const backUrl = "/master/hotel-amenity-types"
 
@@ -23,7 +23,7 @@ function HotelAmenityForm(props) {
   const [form, setForm] = useState({
     hotel_amenity_type_code: "",
     hotel_amenity_type_name: "",
-    hotel_amenity_type_category: "",
+    hotel_amenity_category_hotel_amenity_type: [],
     hotel_amenity_type_asset: {
       multimedia_description_id: null,
       multimedia_description: {
@@ -31,6 +31,7 @@ function HotelAmenityForm(props) {
       },
     },
   })
+
   const translationFields = [
     {
       label: "Hotel Amenity Type Name",
@@ -45,10 +46,8 @@ function HotelAmenityForm(props) {
       min: 0,
       max: 99,
     },
-    hotel_amenity_type_category:{
+    hotel_amenity_category_hotel_amenity_type:{
       required: false,
-      minlength: 1,
-      maxlength: 64,
     },
     hotel_amenity_type_name: {
       required: true,
@@ -119,8 +118,8 @@ function HotelAmenityForm(props) {
       if (!form.hotel_amenity_type_name) {
         form.hotel_amenity_type_name = null
       }
-      if (!form.hotel_amenity_type_category) {
-        form.hotel_amenity_type_category = null
+      if (!form.hotel_amenity_category_hotel_amenity_type) {
+        form.hotel_amenity_category_hotel_amenity_type = null
       }
       if (!form.hotel_amenity_type_asset) {
         form.hotel_amenity_type_asset = null
@@ -189,17 +188,15 @@ function HotelAmenityForm(props) {
           minLength="1"
           maxLength="256"
         />
-        <FormInputSelectAjax
+        <TableDropdownFilter
           label="Hotel Amenity Category"
-          value={form.hotel_amenity_type_category}
-          name="hotel_amenity_type_category"
+          value={form.hotel_amenity_category_hotel_amenity_type}
+          name="hotel_amenity_category_id"
           cl="5"
           cr="6"
           endpoint="/master/hotel-amenity-categories"
           column="hotel_amenity_category_name"
-          onChange={(e) =>
-            setForm({ ...form, hotel_amenity_category_id: e.target.value || null })
-          }
+          onChange={(e, values) => setForm(prev => ({...prev, hotel_amenity_category_hotel_amenity_type: values.map(value => ({hotel_amenity_category_id: value.id}))}))}
           disabled={isView || loading}
           type="select"
           minLength="0"
