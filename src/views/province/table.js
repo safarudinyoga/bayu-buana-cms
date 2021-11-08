@@ -1,9 +1,10 @@
-import React, { useEffect } from "react"
 import BBDataTable from "components/table/bb-data-table"
+import TableDropdownFilter from "components/table/table-dropdown-filter"
 import rowStatus from "lib/row-status"
-import { useDispatch } from "react-redux"
-import { setUIParams } from "redux/ui-store"
-import { renderColumn } from "lib/translation"
+import {renderColumn} from "lib/translation"
+import React, {useEffect, useState} from "react"
+import {useDispatch} from "react-redux"
+import {setUIParams} from "redux/ui-store"
 
 export default function ProvinceTable() {
   let dispatch = useDispatch()
@@ -23,7 +24,46 @@ export default function ProvinceTable() {
     )
   }, [])
 
-  let params = {
+  let [selectedCountries, setSelectedCountries] = useState([])
+  let [selectedCountryIds, setSelectedCountryIds] = useState([])
+
+  const onFilterChange = (e, values) => {
+    let ids = []
+    if (values && values.length > 0) {
+      for (let i in values) {
+        ids.push(values[i].id)
+      }
+    }
+    if (ids.length > 0) {
+      setParams({...params, filters: [["country_id", "in", ids]]})
+    } else {
+      setParams({...params, filters: []})
+    }
+    setSelectedCountries(values)
+    setSelectedCountryIds(ids)
+  }
+
+
+  const extraFilter = () => {
+    return (
+      <TableDropdownFilter
+        label="Country"
+        onChange={onFilterChange}
+        endpoint="/master/countries"
+        column="country_name"
+        value={selectedCountryIds}
+        data={selectedCountries}
+      />
+    )
+  }
+
+  const onReset = () => {
+    setParams({...params, filters: []})
+    setSelectedCountries([])
+    setSelectedCountryIds([])
+  }
+
+  let [params, setParams] = useState({
     title: "States / Provinces",
     baseRoute: "/master/provinces/form",
     endpoint: "/master/state-provinces",
@@ -56,6 +96,7 @@ export default function ProvinceTable() {
         visible: false,
       },
     ],
-  }
-  return <BBDataTable {...params} />
+  });
+
+  return <BBDataTable {...params} extraFilter={extraFilter} onReset={onReset} />
 }

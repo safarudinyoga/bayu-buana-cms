@@ -82,6 +82,11 @@ export default class Sidebar extends Component {
                     </Link>
                   </li>
                   <li className="nav-item">
+                    <Link to="/master/destinations" className="nav-link">
+                      <p>Destination</p>
+                    </Link>
+                  </li>
+                  <li className="nav-item">
                     <Link to="/master/destination-groups" className="nav-link">
                       <p>Destination Group</p>
                     </Link>
@@ -160,6 +165,26 @@ export default class Sidebar extends Component {
                     </Link>
                   </li>
                   <li className="nav-item">
+                    <Link to="/master/room-amenity-categories" className="nav-link">
+                      <p>Room Amenity Category</p>
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link to="/master/room-amenity-types" className="nav-link">
+                      <p>Room Amenity Type</p>
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link to="/master/room-location-types" className="nav-link">
+                      <p>Room Location Type</p>
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link to="/master/room-view-types" className="nav-link">
+                      <p>Room View Type</p>
+                    </Link>
+                  </li>
+                  <li className="nav-item">
                     <Link to="/master/special-requests" className="nav-link">
                       <p>Special Request</p>
                     </Link>
@@ -174,21 +199,16 @@ export default class Sidebar extends Component {
                       <p>Travel Purpose</p>
                     </Link>
                   </li>
-                  {/* <li className="nav-item">
-                    <Link to="/master/room-location-types" className="nav-link">
-                      <p>Room Location Type</p>
-                    </Link>
-                  </li>
-                  <li className="nav-item">
-                    <Link to="/master/room-view-types" className="nav-link">
-                      <p>Room View Type</p>
-                    </Link>
-                  </li>
                   <li className="nav-item">
                     <Link to="/master/trip-types" className="nav-link">
                       <p>Trip Type</p>
                     </Link>
-                  </li> */}
+                  </li>
+                  <li className="nav-item">
+                    <Link to="/master/zones" className="nav-link">
+                      <p>Zones</p>
+                    </Link>
+                  </li>
                 </ul>
               </li>
               <li className="nav-item">

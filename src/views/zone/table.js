@@ -6,27 +6,26 @@ import React, {useEffect, useState} from "react"
 import {useDispatch} from "react-redux"
 import {setUIParams} from "redux/ui-store"
 
-export default function CityTable() {
+export default function ZoneTable() {
   let dispatch = useDispatch()
   useEffect(() => {
     dispatch(
       setUIParams({
-        title: "Cities",
+        title: "Zones",
         breadcrumbs: [
           {
             text: "Master Data Management",
           },
           {
-            text: "Cities",
+            text: "Zones",
           },
         ],
       }),
     )
   }, [])
 
-
-  let [selectedCountries, setSelectedCountries] = useState([])
-  let [selectedCountryIds, setSelectedCountryIds] = useState([])
+  let [selectedDestinations, setSelectedDestinations] = useState([])
+  let [selectedDestinationIds, setSelectedDestinationIds] = useState([])
 
   const onFilterChange = (e, values) => {
     let ids = []
@@ -36,53 +35,53 @@ export default function CityTable() {
       }
     }
     if (ids.length > 0) {
-      setParams({...params, filters: [["country_id", "in", ids]]})
+      setParams({...params, filters: [["destination_id", "in", ids]]})
     } else {
       setParams({...params, filters: []})
     }
-    setSelectedCountries(values)
-    setSelectedCountryIds(ids)
+    setSelectedDestinations(values)
+    setSelectedDestinationIds(ids)
   }
 
   const extraFilter = () => {
     return (
       <TableDropdownFilter
-        label="Country"
+        label="Destination"
         onChange={onFilterChange}
-        endpoint="/master/countries"
-        column="country_name"
-        value={selectedCountryIds}
-        data={selectedCountries}
+        endpoint="/master/destinations"
+        column="destination_name"
+        value={selectedDestinationIds}
+        data={selectedDestinations}
       />
     )
   }
 
   const onReset = () => {
     setParams({...params, filters: []})
-    setSelectedCountries([])
-    setSelectedCountryIds([])
+    setSelectedDestinations([])
+    setSelectedDestinationIds([])
   }
 
   let [params, setParams] = useState({
-    title: "Cities",
-    baseRoute: "/master/cities/form",
-    endpoint: "/master/cities",
-    deleteEndpoint: "/master/batch-actions/delete/cities",
-    activationEndpoint: "/master/batch-actions/activate/cities",
-    deactivationEndpoint: "/master/batch-actions/deactivate/cities",
+    title: "Zones",
+    baseRoute: "/master/zones/form",
+    endpoint: "/master/zones",
+    deleteEndpoint: "/master/batch-actions/delete/zones",
+    activationEndpoint: "/master/batch-actions/activate/zones",
+    deactivationEndpoint: "/master/batch-actions/deactivate/zones",
     columns: [
       {
-        title: "City Code",
-        data: "city_code",
+        title: "Zone Code",
+        data: "zone_code",
       },
       {
-        title: "City Name",
-        data: "city_name",
-        render: renderColumn("city", "city_name"),
+        title: "Zone Name",
+        data: "zone_name",
+        render: renderColumn("zone", "zone_name")
       },
       {
-        title: "Country",
-        data: "country.country_name",
+        title: "Destination",
+        data: "destination.destination_name",
       },
       {
         searchable: false,
@@ -91,8 +90,8 @@ export default function CityTable() {
         render: rowStatus,
       },
       {
-        title: "Translated City Name",
-        data: "city_translation.city_name",
+        title: "Translated Zone Name",
+        data: "zone_translation.zone_name",
         visible: false,
       },
     ],

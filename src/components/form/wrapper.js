@@ -1,4 +1,4 @@
-import { Component } from "react"
+import {Component} from "react"
 
 export default class FormWrapper extends Component {
   render() {
@@ -9,7 +9,7 @@ export default class FormWrapper extends Component {
             {this.props.children[0]}
           </div>
         ) : (
-          <div className="col-xs-12">{this.props.children}</div>
+          <div className="col-xs-12 col-sm-6 col-md-7">{this.props.children}</div>
         )}
         {this.props.children.length > 1 ? (
           <div className="col-xs-12 col-sm-6 col-md-5 order-sm-2">

@@ -1,9 +1,10 @@
-import React, { useEffect } from "react"
 import BBDataTable from "components/table/bb-data-table"
+import TableDropdownFilter from "components/table/table-dropdown-filter"
 import rowStatus from "lib/row-status"
-import { useDispatch } from "react-redux"
-import { setUIParams } from "redux/ui-store"
-import { renderColumn } from "lib/translation"
+import {renderColumn} from "lib/translation"
+import React, {useEffect, useState} from "react"
+import {useDispatch} from "react-redux"
+import {setUIParams} from "redux/ui-store"
 
 export default function CountryTable() {
   let dispatch = useDispatch()
@@ -23,7 +24,46 @@ export default function CountryTable() {
     )
   }, [])
 
-  let params = {
+  let [selectedRegions, setSelectedRegions] = useState([])
+  let [selectedRegionIds, setSelectedRegionIds] = useState([])
+
+  const onFilterChange = (e, values) => {
+    let ids = []
+    if (values && values.length > 0) {
+      for (let i in values) {
+        ids.push(values[i].id)
+      }
+    }
+    if (ids.length > 0) {
+      setParams({...params, filters: [["region_id", "in", ids]]})
+    } else {
+      setParams({...params, filters: []})
+    }
+    setSelectedRegions(values)
+    setSelectedRegionIds(ids)
+  }
+
+
+  const extraFilter = () => {
+    return (
+      <TableDropdownFilter
+        label="Region"
+        onChange={onFilterChange}
+        endpoint="/master/regions"
+        column="region_name"
+        value={selectedRegionIds}
+        data={selectedRegions}
+      />
+    )
+  }
+
+  const onReset = () => {
+    setParams({...params, filters: []})
+    setSelectedRegions([])
+    setSelectedRegionIds([])
+  }
+
+  let [params, setParams] = useState({
     title: "Countries",
     baseRoute: "/master/countries/form",
     endpoint: "/master/countries",
@@ -56,6 +96,6 @@ export default function CountryTable() {
         visible: false,
       },
     ],
-  }
-  return <BBDataTable {...params} />
+  })
+  return <BBDataTable {...params} extraFilter={extraFilter} onReset={onReset} />
 }

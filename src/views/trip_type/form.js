@@ -36,12 +36,12 @@ function TripTypeForm(props) {
   const validationRules = {
     trip_type_code: {
       required: true,
-      minlength: 0,
+      minlength: 1,
       maxlength: 36,
     },
     trip_type_name: {
       required: true,
-      minlength: 0,
+      minlength: 1,
       maxlength: 256,
     },
     is_default: {},
@@ -63,12 +63,11 @@ function TripTypeForm(props) {
         title: docTitle,
         breadcrumbs: [
           {
-            link: "/",
             text: "Master Data Management",
           },
           {
             link: backUrl,
-            text: "Trip Type",
+            text: "Trip Types",
           },
           {
             text: docTitle,
@@ -132,7 +131,8 @@ function TripTypeForm(props) {
     >
       <FormHorizontal>
         <FormInputControl
-          label="Trip Type Name *"
+          label="Trip Type Name"
+          labelRequired="label-required"
           value={form.trip_type_name}
           name="trip_type_name"
           cl="3"
@@ -183,7 +183,8 @@ function TripTypeForm(props) {
 
       <FormHorizontal>
         <FormInputControl
-          label="Trip Type Code *"
+          label="Trip Type Code"
+          labelRequired="label-required"
           value={form.trip_type_code}
           name="trip_type_code"
           cl="4"
@@ -191,7 +192,7 @@ function TripTypeForm(props) {
           onChange={(e) => setForm({ ...form, trip_type_code: e.target.value })}
           disabled={isView || loading}
           type="text"
-          minLength="0"
+          minLength="1"
           maxLength="36"
           hint="Trip Type Code maximum 36 characters"
         />

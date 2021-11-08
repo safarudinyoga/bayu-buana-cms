@@ -1,8 +1,9 @@
 import "@fortawesome/fontawesome-free/css/all.css"
-import "bootstrap/dist/js/bootstrap.js"
-import "admin-lte/dist/css/adminlte.css"
 import "admin-lte"
-import "App.scss"
+import "admin-lte/dist/css/adminlte.css"
+import "App.css"
+import "bootstrap/dist/js/bootstrap.js"
+import DashboardWrapper from "components/wrapper/dashboard"
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom"
 // route list
 import TripTypeForm from "views/trip_type/form"
@@ -31,42 +32,76 @@ import CabinTypeForm from "views/cabin_type/form"
 import CabinTypeTable from "views/cabin_type/table"
 import AgeQualifyingTypeForm from "views/age_qualifying_type/form"
 import AgeQualifyingTypeTable from "views/age_qualifying_type/table"
-import TravelPurposeForm from "views/travel_purpose/form"
-import TravelPurposeTable from "views/travel_purpose/table"
-import SpecialRequestForm from "views/special_request/form"
-import SpecialRequestTable from "views/special_request/table"
-import CurrencyForm from "views/currency/form"
-import CurrencyTable from "views/currency/table"
-import LanguageForm from "views/language/form"
-import LanguageTable from "views/language/table"
-import AirportForm from "views/airport/form"
-import AirportTable from "views/airport/table"
-import RegionForm from "views/region/form"
-import RegionTable from "views/region/table"
+import AircraftForm from "views/aircraft/form"
+import AircraftTable from "views/aircraft/table"
 import AirlineForm from "views/airline/form"
 import AirlineTable from "views/airline/table"
-import AircraftTable from "views/aircraft/table"
-import AircraftForm from "views/aircraft/form"
-import CountryForm from "views/country/form"
-import CountryTable from "views/country/table"
-import ProvinceForm from "views/province/form"
-import ProvinceTable from "views/province/table"
+import AirportForm from "views/airport/form"
+import AirportTable from "views/airport/table"
+import AttractionForm from "views/attraction/form"
+import AttractionTable from "views/attraction/table"
+import AttractionCategoryForm from "views/attraction_category/form"
+import AttractionCategoryTable from "views/attraction_category/table"
+import CabinTypeForm from "views/cabin_type/form"
+import CabinTypeTable from "views/cabin_type/table"
 import CityForm from "views/city/form"
 import CityTable from "views/city/table"
-import RatingTypeTable from "views/rating_type/table"
-import RatingTypeForm from "views/rating_type/form"
-import HotelAmenityTypeTable from "views/hotel_amenity_type/table"
-import HotelAmenityTypeForm from "views/hotel_amenity_type/form"
-import AttractionCategoryTable from "views/attraction_category/table"
-import AttractionCategoryForm from "views/attraction_category/form"
-import HotelAmenityCategoryTable from "views/hotel_amenity_category/table"
-import HotelAmenityCategoryForm from "views/hotel_amenity_category/form"
-import OccupancyTypeTable from "views/occupancy_type/table"
-import OccupancyTypeForm from "views/occupancy_type/form"
-import ProductTypeTable from "views/product_type/table"
-import ProductTypeForm from "views/product_type/form"
-import DashboardWrapper from "components/wrapper/dashboard"
+import CountryForm from "views/country/form"
+import CountryTable from "views/country/table"
+import CurrencyForm from "views/currency/form"
+import CurrencyTable from "views/currency/table"
 import Dashboard from "views/dashboard"
+import DestinationForm from "views/destination/form"
+import DestinationTable from "views/destination/table"
+import DestinationGroupForm from "views/destination_group/form"
+import DestinationGroupTable from "views/destination_group/table"
+import FlightTypeForm from "views/flight_type/form"
+import FlightTypeTable from "views/flight_type/table"
+import HotelAmenityCategoryForm from "views/hotel_amenity_category/form"
+import HotelAmenityCategoryTable from "views/hotel_amenity_category/table"
+import HotelAmenityTypeForm from "views/hotel_amenity_type/form"
+import HotelAmenityTypeTable from "views/hotel_amenity_type/table"
+import HotelBrandForm from "views/hotel_brand/form"
+import HotelBrandTable from "views/hotel_brand/table"
+import HotelSupplierForm from "views/hotel_supplier/form"
+import HotelSupplierTable from "views/hotel_supplier/table"
+import LanguageForm from "views/language/form"
+import LanguageTable from "views/language/table"
+import LocationCategoryForm from "views/location_category/form"
+import LocationCategoryTable from "views/location_category/table"
+import MealPlanTypeForm from "views/meal_plan_type/form"
+import MealPlanTypeTable from "views/meal_plan_type/table"
+import OccupancyTypeForm from "views/occupancy_type/form"
+import OccupancyTypeTable from "views/occupancy_type/table"
+import PassengerTypeForm from "views/passenger_type/form"
+import PassengerTypeTable from "views/passenger_type/table"
+import ProductTypeForm from "views/product_type/form"
+import ProductTypeTable from "views/product_type/table"
+import PropertyCategoryForm from "views/property_category/form"
+import PropertyCategoryTable from "views/property_category/table"
+import ProvinceForm from "views/province/form"
+import ProvinceTable from "views/province/table"
+import RatingTypeForm from "views/rating_type/form"
+import RatingTypeTable from "views/rating_type/table"
+import RegionForm from "views/region/form"
+import RegionTable from "views/region/table"
+import RoomAmenityCategoryForm from "views/room_amenity_category/form"
+import RoomAmenityCategoryTable from "views/room_amenity_category/table"
+import RoomAmenityTypeForm from "views/room_amenity_type/form"
+import RoomAmenityTypeTable from "views/room_amenity_type/table"
+import RoomLocationTypeForm from "views/room_location_type/form"
+import RoomLocationTypeTable from "views/room_location_type/table"
+import RoomViewTypeForm from "views/room_view_type/form"
+import RoomViewTypeTable from "views/room_view_type/table"
+import SpecialRequestForm from "views/special_request/form"
+import SpecialRequestTable from "views/special_request/table"
+import TravelPurposeForm from "views/travel_purpose/form"
+import TravelPurposeTable from "views/travel_purpose/table"
+// route list
+import TripTypeForm from "views/trip_type/form"
+import TripTypeTable from "views/trip_type/table"
+import ZoneForm from "views/zone/form"
+import ZoneTable from "views/zone/table"
 
 // Master Employee
 import EmployeeTable from "views/employee/table"
@@ -225,6 +260,36 @@ function App() {
           </Route>
           <Route path="/master/cities/form/:id?">
             <CityForm />
+          </Route>
+          <Route exact path="/master/zones">
+            <ZoneTable />
+          </Route>
+          <Route path="/master/zones/form/:id?">
+            <ZoneForm />
+          </Route>
+          <Route exact path="/master/destinations">
+            <DestinationTable />
+          </Route>
+          <Route path="/master/destinations/form/:id?">
+            <DestinationForm />
+          </Route>
+          <Route exact path="/master/room-amenity-types">
+            <RoomAmenityTypeTable />
+          </Route>
+          <Route path="/master/room-amenity-types/form/:id?">
+            <RoomAmenityTypeForm />
+          </Route>
+          <Route exact path="/master/room-amenity-categories">
+            <RoomAmenityCategoryTable />
+          </Route>
+          <Route path="/master/room-amenity-categories/form/:id?">
+            <RoomAmenityCategoryForm />
+          </Route>
+          <Route exact path="/master/attractions">
+            <AttractionTable />
+          </Route>
+          <Route path="/master/attractions/form/:id?">
+            <AttractionForm />
           </Route>
 
           <Route exact path="/master/rating-types">

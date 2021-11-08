@@ -9,10 +9,10 @@ import {useDispatch} from "react-redux"
 import {withRouter} from "react-router"
 import {setUIParams} from "redux/ui-store"
 
-const endpoint = "/master/cities"
-const backUrl = "/master/cities"
+const endpoint = "/master/destinations"
+const backUrl = "/master/destinations"
 
-function CityForm(props) {
+function DestinationForm(props) {
   let dispatch = useDispatch()
 
   const isView = useQuery().get("action") === "view"
@@ -21,43 +21,59 @@ function CityForm(props) {
   const [translations, setTranslations] = useState([])
   const [id, setId] = useState(null)
   const [form, setForm] = useState({
-    city_code: "",
-    city_name: "",
-    country_id: ""
+    id: "",
+    destination_name: "",
+    country_id: "",
+    destination_city_id: "",
+    description: "",
+    destination_code: "",
   })
   const translationFields = [
     {
-      label: "City Name",
-      name: "city_name",
+      label: "Destination Name",
+      name: "destination_name",
       type: "text",
+    },
+    {
+      label: "Description",
+      name: "description",
+      type: "textarea",
     },
   ]
 
   const validationRules = {
-    city_code: {
-      required: true,
-      minlength: 3,
-      maxlength: 3,
-    },
-    city_name: {
+    destination_name: {
       required: true,
       minlength: 1,
-      maxlength: 64,
+      maxlength: 256,
     },
-    country_id: {
-      required: false
-    }
+    country: {
+      required: true,
+    },
+    city: {
+      required: true,
+    },
+    description: {
+      required: false,
+      minlength: 1,
+      maxlength: 4000,
+    },
+    destination_code: {
+      required: true,
+      minlength: 1,
+      maxlength: 36,
+    },
   }
 
   useEffect(async () => {
     let api = new Api()
     let formId = props.match.params.id
 
-    let docTitle = "Edit City"
+    let docTitle = "Edit Destination"
     if (!formId) {
-      docTitle = "Create City"
+      docTitle = "Create Destination"
     } else if (isView) {
-      docTitle = "City Details"
+      docTitle = "Destination Details"
     }
 
     dispatch(
@@ -69,7 +85,7 @@ function CityForm(props) {
           },
           {
             link: backUrl,
-            text: "Cities",
+            text: "Destinations",
           },
           {
             text: docTitle,
@@ -105,9 +121,6 @@ function CityForm(props) {
     setLoading(true)
     let api = new Api()
     try {
-      if (!form.country_id) {
-        form.country_id = null
-      }
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
       for (let i in translated) {
@@ -136,18 +149,17 @@ function CityForm(props) {
     >
       <FormHorizontal>
         <FormInputControl
-          label="City Name"
+          label="Destination Name"
           labelRequired="label-required"
-          value={form.city_name}
-          name="city_name"
-          cl="3"
-          cr="6"
-          onChange={(e) => setForm({...form, city_name: e.target.value})}
+          value={form.destination_name}
+          name="destination_name"
+          onChange={(e) => setForm({...form, destination_name: e.target.value})}
           disabled={isView || loading}
           type="text"
           minLength="1"
           maxLength="64"
         />
+
         <FormInputSelectAjax
           label="Country"
           value={form.country_id}
@@ -163,26 +175,53 @@ function CityForm(props) {
           type="select"
         />
 
+        <FormInputSelectAjax
+          label="City"
+          value={form.country_id}
+          name="destination_city_id"
+          cl="3"
+          cr="6"
+          endpoint="/master/cities"
+          filter={form.country_id}
+          column="city_name"
+          onChange={(e) =>
+            setForm({...form, destination_city_id: e.target.value || null})
+          }
+          disabled={isView || loading}
+          type="select"
+        />
+
+        <FormInputControl
+          value={form.description}
+          name="description"
+          onChange={(e) => setForm({...form, description: e.target.value})}
+          label="Description"
+          disabled={isView || loading}
+          type="textarea"
+          minLength="1"
+          maxLength="64"
+        />
       </FormHorizontal>
 
       <FormHorizontal>
         <FormInputControl
-          label="City Code"
-          labelRequired="label-required"
-          value={form.city_code}
-          name="city_code"
-          cl="4"
+          value={form.destination_code}
+          name="destination_code"
+          onChange={(e) => setForm({...form, destination_code: e.target.value})}
+          cl="5"
           cr="6"
-          onChange={(e) => setForm({...form, city_code: e.target.value})}
           disabled={isView || loading}
-          type="text"
+          type="number"
+          label="Destination Code"
+          labelRequired="label-required"
           minLength="3"
           maxLength="3"
-          hint="City code maximum 3 characters"
+          hint="Destination code maximum 3 characters"
         />
+
       </FormHorizontal>
     </FormBuilder>
   )
 }
 
-export default withRouter(CityForm)
+export default withRouter(DestinationForm)
