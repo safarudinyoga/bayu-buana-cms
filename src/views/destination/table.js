@@ -6,24 +6,23 @@ import React, {useEffect, useState} from "react"
 import {useDispatch} from "react-redux"
 import {setUIParams} from "redux/ui-store"
 
-export default function CityTable() {
+export default function DestinationTable() {
   let dispatch = useDispatch()
   useEffect(() => {
     dispatch(
       setUIParams({
-        title: "Cities",
+        title: "Destinations",
         breadcrumbs: [
           {
             text: "Master Data Management",
           },
           {
-            text: "Cities",
+            text: "Destinations",
           },
         ],
       }),
     )
   }, [])
-
 
   let [selectedCountries, setSelectedCountries] = useState([])
   let [selectedCountryIds, setSelectedCountryIds] = useState([])
@@ -64,25 +63,29 @@ export default function CityTable() {
   }
 
   let [params, setParams] = useState({
-    title: "Cities",
-    baseRoute: "/master/cities/form",
-    endpoint: "/master/cities",
-    deleteEndpoint: "/master/batch-actions/delete/cities",
-    activationEndpoint: "/master/batch-actions/activate/cities",
-    deactivationEndpoint: "/master/batch-actions/deactivate/cities",
+    title: "Zones",
+    baseRoute: "/master/destinations/form",
+    endpoint: "/master/destinations",
+    deleteEndpoint: "/master/batch-actions/delete/destinations",
+    activationEndpoint: "/master/batch-actions/activate/destinations",
+    deactivationEndpoint: "/master/batch-actions/deactivate/destinations",
     columns: [
       {
-        title: "City Code",
-        data: "city_code",
+        title: "Destination Code",
+        data: "destination_code",
       },
       {
-        title: "City Name",
-        data: "city_name",
-        render: renderColumn("city", "city_name"),
+        title: "Destination Name",
+        data: "destination_name",
+        render: renderColumn("destination", "destination_name")
       },
       {
         title: "Country",
-        data: "country.country_name",
+        data: "json.country_name",
+      },
+      {
+        title: "City",
+        data: "city.city_name",
       },
       {
         searchable: false,
@@ -91,8 +94,8 @@ export default function CityTable() {
         render: rowStatus,
       },
       {
-        title: "Translated City Name",
-        data: "city_translation.city_name",
+        title: "Translated Destination Name",
+        data: "zone_translation.destination_name",
         visible: false,
       },
     ],

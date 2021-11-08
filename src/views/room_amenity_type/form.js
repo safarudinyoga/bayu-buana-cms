@@ -2,6 +2,7 @@ import FormBuilder from "components/form/builder"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
 import FormInputSelectAjax from "components/form/input-select-ajax"
+import FormInputWrapper from "components/form/input-wrapper"
 import Api from "config/api"
 import useQuery from "lib/query"
 import React, {useEffect, useState} from "react"
@@ -9,10 +10,10 @@ import {useDispatch} from "react-redux"
 import {withRouter} from "react-router"
 import {setUIParams} from "redux/ui-store"
 
-const endpoint = "/master/cities"
-const backUrl = "/master/cities"
+const endpoint = "/master/room-amenity-types"
+const backUrl = "/master/room-amenity-types"
 
-function CityForm(props) {
+function RoomAmenityTypeForm(props) {
   let dispatch = useDispatch()
 
   const isView = useQuery().get("action") === "view"
@@ -21,43 +22,46 @@ function CityForm(props) {
   const [translations, setTranslations] = useState([])
   const [id, setId] = useState(null)
   const [form, setForm] = useState({
-    city_code: "",
-    city_name: "",
-    country_id: ""
+    room_amenity_type_code: "",
+    room_amenity_type_name: "",
+    room_amenity_category_id: "",
+    room_amenity_type_asset: {
+      multimedia_description_id: null,
+      multimedia_description: {
+        url: "",
+      },
+    },
   })
   const translationFields = [
     {
-      label: "City Name",
-      name: "city_name",
+      label: "Room Amenity Type Name",
+      name: "room_amenity_type_name",
       type: "text",
     },
   ]
 
   const validationRules = {
-    city_code: {
+    room_amenity_type_name: {
+      required: true,
+      minlength: 3,
+      maxlength: 64,
+    },
+    room_amenity_type_code: {
       required: true,
       minlength: 3,
       maxlength: 3,
     },
-    city_name: {
-      required: true,
-      minlength: 1,
-      maxlength: 64,
-    },
-    country_id: {
-      required: false
-    }
   }
 
   useEffect(async () => {
     let api = new Api()
     let formId = props.match.params.id
 
-    let docTitle = "Edit City"
+    let docTitle = "Edit Room Amenity Type"
     if (!formId) {
-      docTitle = "Create City"
+      docTitle = "Create Room Amenity Type"
     } else if (isView) {
-      docTitle = "City Details"
+      docTitle = "Room Amenity Type Details"
     }
 
     dispatch(
@@ -69,7 +73,7 @@ function CityForm(props) {
           },
           {
             link: backUrl,
-            text: "Cities",
+            text: "Room Amenity Type",
           },
           {
             text: docTitle,
@@ -105,8 +109,8 @@ function CityForm(props) {
     setLoading(true)
     let api = new Api()
     try {
-      if (!form.country_id) {
-        form.country_id = null
+      if (form.room_amenity_type_asset.multimedia_description_id == null) {
+        form.room_amenity_type_asset = null
       }
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
@@ -120,6 +124,24 @@ function CityForm(props) {
       setLoading(false)
       props.history.push(backUrl)
     }
+  }
+
+  const doUpload = async (e) => {
+    try {
+      let api = new Api()
+      let payload = new FormData()
+      payload.append("files", e.target.files[0])
+      let res = await api.post("/multimedia/files", payload)
+      if (res.data) {
+        setForm({
+          ...form,
+          room_amenity_type_asset: {
+            multimedia_description_id: res.data.id,
+            multimedia_description: res.data,
+          },
+        })
+      }
+    } catch (e) { }
   }
 
   return (
@@ -136,53 +158,82 @@ function CityForm(props) {
     >
       <FormHorizontal>
         <FormInputControl
-          label="City Name"
+          label="Room Amenity Type Name"
           labelRequired="label-required"
-          value={form.city_name}
-          name="city_name"
-          cl="3"
+          value={form.room_amenity_type_name}
+          name="room_amenity_type_name"
+          cl="4"
           cr="6"
-          onChange={(e) => setForm({...form, city_name: e.target.value})}
+          onChange={(e) => setForm({...form, room_amenity_type_name: e.target.value})}
           disabled={isView || loading}
           type="text"
           minLength="1"
           maxLength="64"
         />
         <FormInputSelectAjax
-          label="Country"
-          value={form.country_id}
-          name="country_id"
-          cl="3"
+          label="Room Amenity Category"
+          value={form.room_amenity_category_id}
+          name="room_amenity_category_id"
+          cl="4"
           cr="6"
-          endpoint="/master/countries"
-          column="country_name"
+          endpoint="/master/room-amenity-categories"
+          column="room_amenity_category_name"
           onChange={(e) =>
-            setForm({...form, country_id: e.target.value || null})
+            setForm({...form, room_amenity_category_id: e.target.value || null})
           }
           disabled={isView || loading}
           type="select"
-        />
+          minLength="0"
+          maxLength="9999"
+        >
+        </FormInputSelectAjax>
 
+        <FormInputWrapper label="Icon" cl="4" cr="4">
+          <label className="card card-default shadow-none border">
+            <div className="card-body">
+              {!isView ? <i className="fas fa-edit text-muted img-edit-icon"></i> : null}
+              <input
+                type="file"
+                onChange={doUpload}
+                className="d-none"
+                disabled={isView}
+                accept=".png,.jpg,.jpeg"
+              />
+              {form.room_amenity_type_asset &&
+                form.room_amenity_type_asset.multimedia_description &&
+                form.room_amenity_type_asset.multimedia_description.url ? (
+                <img
+                  src={form.room_amenity_type_asset.multimedia_description.url}
+                  className="img-fluid"
+                  alt="room_amenity_type"
+                />
+              ) : (
+                ""
+              )}
+            </div>
+          </label>
+        </FormInputWrapper>
       </FormHorizontal>
 
       <FormHorizontal>
         <FormInputControl
-          label="City Code"
+          label="Room Amenity Type Code"
           labelRequired="label-required"
-          value={form.city_code}
-          name="city_code"
-          cl="4"
+          value={form.room_amenity_type_code}
+          name="room_amenity_type_code"
+          cl="6"
           cr="6"
-          onChange={(e) => setForm({...form, city_code: e.target.value})}
+          onChange={(e) => setForm({...form, room_amenity_type_code: e.target.value})}
           disabled={isView || loading}
           type="text"
           minLength="3"
           maxLength="3"
-          hint="City code maximum 3 characters"
+          hint="Room Amenity Type code maximum 3 characters"
         />
+
       </FormHorizontal>
     </FormBuilder>
   )
 }
 
-export default withRouter(CityForm)
+export default withRouter(RoomAmenityTypeForm)

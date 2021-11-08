@@ -1,17 +1,18 @@
-import { withRouter } from "react-router"
-import React, { useEffect, useState } from "react"
-import Api from "config/api"
+import FormBuilder from "components/form/builder"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
-import FormBuilder from "components/form/builder"
+import FormInputSelectAjax from "components/form/input-select-ajax"
+import Api from "config/api"
 import useQuery from "lib/query"
-import { useDispatch } from "react-redux"
-import { setUIParams } from "redux/ui-store"
+import React, {useEffect, useState} from "react"
+import {useDispatch} from "react-redux"
+import {withRouter} from "react-router"
+import {setUIParams} from "redux/ui-store"
 
-const endpoint = "/master/room-view-types"
-const backUrl = "/master/room-view-types"
+const endpoint = "/master/zones"
+const backUrl = "/master/zones"
 
-function RoomViewTypeForm(props) {
+function ZoneForm(props) {
   let dispatch = useDispatch()
 
   const isView = useQuery().get("action") === "view"
@@ -20,26 +21,41 @@ function RoomViewTypeForm(props) {
   const [translations, setTranslations] = useState([])
   const [id, setId] = useState(null)
   const [form, setForm] = useState({
-    room_view_type_code: "",
-    room_view_type_name: "",
+    zone_name: "",
+    destination_id: "",
+    description: "",
+    zone_code: "",
   })
   const translationFields = [
     {
-      label: "Room View Type Name",
-      name: "room_view_type_name",
+      label: "Zone Name",
+      name: "zone_name",
       type: "text",
+    },
+    {
+      label: "Description",
+      name: "description",
+      type: "textarea",
     },
   ]
 
   const validationRules = {
-    room_view_type_code: {
-      required: true,
-      min: 3,
-    },
-    room_view_type_name: {
+    zone_name: {
       required: true,
       minlength: 1,
       maxlength: 256,
+    },
+    destination: {
+      required: true,
+    },
+    description: {
+      minlength: 1,
+      maxlength: 4000,
+    },
+    zone_code: {
+      required: true,
+      minlength: 1,
+      maxlength: 16,
     },
   }
 
@@ -47,11 +63,11 @@ function RoomViewTypeForm(props) {
     let api = new Api()
     let formId = props.match.params.id
 
-    let docTitle = "Edit Room View Type"
+    let docTitle = "Edit Zone"
     if (!formId) {
-      docTitle = "Create Room View Type"
+      docTitle = "Create Zone"
     } else if (isView) {
-      docTitle = "Room View Type Details"
+      docTitle = "Zone Details"
     }
 
     dispatch(
@@ -63,7 +79,7 @@ function RoomViewTypeForm(props) {
           },
           {
             link: backUrl,
-            text: "Room View Types",
+            text: "Zones",
           },
           {
             text: docTitle,
@@ -75,14 +91,14 @@ function RoomViewTypeForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
-      } catch (e) {}
+      } catch (e) { }
 
       try {
         let res = await api.get(endpoint + "/" + formId + "/translations", {
           size: 50,
         })
         setTranslations(res.data.items)
-      } catch (e) {}
+      } catch (e) { }
       setLoading(false)
     }
   }, [])
@@ -127,40 +143,65 @@ function RoomViewTypeForm(props) {
     >
       <FormHorizontal>
         <FormInputControl
-          label="Room View Type Name"
+          label="Zone Name"
           labelRequired="label-required"
-          value={form.room_view_type_name}
-          name="room_view_type_name"
-          cl="4"
-          cr="6"
-          onChange={(e) =>
-            setForm({ ...form, room_view_type_name: e.target.value })
-          }
+          value={form.zone_name}
+          name="zone_name"
+          onChange={(e) => setForm({...form, zone_name: e.target.value})}
           disabled={isView || loading}
           type="text"
           minLength="1"
           maxLength="256"
         />
+        <FormInputSelectAjax
+          label="Destination"
+          value={form.destination_id}
+          name="destination"
+          cl="3"
+          cr="6"
+          endpoint="/master/destinations"
+          column="destination_name"
+          onChange={(e) =>
+            setForm({...form, destination_id: e.target.value || null})
+          }
+          disabled={isView || loading}
+          type="select"
+          minLength="0"
+          maxLength="9999"
+        >
+        </FormInputSelectAjax>
+
+        <FormInputControl
+          value={form.description}
+          name="description"
+          onChange={(e) => setForm({...form, description: e.target.value})}
+          label="Description"
+          disabled={isView || loading}
+          type="textarea"
+          minLength="1"
+          maxLength="4000"
+        />
       </FormHorizontal>
 
       <FormHorizontal>
         <FormInputControl
-          label="Room View Type Code"
-          labelRequired="label-required"
-          value={form.room_view_type_code}
-          name="room_view_type_code"
-          cl="6"
+          value={form.zone_code}
+          name="zone_code"
+          onChange={(e) => setForm({...form, zone_code: e.target.value})}
+          cl="4"
           cr="6"
-          onChange={(e) =>
-            setForm({ ...form, room_view_type_code: parseInt(e.target.value) })
-          }
           disabled={isView || loading}
           type="number"
-          hint="Room View Type Code is numeric"
+          label="Zone Code"
+          labelRequired="label-required"
+          minLength="1"
+          maxLength="16"
+          hint="Zone code maximum 16 characters"
         />
+
       </FormHorizontal>
     </FormBuilder>
   )
 }
 
-export default withRouter(RoomViewTypeForm)
+export default withRouter(ZoneForm)

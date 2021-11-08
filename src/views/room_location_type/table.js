@@ -10,14 +10,13 @@ export default function RoomLocationTypeTable() {
   useEffect(() => {
     dispatch(
       setUIParams({
-        title: "Room Location Type",
+        title: "Room Location Types",
         breadcrumbs: [
           {
-            link: "/",
             text: "Master Data Management",
           },
           {
-            text: "Room Location Type",
+            text: "Room Location Types",
           },
         ],
       }),
@@ -25,7 +24,7 @@ export default function RoomLocationTypeTable() {
   }, [])
 
   let params = {
-    title: "Room Location Type",
+    title: "Room Location Types",
     baseRoute: "/master/room-location-types/form",
     endpoint: "/master/room-location-types",
     deleteEndpoint: "/master/batch-actions/delete/room-location-types",
