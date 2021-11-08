@@ -174,7 +174,7 @@ function RoomAmenityTypeForm(props) {
           labelRequired="label-required"
           value={form.room_amenity_category_name}
           name="room_amenity_category_name"
-          cl="3"
+          cl="4"
           cr="6"
           onChange={(e) => setForm({...form, room_amenity_category_name: e.target.value})}
           disabled={isView || loading}
@@ -182,7 +182,7 @@ function RoomAmenityTypeForm(props) {
           minLength="1"
           maxLength="64"
         />
-        <FormInputWrapper label="Is Default" cl="3" cr="6" hint="Set is default">
+        <FormInputWrapper label="Is Default" cl="4" cr="6" hint="Set is default">
           <div className="form-check form-check-inline">
             <input
               className="form-check-input"
@@ -217,7 +217,7 @@ function RoomAmenityTypeForm(props) {
           label="Description"
           value={form.description}
           name="description"
-          cl="3"
+          cl="4"
           cr="6"
           onChange={(e) => setForm({...form, description: e.target.value})}
           disabled={isView || loading}
@@ -226,7 +226,7 @@ function RoomAmenityTypeForm(props) {
           maxLength="64"
         />
 
-        <FormInputWrapper label="Icon" cl="3" cr="4">
+        <FormInputWrapper label="Icon" cl="4" cr="4">
           <label className="card card-default shadow-none border">
             <div className="card-body">
               {!isView ? <i className="fas fa-edit text-muted img-edit-icon"></i> : null}

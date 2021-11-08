@@ -10,14 +10,13 @@ export default function RoomViewTypeTable() {
   useEffect(() => {
     dispatch(
       setUIParams({
-        title: "Room View Type",
+        title: "Room View Types",
         breadcrumbs: [
           {
-            link: "/",
             text: "Master Data Management",
           },
           {
-            text: "Room View Type",
+            text: "Room View Types",
           },
         ],
       }),
@@ -25,7 +24,7 @@ export default function RoomViewTypeTable() {
   }, [])
 
   let params = {
-    title: "Room View Type",
+    title: "Room View Types",
     baseRoute: "/master/room-view-types/form",
     endpoint: "/master/room-view-types",
     deleteEndpoint: "/master/batch-actions/delete/room-view-types",

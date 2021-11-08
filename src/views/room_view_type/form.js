@@ -20,7 +20,7 @@ function RoomViewTypeForm(props) {
   const [translations, setTranslations] = useState([])
   const [id, setId] = useState(null)
   const [form, setForm] = useState({
-    room_view_type_code: 0,
+    room_view_type_code: "",
     room_view_type_name: "",
   })
   const translationFields = [
@@ -34,12 +34,11 @@ function RoomViewTypeForm(props) {
   const validationRules = {
     room_view_type_code: {
       required: true,
-      min: 0,
-      max: 99,
+      min: 3,
     },
     room_view_type_name: {
       required: true,
-      minlength: 0,
+      minlength: 1,
       maxlength: 256,
     },
   }
@@ -60,12 +59,11 @@ function RoomViewTypeForm(props) {
         title: docTitle,
         breadcrumbs: [
           {
-            link: "/",
             text: "Master Data Management",
           },
           {
             link: backUrl,
-            text: "Room View Type",
+            text: "Room View Types",
           },
           {
             text: docTitle,
@@ -129,35 +127,35 @@ function RoomViewTypeForm(props) {
     >
       <FormHorizontal>
         <FormInputControl
-          label="Room View Type Name *"
+          label="Room View Type Name"
+          labelRequired="label-required"
           value={form.room_view_type_name}
           name="room_view_type_name"
-          cl="3"
+          cl="4"
           cr="6"
           onChange={(e) =>
             setForm({ ...form, room_view_type_name: e.target.value })
           }
           disabled={isView || loading}
           type="text"
-          minLength="0"
+          minLength="1"
           maxLength="256"
         />
       </FormHorizontal>
 
       <FormHorizontal>
         <FormInputControl
-          label="Room View Type Code *"
+          label="Room View Type Code"
+          labelRequired="label-required"
           value={form.room_view_type_code}
           name="room_view_type_code"
           cl="6"
           cr="6"
           onChange={(e) =>
-            setForm({ ...form, room_view_type_code: e.target.value })
+            setForm({ ...form, room_view_type_code: parseInt(e.target.value) })
           }
           disabled={isView || loading}
           type="number"
-          min="0"
-          max="99"
           hint="Room View Type Code is numeric"
         />
       </FormHorizontal>

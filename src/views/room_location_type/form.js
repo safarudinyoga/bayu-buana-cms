@@ -20,7 +20,7 @@ function RoomLocationTypeForm(props) {
   const [translations, setTranslations] = useState([])
   const [id, setId] = useState(null)
   const [form, setForm] = useState({
-    room_location_type_code: 0,
+    room_location_type_code: "",
     room_location_type_name: "",
   })
   const translationFields = [
@@ -39,7 +39,7 @@ function RoomLocationTypeForm(props) {
     },
     room_location_type_name: {
       required: true,
-      minlength: 0,
+      minlength: 1,
       maxlength: 256,
     },
   }
@@ -60,12 +60,11 @@ function RoomLocationTypeForm(props) {
         title: docTitle,
         breadcrumbs: [
           {
-            link: "/",
             text: "Master Data Management",
           },
           {
             link: backUrl,
-            text: "Room Location Type",
+            text: "Room Location Types",
           },
           {
             text: docTitle,
@@ -129,7 +128,8 @@ function RoomLocationTypeForm(props) {
     >
       <FormHorizontal>
         <FormInputControl
-          label="Room Location Type Name *"
+          label="Room Location Type Name"
+          labelRequired="label-required"
           value={form.room_location_type_name}
           name="room_location_type_name"
           cl="4"
@@ -146,7 +146,8 @@ function RoomLocationTypeForm(props) {
 
       <FormHorizontal>
         <FormInputControl
-          label="Room Location Type Code *"
+          label="Room Location Type Code"
+          labelRequired="label-required"
           value={form.room_location_type_code}
           name="room_location_type_code"
           cl="6"
@@ -156,8 +157,6 @@ function RoomLocationTypeForm(props) {
           }
           disabled={isView || loading}
           type="number"
-          min="0"
-          max="99"
           hint="Room Location Type Code is numeric"
         />
       </FormHorizontal>
