@@ -32,6 +32,12 @@ export default class FormInput extends Component {
             {this.props.children}
           </select>
         )
+      case "selectmultiple":
+        return (
+          <select ref={this.input} className="form-control" {...this.props} multiple="multiple">
+            {this.props.children}
+          </select>
+        )
       default:
         return (
           <input ref={this.input} className="form-control" {...this.props} />

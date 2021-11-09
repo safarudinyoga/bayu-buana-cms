@@ -19,6 +19,10 @@ function CountryForm(props) {
   const [formBuilder, setFormBuilder] = useState(null)
   const [loading, setLoading] = useState(true)
   const [translations, setTranslations] = useState([])
+  const [timeZoneData, setTimeZoneData] = useState([])
+  const [currencyData, setCurrencyData] = useState([])
+  const [regionData, setRegionData] = useState([])
+  const [languageData, setLanguageData] = useState([])
   const [id, setId] = useState(null)
   const [form, setForm] = useState({
     country_access_code: "",
@@ -109,6 +113,22 @@ function CountryForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
+
+        if (res.data.timezone) {
+          setTimeZoneData([{...res.data.timezone, text: res.data.timezone.zone_name}])
+        }
+
+        if (res.data.currency) {
+          setCurrencyData([{...res.data.currency, text: res.data.currency.currency_name}])
+        }
+
+        if (res.data.region) {
+          setRegionData([{...res.data.region, text: res.data.region.region_name}])
+        }
+
+        if (res.data.language) {
+          setLanguageData([{...res.data.language, text: res.data.language.language_name}])
+        }
       } catch (e) {}
 
       try {
@@ -199,6 +219,7 @@ function CountryForm(props) {
           cr="6"
           endpoint="/master/timezones"
           column="zone_name"
+          data={timeZoneData}
           onChange={(e) =>
             setForm({ ...form, timezone_id: e.target.value || null })
           }
@@ -215,6 +236,7 @@ function CountryForm(props) {
           cr="6"
           endpoint="/master/currencies"
           column="currency_name"
+          data={currencyData}
           onChange={(e) =>
             setForm({ ...form, currency_id: e.target.value || null })
           }
@@ -244,6 +266,7 @@ function CountryForm(props) {
           cr="6"
           endpoint="/master/regions"
           column="region_name"
+          data={regionData}
           onChange={(e) =>
             setForm({ ...form, region_id: e.target.value || null })
           }
@@ -260,6 +283,7 @@ function CountryForm(props) {
           cr="6"
           endpoint="/master/languages"
           column="language_name"
+          data={languageData}
           onChange={(e) =>
             setForm({ ...form, language_id: e.target.value || null })
           }

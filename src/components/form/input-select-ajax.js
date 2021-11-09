@@ -25,6 +25,7 @@ export default class FormInputSelectAjax extends Component {
       try {
         let config = {
           theme: "bootstrap4",
+          data: this.props.data,
         }
         if (!this.props.children) {
           config.ajax = {
@@ -68,14 +69,9 @@ export default class FormInputSelectAjax extends Component {
             if (!this.props.onChange) {
               return
             }
-            if ($(input).attr("multiple")) {
-              this.props.onChange(e, this.select2.select2("data")[0])
-            } else {
-              this.props.onChange(e, this.select2.select2("data"))
-            }
+            this.props.onChange(e, this.select2.select2("data"))
+            
           })
-
-          this.setInitialData()
 
           setTimeout(() => {
             if (this.props.value) {
@@ -87,25 +83,6 @@ export default class FormInputSelectAjax extends Component {
         console.log(e)
       }
     }, 300)
-  }
-
-  componentDidUpdate() {
-    this.setInitialData()
-  }
-
-  setInitialData() {
-    try {
-      if (this.props.data && this.props.data.length) {
-        this.select2.empty()
-        for (let i in this.props.data) {
-          let item = this.props.data[i]
-          this.select2.append(
-            '<option value="' + item.id + '">' + item.text + "</option>",
-          )
-        }
-        this.select2.trigger("change")
-      }
-    } catch (e) {}
   }
 
   componentWillUnmount() {
@@ -122,6 +99,6 @@ export default class FormInputSelectAjax extends Component {
   }
 
   render() {
-    return <FormInputControl ref={this.select} type="select" {...this.props} />
+    return <FormInputControl ref={this.select} type={this.props.type} {...this.props} />
   }
 }

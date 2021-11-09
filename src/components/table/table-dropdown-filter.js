@@ -102,6 +102,7 @@ export default class TableDropdownFilter extends Component {
           {this.props.children}
         </select>
       </div>
+
     )
   }
 }

@@ -19,6 +19,7 @@ function ZoneForm(props) {
   const [formBuilder, setFormBuilder] = useState(null)
   const [loading, setLoading] = useState(true)
   const [translations, setTranslations] = useState([])
+  const [destinationData, setDestinationData] = useState([])
   const [id, setId] = useState(null)
   const [form, setForm] = useState({
     zone_name: "",
@@ -91,6 +92,9 @@ function ZoneForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
+        if (res.data.destination) {
+          setDestinationData([{...res.data.destination, text: res.data.destination.destination_name}])
+        }
       } catch (e) { }
 
       try {
@@ -161,6 +165,7 @@ function ZoneForm(props) {
           cr="6"
           endpoint="/master/destinations"
           column="destination_name"
+          data={destinationData}
           onChange={(e) =>
             setForm({...form, destination_id: e.target.value || null})
           }
