@@ -81,7 +81,7 @@ export default function DestinationTable() {
       },
       {
         title: "Country",
-        data: "json.country_name",
+        data: "country.country_name",
       },
       {
         title: "City",

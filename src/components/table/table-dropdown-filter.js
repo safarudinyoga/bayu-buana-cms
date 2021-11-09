@@ -96,14 +96,13 @@ export default class TableDropdownFilter extends Component {
 
   render() {
     return (
-      <div className="form-group table-dropdown-filter row required">
-        <label className={"text-label-input col-sm-"+(this.props.cl||3)+" col-form-label " + (this.props.labelRequired)}>{this.props.label}</label>
-       <div className={"form-control-wrapper col-sm-"+(this.props.cr||6)}>
-         <select className="form-control" ref={this.select} multiple="multiple">
-           {this.props.children}
-         </select>
-       </div>
+      <div className="table-dropdown-filter">
+        <label>{this.props.label}</label>
+        <select className="form-control" ref={this.select} multiple="multiple">
+          {this.props.children}
+        </select>
       </div>
+
     )
   }
 }

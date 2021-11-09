@@ -19,6 +19,8 @@ function DestinationForm(props) {
   const [formBuilder, setFormBuilder] = useState(null)
   const [loading, setLoading] = useState(true)
   const [translations, setTranslations] = useState([])
+  const [countryData, setCountryData] = useState([])
+  const [cityData, setCityData] = useState([])
   const [id, setId] = useState(null)
   const [form, setForm] = useState({
     id: "",
@@ -97,6 +99,13 @@ function DestinationForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
+        if (res.data.city) {
+          setCityData([{...res.data.city, text: res.data.city.city_name}])
+        }
+
+        if (res.data.country) {
+          setCountryData([{...res.data.country, text: res.data.country.country_name}])
+        }
       } catch (e) { }
 
       try {
@@ -168,6 +177,7 @@ function DestinationForm(props) {
           cr="6"
           endpoint="/master/countries"
           column="country_name"
+          data={countryData}
           onChange={(e) =>
             setForm({...form, country_id: e.target.value || null})
           }
@@ -177,13 +187,14 @@ function DestinationForm(props) {
 
         <FormInputSelectAjax
           label="City"
-          value={form.country_id}
+          value={form.destination_city_id}
           name="destination_city_id"
           cl="3"
           cr="6"
           endpoint="/master/cities"
           filter={form.country_id}
           column="city_name"
+          data={cityData}
           onChange={(e) =>
             setForm({...form, destination_city_id: e.target.value || null})
           }
