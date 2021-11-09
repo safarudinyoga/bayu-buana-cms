@@ -1,9 +1,6 @@
 import { withRouter } from "react-router"
 import React, { useEffect, useState } from "react"
 import Api from "config/api"
-import FormHorizontal from "components/form/horizontal"
-import FormInputControl from "components/form/input-control"
-import FormBuilder from "components/form/builder"
 import { ReactSVG } from "react-svg"
 import { Row, Col, Tab, Nav } from "react-bootstrap"
 import useQuery from "lib/query"
@@ -21,9 +18,7 @@ function EmployeeForm(props) {
   let dispatch = useDispatch()
 
   const isView = useQuery().get("action") === "view"
-  const [formBuilder, setFormBuilder] = useState(null)
   const [loading, setLoading] = useState(true)
-  const [translations, setTranslations] = useState([])
   const [id, setId] = useState(null)
   const [form, setForm] = useState({
     id: "",
@@ -32,36 +27,6 @@ function EmployeeForm(props) {
     icao_code: "",
     aircraft_code: "",
   })
-  const translationFields = [
-    {
-      label: "Aircraft Name",
-      name: "aircraft_name",
-      type: "text",
-    },
-  ]
-
-  const validationRules = {
-    aircraft_name: {
-      required: true,
-      min: 1,
-      max: 64,
-    },
-    model: {
-      required: false,
-      min: 1,
-      max: 64,
-    },
-    icao_code: {
-      required: true,
-      min: 4,
-      max: 4,
-    },
-    aircraft_code: {
-      required: true,
-      min: 4,
-      max: 4,
-    },
-  }
 
   useEffect(async () => {
     let api = new Api()
@@ -96,13 +61,6 @@ function EmployeeForm(props) {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
       } catch (e) {}
-
-      try {
-        let res = await api.get(endpoint + "/" + formId + "/translations", {
-          size: 50,
-        })
-        setTranslations(res.data.items)
-      } catch (e) {}
       setLoading(false)
     }
   }, [])
@@ -113,28 +71,6 @@ function EmployeeForm(props) {
     }
     setId(props.match.params.id)
   }, [props.match.params.id])
-
-  const onSave = async () => {
-    let translated = formBuilder.getTranslations()
-    setLoading(true)
-    let api = new Api()
-    try {
-      if (!form.model) {
-        form.model = null
-      }
-      let res = await api.putOrPost(endpoint, id, form)
-      setId(res.data.id)
-      for (let i in translated) {
-        let tl = translated[i]
-        let path = endpoint + "/" + res.data.id + "/translations"
-        await api.putOrPost(path, tl.id, tl)
-      }
-    } catch (e) {
-    } finally {
-      setLoading(false)
-      props.history.push(backUrl)
-    }
-  }
 
   return (
     <Tab.Container

@@ -2,6 +2,28 @@ label:not(.form-check-label):not(.custom-file-label) {
   color: #333333;
   font-weight: 500;
 }
+.form-control {
+  max-width: 250px;
+  border-radius: 8px;
+}
 .form-label-required {
   color: #ff0000;
+}
+.form-group {
+  margin-bottom: 10px;
+}
+.react-select {
+  > div {
+    border-radius: 8px;
+  }
+  &.is-invalid {
+    > div {
+      border: 1px solid #dc3545;
+    }
+  }
+}
+.invalid-feedback {
+  &:before {
+    display: none;
+  }
 }
