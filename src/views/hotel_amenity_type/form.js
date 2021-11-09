@@ -256,7 +256,7 @@ function HotelAmenityForm(props) {
             })
           }
           disabled={isView || loading}
-          type="number"
+          type="text"
           min="0"
           max="99"
           hint="Hotel Amenity type code maximum 2 characters"
