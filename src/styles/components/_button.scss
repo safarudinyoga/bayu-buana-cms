@@ -1,0 +1,31 @@
+.btn {
+  height: 34px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  &.btn-primary {
+    background-color: #027f71;
+    border-color: #027f71;
+    &:active,
+    &:visited,
+    &:hover {
+      background-color: #027f71 !important;
+      border-color: #027f71 !important;
+    }
+  }
+  &.btn-secondary {
+    color: #333333;
+    background-color: #ffffff;
+    border-color: #707070;
+    &:active,
+    &:visited,
+    &:hover {
+      color: #333333 !important;
+      background-color: #ffffff !important;
+      border-color: #707070 !important;
+    }
+  }
+}

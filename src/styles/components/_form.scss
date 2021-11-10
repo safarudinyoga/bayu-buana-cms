@@ -13,6 +13,7 @@ label:not(.form-check-label):not(.custom-file-label) {
   margin-bottom: 10px;
 }
 .react-select {
+  cursor: pointer;
   > div {
     border-radius: 8px;
   }
