@@ -5,7 +5,7 @@ import { useFormik } from "formik"
 import * as Yup from "yup"
 import Api from "config/api"
 
-const EmergencyContacts = () => {
+const EmergencyContacts = (props) => {
   let api = new Api()
 
   const { handleSubmit, errors, touched } = useFormik({
@@ -101,7 +101,12 @@ const EmergencyContacts = () => {
         <Button variant="primary" type="submit" style={{ marginRight: 15 }}>
           SAVE & NEXT
         </Button>
-        <Button variant="secondary">CANCEL</Button>
+        <Button
+          variant="secondary"
+          onClick={() => props.history.push(props.backUrl)}
+        >
+          CANCEL
+        </Button>
       </div>
     </Form>
   )

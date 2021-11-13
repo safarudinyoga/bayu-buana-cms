@@ -1,6 +1,18 @@
+/* Change the white to any color */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px white inset !important;
+}
+
 label:not(.form-check-label):not(.custom-file-label) {
   color: #333333;
   font-weight: 500;
+}
+input[type="radio"] {
+  width: 16px;
+  height: 16px;
 }
 .form-control {
   max-width: 250px;
@@ -12,8 +24,17 @@ label:not(.form-check-label):not(.custom-file-label) {
 .form-group {
   margin-bottom: 10px;
 }
+.form-control:disabled,
+.form-control[readonly] {
+  background-color: hsl(0, 0%, 95%);
+  border-color: hsl(0, 0%, 90%);
+}
 .react-select {
   cursor: pointer;
+  div,
+  span {
+    cursor: pointer;
+  }
   > div {
     border-radius: 8px;
   }

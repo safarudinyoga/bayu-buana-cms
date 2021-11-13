@@ -6,7 +6,7 @@ import * as Yup from "yup"
 
 import Api from "config/api"
 
-const Employment = () => {
+const Employment = (props) => {
   const [selectCountry, setSelectCountry] = useState([])
 
   let api = new Api()
@@ -176,7 +176,12 @@ const Employment = () => {
         <Button variant="primary" type="submit" style={{ marginRight: 15 }}>
           SAVE & NEXT
         </Button>
-        <Button variant="secondary">CANCEL</Button>
+        <Button
+          variant="secondary"
+          onClick={() => props.history.push(props.backUrl)}
+        >
+          CANCEL
+        </Button>
       </div>
     </Form>
   )

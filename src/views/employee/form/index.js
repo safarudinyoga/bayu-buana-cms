@@ -109,13 +109,13 @@ function EmployeeForm(props) {
         <Col sm={9}>
           <Tab.Content>
             <Tab.Pane eventKey="general-information">
-              <GeneralInformation />
+              <GeneralInformation history={props.history} backUrl={backUrl} />
             </Tab.Pane>
             <Tab.Pane eventKey="emergency-contacts">
-              <EmergencyContacts />
+              <EmergencyContacts history={props.history} backUrl={backUrl} />
             </Tab.Pane>
             <Tab.Pane eventKey="employment">
-              <Employment />
+              <Employment history={props.history} backUrl={backUrl} />
             </Tab.Pane>
           </Tab.Content>
         </Col>
