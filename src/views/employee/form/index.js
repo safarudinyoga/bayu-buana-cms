@@ -14,8 +14,15 @@ import Employment from "./employment"
 const endpoint = "/master/employees"
 const backUrl = "/master/employee"
 
-function EmployeeForm(props) {
+const EmployeeForm = (props) => {
   let dispatch = useDispatch()
+
+  let api = new Api()
+
+  const [tabKey, setTabKey] = useState("general-information")
+  const [selectJobTitle, setSelectJobTitle] = useState([])
+  const [selectDivision, setSelectDivision] = useState([])
+  const [selectBranchOffice, setSelectBranchOffice] = useState([])
 
   const isView = useQuery().get("action") === "view"
   const [loading, setLoading] = useState(true)
@@ -65,6 +72,47 @@ function EmployeeForm(props) {
     }
   }, [])
 
+  // Select tabs
+  const handleSelectTab = async (key) => {
+    setTabKey(key)
+
+    if (key == "employment") {
+      try {
+        let res = await api.get("/master/job-titles")
+        const options = []
+        res.data.items.forEach((data) => {
+          options.push({
+            label: data.job_title_name,
+            value: data.id,
+          })
+          setSelectJobTitle(options)
+        })
+      } catch (e) {}
+      try {
+        let res = await api.get("/master/divisions")
+        const options = []
+        res.data.items.forEach((data) => {
+          options.push({
+            label: data.division_name,
+            value: data.id,
+          })
+          setSelectDivision(options)
+        })
+      } catch (e) {}
+      try {
+        let res = await api.get("/master/divisions")
+        const options = []
+        res.data.items.forEach((data) => {
+          options.push({
+            label: data.division_name,
+            value: data.id,
+          })
+          setSelectBranchOffice(options)
+        })
+      } catch (e) {}
+    }
+  }
+
   useEffect(() => {
     if (!props.match.params.id) {
       setLoading(false)
@@ -73,10 +121,7 @@ function EmployeeForm(props) {
   }, [props.match.params.id])
 
   return (
-    <Tab.Container
-      id="left-tabs-example"
-      defaultActiveKey="general-information"
-    >
+    <Tab.Container activeKey={tabKey} onSelect={handleSelectTab}>
       <Row>
         <Col sm={3}>
           <Nav variant="pills" className="flex-column nav-side">
@@ -109,13 +154,28 @@ function EmployeeForm(props) {
         <Col sm={9}>
           <Tab.Content>
             <Tab.Pane eventKey="general-information">
-              <GeneralInformation history={props.history} backUrl={backUrl} />
+              <GeneralInformation
+                history={props.history}
+                backUrl={backUrl}
+                handleSelectTab={(v) => handleSelectTab(v)}
+              />
             </Tab.Pane>
             <Tab.Pane eventKey="emergency-contacts">
-              <EmergencyContacts history={props.history} backUrl={backUrl} />
+              <EmergencyContacts
+                history={props.history}
+                backUrl={backUrl}
+                handleSelectTab={(v) => handleSelectTab(v)}
+              />
             </Tab.Pane>
             <Tab.Pane eventKey="employment">
-              <Employment history={props.history} backUrl={backUrl} />
+              <Employment
+                history={props.history}
+                backUrl={backUrl}
+                handleSelectTab={(v) => handleSelectTab(v)}
+                selectJobTitle={selectJobTitle}
+                selectDivision={selectDivision}
+                selectBranchOffice={selectBranchOffice}
+              />
             </Tab.Pane>
           </Tab.Content>
         </Col>

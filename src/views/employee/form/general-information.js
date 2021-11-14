@@ -205,22 +205,40 @@ const GeneralInformation = (props) => {
       <Formik
         initialValues={initialForm}
         validationSchema={validationSchema}
-        onSubmit={(values, { setSubmitting, resetForm }) => {
+        onSubmit={async (values, { setSubmitting, resetForm }) => {
           console.log(values)
-
+          console.log(props)
           // setSubmitting(true)
 
-          // setTimeout(() => {
-          //   alert(JSON.stringify(values, null, 2))
+          // try {
+          //   let res = await api.post("master/persons", {
+          //     birth_date: "2021-11-13T04:31:17.022Z",
+          //     business_entity_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          //     citizen_country_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          //     gender_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          //     given_name: "string",
+          //     marital_status_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          //     middle_name: "string",
+          //     name_prefix_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          //     name_suffix: "string",
+          //     name_title: "string",
+          //     religion_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          //     surname: "string",
+          //     surname_prefix: "string",
+          //   })
+          //   console.log(res)
           //   resetForm()
           //   setSubmitting(false)
-          // }, 500)
+          // } catch (e) {}
+
+          return props.handleSelectTab("emergency-contacts")
         }}
       >
         {({
           values,
           errors,
           touched,
+          dirty,
           handleChange,
           handleBlur,
           handleSubmit,
@@ -261,11 +279,11 @@ const GeneralInformation = (props) => {
                                     }}
                                   />
                                   {form.touched.title && form.errors.title && (
-                                    <div className="invalid-feedback">
+                                    <Form.Control.Feedback type="invalid">
                                       {form.touched.title
                                         ? form.errors.title
                                         : null}
-                                    </div>
+                                    </Form.Control.Feedback>
                                   )}
                                 </div>
                               </>
@@ -284,22 +302,20 @@ const GeneralInformation = (props) => {
                               <>
                                 <Form.Control
                                   type="text"
-                                  className={
+                                  isInvalid={
                                     form.touched.firstName &&
                                     form.errors.firstName
-                                      ? "is-invalid"
-                                      : null
                                   }
                                   maxLength={128}
                                   {...field}
                                 />
                                 {form.touched.firstName &&
                                   form.errors.firstName && (
-                                    <div className="invalid-feedback">
-                                      {touched.firstName
-                                        ? errors.firstName
+                                    <Form.Control.Feedback type="invalid">
+                                      {form.touched.firstName
+                                        ? form.errors.firstName
                                         : null}
-                                    </div>
+                                    </Form.Control.Feedback>
                                   )}
                               </>
                             )}
@@ -334,21 +350,19 @@ const GeneralInformation = (props) => {
                                 <Form.Control
                                   {...field}
                                   type="text"
-                                  className={
+                                  isInvalid={
                                     form.touched.lastName &&
                                     form.errors.lastName
-                                      ? "is-invalid"
-                                      : null
                                   }
                                   maxLength={128}
                                 />
                                 {form.touched.lastName &&
                                   form.errors.lastName && (
-                                    <div className="invalid-feedback">
+                                    <Form.Control.Feedback type="invalid">
                                       {form.touched.lastName
                                         ? form.errors.lastName
                                         : null}
-                                    </div>
+                                    </Form.Control.Feedback>
                                   )}
                               </>
                             )}
@@ -431,10 +445,8 @@ const GeneralInformation = (props) => {
                                   checked={values.gender === "male"}
                                   type="radio"
                                   label="Male"
-                                  className={
+                                  isInvalid={
                                     form.touched.gender && form.errors.gender
-                                      ? "is-invalid"
-                                      : null
                                   }
                                   style={{ marginRight: 30 }}
                                   inline
@@ -451,10 +463,8 @@ const GeneralInformation = (props) => {
                                   checked={values.gender === "female"}
                                   type="radio"
                                   label="Female"
-                                  className={
+                                  isInvalid={
                                     form.touched.gender && form.errors.gender
-                                      ? "is-invalid"
-                                      : null
                                   }
                                   inline
                                   onChange={() =>
@@ -464,9 +474,9 @@ const GeneralInformation = (props) => {
                               )}
                             </FastField>
                             {touched.gender && errors.gender && (
-                              <div className="invalid-feedback">
+                              <Form.Control.Feedback type="invalid">
                                 {touched.gender ? errors.gender : null}
-                              </div>
+                              </Form.Control.Feedback>
                             )}
                           </div>
                         </Col>
@@ -550,20 +560,18 @@ const GeneralInformation = (props) => {
                             <Form.Control
                               {...field}
                               type="text"
-                              className={
+                              isInvalid={
                                 form.touched.homePhone && form.errors.homePhone
-                                  ? "is-invalid"
-                                  : null
                               }
                               maxLength={32}
                             />
                             {form.touched.homePhone &&
                               form.errors.homePhone && (
-                                <div className="invalid-feedback">
+                                <Form.Control.Feedback type="invalid">
                                   {form.touched.homePhone
                                     ? form.errors.homePhone
                                     : null}
-                                </div>
+                                </Form.Control.Feedback>
                               )}
                           </>
                         )}
@@ -582,21 +590,19 @@ const GeneralInformation = (props) => {
                             <Form.Control
                               {...field}
                               type="text"
-                              className={
+                              isInvalid={
                                 form.touched.mobilePhone &&
                                 form.errors.mobilePhone
-                                  ? "is-invalid"
-                                  : null
                               }
                               maxLength={32}
                             />
                             {form.touched.mobilePhone &&
                               form.errors.mobilePhone && (
-                                <div className="invalid-feedback">
+                                <Form.Control.Feedback type="invalid">
                                   {form.touched.mobilePhone
                                     ? form.errors.mobilePhone
                                     : null}
-                                </div>
+                                </Form.Control.Feedback>
                               )}
                           </>
                         )}
@@ -614,17 +620,15 @@ const GeneralInformation = (props) => {
                             <Form.Control
                               {...field}
                               type="email"
-                              className={
+                              isInvalid={
                                 form.touched.email && form.errors.email
-                                  ? "is-invalid"
-                                  : null
                               }
                               maxLength={256}
                             />
                             {form.touched.email && form.errors.email && (
-                              <div className="invalid-feedback">
+                              <Form.Control.Feedback type="invalid">
                                 {form.touched.email ? form.errors.email : null}
-                              </div>
+                              </Form.Control.Feedback>
                             )}
                           </>
                         )}
@@ -652,11 +656,11 @@ const GeneralInformation = (props) => {
                             />
                             {form.touched.otherEmail &&
                               form.errors.otherEmail && (
-                                <div className="invalid-feedback">
+                                <Form.Control.Feedback type="invalid">
                                   {form.touched.otherEmail
                                     ? form.errors.otherEmail
                                     : null}
-                                </div>
+                                </Form.Control.Feedback>
                               )}
                           </>
                         )}
@@ -714,11 +718,11 @@ const GeneralInformation = (props) => {
                                 />
                                 {form.touched.currentCountry &&
                                   form.errors.currentCountry && (
-                                    <div className="invalid-feedback">
+                                    <Form.Control.Feedback type="invalid">
                                       {form.touched.currentCountry
                                         ? form.errors.currentCountry
                                         : null}
-                                    </div>
+                                    </Form.Control.Feedback>
                                   )}
                               </div>
                             </>
@@ -848,11 +852,11 @@ const GeneralInformation = (props) => {
                             <>
                               {touched.permanentCountry &&
                                 errors.permanentCountry && (
-                                  <div className="invalid-feedback">
+                                  <Form.Control.Feedback type="invalid">
                                     {touched.permanentCountry
                                       ? errors.permanentCountry
                                       : null}
-                                  </div>
+                                  </Form.Control.Feedback>
                                 )}
                             </>
                           )}
@@ -940,6 +944,7 @@ const GeneralInformation = (props) => {
               <Button
                 variant="primary"
                 type="submit"
+                disabled={isSubmitting || !dirty}
                 style={{ marginRight: 15 }}
               >
                 SAVE & NEXT

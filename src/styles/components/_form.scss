@@ -24,6 +24,23 @@ input[type="radio"] {
 .form-group {
   margin-bottom: 10px;
 }
+.form-group-loader {
+  position: relative;
+  &.active {
+    .form-control {
+      padding-right: 40px;
+    }
+    .input-group-loader {
+      display: block;
+    }
+  }
+  .input-group-loader {
+    position: absolute;
+    right: 15px;
+    top: 5px;
+    display: none;
+  }
+}
 .form-control:disabled,
 .form-control[readonly] {
   background-color: hsl(0, 0%, 95%);

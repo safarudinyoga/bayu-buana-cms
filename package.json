@@ -9,7 +9,7 @@
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
     "@ttskch/select2-bootstrap4-theme": "^1.5.2",
-    "admin-lte": "^3.1",
+    "admin-lte": "3.1",
     "axios": "^0.23.0",
     "bootstrap": "^4.6.0",
     "datatables.net-autofill-bs4": "^2.3.9",
@@ -43,6 +43,8 @@
     "react-select": "^5.2.1",
     "react-svg": "^14.1.1",
     "select2": "^4.0",
+    "use-debounce": "^7.0.1",
+    "use-toggle-state": "^1.1.1",
     "web-vitals": "^1.0.1",
     "yup": "^0.32.11"
   },
