@@ -32,12 +32,12 @@ const Employment = (props) => {
   const validationSchema = Yup.object().shape({
     employeeId: Yup.string().required("Employee Number is required."),
     jobTitle: Yup.object().required("Job Title is required."),
-    division: Yup.string(),
-    branchOffice: Yup.string(),
+    division: Yup.object(),
+    branchOffice: Yup.object(),
     // hiringDate: Yup.string(),
     npwp: Yup.string(),
     additionalJobTitle: Yup.object().required("Job Title is required."),
-    additionalDivision: Yup.string(),
+    additionalDivision: Yup.object(),
   })
 
   return (
