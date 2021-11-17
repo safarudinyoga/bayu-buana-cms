@@ -22,7 +22,7 @@ const Employment = (props) => {
     jobTitle: "",
     division: "",
     branchOffice: "",
-    // hiringDate: "",
+    hiringDate: "",
     npwp: "",
     additionalJobTitle: "",
     additionalDivision: "",
@@ -34,11 +34,52 @@ const Employment = (props) => {
     jobTitle: Yup.object().required("Job Title is required."),
     division: Yup.object(),
     branchOffice: Yup.object(),
-    // hiringDate: Yup.string(),
+    hiringDate: Yup.string(),
     npwp: Yup.string(),
     additionalJobTitle: Yup.object().required("Job Title is required."),
     additionalDivision: Yup.object(),
   })
+
+  const selectDay = () => {
+    const options = []
+    for (let i = 0; i <= 31; i++) {
+      options.push({
+        label: i,
+        value: i,
+      })
+    }
+    return options
+  }
+  const selectMonth = () => {
+    const options = []
+    const month = Array.from({ length: 12 }, (e, i) => {
+      return new Date(null, i + 1, null).toLocaleDateString("en", {
+        month: "long",
+      })
+    })
+    month.forEach((data, i) => {
+      options.push({
+        label: data,
+        value: i + 1,
+      })
+    })
+    return options
+  }
+  const selectYear = () => {
+    const options = []
+
+    const startYear = 1921
+    const endYear = new Date().getFullYear()
+
+    for (let i = endYear; i >= startYear; i--) {
+      options.push({
+        label: i,
+        value: i,
+      })
+    }
+
+    return options
+  }
 
   return (
     <>
@@ -210,25 +251,45 @@ const Employment = (props) => {
                         </div>
                       </Col>
                     </Form.Group>
-                    {/* <Form.Group as={Row} className="form-group">
+                    <Form.Group as={Row} className="form-group">
                       <Form.Label column sm={2}>
                         Hiring Date
                       </Form.Label>
                       <Col sm={10}>
-                        <div style={{ width: 300 }}>
-                          <Select
-                            options={[
-                              { value: "mr", label: "Mr." },
-                              { value: "mrs", label: "Mrs." },
-                            ]}
-                            placeholder="Please choose"
-                            components={{
-                              IndicatorSeparator: () => null,
-                            }}
-                          />
+                        <div style={{ width: 300, display: "flex" }}>
+                          <div style={{ marginRight: 12 }}>
+                            <Select
+                              options={selectDay()}
+                              className="react-select"
+                              components={{
+                                IndicatorSeparator: () => null,
+                              }}
+                              style={{ marginRight: 12 }}
+                            />
+                          </div>
+                          <div style={{ marginRight: 12 }}>
+                            <Select
+                              options={selectMonth()}
+                              className="react-select"
+                              components={{
+                                IndicatorSeparator: () => null,
+                              }}
+                              style={{ marginRight: 12 }}
+                            />
+                          </div>
+                          <div>
+                            <Select
+                              options={selectYear()}
+                              className="react-select"
+                              components={{
+                                IndicatorSeparator: () => null,
+                              }}
+                              style={{ marginRight: 12 }}
+                            />
+                          </div>
                         </div>
                       </Col>
-                    </Form.Group> */}
+                    </Form.Group>
                     <Form.Group as={Row} className="form-group">
                       <Form.Label column sm={2}>
                         NPWP

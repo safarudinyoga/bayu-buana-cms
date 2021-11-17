@@ -369,7 +369,7 @@ const GeneralInformation = (props) => {
                           </FastField>
                         </Col>
                       </Form.Group>
-                      {/* <Form.Group as={Row} className="form-group">
+                      <Form.Group as={Row} className="form-group">
                         <Form.Label column sm={3}>
                           Date Of Birth{" "}
                           <span className="form-label-required">*</span>
@@ -425,7 +425,7 @@ const GeneralInformation = (props) => {
                             </div>
                           )}
                         </Col>
-                      </Form.Group> */}
+                      </Form.Group>
                       <Form.Group as={Row} className="form-group">
                         <Form.Label column sm={3}>
                           Gender <span className="form-label-required">*</span>
