@@ -248,7 +248,7 @@ function HotelAmenityCategoryForm(props) {
           minLength="1"
           maxLength="4000"
         />
-        <FormInputWrapper label="Icon" cl="7" cr="5">
+        <FormInputWrapper label="Hotel Amenity Category Icon Image" cl="7" cr="5">
           <label className="card card-default shadow-none border">
             <div className="card-body">
               {!isView ? (
