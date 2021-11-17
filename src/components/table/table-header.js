@@ -132,7 +132,7 @@ class TableHeader extends Component {
             >
               <span className="text-button-new">
               <i className="fas fa-file-medical mr-2"></i>
-              Create new
+              Create New
               </span>
             </button>
             <Link

@@ -131,10 +131,6 @@ function HotelAmenityForm(props) {
       }
       if (!form.hotel_amenity_category_hotel_amenity_type) {
         form.hotel_amenity_category_hotel_amenity_type = null
-      }else{
-        if(form.hotel_amenity_category_hotel_amenity_type.length > 0){
-          form.hotel_amenity_category_hotel_amenity_type = form.hotel_amenity_category_hotel_amenity_type.map(value => ({hotel_amenity_category_id: value}));
-        }
       }
       if (!form.hotel_amenity_type_asset) {
         form.hotel_amenity_type_asset = null
@@ -260,7 +256,7 @@ function HotelAmenityForm(props) {
             })
           }
           disabled={isView || loading}
-          type="number"
+          type="text"
           min="0"
           max="99"
           hint="Hotel Amenity type code maximum 2 characters"

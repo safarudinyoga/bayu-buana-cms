@@ -82,7 +82,7 @@ class BBDataTable extends Component {
           '" title="Click to edit"><i class="fa fa-edit"></i></a>' +
           '<a href="#" class="table-row-action-item" data-action="view" data-id="' +
           row.id +
-          '" title="Click to view"><i class="fa fa-eye"></i></a>' +
+          '" title="Click to view details"><i class="fa fa-eye"></i></a>' +
           '<a href="#" class="table-row-action-item" data-action="delete" data-id="' +
           row.id +
           '" title="Click to delete"><i class="fa fa-trash"></i></a>'
