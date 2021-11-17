@@ -74,7 +74,7 @@ class BBDataTable extends Component {
     columns.push({
       searchable: false,
       orderable: false,
-      title: "Action",
+      title: "Actions",
       render: function (value, display, row) {
         return (
           '<a href="#" class="table-row-action-item" data-action="edit" data-id="' +
@@ -397,8 +397,8 @@ class BBDataTable extends Component {
           infoFiltered: "",
           loadingRecords: "Loading ...",
           processing: "<i class='fa fa-spin fa-circle-notch'></i> Loading...",
-          zeroRecords: "No record found",
-          emptyTable: "No record found",
+          zeroRecords: `No ${(this.props.title || "selected").toLowerCase()} found`,
+          emptyTable: `No ${(this.props.title || "selected").toLowerCase()} found`,
           lengthMenu: "_MENU_",
         },
         fnDrawCallback: (t) => {
