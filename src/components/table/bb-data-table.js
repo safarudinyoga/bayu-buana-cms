@@ -52,7 +52,7 @@ class BBDataTable extends Component {
       title: '<input type="checkbox" class="select-checkbox-all"/>',
       render: function (val, display, row) {
         return (
-          '<i class="fas fa-ellipsis-v float-left row-handle"></i> <input type="checkbox" data-id="' +
+          '<svg class="float-left row-handle" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none"><rect id="backgroundrect" width="100%" height="100%" x="0" y="0" fill="none" stroke="none"/><path d="M7.098360577225684,13 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 z" fill="#707070" id="svg_1" class=""/><path d="M11.901639938354492,13 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 z" fill="#707070" id="svg_2" class=""/></svg> <input type="checkbox" data-id="' +
           row.id +
           '" class="select-checkbox-item"/>'
         )
@@ -683,6 +683,7 @@ class BBDataTable extends Component {
         <div>
           <table ref={this.table} className="table table-sm"></table>
         </div>
+        <div className="footer">©️ 2021 Bayu Buana Travel Services. All Rights Reserved</div>
       </div>
     )
   }
