@@ -14,6 +14,8 @@ import "datatables.net-rowreorder-bs4/css/rowReorder.bootstrap4.css"
 import $ from "jquery"
 import JSZip from "jszip"
 import React, {Component} from "react"
+import {Button, Modal, ModalBody, ModalFooter} from "react-bootstrap"
+import ModalHeader from "react-bootstrap/esm/ModalHeader"
 import {withRouter} from "react-router"
 import "./bb-data-table.css"
 
@@ -26,10 +28,12 @@ class BBDataTable extends Component {
     this.wrapper = React.createRef()
     this.dt = null
     this.state = {
+      id: null,
       dt: null,
       selected: [],
       status: "0",
       extraFilters: this.props.filters || [],
+      isOpen: false,
     }
     this.inProgress = false
 
@@ -565,9 +569,15 @@ class BBDataTable extends Component {
   }
 
   deleteAction(id) {
-    this.api.delete(this.props.endpoint + "/" + id).finally(() => {
-      this.dt.ajax.reload()
+    // set state isOpen is true
+    console.log('ok sampai disini dengan id ' + id);
+    this.setState({
+      isOpen: true,
+      id: id,
     })
+    // this.api.delete(this.props.endpoint + "/" + id).finally(() => {
+    //   this.dt.ajax.reload()
+    // })
   }
 
   componentWillUnmount() {
@@ -664,6 +674,36 @@ class BBDataTable extends Component {
 
     return (
       <div ref={this.wrapper}>
+        <Modal show={this.state.isOpen}>
+          <ModalHeader>Delete Confirmation</ModalHeader>
+          <ModalBody>Apakah yakin akan di hapus?</ModalBody>
+          <ModalFooter>
+            <Button
+              color="danger"
+              onClick={() => {
+                this.api.delete(this.props.endpoint + "/" + this.state.id).finally(() => {
+                  this.setState({
+                    isOpen: false,
+                  });
+                  this.dt.ajax.reload()
+                })
+              }}
+            >
+              Delete
+            </Button>
+            {' '}
+            <Button
+              color="secondary"
+              onClick={() => {
+                this.setState({
+                  isOpen: false,
+                })
+              }}
+            >
+              Cancel
+            </Button>
+          </ModalFooter>
+        </Modal>
         <TableHeader
           {...this.props}
           selected={this.state.selected.length > 0}
