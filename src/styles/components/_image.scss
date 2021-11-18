@@ -1,0 +1,11 @@
+.img-profile-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  .btn {
+    margin: 10px auto 0;
+  }
+  .img-profile {
+    width: 125px;
+    height: 125px;
+  }
+}

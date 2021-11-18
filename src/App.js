@@ -1,10 +1,10 @@
 import "@fortawesome/fontawesome-free/css/all.css"
 import "admin-lte"
 import "admin-lte/dist/css/adminlte.css"
-import "App.css"
+import "App.scss"
 import "bootstrap/dist/js/bootstrap.js"
 import DashboardWrapper from "components/wrapper/dashboard"
-import {BrowserRouter as Router, Route, Switch} from "react-router-dom"
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom"
 import AgeQualifyingTypeForm from "views/age_qualifying_type/form"
 import AgeQualifyingTypeTable from "views/age_qualifying_type/table"
 import AircraftForm from "views/aircraft/form"
@@ -77,6 +77,10 @@ import TripTypeForm from "views/trip_type/form"
 import TripTypeTable from "views/trip_type/table"
 import ZoneForm from "views/zone/form"
 import ZoneTable from "views/zone/table"
+
+// Master Employee
+import EmployeeTable from "views/employee/table"
+import EmployeeForm from "views/employee/form"
 
 function App() {
   document.title = "Bayu Buana"
@@ -298,6 +302,14 @@ function App() {
           </Route>
           <Route path="/master/product-types/form/:id?">
             <ProductTypeForm />
+          </Route>
+
+          {/* Master Employee */}
+          <Route exact path="/master/employee">
+            <EmployeeTable />
+          </Route>
+          <Route path="/master/employee/form/:id?">
+            <EmployeeForm />
           </Route>
         </Switch>
       </DashboardWrapper>

@@ -3,14 +3,16 @@ import downloadIcon from "assets/download.svg"
 import printIcon from "assets/printer.svg"
 import resetIcon from "assets/reset.svg"
 import { Link, withRouter } from "react-router-dom"
+import { OverlayTrigger, Tooltip } from "react-bootstrap"
 import "./table-header.css"
-import '../button/button.css'
+import "../button/button.css"
 
 class TableHeader extends Component {
   constructor(props) {
     super(props)
     this.state = {
       showFilter: false,
+      showAdvancedOptions: true,
       searchValue: "",
       statusValue: "0",
     }
@@ -103,6 +105,7 @@ class TableHeader extends Component {
                     className="form-control"
                     placeholder="Search..."
                     onChange={this.handleSearch.bind(this)}
+                    maxLength={256}
                   />
                   <div className="input-group-append">
                     <span className="input-group-text">
@@ -111,54 +114,72 @@ class TableHeader extends Component {
                   </div>
                 </div>
               </div>
-              <div className="col-xs-12 col-sm-6">
-                <button
-                  onClick={this.toggleFilter}
-                  type="button"
-                  className="btn btn-link advanced-options-btn float-right-sm"
-                >
-                  Advanced Options {this.state.showFilter ? <span className="raquo-down"> &laquo;</span> : <span className="raquo-down"> &raquo;</span>}
-                </button>
-              </div>
+              {this.state.showAdvancedOptions && (
+                <div className="col-xs-12 col-sm-6">
+                  <button
+                    onClick={this.toggleFilter}
+                    type="button"
+                    className="btn btn-link advanced-options-btn float-right-sm"
+                  >
+                    Advanced Options{" "}
+                    {this.state.showFilter ? (
+                      <span className="raquo-down"> &laquo;</span>
+                    ) : (
+                      <span className="raquo-down"> &raquo;</span>
+                    )}
+                  </button>
+                </div>
+              )}
             </div>
           </div>
 
           <div className="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 order-sm-2 mt-2">
-            <button
-              type="button"
-              onClick={this.handleClick.bind(this)}
-              className="btn btn-warning float-right button-new"
-              title="Click to create"
+            <OverlayTrigger
+              placement="top"
+              overlay={<Tooltip>Click to create</Tooltip>}
             >
-              <span className="text-button-new">
-              <i className="fas fa-file-medical mr-2"></i>
-              Create New
-              </span>
-            </button>
-            <Link
-              to="#"
-              onClick={this.handlePrint.bind(this)}
-              className="btn-table-action float-right"
+              <button
+                type="button"
+                onClick={this.handleClick.bind(this)}
+                className="btn btn-warning float-right button-new"
+              >
+                <span className="text-button-new">
+                  <i className="fas fa-file-medical mr-2"></i>
+                  Create new
+                </span>
+              </button>
+            </OverlayTrigger>
+
+            <OverlayTrigger
+              placement="top"
+              overlay={<Tooltip>Click to print</Tooltip>}
             >
-              <img
-                src={printIcon}
-                className="img-circle"
-                alt="print"
-                title="Click to print"
-              />
-            </Link>
-            <Link
-              to="#"
-              onClick={this.handleDownload.bind(this)}
-              className="btn-table-action float-right"
+              <Link
+                to="#"
+                onClick={this.handlePrint.bind(this)}
+                className="btn-table-action float-right"
+              >
+                <img src={printIcon} className="img-circle" alt="print" />
+              </Link>
+            </OverlayTrigger>
+
+            <OverlayTrigger
+              placement="top"
+              overlay={<Tooltip>Click to download</Tooltip>}
             >
-              <img
-                src={downloadIcon}
-                className="img-circle"
-                alt="download"
-                title="Click to download"
-              />
-            </Link>
+              <Link
+                to="#"
+                onClick={this.handleDownload.bind(this)}
+                className="btn-table-action float-right"
+              >
+                <img
+                  src={downloadIcon}
+                  className="img-circle"
+                  alt="download"
+                  id="datatable-download"
+                />
+              </Link>
+            </OverlayTrigger>
           </div>
         </div>
         <div
@@ -178,6 +199,7 @@ class TableHeader extends Component {
                 ""
               )}
 
+              {this.props.children}
               <div className="col-xs-12 col-sm-12 col-md-6 col-lg-8">
                 <div className="row">
                   <div className="col-xs-4">
@@ -187,9 +209,15 @@ class TableHeader extends Component {
                       value={this.state.statusValue}
                       onChange={this.handleStatus.bind(this)}
                     >
-                      <option className="text-input-select" value="0">All</option>
-                      <option className="text-input-select" value="1">Active</option>
-                      <option className="text-input-select" value="3">Inactive</option>
+                      <option className="text-input-select" value="0">
+                        All
+                      </option>
+                      <option className="text-input-select" value="1">
+                        Active
+                      </option>
+                      <option className="text-input-select" value="3">
+                        Inactive
+                      </option>
                     </select>
                   </div>
                 </div>
