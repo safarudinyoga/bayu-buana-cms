@@ -1,13 +1,13 @@
-import { withRouter } from "react-router"
-import React, { useEffect, useState } from "react"
-import Api from "config/api"
+import FormBuilder from "components/form/builder"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
-import FormInputSelectAjax from "../../components/form/input-select-ajax"
-import FormBuilder from "components/form/builder"
+import Api from "config/api"
 import useQuery from "lib/query"
-import { useDispatch } from "react-redux"
-import { setUIParams } from "redux/ui-store"
+import React, {useEffect, useState} from "react"
+import {useDispatch} from "react-redux"
+import {withRouter} from "react-router"
+import {setUIParams} from "redux/ui-store"
+import FormInputSelectAjax from "../../components/form/input-select-ajax"
 
 const endpoint = "/master/hotel-suppliers"
 const backUrl = "/master/hotel-suppliers"
@@ -79,14 +79,14 @@ function HotelSupplierForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
-      } catch (e) {}
+      } catch (e) { }
 
       try {
         let res = await api.get(endpoint + "/" + formId + "/translations", {
           size: 50,
         })
         setTranslations(res.data.items)
-      } catch (e) {}
+      } catch (e) { }
       setLoading(false)
     }
   }, [])
@@ -132,13 +132,13 @@ function HotelSupplierForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Hotel Supplier Name"
-          labelRequired="label-required" 
+          labelRequired="label-required"
           value={form.hotel_supplier_name}
           name="hotel_supplier_name"
           cl="3"
           cr="6"
           onChange={(e) =>
-            setForm({ ...form, hotel_supplier_name: e.target.value })
+            setForm({...form, hotel_supplier_name: e.target.value})
           }
           disabled={isView || loading}
           type="text"
@@ -154,7 +154,7 @@ function HotelSupplierForm(props) {
           endpoint="/master/supplier-types"
           column="supplier_type_name"
           onChange={(e) =>
-            setForm({ ...form, supplier_type_id: e.target.value || null })
+            setForm({...form, supplier_type_id: e.target.value || null})
           }
           disabled={isView || loading}
           type="select"
@@ -166,13 +166,13 @@ function HotelSupplierForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Hotel Supplier Code"
-          labelRequired="label-required" 
+          labelRequired="label-required"
           value={form.hotel_supplier_code}
           name="hotel_supplier_code"
           cl="6"
           cr="6"
           onChange={(e) =>
-            setForm({ ...form, hotel_supplier_code: e.target.value })
+            setForm({...form, hotel_supplier_code: e.target.value})
           }
           disabled={isView || loading}
           type="text"

@@ -1,21 +1,21 @@
-import React, { Component } from "react"
 import TableHeader from "components/table/table-header"
-import "datatables.net-bs4/css/dataTables.bootstrap4.css"
-import $ from "jquery"
-import { withRouter } from "react-router"
+import Api from "config/api"
 import "datatables.net-bs4"
+import "datatables.net-bs4/css/dataTables.bootstrap4.css"
 import "datatables.net-buttons-bs4"
-import "datatables.net-buttons/js/dataTables.buttons"
 import "datatables.net-buttons/js/buttons.flash"
 import "datatables.net-buttons/js/buttons.html5"
 import "datatables.net-buttons/js/buttons.print"
+import "datatables.net-buttons/js/dataTables.buttons"
 import "datatables.net-colreorder-bs4"
-import "datatables.net-rowreorder-bs4"
 import "datatables.net-responsive-bs4"
+import "datatables.net-rowreorder-bs4"
 import "datatables.net-rowreorder-bs4/css/rowReorder.bootstrap4.css"
-import "./bb-data-table.css"
+import $ from "jquery"
 import JSZip from "jszip"
-import Api from "config/api"
+import React, {Component} from "react"
+import {withRouter} from "react-router"
+import "./bb-data-table.css"
 
 window.JSZip = JSZip
 
@@ -39,7 +39,7 @@ class BBDataTable extends Component {
   componentDidMount() {
     try {
       this.init()
-    } catch (e) {}
+    } catch (e) { }
   }
 
   init() {
@@ -68,7 +68,7 @@ class BBDataTable extends Component {
           visibleColumns.push(i)
         }
       }
-    } catch (e) {}
+    } catch (e) { }
 
     columns.push({
       searchable: false,
@@ -122,43 +122,43 @@ class BBDataTable extends Component {
               if (typeof json.total_elements === "number") {
                 recordFiltered = json.total_elements
               }
-            } catch (e) {}
+            } catch (e) { }
 
             try {
               if (typeof json.data.data.items === "object") {
                 recordTotal = json.data.data.items.length
               }
-            } catch (e) {}
+            } catch (e) { }
 
             try {
               if (typeof json.data.items === "object") {
                 recordTotal = json.data.items.length
               }
-            } catch (e) {}
+            } catch (e) { }
 
             try {
               if (typeof json.data.total_items === "number") {
                 recordFiltered = json.data.total_items
               }
-            } catch (e) {}
+            } catch (e) { }
 
             try {
               if (typeof json.data.total === "number") {
                 recordFiltered = json.data.total
               }
-            } catch (e) {}
+            } catch (e) { }
 
             try {
               if (typeof json.total === "number") {
                 recordFiltered = json.total
               }
-            } catch (e) {}
+            } catch (e) { }
 
             try {
               if (typeof json.total_count === "number") {
                 recordFiltered = json.total_count
               }
-            } catch (e) {}
+            } catch (e) { }
 
             var items = []
             if (typeof json.content === "object") {
@@ -170,7 +170,7 @@ class BBDataTable extends Component {
                 if (typeof json.data.data.items === "object") {
                   items = json.data.data.items
                 }
-              } catch (e) {}
+              } catch (e) { }
             }
 
             if (!items.length) {
@@ -178,7 +178,7 @@ class BBDataTable extends Component {
                 if (typeof json.data.items === "object") {
                   items = json.data.items
                 }
-              } catch (e) {}
+              } catch (e) { }
             }
 
             if (!items.length) {
@@ -189,7 +189,7 @@ class BBDataTable extends Component {
                 ) {
                   items = json.items
                 }
-              } catch (e) {}
+              } catch (e) { }
             }
 
             if (!items.length) {
@@ -200,7 +200,7 @@ class BBDataTable extends Component {
                 ) {
                   items = json.data
                 }
-              } catch (e) {}
+              } catch (e) { }
             }
 
             if (!items.length) {
@@ -211,7 +211,7 @@ class BBDataTable extends Component {
                 ) {
                   items = json.data.data
                 }
-              } catch (e) {}
+              } catch (e) { }
             }
 
             if (!recordTotal) {
@@ -237,13 +237,13 @@ class BBDataTable extends Component {
               if (!pageStartAt) {
                 pageStartAt = 0
               }
-            } catch (e) {}
+            } catch (e) { }
             try {
               searchKey = this.props.searchKey
               if (!searchKey) {
                 searchKey = null
               }
-            } catch (e) {}
+            } catch (e) { }
             try {
               filters = JSON.parse(JSON.stringify(this.props.filters || []))
               if (!filters) {
@@ -258,21 +258,21 @@ class BBDataTable extends Component {
                 }
                 filters.push(this.state.extraFilters)
               }
-            } catch (e) {}
+            } catch (e) { }
             try {
               searchDefault = this.props.searchDefault
               if (!searchDefault) {
                 searchDefault = ""
               }
-            } catch (e) {}
+            } catch (e) { }
             try {
               simpleSort = this.props.simpleSort
               simpleSort = simpleSort === "true" || simpleSort === true
-            } catch (e) {}
+            } catch (e) { }
 
             try {
               extraSorts = this.props.sorts
-            } catch (e) {}
+            } catch (e) { }
 
             if (searchKey) {
               overrideParams[searchKey] = searchDefault
@@ -339,7 +339,7 @@ class BBDataTable extends Component {
                 }
                 overrideParams.filters = "[" + extraFilters.join(",") + "]"
               }
-            } catch (e) {}
+            } catch (e) { }
 
             return overrideParams
           },
@@ -438,7 +438,7 @@ class BBDataTable extends Component {
               dt.responsive.rebuild()
               dt.responsive.recalc()
               dt.columns.adjust().draw()
-            } catch (e) {}
+            } catch (e) { }
           }
         }, 500)
       })
@@ -449,7 +449,7 @@ class BBDataTable extends Component {
         this.setState({
           dt: dt,
         })
-      } catch (e) {}
+      } catch (e) { }
     }
 
     setTimeout(() => initialize(), 100)
@@ -458,7 +458,7 @@ class BBDataTable extends Component {
   onSearch(value) {
     try {
       this.dt.search(value).draw()
-    } catch (e) {}
+    } catch (e) { }
   }
 
   onStatus(value) {
@@ -478,7 +478,7 @@ class BBDataTable extends Component {
       this.inProgress = false
       try {
         this.dt.ajax.reload()
-      } catch (e) {}
+      } catch (e) { }
     }, 100)
   }
 
@@ -499,7 +499,7 @@ class BBDataTable extends Component {
   onPrint() {
     try {
       this.dt.buttons(".buttons-print").trigger()
-    } catch (e) {}
+    } catch (e) { }
   }
 
   onDownload() {
@@ -527,8 +527,8 @@ class BBDataTable extends Component {
   deselectAll() {
     try {
       $(".select-checkbox-all:checked").prop("checked", false).trigger("change")
-    } catch (e) {}
-    this.setState({ selected: [] })
+    } catch (e) { }
+    this.setState({selected: []})
   }
 
   onStatusUpdate(status) {
@@ -573,7 +573,7 @@ class BBDataTable extends Component {
   componentWillUnmount() {
     try {
       this.dt.destroy()
-    } catch (e) {}
+    } catch (e) { }
   }
 
   componentDidUpdate() {
@@ -583,7 +583,7 @@ class BBDataTable extends Component {
     this.inProgress = true
     try {
       this.dt.ajax.reload()
-    } catch (e) {}
+    } catch (e) { }
     setTimeout(() => {
       this.inProgress = false
     }, 300)
@@ -632,7 +632,7 @@ class BBDataTable extends Component {
           } else {
             $(".select-checkbox-all:not(:checked)", table).prop("checked", true)
           }
-        } catch (e) {}
+        } catch (e) { }
 
         this.setState({
           selected: selected,
