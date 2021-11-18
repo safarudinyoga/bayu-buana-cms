@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="125" height="125" viewBox="0 0 125 125">
+  <defs>
+    <clipPath id="clip-path">
+      <rect id="Background" width="125" height="125" rx="62.5" transform="translate(2400 2400)" fill="#d8ab6c"/>
+    </clipPath>
+    <pattern id="pattern" preserveAspectRatio="xMidYMid slice" width="100%" height="100%" viewBox="0 0 128 128">
+      <image width="128" height="128" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAYAAADDPmHLAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAN1wAADdcBQiibeAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAANQSURBVHic7drNS+NAAIbxN9ug6EF7USgBPYoei+Apd/9foYiIePCgEAoWQYsGT6FXLVQFq9nDUtePVZYlGnfe53draSdT5knTCY2yLCsFWz/qngDqRQDmCMAcAZgjAHMEYI4AzBGAOQIwRwDmCMAcAZgjAHMEYI4AzBGAOQIwRwDmCMAcAZgjAHMEYI4AzBGAOQIwRwDmCMAcAZgjAHMEYI4AzBGAOQIwRwDmCMAcAZgjAHMEYI4AzBGAOQIwRwDmCMAcAZgjAHMEYI4AzBGAOQIwRwDmCMAcAZgjAHNx3ROoWpZl6vf7Go/HlY4bx7FWVla0vr5e6bh1CyqAoijU7XbVbDbVbDYrHXs0Gqnb7arVailJkkrHrlNQAQyHQ0lSmqZqtVqVjj0YDLS1taXhcEgA31VZlm8en56e6urqSkmSaHl5ufJj/O+CCuC1/f19nZ+fS5JOTk6UpqlWV1drntX3EuwuYDwe6+Li4sVzZ2dnH76nKAo9PDx85rS+nWADaDQaiuOXX3BTU1Pvvj7Pc3U6HW1vb1tFEGwAURRpY2NDURRJ+rX4723h8jzX3t6eyrJUURRWEQT9G2BtbU1Jkuj6+loLCwuamZl585rniz8xiWBzc1ONRuMrp/zlgv0GmJifn9fS0tIfF//y8vLN4k8URaFOp6P7+/uvmGZtgg9g4vj4WEdHR0+P8zzX7u7uh9u6wWCgnZ2doC8HQV8CJnq93tPil2WpxcXFd8/814qi0N3d3WdPsTbBB/D6zO/1eoqiKLgbOv8q6EvA8zP/ORb/t2ADuL291eHhYd3T+PaCDeDx8bHuKfwXgv0NEMdxZff9X99RDElQn2xy10+Spqenlabppx4jBEEFMDc3J0k6ODjQ7OxspWOPRqMXxwhFUAEkSaJ2u61+v6+bm5tKx47jWO12O6g/g0hSlGUZeyJjwe4C8HcIwBwBmCMAcwRgjgDMEYA5AjBHAOYIwBwBmCMAcwRgjgDMEYA5AjBHAOYIwBwBmCMAcwRgjgDMEYA5AjBHAOYIwBwBmCMAcwRgjgDMEYA5AjBHAOYIwBwBmCMAcwRgjgDMEYA5AjBHAOYIwBwBmCMAcwRgjgDMEYA5AjBHAOYIwBwBmCMAcwRg7ifigdnFn/aHRAAAAABJRU5ErkJggg=="/>
+    </pattern>
+  </defs>
+  <g id="Mask_Group_5" data-name="Mask Group 5" transform="translate(-2400 -2400)" clip-path="url(#clip-path)">
+    <rect id="comment2" width="136" height="136" rx="8" transform="translate(2395 2394.5)" opacity="0.5" fill="url(#pattern)"/>
+  </g>
+</svg>
