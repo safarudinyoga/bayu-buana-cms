@@ -10,7 +10,7 @@ export default class CancelButton extends Component {
         type="button"
         className={"button-cancel" + readOnlyClass}
       >
-        <div className="text-button-cancel">{this.props.isView ? "BACK" : "CANCEL"}</div>
+        <div className="text-button-cancel">{this.props.isView ? "Back" : "CANCEL"}</div>
       </button>
     )
   }
