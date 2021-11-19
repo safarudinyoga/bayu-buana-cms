@@ -3,10 +3,11 @@ import printIcon from "assets/printer.svg"
 import resetIcon from "assets/reset.svg"
 import downIcon from "assets/icons/double-down.svg"
 import upIcon from "assets/icons/double-up.svg"
-import { Link, withRouter } from "react-router-dom"
-import { OverlayTrigger, Tooltip } from "react-bootstrap"
-import "./table-header.css"
+import {Component} from "react"
+import {OverlayTrigger, Tooltip} from "react-bootstrap"
+import {Link, withRouter} from "react-router-dom"
 import "../button/button.css"
+import "./table-header.css"
 import Select from "react-select";
 
 const customStyles = {
@@ -48,7 +49,6 @@ const options = [
   { value: "1", label: "Active" },
   { value: "3", label: "Inactive" }
 ];
-
 class TableHeader extends Component {
   constructor(props) {
     super(props)
@@ -82,7 +82,7 @@ class TableHeader extends Component {
       searchValue: e.target.value,
     })
   }
- 
+
   handleStatus(statusValue) {
     if (this.props.onStatus) {
       this.props.onStatus(statusValue.value)
@@ -131,7 +131,7 @@ class TableHeader extends Component {
     }
   }
 
-  render() {    
+  render() {
     const ExtraFilter = this.props.extraFilter
     return (
       <div className="container-fluid">
@@ -162,7 +162,7 @@ class TableHeader extends Component {
                     type="button"
                     className="btn btn-link advanced-options-btn float-right-sm"
                   >
-                    <span>Advanced Options</span> {this.state.showFilter ? <img src={downIcon} alt="down" /> : <img src={upIcon} alt="up" />}
+                   <span className="mr-2">Advanced Options</span> {this.state.showFilter ? <img src={downIcon} alt="down" /> : <img src={upIcon} alt="up" />}
                   </button>
                 </div>
               )}
@@ -239,7 +239,7 @@ class TableHeader extends Component {
               <div className="col-xs-12 col-sm-12 col-md-6 col-lg-8">
                 <div className="row">
                   <div className="col-xs-4">
-                    <label className="text-label-filter">Status</label>
+                    <label className="text-label-filter">Status: </label>
                     <Select 
                       width='200px'                   
                       onChange={this.handleStatus.bind(this)}
@@ -271,7 +271,7 @@ class TableHeader extends Component {
             <div className="col-xs-12 d-flex flex-row">
               <button
                 type="button"
-                className="btn btn-default textButtonSave dropdown-toggle btn-table-action-dropdown"
+                className="btn btn-default textButtonSave dropdown-toggle btn-table-action-dropdown py-2"
                 data-toggle="dropdown"
                 aria-expanded="false"
               >
