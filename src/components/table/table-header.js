@@ -1,4 +1,3 @@
-import { Component } from "react"
 import downloadIcon from "assets/download.svg"
 import printIcon from "assets/printer.svg"
 import resetIcon from "assets/reset.svg"
@@ -147,6 +146,7 @@ class TableHeader extends Component {
                     placeholder="Search..."
                     onChange={this.handleSearch.bind(this)}
                     maxLength={256}
+                    minLength={1}
                   />
                   <div className="input-group-append">
                     <span className="input-group-text">
@@ -181,7 +181,7 @@ class TableHeader extends Component {
               >
                 <span className="text-button-new">
                   <i className="fas fa-file-medical mr-2"></i>
-                  Create new
+                  Create New
                 </span>
               </button>
             </OverlayTrigger>
@@ -249,13 +249,18 @@ class TableHeader extends Component {
                 </div>
               </div>
             </div>
-            <Link
-              to="#"
-              onClick={this.handleReset.bind(this)}
-              className="btn-table-action btn-table-action-reset"
+            <OverlayTrigger
+              placement="top"
+              overlay={<Tooltip>Reset</Tooltip>}
             >
-              <img src={resetIcon} className="img-circle" alt="reset" />
-            </Link>
+              <Link
+                to="#"
+                onClick={this.handleReset.bind(this)}
+                className="btn-table-action btn-table-action-reset"
+              >
+                <img src={resetIcon} className="img-circle" alt="reset" />
+              </Link>
+            </OverlayTrigger>
           </div>
         </div>
 
@@ -270,7 +275,7 @@ class TableHeader extends Component {
                 data-toggle="dropdown"
                 aria-expanded="false"
               >
-                UPDATE STATUS
+                Update Status
               </button>
               <div className="dropdown-menu shadow-none">
                 <Link
@@ -293,7 +298,9 @@ class TableHeader extends Component {
                 type="button"
                 className="btn btn-default textButtonSave bg-dark-green p-2 ml-2"
               >
-                REMOVE {(this.props.title || "selected").toUpperCase()}
+                Remove {(this.props.title || "selected").split(' ')
+                  .map(w => w[0].toUpperCase() + w.substr(1).toLowerCase())
+                  .join(' ')}
               </button>
             </div>
           </div>

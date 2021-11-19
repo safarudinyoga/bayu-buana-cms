@@ -24,7 +24,7 @@ export default function HotelAmenityCategoryTable() {
   }, [])
 
   let params = {
-    title: "Hotel Amenity Category",
+    title: "Hotel Amenity Categories",
     baseRoute: "/master/hotel-amenity-categories/form",
     endpoint: "/master/hotel-amenity-categories",
     deleteEndpoint: "/master/batch-actions/delete/hotel-amenity-categories",
@@ -66,6 +66,7 @@ export default function HotelAmenityCategoryTable() {
         visible: false,
       },
     ],
+    emptyTable: "No hotel amenity categories found",
   }
   return <BBDataTable {...params} />
 }
