@@ -203,7 +203,7 @@ class TableHeader extends Component {
               <div className="col-xs-12 col-sm-12 col-md-6 col-lg-8">
                 <div className="row">
                   <div className="col-xs-4">
-                    <label className="text-label-filter">Status</label>
+                    <label className="text-label-filter">Status: </label>
                     <select
                       className="custom-select custom-select-md mb-3 text-input-select"
                       value={this.state.statusValue}
@@ -244,7 +244,7 @@ class TableHeader extends Component {
                 data-toggle="dropdown"
                 aria-expanded="false"
               >
-                UPDATE STATUS
+                Update Status
               </button>
               <div className="dropdown-menu shadow-none">
                 <Link
@@ -267,7 +267,7 @@ class TableHeader extends Component {
                 type="button"
                 className="btn btn-default textButtonSave bg-dark-green p-2 ml-2"
               >
-                REMOVE {(this.props.title || "selected").toUpperCase()}
+                Remove {(this.props.title || "selected")}
               </button>
             </div>
           </div>
