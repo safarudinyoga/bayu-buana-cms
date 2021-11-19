@@ -1,21 +1,23 @@
-import React, { Component } from "react"
 import TableHeader from "components/table/table-header"
-import "datatables.net-bs4/css/dataTables.bootstrap4.css"
-import $ from "jquery"
-import { withRouter } from "react-router"
+import Api from "config/api"
 import "datatables.net-bs4"
+import "datatables.net-bs4/css/dataTables.bootstrap4.css"
 import "datatables.net-buttons-bs4"
-import "datatables.net-buttons/js/dataTables.buttons"
 import "datatables.net-buttons/js/buttons.flash"
 import "datatables.net-buttons/js/buttons.html5"
 import "datatables.net-buttons/js/buttons.print"
+import "datatables.net-buttons/js/dataTables.buttons"
 import "datatables.net-colreorder-bs4"
-import "datatables.net-rowreorder-bs4"
 import "datatables.net-responsive-bs4"
+import "datatables.net-rowreorder-bs4"
 import "datatables.net-rowreorder-bs4/css/rowReorder.bootstrap4.css"
-import "./bb-data-table.css"
+import $ from "jquery"
 import JSZip from "jszip"
-import Api from "config/api"
+import React, {Component} from "react"
+import {Button, Modal, ModalBody, ModalFooter} from "react-bootstrap"
+import ModalHeader from "react-bootstrap/esm/ModalHeader"
+import {withRouter} from "react-router"
+import "./bb-data-table.css"
 
 window.JSZip = JSZip
 
@@ -26,10 +28,13 @@ class BBDataTable extends Component {
     this.wrapper = React.createRef()
     this.dt = null
     this.state = {
+      id: null,
+      deleteType: null,
       dt: null,
       selected: [],
       status: "0",
       extraFilters: this.props.filters || [],
+      isOpen: false,
     }
     this.inProgress = false
 
@@ -39,7 +44,7 @@ class BBDataTable extends Component {
   componentDidMount() {
     try {
       this.init()
-    } catch (e) {}
+    } catch (e) { }
   }
 
   init() {
@@ -52,9 +57,9 @@ class BBDataTable extends Component {
       title: '<input type="checkbox" class="select-checkbox-all"/>',
       render: function (val, display, row) {
         return (
-            '<i class="fas fa-ellipsis-v float-left row-handle"></i> <input type="checkbox" data-id="' +
-            row.id +
-            '" class="select-checkbox-item"/>'
+          '<i class="fas fa-ellipsis-v float-left row-handle"></i> <input type="checkbox" data-id="' +
+          row.id +
+          '" class="select-checkbox-item"/>'
         )
       },
     })
@@ -68,7 +73,7 @@ class BBDataTable extends Component {
           visibleColumns.push(i)
         }
       }
-    } catch (e) {}
+    } catch (e) { }
 
     columns.push({
       searchable: false,
@@ -76,15 +81,15 @@ class BBDataTable extends Component {
       title: "Action",
       render: function (value, display, row) {
         return (
-            '<a href="#" class="table-row-action-item" data-action="edit" data-id="' +
-            row.id +
-            '" title="Click to edit"><i class="fa fa-edit"></i></a>' +
-            '<a href="#" class="table-row-action-item" data-action="view" data-id="' +
-            row.id +
-            '" title="Click to view details"><i class="fa fa-eye"></i></a>' +
-            '<a href="#" class="table-row-action-item" data-action="delete" data-id="' +
-            row.id +
-            '" title="Click to delete"><i class="fa fa-trash"></i></a>'
+          '<a href="#" class="table-row-action-item" data-action="edit" data-id="' +
+          row.id +
+          '" title="Click to edit"><i class="fa fa-edit"></i></a>' +
+          '<a href="#" class="table-row-action-item" data-action="view" data-id="' +
+          row.id +
+          '" title="Click to view details"><i class="fa fa-eye"></i></a>' +
+          '<a href="#" class="table-row-action-item" data-action="delete" data-id="' +
+          row.id +
+          '" title="Click to delete"><i class="fa fa-trash"></i></a>'
         )
       },
     })
@@ -122,43 +127,43 @@ class BBDataTable extends Component {
               if (typeof json.total_elements === "number") {
                 recordFiltered = json.total_elements
               }
-            } catch (e) {}
+            } catch (e) { }
 
             try {
               if (typeof json.data.data.items === "object") {
                 recordTotal = json.data.data.items.length
               }
-            } catch (e) {}
+            } catch (e) { }
 
             try {
               if (typeof json.data.items === "object") {
                 recordTotal = json.data.items.length
               }
-            } catch (e) {}
+            } catch (e) { }
 
             try {
               if (typeof json.data.total_items === "number") {
                 recordFiltered = json.data.total_items
               }
-            } catch (e) {}
+            } catch (e) { }
 
             try {
               if (typeof json.data.total === "number") {
                 recordFiltered = json.data.total
               }
-            } catch (e) {}
+            } catch (e) { }
 
             try {
               if (typeof json.total === "number") {
                 recordFiltered = json.total
               }
-            } catch (e) {}
+            } catch (e) { }
 
             try {
               if (typeof json.total_count === "number") {
                 recordFiltered = json.total_count
               }
-            } catch (e) {}
+            } catch (e) { }
 
             var items = []
             if (typeof json.content === "object") {
@@ -170,7 +175,7 @@ class BBDataTable extends Component {
                 if (typeof json.data.data.items === "object") {
                   items = json.data.data.items
                 }
-              } catch (e) {}
+              } catch (e) { }
             }
 
             if (!items.length) {
@@ -178,40 +183,40 @@ class BBDataTable extends Component {
                 if (typeof json.data.items === "object") {
                   items = json.data.items
                 }
-              } catch (e) {}
+              } catch (e) { }
             }
 
             if (!items.length) {
               try {
                 if (
-                    typeof json.items === "object" &&
-                    typeof json.items.length === "number"
+                  typeof json.items === "object" &&
+                  typeof json.items.length === "number"
                 ) {
                   items = json.items
                 }
-              } catch (e) {}
+              } catch (e) { }
             }
 
             if (!items.length) {
               try {
                 if (
-                    typeof json.data === "object" &&
-                    typeof json.data.length === "number"
+                  typeof json.data === "object" &&
+                  typeof json.data.length === "number"
                 ) {
                   items = json.data
                 }
-              } catch (e) {}
+              } catch (e) { }
             }
 
             if (!items.length) {
               try {
                 if (
-                    typeof json.data.data === "object" &&
-                    typeof json.data.data.length === "number"
+                  typeof json.data.data === "object" &&
+                  typeof json.data.data.length === "number"
                 ) {
                   items = json.data.data
                 }
-              } catch (e) {}
+              } catch (e) { }
             }
 
             if (!recordTotal) {
@@ -237,42 +242,42 @@ class BBDataTable extends Component {
               if (!pageStartAt) {
                 pageStartAt = 0
               }
-            } catch (e) {}
+            } catch (e) { }
             try {
               searchKey = this.props.searchKey
               if (!searchKey) {
                 searchKey = null
               }
-            } catch (e) {}
+            } catch (e) { }
             try {
               filters = JSON.parse(JSON.stringify(this.props.filters || []))
               if (!filters) {
                 filters = []
               }
               if (
-                  this.state.extraFilters &&
-                  this.state.extraFilters.length > 0
+                this.state.extraFilters &&
+                this.state.extraFilters.length > 0
               ) {
                 if (filters.length > 0) {
                   filters.push(["AND"])
                 }
                 filters.push(this.state.extraFilters)
               }
-            } catch (e) {}
+            } catch (e) { }
             try {
               searchDefault = this.props.searchDefault
               if (!searchDefault) {
                 searchDefault = ""
               }
-            } catch (e) {}
+            } catch (e) { }
             try {
               simpleSort = this.props.simpleSort
               simpleSort = simpleSort === "true" || simpleSort === true
-            } catch (e) {}
+            } catch (e) { }
 
             try {
               extraSorts = this.props.sorts
-            } catch (e) {}
+            } catch (e) { }
 
             if (searchKey) {
               overrideParams[searchKey] = searchDefault
@@ -281,8 +286,8 @@ class BBDataTable extends Component {
             try {
               overrideParams.size = params.length
               overrideParams.page = !params.start
-                  ? 0
-                  : Math.round(params.start / params.length)
+                ? 0
+                : Math.round(params.start / params.length)
 
               overrideParams.page += parseInt(pageStartAt)
 
@@ -318,7 +323,7 @@ class BBDataTable extends Component {
                       continue
                     }
                     columns.push(
-                        JSON.stringify([col.data, "like", searchValue]),
+                      JSON.stringify([col.data, "like", searchValue]),
                     )
                   }
                   let defaultFilters = ""
@@ -330,7 +335,7 @@ class BBDataTable extends Component {
                     defaultFilters = extraFilters.join(",") + ',["AND"],'
                   }
                   overrideParams.filters =
-                      "[" + defaultFilters + columns.join(',["OR"],') + "]"
+                    "[" + defaultFilters + columns.join(',["OR"],') + "]"
                 }
               } else if (filters.length) {
                 extraFilters = []
@@ -339,7 +344,7 @@ class BBDataTable extends Component {
                 }
                 overrideParams.filters = "[" + extraFilters.join(",") + "]"
               }
-            } catch (e) {}
+            } catch (e) { }
 
             return overrideParams
           },
@@ -389,9 +394,9 @@ class BBDataTable extends Component {
         order: [[1, "asc"]],
         columns: columns,
         dom:
-            "<'container-fluid mt-2 dataTable-root'<'card card-default mb-0 shadow-none'<'card-body'tr>>" +
-            "<'row'<'col-sm-12 col-md-8'li><'col-sm-12 col-md-4'p>>" +
-            ">",
+          "<'container-fluid mt-2 dataTable-root'<'card card-default mb-0 shadow-none'<'card-body'tr>>" +
+          "<'row'<'col-sm-12 col-md-8'li><'col-sm-12 col-md-4'p>>" +
+          ">",
         language: {
           paginate: {
             first: "&laquo;",
@@ -405,16 +410,16 @@ class BBDataTable extends Component {
           infoFiltered: "",
           loadingRecords: "Loading ...",
           processing: "<i class='fa fa-spin fa-circle-notch'></i> Loading...",
-          zeroRecords: "No record found",
+          zeroRecords: "No " + this.props.title + " found",
           emptyTable: this.props.emptyTable
-              ? this.props.emptyTable
-              : "No record found",
+            ? this.props.emptyTable
+            : "No " + this.props.title + " found",
           lengthMenu: "_MENU_",
         },
         fnDrawCallback: (t) => {
           let wrapper = $(".dataTables_paginate", t.nTableWrapper)
           wrapper.append(
-              '<span class="float-right mt-2 mr-2 text-label-input">Page: </span>',
+            '<span class="float-right mt-2 mr-2 text-label-input">Page: </span>',
           )
           $(".pagination", wrapper).addClass("float-right")
 
@@ -438,7 +443,7 @@ class BBDataTable extends Component {
               dt.responsive.rebuild()
               dt.responsive.recalc()
               dt.columns.adjust().draw()
-            } catch (e) {}
+            } catch (e) { }
           }
         }, 500)
       })
@@ -449,7 +454,7 @@ class BBDataTable extends Component {
         this.setState({
           dt: dt,
         })
-      } catch (e) {}
+      } catch (e) { }
     }
 
     setTimeout(() => initialize(), 100)
@@ -458,7 +463,7 @@ class BBDataTable extends Component {
   onSearch(value) {
     try {
       this.dt.search(value).draw()
-    } catch (e) {}
+    } catch (e) { }
   }
 
   onStatus(value) {
@@ -478,7 +483,7 @@ class BBDataTable extends Component {
       this.inProgress = false
       try {
         this.dt.ajax.reload()
-      } catch (e) {}
+      } catch (e) { }
     }, 100)
   }
 
@@ -499,16 +504,16 @@ class BBDataTable extends Component {
   onPrint() {
     try {
       this.dt.buttons(".buttons-print").trigger()
-    } catch (e) {}
+    } catch (e) { }
   }
 
   onDownload() {
     try {
       this.dt
-          .buttons(
-              this.props.btnDownload ? this.prop.btnDownload : ".buttons-excel",
-          )
-          .trigger()
+        .buttons(
+          this.props.btnDownload ? this.prop.btnDownload : ".buttons-excel",
+        )
+        .trigger()
     } catch (e) {
       console.log(e.message)
     }
@@ -527,53 +532,52 @@ class BBDataTable extends Component {
   deselectAll() {
     try {
       $(".select-checkbox-all:checked").prop("checked", false).trigger("change")
-    } catch (e) {}
-    this.setState({ selected: [] })
+    } catch (e) { }
+    this.setState({selected: []})
   }
 
   onStatusUpdate(status) {
     if (status === 1) {
       this.api
-          .post(this.props.activationEndpoint, this.state.selected)
-          .then(() => {
-            this.dt.ajax.reload()
-          })
-          .finally(() => {
-            this.deselectAll()
-          })
-    } else if (status === 3) {
-      this.api
-          .post(this.props.deactivationEndpoint, this.state.selected)
-          .then(() => {
-            this.dt.ajax.reload()
-          })
-          .finally(() => {
-            this.deselectAll()
-          })
-    }
-  }
-
-  onRemoveSelected() {
-    this.api
-        .post(this.props.deleteEndpoint, this.state.selected)
+        .post(this.props.activationEndpoint, this.state.selected)
         .then(() => {
           this.dt.ajax.reload()
         })
         .finally(() => {
           this.deselectAll()
         })
+    } else if (status === 3) {
+      this.api
+        .post(this.props.deactivationEndpoint, this.state.selected)
+        .then(() => {
+          this.dt.ajax.reload()
+        })
+        .finally(() => {
+          this.deselectAll()
+        })
+    }
+  }
+
+  onRemoveSelected() {
+    this.setState({
+      isOpen: true,
+      deleteType: "selected",
+      id: this.state.selected,
+    })
   }
 
   deleteAction(id) {
-    this.api.delete(this.props.endpoint + "/" + id).finally(() => {
-      this.dt.ajax.reload()
+    this.setState({
+      isOpen: true,
+      deleteType: "single",
+      id: id,
     })
   }
 
   componentWillUnmount() {
     try {
       this.dt.destroy()
-    } catch (e) {}
+    } catch (e) { }
   }
 
   componentDidUpdate() {
@@ -583,7 +587,7 @@ class BBDataTable extends Component {
     this.inProgress = true
     try {
       this.dt.ajax.reload()
-    } catch (e) {}
+    } catch (e) { }
     setTimeout(() => {
       this.inProgress = false
     }, 300)
@@ -591,99 +595,140 @@ class BBDataTable extends Component {
 
   render() {
     $(document)
-        .off("change", ".select-checkbox-all")
-        .on("change", ".select-checkbox-all", (e) => {
-          this.inProgress = true
-          console.log("change all")
-          let table = $(e.target).closest("table")
-          let selected = []
-          $(".select-checkbox-item", table).prop(
-              "checked",
-              $(e.target).is(":checked"),
-          )
-          let items = $(".select-checkbox-item:checked", table)
-          for (let i = 0; i < items.length; i++) {
-            selected.push($(items.get(i)).data("id"))
-          }
+      .off("change", ".select-checkbox-all")
+      .on("change", ".select-checkbox-all", (e) => {
+        this.inProgress = true
+        console.log("change all")
+        let table = $(e.target).closest("table")
+        let selected = []
+        $(".select-checkbox-item", table).prop(
+          "checked",
+          $(e.target).is(":checked"),
+        )
+        let items = $(".select-checkbox-item:checked", table)
+        for (let i = 0; i < items.length; i++) {
+          selected.push($(items.get(i)).data("id"))
+        }
 
-          this.setState({
-            selected: selected,
-          })
-          setTimeout(() => {
-            this.inProgress = false
-          }, 100)
+        this.setState({
+          selected: selected,
         })
+        setTimeout(() => {
+          this.inProgress = false
+        }, 100)
+      })
 
     $(document)
-        .off("change", ".select-checkbox-item")
-        .on("change", ".select-checkbox-item", (e) => {
-          console.log("change")
-          this.inProgress = true
-          let table = $(e.target).closest("table")
-          let selected = []
-          let items = $(".select-checkbox-item:checked", table)
-          for (let i = 0; i < items.length; i++) {
-            selected.push($(items.get(i)).data("id"))
+      .off("change", ".select-checkbox-item")
+      .on("change", ".select-checkbox-item", (e) => {
+        console.log("change")
+        this.inProgress = true
+        let table = $(e.target).closest("table")
+        let selected = []
+        let items = $(".select-checkbox-item:checked", table)
+        for (let i = 0; i < items.length; i++) {
+          selected.push($(items.get(i)).data("id"))
+        }
+
+        try {
+          if (selected.length < this.dt.table().data().length) {
+            $(".select-checkbox-all:checked", table).prop("checked", false)
+          } else {
+            $(".select-checkbox-all:not(:checked)", table).prop("checked", true)
           }
+        } catch (e) { }
 
-          try {
-            if (selected.length < this.dt.table().data().length) {
-              $(".select-checkbox-all:checked", table).prop("checked", false)
-            } else {
-              $(".select-checkbox-all:not(:checked)", table).prop("checked", true)
-            }
-          } catch (e) {}
-
-          this.setState({
-            selected: selected,
-          })
-          setTimeout(() => {
-            this.inProgress = false
-          }, 100)
+        this.setState({
+          selected: selected,
         })
+        setTimeout(() => {
+          this.inProgress = false
+        }, 100)
+      })
 
     let me = this
     $(document)
-        .off("click", ".table-row-action-item")
-        .on("click", ".table-row-action-item", function (e) {
-          e.preventDefault()
-          let id = $(this).data("id")
-          let base = me.props.baseRoute || ""
-          switch ($(this).data("action")) {
-            case "edit":
-              me.props.history.push(base + "/" + id)
-              break
-            case "view":
-              me.props.history.push(base + "/" + id + "?action=view")
-              break
-            default:
-              me.deleteAction.bind(me)(id)
-              break
-          }
-        })
+      .off("click", ".table-row-action-item")
+      .on("click", ".table-row-action-item", function (e) {
+        e.preventDefault()
+        let id = $(this).data("id")
+        let base = me.props.baseRoute || ""
+        switch ($(this).data("action")) {
+          case "edit":
+            me.props.history.push(base + "/" + id)
+            break
+          case "view":
+            me.props.history.push(base + "/" + id + "?action=view")
+            break
+          default:
+            me.deleteAction.bind(me)(id)
+            break
+        }
+      })
 
     return (
-        <div ref={this.wrapper}>
-          <TableHeader
-              {...this.props}
-              selected={this.state.selected.length > 0}
-              hideFilter={this.state.hideFilter}
-              extraFilter={this.props.extraFilter}
-              onSearch={this.onSearch.bind(this)}
-              onStatus={this.onStatus.bind(this)}
-              onReset={this.onReset.bind(this)}
-              onPrint={this.onPrint.bind(this)}
-              onDownload={this.onDownload.bind(this)}
-              onToggleFilter={this.onToggleFilter.bind(this)}
-              onStatusUpdate={this.onStatusUpdate.bind(this)}
-              onRemove={this.onRemoveSelected.bind(this)}
-          >
-            {this.props.children}
-          </TableHeader>
-          <div>
-            <table ref={this.table} className="table table-sm"></table>
-          </div>
+      <div ref={this.wrapper}>
+        <Modal show={this.state.isOpen}>
+          <ModalHeader>{'Delete ' + this.props.title}</ModalHeader>
+          <ModalBody>Are you sure you want to delete this?</ModalBody>
+          <ModalFooter>
+            <Button
+              variant="danger"
+              onClick={() => {
+                this.setState({
+                  isOpen: false,
+                });
+                if (this.deleteType === 'single') {
+                  this.api.delete(this.props.endpoint + "/" + this.state.id).finally(() => {
+                    this.dt.ajax.reload()
+                  })
+                } else {
+                  this.api
+                    .post(this.props.deleteEndpoint, this.state.selected)
+                    .then(() => {
+                      this.dt.ajax.reload()
+                    })
+                    .finally(() => {
+                      this.deselectAll()
+                    })
+                }
+              }}
+            >
+              Delete
+            </Button>
+            {' '}
+            <Button
+              variant="secondary"
+              onClick={() => {
+                this.setState({
+                  isOpen: false,
+                })
+              }}
+            >
+              Cancel
+            </Button>
+          </ModalFooter>
+        </Modal>
+        <TableHeader
+          {...this.props}
+          selected={this.state.selected.length > 0}
+          hideFilter={this.state.hideFilter}
+          extraFilter={this.props.extraFilter}
+          onSearch={this.onSearch.bind(this)}
+          onStatus={this.onStatus.bind(this)}
+          onReset={this.onReset.bind(this)}
+          onPrint={this.onPrint.bind(this)}
+          onDownload={this.onDownload.bind(this)}
+          onToggleFilter={this.onToggleFilter.bind(this)}
+          onStatusUpdate={this.onStatusUpdate.bind(this)}
+          onRemove={this.onRemoveSelected.bind(this)}
+        >
+          {this.props.children}
+        </TableHeader>
+        <div>
+          <table ref={this.table} className="table table-sm"></table>
         </div>
+      </div>
     )
   }
 }
