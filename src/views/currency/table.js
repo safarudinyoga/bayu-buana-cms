@@ -41,7 +41,7 @@ export default function CurrencyTable() {
         render: renderColumn("currency", "currency_name"),
       },
       {
-        title: "Symbol",
+        title: "Currency Symbol",
         data: "currency_symbol",
       },
       {
