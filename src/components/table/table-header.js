@@ -204,7 +204,7 @@ class TableHeader extends Component {
               <div className="col-xs-12 col-sm-12 col-md-6 col-lg-8">
                 <div className="row">
                   <div className="col-xs-4">
-                    <label className="text-label-filter">Status</label>
+                    <label className="text-label-filter">Status: </label>
                     <select
                       className="custom-select custom-select-md mb-3 text-input-select"
                       value={this.state.statusValue}

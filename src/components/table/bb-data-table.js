@@ -16,7 +16,6 @@ import JSZip from "jszip"
 import React, {Component} from "react"
 import {Button, Modal, ModalBody, ModalFooter} from "react-bootstrap"
 import ModalHeader from "react-bootstrap/esm/ModalHeader"
-import {withRouter} from "react-router"
 import "./bb-data-table.css"
 
 window.JSZip = JSZip
