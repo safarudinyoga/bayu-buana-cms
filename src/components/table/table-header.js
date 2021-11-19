@@ -275,7 +275,7 @@ class TableHeader extends Component {
                 data-toggle="dropdown"
                 aria-expanded="false"
               >
-                UPDATE STATUS
+                Update Status
               </button>
               <div className="dropdown-menu shadow-none">
                 <Link
@@ -298,9 +298,7 @@ class TableHeader extends Component {
                 type="button"
                 className="btn btn-default textButtonSave bg-dark-green p-2 ml-2"
               >
-                REMOVE {(this.props.title || "selected").split(' ')
-                  .map(w => w[0].toUpperCase() + w.substr(1).toUpperCase())
-                  .join(' ')}
+                Remove {(this.props.title || "selected")}
               </button>
             </div>
           </div>
