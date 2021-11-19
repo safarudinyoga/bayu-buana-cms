@@ -1,13 +1,13 @@
-import { withRouter } from "react-router"
-import React, { useEffect, useState } from "react"
+import {withRouter} from "react-router"
+import React, {useEffect, useState} from "react"
 import Api from "config/api"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
 import FormBuilder from "components/form/builder"
 import FormInputWrapper from "components/form/input-wrapper"
 import useQuery from "lib/query"
-import { useDispatch } from "react-redux"
-import { setUIParams } from "redux/ui-store"
+import {useDispatch} from "react-redux"
+import {setUIParams} from "redux/ui-store"
 
 const endpoint = "/master/trip-types"
 const backUrl = "/master/trip-types"
@@ -55,7 +55,7 @@ function TripTypeForm(props) {
     if (!formId) {
       docTitle = "Create Trip Type"
     } else if (isView) {
-      docTitle = "Trip Type Details"
+      docTitle = "View Trip Type"
     }
 
     dispatch(
@@ -79,14 +79,14 @@ function TripTypeForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
-      } catch (e) {}
+      } catch (e) { }
 
       try {
         let res = await api.get(endpoint + "/" + formId + "/translations", {
           size: 50,
         })
         setTranslations(res.data.items)
-      } catch (e) {}
+      } catch (e) { }
       setLoading(false)
     }
   }, [])
@@ -137,7 +137,7 @@ function TripTypeForm(props) {
           name="trip_type_name"
           cl="3"
           cr="6"
-          onChange={(e) => setForm({ ...form, trip_type_name: e.target.value })}
+          onChange={(e) => setForm({...form, trip_type_name: e.target.value})}
           disabled={isView || loading}
           type="text"
           minLength="0"
@@ -158,7 +158,7 @@ function TripTypeForm(props) {
               id="tt-1"
               value={true}
               checked={form.is_default}
-              onChange={(e) => setForm({ ...form, is_default: true })}
+              onChange={(e) => setForm({...form, is_default: true})}
             />
             <label className="form-check-label" htmlFor="tt-1">
               Yes
@@ -172,7 +172,7 @@ function TripTypeForm(props) {
               id="tt-2"
               value={false}
               checked={!form.is_default}
-              onChange={(e) => setForm({ ...form, is_default: false })}
+              onChange={(e) => setForm({...form, is_default: false})}
             />
             <label className="form-check-label" htmlFor="tt-2">
               No
@@ -189,7 +189,7 @@ function TripTypeForm(props) {
           name="trip_type_code"
           cl="4"
           cr="6"
-          onChange={(e) => setForm({ ...form, trip_type_code: e.target.value })}
+          onChange={(e) => setForm({...form, trip_type_code: e.target.value})}
           disabled={isView || loading}
           type="text"
           minLength="1"

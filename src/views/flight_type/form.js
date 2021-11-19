@@ -1,12 +1,12 @@
-import { withRouter } from "react-router"
-import React, { useEffect, useState } from "react"
+import {withRouter} from "react-router"
+import React, {useEffect, useState} from "react"
 import Api from "config/api"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
 import FormBuilder from "components/form/builder"
 import useQuery from "lib/query"
-import { useDispatch } from "react-redux"
-import { setUIParams } from "redux/ui-store"
+import {useDispatch} from "react-redux"
+import {setUIParams} from "redux/ui-store"
 
 const endpoint = "/master/flight-types"
 const backUrl = "/master/flight-types"
@@ -52,7 +52,7 @@ function FlightTypeForm(props) {
     if (!formId) {
       docTitle = "Create Flight Type"
     } else if (isView) {
-      docTitle = "Flight Type Details"
+      docTitle = "View Flight Type"
     }
 
     dispatch(
@@ -76,14 +76,14 @@ function FlightTypeForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
-      } catch (e) {}
+      } catch (e) { }
 
       try {
         let res = await api.get(endpoint + "/" + formId + "/translations", {
           size: 50,
         })
         setTranslations(res.data.items)
-      } catch (e) {}
+      } catch (e) { }
       setLoading(false)
     }
   }, [])
@@ -129,13 +129,13 @@ function FlightTypeForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Flight Type Name"
-          labelRequired="label-required" 
+          labelRequired="label-required"
           value={form.flight_type_name}
           name="flight_type_name"
           cl="3"
           cr="6"
           onChange={(e) =>
-            setForm({ ...form, flight_type_name: e.target.value })
+            setForm({...form, flight_type_name: e.target.value})
           }
           disabled={isView || loading}
           type="text"
@@ -147,13 +147,13 @@ function FlightTypeForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Flight Type Code"
-          labelRequired="label-required" 
+          labelRequired="label-required"
           value={form.flight_type_code}
           name="flight_type_code"
           cl="5"
           cr="6"
           onChange={(e) =>
-            setForm({ ...form, flight_type_code: e.target.value })
+            setForm({...form, flight_type_code: e.target.value})
           }
           disabled={isView || loading}
           type="text"

@@ -78,7 +78,7 @@ class BBDataTable extends Component {
     columns.push({
       searchable: false,
       orderable: false,
-      title: "Action",
+      title: "Actions",
       render: function (value, display, row) {
         return (
           '<a href="#" class="table-row-action-item" data-action="edit" data-id="' +

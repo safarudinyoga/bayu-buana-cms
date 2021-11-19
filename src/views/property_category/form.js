@@ -1,12 +1,12 @@
-import { withRouter } from "react-router"
-import React, { useEffect, useState } from "react"
+import {withRouter} from "react-router"
+import React, {useEffect, useState} from "react"
 import Api from "config/api"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
 import FormBuilder from "components/form/builder"
 import useQuery from "lib/query"
-import { useDispatch } from "react-redux"
-import { setUIParams } from "redux/ui-store"
+import {useDispatch} from "react-redux"
+import {setUIParams} from "redux/ui-store"
 
 const endpoint = "/master/property-categories"
 const backUrl = "/master/property-categories"
@@ -52,7 +52,7 @@ function PropertyCategoryForm(props) {
     if (!formId) {
       docTitle = "Create Property Category"
     } else if (isView) {
-      docTitle = "Property Category Details"
+      docTitle = "View Property Category"
     }
 
     dispatch(
@@ -76,14 +76,14 @@ function PropertyCategoryForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
-      } catch (e) {}
+      } catch (e) { }
 
       try {
         let res = await api.get(endpoint + "/" + formId + "/translations", {
           size: 50,
         })
         setTranslations(res.data.items)
-      } catch (e) {}
+      } catch (e) { }
       setLoading(false)
     }
   }, [])
@@ -135,7 +135,7 @@ function PropertyCategoryForm(props) {
           cl="4"
           cr="6"
           onChange={(e) =>
-            setForm({ ...form, property_category_name: e.target.value })
+            setForm({...form, property_category_name: e.target.value})
           }
           disabled={isView || loading}
           type="text"
@@ -153,7 +153,7 @@ function PropertyCategoryForm(props) {
           cl="6"
           cr="6"
           onChange={(e) =>
-            setForm({ ...form, property_category_code: parseInt(e.target.value) })
+            setForm({...form, property_category_code: parseInt(e.target.value)})
           }
           disabled={isView || loading}
           type="number"

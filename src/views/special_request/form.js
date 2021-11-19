@@ -1,12 +1,12 @@
-import { withRouter } from "react-router"
-import React, { useEffect, useState } from "react"
+import {withRouter} from "react-router"
+import React, {useEffect, useState} from "react"
 import Api from "config/api"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
 import FormBuilder from "components/form/builder"
 import useQuery from "lib/query"
-import { useDispatch } from "react-redux"
-import { setUIParams } from "redux/ui-store"
+import {useDispatch} from "react-redux"
+import {setUIParams} from "redux/ui-store"
 
 const endpoint = "/master/special-requests"
 const backUrl = "/master/special-requests"
@@ -52,7 +52,7 @@ function SpecialRequestForm(props) {
     if (!formId) {
       docTitle = "Create Special Request"
     } else if (isView) {
-      docTitle = "Special Request Details"
+      docTitle = "View Special Request"
     }
 
     dispatch(
@@ -76,14 +76,14 @@ function SpecialRequestForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
-      } catch (e) {}
+      } catch (e) { }
 
       try {
         let res = await api.get(endpoint + "/" + formId + "/translations", {
           size: 50,
         })
         setTranslations(res.data.items)
-      } catch (e) {}
+      } catch (e) { }
       setLoading(false)
     }
   }, [])
@@ -129,13 +129,13 @@ function SpecialRequestForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Special Request Name"
-          labelRequired="label-required" 
+          labelRequired="label-required"
           value={form.special_request_name}
           name="special_request_name"
           cl="4"
           cr="6"
           onChange={(e) =>
-            setForm({ ...form, special_request_name: e.target.value })
+            setForm({...form, special_request_name: e.target.value})
           }
           disabled={isView || loading}
           type="text"
@@ -147,13 +147,13 @@ function SpecialRequestForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Special Request Code"
-          labelRequired="label-required" 
+          labelRequired="label-required"
           value={form.special_request_code}
           name="special_request_code"
           cl="7"
           cr="5"
           onChange={(e) =>
-            setForm({ ...form, special_request_code: e.target.value })
+            setForm({...form, special_request_code: e.target.value})
           }
           disabled={isView || loading}
           type="text"
