@@ -1,13 +1,13 @@
-import { withRouter } from "react-router"
-import React, { useEffect, useState } from "react"
+import {withRouter} from "react-router"
+import React, {useEffect, useState} from "react"
 import Api from "config/api"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
 import FormInputSelectAjax from "components/form/input-select-ajax"
 import FormBuilder from "components/form/builder"
 import useQuery from "lib/query"
-import { useDispatch } from "react-redux"
-import { setUIParams } from "redux/ui-store"
+import {useDispatch} from "react-redux"
+import {setUIParams} from "redux/ui-store"
 import FormInputWrapper from "components/form/input-wrapper"
 const endpoint = "/master/hotel-amenity-types"
 const backUrl = "/master/hotel-amenity-types"
@@ -47,7 +47,7 @@ function HotelAmenityForm(props) {
       min: 0,
       max: 99,
     },
-    hotel_amenity_category_hotel_amenity_type:{
+    hotel_amenity_category_hotel_amenity_type: {
       required: false,
     },
     hotel_amenity_type_name: {
@@ -65,7 +65,7 @@ function HotelAmenityForm(props) {
     if (!formId) {
       docTitle = "Create Hotel Amenity Type"
     } else if (isView) {
-      docTitle = "Hotel Amenity Type Details"
+      docTitle = "View Hotel Amenity Type"
     }
 
     dispatch(
@@ -106,7 +106,7 @@ function HotelAmenityForm(props) {
           size: 50,
         })
         setTranslations(res.data.items)
-      } catch (e) {}
+      } catch (e) { }
       setLoading(false)
     }
   }, [])
@@ -134,8 +134,8 @@ function HotelAmenityForm(props) {
       }
       if (!form.hotel_amenity_type_asset) {
         form.hotel_amenity_type_asset = null
-      }else{
-        if(!form.hotel_amenity_type_asset.multimedia_description_id){
+      } else {
+        if (!form.hotel_amenity_type_asset.multimedia_description_id) {
           form.hotel_amenity_type_asset = null
         }
       }
@@ -168,7 +168,7 @@ function HotelAmenityForm(props) {
           },
         })
       }
-    } catch (e) {}
+    } catch (e) { }
   }
 
   return (
@@ -192,7 +192,7 @@ function HotelAmenityForm(props) {
           cl="5"
           cr="6"
           onChange={(e) =>
-            setForm({ ...form, hotel_amenity_type_name: e.target.value })
+            setForm({...form, hotel_amenity_type_name: e.target.value})
           }
           disabled={isView || loading}
           type="text"
@@ -226,8 +226,8 @@ function HotelAmenityForm(props) {
                 accept=".png,.jpg,.jpeg"
               />
               {form.hotel_amenity_type_asset &&
-              form.hotel_amenity_type_asset.multimedia_description &&
-              form.hotel_amenity_type_asset.multimedia_description.url ? (
+                form.hotel_amenity_type_asset.multimedia_description &&
+                form.hotel_amenity_type_asset.multimedia_description.url ? (
                 <img
                   src={form.hotel_amenity_type_asset.multimedia_description.url}
                   className="img-fluid"

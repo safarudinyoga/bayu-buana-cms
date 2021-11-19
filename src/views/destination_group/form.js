@@ -1,12 +1,12 @@
-import { withRouter } from "react-router"
-import React, { useEffect, useState } from "react"
+import {withRouter} from "react-router"
+import React, {useEffect, useState} from "react"
 import Api from "config/api"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
 import FormBuilder from "components/form/builder"
 import useQuery from "lib/query"
-import { useDispatch } from "react-redux"
-import { setUIParams } from "redux/ui-store"
+import {useDispatch} from "react-redux"
+import {setUIParams} from "redux/ui-store"
 
 const endpoint = "/master/destination-groups"
 const backUrl = "/master/destination-groups"
@@ -52,7 +52,7 @@ function DestinationGroupForm(props) {
     if (!formId) {
       docTitle = "Create Destination Group"
     } else if (isView) {
-      docTitle = "Destination Group Details"
+      docTitle = "View Destination Group"
     }
 
     dispatch(
@@ -76,14 +76,14 @@ function DestinationGroupForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
-      } catch (e) {}
+      } catch (e) { }
 
       try {
         let res = await api.get(endpoint + "/" + formId + "/translations", {
           size: 50,
         })
         setTranslations(res.data.items)
-      } catch (e) {}
+      } catch (e) { }
       setLoading(false)
     }
   }, [])
@@ -129,13 +129,13 @@ function DestinationGroupForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Destination Group Name"
-          labelRequired="label-required" 
+          labelRequired="label-required"
           value={form.destination_group_name}
           name="destination_group_name"
           cl="4"
           cr="6"
           onChange={(e) =>
-            setForm({ ...form, destination_group_name: e.target.value })
+            setForm({...form, destination_group_name: e.target.value})
           }
           disabled={isView || loading}
           type="text"
@@ -147,13 +147,13 @@ function DestinationGroupForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Destination Group Code"
-          labelRequired="label-required" 
+          labelRequired="label-required"
           value={form.destination_group_code}
           name="destination_group_code"
           cl="6"
           cr="6"
           onChange={(e) =>
-            setForm({ ...form, destination_group_code: e.target.value })
+            setForm({...form, destination_group_code: e.target.value})
           }
           disabled={isView || loading}
           type="text"

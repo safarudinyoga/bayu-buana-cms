@@ -52,7 +52,7 @@ function HotelBrandForm(props) {
     if (!formId) {
       docTitle = "Create Hotel Brand"
     } else if (isView) {
-      docTitle = "Hotel Brand Details"
+      docTitle = "View Hotel Brand"
     }
 
     dispatch(

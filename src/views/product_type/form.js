@@ -1,13 +1,13 @@
-import { withRouter } from "react-router"
-import React, { useEffect, useState } from "react"
+import {withRouter} from "react-router"
+import React, {useEffect, useState} from "react"
 import Api from "config/api"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
 import FormBuilder from "components/form/builder"
 import FormInputWrapper from "components/form/input-wrapper"
 import useQuery from "lib/query"
-import { useDispatch } from "react-redux"
-import { setUIParams } from "redux/ui-store"
+import {useDispatch} from "react-redux"
+import {setUIParams} from "redux/ui-store"
 
 const endpoint = "/master/product-types"
 const backUrl = "/master/product-types"
@@ -55,7 +55,7 @@ function ProductTypeForm(props) {
     if (!formId) {
       docTitle = "Create Product Type"
     } else if (isView) {
-      docTitle = "Product Type Details"
+      docTitle = "View Product Type"
     }
 
     dispatch(
@@ -79,14 +79,14 @@ function ProductTypeForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
-      } catch (e) {}
+      } catch (e) { }
 
       try {
         let res = await api.get(endpoint + "/" + formId + "/translations", {
           size: 50,
         })
         setTranslations(res.data.items)
-      } catch (e) {}
+      } catch (e) { }
       setLoading(false)
     }
   }, [])
@@ -143,7 +143,7 @@ function ProductTypeForm(props) {
           cl="5"
           cr="7"
           onChange={(e) =>
-            setForm({ ...form, product_type_name: e.target.value })
+            setForm({...form, product_type_name: e.target.value})
           }
           disabled={isView || loading}
           type="text"
@@ -207,7 +207,7 @@ function ProductTypeForm(props) {
           name="product_type_code"
           cl="5"
           cr="7"
-          onChange={(e) => setForm({ ...form, product_type_code: +e.target.value })}
+          onChange={(e) => setForm({...form, product_type_code: +e.target.value})}
           disabled={isView || loading}
           type="number"
           min="1"

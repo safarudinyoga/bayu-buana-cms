@@ -75,7 +75,7 @@ function DestinationForm(props) {
     if (!formId) {
       docTitle = "Create Destination"
     } else if (isView) {
-      docTitle = "Destination Details"
+      docTitle = "View Destination"
     }
 
     dispatch(

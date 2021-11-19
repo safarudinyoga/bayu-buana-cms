@@ -1,12 +1,12 @@
-import { withRouter } from "react-router"
-import React, { useEffect, useState } from "react"
+import {withRouter} from "react-router"
+import React, {useEffect, useState} from "react"
 import Api from "config/api"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
 import FormBuilder from "components/form/builder"
 import useQuery from "lib/query"
-import { useDispatch } from "react-redux"
-import { setUIParams } from "redux/ui-store"
+import {useDispatch} from "react-redux"
+import {setUIParams} from "redux/ui-store"
 
 const endpoint = "/master/aircraft"
 const backUrl = "/master/aircrafts"
@@ -65,7 +65,7 @@ function AircraftForm(props) {
     if (!formId) {
       docTitle = "Create Aircraft"
     } else if (isView) {
-      docTitle = "Aircraft Details"
+      docTitle = "View Aircraft"
     }
 
     dispatch(
@@ -89,14 +89,14 @@ function AircraftForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
-      } catch (e) {}
+      } catch (e) { }
 
       try {
         let res = await api.get(endpoint + "/" + formId + "/translations", {
           size: 50,
         })
         setTranslations(res.data.items)
-      } catch (e) {}
+      } catch (e) { }
       setLoading(false)
     }
   }, [])
@@ -144,11 +144,11 @@ function AircraftForm(props) {
     >
       <FormHorizontal>
         <FormInputControl
-          label={"Aircraft Name"}  
-          labelRequired="label-required"       
+          label={"Aircraft Name"}
+          labelRequired="label-required"
           value={form.aircraft_name}
           name="aircraft_name"
-          onChange={(e) => setForm({ ...form, aircraft_name: e.target.value })}
+          onChange={(e) => setForm({...form, aircraft_name: e.target.value})}
           disabled={isView || loading}
           type="text"
           minLength="1"
@@ -157,7 +157,7 @@ function AircraftForm(props) {
         <FormInputControl
           value={form.model}
           name="model"
-          onChange={(e) => setForm({ ...form, model: e.target.value })}
+          onChange={(e) => setForm({...form, model: e.target.value})}
           label="Model"
           disabled={isView || loading}
           type="text"
@@ -169,9 +169,9 @@ function AircraftForm(props) {
       <FormHorizontal>
         <FormInputControl
           value={form.aircraft_code}
-          labelRequired="label-required" 
+          labelRequired="label-required"
           name="aircraft_code"
-          onChange={(e) => setForm({ ...form, aircraft_code: e.target.value })}
+          onChange={(e) => setForm({...form, aircraft_code: e.target.value})}
           cl="5"
           cr="6"
           disabled={isView || loading}
@@ -183,9 +183,9 @@ function AircraftForm(props) {
         />
         <FormInputControl
           value={form.icao_code}
-          labelRequired="label-required" 
+          labelRequired="label-required"
           name="icao_code"
-          onChange={(e) => setForm({ ...form, icao_code: e.target.value })}
+          onChange={(e) => setForm({...form, icao_code: e.target.value})}
           cl="5"
           cr="6"
           disabled={isView || loading}

@@ -1,13 +1,13 @@
-import { withRouter } from "react-router"
-import React, { useEffect, useState } from "react"
+import {withRouter} from "react-router"
+import React, {useEffect, useState} from "react"
 import Api from "config/api"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
 import FormInputSelectAjax from "components/form/input-select-ajax"
 import FormBuilder from "components/form/builder"
 import useQuery from "lib/query"
-import { useDispatch } from "react-redux"
-import { setUIParams } from "redux/ui-store"
+import {useDispatch} from "react-redux"
+import {setUIParams} from "redux/ui-store"
 
 const endpoint = "/master/airports"
 const backUrl = "/master/airports"
@@ -62,7 +62,7 @@ function AirportForm(props) {
     if (!formId) {
       docTitle = "Create Airport"
     } else if (isView) {
-      docTitle = "Airport Details"
+      docTitle = "View Airport"
     }
 
     dispatch(
@@ -89,14 +89,14 @@ function AirportForm(props) {
         if (res.data.city) {
           setCityData([{...res.data.city, text: res.data.city.city_name}])
         }
-      } catch (e) {}
+      } catch (e) { }
 
       try {
         let res = await api.get(endpoint + "/" + formId + "/translations", {
           size: 50,
         })
         setTranslations(res.data.items)
-      } catch (e) {}
+      } catch (e) { }
       setLoading(false)
     }
   }, [])
@@ -142,12 +142,12 @@ function AirportForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Airport Name"
-          labelRequired="label-required" 
+          labelRequired="label-required"
           value={form.airport_name}
           name="airport_name"
           cl="3"
           cr="6"
-          onChange={(e) => setForm({ ...form, airport_name: e.target.value })}
+          onChange={(e) => setForm({...form, airport_name: e.target.value})}
           disabled={isView || loading}
           type="text"
           minLength="1"
@@ -162,7 +162,7 @@ function AirportForm(props) {
           endpoint="/master/cities"
           column="city_name"
           data={cityData}
-          onChange={(e) => setForm({ ...form, city_id: e.target.value || null })}
+          onChange={(e) => setForm({...form, city_id: e.target.value || null})}
           disabled={isView || loading}
           type="select"
         />
@@ -171,12 +171,12 @@ function AirportForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Airport Code"
-          labelRequired="label-required" 
+          labelRequired="label-required"
           value={form.airport_code}
           name="airport_code"
           cl="4"
           cr="6"
-          onChange={(e) => setForm({ ...form, airport_code: e.target.value })}
+          onChange={(e) => setForm({...form, airport_code: e.target.value})}
           disabled={isView || loading}
           type="text"
           minLength="3"
@@ -189,7 +189,7 @@ function AirportForm(props) {
           name="icao_code"
           cl="4"
           cr="6"
-          onChange={(e) => setForm({ ...form, icao_code: e.target.value })}
+          onChange={(e) => setForm({...form, icao_code: e.target.value})}
           disabled={isView || loading}
           type="text"
           minLength="4"

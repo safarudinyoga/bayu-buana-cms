@@ -116,7 +116,7 @@ function AttractionForm(props) {
     if (!formId) {
       docTitle = "Create Attraction"
     } else if (isView) {
-      docTitle = "Attraction Details"
+      docTitle = "View Attraction"
     }
 
     dispatch(

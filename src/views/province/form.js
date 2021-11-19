@@ -1,13 +1,13 @@
-import { withRouter } from "react-router"
-import React, { useEffect, useState } from "react"
+import {withRouter} from "react-router"
+import React, {useEffect, useState} from "react"
 import Api from "config/api"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
 import FormBuilder from "components/form/builder"
 import FormInputSelectAjax from "components/form/input-select-ajax"
 import useQuery from "lib/query"
-import { useDispatch } from "react-redux"
-import { setUIParams } from "redux/ui-store"
+import {useDispatch} from "react-redux"
+import {setUIParams} from "redux/ui-store"
 
 const endpoint = "/master/state-provinces"
 const backUrl = "/master/provinces"
@@ -57,7 +57,7 @@ function ProvinceForm(props) {
     if (!formId) {
       docTitle = "Create State / Province"
     } else if (isView) {
-      docTitle = "State / Province Details"
+      docTitle = "View State / Province"
     }
 
     dispatch(
@@ -87,14 +87,14 @@ function ProvinceForm(props) {
         if (res.data.country) {
           setCountryData([{...res.data.country, text: res.data.country.country_name}])
         }
-      } catch (e) {}
+      } catch (e) { }
 
       try {
         let res = await api.get(endpoint + "/" + formId + "/translations", {
           size: 50,
         })
         setTranslations(res.data.items)
-      } catch (e) {}
+      } catch (e) { }
       setLoading(false)
     }
   }, [])
@@ -152,7 +152,7 @@ function ProvinceForm(props) {
           name="state_province_name"
           cl="4"
           cr="6"
-          onChange={(e) => setForm({ ...form, state_province_name: e.target.value })}
+          onChange={(e) => setForm({...form, state_province_name: e.target.value})}
           disabled={isView || loading}
           type="text"
           minLength="1"
@@ -168,7 +168,7 @@ function ProvinceForm(props) {
           column="state_province_category_name"
           data={subdivisionData}
           onChange={(e) =>
-            setForm({ ...form, state_province_category_id: e.target.value || null })
+            setForm({...form, state_province_category_id: e.target.value || null})
           }
           disabled={isView || loading}
           type="select"
@@ -183,7 +183,7 @@ function ProvinceForm(props) {
           column="country_name"
           data={countryData}
           onChange={(e) =>
-            setForm({ ...form, country_id: e.target.value || null })
+            setForm({...form, country_id: e.target.value || null})
           }
           disabled={isView || loading}
           type="select"
@@ -199,7 +199,7 @@ function ProvinceForm(props) {
           name="state_province_code"
           cl="7"
           cr="5"
-          onChange={(e) => setForm({ ...form, state_province_code: e.target.value })}
+          onChange={(e) => setForm({...form, state_province_code: e.target.value})}
           disabled={isView || loading}
           type="text"
           minLength="1"

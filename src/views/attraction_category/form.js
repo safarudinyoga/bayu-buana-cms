@@ -1,13 +1,13 @@
-import { withRouter } from "react-router"
-import React, { useEffect, useState } from "react"
+import {withRouter} from "react-router"
+import React, {useEffect, useState} from "react"
 import Api from "config/api"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
 import FormBuilder from "components/form/builder"
 import FormInputWrapper from "components/form/input-wrapper"
 import useQuery from "lib/query"
-import { useDispatch } from "react-redux"
-import { setUIParams } from "redux/ui-store"
+import {useDispatch} from "react-redux"
+import {setUIParams} from "redux/ui-store"
 
 const endpoint = "/master/attraction-categories"
 const backUrl = "/master/attraction-categories"
@@ -63,7 +63,7 @@ function AttractionCategoryForm(props) {
     if (!formId) {
       docTitle = "Create Attraction Category"
     } else if (isView) {
-      docTitle = "Attraction Category Details"
+      docTitle = "View Attraction Category"
     }
 
     dispatch(
@@ -87,14 +87,14 @@ function AttractionCategoryForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
-      } catch (e) {}
+      } catch (e) { }
 
       try {
         let res = await api.get(endpoint + "/" + formId + "/translations", {
           size: 50,
         })
         setTranslations(res.data.items)
-      } catch (e) {}
+      } catch (e) { }
       setLoading(false)
     }
   }, [])
@@ -120,8 +120,8 @@ function AttractionCategoryForm(props) {
 
       if (!form.attraction_category_asset) {
         form.attraction_category_asset = null
-      }else{
-        if(!form.attraction_category_asset.multimedia_description_id){
+      } else {
+        if (!form.attraction_category_asset.multimedia_description_id) {
           form.attraction_category_asset = null
         }
       }
@@ -154,7 +154,7 @@ function AttractionCategoryForm(props) {
           },
         })
       }
-    } catch (e) {}
+    } catch (e) { }
   }
   return (
     <FormBuilder
@@ -177,7 +177,7 @@ function AttractionCategoryForm(props) {
           cl="6"
           cr="6"
           onChange={(e) =>
-            setForm({ ...form, attraction_category_name: e.target.value })
+            setForm({...form, attraction_category_name: e.target.value})
           }
           disabled={isView || loading}
           type="text"
@@ -239,7 +239,7 @@ function AttractionCategoryForm(props) {
           name="description"
           cl="6"
           cr="6"
-          onChange={(e) => setForm({ ...form, description: e.target.value })}
+          onChange={(e) => setForm({...form, description: e.target.value})}
           disabled={isView || loading}
           type="textarea"
           minLength="1"
@@ -259,8 +259,8 @@ function AttractionCategoryForm(props) {
                 accept=".png,.jpg,.jpeg"
               />
               {form.attraction_category_asset &&
-              form.attraction_category_asset.multimedia_description &&
-              form.attraction_category_asset.multimedia_description.url ? (
+                form.attraction_category_asset.multimedia_description &&
+                form.attraction_category_asset.multimedia_description.url ? (
                 <img
                   src={
                     form.attraction_category_asset.multimedia_description.url

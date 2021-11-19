@@ -1,12 +1,12 @@
-import { withRouter } from "react-router"
-import React, { useEffect, useState } from "react"
+import {withRouter} from "react-router"
+import React, {useEffect, useState} from "react"
 import Api from "config/api"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
 import FormBuilder from "components/form/builder"
 import useQuery from "lib/query"
-import { useDispatch } from "react-redux"
-import { setUIParams } from "redux/ui-store"
+import {useDispatch} from "react-redux"
+import {setUIParams} from "redux/ui-store"
 
 const endpoint = "/master/age-qualifying-types"
 const backUrl = "/master/age-qualifying-types"
@@ -52,7 +52,7 @@ function AgeQualifyingTypeForm(props) {
     if (!formId) {
       docTitle = "Create Age Qualifying Type"
     } else if (isView) {
-      docTitle = "Age Qualifying Type Details"
+      docTitle = "View Age Qualifying Type"
     }
 
     dispatch(
@@ -76,14 +76,14 @@ function AgeQualifyingTypeForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
-      } catch (e) {}
+      } catch (e) { }
 
       try {
         let res = await api.get(endpoint + "/" + formId + "/translations", {
           size: 50,
         })
         setTranslations(res.data.items)
-      } catch (e) {}
+      } catch (e) { }
       setLoading(false)
     }
   }, [])
@@ -129,13 +129,13 @@ function AgeQualifyingTypeForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Age Qualifying Type Name"
-          labelRequired="label-required" 
+          labelRequired="label-required"
           value={form.age_qualifying_type_name}
           name="age_qualifying_type_name"
           cl="5"
           cr="6"
           onChange={(e) =>
-            setForm({ ...form, age_qualifying_type_name: e.target.value })
+            setForm({...form, age_qualifying_type_name: e.target.value})
           }
           disabled={isView || loading}
           type="text"
@@ -147,13 +147,13 @@ function AgeQualifyingTypeForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Age Qualifying Type Code"
-          labelRequired="label-required" 
+          labelRequired="label-required"
           value={form.age_qualifying_type_code}
           name="age_qualifying_type_code"
           cl="7"
           cr="5"
           onChange={(e) =>
-            setForm({ ...form, age_qualifying_type_code: parseInt(e.target.value) })
+            setForm({...form, age_qualifying_type_code: parseInt(e.target.value)})
           }
           disabled={isView || loading}
           type="number"

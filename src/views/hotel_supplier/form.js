@@ -55,7 +55,7 @@ function HotelSupplierForm(props) {
     if (!formId) {
       docTitle = "Create Hotel Supplier"
     } else if (isView) {
-      docTitle = "Hotel Supplier Details"
+      docTitle = "View Hotel Supplier"
     }
 
     dispatch(
