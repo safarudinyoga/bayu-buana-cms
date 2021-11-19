@@ -675,11 +675,11 @@ class BBDataTable extends Component {
     return (
       <div ref={this.wrapper}>
         <Modal show={this.state.isOpen}>
-          <ModalHeader>Delete Confirmation</ModalHeader>
-          <ModalBody>Apakah yakin akan di hapus?</ModalBody>
+          <ModalHeader>{'Delete ' + this.props.title}</ModalHeader>
+          <ModalBody>Are you sure you want to delete this?</ModalBody>
           <ModalFooter>
             <Button
-              color="danger"
+              variant="danger"
               onClick={() => {
                 this.api.delete(this.props.endpoint + "/" + this.state.id).finally(() => {
                   this.setState({
@@ -693,7 +693,7 @@ class BBDataTable extends Component {
             </Button>
             {' '}
             <Button
-              color="secondary"
+              variant="secondary"
               onClick={() => {
                 this.setState({
                   isOpen: false,

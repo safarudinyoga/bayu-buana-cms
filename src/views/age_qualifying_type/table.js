@@ -1,9 +1,9 @@
-import React, { useEffect } from "react"
 import BBDataTable from "components/table/bb-data-table"
 import rowStatus from "lib/row-status"
-import { useDispatch } from "react-redux"
-import { setUIParams } from "redux/ui-store"
-import { renderColumn } from "lib/translation"
+import {renderColumn} from "lib/translation"
+import React, {useEffect} from "react"
+import {useDispatch} from "react-redux"
+import {setUIParams} from "redux/ui-store"
 
 export default function AgeQualifyingTypeTable() {
   let dispatch = useDispatch()
