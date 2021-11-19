@@ -31,14 +31,14 @@
 
 .dataTable-root table.dataTable thead {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
   background-color: #5e5e5e;
   color: #ffffff; 
 }
 .dataTable-root table.dataTable tbody {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-  font-size: 11px;
+  font-size: 15px;
   font-weight: normal; 
   color: #333333;   
 }
@@ -81,4 +81,16 @@
 input[type=checkbox] { 
   accent-color: #027F71;
   margin-top: 2px;
+}
+
+.fa-edit{
+  color: #3E40AE;
+}
+
+.fa-eye{
+  color: #3E40AE;
+}
+
+.fa-trash{
+  color: #3E40AE;
 }
