@@ -29,6 +29,7 @@ class BBDataTable extends Component {
     this.dt = null
     this.state = {
       id: null,
+      deleteType: null,
       dt: null,
       selected: [],
       status: "0",
@@ -409,10 +410,10 @@ class BBDataTable extends Component {
           infoFiltered: "",
           loadingRecords: "Loading ...",
           processing: "<i class='fa fa-spin fa-circle-notch'></i> Loading...",
-          zeroRecords: "No record found",
+          zeroRecords: "No " + this.props.title + " found",
           emptyTable: this.props.emptyTable
             ? this.props.emptyTable
-            : "No record found",
+            : "No " + this.props.title + " found",
           lengthMenu: "_MENU_",
         },
         fnDrawCallback: (t) => {
@@ -558,26 +559,19 @@ class BBDataTable extends Component {
   }
 
   onRemoveSelected() {
-    this.api
-      .post(this.props.deleteEndpoint, this.state.selected)
-      .then(() => {
-        this.dt.ajax.reload()
-      })
-      .finally(() => {
-        this.deselectAll()
-      })
+    this.setState({
+      isOpen: true,
+      deleteType: "selected",
+      id: this.state.selected,
+    })
   }
 
   deleteAction(id) {
-    // set state isOpen is true
-    console.log('ok sampai disini dengan id ' + id);
     this.setState({
       isOpen: true,
+      deleteType: "single",
       id: id,
     })
-    // this.api.delete(this.props.endpoint + "/" + id).finally(() => {
-    //   this.dt.ajax.reload()
-    // })
   }
 
   componentWillUnmount() {
@@ -681,12 +675,23 @@ class BBDataTable extends Component {
             <Button
               variant="danger"
               onClick={() => {
-                this.api.delete(this.props.endpoint + "/" + this.state.id).finally(() => {
-                  this.setState({
-                    isOpen: false,
-                  });
-                  this.dt.ajax.reload()
-                })
+                this.setState({
+                  isOpen: false,
+                });
+                if (this.deleteType === 'single') {
+                  this.api.delete(this.props.endpoint + "/" + this.state.id).finally(() => {
+                    this.dt.ajax.reload()
+                  })
+                } else {
+                  this.api
+                    .post(this.props.deleteEndpoint, this.state.selected)
+                    .then(() => {
+                      this.dt.ajax.reload()
+                    })
+                    .finally(() => {
+                      this.deselectAll()
+                    })
+                }
               }}
             >
               Delete

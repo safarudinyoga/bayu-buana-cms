@@ -106,6 +106,7 @@ class TableHeader extends Component {
                     placeholder="Search..."
                     onChange={this.handleSearch.bind(this)}
                     maxLength={256}
+                    minLength={1}
                   />
                   <div className="input-group-append">
                     <span className="input-group-text">
@@ -121,7 +122,7 @@ class TableHeader extends Component {
                     type="button"
                     className="btn btn-link advanced-options-btn float-right-sm"
                   >
-                    Advanced Options{" "}
+                    <span style={{marginRight: 10}}>Advanced Options</span>
                     {this.state.showFilter ? (
                       <span className="raquo-down"> &laquo;</span>
                     ) : (
