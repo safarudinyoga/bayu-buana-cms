@@ -1,12 +1,54 @@
 import downloadIcon from "assets/download.svg"
 import printIcon from "assets/printer.svg"
 import resetIcon from "assets/reset.svg"
+import downIcon from "assets/icons/double-down.svg"
+import upIcon from "assets/icons/double-up.svg"
 import {Component} from "react"
 import {OverlayTrigger, Tooltip} from "react-bootstrap"
 import {Link, withRouter} from "react-router-dom"
 import "../button/button.css"
 import "./table-header.css"
+import Select from "react-select";
 
+const customStyles = {
+  option: (provided, state) => ({
+    ...provided,
+    color: "black",
+    backgroundColor: state.isSelected ? "white" : "white",
+    padding: 10,       
+    fontFamily: "Segoe UI, Tahoma, Geneva, Verdana, sans-serif",
+    fontSize: 13,
+    "&:hover": {
+      // Overwrittes the different states of border
+      backgroundColor: state.isFocused ? "#027F71" : "",
+      color: state.isFocused ? "white" : "black"
+    }
+  }),
+  control: (base, state) => ({
+    ...base,          
+    height: 10,
+    width: 120,    
+    marginTop: -1,
+    marginLeft: 0,
+    border: "1px solid #DADEDF",
+    fontSize: 13,
+    backgroundColor: 'white',    
+    boxShadow: state.isFocused ? 0 : 0,
+    '&:hover': {
+       border: "1px solid #DADEDF",       
+    }           
+}),
+  singleValue: (provided, state) => {
+    const opacity = state.isDisabled ? 0.5 : 1;
+    const transition = "opacity 300ms";
+    return { ...provided, opacity, transition };
+  }
+};
+const options = [
+  { value: "0", label: "All" },
+  { value: "1", label: "Active" },
+  { value: "3", label: "Inactive" }
+];
 class TableHeader extends Component {
   constructor(props) {
     super(props)
@@ -41,13 +83,11 @@ class TableHeader extends Component {
     })
   }
 
-  handleStatus(e) {
+  handleStatus(statusValue) {
     if (this.props.onStatus) {
-      this.props.onStatus(e.target.value)
+      this.props.onStatus(statusValue.value)
     }
-    this.setState({
-      statusValue: e.target.value,
-    })
+    this.setState({ statusValue });
   }
 
   handleReset() {
@@ -122,12 +162,7 @@ class TableHeader extends Component {
                     type="button"
                     className="btn btn-link advanced-options-btn float-right-sm"
                   >
-                    <span style={{marginRight: 10}}>Advanced Options</span>
-                    {this.state.showFilter ? (
-                      <span className="raquo-down"> &laquo;</span>
-                    ) : (
-                      <span className="raquo-down"> &raquo;</span>
-                    )}
+                   <span className="mr-2">Advanced Options</span> {this.state.showFilter ? <img src={downIcon} alt="down" /> : <img src={upIcon} alt="up" />}
                   </button>
                 </div>
               )}
@@ -205,21 +240,11 @@ class TableHeader extends Component {
                 <div className="row">
                   <div className="col-xs-4">
                     <label className="text-label-filter">Status: </label>
-                    <select
-                      className="custom-select custom-select-md mb-3 text-input-select"
-                      value={this.state.statusValue}
+                    <Select 
+                      width='200px'                   
                       onChange={this.handleStatus.bind(this)}
-                    >
-                      <option className="text-input-select" value="0">
-                        All
-                      </option>
-                      <option className="text-input-select" value="1">
-                        Active
-                      </option>
-                      <option className="text-input-select" value="3">
-                        Inactive
-                      </option>
-                    </select>
+                      styles={customStyles} 
+                      options={options}/>
                   </div>
                 </div>
               </div>
@@ -243,7 +268,7 @@ class TableHeader extends Component {
           className={this.props.selected ? "container-fluid mt-2" : "d-none"}
         >
           <div className="row">
-            <div className="col-xs-12">
+            <div className="col-xs-12 d-flex flex-row">
               <button
                 type="button"
                 className="btn btn-default textButtonSave dropdown-toggle btn-table-action-dropdown py-2"

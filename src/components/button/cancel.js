@@ -3,7 +3,7 @@ const {Component} = require("react")
 
 export default class CancelButton extends Component {
   render() {
-    const readOnlyClass = this.props.isView ? "bg-dark-grey text-white" : ""
+    const readOnlyClass = this.props.isView ? "" : ""
     return (
       <button
         onClick={this.props.onClick}
