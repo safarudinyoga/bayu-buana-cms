@@ -22,7 +22,7 @@ function AttractionForm(props) {
   const [id, setId] = useState(null)
   const [form, setForm] = useState({
     attraction_name: "",
-    attraction_category_name: "",
+    attraction_category_id: "",
     attraction_address: "",
     country_id: "",
     state_province: "",
@@ -49,25 +49,62 @@ function AttractionForm(props) {
   ]
 
   const validationRules = {
-    aircraft_name: {
+    attraction_name: {
       required: true,
       min: 1,
       max: 64,
     },
-    model: {
+    attraction_category_id: {
       required: false,
-      min: 1,
-      max: 64,
     },
-    icao_code: {
-      required: true,
-      min: 4,
-      max: 4,
+    address: {
+      minLength: 1,
+      maxLength: 512,
     },
-    aircraft_code: {
+    country: {
       required: true,
-      min: 4,
-      max: 4,
+    },
+    state_province: {
+      required: false,
+    },
+    city: {
+      required: true,
+    },
+    zip_code: {
+      required: false,
+      minLength: 1,
+      maxLength: 16,
+    },
+    // destination and zone
+    latitude: {
+      required: false,
+      minLength: 1,
+      maxLength: 16,
+    },
+    longitude: {
+      required: false,
+      minLength: 1,
+      maxLength: 16,
+    },
+    email_address: {
+      required: false,
+      minLength: 1,
+      maxLength: 256,
+    },
+    phone: {
+      required: false,
+      minLength: 1,
+      maxLength: 32,
+    },
+    fax: {
+      required: false,
+      minLength: 1,
+      maxLength: 32,
+    },
+    description: {
+      required: false,
+      minLength: 1,
+      maxLength: 4000,
     },
   }
 
@@ -169,15 +206,19 @@ function AttractionForm(props) {
           maxLength="64"
         />
 
-        <FormInputControl
-          label={"Attraction Category"}
-          value={form.attraction_category_name}
-          name="attraction_category_name"
-          onChange={(e) => setForm({...form, attraction_category_name: e.target.value})}
+        <FormInputSelectAjax
+          label="Attraction Category"
+          value={form.attraction_category_id}
+          name="attraction_category_id"
+          cl="3"
+          cr="6"
+          endpoint="/master/attraction-categories"
+          column="attraction_category_name"
+          onChange={(e) =>
+            setForm({...form, attraction_category_id: e.target.value || null})
+          }
           disabled={isView || loading}
-          type="text"
-          minLength="1"
-          maxLength="64"
+          type="select"
         />
 
         <FormInputControl
@@ -193,6 +234,7 @@ function AttractionForm(props) {
 
         <FormInputSelectAjax
           label="Country"
+          labelRequired="label-required"
           value={form.country_id}
           name="country_id"
           cl="3"
@@ -208,15 +250,15 @@ function AttractionForm(props) {
 
         <FormInputSelectAjax
           label="State/ Province"
-          value={form.state_id}
+          value={form.state_province}
           name="state_id"
           cl="3"
           cr="6"
-          endpoint="/master/cities"
-          filter={form.state_id}
-          column="city_name"
+          endpoint="/master/state-provinces"
+          filter={form.country_id}
+          column="state_province_name"
           onChange={(e) =>
-            setForm({...form, state_id: e.target.value || null})
+            setForm({...form, state_province: e.target.value || null})
           }
           disabled={isView || loading}
           type="select"
@@ -224,7 +266,8 @@ function AttractionForm(props) {
 
         <FormInputSelectAjax
           label="City"
-          value={form.country_id}
+          value={form.city_id}
+          labelRequired="label-required"
           name="destination_city_id"
           cl="3"
           cr="6"
@@ -232,12 +275,11 @@ function AttractionForm(props) {
           filter={form.country_id}
           column="city_name"
           onChange={(e) =>
-            setForm({...form, destination_city_id: e.target.value || null})
+            setForm({...form, city_id: e.target.value || null})
           }
           disabled={isView || loading}
           type="select"
         />
-        {/* country / state/province / city */}
 
         <FormInputControl
           label={"Zip Code"}
