@@ -32,6 +32,7 @@ button.advanced-options-btn:active {
   line-height: 20px;
   color: #212529;
   font-weight: bold;
+  font-size: 14px;
 }
 
 .btn-table-action {
@@ -71,7 +72,7 @@ button.advanced-options-btn:active {
 }
 .btn-table-action-dropdown::after {
   float: right;
-  margin-top: 10px;
+  margin-top: 0px;
 }
 
 .advanced-filter {

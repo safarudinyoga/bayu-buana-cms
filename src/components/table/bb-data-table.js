@@ -726,7 +726,7 @@ class BBDataTable extends Component {
           {this.props.children}
         </TableHeader>
         <div>
-          <table ref={this.table} className="table table-sm"></table>
+          <table ref={this.table} className="table table-sm table-striped"></table>
         </div>
         <div className="footer">©️ 2021 Bayu Buana Travel Services. All Rights Reserved</div>
       </div>
