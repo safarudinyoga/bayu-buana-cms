@@ -1,12 +1,12 @@
-import { withRouter } from "react-router"
-import React, { useEffect, useState } from "react"
+import {withRouter} from "react-router"
+import React, {useEffect, useState} from "react"
 import Api from "config/api"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
 import FormBuilder from "components/form/builder"
 import useQuery from "lib/query"
-import { useDispatch } from "react-redux"
-import { setUIParams } from "redux/ui-store"
+import {useDispatch} from "react-redux"
+import {setUIParams} from "redux/ui-store"
 
 const endpoint = "/master/location-categories"
 const backUrl = "/master/location-categories"
@@ -52,7 +52,7 @@ function LocationCategoryForm(props) {
     if (!formId) {
       docTitle = "Create Location Category"
     } else if (isView) {
-      docTitle = "Location Category Details"
+      docTitle = "View Location Category"
     }
 
     dispatch(
@@ -76,14 +76,14 @@ function LocationCategoryForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
-      } catch (e) {}
+      } catch (e) { }
 
       try {
         let res = await api.get(endpoint + "/" + formId + "/translations", {
           size: 50,
         })
         setTranslations(res.data.items)
-      } catch (e) {}
+      } catch (e) { }
       setLoading(false)
     }
   }, [])
@@ -135,7 +135,7 @@ function LocationCategoryForm(props) {
           cl="5"
           cr="6"
           onChange={(e) =>
-            setForm({ ...form, location_category_name: e.target.value })
+            setForm({...form, location_category_name: e.target.value})
           }
           disabled={isView || loading}
           type="text"
@@ -153,7 +153,7 @@ function LocationCategoryForm(props) {
           cl="6"
           cr="6"
           onChange={(e) =>
-            setForm({ ...form, location_category_code: parseInt(e.target.value) })
+            setForm({...form, location_category_code: parseInt(e.target.value)})
           }
           disabled={isView || loading}
           type="number"

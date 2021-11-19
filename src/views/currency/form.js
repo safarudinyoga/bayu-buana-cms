@@ -1,13 +1,13 @@
-import { withRouter } from "react-router"
-import React, { useEffect, useState } from "react"
+import {withRouter} from "react-router"
+import React, {useEffect, useState} from "react"
 import Api from "config/api"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
 import FormBuilder from "components/form/builder"
 import FormInputWrapper from "components/form/input-wrapper"
 import useQuery from "lib/query"
-import { useDispatch } from "react-redux"
-import { setUIParams } from "redux/ui-store"
+import {useDispatch} from "react-redux"
+import {setUIParams} from "redux/ui-store"
 
 const endpoint = "/master/currencies"
 const backUrl = "/master/currencies"
@@ -92,7 +92,7 @@ function CurrencyForm(props) {
     if (!formId) {
       docTitle = "Create Currency"
     } else if (isView) {
-      docTitle = "Currency Details"
+      docTitle = "View Currency"
     }
 
     dispatch(
@@ -116,14 +116,14 @@ function CurrencyForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
-      } catch (e) {}
+      } catch (e) { }
 
       try {
         let res = await api.get(endpoint + "/" + formId + "/translations", {
           size: 50,
         })
         setTranslations(res.data.items)
-      } catch (e) {}
+      } catch (e) { }
       setLoading(false)
     }
   }, [])
@@ -181,12 +181,12 @@ function CurrencyForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Currency Name"
-          labelRequired="label-required" 
+          labelRequired="label-required"
           value={form.currency_name}
           name="currency_name"
           cl="4"
           cr="6"
-          onChange={(e) => setForm({ ...form, currency_name: e.target.value })}
+          onChange={(e) => setForm({...form, currency_name: e.target.value})}
           disabled={isView || loading}
           type="text"
           minLength="1"
@@ -194,13 +194,13 @@ function CurrencyForm(props) {
         />
         <FormInputControl
           label="Currency Symbol"
-          labelRequired="label-required" 
+          labelRequired="label-required"
           value={form.currency_symbol}
           name="currency_symbol"
           cl="4"
           cr="6"
           onChange={(e) =>
-            setForm({ ...form, currency_symbol: e.target.value })
+            setForm({...form, currency_symbol: e.target.value})
           }
           disabled={isView || loading}
           type="text"
@@ -217,7 +217,7 @@ function CurrencyForm(props) {
               value="Before"
               disabled={isView || loading}
               checked={form.position === "Before"}
-              onChange={(e) => setForm({ ...form, position: e.target.value })}
+              onChange={(e) => setForm({...form, position: e.target.value})}
             />
             <label className="form-check-label" htmlFor="csp-1">
               Before
@@ -232,7 +232,7 @@ function CurrencyForm(props) {
               value="After"
               disabled={isView || loading}
               checked={form.position === "After"}
-              onChange={(e) => setForm({ ...form, position: e.target.value })}
+              onChange={(e) => setForm({...form, position: e.target.value})}
             />
             <label className="form-check-label" htmlFor="csp-2">
               After
@@ -246,7 +246,7 @@ function CurrencyForm(props) {
           cl="4"
           cr="6"
           onChange={(e) =>
-            setForm({ ...form, minor_unit_name: e.target.value })
+            setForm({...form, minor_unit_name: e.target.value})
           }
           disabled={isView || loading}
           type="text"
@@ -259,7 +259,7 @@ function CurrencyForm(props) {
           name="minor_unit"
           cl="4"
           cr="6"
-          onChange={(e) => setForm({ ...form, minor_unit: parseInt(e.target.value) })}
+          onChange={(e) => setForm({...form, minor_unit: parseInt(e.target.value)})}
           disabled={isView || loading}
           type="number"
           min="0"
@@ -272,7 +272,7 @@ function CurrencyForm(props) {
           cl="4"
           cr="6"
           onChange={(e) =>
-            setForm({ ...form, standard_precision: parseInt(e.target.value) })
+            setForm({...form, standard_precision: parseInt(e.target.value)})
           }
           disabled={isView || loading}
           type="number"
@@ -286,7 +286,7 @@ function CurrencyForm(props) {
           cl="4"
           cr="6"
           onChange={(e) =>
-            setForm({ ...form, price_precision: parseInt(e.target.value) })
+            setForm({...form, price_precision: parseInt(e.target.value)})
           }
           disabled={isView || loading}
           type="number"
@@ -298,12 +298,12 @@ function CurrencyForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Currency Code"
-          labelRequired="label-required" 
+          labelRequired="label-required"
           value={form.currency_code}
           name="currency_code"
           cl="5"
           cr="6"
-          onChange={(e) => setForm({ ...form, currency_code: e.target.value })}
+          onChange={(e) => setForm({...form, currency_code: e.target.value})}
           disabled={isView || loading}
           type="text"
           minLength="3"
@@ -312,12 +312,12 @@ function CurrencyForm(props) {
         />
         <FormInputControl
           label="Numeric Code"
-          labelRequired="label-required" 
+          labelRequired="label-required"
           value={form.numeric_code}
           name="numeric_code"
           cl="5"
           cr="6"
-          onChange={(e) => setForm({ ...form, numeric_code: e.target.value })}
+          onChange={(e) => setForm({...form, numeric_code: e.target.value})}
           disabled={isView || loading}
           type="text"
           minLength="3"

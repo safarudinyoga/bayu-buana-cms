@@ -1,21 +1,23 @@
-import React, { Component } from "react"
 import TableHeader from "components/table/table-header"
-import "datatables.net-bs4/css/dataTables.bootstrap4.css"
-import $ from "jquery"
-import { withRouter } from "react-router"
+import Api from "config/api"
 import "datatables.net-bs4"
+import "datatables.net-bs4/css/dataTables.bootstrap4.css"
 import "datatables.net-buttons-bs4"
-import "datatables.net-buttons/js/dataTables.buttons"
 import "datatables.net-buttons/js/buttons.flash"
 import "datatables.net-buttons/js/buttons.html5"
 import "datatables.net-buttons/js/buttons.print"
+import "datatables.net-buttons/js/dataTables.buttons"
 import "datatables.net-colreorder-bs4"
-import "datatables.net-rowreorder-bs4"
 import "datatables.net-responsive-bs4"
+import "datatables.net-rowreorder-bs4"
 import "datatables.net-rowreorder-bs4/css/rowReorder.bootstrap4.css"
-import "./bb-data-table.css"
+import $ from "jquery"
 import JSZip from "jszip"
-import Api from "config/api"
+import React, {Component} from "react"
+import {Button, Modal, ModalBody, ModalFooter} from "react-bootstrap"
+import ModalHeader from "react-bootstrap/esm/ModalHeader"
+import {withRouter} from "react-router"
+import "./bb-data-table.css"
 
 window.JSZip = JSZip
 
@@ -26,10 +28,13 @@ class BBDataTable extends Component {
     this.wrapper = React.createRef()
     this.dt = null
     this.state = {
+      id: null,
+      deleteType: null,
       dt: null,
       selected: [],
       status: "0",
       extraFilters: this.props.filters || [],
+      isOpen: false,
     }
     this.inProgress = false
 
@@ -39,7 +44,7 @@ class BBDataTable extends Component {
   componentDidMount() {
     try {
       this.init()
-    } catch (e) {}
+    } catch (e) { }
   }
 
   init() {
@@ -52,10 +57,9 @@ class BBDataTable extends Component {
       title: '<input type="checkbox" class="select-checkbox-all"/>',
       render: function (val, display, row) {
         return (
-          '<i class="fas fa-ellipsis-v float-left row-handle"></i> <input type="checkbox" data-id="' +
+          '<svg class="float-left row-handle" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none"><rect id="backgroundrect" width="100%" height="100%" x="0" y="0" fill="none" stroke="none"/><path d="M7.098360577225684,13 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 z" fill="#707070" id="svg_1" class=""/><path d="M11.901639938354492,13 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 z" fill="#707070" id="svg_2" class=""/></svg> <input type="checkbox" data-id="' +
           row.id +
           '" class="select-checkbox-item"/>'
-          
         )
       },
     })
@@ -69,12 +73,12 @@ class BBDataTable extends Component {
           visibleColumns.push(i)
         }
       }
-    } catch (e) {}
+    } catch (e) { }
 
     columns.push({
       searchable: false,
       orderable: false,
-      title: "Action",
+      title: "Actions",
       render: function (value, display, row) {
         return (
           '<a href="#" class="table-row-action-item" data-action="edit" data-id="' +
@@ -103,7 +107,10 @@ class BBDataTable extends Component {
         processing: true,
         displayLength: 10,
         displayStart: 0,
-        lengthMenu: [[10, 25, 50, 100, -1],[10, 25, 50, 100, "All"]],
+        lengthMenu: [
+          [10, 25, 50, 100, -1],
+          [10, 25, 50, 100, "All"],
+        ],
         keys: true,
         destroy: true,
         ajax: {
@@ -120,43 +127,43 @@ class BBDataTable extends Component {
               if (typeof json.total_elements === "number") {
                 recordFiltered = json.total_elements
               }
-            } catch (e) {}
+            } catch (e) { }
 
             try {
               if (typeof json.data.data.items === "object") {
                 recordTotal = json.data.data.items.length
               }
-            } catch (e) {}
+            } catch (e) { }
 
             try {
               if (typeof json.data.items === "object") {
                 recordTotal = json.data.items.length
               }
-            } catch (e) {}
+            } catch (e) { }
 
             try {
               if (typeof json.data.total_items === "number") {
                 recordFiltered = json.data.total_items
               }
-            } catch (e) {}
+            } catch (e) { }
 
             try {
               if (typeof json.data.total === "number") {
                 recordFiltered = json.data.total
               }
-            } catch (e) {}
+            } catch (e) { }
 
             try {
               if (typeof json.total === "number") {
                 recordFiltered = json.total
               }
-            } catch (e) {}
+            } catch (e) { }
 
             try {
               if (typeof json.total_count === "number") {
                 recordFiltered = json.total_count
               }
-            } catch (e) {}
+            } catch (e) { }
 
             var items = []
             if (typeof json.content === "object") {
@@ -168,7 +175,7 @@ class BBDataTable extends Component {
                 if (typeof json.data.data.items === "object") {
                   items = json.data.data.items
                 }
-              } catch (e) {}
+              } catch (e) { }
             }
 
             if (!items.length) {
@@ -176,7 +183,7 @@ class BBDataTable extends Component {
                 if (typeof json.data.items === "object") {
                   items = json.data.items
                 }
-              } catch (e) {}
+              } catch (e) { }
             }
 
             if (!items.length) {
@@ -187,7 +194,7 @@ class BBDataTable extends Component {
                 ) {
                   items = json.items
                 }
-              } catch (e) {}
+              } catch (e) { }
             }
 
             if (!items.length) {
@@ -198,7 +205,7 @@ class BBDataTable extends Component {
                 ) {
                   items = json.data
                 }
-              } catch (e) {}
+              } catch (e) { }
             }
 
             if (!items.length) {
@@ -209,7 +216,7 @@ class BBDataTable extends Component {
                 ) {
                   items = json.data.data
                 }
-              } catch (e) {}
+              } catch (e) { }
             }
 
             if (!recordTotal) {
@@ -235,13 +242,13 @@ class BBDataTable extends Component {
               if (!pageStartAt) {
                 pageStartAt = 0
               }
-            } catch (e) {}
+            } catch (e) { }
             try {
               searchKey = this.props.searchKey
               if (!searchKey) {
                 searchKey = null
               }
-            } catch (e) {}
+            } catch (e) { }
             try {
               filters = JSON.parse(JSON.stringify(this.props.filters || []))
               if (!filters) {
@@ -256,21 +263,21 @@ class BBDataTable extends Component {
                 }
                 filters.push(this.state.extraFilters)
               }
-            } catch (e) {}
+            } catch (e) { }
             try {
               searchDefault = this.props.searchDefault
               if (!searchDefault) {
                 searchDefault = ""
               }
-            } catch (e) {}
+            } catch (e) { }
             try {
               simpleSort = this.props.simpleSort
               simpleSort = simpleSort === "true" || simpleSort === true
-            } catch (e) {}
+            } catch (e) { }
 
             try {
               extraSorts = this.props.sorts
-            } catch (e) {}
+            } catch (e) { }
 
             if (searchKey) {
               overrideParams[searchKey] = searchDefault
@@ -337,7 +344,7 @@ class BBDataTable extends Component {
                 }
                 overrideParams.filters = "[" + extraFilters.join(",") + "]"
               }
-            } catch (e) {}
+            } catch (e) { }
 
             return overrideParams
           },
@@ -355,10 +362,16 @@ class BBDataTable extends Component {
               columns: visibleColumns,
             },
           },
+          {
+            extend: "csv",
+            exportOptions: {
+              columns: visibleColumns,
+            },
+          },
         ],
         rowReorder: {
           selector: ".row-handle",
-          update: false
+          update: false,
         },
         responsive: true,
         autoWidth: false,
@@ -397,14 +410,29 @@ class BBDataTable extends Component {
           infoFiltered: "",
           loadingRecords: "Loading ...",
           processing: "<i class='fa fa-spin fa-circle-notch'></i> Loading...",
-          zeroRecords: "No record found",
-          emptyTable: "No record found",
+          zeroRecords: "No " + this.props.title + " found",
+          emptyTable: this.props.emptyTable
+            ? this.props.emptyTable
+            : "No " + this.props.title + " found",
           lengthMenu: "_MENU_",
         },
         fnDrawCallback: (t) => {
           let wrapper = $(".dataTables_paginate", t.nTableWrapper)
-          wrapper.append('<span class="float-right mt-2 mr-2 text-label-input">Page: </span>')
+          wrapper.append(
+            '<span class="float-right mt-2 mr-2 text-label-input">Page: </span>',
+          )
           $(".pagination", wrapper).addClass("float-right")
+
+          // Hide pagination if empty data
+          if (t._iDisplayLength > t.fnRecordsDisplay()) {
+            $(t.nTableWrapper).find(".dataTables_length").hide()
+            $(t.nTableWrapper).find(".dataTables_info").hide()
+            $(t.nTableWrapper).find(".dataTables_paginate").hide()
+          } else {
+            $(t.nTableWrapper).find(".dataTables_length").show()
+            $(t.nTableWrapper).find(".dataTables_info").show()
+            $(t.nTableWrapper).find(".dataTables_paginate").show()
+          }
         },
       })
 
@@ -415,7 +443,7 @@ class BBDataTable extends Component {
               dt.responsive.rebuild()
               dt.responsive.recalc()
               dt.columns.adjust().draw()
-            } catch (e) {}
+            } catch (e) { }
           }
         }, 500)
       })
@@ -426,7 +454,7 @@ class BBDataTable extends Component {
         this.setState({
           dt: dt,
         })
-      } catch (e) {}
+      } catch (e) { }
     }
 
     setTimeout(() => initialize(), 100)
@@ -435,7 +463,7 @@ class BBDataTable extends Component {
   onSearch(value) {
     try {
       this.dt.search(value).draw()
-    } catch (e) {}
+    } catch (e) { }
   }
 
   onStatus(value) {
@@ -455,7 +483,7 @@ class BBDataTable extends Component {
       this.inProgress = false
       try {
         this.dt.ajax.reload()
-      } catch (e) {}
+      } catch (e) { }
     }, 100)
   }
 
@@ -476,12 +504,16 @@ class BBDataTable extends Component {
   onPrint() {
     try {
       this.dt.buttons(".buttons-print").trigger()
-    } catch (e) {}
+    } catch (e) { }
   }
 
   onDownload() {
     try {
-      this.dt.buttons(".buttons-excel").trigger()
+      this.dt
+        .buttons(
+          this.props.btnDownload ? this.prop.btnDownload : ".buttons-excel",
+        )
+        .trigger()
     } catch (e) {
       console.log(e.message)
     }
@@ -500,8 +532,8 @@ class BBDataTable extends Component {
   deselectAll() {
     try {
       $(".select-checkbox-all:checked").prop("checked", false).trigger("change")
-    } catch (e) {}
-    this.setState({ selected: [] })
+    } catch (e) { }
+    this.setState({selected: []})
   }
 
   onStatusUpdate(status) {
@@ -527,28 +559,25 @@ class BBDataTable extends Component {
   }
 
   onRemoveSelected() {
-    this.api
-      .post(this.props.deleteEndpoint, this.state.selected)
-      .then(() => {
-        this.dt.ajax.reload()
-      })
-      .finally(() => {
-        this.deselectAll()
-      })
+    this.setState({
+      isOpen: true,
+      deleteType: "selected",
+      id: this.state.selected,
+    })
   }
 
   deleteAction(id) {
-    this.api
-      .delete(this.props.endpoint + "/" + id)
-      .finally(() => {
-        this.dt.ajax.reload()
-      })
+    this.setState({
+      isOpen: true,
+      deleteType: "single",
+      id: id,
+    })
   }
 
   componentWillUnmount() {
     try {
       this.dt.destroy()
-    } catch (e) {}
+    } catch (e) { }
   }
 
   componentDidUpdate() {
@@ -558,7 +587,7 @@ class BBDataTable extends Component {
     this.inProgress = true
     try {
       this.dt.ajax.reload()
-    } catch (e) {}
+    } catch (e) { }
     setTimeout(() => {
       this.inProgress = false
     }, 300)
@@ -585,7 +614,7 @@ class BBDataTable extends Component {
           selected: selected,
         })
         setTimeout(() => {
-            this.inProgress = false
+          this.inProgress = false
         }, 100)
       })
 
@@ -607,13 +636,13 @@ class BBDataTable extends Component {
           } else {
             $(".select-checkbox-all:not(:checked)", table).prop("checked", true)
           }
-        } catch (e) {}
+        } catch (e) { }
 
         this.setState({
           selected: selected,
         })
         setTimeout(() => {
-            this.inProgress = false
+          this.inProgress = false
         }, 100)
       })
 
@@ -639,6 +668,47 @@ class BBDataTable extends Component {
 
     return (
       <div ref={this.wrapper}>
+        <Modal show={this.state.isOpen}>
+          <ModalHeader>{'Delete ' + this.props.title}</ModalHeader>
+          <ModalBody>Are you sure you want to delete this?</ModalBody>
+          <ModalFooter>
+            <Button
+              variant="danger"
+              onClick={() => {
+                this.setState({
+                  isOpen: false,
+                });
+                if (this.deleteType === 'single') {
+                  this.api.delete(this.props.endpoint + "/" + this.state.id).finally(() => {
+                    this.dt.ajax.reload()
+                  })
+                } else {
+                  this.api
+                    .post(this.props.deleteEndpoint, this.state.selected)
+                    .then(() => {
+                      this.dt.ajax.reload()
+                    })
+                    .finally(() => {
+                      this.deselectAll()
+                    })
+                }
+              }}
+            >
+              Delete
+            </Button>
+            {' '}
+            <Button
+              variant="secondary"
+              onClick={() => {
+                this.setState({
+                  isOpen: false,
+                })
+              }}
+            >
+              Cancel
+            </Button>
+          </ModalFooter>
+        </Modal>
         <TableHeader
           {...this.props}
           selected={this.state.selected.length > 0}
@@ -652,10 +722,13 @@ class BBDataTable extends Component {
           onToggleFilter={this.onToggleFilter.bind(this)}
           onStatusUpdate={this.onStatusUpdate.bind(this)}
           onRemove={this.onRemoveSelected.bind(this)}
-        />
+        >
+          {this.props.children}
+        </TableHeader>
         <div>
           <table ref={this.table} className="table table-sm"></table>
         </div>
+        <div className="footer">©️ 2021 Bayu Buana Travel Services. All Rights Reserved</div>
       </div>
     )
   }

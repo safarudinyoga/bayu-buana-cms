@@ -72,7 +72,7 @@ function RoomAmenityTypeForm(props) {
     if (!formId) {
       docTitle = "Create Room Amenity Category"
     } else if (isView) {
-      docTitle = "Room Amenity Category Details"
+      docTitle = "View Room Amenity Category"
     }
 
     dispatch(

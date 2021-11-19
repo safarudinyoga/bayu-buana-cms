@@ -1,12 +1,12 @@
-import { withRouter } from "react-router"
-import React, { useEffect, useState } from "react"
-import Api from "config/api"
+import FormBuilder from "components/form/builder"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
-import FormBuilder from "components/form/builder"
+import Api from "config/api"
 import useQuery from "lib/query"
-import { useDispatch } from "react-redux"
-import { setUIParams } from "redux/ui-store"
+import React, {useEffect, useState} from "react"
+import {useDispatch} from "react-redux"
+import {withRouter} from "react-router"
+import {setUIParams} from "redux/ui-store"
 
 const endpoint = "/master/hotel-brands"
 const backUrl = "/master/hotel-brands"
@@ -52,7 +52,7 @@ function HotelBrandForm(props) {
     if (!formId) {
       docTitle = "Create Hotel Brand"
     } else if (isView) {
-      docTitle = "Hotel Brand Details"
+      docTitle = "View Hotel Brand"
     }
 
     dispatch(
@@ -64,6 +64,7 @@ function HotelBrandForm(props) {
             text: "Master Data Management",
           },
           {
+            link: backUrl,
             text: "Hotel Brands",
           },
           {
@@ -76,14 +77,14 @@ function HotelBrandForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
-      } catch (e) {}
+      } catch (e) { }
 
       try {
         let res = await api.get(endpoint + "/" + formId + "/translations", {
           size: 50,
         })
         setTranslations(res.data.items)
-      } catch (e) {}
+      } catch (e) { }
       setLoading(false)
     }
   }, [])
@@ -129,13 +130,13 @@ function HotelBrandForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Hotel Brand Name"
-          labelRequired="label-required" 
+          labelRequired="label-required"
           value={form.hotel_brand_name}
           name="hotel_brand_name"
           cl="3"
           cr="6"
           onChange={(e) =>
-            setForm({ ...form, hotel_brand_name: e.target.value })
+            setForm({...form, hotel_brand_name: e.target.value})
           }
           disabled={isView || loading}
           type="text"
@@ -147,13 +148,13 @@ function HotelBrandForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Hotel Brand Code"
-          labelRequired="label-required" 
+          labelRequired="label-required"
           value={form.hotel_brand_code}
           name="hotel_brand_code"
           cl="5"
           cr="6"
           onChange={(e) =>
-            setForm({ ...form, hotel_brand_code: e.target.value })
+            setForm({...form, hotel_brand_code: e.target.value})
           }
           disabled={isView || loading}
           type="text"

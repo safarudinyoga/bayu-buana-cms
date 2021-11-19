@@ -1,12 +1,12 @@
-import { withRouter } from "react-router"
-import React, { useEffect, useState } from "react"
+import {withRouter} from "react-router"
+import React, {useEffect, useState} from "react"
 import Api from "config/api"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
 import FormBuilder from "components/form/builder"
 import useQuery from "lib/query"
-import { useDispatch } from "react-redux"
-import { setUIParams } from "redux/ui-store"
+import {useDispatch} from "react-redux"
+import {setUIParams} from "redux/ui-store"
 import FormInputWrapper from "components/form/input-wrapper"
 
 const endpoint = "/master/languages"
@@ -79,7 +79,7 @@ function LanguageForm(props) {
     if (!formId) {
       docTitle = "Create Language"
     } else if (isView) {
-      docTitle = "Language Details"
+      docTitle = "View Language"
     }
 
     dispatch(
@@ -103,14 +103,14 @@ function LanguageForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
-      } catch (e) {}
+      } catch (e) { }
 
       try {
         let res = await api.get(endpoint + "/" + formId + "/translations", {
           size: 50,
         })
         setTranslations(res.data.items)
-      } catch (e) {}
+      } catch (e) { }
       setLoading(false)
     }
   }, [])
@@ -132,8 +132,8 @@ function LanguageForm(props) {
       }
       if (!form.language_asset) {
         form.language_asset = null
-      }else{
-        if(!form.language_asset.multimedia_description_id){
+      } else {
+        if (!form.language_asset.multimedia_description_id) {
           form.language_asset = null
         }
       }
@@ -166,7 +166,7 @@ function LanguageForm(props) {
           },
         })
       }
-    } catch (e) {}
+    } catch (e) { }
   }
 
   return (
@@ -184,12 +184,12 @@ function LanguageForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Language Name"
-          labelRequired="label-required" 
+          labelRequired="label-required"
           value={form.language_name}
           name="language_name"
           cl="4"
           cr="6"
-          onChange={(e) => setForm({ ...form, language_name: e.target.value })}
+          onChange={(e) => setForm({...form, language_name: e.target.value})}
           disabled={isView || loading}
           type="text"
           minLength="1"
@@ -197,13 +197,13 @@ function LanguageForm(props) {
         />
         <FormInputControl
           label="Language Native Name"
-          labelRequired="label-required" 
+          labelRequired="label-required"
           value={form.language_native_name}
           name="language_native_name"
           cl="4"
           cr="6"
           onChange={(e) =>
-            setForm({ ...form, language_native_name: e.target.value })
+            setForm({...form, language_native_name: e.target.value})
           }
           disabled={isView || loading}
           type="text"
@@ -222,8 +222,8 @@ function LanguageForm(props) {
                 accept=".png,.jpg,.jpeg"
               />
               {form.language_asset &&
-              form.language_asset.multimedia_description &&
-              form.language_asset.multimedia_description.url ? (
+                form.language_asset.multimedia_description &&
+                form.language_asset.multimedia_description.url ? (
                 <img
                   src={form.language_asset.multimedia_description.url}
                   className="img-fluid"
@@ -240,12 +240,12 @@ function LanguageForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Language Code"
-          labelRequired="label-required" 
+          labelRequired="label-required"
           value={form.language_code}
           name="language_code"
           cl="7"
           cr="5"
-          onChange={(e) => setForm({ ...form, language_code: e.target.value })}
+          onChange={(e) => setForm({...form, language_code: e.target.value})}
           disabled={isView || loading}
           type="text"
           minLength="2"
@@ -259,7 +259,7 @@ function LanguageForm(props) {
           cl="7"
           cr="5"
           onChange={(e) =>
-            setForm({ ...form, language_alpha_3_code: e.target.value })
+            setForm({...form, language_alpha_3_code: e.target.value})
           }
           disabled={isView || loading}
           type="text"

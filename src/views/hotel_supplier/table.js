@@ -1,9 +1,10 @@
-import React, { useEffect } from "react"
 import BBDataTable from "components/table/bb-data-table"
+import TableDropdownFilter from "components/table/table-dropdown-filter"
 import rowStatus from "lib/row-status"
-import { useDispatch } from "react-redux"
-import { setUIParams } from "redux/ui-store"
-import { renderColumn } from "lib/translation"
+import {renderColumn} from "lib/translation"
+import React, {useEffect, useState} from "react"
+import {useDispatch} from "react-redux"
+import {setUIParams} from "redux/ui-store"
 
 export default function HotelSupplierTable() {
   let dispatch = useDispatch()
@@ -23,7 +24,45 @@ export default function HotelSupplierTable() {
     )
   }, [])
 
-  let params = {
+  let [SelectedSupplierTypes, setSelectedSupplierTypes] = React.useState([])
+  let [SelectedSupplierTypeIds, setSelectedSupplierTypeIds] = React.useState([])
+
+  const onFilterChange = (e, values) => {
+    let ids = []
+    if (values && values.length > 0) {
+      for (let i in values) {
+        ids.push(values[i].id)
+      }
+    }
+    if (ids.length > 0) {
+      setParams({...params, filters: [["city_id", "in", ids]]})
+    } else {
+      setParams({...params, filters: []})
+    }
+    setSelectedSupplierTypes(values)
+    setSelectedSupplierTypeIds(ids)
+  }
+
+  const extraFilter = () => {
+    return (
+      <TableDropdownFilter
+        label="Supplier Type"
+        onChange={onFilterChange}
+        endpoint="/master/hotel-amenity-types"
+        column="hotel_amenity_type_name"
+        value={SelectedSupplierTypeIds}
+        data={SelectedSupplierTypes}
+      />
+    )
+  }
+
+  const onReset = () => {
+    setParams({...params, filters: []})
+    setSelectedSupplierTypes([])
+    setSelectedSupplierTypeIds([])
+  }
+
+  let [params, setParams] = useState({
     title: "Hotel Suppliers",
     baseRoute: "/master/hotel-suppliers/form",
     endpoint: "/master/hotel-suppliers",
@@ -56,6 +95,7 @@ export default function HotelSupplierTable() {
         visible: false,
       },
     ],
-  }
-  return <BBDataTable {...params} />
+  })
+
+  return <BBDataTable {...params} extraFilter={extraFilter} onReset={onReset} {...params} />
 }

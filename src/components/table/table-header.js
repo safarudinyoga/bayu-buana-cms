@@ -1,16 +1,60 @@
-import { Component } from "react"
 import downloadIcon from "assets/download.svg"
 import printIcon from "assets/printer.svg"
 import resetIcon from "assets/reset.svg"
-import { Link, withRouter } from "react-router-dom"
+import downIcon from "assets/icons/double-down.svg"
+import upIcon from "assets/icons/double-up.svg"
+import {Component} from "react"
+import {OverlayTrigger, Tooltip} from "react-bootstrap"
+import {Link, withRouter} from "react-router-dom"
+import "../button/button.css"
 import "./table-header.css"
-import '../button/button.css'
+import Select from "react-select";
 
+const customStyles = {
+  option: (provided, state) => ({
+    ...provided,
+    color: "black",
+    backgroundColor: state.isSelected ? "white" : "white",
+    padding: 10,       
+    fontFamily: "Segoe UI, Tahoma, Geneva, Verdana, sans-serif",
+    fontSize: 13,
+    "&:hover": {
+      // Overwrittes the different states of border
+      backgroundColor: state.isFocused ? "#027F71" : "",
+      color: state.isFocused ? "white" : "black"
+    }
+  }),
+  control: (base, state) => ({
+    ...base,          
+    height: 10,
+    width: 120,    
+    marginTop: -1,
+    marginLeft: 0,
+    border: "1px solid #DADEDF",
+    fontSize: 13,
+    backgroundColor: 'white',    
+    boxShadow: state.isFocused ? 0 : 0,
+    '&:hover': {
+       border: "1px solid #DADEDF",       
+    }           
+}),
+  singleValue: (provided, state) => {
+    const opacity = state.isDisabled ? 0.5 : 1;
+    const transition = "opacity 300ms";
+    return { ...provided, opacity, transition };
+  }
+};
+const options = [
+  { value: "0", label: "All" },
+  { value: "1", label: "Active" },
+  { value: "3", label: "Inactive" }
+];
 class TableHeader extends Component {
   constructor(props) {
     super(props)
     this.state = {
       showFilter: false,
+      showAdvancedOptions: true,
       searchValue: "",
       statusValue: "0",
     }
@@ -39,13 +83,11 @@ class TableHeader extends Component {
     })
   }
 
-  handleStatus(e) {
+  handleStatus(statusValue) {
     if (this.props.onStatus) {
-      this.props.onStatus(e.target.value)
+      this.props.onStatus(statusValue.value)
     }
-    this.setState({
-      statusValue: e.target.value,
-    })
+    this.setState({ statusValue });
   }
 
   handleReset() {
@@ -103,6 +145,8 @@ class TableHeader extends Component {
                     className="form-control"
                     placeholder="Search..."
                     onChange={this.handleSearch.bind(this)}
+                    maxLength={256}
+                    minLength={1}
                   />
                   <div className="input-group-append">
                     <span className="input-group-text">
@@ -111,54 +155,67 @@ class TableHeader extends Component {
                   </div>
                 </div>
               </div>
-              <div className="col-xs-12 col-sm-6">
-                <button
-                  onClick={this.toggleFilter}
-                  type="button"
-                  className="btn btn-link advanced-options-btn float-right-sm"
-                >
-                  Advanced Options {this.state.showFilter ? <span className="raquo-down"> &laquo;</span> : <span className="raquo-down"> &raquo;</span>}
-                </button>
-              </div>
+              {this.state.showAdvancedOptions && (
+                <div className="col-xs-12 col-sm-6">
+                  <button
+                    onClick={this.toggleFilter}
+                    type="button"
+                    className="btn btn-link advanced-options-btn float-right-sm"
+                  >
+                   <span className="mr-2">Advanced Options</span> {this.state.showFilter ? <img src={downIcon} alt="down" /> : <img src={upIcon} alt="up" />}
+                  </button>
+                </div>
+              )}
             </div>
           </div>
 
           <div className="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 order-sm-2 mt-2">
-            <button
-              type="button"
-              onClick={this.handleClick.bind(this)}
-              className="btn btn-warning float-right button-new"
-              title="Click to create"
+            <OverlayTrigger
+              placement="top"
+              overlay={<Tooltip>Click to create</Tooltip>}
             >
-              <span className="text-button-new">
-              <i className="fas fa-file-medical mr-2"></i>
-              Create New
-              </span>
-            </button>
-            <Link
-              to="#"
-              onClick={this.handlePrint.bind(this)}
-              className="btn-table-action float-right"
+              <button
+                type="button"
+                onClick={this.handleClick.bind(this)}
+                className="btn btn-warning float-right button-new"
+              >
+                <span className="text-button-new">
+                  <i className="fas fa-file-medical mr-2"></i>
+                  Create New
+                </span>
+              </button>
+            </OverlayTrigger>
+
+            <OverlayTrigger
+              placement="top"
+              overlay={<Tooltip>Click to print</Tooltip>}
             >
-              <img
-                src={printIcon}
-                className="img-circle"
-                alt="print"
-                title="Click to print"
-              />
-            </Link>
-            <Link
-              to="#"
-              onClick={this.handleDownload.bind(this)}
-              className="btn-table-action float-right"
+              <Link
+                to="#"
+                onClick={this.handlePrint.bind(this)}
+                className="btn-table-action float-right"
+              >
+                <img src={printIcon} className="img-circle" alt="print" />
+              </Link>
+            </OverlayTrigger>
+
+            <OverlayTrigger
+              placement="top"
+              overlay={<Tooltip>Click to download</Tooltip>}
             >
-              <img
-                src={downloadIcon}
-                className="img-circle"
-                alt="download"
-                title="Click to download"
-              />
-            </Link>
+              <Link
+                to="#"
+                onClick={this.handleDownload.bind(this)}
+                className="btn-table-action float-right"
+              >
+                <img
+                  src={downloadIcon}
+                  className="img-circle"
+                  alt="download"
+                  id="datatable-download"
+                />
+              </Link>
+            </OverlayTrigger>
           </div>
         </div>
         <div
@@ -178,30 +235,32 @@ class TableHeader extends Component {
                 ""
               )}
 
+              {this.props.children}
               <div className="col-xs-12 col-sm-12 col-md-6 col-lg-8">
                 <div className="row">
                   <div className="col-xs-4">
-                    <label className="text-label-filter">Status</label>
-                    <select
-                      className="custom-select custom-select-md mb-3 text-input-select"
-                      value={this.state.statusValue}
+                    <label className="text-label-filter">Status: </label>
+                    <Select 
+                      width='200px'                   
                       onChange={this.handleStatus.bind(this)}
-                    >
-                      <option className="text-input-select" value="0">All</option>
-                      <option className="text-input-select" value="1">Active</option>
-                      <option className="text-input-select" value="3">Inactive</option>
-                    </select>
+                      styles={customStyles} 
+                      options={options}/>
                   </div>
                 </div>
               </div>
             </div>
-            <Link
-              to="#"
-              onClick={this.handleReset.bind(this)}
-              className="btn-table-action btn-table-action-reset"
+            <OverlayTrigger
+              placement="top"
+              overlay={<Tooltip>Reset</Tooltip>}
             >
-              <img src={resetIcon} className="img-circle" alt="reset" />
-            </Link>
+              <Link
+                to="#"
+                onClick={this.handleReset.bind(this)}
+                className="btn-table-action btn-table-action-reset"
+              >
+                <img src={resetIcon} className="img-circle" alt="reset" />
+              </Link>
+            </OverlayTrigger>
           </div>
         </div>
 
@@ -209,14 +268,14 @@ class TableHeader extends Component {
           className={this.props.selected ? "container-fluid mt-2" : "d-none"}
         >
           <div className="row">
-            <div className="col-xs-12">
+            <div className="col-xs-12 d-flex flex-row">
               <button
                 type="button"
                 className="btn btn-default textButtonSave dropdown-toggle btn-table-action-dropdown py-2"
                 data-toggle="dropdown"
                 aria-expanded="false"
               >
-                UPDATE STATUS
+                Update Status
               </button>
               <div className="dropdown-menu shadow-none">
                 <Link
@@ -239,7 +298,9 @@ class TableHeader extends Component {
                 type="button"
                 className="btn btn-default textButtonSave bg-dark-green p-2 ml-2"
               >
-                REMOVE {(this.props.title || "selected").toUpperCase()}
+                Remove {(this.props.title || "selected").split(' ')
+                  .map(w => w[0].toUpperCase() + w.substr(1).toLowerCase())
+                  .join(' ')}
               </button>
             </div>
           </div>

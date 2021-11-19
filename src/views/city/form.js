@@ -58,7 +58,7 @@ function CityForm(props) {
     if (!formId) {
       docTitle = "Create City"
     } else if (isView) {
-      docTitle = "City Details"
+      docTitle = "View City"
     }
 
     dispatch(

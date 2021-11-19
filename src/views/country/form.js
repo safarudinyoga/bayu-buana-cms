@@ -1,13 +1,13 @@
-import { withRouter } from "react-router"
-import React, { useEffect, useState } from "react"
+import {withRouter} from "react-router"
+import React, {useEffect, useState} from "react"
 import Api from "config/api"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
 import FormBuilder from "components/form/builder"
 import FormInputSelectAjax from "components/form/input-select-ajax"
 import useQuery from "lib/query"
-import { useDispatch } from "react-redux"
-import { setUIParams } from "redux/ui-store"
+import {useDispatch} from "react-redux"
+import {setUIParams} from "redux/ui-store"
 
 const endpoint = "/master/countries"
 const backUrl = "/master/countries"
@@ -89,7 +89,7 @@ function CountryForm(props) {
     if (!formId) {
       docTitle = "Create Country"
     } else if (isView) {
-      docTitle = "Country Details"
+      docTitle = "View Country"
     }
 
     dispatch(
@@ -129,14 +129,14 @@ function CountryForm(props) {
         if (res.data.language) {
           setLanguageData([{...res.data.language, text: res.data.language.language_name}])
         }
-      } catch (e) {}
+      } catch (e) { }
 
       try {
         let res = await api.get(endpoint + "/" + formId + "/translations", {
           size: 50,
         })
         setTranslations(res.data.items)
-      } catch (e) {}
+      } catch (e) { }
       setLoading(false)
     }
   }, [])
@@ -205,7 +205,7 @@ function CountryForm(props) {
           name="country_name"
           cl="3"
           cr="6"
-          onChange={(e) => setForm({ ...form, country_name: e.target.value })}
+          onChange={(e) => setForm({...form, country_name: e.target.value})}
           disabled={isView || loading}
           type="text"
           minLength="1"
@@ -221,7 +221,7 @@ function CountryForm(props) {
           column="zone_name"
           data={timeZoneData}
           onChange={(e) =>
-            setForm({ ...form, timezone_id: e.target.value || null })
+            setForm({...form, timezone_id: e.target.value || null})
           }
           disabled={isView || loading}
           type="select"
@@ -238,7 +238,7 @@ function CountryForm(props) {
           column="currency_name"
           data={currencyData}
           onChange={(e) =>
-            setForm({ ...form, currency_id: e.target.value || null })
+            setForm({...form, currency_id: e.target.value || null})
           }
           disabled={isView || loading}
           type="select"
@@ -251,7 +251,7 @@ function CountryForm(props) {
           name="nationality"
           cl="3"
           cr="6"
-          onChange={(e) => setForm({ ...form, nationality: e.target.value })}
+          onChange={(e) => setForm({...form, nationality: e.target.value})}
           disabled={isView || loading}
           type="text"
           minLength="1"
@@ -268,7 +268,7 @@ function CountryForm(props) {
           column="region_name"
           data={regionData}
           onChange={(e) =>
-            setForm({ ...form, region_id: e.target.value || null })
+            setForm({...form, region_id: e.target.value || null})
           }
           disabled={isView || loading}
           type="select"
@@ -285,7 +285,7 @@ function CountryForm(props) {
           column="language_name"
           data={languageData}
           onChange={(e) =>
-            setForm({ ...form, language_id: e.target.value || null })
+            setForm({...form, language_id: e.target.value || null})
           }
           disabled={isView || loading}
           type="select"
@@ -303,7 +303,7 @@ function CountryForm(props) {
           name="country_code"
           cl="7"
           cr="5"
-          onChange={(e) => setForm({ ...form, country_code: e.target.value })}
+          onChange={(e) => setForm({...form, country_code: e.target.value})}
           disabled={isView || loading}
           type="text"
           minLength="2"
@@ -316,7 +316,7 @@ function CountryForm(props) {
           name="country_alpha_3_code"
           cl="7"
           cr="5"
-          onChange={(e) => setForm({ ...form, country_alpha_3_code: e.target.value })}
+          onChange={(e) => setForm({...form, country_alpha_3_code: e.target.value})}
           disabled={isView || loading}
           type="text"
           minLength="3"
@@ -329,7 +329,7 @@ function CountryForm(props) {
           name="country_access_code"
           cl="7"
           cr="5"
-          onChange={(e) => setForm({ ...form, country_access_code: e.target.value })}
+          onChange={(e) => setForm({...form, country_access_code: e.target.value})}
           disabled={isView || loading}
           type="text"
           minLength="3"
@@ -342,7 +342,7 @@ function CountryForm(props) {
           name="numeric_code"
           cl="7"
           cr="5"
-          onChange={(e) => setForm({ ...form, numeric_code: e.target.value })}
+          onChange={(e) => setForm({...form, numeric_code: e.target.value})}
           disabled={isView || loading}
           type="text"
           minLength="3"

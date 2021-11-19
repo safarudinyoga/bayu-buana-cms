@@ -1,13 +1,13 @@
-import { withRouter } from "react-router"
-import React, { useEffect, useState } from "react"
+import {withRouter} from "react-router"
+import React, {useEffect, useState} from "react"
 import Api from "config/api"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
 import FormBuilder from "components/form/builder"
 import FormInputWrapper from "components/form/input-wrapper"
 import useQuery from "lib/query"
-import { useDispatch } from "react-redux"
-import { setUIParams } from "redux/ui-store"
+import {useDispatch} from "react-redux"
+import {setUIParams} from "redux/ui-store"
 
 const endpoint = "/master/occupancy-types"
 const backUrl = "/master/occupancy-types"
@@ -22,9 +22,9 @@ function OccupancyTypeForm(props) {
   const [id, setId] = useState(null)
   const [form, setForm] = useState({
     occupancy_type_name: "",
-    occupancy_type_code:"",
+    occupancy_type_code: "",
     is_default: false,
-    occupancy:"",
+    occupancy: "",
   })
   const translationFields = [
     {
@@ -61,7 +61,7 @@ function OccupancyTypeForm(props) {
     if (!formId) {
       docTitle = "Create Occupancy Type"
     } else if (isView) {
-      docTitle = "Occupancy Type Details"
+      docTitle = "View Occupancy Type"
     }
 
     dispatch(
@@ -85,14 +85,14 @@ function OccupancyTypeForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
-      } catch (e) {}
+      } catch (e) { }
 
       try {
         let res = await api.get(endpoint + "/" + formId + "/translations", {
           size: 50,
         })
         setTranslations(res.data.items)
-      } catch (e) {}
+      } catch (e) { }
       setLoading(false)
     }
   }, [])
@@ -152,7 +152,7 @@ function OccupancyTypeForm(props) {
           cl="5"
           cr="7"
           onChange={(e) =>
-            setForm({ ...form, occupancy_type_name: e.target.value })
+            setForm({...form, occupancy_type_name: e.target.value})
           }
           disabled={isView || loading}
           type="text"
@@ -214,7 +214,7 @@ function OccupancyTypeForm(props) {
           name="occupancy"
           cl="5"
           cr="7"
-          onChange={(e) => setForm({ ...form, occupancy: +e.target.value })}
+          onChange={(e) => setForm({...form, occupancy: +e.target.value})}
           disabled={isView || loading}
           type="number"
           min="1"
@@ -231,7 +231,7 @@ function OccupancyTypeForm(props) {
           cl="6"
           cr="6"
           onChange={(e) =>
-            setForm({ ...form, occupancy_type_code: e.target.value })
+            setForm({...form, occupancy_type_code: e.target.value})
           }
           disabled={isView || loading}
           type="text"

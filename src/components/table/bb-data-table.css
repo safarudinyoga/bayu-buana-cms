@@ -76,3 +76,9 @@
 .dataTables_processing {
     display: none !important;
 }
+
+/* CheckBox Custom */
+input[type=checkbox] { 
+  accent-color: #027F71;
+  margin-top: 2px;
+}

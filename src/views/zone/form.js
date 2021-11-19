@@ -68,7 +68,7 @@ function ZoneForm(props) {
     if (!formId) {
       docTitle = "Create Zone"
     } else if (isView) {
-      docTitle = "Zone Details"
+      docTitle = "View Zone"
     }
 
     dispatch(

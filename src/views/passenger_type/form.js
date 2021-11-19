@@ -1,12 +1,12 @@
-import { withRouter } from "react-router"
-import React, { useEffect, useState } from "react"
+import {withRouter} from "react-router"
+import React, {useEffect, useState} from "react"
 import Api from "config/api"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
 import FormBuilder from "components/form/builder"
 import useQuery from "lib/query"
-import { useDispatch } from "react-redux"
-import { setUIParams } from "redux/ui-store"
+import {useDispatch} from "react-redux"
+import {setUIParams} from "redux/ui-store"
 
 const endpoint = "/master/passenger-types"
 const backUrl = "/master/passenger-types"
@@ -57,7 +57,7 @@ function PassengerTypeForm(props) {
     if (!formId) {
       docTitle = "Create Passenger Type"
     } else if (isView) {
-      docTitle = "Passenger Type Details"
+      docTitle = "View Passenger Type"
     }
 
     dispatch(
@@ -81,14 +81,14 @@ function PassengerTypeForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
-      } catch (e) {}
+      } catch (e) { }
 
       try {
         let res = await api.get(endpoint + "/" + formId + "/translations", {
           size: 50,
         })
         setTranslations(res.data.items)
-      } catch (e) {}
+      } catch (e) { }
       setLoading(false)
     }
   }, [])
@@ -137,13 +137,13 @@ function PassengerTypeForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Passenger Type Name"
-          
+
           value={form.passenger_type_name}
           name="passenger_type_name"
           cl="4"
           cr="6"
           onChange={(e) =>
-            setForm({ ...form, passenger_type_name: e.target.value })
+            setForm({...form, passenger_type_name: e.target.value})
           }
           disabled={isView || loading}
           type="text"
@@ -161,7 +161,7 @@ function PassengerTypeForm(props) {
           cl="6"
           cr="6"
           onChange={(e) =>
-            setForm({ ...form, passenger_type_code: parseInt(e.target.value) })
+            setForm({...form, passenger_type_code: parseInt(e.target.value)})
           }
           disabled={isView || loading}
           type="number"
@@ -176,7 +176,7 @@ function PassengerTypeForm(props) {
           cl="6"
           cr="6"
           onChange={(e) =>
-            setForm({ ...form, passenger_alpha_3_code: e.target.value })
+            setForm({...form, passenger_alpha_3_code: e.target.value})
           }
           disabled={isView || loading}
           type="text"

@@ -1,12 +1,12 @@
-import { withRouter } from "react-router"
-import React, { useEffect, useState } from "react"
+import {withRouter} from "react-router"
+import React, {useEffect, useState} from "react"
 import Api from "config/api"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
 import FormBuilder from "components/form/builder"
 import useQuery from "lib/query"
-import { useDispatch } from "react-redux"
-import { setUIParams } from "redux/ui-store"
+import {useDispatch} from "react-redux"
+import {setUIParams} from "redux/ui-store"
 
 const endpoint = "/master/cabin-types"
 const backUrl = "/master/cabin-types"
@@ -52,7 +52,7 @@ function CabinTypeForm(props) {
     if (!formId) {
       docTitle = "Create Cabin Type"
     } else if (isView) {
-      docTitle = "Cabin Type Details"
+      docTitle = "View Cabin Type"
     }
 
     dispatch(
@@ -76,14 +76,14 @@ function CabinTypeForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
-      } catch (e) {}
+      } catch (e) { }
 
       try {
         let res = await api.get(endpoint + "/" + formId + "/translations", {
           size: 50,
         })
         setTranslations(res.data.items)
-      } catch (e) {}
+      } catch (e) { }
       setLoading(false)
     }
   }, [])
@@ -129,13 +129,13 @@ function CabinTypeForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Cabin Type Name"
-          labelRequired="label-required" 
+          labelRequired="label-required"
           value={form.cabin_type_name}
           name="cabin_type_name"
           cl="3"
           cr="6"
           onChange={(e) =>
-            setForm({ ...form, cabin_type_name: e.target.value })
+            setForm({...form, cabin_type_name: e.target.value})
           }
           disabled={isView || loading}
           type="text"
@@ -147,13 +147,13 @@ function CabinTypeForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Cabin Type Code"
-          labelRequired="label-required" 
+          labelRequired="label-required"
           value={form.cabin_type_code}
           name="cabin_type_code"
           cl="6"
           cr="6"
           onChange={(e) =>
-            setForm({ ...form, cabin_type_code: e.target.value })
+            setForm({...form, cabin_type_code: e.target.value})
           }
           disabled={isView || loading}
           type="text"

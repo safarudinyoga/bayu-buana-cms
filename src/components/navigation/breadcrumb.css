@@ -1,14 +1,14 @@
 .breadcrumb-item {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-size: 11px;
   font-weight: normal;
-  color: #818181;  
+  color: #818181;
 }
 .breadcrumb-item > a {
   color: #818181;
 }
 .breadcrumb-item.active {
-  color: #E84D0E;
+  color: #e84d0e;
 }
 
 .breadcrumb-item + .breadcrumb-item::before {
@@ -18,10 +18,10 @@
   color: #818181;
 }
 
-.main-header-title {  
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+.main-header-title {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-size: 24px;
   font-weight: 600;
   color: #333333;
-  margin-bottom: 32px;
+  margin-bottom: 40px;
 }

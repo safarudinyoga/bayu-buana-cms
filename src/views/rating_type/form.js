@@ -1,12 +1,12 @@
-import { withRouter } from "react-router"
-import React, { useEffect, useState } from "react"
+import {withRouter} from "react-router"
+import React, {useEffect, useState} from "react"
 import Api from "config/api"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
 import FormBuilder from "components/form/builder"
 import useQuery from "lib/query"
-import { useDispatch } from "react-redux"
-import { setUIParams } from "redux/ui-store"
+import {useDispatch} from "react-redux"
+import {setUIParams} from "redux/ui-store"
 
 const endpoint = "/master/rating-types"
 const backUrl = "/master/rating-types"
@@ -75,7 +75,7 @@ function RatingTypeForm(props) {
     if (!formId) {
       docTitle = "Create Rating Type"
     } else if (isView) {
-      docTitle = "Rating Type Details"
+      docTitle = "View Rating Type"
     }
 
     dispatch(
@@ -99,14 +99,14 @@ function RatingTypeForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
-      } catch (e) {}
+      } catch (e) { }
 
       try {
         let res = await api.get(endpoint + "/" + formId + "/translations", {
           size: 50,
         })
         setTranslations(res.data.items)
-      } catch (e) {}
+      } catch (e) { }
       setLoading(false)
     }
   }, [])
@@ -170,7 +170,7 @@ function RatingTypeForm(props) {
           cl="3"
           cr="6"
           onChange={(e) =>
-            setForm({ ...form, rating_type_name: e.target.value })
+            setForm({...form, rating_type_name: e.target.value})
           }
           disabled={isView || loading}
           type="text"
@@ -184,7 +184,7 @@ function RatingTypeForm(props) {
           name="provider"
           cl="3"
           cr="6"
-          onChange={(e) => setForm({ ...form, provider: e.target.value })}
+          onChange={(e) => setForm({...form, provider: e.target.value})}
           disabled={isView || loading}
           type="text"
           minLength="1"
@@ -199,7 +199,7 @@ function RatingTypeForm(props) {
           cr="6"
           column="name"
           onChange={(e) =>
-            setForm({ ...form, rating_symbol: e.target.value || null })
+            setForm({...form, rating_symbol: e.target.value || null})
           }
           disabled={isView || loading}
           type="select"
@@ -220,7 +220,7 @@ function RatingTypeForm(props) {
           cl="3"
           cr="6"
           onChange={(e) =>
-            setForm({ ...form, scale: parseInt(e.target.value) })
+            setForm({...form, scale: parseInt(e.target.value)})
           }
           disabled={isView || loading}
           type="number"
@@ -238,7 +238,7 @@ function RatingTypeForm(props) {
           cl="5"
           cr="6"
           onChange={(e) =>
-            setForm({ ...form, rating_type_code: parseInt(e.target.value) })
+            setForm({...form, rating_type_code: parseInt(e.target.value)})
           }
           disabled={isView || loading}
           type="number"
