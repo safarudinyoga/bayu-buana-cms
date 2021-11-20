@@ -100,6 +100,12 @@ function DestinationGroupForm(props) {
     setLoading(true)
     let api = new Api()
     try {
+      if (!form.destination_group_name) {
+        form.destination_group_name = null
+      }
+      if (!form.destination_group_code) {
+        form.destination_group_code = null
+      }
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
       for (let i in translated) {
