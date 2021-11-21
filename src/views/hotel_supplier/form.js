@@ -2,12 +2,14 @@ import FormBuilder from "components/form/builder"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
 import Api from "config/api"
+import $ from "jquery"
 import useQuery from "lib/query"
 import React, {useEffect, useState} from "react"
 import {useDispatch} from "react-redux"
 import {withRouter} from "react-router"
 import {setUIParams} from "redux/ui-store"
 import FormInputSelectAjax from "../../components/form/input-select-ajax"
+import env from "../../config/environment"
 
 const endpoint = "/master/hotel-suppliers"
 const backUrl = "/master/hotel-suppliers"
@@ -15,6 +17,7 @@ const backUrl = "/master/hotel-suppliers"
 function HotelSupplierForm(props) {
   let dispatch = useDispatch()
 
+  let formId = props.match.params.id
   const isView = useQuery().get("action") === "view"
   const [formBuilder, setFormBuilder] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -38,11 +41,27 @@ function HotelSupplierForm(props) {
       required: true,
       minlength: 1,
       maxlength: 36,
+      checkName: formId == null
     },
     hotel_supplier_name: {
       required: true,
       minlength: 1,
       maxlength: 256,
+      checkName2: formId == null
+    },
+    supplier_type_id: {},
+  }
+
+  const validationMessages = {
+    hotel_supplier_code: {
+      required: "Please enter hotel supplier code",
+      minlength: "Hotel supplier code must be at least 1 characters",
+      maxlength: "Hotel supplier code cannot be longer than 36 characters",
+    },
+    hotel_supplier_name: {
+      required: "Please enter hotel supplier name",
+      minlength: "Hotel supplier name must be at least 1 characters",
+      maxlength: "Hotel supplier name cannot be longer than 256 characters",
     },
     supplier_type_id: {},
   }
@@ -88,6 +107,50 @@ function HotelSupplierForm(props) {
         setTranslations(res.data.items)
       } catch (e) { }
       setLoading(false)
+    } else {
+      $.validator.addMethod(
+        "checkName",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/hotel-suppliers?filters=["hotel_supplier_code","=","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
+
+          return req
+        },
+        "Code already exists",
+      )
+
+      $.validator.addMethod(
+        "checkName2",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/hotel-suppliers?filters=["hotel_supplier_name","=","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
+
+          return req
+        },
+        "Hotel Supplier Name already exists",
+      )
     }
   }, [])
 
@@ -128,6 +191,7 @@ function HotelSupplierForm(props) {
       alertMessage={"Incomplete data"}
       isValid={false}
       rules={validationRules}
+      validationMessages={validationMessages}
     >
       <FormHorizontal>
         <FormInputControl
