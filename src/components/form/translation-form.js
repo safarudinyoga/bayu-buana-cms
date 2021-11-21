@@ -81,6 +81,11 @@ export default class TranslationForm extends Component {
       this.translated[lang] = { language_code: lang }
     }
     this.translated[lang][name] = e.target.value
+    console.log(this.translated)
+  }
+
+  getKeyByValue(object, value) {
+    return Object.keys(object).find((key) => object[key] === value)
   }
 
   render() {
@@ -109,9 +114,20 @@ export default class TranslationForm extends Component {
             aria-controls={"tab-content-" + lang.language_code}
             aria-selected="true"
           >
-            <span className="text-label-input">
-            {lang.language_name}
-            </span>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <span className="text-label-input">{lang.language_name}</span>
+              {lang.language_code in this.translated ? (
+                ""
+              ) : (
+                <i class="fas fa-exclamation-triangle"></i>
+              )}
+            </div>
           </button>
         )
       })
@@ -173,7 +189,7 @@ export default class TranslationForm extends Component {
               onClick={this.togglePills.bind(this)}
             >
               <span className="text-label-input">
-              {this.state.currentLanguage}
+                {this.state.currentLanguage}
               </span>
             </button>
             <div
@@ -182,8 +198,8 @@ export default class TranslationForm extends Component {
               id="v-pills-tab"
               role="tablist"
               aria-orientation="vertical"
-            >            
-              {tabPills}            
+            >
+              {tabPills}
             </div>
           </div>
           <div className="col-xs-12 col-sm-8 col-md-9 translation-form-content card border shadow-none">

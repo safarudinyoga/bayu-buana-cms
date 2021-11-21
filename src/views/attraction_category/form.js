@@ -17,7 +17,7 @@ const backUrl = "/master/attraction-categories"
 function AttractionCategoryForm(props) {
   let api = new Api()
   let dispatch = useDispatch()
-
+  let formId = props.match.params.id
   const isView = useQuery().get("action") === "view"
   const [formBuilder, setFormBuilder] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -49,7 +49,7 @@ function AttractionCategoryForm(props) {
       required: true,
       minlength: 1,
       maxlength: 256,
-      checkName: true,
+      checkName: formId == null,
     },
     is_default: {
       required: true,
@@ -75,8 +75,6 @@ function AttractionCategoryForm(props) {
   }
 
   useEffect(async () => {
-    let formId = props.match.params.id
-
     let docTitle = "Edit Attraction Category"
     if (!formId) {
       docTitle = "Create Attraction Category"
@@ -114,29 +112,29 @@ function AttractionCategoryForm(props) {
         setTranslations(res.data.items)
       } catch (e) {}
       setLoading(false)
+    } else {
+      $.validator.addMethod(
+        "checkName",
+        function (value, element) {
+          var test = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/attraction-categories?filters=["attraction_category_name","=","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                test = false
+              } else {
+                test = true
+              }
+            },
+          })
+
+          return test
+        },
+        "Attraction Category Name already exists",
+      )
     }
-
-    $.validator.addMethod(
-      "checkName",
-      function (value, element) {
-        var test = false
-        $.ajax({
-          type: "GET",
-          async: false,
-          url: `${env.API_URL}/master/attraction-categories?filters=["attraction_category_name","=","${element.value}"]`,
-          success: function (res) {
-            if (res.items.length !== 0) {
-              test = false
-            } else {
-              test = true
-            }
-          },
-        })
-
-        return test
-      },
-      "Attraction Category Name already exists",
-    )
   }, [])
 
   useEffect(() => {
@@ -175,7 +173,7 @@ function AttractionCategoryForm(props) {
     } catch (e) {
       dispatch(
         setAlert({
-          message: `Failed to save this record.`,
+          message: `Failed to ${formId ? "update" : "save"} this record.`,
         }),
       )
     } finally {
@@ -183,7 +181,9 @@ function AttractionCategoryForm(props) {
       props.history.push(backUrl)
       dispatch(
         setAlert({
-          message: `Record ${form.attraction_category_name} has been successfully saved.`,
+          message: `Record ${
+            form.attraction_category_name
+          } has been successfully ${formId ? "updated" : "saved"}.`,
         }),
       )
     }
@@ -243,46 +243,54 @@ function AttractionCategoryForm(props) {
           cr="6"
           hint="Set is default"
         >
-          <div className="form-check form-check-inline">
-            <input
-              className="form-check-input"
-              type="radio"
-              name="is_default"
-              id="ac-1"
-              value={true}
-              disabled={isView || loading}
-              checked={form.is_default}
-              onChange={(e) =>
-                setForm({
-                  ...form,
-                  is_default: true,
-                })
-              }
-            />
-            <label className="form-check-label" htmlFor="ac-1">
-              Yes
-            </label>
-          </div>
-          <div className="form-check form-check-inline">
-            <input
-              className="form-check-input"
-              type="radio"
-              name="is_default"
-              id="ac-2"
-              value={false}
-              disabled={isView || loading}
-              checked={!form.is_default}
-              onChange={(e) =>
-                setForm({
-                  ...form,
-                  is_default: false,
-                })
-              }
-            />
-            <label className="form-check-label" htmlFor="ac-2">
-              No
-            </label>
-          </div>
+          {!isView ? (
+            <>
+              <div className="form-check form-check-inline">
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  name="is_default"
+                  id="ac-1"
+                  value={true}
+                  disabled={isView || loading}
+                  checked={form.is_default}
+                  onChange={(e) =>
+                    setForm({
+                      ...form,
+                      is_default: true,
+                    })
+                  }
+                />
+                <label className="form-check-label" htmlFor="ac-1">
+                  Yes
+                </label>
+              </div>
+              <div className="form-check form-check-inline">
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  name="is_default"
+                  id="ac-2"
+                  value={false}
+                  disabled={isView || loading}
+                  checked={!form.is_default}
+                  onChange={(e) =>
+                    setForm({
+                      ...form,
+                      is_default: false,
+                    })
+                  }
+                />
+                <label className="form-check-label" htmlFor="ac-2">
+                  No
+                </label>
+              </div>
+            </>
+          ) : form.is_default ? (
+            "Yes"
+          ) : (
+            "No"
+          )}
         </FormInputWrapper>
         <FormInputControl
           label="Description"
