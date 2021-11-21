@@ -54,12 +54,12 @@ function HotelSupplierForm(props) {
 
   const validationMessages = {
     hotel_supplier_code: {
-      required: "Please enter hotel supplier code",
+      required: "Hotel Supplier Code is required.",
       minlength: "Hotel supplier code must be at least 1 characters",
       maxlength: "Hotel supplier code cannot be longer than 36 characters",
     },
     hotel_supplier_name: {
-      required: "Please enter hotel supplier name",
+      required: "Hotel Supplier Name is required.",
       minlength: "Hotel supplier name must be at least 1 characters",
       maxlength: "Hotel supplier name cannot be longer than 256 characters",
     },

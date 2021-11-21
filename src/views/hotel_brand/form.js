@@ -51,12 +51,12 @@ function HotelBrandForm(props) {
 
   const validationMessages = {
     hotel_brand_code: {
-      required: "Hotel Brand Code is required",
+      required: "Hotel Brand Code is required.",
       minlength: "Hotel Brand Code must be at least 1 characters",
       maxlength: "Hotel Brand Code cannot be more than 36 characters",
     },
     hotel_brand_name: {
-      required: "Hotel Brand Name is required",
+      required: "Hotel Brand Name is required.",
       minlength: "Hotel Brand Name must be at least 1 characters",
       maxlength: "Hotel Brand Name cannot be more than 256 characters",
     },
