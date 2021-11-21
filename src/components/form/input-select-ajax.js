@@ -1,10 +1,10 @@
-import React, { Component } from "react"
-import FormInputControl from "./input-control"
-import $ from "jquery"
-import "select2"
-import "select2/dist/css/select2.css"
 import "@ttskch/select2-bootstrap4-theme/dist/select2-bootstrap4.css"
 import Api from "config/api"
+import $ from "jquery"
+import React, {Component} from "react"
+import "select2"
+import "select2/dist/css/select2.css"
+import FormInputControl from "./input-control"
 
 export default class FormInputSelectAjax extends Component {
   constructor(props) {
@@ -24,6 +24,7 @@ export default class FormInputSelectAjax extends Component {
     setTimeout(() => {
       try {
         let config = {
+          placeholder: this.props.placeholder || 'Please choose',
           theme: "bootstrap4",
           data: this.props.data,
         }
@@ -70,7 +71,7 @@ export default class FormInputSelectAjax extends Component {
               return
             }
             this.props.onChange(e, this.select2.select2("data"))
-            
+
           })
 
           setTimeout(() => {
@@ -95,7 +96,7 @@ export default class FormInputSelectAjax extends Component {
       if (el.is(".select2-hidden-accessible")) {
         el.off().select2("destroy")
       }
-    } catch (e) {}
+    } catch (e) { }
   }
 
   render() {
