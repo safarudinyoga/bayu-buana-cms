@@ -3,52 +3,53 @@ import printIcon from "assets/printer.svg"
 import resetIcon from "assets/reset.svg"
 import downIcon from "assets/icons/double-down.svg"
 import upIcon from "assets/icons/double-up.svg"
-import {Component} from "react"
-import {OverlayTrigger, Tooltip} from "react-bootstrap"
-import {Link, withRouter} from "react-router-dom"
+import { Component } from "react"
+import { OverlayTrigger, Tooltip } from "react-bootstrap"
+import { Link, withRouter } from "react-router-dom"
 import "../button/button.css"
 import "./table-header.css"
-import Select from "react-select";
+import Select from "react-select"
+import { debounce } from "throttle-debounce"
 
 const customStyles = {
   option: (provided, state) => ({
     ...provided,
     color: "black",
     backgroundColor: state.isSelected ? "white" : "white",
-    padding: 10,       
+    padding: 10,
     fontFamily: "Segoe UI, Tahoma, Geneva, Verdana, sans-serif",
     fontSize: 13,
     "&:hover": {
       // Overwrittes the different states of border
       backgroundColor: state.isFocused ? "#027F71" : "",
-      color: state.isFocused ? "white" : "black"
-    }
+      color: state.isFocused ? "white" : "black",
+    },
   }),
   control: (base, state) => ({
-    ...base,          
+    ...base,
     height: 10,
-    width: 120,    
+    width: 120,
     marginTop: -1,
     marginLeft: 0,
     border: "1px solid #DADEDF",
     fontSize: 13,
-    backgroundColor: 'white',    
+    backgroundColor: "white",
     boxShadow: state.isFocused ? 0 : 0,
-    '&:hover': {
-       border: "1px solid #DADEDF",       
-    }           
-}),
+    "&:hover": {
+      border: "1px solid #DADEDF",
+    },
+  }),
   singleValue: (provided, state) => {
-    const opacity = state.isDisabled ? 0.5 : 1;
-    const transition = "opacity 300ms";
-    return { ...provided, opacity, transition };
-  }
-};
+    const opacity = state.isDisabled ? 0.5 : 1
+    const transition = "opacity 300ms"
+    return { ...provided, opacity, transition }
+  },
+}
 const options = [
   { value: "0", label: "All" },
   { value: "1", label: "Active" },
-  { value: "3", label: "Inactive" }
-];
+  { value: "3", label: "Inactive" },
+]
 class TableHeader extends Component {
   constructor(props) {
     super(props)
@@ -87,7 +88,7 @@ class TableHeader extends Component {
     if (this.props.onStatus) {
       this.props.onStatus(statusValue.value)
     }
-    this.setState({ statusValue });
+    this.setState({ statusValue })
   }
 
   handleReset() {
@@ -162,7 +163,12 @@ class TableHeader extends Component {
                     type="button"
                     className="btn btn-link advanced-options-btn float-right-sm"
                   >
-                   <span className="mr-2">Advanced Options</span> {this.state.showFilter ? <img src={downIcon} alt="down" /> : <img src={upIcon} alt="up" />}
+                    <span className="mr-2">Advanced Options</span>{" "}
+                    {this.state.showFilter ? (
+                      <img src={downIcon} alt="down" />
+                    ) : (
+                      <img src={upIcon} alt="up" />
+                    )}
                   </button>
                 </div>
               )}
@@ -240,19 +246,17 @@ class TableHeader extends Component {
                 <div className="row">
                   <div className="col-xs-4">
                     <label className="text-label-filter">Status: </label>
-                    <Select 
-                      width='200px'                   
+                    <Select
+                      width="200px"
                       onChange={this.handleStatus.bind(this)}
-                      styles={customStyles} 
-                      options={options}/>
+                      styles={customStyles}
+                      options={options}
+                    />
                   </div>
                 </div>
               </div>
             </div>
-            <OverlayTrigger
-              placement="top"
-              overlay={<Tooltip>Reset</Tooltip>}
-            >
+            <OverlayTrigger placement="top" overlay={<Tooltip>Reset</Tooltip>}>
               <Link
                 to="#"
                 onClick={this.handleReset.bind(this)}
@@ -298,9 +302,11 @@ class TableHeader extends Component {
                 type="button"
                 className="btn btn-default textButtonSave bg-dark-green p-2 ml-2"
               >
-                REMOVE {(this.props.title || "selected").split(' ')
-                  .map(w => w[0].toUpperCase() + w.substr(1).toUpperCase())
-                  .join(' ')}
+                REMOVE{" "}
+                {(this.props.title || "selected")
+                  .split(" ")
+                  .map((w) => w[0].toUpperCase() + w.substr(1).toUpperCase())
+                  .join(" ")}
               </button>
             </div>
           </div>

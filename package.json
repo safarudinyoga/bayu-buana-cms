@@ -43,6 +43,7 @@
     "react-select": "^5.2.1",
     "react-svg": "^14.1.1",
     "select2": "^4.0",
+    "throttle-debounce": "^3.0.1",
     "use-debounce": "^7.0.1",
     "use-toggle-state": "^1.1.1",
     "web-vitals": "^1.0.1",
