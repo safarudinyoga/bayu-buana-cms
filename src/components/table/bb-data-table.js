@@ -17,7 +17,8 @@ import React, { Component } from "react"
 import { Button, Modal, ModalBody, ModalFooter } from "react-bootstrap"
 import ModalHeader from "react-bootstrap/esm/ModalHeader"
 import { withRouter } from "react-router"
-import { debounce } from "throttle-debounce"
+import { connect } from "react-redux"
+import { setAlert } from "redux/ui-store"
 import "./bb-data-table.css"
 
 window.JSZip = JSZip
@@ -81,6 +82,7 @@ class BBDataTable extends Component {
       orderable: false,
       title: "Actions",
       render: function (value, display, row) {
+        console.log(row)
         return (
           '<a href="javascript:void(0);" class="table-row-action-item" data-action="edit" data-id="' +
           row.id +
@@ -90,6 +92,8 @@ class BBDataTable extends Component {
           '" title="Click to view details"><i class="fa fa-eye"></i></a>' +
           '<a href="javascript:void(0);" class="table-row-action-item" data-action="delete" data-id="' +
           row.id +
+          '" data-name="' +
+          row.attraction_category_name +
           '" title="Click to delete"><i class="fa fa-trash"></i></a>'
         )
       },
@@ -567,11 +571,12 @@ class BBDataTable extends Component {
     })
   }
 
-  deleteAction(id) {
+  deleteAction(id, name) {
     this.setState({
       isOpen: true,
       deleteType: "single",
       id: id,
+      name: name,
     })
   }
 
@@ -653,6 +658,7 @@ class BBDataTable extends Component {
       .on("click", ".table-row-action-item", function (e) {
         e.preventDefault()
         let id = $(this).data("id")
+        let name = $(this).data("name")
         let base = me.props.baseRoute || ""
         switch ($(this).data("action")) {
           case "edit":
@@ -662,7 +668,7 @@ class BBDataTable extends Component {
             me.props.history.push(base + "/" + id + "?action=view")
             break
           default:
-            me.deleteAction.bind(me)(id)
+            me.deleteAction.bind(me)(id, name)
             break
         }
       })
@@ -682,6 +688,16 @@ class BBDataTable extends Component {
                 if (this.state.deleteType === "single") {
                   this.api
                     .delete(this.props.endpoint + "/" + this.state.id)
+                    .then(() => {
+                      this.props.setAlert({
+                        message: `Record ${this.state.name} was successfully deleted.`,
+                      })
+                    })
+                    .catch(function (error) {
+                      this.props.setAlert({
+                        message: `Failed to save this record.`,
+                      })
+                    })
                     .finally(() => {
                       this.dt.ajax.reload()
                     })
@@ -690,6 +706,14 @@ class BBDataTable extends Component {
                     .post(this.props.deleteEndpoint, this.state.selected)
                     .then(() => {
                       this.dt.ajax.reload()
+                      this.props.setAlert({
+                        message: `Record attraction category was successfully deleted.`,
+                      })
+                    })
+                    .catch(function (error) {
+                      this.props.setAlert({
+                        message: `Failed to save this record.`,
+                      })
                     })
                     .finally(() => {
                       this.deselectAll()
@@ -741,4 +765,17 @@ class BBDataTable extends Component {
   }
 }
 
-export default withRouter(BBDataTable)
+const mapStateToProps = ({ ui }) => {
+  return {
+    stateAlert: ui.alert,
+  }
+}
+
+const mapDispatchToProps = (dispatch) => ({
+  setAlert: (payload) => dispatch(setAlert(payload)),
+})
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(withRouter(BBDataTable))
