@@ -116,21 +116,21 @@ function AttractionCategoryForm(props) {
       $.validator.addMethod(
         "checkName",
         function (value, element) {
-          var test = false
+          var req = false
           $.ajax({
             type: "GET",
             async: false,
             url: `${env.API_URL}/master/attraction-categories?filters=["attraction_category_name","=","${element.value}"]`,
             success: function (res) {
               if (res.items.length !== 0) {
-                test = false
+                req = false
               } else {
-                test = true
+                req = true
               }
             },
           })
 
-          return test
+          return req
         },
         "Attraction Category Name already exists",
       )
