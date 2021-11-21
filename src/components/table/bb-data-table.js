@@ -77,12 +77,20 @@ class BBDataTable extends Component {
       }
     } catch (e) {}
 
+    const allowed = [this.props.recordName]
+
     columns.push({
       searchable: false,
       orderable: false,
       title: "Actions",
       render: function (value, display, row) {
-        console.log(row)
+        const filteredRecordName = Object.keys(row)
+          .filter((key) => allowed.includes(key))
+          .reduce((obj, key) => {
+            obj[key] = row[key]
+            return obj
+          }, {})
+
         return (
           '<a href="javascript:void(0);" class="table-row-action-item" data-action="edit" data-id="' +
           row.id +
@@ -93,7 +101,7 @@ class BBDataTable extends Component {
           '<a href="javascript:void(0);" class="table-row-action-item" data-action="delete" data-id="' +
           row.id +
           '" data-name="' +
-          row.attraction_category_name +
+          filteredRecordName[allowed] +
           '" title="Click to delete"><i class="fa fa-trash"></i></a>'
         )
       },
@@ -682,6 +690,7 @@ class BBDataTable extends Component {
             <Button
               variant="danger"
               onClick={() => {
+                console.log(this.state)
                 this.setState({
                   isOpen: false,
                 })
@@ -695,7 +704,7 @@ class BBDataTable extends Component {
                     })
                     .catch(function (error) {
                       this.props.setAlert({
-                        message: `Failed to save this record.`,
+                        message: `Record deletion failed.`,
                       })
                     })
                     .finally(() => {
@@ -707,12 +716,12 @@ class BBDataTable extends Component {
                     .then(() => {
                       this.dt.ajax.reload()
                       this.props.setAlert({
-                        message: `Record attraction category was successfully deleted.`,
+                        message: `Records was successfully deleted.`,
                       })
                     })
                     .catch(function (error) {
                       this.props.setAlert({
-                        message: `Failed to save this record.`,
+                        message: `Record deletion failed.`,
                       })
                     })
                     .finally(() => {

@@ -62,6 +62,7 @@ export default function AttractionCategoryTable() {
         visible: false,
       },
     ],
+    recordName: "attraction_category_name",
   }
   return <BBDataTable {...params} />
 }

@@ -7,7 +7,7 @@ import FormBuilder from "components/form/builder"
 import useQuery from "lib/query"
 import $ from "jquery"
 import { useDispatch } from "react-redux"
-import { setUIParams } from "redux/ui-store"
+import { setAlert, setUIParams } from "redux/ui-store"
 import env from "../../config/environment"
 
 const endpoint = "/master/cabin-types"
@@ -142,9 +142,21 @@ function CabinTypeForm(props) {
         await api.putOrPost(path, tl.id, tl)
       }
     } catch (e) {
+      dispatch(
+        setAlert({
+          message: `Failed to ${formId ? "update" : "save"} this record.`,
+        }),
+      )
     } finally {
       setLoading(false)
       props.history.push(backUrl)
+      dispatch(
+        setAlert({
+          message: `Record ${form.cabin_type_code} - ${
+            form.cabin_type_name
+          } has been successfully ${formId ? "updated" : "saved"}.`,
+        }),
+      )
     }
   }
 
