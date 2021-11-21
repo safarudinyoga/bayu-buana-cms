@@ -45,6 +45,7 @@ function CabinTypeForm(props) {
       required: true,
       minlength: 1,
       maxlength: 256,
+      checkName: formId == null,
     },
   }
 
@@ -118,6 +119,27 @@ function CabinTypeForm(props) {
           return req
         },
         "Code already exists",
+      )
+      $.validator.addMethod(
+        "checkName",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/cabin-types?filters=["cabin_type_name","=","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
+
+          return req
+        },
+        "Cabin Type Name already exists",
       )
     }
   }, [])
