@@ -1,3 +1,4 @@
+import React, { useEffect } from "react"
 import "@fortawesome/fontawesome-free/css/all.css"
 import "admin-lte"
 import "admin-lte/dist/css/adminlte.css"
@@ -82,7 +83,7 @@ import ZoneTable from "views/zone/table"
 import EmployeeTable from "views/employee/table"
 import EmployeeForm from "views/employee/form"
 
-function App() {
+const App = () => {
   document.title = "Bayu Buana"
   return (
     <Router>

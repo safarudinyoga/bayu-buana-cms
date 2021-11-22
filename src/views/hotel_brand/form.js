@@ -2,11 +2,13 @@ import FormBuilder from "components/form/builder"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
 import Api from "config/api"
+import $ from "jquery"
 import useQuery from "lib/query"
 import React, {useEffect, useState} from "react"
 import {useDispatch} from "react-redux"
 import {withRouter} from "react-router"
 import {setUIParams} from "redux/ui-store"
+import env from "../../config/environment"
 
 const endpoint = "/master/hotel-brands"
 const backUrl = "/master/hotel-brands"
@@ -15,6 +17,7 @@ function HotelBrandForm(props) {
   let dispatch = useDispatch()
 
   const isView = useQuery().get("action") === "view"
+  let formId = props.match.params.id
   const [formBuilder, setFormBuilder] = useState(null)
   const [loading, setLoading] = useState(true)
   const [translations, setTranslations] = useState([])
@@ -36,11 +39,26 @@ function HotelBrandForm(props) {
       required: true,
       minlength: 1,
       maxlength: 36,
+      checkName: formId == null
     },
     hotel_brand_name: {
       required: true,
       minlength: 1,
       maxlength: 256,
+      checkName2: formId == null
+    },
+  }
+
+  const validationMessages = {
+    hotel_brand_code: {
+      required: "Hotel Brand Code is required.",
+      minlength: "Hotel Brand Code must be at least 1 characters",
+      maxlength: "Hotel Brand Code cannot be more than 36 characters",
+    },
+    hotel_brand_name: {
+      required: "Hotel Brand Name is required.",
+      minlength: "Hotel Brand Name must be at least 1 characters",
+      maxlength: "Hotel Brand Name cannot be more than 256 characters",
     },
   }
 
@@ -60,7 +78,6 @@ function HotelBrandForm(props) {
         title: docTitle,
         breadcrumbs: [
           {
-            link: "/",
             text: "Master Data Management",
           },
           {
@@ -86,6 +103,50 @@ function HotelBrandForm(props) {
         setTranslations(res.data.items)
       } catch (e) { }
       setLoading(false)
+    } else {
+      $.validator.addMethod(
+        "checkName",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/hotel-brands?filters=["hotel_brand_code","=","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
+
+          return req
+        },
+        "Hotel Brand Code already exists",
+      )
+
+      $.validator.addMethod(
+        "checkName2",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/hotel-brands?filters=["hotel_brand_name","=","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
+
+          return req
+        },
+        "Hotel Brand Name already exists",
+      )
     }
   }, [])
 
@@ -126,6 +187,7 @@ function HotelBrandForm(props) {
       alertMessage={"Incomplete data"}
       isValid={false}
       rules={validationRules}
+      validationMessages={validationMessages}
     >
       <FormHorizontal>
         <FormInputControl

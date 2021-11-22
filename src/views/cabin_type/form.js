@@ -1,18 +1,21 @@
-import {withRouter} from "react-router"
-import React, {useEffect, useState} from "react"
+import { withRouter } from "react-router"
+import React, { useEffect, useState } from "react"
 import Api from "config/api"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
 import FormBuilder from "components/form/builder"
 import useQuery from "lib/query"
-import {useDispatch} from "react-redux"
-import {setUIParams} from "redux/ui-store"
+import $ from "jquery"
+import { useDispatch } from "react-redux"
+import { setAlert, setUIParams } from "redux/ui-store"
+import env from "../../config/environment"
 
 const endpoint = "/master/cabin-types"
 const backUrl = "/master/cabin-types"
 
 function CabinTypeForm(props) {
   let dispatch = useDispatch()
+  let formId = props.match.params.id
 
   const isView = useQuery().get("action") === "view"
   const [formBuilder, setFormBuilder] = useState(null)
@@ -36,17 +39,27 @@ function CabinTypeForm(props) {
       required: true,
       minlength: 1,
       maxlength: 36,
+      checkCode: formId == null,
     },
     cabin_type_name: {
       required: true,
       minlength: 1,
       maxlength: 256,
+      checkName: formId == null,
+    },
+  }
+
+  const validationMessages = {
+    cabin_type_code: {
+      required: "Cabin Type Code is required.",
+    },
+    cabin_type_name: {
+      required: "Cabin Type Name is required.",
     },
   }
 
   useEffect(async () => {
     let api = new Api()
-    let formId = props.match.params.id
 
     let docTitle = "Edit Cabin Type"
     if (!formId) {
@@ -76,15 +89,58 @@ function CabinTypeForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
-      } catch (e) { }
+      } catch (e) {}
 
       try {
         let res = await api.get(endpoint + "/" + formId + "/translations", {
           size: 50,
         })
         setTranslations(res.data.items)
-      } catch (e) { }
+      } catch (e) {}
       setLoading(false)
+    } else {
+      $.validator.addMethod(
+        "checkCode",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/cabin-types?filters=["cabin_type_code","=","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
+
+          return req
+        },
+        "Code already exists",
+      )
+      $.validator.addMethod(
+        "checkName",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/cabin-types?filters=["cabin_type_name","=","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
+
+          return req
+        },
+        "Cabin Type Name already exists",
+      )
     }
   }, [])
 
@@ -108,9 +164,21 @@ function CabinTypeForm(props) {
         await api.putOrPost(path, tl.id, tl)
       }
     } catch (e) {
+      dispatch(
+        setAlert({
+          message: `Failed to ${formId ? "update" : "save"} this record.`,
+        }),
+      )
     } finally {
       setLoading(false)
       props.history.push(backUrl)
+      dispatch(
+        setAlert({
+          message: `Record ${form.cabin_type_code} - ${
+            form.cabin_type_name
+          } has been successfully ${formId ? "updated" : "saved"}.`,
+        }),
+      )
     }
   }
 
@@ -125,6 +193,7 @@ function CabinTypeForm(props) {
       alertMessage={"Incomplete data"}
       isValid={false}
       rules={validationRules}
+      validationMessages={validationMessages}
     >
       <FormHorizontal>
         <FormInputControl
@@ -135,7 +204,7 @@ function CabinTypeForm(props) {
           cl="3"
           cr="6"
           onChange={(e) =>
-            setForm({...form, cabin_type_name: e.target.value})
+            setForm({ ...form, cabin_type_name: e.target.value })
           }
           disabled={isView || loading}
           type="text"
@@ -153,7 +222,7 @@ function CabinTypeForm(props) {
           cl="6"
           cr="6"
           onChange={(e) =>
-            setForm({...form, cabin_type_code: e.target.value})
+            setForm({ ...form, cabin_type_code: e.target.value })
           }
           disabled={isView || loading}
           type="text"

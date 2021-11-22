@@ -3,7 +3,7 @@ import BBDataTable from "components/table/bb-data-table"
 import rowStatus from "lib/row-status"
 import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
-import { renderColumn } from "lib/translation" 
+import { renderColumn } from "lib/translation"
 
 export default function CabinTypeTable() {
   let dispatch = useDispatch()
@@ -32,13 +32,13 @@ export default function CabinTypeTable() {
     deactivationEndpoint: "/master/batch-actions/deactivate/cabin-types",
     columns: [
       {
-        "title": "Cabin Type Code",
-        "data": "cabin_type_code"
+        title: "Cabin Type Code",
+        data: "cabin_type_code",
       },
       {
-        "title": "Cabin Type Name",
-        "data": "cabin_type_name",
-        "render": renderColumn('cabin_type','cabin_type_name')
+        title: "Cabin Type Name",
+        data: "cabin_type_name",
+        render: renderColumn("cabin_type", "cabin_type_name"),
       },
       {
         searchable: false,
@@ -47,11 +47,12 @@ export default function CabinTypeTable() {
         render: rowStatus,
       },
       {
-        "title": "Translated Cabin Type Name",
-        "data": "cabin_type_translation.cabin_type_name",
-        "visible": false
-      }
+        title: "Translated Cabin Type Name",
+        data: "cabin_type_translation.cabin_type_name",
+        visible: false,
+      },
     ],
+    recordName: "cabin_type_name",
   }
   return <BBDataTable {...params} />
 }
