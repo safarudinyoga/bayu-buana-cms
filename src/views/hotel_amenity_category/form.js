@@ -7,14 +7,14 @@ import FormBuilder from "components/form/builder"
 import FormInputWrapper from "components/form/input-wrapper"
 import useQuery from "lib/query"
 import {useDispatch} from "react-redux"
-import {setUIParams} from "redux/ui-store"
+import { setAlert, setUIParams } from "redux/ui-store"
 
 const endpoint = "/master/hotel-amenity-categories"
 const backUrl = "/master/hotel-amenity-categories"
 
 function HotelAmenityCategoryForm(props) {
   let dispatch = useDispatch()
-
+  let formId = props.match.params.id
   const isView = useQuery().get("action") === "view"
   const [formBuilder, setFormBuilder] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -57,6 +57,28 @@ function HotelAmenityCategoryForm(props) {
       minlength: 1,
       maxlength: 4000,
     },
+    hotel_amenity_category_asset:{
+      multimedia_description:{
+        url:{
+          required:true
+        }
+      }
+    }
+  }
+  const validationMessages = {
+    hotel_amenity_category_name: {
+      required: "Hotel Amenity Category Name is required.",
+    },
+    is_default: {
+      required: "Is Default is required.",
+    },
+    hotel_amenity_category_asset:{
+      multimedia_description:{
+        url:{
+          required:"Hotel Amenity Category Icon Image is required."
+        }
+      }
+    }
   }
 
   useEffect(async () => {
@@ -138,9 +160,21 @@ function HotelAmenityCategoryForm(props) {
         await api.putOrPost(path, tl.id, tl)
       }
     } catch (e) {
+      dispatch(
+          setAlert({
+            message: `Failed to ${formId ? "update" : "save"} this record.`,
+          }),
+      )
     } finally {
       setLoading(false)
       props.history.push(backUrl)
+      dispatch(
+          setAlert({
+            message: `Record ${
+                form.hotel_amenity_category_name
+            } has been successfully ${formId ? "updated" : "saved"}.`,
+          }),
+      )
     }
   }
   const doUpload = async (e) => {
@@ -171,6 +205,7 @@ function HotelAmenityCategoryForm(props) {
       alertMessage={"Incomplete data"}
       isValid={false}
       rules={validationRules}
+      validationMessages={validationMessages}
     >
       <FormHorizontal>
         <FormInputControl
