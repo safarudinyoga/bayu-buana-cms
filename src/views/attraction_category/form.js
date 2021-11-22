@@ -1,23 +1,27 @@
-import {withRouter} from "react-router"
-import React, {useEffect, useState} from "react"
+import { withRouter } from "react-router"
+import React, { useEffect, useState, useCallback } from "react"
 import Api from "config/api"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
 import FormBuilder from "components/form/builder"
 import FormInputWrapper from "components/form/input-wrapper"
 import useQuery from "lib/query"
-import {useDispatch} from "react-redux"
-import {setUIParams} from "redux/ui-store"
+import $ from "jquery"
+import { useDispatch } from "react-redux"
+import { setAlert, setUIParams } from "redux/ui-store"
+import env from "../../config/environment"
 
 const endpoint = "/master/attraction-categories"
 const backUrl = "/master/attraction-categories"
 
 function AttractionCategoryForm(props) {
+  let api = new Api()
   let dispatch = useDispatch()
-
+  let formId = props.match.params.id
   const isView = useQuery().get("action") === "view"
   const [formBuilder, setFormBuilder] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [checkSubmit, setCheckSubmit] = useState(false)
   const [translations, setTranslations] = useState([])
   const [id, setId] = useState(null)
   const [form, setForm] = useState({
@@ -30,6 +34,7 @@ function AttractionCategoryForm(props) {
         url: "",
       },
     },
+    attraction_category_icon: "",
   })
   const translationFields = [
     {
@@ -44,6 +49,7 @@ function AttractionCategoryForm(props) {
       required: true,
       minlength: 1,
       maxlength: 256,
+      checkName: formId == null,
     },
     is_default: {
       required: true,
@@ -53,12 +59,22 @@ function AttractionCategoryForm(props) {
       minlength: 1,
       maxlength: 4000,
     },
+    attraction_category_icon: {
+      required: true,
+      minlength: 1,
+    },
+  }
+
+  const validationMessages = {
+    attraction_category_name: {
+      required: "Attraction Category Name is required.",
+    },
+    attraction_category_icon: {
+      required: "Attraction Category Icon Image is required.",
+    },
   }
 
   useEffect(async () => {
-    let api = new Api()
-    let formId = props.match.params.id
-
     let docTitle = "Edit Attraction Category"
     if (!formId) {
       docTitle = "Create Attraction Category"
@@ -87,15 +103,37 @@ function AttractionCategoryForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
-      } catch (e) { }
+      } catch (e) {}
 
       try {
         let res = await api.get(endpoint + "/" + formId + "/translations", {
           size: 50,
         })
         setTranslations(res.data.items)
-      } catch (e) { }
+      } catch (e) {}
       setLoading(false)
+    } else {
+      $.validator.addMethod(
+        "checkName",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/attraction-categories?filters=["attraction_category_name","=","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
+
+          return req
+        },
+        "Attraction Category Name already exists",
+      )
     }
   }, [])
 
@@ -109,7 +147,6 @@ function AttractionCategoryForm(props) {
   const onSave = async () => {
     let translated = formBuilder.getTranslations()
     setLoading(true)
-    let api = new Api()
     try {
       if (!form.attraction_category_name) {
         form.attraction_category_name = null
@@ -134,14 +171,25 @@ function AttractionCategoryForm(props) {
         await api.putOrPost(path, tl.id, tl)
       }
     } catch (e) {
+      dispatch(
+        setAlert({
+          message: `Failed to ${formId ? "update" : "save"} this record.`,
+        }),
+      )
     } finally {
       setLoading(false)
       props.history.push(backUrl)
+      dispatch(
+        setAlert({
+          message: `Record ${
+            form.attraction_category_name
+          } has been successfully ${formId ? "updated" : "saved"}.`,
+        }),
+      )
     }
   }
   const doUpload = async (e) => {
     try {
-      let api = new Api()
       let payload = new FormData()
       payload.append("files", e.target.files[0])
       let res = await api.post("/multimedia/files", payload)
@@ -154,10 +202,12 @@ function AttractionCategoryForm(props) {
           },
         })
       }
-    } catch (e) { }
+    } catch (e) {}
   }
+
   return (
     <FormBuilder
+      id="form-attraction-category"
       onBuild={(el) => setFormBuilder(el)}
       isView={isView || loading}
       onSave={onSave}
@@ -167,6 +217,7 @@ function AttractionCategoryForm(props) {
       alertMessage={"Incomplete data"}
       isValid={false}
       rules={validationRules}
+      validationMessages={validationMessages}
     >
       <FormHorizontal>
         <FormInputControl
@@ -176,9 +227,9 @@ function AttractionCategoryForm(props) {
           name="attraction_category_name"
           cl="6"
           cr="6"
-          onChange={(e) =>
-            setForm({...form, attraction_category_name: e.target.value})
-          }
+          onChange={(e) => {
+            setForm({ ...form, attraction_category_name: e.target.value })
+          }}
           disabled={isView || loading}
           type="text"
           minLength="1"
@@ -192,46 +243,54 @@ function AttractionCategoryForm(props) {
           cr="6"
           hint="Set is default"
         >
-          <div className="form-check form-check-inline">
-            <input
-              className="form-check-input"
-              type="radio"
-              name="is_default"
-              id="ac-1"
-              value={true}
-              disabled={isView || loading}
-              checked={form.is_default}
-              onChange={(e) =>
-                setForm({
-                  ...form,
-                  is_default: true,
-                })
-              }
-            />
-            <label className="form-check-label" htmlFor="ac-1">
-              Yes
-            </label>
-          </div>
-          <div className="form-check form-check-inline">
-            <input
-              className="form-check-input"
-              type="radio"
-              name="is_default"
-              id="ac-2"
-              value={false}
-              disabled={isView || loading}
-              checked={!form.is_default}
-              onChange={(e) =>
-                setForm({
-                  ...form,
-                  is_default: false,
-                })
-              }
-            />
-            <label className="form-check-label" htmlFor="ac-2">
-              No
-            </label>
-          </div>
+          {!isView ? (
+            <>
+              <div className="form-check form-check-inline">
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  name="is_default"
+                  id="ac-1"
+                  value={true}
+                  disabled={isView || loading}
+                  checked={form.is_default}
+                  onChange={(e) =>
+                    setForm({
+                      ...form,
+                      is_default: true,
+                    })
+                  }
+                />
+                <label className="form-check-label" htmlFor="ac-1">
+                  Yes
+                </label>
+              </div>
+              <div className="form-check form-check-inline">
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  name="is_default"
+                  id="ac-2"
+                  value={false}
+                  disabled={isView || loading}
+                  checked={!form.is_default}
+                  onChange={(e) =>
+                    setForm({
+                      ...form,
+                      is_default: false,
+                    })
+                  }
+                />
+                <label className="form-check-label" htmlFor="ac-2">
+                  No
+                </label>
+              </div>
+            </>
+          ) : form.is_default ? (
+            "Yes"
+          ) : (
+            "No"
+          )}
         </FormInputWrapper>
         <FormInputControl
           label="Description"
@@ -239,14 +298,19 @@ function AttractionCategoryForm(props) {
           name="description"
           cl="6"
           cr="6"
-          onChange={(e) => setForm({...form, description: e.target.value})}
+          onChange={(e) => setForm({ ...form, description: e.target.value })}
           disabled={isView || loading}
           type="textarea"
           minLength="1"
           maxLength="4000"
         />
-        <FormInputWrapper label="Icon" cl="6" cr="6" labelRequired="label-required">
-          <label className="card card-default shadow-none border">
+        <FormInputWrapper
+          label="Icon"
+          cl="6"
+          cr="6"
+          labelRequired="label-required"
+        >
+          <label className={`card card-default shadow-none border`}>
             <div className="card-body">
               {!isView ? (
                 <i className="fas fa-edit text-muted img-edit-icon"></i>
@@ -257,10 +321,12 @@ function AttractionCategoryForm(props) {
                 className="d-none"
                 disabled={isView}
                 accept=".png,.jpg,.jpeg"
+                name="attraction_category_icon"
+                value={form.attraction_category_icon}
               />
               {form.attraction_category_asset &&
-                form.attraction_category_asset.multimedia_description &&
-                form.attraction_category_asset.multimedia_description.url ? (
+              form.attraction_category_asset.multimedia_description &&
+              form.attraction_category_asset.multimedia_description.url ? (
                 <img
                   src={
                     form.attraction_category_asset.multimedia_description.url

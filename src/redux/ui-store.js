@@ -5,6 +5,7 @@ export const uiStore = createSlice({
   initialState: {
     breadcrumbs: [],
     title: "",
+    alert: null,
   },
   reducers: {
     setUIParams(state, action) {
@@ -22,9 +23,13 @@ export const uiStore = createSlice({
     setBreadcrumbs: (state, action) => {
       state.breadcrumbs = action.payload
     },
+    setAlert: (state, action) => {
+      state.alert = action.payload
+    },
   },
 })
 
-export const { setTitle, setBreadcrumbs, setUIParams } = uiStore.actions
+export const { setTitle, setBreadcrumbs, setAlert, setUIParams } =
+  uiStore.actions
 
 export default uiStore.reducer
