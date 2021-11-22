@@ -1,12 +1,14 @@
-import {withRouter} from "react-router"
-import React, {useEffect, useState} from "react"
-import Api from "config/api"
+import FormBuilder from "components/form/builder"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
-import FormBuilder from "components/form/builder"
+import Api from "config/api"
+import $ from "jquery"
 import useQuery from "lib/query"
+import React, {useEffect, useState} from "react"
 import {useDispatch} from "react-redux"
+import {withRouter} from "react-router"
 import {setUIParams} from "redux/ui-store"
+import env from "../../config/environment"
 
 const endpoint = "/master/flight-types"
 const backUrl = "/master/flight-types"
@@ -14,6 +16,7 @@ const backUrl = "/master/flight-types"
 function FlightTypeForm(props) {
   let dispatch = useDispatch()
 
+  let formId = props.match.params.id
   const isView = useQuery().get("action") === "view"
   const [formBuilder, setFormBuilder] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -36,11 +39,27 @@ function FlightTypeForm(props) {
       required: true,
       minlength: 1,
       maxlength: 36,
+      checkName: formId == null
     },
     flight_type_name: {
       required: true,
       minlength: 1,
       maxlength: 256,
+      checkName2: formId == null
+    },
+  }
+
+  const validationMessages = {
+    flight_type_code: {
+      required: "Flight Type Code is required.",
+      minlength: "Flight type code must be at least 1 characters",
+      maxlength: "Flight type code cannot be longer than 36 characters",
+
+    },
+    flight_type_name: {
+      required: "Flight Type Name is required.",
+      minlength: "Flight type name must be at least 1 characters",
+      maxlength: "Flight type name cannot be longer than 256 characters",
     },
   }
 
@@ -85,6 +104,50 @@ function FlightTypeForm(props) {
         setTranslations(res.data.items)
       } catch (e) { }
       setLoading(false)
+    } else {
+      $.validator.addMethod(
+        "checkName",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/flight-types?filters=["flight_type_code","=","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
+
+          return req
+        },
+        "Code already exists",
+      )
+
+      $.validator.addMethod(
+        "checkName2",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/flight-types?filters=["flight_type_name","=","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
+
+          return req
+        },
+        "Flight Type Name already exists",
+      )
     }
   }, [])
 
@@ -125,6 +188,7 @@ function FlightTypeForm(props) {
       alertMessage={"Incomplete data"}
       isValid={false}
       rules={validationRules}
+      validationMessages={validationMessages}
     >
       <FormHorizontal>
         <FormInputControl
