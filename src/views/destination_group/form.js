@@ -6,14 +6,13 @@ import FormInputControl from "components/form/input-control"
 import FormBuilder from "components/form/builder"
 import useQuery from "lib/query"
 import {useDispatch} from "react-redux"
-import {setUIParams} from "redux/ui-store"
-
+import { setAlert, setUIParams } from "redux/ui-store"
 const endpoint = "/master/destination-groups"
 const backUrl = "/master/destination-groups"
 
 function DestinationGroupForm(props) {
   let dispatch = useDispatch()
-
+  let formId = props.match.params.id
   const isView = useQuery().get("action") === "view"
   const [formBuilder, setFormBuilder] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -41,6 +40,14 @@ function DestinationGroupForm(props) {
       required: true,
       minlength: 1,
       maxlength: 256,
+    },
+  }
+  const validationMessages = {
+    destination_group_code: {
+      required: "Destination Group Code is required.",
+    },
+    destination_group_name: {
+      required: "Destination Group Name is required.",
     },
   }
 
@@ -100,6 +107,12 @@ function DestinationGroupForm(props) {
     setLoading(true)
     let api = new Api()
     try {
+      if (!form.destination_group_name) {
+        form.destination_group_name = null
+      }
+      if (!form.destination_group_code) {
+        form.destination_group_code = null
+      }
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
       for (let i in translated) {
@@ -108,9 +121,21 @@ function DestinationGroupForm(props) {
         await api.putOrPost(path, tl.id, tl)
       }
     } catch (e) {
+      dispatch(
+          setAlert({
+            message: `Failed to ${formId ? "update" : "save"} this record.`,
+          }),
+      )
     } finally {
       setLoading(false)
       props.history.push(backUrl)
+      dispatch(
+          setAlert({
+            message: `Record ${
+                form.destination_group_name
+            } has been successfully ${formId ? "updated" : "saved"}.`,
+          }),
+      )
     }
   }
 
@@ -125,6 +150,7 @@ function DestinationGroupForm(props) {
       alertMessage={"Incomplete data"}
       isValid={false}
       rules={validationRules}
+      validationMessages={validationMessages}
     >
       <FormHorizontal>
         <FormInputControl
