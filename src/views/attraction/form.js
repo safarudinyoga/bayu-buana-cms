@@ -31,6 +31,8 @@ function AttractionForm(props) {
     state_province: "",
     city_id: "",
     zip_code: "",
+    destination_id: "",
+    zone_id: "",
     latitude: "",
     longitude: "",
     email: "",
@@ -78,7 +80,12 @@ function AttractionForm(props) {
       minlength: 1,
       maxlength: 16,
     },
-    // destination and zone
+    destination_id: {
+      required: false,
+    },
+    zone_id: {
+      required: false,
+    },
     latitude: {
       required: false,
       minlength: 1,
@@ -138,7 +145,12 @@ function AttractionForm(props) {
       minlength: "Zip Code must be at least 1 characters",
       maxlength: "Zip Code cannot be more than 16 characters",
     },
-    // destination and zone
+    destination_id: {
+      required: "Destination is required",
+    },
+    zone_id: {
+      required: "Zone is required",
+    },
     latitude: {
       required: "Latitude is required",
       minlength: "Latitude must be at least 1 characters",
@@ -203,13 +215,10 @@ function AttractionForm(props) {
 
       try {
         let res = await api.get(endpoint + "/" + formId)
-
         setForm(res.data)
         if (res.data.country) {
-          console.log({country_name: res.data.country.country_name})
+          // TODO: fix dropdown edit
           setCountryData([{...res.data.country, text: res.data.country.country_name}])
-          // setForm(...form, {country_id: res.data.country.id})
-          // console.log({id: res.data.country.id, form: form, country_data: countryData});
         }
 
       } catch (e) {
@@ -375,6 +384,38 @@ function AttractionForm(props) {
           type="text"
           minLength="1"
           maxLength="64"
+        />
+
+        <FormInputSelectAjax
+          label="Destination"
+          value={form.destination_id}
+          name="destination_id"
+          cl="3"
+          cr="6"
+          endpoint="/master/destinations"
+          filter={form.destination_id}
+          column="destination_name"
+          onChange={(e) =>
+            setForm({...form, destination_id: e.target.value || null})
+          }
+          disabled={isView || loading}
+          type="select"
+        />
+
+        <FormInputSelectAjax
+          label="Zone"
+          value={form.zone_id}
+          name="zone_id"
+          cl="3"
+          cr="6"
+          endpoint="/master/zones"
+          filter={form.zone_id}
+          column="zone_name"
+          onChange={(e) =>
+            setForm({...form, zone_id: e.target.value || null})
+          }
+          disabled={isView || loading}
+          type="select"
         />
 
         <FormInputControl
