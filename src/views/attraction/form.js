@@ -7,7 +7,7 @@ import useQuery from "lib/query"
 import React, {useEffect, useState} from "react"
 import {useDispatch} from "react-redux"
 import {withRouter} from "react-router"
-import {setUIParams} from "redux/ui-store"
+import {setAlert, setUIParams} from "redux/ui-store"
 
 const endpoint = "/master/attractions"
 const backUrl = "/master/attractions"
@@ -16,6 +16,7 @@ function AttractionForm(props) {
   let dispatch = useDispatch()
 
   const isView = useQuery().get("action") === "view"
+  let formId = props.match.params.id
   const [formBuilder, setFormBuilder] = useState(null)
   const [loading, setLoading] = useState(true)
   const [translations, setTranslations] = useState([])
@@ -248,9 +249,19 @@ function AttractionForm(props) {
         await api.putOrPost(path, tl.id, tl)
       }
     } catch (e) {
+      dispatch(
+        setAlert({
+          message: `Failed to ${formId ? "update" : "save"} this record.`,
+        }),
+      )
     } finally {
       setLoading(false)
       props.history.push(backUrl)
+      dispatch(
+        setAlert({
+          message: `Record ${form.attraction_name} has been successfully ${formId ? "updated" : "saved"}.`,
+        }),
+      )
     }
   }
 

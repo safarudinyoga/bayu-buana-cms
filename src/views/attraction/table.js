@@ -71,6 +71,7 @@ export default function AttractionTable() {
         visible: false,
       },
     ],
+    recordName: "attraction_name",
   })
 
   const onFilterChangeAttractionCategories = (e, values) => {
