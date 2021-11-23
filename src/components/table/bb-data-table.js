@@ -423,10 +423,10 @@ class BBDataTable extends Component {
           infoFiltered: "",
           loadingRecords: "Loading ...",
           processing: "<i class='fa fa-spin fa-circle-notch'></i> Loading...",
-          zeroRecords: "No " + this.props.title + " found",
+          zeroRecords: "No " + this.props.title.toLowerCase() + " found",
           emptyTable: this.props.emptyTable
             ? this.props.emptyTable
-            : "No " + this.props.title + " found",
+            : "No " + this.props.title.toLowerCase() + " found",
           lengthMenu: "_MENU_",
         },
         fnDrawCallback: (t) => {
