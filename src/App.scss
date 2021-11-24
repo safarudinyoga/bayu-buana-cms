@@ -133,15 +133,15 @@ select.bg-dark-grey > option {
 
 /* footer */
 .footer {
-  position: fixed;
-  left: 80px;
+  // position: fixed;
+  margin-top: 50px;
   padding: 12px;
   bottom: 0;
   width: 100%;
   z-index: 1;
   background-color: white;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  font-size: 13px;
+  font-size: 0.7em;
   font-weight: normal;
   color: #818181;
 }
