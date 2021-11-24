@@ -21,7 +21,6 @@ function AttractionCategoryForm(props) {
   const isView = useQuery().get("action") === "view"
   const [formBuilder, setFormBuilder] = useState(null)
   const [loading, setLoading] = useState(true)
-  const [checkSubmit, setCheckSubmit] = useState(false)
   const [translations, setTranslations] = useState([])
   const [id, setId] = useState(null)
   const [form, setForm] = useState({
@@ -84,7 +83,7 @@ function AttractionCategoryForm(props) {
 
     dispatch(
       setUIParams({
-        title: docTitle,
+        title: isView ? "Attraction Category Details" : docTitle,
         breadcrumbs: [
           {
             text: "Master Data Management",

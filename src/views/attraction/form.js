@@ -196,7 +196,7 @@ function AttractionForm(props) {
 
     dispatch(
       setUIParams({
-        title: docTitle,
+        title: isView ? "Attraction Details" : docTitle,
         breadcrumbs: [
           {
             text: "Master Data Management",

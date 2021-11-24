@@ -64,7 +64,7 @@ function DestinationGroupForm(props) {
 
     dispatch(
       setUIParams({
-        title: docTitle,
+        title: isView ? "Destination Group Details" : docTitle,
         breadcrumbs: [
           {
             text: "Master Data Management",
