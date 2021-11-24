@@ -58,6 +58,7 @@ function AttractionForm(props) {
       required: true,
       minlength: 1,
       maxlength: 64,
+      noSpace: true,
     },
     attraction_category_attraction: {
       required: false,
@@ -217,7 +218,6 @@ function AttractionForm(props) {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
         if (res.data.country) {
-          // TODO: fix dropdown edit
           setCountryData([{...res.data.country, text: res.data.country.country_name}])
         }
 
@@ -325,7 +325,7 @@ function AttractionForm(props) {
           maxLength="64"
         />
 
-        <FormInputSelectAjax
+        {(form.country_id || formId == undefined) && <FormInputSelectAjax
           label="Country"
           labelRequired="label-required"
           value={form.country_id}
@@ -340,7 +340,7 @@ function AttractionForm(props) {
           }
           disabled={isView || loading}
           type="select"
-        />
+        />}
 
         <FormInputSelectAjax
           label="State/ Province"
