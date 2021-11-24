@@ -389,6 +389,12 @@ class BBDataTable extends Component {
         responsive: true,
         autoWidth: false,
         columnDefs: [
+          // {
+          //   targets: 0,
+          //   checkboxes: {
+          //     selectRow: true,
+          //   },
+          // },
           {
             ordeable: false,
             className: "select-checkbox",
@@ -404,6 +410,9 @@ class BBDataTable extends Component {
             targets: [columns.length - 1],
           },
         ],
+        // select: {
+        //   style: "multi",
+        // },
         order: [[1, "asc"]],
         columns: columns,
         dom:
@@ -435,9 +444,8 @@ class BBDataTable extends Component {
             '<span class="float-right mt-2 mr-2 text-label-input">Page: </span>',
           )
           $(".pagination", wrapper).addClass("float-right")
-
           // Hide pagination if empty data
-          if (t._iDisplayLength > t.fnRecordsDisplay()) {
+          if (t.fnRecordsDisplay() == 1) {
             $(t.nTableWrapper).find(".dataTables_length").hide()
             $(t.nTableWrapper).find(".dataTables_info").hide()
             $(t.nTableWrapper).find(".dataTables_paginate").hide()
@@ -445,6 +453,10 @@ class BBDataTable extends Component {
             $(t.nTableWrapper).find(".dataTables_length").show()
             $(t.nTableWrapper).find(".dataTables_info").show()
             $(t.nTableWrapper).find(".dataTables_paginate").show()
+          }
+
+          if ($(".select-checkbox-all").is(":checked")) {
+            $(".select-checkbox-all").prop("checked", false)
           }
         },
       })
@@ -595,6 +607,7 @@ class BBDataTable extends Component {
   }
 
   componentDidUpdate() {
+    console.log(this.state.selected)
     if (this.inProgress) {
       return
     }
@@ -623,7 +636,6 @@ class BBDataTable extends Component {
         for (let i = 0; i < items.length; i++) {
           selected.push($(items.get(i)).data("id"))
         }
-
         this.setState({
           selected: selected,
         })
@@ -656,7 +668,7 @@ class BBDataTable extends Component {
           selected: selected,
         })
         setTimeout(() => {
-          this.inProgress = false
+          this.inProgress = true
         }, 100)
       })
 
@@ -690,7 +702,6 @@ class BBDataTable extends Component {
             <Button
               variant="danger"
               onClick={() => {
-                console.log(this.state)
                 this.setState({
                   isOpen: false,
                 })
@@ -737,6 +748,7 @@ class BBDataTable extends Component {
               onClick={() => {
                 this.setState({
                   isOpen: false,
+                  selected: false,
                 })
               }}
             >
