@@ -55,7 +55,7 @@
 } */
 
 .dataTable-root .select-checkbox {
-    width: 40px;
+    width: 60px;
     text-align: right;    
 }
 
@@ -93,4 +93,10 @@ input[type=checkbox] {
 
 .fa-trash{
   color: #3E40AE;
+}
+
+@media (min-width: 576px) {
+  .dataTable-root .select-checkbox {
+    width: 40px;  
+  }
 }
