@@ -77,7 +77,7 @@ class TableHeader extends Component {
 
   handleSearch(e) {
     if (this.props.onSearch) {
-      this.props.onSearch(e.target.value)
+      setTimeout(()=>{   this.props.onSearch(e.target.value)},3000)
     }
     this.setState({
       searchValue: e.target.value,
