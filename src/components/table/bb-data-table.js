@@ -387,6 +387,13 @@ class BBDataTable extends Component {
           update: false,
         },
         responsive: true,
+        // responsive: {
+        //   details: {
+        //     display: $.fn.dataTable.Responsive.display.childRowImmediate,
+        //     type: 'none',
+        //     target: ''
+        //   }
+        // },
         autoWidth: false,
         columnDefs: [
           {
@@ -432,9 +439,12 @@ class BBDataTable extends Component {
         fnDrawCallback: (t) => {
           let wrapper = $(".dataTables_paginate", t.nTableWrapper)
           wrapper.append(
-            '<span class="float-right mt-2 mr-2 text-label-input">Page: </span>',
+            '<span class="d-none d-md-block float-right mt-2 mr-2 text-label-input">Page: </span>',
           )
-          $(".pagination", wrapper).addClass("float-right")
+          wrapper.prepend(
+            '<span class="d-md-none float-left mt-2 mr-2 text-label-input">Page: </span>',
+          )
+          $(".pagination", wrapper).addClass("float-right float-left-sm")
 
           // Hide pagination if empty data
           if (t._iDisplayLength > t.fnRecordsDisplay()) {
@@ -766,7 +776,7 @@ class BBDataTable extends Component {
             className="table table-sm table-striped"
           ></table>
         </div>
-        <div className="footer">
+        <div className="footer text-center text-md-left">
           ©️ 2021 Bayu Buana Travel Services. All Rights Reserved
         </div>
       </div>
