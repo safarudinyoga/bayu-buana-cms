@@ -14,6 +14,13 @@ export default class FormContainer extends Component {
 
   componentDidMount() {
     this.validator = this.validate()
+    $.validator.addMethod(
+      "noSpace",
+      function (value, element) {
+        return value.indexOf(" ") < 0
+      },
+      "No space please and don't leave it empty",
+    )
   }
 
   componentDidUpdate() { }
