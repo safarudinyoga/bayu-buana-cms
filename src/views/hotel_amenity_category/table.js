@@ -67,6 +67,7 @@ export default function HotelAmenityCategoryTable() {
       },
     ],
     emptyTable: "No hotel amenity categories found",
+    recordName: "hotel_amenity_category_name",
   }
   return <BBDataTable {...params} />
 }
