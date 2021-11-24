@@ -1,5 +1,5 @@
-import React, { Component } from "react"
-import { Link } from "react-router-dom"
+import React, {Component} from "react"
+import {Link} from "react-router-dom"
 import "./sidebar.css"
 
 export default class Sidebar extends Component {
@@ -51,6 +51,14 @@ export default class Sidebar extends Component {
                   <li className="nav-item">
                     <Link to="/master/airports" className="nav-link">
                       <p>Airport</p>
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link
+                      to="/master/attractions"
+                      className="nav-link"
+                    >
+                      <p>Attraction</p>
                     </Link>
                   </li>
                   <li className="nav-item">
