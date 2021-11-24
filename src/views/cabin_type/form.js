@@ -72,7 +72,7 @@ function CabinTypeForm(props) {
 
     dispatch(
       setUIParams({
-        title: docTitle,
+        title: isView ? "Cabin Type Details" : docTitle,
         breadcrumbs: [
           {
             text: "Master Data Management",

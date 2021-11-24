@@ -1,9 +1,9 @@
-import React, { Component } from "react"
-import FormContainer from "./container"
-import FormWrapper from "./wrapper"
+import React, {Component} from "react"
+import {withRouter} from "react-router"
 import FormAlert from "./alert"
+import FormContainer from "./container"
 import TranslationForm from "./translation-form"
-import { withRouter } from "react-router"
+import FormWrapper from "./wrapper"
 
 class FormBuilder extends Component {
   constructor(props) {
@@ -35,7 +35,7 @@ class FormBuilder extends Component {
         isView={this.props.isView}
         onSave={this.props.onSave}
         onBack={this.onBack.bind(this)}
-        id={this.props.id}
+        id={this.props.match.params.id}
       >
         <FormWrapper>{this.props.children}</FormWrapper>
         <TranslationForm

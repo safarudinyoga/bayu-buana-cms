@@ -88,7 +88,7 @@ function HotelAmenityCategoryForm(props) {
 
     dispatch(
         setUIParams({
-          title: docTitle,
+          title: isView ? "Hotel Amenity Category Details" : docTitle,
           breadcrumbs: [
             {
               text: "Master Data Management",
