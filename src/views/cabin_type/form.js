@@ -40,12 +40,14 @@ function CabinTypeForm(props) {
       minlength: 1,
       maxlength: 36,
       checkCode: formId == null,
+      noSpace: true,
     },
     cabin_type_name: {
       required: true,
       minlength: 1,
       maxlength: 256,
       checkName: formId == null,
+      noSpace: true,
     },
   }
 
