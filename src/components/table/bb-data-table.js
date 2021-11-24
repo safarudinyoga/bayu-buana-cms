@@ -61,7 +61,7 @@ class BBDataTable extends Component {
         return (
           '<svg class="float-left row-handle" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none"><rect id="backgroundrect" width="100%" height="100%" x="0" y="0" fill="none" stroke="none"/><path d="M7.098360577225684,13 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 z" fill="#707070" id="svg_1" class=""/><path d="M11.901639938354492,13 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 z" fill="#707070" id="svg_2" class=""/></svg> <input type="checkbox" data-id="' +
           row.id +
-          '" class="select-checkbox-item"/>'
+          '" class="float-left select-checkbox-item"/> <a class="float-left" style="padding: 0; color: #b7b7b7"><i class="fas fa-plus-circle"></i></a>'
         )
       },
     })
@@ -387,13 +387,6 @@ class BBDataTable extends Component {
           update: false,
         },
         responsive: true,
-        // responsive: {
-        //   details: {
-        //     display: $.fn.dataTable.Responsive.display.childRowImmediate,
-        //     type: 'none',
-        //     target: ''
-        //   }
-        // },
         autoWidth: false,
         columnDefs: [
           // {
@@ -788,9 +781,6 @@ class BBDataTable extends Component {
             ref={this.table}
             className="table table-sm table-striped"
           ></table>
-        </div>
-        <div className="footer text-center text-md-left">
-          ©️ 2021 Bayu Buana Travel Services. All Rights Reserved
         </div>
       </div>
     )
