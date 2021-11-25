@@ -36,11 +36,21 @@
   background-color: #5e5e5e;
   color: #ffffff; 
 }
+@media only screen and (max-width: 768px) {
+  .dataTable-root table.dataTable thead {
+    font-size: 13px;
+  }
+}
 .dataTable-root table.dataTable tbody {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
   font-size: 15px;
   font-weight: normal; 
   color: #333333;   
+}
+@media only screen and (max-width: 768px) {
+  .dataTable-root table.dataTable tbody {
+    font-size: 13px;
+  }
 }
 .dataTable-root table.dataTable td {  
   vertical-align:middle;     
@@ -75,12 +85,6 @@
 
 .dataTables_processing {
     display: none !important;
-}
-
-/* CheckBox Custom */
-input[type=checkbox] { 
-  accent-color: #027F71;
-  margin-top: 2px;
 }
 
 .fa-edit{
