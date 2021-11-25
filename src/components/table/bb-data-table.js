@@ -417,7 +417,7 @@ class BBDataTable extends Component {
         columns: columns,
         dom:
           "<'container-fluid mt-2 dataTable-root'<'card card-default mb-0 shadow-none'<'card-body'tr>>" +
-          "<'row'<'col-sm-12 col-md-8'li><'col-sm-12 col-md-4'p>>" +
+          "<'row'<'col-sm-12 col-md-4'li><'col-sm-12 col-md-8'p>>" +
           ">",
         language: {
           paginate: {
@@ -427,8 +427,8 @@ class BBDataTable extends Component {
             last: "&raquo;",
           },
           search: "Search",
-          info: "Showing _START_ - _END_ of _TOTAL_",
-          infoEmpty: "Showing 0 - 0 of 0",
+          info: '<span class="ml-2 text-label-input danger">Showing _START_ - _END_ of _TOTAL_</span>',
+          infoEmpty: '<span class="ml-2 text-label-input danger">Showing 0 - 0 of 0</span>',
           infoFiltered: "",
           loadingRecords: "Loading ...",
           processing: "<i class='fa fa-spin fa-circle-notch'></i> Loading...",

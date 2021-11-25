@@ -91,6 +91,12 @@ button.advanced-options-btn:active {
   font-weight:500;
   color: #333333;
 }
+@media only screen and (max-width: 768px) {
+  .text-label-filter {
+    font-size: 13px;
+    font-weight:bold;
+  }
+}
 .text-input-select{
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-size: 14px;
