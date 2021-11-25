@@ -7,7 +7,7 @@ import useQuery from "lib/query"
 import React, {useEffect, useState} from "react"
 import {useDispatch} from "react-redux"
 import {withRouter} from "react-router"
-import {setUIParams} from "redux/ui-store"
+import { setAlert, setUIParams } from "redux/ui-store"
 import env from "../../config/environment"
 
 const endpoint = "/master/hotel-brands"
@@ -75,7 +75,7 @@ function HotelBrandForm(props) {
 
     dispatch(
       setUIParams({
-        title: docTitle,
+        title: isView ? "Hotel Brand Details" : docTitle,
         breadcrumbs: [
           {
             text: "Master Data Management",
@@ -170,9 +170,21 @@ function HotelBrandForm(props) {
         await api.putOrPost(path, tl.id, tl)
       }
     } catch (e) {
+      dispatch(
+        setAlert({
+          message: `Failed to ${formId ? "update" : "save"} this record.`,
+        }),
+      )
     } finally {
       setLoading(false)
       props.history.push(backUrl)
+      dispatch(
+        setAlert({
+          message: `Record ${form.hotel_brand_code} - ${
+            form.hotel_brand_name
+          } has been successfully ${formId ? "updated" : "saved"}.`,
+        }),
+      )
     }
   }
 

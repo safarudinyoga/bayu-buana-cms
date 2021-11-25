@@ -52,7 +52,12 @@ export default function AttractionTable() {
       },
       {
         title: "Attraction Category",
-        data: "attraction_category.attraction_category_name",
+        data: "attraction_category_attraction",
+        render: (data) => {
+          return data.map(value => {
+            return value.attraction_category.attraction_category_name
+          }).join(" & ")
+        }
       },
       {
         searchable: false,
@@ -66,6 +71,7 @@ export default function AttractionTable() {
         visible: false,
       },
     ],
+    recordName: "attraction_name",
   })
 
   const onFilterChangeAttractionCategories = (e, values) => {

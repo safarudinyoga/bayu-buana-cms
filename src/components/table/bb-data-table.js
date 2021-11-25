@@ -61,7 +61,7 @@ class BBDataTable extends Component {
         return (
           '<svg class="float-left row-handle" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none"><rect id="backgroundrect" width="100%" height="100%" x="0" y="0" fill="none" stroke="none"/><path d="M7.098360577225684,13 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 z" fill="#707070" id="svg_1" class=""/><path d="M11.901639938354492,13 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 z" fill="#707070" id="svg_2" class=""/></svg> <input type="checkbox" data-id="' +
           row.id +
-          '" class="select-checkbox-item"/>'
+          '" class="select-checkbox-item"/> <a class="float-left d-md-none" style="padding: 0; color: #b7b7b7"><i class="fas fa-plus-circle"></i></a>'
         )
       },
     })
@@ -441,9 +441,13 @@ class BBDataTable extends Component {
         fnDrawCallback: (t) => {
           let wrapper = $(".dataTables_paginate", t.nTableWrapper)
           wrapper.append(
-            '<span class="float-right mt-2 mr-2 text-label-input">Page: </span>',
+            '<span class="d-none d-md-block float-right mt-2 mr-2 text-label-input">Page: </span>',
           )
-          $(".pagination", wrapper).addClass("float-right")
+          wrapper.prepend(
+            '<span class="d-md-none float-left mt-2 mr-2 text-label-input">Page: </span>',
+          )
+          $(".pagination", wrapper).addClass("float-right float-left-sm")
+
           // Hide pagination if empty data
           if (t.fnRecordsDisplay() == 1) {
             $(t.nTableWrapper).find(".dataTables_length").hide()
@@ -777,9 +781,6 @@ class BBDataTable extends Component {
             ref={this.table}
             className="table table-sm table-striped"
           ></table>
-        </div>
-        <div className="footer">
-          ©️ 2021 Bayu Buana Travel Services. All Rights Reserved
         </div>
       </div>
     )

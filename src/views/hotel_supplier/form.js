@@ -79,7 +79,7 @@ function HotelSupplierForm(props) {
 
     dispatch(
       setUIParams({
-        title: docTitle,
+        title: isView ? "Hotel Supplier Details" : docTitle,
         breadcrumbs: [
           {
             text: "Master Data Management",
