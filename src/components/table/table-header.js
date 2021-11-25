@@ -29,8 +29,8 @@ const customStyles = {
     ...base,
     height: 10,
     width: 120,
-    marginTop: -1,
-    marginLeft: 0,
+    marginTop: -1,    
+    marginLeft: 8,
     border: "1px solid #DADEDF",
     fontSize: 13,
     backgroundColor: "white",
@@ -233,10 +233,8 @@ class TableHeader extends Component {
           >
             <div className="card-body">
               <div className="row">
-                {ExtraFilter ? (
-                    <div className="col-xs-12 col-sm-12 col-md-6 col-lg-4">
-                      <ExtraFilter />
-                    </div>
+                {ExtraFilter ? (                    
+                      <ExtraFilter />                  
                 ) : (
                     ""
                 )}
@@ -245,7 +243,7 @@ class TableHeader extends Component {
                 <div className="col-xs-12 col-sm-12 col-md-6 col-lg-8">
                   <div className="row">
                     <div className="col-xs-4">
-                      <label className="text-label-filter">Status: </label>
+                      <label className="text-label-filter ml-2">Status</label>
                       <Select
                           width="200px"
                           onChange={this.handleStatus.bind(this)}
