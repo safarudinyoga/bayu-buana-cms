@@ -49,6 +49,7 @@ function AttractionCategoryForm(props) {
       minlength: 1,
       maxlength: 256,
       checkName: formId == null,
+      noSpace:true
     },
     is_default: {
       required: true,
