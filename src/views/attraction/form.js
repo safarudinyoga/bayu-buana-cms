@@ -23,6 +23,11 @@ function AttractionForm(props) {
   const [id, setId] = useState(null)
   const [categoryData, setCategoryData] = useState([])
   const [countryData, setCountryData] = useState([])
+  const [provinceData, setProvinceData] = useState([])
+  const [cityData, setCityData] = useState([])
+  const [destinationData, setDestinationData] = useState([])
+  const [zoneData, setZoneData] = useState([])
+
   const [form, setForm] = useState({
     attraction_name: "",
     attraction_category_attraction: [],
@@ -30,13 +35,13 @@ function AttractionForm(props) {
     country_id: "",
     state_province: "",
     city_id: "",
-    zip_code: "",
+    postal_code: "",
     destination_id: "",
     zone_id: "",
     latitude: "",
     longitude: "",
     email: "",
-    phone: "",
+    phone_number: "",
     fax_number: "",
     description: "",
   })
@@ -58,6 +63,7 @@ function AttractionForm(props) {
       required: true,
       minlength: 1,
       maxlength: 64,
+      noSpace: true,
     },
     attraction_category_attraction: {
       required: false,
@@ -75,7 +81,7 @@ function AttractionForm(props) {
     city_id: {
       required: true,
     },
-    zip_code: {
+    postal_code: {
       required: false,
       minlength: 1,
       maxlength: 16,
@@ -101,7 +107,7 @@ function AttractionForm(props) {
       minlength: 1,
       maxlength: 256,
     },
-    phone: {
+    phone_number: {
       required: false,
       minlength: 1,
       maxlength: 32,
@@ -140,7 +146,7 @@ function AttractionForm(props) {
     city_id: {
       required: "City is required",
     },
-    zip_code: {
+    postal_code: {
       required: "Zip Code is required",
       minlength: "Zip Code must be at least 1 characters",
       maxlength: "Zip Code cannot be more than 16 characters",
@@ -166,7 +172,7 @@ function AttractionForm(props) {
       minlength: "Email Address must be at least 1 characters",
       maxlength: "Email Address cannot be more than 256 characters",
     },
-    phone: {
+    phone_number: {
       required: "Phone is required",
       minlength: "Phone must be at least 1 characters",
       maxlength: "Phone cannot be more than 32 characters",
@@ -215,12 +221,24 @@ function AttractionForm(props) {
 
       try {
         let res = await api.get(endpoint + "/" + formId)
-        setForm(res.data)
+        if (res.data.attraction_category_attraction) {
+          setCategoryData(res.data.attraction_category_attraction.map(value => {
+            return {id: value.attraction_category.id, text: value.attraction_category.attraction_category_name}
+          }))
+        }
         if (res.data.country) {
-          // TODO: fix dropdown edit
           setCountryData([{...res.data.country, text: res.data.country.country_name}])
         }
-
+        if (res.data.city) {
+          setCityData([{...res.data.city, text: res.data.city.city_name}])
+        }
+        if (res.data.destination) {
+          setDestinationData([{...res.data.destination, text: res.data.destination.destination_name}])
+        }
+        if (res.data.zone) {
+          setZoneData([{...res.data.zone, text: res.data.zone.zone_name}])
+        }
+        setForm(res.data)
       } catch (e) {
         console.error(e);
       }
@@ -300,7 +318,7 @@ function AttractionForm(props) {
           maxLength="64"
         />
 
-        <FormInputSelectAjax
+        {(form.attraction_category_attraction.length > 0 || formId == undefined) && <FormInputSelectAjax
           label="Attraction Category"
           value={form.attraction_category_attraction.map((item) => item.attraction_category_id)}
           name="attraction_category_attraction"
@@ -312,7 +330,7 @@ function AttractionForm(props) {
           onChange={(e, values) => setForm(form => ({...form, attraction_category_attraction: values.map(v => ({attraction_category_id: v.id}))}))}
           disabled={isView || loading}
           type="selectmultiple"
-        />
+        />}
 
         <FormInputControl
           label={"Address"}
@@ -325,7 +343,7 @@ function AttractionForm(props) {
           maxLength="64"
         />
 
-        <FormInputSelectAjax
+        {(form.country_id || formId == undefined) && <FormInputSelectAjax
           label="Country"
           labelRequired="label-required"
           value={form.country_id}
@@ -340,9 +358,9 @@ function AttractionForm(props) {
           }
           disabled={isView || loading}
           type="select"
-        />
+        />}
 
-        <FormInputSelectAjax
+        {(form.state_province || formId == undefined) && <FormInputSelectAjax
           label="State/ Province"
           value={form.state_province}
           name="state_id"
@@ -356,15 +374,16 @@ function AttractionForm(props) {
           }
           disabled={isView || loading}
           type="select"
-        />
+        />}
 
-        <FormInputSelectAjax
+        {(form.city_id || formId == undefined) && <FormInputSelectAjax
           label="City"
           value={form.city_id}
           labelRequired="label-required"
           name="city_id"
           cl="3"
           cr="6"
+          data={cityData}
           endpoint="/master/cities"
           filter={form.country_id}
           column="city_name"
@@ -373,25 +392,26 @@ function AttractionForm(props) {
           }
           disabled={isView || loading}
           type="select"
-        />
+        />}
 
         <FormInputControl
           label={"Zip Code"}
-          value={form.zip_code}
-          name="zip_code"
-          onChange={(e) => setForm({...form, zip_code: e.target.value})}
+          value={form.postal_code}
+          name="postal_code"
+          onChange={(e) => setForm({...form, postal_code: e.target.value})}
           disabled={isView || loading}
           type="text"
           minLength="1"
-          maxLength="64"
+          maxLength="16"
         />
 
-        <FormInputSelectAjax
+        {(form.destination_id || formId == undefined) && <FormInputSelectAjax
           label="Destination"
           value={form.destination_id}
           name="destination_id"
           cl="3"
           cr="6"
+          data={destinationData}
           endpoint="/master/destinations"
           filter={form.destination_id}
           column="destination_name"
@@ -400,14 +420,15 @@ function AttractionForm(props) {
           }
           disabled={isView || loading}
           type="select"
-        />
+        />}
 
-        <FormInputSelectAjax
+        {(form.zone_id || formId == undefined) && <FormInputSelectAjax
           label="Zone"
           value={form.zone_id}
           name="zone_id"
           cl="3"
           cr="6"
+          data={zoneData}
           endpoint="/master/zones"
           filter={form.zone_id}
           column="zone_name"
@@ -416,7 +437,7 @@ function AttractionForm(props) {
           }
           disabled={isView || loading}
           type="select"
-        />
+        />}
 
         <FormInputControl
           label={"Latitude"}
@@ -453,9 +474,9 @@ function AttractionForm(props) {
 
         <FormInputControl
           label={"Phone"}
-          value={form.phone}
-          name="phone"
-          onChange={(e) => setForm({...form, phone: e.target.value})}
+          value={form.phone_number}
+          name="phone_number"
+          onChange={(e) => setForm({...form, phone_number: e.target.value})}
           disabled={isView || loading}
           type="text"
           minLength="1"

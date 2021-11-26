@@ -17,7 +17,7 @@ export default class FormContainer extends Component {
     $.validator.addMethod(
       "noSpace",
       function (value, element) {
-        return value.indexOf(" ") < 0
+        return value.trim() === value
       },
       "No space please and don't leave it empty",
     )
