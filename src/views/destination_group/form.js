@@ -5,10 +5,13 @@ import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
 import FormBuilder from "components/form/builder"
 import useQuery from "lib/query"
+import env from "../../config/environment"
+import $ from "jquery"
 import {useDispatch} from "react-redux"
 import { setAlert, setUIParams } from "redux/ui-store"
 const endpoint = "/master/destination-groups"
 const backUrl = "/master/destination-groups"
+
 
 function DestinationGroupForm(props) {
   let dispatch = useDispatch()
@@ -35,16 +38,22 @@ function DestinationGroupForm(props) {
       required: true,
       minlength: 1,
       maxlength: 36,
+      checkCode: formId == null,
+      noSpace : true,
+      number:true
     },
     destination_group_name: {
       required: true,
       minlength: 1,
       maxlength: 256,
+      checkName: formId == null,
+      noSpace:true
     },
   }
   const validationMessages = {
     destination_group_code: {
       required: "Destination Group Code is required.",
+      number : "Code format is invalid"
     },
     destination_group_name: {
       required: "Destination Group Name is required.",
@@ -92,6 +101,49 @@ function DestinationGroupForm(props) {
         setTranslations(res.data.items)
       } catch (e) { }
       setLoading(false)
+    } else{
+      $.validator.addMethod(
+          "checkName",
+          function (value, element) {
+            var req = false
+            $.ajax({
+              type: "GET",
+              async: false,
+              url: `${env.API_URL}/master/destination-groups?filters=["destination_group_name","=","${element.value}"]`,
+              success: function (res) {
+                if (res.items.length !== 0) {
+                  req = false
+                } else {
+                  req = true
+                }
+              },
+            })
+
+            return req
+          },
+          "Destination Group Name already exists",
+      )
+      $.validator.addMethod(
+          "checkCode",
+          function (value, element) {
+            var req = false
+            $.ajax({
+              type: "GET",
+              async: false,
+              url: `${env.API_URL}/master/destination-groups?filters=["destination_group_code","=","${element.value}"]`,
+              success: function (res) {
+                if (res.items.length !== 0) {
+                  req = false
+                } else {
+                  req = true
+                }
+              },
+            })
+
+            return req
+          },
+          "Code already exists",
+      )
     }
   }, [])
 
