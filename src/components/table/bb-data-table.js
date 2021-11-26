@@ -406,7 +406,7 @@ class BBDataTable extends Component {
           //   },
           {
             ordeable: false,
-            className: "table-row-action",
+            // className: "table-row-action",
             targets: [columns.length - 1],
           },
         ],
