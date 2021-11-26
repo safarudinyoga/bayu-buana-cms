@@ -135,8 +135,6 @@ function TripTypeForm(props) {
           labelRequired="label-required"
           value={form.trip_type_name}
           name="trip_type_name"
-          cl="3"
-          cr="6"
           onChange={(e) => setForm({...form, trip_type_name: e.target.value})}
           disabled={isView || loading}
           type="text"
@@ -146,8 +144,6 @@ function TripTypeForm(props) {
 
         <FormInputWrapper
           label="Is Default"
-          cl="3"
-          cr="6"
           hint="Set is default"
         >
           <div className="form-check form-check-inline">
@@ -187,8 +183,8 @@ function TripTypeForm(props) {
           labelRequired="label-required"
           value={form.trip_type_code}
           name="trip_type_code"
-          cl="4"
-          cr="6"
+          cl="12"
+          cr="12"
           onChange={(e) => setForm({...form, trip_type_code: e.target.value})}
           disabled={isView || loading}
           type="text"

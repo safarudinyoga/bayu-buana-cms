@@ -161,8 +161,6 @@ function ZoneForm(props) {
           label="Destination"
           value={form.destination_id}
           name="destination"
-          cl="3"
-          cr="6"
           endpoint="/master/destinations"
           column="destination_name"
           data={destinationData}
@@ -193,8 +191,8 @@ function ZoneForm(props) {
           value={form.zone_code}
           name="zone_code"
           onChange={(e) => setForm({...form, zone_code: e.target.value})}
-          cl="4"
-          cr="6"
+          cl="12"
+          cr="12"
           disabled={isView || loading}
           type="number"
           label="Zone Code"

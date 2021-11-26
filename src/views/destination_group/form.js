@@ -210,8 +210,6 @@ function DestinationGroupForm(props) {
           labelRequired="label-required"
           value={form.destination_group_name}
           name="destination_group_name"
-          cl="4"
-          cr="6"
           onChange={(e) =>
             setForm({...form, destination_group_name: e.target.value})
           }
@@ -228,8 +226,8 @@ function DestinationGroupForm(props) {
           labelRequired="label-required"
           value={form.destination_group_code}
           name="destination_group_code"
-          cl="6"
-          cr="6"
+          cl="12"
+          cr="12"
           onChange={(e) =>
             setForm({...form, destination_group_code: e.target.value})
           }

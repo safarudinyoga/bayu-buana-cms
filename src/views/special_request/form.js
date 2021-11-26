@@ -132,8 +132,6 @@ function SpecialRequestForm(props) {
           labelRequired="label-required"
           value={form.special_request_name}
           name="special_request_name"
-          cl="4"
-          cr="6"
           onChange={(e) =>
             setForm({...form, special_request_name: e.target.value})
           }
@@ -150,8 +148,8 @@ function SpecialRequestForm(props) {
           labelRequired="label-required"
           value={form.special_request_code}
           name="special_request_code"
-          cl="7"
-          cr="5"
+          cl="12"
+          cr="12"
           onChange={(e) =>
             setForm({...form, special_request_code: e.target.value})
           }

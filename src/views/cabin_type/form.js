@@ -205,8 +205,6 @@ function CabinTypeForm(props) {
           labelRequired="label-required"
           value={form.cabin_type_name}
           name="cabin_type_name"
-          cl="3"
-          cr="6"
           onChange={(e) =>
             setForm({ ...form, cabin_type_name: e.target.value })
           }
@@ -223,8 +221,8 @@ function CabinTypeForm(props) {
           labelRequired="label-required"
           value={form.cabin_type_code}
           name="cabin_type_code"
-          cl="6"
-          cr="6"
+          cl="12"
+          cr="12"
           onChange={(e) =>
             setForm({ ...form, cabin_type_code: e.target.value })
           }
