@@ -144,9 +144,7 @@ function AirportForm(props) {
           label="Airport Name"
           labelRequired="label-required"
           value={form.airport_name}
-          name="airport_name"
-          cl="3"
-          cr="6"
+          name="airport_name"          
           onChange={(e) => setForm({...form, airport_name: e.target.value})}
           disabled={isView || loading}
           type="text"
@@ -156,9 +154,7 @@ function AirportForm(props) {
         <FormInputSelectAjax
           label="City"
           value={form.city_id}
-          name="city_id"
-          cl="3"
-          cr="6"
+          name="city_id"         
           endpoint="/master/cities"
           column="city_name"
           data={cityData}
@@ -174,8 +170,8 @@ function AirportForm(props) {
           labelRequired="label-required"
           value={form.airport_code}
           name="airport_code"
-          cl="4"
-          cr="6"
+          cl="12"
+          cr="12"
           onChange={(e) => setForm({...form, airport_code: e.target.value})}
           disabled={isView || loading}
           type="text"
@@ -187,8 +183,8 @@ function AirportForm(props) {
           label="ICAO Code"
           value={form.icao_code}
           name="icao_code"
-          cl="4"
-          cr="6"
+          cl="12"
+          cr="12"
           onChange={(e) => setForm({...form, icao_code: e.target.value})}
           disabled={isView || loading}
           type="text"

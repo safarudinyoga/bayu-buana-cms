@@ -149,8 +149,6 @@ function OccupancyTypeForm(props) {
           labelRequired="label-required"
           value={form.occupancy_type_name}
           name="occupancy_type_name"
-          cl="5"
-          cr="7"
           onChange={(e) =>
             setForm({...form, occupancy_type_name: e.target.value})
           }
@@ -162,8 +160,6 @@ function OccupancyTypeForm(props) {
 
         <FormInputWrapper
           label="Is Default"
-          cl="5"
-          cr="7"
           hint="Set is default"
         >
           <div className="form-check form-check-inline">
@@ -212,8 +208,6 @@ function OccupancyTypeForm(props) {
           labelRequired="label-required"
           value={form.occupancy}
           name="occupancy"
-          cl="5"
-          cr="7"
           onChange={(e) => setForm({...form, occupancy: +e.target.value})}
           disabled={isView || loading}
           type="number"
@@ -228,8 +222,8 @@ function OccupancyTypeForm(props) {
           labelRequired="label-required"
           value={form.occupancy_type_code}
           name="occupancy_type_code"
-          cl="6"
-          cr="6"
+          cl="12"
+          cr="12"
           onChange={(e) =>
             setForm({...form, occupancy_type_code: e.target.value})
           }

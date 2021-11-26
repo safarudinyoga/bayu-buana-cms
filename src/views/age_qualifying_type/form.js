@@ -132,8 +132,6 @@ function AgeQualifyingTypeForm(props) {
           labelRequired="label-required"
           value={form.age_qualifying_type_name}
           name="age_qualifying_type_name"
-          cl="5"
-          cr="6"
           onChange={(e) =>
             setForm({...form, age_qualifying_type_name: e.target.value})
           }
@@ -150,8 +148,8 @@ function AgeQualifyingTypeForm(props) {
           labelRequired="label-required"
           value={form.age_qualifying_type_code}
           name="age_qualifying_type_code"
-          cl="7"
-          cr="5"
+          cl="12"
+          cr="12"
           onChange={(e) =>
             setForm({...form, age_qualifying_type_code: parseInt(e.target.value)})
           }

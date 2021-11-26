@@ -208,8 +208,6 @@ function HotelAmenityCategoryForm(props) {
               labelRequired="label-required"
               value={form.hotel_amenity_category_name}
               name="hotel_amenity_category_name"
-              cl="7"
-              cr="5"
               onChange={(e) =>
                   setForm({...form, hotel_amenity_category_name: e.target.value})
               }
@@ -221,8 +219,6 @@ function HotelAmenityCategoryForm(props) {
 
           <FormInputWrapper
               label="Is Default"
-              cl="7"
-              cr="5"
               hint="Set is default"
           >
             <div className="form-check form-check-inline">
@@ -270,15 +266,13 @@ function HotelAmenityCategoryForm(props) {
               label="Description"
               value={form.description}
               name="description"
-              cl="7"
-              cr="5"
               onChange={(e) => setForm({...form, description: e.target.value})}
               disabled={isView || loading}
               type="textarea"
               minLength="1"
               maxLength="4000"
           />
-          <FormInputWrapper label="Hotel Amenity Category Icon Image" cl="7" cr="5">
+          <FormInputWrapper label="Hotel Amenity Category Icon Image">
             <label className="card card-default shadow-none border">
               <div className="card-body">
                 {!isView ? (
