@@ -54,9 +54,13 @@ export default function AttractionTable() {
         title: "Attraction Category",
         data: "attraction_category_attraction",
         render: (data) => {
-          return data.map(value => {
-            return value.attraction_category.attraction_category_name
-          }).join(" & ")
+          try {
+            return data.map(value => {
+              return value.attraction_category.attraction_category_name
+            }).join(" & ")
+          } catch (e) {
+            return ""
+          }
         }
       },
       {
