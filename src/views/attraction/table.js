@@ -52,12 +52,7 @@ export default function AttractionTable() {
       },
       {
         title: "Attraction Category",
-        data: "attraction_category_attraction",
-        render: (data) => {
-          return data.map(value => {
-            return value.attraction_category.attraction_category_name
-          }).join(" & ")
-        }
+        data: "attraction_category_names",
       },
       {
         searchable: false,
