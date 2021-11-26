@@ -132,8 +132,6 @@ function TravelPurposeForm(props) {
           labelRequired="label-required"
           value={form.travel_purpose_name}
           name="travel_purpose_name"
-          cl="4"
-          cr="6"
           onChange={(e) =>
             setForm({...form, travel_purpose_name: e.target.value})
           }
@@ -150,8 +148,8 @@ function TravelPurposeForm(props) {
           labelRequired="label-required"
           value={form.travel_purpose_code}
           name="travel_purpose_code"
-          cl="7"
-          cr="5"
+          cl="12"
+          cr="12"
           onChange={(e) =>
             setForm({...form, travel_purpose_code: e.target.value})
           }

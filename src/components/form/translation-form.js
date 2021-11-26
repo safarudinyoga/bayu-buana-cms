@@ -158,9 +158,7 @@ export default class TranslationForm extends Component {
                       field.name,
                     )}
                     name={field.name + "_" + lang.language_code}
-                    type={field.type}
-                    cl="3"
-                    cr="4"
+                    type={field.type}                    
                     label={field.label}
                   />
                 )
@@ -182,7 +180,7 @@ export default class TranslationForm extends Component {
         <p className="text-sub-header">Translation</p>
         <hr />
         <div className="row">
-          <div className="col-xs-12 col-sm-4 col-md-3 translation-tab-container">
+          <div className="col-xs-12 col-sm-4 col-md-4 col-lg-3 translation-tab-container">
             <button
               type="button"
               className="btn btn-default dropdown-toggle btn-block shadow"
@@ -202,7 +200,7 @@ export default class TranslationForm extends Component {
               {tabPills}
             </div>
           </div>
-          <div className="col-xs-12 col-sm-8 col-md-9 translation-form-content card border shadow-none">
+          <div className="col-xs-12 col-sm-8 col-md-8 col-lg-9 translation-form-content card border shadow-none">
             <div className="tab-content card-body" id="v-pills-tabContent">
               {tabContents}
             </div>

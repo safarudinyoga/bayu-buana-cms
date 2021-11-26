@@ -132,8 +132,6 @@ function MealPlanTypeForm(props) {
           labelRequired="label-required"
           value={form.meal_plan_type_name}
           name="meal_plan_type_name"
-          cl="4"
-          cr="6"
           onChange={(e) =>
             setForm({...form, meal_plan_type_name: e.target.value})
           }
@@ -150,8 +148,8 @@ function MealPlanTypeForm(props) {
           labelRequired="label-required"
           value={form.meal_plan_type_code}
           name="meal_plan_type_code"
-          cl="6"
-          cr="6"
+          cl="12"
+          cr="12"
           onChange={(e) =>
             setForm({...form, meal_plan_type_code: parseInt(e.target.value)})
           }

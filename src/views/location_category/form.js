@@ -132,8 +132,6 @@ function LocationCategoryForm(props) {
           labelRequired="label-required"
           value={form.location_category_name}
           name="location_category_name"
-          cl="5"
-          cr="6"
           onChange={(e) =>
             setForm({...form, location_category_name: e.target.value})
           }
@@ -150,8 +148,8 @@ function LocationCategoryForm(props) {
           labelRequired="label-required"
           value={form.location_category_code}
           name="location_category_code"
-          cl="6"
-          cr="6"
+          cl="12"
+          cr="12"
           onChange={(e) =>
             setForm({...form, location_category_code: parseInt(e.target.value)})
           }
