@@ -132,8 +132,6 @@ function RegionForm(props) {
           labelRequired="label-required"
           value={form.region_name}
           name="region_name"
-          cl="4"
-          cr="6"
           onChange={(e) => setForm({...form, region_name: e.target.value})}
           disabled={isView || loading}
           type="text"
@@ -148,8 +146,8 @@ function RegionForm(props) {
           labelRequired="label-required"
           value={form.region_code}
           name="region_code"
-          cl="5"
-          cr="6"
+          cl="12"
+          cr="12"
           onChange={(e) => setForm({...form, region_code: e.target.value})}
           disabled={isView || loading}
           type="text"

@@ -178,9 +178,7 @@ function AirlineForm(props) {
           label="Airline Name"
           labelRequired="label-required"
           value={form.airline_name}
-          name="airline_name"
-          cl="3"
-          cr="6"
+          name="airline_name"          
           onChange={(e) => setForm({...form, airline_name: e.target.value})}
           disabled={isView || loading}
           type="text"
@@ -190,9 +188,7 @@ function AirlineForm(props) {
         <FormInputSelectAjax
           label="Company Name"
           value={form.company_id}
-          name="company_id"
-          cl="3"
-          cr="6"
+          name="company_id"          
           endpoint="/master/companies"
           column="company_name"
           onChange={(e) =>
@@ -211,7 +207,7 @@ function AirlineForm(props) {
             Company 2
           </option>
         </FormInputSelectAjax>
-        <FormInputWrapper label="Airline Logo" cl="3" cr="4">
+        <FormInputWrapper label="Airline Logo">
           <label className="card card-default shadow-none border">
             <div className="card-body">
               {!isView ? (
@@ -246,8 +242,8 @@ function AirlineForm(props) {
           labelRequired="label-required"
           value={form.airline_code}
           name="airline_code"
-          cl="4"
-          cr="6"
+          cl="12"
+          cr="12"
           onChange={(e) => setForm({...form, airline_code: e.target.value})}
           disabled={isView || loading}
           type="text"
@@ -259,8 +255,8 @@ function AirlineForm(props) {
           label="Numeric Code"
           value={form.numeric_code}
           name="numeric_code"
-          cl="4"
-          cr="6"
+          cl="12"
+          cr="12"
           onChange={(e) => setForm({...form, numeric_code: e.target.value})}
           disabled={isView || loading}
           type="text"

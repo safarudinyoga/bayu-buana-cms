@@ -215,8 +215,6 @@ function HotelSupplierForm(props) {
           labelRequired="label-required"
           value={form.hotel_supplier_name}
           name="hotel_supplier_name"
-          cl="3"
-          cr="6"
           onChange={(e) =>
             setForm({...form, hotel_supplier_name: e.target.value})
           }
@@ -230,8 +228,6 @@ function HotelSupplierForm(props) {
           label="Supplier Type"
           value={form.supplier_type_id}
           name="supplier_type_id"
-          cl="3"
-          cr="6"
           endpoint="/master/supplier-types"
           column="supplier_type_name"
           onChange={(e) =>
@@ -251,8 +247,8 @@ function HotelSupplierForm(props) {
           labelRequired="label-required"
           value={form.hotel_supplier_code}
           name="hotel_supplier_code"
-          cl="6"
-          cr="6"
+          cl="12"
+          cr="12"
           onChange={(e) =>
             setForm({...form, hotel_supplier_code: e.target.value})
           }

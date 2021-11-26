@@ -145,8 +145,6 @@ function CityForm(props) {
           labelRequired="label-required"
           value={form.city_name}
           name="city_name"
-          cl="3"
-          cr="6"
           onChange={(e) => setForm({...form, city_name: e.target.value})}
           disabled={isView || loading}
           type="text"
@@ -157,8 +155,6 @@ function CityForm(props) {
           label="Country"
           value={form.country_id}
           name="country_id"
-          cl="3"
-          cr="6"
           endpoint="/master/countries"
           column="country_name"
           data={countryData}
@@ -177,8 +173,8 @@ function CityForm(props) {
           labelRequired="label-required"
           value={form.city_code}
           name="city_code"
-          cl="4"
-          cr="6"
+          cl="12"
+          cr="12"
           onChange={(e) => setForm({...form, city_code: e.target.value})}
           disabled={isView || loading}
           type="text"

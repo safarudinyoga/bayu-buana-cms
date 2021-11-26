@@ -322,8 +322,8 @@ function AttractionForm(props) {
           label="Attraction Category"
           value={form.attraction_category_attraction.map((item) => item.attraction_category_id)}
           name="attraction_category_attraction"
-          cl="3"
-          cr="6"
+          
+          
           data={categoryData}
           endpoint="/master/attraction-categories"
           column="attraction_category_name"
@@ -348,8 +348,8 @@ function AttractionForm(props) {
           labelRequired="label-required"
           value={form.country_id}
           name="country_id"
-          cl="3"
-          cr="6"
+          
+          
           data={countryData}
           endpoint="/master/countries"
           column="country_name"
@@ -364,8 +364,8 @@ function AttractionForm(props) {
           label="State/ Province"
           value={form.state_province}
           name="state_id"
-          cl="3"
-          cr="6"
+          
+          
           endpoint="/master/state-provinces"
           filter={form.country_id}
           column="state_province_name"
@@ -381,8 +381,8 @@ function AttractionForm(props) {
           value={form.city_id}
           labelRequired="label-required"
           name="city_id"
-          cl="3"
-          cr="6"
+          
+          
           data={cityData}
           endpoint="/master/cities"
           filter={form.country_id}
@@ -409,8 +409,8 @@ function AttractionForm(props) {
           label="Destination"
           value={form.destination_id}
           name="destination_id"
-          cl="3"
-          cr="6"
+          
+          
           data={destinationData}
           endpoint="/master/destinations"
           filter={form.destination_id}
@@ -426,8 +426,8 @@ function AttractionForm(props) {
           label="Zone"
           value={form.zone_id}
           name="zone_id"
-          cl="3"
-          cr="6"
+          
+          
           data={zoneData}
           endpoint="/master/zones"
           filter={form.zone_id}

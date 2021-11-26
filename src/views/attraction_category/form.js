@@ -225,8 +225,6 @@ function AttractionCategoryForm(props) {
           labelRequired="label-required"
           value={form.attraction_category_name}
           name="attraction_category_name"
-          cl="6"
-          cr="6"
           onChange={(e) => {
             setForm({ ...form, attraction_category_name: e.target.value })
           }}
@@ -239,8 +237,6 @@ function AttractionCategoryForm(props) {
         <FormInputWrapper
           label="Is Default"
           labelRequired="label-required"
-          cl="6"
-          cr="6"
           hint="Set is default"
         >
           {!isView ? (
@@ -296,8 +292,6 @@ function AttractionCategoryForm(props) {
           label="Description"
           value={form.description}
           name="description"
-          cl="6"
-          cr="6"
           onChange={(e) => setForm({ ...form, description: e.target.value })}
           disabled={isView || loading}
           type="textarea"
@@ -305,9 +299,7 @@ function AttractionCategoryForm(props) {
           maxLength="4000"
         />
         <FormInputWrapper
-          label="Icon"
-          cl="6"
-          cr="6"
+          label="Icon"      
           labelRequired="label-required"
         >
           <label className={`card card-default shadow-none border`}>
