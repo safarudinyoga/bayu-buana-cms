@@ -1,6 +1,8 @@
 import React, { Component } from "react"
 import "./navbar.css"
 import avatar2 from "admin-lte/dist/img/user8-128x128.jpg"
+import infoIcon from "assets/icons/information.svg"
+import notifIcon from "assets/icons/notification.svg"
 
 export default class Navbar extends Component {
   render() {
@@ -19,7 +21,7 @@ export default class Navbar extends Component {
           </li>
           <li className="nav-item">
               <a
-              className="nav-link"
+              className="nav-link pl-0 pl-sm-3"
               href="/"
             >
                 <img src="/img/logo.png" className="navbar-img" alt="logo"/>
@@ -28,8 +30,26 @@ export default class Navbar extends Component {
         </ul>
 
         <ul className="navbar-nav ml-auto">
+          <li className="nav-item">
+            <a className="nav-link px-0 px-sm-3" href="/">
+              <img
+                src={infoIcon}
+                alt="info icon"
+                className="navbar-icon"
+              />
+            </a>
+          </li>
+          <li className="nav-item">
+            <a className="nav-link px-2 px-sm-3" href="/">
+              <img
+                src={notifIcon}
+                alt="notif icon"
+                className="navbar-icon"
+              />
+            </a>
+          </li>
           <li className="nav-item dropdown">
-            <a className="nav-link" data-toggle="dropdown" href="/">
+            <a className="nav-link pl-0 pl-sm-3" data-toggle="dropdown" href="/">
               <img
                 src={avatar2}
                 alt="User Avatar"
