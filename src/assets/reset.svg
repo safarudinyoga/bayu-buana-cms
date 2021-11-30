@@ -1,11 +1,21 @@
-<svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-<g clip-path="url(#clip0)">
-<path d="M16.8036 22.4307C14.2476 23.4467 11.4488 23.4065 8.92298 22.3174C6.80088 21.4025 5.08515 19.8391 3.98824 17.8469L8.23582 17.9079L8.26023 16.209L1.80462 16.1163L1.71186 22.5719L3.41078 22.5963L3.44639 20.1185C6.62422 24.299 12.3186 26.0418 17.4313 24.0097C19.3797 23.2352 21.0948 21.9626 22.3913 20.3293C23.6482 18.7458 24.4917 16.8548 24.8306 14.8608L23.1554 14.5762C22.5473 18.1553 20.1728 21.0915 16.8036 22.4307Z" fill="white"/>
-<path d="M17.7497 1.84482C14.8071 0.576178 11.5466 0.529329 8.56874 1.7129C6.62033 2.48736 4.90521 3.75999 3.60877 5.39328C2.35178 6.97677 1.50828 8.86778 1.16945 10.8618L2.84458 11.1464C3.45275 7.56728 5.82724 4.63108 9.19636 3.29193C11.7524 2.27596 14.5512 2.31617 17.077 3.40516C19.1991 4.32006 20.9149 5.88346 22.0118 7.87563L17.7642 7.8146L17.7398 9.51352L24.1954 9.60627L24.2881 3.15068L22.5892 3.12627L22.5537 5.59678C21.3187 3.96739 19.6782 2.67628 17.7497 1.84482Z" fill="white"/>
-</g>
-<defs>
-<clipPath id="clip0">
-<rect width="24" height="23.7161" fill="white" transform="translate(0.970825 24.6864) rotate(-89.1768)"/>
-</clipPath>
-</defs>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="60" height="60" viewBox="0 0 60 60">
+  <defs>
+    <filter id="Ellipse_114" x="0" y="0" width="60" height="60" filterUnits="userSpaceOnUse">
+      <feOffset dy="3" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feFlood flood-opacity="0.302"/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g id="refresh_icon" data-name="refresh icon" transform="translate(12 9)">
+    <g transform="matrix(1, 0, 0, 1, -12, -9)" filter="url(#Ellipse_114)">
+      <circle id="Ellipse_114-2" data-name="Ellipse 114" cx="18" cy="18" r="18" transform="translate(12 9)" fill="#5e5e5e"/>
+    </g>
+    <g id="Icon_feather-refresh-cw" data-name="Icon feather-refresh-cw" transform="translate(7 9)">
+      <path id="Path_263" data-name="Path 263" d="M31.231,6v6.226H25.5" transform="translate(-10.218 -4.965)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <path id="Path_264" data-name="Path 264" d="M1.5,27.226V21H7.231" transform="translate(-1.5 -9.588)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <path id="Path_265" data-name="Path 265" d="M3.9,10.727A8.879,8.879,0,0,1,10.1,4.734,8.151,8.151,0,0,1,18.081,7.24l4.432,4.524M1.5,15.915,5.932,20.44a8.151,8.151,0,0,0,7.977,2.507,8.879,8.879,0,0,0,6.207-5.993" transform="translate(-1.5 -4.503)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+    </g>
+  </g>
 </svg>

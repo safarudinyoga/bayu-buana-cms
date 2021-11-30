@@ -65,7 +65,7 @@
 } */
 
 .dataTable-root .select-checkbox {
-    width: 60px;
+    min-width: 50px;
     text-align: right;    
 }
 
@@ -79,8 +79,7 @@
 }
 
 .dataTable-root .table-row-action-item {
-    padding-left: 3px;
-    padding-right: 3px;
+    color: #3E40AE;
 }
 
 .dataTables_processing {
@@ -99,8 +98,34 @@
   color: #3E40AE;
 }
 
+.cstm-col-width {
+  min-width: 100px;
+  max-width: 200px !important;
+  width: 50%;  
+}
+
+table.dataTable>tbody>tr.child ul.dtr-details {
+  display: inline-block;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+table.dataTable>tbody>tr.child ul.dtr-details>li {
+  padding: 0.5em 20px;
+}
+table.dataTable>tbody>tr.child span.dtr-title {
+  display: inline-block;
+  min-width: 75px;
+  font-weight: bold;
+}
+
 @media (min-width: 576px) {
   .dataTable-root .select-checkbox {
     width: 40px;  
+  }
+  .cstm-col-width {
+    min-width: none;
+    max-width: none;
+    width: auto;
   }
 }

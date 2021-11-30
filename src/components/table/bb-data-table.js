@@ -20,6 +20,9 @@ import { withRouter } from "react-router"
 import { connect } from "react-redux"
 import { setAlert } from "redux/ui-store"
 import "./bb-data-table.css"
+import editIcon from "assets/icons/edit.svg"
+import removeIcon from "assets/icons/remove.svg"
+import showIcon from "assets/icons/show.svg"
 
 window.JSZip = JSZip
 
@@ -94,15 +97,15 @@ class BBDataTable extends Component {
         return (
           '<a href="javascript:void(0);" class="table-row-action-item" data-action="edit" data-id="' +
           row.id +
-          '" title="Click to edit"><i class="fa fa-edit"></i></a>' +
+          '" title="Click to edit"><img src="'+ editIcon +'" /></a>' +
           '<a href="javascript:void(0);" class="table-row-action-item" data-action="view" data-id="' +
           row.id +
-          '" title="Click to view details"><i class="fa fa-eye"></i></a>' +
+          '" title="Click to view details"><img src="'+ showIcon +'"/></a>' +
           '<a href="javascript:void(0);" class="table-row-action-item" data-action="delete" data-id="' +
           row.id +
           '" data-name="' +
           filteredRecordName[allowed] +
-          '" title="Click to delete"><i class="fa fa-trash"></i></a>'
+          '" title="Click to delete"><img src="'+ removeIcon +'" /></a>'
         )
       },
     })
@@ -406,7 +409,7 @@ class BBDataTable extends Component {
           //   },
           {
             ordeable: false,
-            className: "table-row-action",
+            // className: "table-row-action",
             targets: [columns.length - 1],
           },
         ],
