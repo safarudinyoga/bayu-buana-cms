@@ -36,10 +36,6 @@ button.advanced-options-btn:active {
 }
 
 .btn-table-action {
-  background-color: #5e5e5e;
-  border-radius: 50%;
-  width: 38px;
-  height: 38px;
   display: inline-block;
   margin: 1px 8px 0px 0px;
 }
@@ -51,9 +47,6 @@ button.advanced-options-btn:active {
 
 .btn-table-action img {
   display: block;
-  width: 30px;
-  height: 30px;
-  margin: 4px;
 }
 
 .btn-table-action-reset {

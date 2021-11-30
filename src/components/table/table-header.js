@@ -1,6 +1,7 @@
 import downloadIcon from "assets/download.svg"
 import printIcon from "assets/printer.svg"
 import resetIcon from "assets/reset.svg"
+import createIcon from "assets/icons/create.svg"
 import downIcon from "assets/icons/double-down.svg"
 import upIcon from "assets/icons/double-up.svg"
 import { Component } from "react"
@@ -185,10 +186,8 @@ class TableHeader extends Component {
                     onClick={this.handleClick.bind(this)}
                     className="btn btn-warning float-right button-new"
                 >
-                <span className="text-button-new">
-                  <i className="fas fa-file-medical mr-2"></i>
+                  <img src={createIcon} className="mr-1"/>
                   Create New
-                </span>
                 </button>
               </OverlayTrigger>
 
@@ -245,7 +244,7 @@ class TableHeader extends Component {
                     <div className="col-xs-4">
                       <label className="text-label-filter ml-2">Status</label>
                       <Select
-                          width="200px"
+                          value={options[this.state.statusValue]}
                           onChange={this.handleStatus.bind(this)}
                           styles={customStyles}
                           options={options}
@@ -258,7 +257,7 @@ class TableHeader extends Component {
                 <Link
                     to="#"
                     onClick={this.handleReset.bind(this)}
-                    className="btn-table-action btn-table-action-reset"
+                    className="btn-table-action-reset"
                 >
                   <img src={resetIcon} className="img-circle" alt="reset" />
                 </Link>
