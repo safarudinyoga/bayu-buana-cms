@@ -1,3 +1,7 @@
+.input-group {
+  width: 250px;
+}
+
 .input-group-with-text input.form-control {
   border-right-width: 0px;
 }
@@ -40,10 +44,10 @@ button.advanced-options-btn:active {
   margin: 1px 8px 0px 0px;
 }
 
-.btn-table-action:hover,
+/* .btn-table-action:hover,
 .btn-table-action:focus {
   box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.4);
-}
+} */
 
 .btn-table-action img {
   display: block;
@@ -85,6 +89,9 @@ button.advanced-options-btn:active {
   color: #333333;
 }
 @media only screen and (max-width: 768px) {
+  .input-group {
+    width: 100%;
+  }
   .text-label-filter {
     font-size: 13px;
     font-weight:bold;

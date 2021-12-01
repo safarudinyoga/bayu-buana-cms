@@ -1,3 +1,8 @@
+.content-header .breadcrumb {
+  margin-top: 8px;
+  line-height: 8px;
+}
+
 .breadcrumb-item {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-size: 11px;
