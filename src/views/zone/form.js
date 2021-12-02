@@ -60,6 +60,22 @@ function ZoneForm(props) {
     },
   }
 
+  const validationMessages = {
+    zone_name: {
+      required: "Zone Name is required",
+      minlength: "Zone Name must be at least 1 characters",
+      maxlength: "Zone Name cannot be more than 256 characters",
+    },
+    destination: {
+      required: "Destination is required",
+    }, 
+    zone_code: {
+      required: "Zone Code is required",
+      minlength: "Zone Code must be at least 1 characters",
+      maxlength: "Zone Code cannot be more than 16 characters",
+    }
+  }
+
   useEffect(async () => {
     let api = new Api()
     let formId = props.match.params.id
@@ -144,6 +160,7 @@ function ZoneForm(props) {
       alertMessage={"Incomplete data"}
       isValid={false}
       rules={validationRules}
+      validationMessages={validationMessages}
     >
       <FormHorizontal>
         <FormInputControl

@@ -71,6 +71,27 @@ function LanguageForm(props) {
     },
   }
 
+  const validationMessages = {
+    language_code: {
+      required: "Language Code is required",
+      minlength: "Language Code must be at least 3 characters",
+      maxlength: "Language Code cannot be more than 3 characters",
+    },
+    language_name: {
+      required: "Language Name is required",
+      minlength: "Language Name must be at least 1 characters",
+      maxlength: "Language Name cannot be more than 256 characters",
+    }, 
+    language_native_name: {
+      required: "Language Native Name is required",
+      minlength: "Language Native Name must be at least 1 characters",
+      maxlength: "Language Native Name cannot be more than 256 characters",
+    }, 
+    language_asset: {
+      required: "Language Flag Image is required",
+    },
+  }
+
   useEffect(async () => {
     let api = new Api()
     let formId = props.match.params.id
@@ -180,6 +201,7 @@ function LanguageForm(props) {
       alertMessage={"Incomplete data"}
       isValid={false}
       rules={validationRules}
+      validationMessages={validationMessages}
     >
       <FormHorizontal>
         <FormInputControl
