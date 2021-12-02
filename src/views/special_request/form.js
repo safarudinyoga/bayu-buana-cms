@@ -44,6 +44,19 @@ function SpecialRequestForm(props) {
     },
   }
 
+  const validationMessages = {
+    special_request_code: {
+      required: "Special Request Code is required.",
+      minlength: "Special Request Code must be at least 1 characters",
+      maxlength: "Special Request Code cannot be more than 36 characters",
+    },
+    special_request_name: {
+      required: "Special Request Name is required",
+      minlength: "Special Request Name must be at least 1 characters",
+      maxlength: "Special Request Name cannot be more than 256 characters",
+    },
+  }
+
   useEffect(async () => {
     let api = new Api()
     let formId = props.match.params.id
@@ -125,6 +138,7 @@ function SpecialRequestForm(props) {
       alertMessage={"Incomplete data"}
       isValid={false}
       rules={validationRules}
+      validationMessages={validationMessages}
     >
       <FormHorizontal>
         <FormInputControl
