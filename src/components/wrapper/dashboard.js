@@ -31,7 +31,7 @@ const DashboardWrapper = (props) => {
       <Navbar />
       <Sidebar />
       <div className="content-wrapper">
-        <div className="container-fluid pb-5">
+        <div className="container-fluid pb-5 pl-3">
           <Breadcrumb />
           <section className="content">{props.children}</section>
         </div>

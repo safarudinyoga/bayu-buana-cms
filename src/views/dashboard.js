@@ -21,7 +21,7 @@ export default function Dashboard() {
     )
   }, [])
   return (
-    <div className="container-fluid">
+    <div className="container-fluid pl-0">
       <div className="card card-default border shadow-none">
         <div className="card-body">
           <h1>{environments.APP_NAME}</h1>

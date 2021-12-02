@@ -1,3 +1,6 @@
+.sidebar .nav {
+  margin-top: 25px;
+}
 .sidebar .nav-item a > p {
   font-size: 14px;
 }
