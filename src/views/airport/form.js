@@ -54,6 +54,15 @@ function AirportForm(props) {
     city_id: {},
   }
 
+  const validationMessage = {
+    airport_code: {
+      required: "Airport Code is required",
+    },
+    airport_name: {
+      required: "Airport Name is required",
+    },
+  }
+
   useEffect(async () => {
     let api = new Api()
     let formId = props.match.params.id
@@ -138,6 +147,7 @@ function AirportForm(props) {
       alertMessage={"Incomplete data"}
       isValid={false}
       rules={validationRules}
+      validationMessages={validationMessage}
     >
       <FormHorizontal>
         <FormInputControl

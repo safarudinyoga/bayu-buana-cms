@@ -44,6 +44,15 @@ function AgeQualifyingTypeForm(props) {
     },
   }
 
+  const validationMessage = {
+    age_qualifying_type_code: {
+      required: "Age Qualifying Type Code is required.",
+    },
+    age_qualifying_type_name: {
+      required: "Age Qualifying Type Name is required",
+    },
+  }
+
   useEffect(async () => {
     let api = new Api()
     let formId = props.match.params.id
@@ -125,6 +134,7 @@ function AgeQualifyingTypeForm(props) {
       alertMessage={"Incomplete data"}
       isValid={false}
       rules={validationRules}
+      validationMessages={validationMessage}
     >
       <FormHorizontal>
         <FormInputControl

@@ -44,6 +44,15 @@ function SpecialRequestForm(props) {
     },
   }
 
+  const validationMessage = {
+    special_request_code: {
+      required: "Special Request Code is required.",
+    },
+    special_request_name: {
+      required: "Special Request Name is required",
+    },
+  }
+
   useEffect(async () => {
     let api = new Api()
     let formId = props.match.params.id
@@ -125,6 +134,7 @@ function SpecialRequestForm(props) {
       alertMessage={"Incomplete data"}
       isValid={false}
       rules={validationRules}
+      validationMessages={validationMessage}
     >
       <FormHorizontal>
         <FormInputControl

@@ -81,6 +81,18 @@ function CountryForm(props) {
     }
   }
 
+  const validationMessage = {
+    country_code: {
+      required: "Country Code is required",
+    },
+    country_name: {
+      required: "Country Name is required",
+    },
+    region_id: {
+      required: "Region is required"
+    }
+  }
+
   useEffect(async () => {
     let api = new Api()
     let formId = props.match.params.id
@@ -196,6 +208,7 @@ function CountryForm(props) {
       alertMessage={"Incomplete data"}
       isValid={false}
       rules={validationRules}
+      validationMessages={validationMessage}
     >
       <FormHorizontal>
         <FormInputControl

@@ -60,6 +60,18 @@ function ZoneForm(props) {
     },
   }
 
+  const validationMessage = {
+    zone_name: {
+      required: "Zone Name is required",
+    },
+    destination: {
+      required: "Destination is required",
+    }, 
+    zone_code: {
+      required: "Zone Code is required",
+    }
+  }
+
   useEffect(async () => {
     let api = new Api()
     let formId = props.match.params.id
@@ -144,6 +156,7 @@ function ZoneForm(props) {
       alertMessage={"Incomplete data"}
       isValid={false}
       rules={validationRules}
+      validationMessages={validationMessage}
     >
       <FormHorizontal>
         <FormInputControl

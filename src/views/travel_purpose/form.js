@@ -44,6 +44,15 @@ function TravelPurposeForm(props) {
     },
   }
 
+  const validationMessage = {
+    travel_purpose_code: {
+      required: "Travel Purpose Code is required.",
+    },
+    travel_purpose_name: {
+      required: "Travel Purpose Name is required",
+    },
+  }
+
   useEffect(async () => {
     let api = new Api()
     let formId = props.match.params.id
@@ -125,6 +134,7 @@ function TravelPurposeForm(props) {
       alertMessage={"Incomplete data"}
       isValid={false}
       rules={validationRules}
+      validationMessages={validationMessage}
     >
       <FormHorizontal>
         <FormInputControl
