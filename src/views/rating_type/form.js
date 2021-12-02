@@ -227,7 +227,7 @@ function RatingTypeForm(props) {
           labelRequired="label-required"
           value={form.rating_type_code}
           name="rating_type_code"
-          cl="12"
+          cl={{md:"12"}}
           cr="12"
           onChange={(e) =>
             setForm({...form, rating_type_code: parseInt(e.target.value)})

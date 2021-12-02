@@ -224,7 +224,7 @@ function FlightTypeForm(props) {
           labelRequired="label-required"
           value={form.flight_type_code}
           name="flight_type_code"
-          cl="12"
+          cl={{md:"12"}}
           cr="12"
           onChange={(e) =>
             setForm({...form, flight_type_code: e.target.value})

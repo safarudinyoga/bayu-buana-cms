@@ -191,7 +191,7 @@ function ZoneForm(props) {
           value={form.zone_code}
           name="zone_code"
           onChange={(e) => setForm({...form, zone_code: e.target.value})}
-          cl="12"
+          cl={{md:"12"}}
           cr="12"
           disabled={isView || loading}
           type="number"

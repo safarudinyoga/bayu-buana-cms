@@ -170,7 +170,7 @@ function AirportForm(props) {
           labelRequired="label-required"
           value={form.airport_code}
           name="airport_code"
-          cl="12"
+          cl={{md:"12"}}
           cr="12"
           onChange={(e) => setForm({...form, airport_code: e.target.value})}
           disabled={isView || loading}
@@ -183,7 +183,7 @@ function AirportForm(props) {
           label="ICAO Code"
           value={form.icao_code}
           name="icao_code"
-          cl="12"
+          cl={{md:"12"}}
           cr="12"
           onChange={(e) => setForm({...form, icao_code: e.target.value})}
           disabled={isView || loading}
