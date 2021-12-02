@@ -243,7 +243,7 @@ function HotelAmenityForm(props) {
           labelRequired="label-required"
           value={form.hotel_amenity_type_code}
           name="hotel_amenity_type_code"
-          cl="12"
+          cl={{md:"12"}}
           cr="12"
           onChange={(e) =>
             setForm({

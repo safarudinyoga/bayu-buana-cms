@@ -4,6 +4,7 @@ import Api from "config/api"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
 import FormBuilder from "components/form/builder"
+import FormInputFile from '../../components/form/input-file'
 import useQuery from "lib/query"
 import {useDispatch} from "react-redux"
 import {setUIParams} from "redux/ui-store"
@@ -239,7 +240,7 @@ function LanguageForm(props) {
           labelRequired="label-required"
           value={form.language_code}
           name="language_code"
-          cl="12"
+          cl={{md:"12"}}
           cr="12"
           onChange={(e) => setForm({...form, language_code: e.target.value})}
           disabled={isView || loading}
@@ -252,7 +253,7 @@ function LanguageForm(props) {
           label="Language Alpha 3 Code"
           value={form.language_alpha_3_code}
           name="language_alpha_3_code"
-          cl="12"
+          cl={{md:"12"}}
           cr="12"
           onChange={(e) =>
             setForm({...form, language_alpha_3_code: e.target.value})

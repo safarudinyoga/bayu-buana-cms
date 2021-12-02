@@ -155,7 +155,7 @@ function PassengerTypeForm(props) {
           labelRequired="label-required"
           value={form.passenger_type_code}
           name="passenger_type_code"
-          cl="12"
+          cl={{md:"12"}}
           cr='12'
           onChange={(e) =>
             setForm({...form, passenger_type_code: parseInt(e.target.value)})
@@ -170,7 +170,7 @@ function PassengerTypeForm(props) {
           label="Passenger Alpha 3 Code"
           value={form.passenger_alpha_3_code}
           name="passenger_alpha_3_code"
-          cl="12"
+          cl={{md:"12"}}
           cr="12"
           onChange={(e) =>
             setForm({...form, passenger_alpha_3_code: e.target.value})

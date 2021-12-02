@@ -226,7 +226,7 @@ function DestinationGroupForm(props) {
           labelRequired="label-required"
           value={form.destination_group_code}
           name="destination_group_code"
-          cl="12"
+          cl={{md:"12"}}
           cr="12"
           onChange={(e) =>
             setForm({...form, destination_group_code: e.target.value})

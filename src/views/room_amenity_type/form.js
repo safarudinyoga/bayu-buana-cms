@@ -217,7 +217,7 @@ function RoomAmenityTypeForm(props) {
           labelRequired="label-required"
           value={form.room_amenity_type_code}
           name="room_amenity_type_code"
-          cl="12"
+          cl={{md:"12"}}
           cr="12"
           onChange={(e) => setForm({...form, room_amenity_type_code: e.target.value})}
           disabled={isView || loading}

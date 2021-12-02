@@ -242,7 +242,7 @@ function AirlineForm(props) {
           labelRequired="label-required"
           value={form.airline_code}
           name="airline_code"
-          cl="12"
+          cl={{md:"12"}}
           cr="12"
           onChange={(e) => setForm({...form, airline_code: e.target.value})}
           disabled={isView || loading}
@@ -255,7 +255,7 @@ function AirlineForm(props) {
           label="Numeric Code"
           value={form.numeric_code}
           name="numeric_code"
-          cl="12"
+          cl={{md:"12"}}
           cr="12"
           onChange={(e) => setForm({...form, numeric_code: e.target.value})}
           disabled={isView || loading}

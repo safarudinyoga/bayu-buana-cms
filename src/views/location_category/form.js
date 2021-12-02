@@ -148,7 +148,7 @@ function LocationCategoryForm(props) {
           labelRequired="label-required"
           value={form.location_category_code}
           name="location_category_code"
-          cl="12"
+          cl={{md:"12"}}
           cr="12"
           onChange={(e) =>
             setForm({...form, location_category_code: parseInt(e.target.value)})

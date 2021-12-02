@@ -227,7 +227,7 @@ function CityForm(props) {
           labelRequired="label-required"
           value={form.city_code}
           name="city_code"
-          cl="12"
+          cl={{md:"12"}}
           cr="12"
           onChange={(e) => setForm({...form, city_code: e.target.value})}
           disabled={isView || loading}

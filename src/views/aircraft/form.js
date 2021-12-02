@@ -172,7 +172,7 @@ function AircraftForm(props) {
           labelRequired="label-required"
           name="aircraft_code"
           onChange={(e) => setForm({...form, aircraft_code: e.target.value})}
-          cl="12"
+          cl={{md:"12"}}
           cr="12"
           disabled={isView || loading}
           type="number"
@@ -186,7 +186,7 @@ function AircraftForm(props) {
           labelRequired="label-required"
           name="icao_code"
           onChange={(e) => setForm({...form, icao_code: e.target.value})}
-          cl="12"
+          cl={{md:"12"}}
           cr="12"
           disabled={isView || loading}
           label="ICAO Code"

@@ -250,7 +250,7 @@ function HotelSupplierForm(props) {
           labelRequired="label-required"
           value={form.hotel_supplier_code}
           name="hotel_supplier_code"
-          cl="12"
+          cl={{md:"12"}}
           cr="12"
           onChange={(e) =>
             setForm({...form, hotel_supplier_code: e.target.value})

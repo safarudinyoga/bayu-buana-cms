@@ -34,13 +34,11 @@ export default function CabinTypeTable() {
       {
         title: "Cabin Type Code",
         data: "cabin_type_code",
-        className: "cstm-col-width",
       },
       {
         title: "Cabin Type Name",
         data: "cabin_type_name",
         render: renderColumn("cabin_type", "cabin_type_name"),
-        className: "cstm-col-width",
       },
       {
         searchable: false,

@@ -215,7 +215,7 @@ function DestinationForm(props) {
           value={form.destination_code}
           name="destination_code"
           onChange={(e) => setForm({...form, destination_code: e.target.value})}
-          cl="12"
+          cl={{md:"12"}}
           cr="12"
           disabled={isView || loading}
           type="number"

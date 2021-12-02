@@ -183,7 +183,7 @@ function TripTypeForm(props) {
           labelRequired="label-required"
           value={form.trip_type_code}
           name="trip_type_code"
-          cl="12"
+          cl={{md:"12"}}
           cr="12"
           onChange={(e) => setForm({...form, trip_type_code: e.target.value})}
           disabled={isView || loading}

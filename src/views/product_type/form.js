@@ -201,7 +201,7 @@ function ProductTypeForm(props) {
           labelRequired="label-required"
           value={form.product_type_code}
           name="product_type_code"
-          cl="12"
+          cl={{md:"12"}}
           cr="12"
           onChange={(e) => setForm({...form, product_type_code: +e.target.value})}
           disabled={isView || loading}

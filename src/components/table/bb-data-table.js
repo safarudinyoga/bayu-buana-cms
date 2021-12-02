@@ -59,12 +59,12 @@ class BBDataTable extends Component {
     columns.push({
       searchable: false,
       orderable: false,
-      title: '<input type="checkbox" class="select-checkbox-all"/>',
+      title: '<input type="checkbox" id="cb-th" class=" float-left select-checkbox-all"/>',
       render: function (val, display, row) {
         return (
           '<svg class="float-left row-handle" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none"><rect id="backgroundrect" width="100%" height="100%" x="0" y="0" fill="none" stroke="none"/><path d="M7.098360577225684,13 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 z" fill="#707070" id="svg_1" class=""/><path d="M11.901639938354492,13 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 z" fill="#707070" id="svg_2" class=""/></svg> <input type="checkbox" data-id="' +
           row.id +
-          '" class="select-checkbox-item"/> <a class="float-left d-md-none" style="padding: 0; color: #b7b7b7"><i class="fas fa-plus-circle"></i></a>'
+          '" class="float-left select-checkbox-item"/> <a class="float-left d-md-none" style="padding: 0; color: #b7b7b7"><i class="fas fa-plus-circle" style="font-size: 17px;padding-left: 8px"></i></a>'
         )
       },
     })
@@ -403,6 +403,10 @@ class BBDataTable extends Component {
             className: "select-checkbox",
             targets: [0],
           },
+          {
+            targets:[1, 2],
+            className: "cstm-col-width",
+          },
           //   {
           //     responsivePriority: 10001,
           //     targets: [1, 3],
@@ -430,8 +434,8 @@ class BBDataTable extends Component {
             last: "&raquo;",
           },
           search: "Search",
-          info: '<span class="ml-2 text-label-input danger">Showing _START_ - _END_ of _TOTAL_</span>',
-          infoEmpty: '<span class="ml-2 text-label-input danger">Showing 0 - 0 of 0</span>',
+          info: '<span class="ml-2 text-label-input-paginate danger">Showing _START_ - _END_ of _TOTAL_</span>',
+          infoEmpty: '<span class="ml-2 text-label-input-paginate danger">Showing 0 - 0 of 0</span>',
           infoFiltered: "",
           loadingRecords: "Loading ...",
           processing: "<i class='fa fa-spin fa-circle-notch'></i> Loading...",

@@ -224,7 +224,7 @@ class TableHeader extends Component {
                     : "d-none"
               }
           >
-            <div className="card-body">
+            <div className="card-body-filter">
               <div className="row">
                 {ExtraFilter ? (                    
                       <ExtraFilter />                  
