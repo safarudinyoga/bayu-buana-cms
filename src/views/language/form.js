@@ -207,16 +207,6 @@ function LanguageForm(props) {
           minLength="1"
           maxLength="256"
         />
-        <FormInputFile
-          label="Flag"
-          value={form.language_native_name}
-          name="language_native_name"
-          onChange={doUpload}
-          disabled={isView}
-          type="file"
-          data={form}
-          // className="d-none"
-        />
         <FormInputWrapper label="Flag">
           <label className="card card-default shadow-none border">
             <div className="card-body">
