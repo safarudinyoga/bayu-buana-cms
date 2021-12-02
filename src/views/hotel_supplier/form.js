@@ -171,6 +171,9 @@ function HotelSupplierForm(props) {
     setLoading(true)
     let api = new Api()
     try {
+      if (!form.supplier_type_id) {
+        form.supplier_type_id = null
+      }
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
       for (let i in translated) {
