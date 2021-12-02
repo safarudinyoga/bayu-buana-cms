@@ -4,7 +4,6 @@ import Api from "config/api"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
 import FormBuilder from "components/form/builder"
-import FormInputFile from '../../components/form/input-file'
 import useQuery from "lib/query"
 import {useDispatch} from "react-redux"
 import {setUIParams} from "redux/ui-store"
