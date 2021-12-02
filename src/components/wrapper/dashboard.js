@@ -36,7 +36,7 @@ const DashboardWrapper = (props) => {
           <section className="content">{props.children}</section>
         </div>
         <div className="footer text-center text-md-left">
-          ©️ 2021 Bayu Buana Travel Services. All Rights Reserved
+          &copy; 2021 Bayu Buana Travel Services. All Rights Reserved.
         </div>
       </div>
     </div>
