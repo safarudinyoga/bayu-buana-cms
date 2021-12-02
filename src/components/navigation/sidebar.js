@@ -25,7 +25,7 @@ export default class Sidebar extends Component {
                   <i className="fas fa-briefcase nav-icon"></i>
                   <p>
                     Master Data Management
-                    <i className="right fas fa-angle-left"></i>
+                    <i className="right fas fa-angle-right"></i>
                   </p>
                 </Link>
                 <ul className="nav nav-treeview">
@@ -224,7 +224,7 @@ export default class Sidebar extends Component {
                   <img src="/img/icons/users.svg" alt="icon users" />
                   <p>
                     Employment Management
-                    <i className="right fas fa-angle-left"></i>
+                    <i className="right fas fa-angle-right"></i>
                   </p>
                 </Link>
                 <ul className="nav nav-treeview">
