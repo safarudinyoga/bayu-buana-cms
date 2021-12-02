@@ -44,12 +44,16 @@ function TravelPurposeForm(props) {
     },
   }
 
-  const validationMessage = {
+  const validationMessages = {
     travel_purpose_code: {
       required: "Travel Purpose Code is required.",
+      minlength: "Travel Purpose Code must be at least 1 characters",
+      maxlength: "Travel Purpose Code cannot be more than 36 characters",
     },
     travel_purpose_name: {
       required: "Travel Purpose Name is required",
+      minlength: "Travel Purpose Name must be at least 1 characters",
+      maxlength: "Travel Purpose Name cannot be more than 256 characters",
     },
   }
 
@@ -134,7 +138,7 @@ function TravelPurposeForm(props) {
       alertMessage={"Incomplete data"}
       isValid={false}
       rules={validationRules}
-      validationMessages={validationMessage}
+      validationMessages={validationMessages}
     >
       <FormHorizontal>
         <FormInputControl
@@ -142,8 +146,6 @@ function TravelPurposeForm(props) {
           labelRequired="label-required"
           value={form.travel_purpose_name}
           name="travel_purpose_name"
-          cl="4"
-          cr="6"
           onChange={(e) =>
             setForm({...form, travel_purpose_name: e.target.value})
           }
@@ -160,8 +162,8 @@ function TravelPurposeForm(props) {
           labelRequired="label-required"
           value={form.travel_purpose_code}
           name="travel_purpose_code"
-          cl="7"
-          cr="5"
+          cl={{md:"12"}}
+          cr="12"
           onChange={(e) =>
             setForm({...form, travel_purpose_code: e.target.value})
           }

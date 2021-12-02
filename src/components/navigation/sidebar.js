@@ -1,5 +1,5 @@
-import React, { Component } from "react"
-import { Link } from "react-router-dom"
+import React, {Component} from "react"
+import {Link} from "react-router-dom"
 import "./sidebar.css"
 
 export default class Sidebar extends Component {
@@ -25,7 +25,7 @@ export default class Sidebar extends Component {
                   <i className="fas fa-briefcase nav-icon"></i>
                   <p>
                     Master Data Management
-                    <i className="right fas fa-angle-left"></i>
+                    <i className="right fas fa-angle-right"></i>
                   </p>
                 </Link>
                 <ul className="nav nav-treeview">
@@ -51,6 +51,14 @@ export default class Sidebar extends Component {
                   <li className="nav-item">
                     <Link to="/master/airports" className="nav-link">
                       <p>Airport</p>
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link
+                      to="/master/attractions"
+                      className="nav-link"
+                    >
+                      <p>Attraction</p>
                     </Link>
                   </li>
                   <li className="nav-item">
@@ -216,7 +224,7 @@ export default class Sidebar extends Component {
                   <img src="/img/icons/users.svg" alt="icon users" />
                   <p>
                     Employment Management
-                    <i className="right fas fa-angle-left"></i>
+                    <i className="right fas fa-angle-right"></i>
                   </p>
                 </Link>
                 <ul className="nav nav-treeview">

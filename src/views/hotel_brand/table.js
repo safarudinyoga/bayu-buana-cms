@@ -52,6 +52,7 @@ export default function HotelBrandTable() {
         visible: false,
       },
     ],
+    recordName: "hotel_brand_name",
   }
   return <BBDataTable {...params} />
 }

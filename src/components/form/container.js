@@ -1,9 +1,9 @@
-import React, { Component } from "react"
-import SaveButton from "components/button/save"
-import CancelButton from "components/button/cancel"
-import $ from "jquery"
-import "admin-lte/plugins/jquery-validation/jquery.validate"
 import "admin-lte/plugins/jquery-validation/additional-methods"
+import "admin-lte/plugins/jquery-validation/jquery.validate"
+import CancelButton from "components/button/cancel"
+import SaveButton from "components/button/save"
+import $ from "jquery"
+import React, {Component} from "react"
 
 export default class FormContainer extends Component {
   constructor(props) {
@@ -14,15 +14,22 @@ export default class FormContainer extends Component {
 
   componentDidMount() {
     this.validator = this.validate()
+    $.validator.addMethod(
+      "noSpace",
+      function (value, element) {
+        return value.trim() === value
+      },
+      "No space please and don't leave it empty",
+    )
   }
 
-  componentDidUpdate() {}
+  componentDidUpdate() { }
 
   componentWillUnmount() {
     if (this.validator) {
       try {
         this.validator.destroy()
-      } catch (e) {}
+      } catch (e) { }
     }
   }
 
@@ -50,7 +57,7 @@ export default class FormContainer extends Component {
   onSubmit(e) {
     try {
       e.preventDefault()
-    } catch (e) {}
+    } catch (e) { }
 
     if (this.props.onSave) {
       this.props.onSave()
@@ -67,14 +74,14 @@ export default class FormContainer extends Component {
         ref={this.form}
         method="post"
         className={
-          this.props.isView ? "container-fluid view-only" : "container-fluid"
+          this.props.isView ? "container-fluid pl-0 view-only" : "container-fluid pl-0"
         }
       >
         <div className="card card-default border">
           <div className="card-body">{this.props.children}</div>
           <hr className="mx-4" />
           <div className="p-4">
-            {this.props.isView ? "" : <SaveButton />}
+            {this.props.isView ? "" : <SaveButton id={this.props.id} />}
             <CancelButton
               isView={this.props.isView}
               onClick={this.props.onBack}

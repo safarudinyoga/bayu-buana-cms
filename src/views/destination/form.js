@@ -173,8 +173,6 @@ function DestinationForm(props) {
           label="Country"
           value={form.country_id}
           name="country_id"
-          cl="3"
-          cr="6"
           endpoint="/master/countries"
           column="country_name"
           data={countryData}
@@ -189,8 +187,6 @@ function DestinationForm(props) {
           label="City"
           value={form.destination_city_id}
           name="destination_city_id"
-          cl="3"
-          cr="6"
           endpoint="/master/cities"
           filter={form.country_id}
           column="city_name"
@@ -219,8 +215,8 @@ function DestinationForm(props) {
           value={form.destination_code}
           name="destination_code"
           onChange={(e) => setForm({...form, destination_code: e.target.value})}
-          cl="5"
-          cr="6"
+          cl={{md:"12"}}
+          cr="12"
           disabled={isView || loading}
           type="number"
           label="Destination Code"

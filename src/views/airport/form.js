@@ -54,12 +54,16 @@ function AirportForm(props) {
     city_id: {},
   }
 
-  const validationMessage = {
+  const validationMessages = {
     airport_code: {
       required: "Airport Code is required",
+      minlength: "Airport Code must be at least 3 characters",
+      maxlength: "Airport Code cannot be more than 3 characters",
     },
     airport_name: {
       required: "Airport Name is required",
+      minlength: "Airport Name must be at least 1 characters",
+      maxlength: "Airport Name cannot be more than 256 characters",
     },
   }
 
@@ -147,16 +151,14 @@ function AirportForm(props) {
       alertMessage={"Incomplete data"}
       isValid={false}
       rules={validationRules}
-      validationMessages={validationMessage}
+      validationMessages={validationMessages}
     >
       <FormHorizontal>
         <FormInputControl
           label="Airport Name"
           labelRequired="label-required"
           value={form.airport_name}
-          name="airport_name"
-          cl="3"
-          cr="6"
+          name="airport_name"          
           onChange={(e) => setForm({...form, airport_name: e.target.value})}
           disabled={isView || loading}
           type="text"
@@ -166,9 +168,7 @@ function AirportForm(props) {
         <FormInputSelectAjax
           label="City"
           value={form.city_id}
-          name="city_id"
-          cl="3"
-          cr="6"
+          name="city_id"         
           endpoint="/master/cities"
           column="city_name"
           data={cityData}
@@ -184,8 +184,8 @@ function AirportForm(props) {
           labelRequired="label-required"
           value={form.airport_code}
           name="airport_code"
-          cl="4"
-          cr="6"
+          cl={{md:"12"}}
+          cr="12"
           onChange={(e) => setForm({...form, airport_code: e.target.value})}
           disabled={isView || loading}
           type="text"
@@ -197,8 +197,8 @@ function AirportForm(props) {
           label="ICAO Code"
           value={form.icao_code}
           name="icao_code"
-          cl="4"
-          cr="6"
+          cl={{md:"12"}}
+          cr="12"
           onChange={(e) => setForm({...form, icao_code: e.target.value})}
           disabled={isView || loading}
           type="text"

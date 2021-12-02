@@ -71,15 +71,21 @@ function LanguageForm(props) {
     },
   }
 
-  const validationMessage = {
+  const validationMessages = {
     language_code: {
       required: "Language Code is required",
+      minlength: "Language Code must be at least 3 characters",
+      maxlength: "Language Code cannot be more than 3 characters",
     },
     language_name: {
       required: "Language Name is required",
+      minlength: "Language Name must be at least 1 characters",
+      maxlength: "Language Name cannot be more than 256 characters",
     }, 
     language_native_name: {
       required: "Language Native Name is required",
+      minlength: "Language Native Name must be at least 1 characters",
+      maxlength: "Language Native Name cannot be more than 256 characters",
     }, 
     language_asset: {
       required: "Language Flag Image is required",
@@ -195,7 +201,7 @@ function LanguageForm(props) {
       alertMessage={"Incomplete data"}
       isValid={false}
       rules={validationRules}
-      validationMessages={validationMessage}
+      validationMessages={validationMessages}
     >
       <FormHorizontal>
         <FormInputControl
@@ -203,8 +209,6 @@ function LanguageForm(props) {
           labelRequired="label-required"
           value={form.language_name}
           name="language_name"
-          cl="4"
-          cr="6"
           onChange={(e) => setForm({...form, language_name: e.target.value})}
           disabled={isView || loading}
           type="text"
@@ -216,8 +220,6 @@ function LanguageForm(props) {
           labelRequired="label-required"
           value={form.language_native_name}
           name="language_native_name"
-          cl="4"
-          cr="6"
           onChange={(e) =>
             setForm({...form, language_native_name: e.target.value})
           }
@@ -226,7 +228,7 @@ function LanguageForm(props) {
           minLength="1"
           maxLength="256"
         />
-        <FormInputWrapper label="Flag" cl="4" cr="4">
+        <FormInputWrapper label="Flag">
           <label className="card card-default shadow-none border">
             <div className="card-body">
               {!isView ? <i className="fas fa-edit text-muted img-edit-icon"></i> : null}
@@ -259,8 +261,8 @@ function LanguageForm(props) {
           labelRequired="label-required"
           value={form.language_code}
           name="language_code"
-          cl="7"
-          cr="5"
+          cl={{md:"12"}}
+          cr="12"
           onChange={(e) => setForm({...form, language_code: e.target.value})}
           disabled={isView || loading}
           type="text"
@@ -272,8 +274,8 @@ function LanguageForm(props) {
           label="Language Alpha 3 Code"
           value={form.language_alpha_3_code}
           name="language_alpha_3_code"
-          cl="7"
-          cr="5"
+          cl={{md:"12"}}
+          cr="12"
           onChange={(e) =>
             setForm({...form, language_alpha_3_code: e.target.value})
           }

@@ -184,8 +184,6 @@ function CurrencyForm(props) {
           labelRequired="label-required"
           value={form.currency_name}
           name="currency_name"
-          cl="4"
-          cr="6"
           onChange={(e) => setForm({...form, currency_name: e.target.value})}
           disabled={isView || loading}
           type="text"
@@ -197,8 +195,6 @@ function CurrencyForm(props) {
           labelRequired="label-required"
           value={form.currency_symbol}
           name="currency_symbol"
-          cl="4"
-          cr="6"
           onChange={(e) =>
             setForm({...form, currency_symbol: e.target.value})
           }
@@ -207,7 +203,7 @@ function CurrencyForm(props) {
           minLength="1"
           maxLength="64"
         />
-        <FormInputWrapper label="Symbol Position" cl="4" cr="6">
+        <FormInputWrapper label="Symbol Position">
           <div className="form-check form-check-inline">
             <input
               className="form-check-input"
@@ -243,8 +239,6 @@ function CurrencyForm(props) {
           label="Minor Unit Name"
           value={form.minor_unit_name}
           name="minor_unit_name"
-          cl="4"
-          cr="6"
           onChange={(e) =>
             setForm({...form, minor_unit_name: e.target.value})
           }
@@ -257,8 +251,6 @@ function CurrencyForm(props) {
           label="Minor Unit"
           value={form.minor_unit}
           name="minor_unit"
-          cl="4"
-          cr="6"
           onChange={(e) => setForm({...form, minor_unit: parseInt(e.target.value)})}
           disabled={isView || loading}
           type="number"
@@ -269,8 +261,6 @@ function CurrencyForm(props) {
           label="Standard Precision"
           value={form.standard_precision}
           name="standard_precision"
-          cl="4"
-          cr="6"
           onChange={(e) =>
             setForm({...form, standard_precision: parseInt(e.target.value)})
           }
@@ -283,8 +273,6 @@ function CurrencyForm(props) {
           label="Price Precision"
           value={form.price_precision}
           name="price_precision"
-          cl="4"
-          cr="6"
           onChange={(e) =>
             setForm({...form, price_precision: parseInt(e.target.value)})
           }
@@ -301,8 +289,8 @@ function CurrencyForm(props) {
           labelRequired="label-required"
           value={form.currency_code}
           name="currency_code"
-          cl="5"
-          cr="6"
+          cl={{md:"12"}}
+          cr="12"
           onChange={(e) => setForm({...form, currency_code: e.target.value})}
           disabled={isView || loading}
           type="text"
@@ -315,8 +303,8 @@ function CurrencyForm(props) {
           labelRequired="label-required"
           value={form.numeric_code}
           name="numeric_code"
-          cl="5"
-          cr="6"
+          cl={{md:"12"}}
+          cr="12"
           onChange={(e) => setForm({...form, numeric_code: e.target.value})}
           disabled={isView || loading}
           type="text"

@@ -151,7 +151,7 @@ function ProvinceForm(props) {
           value={form.state_province_name}
           name="state_province_name"
           cl="4"
-          cr="6"
+          
           onChange={(e) => setForm({...form, state_province_name: e.target.value})}
           disabled={isView || loading}
           type="text"
@@ -163,7 +163,7 @@ function ProvinceForm(props) {
           value={form.state_province_category_id}
           name="state_province_category_id"
           cl="4"
-          cr="6"
+          
           endpoint="/master/state-province-categories"
           column="state_province_category_name"
           data={subdivisionData}
@@ -178,7 +178,7 @@ function ProvinceForm(props) {
           value={form.country_id}
           name="country_id"
           cl="4"
-          cr="6"
+          
           endpoint="/master/countries"
           column="country_name"
           data={countryData}

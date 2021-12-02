@@ -48,8 +48,8 @@ export default function HotelSupplierTable() {
       <TableDropdownFilter
         label="Supplier Type"
         onChange={onFilterChange}
-        endpoint="/master/hotel-amenity-types"
-        column="hotel_amenity_type_name"
+        endpoint="/master/supplier-types"
+        column="supplier_type_name"
         value={SelectedSupplierTypeIds}
         data={SelectedSupplierTypes}
       />
@@ -95,6 +95,7 @@ export default function HotelSupplierTable() {
         visible: false,
       },
     ],
+    recordName: "hotel_supplier_name",
   })
 
   return <BBDataTable {...params} extraFilter={extraFilter} onReset={onReset} {...params} />

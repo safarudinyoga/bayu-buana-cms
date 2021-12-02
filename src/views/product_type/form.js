@@ -140,8 +140,6 @@ function ProductTypeForm(props) {
           labelRequired="label-required"
           value={form.product_type_name}
           name="product_type_name"
-          cl="5"
-          cr="7"
           onChange={(e) =>
             setForm({...form, product_type_name: e.target.value})
           }
@@ -153,8 +151,6 @@ function ProductTypeForm(props) {
 
         <FormInputWrapper
           label="Is Default"
-          cl="5"
-          cr="7"
           hint="Set is default"
         >
           <div className="form-check form-check-inline">
@@ -205,8 +201,8 @@ function ProductTypeForm(props) {
           labelRequired="label-required"
           value={form.product_type_code}
           name="product_type_code"
-          cl="5"
-          cr="7"
+          cl={{md:"12"}}
+          cr="12"
           onChange={(e) => setForm({...form, product_type_code: +e.target.value})}
           disabled={isView || loading}
           type="number"

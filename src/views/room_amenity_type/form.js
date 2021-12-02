@@ -162,8 +162,6 @@ function RoomAmenityTypeForm(props) {
           labelRequired="label-required"
           value={form.room_amenity_type_name}
           name="room_amenity_type_name"
-          cl="4"
-          cr="6"
           onChange={(e) => setForm({...form, room_amenity_type_name: e.target.value})}
           disabled={isView || loading}
           type="text"
@@ -174,8 +172,6 @@ function RoomAmenityTypeForm(props) {
           label="Room Amenity Category"
           value={form.room_amenity_category_id}
           name="room_amenity_category_id"
-          cl="4"
-          cr="6"
           endpoint="/master/room-amenity-categories"
           column="room_amenity_category_name"
           onChange={(e) =>
@@ -188,7 +184,7 @@ function RoomAmenityTypeForm(props) {
         >
         </FormInputSelectAjax>
 
-        <FormInputWrapper label="Icon" cl="4" cr="4">
+        <FormInputWrapper label="Icon">
           <label className="card card-default shadow-none border">
             <div className="card-body">
               {!isView ? <i className="fas fa-edit text-muted img-edit-icon"></i> : null}
@@ -221,8 +217,8 @@ function RoomAmenityTypeForm(props) {
           labelRequired="label-required"
           value={form.room_amenity_type_code}
           name="room_amenity_type_code"
-          cl="6"
-          cr="6"
+          cl={{md:"12"}}
+          cr="12"
           onChange={(e) => setForm({...form, room_amenity_type_code: e.target.value})}
           disabled={isView || loading}
           type="text"

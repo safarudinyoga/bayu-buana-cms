@@ -167,8 +167,6 @@ function RatingTypeForm(props) {
           labelRequired="label-required"
           value={form.rating_type_name}
           name="rating_type_name"
-          cl="3"
-          cr="6"
           onChange={(e) =>
             setForm({...form, rating_type_name: e.target.value})
           }
@@ -182,8 +180,6 @@ function RatingTypeForm(props) {
           label="Provider"
           value={form.provider}
           name="provider"
-          cl="3"
-          cr="6"
           onChange={(e) => setForm({...form, provider: e.target.value})}
           disabled={isView || loading}
           type="text"
@@ -195,8 +191,6 @@ function RatingTypeForm(props) {
           labelRequired="label-required"
           value={form.rating_symbol}
           name="rating_symbol"
-          cl="3"
-          cr="6"
           column="name"
           onChange={(e) =>
             setForm({...form, rating_symbol: e.target.value || null})
@@ -217,8 +211,6 @@ function RatingTypeForm(props) {
           labelRequired="label-required"
           value={form.scale}
           name="scale"
-          cl="3"
-          cr="6"
           onChange={(e) =>
             setForm({...form, scale: parseInt(e.target.value)})
           }
@@ -235,8 +227,8 @@ function RatingTypeForm(props) {
           labelRequired="label-required"
           value={form.rating_type_code}
           name="rating_type_code"
-          cl="5"
-          cr="6"
+          cl={{md:"12"}}
+          cr="12"
           onChange={(e) =>
             setForm({...form, rating_type_code: parseInt(e.target.value)})
           }

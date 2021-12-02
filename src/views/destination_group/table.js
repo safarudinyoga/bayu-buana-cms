@@ -46,12 +46,14 @@ export default function DestinationGroupTable() {
         data: "status",
         render: rowStatus,
       },
-      {
-        title: "Translated Destination Group Name",
-        data: "destination_group_translation.destination_group_name",
-        visible: false,
-      },
+      // {
+      //   title: "Translated Destination Group Name",
+      //   data: "destination_group_translation.destination_group_name",
+      //   visible: false,
+      // },
     ],
+    emptyTable: "No Destination Groups found",
+    recordName: "destination_group_name",
   }
   return <BBDataTable {...params} />
 }

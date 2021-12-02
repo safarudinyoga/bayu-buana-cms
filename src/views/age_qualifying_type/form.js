@@ -44,12 +44,16 @@ function AgeQualifyingTypeForm(props) {
     },
   }
 
-  const validationMessage = {
+  const validationMessages = {
     age_qualifying_type_code: {
       required: "Age Qualifying Type Code is required.",
+      minlength: "Age Qualifying Type Code must be at least 0 characters",
+      maxlength: "Age Qualifying Type Code cannot be more than 99 characters",
     },
     age_qualifying_type_name: {
       required: "Age Qualifying Type Name is required",
+      minlength: "Age Qualifying Type Name must be at least 1 characters",
+      maxlength: "Age Qualifying Type Name cannot be more than 256 characters",
     },
   }
 
@@ -134,7 +138,7 @@ function AgeQualifyingTypeForm(props) {
       alertMessage={"Incomplete data"}
       isValid={false}
       rules={validationRules}
-      validationMessages={validationMessage}
+      validationMessages={validationMessages}
     >
       <FormHorizontal>
         <FormInputControl
@@ -142,8 +146,6 @@ function AgeQualifyingTypeForm(props) {
           labelRequired="label-required"
           value={form.age_qualifying_type_name}
           name="age_qualifying_type_name"
-          cl="5"
-          cr="6"
           onChange={(e) =>
             setForm({...form, age_qualifying_type_name: e.target.value})
           }
@@ -160,8 +162,8 @@ function AgeQualifyingTypeForm(props) {
           labelRequired="label-required"
           value={form.age_qualifying_type_code}
           name="age_qualifying_type_code"
-          cl="7"
-          cr="5"
+          cl={{md:"12"}}
+          cr="12"
           onChange={(e) =>
             setForm({...form, age_qualifying_type_code: parseInt(e.target.value)})
           }

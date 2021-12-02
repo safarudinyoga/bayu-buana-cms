@@ -5,15 +5,17 @@ import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
 import FormBuilder from "components/form/builder"
 import useQuery from "lib/query"
+import env from "../../config/environment"
+import $ from "jquery"
 import {useDispatch} from "react-redux"
-import {setUIParams} from "redux/ui-store"
-
+import { setAlert, setUIParams } from "redux/ui-store"
 const endpoint = "/master/destination-groups"
 const backUrl = "/master/destination-groups"
 
+
 function DestinationGroupForm(props) {
   let dispatch = useDispatch()
-
+  let formId = props.match.params.id
   const isView = useQuery().get("action") === "view"
   const [formBuilder, setFormBuilder] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -36,11 +38,25 @@ function DestinationGroupForm(props) {
       required: true,
       minlength: 1,
       maxlength: 36,
+      checkCode: formId == null,
+      noSpace : true,
+      number:true
     },
     destination_group_name: {
       required: true,
       minlength: 1,
       maxlength: 256,
+      checkName: formId == null,
+      noSpace:true
+    },
+  }
+  const validationMessages = {
+    destination_group_code: {
+      required: "Destination Group Code is required.",
+      number : "Code format is invalid"
+    },
+    destination_group_name: {
+      required: "Destination Group Name is required.",
     },
   }
 
@@ -57,7 +73,7 @@ function DestinationGroupForm(props) {
 
     dispatch(
       setUIParams({
-        title: docTitle,
+        title: isView ? "Destination Group Details" : docTitle,
         breadcrumbs: [
           {
             text: "Master Data Management",
@@ -85,6 +101,49 @@ function DestinationGroupForm(props) {
         setTranslations(res.data.items)
       } catch (e) { }
       setLoading(false)
+    } else{
+      $.validator.addMethod(
+          "checkName",
+          function (value, element) {
+            var req = false
+            $.ajax({
+              type: "GET",
+              async: false,
+              url: `${env.API_URL}/master/destination-groups?filters=["destination_group_name","=","${element.value}"]`,
+              success: function (res) {
+                if (res.items.length !== 0) {
+                  req = false
+                } else {
+                  req = true
+                }
+              },
+            })
+
+            return req
+          },
+          "Destination Group Name already exists",
+      )
+      $.validator.addMethod(
+          "checkCode",
+          function (value, element) {
+            var req = false
+            $.ajax({
+              type: "GET",
+              async: false,
+              url: `${env.API_URL}/master/destination-groups?filters=["destination_group_code","=","${element.value}"]`,
+              success: function (res) {
+                if (res.items.length !== 0) {
+                  req = false
+                } else {
+                  req = true
+                }
+              },
+            })
+
+            return req
+          },
+          "Code already exists",
+      )
     }
   }, [])
 
@@ -100,6 +159,12 @@ function DestinationGroupForm(props) {
     setLoading(true)
     let api = new Api()
     try {
+      if (!form.destination_group_name) {
+        form.destination_group_name = null
+      }
+      if (!form.destination_group_code) {
+        form.destination_group_code = null
+      }
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
       for (let i in translated) {
@@ -108,9 +173,21 @@ function DestinationGroupForm(props) {
         await api.putOrPost(path, tl.id, tl)
       }
     } catch (e) {
+      dispatch(
+          setAlert({
+            message: `Failed to ${formId ? "update" : "save"} this record.`,
+          }),
+      )
     } finally {
       setLoading(false)
       props.history.push(backUrl)
+      dispatch(
+          setAlert({
+            message: `Record ${
+                form.destination_group_name
+            } has been successfully ${formId ? "updated" : "saved"}.`,
+          }),
+      )
     }
   }
 
@@ -125,6 +202,7 @@ function DestinationGroupForm(props) {
       alertMessage={"Incomplete data"}
       isValid={false}
       rules={validationRules}
+      validationMessages={validationMessages}
     >
       <FormHorizontal>
         <FormInputControl
@@ -132,8 +210,6 @@ function DestinationGroupForm(props) {
           labelRequired="label-required"
           value={form.destination_group_name}
           name="destination_group_name"
-          cl="4"
-          cr="6"
           onChange={(e) =>
             setForm({...form, destination_group_name: e.target.value})
           }
@@ -150,8 +226,8 @@ function DestinationGroupForm(props) {
           labelRequired="label-required"
           value={form.destination_group_code}
           name="destination_group_code"
-          cl="6"
-          cr="6"
+          cl={{md:"12"}}
+          cr="12"
           onChange={(e) =>
             setForm({...form, destination_group_code: e.target.value})
           }

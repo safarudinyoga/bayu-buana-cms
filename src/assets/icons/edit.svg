@@ -1,4 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-  <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
-  <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="19.161" height="19.254" viewBox="0 0 19.161 19.254">
+  <g id="edit_icon" data-name="edit icon" transform="translate(1 1)">
+    <path id="Path_6" data-name="Path 6" d="M10.066,4H3.793A1.793,1.793,0,0,0,2,5.793V18.34a1.793,1.793,0,0,0,1.793,1.793H16.34a1.793,1.793,0,0,0,1.793-1.793V12.066" transform="translate(-2 -2.879)" fill="none" stroke="#3e40ae" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+    <path id="Path_7" data-name="Path 7" d="M16.179,2.363A1.652,1.652,0,0,1,18.516,4.7l-7.4,7.4L8,12.879l.779-3.116Z" transform="translate(-2 -1.879)" fill="none" stroke="#3e40ae" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+  </g>
 </svg>

@@ -24,6 +24,14 @@
   outline: none;
 }
 
+.page-link {
+  color: #4D4D4D;
+}
+
+.page-item.disabled .page-link {
+  color: #A3A3A3;
+}
+
 .dataTable-root table.dataTable {
   margin-top: 0px !important;
   margin-bottom: 0px !important;
@@ -36,11 +44,21 @@
   background-color: #5e5e5e;
   color: #ffffff; 
 }
+@media only screen and (max-width: 768px) {
+  .dataTable-root table.dataTable thead {
+    font-size: 13px;
+  }
+}
 .dataTable-root table.dataTable tbody {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
   font-size: 15px;
   font-weight: normal; 
   color: #333333;   
+}
+@media only screen and (max-width: 768px) {
+  .dataTable-root table.dataTable tbody {
+    font-size: 13px;
+  }
 }
 .dataTable-root table.dataTable td {  
   vertical-align:middle;     
@@ -55,8 +73,7 @@
 } */
 
 .dataTable-root .select-checkbox {
-    width: 40px;
-    text-align: right;    
+    min-width: 70px;
 }
 
 .dataTable-root .select-checkbox .row-handle {
@@ -69,18 +86,11 @@
 }
 
 .dataTable-root .table-row-action-item {
-    padding-left: 3px;
-    padding-right: 3px;
+    color: #3E40AE;
 }
 
 .dataTables_processing {
     display: none !important;
-}
-
-/* CheckBox Custom */
-input[type=checkbox] { 
-  accent-color: #027F71;
-  margin-top: 2px;
 }
 
 .fa-edit{
@@ -93,4 +103,40 @@ input[type=checkbox] {
 
 .fa-trash{
   color: #3E40AE;
+}
+
+.cstm-col-width {
+  min-width: 100px;
+  max-width: 200px !important;
+  width: 50%;  
+}
+
+table.dataTable>tbody>tr.child ul.dtr-details {
+  display: inline-block;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+table.dataTable>tbody>tr.child ul.dtr-details>li {
+  padding: 0.5em 20px;
+}
+table.dataTable>tbody>tr.child span.dtr-title {
+  display: inline-block;
+  min-width: 75px;
+  font-weight: bold;
+}
+
+@media (min-width: 576px) {
+  .dataTable-root .select-checkbox {
+    min-width: 60px;
+    width: 60px;  
+  }
+  .select-checkbox-all {
+    margin-right: 0;
+  }
+  .cstm-col-width {
+    min-width: none;
+    max-width: none;
+    width: auto;
+  }
 }

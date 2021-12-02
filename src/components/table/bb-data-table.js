@@ -20,6 +20,9 @@ import { withRouter } from "react-router"
 import { connect } from "react-redux"
 import { setAlert } from "redux/ui-store"
 import "./bb-data-table.css"
+import editIcon from "assets/icons/edit.svg"
+import removeIcon from "assets/icons/remove.svg"
+import showIcon from "assets/icons/show.svg"
 
 window.JSZip = JSZip
 
@@ -56,12 +59,12 @@ class BBDataTable extends Component {
     columns.push({
       searchable: false,
       orderable: false,
-      title: '<input type="checkbox" class="select-checkbox-all"/>',
+      title: '<input type="checkbox" id="cb-th" class=" float-left select-checkbox-all"/>',
       render: function (val, display, row) {
         return (
           '<svg class="float-left row-handle" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none"><rect id="backgroundrect" width="100%" height="100%" x="0" y="0" fill="none" stroke="none"/><path d="M7.098360577225684,13 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 z" fill="#707070" id="svg_1" class=""/><path d="M11.901639938354492,13 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 z" fill="#707070" id="svg_2" class=""/></svg> <input type="checkbox" data-id="' +
           row.id +
-          '" class="select-checkbox-item"/>'
+          '" class="float-left select-checkbox-item"/> <a class="float-left d-md-none" style="padding: 0; color: #b7b7b7"><i class="fas fa-plus-circle" style="font-size: 17px;padding-left: 8px"></i></a>'
         )
       },
     })
@@ -94,15 +97,15 @@ class BBDataTable extends Component {
         return (
           '<a href="javascript:void(0);" class="table-row-action-item" data-action="edit" data-id="' +
           row.id +
-          '" title="Click to edit"><i class="fa fa-edit"></i></a>' +
+          '" title="Click to edit"><img src="'+ editIcon +'" /></a>' +
           '<a href="javascript:void(0);" class="table-row-action-item" data-action="view" data-id="' +
           row.id +
-          '" title="Click to view details"><i class="fa fa-eye"></i></a>' +
+          '" title="Click to view details"><img src="'+ showIcon +'"/></a>' +
           '<a href="javascript:void(0);" class="table-row-action-item" data-action="delete" data-id="' +
           row.id +
           '" data-name="' +
           filteredRecordName[allowed] +
-          '" title="Click to delete"><i class="fa fa-trash"></i></a>'
+          '" title="Click to delete"><img src="'+ removeIcon +'" /></a>'
         )
       },
     })
@@ -389,10 +392,20 @@ class BBDataTable extends Component {
         responsive: true,
         autoWidth: false,
         columnDefs: [
+          // {
+          //   targets: 0,
+          //   checkboxes: {
+          //     selectRow: true,
+          //   },
+          // },
           {
             ordeable: false,
             className: "select-checkbox",
             targets: [0],
+          },
+          {
+            targets:[1, 2],
+            className: "cstm-col-width",
           },
           //   {
           //     responsivePriority: 10001,
@@ -400,15 +413,18 @@ class BBDataTable extends Component {
           //   },
           {
             ordeable: false,
-            className: "table-row-action",
+            // className: "table-row-action",
             targets: [columns.length - 1],
           },
         ],
+        // select: {
+        //   style: "multi",
+        // },
         order: [[1, "asc"]],
         columns: columns,
         dom:
-          "<'container-fluid mt-2 dataTable-root'<'card card-default mb-0 shadow-none'<'card-body'tr>>" +
-          "<'row'<'col-sm-12 col-md-8'li><'col-sm-12 col-md-4'p>>" +
+          "<'container-fluid mt-2 pl-0 dataTable-root'<'card card-default mb-0 shadow-none'<'card-body'tr>>" +
+          "<'row'<'col-sm-12 col-md-4'li><'col-sm-12 col-md-8'p>>" +
           ">",
         language: {
           paginate: {
@@ -418,26 +434,29 @@ class BBDataTable extends Component {
             last: "&raquo;",
           },
           search: "Search",
-          info: "Showing _START_ - _END_ of _TOTAL_",
-          infoEmpty: "Showing 0 - 0 of 0",
+          info: '<span class="ml-2 text-label-input-paginate danger">Showing _START_ - _END_ of _TOTAL_</span>',
+          infoEmpty: '<span class="ml-2 text-label-input-paginate danger">Showing 0 - 0 of 0</span>',
           infoFiltered: "",
           loadingRecords: "Loading ...",
           processing: "<i class='fa fa-spin fa-circle-notch'></i> Loading...",
-          zeroRecords: "No " + this.props.title + " found",
+          zeroRecords: "No " + this.props.title.toLowerCase() + " found",
           emptyTable: this.props.emptyTable
             ? this.props.emptyTable
-            : "No " + this.props.title + " found",
+            : "No " + this.props.title.toLowerCase() + " found",
           lengthMenu: "_MENU_",
         },
         fnDrawCallback: (t) => {
           let wrapper = $(".dataTables_paginate", t.nTableWrapper)
           wrapper.append(
-            '<span class="float-right mt-2 mr-2 text-label-input">Page: </span>',
+            '<span class="d-none d-md-block float-right mt-2 mr-2 text-label-input">Page: </span>',
           )
-          $(".pagination", wrapper).addClass("float-right")
+          wrapper.prepend(
+            '<span class="d-md-none float-left mt-2 mr-2 text-label-input">Page: </span>',
+          )
+          $(".pagination", wrapper).addClass("float-right float-left-sm")
 
           // Hide pagination if empty data
-          if (t._iDisplayLength > t.fnRecordsDisplay()) {
+          if (t.fnRecordsDisplay() == 1) {
             $(t.nTableWrapper).find(".dataTables_length").hide()
             $(t.nTableWrapper).find(".dataTables_info").hide()
             $(t.nTableWrapper).find(".dataTables_paginate").hide()
@@ -445,6 +464,10 @@ class BBDataTable extends Component {
             $(t.nTableWrapper).find(".dataTables_length").show()
             $(t.nTableWrapper).find(".dataTables_info").show()
             $(t.nTableWrapper).find(".dataTables_paginate").show()
+          }
+
+          if ($(".select-checkbox-all").is(":checked")) {
+            $(".select-checkbox-all").prop("checked", false)
           }
         },
       })
@@ -595,6 +618,7 @@ class BBDataTable extends Component {
   }
 
   componentDidUpdate() {
+    console.log(this.state.selected)
     if (this.inProgress) {
       return
     }
@@ -623,7 +647,6 @@ class BBDataTable extends Component {
         for (let i = 0; i < items.length; i++) {
           selected.push($(items.get(i)).data("id"))
         }
-
         this.setState({
           selected: selected,
         })
@@ -656,7 +679,7 @@ class BBDataTable extends Component {
           selected: selected,
         })
         setTimeout(() => {
-          this.inProgress = false
+          this.inProgress = true
         }, 100)
       })
 
@@ -690,7 +713,6 @@ class BBDataTable extends Component {
             <Button
               variant="danger"
               onClick={() => {
-                console.log(this.state)
                 this.setState({
                   isOpen: false,
                 })
@@ -737,6 +759,7 @@ class BBDataTable extends Component {
               onClick={() => {
                 this.setState({
                   isOpen: false,
+                  selected: false,
                 })
               }}
             >
@@ -765,9 +788,6 @@ class BBDataTable extends Component {
             ref={this.table}
             className="table table-sm table-striped"
           ></table>
-        </div>
-        <div className="footer">
-          ©️ 2021 Bayu Buana Travel Services. All Rights Reserved
         </div>
       </div>
     )

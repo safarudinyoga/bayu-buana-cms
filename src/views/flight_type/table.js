@@ -52,6 +52,7 @@ export default function FlightTypeTable() {
         visible: false,
       },
     ],
+    recordName: "flight_type_name",
   }
   return <BBDataTable {...params} />
 }

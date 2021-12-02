@@ -3,14 +3,15 @@ const {Component} = require("react")
 
 export default class CancelButton extends Component {
   render() {
-    const readOnlyClass = this.props.isView ? "" : ""
+    const readOnlyClass = this.props.isView ? "button-save" : "button-cancel"
+    const readClass = this.props.isView ? "text-button-save" : "text-button-cancel"
     return (
       <button
         onClick={this.props.onClick}
         type="button"
-        className={"button-cancel" + readOnlyClass}
+        className={readOnlyClass}
       >
-        <div className="text-button-cancel">{this.props.isView ? "BACK" : "CANCEL"}</div>
+        <div className={readClass}>{this.props.isView ? "BACK" : "Cancel"}</div>
       </button>
     )
   }

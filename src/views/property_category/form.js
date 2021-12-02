@@ -132,8 +132,6 @@ function PropertyCategoryForm(props) {
           labelRequired="label-required"
           value={form.property_category_name}
           name="property_category_name"
-          cl="4"
-          cr="6"
           onChange={(e) =>
             setForm({...form, property_category_name: e.target.value})
           }
@@ -150,8 +148,8 @@ function PropertyCategoryForm(props) {
           labelRequired="label-required"
           value={form.property_category_code}
           name="property_category_code"
-          cl="6"
-          cr="6"
+          cl={{md:"12"}}
+          cr="12"
           onChange={(e) =>
             setForm({...form, property_category_code: parseInt(e.target.value)})
           }

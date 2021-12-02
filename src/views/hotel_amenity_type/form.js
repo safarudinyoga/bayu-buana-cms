@@ -189,8 +189,6 @@ function HotelAmenityForm(props) {
           labelRequired="label-required"
           value={form.hotel_amenity_type_name}
           name="hotel_amenity_type_name"
-          cl="5"
-          cr="6"
           onChange={(e) =>
             setForm({...form, hotel_amenity_type_name: e.target.value})
           }
@@ -203,8 +201,6 @@ function HotelAmenityForm(props) {
           label="Hotel Amenity Category"
           value={form.hotel_amenity_category_hotel_amenity_type}
           name="hotel_amenity_category_id"
-          cl="5"
-          cr="6"
           data={categoryData}
           endpoint="/master/hotel-amenity-categories"
           column="hotel_amenity_category_name"
@@ -212,7 +208,7 @@ function HotelAmenityForm(props) {
           disabled={isView || loading}
           type="selectmultiple"
         />
-        <FormInputWrapper label="Icon" cl="5" cr="6">
+        <FormInputWrapper label="Icon">
           <label className="card card-default shadow-none border">
             <div className="card-body">
               {!isView ? (
@@ -247,8 +243,8 @@ function HotelAmenityForm(props) {
           labelRequired="label-required"
           value={form.hotel_amenity_type_code}
           name="hotel_amenity_type_code"
-          cl="6"
-          cr="6"
+          cl={{md:"12"}}
+          cr="12"
           onChange={(e) =>
             setForm({
               ...form,

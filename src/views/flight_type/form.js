@@ -7,7 +7,7 @@ import useQuery from "lib/query"
 import React, {useEffect, useState} from "react"
 import {useDispatch} from "react-redux"
 import {withRouter} from "react-router"
-import {setUIParams} from "redux/ui-store"
+import { setAlert, setUIParams } from "redux/ui-store"
 import env from "../../config/environment"
 
 const endpoint = "/master/flight-types"
@@ -76,7 +76,7 @@ function FlightTypeForm(props) {
 
     dispatch(
       setUIParams({
-        title: docTitle,
+        title: isView ? "Flight Type Details" : docTitle,
         breadcrumbs: [
           {
             text: "Master Data Management",
@@ -171,9 +171,21 @@ function FlightTypeForm(props) {
         await api.putOrPost(path, tl.id, tl)
       }
     } catch (e) {
+      dispatch(
+        setAlert({
+          message: `Failed to ${formId ? "update" : "save"} this record.`,
+        }),
+      )
     } finally {
       setLoading(false)
       props.history.push(backUrl)
+      dispatch(
+        setAlert({
+          message: `Record ${form.flight_type_code} - ${
+            form.flight_type_name
+          } has been successfully ${formId ? "updated" : "saved"}.`,
+        }),
+      )
     }
   }
 
@@ -196,8 +208,6 @@ function FlightTypeForm(props) {
           labelRequired="label-required"
           value={form.flight_type_name}
           name="flight_type_name"
-          cl="3"
-          cr="6"
           onChange={(e) =>
             setForm({...form, flight_type_name: e.target.value})
           }
@@ -214,8 +224,8 @@ function FlightTypeForm(props) {
           labelRequired="label-required"
           value={form.flight_type_code}
           name="flight_type_code"
-          cl="5"
-          cr="6"
+          cl={{md:"12"}}
+          cr="12"
           onChange={(e) =>
             setForm({...form, flight_type_code: e.target.value})
           }

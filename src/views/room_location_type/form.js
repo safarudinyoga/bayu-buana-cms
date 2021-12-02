@@ -132,8 +132,6 @@ function RoomLocationTypeForm(props) {
           labelRequired="label-required"
           value={form.room_location_type_name}
           name="room_location_type_name"
-          cl="4"
-          cr="6"
           onChange={(e) =>
             setForm({...form, room_location_type_name: e.target.value})
           }
@@ -150,8 +148,8 @@ function RoomLocationTypeForm(props) {
           labelRequired="label-required"
           value={form.room_location_type_code}
           name="room_location_type_code"
-          cl="6"
-          cr="6"
+          cl={{md:"12"}}
+          cr="12"
           onChange={(e) =>
             setForm({...form, room_location_type_code: parseInt(e.target.value)})
           }

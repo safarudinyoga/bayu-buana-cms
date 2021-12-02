@@ -60,15 +60,19 @@ function ZoneForm(props) {
     },
   }
 
-  const validationMessage = {
+  const validationMessages = {
     zone_name: {
       required: "Zone Name is required",
+      minlength: "Zone Name must be at least 1 characters",
+      maxlength: "Zone Name cannot be more than 256 characters",
     },
     destination: {
       required: "Destination is required",
     }, 
     zone_code: {
       required: "Zone Code is required",
+      minlength: "Zone Code must be at least 1 characters",
+      maxlength: "Zone Code cannot be more than 16 characters",
     }
   }
 
@@ -156,7 +160,7 @@ function ZoneForm(props) {
       alertMessage={"Incomplete data"}
       isValid={false}
       rules={validationRules}
-      validationMessages={validationMessage}
+      validationMessages={validationMessages}
     >
       <FormHorizontal>
         <FormInputControl
@@ -174,8 +178,6 @@ function ZoneForm(props) {
           label="Destination"
           value={form.destination_id}
           name="destination"
-          cl="3"
-          cr="6"
           endpoint="/master/destinations"
           column="destination_name"
           data={destinationData}
@@ -206,8 +208,8 @@ function ZoneForm(props) {
           value={form.zone_code}
           name="zone_code"
           onChange={(e) => setForm({...form, zone_code: e.target.value})}
-          cl="4"
-          cr="6"
+          cl={{md:"12"}}
+          cr="12"
           disabled={isView || loading}
           type="number"
           label="Zone Code"

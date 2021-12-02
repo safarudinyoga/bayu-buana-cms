@@ -44,12 +44,16 @@ function SpecialRequestForm(props) {
     },
   }
 
-  const validationMessage = {
+  const validationMessages = {
     special_request_code: {
       required: "Special Request Code is required.",
+      minlength: "Special Request Code must be at least 1 characters",
+      maxlength: "Special Request Code cannot be more than 36 characters",
     },
     special_request_name: {
       required: "Special Request Name is required",
+      minlength: "Special Request Name must be at least 1 characters",
+      maxlength: "Special Request Name cannot be more than 256 characters",
     },
   }
 
@@ -134,7 +138,7 @@ function SpecialRequestForm(props) {
       alertMessage={"Incomplete data"}
       isValid={false}
       rules={validationRules}
-      validationMessages={validationMessage}
+      validationMessages={validationMessages}
     >
       <FormHorizontal>
         <FormInputControl
@@ -142,8 +146,6 @@ function SpecialRequestForm(props) {
           labelRequired="label-required"
           value={form.special_request_name}
           name="special_request_name"
-          cl="4"
-          cr="6"
           onChange={(e) =>
             setForm({...form, special_request_name: e.target.value})
           }
@@ -160,8 +162,8 @@ function SpecialRequestForm(props) {
           labelRequired="label-required"
           value={form.special_request_code}
           name="special_request_code"
-          cl="7"
-          cr="5"
+          cl={{md:"12"}}
+          cr="12"
           onChange={(e) =>
             setForm({...form, special_request_code: e.target.value})
           }

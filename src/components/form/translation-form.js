@@ -1,9 +1,9 @@
-import { Component } from "react"
-import "./translation-form.css"
+import Api from "config/api"
 import $ from "jquery"
+import {Component} from "react"
 import FormHorizontal from "./horizontal"
 import FormInputControl from "./input-control"
-import Api from "config/api"
+import "./translation-form.css"
 
 export default class TranslationForm extends Component {
   constructor(props) {
@@ -22,9 +22,9 @@ export default class TranslationForm extends Component {
 
   componentDidMount() {
     this.api
-      .get("/master/languages", { size: 50, sort: "-language_name" })
+      .get("/master/languages", {size: 50, sort: "-language_name"})
       .then((res) => {
-        this.setState({ languages: res.data.items })
+        this.setState({languages: res.data.items})
         if (res.data.items.length > 0) {
           this.setState({
             currentLanguage: res.data.items[0].language_name,
@@ -32,7 +32,7 @@ export default class TranslationForm extends Component {
         }
       })
       .finally(() => {
-        this.setState({ loading: false })
+        this.setState({loading: false})
       })
   }
 
@@ -56,7 +56,7 @@ export default class TranslationForm extends Component {
             let inputId = "trans-" + item.language_code + "-" + field.name
             try {
               document.getElementById(inputId).value = item[field.name] || ""
-            } catch (e) {}
+            } catch (e) { }
           }
         }
       }
@@ -66,7 +66,7 @@ export default class TranslationForm extends Component {
   togglePills() {
     let display = this.state.pillStyle.display === "flex" ? "none" : "flex"
     this.setState({
-      pillStyle: { display: display },
+      pillStyle: {display: display},
     })
   }
 
@@ -78,7 +78,7 @@ export default class TranslationForm extends Component {
 
   onValueChange(lang, name, e) {
     if (!this.translated[lang]) {
-      this.translated[lang] = { language_code: lang }
+      this.translated[lang] = {language_code: lang}
     }
     this.translated[lang][name] = e.target.value
     console.log(this.translated)
@@ -125,7 +125,7 @@ export default class TranslationForm extends Component {
               {lang.language_code in this.translated ? (
                 ""
               ) : (
-                <i class="fas fa-exclamation-triangle"></i>
+                <i className="fas fa-exclamation-triangle" style={{color: 'red'}}></i>
               )}
             </div>
           </button>
@@ -158,10 +158,9 @@ export default class TranslationForm extends Component {
                       field.name,
                     )}
                     name={field.name + "_" + lang.language_code}
-                    type={field.type}
-                    cl="3"
-                    cr="4"
+                    type={field.type}                    
                     label={field.label}
+                    cl={{lg:2}}
                   />
                 )
               })}
@@ -182,7 +181,7 @@ export default class TranslationForm extends Component {
         <p className="text-sub-header">Translation</p>
         <hr />
         <div className="row">
-          <div className="col-xs-12 col-sm-4 col-md-3 translation-tab-container">
+          <div className="col-xs-12 col-sm-4 col-md-4 col-lg-2 translation-tab-container">
             <button
               type="button"
               className="btn btn-default dropdown-toggle btn-block shadow"
@@ -202,8 +201,8 @@ export default class TranslationForm extends Component {
               {tabPills}
             </div>
           </div>
-          <div className="col-xs-12 col-sm-8 col-md-9 translation-form-content card border shadow-none">
-            <div className="tab-content card-body" id="v-pills-tabContent">
+          <div className="col-xs-12 col-sm-8 col-md-8 col-lg-10 translation-form-content card border shadow-none">
+            <div className="tab-content card-body-translation" id="v-pills-tabContent">
               {tabContents}
             </div>
           </div>
