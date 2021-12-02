@@ -136,44 +136,38 @@ class TableHeader extends Component {
   render() {
     const ExtraFilter = this.props.extraFilter
     return (
-        <div className="container-fluid">
+        <div className="container-fluid pl-0">
           <div className="row">
             <div className="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 order-2 order-sm-1 mt-2">
-              <div className="row">
-                <div className="col-xs-12 col-sm-6">
-                  <div className="input-group input-group-with-text">
-                    <input
-                        value={this.state.searchValue}
-                        className="form-control"
-                        placeholder="Search..."
-                        onChange={this.handleSearch.bind(this)}
-                        maxLength={256}
-                        minLength={1}
-                    />
-                    <div className="input-group-append">
-                    <span className="input-group-text">
-                      <i className="fas fa-search"></i>
-                    </span>
-                    </div>
-                  </div>
+              <div className="input-group input-group-with-text float-md-left">
+                <input
+                    value={this.state.searchValue}
+                    className="form-control"
+                    placeholder="Search..."
+                    onChange={this.handleSearch.bind(this)}
+                    maxLength={256}
+                    minLength={1}
+                />
+                <div className="input-group-append">
+                <span className="input-group-text">
+                  <i className="fas fa-search"></i>
+                </span>
                 </div>
-                {this.state.showAdvancedOptions && (
-                    <div className="col-xs-12 col-sm-6">
-                      <button
-                          onClick={this.toggleFilter}
-                          type="button"
-                          className="btn btn-link advanced-options-btn float-right-sm"
-                      >
-                        <span className="mr-2">Advanced Options</span>{" "}
-                        {this.state.showFilter ? (
-                            <img src={downIcon} alt="down" />
-                        ) : (
-                            <img src={upIcon} alt="up" />
-                        )}
-                      </button>
-                    </div>
-                )}
               </div>
+              {this.state.showAdvancedOptions && (
+                <button
+                    onClick={this.toggleFilter}
+                    type="button"
+                    className="btn btn-link advanced-options-btn float-left float-right-sm pr-0"
+                >
+                  <span className="mr-2">Advanced Options</span>{" "}
+                  {this.state.showFilter ? (
+                      <img src={downIcon} alt="down" />
+                  ) : (
+                      <img src={upIcon} alt="up" />
+                  )}
+                </button>
+              )}
             </div>
 
             <div className="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 order-sm-2 mt-2">

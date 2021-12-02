@@ -419,7 +419,7 @@ class BBDataTable extends Component {
         order: [[1, "asc"]],
         columns: columns,
         dom:
-          "<'container-fluid mt-2 dataTable-root'<'card card-default mb-0 shadow-none'<'card-body'tr>>" +
+          "<'container-fluid mt-2 pl-0 dataTable-root'<'card card-default mb-0 shadow-none'<'card-body'tr>>" +
           "<'row'<'col-sm-12 col-md-4'li><'col-sm-12 col-md-8'p>>" +
           ">",
         language: {
