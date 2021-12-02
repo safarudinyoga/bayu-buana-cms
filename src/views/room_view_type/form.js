@@ -147,7 +147,7 @@ function RoomViewTypeForm(props) {
           labelRequired="label-required"
           value={form.room_view_type_code}
           name="room_view_type_code"
-          cl="12"
+          cl={{md:"12"}}
           cr="12"
           onChange={(e) =>
             setForm({...form, room_view_type_code: parseInt(e.target.value)})

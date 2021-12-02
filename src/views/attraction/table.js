@@ -52,12 +52,7 @@ export default function AttractionTable() {
       },
       {
         title: "Attraction Category",
-        data: "attraction_category_attraction",
-        render: (data) => {
-          return data.map(value => {
-            return value.attraction_category.attraction_category_name
-          }).join(" & ")
-        }
+        data: "attraction_category_names",
       },
       {
         searchable: false,
@@ -76,13 +71,21 @@ export default function AttractionTable() {
 
   const onFilterChangeAttractionCategories = (e, values) => {
     let ids = []
+    let columns = []
     if (values && values.length > 0) {
       for (let i in values) {
         ids.push(values[i].id)
+        columns.push(
+          ["attraction_category_names", "like", values[i].attraction_category_name],
+        )
+      }
+
+      if(values.length > 1){
+        columns.push(["OR"])
       }
     }
-    if (ids.length > 0) {
-      setParams({...params, filters: [["attraction_category_id", "in", ids]]})
+    if (columns.length > 0) {
+      setParams({...params, filters: columns})
     } else {
       setParams({...params, filters: []})
     }

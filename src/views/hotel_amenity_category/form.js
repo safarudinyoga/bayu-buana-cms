@@ -6,6 +6,8 @@ import FormInputControl from "components/form/input-control"
 import FormBuilder from "components/form/builder"
 import FormInputWrapper from "components/form/input-wrapper"
 import useQuery from "lib/query"
+import env from "../../config/environment"
+import $ from "jquery"
 import {useDispatch} from "react-redux"
 import { setAlert, setUIParams } from "redux/ui-store"
 
@@ -49,6 +51,8 @@ function HotelAmenityCategoryForm(props) {
       required: true,
       minlength: 1,
       maxlength: 256,
+      checkName: formId == null,
+      noSpace:true
     },
     is_default: {
       required: true,
@@ -116,6 +120,28 @@ function HotelAmenityCategoryForm(props) {
         setTranslations(res.data.items)
       } catch (e) { }
       setLoading(false)
+    }else{
+      $.validator.addMethod(
+          "checkName",
+          function (value, element) {
+            var req = false
+            $.ajax({
+              type: "GET",
+              async: false,
+              url: `${env.API_URL}/master/hotel-amenity-categories?filters=["hotel_amenity_category_name","=","${element.value}"]`,
+              success: function (res) {
+                if (res.items.length !== 0) {
+                  req = false
+                } else {
+                  req = true
+                }
+              },
+            })
+
+            return req
+          },
+          "Hotel Amenity Category Name already exists",
+      )
     }
   }, [])
 

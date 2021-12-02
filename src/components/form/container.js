@@ -74,7 +74,7 @@ export default class FormContainer extends Component {
         ref={this.form}
         method="post"
         className={
-          this.props.isView ? "container-fluid view-only" : "container-fluid"
+          this.props.isView ? "container-fluid pl-0 view-only" : "container-fluid pl-0"
         }
       >
         <div className="card card-default border">

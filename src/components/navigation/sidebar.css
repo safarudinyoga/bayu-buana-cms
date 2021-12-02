@@ -1,3 +1,6 @@
+.sidebar {
+  margin-top: 18px;
+}
 .sidebar .nav-item a > p {
   font-size: 14px;
 }
@@ -32,4 +35,7 @@
 [class*="sidebar-dark-"] {
   background-color: rgb(2, 127, 113);
   opacity: 0.85;
+}
+.nav-sidebar .menu-open > .nav-link i.right, .nav-sidebar .menu-is-opening > .nav-link i.right {
+  transform: none;
 }

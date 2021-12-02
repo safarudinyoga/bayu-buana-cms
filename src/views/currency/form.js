@@ -289,7 +289,7 @@ function CurrencyForm(props) {
           labelRequired="label-required"
           value={form.currency_code}
           name="currency_code"
-          cl="12"
+          cl={{md:"12"}}
           cr="12"
           onChange={(e) => setForm({...form, currency_code: e.target.value})}
           disabled={isView || loading}
@@ -303,7 +303,7 @@ function CurrencyForm(props) {
           labelRequired="label-required"
           value={form.numeric_code}
           name="numeric_code"
-          cl="12"
+          cl={{md:"12"}}
           cr="12"
           onChange={(e) => setForm({...form, numeric_code: e.target.value})}
           disabled={isView || loading}

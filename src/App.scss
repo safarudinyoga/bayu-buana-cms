@@ -102,7 +102,7 @@ select.bg-dark-grey > option {
   font-size: 20px;
   font-weight: 600;
   color: #333333;
-  margin-bottom: 32px;
+  margin-bottom: 10px;
 }
 @media only screen and (max-width: 767px) {
   .text-sub-header {
@@ -116,6 +116,12 @@ select.bg-dark-grey > option {
   font-size: 15px;
   font-weight: 500;
   color: #333333;
+
+  &-paginate{
+    font-family: "Segoe UI";
+    font-size: 13px;
+    color: #333333;
+  }
 }
 @media only screen and (max-width: 768px) {
   .text-label-input {
@@ -146,17 +152,23 @@ select.bg-dark-grey > option {
 /* footer */
 .footer {
   position: absolute;
-  padding: 12px;
+  padding: 12px 1.5rem;
   bottom: 0;
   width: 100%;
   z-index: 1;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  font-size: 0.7em;
+  font-size: 0.73em;
   font-weight: normal;
   color: #818181;
 }
 
 /* Select Custom */
+.select2 {
+  max-width: 300px;
+}
+.select2-container--bootstrap4 .select2-selection {
+  border-radius: 8px !important;
+}
 .select2-results__option {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-size: 15px;
@@ -175,6 +187,18 @@ select.bg-dark-grey > option {
 @media (min-width: 577px) {
   .footer {
     width: auto;
+  }
+}
+
+@media (max-width: 320px) {
+  .select2 {
+    max-width: 225px;
+  }
+}
+
+@media (min-width: 321px) and (max-width: 360px) {
+  .select2 {
+    max-width: 266px;
   }
 }
 

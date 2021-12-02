@@ -4,6 +4,7 @@ input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
   -webkit-box-shadow: 0 0 0 30px white inset !important;
+  box-shadow: 0 0 0 30px white inset !important;
 }
 
 label:not(.form-check-label):not(.custom-file-label) {
@@ -17,10 +18,16 @@ input[type="radio"] {
 }
 /* CheckBox Custom */
 input[type=checkbox] { 
-  accent-color: #027F71;  
+  accent-color: #027F71; 
+  width: 16px; 
+  height: 16px;
+  margin-left: 5px;
+}
+input[id=cb-th] {
+  margin-left: 26px;
 }
 .form-control {
-  max-width: 250px;
+  max-width: 300px;
   border-radius: 8px;
 }
 .form-label-required {

@@ -1,6 +1,7 @@
 import downloadIcon from "assets/download.svg"
 import printIcon from "assets/printer.svg"
 import resetIcon from "assets/reset.svg"
+import createIcon from "assets/icons/create.svg"
 import downIcon from "assets/icons/double-down.svg"
 import upIcon from "assets/icons/double-up.svg"
 import { Component } from "react"
@@ -135,44 +136,38 @@ class TableHeader extends Component {
   render() {
     const ExtraFilter = this.props.extraFilter
     return (
-        <div className="container-fluid">
+        <div className="container-fluid pl-0">
           <div className="row">
             <div className="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 order-2 order-sm-1 mt-2">
-              <div className="row">
-                <div className="col-xs-12 col-sm-6">
-                  <div className="input-group input-group-with-text">
-                    <input
-                        value={this.state.searchValue}
-                        className="form-control"
-                        placeholder="Search..."
-                        onChange={this.handleSearch.bind(this)}
-                        maxLength={256}
-                        minLength={1}
-                    />
-                    <div className="input-group-append">
-                    <span className="input-group-text">
-                      <i className="fas fa-search"></i>
-                    </span>
-                    </div>
-                  </div>
+              <div className="input-group input-group-with-text float-md-left">
+                <input
+                    value={this.state.searchValue}
+                    className="form-control"
+                    placeholder="Search..."
+                    onChange={this.handleSearch.bind(this)}
+                    maxLength={256}
+                    minLength={1}
+                />
+                <div className="input-group-append">
+                <span className="input-group-text">
+                  <i className="fas fa-search"></i>
+                </span>
                 </div>
-                {this.state.showAdvancedOptions && (
-                    <div className="col-xs-12 col-sm-6">
-                      <button
-                          onClick={this.toggleFilter}
-                          type="button"
-                          className="btn btn-link advanced-options-btn float-right-sm"
-                      >
-                        <span className="mr-2">Advanced Options</span>{" "}
-                        {this.state.showFilter ? (
-                            <img src={downIcon} alt="down" />
-                        ) : (
-                            <img src={upIcon} alt="up" />
-                        )}
-                      </button>
-                    </div>
-                )}
               </div>
+              {this.state.showAdvancedOptions && (
+                <button
+                    onClick={this.toggleFilter}
+                    type="button"
+                    className="btn btn-link advanced-options-btn float-left float-right-sm pr-0"
+                >
+                  <span className="mr-2">Advanced Options</span>{" "}
+                  {this.state.showFilter ? (
+                      <img src={downIcon} alt="down" />
+                  ) : (
+                      <img src={upIcon} alt="up" />
+                  )}
+                </button>
+              )}
             </div>
 
             <div className="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 order-sm-2 mt-2">
@@ -185,10 +180,8 @@ class TableHeader extends Component {
                     onClick={this.handleClick.bind(this)}
                     className="btn btn-warning float-right button-new"
                 >
-                <span className="text-button-new">
-                  <i className="fas fa-file-medical mr-2"></i>
+                  <img src={createIcon} className="mr-1"/>
                   Create New
-                </span>
                 </button>
               </OverlayTrigger>
 
@@ -231,7 +224,7 @@ class TableHeader extends Component {
                     : "d-none"
               }
           >
-            <div className="card-body">
+            <div className="card-body-filter">
               <div className="row">
                 {ExtraFilter ? (                    
                       <ExtraFilter />                  
@@ -245,7 +238,7 @@ class TableHeader extends Component {
                     <div className="col-xs-4">
                       <label className="text-label-filter ml-2">Status</label>
                       <Select
-                          width="200px"
+                          value={options[this.state.statusValue]}
                           onChange={this.handleStatus.bind(this)}
                           styles={customStyles}
                           options={options}
@@ -258,7 +251,7 @@ class TableHeader extends Component {
                 <Link
                     to="#"
                     onClick={this.handleReset.bind(this)}
-                    className="btn-table-action btn-table-action-reset"
+                    className="btn-table-action-reset"
                 >
                   <img src={resetIcon} className="img-circle" alt="reset" />
                 </Link>

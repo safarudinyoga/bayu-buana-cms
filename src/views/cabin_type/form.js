@@ -41,6 +41,7 @@ function CabinTypeForm(props) {
       maxlength: 36,
       checkCode: formId == null,
       noSpace: true,
+      number:true
     },
     cabin_type_name: {
       required: true,
@@ -54,6 +55,7 @@ function CabinTypeForm(props) {
   const validationMessages = {
     cabin_type_code: {
       required: "Cabin Type Code is required.",
+      number : "Code format is invalid"
     },
     cabin_type_name: {
       required: "Cabin Type Name is required.",
@@ -219,7 +221,7 @@ function CabinTypeForm(props) {
           labelRequired="label-required"
           value={form.cabin_type_code}
           name="cabin_type_code"
-          cl="12"
+          cl={{md:"12"}}
           cr="12"
           onChange={(e) =>
             setForm({ ...form, cabin_type_code: e.target.value })

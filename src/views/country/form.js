@@ -288,7 +288,7 @@ function CountryForm(props) {
           labelRequired="label-required"
           value={form.country_code}
           name="country_code"
-          cl="12"
+          cl={{md:"12"}}
           cr="12"
           onChange={(e) => setForm({...form, country_code: e.target.value})}
           disabled={isView || loading}
@@ -301,7 +301,7 @@ function CountryForm(props) {
           label="Country Alpha 3 Code"
           value={form.country_alpha_3_code}
           name="country_alpha_3_code"
-          cl="12"
+          cl={{md:"12"}}
           cr="12"
           onChange={(e) => setForm({...form, country_alpha_3_code: e.target.value})}
           disabled={isView || loading}
@@ -314,7 +314,7 @@ function CountryForm(props) {
           label="Country Access Code"
           value={form.country_access_code}
           name="country_access_code"
-          cl="12"
+          cl={{md:"12"}}
           cr="12"
           onChange={(e) => setForm({...form, country_access_code: e.target.value})}
           disabled={isView || loading}
@@ -327,7 +327,7 @@ function CountryForm(props) {
           label="Numeric Code"
           value={form.numeric_code}
           name="numeric_code"
-          cl="12"
+          cl={{md:"12"}}
           cr="12"
           onChange={(e) => setForm({...form, numeric_code: e.target.value})}
           disabled={isView || loading}
