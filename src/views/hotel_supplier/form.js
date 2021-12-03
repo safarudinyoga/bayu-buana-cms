@@ -227,7 +227,7 @@ function HotelSupplierForm(props) {
           maxLength="256"
         />
 
-        {(formId == undefined || !loading) && <FormInputSelectAjax
+        {(formId === undefined || !loading) && <FormInputSelectAjax
           label="Supplier Type"
           value={form.supplier_type_id}
           name="supplier_type_id"

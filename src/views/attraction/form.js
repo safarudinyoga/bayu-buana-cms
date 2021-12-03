@@ -92,7 +92,7 @@ function AttractionForm(props) {
     attraction_category_attraction: [],
     attraction_address: "",
     country_id: "",
-    state_province: "",
+    state_province_id: "",
     city_id: "",
     postal_code: "",
     destination_id: "",
@@ -152,7 +152,7 @@ function AttractionForm(props) {
     country_id: {
       required: true,
     },
-    state_province: {
+    state_province_id: {
       required: false,
     },
     city_id: {
@@ -217,7 +217,7 @@ function AttractionForm(props) {
     country_id: {
       required: "Country is required",
     },
-    state_province: {
+    state_province_id: {
       required: "State/Province is required",
     },
     city_id: {
@@ -302,6 +302,9 @@ function AttractionForm(props) {
             return {id: value.attraction_category.id, text: value.attraction_category.attraction_category_name}
           }))
         }
+        if (res.data.state_province) {
+          setProvinceData([{...res.data.state_province, text: res.data.state_province.state_province_name}])
+        }
         if (res.data.country) {
           setCountryData([{...res.data.country, text: res.data.country.country_name}])
         }
@@ -343,8 +346,8 @@ function AttractionForm(props) {
       if (!form.attraction_address) {
         form.attraction_address = null
       }
-      if (!form.state_province) {
-        form.state_province = null
+      if (!form.state_province_id) {
+        form.state_province_id = null
       }
       if (!form.postal_code) {
         form.postal_code = null
@@ -514,8 +517,6 @@ function AttractionForm(props) {
           label="Attraction Category"
           value={form.attraction_category_attraction ? form.attraction_category_attraction.map((item) => item.attraction_category_id) : []}
           name="attraction_category_attraction"
-
-
           data={categoryData}
           endpoint="/master/attraction-categories"
           column="attraction_category_name"
@@ -540,8 +541,6 @@ function AttractionForm(props) {
           labelRequired="label-required"
           value={form.country_id}
           name="country_id"
-
-
           data={countryData}
           endpoint="/master/countries"
           column="country_name"
@@ -554,15 +553,14 @@ function AttractionForm(props) {
 
         <FormInputSelectAjax
           label="State/ Province"
-          value={form.state_province}
+          value={form.state_province_id}
           name="state_id"
-
-
+          data={provinceData}
           endpoint="/master/state-provinces"
           filter={form.country_id}
           column="state_province_name"
           onChange={(e) =>
-            setForm({...form, state_province: e.target.value || null})
+            setForm({...form, state_province_id: e.target.value || null})
           }
           disabled={isView || loading}
           type="select"
@@ -573,8 +571,6 @@ function AttractionForm(props) {
           value={form.city_id}
           labelRequired="label-required"
           name="city_id"
-
-
           data={cityData}
           endpoint="/master/cities"
           filter={form.country_id}
@@ -601,8 +597,6 @@ function AttractionForm(props) {
           label="Destination"
           value={form.destination_id}
           name="destination_id"
-
-
           data={destinationData}
           endpoint="/master/destinations"
           filter={form.destination_id}
@@ -618,8 +612,6 @@ function AttractionForm(props) {
           label="Zone"
           value={form.zone_id}
           name="zone_id"
-
-
           data={zoneData}
           endpoint="/master/zones"
           filter={form.zone_id}
