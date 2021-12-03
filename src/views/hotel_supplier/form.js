@@ -120,7 +120,7 @@ function HotelSupplierForm(props) {
           $.ajax({
             type: "GET",
             async: false,
-            url: `${env.API_URL}/master/supplier-types?filters=["hotel_supplier_code","=","${element.value}"]`,
+            url: `${env.API_URL}/master/hotel-suppliers?filters=["hotel_supplier_code","=","${element.value}"]`,
             success: function (res) {
               if (res.items.length !== 0) {
                 req = false
@@ -132,7 +132,7 @@ function HotelSupplierForm(props) {
 
           return req
         },
-        "Code already exists",
+        "Hotel Supplier Code already exists",
       )
 
       $.validator.addMethod(
