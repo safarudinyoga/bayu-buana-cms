@@ -142,7 +142,7 @@ function DestinationGroupForm(props) {
 
             return req
           },
-          "Code already exists",
+          "Destination Group Code already exists",
       )
     }
   }, [])
