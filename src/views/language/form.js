@@ -206,31 +206,15 @@ function LanguageForm(props) {
           minLength="1"
           maxLength="256"
         />
-        <FormInputWrapper label="Flag">
-          <label className="card card-default shadow-none border">
-            <div className="card-body">
-              {!isView ? <i className="fas fa-edit text-muted img-edit-icon"></i> : null}
-              <input
-                type="file"
-                onChange={doUpload}
-                className="d-none"
-                disabled={isView}
-                accept=".png,.jpg,.jpeg"
-              />
-              {form.language_asset &&
-                form.language_asset.multimedia_description &&
-                form.language_asset.multimedia_description.url ? (
-                <img
-                  src={form.language_asset.multimedia_description.url}
-                  className="img-fluid"
-                  alt="language"
-                />
-              ) : (
-                ""
-              )}
-            </div>
-          </label>
-        </FormInputWrapper>
+        <FormInputControl
+          label="Flag"
+          type="image"
+          onChange={doUpload}
+          disabled={isView}
+          accept=".png,.jpg,.jpeg"
+          data={form}
+          style={{maxWidth: 300, marginTop: 12}}
+        />
       </FormHorizontal>
 
       <FormHorizontal>
@@ -250,6 +234,7 @@ function LanguageForm(props) {
         />
         <FormInputControl
           label="Language Alpha 3 Code"
+          labelRequired="label-required"
           value={form.language_alpha_3_code}
           name="language_alpha_3_code"
           cl={{md:"12"}}
