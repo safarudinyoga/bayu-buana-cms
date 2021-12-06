@@ -3,6 +3,7 @@ import FormInputFile from './input-image'
 
 const mediaTypes = ["desktop", "tablet", "mobile"]
 const MediaForm = ({
+	isView=false,
 	data= {
 		attraction_asset_desktop: {
 			multimedia_description_id: null,
@@ -27,7 +28,7 @@ const MediaForm = ({
 }) => {
     return (
     	<div className="media-form">
-			<p class="text-sub-header">MEDIA</p>
+			<p className="text-sub-header">MEDIA</p>
 			<div className="row">
 				{
 					mediaTypes.map((m_type, i) => (
@@ -39,6 +40,7 @@ const MediaForm = ({
 								url={data["attraction_asset_"+m_type]?.multimedia_description?.url || ""}
 								accept=".png,.jpg,.jpeg"
 								name={"attraction_asset_"+m_type}
+								disabled={isView}
 							/>
 						</div>
 					))

@@ -43,6 +43,7 @@ class FormBuilder extends Component {
           <MediaForm 
             doUpload={this.props.uploadMedia} 
             data={this.props.mediaData} 
+            isView={this.props.isView}
           />
           }
         <TranslationForm
