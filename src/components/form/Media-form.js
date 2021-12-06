@@ -34,7 +34,6 @@ const MediaForm = ({
 						<div className="col-md-4" key={i}>
 							<FormInputFile
 								title={`BANNER (${m_type}) IMAGE`}
-								value={[m_type].language_native_name}
 								mediaType={m_type}
 								onChange={doUpload}
 								url={data["attraction_asset_"+m_type]?.multimedia_description?.url || ""}

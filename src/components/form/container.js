@@ -41,6 +41,10 @@ export default class FormContainer extends Component {
       errorPlacement: function (error, element) {
         error.addClass("invalid-feedback")
         element.closest(".form-control-wrapper").append(error)
+
+        if($("div").hasClass("media-form")) {
+          element.closest(".image-wrapper").append(error)
+        }
       },
       highlight: function (element, errorClass, validClass) {
         $(element).addClass("is-invalid")
