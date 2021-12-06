@@ -1,0 +1,21 @@
+.media-title {
+    text-align: left;
+    font: normal normal normal 1em 'Segoe UI';
+    letter-spacing: 0px;
+    color: #333333;
+    text-transform: uppercase;
+    margin-bottom: 0 !important;
+}
+
+.media-info {
+    text-align: left;
+    font: italic normal normal 0.8em 'Segoe UI';
+    letter-spacing: 0px;
+    color: #818181;
+}
+
+.media-label {
+    margin-right: 35px;
+    margin-top: 9px;
+    position: relative;
+}
