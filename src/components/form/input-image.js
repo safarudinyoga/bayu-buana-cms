@@ -36,7 +36,7 @@ export default class FormInputFile extends Component {
         {
           title && (
             <>
-              <p className="media-title">{title}</p>
+              <p className="media-title media-title-required">{title}</p>
               <span className="media-info">Only {accept?.split(",").join(" ") || ".png, .jpg, .jpeg"} file supported.</span>
             </>
           )
