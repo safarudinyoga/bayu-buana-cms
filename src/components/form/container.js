@@ -41,6 +41,10 @@ export default class FormContainer extends Component {
       errorPlacement: function (error, element) {
         error.addClass("invalid-feedback")
         element.closest(".form-control-wrapper").append(error)
+
+        if($("div").hasClass("media-form")) {
+          element.closest(".image-wrapper").append(error)
+        }
       },
       highlight: function (element, errorClass, validClass) {
         $(element).addClass("is-invalid")
@@ -79,14 +83,13 @@ export default class FormContainer extends Component {
       >
         <div className="card card-default border">
           <div className="card-body">{this.props.children}</div>
-          <hr className="mx-4" />
-          <div className="p-4">
-            {this.props.isView ? "" : <SaveButton id={this.props.id} />}
-            <CancelButton
-              isView={this.props.isView}
-              onClick={this.props.onBack}
-            />
-          </div>
+        </div>
+        <div>
+          {this.props.isView ? "" : <SaveButton id={this.props.id} />}
+          <CancelButton
+            isView={this.props.isView}
+            onClick={this.props.onBack}
+          />
         </div>
       </form>
     )

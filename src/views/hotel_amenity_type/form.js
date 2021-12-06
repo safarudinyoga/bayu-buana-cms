@@ -8,7 +8,6 @@ import FormBuilder from "components/form/builder"
 import useQuery from "lib/query"
 import {useDispatch} from "react-redux"
 import {setUIParams} from "redux/ui-store"
-import FormInputWrapper from "components/form/input-wrapper"
 const endpoint = "/master/hotel-amenity-types"
 const backUrl = "/master/hotel-amenity-types"
 
@@ -208,33 +207,14 @@ function HotelAmenityForm(props) {
           disabled={isView || loading}
           type="selectmultiple"
         />
-        <FormInputWrapper label="Icon">
-          <label className="card card-default shadow-none border">
-            <div className="card-body">
-              {!isView ? (
-                <i className="fas fa-edit text-muted img-edit-icon"></i>
-              ) : null}
-              <input
-                type="file"
-                onChange={doUpload}
-                className="d-none"
-                disabled={isView}
-                accept=".png,.jpg,.jpeg"
-              />
-              {form.hotel_amenity_type_asset &&
-                form.hotel_amenity_type_asset.multimedia_description &&
-                form.hotel_amenity_type_asset.multimedia_description.url ? (
-                <img
-                  src={form.hotel_amenity_type_asset.multimedia_description.url}
-                  className="img-fluid"
-                  alt="hotel amenity type"
-                />
-              ) : (
-                ""
-              )}
-            </div>
-          </label>
-        </FormInputWrapper>
+        <FormInputControl
+          label="Icon"
+          type="image"
+          onChange={doUpload}
+          disabled={isView}
+          url={form.hotel_amenity_type_asset.multimedia_description.url}
+          style={{maxWidth: 300, marginTop: 12}}
+        />
       </FormHorizontal>
 
       <FormHorizontal>

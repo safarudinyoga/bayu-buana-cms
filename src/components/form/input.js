@@ -1,4 +1,5 @@
 import React, { Component } from "react"
+import FormInputFile from './input-image';
 
 export default class FormInput extends Component {
   constructor(props) {
@@ -37,6 +38,10 @@ export default class FormInput extends Component {
           <select ref={this.input} className="form-control" {...this.props} multiple="multiple">
             {this.props.children}
           </select>
+        )
+      case "image":
+        return (
+          <FormInputFile {...this.props} />
         )
       default:
         return (

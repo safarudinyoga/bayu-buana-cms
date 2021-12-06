@@ -89,6 +89,13 @@ select.bg-dark-grey > option {
   top: 10px;
 }
 
+.img-up-icon {
+  position: absolute;
+  right: -7px;
+  top: -20px;
+  z-index: 1;
+}
+
 .table-image {
   width: auto;
   height: auto;

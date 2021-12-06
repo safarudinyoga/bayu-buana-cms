@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React from "react"
 import "@fortawesome/fontawesome-free/css/all.css"
 import "admin-lte"
 import "admin-lte/dist/css/adminlte.css"

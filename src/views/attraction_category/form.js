@@ -1,5 +1,5 @@
 import { withRouter } from "react-router"
-import React, { useEffect, useState, useCallback } from "react"
+import React, { useEffect, useState } from "react"
 import Api from "config/api"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
@@ -33,7 +33,6 @@ function AttractionCategoryForm(props) {
         url: "",
       },
     },
-    attraction_category_icon: "",
   })
   const translationFields = [
     {
@@ -59,9 +58,8 @@ function AttractionCategoryForm(props) {
       minlength: 1,
       maxlength: 4000,
     },
-    attraction_category_icon: {
+    attraction_category_asset: {
       required: true,
-      minlength: 1,
     },
   }
 
@@ -69,7 +67,7 @@ function AttractionCategoryForm(props) {
     attraction_category_name: {
       required: "Attraction Category Name is required.",
     },
-    attraction_category_icon: {
+    attraction_category_asset: {
       required: "Attraction Category Icon Image is required.",
     },
   }
@@ -234,59 +232,51 @@ function AttractionCategoryForm(props) {
           maxLength="256"
         />
 
-        <FormInputWrapper
-          label="Is Default"
-          labelRequired="label-required"
-          hint="Set is default"
-        >
-          {!isView ? (
-            <>
-              <div className="form-check form-check-inline">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="is_default"
-                  id="ac-1"
-                  value={true}
-                  disabled={isView || loading}
-                  checked={form.is_default}
-                  onChange={(e) =>
+          <FormInputWrapper
+              label="Is Default"
+              hint="Set is default"
+              labelRequired="label-required"
+          >
+          <div className="form-check form-check-inline">
+            <input
+                className="form-check-input"
+                type="radio"
+                name="is_default"
+                id="ha-1"
+                value={true}
+                disabled={isView || loading}
+                checked={form.is_default}
+                onChange={(e) =>
                     setForm({
                       ...form,
                       is_default: true,
                     })
-                  }
-                />
-                <label className="form-check-label" htmlFor="ac-1">
-                  Yes
-                </label>
-              </div>
-              <div className="form-check form-check-inline">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="is_default"
-                  id="ac-2"
-                  value={false}
-                  disabled={isView || loading}
-                  checked={!form.is_default}
-                  onChange={(e) =>
+                }
+            />
+            <label className="form-check-label" htmlFor="ha-1">
+              Yes
+            </label>
+          </div>
+          <div className="form-check form-check-inline">
+            <input
+                className="form-check-input"
+                type="radio"
+                name="is_default"
+                id="ha-2"
+                value={false}
+                disabled={isView || loading}
+                checked={!form.is_default}
+                onChange={(e) =>
                     setForm({
                       ...form,
                       is_default: false,
                     })
-                  }
-                />
-                <label className="form-check-label" htmlFor="ac-2">
-                  No
-                </label>
-              </div>
-            </>
-          ) : form.is_default ? (
-            "Yes"
-          ) : (
-            "No"
-          )}
+                }
+            />
+            <label className="form-check-label" htmlFor="ha-2">
+              No
+            </label>
+          </div>
         </FormInputWrapper>
         <FormInputControl
           label="Description"
@@ -298,40 +288,16 @@ function AttractionCategoryForm(props) {
           minLength="1"
           maxLength="4000"
         />
-        <FormInputWrapper
-          label="Icon"      
+        <FormInputControl
+          label="Icon"
+          type="image"
           labelRequired="label-required"
-        >
-          <label className={`card card-default shadow-none border`}>
-            <div className="card-body">
-              {!isView ? (
-                <i className="fas fa-edit text-muted img-edit-icon"></i>
-              ) : null}
-              <input
-                type="file"
-                onChange={doUpload}
-                className="d-none"
-                disabled={isView}
-                accept=".png,.jpg,.jpeg"
-                name="attraction_category_icon"
-                value={form.attraction_category_icon}
-              />
-              {form.attraction_category_asset &&
-              form.attraction_category_asset.multimedia_description &&
-              form.attraction_category_asset.multimedia_description.url ? (
-                <img
-                  src={
-                    form.attraction_category_asset.multimedia_description.url
-                  }
-                  className="img-fluid"
-                  alt="attraction category"
-                />
-              ) : (
-                ""
-              )}
-            </div>
-          </label>
-        </FormInputWrapper>
+          name="attraction_category_asset"
+          onChange={doUpload}
+          disabled={isView}
+          url={form.attraction_category_asset.multimedia_description.url}
+          style={{maxWidth: 300, marginTop: 12}}
+        />
       </FormHorizontal>
     </FormBuilder>
   )

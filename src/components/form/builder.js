@@ -2,6 +2,7 @@ import React, {Component} from "react"
 import {withRouter} from "react-router"
 import FormAlert from "./alert"
 import FormContainer from "./container"
+import MediaForm from "./Media-form"
 import TranslationForm from "./translation-form"
 import FormWrapper from "./wrapper"
 
@@ -38,6 +39,13 @@ class FormBuilder extends Component {
         id={this.props.match.params.id}
       >
         <FormWrapper>{this.props.children}</FormWrapper>
+        {this.props.showMedia && 
+          <MediaForm 
+            doUpload={this.props.uploadMedia} 
+            data={this.props.mediaData} 
+            isView={this.props.isView}
+          />
+          }
         <TranslationForm
           ref={this.translationForm}
           translations={this.props.translations}
