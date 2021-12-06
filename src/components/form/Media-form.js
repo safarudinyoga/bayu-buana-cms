@@ -3,82 +3,29 @@ import {Component} from "react"
 import FormInputFile from './input-image'
 
 const mediaTypes = ["desktop", "tablet", "mobile"]
-export default class MediaForm extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      isView: false,
-			desktop: {
-				language_code: "",
-				language_alpha_3_code: "",
-				language_name: "",
-				language_native_name: "",
-				language_asset: {
-					multimedia_description_id: null,
-					multimedia_description: {
-						url: "",
-					},
-				},
+const MediaForm = ({
+	data= {
+		attraction_asset_desktop: {
+			multimedia_description_id: null,
+			multimedia_description: {
+			  url: "",
 			},
-			tablet: {
-				language_code: "",
-				language_alpha_3_code: "",
-				language_name: "",
-				language_native_name: "",
-				language_asset: {
-					multimedia_description_id: null,
-					multimedia_description: {
-						url: "",
-					},
-				},
+		  },
+		  attraction_asset_mobile: {
+			multimedia_description_id: null,
+			multimedia_description: {
+			  url: "",
 			},
-			mobile: {
-				language_code: "",
-				language_alpha_3_code: "",
-				language_name: "",
-				language_native_name: "",
-				language_asset: {
-					multimedia_description_id: null,
-					multimedia_description: {
-						url: "",
-					},
-				},
+		  },
+		  attraction_asset_tablet: {
+			multimedia_description_id: null,
+			multimedia_description: {
+			  url: "",
 			},
-    }
-
-    this.translated = {}
-    this.hasTranslated = false
-    this.api = new Api()
-  }
-
-  componentDidMount() {
-  }
-
-  componentDidUpdate() {
-  }
-
-	doUpload = async (e, mode) => {
-    try {
-      let api = new Api()
-      let payload = new FormData()
-      payload.append("files", e.target.files[0])
-      let res = await api.post("/multimedia/files", payload)
-      if (res.data) {
-        this.setState({
-			[mode]: {
-				...this.state[mode],
-				language_asset: {
-				multimedia_description_id: res.data.id,
-				multimedia_description: res.data,
-				},
-			}
-		})
-      }
-    } catch (e) { }
-  }
-
-  render() {
-		const {desktop, tablet, mobile, isView} = this.state
+		  },
+	},
+	doUpload = () => {}
+}) => {
     return (
     	<div className="media-form">
 			<p class="text-sub-header">MEDIA</p>
@@ -89,10 +36,11 @@ export default class MediaForm extends Component {
 							<FormInputFile
 								title={`BANNER (${m_type}) IMAGE`}
 								value={[m_type].language_native_name}
-								onChange={this.doUpload}
-								disabled={isView}
-								data={m_type}
+								mediaType={m_type}
+								onChange={doUpload}
+								url={data["attraction_asset_"+m_type]?.multimedia_description?.url || ""}
 								accept=".png,.jpg,.jpeg"
+								name={"attraction_asset_"+m_type}
 							/>
 						</div>
 					))
@@ -100,5 +48,6 @@ export default class MediaForm extends Component {
 			</div>
     	</div>
     )
-  }
 }
+
+export default MediaForm
