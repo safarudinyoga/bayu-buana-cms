@@ -25,8 +25,7 @@ export default class FormInputFile extends Component {
       accept, 
       title, 
       name, 
-      mediaType="desktop", 
-      value=""
+      mediaType="desktop",
     } = this.props;
     const acceptFormat = accept 
       ? accept.split(",").map(v => "image/"+v.substring(1)).join(",")
@@ -57,21 +56,12 @@ export default class FormInputFile extends Component {
                 name={name}
                 disabled={disabled}
                 accept={acceptFormat}
-                value={value}
               />
-              {url ? (
-                <img
-                  src={url}
-                  className="img-fluid img-up"
-                  alt="up-img"
-                />
-              ) : (
-                <img
-                  src={NoImage}
-                  className="img-fluid img-up"
-                  alt="up-no-img"
-                />
-              )}
+              <img
+                src={url || NoImage}
+                className="img-fluid img-up"
+                alt="up-img"
+              />
           </label>
       </div>
     )
