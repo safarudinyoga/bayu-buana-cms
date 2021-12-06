@@ -1,5 +1,4 @@
-import Api from "config/api"
-import {Component} from "react"
+import React from "react"
 import FormInputFile from './input-image'
 
 const mediaTypes = ["desktop", "tablet", "mobile"]
@@ -32,7 +31,7 @@ const MediaForm = ({
 			<div className="row">
 				{
 					mediaTypes.map((m_type, i) => (
-						<div className="col-md-4">
+						<div className="col-md-4" key={i}>
 							<FormInputFile
 								title={`BANNER (${m_type}) IMAGE`}
 								value={[m_type].language_native_name}
