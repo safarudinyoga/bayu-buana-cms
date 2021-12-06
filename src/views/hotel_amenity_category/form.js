@@ -26,6 +26,7 @@ function HotelAmenityCategoryForm(props) {
     hotel_amenity_category_name: "",
     is_default: false,
     description: "",
+    hotel_amenity_category_icon: "",
     hotel_amenity_category_asset: {
       multimedia_description_id: null,
       multimedia_description: {
@@ -61,9 +62,8 @@ function HotelAmenityCategoryForm(props) {
       minlength: 1,
       maxlength: 4000,
     },
-    hotel_amenity_category_asset: {
-      multimedia_description_id: {required:true},
-      multimedia_description: {required:true},
+    hotel_amenity_category_icon: {
+      required: true
     },
   }
   const validationMessages = {
@@ -73,9 +73,8 @@ function HotelAmenityCategoryForm(props) {
     is_default: {
       required: "Is Default is required.",
     },
-    hotel_amenity_category_asset: {
-      multimedia_description_id: { required:"Hotel Amenity Category Icon Image is required."},
-      multimedia_description: { required:"Hotel Amenity Category Icon Image is required."},
+    hotel_amenity_category_icon: {
+      required:"Hotel Amenity Category Icon Image is required.",
     }
   }
 
@@ -302,7 +301,7 @@ function HotelAmenityCategoryForm(props) {
             label="Hotel Amenity Category Icon Image"
             type="image"
             labelRequired="label-required"
-            name="language_asset"
+            name="hotel_amenity_category_icon"
             onChange={doUpload}
             disabled={isView}
             accept=".png,.jpg,.jpeg"
