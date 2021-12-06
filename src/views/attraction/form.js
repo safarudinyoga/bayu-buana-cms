@@ -304,6 +304,7 @@ function AttractionForm(props) {
       isValid={false}
       rules={validationRules}
       validationMessages={validationMessages}
+      showMedia={true}
     >
       <FormHorizontal>
         <FormInputControl
