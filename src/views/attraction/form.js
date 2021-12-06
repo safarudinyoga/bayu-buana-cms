@@ -199,6 +199,15 @@ function AttractionForm(props) {
       minlength: 1,
       maxlength: 4000,
     },
+    attraction_asset_desktop: {
+      required: true
+    },
+    attraction_asset_mobile: {
+      required: true
+    },
+    attraction_asset_tablet: {
+      required: true
+    },
   }
 
   const validationMessages = {
@@ -263,6 +272,15 @@ function AttractionForm(props) {
       required: "Description is required",
       minlength: "Description must be at least 1 characters",
       maxlength: "Description cannot be more than 4000 characters",
+    },
+    attraction_asset_desktop: {
+      required: "Banner Desktop is required"
+    },
+    attraction_asset_mobile: {
+      required: "Banner Mobile is required"
+    },
+    attraction_asset_tablet: {
+      required: "Banner Tablet is required"
     },
   }
 
@@ -432,51 +450,18 @@ function AttractionForm(props) {
     }
   }
 
-  const doUploadDesktop = async (e) => {
+  const doUploadMedia = async (e, media_type="desktop") => {
     try {
+      let media_code = ["desktop", "tablet", "mobile"].indexOf(media_type)+1
       let payload = new FormData()
       payload.append("files", e.target.files[0])
+      media_type !== "desktop" && payload.append("dimension_category_code", media_code)
+      
       let res = await api.post("/multimedia/files", payload)
       if (res.data) {
         setForm({
           ...form,
-          attraction_asset_desktop: {
-            multimedia_description_id: res.data.id,
-            multimedia_description: res.data,
-          },
-        })
-      }
-    } catch (e) {}
-  }
-
-  const doUploadTablet = async (e) => {
-    try {
-      let payload = new FormData()
-      payload.append("files", e.target.files[0])
-      payload.append("dimension_category_code", 2)
-      let res = await api.post("/multimedia/files", payload)
-      if (res.data) {
-        setForm({
-          ...form,
-          attraction_asset_tablet: {
-            multimedia_description_id: res.data.id,
-            multimedia_description: res.data,
-          },
-        })
-      }
-    } catch (e) {}
-  }
-
-  const doUploadMobile = async (e) => {
-    try {
-      let payload = new FormData()
-      payload.append("files", e.target.files[0])
-      payload.append("dimension_category_code", 3)
-      let res = await api.post("/multimedia/files", payload)
-      if (res.data) {
-        setForm({
-          ...form,
-          attraction_asset_mobile: {
+          ["attraction_asset_" + media_type]: {
             multimedia_description_id: res.data.id,
             multimedia_description: res.data,
           },
@@ -497,300 +482,200 @@ function AttractionForm(props) {
       isValid={false}
       rules={validationRules}
       validationMessages={validationMessages}
-      gallery={Gallery()}
+      showMedia={true}
+      uploadMedia={doUploadMedia}
+      mediaData={form}
     >
       <div className="col-lg-12">
-      <FormHorizontal>
-        <FormInputControl
-          label="Attraction Name"
-          labelRequired="label-required"
-          value={form.attraction_name}
-          name="attraction_name"
-          onChange={(e) => setForm({...form, attraction_name: e.target.value})}
-          disabled={isView || loading}
-          type="text"
-          minLength="1"
-          maxLength="64"
-        />
+        <FormHorizontal>
+          <FormInputControl
+            label="Attraction Name"
+            labelRequired="label-required"
+            value={form.attraction_name}
+            name="attraction_name"
+            onChange={(e) => setForm({...form, attraction_name: e.target.value})}
+            disabled={isView || loading}
+            type="text"
+            minLength="1"
+            maxLength="64"
+          />
 
-        <FormInputSelectAjax
-          label="Attraction Category"
-          value={form.attraction_category_attraction ? form.attraction_category_attraction.map((item) => item.attraction_category_id) : []}
-          name="attraction_category_attraction"
-          data={categoryData}
-          endpoint="/master/attraction-categories"
-          column="attraction_category_name"
-          onChange={(e, values) => setForm(form => ({...form, attraction_category_attraction: values.map(v => ({attraction_category_id: v.id}))}))}
-          disabled={isView || loading}
-          type="selectmultiple"
-        />
+          <FormInputSelectAjax
+            label="Attraction Category"
+            value={form.attraction_category_attraction ? form.attraction_category_attraction.map((item) => item.attraction_category_id) : []}
+            name="attraction_category_attraction"
+            data={categoryData}
+            endpoint="/master/attraction-categories"
+            column="attraction_category_name"
+            onChange={(e, values) => setForm(form => ({...form, attraction_category_attraction: values.map(v => ({attraction_category_id: v.id}))}))}
+            disabled={isView || loading}
+            type="selectmultiple"
+          />
 
-        <FormInputControl
-          label={"Address"}
-          value={form.address_line}
-          name="address_line"
-          onChange={(e) => setForm({...form, address_line: e.target.value})}
-          disabled={isView || loading}
-          type="textarea"
-          minLength="1"
-          maxLength="64"
-        />
+          <FormInputControl
+            label={"Address"}
+            value={form.address_line}
+            name="address_line"
+            onChange={(e) => setForm({...form, address_line: e.target.value})}
+            disabled={isView || loading}
+            type="textarea"
+            minLength="1"
+            maxLength="64"
+          />
 
-        <FormInputSelectAjax
-          label="Country"
-          labelRequired="label-required"
-          value={form.country_id}
-          name="country_id"
-          data={countryData}
-          endpoint="/master/countries"
-          column="country_name"
-          onChange={(e) =>
-            setForm({...form, country_id: e.target.value || null})
-          }
-          disabled={isView || loading}
-          type="select"
-        />
+          <FormInputSelectAjax
+            label="Country"
+            labelRequired="label-required"
+            value={form.country_id}
+            name="country_id"
+            data={countryData}
+            endpoint="/master/countries"
+            column="country_name"
+            onChange={(e) =>
+              setForm({...form, country_id: e.target.value || null})
+            }
+            disabled={isView || loading}
+            type="select"
+          />
 
-        <FormInputSelectAjax
-          label="State/ Province"
-          value={form.state_province_id}
-          name="state_id"
-          data={provinceData}
-          endpoint="/master/state-provinces"
-          filter={form.country_id}
-          column="state_province_name"
-          onChange={(e) =>
-            setForm({...form, state_province_id: e.target.value || null})
-          }
-          disabled={isView || loading}
-          type="select"
-        />
+          <FormInputSelectAjax
+            label="State/ Province"
+            value={form.state_province_id}
+            name="state_id"
+            data={provinceData}
+            endpoint="/master/state-provinces"
+            filter={form.country_id}
+            column="state_province_name"
+            onChange={(e) =>
+              setForm({...form, state_province_id: e.target.value || null})
+            }
+            disabled={isView || loading}
+            type="select"
+          />
 
-        <FormInputSelectAjax
-          label="City"
-          value={form.city_id}
-          labelRequired="label-required"
-          name="city_id"
-          data={cityData}
-          endpoint="/master/cities"
-          filter={form.country_id}
-          column="city_name"
-          onChange={(e) =>
-            setForm({...form, city_id: e.target.value || null})
-          }
-          disabled={isView || loading}
-          type="select"
-        />
+          <FormInputSelectAjax
+            label="City"
+            value={form.city_id}
+            labelRequired="label-required"
+            name="city_id"
+            data={cityData}
+            endpoint="/master/cities"
+            filter={form.country_id}
+            column="city_name"
+            onChange={(e) =>
+              setForm({...form, city_id: e.target.value || null})
+            }
+            disabled={isView || loading}
+            type="select"
+          />
 
-        <FormInputControl
-          label={"Zip Code"}
-          value={form.postal_code}
-          name="postal_code"
-          onChange={(e) => setForm({...form, postal_code: e.target.value})}
-          disabled={isView || loading}
-          type="text"
-          minLength="1"
-          maxLength="16"
-        />
+          <FormInputControl
+            label={"Zip Code"}
+            value={form.postal_code}
+            name="postal_code"
+            onChange={(e) => setForm({...form, postal_code: e.target.value})}
+            disabled={isView || loading}
+            type="text"
+            minLength="1"
+            maxLength="16"
+          />
 
-        <FormInputSelectAjax
-          label="Destination"
-          value={form.destination_id}
-          name="destination_id"
-          data={destinationData}
-          endpoint="/master/destinations"
-          filter={form.destination_id}
-          column="destination_name"
-          onChange={(e) =>
-            setForm({...form, destination_id: e.target.value || null})
-          }
-          disabled={isView || loading}
-          type="select"
-        />
+          <FormInputSelectAjax
+            label="Destination"
+            value={form.destination_id}
+            name="destination_id"
+            data={destinationData}
+            endpoint="/master/destinations"
+            filter={form.destination_id}
+            column="destination_name"
+            onChange={(e) =>
+              setForm({...form, destination_id: e.target.value || null})
+            }
+            disabled={isView || loading}
+            type="select"
+          />
 
-        <FormInputSelectAjax
-          label="Zone"
-          value={form.zone_id}
-          name="zone_id"
-          data={zoneData}
-          endpoint="/master/zones"
-          filter={form.zone_id}
-          column="zone_name"
-          onChange={(e) =>
-            setForm({...form, zone_id: e.target.value || null})
-          }
-          disabled={isView || loading}
-          type="select"
-        />
+          <FormInputSelectAjax
+            label="Zone"
+            value={form.zone_id}
+            name="zone_id"
+            data={zoneData}
+            endpoint="/master/zones"
+            filter={form.zone_id}
+            column="zone_name"
+            onChange={(e) =>
+              setForm({...form, zone_id: e.target.value || null})
+            }
+            disabled={isView || loading}
+            type="select"
+          />
 
-        <FormInputControl
-          label={"Latitude"}
-          value={form.latitude}
-          name="latitude"
-          onChange={(e) => setForm({...form, latitude: e.target.value})}
-          disabled={isView || loading}
-          type="text"
-          minLength="1"
-          maxLength="16"
-        />
+          <FormInputControl
+            label={"Latitude"}
+            value={form.latitude}
+            name="latitude"
+            onChange={(e) => setForm({...form, latitude: e.target.value})}
+            disabled={isView || loading}
+            type="text"
+            minLength="1"
+            maxLength="16"
+          />
 
-        <FormInputControl
-          label={"Longitude"}
-          value={form.longitude}
-          name="longitude"
-          onChange={(e) => setForm({...form, longitude: e.target.value})}
-          disabled={isView || loading}
-          type="text"
-          minLength="1"
-          maxLength="16"
-        />
+          <FormInputControl
+            label={"Longitude"}
+            value={form.longitude}
+            name="longitude"
+            onChange={(e) => setForm({...form, longitude: e.target.value})}
+            disabled={isView || loading}
+            type="text"
+            minLength="1"
+            maxLength="16"
+          />
 
-        <FormInputControl
-          label={"Email Address"}
-          value={form.email}
-          name="email"
-          onChange={(e) => setForm({...form, email: e.target.value})}
-          disabled={isView || loading}
-          type="text"
-          minLength="1"
-          maxLength="64"
-        />
+          <FormInputControl
+            label={"Email Address"}
+            value={form.email}
+            name="email"
+            onChange={(e) => setForm({...form, email: e.target.value})}
+            disabled={isView || loading}
+            type="text"
+            minLength="1"
+            maxLength="64"
+          />
 
-        <FormInputControl
-          label={"Phone"}
-          value={form.phone_number}
-          name="phone_number"
-          onChange={(e) => setForm({...form, phone_number: e.target.value})}
-          disabled={isView || loading}
-          type="text"
-          minLength="1"
-          maxLength="64"
-        />
+          <FormInputControl
+            label={"Phone"}
+            value={form.phone_number}
+            name="phone_number"
+            onChange={(e) => setForm({...form, phone_number: e.target.value})}
+            disabled={isView || loading}
+            type="text"
+            minLength="1"
+            maxLength="64"
+          />
 
-        <FormInputControl
-          label={"Fax"}
-          value={form.fax_number}
-          name="fax_number"
-          onChange={(e) => setForm({...form, fax_number: e.target.value})}
-          disabled={isView || loading}
-          type="text"
-          minLength="1"
-          maxLength="64"
-        />
+          <FormInputControl
+            label={"Fax"}
+            value={form.fax_number}
+            name="fax_number"
+            onChange={(e) => setForm({...form, fax_number: e.target.value})}
+            disabled={isView || loading}
+            type="text"
+            minLength="1"
+            maxLength="64"
+          />
 
-        <FormInputControl
-          value={form.description}
-          name="description"
-          onChange={(e) => setForm({...form, description: e.target.value})}
-          label="Description"
-          disabled={isView || loading}
-          type="textarea"
-          minLength="1"
-          maxLength="64"
-        />
-      </FormHorizontal>
-      <p className="text-sub-header">Media</p>
-      <div className="row">
-        <div className="col-lg-6">
-          <FormInputWrapper
-            label="Banner Desktop"
-          >
-            <label className={`card card-default shadow-none border`}>
-              <div className="card-body">
-                {!isView ? (
-                  <i className="fas fa-edit text-muted img-edit-icon"></i>
-                ) : null}
-                <input
-                  type="file"
-                  onChange={doUploadDesktop}
-                  className="d-none"
-                  disabled={isView}
-                  accept=".png,.jpg,.jpeg"
-                />
-                {form.attraction_asset_desktop &&
-                form.attraction_asset_desktop.multimedia_description &&
-                form.attraction_asset_desktop.multimedia_description.url ? (
-                  <img
-                    src={
-                      form.attraction_asset_desktop.multimedia_description.url
-                    }
-                    className="img-fluid"
-                    alt="attraction asset desktop"
-                  />
-                ) : (
-                  ""
-                )}
-              </div>
-            </label>
-          </FormInputWrapper>
-        </div>
-        <div className="col-lg-6">
-          <FormInputWrapper
-            label="Banner Tablet"
-          >
-            <label className={`card card-default shadow-none border`}>
-              <div className="card-body">
-                {!isView ? (
-                  <i className="fas fa-edit text-muted img-edit-icon"></i>
-                ) : null}
-                <input
-                  type="file"
-                  onChange={doUploadTablet}
-                  className="d-none"
-                  disabled={isView}
-                  accept=".png,.jpg,.jpeg"
-                />
-                {form.attraction_asset_tablet &&
-                form.attraction_asset_tablet.multimedia_description &&
-                form.attraction_asset_tablet.multimedia_description.url ? (
-                  <img
-                    src={
-                      form.attraction_asset_tablet.multimedia_description.url
-                    }
-                    className="img-fluid"
-                    alt="attraction asset tablet"
-                  />
-                ) : (
-                  ""
-                )}
-              </div>
-            </label>
-          </FormInputWrapper>
-        </div>
-        <div className="col-lg-6">
-          <FormInputWrapper
-            label="Banner Mobile"
-          >
-            <label className={`card card-default shadow-none border`}>
-              <div className="card-body">
-                {!isView ? (
-                  <i className="fas fa-edit text-muted img-edit-icon"></i>
-                ) : null}
-                <input
-                  type="file"
-                  onChange={doUploadMobile}
-                  className="d-none"
-                  disabled={isView}
-                  accept=".png,.jpg,.jpeg"
-                />
-                {form.attraction_asset_mobile &&
-                form.attraction_asset_mobile.multimedia_description &&
-                form.attraction_asset_mobile.multimedia_description.url ? (
-                  <img
-                    src={
-                      form.attraction_asset_mobile.multimedia_description.url
-                    }
-                    className="img-fluid"
-                    alt="attraction asset mobile"
-                  />
-                ) : (
-                  ""
-                )}
-              </div>
-            </label>
-          </FormInputWrapper>
-        </div>
-        </div>
+          <FormInputControl
+            value={form.description}
+            name="description"
+            onChange={(e) => setForm({...form, description: e.target.value})}
+            label="Description"
+            disabled={isView || loading}
+            type="textarea"
+            minLength="1"
+            maxLength="64"
+          />
+        </FormHorizontal>
       </div>
     </FormBuilder>
   )
