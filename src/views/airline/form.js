@@ -207,33 +207,14 @@ function AirlineForm(props) {
             Company 2
           </option>
         </FormInputSelectAjax>
-        <FormInputWrapper label="Airline Logo">
-          <label className="card card-default shadow-none border">
-            <div className="card-body">
-              {!isView ? (
-                <i className="fas fa-edit text-muted img-edit-icon"></i>
-              ) : null}
-              <input
-                type="file"
-                onChange={doUpload}
-                className="d-none"
-                disabled={isView}
-                accept=".png,.jpg,.jpeg"
-              />
-              {form.airline_asset &&
-                form.airline_asset.multimedia_description &&
-                form.airline_asset.multimedia_description.url ? (
-                <img
-                  src={form.airline_asset.multimedia_description.url}
-                  className="img-fluid"
-                  alt="airline"
-                />
-              ) : (
-                ""
-              )}
-            </div>
-          </label>
-        </FormInputWrapper>
+        <FormInputControl
+          label="Airline Logo"
+          type="image"
+          onChange={doUpload}
+          disabled={isView}
+          url={form.airline_asset.multimedia_description.url}
+          style={{maxWidth: 300, marginTop: 12}}
+        />
       </FormHorizontal>
 
       <FormHorizontal>

@@ -18,7 +18,16 @@ export default class FormInputFile extends Component {
   }
 
   render() {
-    const {url, disabled, onChange, accept, title, name, mediaType="desktop"} = this.props;
+    const {
+      url, 
+      disabled, 
+      onChange, 
+      accept, 
+      title, 
+      name, 
+      mediaType="desktop", 
+      value=""
+    } = this.props;
     const acceptFormat = accept 
       ? accept.split(",").map(v => "image/"+v.substring(1)).join(",")
       : "image/png,image/jpg,image/jpeg"
@@ -48,6 +57,7 @@ export default class FormInputFile extends Component {
                 name={name}
                 disabled={disabled}
                 accept={acceptFormat}
+                value={value}
               />
               {url ? (
                 <img
