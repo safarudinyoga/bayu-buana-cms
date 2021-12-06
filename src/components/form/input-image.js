@@ -1,5 +1,4 @@
 import React, { Component } from "react"
-import FormInputWrapper from "./input-wrapper"
 import NoImage from "assets/no_image.png"
 import UploadIcon from "assets/icons/upload.svg"
 import "./input-image.css"
@@ -19,9 +18,13 @@ export default class FormInputFile extends Component {
   }
 
   render() {
-    const {data, disabled, onChange, accept, title} = this.props;
+    const {url, disabled, onChange, accept, title, name, mediaType="desktop"} = this.props;
+    const acceptFormat = accept 
+      ? accept.split(",").map(v => "image/"+v.substring(1)).join(",")
+      : "image/png,image/jpg,image/jpeg"
+      
     return (
-      <div style={{}}>
+      <div className={`image-wrapper ${name}`}>
         {
           title && (
             <>
@@ -40,27 +43,27 @@ export default class FormInputFile extends Component {
               : null}
               <input
                 type="file"
-                onChange={onChange}
+                onChange={(e) => onChange(e, mediaType)}
                 className="d-none"
+                name={name}
                 disabled={disabled}
-                accept={accept || ".png,.jpg,.jpeg"}
+                accept={acceptFormat}
               />
-              {data.language_asset &&
-                data.language_asset.multimedia_description &&
-                data.language_asset.multimedia_description.url ? (
+              {url ? (
                 <img
-                  src={data.language_asset.multimedia_description.url}
-                  className="img-fluid"
+                  src={url}
+                  className="img-fluid img-up"
                   alt="up-img"
                 />
               ) : (
                 <img
                   src={NoImage}
-                  className="img-fluid"
+                  className="img-fluid img-up"
                   alt="up-no-img"
                 />
               )}
           </label>
+          {/* <span class="error-msg">{name} is required</span> */}
       </div>
     )
   }

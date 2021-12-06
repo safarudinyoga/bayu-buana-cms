@@ -1,3 +1,7 @@
+.image-wrapper {
+    margin-bottom: 15px;
+}
+
 .media-title {
     text-align: left;
     font: normal normal normal 1em 'Segoe UI';
@@ -17,5 +21,14 @@
 .media-label {
     margin-right: 35px;
     margin-top: 9px;
+    margin-bottom: 0;
     position: relative;
+    width: 100%;
+}
+
+.error-msg {
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: 80%;
+    color: #dc3545;
 }
