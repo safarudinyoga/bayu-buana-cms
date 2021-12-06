@@ -39,7 +39,12 @@ class FormBuilder extends Component {
         id={this.props.match.params.id}
       >
         <FormWrapper>{this.props.children}</FormWrapper>
-        {this.props.showMedia && <MediaForm/>}
+        {this.props.showMedia && 
+          <MediaForm 
+            doUpload={this.props.uploadMedia} 
+            data={this.props.mediaData} 
+          />
+          }
         <TranslationForm
           ref={this.translationForm}
           translations={this.props.translations}
