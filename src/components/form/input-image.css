@@ -18,6 +18,13 @@
     margin-bottom: 0 !important;
 }
 
+.media-title-required::after {
+    color: #d91c1c;
+    content: "*";
+    position: relative;
+    margin-left: 4px;
+}
+
 .media-info {
     text-align: left;
     font: italic normal normal 0.8em 'Segoe UI';
