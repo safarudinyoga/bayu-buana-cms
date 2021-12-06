@@ -33,7 +33,6 @@ function AttractionCategoryForm(props) {
         url: "",
       },
     },
-    attraction_category_icon: "",
   })
   const translationFields = [
     {
@@ -59,9 +58,8 @@ function AttractionCategoryForm(props) {
       minlength: 1,
       maxlength: 4000,
     },
-    attraction_category_icon: {
+    attraction_category_asset: {
       required: true,
-      minlength: 1,
     },
   }
 
@@ -69,7 +67,7 @@ function AttractionCategoryForm(props) {
     attraction_category_name: {
       required: "Attraction Category Name is required.",
     },
-    attraction_category_icon: {
+    attraction_category_asset: {
       required: "Attraction Category Icon Image is required.",
     },
   }
@@ -294,10 +292,9 @@ function AttractionCategoryForm(props) {
           label="Icon"
           type="image"
           labelRequired="label-required"
-          name="attraction_category_icon"
+          name="attraction_category_asset"
           onChange={doUpload}
           disabled={isView}
-          value={form.attraction_category_icon}
           url={form.attraction_category_asset.multimedia_description.url}
           style={{maxWidth: 300, marginTop: 12}}
         />

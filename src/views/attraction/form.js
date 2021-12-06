@@ -273,13 +273,13 @@ function AttractionForm(props) {
       maxlength: "Description cannot be more than 4000 characters",
     },
     attraction_asset_desktop: {
-      required: "Banner Desktop is required"
+      required: "Banner (Desktop) image is required"
     },
     attraction_asset_mobile: {
-      required: "Banner Mobile is required"
+      required: "Banner (Mobile) image is required"
     },
     attraction_asset_tablet: {
-      required: "Banner Tablet is required"
+      required: "Banner (Tablet) image is required"
     },
   }
 
