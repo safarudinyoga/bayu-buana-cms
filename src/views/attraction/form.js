@@ -316,7 +316,9 @@ function AttractionForm(props) {
         let res = await api.get(endpoint + "/" + formId)
         if (res.data.attraction_category_attraction) {
           setCategoryData(res.data.attraction_category_attraction.map(value => {
-            return {id: value.attraction_category.id, text: value.attraction_category.attraction_category_name}
+            if(value.attraction_category) {
+              return {id: value.attraction_category.id, text: value.attraction_category.attraction_category_name}
+            }
           }))
         }
         if (res.data.state_province) {
@@ -484,6 +486,7 @@ function AttractionForm(props) {
       showMedia={true}
       uploadMedia={doUploadMedia}
       mediaData={form}
+      isView={isView}
     >
       <div className="col-lg-12">
         <FormHorizontal>
