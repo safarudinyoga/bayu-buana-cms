@@ -7,7 +7,6 @@ import FormBuilder from "components/form/builder"
 import useQuery from "lib/query"
 import {useDispatch} from "react-redux"
 import {setUIParams} from "redux/ui-store"
-import FormInputWrapper from "components/form/input-wrapper"
 
 const endpoint = "/master/languages"
 const backUrl = "/master/languages"
@@ -52,7 +51,7 @@ function LanguageForm(props) {
       maxlength: 2,
     },
     language_alpha_3_code: {
-      required: false,
+      required: true,
       minlength: 3,
       maxlength: 3,
     },
@@ -90,6 +89,11 @@ function LanguageForm(props) {
     language_asset: {
       required: "Language Flag Image is required",
     },
+    language_alpha_3_code: {
+      required: "Language Code is required",
+      minlength: "Language Code must be at least 3 characters",
+      maxlength: "Language Code cannot be more than 3 characters",
+    }
   }
 
   useEffect(async () => {
@@ -231,10 +235,12 @@ function LanguageForm(props) {
         <FormInputControl
           label="Flag"
           type="image"
+          labelRequired="label-required"
+          name="language_asset"
           onChange={doUpload}
           disabled={isView}
           accept=".png,.jpg,.jpeg"
-          data={form}
+          url={form.language_asset.multimedia_description.url}
           style={{maxWidth: 300, marginTop: 12}}
         />
       </FormHorizontal>
