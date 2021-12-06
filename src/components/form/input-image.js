@@ -53,7 +53,7 @@ export default class FormInputFile extends Component {
               <input
                 type="file"
                 onChange={(e) => onChange(e, mediaType)}
-                className="d-none"
+                className="form-control input-image"
                 name={name}
                 disabled={disabled}
                 accept={acceptFormat}
@@ -73,7 +73,6 @@ export default class FormInputFile extends Component {
                 />
               )}
           </label>
-          {/* <span class="error-msg">{name} is required</span> */}
       </div>
     )
   }
