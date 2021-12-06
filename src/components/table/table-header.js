@@ -236,7 +236,7 @@ class TableHeader extends Component {
                 <div className="col-xs-12 col-sm-12 col-md-6 col-lg-8">
                   <div className="row">
                     <div className="col-xs-4">
-                      <label className="text-label-filter ml-2">Status</label>
+                      <label className="text-label-filter ml-2">Status :</label>
                       <Select
                           value={options[this.state.statusValue]}
                           onChange={this.handleStatus.bind(this)}

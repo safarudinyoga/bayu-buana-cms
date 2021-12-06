@@ -1,4 +1,3 @@
-import { auto } from "@popperjs/core"
 import React from "react"
 import { default as ReactSelect } from "react-select"
 

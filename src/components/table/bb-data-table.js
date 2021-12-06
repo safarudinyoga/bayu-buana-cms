@@ -456,7 +456,7 @@ class BBDataTable extends Component {
           $(".pagination", wrapper).addClass("float-right float-left-sm")
 
           // Hide pagination if empty data
-          if (t.fnRecordsDisplay() == 1) {
+          if (t.fnRecordsDisplay() === 1) {
             $(t.nTableWrapper).find(".dataTables_length").hide()
             $(t.nTableWrapper).find(".dataTables_info").hide()
             $(t.nTableWrapper).find(".dataTables_paginate").hide()
