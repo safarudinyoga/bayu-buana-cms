@@ -8,7 +8,6 @@ import FormInputSelectAjax from "components/form/input-select-ajax"
 import useQuery from "lib/query"
 import {useDispatch} from "react-redux"
 import {setUIParams} from "redux/ui-store"
-import FormInputWrapper from "components/form/input-wrapper"
 
 const endpoint = "/master/airlines"
 const backUrl = "/master/airlines"

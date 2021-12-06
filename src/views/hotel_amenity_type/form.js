@@ -8,7 +8,6 @@ import FormBuilder from "components/form/builder"
 import useQuery from "lib/query"
 import {useDispatch} from "react-redux"
 import {setUIParams} from "redux/ui-store"
-import FormInputWrapper from "components/form/input-wrapper"
 const endpoint = "/master/hotel-amenity-types"
 const backUrl = "/master/hotel-amenity-types"
 
