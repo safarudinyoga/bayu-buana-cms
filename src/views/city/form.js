@@ -4,10 +4,12 @@ import FormInputControl from "components/form/input-control"
 import FormInputSelectAjax from "components/form/input-select-ajax"
 import Api from "config/api"
 import useQuery from "lib/query"
+import $ from "jquery"
 import React, {useEffect, useState} from "react"
 import {useDispatch} from "react-redux"
 import {withRouter} from "react-router"
 import {setAlert, setUIParams} from "redux/ui-store"
+import env from "../../config/environment"
 
 const endpoint = "/master/cities"
 const backUrl = "/master/cities"
@@ -42,11 +44,13 @@ function CityForm(props) {
       required: true,
       minlength: 3,
       maxlength: 3,
+      checkCode: formId == null,
     },
     city_name: {
       required: true,
       minlength: 1,
       maxlength: 256,
+      checkName: formId == null,
     },
     country_id: {
       required: true
@@ -120,6 +124,49 @@ function CityForm(props) {
         setTranslations(res.data.items)
       } catch (e) { }
       setLoading(false)
+    } else {
+      $.validator.addMethod(
+        "checkCode",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/cities?filters=["city_code","=","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
+
+          return req
+        },
+        "Code already exists",
+      )
+      $.validator.addMethod(
+        "checkName",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/cities?filters=["city_name","=","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
+          
+          return req
+        },
+        "City Name already exists",
+      )
     }
   }, [])
 

@@ -5,15 +5,18 @@ import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
 import FormBuilder from "components/form/builder"
 import useQuery from "lib/query"
+import $ from "jquery"
 import {useDispatch} from "react-redux"
-import {setUIParams} from "redux/ui-store"
+import {setAlert, setUIParams} from "redux/ui-store"
 import FormInputWrapper from "components/form/input-wrapper"
+import env from "../../config/environment"
 
 const endpoint = "/master/languages"
 const backUrl = "/master/languages"
 
 function LanguageForm(props) {
   let dispatch = useDispatch()
+  let formId = props.match.params.id
 
   const isView = useQuery().get("action") === "view"
   const [formBuilder, setFormBuilder] = useState(null)
@@ -50,21 +53,25 @@ function LanguageForm(props) {
       required: true,
       minlength: 2,
       maxlength: 2,
+      checkCode: formId == null,
     },
     language_alpha_3_code: {
       required: false,
       minlength: 3,
       maxlength: 3,
+      checkAlpha3: formId == null,
     },
     language_name: {
       required: true,
       minlength: 1,
       maxlength: 256,
+      checkName: formId == null,
     },
     language_native_name: {
       required: true,
       minlength: 1,
       maxlength: 256,
+      checkNativeName: formId == null,
     },
     language_asset: {
       required: true
@@ -89,6 +96,7 @@ function LanguageForm(props) {
     }, 
     language_asset: {
       required: "Language Flag Image is required",
+      extension: "png|jpg|jpeg"
     },
   }
 
@@ -133,6 +141,91 @@ function LanguageForm(props) {
         setTranslations(res.data.items)
       } catch (e) { }
       setLoading(false)
+    } else {
+      $.validator.addMethod(
+        "checkCode",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/languages?filters=["language_code","=","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
+
+          return req
+        },
+        "Code already exists",
+      )
+      $.validator.addMethod(
+        "checkAlpha3",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/languages?filters=["language_alpha_3_code","=","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
+
+          return req
+        },
+        "Alpha 3 Code already exists",
+      )
+      $.validator.addMethod(
+        "checkName",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/languages?filters=["language_name","=","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
+
+          return req
+        },
+        "Language Name already exists",
+      )
+      $.validator.addMethod(
+        "checkNativeName",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/languages?filters=["language_native_name","=","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
+
+          return req
+        },
+        "Language Native Name already exists",
+      )
     }
   }, [])
 
@@ -166,9 +259,21 @@ function LanguageForm(props) {
         await api.putOrPost(path, tl.id, tl)
       }
     } catch (e) {
+      dispatch(
+        setAlert({
+          message: `Failed to ${formId ? "update" : "save"} this record.`,
+        }),
+      )
     } finally {
       setLoading(false)
       props.history.push(backUrl)
+      dispatch(
+        setAlert({
+          message: `Record ${form.language_code} - ${
+            form.language_name
+          } has been successfully ${formId ? "updated" : "saved"}.`,
+        }),
+      )
     }
   }
 

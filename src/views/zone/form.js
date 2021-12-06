@@ -4,16 +4,19 @@ import FormInputControl from "components/form/input-control"
 import FormInputSelectAjax from "components/form/input-select-ajax"
 import Api from "config/api"
 import useQuery from "lib/query"
+import $ from "jquery"
 import React, {useEffect, useState} from "react"
 import {useDispatch} from "react-redux"
 import {withRouter} from "react-router"
-import {setUIParams} from "redux/ui-store"
+import {setAlert, setUIParams} from "redux/ui-store"
+import env from "../../config/environment"
 
 const endpoint = "/master/zones"
 const backUrl = "/master/zones"
 
 function ZoneForm(props) {
   let dispatch = useDispatch()
+  let formId = props.match.params.id
 
   const isView = useQuery().get("action") === "view"
   const [formBuilder, setFormBuilder] = useState(null)
@@ -45,6 +48,7 @@ function ZoneForm(props) {
       required: true,
       minlength: 1,
       maxlength: 256,
+      checkName: formId == null,
     },
     destination: {
       required: true,
@@ -57,6 +61,7 @@ function ZoneForm(props) {
       required: true,
       minlength: 1,
       maxlength: 16,
+      checkCode: formId == null,
     },
   }
 
@@ -120,6 +125,49 @@ function ZoneForm(props) {
         setTranslations(res.data.items)
       } catch (e) { }
       setLoading(false)
+    } else {
+      $.validator.addMethod(
+        "checkCode",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/zones?filters=["zone_code","=","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
+
+          return req
+        },
+        "Code already exists",
+      )
+      $.validator.addMethod(
+        "checkName",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/zones?filters=["zone_name","=","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
+
+          return req
+        },
+        "Zone Name already exists",
+      )
     }
   }, [])
 
