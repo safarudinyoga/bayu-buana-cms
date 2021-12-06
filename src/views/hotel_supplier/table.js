@@ -35,7 +35,7 @@ export default function HotelSupplierTable() {
       }
     }
     if (ids.length > 0) {
-      setParams({...params, filters: [["city_id", "in", ids]]})
+      setParams({...params, filters: [["supplier_type_id", "in", ids]]})
     } else {
       setParams({...params, filters: []})
     }

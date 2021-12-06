@@ -122,7 +122,7 @@ function CabinTypeForm(props) {
 
           return req
         },
-        "Code already exists",
+        "Cabin Type Code already exists",
       )
       $.validator.addMethod(
         "checkName",

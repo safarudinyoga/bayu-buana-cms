@@ -1,5 +1,5 @@
 import { withRouter } from "react-router"
-import React, { useEffect, useState, useCallback } from "react"
+import React, { useEffect, useState } from "react"
 import Api from "config/api"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
@@ -234,59 +234,51 @@ function AttractionCategoryForm(props) {
           maxLength="256"
         />
 
-        <FormInputWrapper
-          label="Is Default"
-          labelRequired="label-required"
-          hint="Set is default"
-        >
-          {!isView ? (
-            <>
-              <div className="form-check form-check-inline">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="is_default"
-                  id="ac-1"
-                  value={true}
-                  disabled={isView || loading}
-                  checked={form.is_default}
-                  onChange={(e) =>
+          <FormInputWrapper
+              label="Is Default"
+              hint="Set is default"
+              labelRequired="label-required"
+          >
+          <div className="form-check form-check-inline">
+            <input
+                className="form-check-input"
+                type="radio"
+                name="is_default"
+                id="ha-1"
+                value={true}
+                disabled={isView || loading}
+                checked={form.is_default}
+                onChange={(e) =>
                     setForm({
                       ...form,
                       is_default: true,
                     })
-                  }
-                />
-                <label className="form-check-label" htmlFor="ac-1">
-                  Yes
-                </label>
-              </div>
-              <div className="form-check form-check-inline">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="is_default"
-                  id="ac-2"
-                  value={false}
-                  disabled={isView || loading}
-                  checked={!form.is_default}
-                  onChange={(e) =>
+                }
+            />
+            <label className="form-check-label" htmlFor="ha-1">
+              Yes
+            </label>
+          </div>
+          <div className="form-check form-check-inline">
+            <input
+                className="form-check-input"
+                type="radio"
+                name="is_default"
+                id="ha-2"
+                value={false}
+                disabled={isView || loading}
+                checked={!form.is_default}
+                onChange={(e) =>
                     setForm({
                       ...form,
                       is_default: false,
                     })
-                  }
-                />
-                <label className="form-check-label" htmlFor="ac-2">
-                  No
-                </label>
-              </div>
-            </>
-          ) : form.is_default ? (
-            "Yes"
-          ) : (
-            "No"
-          )}
+                }
+            />
+            <label className="form-check-label" htmlFor="ha-2">
+              No
+            </label>
+          </div>
         </FormInputWrapper>
         <FormInputControl
           label="Description"

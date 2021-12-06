@@ -26,6 +26,8 @@ export default function AirportTable() {
 
   let [selectedCities, setSelectedCities] = useState([])
   let [selectedCityIds, setSelectedCityIds] = useState([])
+  let [selectedCountries, setSelectedCountries] = useState([])
+  let [selectedCountryIds, setSelectedCountryIds] = useState([])
 
   let [params, setParams] = useState({
     filters: [],
@@ -63,7 +65,11 @@ export default function AirportTable() {
     ],
   })
 
-  const onFilterChange = (e, values) => {
+  useEffect(() => {
+    console.log(params.filters);
+  }, [params])
+
+  const onFilterChangeCities = (e, values) => {
     let ids = []
     if (values && values.length > 0) {
       for (let i in values) {
@@ -79,16 +85,42 @@ export default function AirportTable() {
     setSelectedCityIds(ids)
   }
 
+  const onFilterChangeCountries = (e, values) => {
+    let ids = []
+    if (values && values.length > 0) {
+      for (let i in values) {
+        ids.push(values[i].id)
+      }
+    }
+    if (ids.length > 0) {
+      setParams({...params, filters: [["country_id", "in", ids]]})
+    } else {
+      setParams({...params, filters: []})
+    }
+    setSelectedCountries(values)
+    setSelectedCountryIds(ids)
+  }
+
   const extraFilter = () => {
     return (
-      <TableDropdownFilter
-        label="City"
-        onChange={onFilterChange}
-        endpoint="/master/cities"
-        column="city_name"
-        value={selectedCityIds}
-        data={selectedCities}
-      />
+      <>
+        <TableDropdownFilter
+          label="City"
+          onChange={onFilterChangeCities}
+          endpoint="/master/cities"
+          column="city_name"
+          value={selectedCityIds}
+          data={selectedCities}
+        />
+        <TableDropdownFilter
+          label="Country"
+          onChange={onFilterChangeCountries}
+          endpoint="/master/countries"
+          column="country_name"
+          value={selectedCountryIds}
+          data={selectedCountries}
+        />
+      </>
     )
   }
 
@@ -96,6 +128,8 @@ export default function AirportTable() {
       setParams({...params, filters: []})
       setSelectedCities([])
       setSelectedCityIds([])
+      setSelectedCountries([])
+      setSelectedCountryIds([])
   }
 
   return <BBDataTable extraFilter={extraFilter} onReset={onReset} {...params} />

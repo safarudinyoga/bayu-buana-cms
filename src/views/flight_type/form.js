@@ -124,7 +124,7 @@ function FlightTypeForm(props) {
 
           return req
         },
-        "Code already exists",
+        "Flight Type Code already exists",
       )
 
       $.validator.addMethod(

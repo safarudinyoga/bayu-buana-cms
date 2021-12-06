@@ -44,6 +44,19 @@ function TravelPurposeForm(props) {
     },
   }
 
+  const validationMessages = {
+    travel_purpose_code: {
+      required: "Travel Purpose Code is required.",
+      minlength: "Travel Purpose Code must be at least 1 characters",
+      maxlength: "Travel Purpose Code cannot be more than 36 characters",
+    },
+    travel_purpose_name: {
+      required: "Travel Purpose Name is required",
+      minlength: "Travel Purpose Name must be at least 1 characters",
+      maxlength: "Travel Purpose Name cannot be more than 256 characters",
+    },
+  }
+
   useEffect(async () => {
     let api = new Api()
     let formId = props.match.params.id
@@ -125,6 +138,7 @@ function TravelPurposeForm(props) {
       alertMessage={"Incomplete data"}
       isValid={false}
       rules={validationRules}
+      validationMessages={validationMessages}
     >
       <FormHorizontal>
         <FormInputControl

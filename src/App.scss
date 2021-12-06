@@ -219,3 +219,9 @@ select.bg-dark-grey > option {
   background-color: #027f71;
   color: white;
 }
+
+@media (max-width: 768px) {
+  .tooltip {
+    visibility: hidden;  
+  }   
+}

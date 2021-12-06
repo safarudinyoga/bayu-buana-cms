@@ -2,6 +2,7 @@ import FormBuilder from "components/form/builder"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
 import FormInputSelectAjax from "components/form/input-select-ajax"
+import FormInputWrapper from "components/form/input-wrapper"
 import Api from "config/api"
 import useQuery from "lib/query"
 import React, {useEffect, useState} from "react"
@@ -12,9 +13,67 @@ import {setAlert, setUIParams} from "redux/ui-store"
 const endpoint = "/master/attractions"
 const backUrl = "/master/attractions"
 
-function AttractionForm(props) {
-  let dispatch = useDispatch()
+const MediaGallery = (props) => {
 
+  const [image, setImage] = useState(false)
+
+  const doUpload = async (e) => {
+    try {
+      let api = new Api()
+      let payload = new FormData()
+      payload.append("files", e.target.files[0])
+      let res = await api.post("/multimedia/files", payload)
+      if (res.data) {
+        if (res.data.url) {
+          setImage(res.data.url);
+        }
+      }
+    } catch (e) { }
+  }
+
+  return (
+    <div className="pos-relative ht-100p">
+      <label htmlFor="upload-me">
+        <div className="marker pos-absolute t-10 l-10">{props.name}</div>
+        {image ? (<img src={image} className="rounded" alt="" style={{width: '100%'}} />) : <img src="/img/noimg.jpeg" className="rounded" alt="" style={{width: '100%'}} />}
+      </label>
+      <input type="file" id="upload-me" className="d-none" onChange={doUpload} style={{display: 'none'}} disabled={props.isView} />
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="feather feather-edit svg-20 pos-absolute r--10 text-primary">
+        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+      </svg>
+    </div>
+  )
+}
+
+// react function named gallery
+const Gallery = (props) => {
+  return (
+    <div className="row row-sm media">
+      <div className="col-12 mg-y-10">
+        <hr />
+        <h4>Media</h4>
+        <div className="row row-sm">
+          <div className="col-lg-6">
+            <MediaGallery name="BANNER DESKTOP" />
+          </div>
+          <div className="col-lg-6">
+            <MediaGallery name="BANNER MOBILE" />
+          </div>
+        </div>
+        <div className="row row-sm">
+          <div className="col-lg-6">
+            <MediaGallery name="BANNER TABLET" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function AttractionForm(props) {
+  let api = new Api()
+  let dispatch = useDispatch()
   const isView = useQuery().get("action") === "view"
   let formId = props.match.params.id
   const [formBuilder, setFormBuilder] = useState(null)
@@ -33,7 +92,7 @@ function AttractionForm(props) {
     attraction_category_attraction: [],
     attraction_address: "",
     country_id: "",
-    state_province: "",
+    state_province_id: "",
     city_id: "",
     postal_code: "",
     destination_id: "",
@@ -44,6 +103,24 @@ function AttractionForm(props) {
     phone_number: "",
     fax_number: "",
     description: "",
+    attraction_asset_desktop: {
+      multimedia_description_id: null,
+      multimedia_description: {
+        url: "",
+      },
+    },
+    attraction_asset_mobile: {
+      multimedia_description_id: null,
+      multimedia_description: {
+        url: "",
+      },
+    },
+    attraction_asset_tablet: {
+      multimedia_description_id: null,
+      multimedia_description: {
+        url: "",
+      },
+    },
   })
   const translationFields = [
     {
@@ -75,7 +152,7 @@ function AttractionForm(props) {
     country_id: {
       required: true,
     },
-    state_province: {
+    state_province_id: {
       required: false,
     },
     city_id: {
@@ -140,7 +217,7 @@ function AttractionForm(props) {
     country_id: {
       required: "Country is required",
     },
-    state_province: {
+    state_province_id: {
       required: "State/Province is required",
     },
     city_id: {
@@ -190,7 +267,6 @@ function AttractionForm(props) {
   }
 
   useEffect(async () => {
-    let api = new Api()
     let formId = props.match.params.id
 
     let docTitle = "Edit Attraction"
@@ -225,6 +301,9 @@ function AttractionForm(props) {
           setCategoryData(res.data.attraction_category_attraction.map(value => {
             return {id: value.attraction_category.id, text: value.attraction_category.attraction_category_name}
           }))
+        }
+        if (res.data.state_province) {
+          setProvinceData([{...res.data.state_province, text: res.data.state_province.state_province_name}])
         }
         if (res.data.country) {
           setCountryData([{...res.data.country, text: res.data.country.country_name}])
@@ -263,10 +342,71 @@ function AttractionForm(props) {
   const onSave = async () => {
     let translated = formBuilder.getTranslations()
     setLoading(true)
-    let api = new Api()
     try {
-      form.latitude = parseFloat(form.latitude)
-      form.longitude = parseFloat(form.longitude);
+      if (!form.attraction_address) {
+        form.attraction_address = null
+      }
+      if (!form.state_province_id) {
+        form.state_province_id = null
+      }
+      if (!form.postal_code) {
+        form.postal_code = null
+      }
+      if (!form.destination_id) {
+        form.destination_id = null
+      }
+      if (!form.zone_id) {
+        form.zone_id = null
+      }
+      if (!form.latitude) {
+        form.latitude = null
+      }else{
+        form.latitude = parseFloat(form.latitude)
+      }
+      if (!form.longitude) {
+        form.longitude = null
+      }else{
+        form.longitude = parseFloat(form.longitude);
+      }
+      if (!form.email) {
+        form.email = null
+      }
+      if (!form.phone_number) {
+        form.phone_number = null
+      }
+      if (!form.fax_number) {
+        form.fax_number = null
+      }
+      if (!form.description) {
+        form.description = null
+      }
+      if (!form.attraction_category_attraction) {
+        form.attraction_category_attraction = null
+      }
+
+      if (!form.attraction_asset_desktop) {
+        form.attraction_asset_desktop = null
+      } else {
+        if (!form.attraction_asset_desktop.multimedia_description_id) {
+          form.attraction_asset_desktop = null
+        }
+      }
+
+      if (!form.attraction_asset_mobile) {
+        form.attraction_asset_mobile = null
+      } else {
+        if (!form.attraction_asset_mobile.multimedia_description_id) {
+          form.attraction_asset_mobile = null
+        }
+      }
+
+      if (!form.attraction_asset_tablet) {
+        form.attraction_asset_tablet = null
+      } else {
+        if (!form.attraction_asset_tablet.multimedia_description_id) {
+          form.attraction_asset_tablet = null
+        }
+      }
 
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
@@ -292,6 +432,59 @@ function AttractionForm(props) {
     }
   }
 
+  const doUploadDesktop = async (e) => {
+    try {
+      let payload = new FormData()
+      payload.append("files", e.target.files[0])
+      let res = await api.post("/multimedia/files", payload)
+      if (res.data) {
+        setForm({
+          ...form,
+          attraction_asset_desktop: {
+            multimedia_description_id: res.data.id,
+            multimedia_description: res.data,
+          },
+        })
+      }
+    } catch (e) {}
+  }
+
+  const doUploadTablet = async (e) => {
+    try {
+      let payload = new FormData()
+      payload.append("files", e.target.files[0])
+      payload.append("dimension_category_code", 2)
+      let res = await api.post("/multimedia/files", payload)
+      if (res.data) {
+        setForm({
+          ...form,
+          attraction_asset_tablet: {
+            multimedia_description_id: res.data.id,
+            multimedia_description: res.data,
+          },
+        })
+      }
+    } catch (e) {}
+  }
+
+  const doUploadMobile = async (e) => {
+    try {
+      let payload = new FormData()
+      payload.append("files", e.target.files[0])
+      payload.append("dimension_category_code", 3)
+      let res = await api.post("/multimedia/files", payload)
+      if (res.data) {
+        setForm({
+          ...form,
+          attraction_asset_mobile: {
+            multimedia_description_id: res.data.id,
+            multimedia_description: res.data,
+          },
+        })
+      }
+    } catch (e) {}
+  }
+
   return (
     <FormBuilder
       onBuild={(el) => setFormBuilder(el)}
@@ -305,7 +498,9 @@ function AttractionForm(props) {
       rules={validationRules}
       validationMessages={validationMessages}
       showMedia={true}
+      // gallery={Gallery}
     >
+      <div className="col-lg-12">
       <FormHorizontal>
         <FormInputControl
           label="Attraction Name"
@@ -319,19 +514,17 @@ function AttractionForm(props) {
           maxLength="64"
         />
 
-        {(form.attraction_category_attraction.length > 0 || formId == undefined) && <FormInputSelectAjax
+        <FormInputSelectAjax
           label="Attraction Category"
-          value={form.attraction_category_attraction.map((item) => item.attraction_category_id)}
+          value={form.attraction_category_attraction ? form.attraction_category_attraction.map((item) => item.attraction_category_id) : []}
           name="attraction_category_attraction"
-          
-          
           data={categoryData}
           endpoint="/master/attraction-categories"
           column="attraction_category_name"
           onChange={(e, values) => setForm(form => ({...form, attraction_category_attraction: values.map(v => ({attraction_category_id: v.id}))}))}
           disabled={isView || loading}
           type="selectmultiple"
-        />}
+        />
 
         <FormInputControl
           label={"Address"}
@@ -344,13 +537,11 @@ function AttractionForm(props) {
           maxLength="64"
         />
 
-        {(form.country_id || formId == undefined) && <FormInputSelectAjax
+        <FormInputSelectAjax
           label="Country"
           labelRequired="label-required"
           value={form.country_id}
           name="country_id"
-          
-          
           data={countryData}
           endpoint="/master/countries"
           column="country_name"
@@ -359,31 +550,28 @@ function AttractionForm(props) {
           }
           disabled={isView || loading}
           type="select"
-        />}
+        />
 
-        {(form.state_province || formId == undefined) && <FormInputSelectAjax
+        <FormInputSelectAjax
           label="State/ Province"
-          value={form.state_province}
+          value={form.state_province_id}
           name="state_id"
-          
-          
+          data={provinceData}
           endpoint="/master/state-provinces"
           filter={form.country_id}
           column="state_province_name"
           onChange={(e) =>
-            setForm({...form, state_province: e.target.value || null})
+            setForm({...form, state_province_id: e.target.value || null})
           }
           disabled={isView || loading}
           type="select"
-        />}
+        />
 
-        {(form.city_id || formId == undefined) && <FormInputSelectAjax
+        <FormInputSelectAjax
           label="City"
           value={form.city_id}
           labelRequired="label-required"
           name="city_id"
-          
-          
           data={cityData}
           endpoint="/master/cities"
           filter={form.country_id}
@@ -393,7 +581,7 @@ function AttractionForm(props) {
           }
           disabled={isView || loading}
           type="select"
-        />}
+        />
 
         <FormInputControl
           label={"Zip Code"}
@@ -406,12 +594,10 @@ function AttractionForm(props) {
           maxLength="16"
         />
 
-        {(form.destination_id || formId == undefined) && <FormInputSelectAjax
+        <FormInputSelectAjax
           label="Destination"
           value={form.destination_id}
           name="destination_id"
-          
-          
           data={destinationData}
           endpoint="/master/destinations"
           filter={form.destination_id}
@@ -421,14 +607,12 @@ function AttractionForm(props) {
           }
           disabled={isView || loading}
           type="select"
-        />}
+        />
 
-        {(form.zone_id || formId == undefined) && <FormInputSelectAjax
+        <FormInputSelectAjax
           label="Zone"
           value={form.zone_id}
           name="zone_id"
-          
-          
           data={zoneData}
           endpoint="/master/zones"
           filter={form.zone_id}
@@ -438,7 +622,7 @@ function AttractionForm(props) {
           }
           disabled={isView || loading}
           type="select"
-        />}
+        />
 
         <FormInputControl
           label={"Latitude"}
@@ -506,6 +690,109 @@ function AttractionForm(props) {
           maxLength="64"
         />
       </FormHorizontal>
+      <p className="text-sub-header">Media</p>
+      <div className="row">
+        <div className="col-lg-6">
+          <FormInputWrapper
+            label="Banner Desktop"
+          >
+            <label className={`card card-default shadow-none border`}>
+              <div className="card-body">
+                {!isView ? (
+                  <i className="fas fa-edit text-muted img-edit-icon"></i>
+                ) : null}
+                <input
+                  type="file"
+                  onChange={doUploadDesktop}
+                  className="d-none"
+                  disabled={isView}
+                  accept=".png,.jpg,.jpeg"
+                />
+                {form.attraction_asset_desktop &&
+                form.attraction_asset_desktop.multimedia_description &&
+                form.attraction_asset_desktop.multimedia_description.url ? (
+                  <img
+                    src={
+                      form.attraction_asset_desktop.multimedia_description.url
+                    }
+                    className="img-fluid"
+                    alt="attraction asset desktop"
+                  />
+                ) : (
+                  ""
+                )}
+              </div>
+            </label>
+          </FormInputWrapper>
+        </div>
+        <div className="col-lg-6">
+          <FormInputWrapper
+            label="Banner Tablet"
+          >
+            <label className={`card card-default shadow-none border`}>
+              <div className="card-body">
+                {!isView ? (
+                  <i className="fas fa-edit text-muted img-edit-icon"></i>
+                ) : null}
+                <input
+                  type="file"
+                  onChange={doUploadTablet}
+                  className="d-none"
+                  disabled={isView}
+                  accept=".png,.jpg,.jpeg"
+                />
+                {form.attraction_asset_tablet &&
+                form.attraction_asset_tablet.multimedia_description &&
+                form.attraction_asset_tablet.multimedia_description.url ? (
+                  <img
+                    src={
+                      form.attraction_asset_tablet.multimedia_description.url
+                    }
+                    className="img-fluid"
+                    alt="attraction asset tablet"
+                  />
+                ) : (
+                  ""
+                )}
+              </div>
+            </label>
+          </FormInputWrapper>
+        </div>
+        <div className="col-lg-6">
+          <FormInputWrapper
+            label="Banner Mobile"
+          >
+            <label className={`card card-default shadow-none border`}>
+              <div className="card-body">
+                {!isView ? (
+                  <i className="fas fa-edit text-muted img-edit-icon"></i>
+                ) : null}
+                <input
+                  type="file"
+                  onChange={doUploadMobile}
+                  className="d-none"
+                  disabled={isView}
+                  accept=".png,.jpg,.jpeg"
+                />
+                {form.attraction_asset_mobile &&
+                form.attraction_asset_mobile.multimedia_description &&
+                form.attraction_asset_mobile.multimedia_description.url ? (
+                  <img
+                    src={
+                      form.attraction_asset_mobile.multimedia_description.url
+                    }
+                    className="img-fluid"
+                    alt="attraction asset mobile"
+                  />
+                ) : (
+                  ""
+                )}
+              </div>
+            </label>
+          </FormInputWrapper>
+        </div>
+        </div>
+      </div>
     </FormBuilder>
   )
 }
