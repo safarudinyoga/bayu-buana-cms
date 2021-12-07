@@ -6,15 +6,17 @@ import FormInputControl from "components/form/input-control"
 import FormBuilder from "components/form/builder"
 import FormInputSelectAjax from "components/form/input-select-ajax"
 import useQuery from "lib/query"
+import $ from "jquery"
 import {useDispatch} from "react-redux"
 import {setAlert, setUIParams} from "redux/ui-store"
+import env from "../../config/environment"
 
 const endpoint = "/master/airlines"
 const backUrl = "/master/airlines"
 
 function AirlineForm(props) {
   let dispatch = useDispatch()
-
+  let formId = props.match.params.id
   const isView = useQuery().get("action") === "view"
   const [formBuilder, setFormBuilder] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -45,16 +47,19 @@ function AirlineForm(props) {
       required: true,
       minlength: 2,
       maxlength: 2,
+      checkCode: formId == null,
     },
     numeric_code: {
       required: true,
       minlength: 2,
       maxlength: 2,
+      checkNumeric: formId == null,
     },
     airline_name: {
       required: true,
       minlength: 1,
       maxlength: 256,
+      checkName: formId == null,
     },
   }
 
@@ -111,6 +116,70 @@ function AirlineForm(props) {
         setTranslations(res.data.items)
       } catch (e) { }
       setLoading(false)
+    } else {
+      $.validator.addMethod(
+        "checkCode",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/airlines?filters=["airline_code","=","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
+
+          return req
+        },
+        "Airline Code already exists",
+      )
+      $.validator.addMethod(
+        "checkNumeric",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/airlines?filters=["numeric_code","=","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
+
+          return req
+        },
+        "Numeric Code already exists",
+      )
+      $.validator.addMethod(
+        "checkName",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/airlines?filters=["airline_name","=","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
+
+          return req
+        },
+        "Airline Name already exists",
+      )
     }
   }, [])
 
