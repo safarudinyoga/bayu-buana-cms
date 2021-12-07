@@ -233,6 +233,7 @@ function AirlineForm(props) {
         />
         <FormInputControl
           label="Numeric Code"
+          type="number"
           value={form.numeric_code}
           name="numeric_code"
           cl={{md:"12"}}
