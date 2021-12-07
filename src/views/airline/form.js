@@ -7,7 +7,7 @@ import FormBuilder from "components/form/builder"
 import FormInputSelectAjax from "components/form/input-select-ajax"
 import useQuery from "lib/query"
 import {useDispatch} from "react-redux"
-import {setUIParams} from "redux/ui-store"
+import {setAlert, setUIParams} from "redux/ui-store"
 
 const endpoint = "/master/airlines"
 const backUrl = "/master/airlines"
@@ -148,9 +148,19 @@ function AirlineForm(props) {
         await api.putOrPost(path, tl.id, tl)
       }
     } catch (e) {
+      dispatch(
+        setAlert({
+          message: `Failed to save this record.`,
+        }),
+      )
     } finally {
       setLoading(false)
       props.history.push(backUrl)
+      dispatch(
+        setAlert({
+          message: `Record ${form.airline_code} - ${form.airline_name} has been successfully saved.`,
+        }),
+      )
     }
   }
 
