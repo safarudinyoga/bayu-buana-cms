@@ -61,9 +61,12 @@ function AirlineForm(props) {
       maxlength: 256,
       checkName: formId == null,
     },
+    airline_asset: {
+      required: true,
+    },
   }
 
-  let validationMessages = {
+  const validationMessages = {
     airline_name: {
       required: "Airline Name is required",
     },
@@ -72,6 +75,9 @@ function AirlineForm(props) {
     },
     airline_code: {
       required: "Airline Code is required",
+    },
+    airline_asset: {
+      required: "Airline Logo Image is required",
     },
   }
 
@@ -219,7 +225,7 @@ function AirlineForm(props) {
     } catch (e) {
       dispatch(
         setAlert({
-          message: `Failed to save this record.`,
+          message: `Failed to ${formId ? "update" : "save"} this record.`,
         }),
       )
     } finally {
@@ -227,7 +233,7 @@ function AirlineForm(props) {
       props.history.push(backUrl)
       dispatch(
         setAlert({
-          message: `Record ${form.airline_code} - ${form.airline_name} has been successfully saved.`,
+          message: `Record ${form.airline_code} - ${form.airline_name} has been successfully ${formId ? "updated" : "saved"}..`,
         }),
       )
     }
@@ -301,6 +307,7 @@ function AirlineForm(props) {
         <FormInputControl
           label="Airline Logo Image"
           type="image"
+          name="airline_asset"
           onChange={doUpload}
           disabled={isView}
           url={form.airline_asset.multimedia_description.url}
