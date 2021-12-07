@@ -48,8 +48,8 @@ function AirlineForm(props) {
     },
     numeric_code: {
       required: false,
-      minlength: 3,
-      maxlength: 3,
+      minlength: 2,
+      maxlength: 2,
     },
     airline_name: {
       required: true,
@@ -247,9 +247,9 @@ function AirlineForm(props) {
           onChange={(e) => setForm({...form, numeric_code: e.target.value})}
           disabled={isView || loading}
           type="number"
-          minLength="3"
-          maxLength="3"
-          hint="Numeric code maximum 3 characters"
+          minLength="2"
+          maxLength="2"
+          hint="Numeric code maximum 2 characters"
         />
       </FormHorizontal>
     </FormBuilder>
