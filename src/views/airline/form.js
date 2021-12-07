@@ -65,6 +65,9 @@ function AirlineForm(props) {
     numeric_code: {
       required: "Numeric Code is required",
     },
+    airline_code: {
+      required: "Airline Code is required",
+    },
   }
 
   useEffect(async () => {
