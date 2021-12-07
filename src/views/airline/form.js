@@ -47,7 +47,7 @@ function AirlineForm(props) {
       maxlength: 2,
     },
     numeric_code: {
-      required: false,
+      required: true,
       minlength: 2,
       maxlength: 2,
     },
@@ -61,6 +61,9 @@ function AirlineForm(props) {
   let validationMessages = {
     airline_name: {
       required: "Airline Name is required",
+    },
+    numeric_code: {
+      required: "Numeric Code is required",
     },
   }
 
