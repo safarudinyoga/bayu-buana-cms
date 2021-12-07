@@ -233,14 +233,13 @@ function AirlineForm(props) {
         />
         <FormInputControl
           label="Numeric Code"
-          type="number"
           value={form.numeric_code}
           name="numeric_code"
           cl={{md:"12"}}
           cr="12"
           onChange={(e) => setForm({...form, numeric_code: e.target.value})}
           disabled={isView || loading}
-          type="text"
+          type="number"
           minLength="3"
           maxLength="3"
           hint="Numeric code maximum 3 characters"
