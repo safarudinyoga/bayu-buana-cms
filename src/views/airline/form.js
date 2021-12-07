@@ -214,7 +214,7 @@ function AirlineForm(props) {
           </option>
         </FormInputSelectAjax>
         <FormInputControl
-          label="Airline Logo"
+          label="Airline Logo Image"
           type="image"
           onChange={doUpload}
           disabled={isView}
