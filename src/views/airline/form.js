@@ -54,7 +54,7 @@ function AirlineForm(props) {
     airline_name: {
       required: true,
       minlength: 1,
-      maxlength: 64,
+      maxlength: 256,
     },
   }
 
@@ -189,7 +189,7 @@ function AirlineForm(props) {
           disabled={isView || loading}
           type="text"
           minLength="1"
-          maxLength="64"
+          maxLength="256"
         />
         <FormInputSelectAjax
           label="Company Name"
