@@ -75,7 +75,7 @@ function AirlineForm(props) {
     if (!formId) {
       docTitle = "Create Airline"
     } else if (isView) {
-      docTitle = "View Airline"
+      docTitle = "Airline Details"
     }
 
     dispatch(
