@@ -112,7 +112,7 @@ class BBDataTable extends Component {
         return (
           '<a href="javascript:void(0);" data-toggle="tooltip" class="table-row-action-item" data-action="edit" data-id="' +
           row.id +
-          '" title="Click to update"><img src="' +
+          '" title="Click to edit"><img src="' +
           editIcon +
           '" /></a>' +
           '<a href="javascript:void(0);" data-toggle="tooltip" class="table-row-action-item" data-action="view" data-id="' +
