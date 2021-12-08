@@ -49,6 +49,7 @@ class BBDataTable extends Component {
   componentDidMount() {
     try {
       this.init()
+      const module = this.props.title.toLowerCase().split(" ").join("_")
     } catch (e) {}
   }
 
@@ -483,6 +484,31 @@ class BBDataTable extends Component {
           }
         }, 500)
       })
+
+      dt.on( 'row-reorder', ( e, diff, edit ) => {
+        if(diff.length > 0) {
+          const module = this.props.title.toLowerCase().split(" ").join("_")
+          let sort = 0
+          let rowID = edit.triggerRow.data().id
+          let rowPositionDiff = diff.findIndex(v => dt.row(v.node).data().id === rowID)
+          if(rowPositionDiff === 0){
+            sort = dt.row(diff[1].node)?.data()?.sort
+          }
+          if(rowPositionDiff === diff.length-1) {
+            sort = dt.row(diff[diff.length-2].node)?.data()?.sort 
+          }
+          console.log(dt.rows().data().toArray())
+          this.api
+            .post(`/master/batch-actions/sort/${module}`, {id: rowID, sort})
+              .then((res) => {
+                console.log(res)
+              })
+              .catch((e) => {
+                console.log(e)
+              })
+        }
+      })
+    
 
       this.dt = dt
 
