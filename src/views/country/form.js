@@ -6,14 +6,17 @@ import FormInputControl from "components/form/input-control"
 import FormBuilder from "components/form/builder"
 import FormInputSelectAjax from "components/form/input-select-ajax"
 import useQuery from "lib/query"
+import $ from "jquery"
 import {useDispatch} from "react-redux"
-import {setUIParams} from "redux/ui-store"
+import { setAlert, setUIParams} from "redux/ui-store"
+import env from "../../config/environment"
 
 const endpoint = "/master/countries"
 const backUrl = "/master/countries"
 
 function CountryForm(props) {
   let dispatch = useDispatch()
+  let formId = props.match.params.id
 
   const isView = useQuery().get("action") === "view"
   const [formBuilder, setFormBuilder] = useState(null)
@@ -50,6 +53,7 @@ function CountryForm(props) {
       required: true,
       minlength: 2,
       maxlength: 2,
+      checkCode: formId == null,
     },
     country_alpha_3_code: {
       required: false,
@@ -70,6 +74,7 @@ function CountryForm(props) {
       required: true,
       minlength: 1,
       maxlength: 64,
+      checkName: formId == null,
     },
     nationality: {
       required: false,
@@ -92,6 +97,10 @@ function CountryForm(props) {
       minlength: "Country Name must be at least 1 characters",
       maxlength: "Country Name cannot be more than 64 characters",
     },
+    nationality: {
+      minlength: "Nationality must be at least 1 characters",
+      maxlength: "Nationality cannot be more than 64 characters",
+    },
     region_id: {
       required: "Region is required"
     }
@@ -102,10 +111,13 @@ function CountryForm(props) {
     let formId = props.match.params.id
 
     let docTitle = "Edit Country"
+    let breadcrumbTitle = "Edit Country"
     if (!formId) {
       docTitle = "Create Country"
+      breadcrumbTitle = "Create Country"
     } else if (isView) {
-      docTitle = "View Country"
+      docTitle = "Country Details"
+      breadcrumbTitle = "View Country"
     }
 
     dispatch(
@@ -120,7 +132,7 @@ function CountryForm(props) {
             text: "Countries",
           },
           {
-            text: docTitle,
+            text: breadcrumbTitle,
           },
         ],
       }),
@@ -154,6 +166,49 @@ function CountryForm(props) {
         setTranslations(res.data.items)
       } catch (e) { }
       setLoading(false)
+    } else {
+      $.validator.addMethod(
+        "checkCode",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/countries?filters=["country_code","=","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
+
+          return req
+        },
+        "Code already exists",
+      )
+      $.validator.addMethod(
+        "checkName",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/countries?filters=["country_name","=","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
+
+          return req
+        },
+        "Country Name already exists",
+      )
     }
   }, [])
 
@@ -195,9 +250,21 @@ function CountryForm(props) {
         await api.putOrPost(path, tl.id, tl)
       }
     } catch (e) {
+      dispatch(
+        setAlert({
+          message: `Failed to ${formId ? "update" : "save"} this record.`,
+        }),
+      )
     } finally {
       setLoading(false)
       props.history.push(backUrl)
+      dispatch(
+        setAlert({
+          message: `Record ${form.country_code} - ${
+            form.country_name
+          } has been successfully ${formId ? "updated" : "saved"}.`,
+        }),
+      )
     }
   }
 

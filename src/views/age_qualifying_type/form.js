@@ -5,14 +5,17 @@ import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
 import FormBuilder from "components/form/builder"
 import useQuery from "lib/query"
+import $ from "jquery"
 import {useDispatch} from "react-redux"
-import {setUIParams} from "redux/ui-store"
+import { setAlert, setUIParams } from "redux/ui-store"
+import env from "../../config/environment"
 
 const endpoint = "/master/age-qualifying-types"
 const backUrl = "/master/age-qualifying-types"
 
 function AgeQualifyingTypeForm(props) {
   let dispatch = useDispatch()
+  let formId = props.match.params.id
 
   const isView = useQuery().get("action") === "view"
   const [formBuilder, setFormBuilder] = useState(null)
@@ -36,11 +39,15 @@ function AgeQualifyingTypeForm(props) {
       required: true,
       min: 0,
       max: 99,
+      checkCode: formId == null,
+      noSpace: true,
+      number:true
     },
     age_qualifying_type_name: {
       required: true,
       minlength: 1,
       maxlength: 256,
+      checkName: formId == null,
     },
   }
 
@@ -62,10 +69,13 @@ function AgeQualifyingTypeForm(props) {
     let formId = props.match.params.id
 
     let docTitle = "Edit Age Qualifying Type"
+    let breadcrumbTitle = "Edit Age Qualifying Type"
     if (!formId) {
       docTitle = "Create Age Qualifying Type"
+      breadcrumbTitle = "Create Age Qualifying Type"
     } else if (isView) {
-      docTitle = "View Age Qualifying Type"
+      docTitle = "Age Qualifying Type Details"
+      breadcrumbTitle = "View Age Qualifying Type"
     }
 
     dispatch(
@@ -80,7 +90,7 @@ function AgeQualifyingTypeForm(props) {
             text: "Age Qualifying Types",
           },
           {
-            text: docTitle,
+            text: breadcrumbTitle,
           },
         ],
       }),
@@ -98,6 +108,49 @@ function AgeQualifyingTypeForm(props) {
         setTranslations(res.data.items)
       } catch (e) { }
       setLoading(false)
+    } else {
+      $.validator.addMethod(
+        "checkCode",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/age-qualifying-types?filters=["age_qualifying_type_code","=","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
+
+          return req
+        },
+        "Code already exists",
+      )
+      $.validator.addMethod(
+        "checkName",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/age-qualifying-types?filters=["age_qualifying_type_name","=","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
+
+          return req
+        },
+        "Age Qualifying Type Name already exists",
+      )
     }
   }, [])
 
@@ -121,9 +174,21 @@ function AgeQualifyingTypeForm(props) {
         await api.putOrPost(path, tl.id, tl)
       }
     } catch (e) {
+      dispatch(
+        setAlert({
+          message: `Failed to ${formId ? "update" : "save"} this record.`,
+        }),
+      )
     } finally {
       setLoading(false)
       props.history.push(backUrl)
+      dispatch(
+        setAlert({
+          message: `Record ${form.age_qualifying_type_code} - ${
+            form.age_qualifying_type_name
+          } has been successfully ${formId ? "updated" : "saved"}.`,
+        }),
+      )
     }
   }
 
