@@ -82,31 +82,45 @@ class BBDataTable extends Component {
     } catch (e) {}
 
     const allowed = [this.props.recordName]
-
+    
     columns.push({
       searchable: false,
       orderable: false,
-      title: "Actions",
+      title: "Actions",      
       render: function (value, display, row) {
+        function tooltipCust(x) {            
+          if (x.matches) {  
+            $(function () {
+              $('[data-toggle="tooltip"]').tooltip()
+            })                          
+          } else {  
+            $(function () {
+              $('[data-toggle="tooltip"]').tooltip('hide')
+            }) 
+          }
+        }          
+        var x = window.matchMedia("(max-width: 768px)")
+        tooltipCust(x) 
+        x.addListener(tooltipCust)           
         const filteredRecordName = Object.keys(row)
           .filter((key) => allowed.includes(key))
           .reduce((obj, key) => {
             obj[key] = row[key]
             return obj
           }, {})
-
+               
         return (
-          '<a href="javascript:void(0);" class="table-row-action-item" data-action="edit" data-id="' +
+          '<a href="javascript:void(0);" data-toggle="tooltip" class="table-row-action-item" data-action="edit" data-id="' +
           row.id +
-          '" title="Click to edit"><img src="' +
+          '" title="Click to update"><img src="' +
           editIcon +
           '" /></a>' +
-          '<a href="javascript:void(0);" class="table-row-action-item" data-action="view" data-id="' +
+          '<a href="javascript:void(0);" data-toggle="tooltip" class="table-row-action-item" data-action="view" data-id="' +
           row.id +
           '" title="Click to view details"><img src="' +
           showIcon +
           '"/></a>' +
-          '<a href="javascript:void(0);" class="table-row-action-item" data-action="delete" data-id="' +
+          '<a href="javascript:void(0);" data-toggle="tooltip" class="table-row-action-item" data-action="delete" data-id="' +
           row.id +
           '" data-name="' +
           filteredRecordName[allowed] +
@@ -376,20 +390,25 @@ class BBDataTable extends Component {
           {
             extend: "print",
             exportOptions: {
+              stripHtml: false,
               columns: visibleColumns,
             },
           },
           {
-            extend: "excel",
+            extend: 'excelHtml5',
+            text: 'Excel',
             exportOptions: {
-              columns: visibleColumns,
-            },
-          },
+                stripHtml: false,
+                columns: visibleColumns,
+            }
+          },          
           {
-            extend: "csv",
+            extend: 'csvHtml5',
+            text: 'CSV',
             exportOptions: {
-              columns: visibleColumns,
-            },
+                stripHtml: false,
+                columns: visibleColumns,
+            }
           },
         ],
         rowReorder: {
