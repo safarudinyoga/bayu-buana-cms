@@ -69,10 +69,13 @@ function TravelPurposeForm(props) {
     let formId = props.match.params.id
 
     let docTitle = "Edit Travel Purpose"
+    let breadcrumbTitle = "Edit Travel Purpose"
     if (!formId) {
       docTitle = "Create Travel Purpose"
+      breadcrumbTitle = "Create Travel Purpose"
     } else if (isView) {
-      docTitle = "View Travel Purpose"
+      docTitle = "Travel Purpose Details"
+      breadcrumbTitle = "View Travel Purpose"
     }
 
     dispatch(
@@ -87,7 +90,7 @@ function TravelPurposeForm(props) {
             text: "Travel Purposes",
           },
           {
-            text: docTitle,
+            text: breadcrumbTitle,
           },
         ],
       }),

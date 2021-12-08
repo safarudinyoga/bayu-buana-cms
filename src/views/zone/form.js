@@ -86,10 +86,12 @@ function ZoneForm(props) {
     let formId = props.match.params.id
 
     let docTitle = "Edit Zone"
+    let breadcrumbTitle = "Edit Zone"
     if (!formId) {
-      docTitle = "Create Zone"
+      docTitle =  breadcrumbTitle = "Create Zone"
     } else if (isView) {
-      docTitle = "View Zone"
+      docTitle = "Zone Details"
+      breadcrumbTitle = "View Zone"
     }
 
     dispatch(
@@ -104,7 +106,7 @@ function ZoneForm(props) {
             text: "Zones",
           },
           {
-            text: docTitle,
+            text: breadcrumbTitle,
           },
         ],
       }),
@@ -191,9 +193,20 @@ function ZoneForm(props) {
         await api.putOrPost(path, tl.id, tl)
       }
     } catch (e) {
+      dispatch(
+        setAlert({
+          message: `Failed to ${formId ? "update" : "save"} this record.`,
+        }),
+      )
     } finally {
       setLoading(false)
       props.history.push(backUrl)
+      dispatch(
+        setAlert({
+          message: `Record ${form.zone_code} - ${form.zone_name
+            } has been successfully ${formId ? "updated" : "saved"}.`,
+        }),
+      )
     }
   }
 

@@ -69,10 +69,13 @@ function AgeQualifyingTypeForm(props) {
     let formId = props.match.params.id
 
     let docTitle = "Edit Age Qualifying Type"
+    let breadcrumbTitle = "Edit Age Qualifying Type"
     if (!formId) {
       docTitle = "Create Age Qualifying Type"
+      breadcrumbTitle = "Create Age Qualifying Type"
     } else if (isView) {
-      docTitle = "View Age Qualifying Type"
+      docTitle = "Age Qualifying Type Details"
+      breadcrumbTitle = "View Age Qualifying Type"
     }
 
     dispatch(
@@ -87,7 +90,7 @@ function AgeQualifyingTypeForm(props) {
             text: "Age Qualifying Types",
           },
           {
-            text: docTitle,
+            text: breadcrumbTitle,
           },
         ],
       }),

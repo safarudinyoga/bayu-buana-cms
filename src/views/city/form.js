@@ -81,10 +81,13 @@ function CityForm(props) {
     let formId = props.match.params.id
 
     let docTitle = "Edit City"
+    let breadcrumbTitle = "Edit City"
     if (!formId) {
       docTitle = "Create City"
+      breadcrumbTitle = "Create City"
     } else if (isView) {
-      docTitle = "View City"
+      docTitle = "City Details"
+      breadcrumbTitle = "View City"
     }
 
     dispatch(
@@ -99,7 +102,7 @@ function CityForm(props) {
             text: "Cities",
           },
           {
-            text: docTitle,
+            text: breadcrumbTitle,
           },
         ],
       }),

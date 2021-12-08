@@ -67,10 +67,13 @@ function SpecialRequestForm(props) {
     let formId = props.match.params.id
 
     let docTitle = "Edit Special Request"
+    let breadcrumbTitle = "Edit Special Request"
     if (!formId) {
       docTitle = "Create Special Request"
+      breadcrumbTitle = "Create Special Request"
     } else if (isView) {
-      docTitle = "View Special Request"
+      docTitle = "Special Request Details"
+      breadcrumbTitle = "View Special Request"
     }
 
     dispatch(
@@ -85,7 +88,7 @@ function SpecialRequestForm(props) {
             text: "Special Requests",
           },
           {
-            text: docTitle,
+            text: breadcrumbTitle,
           },
         ],
       }),

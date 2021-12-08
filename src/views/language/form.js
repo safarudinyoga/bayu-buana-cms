@@ -99,9 +99,9 @@ function LanguageForm(props) {
       extension: "png|jpg|jpeg"
     },
     language_alpha_3_code: {
-      required: "Language Code is required",
-      minlength: "Language Code must be at least 3 characters",
-      maxlength: "Language Code cannot be more than 3 characters",
+      required: "Language Alpha 3 Code is required",
+      minlength: "Language Alpha 3 Code must be at least 3 characters",
+      maxlength: "Language Alpha 3 Code cannot be more than 3 characters",
     }
   }
 
@@ -110,10 +110,13 @@ function LanguageForm(props) {
     let formId = props.match.params.id
 
     let docTitle = "Edit Language"
+    let breadcrumbTitle = "Edit Language"
     if (!formId) {
       docTitle = "Create Language"
+      breadcrumbTitle = "Create Language"
     } else if (isView) {
-      docTitle = "View Language"
+      docTitle = "Language Details"
+      breadcrumbTitle = "View Language"
     }
 
     dispatch(
@@ -128,7 +131,7 @@ function LanguageForm(props) {
             text: "Language",
           },
           {
-            text: docTitle,
+            text: breadcrumbTitle,
           },
         ],
       }),

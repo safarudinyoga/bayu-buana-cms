@@ -97,6 +97,10 @@ function CountryForm(props) {
       minlength: "Country Name must be at least 1 characters",
       maxlength: "Country Name cannot be more than 64 characters",
     },
+    nationality: {
+      minlength: "Nationality must be at least 1 characters",
+      maxlength: "Nationality cannot be more than 64 characters",
+    },
     region_id: {
       required: "Region is required"
     }
@@ -107,10 +111,13 @@ function CountryForm(props) {
     let formId = props.match.params.id
 
     let docTitle = "Edit Country"
+    let breadcrumbTitle = "Edit Country"
     if (!formId) {
       docTitle = "Create Country"
+      breadcrumbTitle = "Create Country"
     } else if (isView) {
-      docTitle = "View Country"
+      docTitle = "Country Details"
+      breadcrumbTitle = "View Country"
     }
 
     dispatch(
@@ -125,7 +132,7 @@ function CountryForm(props) {
             text: "Countries",
           },
           {
-            text: docTitle,
+            text: breadcrumbTitle,
           },
         ],
       }),

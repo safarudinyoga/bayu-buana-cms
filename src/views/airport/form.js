@@ -78,10 +78,13 @@ function AirportForm(props) {
     let formId = props.match.params.id
 
     let docTitle = "Edit Airport"
+    let breadcrumbTitle = "Edit Airport"
     if (!formId) {
       docTitle = "Create Airport"
+      breadcrumbTitle = "Create Airport"
     } else if (isView) {
-      docTitle = "View Airport"
+      docTitle = "Airport Details"
+      breadcrumbTitle = "View Airport"
     }
 
     dispatch(
@@ -96,7 +99,7 @@ function AirportForm(props) {
             text: "Airports",
           },
           {
-            text: docTitle,
+            text: breadcrumbTitle,
           },
         ],
       }),
