@@ -6,7 +6,7 @@ import FormInputControl from "components/form/input-control"
 import FormBuilder from "components/form/builder"
 import useQuery from "lib/query"
 import {useDispatch} from "react-redux"
-import {setUIParams} from "redux/ui-store"
+import {setAlert, setUIParams} from "redux/ui-store"
 import $ from "jquery"
 import env from "../../config/environment"
 
@@ -168,6 +168,11 @@ function RegionForm(props) {
     } finally {
       setLoading(false)
       props.history.push(backUrl)
+      dispatch(
+        setAlert({
+          message: `Record ${form.region_code} - ${form.region_name} has been successfully ${formId ? "updated" : "saved"}..`,
+        }),
+      )
     }
   }
 
