@@ -175,11 +175,12 @@ function AircraftForm(props) {
           cl={{md:"12"}}
           cr="12"
           disabled={isView || loading}
-          type="number"
           label="Aircraft Code"
-          minLength="3"
-          maxLength="3"
-          hint="Aircraft code maximum 3 characters"
+          type="text"
+          pattern="\d*" 
+          minLength="4"
+          maxLength="4"
+          hint="Aircraft code maximum 4 characters"
         />
         <FormInputControl
           value={form.icao_code}
