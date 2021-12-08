@@ -57,6 +57,12 @@ function AircraftForm(props) {
     },
   }
 
+  const validationMessages = {
+    aircraft_code: {
+      required: "Airline Code is required",
+    },
+  }
+
   useEffect(async () => {
     let api = new Api()
     let formId = props.match.params.id
@@ -141,6 +147,7 @@ function AircraftForm(props) {
       alertMessage={"Incomplete data"}
       isValid={false}
       rules={validationRules}
+      validationMessages={validationMessages}
     >
       <FormHorizontal>
         <FormInputControl
