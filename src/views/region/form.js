@@ -52,6 +52,9 @@ function RegionForm(props) {
     region_code: {
       required: "Region Code is required",
     },
+    region_name: {
+      required: "Region Name is required",
+    },
   }
 
   useEffect(async () => {
