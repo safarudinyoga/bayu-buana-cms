@@ -62,8 +62,7 @@ function HotelAmenityCategoryForm(props) {
       maxlength: 4000,
     },
     hotel_amenity_category_asset: {
-      multimedia_description_id: {required:true},
-      multimedia_description: {required:true},
+      required: true
     },
   }
   const validationMessages = {
@@ -74,8 +73,7 @@ function HotelAmenityCategoryForm(props) {
       required: "Is Default is required.",
     },
     hotel_amenity_category_asset: {
-      multimedia_description_id: { required:"Hotel Amenity Category Icon Image is required."},
-      multimedia_description: { required:"Hotel Amenity Category Icon Image is required."},
+      required:"Hotel Amenity Category Icon Image is required.",
     }
   }
 
@@ -298,35 +296,17 @@ function HotelAmenityCategoryForm(props) {
               minLength="1"
               maxLength="4000"
           />
-          <FormInputWrapper label="Hotel Amenity Category Icon Image">
-            <label className="card card-default shadow-none border">
-              <div className="card-body">
-                {!isView ? (
-                    <i className="fas fa-edit text-muted img-edit-icon"></i>
-                ) : null}
-                <input
-                    type="file"
-                    onChange={doUpload}
-                    className="d-none"
-                    disabled={isView}
-                    accept=".png,.jpg,.jpeg"
-                />
-                {form.hotel_amenity_category_asset &&
-                form.hotel_amenity_category_asset.multimedia_description &&
-                form.hotel_amenity_category_asset.multimedia_description.url ? (
-                    <img
-                        src={
-                          form.hotel_amenity_category_asset.multimedia_description.url
-                        }
-                        className="img-fluid"
-                        alt="hotel amenity category"
-                    />
-                ) : (
-                    ""
-                )}
-              </div>
-            </label>
-          </FormInputWrapper>
+          <FormInputControl
+            label="Hotel Amenity Category Icon Image"
+            type="image"
+            labelRequired="label-required"
+            name="hotel_amenity_category_asset"
+            onChange={doUpload}
+            disabled={isView}
+            accept=".png,.jpg,.jpeg"
+            url={form.hotel_amenity_category_asset.multimedia_description.url}
+            style={{maxWidth: 300, marginTop: 12}}
+          />
         </FormHorizontal>
       </FormBuilder>
   )

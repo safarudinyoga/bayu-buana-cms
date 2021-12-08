@@ -222,31 +222,14 @@ function RoomAmenityTypeForm(props) {
           maxLength="64"
         />
 
-        <FormInputWrapper label="Icon">
-          <label className="card card-default shadow-none border">
-            <div className="card-body">
-              {!isView ? <i className="fas fa-edit text-muted img-edit-icon"></i> : null}
-              <input
-                type="file"
-                onChange={doUpload}
-                className="d-none"
-                disabled={isView}
-                accept=".png,.jpg,.jpeg"
-              />
-              {form.room_amenity_category_asset &&
-                form.room_amenity_category_asset.multimedia_description &&
-                form.room_amenity_category_asset.multimedia_description.url ? (
-                <img
-                  src={form.room_amenity_category_asset.multimedia_description.url}
-                  className="img-fluid"
-                  alt="room_amenity_type"
-                />
-              ) : (
-                ""
-              )}
-            </div>
-          </label>
-        </FormInputWrapper>
+        <FormInputControl
+          label="Icon"
+          type="image"
+          onChange={doUpload}
+          disabled={isView}
+          url={form.room_amenity_category_asset.multimedia_description.url}
+          style={{maxWidth: 300, marginTop: 12}}
+        />
       </FormHorizontal>
 
     </FormBuilder>

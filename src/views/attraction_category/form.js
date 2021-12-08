@@ -33,7 +33,6 @@ function AttractionCategoryForm(props) {
         url: "",
       },
     },
-    attraction_category_icon: "",
   })
   const translationFields = [
     {
@@ -59,9 +58,8 @@ function AttractionCategoryForm(props) {
       minlength: 1,
       maxlength: 4000,
     },
-    attraction_category_icon: {
+    attraction_category_asset: {
       required: true,
-      minlength: 1,
     },
   }
 
@@ -69,7 +67,7 @@ function AttractionCategoryForm(props) {
     attraction_category_name: {
       required: "Attraction Category Name is required.",
     },
-    attraction_category_icon: {
+    attraction_category_asset: {
       required: "Attraction Category Icon Image is required.",
     },
   }
@@ -290,40 +288,16 @@ function AttractionCategoryForm(props) {
           minLength="1"
           maxLength="4000"
         />
-        <FormInputWrapper
-          label="Icon"      
+        <FormInputControl
+          label="Icon"
+          type="image"
           labelRequired="label-required"
-        >
-          <label className={`card card-default shadow-none border`}>
-            <div className="card-body">
-              {!isView ? (
-                <i className="fas fa-edit text-muted img-edit-icon"></i>
-              ) : null}
-              <input
-                type="file"
-                onChange={doUpload}
-                className="d-none"
-                disabled={isView}
-                accept=".png,.jpg,.jpeg"
-                name="attraction_category_icon"
-                value={form.attraction_category_icon}
-              />
-              {form.attraction_category_asset &&
-              form.attraction_category_asset.multimedia_description &&
-              form.attraction_category_asset.multimedia_description.url ? (
-                <img
-                  src={
-                    form.attraction_category_asset.multimedia_description.url
-                  }
-                  className="img-fluid"
-                  alt="attraction category"
-                />
-              ) : (
-                ""
-              )}
-            </div>
-          </label>
-        </FormInputWrapper>
+          name="attraction_category_asset"
+          onChange={doUpload}
+          disabled={isView}
+          url={form.attraction_category_asset.multimedia_description.url}
+          style={{maxWidth: 300, marginTop: 12}}
+        />
       </FormHorizontal>
     </FormBuilder>
   )
