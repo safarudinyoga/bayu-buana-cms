@@ -45,6 +45,7 @@ function RegionForm(props) {
       required: true,
       minlength: 1,
       maxlength: 256,
+      checkName: formId == null,
     },
   }
 
@@ -119,6 +120,27 @@ function RegionForm(props) {
           return req
         },
         "Region Code already exists",
+      )
+      $.validator.addMethod(
+        "checkName",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/regions?filters=["region_name","=","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
+
+          return req
+        },
+        "Region Name already exists",
       )
     }
   }, [])
