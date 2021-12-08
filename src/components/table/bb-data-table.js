@@ -348,6 +348,8 @@ class BBDataTable extends Component {
                   }
                   overrideParams.sort = orders.join(",")
                 }
+              } else {
+                overrideParams.sort = "sort"
               }
               if (params.search.value) {
                 let searchValue = params.search.value.replace(/^\s+|\s+$/g, "")
@@ -447,7 +449,7 @@ class BBDataTable extends Component {
         // select: {
         //   style: "multi",
         // },
-        order: [[1, "asc"]],
+        order: [],
         columns: columns,
         dom:
           "<'container-fluid mt-2 pl-0 dataTable-root'<'card card-default mb-0 shadow-none'<'card-body'tr>>" +
@@ -515,24 +517,18 @@ class BBDataTable extends Component {
       dt.on( 'row-reorder', ( e, diff, edit ) => {
         if(diff.length > 0) {
           const module = this.props.title.toLowerCase().split(" ").join("_")
-          let sort = 0
           let rowID = edit.triggerRow.data().id
           let rowPositionDiff = diff.findIndex(v => dt.row(v.node).data().id === rowID)
-          if(rowPositionDiff === 0){
-            sort = dt.row(diff[1].node)?.data()?.sort
-          }
-          if(rowPositionDiff === diff.length-1) {
-            sort = dt.row(diff[diff.length-2].node)?.data()?.sort 
-          }
-          console.log(dt.rows().data().toArray())
+          let targetIdx = rowPositionDiff === 0 ? 1 : diff.length-2
+          let sort = dt.row(diff[targetIdx].node)?.data()?.sort || 0
           this.api
             .post(`/master/batch-actions/sort/${module}`, {id: rowID, sort})
-              .then((res) => {
-                console.log(res)
-              })
-              .catch((e) => {
-                console.log(e)
-              })
+            .then((res) => {
+              console.log(res)
+            })
+            .catch((e) => {
+              console.log(e)
+            })
         }
       })
     
