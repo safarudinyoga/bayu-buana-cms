@@ -60,7 +60,8 @@ class BBDataTable extends Component {
     columns.push({
       searchable: false,
       orderable: false,
-      title: '<input type="checkbox" id="cb-th" class=" float-left select-checkbox-all"/>',
+      title:
+        '<input type="checkbox" id="cb-th" class=" float-left select-checkbox-all"/>',
       render: function (val, display, row) {
         return (
           '<svg class="float-left row-handle" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none"><rect id="backgroundrect" width="100%" height="100%" x="0" y="0" fill="none" stroke="none"/><path d="M7.098360577225684,13 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 z" fill="#707070" id="svg_1" class=""/><path d="M11.901639938354492,13 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 z" fill="#707070" id="svg_2" class=""/></svg> <input type="checkbox" data-id="' +
@@ -82,31 +83,51 @@ class BBDataTable extends Component {
     } catch (e) {}
 
     const allowed = [this.props.recordName]
-
+    
     columns.push({
       searchable: false,
       orderable: false,
-      title: "Actions",
+      title: "Actions",      
       render: function (value, display, row) {
+        function tooltipCust(x) {            
+          if (x.matches) {  
+            $(function () {
+              $('[data-toggle="tooltip"]').tooltip()
+            })                          
+          } else {  
+            $(function () {
+              $('[data-toggle="tooltip"]').tooltip('hide')
+            }) 
+          }
+        }          
+        var x = window.matchMedia("(max-width: 768px)")
+        tooltipCust(x) 
+        x.addListener(tooltipCust)           
         const filteredRecordName = Object.keys(row)
           .filter((key) => allowed.includes(key))
           .reduce((obj, key) => {
             obj[key] = row[key]
             return obj
           }, {})
-
+               
         return (
-          '<a href="javascript:void(0);" class="table-row-action-item" data-action="edit" data-id="' +
+          '<a href="javascript:void(0);" data-toggle="tooltip" class="table-row-action-item" data-action="edit" data-id="' +
           row.id +
-          '" title="Click to edit"><img src="'+ editIcon +'" /></a>' +
-          '<a href="javascript:void(0);" class="table-row-action-item" data-action="view" data-id="' +
+          '" title="Click to edit"><img src="' +
+          editIcon +
+          '" /></a>' +
+          '<a href="javascript:void(0);" data-toggle="tooltip" class="table-row-action-item" data-action="view" data-id="' +
           row.id +
-          '" title="Click to view details"><img src="'+ showIcon +'"/></a>' +
-          '<a href="javascript:void(0);" class="table-row-action-item" data-action="delete" data-id="' +
+          '" title="Click to view details"><img src="' +
+          showIcon +
+          '"/></a>' +
+          '<a href="javascript:void(0);" data-toggle="tooltip" class="table-row-action-item" data-action="delete" data-id="' +
           row.id +
           '" data-name="' +
           filteredRecordName[allowed] +
-          '" title="Click to delete"><img src="'+ removeIcon +'" /></a>'
+          '" title="Click to delete"><img src="' +
+          removeIcon +
+          '" /></a>'
         )
       },
     })
@@ -370,20 +391,25 @@ class BBDataTable extends Component {
           {
             extend: "print",
             exportOptions: {
+              stripHtml: false,
               columns: visibleColumns,
             },
           },
           {
-            extend: "excel",
+            extend: 'excelHtml5',
+            text: 'Excel',
             exportOptions: {
-              columns: visibleColumns,
-            },
-          },
+                stripHtml: false,
+                columns: visibleColumns,
+            }
+          },          
           {
-            extend: "csv",
+            extend: 'csvHtml5',
+            text: 'CSV',
             exportOptions: {
-              columns: visibleColumns,
-            },
+                stripHtml: false,
+                columns: visibleColumns,
+            }
           },
         ],
         rowReorder: {
@@ -405,7 +431,7 @@ class BBDataTable extends Component {
             targets: [0],
           },
           {
-            targets:[1, 2],
+            targets: [1, 2],
             className: "cstm-col-width",
           },
           //   {
@@ -436,7 +462,8 @@ class BBDataTable extends Component {
           },
           search: "Search",
           info: '<span class="ml-2 text-label-input-paginate danger">Showing _START_ - _END_ of _TOTAL_</span>',
-          infoEmpty: '<span class="ml-2 text-label-input-paginate danger">Showing 0 - 0 of 0</span>',
+          infoEmpty:
+            '<span class="ml-2 text-label-input-paginate danger">Showing 0 - 0 of 0</span>',
           infoFiltered: "",
           loadingRecords: "Loading ...",
           processing: "<i class='fa fa-spin fa-circle-notch'></i> Loading...",
