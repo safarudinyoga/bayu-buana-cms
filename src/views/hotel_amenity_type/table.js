@@ -46,7 +46,10 @@ export default function HotelAmenityTable() {
         data: "hotel_amenity_type_asset.multimedia_description.url",
         searchable: false,
         orderable: false,
-        render: (val) => {
+        render: (val, type) => {
+          if (type === 'myExport') {
+            return val
+          }
           if (val) {
             return '<img src="' + val + '" class="table-image"/>'
           }

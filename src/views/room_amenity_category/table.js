@@ -39,7 +39,10 @@ export default function RoomAmenityCategoryTable() {
         data: "room_amenity_category_asset.multimedia_description.url",
         searchable: false,
         orderable: false,
-        render: (val) => {
+        render: (val, type) => {
+          if (type === 'myExport') {
+            return val
+          }
           if (val) {
             return '<img src="' + val + '" class="table-image"/>'
           }
