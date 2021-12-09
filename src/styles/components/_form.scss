@@ -24,6 +24,8 @@ input[type=checkbox] {
   margin-left: 5px;
 }
 input[id=cb-th] {
+  position: relative;
+  top: -0.16em;
   margin-left: 26px;
 }
 .form-control {
