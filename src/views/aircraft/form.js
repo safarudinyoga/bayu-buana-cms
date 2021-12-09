@@ -57,6 +57,12 @@ function AircraftForm(props) {
     },
   }
 
+  const validationMessages = {
+    aircraft_code: {
+      required: "Airline Code is required",
+    },
+  }
+
   useEffect(async () => {
     let api = new Api()
     let formId = props.match.params.id
@@ -141,6 +147,7 @@ function AircraftForm(props) {
       alertMessage={"Incomplete data"}
       isValid={false}
       rules={validationRules}
+      validationMessages={validationMessages}
     >
       <FormHorizontal>
         <FormInputControl
@@ -175,11 +182,12 @@ function AircraftForm(props) {
           cl={{md:"12"}}
           cr="12"
           disabled={isView || loading}
-          type="number"
           label="Aircraft Code"
-          minLength="3"
-          maxLength="3"
-          hint="Aircraft code maximum 3 characters"
+          type="text"
+          pattern="\d*" 
+          minLength="4"
+          maxLength="4"
+          hint="Aircraft code maximum 4 characters"
         />
         <FormInputControl
           value={form.icao_code}

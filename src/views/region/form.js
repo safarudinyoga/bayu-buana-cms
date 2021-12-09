@@ -6,13 +6,16 @@ import FormInputControl from "components/form/input-control"
 import FormBuilder from "components/form/builder"
 import useQuery from "lib/query"
 import {useDispatch} from "react-redux"
-import {setUIParams} from "redux/ui-store"
+import {setAlert, setUIParams} from "redux/ui-store"
+import $ from "jquery"
+import env from "../../config/environment"
 
 const endpoint = "/master/regions"
 const backUrl = "/master/regions"
 
 function RegionForm(props) {
   let dispatch = useDispatch()
+  let formId = props.match.params.id
 
   const isView = useQuery().get("action") === "view"
   const [formBuilder, setFormBuilder] = useState(null)
@@ -36,11 +39,22 @@ function RegionForm(props) {
       required: true,
       minlength: 2,
       maxlength: 2,
+      checkCode: formId == null,
     },
     region_name: {
       required: true,
       minlength: 1,
       maxlength: 256,
+      checkName: formId == null,
+    },
+  }
+
+  const validationMessages = {
+    region_code: {
+      required: "Region Code is required",
+    },
+    region_name: {
+      required: "Region Name is required",
     },
   }
 
@@ -85,6 +99,49 @@ function RegionForm(props) {
         setTranslations(res.data.items)
       } catch (e) { }
       setLoading(false)
+    } else {
+      $.validator.addMethod(
+        "checkCode",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/regions?filters=["region_code","=","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
+
+          return req
+        },
+        "Region Code already exists",
+      )
+      $.validator.addMethod(
+        "checkName",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/regions?filters=["region_name","=","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
+
+          return req
+        },
+        "Region Name already exists",
+      )
     }
   }, [])
 
@@ -108,9 +165,19 @@ function RegionForm(props) {
         await api.putOrPost(path, tl.id, tl)
       }
     } catch (e) {
+      dispatch(
+        setAlert({
+          message: `Failed to ${formId ? "update" : "save"} this record.`,
+        }),
+      )
     } finally {
       setLoading(false)
       props.history.push(backUrl)
+      dispatch(
+        setAlert({
+          message: `Record ${form.region_code} - ${form.region_name} has been successfully ${formId ? "updated" : "saved"}..`,
+        }),
+      )
     }
   }
 
@@ -125,6 +192,7 @@ function RegionForm(props) {
       alertMessage={"Incomplete data"}
       isValid={false}
       rules={validationRules}
+      validationMessages={validationMessages}
     >
       <FormHorizontal>
         <FormInputControl
