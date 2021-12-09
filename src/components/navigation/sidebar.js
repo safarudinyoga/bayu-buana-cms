@@ -1,5 +1,7 @@
 import React, {Component} from "react"
 import {Link} from "react-router-dom"
+import BriefCaseIcon from "assets/icons/briefcase.svg"
+import HomeIcon from "assets/icons/home.svg"
 import "./sidebar.css"
 
 export default class Sidebar extends Component {
@@ -16,13 +18,13 @@ export default class Sidebar extends Component {
             >
               <li className="nav-item">
                 <Link to="/" className="nav-link">
-                  <i className="fa fa-home nav-icon"></i>
+                  <img src={HomeIcon} alt="home_icon"/>
                   <p>Dashboard</p>
                 </Link>
               </li>
               <li className="nav-item">
                 <Link to="#" className="nav-link">
-                  <i className="fas fa-briefcase nav-icon"></i>
+                  <img src={BriefCaseIcon} alt="briefcase_icon"/>
                   <p>
                     Master Data Management
                     <i className="right fas fa-angle-right"></i>
