@@ -7,13 +7,17 @@ import FormBuilder from "components/form/builder"
 import FormInputSelectAjax from "components/form/input-select-ajax"
 import useQuery from "lib/query"
 import {useDispatch} from "react-redux"
-import {setUIParams} from "redux/ui-store"
+import {setAlert, setUIParams} from "redux/ui-store"
+import $ from "jquery"
+import env from "../../config/environment"
+
 
 const endpoint = "/master/state-provinces"
 const backUrl = "/master/provinces"
 
 function ProvinceForm(props) {
   let dispatch = useDispatch()
+  let formId = props.match.params.id
 
   const isView = useQuery().get("action") === "view"
   const [formBuilder, setFormBuilder] = useState(null)
@@ -41,12 +45,23 @@ function ProvinceForm(props) {
       required: true,
       minlength: 1,
       maxlength: 8,
+      checkCode: formId == null,
     },
     state_province_name: {
       required: true,
       minlength: 1,
       maxlength: 256,
+      checkName: formId == null,
     }
+  }
+
+  const validationMessages = {
+    state_province_name: {
+      required: "State Province Name is required",
+    },
+    state_province_code: {
+      required: "State Province Code is required",
+    },
   }
 
   useEffect(async () => {
@@ -96,6 +111,49 @@ function ProvinceForm(props) {
         setTranslations(res.data.items)
       } catch (e) { }
       setLoading(false)
+    } else {
+      $.validator.addMethod(
+        "checkName",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/state-provinces?filters=["state_province_name","=","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
+
+          return req
+        },
+        "State Province Name already exists",
+      )
+      $.validator.addMethod(
+        "checkCode",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/state-provinces?filters=["state_province_code","=","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
+
+          return req
+        },
+        "State Province Code already exists",
+      )
     }
   }, [])
 
@@ -126,9 +184,19 @@ function ProvinceForm(props) {
         await api.putOrPost(path, tl.id, tl)
       }
     } catch (e) {
+      dispatch(
+        setAlert({
+          message: `Failed to ${formId ? "update" : "save"} this record.`,
+        }),
+      )
     } finally {
       setLoading(false)
       props.history.push(backUrl)
+      dispatch(
+        setAlert({
+          message: `Record ${form.state_province_code} - ${form.state_province_name} has been successfully ${formId ? "updated" : "saved"}..`,
+        }),
+      )
     }
   }
 
@@ -143,6 +211,7 @@ function ProvinceForm(props) {
       alertMessage={"Incomplete data"}
       isValid={false}
       rules={validationRules}
+      validationMessages={validationMessages}
     >
       <FormHorizontal>
         <FormInputControl
@@ -159,7 +228,7 @@ function ProvinceForm(props) {
           maxLength="256"
         />
         <FormInputSelectAjax
-          label="Subdivision Category"
+          label="State / Province Category"
           value={form.state_province_category_id}
           name="state_province_category_id"
           cl="4"
