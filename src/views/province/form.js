@@ -49,6 +49,15 @@ function ProvinceForm(props) {
     }
   }
 
+  const validationMessages = {
+    state_province_name: {
+      required: "State Province Name is required",
+    },
+    state_province_code: {
+      required: "State Province Code is required",
+    },
+  }
+
   useEffect(async () => {
     let api = new Api()
     let formId = props.match.params.id
@@ -143,6 +152,7 @@ function ProvinceForm(props) {
       alertMessage={"Incomplete data"}
       isValid={false}
       rules={validationRules}
+      validationMessages={validationMessages}
     >
       <FormHorizontal>
         <FormInputControl
