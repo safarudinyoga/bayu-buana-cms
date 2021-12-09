@@ -218,7 +218,7 @@ function ProvinceForm(props) {
           maxLength="256"
         />
         <FormInputSelectAjax
-          label="Subdivision Category"
+          label="State / Province Category"
           value={form.state_province_category_id}
           name="state_province_category_id"
           cl="4"
