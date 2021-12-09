@@ -45,14 +45,14 @@ function AirlineForm(props) {
   const validationRules = {
     airline_code: {
       required: true,
-      minlength: 2,
-      maxlength: 2,
+      minlength: 3,
+      maxlength: 3,
       checkCode: formId == null,
     },
     numeric_code: {
       required: true,
-      minlength: 2,
-      maxlength: 2,
+      minlength: 3,
+      maxlength: 3,
       checkNumeric: formId == null,
     },
     airline_name: {
@@ -326,9 +326,9 @@ function AirlineForm(props) {
           onChange={(e) => setForm({...form, airline_code: e.target.value})}
           disabled={isView || loading}
           type="text"
-          minLength="2"
-          maxLength="2"
-          hint="Airline code maximum 2 characters"
+          minLength="3"
+          maxLength="3"
+          hint="Airline code maximum 3 characters"
         />
         <FormInputControl
           label="Numeric Code"
@@ -338,10 +338,10 @@ function AirlineForm(props) {
           cr="12"
           onChange={(e) => setForm({...form, numeric_code: e.target.value})}
           disabled={isView || loading}
-          pattern="\d*" 
-          minLength="2"
-          maxLength="2"
-          hint="Numeric code maximum 2 characters"
+          type="number"
+          minlength="3"
+          maxLength="3"
+          hint="Numeric code maximum 3 characters"
         />
       </FormHorizontal>
     </FormBuilder>
