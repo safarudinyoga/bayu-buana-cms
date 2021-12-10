@@ -191,11 +191,13 @@ function AttractionForm(props) {
       required: false,
       minlength: 1,
       maxlength: 32,
+      phone: true,
     },
     fax_number: {
       required: false,
       minlength: 1,
       maxlength: 32,
+      fax: true
     },
     description: {
       required: false,
@@ -289,6 +291,19 @@ function AttractionForm(props) {
 
   useEffect(async () => {
     let formId = props.match.params.id
+
+    // validator for alpha num
+    $.validator.addMethod(
+      "phone", function (value, element) {
+        return this.optional(element) || /^[0-9\-\(\)\s]+$/.test(value);
+      }, "Please enter a valid phone number"
+    );
+
+    $.validator.addMethod(
+      "fax", function (value, element) {
+        return this.optional(element) || /^[0-9\-\(\)\s]+$/.test(value);
+      }, "Please enter a valid fax number"
+    );
 
     let docTitle = "Edit Attraction"
     if (!formId) {
@@ -710,7 +725,7 @@ function AttractionForm(props) {
             disabled={isView || loading}
             type="text"
             minLength="1"
-            maxLength="64"
+            maxLength="32"
           />
 
           <FormInputControl
