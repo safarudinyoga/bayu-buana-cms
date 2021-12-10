@@ -53,7 +53,7 @@ function CountryForm(props) {
       required: true,
       minlength: 2,
       maxlength: 2,
-      checkCode: formId == null,
+      checkCode: true,
     },
     country_alpha_3_code: {
       required: false,
@@ -74,7 +74,7 @@ function CountryForm(props) {
       required: true,
       minlength: 1,
       maxlength: 64,
-      checkName: formId == null,
+      checkName: true,
     },
     nationality: {
       required: false,
@@ -137,6 +137,7 @@ function CountryForm(props) {
         ],
       }),
     )
+
     if (formId) {
       try {
         let res = await api.get(endpoint + "/" + formId)
@@ -156,6 +157,63 @@ function CountryForm(props) {
 
         if (res.data.language) {
           setLanguageData([{...res.data.language, text: res.data.language.language_name}])
+        }
+
+        if(res.data){
+          let currentCode = res.data.country_code
+          let currentCountry = res.data.country_name
+
+          $.validator.addMethod(
+            "checkCode",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/countries?filters=["country_code","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if(currentCode == element.value){
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+    
+              return req
+            },
+            "Code already exists",
+          )
+
+          $.validator.addMethod(
+            "checkName",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/countries?filters=["country_name","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if(currentCountry.toUpperCase() === element.value.toUpperCase()){
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+      
+              return req
+            },
+            "Country Name already exists",
+          )
         }
       } catch (e) { }
 
@@ -188,6 +246,7 @@ function CountryForm(props) {
         },
         "Code already exists",
       )
+
       $.validator.addMethod(
         "checkName",
         function (value, element) {
@@ -204,11 +263,12 @@ function CountryForm(props) {
               }
             },
           })
-
+  
           return req
         },
         "Country Name already exists",
       )
+      
     }
   }, [])
 

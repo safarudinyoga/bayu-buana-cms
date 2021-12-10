@@ -53,25 +53,25 @@ function LanguageForm(props) {
       required: true,
       minlength: 2,
       maxlength: 2,
-      checkCode: formId == null,
+      checkCode: true,
     },
     language_alpha_3_code: {
       required: true,
       minlength: 3,
       maxlength: 3,
-      checkAlpha3: formId == null,
+      checkAlpha3: true,
     },
     language_name: {
       required: true,
       minlength: 1,
       maxlength: 256,
-      checkName: formId == null,
+      checkName: true,
     },
     language_native_name: {
       required: true,
       minlength: 1,
       maxlength: 256,
-      checkNativeName: formId == null,
+      checkNativeName: true,
     },
     language_asset: {
       required: true
@@ -140,6 +140,114 @@ function LanguageForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
+
+        if(res.data) {
+          let currentCode = res.data.language_code
+          let currentAlpha3 = res.data.language_alpha_3_code
+          let currentName = res.data.language_name
+          let currentNative = res.data.language_native_name
+
+          $.validator.addMethod(
+            "checkCode",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/languages?filters=["language_code","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if(currentCode.toUpperCase() === element.value.toUpperCase()){
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+    
+              return req
+            },
+            "Code already exists",
+          )
+          $.validator.addMethod(
+            "checkAlpha3",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/languages?filters=["language_alpha_3_code","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if(currentAlpha3.toUpperCase() === element.value.toUpperCase()){
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+    
+              return req
+            },
+            "Alpha 3 Code already exists",
+          )
+          $.validator.addMethod(
+            "checkName",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/languages?filters=["language_name","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if(currentName.toUpperCase() === element.value.toUpperCase()){
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+    
+              return req
+            },
+            "Language Name already exists",
+          )
+          $.validator.addMethod(
+            "checkNativeName",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/languages?filters=["language_native_name","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if(currentNative.toUpperCase() === element.value.toUpperCase()){
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+    
+              return req
+            },
+            "Language Native Name already exists",
+          )
+        }
       } catch (e) { }
 
       try {
