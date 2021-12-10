@@ -181,6 +181,7 @@ function DestinationForm(props) {
           }
           disabled={isView || loading}
           type="select"
+          placeholder="Country"
         />
 
         <FormInputSelectAjax
