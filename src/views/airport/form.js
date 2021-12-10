@@ -283,6 +283,10 @@ function AirportForm(props) {
     setLoading(true)
     let api = new Api()
     try {
+      if (!form.city_id) {
+        form.city_id = null
+      }
+
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
       for (let i in translated) {
