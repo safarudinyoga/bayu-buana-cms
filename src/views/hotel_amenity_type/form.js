@@ -8,11 +8,15 @@ import FormBuilder from "components/form/builder"
 import useQuery from "lib/query"
 import {useDispatch} from "react-redux"
 import {setUIParams} from "redux/ui-store"
+import $ from "jquery"
+import env from "../../config/environment"
+
 const endpoint = "/master/hotel-amenity-types"
 const backUrl = "/master/hotel-amenity-types"
 
 function HotelAmenityForm(props) {
   let dispatch = useDispatch()
+  let formId = props.match.params.id
 
   const isView = useQuery().get("action") === "view"
   const [formBuilder, setFormBuilder] = useState(null)
@@ -45,6 +49,7 @@ function HotelAmenityForm(props) {
       required: true,
       min: 0,
       max: 99,
+      checkCode: formId == null,
     },
     hotel_amenity_category_hotel_amenity_type: {
       required: false,
@@ -53,6 +58,7 @@ function HotelAmenityForm(props) {
       required: true,
       minlength: 1,
       maxlength: 256,
+      checkName: formId == null,
     },
   }
 
@@ -116,6 +122,49 @@ function HotelAmenityForm(props) {
         setTranslations(res.data.items)
       } catch (e) { }
       setLoading(false)
+    } else {
+      $.validator.addMethod(
+        "checkName",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/hotel-amenity-types?filters=["hotel_amenity_type_name","=","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
+
+          return req
+        },
+        "Hotel Amenity Type Name already exists",
+      )
+      $.validator.addMethod(
+        "checkCode",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/hotel-amenity-types?filters=["hotel_amenity_type_code","=","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
+
+          return req
+        },
+        "Hotel Amenity Type Code already exists",
+      )
     }
   }, [])
 
