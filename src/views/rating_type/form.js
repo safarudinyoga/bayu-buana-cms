@@ -6,7 +6,7 @@ import FormInputControl from "components/form/input-control"
 import FormBuilder from "components/form/builder"
 import useQuery from "lib/query"
 import {useDispatch} from "react-redux"
-import {setUIParams} from "redux/ui-store"
+import {setAlert, setUIParams} from "redux/ui-store"
 import $ from "jquery"
 import env from "../../config/environment"
 
@@ -205,9 +205,19 @@ function RatingTypeForm(props) {
         await api.putOrPost(path, tl.id, tl)
       }
     } catch (e) {
+      dispatch(
+        setAlert({
+          message: `Failed to ${formId ? "update" : "save"} this record.`,
+        }),
+      )
     } finally {
       setLoading(false)
       props.history.push(backUrl)
+      dispatch(
+        setAlert({
+          message: `Record ${form.rating_type_code} - ${form.rating_type_name} has been successfully ${formId ? "updated" : "saved"}..`,
+        }),
+      )
     }
   }
 
