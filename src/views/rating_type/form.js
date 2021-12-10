@@ -67,6 +67,21 @@ function RatingTypeForm(props) {
     },
   }
 
+  const validationMessages = {
+    rating_type_name: {
+      required: "Rating Type Name is required",
+    },
+    rating_type_code: {
+      required: "Rating Type Code is required",
+    },
+    scale: {
+      required: "Scale is required",
+    },
+    rating_symbol: {
+      required: "Rating Symbol is required",
+    },
+  }
+
   useEffect(async () => {
     let api = new Api()
     let formId = props.match.params.id
@@ -160,6 +175,7 @@ function RatingTypeForm(props) {
       alertMessage={"Incomplete data"}
       isValid={false}
       rules={validationRules}
+      validationMessages={validationMessages}
     >
       <FormHorizontal>
         <FormInputControl
