@@ -93,7 +93,7 @@ export default function AirportTable() {
       }
     }
     if (ids.length > 0) {
-      setParams({...params, filters: [["country_id", "in", ids]]})
+      setParams({...params, filters: [["city.country_id", "in", ids]]})
     } else {
       setParams({...params, filters: []})
     }

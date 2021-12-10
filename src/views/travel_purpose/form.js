@@ -5,14 +5,17 @@ import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
 import FormBuilder from "components/form/builder"
 import useQuery from "lib/query"
+import $ from "jquery"
 import {useDispatch} from "react-redux"
-import {setUIParams} from "redux/ui-store"
+import {setAlert, setUIParams} from "redux/ui-store"
+import env from "../../config/environment"
 
 const endpoint = "/master/travel-purposes"
 const backUrl = "/master/travel-purposes"
 
 function TravelPurposeForm(props) {
   let dispatch = useDispatch()
+  let formId = props.match.params.id
 
   const isView = useQuery().get("action") === "view"
   const [formBuilder, setFormBuilder] = useState(null)
@@ -36,11 +39,15 @@ function TravelPurposeForm(props) {
       required: true,
       minlength: 1,
       maxlength: 36,
+      checkCode: true,
+      number:true,
+      noSpace: true
     },
     travel_purpose_name: {
       required: true,
       minlength: 1,
       maxlength: 256,
+      checkName: true,
     },
   }
 
@@ -62,10 +69,13 @@ function TravelPurposeForm(props) {
     let formId = props.match.params.id
 
     let docTitle = "Edit Travel Purpose"
+    let breadcrumbTitle = "Edit Travel Purpose"
     if (!formId) {
       docTitle = "Create Travel Purpose"
+      breadcrumbTitle = "Create Travel Purpose"
     } else if (isView) {
-      docTitle = "View Travel Purpose"
+      docTitle = "Travel Purpose Details"
+      breadcrumbTitle = "View Travel Purpose"
     }
 
     dispatch(
@@ -80,7 +90,7 @@ function TravelPurposeForm(props) {
             text: "Travel Purposes",
           },
           {
-            text: docTitle,
+            text: breadcrumbTitle,
           },
         ],
       }),
@@ -89,6 +99,62 @@ function TravelPurposeForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
+
+        if(res.data){
+          let currentCode = res.data.travel_purpose_code
+          let currentName = res.data.travel_purpose_name
+
+          $.validator.addMethod(
+            "checkCode",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/travel-purposes?filters=["travel_purpose_code","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if(currentCode == element.value){
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+    
+              return req
+            },
+            "Code already exists",
+          )
+          $.validator.addMethod(
+            "checkName",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/travel-purposes?filters=["travel_purpose_name","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if(currentName.toUpperCase() === element.value.toUpperCase()){
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+    
+              return req
+            },
+            "Travel Purpose Name already exists",
+          )
+        }
       } catch (e) { }
 
       try {
@@ -98,6 +164,49 @@ function TravelPurposeForm(props) {
         setTranslations(res.data.items)
       } catch (e) { }
       setLoading(false)
+    } else {
+      $.validator.addMethod(
+        "checkCode",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/travel-purposes?filters=["travel_purpose_code","=","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
+
+          return req
+        },
+        "Code already exists",
+      )
+      $.validator.addMethod(
+        "checkName",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/travel-purposes?filters=["travel_purpose_name","=","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
+
+          return req
+        },
+        "Travel Purpose Name already exists",
+      )
     }
   }, [])
 
@@ -121,9 +230,21 @@ function TravelPurposeForm(props) {
         await api.putOrPost(path, tl.id, tl)
       }
     } catch (e) {
+      dispatch(
+        setAlert({
+          message: `Failed to ${formId ? "update" : "save"} this record.`,
+        }),
+      )
     } finally {
       setLoading(false)
       props.history.push(backUrl)
+      dispatch(
+        setAlert({
+          message: `Record ${form.travel_purpose_code} - ${
+            form.travel_purpose_name
+          } has been successfully ${formId ? "updated" : "saved"}.`,
+        }),
+      )
     }
   }
 

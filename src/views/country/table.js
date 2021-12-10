@@ -53,6 +53,7 @@ export default function CountryTable() {
         column="region_name"
         value={selectedRegionIds}
         data={selectedRegions}
+        placeholder="Region"
       />
     )
   }

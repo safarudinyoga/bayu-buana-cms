@@ -4,10 +4,12 @@ import FormInputControl from "components/form/input-control"
 import FormInputSelectAjax from "components/form/input-select-ajax"
 import Api from "config/api"
 import useQuery from "lib/query"
+import $ from "jquery"
 import React, {useEffect, useState} from "react"
 import {useDispatch} from "react-redux"
 import {withRouter} from "react-router"
 import {setAlert, setUIParams} from "redux/ui-store"
+import env from "../../config/environment"
 
 const endpoint = "/master/cities"
 const backUrl = "/master/cities"
@@ -42,11 +44,13 @@ function CityForm(props) {
       required: true,
       minlength: 3,
       maxlength: 3,
+      checkCode: true,
     },
     city_name: {
       required: true,
       minlength: 1,
       maxlength: 256,
+      checkName: true,
     },
     country_id: {
       required: true
@@ -77,10 +81,13 @@ function CityForm(props) {
     let formId = props.match.params.id
 
     let docTitle = "Edit City"
+    let breadcrumbTitle = "Edit City"
     if (!formId) {
       docTitle = "Create City"
+      breadcrumbTitle = "Create City"
     } else if (isView) {
-      docTitle = "View City"
+      docTitle = "City Details"
+      breadcrumbTitle = "View City"
     }
 
     dispatch(
@@ -95,7 +102,7 @@ function CityForm(props) {
             text: "Cities",
           },
           {
-            text: docTitle,
+            text: breadcrumbTitle,
           },
         ],
       }),
@@ -111,6 +118,63 @@ function CityForm(props) {
         if (res.data.state_province) {
           setStateProvinceData([{...res.data.state_province, text: res.data.state_province.state_province_name}])
         }
+
+        if(res.data) {
+          let currentCode = res.data.city_code
+          let currentName = res.data.city_name
+
+          $.validator.addMethod(
+            "checkCode",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/cities?filters=["city_code","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if(currentCode == element.value){
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+    
+              return req
+            },
+            "Code already exists",
+          )
+
+          $.validator.addMethod(
+            "checkName",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/cities?filters=["city_name","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if(currentName.toUpperCase() === element.value.toUpperCase()){
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+              
+              return req
+            },
+            "City Name already exists",
+          )
+        }
       } catch (e) { }
 
       try {
@@ -120,6 +184,49 @@ function CityForm(props) {
         setTranslations(res.data.items)
       } catch (e) { }
       setLoading(false)
+    } else {
+      $.validator.addMethod(
+        "checkCode",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/cities?filters=["city_code","=","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
+
+          return req
+        },
+        "Code already exists",
+      )
+      $.validator.addMethod(
+        "checkName",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/cities?filters=["city_name","=","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
+          
+          return req
+        },
+        "City Name already exists",
+      )
     }
   }, [])
 
