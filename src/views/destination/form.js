@@ -7,13 +7,16 @@ import useQuery from "lib/query"
 import React, {useEffect, useState} from "react"
 import {useDispatch} from "react-redux"
 import {withRouter} from "react-router"
-import {setUIParams} from "redux/ui-store"
+import {setAlert, setUIParams} from "redux/ui-store"
+import $ from "jquery"
+import env from "../../config/environment"
 
 const endpoint = "/master/destinations"
 const backUrl = "/master/destinations"
 
 function DestinationForm(props) {
   let dispatch = useDispatch()
+  let formId = props.match.params.id
 
   const isView = useQuery().get("action") === "view"
   const [formBuilder, setFormBuilder] = useState(null)
@@ -48,6 +51,7 @@ function DestinationForm(props) {
       required: true,
       minlength: 1,
       maxlength: 256,
+      checkName: formId == null,
     },
     country: {
       required: true,
@@ -64,6 +68,22 @@ function DestinationForm(props) {
       required: true,
       minlength: 1,
       maxlength: 36,
+      checkCode: formId == null,
+    },
+  }
+
+  const validationMessages = {
+    destination_name: {
+      required: "Destinantion Name is required",
+    },
+    destination_code: {
+      required: "Destinantion Code is required",
+    },
+    country: {
+      required: "Country is required",
+    },
+    city: {
+      required: "City is required",
     },
   }
 
@@ -115,6 +135,49 @@ function DestinationForm(props) {
         setTranslations(res.data.items)
       } catch (e) { }
       setLoading(false)
+    } else {
+      $.validator.addMethod(
+        "checkName",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/destinations?filters=["destination_name","=","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
+
+          return req
+        },
+        "Destination Name already exists",
+      )
+      $.validator.addMethod(
+        "checkCode",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/destinations?filters=["destination_code","=","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
+
+          return req
+        },
+        "Destination Code already exists",
+      )
     }
   }, [])
 
@@ -138,9 +201,19 @@ function DestinationForm(props) {
         await api.putOrPost(path, tl.id, tl)
       }
     } catch (e) {
+      dispatch(
+        setAlert({
+          message: `Failed to ${formId ? "update" : "save"} this record.`,
+        }),
+      )
     } finally {
       setLoading(false)
       props.history.push(backUrl)
+      dispatch(
+        setAlert({
+          message: `Record ${form.destination_code} - ${form.destination_name} has been successfully ${formId ? "updated" : "saved"}..`,
+        }),
+      )
     }
   }
 
@@ -155,6 +228,7 @@ function DestinationForm(props) {
       alertMessage={"Incomplete data"}
       isValid={false}
       rules={validationRules}
+      validationMessages={validationMessages}
     >
       <FormHorizontal>
         <FormInputControl
@@ -166,7 +240,7 @@ function DestinationForm(props) {
           disabled={isView || loading}
           type="text"
           minLength="1"
-          maxLength="64"
+          maxLength="256"
         />
 
         <FormInputSelectAjax
@@ -181,6 +255,7 @@ function DestinationForm(props) {
           }
           disabled={isView || loading}
           type="select"
+          placeholder="Country"
         />
 
         <FormInputSelectAjax
@@ -196,6 +271,7 @@ function DestinationForm(props) {
           }
           disabled={isView || loading}
           type="select"
+          placeholder="City"
         />
 
         <FormInputControl
@@ -221,8 +297,8 @@ function DestinationForm(props) {
           type="number"
           label="Destination Code"
           labelRequired="label-required"
-          minLength="3"
-          maxLength="3"
+          minLength="1"
+          maxLength="36"
           hint="Destination code maximum 3 characters"
         />
 

@@ -6,13 +6,16 @@ import FormInputControl from "components/form/input-control"
 import FormBuilder from "components/form/builder"
 import useQuery from "lib/query"
 import {useDispatch} from "react-redux"
-import {setUIParams} from "redux/ui-store"
+import {setAlert, setUIParams} from "redux/ui-store"
+import $ from "jquery"
+import env from "../../config/environment"
 
 const endpoint = "/master/aircraft"
 const backUrl = "/master/aircrafts"
 
 function AircraftForm(props) {
   let dispatch = useDispatch()
+  let formId = props.match.params.id
 
   const isView = useQuery().get("action") === "view"
   const [formBuilder, setFormBuilder] = useState(null)
@@ -37,29 +40,41 @@ function AircraftForm(props) {
   const validationRules = {
     aircraft_name: {
       required: true,
-      min: 1,
-      max: 64,
+      minlength: 1,
+      maxlength: 64,
+      checkName: formId == null,
     },
     model: {
-      required: false,
-      min: 1,
-      max: 64,
+      required: true,
+      minlength: 1,
+      maxlength: 64,
     },
     icao_code: {
       required: true,
-      min: 4,
-      max: 4,
+      minlength: 4,
+      maxlength: 4,
+      checkIcao: formId == null,
     },
     aircraft_code: {
       required: true,
-      min: 4,
-      max: 4,
+      minlength: 4,
+      maxlength: 4,
+      checkCode: formId == null,
     },
   }
 
   const validationMessages = {
+    aircraft_name: {
+      required: "Aircraft Name is required",
+    },
+    icao_code: {
+      required: "Icao Code is required",
+    },
+    model: {
+      required: "Model is required",
+    },
     aircraft_code: {
-      required: "Airline Code is required",
+      required: "Aircraft Code is required",
     },
   }
 
@@ -104,6 +119,70 @@ function AircraftForm(props) {
         setTranslations(res.data.items)
       } catch (e) { }
       setLoading(false)
+    } else {
+      $.validator.addMethod(
+        "checkName",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/aircraft?filters=["aircraft_name","=","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
+
+          return req
+        },
+        "Aircraft Name already exists",
+      )
+      $.validator.addMethod(
+        "checkIcao",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/aircraft?filters=["icao_code","=","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
+
+          return req
+        },
+        "Icao Code already exists",
+      )
+      $.validator.addMethod(
+        "checkCode",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/aircraft?filters=["aircraft_code","=","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
+
+          return req
+        },
+        "Aircraft Code already exists",
+      )
     }
   }, [])
 
@@ -130,9 +209,19 @@ function AircraftForm(props) {
         await api.putOrPost(path, tl.id, tl)
       }
     } catch (e) {
+      dispatch(
+        setAlert({
+          message: `Failed to ${formId ? "update" : "save"} this record.`,
+        }),
+      )
     } finally {
       setLoading(false)
       props.history.push(backUrl)
+      dispatch(
+        setAlert({
+          message: `Record ${form.aircraft_code} - ${form.aircraft_name} has been successfully ${formId ? "updated" : "saved"}..`,
+        }),
+      )
     }
   }
 
