@@ -5,6 +5,21 @@ import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
 import { renderColumn } from "lib/translation"
 
+const imageBase64 = (url) => {
+  console.log(url)
+  var xhr = new XMLHttpRequest()
+    xhr.open('GET', url)
+    xhr.responseType = 'blob'
+    xhr.onload = function () {
+      var reader = new FileReader();
+      reader.readAsDataURL(xhr.response);
+      reader.onloadend = function() {
+        var base64data = reader.result;     
+        console.log(base64data) 
+      }
+    }
+}
+
 export default function AirlineTable() {
   let dispatch = useDispatch()
   useEffect(() => {
@@ -45,7 +60,11 @@ export default function AirlineTable() {
         data: "airline_asset.multimedia_description.url",
         searchable: false,
         orderable: false,
-        render: (val) => {
+        render: (val, type) => {
+          imageBase64(val) // testt convert image to base64
+          if (type === 'myExport') {
+            return val
+          }
           if (val) {
             return '<img src="' + val + '" class="table-image"/>'
           }

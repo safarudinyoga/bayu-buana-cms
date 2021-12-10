@@ -8,7 +8,6 @@ import useQuery from "lib/query"
 import $ from "jquery"
 import {useDispatch} from "react-redux"
 import {setAlert, setUIParams} from "redux/ui-store"
-import FormInputWrapper from "components/form/input-wrapper"
 import env from "../../config/environment"
 
 const endpoint = "/master/languages"
