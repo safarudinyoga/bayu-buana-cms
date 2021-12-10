@@ -197,6 +197,7 @@ function DestinationForm(props) {
           }
           disabled={isView || loading}
           type="select"
+          placeholder="City"
         />
 
         <FormInputControl
