@@ -45,7 +45,7 @@ function AirlineForm(props) {
   const validationRules = {
     airline_code: {
       required: true,
-      minlength: 3,
+      minlength: 1,
       maxlength: 3,
       checkCode: formId == null,
     },
@@ -326,7 +326,7 @@ function AirlineForm(props) {
           onChange={(e) => setForm({...form, airline_code: e.target.value})}
           disabled={isView || loading}
           type="text"
-          minLength="3"
+          minLength="1"
           maxLength="3"
           hint="Airline code maximum 3 characters"
         />
