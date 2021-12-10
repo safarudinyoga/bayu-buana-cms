@@ -268,7 +268,7 @@ function HotelAmenityForm(props) {
           placeholder="Hotel Amenity Category"
         />
         <FormInputControl
-          label="Icon"
+          label="Hotel Amenity Type Icon Image"
           type="image"
           onChange={doUpload}
           disabled={isView}
