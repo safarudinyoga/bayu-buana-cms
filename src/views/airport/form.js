@@ -43,19 +43,19 @@ function AirportForm(props) {
       required: true,
       minlength: 3,
       maxlength: 3,
-      checkCode: formId == null,
+      checkCode: true,
     },
     icao_code: {
       required: false,
       minlength: 4,
       maxlength: 4,
-      checkIcao: formId == null,
+      checkIcao: true,
     },
     airport_name: {
       required: true,
       minlength: 1,
       maxlength: 256,
-      checkName: formId == null,
+      checkName: true,
     },
     city_id: {},
   }
@@ -110,6 +110,90 @@ function AirportForm(props) {
         setForm(res.data)
         if (res.data.city) {
           setCityData([{...res.data.city, text: res.data.city.city_name}])
+        }
+
+        if(res.data) {
+          let currentCode = res.data.airport_code
+          let currentIcao = res.data.icao_code
+          let currentName = res.data.airport_name
+
+          $.validator.addMethod(
+            "checkCode",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/airports?filters=["airport_code","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if(currentCode === element.value){
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+    
+              return req
+            },
+            "Code already exists",
+          )
+
+          $.validator.addMethod(
+            "checkIcao",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/airports?filters=["icao_code","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if(currentIcao === element.value){
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+    
+              return req
+            },
+            "ICAO Code already exists",
+          )
+
+          $.validator.addMethod(
+            "checkName",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/airports?filters=["airport_name","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if(currentName.toUpperCase() === element.value.toUpperCase()){
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+    
+              return req
+            },
+            "Airport Name already exists",
+          )
         }
       } catch (e) { }
 

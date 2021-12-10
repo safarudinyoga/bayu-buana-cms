@@ -44,13 +44,13 @@ function CityForm(props) {
       required: true,
       minlength: 3,
       maxlength: 3,
-      checkCode: formId == null,
+      checkCode: true,
     },
     city_name: {
       required: true,
       minlength: 1,
       maxlength: 256,
-      checkName: formId == null,
+      checkName: true,
     },
     country_id: {
       required: true
@@ -117,6 +117,63 @@ function CityForm(props) {
         }
         if (res.data.state_province) {
           setStateProvinceData([{...res.data.state_province, text: res.data.state_province.state_province_name}])
+        }
+
+        if(res.data) {
+          let currentCode = res.data.city_code
+          let currentName = res.data.city_name
+
+          $.validator.addMethod(
+            "checkCode",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/cities?filters=["city_code","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if(currentCode == element.value){
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+    
+              return req
+            },
+            "Code already exists",
+          )
+
+          $.validator.addMethod(
+            "checkName",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/cities?filters=["city_name","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if(currentName.toUpperCase() === element.value.toUpperCase()){
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+              
+              return req
+            },
+            "City Name already exists",
+          )
         }
       } catch (e) { }
 

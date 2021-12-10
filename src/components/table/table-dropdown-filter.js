@@ -28,6 +28,7 @@ export default class TableDropdownFilter extends Component {
         let config = {
           theme: "bootstrap4",
           data: this.props.data,
+          placeholder: this.props.placeholder
         }
         // if (!this.props.children || this.props.children.length < 1) {
           config.ajax = {

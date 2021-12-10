@@ -39,7 +39,7 @@ function TravelPurposeForm(props) {
       required: true,
       minlength: 1,
       maxlength: 36,
-      checkCode: formId == null,
+      checkCode: true,
       number:true,
       noSpace: true
     },
@@ -47,7 +47,7 @@ function TravelPurposeForm(props) {
       required: true,
       minlength: 1,
       maxlength: 256,
-      checkName: formId == null,
+      checkName: true,
     },
   }
 
@@ -99,6 +99,62 @@ function TravelPurposeForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
+
+        if(res.data){
+          let currentCode = res.data.travel_purpose_code
+          let currentName = res.data.travel_purpose_name
+
+          $.validator.addMethod(
+            "checkCode",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/travel-purposes?filters=["travel_purpose_code","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if(currentCode == element.value){
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+    
+              return req
+            },
+            "Code already exists",
+          )
+          $.validator.addMethod(
+            "checkName",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/travel-purposes?filters=["travel_purpose_name","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if(currentName.toUpperCase() === element.value.toUpperCase()){
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+    
+              return req
+            },
+            "Travel Purpose Name already exists",
+          )
+        }
       } catch (e) { }
 
       try {
@@ -137,7 +193,7 @@ function TravelPurposeForm(props) {
           $.ajax({
             type: "GET",
             async: false,
-            url: `${env.API_URL}/master/travel-purpose?filters=["travel_purpose_name","=","${element.value}"]`,
+            url: `${env.API_URL}/master/travel-purposes?filters=["travel_purpose_name","=","${element.value}"]`,
             success: function (res) {
               if (res.items.length !== 0) {
                 req = false

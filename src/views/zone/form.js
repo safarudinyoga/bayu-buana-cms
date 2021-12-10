@@ -48,7 +48,7 @@ function ZoneForm(props) {
       required: true,
       minlength: 1,
       maxlength: 256,
-      checkName: formId == null,
+      checkName: true,
     },
     destination: {
       required: true,
@@ -61,7 +61,7 @@ function ZoneForm(props) {
       required: true,
       minlength: 1,
       maxlength: 16,
-      checkCode: formId == null,
+      checkCode: true,
     },
   }
 
@@ -117,6 +117,63 @@ function ZoneForm(props) {
         setForm(res.data)
         if (res.data.destination) {
           setDestinationData([{...res.data.destination, text: res.data.destination.destination_name}])
+        }
+
+        if(res.data) {
+          let currentCode = res.data.zone_code
+          let currentName = res.data.zone_name
+
+          $.validator.addMethod(
+            "checkCode",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/zones?filters=["zone_code","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if(currentCode == element.value){
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+    
+              return req
+            },
+            "Code already exists",
+          )
+
+          $.validator.addMethod(
+            "checkName",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/zones?filters=["zone_name","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if(currentName.toUpperCase() === element.value.toUpperCase()){
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+    
+              return req
+            },
+            "Zone Name already exists",
+          )
         }
       } catch (e) { }
 

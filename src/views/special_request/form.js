@@ -39,13 +39,13 @@ function SpecialRequestForm(props) {
       required: true,
       minlength: 1,
       maxlength: 36,
-      checkCode: formId == null,
+      checkCode: true,
     },
     special_request_name: {
       required: true,
       minlength: 1,
       maxlength: 256,
-      checkName: formId == null,
+      checkName: true,
     },
   }
 
@@ -97,6 +97,62 @@ function SpecialRequestForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
+
+        if(res.data){
+          let currentCode = res.data.special_request_code
+          let currentName = res.data.special_request_name
+
+          $.validator.addMethod(
+            "checkCode",
+            function(value, element){
+              var req = false;
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/special-requests?filters=["special_request_code","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if(currentCode.toUpperCase() === element.value.toUpperCase()){
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+    
+              return req
+            },
+            "Code already exists"
+          )
+          $.validator.addMethod(
+            "checkName",
+            function(value, element){
+              var req = false;
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/special-requests?filters=["special_request_name","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if(currentName.toUpperCase() === element.value.toUpperCase()){
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+    
+              return req
+            },
+            "Special Request Name already exists"
+          )
+        }
       } catch (e) { }
 
       try {

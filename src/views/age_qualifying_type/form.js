@@ -39,7 +39,7 @@ function AgeQualifyingTypeForm(props) {
       required: true,
       min: 0,
       max: 99,
-      checkCode: formId == null,
+      checkCode: true,
       noSpace: true,
       number:true
     },
@@ -47,7 +47,7 @@ function AgeQualifyingTypeForm(props) {
       required: true,
       minlength: 1,
       maxlength: 256,
-      checkName: formId == null,
+      checkName: true,
     },
   }
 
@@ -99,6 +99,62 @@ function AgeQualifyingTypeForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
+
+        if(res.data) {
+          let currentCode = res.data.age_qualifying_type_code
+          let currentName = res.data.age_qualifying_type_name
+
+          $.validator.addMethod(
+            "checkCode",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/age-qualifying-types?filters=["age_qualifying_type_code","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if(currentCode == element.value){
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+    
+              return req
+            },
+            "Code already exists",
+          )
+          $.validator.addMethod(
+            "checkName",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/age-qualifying-types?filters=["age_qualifying_type_name","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if(currentName.toUpperCase() === element.value.toUpperCase()){
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+    
+              return req
+            },
+            "Age Qualifying Type Name already exists",
+          )
+        }
       } catch (e) { }
 
       try {
