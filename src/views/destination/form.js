@@ -67,6 +67,21 @@ function DestinationForm(props) {
     },
   }
 
+  const validationMessages = {
+    destination_name: {
+      required: "Destinantion Name is required",
+    },
+    destination_code: {
+      required: "Destinantion Code is required",
+    },
+    country: {
+      required: "Country is required",
+    },
+    city: {
+      required: "City is required",
+    },
+  }
+
   useEffect(async () => {
     let api = new Api()
     let formId = props.match.params.id
@@ -155,6 +170,7 @@ function DestinationForm(props) {
       alertMessage={"Incomplete data"}
       isValid={false}
       rules={validationRules}
+      validationMessages={validationMessages}
     >
       <FormHorizontal>
         <FormInputControl
