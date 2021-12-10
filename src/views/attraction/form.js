@@ -185,6 +185,7 @@ function AttractionForm(props) {
       required: false,
       minlength: 1,
       maxlength: 256,
+      email: true,
     },
     phone_number: {
       required: false,
