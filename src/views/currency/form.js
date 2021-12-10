@@ -219,7 +219,7 @@ function CurrencyForm(props) {
           minLength="1"
           maxLength="64"
         />
-        <FormInputWrapper label="Symbol Position">
+        <FormInputWrapper label="Position">
           <div className="form-check form-check-inline">
             <input
               className="form-check-input"
