@@ -182,7 +182,7 @@ function DestinationForm(props) {
           disabled={isView || loading}
           type="text"
           minLength="1"
-          maxLength="64"
+          maxLength="256"
         />
 
         <FormInputSelectAjax
