@@ -736,7 +736,7 @@ function AttractionForm(props) {
             disabled={isView || loading}
             type="text"
             minLength="1"
-            maxLength="64"
+            maxLength="32"
           />
 
           <FormInputControl
@@ -747,7 +747,7 @@ function AttractionForm(props) {
             disabled={isView || loading}
             type="textarea"
             minLength="1"
-            maxLength="64"
+            maxLength="4000"
           />
         </FormHorizontal>
       </div>
