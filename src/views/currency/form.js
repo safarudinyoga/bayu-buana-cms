@@ -84,6 +84,21 @@ function CurrencyForm(props) {
     },
   }
 
+  const validationMessages = {
+    currency_code: {
+      required: "Currency Code is required",
+    },
+    currency_name: {
+      required: "Currency Name is required",
+    },
+    currency_symbol: {
+      required: "Currency Symbol is required",
+    },
+    numeric_code: {
+      required: "Numeric Code is required",
+    },
+  }
+
   useEffect(async () => {
     let api = new Api()
     let formId = props.match.params.id
@@ -177,6 +192,7 @@ function CurrencyForm(props) {
       alertMessage={"Incomplete data"}
       isValid={false}
       rules={validationRules}
+      validationMessages={validationMessages}
     >
       <FormHorizontal>
         <FormInputControl
