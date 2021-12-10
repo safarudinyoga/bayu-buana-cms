@@ -56,6 +56,15 @@ function HotelAmenityForm(props) {
     },
   }
 
+  const validationMessages = {
+    hotel_amenity_type_name: {
+      required: "Hotel Amenity Type Name is required",
+    },
+    hotel_amenity_type_code: {
+      required: "Hotel Amenity Type Code is required",
+    },
+  }
+
   useEffect(async () => {
     let api = new Api()
     let formId = props.match.params.id
@@ -181,6 +190,7 @@ function HotelAmenityForm(props) {
       alertMessage={"Incomplete data"}
       isValid={false}
       rules={validationRules}
+      validationMessages={validationMessages}
     >
       <FormHorizontal>
         <FormInputControl
@@ -206,6 +216,7 @@ function HotelAmenityForm(props) {
           onChange={(e, values) => setForm(prev => ({...prev, hotel_amenity_category_hotel_amenity_type: values.map(value => ({hotel_amenity_category_id: value.id}))}))}
           disabled={isView || loading}
           type="selectmultiple"
+          placeholder="Hotel Amenity Category"
         />
         <FormInputControl
           label="Icon"
