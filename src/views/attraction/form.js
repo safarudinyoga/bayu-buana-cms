@@ -578,7 +578,7 @@ function AttractionForm(props) {
             disabled={isView || loading}
             type="textarea"
             minLength="1"
-            maxLength="64"
+            maxLength="256"
           />
 
           <FormInputSelectAjax
