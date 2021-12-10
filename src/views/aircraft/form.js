@@ -45,7 +45,7 @@ function AircraftForm(props) {
       checkName: formId == null,
     },
     model: {
-      required: false,
+      required: true,
       minlength: 1,
       maxlength: 64,
     },
@@ -69,6 +69,9 @@ function AircraftForm(props) {
     },
     icao_code: {
       required: "Icao Code is required",
+    },
+    model: {
+      required: "Model is required",
     },
     aircraft_code: {
       required: "Aircraft Code is required",
