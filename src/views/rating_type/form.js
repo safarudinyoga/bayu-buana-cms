@@ -6,13 +6,16 @@ import FormInputControl from "components/form/input-control"
 import FormBuilder from "components/form/builder"
 import useQuery from "lib/query"
 import {useDispatch} from "react-redux"
-import {setUIParams} from "redux/ui-store"
+import {setAlert, setUIParams} from "redux/ui-store"
+import $ from "jquery"
+import env from "../../config/environment"
 
 const endpoint = "/master/rating-types"
 const backUrl = "/master/rating-types"
 
 function RatingTypeForm(props) {
   let dispatch = useDispatch()
+  let formId = props.match.params.id
 
   const isView = useQuery().get("action") === "view"
   const [formBuilder, setFormBuilder] = useState(null)
@@ -52,18 +55,35 @@ function RatingTypeForm(props) {
       required: true,
       min: 0,
       max: 99,
+      checkCode: formId == null,
     },
 
     rating_type_name: {
       required: true,
       minlength: 1,
       maxlength: 256,
+      checkName: formId == null,
     },
 
     scale: {
       required: true,
       min: 1,
       max: 3,
+    },
+  }
+
+  const validationMessages = {
+    rating_type_name: {
+      required: "Rating Type Name is required",
+    },
+    rating_type_code: {
+      required: "Rating Type Code is required",
+    },
+    scale: {
+      required: "Scale is required",
+    },
+    rating_symbol: {
+      required: "Rating Symbol is required",
     },
   }
 
@@ -109,6 +129,48 @@ function RatingTypeForm(props) {
       } catch (e) { }
       setLoading(false)
     }
+    $.validator.addMethod(
+      "checkCode",
+      function (value, element) {
+        var req = false
+        $.ajax({
+          type: "GET",
+          async: false,
+          url: `${env.API_URL}/master/rating-types?filters=["rating_type_code","=","${element.value}"]`,
+          success: function (res) {
+            if (res.items.length !== 0) {
+              req = false
+            } else {
+              req = true
+            }
+          },
+        })
+
+        return req
+      },
+      "Rating Type Code already exists",
+    )
+    $.validator.addMethod(
+      "checkName",
+      function (value, element) {
+        var req = false
+        $.ajax({
+          type: "GET",
+          async: false,
+          url: `${env.API_URL}/master/rating-types?filters=["rating_type_name","=","${element.value}"]`,
+          success: function (res) {
+            if (res.items.length !== 0) {
+              req = false
+            } else {
+              req = true
+            }
+          },
+        })
+
+        return req
+      },
+      "Rating Type Name already exists",
+    )
   }, [])
 
   useEffect(() => {
@@ -143,9 +205,19 @@ function RatingTypeForm(props) {
         await api.putOrPost(path, tl.id, tl)
       }
     } catch (e) {
+      dispatch(
+        setAlert({
+          message: `Failed to ${formId ? "update" : "save"} this record.`,
+        }),
+      )
     } finally {
       setLoading(false)
       props.history.push(backUrl)
+      dispatch(
+        setAlert({
+          message: `Record ${form.rating_type_code} - ${form.rating_type_name} has been successfully ${formId ? "updated" : "saved"}..`,
+        }),
+      )
     }
   }
 
@@ -160,6 +232,7 @@ function RatingTypeForm(props) {
       alertMessage={"Incomplete data"}
       isValid={false}
       rules={validationRules}
+      validationMessages={validationMessages}
     >
       <FormHorizontal>
         <FormInputControl
