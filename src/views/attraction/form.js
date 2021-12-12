@@ -3,11 +3,13 @@ import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
 import FormInputSelectAjax from "components/form/input-select-ajax"
 import Api from "config/api"
+import $ from "jquery"
 import useQuery from "lib/query"
 import React, {useEffect, useState} from "react"
 import {useDispatch} from "react-redux"
 import {withRouter} from "react-router"
 import {setAlert, setUIParams} from "redux/ui-store"
+import env from "../../config/environment"
 
 const endpoint = "/master/attractions"
 const backUrl = "/master/attractions"
@@ -138,8 +140,9 @@ function AttractionForm(props) {
     attraction_name: {
       required: true,
       minlength: 1,
-      maxlength: 64,
+      maxlength: 256,
       noSpace: true,
+      checkName: true,
     },
     attraction_category_attraction: {
       required: false,
@@ -182,16 +185,19 @@ function AttractionForm(props) {
       required: false,
       minlength: 1,
       maxlength: 256,
+      email: true,
     },
     phone_number: {
       required: false,
       minlength: 1,
       maxlength: 32,
+      phone: true,
     },
     fax_number: {
       required: false,
       minlength: 1,
       maxlength: 32,
+      fax: true
     },
     description: {
       required: false,
@@ -286,6 +292,19 @@ function AttractionForm(props) {
   useEffect(async () => {
     let formId = props.match.params.id
 
+    // validator for alpha num
+    $.validator.addMethod(
+      "phone", function (value, element) {
+        return this.optional(element) || /^[0-9\-\(\)\s]+$/.test(value);
+      }, "Please enter a valid phone number"
+    );
+
+    $.validator.addMethod(
+      "fax", function (value, element) {
+        return this.optional(element) || /^[0-9\-\(\)\s]+$/.test(value);
+      }, "Please enter a valid fax number"
+    );
+
     let docTitle = "Edit Attraction"
     if (!formId) {
       docTitle = "Create Attraction"
@@ -311,12 +330,43 @@ function AttractionForm(props) {
       }),
     )
     if (formId) {
-
       try {
         let res = await api.get(endpoint + "/" + formId)
+
+        if (res.data) {
+
+          let currentName = res.data.attraction_name
+
+          $.validator.addMethod(
+            "checkName",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/attractions?filters=["attraction_name","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if (currentName == element.value) {
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+
+              return req
+            },
+            "Attraction Name already exists",
+          )
+        }
+
         if (res.data.attraction_category_attraction) {
           setCategoryData(res.data.attraction_category_attraction.map(value => {
-            if(value.attraction_category) {
+            if (value.attraction_category) {
               return {id: value.attraction_category.id, text: value.attraction_category.attraction_category_name}
             }
           }))
@@ -348,6 +398,28 @@ function AttractionForm(props) {
         setTranslations(res.data.items)
       } catch (e) { }
       setLoading(false)
+    } else {
+      $.validator.addMethod(
+        "checkName",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/attractions?filters=["attraction_name","=","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
+
+          return req
+        },
+        "Attraction Name already exists",
+      )
     }
   }, [])
 
@@ -379,12 +451,12 @@ function AttractionForm(props) {
       }
       if (!form.latitude) {
         form.latitude = null
-      }else{
+      } else {
         form.latitude = parseFloat(form.latitude)
       }
       if (!form.longitude) {
         form.longitude = null
-      }else{
+      } else {
         form.longitude = parseFloat(form.longitude);
       }
       if (!form.email) {
@@ -451,13 +523,13 @@ function AttractionForm(props) {
     }
   }
 
-  const doUploadMedia = async (e, media_type="desktop") => {
+  const doUploadMedia = async (e, media_type = "desktop") => {
     try {
-      let media_code = ["desktop", "tablet", "mobile"].indexOf(media_type)+1
+      let media_code = ["desktop", "tablet", "mobile"].indexOf(media_type) + 1
       let payload = new FormData()
       payload.append("files", e.target.files[0])
       media_type !== "desktop" && payload.append("dimension_category_code", media_code)
-      
+
       let res = await api.post("/multimedia/files", payload)
       if (res.data) {
         setForm({
@@ -468,7 +540,7 @@ function AttractionForm(props) {
           },
         })
       }
-    } catch (e) {}
+    } catch (e) { }
   }
 
   return (
@@ -499,7 +571,7 @@ function AttractionForm(props) {
             disabled={isView || loading}
             type="text"
             minLength="1"
-            maxLength="64"
+            maxLength="256"
           />
 
           <FormInputSelectAjax
@@ -522,7 +594,7 @@ function AttractionForm(props) {
             disabled={isView || loading}
             type="textarea"
             minLength="1"
-            maxLength="64"
+            maxLength="256"
           />
 
           <FormInputSelectAjax
@@ -642,7 +714,7 @@ function AttractionForm(props) {
             disabled={isView || loading}
             type="text"
             minLength="1"
-            maxLength="64"
+            maxLength="256"
           />
 
           <FormInputControl
@@ -653,7 +725,7 @@ function AttractionForm(props) {
             disabled={isView || loading}
             type="text"
             minLength="1"
-            maxLength="64"
+            maxLength="32"
           />
 
           <FormInputControl
@@ -664,7 +736,7 @@ function AttractionForm(props) {
             disabled={isView || loading}
             type="text"
             minLength="1"
-            maxLength="64"
+            maxLength="32"
           />
 
           <FormInputControl
@@ -675,7 +747,7 @@ function AttractionForm(props) {
             disabled={isView || loading}
             type="textarea"
             minLength="1"
-            maxLength="64"
+            maxLength="4000"
           />
         </FormHorizontal>
       </div>
