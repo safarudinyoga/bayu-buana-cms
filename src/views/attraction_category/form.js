@@ -48,7 +48,7 @@ function AttractionCategoryForm(props) {
       minlength: 1,
       maxlength: 256,
       checkName: formId == null,
-      noSpace:true
+      noSpace: true,
     },
     is_default: {
       required: true,
@@ -59,7 +59,7 @@ function AttractionCategoryForm(props) {
       maxlength: 4000,
     },
     attraction_category_asset: {
-      required: true,
+      required: formId == null,
     },
   }
 
@@ -232,26 +232,26 @@ function AttractionCategoryForm(props) {
           maxLength="256"
         />
 
-          <FormInputWrapper
-              label="Is Default"
-              hint="Set is default"
-              labelRequired="label-required"
-          >
+        <FormInputWrapper
+          label="Is Default"
+          hint="Set is default"
+          labelRequired="label-required"
+        >
           <div className="form-check form-check-inline">
             <input
-                className="form-check-input"
-                type="radio"
-                name="is_default"
-                id="ha-1"
-                value={true}
-                disabled={isView || loading}
-                checked={form.is_default}
-                onChange={(e) =>
-                    setForm({
-                      ...form,
-                      is_default: true,
-                    })
-                }
+              className="form-check-input"
+              type="radio"
+              name="is_default"
+              id="ha-1"
+              value={true}
+              disabled={isView || loading}
+              checked={form.is_default}
+              onChange={(e) =>
+                setForm({
+                  ...form,
+                  is_default: true,
+                })
+              }
             />
             <label className="form-check-label" htmlFor="ha-1">
               Yes
@@ -259,19 +259,19 @@ function AttractionCategoryForm(props) {
           </div>
           <div className="form-check form-check-inline">
             <input
-                className="form-check-input"
-                type="radio"
-                name="is_default"
-                id="ha-2"
-                value={false}
-                disabled={isView || loading}
-                checked={!form.is_default}
-                onChange={(e) =>
-                    setForm({
-                      ...form,
-                      is_default: false,
-                    })
-                }
+              className="form-check-input"
+              type="radio"
+              name="is_default"
+              id="ha-2"
+              value={false}
+              disabled={isView || loading}
+              checked={!form.is_default}
+              onChange={(e) =>
+                setForm({
+                  ...form,
+                  is_default: false,
+                })
+              }
             />
             <label className="form-check-label" htmlFor="ha-2">
               No
@@ -296,7 +296,7 @@ function AttractionCategoryForm(props) {
           onChange={doUpload}
           disabled={isView}
           url={form.attraction_category_asset.multimedia_description.url}
-          style={{maxWidth: 300, marginTop: 12}}
+          style={{ maxWidth: 300, marginTop: 12 }}
         />
       </FormHorizontal>
     </FormBuilder>

@@ -1,13 +1,13 @@
-import {withRouter} from "react-router"
-import React, {useEffect, useState} from "react"
+import { withRouter } from "react-router"
+import React, { useEffect, useState } from "react"
 import Api from "config/api"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
 import FormBuilder from "components/form/builder"
 import useQuery from "lib/query"
 import $ from "jquery"
-import {useDispatch} from "react-redux"
-import {setAlert, setUIParams} from "redux/ui-store"
+import { useDispatch } from "react-redux"
+import { setAlert, setUIParams } from "redux/ui-store"
 import env from "../../config/environment"
 
 const endpoint = "/master/languages"
@@ -73,7 +73,7 @@ function LanguageForm(props) {
       checkNativeName: true,
     },
     language_asset: {
-      required: true
+      required: formId == null,
     },
   }
 
@@ -87,21 +87,21 @@ function LanguageForm(props) {
       required: "Language Name is required",
       minlength: "Language Name must be at least 1 characters",
       maxlength: "Language Name cannot be more than 256 characters",
-    }, 
+    },
     language_native_name: {
       required: "Language Native Name is required",
       minlength: "Language Native Name must be at least 1 characters",
       maxlength: "Language Native Name cannot be more than 256 characters",
-    }, 
+    },
     language_asset: {
       required: "Language Flag Image is required",
-      extension: "png|jpg|jpeg"
+      extension: "png|jpg|jpeg",
     },
     language_alpha_3_code: {
       required: "Language Alpha 3 Code is required",
       minlength: "Language Alpha 3 Code must be at least 3 characters",
       maxlength: "Language Alpha 3 Code cannot be more than 3 characters",
-    }
+    },
   }
 
   useEffect(async () => {
@@ -140,7 +140,7 @@ function LanguageForm(props) {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
 
-        if(res.data) {
+        if (res.data) {
           let currentCode = res.data.language_code
           let currentAlpha3 = res.data.language_alpha_3_code
           let currentName = res.data.language_name
@@ -156,7 +156,9 @@ function LanguageForm(props) {
                 url: `${env.API_URL}/master/languages?filters=["language_code","=","${element.value}"]`,
                 success: function (res) {
                   if (res.items.length !== 0) {
-                    if(currentCode.toUpperCase() === element.value.toUpperCase()){
+                    if (
+                      currentCode.toUpperCase() === element.value.toUpperCase()
+                    ) {
                       req = true
                     } else {
                       req = false
@@ -166,7 +168,7 @@ function LanguageForm(props) {
                   }
                 },
               })
-    
+
               return req
             },
             "Code already exists",
@@ -181,7 +183,10 @@ function LanguageForm(props) {
                 url: `${env.API_URL}/master/languages?filters=["language_alpha_3_code","=","${element.value}"]`,
                 success: function (res) {
                   if (res.items.length !== 0) {
-                    if(currentAlpha3.toUpperCase() === element.value.toUpperCase()){
+                    if (
+                      currentAlpha3.toUpperCase() ===
+                      element.value.toUpperCase()
+                    ) {
                       req = true
                     } else {
                       req = false
@@ -191,7 +196,7 @@ function LanguageForm(props) {
                   }
                 },
               })
-    
+
               return req
             },
             "Alpha 3 Code already exists",
@@ -206,7 +211,9 @@ function LanguageForm(props) {
                 url: `${env.API_URL}/master/languages?filters=["language_name","=","${element.value}"]`,
                 success: function (res) {
                   if (res.items.length !== 0) {
-                    if(currentName.toUpperCase() === element.value.toUpperCase()){
+                    if (
+                      currentName.toUpperCase() === element.value.toUpperCase()
+                    ) {
                       req = true
                     } else {
                       req = false
@@ -216,7 +223,7 @@ function LanguageForm(props) {
                   }
                 },
               })
-    
+
               return req
             },
             "Language Name already exists",
@@ -231,7 +238,10 @@ function LanguageForm(props) {
                 url: `${env.API_URL}/master/languages?filters=["language_native_name","=","${element.value}"]`,
                 success: function (res) {
                   if (res.items.length !== 0) {
-                    if(currentNative.toUpperCase() === element.value.toUpperCase()){
+                    if (
+                      currentNative.toUpperCase() ===
+                      element.value.toUpperCase()
+                    ) {
                       req = true
                     } else {
                       req = false
@@ -241,20 +251,20 @@ function LanguageForm(props) {
                   }
                 },
               })
-    
+
               return req
             },
             "Language Native Name already exists",
           )
         }
-      } catch (e) { }
+      } catch (e) {}
 
       try {
         let res = await api.get(endpoint + "/" + formId + "/translations", {
           size: 50,
         })
         setTranslations(res.data.items)
-      } catch (e) { }
+      } catch (e) {}
       setLoading(false)
     } else {
       $.validator.addMethod(
@@ -407,7 +417,7 @@ function LanguageForm(props) {
           },
         })
       }
-    } catch (e) { }
+    } catch (e) {}
   }
 
   return (
@@ -429,7 +439,7 @@ function LanguageForm(props) {
           labelRequired="label-required"
           value={form.language_name}
           name="language_name"
-          onChange={(e) => setForm({...form, language_name: e.target.value})}
+          onChange={(e) => setForm({ ...form, language_name: e.target.value })}
           disabled={isView || loading}
           type="text"
           minLength="1"
@@ -441,7 +451,7 @@ function LanguageForm(props) {
           value={form.language_native_name}
           name="language_native_name"
           onChange={(e) =>
-            setForm({...form, language_native_name: e.target.value})
+            setForm({ ...form, language_native_name: e.target.value })
           }
           disabled={isView || loading}
           type="text"
@@ -457,7 +467,7 @@ function LanguageForm(props) {
           disabled={isView}
           accept=".png,.jpg,.jpeg"
           url={form.language_asset.multimedia_description.url}
-          style={{maxWidth: 300, marginTop: 12}}
+          style={{ maxWidth: 300, marginTop: 12 }}
         />
       </FormHorizontal>
 
@@ -467,9 +477,9 @@ function LanguageForm(props) {
           labelRequired="label-required"
           value={form.language_code}
           name="language_code"
-          cl={{md:"12"}}
+          cl={{ md: "12" }}
           cr="12"
-          onChange={(e) => setForm({...form, language_code: e.target.value})}
+          onChange={(e) => setForm({ ...form, language_code: e.target.value })}
           disabled={isView || loading}
           type="text"
           minLength="2"
@@ -481,10 +491,10 @@ function LanguageForm(props) {
           labelRequired="label-required"
           value={form.language_alpha_3_code}
           name="language_alpha_3_code"
-          cl={{md:"12"}}
+          cl={{ md: "12" }}
           cr="12"
           onChange={(e) =>
-            setForm({...form, language_alpha_3_code: e.target.value})
+            setForm({ ...form, language_alpha_3_code: e.target.value })
           }
           disabled={isView || loading}
           type="text"

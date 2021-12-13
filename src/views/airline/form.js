@@ -1,5 +1,5 @@
-import {withRouter} from "react-router"
-import React, {useEffect, useState} from "react"
+import { withRouter } from "react-router"
+import React, { useEffect, useState } from "react"
 import Api from "config/api"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
@@ -7,8 +7,8 @@ import FormBuilder from "components/form/builder"
 import FormInputSelectAjax from "components/form/input-select-ajax"
 import useQuery from "lib/query"
 import $ from "jquery"
-import {useDispatch} from "react-redux"
-import {setAlert, setUIParams} from "redux/ui-store"
+import { useDispatch } from "react-redux"
+import { setAlert, setUIParams } from "redux/ui-store"
 import env from "../../config/environment"
 
 const endpoint = "/master/airlines"
@@ -62,7 +62,7 @@ function AirlineForm(props) {
       checkName: formId == null,
     },
     airline_asset: {
-      required: true,
+      required: formId == null,
     },
   }
 
@@ -113,14 +113,14 @@ function AirlineForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
-      } catch (e) { }
+      } catch (e) {}
 
       try {
         let res = await api.get(endpoint + "/" + formId + "/translations", {
           size: 50,
         })
         setTranslations(res.data.items)
-      } catch (e) { }
+      } catch (e) {}
       setLoading(false)
     } else {
       $.validator.addMethod(
@@ -233,7 +233,9 @@ function AirlineForm(props) {
       props.history.push(backUrl)
       dispatch(
         setAlert({
-          message: `Record ${form.airline_code} - ${form.airline_name} has been successfully ${formId ? "updated" : "saved"}..`,
+          message: `Record ${form.airline_code} - ${
+            form.airline_name
+          } has been successfully ${formId ? "updated" : "saved"}..`,
         }),
       )
     }
@@ -254,7 +256,7 @@ function AirlineForm(props) {
           },
         })
       }
-    } catch (e) { }
+    } catch (e) {}
   }
 
   return (
@@ -275,8 +277,8 @@ function AirlineForm(props) {
           label="Airline Name"
           labelRequired="label-required"
           value={form.airline_name}
-          name="airline_name"          
-          onChange={(e) => setForm({...form, airline_name: e.target.value})}
+          name="airline_name"
+          onChange={(e) => setForm({ ...form, airline_name: e.target.value })}
           disabled={isView || loading}
           type="text"
           minLength="1"
@@ -285,11 +287,11 @@ function AirlineForm(props) {
         <FormInputSelectAjax
           label="Company Name"
           value={form.company_id}
-          name="company_id"          
+          name="company_id"
           endpoint="/master/companies"
           column="company_name"
           onChange={(e) =>
-            setForm({...form, company_id: e.target.value || null})
+            setForm({ ...form, company_id: e.target.value || null })
           }
           disabled={isView || loading}
           type="select"
@@ -311,7 +313,7 @@ function AirlineForm(props) {
           onChange={doUpload}
           disabled={isView}
           url={form.airline_asset.multimedia_description.url}
-          style={{maxWidth: 300, marginTop: 12}}
+          style={{ maxWidth: 300, marginTop: 12 }}
         />
       </FormHorizontal>
 
@@ -321,9 +323,9 @@ function AirlineForm(props) {
           labelRequired="label-required"
           value={form.airline_code}
           name="airline_code"
-          cl={{md:"12"}}
+          cl={{ md: "12" }}
           cr="12"
-          onChange={(e) => setForm({...form, airline_code: e.target.value})}
+          onChange={(e) => setForm({ ...form, airline_code: e.target.value })}
           disabled={isView || loading}
           type="text"
           minLength="1"
@@ -334,9 +336,9 @@ function AirlineForm(props) {
           label="Numeric Code"
           value={form.numeric_code}
           name="numeric_code"
-          cl={{md:"12"}}
+          cl={{ md: "12" }}
           cr="12"
-          onChange={(e) => setForm({...form, numeric_code: e.target.value})}
+          onChange={(e) => setForm({ ...form, numeric_code: e.target.value })}
           disabled={isView || loading}
           type="number"
           minlength="3"
