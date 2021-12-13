@@ -128,8 +128,8 @@ function DestinationForm(props) {
         }
 
         if (res.data) {
-          let currentName = res.data.destination_code
-          let currentCode = res.data.destination_name
+          let currentName = res.data.destination_name
+          let currentCode = res.data.destination_code
 
           $.validator.addMethod(
             "checkName",
@@ -141,7 +141,7 @@ function DestinationForm(props) {
                 url: `${env.API_URL}/master/destinations?filters=["destination_name","=","${element.value}"]`,
                 success: function (res) {
                   if (res.items.length !== 0) {
-                    if(currentName.toUpperCase() === element.value.toUpperCase()){
+                    if(currentName === element.value){
                       req = true
                     } else {
                       req = false
@@ -166,7 +166,7 @@ function DestinationForm(props) {
                 url: `${env.API_URL}/master/destinations?filters=["destination_code","=","${element.value}"]`,
                 success: function (res) {
                   if (res.items.length !== 0) {
-                    if(currentCode.toUpperCase() === element.value.toUpperCase()){
+                    if(currentCode === element.value){
                       req = true
                     } else {
                       req = false
@@ -191,7 +191,50 @@ function DestinationForm(props) {
         setTranslations(res.data.items)
       } catch (e) { }
       setLoading(false)
-    } 
+    } else {
+      $.validator.addMethod(
+        "checkName",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/destinations?filters=["destination_name","=","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
+
+          return req
+        },
+        "Destination Name already exists",
+      )
+      $.validator.addMethod(
+        "checkCode",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/destinations?filters=["destination_code","=","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
+
+          return req
+        },
+        "Destination Code already exists",
+      )
+    }
   }, [])
 
   useEffect(() => {
