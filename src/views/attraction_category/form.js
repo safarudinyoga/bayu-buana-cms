@@ -47,7 +47,7 @@ function AttractionCategoryForm(props) {
       required: true,
       minlength: 1,
       maxlength: 256,
-      checkName: formId == null,
+      checkName: true,
       noSpace: true,
     },
     is_default: {
@@ -70,6 +70,30 @@ function AttractionCategoryForm(props) {
     attraction_category_asset: {
       required: "Attraction Category Icon Image is required.",
     },
+  }
+
+  const addMethodValidation = () => {
+    $.validator.addMethod(
+      "checkName",
+      function (value, element) {
+        var req = false
+        $.ajax({
+          type: "GET",
+          async: false,
+          url: `${env.API_URL}/master/attraction-categories?filters=["attraction_category_name","=","${element.value}"]`,
+          success: function (res) {
+            if (res.items.length !== 0) {
+              req = false
+            } else {
+              req = true
+            }
+          },
+        })
+
+        return req
+      },
+      "Attraction Category Name already exists",
+    )
   }
 
   useEffect(async () => {
@@ -110,28 +134,9 @@ function AttractionCategoryForm(props) {
         setTranslations(res.data.items)
       } catch (e) {}
       setLoading(false)
+      addMethodValidation()
     } else {
-      $.validator.addMethod(
-        "checkName",
-        function (value, element) {
-          var req = false
-          $.ajax({
-            type: "GET",
-            async: false,
-            url: `${env.API_URL}/master/attraction-categories?filters=["attraction_category_name","=","${element.value}"]`,
-            success: function (res) {
-              if (res.items.length !== 0) {
-                req = false
-              } else {
-                req = true
-              }
-            },
-          })
-
-          return req
-        },
-        "Attraction Category Name already exists",
-      )
+      addMethodValidation()
     }
   }, [])
 
