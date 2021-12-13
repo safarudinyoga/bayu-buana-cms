@@ -39,15 +39,15 @@ function CabinTypeForm(props) {
       required: true,
       minlength: 1,
       maxlength: 36,
-      checkCode: formId == null,
+      checkCode: true,
       noSpace: true,
-      number:true
+      number: true,
     },
     cabin_type_name: {
       required: true,
       minlength: 1,
       maxlength: 256,
-      checkName: formId == null,
+      checkName: true,
       noSpace: true,
     },
   }
@@ -55,7 +55,7 @@ function CabinTypeForm(props) {
   const validationMessages = {
     cabin_type_code: {
       required: "Cabin Type Code is required.",
-      number : "Code format is invalid"
+      number: "Code format is invalid",
     },
     cabin_type_name: {
       required: "Cabin Type Name is required.",
@@ -102,50 +102,49 @@ function CabinTypeForm(props) {
         setTranslations(res.data.items)
       } catch (e) {}
       setLoading(false)
-    } else {
-      $.validator.addMethod(
-        "checkCode",
-        function (value, element) {
-          var req = false
-          $.ajax({
-            type: "GET",
-            async: false,
-            url: `${env.API_URL}/master/cabin-types?filters=["cabin_type_code","=","${element.value}"]`,
-            success: function (res) {
-              if (res.items.length !== 0) {
-                req = false
-              } else {
-                req = true
-              }
-            },
-          })
-
-          return req
-        },
-        "Cabin Type Code already exists",
-      )
-      $.validator.addMethod(
-        "checkName",
-        function (value, element) {
-          var req = false
-          $.ajax({
-            type: "GET",
-            async: false,
-            url: `${env.API_URL}/master/cabin-types?filters=["cabin_type_name","=","${element.value}"]`,
-            success: function (res) {
-              if (res.items.length !== 0) {
-                req = false
-              } else {
-                req = true
-              }
-            },
-          })
-
-          return req
-        },
-        "Cabin Type Name already exists",
-      )
     }
+    $.validator.addMethod(
+      "checkCode",
+      function (value, element) {
+        var req = false
+        $.ajax({
+          type: "GET",
+          async: false,
+          url: `${env.API_URL}/master/cabin-types?filters=["cabin_type_code","=","${element.value}"]`,
+          success: function (res) {
+            if (res.items.length !== 0) {
+              req = false
+            } else {
+              req = true
+            }
+          },
+        })
+
+        return req
+      },
+      "Cabin Type Code already exists",
+    )
+    $.validator.addMethod(
+      "checkName",
+      function (value, element) {
+        var req = false
+        $.ajax({
+          type: "GET",
+          async: false,
+          url: `${env.API_URL}/master/cabin-types?filters=["cabin_type_name","=","${element.value}"]`,
+          success: function (res) {
+            if (res.items.length !== 0) {
+              req = false
+            } else {
+              req = true
+            }
+          },
+        })
+
+        return req
+      },
+      "Cabin Type Name already exists",
+    )
   }, [])
 
   useEffect(() => {
@@ -221,7 +220,7 @@ function CabinTypeForm(props) {
           labelRequired="label-required"
           value={form.cabin_type_code}
           name="cabin_type_code"
-          cl={{md:"12"}}
+          cl={{ md: "12" }}
           cr="12"
           onChange={(e) =>
             setForm({ ...form, cabin_type_code: e.target.value })

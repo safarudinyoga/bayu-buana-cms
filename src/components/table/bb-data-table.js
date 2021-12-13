@@ -83,33 +83,33 @@ class BBDataTable extends Component {
     } catch (e) {}
 
     const allowed = [this.props.recordName]
-    
+
     columns.push({
       searchable: false,
       orderable: false,
-      title: "Actions",      
+      title: "Actions",
       render: function (value, display, row) {
-        function tooltipCust(x) {            
-          if (x.matches) {  
+        function tooltipCust(x) {
+          if (x.matches) {
             $(function () {
               $('[data-toggle="tooltip"]').tooltip()
-            })                          
-          } else {  
+            })
+          } else {
             $(function () {
-              $('[data-toggle="tooltip"]').tooltip('hide')
-            }) 
+              $('[data-toggle="tooltip"]').tooltip("hide")
+            })
           }
-        }          
+        }
         var x = window.matchMedia("(max-width: 768px)")
-        tooltipCust(x) 
-        x.addListener(tooltipCust)           
+        tooltipCust(x)
+        x.addListener(tooltipCust)
         const filteredRecordName = Object.keys(row)
           .filter((key) => allowed.includes(key))
           .reduce((obj, key) => {
             obj[key] = row[key]
             return obj
           }, {})
-               
+
         return (
           '<a href="javascript:void(0);" data-toggle="tooltip" class="table-row-action-item" data-action="edit" data-id="' +
           row.id +
@@ -398,21 +398,21 @@ class BBDataTable extends Component {
             },
           },
           {
-            extend: 'excelHtml5',
-            text: 'Excel',
+            extend: "excelHtml5",
+            text: "Excel",
             exportOptions: {
-                stripHtml: false,
-                columns: visibleColumns,
-                orthogonal: "myExport"
-            }
-          },          
+              stripHtml: false,
+              columns: visibleColumns,
+              orthogonal: "myExport",
+            },
+          },
           {
-            extend: 'csvHtml5',
-            text: 'CSV',
+            extend: "csvHtml5",
+            text: "CSV",
             exportOptions: {
-                stripHtml: false,
-                columns: visibleColumns,
-            }
+              stripHtml: false,
+              columns: visibleColumns,
+            },
           },
         ],
         rowReorder: {
@@ -515,15 +515,17 @@ class BBDataTable extends Component {
         }, 500)
       })
 
-      dt.on( 'row-reorder', ( e, diff, edit ) => {
-        if(diff.length > 0) {
+      dt.on("row-reorder", (e, diff, edit) => {
+        if (diff.length > 0) {
           const module = this.props.title.toLowerCase().split(" ").join("_")
           let rowID = edit.triggerRow.data().id
-          let rowPositionDiff = diff.findIndex(v => dt.row(v.node).data().id === rowID)
-          let targetIdx = rowPositionDiff === 0 ? 1 : diff.length-2
+          let rowPositionDiff = diff.findIndex(
+            (v) => dt.row(v.node).data().id === rowID,
+          )
+          let targetIdx = rowPositionDiff === 0 ? 1 : diff.length - 2
           let sort = dt.row(diff[targetIdx].node)?.data()?.sort || 0
           this.api
-            .post(`/master/batch-actions/sort/${module}`, {id: rowID, sort})
+            .post(`/master/batch-actions/sort/${module}`, { id: rowID, sort })
             .then((res) => {
               console.log(res)
             })
@@ -532,7 +534,6 @@ class BBDataTable extends Component {
             })
         }
       })
-    
 
       this.dt = dt
 
@@ -757,7 +758,10 @@ class BBDataTable extends Component {
     return (
       <div ref={this.wrapper}>
         <Modal show={this.state.isOpen}>
-          <ModalHeader>{"Delete " + this.props.title}</ModalHeader>
+          <ModalHeader>
+            Delete{" "}
+            {this.props.titleModal ? this.props.titleModal : this.props.title}
+          </ModalHeader>
           <ModalBody>Are you sure you want to delete this?</ModalBody>
           <ModalFooter>
             <Button
