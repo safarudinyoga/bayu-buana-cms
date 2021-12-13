@@ -55,7 +55,7 @@ function LanguageForm(props) {
       checkCode: true,
     },
     language_alpha_3_code: {
-      required: true,
+      required: false,
       minlength: 3,
       maxlength: 3,
       checkAlpha3: true,
@@ -127,7 +127,7 @@ function LanguageForm(props) {
           },
           {
             link: backUrl,
-            text: "Language",
+            text: "Languages",
           },
           {
             text: breadcrumbTitle,
