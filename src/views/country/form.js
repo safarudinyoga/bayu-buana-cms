@@ -46,6 +46,11 @@ function CountryForm(props) {
       name: "country_name",
       type: "text",
     },
+    {
+      label: "Nationality",
+      name: "nationality",
+      type: "text",
+    },
   ]
 
   const validationRules = {
