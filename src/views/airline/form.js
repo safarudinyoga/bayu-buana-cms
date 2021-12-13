@@ -46,7 +46,7 @@ function AirlineForm(props) {
     airline_code: {
       required: true,
       minlength: 1,
-      maxlength: 3,
+      maxlength: 2,
       checkCode: formId == null,
     },
     numeric_code: {
@@ -329,8 +329,8 @@ function AirlineForm(props) {
           disabled={isView || loading}
           type="text"
           minLength="1"
-          maxLength="3"
-          hint="Airline code maximum 3 characters"
+          maxLength="2"
+          hint="Airline code maximum 2 characters"
         />
         <FormInputControl
           label="Numeric Code"
