@@ -72,30 +72,6 @@ function AttractionCategoryForm(props) {
     },
   }
 
-  const addMethodValidation = () => {
-    $.validator.addMethod(
-      "checkName",
-      function (value, element) {
-        var req = false
-        $.ajax({
-          type: "GET",
-          async: false,
-          url: `${env.API_URL}/master/attraction-categories?filters=["attraction_category_name","=","${element.value}"]`,
-          success: function (res) {
-            if (res.items.length !== 0) {
-              req = false
-            } else {
-              req = true
-            }
-          },
-        })
-
-        return req
-      },
-      "Attraction Category Name already exists",
-    )
-  }
-
   useEffect(async () => {
     let docTitle = "Edit Attraction Category"
     if (!formId) {
@@ -125,6 +101,35 @@ function AttractionCategoryForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
+        if (res.data) {
+          let currentName = res.data.attraction_category_name
+
+          $.validator.addMethod(
+            "checkName",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/attraction-categories?filters=["attraction_category_name","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if (currentName === element.value) {
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+
+              return req
+            },
+            "Attraction Category Name already exists",
+          )
+        }
       } catch (e) {}
 
       try {
@@ -134,9 +139,28 @@ function AttractionCategoryForm(props) {
         setTranslations(res.data.items)
       } catch (e) {}
       setLoading(false)
-      addMethodValidation()
     } else {
-      addMethodValidation()
+      $.validator.addMethod(
+        "checkName",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/attraction-categories?filters=["attraction_category_name","=","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
+
+          return req
+        },
+        "Attraction Category Name already exists",
+      )
     }
   }, [])
 

@@ -93,6 +93,62 @@ function CabinTypeForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
+        if (res.data) {
+          let currentCode = res.data.cabin_type_code
+          let currentName = res.data.cabin_type_name
+
+          $.validator.addMethod(
+            "checkCode",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/cabin-types?filters=["cabin_type_code","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if (currentCode === element.value) {
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+
+              return req
+            },
+            "Cabin Type Code already exists",
+          )
+
+          $.validator.addMethod(
+            "checkName",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/cabin-types?filters=["cabin_type_name","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if (currentName === element.value) {
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+
+              return req
+            },
+            "Cabin Type Name already exists",
+          )
+        }
       } catch (e) {}
 
       try {
@@ -102,49 +158,50 @@ function CabinTypeForm(props) {
         setTranslations(res.data.items)
       } catch (e) {}
       setLoading(false)
+    } else {
+      $.validator.addMethod(
+        "checkCode",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/cabin-types?filters=["cabin_type_code","=","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
+
+          return req
+        },
+        "Cabin Type Code already exists",
+      )
+      $.validator.addMethod(
+        "checkName",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/cabin-types?filters=["cabin_type_name","=","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
+
+          return req
+        },
+        "Cabin Type Name already exists",
+      )
     }
-    $.validator.addMethod(
-      "checkCode",
-      function (value, element) {
-        var req = false
-        $.ajax({
-          type: "GET",
-          async: false,
-          url: `${env.API_URL}/master/cabin-types?filters=["cabin_type_code","=","${element.value}"]`,
-          success: function (res) {
-            if (res.items.length !== 0) {
-              req = false
-            } else {
-              req = true
-            }
-          },
-        })
-
-        return req
-      },
-      "Cabin Type Code already exists",
-    )
-    $.validator.addMethod(
-      "checkName",
-      function (value, element) {
-        var req = false
-        $.ajax({
-          type: "GET",
-          async: false,
-          url: `${env.API_URL}/master/cabin-types?filters=["cabin_type_name","=","${element.value}"]`,
-          success: function (res) {
-            if (res.items.length !== 0) {
-              req = false
-            } else {
-              req = true
-            }
-          },
-        })
-
-        return req
-      },
-      "Cabin Type Name already exists",
-    )
   }, [])
 
   useEffect(() => {

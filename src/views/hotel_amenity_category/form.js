@@ -51,7 +51,7 @@ function HotelAmenityCategoryForm(props) {
       required: true,
       minlength: 1,
       maxlength: 256,
-      checkName: formId == null,
+      checkName: true,
       noSpace: true,
     },
     is_default: {
@@ -109,6 +109,34 @@ function HotelAmenityCategoryForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
+        if (res.data) {
+          let currentName = res.data.hotel_amenity_category_name
+          $.validator.addMethod(
+            "checkName",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/hotel-amenity-categories?filters=["hotel_amenity_category_name","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if (currentName === element.value) {
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+
+              return req
+            },
+            "Hotel Amenity Category Name already exists",
+          )
+        }
       } catch (e) {}
 
       try {
