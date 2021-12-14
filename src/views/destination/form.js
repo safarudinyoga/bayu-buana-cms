@@ -51,7 +51,7 @@ function DestinationForm(props) {
       required: true,
       minlength: 1,
       maxlength: 256,
-      checkName: formId == null,
+      checkName: true,
     },
     country: {
       required: true,
@@ -68,7 +68,7 @@ function DestinationForm(props) {
       required: true,
       minlength: 1,
       maxlength: 36,
-      checkCode: formId == null,
+      checkCode: true,
     },
   }
 
@@ -125,6 +125,62 @@ function DestinationForm(props) {
 
         if (res.data.country) {
           setCountryData([{...res.data.country, text: res.data.country.country_name}])
+        }
+
+        if (res.data) {
+          let currentName = res.data.destination_name
+          let currentCode = res.data.destination_code
+
+          $.validator.addMethod(
+            "checkName",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/destinations?filters=["destination_name","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if(currentName === element.value){
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+    
+              return req
+            },
+            "Destination Name already exists",
+          )
+          $.validator.addMethod(
+            "checkCode",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/destinations?filters=["destination_code","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if(currentCode === element.value){
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+    
+              return req
+            },
+            "Destination Code already exists",
+          )
         }
       } catch (e) { }
 

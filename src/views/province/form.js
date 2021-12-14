@@ -45,13 +45,13 @@ function ProvinceForm(props) {
       required: true,
       minlength: 1,
       maxlength: 8,
-      checkCode: formId == null,
+      checkCode: true,
     },
     state_province_name: {
       required: true,
       minlength: 1,
       maxlength: 256,
-      checkName: formId == null,
+      checkName: true,
     }
   }
 
@@ -101,6 +101,62 @@ function ProvinceForm(props) {
         }
         if (res.data.country) {
           setCountryData([{...res.data.country, text: res.data.country.country_name}])
+        }
+
+        if (res.data) {
+          let currentCode = res.data.state_province_code
+          let currentName = res.data.state_province_name
+
+          $.validator.addMethod(
+            "checkName",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/state-provinces?filters=["state_province_name","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if(currentName === element.value){
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+    
+              return req
+            },
+            "State Province Name already exists",
+          )
+          $.validator.addMethod(
+            "checkCode",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/state-provinces?filters=["state_province_code","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if(currentCode === element.value){
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+    
+              return req
+            },
+            "State Province Code already exists",
+          )
         }
       } catch (e) { }
 
