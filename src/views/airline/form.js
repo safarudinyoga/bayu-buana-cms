@@ -1,5 +1,5 @@
-import {withRouter} from "react-router"
-import React, {useEffect, useState} from "react"
+import { withRouter } from "react-router"
+import React, { useEffect, useState } from "react"
 import Api from "config/api"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
@@ -7,8 +7,8 @@ import FormBuilder from "components/form/builder"
 import FormInputSelectAjax from "components/form/input-select-ajax"
 import useQuery from "lib/query"
 import $ from "jquery"
-import {useDispatch} from "react-redux"
-import {setAlert, setUIParams} from "redux/ui-store"
+import { useDispatch } from "react-redux"
+import { setAlert, setUIParams } from "redux/ui-store"
 import env from "../../config/environment"
 
 const endpoint = "/master/airlines"
@@ -45,24 +45,24 @@ function AirlineForm(props) {
   const validationRules = {
     airline_code: {
       required: true,
-      minlength: 3,
-      maxlength: 3,
-      checkCode: formId == null,
+      minlength: 1,
+      maxlength: 2,
+      checkCode: true,
     },
     numeric_code: {
       required: true,
       minlength: 3,
       maxlength: 3,
-      checkNumeric: formId == null,
+      checkNumeric: true,
     },
     airline_name: {
       required: true,
       minlength: 1,
       maxlength: 256,
-      checkName: formId == null,
+      checkName: true,
     },
     airline_asset: {
-      required: true,
+      required: formId == null,
     },
   }
 
@@ -113,14 +113,96 @@ function AirlineForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
-      } catch (e) { }
+
+        if (res.data) {
+          let currentCode = res.data.airline_code
+          let currentNumeric = res.data.numeric_code
+          let currentName = res.data.airline_name
+
+          $.validator.addMethod(
+            "checkCode",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/airlines?filters=["airline_code","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if(currentCode === element.value){
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+    
+              return req
+            },
+            "Airline Code already exists",
+          )
+          $.validator.addMethod(
+            "checkNumeric",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/airlines?filters=["numeric_code","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if(currentNumeric === element.value){
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+    
+              return req
+            },
+            "Numeric Code already exists",
+          )
+          $.validator.addMethod(
+            "checkName",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/airlines?filters=["airline_name","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if(currentName === element.value){
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+    
+              return req
+            },
+            "Airline Name already exists",
+          )
+        }
+      } catch (e) {}
 
       try {
         let res = await api.get(endpoint + "/" + formId + "/translations", {
           size: 50,
         })
         setTranslations(res.data.items)
-      } catch (e) { }
+      } catch (e) {}
       setLoading(false)
     } else {
       $.validator.addMethod(
@@ -233,7 +315,9 @@ function AirlineForm(props) {
       props.history.push(backUrl)
       dispatch(
         setAlert({
-          message: `Record ${form.airline_code} - ${form.airline_name} has been successfully ${formId ? "updated" : "saved"}..`,
+          message: `Record ${form.airline_code} - ${
+            form.airline_name
+          } has been successfully ${formId ? "updated" : "saved"}..`,
         }),
       )
     }
@@ -254,7 +338,7 @@ function AirlineForm(props) {
           },
         })
       }
-    } catch (e) { }
+    } catch (e) {}
   }
 
   return (
@@ -275,8 +359,8 @@ function AirlineForm(props) {
           label="Airline Name"
           labelRequired="label-required"
           value={form.airline_name}
-          name="airline_name"          
-          onChange={(e) => setForm({...form, airline_name: e.target.value})}
+          name="airline_name"
+          onChange={(e) => setForm({ ...form, airline_name: e.target.value })}
           disabled={isView || loading}
           type="text"
           minLength="1"
@@ -285,11 +369,11 @@ function AirlineForm(props) {
         <FormInputSelectAjax
           label="Company Name"
           value={form.company_id}
-          name="company_id"          
+          name="company_id"
           endpoint="/master/companies"
           column="company_name"
           onChange={(e) =>
-            setForm({...form, company_id: e.target.value || null})
+            setForm({ ...form, company_id: e.target.value || null })
           }
           disabled={isView || loading}
           type="select"
@@ -311,7 +395,7 @@ function AirlineForm(props) {
           onChange={doUpload}
           disabled={isView}
           url={form.airline_asset.multimedia_description.url}
-          style={{maxWidth: 300, marginTop: 12}}
+          style={{ maxWidth: 300, marginTop: 12 }}
         />
       </FormHorizontal>
 
@@ -321,22 +405,22 @@ function AirlineForm(props) {
           labelRequired="label-required"
           value={form.airline_code}
           name="airline_code"
-          cl={{md:"12"}}
+          cl={{ md: "12" }}
           cr="12"
-          onChange={(e) => setForm({...form, airline_code: e.target.value})}
+          onChange={(e) => setForm({ ...form, airline_code: e.target.value })}
           disabled={isView || loading}
           type="text"
-          minLength="3"
-          maxLength="3"
-          hint="Airline code maximum 3 characters"
+          minLength="1"
+          maxLength="2"
+          hint="Airline code maximum 2 characters"
         />
         <FormInputControl
           label="Numeric Code"
           value={form.numeric_code}
           name="numeric_code"
-          cl={{md:"12"}}
+          cl={{ md: "12" }}
           cr="12"
-          onChange={(e) => setForm({...form, numeric_code: e.target.value})}
+          onChange={(e) => setForm({ ...form, numeric_code: e.target.value })}
           disabled={isView || loading}
           type="number"
           minlength="3"

@@ -25,6 +25,7 @@ export default function CabinTypeTable() {
 
   let params = {
     title: "Cabin Types",
+    titleModal: "Cabin Type",
     baseRoute: "/master/cabin-types/form",
     endpoint: "/master/cabin-types",
     deleteEndpoint: "/master/batch-actions/delete/cabin-types",

@@ -7,7 +7,7 @@ import useQuery from "lib/query"
 import React, {useEffect, useState} from "react"
 import {useDispatch} from "react-redux"
 import {withRouter} from "react-router"
-import { setAlert, setUIParams } from "redux/ui-store"
+import {setAlert, setUIParams} from "redux/ui-store"
 import env from "../../config/environment"
 
 const endpoint = "/master/hotel-brands"
@@ -123,7 +123,7 @@ function HotelBrandForm(props) {
 
           return req
         },
-        "Hotel Brand Code already exists",
+        "Code already exists",
       )
 
       $.validator.addMethod(
@@ -180,9 +180,8 @@ function HotelBrandForm(props) {
       props.history.push(backUrl)
       dispatch(
         setAlert({
-          message: `Record ${form.hotel_brand_code} - ${
-            form.hotel_brand_name
-          } has been successfully ${formId ? "updated" : "saved"}.`,
+          message: `Record ${form.hotel_brand_code} - ${form.hotel_brand_name
+            } has been successfully ${formId ? "updated" : "saved"}.`,
         }),
       )
     }
@@ -223,7 +222,7 @@ function HotelBrandForm(props) {
           labelRequired="label-required"
           value={form.hotel_brand_code}
           name="hotel_brand_code"
-          cl={{md:"12"}}
+          cl={{md: "12"}}
           cr="12"
           onChange={(e) =>
             setForm({...form, hotel_brand_code: e.target.value})

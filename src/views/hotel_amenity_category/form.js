@@ -1,5 +1,5 @@
-import {withRouter} from "react-router"
-import React, {useEffect, useState} from "react"
+import { withRouter } from "react-router"
+import React, { useEffect, useState } from "react"
 import Api from "config/api"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
@@ -8,7 +8,7 @@ import FormInputWrapper from "components/form/input-wrapper"
 import useQuery from "lib/query"
 import env from "../../config/environment"
 import $ from "jquery"
-import {useDispatch} from "react-redux"
+import { useDispatch } from "react-redux"
 import { setAlert, setUIParams } from "redux/ui-store"
 
 const endpoint = "/master/hotel-amenity-categories"
@@ -51,8 +51,8 @@ function HotelAmenityCategoryForm(props) {
       required: true,
       minlength: 1,
       maxlength: 256,
-      checkName: formId == null,
-      noSpace:true
+      checkName: true,
+      noSpace: true,
     },
     is_default: {
       required: true,
@@ -62,7 +62,7 @@ function HotelAmenityCategoryForm(props) {
       maxlength: 4000,
     },
     hotel_amenity_category_asset: {
-      required: true
+      required: formId == null,
     },
   }
   const validationMessages = {
@@ -73,8 +73,8 @@ function HotelAmenityCategoryForm(props) {
       required: "Is Default is required.",
     },
     hotel_amenity_category_asset: {
-      required:"Hotel Amenity Category Icon Image is required.",
-    }
+      required: "Hotel Amenity Category Icon Image is required.",
+    },
   }
 
   useEffect(async () => {
@@ -89,56 +89,84 @@ function HotelAmenityCategoryForm(props) {
     }
 
     dispatch(
-        setUIParams({
-          title: isView ? "Hotel Amenity Category Details" : docTitle,
-          breadcrumbs: [
-            {
-              text: "Master Data Management",
-            },
-            {
-              link: backUrl,
-              text: "Hotel Amenity Categories",
-            },
-            {
-              text: docTitle,
-            },
-          ],
-        }),
+      setUIParams({
+        title: isView ? "Hotel Amenity Category Details" : docTitle,
+        breadcrumbs: [
+          {
+            text: "Master Data Management",
+          },
+          {
+            link: backUrl,
+            text: "Hotel Amenity Categories",
+          },
+          {
+            text: docTitle,
+          },
+        ],
+      }),
     )
     if (formId) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
-      } catch (e) { }
+        if (res.data) {
+          let currentName = res.data.hotel_amenity_category_name
+          $.validator.addMethod(
+            "checkName",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/hotel-amenity-categories?filters=["hotel_amenity_category_name","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if (currentName === element.value) {
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+
+              return req
+            },
+            "Hotel Amenity Category Name already exists",
+          )
+        }
+      } catch (e) {}
 
       try {
         let res = await api.get(endpoint + "/" + formId + "/translations", {
           size: 50,
         })
         setTranslations(res.data.items)
-      } catch (e) { }
+      } catch (e) {}
       setLoading(false)
-    }else{
+    } else {
       $.validator.addMethod(
-          "checkName",
-          function (value, element) {
-            var req = false
-            $.ajax({
-              type: "GET",
-              async: false,
-              url: `${env.API_URL}/master/hotel-amenity-categories?filters=["hotel_amenity_category_name","=","${element.value}"]`,
-              success: function (res) {
-                if (res.items.length !== 0) {
-                  req = false
-                } else {
-                  req = true
-                }
-              },
-            })
+        "checkName",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/hotel-amenity-categories?filters=["hotel_amenity_category_name","=","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
 
-            return req
-          },
-          "Hotel Amenity Category Name already exists",
+          return req
+        },
+        "Hotel Amenity Category Name already exists",
       )
     }
   }, [])
@@ -179,19 +207,19 @@ function HotelAmenityCategoryForm(props) {
       }
     } catch (e) {
       dispatch(
-          setAlert({
-            message: `Failed to ${formId ? "update" : "save"} this record.`,
-          }),
+        setAlert({
+          message: `Failed to ${formId ? "update" : "save"} this record.`,
+        }),
       )
     } finally {
       setLoading(false)
       props.history.push(backUrl)
       dispatch(
-          setAlert({
-            message: `Record ${
-                form.hotel_amenity_category_name
-            } has been successfully ${formId ? "updated" : "saved"}.`,
-          }),
+        setAlert({
+          message: `Record ${
+            form.hotel_amenity_category_name
+          } has been successfully ${formId ? "updated" : "saved"}.`,
+        }),
       )
     }
   }
@@ -201,7 +229,7 @@ function HotelAmenityCategoryForm(props) {
       let payload = new FormData()
       payload.append("files", e.target.files[0])
       let res = await api.post("/multimedia/files", payload)
-      console.log(res,'res')
+      console.log(res, "res")
       if (res.data) {
         setForm({
           ...form,
@@ -211,104 +239,101 @@ function HotelAmenityCategoryForm(props) {
           },
         })
       }
-    } catch (e) { }
+    } catch (e) {}
   }
   return (
-      <FormBuilder
-          onBuild={(el) => setFormBuilder(el)}
-          isView={isView || loading}
-          onSave={onSave}
-          back={backUrl}
-          translations={translations}
-          translationFields={translationFields}
-          alertMessage={"Incomplete data"}
-          isValid={false}
-          rules={validationRules}
-          validationMessages={validationMessages}
-      >
-        <FormHorizontal>
-          <FormInputControl
-              label="Hotel Amenity Category Name"
-              labelRequired="label-required"
-              value={form.hotel_amenity_category_name}
-              name="hotel_amenity_category_name"
-              onChange={(e) =>
-                  setForm({...form, hotel_amenity_category_name: e.target.value})
-              }
-              disabled={isView || loading}
-              type="text"
-              minLength="1"
-              maxLength="256"
-          />
+    <FormBuilder
+      onBuild={(el) => setFormBuilder(el)}
+      isView={isView || loading}
+      onSave={onSave}
+      back={backUrl}
+      translations={translations}
+      translationFields={translationFields}
+      alertMessage={"Incomplete data"}
+      isValid={false}
+      rules={validationRules}
+      validationMessages={validationMessages}
+    >
+      <FormHorizontal>
+        <FormInputControl
+          label="Hotel Amenity Category Name"
+          labelRequired="label-required"
+          value={form.hotel_amenity_category_name}
+          name="hotel_amenity_category_name"
+          onChange={(e) =>
+            setForm({ ...form, hotel_amenity_category_name: e.target.value })
+          }
+          disabled={isView || loading}
+          type="text"
+          minLength="1"
+          maxLength="256"
+        />
 
-          <FormInputWrapper
-              label="Is Default"
-              hint="Set is default"
-          >
-            <div className="form-check form-check-inline">
-              <input
-                  className="form-check-input"
-                  type="radio"
-                  name="is_default"
-                  id="ha-1"
-                  value={true}
-                  disabled={isView || loading}
-                  checked={form.is_default}
-                  onChange={(e) =>
-                      setForm({
-                        ...form,
-                        is_default: true,
-                      })
-                  }
-              />
-              <label className="form-check-label" htmlFor="ha-1">
-                Yes
-              </label>
-            </div>
-            <div className="form-check form-check-inline">
-              <input
-                  className="form-check-input"
-                  type="radio"
-                  name="is_default"
-                  id="ha-2"
-                  value={false}
-                  disabled={isView || loading}
-                  checked={!form.is_default}
-                  onChange={(e) =>
-                      setForm({
-                        ...form,
-                        is_default: false,
-                      })
-                  }
-              />
-              <label className="form-check-label" htmlFor="ha-2">
-                No
-              </label>
-            </div>
-          </FormInputWrapper>
-          <FormInputControl
-              label="Description"
-              value={form.description}
-              name="description"
-              onChange={(e) => setForm({...form, description: e.target.value})}
+        <FormInputWrapper label="Is Default" hint="Set is default">
+          <div className="form-check form-check-inline">
+            <input
+              className="form-check-input"
+              type="radio"
+              name="is_default"
+              id="ha-1"
+              value={true}
               disabled={isView || loading}
-              type="textarea"
-              minLength="1"
-              maxLength="4000"
-          />
-          <FormInputControl
-            label="Hotel Amenity Category Icon Image"
-            type="image"
-            labelRequired="label-required"
-            name="hotel_amenity_category_asset"
-            onChange={doUpload}
-            disabled={isView}
-            accept=".png,.jpg,.jpeg"
-            url={form.hotel_amenity_category_asset.multimedia_description.url}
-            style={{maxWidth: 300, marginTop: 12}}
-          />
-        </FormHorizontal>
-      </FormBuilder>
+              checked={form.is_default}
+              onChange={(e) =>
+                setForm({
+                  ...form,
+                  is_default: true,
+                })
+              }
+            />
+            <label className="form-check-label" htmlFor="ha-1">
+              Yes
+            </label>
+          </div>
+          <div className="form-check form-check-inline">
+            <input
+              className="form-check-input"
+              type="radio"
+              name="is_default"
+              id="ha-2"
+              value={false}
+              disabled={isView || loading}
+              checked={!form.is_default}
+              onChange={(e) =>
+                setForm({
+                  ...form,
+                  is_default: false,
+                })
+              }
+            />
+            <label className="form-check-label" htmlFor="ha-2">
+              No
+            </label>
+          </div>
+        </FormInputWrapper>
+        <FormInputControl
+          label="Description"
+          value={form.description}
+          name="description"
+          onChange={(e) => setForm({ ...form, description: e.target.value })}
+          disabled={isView || loading}
+          type="textarea"
+          minLength="1"
+          maxLength="4000"
+        />
+        <FormInputControl
+          label="Hotel Amenity Category Icon Image"
+          type="image"
+          labelRequired="label-required"
+          name="hotel_amenity_category_asset"
+          onChange={doUpload}
+          disabled={isView}
+          accept=".png,.jpg,.jpeg"
+          url={form.hotel_amenity_category_asset.multimedia_description.url}
+          style={{ maxWidth: 300, marginTop: 12 }}
+        />
+      </FormHorizontal>
+    </FormBuilder>
   )
 }
 

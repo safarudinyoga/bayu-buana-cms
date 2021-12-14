@@ -1,5 +1,5 @@
-import {withRouter} from "react-router"
-import React, {useEffect, useState} from "react"
+import { withRouter } from "react-router"
+import React, { useEffect, useState } from "react"
 import Api from "config/api"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
@@ -7,11 +7,10 @@ import FormBuilder from "components/form/builder"
 import useQuery from "lib/query"
 import env from "../../config/environment"
 import $ from "jquery"
-import {useDispatch} from "react-redux"
+import { useDispatch } from "react-redux"
 import { setAlert, setUIParams } from "redux/ui-store"
 const endpoint = "/master/destination-groups"
 const backUrl = "/master/destination-groups"
-
 
 function DestinationGroupForm(props) {
   let dispatch = useDispatch()
@@ -38,22 +37,22 @@ function DestinationGroupForm(props) {
       required: true,
       minlength: 1,
       maxlength: 36,
-      checkCode: formId == null,
-      noSpace : true,
-      number:true
+      checkCode: true,
+      noSpace: true,
+      number: true,
     },
     destination_group_name: {
       required: true,
       minlength: 1,
       maxlength: 256,
-      checkName: formId == null,
-      noSpace:true
+      checkName: true,
+      noSpace: true,
     },
   }
   const validationMessages = {
     destination_group_code: {
       required: "Destination Group Code is required.",
-      number : "Code format is invalid"
+      number: "Code format is invalid",
     },
     destination_group_name: {
       required: "Destination Group Name is required.",
@@ -92,57 +91,112 @@ function DestinationGroupForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
-      } catch (e) { }
+        if (res.data) {
+          let currentCode = res.data.cabin_type_code
+          let currentName = res.data.cabin_type_name
+
+          $.validator.addMethod(
+            "checkName",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/destination-groups?filters=["destination_group_name","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if (currentName === element.value) {
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+
+              return req
+            },
+            "Destination Group Name already exists",
+          )
+          $.validator.addMethod(
+            "checkCode",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/destination-groups?filters=["destination_group_code","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if (currentCode === element.value) {
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+
+              return req
+            },
+            "Destination Group Code already exists",
+          )
+        }
+      } catch (e) {}
 
       try {
         let res = await api.get(endpoint + "/" + formId + "/translations", {
           size: 50,
         })
         setTranslations(res.data.items)
-      } catch (e) { }
+      } catch (e) {}
       setLoading(false)
-    } else{
+    } else {
       $.validator.addMethod(
-          "checkName",
-          function (value, element) {
-            var req = false
-            $.ajax({
-              type: "GET",
-              async: false,
-              url: `${env.API_URL}/master/destination-groups?filters=["destination_group_name","=","${element.value}"]`,
-              success: function (res) {
-                if (res.items.length !== 0) {
-                  req = false
-                } else {
-                  req = true
-                }
-              },
-            })
+        "checkName",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/destination-groups?filters=["destination_group_name","=","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
 
-            return req
-          },
-          "Destination Group Name already exists",
+          return req
+        },
+        "Destination Group Name already exists",
       )
       $.validator.addMethod(
-          "checkCode",
-          function (value, element) {
-            var req = false
-            $.ajax({
-              type: "GET",
-              async: false,
-              url: `${env.API_URL}/master/destination-groups?filters=["destination_group_code","=","${element.value}"]`,
-              success: function (res) {
-                if (res.items.length !== 0) {
-                  req = false
-                } else {
-                  req = true
-                }
-              },
-            })
+        "checkCode",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/destination-groups?filters=["destination_group_code","=","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
 
-            return req
-          },
-          "Destination Group Code already exists",
+          return req
+        },
+        "Destination Group Code already exists",
       )
     }
   }, [])
@@ -174,19 +228,19 @@ function DestinationGroupForm(props) {
       }
     } catch (e) {
       dispatch(
-          setAlert({
-            message: `Failed to ${formId ? "update" : "save"} this record.`,
-          }),
+        setAlert({
+          message: `Failed to ${formId ? "update" : "save"} this record.`,
+        }),
       )
     } finally {
       setLoading(false)
       props.history.push(backUrl)
       dispatch(
-          setAlert({
-            message: `Record ${
-                form.destination_group_name
-            } has been successfully ${formId ? "updated" : "saved"}.`,
-          }),
+        setAlert({
+          message: `Record ${
+            form.destination_group_name
+          } has been successfully ${formId ? "updated" : "saved"}.`,
+        }),
       )
     }
   }
@@ -211,7 +265,7 @@ function DestinationGroupForm(props) {
           value={form.destination_group_name}
           name="destination_group_name"
           onChange={(e) =>
-            setForm({...form, destination_group_name: e.target.value})
+            setForm({ ...form, destination_group_name: e.target.value })
           }
           disabled={isView || loading}
           type="text"
@@ -226,15 +280,15 @@ function DestinationGroupForm(props) {
           labelRequired="label-required"
           value={form.destination_group_code}
           name="destination_group_code"
-          cl={{md:"12"}}
+          cl={{ md: "12" }}
           cr="12"
           onChange={(e) =>
-            setForm({...form, destination_group_code: e.target.value})
+            setForm({ ...form, destination_group_code: e.target.value })
           }
           disabled={isView || loading}
           type="text"
           minLength="0"
-          maxLength="36"
+          maxLength="5"
           hint="Destination Group Code maximum 36 characters"
         />
       </FormHorizontal>

@@ -52,19 +52,19 @@ function CurrencyForm(props) {
       required: true,
       minlength: 3,
       maxlength: 3,
-      checkCode: formId == null,
+      checkCode: true,
     },
     numeric_code: {
       required: true,
       minlength: 3,
       maxlength: 3,
-      checkNumeric: formId == null,
+      checkNumeric: true,
     },
     currency_name: {
       required: true,
       minlength: 1,
       maxlength: 64,
-      checkName: formId == null,
+      checkName: true,
     },
     currency_symbol: {
       required: true,
@@ -137,6 +137,88 @@ function CurrencyForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
+
+        if (res.data) {
+          let currentCode = res.data.currency_code
+          let currentNumeric = res.data.numeric_code
+          let currentName = res.data.currency_name
+
+          $.validator.addMethod(
+            "checkName",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/currencies?filters=["currency_name","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if(currentName === element.value){
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+    
+              return req
+            },
+            "Currency Name already exists",
+          )
+          $.validator.addMethod(
+            "checkCode",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/currencies?filters=["currency_code","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if(currentCode === element.value){
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+    
+              return req
+            },
+            "Currency Code already exists",
+          )
+          $.validator.addMethod(
+            "checkNumeric",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/currencies?filters=["numeric_code","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if(currentNumeric === element.value){
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+    
+              return req
+            },
+            "Numeric Code already exists",
+          )
+        }
       } catch (e) { }
 
       try {

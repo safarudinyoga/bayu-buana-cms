@@ -39,15 +39,15 @@ function CabinTypeForm(props) {
       required: true,
       minlength: 1,
       maxlength: 36,
-      checkCode: formId == null,
+      checkCode: true,
       noSpace: true,
-      number:true
+      number: true,
     },
     cabin_type_name: {
       required: true,
       minlength: 1,
       maxlength: 256,
-      checkName: formId == null,
+      checkName: true,
       noSpace: true,
     },
   }
@@ -55,7 +55,7 @@ function CabinTypeForm(props) {
   const validationMessages = {
     cabin_type_code: {
       required: "Cabin Type Code is required.",
-      number : "Code format is invalid"
+      number: "Code format is invalid",
     },
     cabin_type_name: {
       required: "Cabin Type Name is required.",
@@ -93,6 +93,62 @@ function CabinTypeForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
+        if (res.data) {
+          let currentCode = res.data.cabin_type_code
+          let currentName = res.data.cabin_type_name
+
+          $.validator.addMethod(
+            "checkCode",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/cabin-types?filters=["cabin_type_code","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if (currentCode === element.value) {
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+
+              return req
+            },
+            "Cabin Type Code already exists",
+          )
+
+          $.validator.addMethod(
+            "checkName",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/cabin-types?filters=["cabin_type_name","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if (currentName === element.value) {
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+
+              return req
+            },
+            "Cabin Type Name already exists",
+          )
+        }
       } catch (e) {}
 
       try {
@@ -221,7 +277,7 @@ function CabinTypeForm(props) {
           labelRequired="label-required"
           value={form.cabin_type_code}
           name="cabin_type_code"
-          cl={{md:"12"}}
+          cl={{ md: "12" }}
           cr="12"
           onChange={(e) =>
             setForm({ ...form, cabin_type_code: e.target.value })
