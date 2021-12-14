@@ -9,7 +9,7 @@ export default class FormInputWrapper extends Component {
         {this.props.label}
         {this.props.hint ? <i className="fa fa-info-circle hint" title={this.props.hint}></i>: ""}
         </span>
-        <div className={`form-control-wrapper col-sm-${cl?.sm ? 12 - cl.sm : 6} col-md-${cl?.md ? 12 - cl.md : 7} col-lg-${cl?.lg ? 12 - cl.lg : 8}`}>{this.props.children}</div>
+        <div className={`form-control-wrapper col-sm-${cl?.sm ? 12 - cl.sm : 6} col-md-${cl?.md||7} col-lg-${cl?.lg ? 12 - cl.lg : 8}`}>{this.props.children}</div>
       </div>
     )
   }

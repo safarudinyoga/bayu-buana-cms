@@ -1,5 +1,5 @@
 .input-group {
-  width: 250px;
+  width: 100;
 }
 
 .input-group-with-text input.form-control {
@@ -88,7 +88,7 @@ button.advanced-options-btn:active {
   font-weight:500;
   color: #333333;
 }
-@media only screen and (max-width: 768px) {
+@media (max-width: 768px) {
   .input-group {
     width: 100%;
   }

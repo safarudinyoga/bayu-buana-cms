@@ -140,8 +140,8 @@ class TableHeader extends Component {
     return (
       <div className="container-fluid pl-0">
         <div className="row">
-          <div className="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 order-2 order-sm-1 mt-2">
-            <div className="input-group input-group-with-text float-md-left">
+          <div className="col-xs-12 col-sm-12 col-md-4 col-lg-3 col-xl-3">
+            <div className="input-group input-group-with-text">
               <input
                 value={this.state.searchValue}
                 className="form-control"
@@ -149,18 +149,22 @@ class TableHeader extends Component {
                 onChange={this.handleSearch.bind(this)}
                 maxLength={256}
                 minLength={1}
-              />
+              />              
               <div className="input-group-append">
                 <span className="input-group-text">
                   <i className="fas fa-search"></i>
-                </span>
-              </div>
+                </span> 
+              </div>             
             </div>
+         </div> 
+         
+            
+          <div className="col-xs-12 col-sm-12 col-md-4 col-lg-3 col-xl-3">  
             {this.state.showAdvancedOptions && (
               <button
                 onClick={this.toggleFilter}
                 type="button"
-                className="btn btn-link advanced-options-btn float-left float-right-sm pr-0"
+                className="btn btn-link advanced-options-btn float-right float-md-left"
               >
                 <span className="mr-2">Advanced Options</span>{" "}
                 {this.state.showFilter ? (
@@ -169,10 +173,10 @@ class TableHeader extends Component {
                   <img src={upIcon} alt="up" />
                 )}
               </button>
-            )}
+            )}           
           </div>
 
-          <div className="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 order-sm-2 mt-2">
+          <div className="col-xs-12 col-sm-12 col-md-4 col-lg-6 col-xl-6 mb-2 order-first order-md-last">            
             <OverlayTrigger
               placement="top"
               overlay={<Tooltip>Click to create</Tooltip>}
@@ -217,7 +221,7 @@ class TableHeader extends Component {
                 />
               </Link>
             </OverlayTrigger>
-          </div>
+          </div>         
         </div>
         <div
           className={
