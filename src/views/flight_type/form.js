@@ -35,17 +35,20 @@ function FlightTypeForm(props) {
   ]
 
   const validationRules = {
-    flight_type_code: {
+    flight_type_code: {  
       required: true,
       minlength: 1,
       maxlength: 36,
-      checkName: formId == null
+      checkCode: true,
+      noSpace: true,
+      number: true,
     },
     flight_type_name: {
       required: true,
       minlength: 1,
       maxlength: 256,
-      checkName2: formId == null
+      checkName: true,
+      noSpace: true,
     },
   }
 
@@ -64,8 +67,7 @@ function FlightTypeForm(props) {
   }
 
   useEffect(async () => {
-    let api = new Api()
-    let formId = props.match.params.id
+    let api = new Api()    
 
     let docTitle = "Edit Flight Type"
     if (!formId) {
@@ -95,6 +97,62 @@ function FlightTypeForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
+        if (res.data) {
+          let currentCode = res.data.flight_type_code
+          let currentName = res.data.flight_type_name
+
+          $.validator.addMethod(
+            "checkCode",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/flight-types?filters=["flight_type_code","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if (currentCode === element.value) {
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+
+              return req
+            },
+            "Flight Type Code already exists",
+          )
+
+          $.validator.addMethod(
+            "checkName",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/flight-types?filters=["flight_type_name","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if (currentName === element.value) {
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+
+              return req
+            },
+            "Flight Type Name already exists",
+          )
+        }
       } catch (e) { }
 
       try {

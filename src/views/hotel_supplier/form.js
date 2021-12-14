@@ -42,13 +42,16 @@ function HotelSupplierForm(props) {
       required: true,
       minlength: 1,
       maxlength: 36,
-      checkName: formId == null
+      checkCode: true,
+      noSpace: true,
+      number: true,
     },
     hotel_supplier_name: {
       required: true,
       minlength: 1,
       maxlength: 256,
-      checkName2: formId == null
+      checkName: true,
+      noSpace: true,
     },
     supplier_type_id: {},
   }
@@ -68,8 +71,7 @@ function HotelSupplierForm(props) {
   }
 
   useEffect(async () => {
-    let api = new Api()
-    let formId = props.match.params.id
+    let api = new Api()    
 
     let docTitle = "Edit Hotel Supplier"
     if (!formId) {
@@ -98,9 +100,62 @@ function HotelSupplierForm(props) {
     if (formId) {
       try {
         let res = await api.get(endpoint + "/" + formId)
-        setForm({...res.data, loaded: true});
-        if (res.data.supplier_type) {
-          setSupplierTypeData([{...res.data.supplier_type, text: res.data.supplier_type.supplier_type_name}]);
+        setForm(res.data);
+        if (res.data) {
+          let currentCode = res.data.cabin_type_code
+          let currentName = res.data.cabin_type_name
+
+          $.validator.addMethod(
+            "checkCode",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/hotel-suppliers?filters=["hotel_supplier_code","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if (currentCode === element.value) {
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+
+              return req
+            },
+            "Hotel Supplier Code already exists",
+          )
+
+          $.validator.addMethod(
+            "checkName",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/hotel-suppliers?filters=["hotel_supplier_name","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if (currentName === element.value) {
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+
+              return req
+            },
+            "Hotel Supplier Name already exists",
+          )
         }
 
       } catch (e) { }

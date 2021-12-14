@@ -30,3 +30,12 @@
   color: #333333;
   margin-bottom: 40px;
 }
+@media (max-width: 768px) {
+  .main-header-title {    
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 24px;
+    font-weight: 600;
+    color: #333333;
+    margin-bottom: 12px;
+  } 
+}

@@ -3,6 +3,7 @@ import "./navbar.css"
 import avatar2 from "admin-lte/dist/img/user8-128x128.jpg"
 import infoIcon from "assets/icons/information.svg"
 import notifIcon from "assets/icons/notification.svg"
+import menuIcon from "assets/icons/navigation/menu.svg"
 
 export default class Navbar extends Component {
   render() {
@@ -16,12 +17,16 @@ export default class Navbar extends Component {
               href="/"
               role="button"
             >
-              <i className="fas fa-bars"></i>
+              <img
+                src={menuIcon}
+                alt="info icon"
+                className="navbar-menu"
+              />
             </a>
           </li>
           <li className="nav-item">
               <a
-              className="nav-link pl-0 pl-sm-3"
+              className="nav-link"
               href="/"
             >
                 <img src="/img/logo.png" className="navbar-img" alt="logo"/>
