@@ -295,9 +295,7 @@ function AirportForm(props) {
       if(!form.icao_code) {
         form.icao_code = null
       }
-
-      console.log(form);
-
+      
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
       for (let i in translated) {
@@ -313,7 +311,7 @@ function AirportForm(props) {
       )
     } finally {
       setLoading(false)
-      // props.history.push(backUrl)
+      props.history.push(backUrl)
       dispatch(
         setAlert({
           message: `Record ${form.airport_code} - ${
