@@ -99,6 +99,7 @@ export default function DestinationTable() {
         visible: false,
       },
     ],
+    emptyTable: "No destination found",
   })
 
   return <BBDataTable {...params} extraFilter={extraFilter} onReset={onReset} />

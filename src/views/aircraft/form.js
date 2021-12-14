@@ -42,7 +42,7 @@ function AircraftForm(props) {
       required: true,
       minlength: 1,
       maxlength: 64,
-      checkName: formId == null,
+      checkName: true,
     },
     model: {
       required: true,
@@ -53,13 +53,13 @@ function AircraftForm(props) {
       required: true,
       minlength: 4,
       maxlength: 4,
-      checkIcao: formId == null,
+      checkIcao: true,
     },
     aircraft_code: {
       required: true,
       minlength: 4,
       maxlength: 4,
-      checkCode: formId == null,
+      checkCode: true,
     },
   }
 
@@ -110,6 +110,88 @@ function AircraftForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
+
+        if (res.data) {
+          let currentCode = res.data.aircraft_code
+          let currentIcao = res.data.icao_code
+          let currentName = res.data.aircraft_name
+
+          $.validator.addMethod(
+            "checkName",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/aircraft?filters=["aircraft_name","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if(currentName === element.value){
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+    
+              return req
+            },
+            "Aircraft Name already exists",
+          )
+          $.validator.addMethod(
+            "checkIcao",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/aircraft?filters=["icao_code","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if(currentIcao === element.value){
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+    
+              return req
+            },
+            "Icao Code already exists",
+          )
+          $.validator.addMethod(
+            "checkCode",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/aircraft?filters=["aircraft_code","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if(currentCode === element.value){
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+              return req
+            },
+            "Aircraft Code already exists",
+          )
+        }
+
       } catch (e) { }
 
       try {
