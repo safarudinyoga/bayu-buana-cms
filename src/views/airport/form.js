@@ -153,7 +153,7 @@ function AirportForm(props) {
                 url: `${env.API_URL}/master/airports?filters=["icao_code","=","${element.value}"]`,
                 success: function (res) {
                   if (res.items.length !== 0) {
-                    if(currentIcao === element.value){
+                    if(currentIcao === element.value || !element.value){
                       req = true
                     } else {
                       req = false
@@ -236,7 +236,12 @@ function AirportForm(props) {
             url: `${env.API_URL}/master/airports?filters=["icao_code","=","${element.value}"]`,
             success: function (res) {
               if (res.items.length !== 0) {
-                req = false
+                if(!element.value){
+                  req = true
+                } else {
+                  req = false
+                }
+                
               } else {
                 req = true
               }
@@ -287,6 +292,10 @@ function AirportForm(props) {
         form.city_id = null
       }
 
+      if(!form.icao_code) {
+        form.icao_code = null
+      }
+      
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
       for (let i in translated) {
