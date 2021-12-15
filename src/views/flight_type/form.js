@@ -164,7 +164,7 @@ function FlightTypeForm(props) {
       setLoading(false)
     } else {
       $.validator.addMethod(
-        "checkName",
+        "checkCode",
         function (value, element) {
           var req = false
           $.ajax({
@@ -186,7 +186,7 @@ function FlightTypeForm(props) {
       )
 
       $.validator.addMethod(
-        "checkName2",
+        "checkName",
         function (value, element) {
           var req = false
           $.ajax({
