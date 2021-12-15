@@ -2,6 +2,13 @@
   padding-top: 18px;
   padding-bottom: 24px;
 }
+@media (max-width: 768px) {
+  .main-header {
+    padding-top: 8px;
+    padding-bottom: 12px;
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2)
+  }
+}
 
 .img-avatar {
   width: 40px;
@@ -27,6 +34,22 @@
   display: inline-block;
   margin-top: -7px;
 }
+@media (max-width: 765px) {
+  .navbar-img {
+    width: 120px;
+    height: 30px;    
+  }
+}
 .navbar-icon {
   width: 16px;
+}
+.navbar-menu {   
+  width: 32px;
+  height: 30px;  
+}
+@media (max-width: 765px) {
+  .navbar-menu {   
+    width: 24px;
+    height: 24px;  
+  }
 }
