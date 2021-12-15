@@ -100,7 +100,7 @@ function RatingTypeForm(props) {
 
     dispatch(
       setUIParams({
-        title: docTitle,
+        title: isView ? "Rating Type Details" : docTitle,
         breadcrumbs: [
           {
             text: "Master Data Management",

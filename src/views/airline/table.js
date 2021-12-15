@@ -84,6 +84,7 @@ export default function AirlineTable() {
         visible: false,
       },
     ],
+    recordName: "airline_name",
   }
   return <BBDataTable {...params} />
 }
