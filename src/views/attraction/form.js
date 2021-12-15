@@ -136,7 +136,7 @@ function AttractionForm(props) {
     },
   ]
 
-  const validationRules = {
+  const [validationRules, setValidationRules] = useState({
     attraction_name: {
       required: true,
       minlength: 1,
@@ -204,16 +204,8 @@ function AttractionForm(props) {
       minlength: 1,
       maxlength: 4000,
     },
-    attraction_asset_desktop: {
-      required: true
-    },
-    attraction_asset_mobile: {
-      required: true
-    },
-    attraction_asset_tablet: {
-      required: true
-    },
-  }
+
+  });
 
   const validationMessages = {
     attraction_name: {
@@ -399,6 +391,19 @@ function AttractionForm(props) {
       } catch (e) { }
       setLoading(false)
     } else {
+      setValidationRules({
+        ...validationRules,
+        attraction_asset_desktop: {
+          required: true
+        },
+        attraction_asset_mobile: {
+          required: true
+        },
+        attraction_asset_tablet: {
+          required: true
+        },
+      })
+
       $.validator.addMethod(
         "checkName",
         function (value, element) {
@@ -594,7 +599,7 @@ function AttractionForm(props) {
             disabled={isView || loading}
             type="textarea"
             minLength="1"
-            maxLength="256"
+            maxLength="512"
           />
 
           <FormInputSelectAjax
