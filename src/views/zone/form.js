@@ -294,6 +294,7 @@ function ZoneForm(props) {
         />
         <FormInputSelectAjax
           label="Destination"
+          labelRequired="label-required"
           value={form.destination_id}
           name="destination"
           endpoint="/master/destinations"
@@ -329,7 +330,7 @@ function ZoneForm(props) {
           cl={{md:"12"}}
           cr="12"
           disabled={isView || loading}
-          type="number"
+          type="text"
           label="Zone Code"
           labelRequired="label-required"
           minLength="1"

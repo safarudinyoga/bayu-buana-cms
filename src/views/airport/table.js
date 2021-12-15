@@ -63,6 +63,7 @@ export default function AirportTable() {
         visible: false,
       },
     ],
+    recordName: "airport_name",
   })
 
   useEffect(() => {
