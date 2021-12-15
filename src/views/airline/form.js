@@ -94,7 +94,7 @@ function AirlineForm(props) {
 
     dispatch(
       setUIParams({
-        title: docTitle,
+        title: isView ? "Airline Details" : docTitle,
         breadcrumbs: [
           {
             text: "Master Data Management",

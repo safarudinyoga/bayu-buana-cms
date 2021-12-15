@@ -74,10 +74,10 @@ function DestinationForm(props) {
 
   const validationMessages = {
     destination_name: {
-      required: "Destinantion Name is required",
+      required: "Destination Name is required",
     },
     destination_code: {
-      required: "Destinantion Code is required",
+      required: "Destination Code is required",
     },
     country: {
       required: "Country is required",
@@ -100,7 +100,7 @@ function DestinationForm(props) {
 
     dispatch(
       setUIParams({
-        title: docTitle,
+        title: isView ? "Destination Details" : docTitle,
         breadcrumbs: [
           {
             text: "Master Data Management",
@@ -249,6 +249,15 @@ function DestinationForm(props) {
     setLoading(true)
     let api = new Api()
     try {
+      if (!form.country_id) {
+        form.country_id = null
+      }
+      if (!form.destination_city_id) {
+        form.destination_city_id = null
+      }
+      if (!form.description) {
+        form.description = null
+      }
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
       for (let i in translated) {

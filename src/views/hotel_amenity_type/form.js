@@ -60,6 +60,9 @@ function HotelAmenityForm(props) {
       maxlength: 256,
       checkName: formId == null,
     },
+    hotel_amenity_type_asset: {
+      required: false,
+    },
   }
 
   const validationMessages = {
@@ -68,6 +71,10 @@ function HotelAmenityForm(props) {
     },
     hotel_amenity_type_code: {
       required: "Hotel Amenity Type Code is required",
+    },
+    hotel_amenity_type_asset: {
+      required: "Hotel Amenity Type Image is required",
+      extension: "png|jpg|jpeg",
     },
   }
 
@@ -84,7 +91,7 @@ function HotelAmenityForm(props) {
 
     dispatch(
       setUIParams({
-        title: docTitle,
+        title: isView ? "Hotel Amenity Type Details" : docTitle,
         breadcrumbs: [
           {
             text: "Master Data Management",
@@ -280,8 +287,10 @@ function HotelAmenityForm(props) {
         <FormInputControl
           label="Hotel Amenity Type Icon Image"
           type="image"
+          name="hotel_amenity_type_asset"
           onChange={doUpload}
           disabled={isView}
+          accept=".png,.jpg,.jpeg"
           url={form.hotel_amenity_type_asset.multimedia_description.url}
           style={{maxWidth: 300, marginTop: 12}}
         />

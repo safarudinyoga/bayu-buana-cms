@@ -118,7 +118,7 @@ function CurrencyForm(props) {
 
     dispatch(
       setUIParams({
-        title: docTitle,
+        title: isView ? "Currency Details" : docTitle,
         breadcrumbs: [
           {
             text: "Master Data Management",

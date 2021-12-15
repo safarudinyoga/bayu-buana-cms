@@ -71,7 +71,7 @@ function RegionForm(props) {
 
     dispatch(
       setUIParams({
-        title: docTitle,
+        title: isView ? "Region Details" : docTitle,
         breadcrumbs: [
           {
             text: "Master Data Management",

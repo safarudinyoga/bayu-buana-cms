@@ -63,7 +63,7 @@ export default function DestinationTable() {
   }
 
   let [params, setParams] = useState({
-    title: "Zones",
+    title: "Destinations",
     baseRoute: "/master/destinations/form",
     endpoint: "/master/destinations",
     deleteEndpoint: "/master/batch-actions/delete/destinations",
@@ -100,6 +100,7 @@ export default function DestinationTable() {
       },
     ],
     emptyTable: "No destination found",
+    recordName: "destination_name",
   })
 
   return <BBDataTable {...params} extraFilter={extraFilter} onReset={onReset} />
