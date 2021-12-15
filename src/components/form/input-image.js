@@ -56,6 +56,8 @@ export default class FormInputFile extends Component {
             name={name}
             disabled={disabled}
             accept={acceptFormat}
+            data-rule-required="true"
+            data-msg-accept="Only .png, .jpg, .jpeg file supported"
           />
           <img src={url || NoImage} className="img-fluid img-up" alt="up-img" />
         </label>
