@@ -543,7 +543,6 @@ class BBDataTable extends Component {
         })
       } catch (e) {}
     }
-
     setTimeout(() => initialize(), 100)
   }
 
@@ -590,17 +589,28 @@ class BBDataTable extends Component {
 
   onPrint() {
     try {
-      this.dt.buttons(".buttons-print").trigger()
+      let prevLen = this.dt.page.len();
+      this.dt.page.len(-1).draw();
+      setTimeout(() => {
+        this.dt.buttons(".buttons-print").trigger()
+        this.dt.page.len(prevLen).draw();
+      }, 500)
+
     } catch (e) {}
   }
 
   onDownload() {
     try {
-      this.dt
-        .buttons(
-          this.props.btnDownload ? this.prop.btnDownload : ".buttons-excel",
-        )
-        .trigger()
+      let prevLen = this.dt.page.len();
+      this.dt.page.len(-1).draw();
+      setTimeout(() => {
+        this.dt
+          .buttons(
+            this.props.btnDownload ? this.prop.btnDownload : ".buttons-excel",
+          )
+          .trigger()
+        this.dt.page.len(prevLen).draw();
+      }, 500)
     } catch (e) {
       console.log(e.message)
     }
