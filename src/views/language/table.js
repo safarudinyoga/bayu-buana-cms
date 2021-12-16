@@ -68,8 +68,7 @@ export default function LanguageTable() {
         visible: false,
       },
     ],
-    recordName: "language_code",
-    recordName2: "language_name",
+    recordName: ["language_code", "language_name"],
   }
   return <BBDataTable {...params} />
 }

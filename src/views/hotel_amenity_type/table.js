@@ -69,8 +69,7 @@ export default function HotelAmenityTable() {
         visible: false,
       },
     ],
-    recordName: "hotel_amenity_type_code",
-    recordName2: "hotel_amenity_type_name",
+    recordName: ["hotel_amenity_type_code", "hotel_amenity_type_name"],
   }
   return <BBDataTable {...params} />
 }

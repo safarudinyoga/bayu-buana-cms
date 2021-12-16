@@ -82,11 +82,8 @@ class BBDataTable extends Component {
       }
     } catch (e) {}
 
-    // const allowed = Array.isArray(this.props.recordName) ? [...this.props.recordName] : [this.props.recordName]
     const allowed = [this.props.recordName]
-    const allowed2 = [this.props.recordName2]
-
-    // console.log(allowed, "allowed")
+    const { recordName } = this.props
     columns.push({
       searchable: false,
       orderable: false,
@@ -103,6 +100,16 @@ class BBDataTable extends Component {
             })
           }
         }
+
+        const cvtRecordName = recordName
+          ? Array.isArray(recordName)
+            ? recordName
+                .map((v) => row[v])
+                .filter((v) => v)
+                .join(" - ")
+            : row[recordName]
+          : ""
+
         var x = window.matchMedia("(max-width: 768px)")
         tooltipCust(x)
         x.addListener(tooltipCust)
@@ -112,21 +119,6 @@ class BBDataTable extends Component {
             obj[key] = row[key]
             return obj
           }, {})
-
-        const filteredRecordName2 = Object.keys(row)
-          .filter((key) => allowed2.includes(key))
-          .reduce((obj, key) => {
-            obj[key] = row[key]
-            return obj
-          }, {})
-
-        const filteredName = () => {
-          if (allowed2[0] !== undefined) {
-            return `${filteredRecordName[allowed]} - ${filteredRecordName2[allowed2]}`
-          } else {
-            return filteredRecordName[allowed]
-          }
-        }
 
         return (
           '<a href="javascript:void(0);" data-toggle="tooltip" class="table-row-action-item" data-action="edit" data-id="' +
@@ -142,7 +134,7 @@ class BBDataTable extends Component {
           '<a href="javascript:void(0);" data-toggle="tooltip" class="table-row-action-item" data-action="delete" data-id="' +
           row.id +
           '" data-name="' +
-          filteredName() +
+          cvtRecordName +
           '" title="Click to delete"><img src="' +
           removeIcon +
           '" /></a>'

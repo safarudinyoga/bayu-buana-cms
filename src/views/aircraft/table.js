@@ -52,8 +52,7 @@ export default function AircraftTable() {
         visible: false,
       },
     ],
-    recordName: "aircraft_code",
-    recordName2: "aircraft_name",
+    recordName: ["aircraft_code", "aircraft_name"],
   }
   return <BBDataTable {...params} />
 }

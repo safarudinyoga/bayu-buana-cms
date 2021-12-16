@@ -53,7 +53,7 @@ export default function DestinationGroupTable() {
       // },
     ],
     emptyTable: "No Destination Groups found",
-    recordName: "destination_group_name",
+    recordName: ["destination_group_code", "destination_group_name"],
   }
   return <BBDataTable {...params} />
 }

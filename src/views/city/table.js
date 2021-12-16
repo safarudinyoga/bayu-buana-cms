@@ -96,8 +96,7 @@ export default function CityTable() {
         visible: false,
       },
     ],
-    recordName: "city_code",
-    recordName2: "city_name",
+    recordName: ["city_code", "city_name"],
   })
 
   return <BBDataTable {...params} extraFilter={extraFilter} onReset={onReset} />

@@ -53,8 +53,7 @@ export default function AgeQualifyingTypeTable() {
         visible: false,
       },
     ],
-    recordName: "age_qualifying_type_code",
-    recordName2: "age_qualifying_type_name",
+    recordName: ["age_qualifying_type_code", "age_qualifying_type_name"],
   }
   return <BBDataTable {...params} />
 }

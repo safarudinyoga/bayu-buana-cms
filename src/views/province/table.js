@@ -95,8 +95,7 @@ export default function ProvinceTable() {
         visible: false,
       },
     ],
-    recordName: "state_province_code",
-    recordName2: "state_province_name",
+    recordName: ["state_province_code", "state_province_name"],
   })
 
   return <BBDataTable {...params} extraFilter={extraFilter} onReset={onReset} />

@@ -52,8 +52,7 @@ export default function RegionTable() {
         visible: false,
       },
     ],
-    recordName: "region_code",
-    recordName2: "region_name",
+    recordName: ["region_code", "region_name"],
   }
   return <BBDataTable {...params} />
 }
