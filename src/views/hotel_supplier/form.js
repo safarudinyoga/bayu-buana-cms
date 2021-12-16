@@ -312,7 +312,7 @@ function HotelSupplierForm(props) {
             setForm({...form, hotel_supplier_code: e.target.value})
           }
           disabled={isView || loading}
-          type="text"
+          type="number"
           minLength="1"
           maxLength="36"
           hint="Hotel Supplier Code maximum 36 characters"
