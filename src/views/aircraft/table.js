@@ -38,7 +38,7 @@ export default function AircraftTable() {
       {
         title: "Aircraft Name",
         data: "aircraft_name",
-        render: renderColumn("aircraft", "aircraft_name")
+        render: renderColumn("aircraft", "aircraft_name"),
       },
       {
         searchable: false,
@@ -52,7 +52,8 @@ export default function AircraftTable() {
         visible: false,
       },
     ],
-    recordName: "aircraft_name",
+    recordName: "aircraft_code",
+    recordName2: "aircraft_name",
   }
   return <BBDataTable {...params} />
 }

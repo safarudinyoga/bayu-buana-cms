@@ -8,16 +8,16 @@ import { renderColumn } from "lib/translation"
 const imageBase64 = (url) => {
   console.log(url)
   var xhr = new XMLHttpRequest()
-    xhr.open('GET', url)
-    xhr.responseType = 'blob'
-    xhr.onload = function () {
-      var reader = new FileReader();
-      reader.readAsDataURL(xhr.response);
-      reader.onloadend = function() {
-        var base64data = reader.result;     
-        console.log(base64data) 
-      }
+  xhr.open("GET", url)
+  xhr.responseType = "blob"
+  xhr.onload = function () {
+    var reader = new FileReader()
+    reader.readAsDataURL(xhr.response)
+    reader.onloadend = function () {
+      var base64data = reader.result
+      console.log(base64data)
     }
+  }
 }
 
 export default function AirlineTable() {
@@ -62,7 +62,7 @@ export default function AirlineTable() {
         orderable: false,
         render: (val, type) => {
           imageBase64(val) // testt convert image to base64
-          if (type === 'myExport') {
+          if (type === "myExport") {
             return val
           }
           if (val) {
@@ -84,7 +84,8 @@ export default function AirlineTable() {
         visible: false,
       },
     ],
-    recordName: "airline_name",
+    recordName: "airline_code",
+    recordName2: "airline_name",
   }
   return <BBDataTable {...params} />
 }

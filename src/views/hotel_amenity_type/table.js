@@ -47,7 +47,7 @@ export default function HotelAmenityTable() {
         searchable: false,
         orderable: false,
         render: (val, type) => {
-          if (type === 'myExport') {
+          if (type === "myExport") {
             return val
           }
           if (val) {
@@ -69,7 +69,8 @@ export default function HotelAmenityTable() {
         visible: false,
       },
     ],
-    recordName: "hotel_amenity_type_name",
+    recordName: "hotel_amenity_type_code",
+    recordName2: "hotel_amenity_type_name",
   }
   return <BBDataTable {...params} />
 }

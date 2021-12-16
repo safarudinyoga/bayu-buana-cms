@@ -1,9 +1,9 @@
 import BBDataTable from "components/table/bb-data-table"
 import rowStatus from "lib/row-status"
-import {renderColumn} from "lib/translation"
-import React, {useEffect} from "react"
-import {useDispatch} from "react-redux"
-import {setUIParams} from "redux/ui-store"
+import { renderColumn } from "lib/translation"
+import React, { useEffect } from "react"
+import { useDispatch } from "react-redux"
+import { setUIParams } from "redux/ui-store"
 
 export default function AgeQualifyingTypeTable() {
   let dispatch = useDispatch()
@@ -53,7 +53,8 @@ export default function AgeQualifyingTypeTable() {
         visible: false,
       },
     ],
-    recordName: "age_qualifying_type_name",
+    recordName: "age_qualifying_type_code",
+    recordName2: "age_qualifying_type_name",
   }
   return <BBDataTable {...params} />
 }

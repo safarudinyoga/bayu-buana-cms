@@ -46,7 +46,7 @@ export default function LanguageTable() {
         searchable: false,
         orderable: false,
         render: (val, type) => {
-          if (type === 'myExport') {
+          if (type === "myExport") {
             return val
           }
           if (val) {
@@ -68,7 +68,8 @@ export default function LanguageTable() {
         visible: false,
       },
     ],
-    recordName: "language_name",
+    recordName: "language_code",
+    recordName2: "language_name",
   }
   return <BBDataTable {...params} />
 }

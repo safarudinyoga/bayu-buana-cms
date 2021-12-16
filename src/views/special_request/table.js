@@ -52,7 +52,8 @@ export default function SpecialRequestTable() {
         visible: false,
       },
     ],
-    recordName: "special_request_name",
+    recordName: "special_request_code",
+    recordName2: "special_request_name",
   }
   return <BBDataTable {...params} />
 }

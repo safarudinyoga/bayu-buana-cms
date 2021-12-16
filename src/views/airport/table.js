@@ -63,11 +63,12 @@ export default function AirportTable() {
         visible: false,
       },
     ],
-    recordName: "airport_name",
+    recordName: "airport_code",
+    recordName2: "airport_name",
   })
 
   useEffect(() => {
-    console.log(params.filters);
+    console.log(params.filters)
   }, [params])
 
   const onFilterChangeCities = (e, values) => {
@@ -94,9 +95,9 @@ export default function AirportTable() {
       }
     }
     if (ids.length > 0) {
-      setParams({...params, filters: [["city.country_id", "in", ids]]})
+      setParams({ ...params, filters: [["city.country_id", "in", ids]] })
     } else {
-      setParams({...params, filters: []})
+      setParams({ ...params, filters: [] })
     }
     setSelectedCountries(values)
     setSelectedCountryIds(ids)
@@ -126,11 +127,11 @@ export default function AirportTable() {
   }
 
   const onReset = () => {
-      setParams({...params, filters: []})
-      setSelectedCities([])
-      setSelectedCityIds([])
-      setSelectedCountries([])
-      setSelectedCountryIds([])
+    setParams({ ...params, filters: [] })
+    setSelectedCities([])
+    setSelectedCityIds([])
+    setSelectedCountries([])
+    setSelectedCountryIds([])
   }
 
   return <BBDataTable extraFilter={extraFilter} onReset={onReset} {...params} />

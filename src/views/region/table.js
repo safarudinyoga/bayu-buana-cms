@@ -52,7 +52,8 @@ export default function RegionTable() {
         visible: false,
       },
     ],
-    recordName: "region_name",
+    recordName: "region_code",
+    recordName2: "region_name",
   }
   return <BBDataTable {...params} />
 }

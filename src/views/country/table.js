@@ -1,10 +1,10 @@
 import BBDataTable from "components/table/bb-data-table"
 import TableDropdownFilter from "components/table/table-dropdown-filter"
 import rowStatus from "lib/row-status"
-import {renderColumn} from "lib/translation"
-import React, {useEffect, useState} from "react"
-import {useDispatch} from "react-redux"
-import {setUIParams} from "redux/ui-store"
+import { renderColumn } from "lib/translation"
+import React, { useEffect, useState } from "react"
+import { useDispatch } from "react-redux"
+import { setUIParams } from "redux/ui-store"
 
 export default function CountryTable() {
   let dispatch = useDispatch()
@@ -35,14 +35,13 @@ export default function CountryTable() {
       }
     }
     if (ids.length > 0) {
-      setParams({...params, filters: [["region_id", "in", ids]]})
+      setParams({ ...params, filters: [["region_id", "in", ids]] })
     } else {
-      setParams({...params, filters: []})
+      setParams({ ...params, filters: [] })
     }
     setSelectedRegions(values)
     setSelectedRegionIds(ids)
   }
-
 
   const extraFilter = () => {
     return (
@@ -59,7 +58,7 @@ export default function CountryTable() {
   }
 
   const onReset = () => {
-    setParams({...params, filters: []})
+    setParams({ ...params, filters: [] })
     setSelectedRegions([])
     setSelectedRegionIds([])
   }
@@ -84,7 +83,7 @@ export default function CountryTable() {
       },
       {
         title: "Region",
-        data: "region.region_name"
+        data: "region.region_name",
       },
       {
         searchable: false,
@@ -98,7 +97,8 @@ export default function CountryTable() {
         visible: false,
       },
     ],
-    recordName: "country_name",
+    recordName: "country_code",
+    recordName2: "country_name",
   })
   return <BBDataTable {...params} extraFilter={extraFilter} onReset={onReset} />
 }

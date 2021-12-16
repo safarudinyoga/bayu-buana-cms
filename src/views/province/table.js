@@ -1,10 +1,10 @@
 import BBDataTable from "components/table/bb-data-table"
 import TableDropdownFilter from "components/table/table-dropdown-filter"
 import rowStatus from "lib/row-status"
-import {renderColumn} from "lib/translation"
-import React, {useEffect, useState} from "react"
-import {useDispatch} from "react-redux"
-import {setUIParams} from "redux/ui-store"
+import { renderColumn } from "lib/translation"
+import React, { useEffect, useState } from "react"
+import { useDispatch } from "react-redux"
+import { setUIParams } from "redux/ui-store"
 
 export default function ProvinceTable() {
   let dispatch = useDispatch()
@@ -35,14 +35,13 @@ export default function ProvinceTable() {
       }
     }
     if (ids.length > 0) {
-      setParams({...params, filters: [["country_id", "in", ids]]})
+      setParams({ ...params, filters: [["country_id", "in", ids]] })
     } else {
-      setParams({...params, filters: []})
+      setParams({ ...params, filters: [] })
     }
     setSelectedCountries(values)
     setSelectedCountryIds(ids)
   }
-
 
   const extraFilter = () => {
     return (
@@ -58,7 +57,7 @@ export default function ProvinceTable() {
   }
 
   const onReset = () => {
-    setParams({...params, filters: []})
+    setParams({ ...params, filters: [] })
     setSelectedCountries([])
     setSelectedCountryIds([])
   }
@@ -96,8 +95,9 @@ export default function ProvinceTable() {
         visible: false,
       },
     ],
-    recordName: "state_province_name",
-  });
+    recordName: "state_province_code",
+    recordName2: "state_province_name",
+  })
 
   return <BBDataTable {...params} extraFilter={extraFilter} onReset={onReset} />
 }
