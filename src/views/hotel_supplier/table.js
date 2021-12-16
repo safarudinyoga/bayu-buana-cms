@@ -64,6 +64,7 @@ export default function HotelSupplierTable() {
 
   let [params, setParams] = useState({
     title: "Hotel Suppliers",
+    titleModal: "Hotel Supplier",
     baseRoute: "/master/hotel-suppliers/form",
     endpoint: "/master/hotel-suppliers",
     deleteEndpoint: "/master/batch-actions/delete/hotel-suppliers",
