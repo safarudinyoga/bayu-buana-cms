@@ -83,7 +83,7 @@ class BBDataTable extends Component {
     } catch (e) {}
 
     const allowed = [this.props.recordName]
-    const {recordName} = this.props
+    const { recordName } = this.props
     columns.push({
       searchable: false,
       orderable: false,
@@ -102,10 +102,13 @@ class BBDataTable extends Component {
         }
 
         const cvtRecordName = recordName
-        ? Array.isArray(recordName)
-        ? recordName.map((v) => row[v]).filter(v => v).join(" - ")
-        : row[recordName]
-        : ""
+          ? Array.isArray(recordName)
+            ? recordName
+                .map((v) => row[v])
+                .filter((v) => v)
+                .join(" - ")
+            : row[recordName]
+          : ""
 
         var x = window.matchMedia("(max-width: 768px)")
         tooltipCust(x)
@@ -596,27 +599,26 @@ class BBDataTable extends Component {
 
   onPrint() {
     try {
-      let prevLen = this.dt.page.len();
-      this.dt.page.len(-1).draw();
+      let prevLen = this.dt.page.len()
+      this.dt.page.len(-1).draw()
       setTimeout(() => {
         this.dt.buttons(".buttons-print").trigger()
-        this.dt.page.len(prevLen).draw();
+        this.dt.page.len(prevLen).draw()
       }, 500)
-
     } catch (e) {}
   }
 
   onDownload() {
     try {
-      let prevLen = this.dt.page.len();
-      this.dt.page.len(-1).draw();
+      let prevLen = this.dt.page.len()
+      this.dt.page.len(-1).draw()
       setTimeout(() => {
         this.dt
           .buttons(
             this.props.btnDownload ? this.prop.btnDownload : ".buttons-excel",
           )
           .trigger()
-        this.dt.page.len(prevLen).draw();
+        this.dt.page.len(prevLen).draw()
       }, 500)
     } catch (e) {
       console.log(e.message)
@@ -776,11 +778,11 @@ class BBDataTable extends Component {
         <Modal show={this.state.isOpen}>
           <ModalHeader>
             Delete{" "}
-            {this.props.titleModal 
-            ? this.state.deleteType === "single"
-            ? this.props.titleModal 
-            : this.props.title
-            : this.props.title}
+            {this.props.titleModal
+              ? this.state.deleteType === "single"
+                ? this.props.titleModal
+                : this.props.title
+              : this.props.title}
           </ModalHeader>
           <ModalBody>Are you sure you want to delete this?</ModalBody>
           <ModalFooter>

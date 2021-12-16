@@ -1,10 +1,10 @@
 import BBDataTable from "components/table/bb-data-table"
 import TableDropdownFilter from "components/table/table-dropdown-filter"
 import rowStatus from "lib/row-status"
-import {renderColumn} from "lib/translation"
-import React, {useEffect, useState} from "react"
-import {useDispatch} from "react-redux"
-import {setUIParams} from "redux/ui-store"
+import { renderColumn } from "lib/translation"
+import React, { useEffect, useState } from "react"
+import { useDispatch } from "react-redux"
+import { setUIParams } from "redux/ui-store"
 
 export default function CityTable() {
   let dispatch = useDispatch()
@@ -24,7 +24,6 @@ export default function CityTable() {
     )
   }, [])
 
-
   let [selectedCountries, setSelectedCountries] = useState([])
   let [selectedCountryIds, setSelectedCountryIds] = useState([])
 
@@ -36,9 +35,9 @@ export default function CityTable() {
       }
     }
     if (ids.length > 0) {
-      setParams({...params, filters: [["country_id", "in", ids]]})
+      setParams({ ...params, filters: [["country_id", "in", ids]] })
     } else {
-      setParams({...params, filters: []})
+      setParams({ ...params, filters: [] })
     }
     setSelectedCountries(values)
     setSelectedCountryIds(ids)
@@ -58,13 +57,14 @@ export default function CityTable() {
   }
 
   const onReset = () => {
-    setParams({...params, filters: []})
+    setParams({ ...params, filters: [] })
     setSelectedCountries([])
     setSelectedCountryIds([])
   }
 
   let [params, setParams] = useState({
     title: "Cities",
+    titleModal: "City",
     baseRoute: "/master/cities/form",
     endpoint: "/master/cities",
     deleteEndpoint: "/master/batch-actions/delete/cities",

@@ -1,10 +1,10 @@
 import BBDataTable from "components/table/bb-data-table"
 import TableDropdownFilter from "components/table/table-dropdown-filter"
 import rowStatus from "lib/row-status"
-import {renderColumn} from "lib/translation"
-import React, {useEffect, useState} from "react"
-import {useDispatch} from "react-redux"
-import {setUIParams} from "redux/ui-store"
+import { renderColumn } from "lib/translation"
+import React, { useEffect, useState } from "react"
+import { useDispatch } from "react-redux"
+import { setUIParams } from "redux/ui-store"
 
 export default function DestinationTable() {
   let dispatch = useDispatch()
@@ -35,9 +35,9 @@ export default function DestinationTable() {
       }
     }
     if (ids.length > 0) {
-      setParams({...params, filters: [["country_id", "in", ids]]})
+      setParams({ ...params, filters: [["country_id", "in", ids]] })
     } else {
-      setParams({...params, filters: []})
+      setParams({ ...params, filters: [] })
     }
     setSelectedCountries(values)
     setSelectedCountryIds(ids)
@@ -57,7 +57,7 @@ export default function DestinationTable() {
   }
 
   const onReset = () => {
-    setParams({...params, filters: []})
+    setParams({ ...params, filters: [] })
     setSelectedCountries([])
     setSelectedCountryIds([])
   }
@@ -77,7 +77,7 @@ export default function DestinationTable() {
       {
         title: "Destination Name",
         data: "destination_name",
-        render: renderColumn("destination", "destination_name")
+        render: renderColumn("destination", "destination_name"),
       },
       {
         title: "Country",
