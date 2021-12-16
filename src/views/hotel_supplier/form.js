@@ -313,7 +313,7 @@ function HotelSupplierForm(props) {
           disabled={isView || loading}
           type="text"
           minLength="1"
-          maxLength="26"
+          maxLength="36"
           hint="Hotel Supplier Code maximum 36 characters"
         />
       </FormHorizontal>
