@@ -96,7 +96,7 @@ export default function HotelSupplierTable() {
         visible: false,
       },
     ],
-    recordName: "hotel_supplier_name",
+    recordName: ["hotel_supplier_code", "hotel_supplier_name"],
   })
 
   return <BBDataTable {...params} extraFilter={extraFilter} onReset={onReset} {...params} />
