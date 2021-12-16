@@ -128,7 +128,7 @@ function HotelSupplierForm(props) {
 
               return req
             },
-            "Hotel Supplier Code already exists",
+            "Code already exists",
           )
 
           $.validator.addMethod(
@@ -187,7 +187,7 @@ function HotelSupplierForm(props) {
 
           return req
         },
-        "Hotel Supplier Code already exists",
+        "Code already exists",
       )
 
       $.validator.addMethod(
