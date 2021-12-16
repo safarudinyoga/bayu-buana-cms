@@ -114,14 +114,17 @@ function HotelAmenityForm(props) {
           hotel_amenity_type_name: res.data.hotel_amenity_type_name,
           hotel_amenity_type_asset: res.data.hotel_amenity_type_asset
         }
+        if (res.data.hotel_amenity_category_hotel_amenity_type) {
+          setCategoryData(res.data.hotel_amenity_category_hotel_amenity_type.map(value => (
+            {...value.hotel_amenity_category, text: value.hotel_amenity_category.hotel_amenity_category_name})
+          ))
+        }
+        if (res.data.hotel_amenity_category_hotel_amenity_type) {
+          data = {...data, hotel_amenity_category_hotel_amenity_type: res.data.hotel_amenity_category_hotel_amenity_type.map(value => ({hotel_amenity_category_id: value.hotel_amenity_category.id}))}
+        }
 
-        if (res.data.hotel_amenity_category_hotel_amenity_type) {
-          data = {...data, hotel_amenity_category_hotel_amenity_type: res.data.hotel_amenity_category_hotel_amenity_type.map(value => value.hotel_amenity_category.id)}
-        }
         setForm(data)
-        if (res.data.hotel_amenity_category_hotel_amenity_type) {
-          setCategoryData(res.data.hotel_amenity_category_hotel_amenity_type.map(value => ({...value.hotel_amenity_category, text: value.hotel_amenity_category.hotel_amenity_category_name})))
-        }
+
       } catch (e) {
         console.error({errorSetForm: e});
       }
@@ -216,6 +219,12 @@ function HotelAmenityForm(props) {
         let path = endpoint + "/" + res.data.id + "/translations"
         await api.putOrPost(path, tl.id, tl)
       }
+
+      dispatch(
+        setAlert({
+          message: `Record ${form.hotel_amenity_type_code} - ${form.hotel_amenity_type_name} has been successfully ${formId ? "updated" : "saved"}..`,
+        }),
+      )
     } catch (e) {
       dispatch(
         setAlert({
@@ -225,11 +234,6 @@ function HotelAmenityForm(props) {
     } finally {
       setLoading(false)
       props.history.push(backUrl)
-      dispatch(
-        setAlert({
-          message: `Record ${form.hotel_amenity_type_code} - ${form.hotel_amenity_type_name} has been successfully ${formId ? "updated" : "saved"}..`,
-        }),
-      )
     }
   }
 
@@ -280,7 +284,7 @@ function HotelAmenityForm(props) {
         />
         <FormInputSelectAjax
           label="Hotel Amenity Category"
-          value={form.hotel_amenity_category_hotel_amenity_type}
+          value={form.hotel_amenity_category_hotel_amenity_type ? form.hotel_amenity_category_hotel_amenity_type.map((item) => item.hotel_amenity_category_id) : []}
           name="hotel_amenity_category_id"
           data={categoryData}
           endpoint="/master/hotel-amenity-categories"
