@@ -102,8 +102,8 @@ function HotelSupplierForm(props) {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data);
         if (res.data) {
-          let currentCode = res.data.cabin_type_code
-          let currentName = res.data.cabin_type_name
+          let currentCode = res.data.hotel_supplier_code
+          let currentName = res.data.hotel_supplier_name
 
           $.validator.addMethod(
             "checkCode",
@@ -185,6 +185,7 @@ function HotelSupplierForm(props) {
             },
           })
 
+          console.log(req)
           return req
         },
         "Code already exists",
