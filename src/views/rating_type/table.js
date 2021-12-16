@@ -56,7 +56,7 @@ export default function RatingTypeTable() {
         visible: false,
       },
     ],
-    recordName: "rating_type_name",
+    recordName: ["rating_type_code", "rating_type_name"],
   }
   return <BBDataTable {...params} />
 }

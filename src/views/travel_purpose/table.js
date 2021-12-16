@@ -52,7 +52,7 @@ export default function TravelPurposeTable() {
         visible: false,
       },
     ],
-    recordName: "travel_purpose_name",
+    recordName: ["travel_purpose_code", "travel_purpose_name"],
   }
   return <BBDataTable {...params} />
 }
