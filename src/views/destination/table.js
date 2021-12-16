@@ -100,7 +100,7 @@ export default function DestinationTable() {
       },
     ],
     emptyTable: "No destination found",
-    recordName: "destination_name",
+    recordName: ["destination_code", "destination_name"],
   })
 
   return <BBDataTable {...params} extraFilter={extraFilter} onReset={onReset} />
