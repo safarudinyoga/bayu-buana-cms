@@ -95,6 +95,7 @@ export default function ZoneTable() {
         visible: false,
       },
     ],
+    recordName: "zone_name",
   })
 
   return <BBDataTable {...params} extraFilter={extraFilter} onReset={onReset} />

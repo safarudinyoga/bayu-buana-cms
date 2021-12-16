@@ -83,7 +83,7 @@ class BBDataTable extends Component {
     } catch (e) {}
 
     const allowed = [this.props.recordName]
-
+    const {recordName} = this.props
     columns.push({
       searchable: false,
       orderable: false,
@@ -100,6 +100,13 @@ class BBDataTable extends Component {
             })
           }
         }
+
+        const cvtRecordName = recordName
+        ? Array.isArray(recordName)
+        ? recordName.map((v) => row[v]).filter(v => v).join(" - ")
+        : row[recordName]
+        : ""
+
         var x = window.matchMedia("(max-width: 768px)")
         tooltipCust(x)
         x.addListener(tooltipCust)
@@ -124,7 +131,7 @@ class BBDataTable extends Component {
           '<a href="javascript:void(0);" data-toggle="tooltip" class="table-row-action-item" data-action="delete" data-id="' +
           row.id +
           '" data-name="' +
-          filteredRecordName[allowed] +
+          cvtRecordName +
           '" title="Click to delete"><img src="' +
           removeIcon +
           '" /></a>'
@@ -679,7 +686,6 @@ class BBDataTable extends Component {
   }
 
   componentDidUpdate() {
-    console.log(this.state.selected)
     if (this.inProgress) {
       return
     }
@@ -770,7 +776,11 @@ class BBDataTable extends Component {
         <Modal show={this.state.isOpen}>
           <ModalHeader>
             Delete{" "}
-            {this.props.titleModal ? this.props.titleModal : this.props.title}
+            {this.props.titleModal 
+            ? this.state.deleteType === "single"
+            ? this.props.titleModal 
+            : this.props.title
+            : this.props.title}
           </ModalHeader>
           <ModalBody>Are you sure you want to delete this?</ModalBody>
           <ModalFooter>
@@ -784,6 +794,7 @@ class BBDataTable extends Component {
                   this.api
                     .delete(this.props.endpoint + "/" + this.state.id)
                     .then(() => {
+                      console.log(this.state)
                       this.props.setAlert({
                         message: `Record ${this.state.name} was successfully deleted.`,
                       })

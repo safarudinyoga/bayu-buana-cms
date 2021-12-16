@@ -64,6 +64,7 @@ export default function HotelSupplierTable() {
 
   let [params, setParams] = useState({
     title: "Hotel Suppliers",
+    titleModal: "Hotel Supplier",
     baseRoute: "/master/hotel-suppliers/form",
     endpoint: "/master/hotel-suppliers",
     deleteEndpoint: "/master/batch-actions/delete/hotel-suppliers",
@@ -95,7 +96,7 @@ export default function HotelSupplierTable() {
         visible: false,
       },
     ],
-    recordName: "hotel_supplier_name",
+    recordName: ["hotel_supplier_code", "hotel_supplier_name"],
   })
 
   return <BBDataTable {...params} extraFilter={extraFilter} onReset={onReset} {...params} />

@@ -11,13 +11,13 @@ export default function ProvinceTable() {
   useEffect(() => {
     dispatch(
       setUIParams({
-        title: "States / Provinces",
+        title: "States/ Provinces",
         breadcrumbs: [
           {
             text: "Master Data Management",
           },
           {
-            text: "States / Provinces",
+            text: "States/ Provinces",
           },
         ],
       }),
@@ -64,7 +64,7 @@ export default function ProvinceTable() {
   }
 
   let [params, setParams] = useState({
-    title: "States / Provinces",
+    title: "States/ Provinces",
     baseRoute: "/master/provinces/form",
     endpoint: "/master/state-provinces",
     deleteEndpoint: "/master/batch-actions/delete/provinces",
@@ -72,11 +72,11 @@ export default function ProvinceTable() {
     deactivationEndpoint: "/master/batch-actions/deactivate/provinces",
     columns: [
       {
-        title: "State / Province Code",
+        title: "State/ Province Code",
         data: "state_province_code",
       },
       {
-        title: "State / Province Name",
+        title: "State/ Province Name",
         data: "state_province_name",
         render: renderColumn("province", "state_province_name"),
       },
@@ -92,10 +92,11 @@ export default function ProvinceTable() {
       },
       {
         title: "Translated State / Province Name",
-        data: "airline_translation.airline_name",
+        data: "state_province_translation.state_province_name",
         visible: false,
       },
     ],
+    recordName: "state_province_name",
   });
 
   return <BBDataTable {...params} extraFilter={extraFilter} onReset={onReset} />

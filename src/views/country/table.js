@@ -66,6 +66,7 @@ export default function CountryTable() {
 
   let [params, setParams] = useState({
     title: "Countries",
+    titleModal: "Country",
     baseRoute: "/master/countries/form",
     endpoint: "/master/countries",
     deleteEndpoint: "/master/batch-actions/delete/countries",
@@ -97,6 +98,7 @@ export default function CountryTable() {
         visible: false,
       },
     ],
+    recordName: "country_name",
   })
   return <BBDataTable {...params} extraFilter={extraFilter} onReset={onReset} />
 }

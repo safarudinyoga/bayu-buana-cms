@@ -109,14 +109,21 @@ function SpecialRequestForm(props) {
               $.ajax({
                 type: "GET",
                 async: false,
-                url: `${env.API_URL}/master/special-requests?filters=["special_request_code","=","${element.value}"]`,
+                url: `${env.API_URL}/master/special-requests?filters=["special_request_code","like","${element.value}"]`,
                 success: function (res) {
                   if (res.items.length !== 0) {
                     if(currentCode.toUpperCase() === element.value.toUpperCase()){
                       req = true
                     } else {
-                      req = false
+                      if(res.items[0].special_request_code.toUpperCase() === element.value.toUpperCase()){
+                        req = false
+                      }
+                      else {
+                        req = true
+                      }
                     }
+
+                    
                   } else {
                     req = true
                   }
@@ -140,7 +147,12 @@ function SpecialRequestForm(props) {
                     if(currentName.toUpperCase() === element.value.toUpperCase()){
                       req = true
                     } else {
-                      req = false
+                      if(res.items[0].special_request_name.toUpperCase() === element.value.toUpperCase()){
+                        req = false
+                      }
+                      else {
+                        req = true
+                      }
                     }
                   } else {
                     req = true
@@ -170,10 +182,15 @@ function SpecialRequestForm(props) {
           $.ajax({
             type: "GET",
             async: false,
-            url: `${env.API_URL}/master/special-requests?filters=["special_request_code","=","${element.value}"]`,
+            url: `${env.API_URL}/master/special-requests?filters=["special_request_code","like","${element.value}"]`,
             success: function (res) {
               if (res.items.length !== 0) {
-                req = false
+                if(res.items[0].special_request_code.toUpperCase() === element.value.toUpperCase()){
+                  req = false
+                }
+                else {
+                  req = true
+                }
               } else {
                 req = true
               }
@@ -191,10 +208,15 @@ function SpecialRequestForm(props) {
           $.ajax({
             type: "GET",
             async: false,
-            url: `${env.API_URL}/master/special-requests?filters=["special_request_name","=","${element.value}"]`,
+            url: `${env.API_URL}/master/special-requests?filters=["special_request_name","like","${element.value}"]`,
             success: function (res) {
               if (res.items.length !== 0) {
-                req = false
+                if(res.items[0].special_request_name.toUpperCase() === element.value.toUpperCase()){
+                  req = false
+                }
+                else {
+                  req = true
+                }
               } else {
                 req = true
               }

@@ -68,23 +68,23 @@ function ProvinceForm(props) {
     let api = new Api()
     let formId = props.match.params.id
 
-    let docTitle = "Edit State / Province"
+    let docTitle = "Edit State Province"
     if (!formId) {
-      docTitle = "Create State / Province"
+      docTitle = "Create State Province"
     } else if (isView) {
-      docTitle = "View State / Province"
+      docTitle = "View State Province"
     }
 
     dispatch(
       setUIParams({
-        title: docTitle,
+        title: isView ? "State Province Details" : docTitle,
         breadcrumbs: [
           {
             text: "Master Data Management",
           },
           {
             link: backUrl,
-            text: "States / Provinces",
+            text: "States/ Provinces",
           },
           {
             text: docTitle,
@@ -271,7 +271,7 @@ function ProvinceForm(props) {
     >
       <FormHorizontal>
         <FormInputControl
-          label="State / Province Name"
+          label="State/ Province Name"
           labelRequired="label-required"
           value={form.state_province_name}
           name="state_province_name"

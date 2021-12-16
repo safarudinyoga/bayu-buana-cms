@@ -52,6 +52,7 @@ export default function AircraftTable() {
         visible: false,
       },
     ],
+    recordName: "aircraft_name",
   }
   return <BBDataTable {...params} />
 }

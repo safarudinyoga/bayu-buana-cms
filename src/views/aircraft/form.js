@@ -91,7 +91,7 @@ function AircraftForm(props) {
 
     dispatch(
       setUIParams({
-        title: docTitle,
+        title: isView ? "Aircraft Details" : docTitle,
         breadcrumbs: [
           {
             text: "Master Data Management",
@@ -334,6 +334,7 @@ function AircraftForm(props) {
         />
         <FormInputControl
           value={form.model}
+          labelRequired="label-required"
           name="model"
           onChange={(e) => setForm({...form, model: e.target.value})}
           label="Model"

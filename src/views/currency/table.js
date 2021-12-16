@@ -56,6 +56,7 @@ export default function CurrencyTable() {
         visible: false,
       },
     ],
+    recordName: "currency_name",
   }
   return <BBDataTable {...params} />
 }

@@ -25,6 +25,7 @@ export default function HotelBrandTable() {
 
   let params = {
     title: "Hotel Brands",
+    titleModal: "Hotel Brand",
     baseRoute: "/master/hotel-brands/form",
     endpoint: "/master/hotel-brands",
     deleteEndpoint: "/master/batch-actions/delete/hotel-brands",
@@ -52,7 +53,7 @@ export default function HotelBrandTable() {
         visible: false,
       },
     ],
-    recordName: "hotel_brand_name",
+    recordName: ["hotel_brand_code", "hotel_brand_name"],
   }
   return <BBDataTable {...params} />
 }
