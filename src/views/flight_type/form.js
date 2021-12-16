@@ -40,8 +40,7 @@ function FlightTypeForm(props) {
       minlength: 1,
       maxlength: 36,
       checkCode: true,
-      noSpace: true,
-      number: true,
+      noSpace: true,      
     },
     flight_type_name: {
       required: true,
