@@ -1,14 +1,14 @@
-import {withRouter} from "react-router"
-import React, {useEffect, useState} from "react"
-import Api from "config/api"
+import FormBuilder from "components/form/builder"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
 import FormInputSelectAjax from "components/form/input-select-ajax"
-import FormBuilder from "components/form/builder"
-import useQuery from "lib/query"
-import {useDispatch} from "react-redux"
-import {setAlert, setUIParams} from "redux/ui-store"
+import Api from "config/api"
 import $ from "jquery"
+import useQuery from "lib/query"
+import React, {useEffect, useState} from "react"
+import {useDispatch} from "react-redux"
+import {withRouter} from "react-router"
+import {setAlert, setUIParams} from "redux/ui-store"
 import env from "../../config/environment"
 
 const endpoint = "/master/hotel-amenity-types"
@@ -112,14 +112,21 @@ function HotelAmenityForm(props) {
         let data = {
           hotel_amenity_type_code: res.data.hotel_amenity_type_code,
           hotel_amenity_type_name: res.data.hotel_amenity_type_name,
-          hotel_amenity_category_hotel_amenity_type: res.data.hotel_amenity_category_hotel_amenity_type.map(value => value.hotel_amenity_category.id),
           hotel_amenity_type_asset: res.data.hotel_amenity_type_asset
         }
-        setForm(data)
         if (res.data.hotel_amenity_category_hotel_amenity_type) {
-          setCategoryData(res.data.hotel_amenity_category_hotel_amenity_type.map(value => ({...value.hotel_amenity_category, text: value.hotel_amenity_category.hotel_amenity_category_name})))
+          setCategoryData(res.data.hotel_amenity_category_hotel_amenity_type.map(value => (
+            {...value.hotel_amenity_category, text: value.hotel_amenity_category.hotel_amenity_category_name})
+          ))
         }
+        if (res.data.hotel_amenity_category_hotel_amenity_type) {
+          data = {...data, hotel_amenity_category_hotel_amenity_type: res.data.hotel_amenity_category_hotel_amenity_type.map(value => ({hotel_amenity_category_id: value.hotel_amenity_category.id}))}
+        }
+
+        setForm(data)
+
       } catch (e) {
+        console.error({errorSetForm: e});
       }
 
       try {
@@ -189,6 +196,8 @@ function HotelAmenityForm(props) {
     try {
       if (!form.hotel_amenity_type_code) {
         form.hotel_amenity_type_code = null
+      } else {
+        form.hotel_amenity_type_code = parseInt(form.hotel_amenity_type_code)
       }
       if (!form.hotel_amenity_type_name) {
         form.hotel_amenity_type_name = null
@@ -210,6 +219,12 @@ function HotelAmenityForm(props) {
         let path = endpoint + "/" + res.data.id + "/translations"
         await api.putOrPost(path, tl.id, tl)
       }
+
+      dispatch(
+        setAlert({
+          message: `Record ${form.hotel_amenity_type_code} - ${form.hotel_amenity_type_name} has been successfully ${formId ? "updated" : "saved"}..`,
+        }),
+      )
     } catch (e) {
       dispatch(
         setAlert({
@@ -219,11 +234,6 @@ function HotelAmenityForm(props) {
     } finally {
       setLoading(false)
       props.history.push(backUrl)
-      dispatch(
-        setAlert({
-          message: `Record ${form.hotel_amenity_type_code} - ${form.hotel_amenity_type_name} has been successfully ${formId ? "updated" : "saved"}..`,
-        }),
-      )
     }
   }
 
@@ -274,7 +284,7 @@ function HotelAmenityForm(props) {
         />
         <FormInputSelectAjax
           label="Hotel Amenity Category"
-          value={form.hotel_amenity_category_hotel_amenity_type}
+          value={form.hotel_amenity_category_hotel_amenity_type ? form.hotel_amenity_category_hotel_amenity_type.map((item) => item.hotel_amenity_category_id) : []}
           name="hotel_amenity_category_id"
           data={categoryData}
           endpoint="/master/hotel-amenity-categories"
@@ -291,7 +301,7 @@ function HotelAmenityForm(props) {
           onChange={doUpload}
           disabled={isView}
           accept=".png,.jpg,.jpeg"
-          url={form.hotel_amenity_type_asset.multimedia_description.url}
+          url={form.hotel_amenity_type_asset?.multimedia_description.url}
           style={{maxWidth: 300, marginTop: 12}}
         />
       </FormHorizontal>
@@ -302,7 +312,7 @@ function HotelAmenityForm(props) {
           labelRequired="label-required"
           value={form.hotel_amenity_type_code}
           name="hotel_amenity_type_code"
-          cl={{md:"12"}}
+          cl={{md: "12"}}
           cr="12"
           // onChange={(e) =>
           //   setForm({
@@ -313,7 +323,7 @@ function HotelAmenityForm(props) {
           onChange={(e) => setForm({...form, hotel_amenity_type_code: e.target.value})}
           disabled={isView || loading}
           type="text"
-          pattern="\d*" 
+          pattern="\d*"
           minLength="0"
           maxLength="99"
           hint="Hotel Amenity type code maximum 2 characters"
