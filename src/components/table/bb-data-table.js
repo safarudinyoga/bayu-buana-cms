@@ -82,9 +82,8 @@ class BBDataTable extends Component {
       }
     } catch (e) {}
 
-    // const allowed = Array.isArray(this.props.recordName) ? [...this.props.recordName] : [this.props.recordName]
     const allowed = [this.props.recordName]
-    // console.log(allowed, "allowed")
+    const {recordName} = this.props
     columns.push({
       searchable: false,
       orderable: false,
@@ -101,6 +100,13 @@ class BBDataTable extends Component {
             })
           }
         }
+
+        const cvtRecordName = recordName
+        ? Array.isArray(recordName)
+        ? recordName.map((v) => row[v]).filter(v => v).join(" - ")
+        : row[recordName]
+        : ""
+
         var x = window.matchMedia("(max-width: 768px)")
         tooltipCust(x)
         x.addListener(tooltipCust)
@@ -125,7 +131,7 @@ class BBDataTable extends Component {
           '<a href="javascript:void(0);" data-toggle="tooltip" class="table-row-action-item" data-action="delete" data-id="' +
           row.id +
           '" data-name="' +
-          filteredRecordName[allowed] +
+          cvtRecordName +
           '" title="Click to delete"><img src="' +
           removeIcon +
           '" /></a>'
