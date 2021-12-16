@@ -25,6 +25,7 @@ export default function HotelBrandTable() {
 
   let params = {
     title: "Hotel Brands",
+    titleModal: "Hotel Brand",
     baseRoute: "/master/hotel-brands/form",
     endpoint: "/master/hotel-brands",
     deleteEndpoint: "/master/batch-actions/delete/hotel-brands",
