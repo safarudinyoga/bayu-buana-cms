@@ -82,8 +82,9 @@ class BBDataTable extends Component {
       }
     } catch (e) {}
 
+    // const allowed = Array.isArray(this.props.recordName) ? [...this.props.recordName] : [this.props.recordName]
     const allowed = [this.props.recordName]
-
+    // console.log(allowed, "allowed")
     columns.push({
       searchable: false,
       orderable: false,
@@ -679,7 +680,6 @@ class BBDataTable extends Component {
   }
 
   componentDidUpdate() {
-    console.log(this.state.selected)
     if (this.inProgress) {
       return
     }
@@ -770,7 +770,11 @@ class BBDataTable extends Component {
         <Modal show={this.state.isOpen}>
           <ModalHeader>
             Delete{" "}
-            {this.props.titleModal ? this.props.titleModal : this.props.title}
+            {this.props.titleModal 
+            ? this.state.deleteType === "single"
+            ? this.props.titleModal 
+            : this.props.title
+            : this.props.title}
           </ModalHeader>
           <ModalBody>Are you sure you want to delete this?</ModalBody>
           <ModalFooter>
@@ -784,6 +788,7 @@ class BBDataTable extends Component {
                   this.api
                     .delete(this.props.endpoint + "/" + this.state.id)
                     .then(() => {
+                      console.log(this.state)
                       this.props.setAlert({
                         message: `Record ${this.state.name} was successfully deleted.`,
                       })

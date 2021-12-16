@@ -43,6 +43,7 @@ function HotelAmenityCategoryForm(props) {
       label: "Description",
       name: "description",
       type: "textarea",
+      maxLength: 4000,
     },
   ]
 
