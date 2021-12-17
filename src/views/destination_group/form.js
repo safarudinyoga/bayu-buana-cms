@@ -38,8 +38,7 @@ function DestinationGroupForm(props) {
       minlength: 1,
       maxlength: 36,
       checkCode: true,
-      noSpace: true,
-      number: true,
+      noSpace: true,      
     },
     destination_group_name: {
       required: true,
