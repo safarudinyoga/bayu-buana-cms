@@ -25,8 +25,8 @@ function PageBreadcrumb() {
         const active = index + 1 === data.length
         const bcClass = active ? "breadcrumb-item active" : "breadcrumb-item"
         return (
-          <li className={bcClass} key={index}>
-            {active || !bc.link ? bc.text : <Link classname="p-2"to={bc.link}>{bc.text}</Link>}
+          <li className={`breadcrumb-overflow ${bcClass}`} key={index}>
+            {active || !bc.link ? bc.text : <Link to={bc.link}> {bc.text}</Link>}
           </li>
         )
       })}
