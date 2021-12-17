@@ -168,12 +168,11 @@ class BBDataTable extends Component {
           for(let i = 0; i < items.length; i++) {
             if(items[i].airline_asset?.multimedia_description?.url) {
               let convertImg = await imgBase64(items[i].airline_asset.multimedia_description.url)
-              console.log(convertImg)
+              // console.log(convertImg)
               items[i].airline_asset.multimedia_description.base64 = convertImg
             }
           }
           data.json.items = items
-          console.log(data.json, "heresss")
           return data
         },
         ajax: {
@@ -431,27 +430,28 @@ class BBDataTable extends Component {
               orthogonal: "myExport",
             },
             customize: ( xlsx ) => {
-              var sheet = xlsx.xl.worksheets['sheet1.xml'];
-              var table = $(this.table.current).DataTable();
-              var thead = table.table().header(); 
-              var titles = [];
-              $(thead).find('th').map(function(){
-                titles.push($(this).text());
-              });
-              let imgIdx = titles.findIndex(e => e === "Logo" || e === "Icon")
-              if(imgIdx !== -1) {
-                var plainArray = table
-                  .column(imgIdx)
-                  .data()
-                  .toArray();
-                  let arr = []
-                  // for(let i=0; i< plainArray.length;i++) {
-                  //   let img = await imgBase64(plainArray[i])
-                  //   arr.push(img)
-                  // }
-                console.log(table.rows().data(), "here");
+              "here"
+              // var sheet = xlsx.xl.worksheets['sheet1.xml'];
+              // var table = $(this.table.current).DataTable();
+              // var thead = table.table().header(); 
+              // var titles = [];
+              // $(thead).find('th').map(function(){
+              //   titles.push($(this).text());
+              // });
+              // let imgIdx = titles.findIndex(e => e === "Logo" || e === "Icon")
+              // if(imgIdx !== -1) {
+              //   var plainArray = table
+              //     .column(imgIdx)
+              //     .data()
+              //     .toArray();
+              //     let arr = []
+              //     for(let i=0; i< plainArray.length;i++) {
+              //       let img = getBase64Image(plainArray[i])
+              //       arr.push(img)
+              //     }
+              //   console.log(table.rows().data(), "here");
 
-              }
+              // }
                 
             }
           },
@@ -495,15 +495,6 @@ class BBDataTable extends Component {
             // className: "table-row-action",
             targets: [columns.length - 1],
           },
-          {
-            targets: 3,
-            createdCell: function (td, cellData, rowData, row, col) {
-              console.log(td, cellData)
-              if ( cellData < 1 ) {
-                $(td).css('color', 'red')
-              }
-            }
-          }
         ],
         // select: {
         //   style: "multi",
@@ -665,8 +656,9 @@ class BBDataTable extends Component {
           .buttons(
             this.props.btnDownload ? this.prop.btnDownload : ".buttons-excel",
           )
-          .trigger()
+          // .trigger()
         this.dt.page.len(prevLen).draw()
+        saveAsExcel(`Bayu Buana - ${this.props.title}`, this.dt)
       }, 500)
     } catch (e) {
       console.log(e.message)
@@ -820,7 +812,6 @@ class BBDataTable extends Component {
             break
         }
       })
-      console.log(this.props)
     return (
       <div ref={this.wrapper}>
         <Modal show={this.state.isOpen}>
@@ -844,7 +835,6 @@ class BBDataTable extends Component {
                   this.api
                     .delete(this.props.endpoint + "/" + this.state.id)
                     .then(() => {
-                      console.log(this.state)
                       this.props.setAlert({
                         message: `Record ${this.state.name} was successfully deleted.`,
                       })
