@@ -6,6 +6,7 @@ import "select2/dist/css/select2.css"
 import "@ttskch/select2-bootstrap4-theme/dist/select2-bootstrap4.css"
 import Api from "config/api"
 
+
 export default class TableDropdownFilter extends Component {
   constructor(props) {
     super(props)
@@ -94,15 +95,16 @@ export default class TableDropdownFilter extends Component {
         }
     } catch (e) {}
   }
-
+  
+  
   render() {
     return (
     <div className="col-xs-12 col-sm-12 col-md-6 col-lg-4">        
       <div className="col-xs-4">      
-      <label className="text-label-filter">{this.props.label}</label>
+      <label className="text-label-filter font-weight-bold">{this.props.label}</label>
       <div class="input-group mb-3 mb-sm-0">
-      <select className="" ref={this.select} multiple="multiple">
-        {this.props.children}
+      <select  ref={this.select} multiple="multiple">
+        {this.props.children}        
       </select>
       </div>
      </div>
@@ -110,3 +112,12 @@ export default class TableDropdownFilter extends Component {
     )
   }
 }
+function formatText (icon) {
+  return $('<span><i class="fas ' + $(icon.element).data('icon') + '"></i> ' + icon.text + '</span>');
+};
+
+$('.select2-icon').select2({
+  width: "50%",
+  templateSelection: formatText,
+  templateResult: formatText
+});

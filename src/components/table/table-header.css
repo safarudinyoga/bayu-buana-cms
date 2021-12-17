@@ -1,5 +1,5 @@
 .input-group {
-  width: 100;
+  width: 100%;  
 }
 
 .input-group-with-text input.form-control {
@@ -64,29 +64,33 @@ button.advanced-options-btn:active {
 .btn-table-action-dropdown:active {
   background-color: #027F71 !important;
   color: #ffffff !important;
-  min-width: 150px;
-  text-align: left;
+  min-width: 100px;  
 }
 .btn-table-action-dropdown::after {
   float: right;
-  margin-top: 0px;
+  margin-top: 0px;  
 }
 
 .advanced-filter {
     background-color: #f5f7f9;
     border: 1px solid #ced3db;
+    padding-bottom: 24px ;
 }
 .text-filter{
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-size: 14px;
   font-weight:bold;
-  color: #333333;
+  color: #333333;  
 }
 .text-label-filter{
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-size: 16px;
-  font-weight:500;
+  font-weight: 900;
   color: #333333;
+  
+}
+.padding-0{
+  padding-right:0;  
 }
 @media (max-width: 768px) {
   .input-group {
@@ -95,7 +99,10 @@ button.advanced-options-btn:active {
   .text-label-filter {
     font-size: 13px;
     font-weight:bold;
-  }
+  } 
+  .padding-0{
+    margin: 0;  
+  } 
 }
 .text-input-select{
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -103,4 +110,8 @@ button.advanced-options-btn:active {
   font-weight:500;
   color: #5E5E5E;  
   margin-left: -2px;
+}
+
+.dropdown-toggle::after {
+  display: none;
 }
