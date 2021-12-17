@@ -376,16 +376,19 @@ class BBDataTable extends Component {
                       JSON.stringify([col.data, "like", searchValue]),
                     )
                   }
-                  let defaultFilters = ""
                   if (filters.length > 0) {
                     extraFilters = []
-                    for (var f in filters) {
-                      extraFilters.push(JSON.stringify(filters[f]))
+                    for (var c in columns) {
+                      for (var f in filters) {
+                        extraFilters.push(columns[c] + ',["AND"],' + JSON.stringify(filters[f]))
+                      }
                     }
-                    defaultFilters = extraFilters.join(",") + ',["AND"],'
+                    overrideParams.filters =
+                    "[" + extraFilters.join(',["OR"],') + "]"
+                  }else{
+                    overrideParams.filters =
+                    "[" + columns.join(',["OR"],') + "]"
                   }
-                  overrideParams.filters =
-                    "[" + defaultFilters + columns.join(',["OR"],') + "]"
                 }
               } else if (filters.length) {
                 extraFilters = []
