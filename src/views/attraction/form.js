@@ -205,7 +205,15 @@ function AttractionForm(props) {
       minlength: 1,
       maxlength: 4000,
     },
-
+    attraction_asset_desktop: {
+      required: formId == null,
+    },
+    attraction_asset_mobile: {
+      required: formId == null,
+    },
+    attraction_asset_tablet: {
+      required: formId == null,
+    },
   });
 
   const validationMessages = {

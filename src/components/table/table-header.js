@@ -181,9 +181,9 @@ class TableHeader extends Component {
               >
                 <span className="mr-2">Advanced Options</span>{" "}
                 {this.state.showFilter ? (
-                  <img src={downIcon} alt="down" />
-                ) : (
                   <img src={upIcon} alt="up" />
+                ) : (
+                  <img src={downIcon} alt="down" />
                 )}
               </button>
             )}           
