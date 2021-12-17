@@ -236,7 +236,7 @@ function AttractionForm(props) {
       required: "State/Province is required",
     },
     city_id: {
-      required: "State Province is required",
+      required: "City is required",
     },
     postal_code: {
       required: "Zip Code is required",
