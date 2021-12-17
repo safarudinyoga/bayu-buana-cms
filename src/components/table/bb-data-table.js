@@ -24,6 +24,7 @@ import editIcon from "assets/icons/edit.svg"
 import removeIcon from "assets/icons/remove.svg"
 import showIcon from "assets/icons/show.svg"
 import imgBase64 from '../../lib/imgBase64';
+import { saveAsExcel } from "lib/exportExcel"
 
 window.JSZip = JSZip
 
@@ -491,6 +492,15 @@ class BBDataTable extends Component {
             // className: "table-row-action",
             targets: [columns.length - 1],
           },
+          {
+            targets: 3,
+            createdCell: function (td, cellData, rowData, row, col) {
+              console.log(td, cellData)
+              if ( cellData < 1 ) {
+                $(td).css('color', 'red')
+              }
+            }
+          }
         ],
         // select: {
         //   style: "multi",
@@ -653,7 +663,8 @@ class BBDataTable extends Component {
           .buttons(
             this.props.btnDownload ? this.prop.btnDownload : ".buttons-excel",
           )
-          .trigger()
+          // .trigger()
+          saveAsExcel()
         this.dt.page.len(prevLen).draw();
       }, 500)
     } catch (e) {
