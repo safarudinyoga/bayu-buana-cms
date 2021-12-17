@@ -236,7 +236,7 @@ function AttractionForm(props) {
       required: "State/Province is required",
     },
     city_id: {
-      required: "State Province is required",
+      required: "City is required",
     },
     postal_code: {
       required: "Zip Code is required",
@@ -308,7 +308,7 @@ function AttractionForm(props) {
 
     $.validator.addMethod(
       "validEmail", function (value, element){
-        return this.optional( element ) || /[a-z]+@[a-z]+\.[a-z]+/.test( value );
+        return this.optional( element ) || /[a-z]+@[a-z]+\.[a-z]+$/.test( value );
       }, "Please enter a valid email address"
     );
 
