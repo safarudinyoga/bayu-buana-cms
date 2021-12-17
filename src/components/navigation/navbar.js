@@ -36,7 +36,7 @@ export default class Navbar extends Component {
 
         <ul className="navbar-nav ml-auto">
           <li className="nav-item">
-            <a className="nav-link px-0 px-sm-3" href="/">
+            <a className="nav-link px-0 px-xl-2" href="/">
               <img
                 src={infoIcon}
                 alt="info icon"
@@ -45,7 +45,7 @@ export default class Navbar extends Component {
             </a>
           </li>
           <li className="nav-item">
-            <a className="nav-link px-2 px-sm-3" href="/">
+            <a className="nav-link px-2 px-xl-2" href="/">
               <img
                 src={notifIcon}
                 alt="notif icon"

@@ -4,18 +4,30 @@ import resetIcon from "assets/reset.svg"
 import createIcon from "assets/icons/create.svg"
 import downIcon from "assets/icons/double-down.svg"
 import upIcon from "assets/icons/double-up.svg"
+import dropdownIcon from "assets/icons/dropdownArrow.svg"
+import arrowdownIcon from "assets/icons/arrow-down.svg"
 import { Component } from "react"
 import { OverlayTrigger, Tooltip } from "react-bootstrap"
 import { Link, withRouter } from "react-router-dom"
 import "../button/button.css"
 import "./table-header.css"
-import Select from "react-select"
+import Select, { components } from "react-select"
 import { debounce } from "lodash"
 
+const DownIcon = () => {
+  return <img src={arrowdownIcon} alt="down" />;
+};
+const DropdownIndicator = props => {
+  return (
+    <components.DropdownIndicator {...props}>
+      <DownIcon />
+    </components.DropdownIndicator>
+  );
+};
 const customStyles = {
   option: (provided, state) => ({
     ...provided,
-    color: "black",
+    color: "black",    
     backgroundColor: state.isSelected ? "white" : "white",
     padding: 10,
     fontFamily: "Segoe UI, Tahoma, Geneva, Verdana, sans-serif",
@@ -32,8 +44,9 @@ const customStyles = {
     width: 120,
     marginTop: -1,
     marginLeft: 8,
-    border: "1px solid #DADEDF",
+    border: "1px solid #DADEDF",   
     fontSize: 13,
+    fontFamily: "Segoe UI, Tahoma, Geneva, Verdana, sans-serif",
     backgroundColor: "white",
     boxShadow: state.isFocused ? 0 : 0,
     "&:hover": {
@@ -140,7 +153,7 @@ class TableHeader extends Component {
     return (
       <div className="container-fluid pl-0">
         <div className="row">
-          <div className="col-xs-12 col-sm-12 col-md-4 col-lg-3 col-xl-3">
+          <div className="col-xs-12 col-sm-12 col-md-4 col-lg-3 col-xl-3 padding-0">
             <div className="input-group input-group-with-text">
               <input
                 value={this.state.searchValue}
@@ -159,12 +172,12 @@ class TableHeader extends Component {
          </div> 
          
             
-          <div className="col-xs-12 col-sm-12 col-md-4 col-lg-3 col-xl-3">  
+          <div className="col-xs-12 col-sm-12 col-md-4 col-lg-3 col-xl-3 padding-0">  
             {this.state.showAdvancedOptions && (
               <button
                 onClick={this.toggleFilter}
                 type="button"
-                className="btn btn-link advanced-options-btn float-right float-md-left"
+                className="btn btn-link advanced-options-btn float-right float-md-left nopadding"
               >
                 <span className="mr-2">Advanced Options</span>{" "}
                 {this.state.showFilter ? (
@@ -238,8 +251,9 @@ class TableHeader extends Component {
               <div className="col-xs-12 col-sm-12 col-md-6 col-lg-8">
                 <div className="row">
                   <div className="col-xs-4">
-                    <label className="text-label-filter ml-2">Status :</label>
-                    <Select
+                    <label className="text-label-filter ml-2 font-weight-bold">Status :</label>
+                    <Select                      
+                      components={{ IndicatorSeparator: () => null, DropdownIndicator }}
                       value={options[this.state.statusValue]}
                       onChange={this.handleStatus.bind(this)}
                       styles={customStyles}
@@ -272,7 +286,8 @@ class TableHeader extends Component {
                 data-toggle="dropdown"
                 aria-expanded="false"
               >
-                Update Status
+                UPDATE STATUS
+                <img className="ml-1" src={dropdownIcon} alt="down" />
               </button>
               <div className="dropdown-menu shadow-none">
                 <Link
@@ -293,9 +308,9 @@ class TableHeader extends Component {
               <button
                 onClick={this.handleRemove.bind(this)}
                 type="button"
-                className="btn btn-default textButtonSave bg-dark-green p-2 ml-2"
+                className="btn btn-default textButtonSave bg-dark-green p-2 ml-3"
               >
-                Remove {this.props.title}
+                REMOVE {this.props.title.toUpperCase()}
               </button>
             </div>
           </div>
