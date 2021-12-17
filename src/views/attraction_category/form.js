@@ -40,6 +40,11 @@ function AttractionCategoryForm(props) {
       name: "attraction_category_name",
       type: "text",
     },
+    {
+      label: "Description",
+      name: "description",
+      type: "textarea",
+    },
   ]
 
   const validationRules = {

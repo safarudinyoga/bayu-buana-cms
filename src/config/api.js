@@ -1,5 +1,5 @@
-import env from "./environment"
 import axios from "axios"
+import env from "./environment"
 
 export default class Api {
   constructor() {
@@ -18,7 +18,9 @@ export default class Api {
   }
 
   get(path, params) {
-    return this.axios.get(path, { params })
+    return this.axios.get(path, {params}).catch((error) => {
+      throw error
+    })
   }
 
   put(path, data) {
@@ -29,7 +31,9 @@ export default class Api {
       }
     }
 
-    return this.axios.put(path, data, headers)
+    return this.axios.put(path, data, headers).catch((error) => {
+      throw error
+    })
   }
 
   post(path, data) {
@@ -40,7 +44,9 @@ export default class Api {
       }
     }
 
-    return this.axios.post(path, data, headers)
+    return this.axios.post(path, data, headers).catch((error) => {
+      throw error
+    })
   }
 
   putOrPost(path, id, data) {
@@ -50,6 +56,8 @@ export default class Api {
   }
 
   delete(path, params) {
-    return this.axios.delete(path, { params })
+    return this.axios.delete(path, {params}).catch((error) => {
+      throw error
+    })
   }
 }

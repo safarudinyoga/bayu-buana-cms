@@ -78,19 +78,21 @@ export default function AttractionTable() {
         columns.push(
           ["attraction_category_names", "like", values[i].attraction_category_name],
         )
-      }
 
-      if(values.length > 1){
-        columns.push(["OR"])
+        if(parseInt(i)+1 != values.length) {
+          columns.push(["OR"])
+        }
       }
     }
     if (columns.length > 0) {
-      setParams({...params, filters: columns})
+      setParams({...params, filters: [columns]})
     } else {
       setParams({...params, filters: []})
     }
     setSelectedAttractionCategories(values)
     setSelectedAttractionCategoryIds(ids)
+
+    console.log(params);
   }
 
   const onFilterChangeCountries = (e, values) => {
@@ -101,7 +103,7 @@ export default function AttractionTable() {
       }
     }
     if (ids.length > 0) {
-      setParams({...params, filters: [["country_id", "in", ids]]})
+      setParams({...params, filters: [["country.id", "in", ids]]})
     } else {
       setParams({...params, filters: []})
     }

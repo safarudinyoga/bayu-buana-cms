@@ -133,6 +133,7 @@ function AttractionForm(props) {
       label: "Description",
       name: "description",
       type: "textarea",
+      maxLength: 4000
     },
   ]
 
@@ -185,7 +186,7 @@ function AttractionForm(props) {
       required: false,
       minlength: 1,
       maxlength: 256,
-      email: true,
+      validEmail: true,
     },
     phone_number: {
       required: false,
@@ -204,7 +205,15 @@ function AttractionForm(props) {
       minlength: 1,
       maxlength: 4000,
     },
-
+    attraction_asset_desktop: {
+      required: formId == null,
+    },
+    attraction_asset_mobile: {
+      required: formId == null,
+    },
+    attraction_asset_tablet: {
+      required: formId == null,
+    },
   });
 
   const validationMessages = {
@@ -271,13 +280,13 @@ function AttractionForm(props) {
       maxlength: "Description cannot be more than 4000 characters",
     },
     attraction_asset_desktop: {
-      required: "Banner (Desktop) image is required"
+      required: "Banner (Desktop) Image is required"
     },
     attraction_asset_mobile: {
-      required: "Banner (Mobile) image is required"
+      required: "Banner (Mobile) Image is required"
     },
     attraction_asset_tablet: {
-      required: "Banner (Tablet) image is required"
+      required: "Banner (Tablet) Image is required"
     },
   }
 
@@ -295,6 +304,12 @@ function AttractionForm(props) {
       "fax", function (value, element) {
         return this.optional(element) || /^[0-9\-\(\)\s]+$/.test(value);
       }, "Please enter a valid fax number"
+    );
+
+    $.validator.addMethod(
+      "validEmail", function (value, element){
+        return this.optional( element ) || /[a-z]+@[a-z]+\.[a-z]+$/.test( value );
+      }, "Please enter a valid email address"
     );
 
     let docTitle = "Edit Attraction"
@@ -324,7 +339,6 @@ function AttractionForm(props) {
     if (formId) {
       try {
         let res = await api.get(endpoint + "/" + formId)
-
         if (res.data) {
 
           let currentName = res.data.attraction_name

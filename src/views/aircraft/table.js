@@ -38,7 +38,7 @@ export default function AircraftTable() {
       {
         title: "Aircraft Name",
         data: "aircraft_name",
-        render: renderColumn("aircraft", "aircraft_name")
+        render: renderColumn("aircraft", "aircraft_name"),
       },
       {
         searchable: false,

@@ -50,7 +50,6 @@ function AirlineForm(props) {
       checkCode: true,
     },
     numeric_code: {
-      required: true,
       minlength: 3,
       maxlength: 3,
       checkNumeric: true,
@@ -129,7 +128,7 @@ function AirlineForm(props) {
                 url: `${env.API_URL}/master/airlines?filters=["airline_code","=","${element.value}"]`,
                 success: function (res) {
                   if (res.items.length !== 0) {
-                    if(currentCode === element.value){
+                    if (currentCode === element.value) {
                       req = true
                     } else {
                       req = false
@@ -139,7 +138,7 @@ function AirlineForm(props) {
                   }
                 },
               })
-    
+
               return req
             },
             "Airline Code already exists",
@@ -154,7 +153,7 @@ function AirlineForm(props) {
                 url: `${env.API_URL}/master/airlines?filters=["numeric_code","=","${element.value}"]`,
                 success: function (res) {
                   if (res.items.length !== 0) {
-                    if(currentNumeric === element.value){
+                    if (currentNumeric === element.value) {
                       req = true
                     } else {
                       req = false
@@ -164,7 +163,7 @@ function AirlineForm(props) {
                   }
                 },
               })
-    
+
               return req
             },
             "Numeric Code already exists",
@@ -179,7 +178,7 @@ function AirlineForm(props) {
                 url: `${env.API_URL}/master/airlines?filters=["airline_name","=","${element.value}"]`,
                 success: function (res) {
                   if (res.items.length !== 0) {
-                    if(currentName === element.value){
+                    if (currentName === element.value) {
                       req = true
                     } else {
                       req = false
@@ -189,7 +188,7 @@ function AirlineForm(props) {
                   }
                 },
               })
-    
+
               return req
             },
             "Airline Name already exists",
@@ -317,7 +316,7 @@ function AirlineForm(props) {
         setAlert({
           message: `Record ${form.airline_code} - ${
             form.airline_name
-          } has been successfully ${formId ? "updated" : "saved"}..`,
+          } has been successfully ${formId ? "updated" : "saved"}.`,
         }),
       )
     }

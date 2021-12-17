@@ -47,7 +47,7 @@ export default function HotelAmenityTable() {
         searchable: false,
         orderable: false,
         render: (val, type) => {
-          if (type === 'myExport') {
+          if (type === "myExport") {
             return val
           }
           if (val) {
