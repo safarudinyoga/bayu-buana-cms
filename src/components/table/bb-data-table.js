@@ -500,15 +500,15 @@ class BBDataTable extends Component {
           $(".pagination", wrapper).addClass("float-right float-left-sm")
 
           // Hide pagination if empty data
-          if (t.fnRecordsDisplay() === 1) {
-            $(t.nTableWrapper).find(".dataTables_length").hide()
-            $(t.nTableWrapper).find(".dataTables_info").hide()
-            $(t.nTableWrapper).find(".dataTables_paginate").hide()
-          } else {
+          // if (t.fnRecordsDisplay() === 1) {
+          //   $(t.nTableWrapper).find(".dataTables_length").hide()
+          //   $(t.nTableWrapper).find(".dataTables_info").hide()
+          //   $(t.nTableWrapper).find(".dataTables_paginate").hide()
+          // } else {
             $(t.nTableWrapper).find(".dataTables_length").show()
             $(t.nTableWrapper).find(".dataTables_info").show()
             $(t.nTableWrapper).find(".dataTables_paginate").show()
-          }
+          // }
 
           if ($(".select-checkbox-all").is(":checked")) {
             $(".select-checkbox-all").prop("checked", false)
