@@ -350,7 +350,7 @@ function AttractionForm(props) {
               $.ajax({
                 type: "GET",
                 async: false,
-                url: `${env.API_URL}/master/attractions?filters=["attraction_name","=","${element.value}"]`,
+                url: `${env.API_URL}/master/attractions?filters=["attraction_name","=","${encodeURIComponent(element.value)}"]`,
                 success: function (res) {
                   if (res.items.length !== 0) {
                     if (currentName == element.value) {
@@ -393,6 +393,7 @@ function AttractionForm(props) {
           setZoneData([{...res.data.zone, text: res.data.zone.zone_name}])
         }
         setForm(res.data)
+        
       } catch (e) {
         console.error(e);
       }
@@ -425,7 +426,7 @@ function AttractionForm(props) {
           $.ajax({
             type: "GET",
             async: false,
-            url: `${env.API_URL}/master/attractions?filters=["attraction_name","=","${element.value}"]`,
+            url: `${env.API_URL}/master/attractions?filters=["attraction_name","=","${encodeURIComponent(element.value)}"]`,
             success: function (res) {
               if (res.items.length !== 0) {
                 req = false

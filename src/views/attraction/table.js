@@ -4,6 +4,7 @@ import rowStatus from "lib/row-status"
 import React, {useEffect, useState} from "react"
 import {useDispatch} from "react-redux"
 import {setUIParams} from "redux/ui-store"
+import { renderColumn } from "lib/translation"
 
 export default function AttractionTable() {
   let dispatch = useDispatch()
@@ -41,6 +42,7 @@ export default function AttractionTable() {
       {
         title: "Attraction Name",
         data: "attraction_name",
+        render: renderColumn("attraction", "attraction_name"),
       },
       {
         title: "City",
