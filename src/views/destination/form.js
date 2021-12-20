@@ -15,6 +15,7 @@ const endpoint = "/master/destinations"
 const backUrl = "/master/destinations"
 
 function DestinationForm(props) {
+  let api = new Api()
   let dispatch = useDispatch()
   let formId = props.match.params.id
 
@@ -32,6 +33,24 @@ function DestinationForm(props) {
     destination_city_id: "",
     description: "",
     destination_code: "",
+    destination_asset_desktop: {
+      multimedia_description_id: null,
+      multimedia_description: {
+        url: "",
+      },
+    },
+    destination_asset_mobile: {
+      multimedia_description_id: null,
+      multimedia_description: {
+        url: "",
+      },
+    },
+    destination_asset_tablet: {
+      multimedia_description_id: null,
+      multimedia_description: {
+        url: "",
+      },
+    },
   })
   const translationFields = [
     {
@@ -46,7 +65,7 @@ function DestinationForm(props) {
     },
   ]
 
-  const validationRules = {
+  const [validationRules, setValidationRules] = useState({
     destination_name: {
       required: true,
       minlength: 1,
@@ -70,7 +89,16 @@ function DestinationForm(props) {
       maxlength: 36,
       checkCode: true,
     },
-  }
+    destination_asset_desktop: {
+      required: formId == null,
+    },
+    destination_asset_mobile: {
+      required: formId == null,
+    },
+    destination_asset_tablet: {
+      required: formId == null,
+    },
+  })
 
   const validationMessages = {
     destination_name: {
@@ -84,6 +112,15 @@ function DestinationForm(props) {
     },
     city: {
       required: "City is required",
+    },
+    destination_asset_desktop: {
+      required: "Banner (Desktop) Image is required"
+    },
+    destination_asset_mobile: {
+      required: "Banner (Mobile) Image is required"
+    },
+    destination_asset_tablet: {
+      required: "Banner (Tablet) Image is required"
     },
   }
 
@@ -119,8 +156,8 @@ function DestinationForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
-        if (res.data.city) {
-          setCityData([{...res.data.city, text: res.data.city.city_name}])
+        if (res.data.destination_city) {
+          setCityData([{...res.data.destination_city, text: res.data.destination_city.city_name}])
         }
 
         if (res.data.country) {
@@ -130,7 +167,20 @@ function DestinationForm(props) {
         if (res.data) {
           let currentName = res.data.destination_name
           let currentCode = res.data.destination_code
-
+          let currentDesktopImage = res.data.destination_asset_desktop.multimedia_description_id
+          console.log('currentDesktopImage', currentDesktopImage)
+          setValidationRules({
+            ...validationRules,
+            destination_asset_desktop: {
+              required: currentDesktopImage == null
+            },
+            destination_asset_mobile: {
+              required: true
+            },
+            destination_asset_tablet: {
+              required: true
+            },
+          })
           $.validator.addMethod(
             "checkName",
             function (value, element) {
@@ -192,6 +242,19 @@ function DestinationForm(props) {
       } catch (e) { }
       setLoading(false)
     } else {
+      console.log('atau here')
+      setValidationRules({
+        ...validationRules,
+        destination_asset_desktop: {
+          required: true
+        },
+        destination_asset_mobile: {
+          required: true
+        },
+        destination_asset_tablet: {
+          required: true
+        },
+      })
       $.validator.addMethod(
         "checkName",
         function (value, element) {
@@ -258,6 +321,31 @@ function DestinationForm(props) {
       if (!form.description) {
         form.description = null
       }
+
+      if (!form.destination_asset_desktop) {
+        form.destination_asset_desktop = null
+      } else {
+        if (!form.destination_asset_desktop.multimedia_description_id) {
+          form.destination_asset_desktop = null
+        }
+      }
+
+      if (!form.destination_asset_mobile) {
+        form.destination_asset_mobile = null
+      } else {
+        if (!form.destination_asset_mobile.multimedia_description_id) {
+          form.destination_asset_mobile = null
+        }
+      }
+
+      if (!form.destination_asset_mobile) {
+        form.destination_asset_mobile = null
+      } else {
+        if (!form.destination_asset_mobile.multimedia_description_id) {
+          form.destination_asset_mobile = null
+        }
+      }
+
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
       for (let i in translated) {
@@ -282,6 +370,26 @@ function DestinationForm(props) {
     }
   }
 
+  const doUploadMedia = async (e, media_type = "desktop") => {
+    try {
+      let media_code = ["desktop", "tablet", "mobile"].indexOf(media_type) + 1
+      let payload = new FormData()
+      payload.append("files", e.target.files[0])
+      media_type !== "desktop" && payload.append("dimension_category_code", media_code)
+
+      let res = await api.post("/multimedia/files", payload)
+      if (res.data) {
+        setForm({
+          ...form,
+          ["destination_asset_" + media_type]: {
+            multimedia_description_id: res.data.id,
+            multimedia_description: res.data,
+          },
+        })
+      }
+    } catch (e) { }
+  }
+
   return (
     <FormBuilder
       onBuild={(el) => setFormBuilder(el)}
@@ -294,6 +402,11 @@ function DestinationForm(props) {
       isValid={false}
       rules={validationRules}
       validationMessages={validationMessages}
+      showMedia={true}
+      uploadMedia={doUploadMedia}
+      mediaData={form}
+      isView={isView}
+      moduleName={"destination"}
     >
       <FormHorizontal>
         <FormInputControl
@@ -359,7 +472,7 @@ function DestinationForm(props) {
           cl={{md:"12"}}
           cr="12"
           disabled={isView || loading}
-          type="number"
+          type="text"
           label="Destination Code"
           labelRequired="label-required"
           minLength="1"
