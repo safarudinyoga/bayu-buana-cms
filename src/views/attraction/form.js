@@ -308,7 +308,7 @@ function AttractionForm(props) {
 
     $.validator.addMethod(
       "validEmail", function (value, element){
-        return this.optional( element ) || /[a-z]+@[a-z]+\.[a-z]+$/.test( value );
+        return this.optional( element ) || /^\b[A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b$/i.test( value );
       }, "Please enter a valid email address"
     );
 
