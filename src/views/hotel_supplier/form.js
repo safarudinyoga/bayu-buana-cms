@@ -101,6 +101,9 @@ function HotelSupplierForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data);
+        if (res.data.supplier_type) {
+          setSupplierTypeData([{...res.data.supplier_type, text: res.data.supplier_type.supplier_type_name}])
+        }
         if (res.data) {
           let currentCode = res.data.hotel_supplier_code
           let currentName = res.data.hotel_supplier_name
