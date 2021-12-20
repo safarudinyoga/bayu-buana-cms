@@ -579,6 +579,7 @@ function AttractionForm(props) {
       uploadMedia={doUploadMedia}
       mediaData={form}
       isView={isView}
+      moduleName={"attraction"}
     >
       <div className="col-lg-12">
         <FormHorizontal>
