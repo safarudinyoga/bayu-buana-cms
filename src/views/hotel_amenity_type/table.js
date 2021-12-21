@@ -1,5 +1,6 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import BBDataTable from "components/table/bb-data-table"
+import TableDropdownFilter from "components/table/table-dropdown-filter"
 import rowStatus from "lib/row-status"
 import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
@@ -23,7 +24,51 @@ export default function HotelAmenityTable() {
     )
   }, [])
 
-  let params = {
+  const onFilterChangeHotelAmenityCategories = (e, values) => {
+    let ids = []
+    let columns = []
+    if (values && values.length > 0) {
+      for (let i in values) {
+        ids.push(values[i].id)
+        columns.push(
+          ["hotel_amenity_category_names", "like", values[i].hotel_amenity_category_name],
+        )
+
+        if(parseInt(i)+1 != values.length) {
+          columns.push(["OR"])
+        }
+      }
+    }
+    if (columns.length > 0) {
+      setParams({...params, filters: [columns]})
+    } else {
+      setParams({...params, filters: []})
+    }
+    setSelectedHotelAmenityCategories(values)
+    setSelectedHotelAmenityCategoriesIds(ids)
+
+    console.log(params);
+  }
+
+
+  let [selectedHotelAmenityCategories, setSelectedHotelAmenityCategories] = useState([])
+  let [selectedHotelAmenityCategoriesIds, setSelectedHotelAmenityCategoriesIds] = useState([])
+
+  const extraFilter = () => {
+    return (
+      <>
+        <TableDropdownFilter
+          label="Hotel Amenity Category"
+          onChange={onFilterChangeHotelAmenityCategories}
+          endpoint="/master/hotel-amenity-categories"
+          column="hotel_amenity_category_name"
+          value={selectedHotelAmenityCategoriesIds}
+          data={selectedHotelAmenityCategories}
+        />
+      </>
+    )
+  }
+  let [params, setParams] = useState({
     title: "Hotel Amenity Type",
     baseRoute: "/master/hotel-amenity-types/form",
     endpoint: "/master/hotel-amenity-types",
@@ -58,6 +103,10 @@ export default function HotelAmenityTable() {
         },
       },
       {
+        title: "Hotel Amenity Category",
+        data: "hotel_amenity_category_names",
+      },
+      {
         searchable: false,
         title: "Status",
         data: "status",
@@ -70,6 +119,13 @@ export default function HotelAmenityTable() {
       },
     ],
     recordName: ["hotel_amenity_type_code", "hotel_amenity_type_name"],
+  })
+
+  const onReset = () => {
+    setParams({...params, filters: []})
+    setSelectedHotelAmenityCategories([])
+    setSelectedHotelAmenityCategoriesIds([])
+
   }
-  return <BBDataTable {...params} />
+  return <BBDataTable {...params} extraFilter={extraFilter} onReset={onReset} />
 }
