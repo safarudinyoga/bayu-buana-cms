@@ -118,6 +118,7 @@ export default function HotelAmenityTable() {
         visible: false,
       },
     ],
+    emptyTable: "No hotel amenity types found",
     recordName: ["hotel_amenity_type_code", "hotel_amenity_type_name"],
   })
 
