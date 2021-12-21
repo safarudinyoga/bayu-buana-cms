@@ -271,7 +271,7 @@ function ProvinceForm(props) {
     >
       <FormHorizontal>
         <FormInputControl
-          label="State/ Province Name"
+          label="State / Province Name"
           labelRequired="label-required"
           value={form.state_province_name}
           name="state_province_name"
