@@ -66,9 +66,17 @@ class BBDataTable extends Component {
         '<input type="checkbox" id="cb-th" class="select-checkbox-all"/>',
       render: function (val, display, row) {
         return (
-          '<svg class="float-left row-handle nopadding" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none"><rect id="backgroundrect" width="100%" height="100%" x="0" y="0" fill="none" stroke="none"/><path d="M7.098360577225684,13 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 z" fill="#707070" id="svg_1" class=""/><path d="M11.901639938354492,13 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 z" fill="#707070" id="svg_2" class=""/></svg> <input type="checkbox" data-id="' +
-          row.id +
-          '" class="float-left select-checkbox-item ml-2 mr-1"/> <a class="float-left d-md-none" style="padding: 0; color: #b7b7b7"><i class="fas fa-plus-circle" style="font-size: 17px;padding-left: 8px"></i></a>'
+          `
+          <svg class="float-left row-handle nopadding" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none">
+            <rect id="backgroundrect" width="100%" height="100%" x="0" y="0" fill="none" stroke="none"/>
+            <path d="M7.098360577225684,13 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 z" fill="#707070" id="svg_1" class=""/>
+            <path d="M11.901639938354492,13 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 z" fill="#707070" id="svg_2" class=""/>
+          </svg>
+          <input type="checkbox" data-id="${row.id}" class="float-left select-checkbox-item ml-2 mr-1"/>
+          <a class="float-left d-md-none" style="padding: 0; color: #b7b7b7">
+            <i class="fas fa-plus-circle" style="font-size: 17px;padding-left: 8px"></i>
+          </a>
+          `
         )
       },
     })
@@ -315,6 +323,14 @@ class BBDataTable extends Component {
               filters = JSON.parse(JSON.stringify(this.props.filters || []))
               if (!filters) {
                 filters = []
+              }
+              if(filters.length > 1) {
+                let temptFilter = []
+                filters.forEach((e,i) => {
+                  temptFilter.push(e)
+                  if (i < filters.length-1) temptFilter.push(["AND"])
+                })
+                filters = temptFilter
               }
               if (
                 this.state.extraFilters &&
@@ -659,9 +675,9 @@ class BBDataTable extends Component {
           .buttons(
             this.props.btnDownload ? this.prop.btnDownload : ".buttons-excel",
           )
-          // .trigger()
+          .trigger()
         this.dt.page.len(prevLen).draw()
-        saveAsExcel(`Bayu Buana - ${this.props.title}`, this.dt)
+        // saveAsExcel(`Bayu Buana - ${this.props.title}`, this.dt)
       }, 500)
     } catch (e) {
       console.log(e.message)
