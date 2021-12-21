@@ -130,6 +130,9 @@ table.dataTable>tbody>tr.child span.dtr-title {
   .dataTable-root .select-checkbox {
     min-width: 74px; 
   }
+}
+
+@media (min-width: 576px) {
   .select-checkbox-all {
     margin: 0;
     padding:2px;
