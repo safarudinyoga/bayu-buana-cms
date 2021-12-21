@@ -308,7 +308,7 @@ function AttractionForm(props) {
 
     $.validator.addMethod(
       "validEmail", function (value, element){
-        return this.optional( element ) || /[a-z]+@[a-z]+\.[a-z]+$/.test( value );
+        return this.optional( element ) || /^\b[A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b$/i.test( value );
       }, "Please enter a valid email address"
     );
 
@@ -350,7 +350,7 @@ function AttractionForm(props) {
               $.ajax({
                 type: "GET",
                 async: false,
-                url: `${env.API_URL}/master/attractions?filters=["attraction_name","=","${element.value}"]`,
+                url: `${env.API_URL}/master/attractions?filters=["attraction_name","=","${encodeURIComponent(element.value)}"]`,
                 success: function (res) {
                   if (res.items.length !== 0) {
                     if (currentName == element.value) {
@@ -393,6 +393,7 @@ function AttractionForm(props) {
           setZoneData([{...res.data.zone, text: res.data.zone.zone_name}])
         }
         setForm(res.data)
+        
       } catch (e) {
         console.error(e);
       }
@@ -425,7 +426,7 @@ function AttractionForm(props) {
           $.ajax({
             type: "GET",
             async: false,
-            url: `${env.API_URL}/master/attractions?filters=["attraction_name","=","${element.value}"]`,
+            url: `${env.API_URL}/master/attractions?filters=["attraction_name","=","${encodeURIComponent(element.value)}"]`,
             success: function (res) {
               if (res.items.length !== 0) {
                 req = false
@@ -578,6 +579,7 @@ function AttractionForm(props) {
       uploadMedia={doUploadMedia}
       mediaData={form}
       isView={isView}
+      moduleName={"attraction"}
     >
       <div className="col-lg-12">
         <FormHorizontal>

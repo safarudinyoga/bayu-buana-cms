@@ -40,21 +40,19 @@ function RatingTypeForm(props) {
 
   const validationRules = {
     provider: {
-      required: true,
+      required: false,
       minlength: 1,
       maxlength: 256,
     },
 
     rating_symbol: {
       required: true,
-      minlength: 1,
-      maxlength: 64,
     },
 
     rating_type_code: {
       required: true,
       min: 0,
-      max: 99,
+      max: 999,
       checkCode: formId == null,
     },
 
@@ -68,7 +66,7 @@ function RatingTypeForm(props) {
     scale: {
       required: true,
       min: 1,
-      max: 3,
+      max: 999,
     },
   }
 
@@ -264,16 +262,14 @@ function RatingTypeForm(props) {
           labelRequired="label-required"
           value={form.rating_symbol}
           name="rating_symbol"
-          column="name"
+          column="rating_symbol"
           onChange={(e) =>
             setForm({...form, rating_symbol: e.target.value || null})
           }
           disabled={isView || loading}
           type="select"
-          minLength="0"
-          maxLength="9999"
         >
-          <option>Please Choose</option>
+          <option value="">Please Choose</option>
           <option value="star">Star</option>
           <option value="like">Like</option>
           <option value="smiler">Smile</option>
