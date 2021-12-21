@@ -71,7 +71,12 @@ export default class FormInputSelectAjax extends Component {
               return
             }
             this.props.onChange(e, this.select2.select2("data"))
-
+          })
+          this.select2.on("select2:unselect", (e) => {
+            if (!this.props.onChange) {
+              return
+            }
+            this.props.onChange(e, this.select2.select2("data"))
           })
 
           setTimeout(() => {

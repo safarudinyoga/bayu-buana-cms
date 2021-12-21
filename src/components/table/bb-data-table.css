@@ -132,7 +132,8 @@ table.dataTable>tbody>tr.child span.dtr-title {
     width: 60px;  
   }
   .select-checkbox-all {
-    margin-right: 0;
+    margin: 0;
+    padding:2px;
   }
   .cstm-col-width {
     min-width: none;

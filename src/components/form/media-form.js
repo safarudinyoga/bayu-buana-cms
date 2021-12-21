@@ -24,7 +24,8 @@ const MediaForm = ({
 			},
 		},
 	},
-	doUpload = () => { }
+	doUpload = () => { },
+	moduleName = ""
 }) => {
 	return (
 		<div className="media-form">
@@ -34,12 +35,12 @@ const MediaForm = ({
 					mediaTypes.map((m_type, i) => (
 						<div className="col-md-4" key={i}>
 							<FormInputFile
-								title={`Banner (${m_type}) Image`}
+								title={isView ? `Banner (${m_type})` : `Banner (${m_type}) Image`}
 								mediaType={m_type.toLowerCase()}
 								onChange={doUpload}
-								url={data["attraction_asset_" + m_type.toLowerCase()]?.multimedia_description?.url || ""}
+								url={data[moduleName + "_asset_" + m_type.toLowerCase()]?.multimedia_description?.url || ""}
 								accept=".png,.jpg,.jpeg"
-								name={"attraction_asset_" + m_type.toLowerCase()}
+								name={moduleName + "_asset_" + m_type.toLowerCase()}
 								disabled={isView}
 							/>
 						</div>

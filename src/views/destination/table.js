@@ -1,10 +1,10 @@
 import BBDataTable from "components/table/bb-data-table"
 import TableDropdownFilter from "components/table/table-dropdown-filter"
 import rowStatus from "lib/row-status"
-import {renderColumn} from "lib/translation"
-import React, {useEffect, useState} from "react"
-import {useDispatch} from "react-redux"
-import {setUIParams} from "redux/ui-store"
+import { renderColumn } from "lib/translation"
+import React, { useEffect, useState } from "react"
+import { useDispatch } from "react-redux"
+import { setUIParams } from "redux/ui-store"
 
 export default function DestinationTable() {
   let dispatch = useDispatch()
@@ -24,10 +24,12 @@ export default function DestinationTable() {
     )
   }, [])
 
+  let [selectedCities, setSelectedCities] = useState([])
+  let [selectedCityIds, setSelectedCityIds] = useState([])
   let [selectedCountries, setSelectedCountries] = useState([])
   let [selectedCountryIds, setSelectedCountryIds] = useState([])
 
-  const onFilterChange = (e, values) => {
+  const onFilterChangeCountries = (e, values) => {
     let ids = []
     if (values && values.length > 0) {
       for (let i in values) {
@@ -35,7 +37,7 @@ export default function DestinationTable() {
       }
     }
     if (ids.length > 0) {
-      setParams({...params, filters: [["country_id", "in", ids]]})
+      setParams({...params, filters: [["country.id", "in", ids]]})
     } else {
       setParams({...params, filters: []})
     }
@@ -43,21 +45,51 @@ export default function DestinationTable() {
     setSelectedCountryIds(ids)
   }
 
+  const onFilterChangeCities = (e, values) => {
+    let ids = []
+    if (values && values.length > 0) {
+      for (let i in values) {
+        ids.push(values[i].id)
+      }
+    }
+    if (ids.length > 0) {
+      setParams({...params, filters: [["destination_city_id", "in", ids]]})
+    } else {
+      setParams({...params, filters: []})
+    }
+    setSelectedCities(values)
+    setSelectedCityIds(ids)
+  }
+
   const extraFilter = () => {
     return (
+      <>
       <TableDropdownFilter
-        label="Country"
-        onChange={onFilterChange}
-        endpoint="/master/countries"
-        column="country_name"
-        value={selectedCountryIds}
-        data={selectedCountries}
-      />
+          label="City"
+          onChange={onFilterChangeCities}
+          endpoint="/master/cities"
+          column="city_name"
+          value={selectedCityIds}
+          data={selectedCities}
+          placeholder="City"
+        />
+        <TableDropdownFilter
+          label="Country"
+          onChange={onFilterChangeCountries}
+          endpoint="/master/countries"
+          column="country_name"
+          value={selectedCountryIds}
+          data={selectedCountries}
+          placeholder="Country"
+        />
+      </>
     )
   }
 
   const onReset = () => {
-    setParams({...params, filters: []})
+    setParams({ ...params, filters: [] })
+    setSelectedCities([])
+    setSelectedCityIds([])
     setSelectedCountries([])
     setSelectedCountryIds([])
   }
@@ -77,7 +109,7 @@ export default function DestinationTable() {
       {
         title: "Destination Name",
         data: "destination_name",
-        render: renderColumn("destination", "destination_name")
+        render: renderColumn("destination", "destination_name"),
       },
       {
         title: "Country",
@@ -85,7 +117,7 @@ export default function DestinationTable() {
       },
       {
         title: "City",
-        data: "city.city_name",
+        data: "destination_city.city_name",
       },
       {
         searchable: false,
@@ -95,7 +127,7 @@ export default function DestinationTable() {
       },
       {
         title: "Translated Destination Name",
-        data: "zone_translation.destination_name",
+        data: "destination_translation.destination_name",
         visible: false,
       },
     ],

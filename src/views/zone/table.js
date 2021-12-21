@@ -1,10 +1,10 @@
 import BBDataTable from "components/table/bb-data-table"
 import TableDropdownFilter from "components/table/table-dropdown-filter"
 import rowStatus from "lib/row-status"
-import {renderColumn} from "lib/translation"
-import React, {useEffect, useState} from "react"
-import {useDispatch} from "react-redux"
-import {setUIParams} from "redux/ui-store"
+import { renderColumn } from "lib/translation"
+import React, { useEffect, useState } from "react"
+import { useDispatch } from "react-redux"
+import { setUIParams } from "redux/ui-store"
 
 export default function ZoneTable() {
   let dispatch = useDispatch()
@@ -35,9 +35,9 @@ export default function ZoneTable() {
       }
     }
     if (ids.length > 0) {
-      setParams({...params, filters: [["destination_id", "in", ids]]})
+      setParams({ ...params, filters: [["destination_id", "in", ids]] })
     } else {
-      setParams({...params, filters: []})
+      setParams({ ...params, filters: [] })
     }
     setSelectedDestinations(values)
     setSelectedDestinationIds(ids)
@@ -57,7 +57,7 @@ export default function ZoneTable() {
   }
 
   const onReset = () => {
-    setParams({...params, filters: []})
+    setParams({ ...params, filters: [] })
     setSelectedDestinations([])
     setSelectedDestinationIds([])
   }
@@ -77,7 +77,7 @@ export default function ZoneTable() {
       {
         title: "Zone Name",
         data: "zone_name",
-        render: renderColumn("zone", "zone_name")
+        render: renderColumn("zone", "zone_name"),
       },
       {
         title: "Destination",

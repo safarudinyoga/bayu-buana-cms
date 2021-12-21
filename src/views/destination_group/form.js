@@ -38,8 +38,7 @@ function DestinationGroupForm(props) {
       minlength: 1,
       maxlength: 36,
       checkCode: true,
-      noSpace: true,
-      number: true,
+      noSpace: true,      
     },
     destination_group_name: {
       required: true,
@@ -92,8 +91,8 @@ function DestinationGroupForm(props) {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
         if (res.data) {
-          let currentCode = res.data.cabin_type_code
-          let currentName = res.data.cabin_type_name
+          let currentCode = res.data.destination_group_code
+          let currentName = res.data.destination_group_name
 
           $.validator.addMethod(
             "checkName",
@@ -288,7 +287,7 @@ function DestinationGroupForm(props) {
           disabled={isView || loading}
           type="text"
           minLength="0"
-          maxLength="5"
+          maxLength="36"
           hint="Destination Group Code maximum 36 characters"
         />
       </FormHorizontal>

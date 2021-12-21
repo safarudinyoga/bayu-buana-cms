@@ -160,7 +160,7 @@ export default class TranslationForm extends Component {
                     name={field.name + "_" + lang.language_code}
                     type={field.type}                    
                     label={field.label}
-                    cl={{lg:2}}
+                    cl={{lg:5}}
                     maxLength={field?.maxLength || "256"}
                   />
                 )
@@ -191,7 +191,7 @@ export default class TranslationForm extends Component {
               <span className="text-label-input">
                 {this.state.currentLanguage}
               </span>
-            </button>
+            </button>            
             <div
               className="nav flex-column nav-pills"
               style={this.state.pillStyle}
@@ -200,12 +200,15 @@ export default class TranslationForm extends Component {
               aria-orientation="vertical"
             >
               {tabPills}
-            </div>
+            </div>            
           </div>
           <div className="col-xs-12 col-sm-8 col-md-8 col-lg-10 translation-form-content card border shadow-none">
-            <div className="tab-content card-body-translation" id="v-pills-tabContent">
+          <div class="row">
+            <div className="col-xs-12 col-sm-12 col-md-12 col-lg-6 tab-content card-body-translation" id="v-pills-tabContent">
               {tabContents}
             </div>
+            <div className="col-lg-6"></div>
+          </div>
           </div>
         </div>
       </div>

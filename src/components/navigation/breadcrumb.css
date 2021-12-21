@@ -8,9 +8,11 @@
   font-size: 11px;
   font-weight: normal;
   color: #818181;
+  line-height: 140%;
+  margin-right: 6px
 }
 .breadcrumb-item > a {
-  color: #818181;
+  color: #818181;  
 }
 .breadcrumb-item.active {
   color: #e84d0e;
@@ -20,7 +22,8 @@
   content: "\f105";
   font-family: "Font Awesome 5 Free";
   font-weight: 900;
-  color: #818181;
+  color: #818181; 
+  margin-right: 6px; 
 }
 
 .main-header-title {
@@ -37,5 +40,23 @@
     font-weight: 600;
     color: #333333;
     margin-bottom: 12px;
-  } 
+  }   
+}
+@media (max-width: 767px) {
+  .breadcrumb-item {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 11px;
+    font-weight: normal;
+    color: #818181;
+    line-height: 140%;
+    margin-right: 12px;
+  }
+  .breadcrumb-item + .breadcrumb-item::before {
+    content: "\f105";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    color: #818181;
+    margin-left: -6px;    
+  }
+  
 }
