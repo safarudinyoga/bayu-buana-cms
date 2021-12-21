@@ -3,6 +3,7 @@ import React, {useEffect, useState} from "react"
 import Api from "config/api"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
+import FormInputSelectAjax from "components/form/input-select-ajax"
 import FormBuilder from "components/form/builder"
 import useQuery from "lib/query"
 import {useDispatch} from "react-redux"
@@ -257,7 +258,7 @@ function RatingTypeForm(props) {
           minLength="1"
           maxLength="256"
         />
-        <FormInputControl
+        <FormInputSelectAjax
           label="Rating Symbol"
           labelRequired="label-required"
           value={form.rating_symbol}
@@ -265,7 +266,7 @@ function RatingTypeForm(props) {
           column="rating_symbol"
           onChange={(e) =>
             setForm({...form, rating_symbol: e.target.value || null})
-          }
+          }          
           disabled={isView || loading}
           type="select"
         >
@@ -273,7 +274,7 @@ function RatingTypeForm(props) {
           <option value="star">Star</option>
           <option value="like">Like</option>
           <option value="smiler">Smile</option>
-        </FormInputControl>
+        </FormInputSelectAjax>
 
         <FormInputControl
           label="Scale"
