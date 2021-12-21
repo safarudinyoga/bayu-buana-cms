@@ -43,8 +43,7 @@ function HotelSupplierForm(props) {
       minlength: 1,
       maxlength: 36,
       checkCode: true,
-      noSpace: true,
-      number: true,
+      noSpace: true,      
     },
     hotel_supplier_name: {
       required: true,
@@ -315,7 +314,7 @@ function HotelSupplierForm(props) {
             setForm({...form, hotel_supplier_code: e.target.value})
           }
           disabled={isView || loading}
-          type="number"
+          type="text"
           minLength="1"
           maxLength="36"
           hint="Hotel Supplier Code maximum 36 characters"
