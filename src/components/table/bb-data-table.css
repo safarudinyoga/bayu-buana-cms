@@ -126,10 +126,9 @@ table.dataTable>tbody>tr.child span.dtr-title {
   font-weight: bold;
 }
 
-@media (min-width: 576px) {
+@media (min-width: 338px) and (max-width:767px){
   .dataTable-root .select-checkbox {
-    min-width: 60px;
-    width: 60px;  
+    min-width: 74px; 
   }
   .select-checkbox-all {
     margin: 0;

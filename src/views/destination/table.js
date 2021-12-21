@@ -36,10 +36,11 @@ export default function DestinationTable() {
         ids.push(values[i].id)
       }
     }
+    let findFilter = params.filters ? params.filters.filter(v => v[0] !== "country.id") : []
     if (ids.length > 0) {
-      setParams({...params, filters: [["country.id", "in", ids]]})
+      setParams({...params, filters: [...findFilter, ["country.id", "in", ids]]})
     } else {
-      setParams({...params, filters: []})
+      setParams({...params, filters: [...findFilter]})
     }
     setSelectedCountries(values)
     setSelectedCountryIds(ids)
@@ -52,10 +53,11 @@ export default function DestinationTable() {
         ids.push(values[i].id)
       }
     }
+    let findFilter = params.filters ? params.filters.filter(v => v[0] !== "destination_city_id") : []
     if (ids.length > 0) {
-      setParams({...params, filters: [["destination_city_id", "in", ids]]})
+      setParams({...params, filters: [...findFilter, ["destination_city_id", "in", ids]]})
     } else {
-      setParams({...params, filters: []})
+      setParams({...params, filters: [...findFilter]})
     }
     setSelectedCities(values)
     setSelectedCityIds(ids)
