@@ -80,7 +80,7 @@ function TripTypeForm(props) {
 
     dispatch(
       setUIParams({
-        title: docTitle,
+        title: isView ? "Trip Type Details" : docTitle,
         breadcrumbs: [
           {
             text: "Master Data Management",

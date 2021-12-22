@@ -639,7 +639,7 @@ function AttractionForm(props) {
             name="state_id"
             data={provinceData}
             endpoint="/master/state-provinces"
-            filter={form.country_id}
+            filter={`["country.id", "=", "${form.country_id}"]`}
             column="state_province_name"
             onChange={(e) =>
               setForm({...form, state_province_id: e.target.value || null})
@@ -655,7 +655,7 @@ function AttractionForm(props) {
             name="city_id"
             data={cityData}
             endpoint="/master/cities"
-            filter={form.country_id}
+            filter={`["state_province.id", "=", "${form.state_province_id}"]`}
             column="city_name"
             onChange={(e) =>
               setForm({...form, city_id: e.target.value || null})

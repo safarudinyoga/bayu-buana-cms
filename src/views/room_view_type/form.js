@@ -77,7 +77,7 @@ function RoomViewTypeForm(props) {
 
     dispatch(
       setUIParams({
-        title: docTitle,
+        title: isView ? "Room View Type Details" : docTitle,
         breadcrumbs: [
           {
             text: "Master Data Management",
