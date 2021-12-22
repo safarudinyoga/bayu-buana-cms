@@ -86,10 +86,11 @@ export default function AttractionTable() {
         }
       }
     }
+    let findFilter = params.filters ? params.filters.filter(v => v[0][0] !== "attraction_category_names") : []
     if (columns.length > 0) {
-      setParams({...params, filters: [columns]})
+      setParams({...params, filters: [...findFilter, columns]})
     } else {
-      setParams({...params, filters: []})
+      setParams({...params, filters: [...findFilter]})
     }
     setSelectedAttractionCategories(values)
     setSelectedAttractionCategoryIds(ids)
@@ -104,10 +105,11 @@ export default function AttractionTable() {
         ids.push(values[i].id)
       }
     }
+    let findFilter = params.filters ? params.filters.filter(v => v[0] !== "country.id") : []
     if (ids.length > 0) {
-      setParams({...params, filters: [["country.id", "in", ids]]})
+      setParams({...params, filters: [...findFilter, ["country.id", "in", ids]]})
     } else {
-      setParams({...params, filters: []})
+      setParams({...params, filters: [...findFilter]})
     }
     setSelectedCountries(values)
     setSelectedCountryIds(ids)
@@ -120,10 +122,11 @@ export default function AttractionTable() {
         ids.push(values[i].id)
       }
     }
+    let findFilter = params.filters ? params.filters.filter(v => v[0] !== "city_id") : []
     if (ids.length > 0) {
-      setParams({...params, filters: [["city_id", "in", ids]]})
+      setParams({...params, filters: [...findFilter, ["city_id", "in", ids]]})
     } else {
-      setParams({...params, filters: []})
+      setParams({...params, filters: [...findFilter]})
     }
     setSelectedCities(values)
     setSelectedCityIds(ids)

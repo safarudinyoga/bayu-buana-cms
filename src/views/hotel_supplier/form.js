@@ -43,8 +43,7 @@ function HotelSupplierForm(props) {
       minlength: 1,
       maxlength: 36,
       checkCode: true,
-      noSpace: true,
-      number: true,
+      noSpace: true,      
     },
     hotel_supplier_name: {
       required: true,
@@ -101,6 +100,9 @@ function HotelSupplierForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data);
+        if (res.data.supplier_type) {
+          setSupplierTypeData([{...res.data.supplier_type, text: res.data.supplier_type.supplier_type_name}])
+        }
         if (res.data) {
           let currentCode = res.data.hotel_supplier_code
           let currentName = res.data.hotel_supplier_name
@@ -312,7 +314,7 @@ function HotelSupplierForm(props) {
             setForm({...form, hotel_supplier_code: e.target.value})
           }
           disabled={isView || loading}
-          type="number"
+          type="text"
           minLength="1"
           maxLength="36"
           hint="Hotel Supplier Code maximum 36 characters"

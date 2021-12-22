@@ -312,7 +312,7 @@ function CityForm(props) {
         />
 
         <FormInputSelectAjax
-          label="State/ Province"
+          label="State / Province"
           value={form.state_province_id}
           name="state_id"
           endpoint="/master/state-provinces"
