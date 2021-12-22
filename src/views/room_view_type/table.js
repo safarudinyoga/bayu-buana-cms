@@ -25,6 +25,7 @@ export default function RoomViewTypeTable() {
 
   let params = {
     title: "Room View Types",
+    titleModal: "Room View Type",
     baseRoute: "/master/room-view-types/form",
     endpoint: "/master/room-view-types",
     deleteEndpoint: "/master/batch-actions/delete/room-view-types",
@@ -52,6 +53,7 @@ export default function RoomViewTypeTable() {
         visible: false,
       },
     ],
+    recordName: ["room_view_type_code", "room_view_type_name"],
   }
   return <BBDataTable {...params} />
 }
