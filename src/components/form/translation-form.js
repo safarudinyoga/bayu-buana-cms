@@ -161,7 +161,7 @@ export default class TranslationForm extends Component {
                     type={field.type}                    
                     label={field.label}
                     cl={{lg:5}}
-                    maxLength={field?.maxLength || "4000"}
+                    maxLength={field?.maxLength || "256"}
                   />
                 )
               })}
