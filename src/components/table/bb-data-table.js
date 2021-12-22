@@ -427,8 +427,8 @@ class BBDataTable extends Component {
         buttons: [
           {
             extend: "print",
-            header: false,
-            foote: false,
+            header: true,
+            footer: false,
             exportOptions: {
               stripHtml: false,
               columns: visibleColumns,
@@ -746,7 +746,7 @@ class BBDataTable extends Component {
     }
     this.inProgress = true
     try {
-      this.dt.ajax.reload()
+
     } catch (e) {}
     setTimeout(() => {
       this.inProgress = false
