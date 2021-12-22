@@ -15,19 +15,19 @@ import Select, { components } from "react-select"
 import { debounce } from "lodash"
 
 const DownIcon = () => {
-  return <img src={arrowdownIcon} alt="down" />;
-};
-const DropdownIndicator = props => {
+  return <img src={arrowdownIcon} alt="down" />
+}
+const DropdownIndicator = (props) => {
   return (
     <components.DropdownIndicator {...props}>
       <DownIcon />
     </components.DropdownIndicator>
-  );
-};
+  )
+}
 const customStyles = {
   option: (provided, state) => ({
     ...provided,
-    color: "black",    
+    color: "black",
     backgroundColor: state.isSelected ? "white" : "white",
     padding: 10,
     fontFamily: "Segoe UI, Tahoma, Geneva, Verdana, sans-serif",
@@ -44,7 +44,7 @@ const customStyles = {
     width: 120,
     marginTop: -1,
     marginLeft: 8,
-    border: "1px solid #DADEDF",   
+    border: "1px solid #DADEDF",
     fontSize: 13,
     fontFamily: "Segoe UI, Tahoma, Geneva, Verdana, sans-serif",
     backgroundColor: "white",
@@ -92,6 +92,11 @@ class TableHeader extends Component {
   handleSearchDebounce = debounce((text) => this.props.onSearch(text), 500)
 
   handleSearch(e) {
+    if (this.props.onSearch) {
+      setTimeout(() => {
+        this.props.onSearch(e.target.value)
+      }, 3000)
+    }
     this.setState({
       searchValue: e.target.value,
     })
@@ -153,8 +158,8 @@ class TableHeader extends Component {
     return (
       <div className="container-fluid pl-0">
         <div className="row">
-          <div className="col-xs-12 col-sm-12 col-md-4 col-lg-3 col-xl-3 padding-0">
-            <div className="input-group input-group-with-text">
+          <div className="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 order-2 order-sm-1 mt-2">
+            <div className="input-group input-group-with-text float-md-left">
               <input
                 value={this.state.searchValue}
                 className="form-control"
@@ -162,34 +167,30 @@ class TableHeader extends Component {
                 onChange={this.handleSearch.bind(this)}
                 maxLength={256}
                 minLength={1}
-              />              
+              />
               <div className="input-group-append">
                 <span className="input-group-text">
                   <i className="fas fa-search"></i>
-                </span> 
-              </div>             
+                </span>
+              </div>
             </div>
-         </div> 
-         
-            
-          <div className="col-xs-12 col-sm-12 col-md-4 col-lg-3 col-xl-3 padding-0">  
             {this.state.showAdvancedOptions && (
               <button
                 onClick={this.toggleFilter}
                 type="button"
-                className="btn btn-link advanced-options-btn float-right float-md-left nopadding"
+                className="btn btn-link advanced-options-btn float-left float-right-sm pr-0"
               >
                 <span className="mr-2">Advanced Options</span>{" "}
                 {this.state.showFilter ? (
-                  <img src={upIcon} alt="up" />
-                ) : (
                   <img src={downIcon} alt="down" />
+                ) : (
+                  <img src={upIcon} alt="up" />
                 )}
               </button>
-            )}           
+            )}
           </div>
 
-          <div className="col-xs-12 col-sm-12 col-md-4 col-lg-6 col-xl-6 mb-2 order-first order-md-last">            
+          <div className="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 order-sm-2 mt-2">
             <OverlayTrigger
               placement="top"
               overlay={<Tooltip>Click to create</Tooltip>}
@@ -234,7 +235,7 @@ class TableHeader extends Component {
                 />
               </Link>
             </OverlayTrigger>
-          </div>         
+          </div>
         </div>
         <div
           className={
@@ -243,17 +244,16 @@ class TableHeader extends Component {
               : "d-none"
           }
         >
-          <div className="card-body-filter">
+          <div className="card-body">
             <div className="row">
               {ExtraFilter ? <ExtraFilter /> : ""}
 
               {this.props.children}
-              <div className="col-xs-12 col-sm-12 col-md-6 col-lg-4">
+              <div className="col-xs-12 col-sm-12 col-md-6 col-lg-8">
                 <div className="row">
                   <div className="col-xs-4">
-                    <label className="text-label-filter ml-2 font-weight-bold">Status :</label>
-                    <Select                      
-                      components={{ IndicatorSeparator: () => null, DropdownIndicator }}
+                    <label className="text-label-filter ml-2">Status :</label>
+                    <Select
                       value={options[this.state.statusValue]}
                       onChange={this.handleStatus.bind(this)}
                       styles={customStyles}
@@ -286,8 +286,7 @@ class TableHeader extends Component {
                 data-toggle="dropdown"
                 aria-expanded="false"
               >
-                UPDATE STATUS
-                <img className="ml-1" src={dropdownIcon} alt="down" />
+                Update Status
               </button>
               <div className="dropdown-menu shadow-none">
                 <Link
@@ -308,9 +307,9 @@ class TableHeader extends Component {
               <button
                 onClick={this.handleRemove.bind(this)}
                 type="button"
-                className="btn btn-default textButtonSave bg-dark-green p-2 ml-3"
+                className="btn btn-default textButtonSave bg-dark-green p-2 ml-2"
               >
-                REMOVE {this.props.title.toUpperCase()}
+                Remove {this.props.title}
               </button>
             </div>
           </div>
