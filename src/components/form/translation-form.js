@@ -82,8 +82,11 @@ export default class TranslationForm extends Component {
     if (!this.translated[lang]) {
       this.translated[lang] = {language_code: lang}
     }
+    try {
+        this.translated[lang][name] = e.target.value
+    } catch (ignored) {}
 
-    if(this.props.fields && this.props.fields.length > 1){
+    /*if(this.props.fields && this.props.fields.length > 1){
       let inField = []
       this.props.fields.map((field, index) => {
         let id = "trans-" + lang + "-" + field.name
@@ -113,7 +116,7 @@ export default class TranslationForm extends Component {
       }
     }
     
-    console.log(this.translated)
+    console.log(this.translated)*/
   }
 
   getKeyByValue(object, value) {
