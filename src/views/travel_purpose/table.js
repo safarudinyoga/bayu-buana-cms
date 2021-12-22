@@ -25,6 +25,7 @@ export default function TravelPurposeTable() {
 
   let params = {
     title: "Travel Purposes",
+    titleModal: "Travel Purpose",
     baseRoute: "/master/travel-purposes/form",
     endpoint: "/master/travel-purposes",
     deleteEndpoint: "/master/batch-actions/delete/travel-purposes",
