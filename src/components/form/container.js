@@ -84,7 +84,7 @@ export default class FormContainer extends Component {
         <div className="card card-default border">
           <div className="card-body">{this.props.children}</div>
         </div>
-        <div>
+        <div className="mb-5 ml-1 row justify-content-md-start justify-content-center">
           {this.props.isView ? "" : <SaveButton id={this.props.id} />}
           <CancelButton
             isView={this.props.isView}
