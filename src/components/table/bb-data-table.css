@@ -141,8 +141,5 @@ table.dataTable>tbody>tr.child span.dtr-title {
     width: auto;
   }
 }
-table.dataTable.dtr-inline.collapsed>tbody>tr>td.dtr-control,table.dataTable.dtr-inline.collapsed>tbody>tr>th.dtr-control{
-  position:relative;    
-  cursor:pointer
-}
+
 
