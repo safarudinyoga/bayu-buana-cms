@@ -435,6 +435,8 @@ class BBDataTable extends Component {
         buttons: [
           {
             extend: "print",
+            header: false,
+            foote: false,
             exportOptions: {
               stripHtml: false,
               columns: visibleColumns,
