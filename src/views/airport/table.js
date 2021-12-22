@@ -77,10 +77,11 @@ export default function AirportTable() {
         ids.push(values[i].id)
       }
     }
+    let findFilter = params.filters ? params.filters.filter(v => v[0] !== "city_id") : []
     if (ids.length > 0) {
-      setParams({ ...params, filters: [["city_id", "in", ids]] })
+      setParams({ ...params, filters: [...findFilter, ["city_id", "in", ids]] })
     } else {
-      setParams({ ...params, filters: [] })
+      setParams({ ...params, filters: [...findFilter] })
     }
     setSelectedCities(values)
     setSelectedCityIds(ids)
@@ -93,10 +94,11 @@ export default function AirportTable() {
         ids.push(values[i].id)
       }
     }
+    let findFilter = params.filters ? params.filters.filter(v => v[0] !== "city.country_id") : []
     if (ids.length > 0) {
-      setParams({ ...params, filters: [["city.country_id", "in", ids]] })
+      setParams({ ...params, filters: [...findFilter, ["city.country_id", "in", ids]] })
     } else {
-      setParams({ ...params, filters: [] })
+      setParams({ ...params, filters: [...findFilter] })
     }
     setSelectedCountries(values)
     setSelectedCountryIds(ids)

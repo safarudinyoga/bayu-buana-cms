@@ -314,13 +314,13 @@ function HotelAmenityForm(props) {
           name="hotel_amenity_type_code"
           cl={{md: "12"}}
           cr="12"
-          // onChange={(e) =>
-          //   setForm({
-          //     ...form,
-          //     hotel_amenity_type_code: parseInt(e.target.value),
-          //   })
-          // }
-          onChange={(e) => setForm({...form, hotel_amenity_type_code: e.target.value})}
+          onChange={(e) =>
+            setForm({
+              ...form,
+              hotel_amenity_type_code: parseInt(e.target.value),
+            })
+          }
+          // onChange={(e) => setForm({...form, hotel_amenity_type_code: e.target.value})}
           disabled={isView || loading}
           type="text"
           pattern="\d*"

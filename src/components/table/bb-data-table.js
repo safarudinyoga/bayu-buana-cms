@@ -23,6 +23,8 @@ import "./bb-data-table.css"
 import editIcon from "assets/icons/edit.svg"
 import removeIcon from "assets/icons/remove.svg"
 import showIcon from "assets/icons/show.svg"
+import imgBase64 from '../../lib/imgBase64';
+import { saveAsExcel } from "lib/exportExcel"
 
 window.JSZip = JSZip
 
@@ -161,6 +163,18 @@ class BBDataTable extends Component {
         ],
         keys: true,
         destroy: true,
+        initComplete: async (data) => {
+          let items = data.json.items
+          for(let i = 0; i < items.length; i++) {
+            if(items[i].airline_asset?.multimedia_description?.url) {
+              let convertImg = await imgBase64(items[i].airline_asset.multimedia_description.url)
+              // console.log(convertImg)
+              items[i].airline_asset.multimedia_description.base64 = convertImg
+            }
+          }
+          data.json.items = items
+          return data
+        },
         ajax: {
           url: this.api.env.endpoint(this.props.endpoint),
           cache: true,
@@ -302,6 +316,14 @@ class BBDataTable extends Component {
               if (!filters) {
                 filters = []
               }
+              if(filters.length > 1) {
+                let temptFilter = []
+                filters.forEach((e,i) => {
+                  temptFilter.push(e)
+                  if (i < filters.length-1) temptFilter.push(["AND"])
+                })
+                filters = temptFilter
+              }
               if (
                 this.state.extraFilters &&
                 this.state.extraFilters.length > 0
@@ -405,6 +427,8 @@ class BBDataTable extends Component {
         buttons: [
           {
             extend: "print",
+            header: false,
+            foote: false,
             exportOptions: {
               stripHtml: false,
               columns: visibleColumns,
@@ -418,6 +442,31 @@ class BBDataTable extends Component {
               columns: visibleColumns,
               orthogonal: "myExport",
             },
+            customize: ( xlsx ) => {
+              "here"
+              // var sheet = xlsx.xl.worksheets['sheet1.xml'];
+              // var table = $(this.table.current).DataTable();
+              // var thead = table.table().header(); 
+              // var titles = [];
+              // $(thead).find('th').map(function(){
+              //   titles.push($(this).text());
+              // });
+              // let imgIdx = titles.findIndex(e => e === "Logo" || e === "Icon")
+              // if(imgIdx !== -1) {
+              //   var plainArray = table
+              //     .column(imgIdx)
+              //     .data()
+              //     .toArray();
+              //     let arr = []
+              //     for(let i=0; i< plainArray.length;i++) {
+              //       let img = getBase64Image(plainArray[i])
+              //       arr.push(img)
+              //     }
+              //   console.log(table.rows().data(), "here");
+
+              // }
+                
+            }
           },
           {
             extend: "csvHtml5",
@@ -622,6 +671,7 @@ class BBDataTable extends Component {
           )
           .trigger()
         this.dt.page.len(prevLen).draw()
+        // saveAsExcel(`Bayu Buana - ${this.props.title}`, this.dt)
       }, 500)
     } catch (e) {
       console.log(e.message)
@@ -775,7 +825,6 @@ class BBDataTable extends Component {
             break
         }
       })
-
     return (
       <div ref={this.wrapper}>
         <Modal show={this.state.isOpen}>
@@ -799,7 +848,6 @@ class BBDataTable extends Component {
                   this.api
                     .delete(this.props.endpoint + "/" + this.state.id)
                     .then(() => {
-                      console.log(this.state)
                       this.props.setAlert({
                         message: `Record ${this.state.name} was successfully deleted.`,
                       })
