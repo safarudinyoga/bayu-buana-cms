@@ -54,7 +54,7 @@ function RoomViewTypeForm(props) {
   const validationMessages = {
     room_view_type_name: {
       required: "Room View Type Name is required",
-      minlength: "Room View Type Name must be at least 1 characters",
+      minlength: "Room View Type Name must be at least 3 characters",
       maxlength: "Room View Type Name cannot be more than 256 characters",
     },
     room_view_type_code: {
