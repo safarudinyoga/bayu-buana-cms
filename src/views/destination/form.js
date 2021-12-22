@@ -406,7 +406,6 @@ function DestinationForm(props) {
       showMedia={true}
       uploadMedia={doUploadMedia}
       mediaData={form}
-      isView={isView}
       moduleName={"destination"}
     >
       <FormHorizontal>

@@ -111,7 +111,7 @@ function RoomViewTypeForm(props) {
                 url: `${env.API_URL}/master/room-view-types?filters=["room_view_type_code","=","${element.value}"]`,
                 success: function (res) {
                   if (res.items.length !== 0) {
-                    if(currentCode == element.value){
+                    if(currentCode === element.value){
                       req = true
                     } else {
                       req = false

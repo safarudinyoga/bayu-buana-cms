@@ -81,7 +81,7 @@ export default function AttractionTable() {
           ["attraction_category_names", "like", values[i].attraction_category_name],
         )
 
-        if(parseInt(i)+1 != values.length) {
+        if(parseInt(i)+1 !== values.length) {
           columns.push(["OR"])
         }
       }
