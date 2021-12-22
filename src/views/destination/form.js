@@ -62,6 +62,7 @@ function DestinationForm(props) {
       label: "Description",
       name: "description",
       type: "textarea",
+      maxLength: 4000
     },
   ]
 
@@ -424,6 +425,7 @@ function DestinationForm(props) {
         <FormInputSelectAjax
           label="Country"
           value={form.country_id}
+          labelRequired="label-required"
           name="country_id"
           endpoint="/master/countries"
           column="country_name"
@@ -438,6 +440,7 @@ function DestinationForm(props) {
 
         <FormInputSelectAjax
           label="City"
+          labelRequired="label-required"
           value={form.destination_city_id}
           name="destination_city_id"
           endpoint="/master/cities"
@@ -460,7 +463,7 @@ function DestinationForm(props) {
           disabled={isView || loading}
           type="textarea"
           minLength="1"
-          maxLength="64"
+          maxLength="4000"
         />
       </FormHorizontal>
 
