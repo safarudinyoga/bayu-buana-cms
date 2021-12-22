@@ -316,7 +316,7 @@ function CityForm(props) {
           value={form.state_province_id}
           name="state_id"
           endpoint="/master/state-provinces"
-          filter={form.country_id}
+          filter={`["country.id", "=", "${form.country_id}"]`}
           column="state_province_name"
           data={stateProvinceData}
           onChange={(e) =>
