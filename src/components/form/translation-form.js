@@ -83,23 +83,35 @@ export default class TranslationForm extends Component {
       this.translated[lang] = {language_code: lang}
     }
 
-    // if(this.props.fields && this.props.fields.length > 1){
-    //   this.props.fields.map((field, index) => {
-    //     let id = "trans-" + lang + "-" + field.name
-    //     let elem = document.getElementById(id)
-    //     if(!elem.value){
-    //       delete this.translated[lang]
-    //     } else {
-    //       this.translated[lang][name] = e.target.value
-    //     }
-    //   })
-    // } else {
+    if(this.props.fields && this.props.fields.length > 1){
+      let inField = []
+      this.props.fields.map((field, index) => {
+        let id = "trans-" + lang + "-" + field.name
+        let elem = document.getElementById(id)
+        inField.push(elem.value);
+        // if(!elem.value){
+        //   delete this.translated[lang]
+        // } else {
+        //   this.translated[lang][name] = e.target.value
+        // }
+      })
+      const allEmpty = inField.every(field => {
+        if(!field) return true
+      })
+
+      if(allEmpty){
+        delete this.translated[lang]
+      } else {
+        this.translated[lang][name] = e.target.value
+      }
+
+    } else {
       if(!e.target.value){
         delete this.translated[lang]
       } else {
         this.translated[lang][name] = e.target.value
       }
-    // }
+    }
     
     console.log(this.translated)
   }
