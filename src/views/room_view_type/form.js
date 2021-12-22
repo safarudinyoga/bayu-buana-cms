@@ -34,7 +34,7 @@ function RoomViewTypeForm(props) {
   const validationRules = {
     room_view_type_code: {
       required: true,
-      min: 3,
+      minlength: 3,
     },
     room_view_type_name: {
       required: true,
