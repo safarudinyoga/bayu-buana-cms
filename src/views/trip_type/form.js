@@ -153,6 +153,7 @@ function TripTypeForm(props) {
               name="is_default"
               id="tt-1"
               value={true}
+              disabled={isView || loading}
               checked={form.is_default}
               onChange={(e) => setForm({...form, is_default: true})}
             />
@@ -167,6 +168,7 @@ function TripTypeForm(props) {
               name="is_default"
               id="tt-2"
               value={false}
+              disabled={isView || loading}
               checked={!form.is_default}
               onChange={(e) => setForm({...form, is_default: false})}
             />
