@@ -73,7 +73,7 @@
 } */
 
 .dataTable-root .select-checkbox {
-    min-width: 70px;
+    min-width: 80px;
 }
 
 .dataTable-root .select-checkbox .row-handle {
@@ -141,3 +141,8 @@ table.dataTable>tbody>tr.child span.dtr-title {
     width: auto;
   }
 }
+table.dataTable.dtr-inline.collapsed>tbody>tr>td.dtr-control,table.dataTable.dtr-inline.collapsed>tbody>tr>th.dtr-control{
+  position:relative;    
+  cursor:pointer
+}
+
