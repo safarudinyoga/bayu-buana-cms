@@ -14,64 +14,6 @@ import env from "../../config/environment"
 const endpoint = "/master/attractions"
 const backUrl = "/master/attractions"
 
-const MediaGallery = (props) => {
-
-  const [image, setImage] = useState(false)
-
-  const doUpload = async (e) => {
-    try {
-      let api = new Api()
-      let payload = new FormData()
-      payload.append("files", e.target.files[0])
-      let res = await api.post("/multimedia/files", payload)
-      if (res.data) {
-        if (res.data.url) {
-          setImage(res.data.url);
-        }
-      }
-    } catch (e) { }
-  }
-
-  return (
-    <div className="pos-relative ht-100p">
-      <label htmlFor="upload-me">
-        <div className="marker pos-absolute t-10 l-10">{props.name}</div>
-        {image ? (<img src={image} className="rounded" alt="" style={{width: '100%'}} />) : <img src="/img/noimg.jpeg" className="rounded" alt="" style={{width: '100%'}} />}
-      </label>
-      <input type="file" id="upload-me" className="d-none" onChange={doUpload} style={{display: 'none'}} disabled={props.isView} />
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="feather feather-edit svg-20 pos-absolute r--10 text-primary">
-        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-      </svg>
-    </div>
-  )
-}
-
-// react function named gallery
-const Gallery = (props) => {
-  return (
-    <div className="row row-sm media">
-      <div className="col-12 mg-y-10">
-        <hr />
-        <h4>Media</h4>
-        <div className="row row-sm">
-          <div className="col-lg-6">
-            <MediaGallery name="BANNER DESKTOP" />
-          </div>
-          <div className="col-lg-6">
-            <MediaGallery name="BANNER MOBILE" />
-          </div>
-        </div>
-        <div className="row row-sm">
-          <div className="col-lg-6">
-            <MediaGallery name="BANNER TABLET" />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 function AttractionForm(props) {
   let api = new Api()
   let dispatch = useDispatch()
@@ -354,7 +296,7 @@ function AttractionForm(props) {
                 url: `${env.API_URL}/master/attractions?filters=${encodeURIComponent(filters)}`,
                 success: function (res) {
                   if (res.items.length !== 0) {
-                    if (currentName == element.value) {
+                    if (currentName === element.value) {
                       req = true
                     } else {
                       req = false
@@ -580,7 +522,6 @@ function AttractionForm(props) {
       showMedia={true}
       uploadMedia={doUploadMedia}
       mediaData={form}
-      isView={isView}
       moduleName={"attraction"}
     >
       <div className="col-lg-12">
