@@ -759,6 +759,19 @@ class BBDataTable extends Component {
     }, 300)
   }
 
+  onChangeSelect (e) {
+    let table = $(e.target).closest("table")
+    let items = $(".select-checkbox-item", table)
+
+    // console.log(this.state.selected)
+    for (let i = 0; i < items.length; i++) {
+      let includeItem = this.state.selected.includes($(items.get(i)).data("id"))
+      if(includeItem) {
+        // console.log($(items.get(i)).prop('checked', true))
+      }
+    }
+  }
+
   render() {
     $(document)
       .off("change", ".select-checkbox-all")
@@ -775,9 +788,14 @@ class BBDataTable extends Component {
         for (let i = 0; i < items.length; i++) {
           selected.push($(items.get(i)).data("id"))
         }
+        let filterValues = this.state.selected.filter(e => selected.indexOf(e) === -1)
+        console.log(filterValues, "filters")
+        console.log(selected, "selected")
         this.setState({
-          selected: selected,
-        })
+          selected: [...filterValues, ...selected],
+        }, 
+        () => this.onChangeSelect(e)
+        )
         setTimeout(() => {
           this.inProgress = false
         }, 100)
@@ -802,10 +820,13 @@ class BBDataTable extends Component {
             $(".select-checkbox-all:not(:checked)", table).prop("checked", true)
           }
         } catch (e) {}
-
+        let filterValues = this.state.selected.filter(e => selected.indexOf(e) === -1)
+        console.log(filterValues, items, "chechke")
         this.setState({
-          selected: selected,
-        })
+          selected: [...filterValues, ...selected],
+        },
+          () => this.onChangeSelect(e)
+        )
         setTimeout(() => {
           this.inProgress = true
         }, 100)
