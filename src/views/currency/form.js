@@ -39,11 +39,13 @@ function CurrencyForm(props) {
       label: "Currency Name",
       name: "currency_name",
       type: "text",
+      maxLength: 64,
     },
     {
       label: "Minor Unit Name",
       name: "minor_unit_name",
       type: "text",
+      maxLength: 64,
     },
   ]
 
@@ -77,7 +79,7 @@ function CurrencyForm(props) {
       maxlength: 64,
     },
     minor_unit: {
-      min: 0,
+      min: 1,
       max: 99,
     },
     standard_precision: {
@@ -432,7 +434,7 @@ function CurrencyForm(props) {
           onChange={(e) => setForm({...form, minor_unit: parseInt(e.target.value)})}
           disabled={isView || loading}
           type="number"
-          min="0"
+          min="1"
           max="99"
         />
         <FormInputControl
