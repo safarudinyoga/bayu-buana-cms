@@ -599,7 +599,7 @@ function AttractionForm(props) {
             name="city_id"
             data={cityData}
             endpoint="/master/cities"
-            filter={`["state_province.id", "=", "${form.state_province_id}"]`}
+            filter={`["country.id", "=", "${form.country_id}"]`}
             column="city_name"
             onChange={(e) =>
               setForm({...form, city_id: e.target.value || null})
