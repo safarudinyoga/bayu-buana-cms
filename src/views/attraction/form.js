@@ -571,9 +571,11 @@ function AttractionForm(props) {
             data={countryData}
             endpoint="/master/countries"
             column="country_name"
-            onChange={(e) =>
+            onChange={(e) => {
               setForm({...form, country_id: e.target.value || null})
-            }
+              $('#attr_state').empty();
+              $('#attr_city').empty();
+            }}
             disabled={isView || loading}
             type="select"
           />
@@ -582,6 +584,7 @@ function AttractionForm(props) {
             label="State/ Province"
             value={form.state_province_id}
             name="state_id"
+            id="attr_state"
             data={provinceData}
             endpoint="/master/state-provinces"
             filter={`["country.id", "=", "${form.country_id}"]`}
@@ -598,6 +601,7 @@ function AttractionForm(props) {
             value={form.city_id}
             labelRequired="label-required"
             name="city_id"
+            id="attr_city"
             data={cityData}
             endpoint="/master/cities"
             filter={`["country.id", "=", "${form.country_id}"]`}
