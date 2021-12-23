@@ -561,7 +561,8 @@ class BBDataTable extends Component {
               cbHTML.prop("checked", true)
             }
           }
-            $(".select-checkbox-all").prop("checked", itemsSelected.length === items.length)
+          let checkedHeader = items.length > 0 && itemsSelected.length === items.length
+          $(".select-checkbox-all").prop("checked", checkedHeader)
         },
       })
 
@@ -740,13 +741,14 @@ class BBDataTable extends Component {
     } catch (e) {}
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps, prevState) {
     if (this.inProgress) {
       return
     }
     this.inProgress = true
     try {
-      this.dt.ajax.reload()
+      console.log(prevProps, prevState)
+      if(prevProps.filters && prevProps.filters !== this.props.filters) this.dt.ajax.reload()
     } catch (e) {}
     setTimeout(() => {
       this.inProgress = false
