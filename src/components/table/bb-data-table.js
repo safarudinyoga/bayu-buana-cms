@@ -316,21 +316,10 @@ class BBDataTable extends Component {
               if (!filters) {
                 filters = []
               }
-              if(filters.length > 1) {
-                let temptFilter = []
-                filters.forEach((e,i) => {
-                  temptFilter.push(e)
-                  if (i < filters.length-1) temptFilter.push(["AND"])
-                })
-                filters = temptFilter
-              }
               if (
                 this.state.extraFilters &&
                 this.state.extraFilters.length > 0
               ) {
-                if (filters.length > 0) {
-                  filters.push(["AND"])
-                }
                 filters.push(this.state.extraFilters)
               }
             } catch (e) {}
@@ -401,9 +390,11 @@ class BBDataTable extends Component {
                   if (filters.length > 0) {
                     extraFilters = []
                     for (var c in columns) {
+                      let tempFilters = columns[c]
                       for (var f in filters) {
-                        extraFilters.push(columns[c] + ',["AND"],' + JSON.stringify(filters[f]))
+                        tempFilters = tempFilters + ',["AND"],' + JSON.stringify(filters[f])
                       }
+                      extraFilters.push(tempFilters)
                     }
                     overrideParams.filters =
                     "[" + extraFilters.join(',["OR"],') + "]"
@@ -416,6 +407,7 @@ class BBDataTable extends Component {
                 extraFilters = []
                 for (var x in filters) {
                   extraFilters.push(JSON.stringify(filters[x]))
+                  if (x < filters.length-1) extraFilters.push(JSON.stringify(["AND"]))
                 }
                 overrideParams.filters = "[" + extraFilters.join(",") + "]"
               }
@@ -746,7 +738,7 @@ class BBDataTable extends Component {
     }
     this.inProgress = true
     try {
-
+      this.dt.ajax.reload()
     } catch (e) {}
     setTimeout(() => {
       this.inProgress = false
