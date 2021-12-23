@@ -199,7 +199,7 @@ class TableHeader extends Component {
                 onClick={this.handleClick.bind(this)}
                 className="btn btn-warning float-right button-new"
               >
-                <img src={createIcon} className="mr-1" />
+                <img src={createIcon} className="mr-1" alt="new"/>
                 Create New
               </button>
             </OverlayTrigger>

@@ -45,11 +45,13 @@ function CountryForm(props) {
       label: "Country Name",
       name: "country_name",
       type: "text",
+      maxLength: 64,
     },
     {
       label: "Nationality",
       name: "nationality",
       type: "text",
+      maxLength: 64,
     },
   ]
 
@@ -178,7 +180,7 @@ function CountryForm(props) {
                 url: `${env.API_URL}/master/countries?filters=["country_code","=","${element.value}"]`,
                 success: function (res) {
                   if (res.items.length !== 0) {
-                    if(currentCode == element.value){
+                    if(currentCode === element.value){
                       req = true
                     } else {
                       req = false
