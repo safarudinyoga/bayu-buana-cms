@@ -72,6 +72,7 @@ function CurrencyForm(props) {
       required: true,
       minlength: 1,
       maxlength: 64,
+      checkSymbol: true,
     },
     position: {},
     minor_unit_name: {
@@ -135,6 +136,7 @@ function CurrencyForm(props) {
         ],
       }),
     )
+    console.log(formId)
     if (formId) {
       try {
         let res = await api.get(endpoint + "/" + formId)
@@ -144,6 +146,7 @@ function CurrencyForm(props) {
           let currentCode = res.data.currency_code
           let currentNumeric = res.data.numeric_code
           let currentName = res.data.currency_name
+          let currentSymbol = res.data.currency_symbol
 
           $.validator.addMethod(
             "checkName",
@@ -220,6 +223,31 @@ function CurrencyForm(props) {
             },
             "Numeric Code already exists",
           )
+          $.validator.addMethod(
+            "checkSymbol",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/currencies?filters=["currency_symbol","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if(currentSymbol === element.value){
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+    
+              return req
+            },
+            "Currency Symbol already exists",
+          )
         }
       } catch (e) { }
 
@@ -293,6 +321,27 @@ function CurrencyForm(props) {
           return req
         },
         "Numeric Code already exists",
+      )
+      $.validator.addMethod(
+        "checkSymbol",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/currencies?filters=["currency_symbol","=","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
+
+          return req
+        },
+        "Currency Symbol already exists",
       )
     }
   }, [])
