@@ -106,7 +106,6 @@ function PassengerTypeForm(props) {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
         if (res.data) {
-          console.log(res.data)
           let currentName = res.data.passenger_type_name
           let currentTypeCode = res.data.passenger_type_code
           let currentAlphaCode = res.data.passenger_alpha_3_code
