@@ -40,6 +40,7 @@ function ZoneForm(props) {
       label: "Description",
       name: "description",
       type: "textarea",
+      maxLength: 4000
     },
   ]
 
@@ -61,7 +62,7 @@ function ZoneForm(props) {
       required: true,
       minlength: 1,
       maxlength: 16,
-      checkCode: true,
+      checkCode: true,      
     },
   }
 

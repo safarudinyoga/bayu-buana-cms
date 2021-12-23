@@ -50,6 +50,7 @@ function AirlineForm(props) {
       checkCode: true,
     },
     numeric_code: {
+      required: true,
       minlength: 3,
       maxlength: 3,
       checkNumeric: true,
@@ -68,12 +69,18 @@ function AirlineForm(props) {
   const validationMessages = {
     airline_name: {
       required: "Airline Name is required",
+      minlength: "Airline Name must be at least 1 characters",
+      maxlength: "Airline Name cannot be more than 64 characters",
     },
     numeric_code: {
       required: "Numeric Code is required",
+      minlength: "Numeric Code must be at least 3 characters",
+      maxlength: "Numeric Code cannot be more than 3 characters",
     },
     airline_code: {
       required: "Airline Code is required",
+      minlength: "Airline Code must be at least 1 characters",
+      maxlength: "Airline Code cannot be more than 2 characters",
     },
     airline_asset: {
       required: "Airline Logo Image is required",
@@ -421,7 +428,7 @@ function AirlineForm(props) {
           cr="12"
           onChange={(e) => setForm({ ...form, numeric_code: e.target.value })}
           disabled={isView || loading}
-          type="number"
+          type="text"
           minlength="3"
           maxLength="3"
           hint="Numeric code maximum 3 characters"
