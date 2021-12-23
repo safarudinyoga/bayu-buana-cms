@@ -909,7 +909,6 @@ class BBDataTable extends Component {
               onClick={() => {
                 this.setState({
                   isOpen: false,
-                  selected: false,
                 })
               }}
             >
