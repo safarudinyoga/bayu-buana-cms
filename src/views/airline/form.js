@@ -429,7 +429,7 @@ function AirlineForm(props) {
           cr="12"
           onChange={(e) => setForm({ ...form, numeric_code: e.target.value })}
           disabled={isView || loading}
-          type="text"
+          type="number"
           minlength="3"
           maxLength="3"
           hint="Numeric code maximum 3 characters"

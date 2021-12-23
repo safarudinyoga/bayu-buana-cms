@@ -5,6 +5,7 @@ import React, {Component} from "react"
 import "select2"
 import "select2/dist/css/select2.css"
 import FormInputControl from "./input-control"
+import "./input-select-ajax.css"
 
 export default class FormInputSelectAjax extends Component {
   constructor(props) {

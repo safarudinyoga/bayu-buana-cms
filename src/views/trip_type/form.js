@@ -42,8 +42,6 @@ function TripTypeForm(props) {
       minlength: 1,
       maxlength: 36,
       checkCode: true,
-      number: true,
-      noSpace: true
     },
     trip_type_name: {
       required: true,
