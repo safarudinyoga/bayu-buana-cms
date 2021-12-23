@@ -561,7 +561,8 @@ class BBDataTable extends Component {
               cbHTML.prop("checked", true)
             }
           }
-            $(".select-checkbox-all").prop("checked", itemsSelected.length === items.length)
+          let checkedHeader = items.length > 0 && itemsSelected.length === items.length
+          $(".select-checkbox-all").prop("checked", checkedHeader)
         },
       })
 
