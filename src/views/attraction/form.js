@@ -366,10 +366,11 @@ function AttractionForm(props) {
         "checkName",
         function (value, element) {
           var req = false
+          let filters = JSON.stringify(["attraction_name","=",element.value])
           $.ajax({
             type: "GET",
             async: false,
-            url: `${env.API_URL}/master/attractions?filters=["attraction_name","=","${encodeURIComponent(element.value)}"]`,
+            url: `${env.API_URL}/master/attractions?filters=${encodeURIComponent(filters)}`,
             success: function (res) {
               if (res.items.length !== 0) {
                 req = false
