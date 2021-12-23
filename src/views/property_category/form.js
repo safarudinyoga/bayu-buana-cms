@@ -1,18 +1,21 @@
-import {withRouter} from "react-router"
-import React, {useEffect, useState} from "react"
+import { withRouter } from "react-router"
+import React, { useEffect, useState } from "react"
 import Api from "config/api"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
 import FormBuilder from "components/form/builder"
 import useQuery from "lib/query"
-import {useDispatch} from "react-redux"
-import {setUIParams} from "redux/ui-store"
+import { useDispatch } from "react-redux"
+import { setAlert, setUIParams } from "redux/ui-store"
+import $ from "jquery"
+import env from "../../config/environment"
 
 const endpoint = "/master/property-categories"
 const backUrl = "/master/property-categories"
 
 function PropertyCategoryForm(props) {
   let dispatch = useDispatch()
+  let formId = props.match.params.id
 
   const isView = useQuery().get("action") === "view"
   const [formBuilder, setFormBuilder] = useState(null)
@@ -34,13 +37,26 @@ function PropertyCategoryForm(props) {
   const validationRules = {
     property_category_code: {
       required: true,
-      min: 0,
-      max: 99,
+      number: true,
+      checkCode: true,
+      noSpace: true,
     },
     property_category_name: {
       required: true,
       minlength: 1,
       maxlength: 256,
+      checkName: true,
+      noSpace: true,
+    },
+  }
+
+  const validationMessages = {
+    property_category_code: {
+      required: "Property Category Code is required.",
+      number: "Code format is invalid",
+    },
+    property_category_name: {
+      required: "Property Category Name is required.",
     },
   }
 
@@ -76,15 +92,115 @@ function PropertyCategoryForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
-      } catch (e) { }
+        if (res.data) {
+          let currentName = res.data.property_category_name
+          let currentCode = res.data.property_category_code
+
+          $.validator.addMethod(
+            "checkCode",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/property-categories?filters=["property_category_code","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if (currentCode === parseInt(element.value)) {
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+
+              return req
+            },
+            "Code already exists",
+          )
+
+          $.validator.addMethod(
+            "checkName",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/property-categories?filters=["property_category_name","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if (currentName === element.value) {
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+
+              return req
+            },
+            "Property Category Name already exists",
+          )
+        }
+      } catch (e) {}
 
       try {
         let res = await api.get(endpoint + "/" + formId + "/translations", {
           size: 50,
         })
         setTranslations(res.data.items)
-      } catch (e) { }
+      } catch (e) {}
       setLoading(false)
+    } else {
+      $.validator.addMethod(
+        "checkCode",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/property-categories?filters=["property_category_code","=","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
+
+          return req
+        },
+        "Code already exists",
+      )
+
+      $.validator.addMethod(
+        "checkName",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/property-categories?filters=["property_category_name","=","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
+
+          return req
+        },
+        "Property Category Name already exists",
+      )
     }
   }, [])
 
@@ -100,7 +216,10 @@ function PropertyCategoryForm(props) {
     setLoading(true)
     let api = new Api()
     try {
-      let res = await api.putOrPost(endpoint, id, form)
+      let res = await api.putOrPost(endpoint, id, {
+        ...form,
+        property_category_code: parseInt(form.property_category_code),
+      })
       setId(res.data.id)
       for (let i in translated) {
         let tl = translated[i]
@@ -108,9 +227,21 @@ function PropertyCategoryForm(props) {
         await api.putOrPost(path, tl.id, tl)
       }
     } catch (e) {
+      dispatch(
+        setAlert({
+          message: `Failed to ${formId ? "update" : "save"} this record.`,
+        }),
+      )
     } finally {
       setLoading(false)
       props.history.push(backUrl)
+      dispatch(
+        setAlert({
+          message: `Record ${form.property_category_code} - ${
+            form.property_category_name
+          } has been successfully ${formId ? "updated" : "saved"}.`,
+        }),
+      )
     }
   }
 
@@ -125,6 +256,7 @@ function PropertyCategoryForm(props) {
       alertMessage={"Incomplete data"}
       isValid={false}
       rules={validationRules}
+      validationMessages={validationMessages}
     >
       <FormHorizontal>
         <FormInputControl
@@ -133,7 +265,7 @@ function PropertyCategoryForm(props) {
           value={form.property_category_name}
           name="property_category_name"
           onChange={(e) =>
-            setForm({...form, property_category_name: e.target.value})
+            setForm({ ...form, property_category_name: e.target.value })
           }
           disabled={isView || loading}
           type="text"
@@ -148,16 +280,16 @@ function PropertyCategoryForm(props) {
           labelRequired="label-required"
           value={form.property_category_code}
           name="property_category_code"
-          cl={{md:"12"}}
+          cl={{ md: "12" }}
           cr="12"
           onChange={(e) =>
-            setForm({...form, property_category_code: parseInt(e.target.value)})
+            setForm({
+              ...form,
+              property_category_code: e.target.value,
+            })
           }
           disabled={isView || loading}
-          type="number"
-          min="0"
-          max="99"
-          hint="Property Category Code is numeric"
+          type="text"
         />
       </FormHorizontal>
     </FormBuilder>
