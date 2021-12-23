@@ -324,7 +324,7 @@ function AttractionCategoryForm(props) {
           maxLength="4000"
         />
         <FormInputControl
-          label="Attraction Category Icon Image"
+          label="Icon"
           type="image"
           labelRequired="label-required"
           name="attraction_category_asset"

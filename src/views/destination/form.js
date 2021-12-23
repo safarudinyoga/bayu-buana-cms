@@ -73,10 +73,10 @@ function DestinationForm(props) {
       maxlength: 256,
       checkName: true,
     },
-    country: {
+    country_id: {
       required: true,
     },
-    city: {
+    destination_city_id: {
       required: true,
     },
     description: {
@@ -108,10 +108,10 @@ function DestinationForm(props) {
     destination_code: {
       required: "Destination Code is required",
     },
-    country: {
+    country_id: {
       required: "Country is required",
     },
-    city: {
+   destination_city_id: {
       required: "City is required",
     },
     destination_asset_desktop: {
@@ -310,6 +310,7 @@ function DestinationForm(props) {
 
   const onSave = async () => {
     let translated = formBuilder.getTranslations()
+
     setLoading(true)
     let api = new Api()
     try {

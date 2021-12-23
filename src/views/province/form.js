@@ -284,7 +284,7 @@ function ProvinceForm(props) {
           maxLength="256"
         />
         <FormInputSelectAjax
-          label="State / Province Category"
+          label="Subdivision Category"
           value={form.state_province_category_id}
           name="state_province_category_id"
           cl="4"
@@ -330,7 +330,7 @@ function ProvinceForm(props) {
           type="text"
           minLength="1"
           maxLength="8"
-          hint="State / Province code maximum 2 characters"
+          hint="State / Province code maximum 8 characters"
         />
       </FormHorizontal>
     </FormBuilder>

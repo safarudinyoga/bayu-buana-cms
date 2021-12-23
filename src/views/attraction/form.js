@@ -366,10 +366,11 @@ function AttractionForm(props) {
         "checkName",
         function (value, element) {
           var req = false
+          let filters = JSON.stringify(["attraction_name","=",element.value])
           $.ajax({
             type: "GET",
             async: false,
-            url: `${env.API_URL}/master/attractions?filters=["attraction_name","=","${encodeURIComponent(element.value)}"]`,
+            url: `${env.API_URL}/master/attractions?filters=${encodeURIComponent(filters)}`,
             success: function (res) {
               if (res.items.length !== 0) {
                 req = false
@@ -464,6 +465,7 @@ function AttractionForm(props) {
 
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
+      
       for (let i in translated) {
         let tl = translated[i]
         console.log(tl)
@@ -569,9 +571,11 @@ function AttractionForm(props) {
             data={countryData}
             endpoint="/master/countries"
             column="country_name"
-            onChange={(e) =>
+            onChange={(e) => {
               setForm({...form, country_id: e.target.value || null})
-            }
+              $('#attr_state').empty();
+              $('#attr_city').empty();
+            }}
             disabled={isView || loading}
             type="select"
           />
@@ -580,6 +584,7 @@ function AttractionForm(props) {
             label="State/ Province"
             value={form.state_province_id}
             name="state_id"
+            id="attr_state"
             data={provinceData}
             endpoint="/master/state-provinces"
             filter={`["country.id", "=", "${form.country_id}"]`}
@@ -596,9 +601,10 @@ function AttractionForm(props) {
             value={form.city_id}
             labelRequired="label-required"
             name="city_id"
+            id="attr_city"
             data={cityData}
             endpoint="/master/cities"
-            filter={`["state_province.id", "=", "${form.state_province_id}"]`}
+            filter={`["country.id", "=", "${form.country_id}"]`}
             column="city_name"
             onChange={(e) =>
               setForm({...form, city_id: e.target.value || null})

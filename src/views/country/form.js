@@ -45,11 +45,13 @@ function CountryForm(props) {
       label: "Country Name",
       name: "country_name",
       type: "text",
+      maxLength: 64,
     },
     {
       label: "Nationality",
       name: "nationality",
       type: "text",
+      maxLength: 64,
     },
   ]
 

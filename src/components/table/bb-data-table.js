@@ -316,21 +316,10 @@ class BBDataTable extends Component {
               if (!filters) {
                 filters = []
               }
-              if(filters.length > 1) {
-                let temptFilter = []
-                filters.forEach((e,i) => {
-                  temptFilter.push(e)
-                  if (i < filters.length-1) temptFilter.push(["AND"])
-                })
-                filters = temptFilter
-              }
               if (
                 this.state.extraFilters &&
                 this.state.extraFilters.length > 0
               ) {
-                if (filters.length > 0) {
-                  filters.push(["AND"])
-                }
                 filters.push(this.state.extraFilters)
               }
             } catch (e) {}
@@ -401,9 +390,11 @@ class BBDataTable extends Component {
                   if (filters.length > 0) {
                     extraFilters = []
                     for (var c in columns) {
+                      let tempFilters = columns[c]
                       for (var f in filters) {
-                        extraFilters.push(columns[c] + ',["AND"],' + JSON.stringify(filters[f]))
+                        tempFilters = tempFilters + ',["AND"],' + JSON.stringify(filters[f])
                       }
+                      extraFilters.push(tempFilters)
                     }
                     overrideParams.filters =
                     "[" + extraFilters.join(',["OR"],') + "]"
@@ -416,6 +407,7 @@ class BBDataTable extends Component {
                 extraFilters = []
                 for (var x in filters) {
                   extraFilters.push(JSON.stringify(filters[x]))
+                  if (x < filters.length-1) extraFilters.push(JSON.stringify(["AND"]))
                 }
                 overrideParams.filters = "[" + extraFilters.join(",") + "]"
               }
@@ -539,6 +531,7 @@ class BBDataTable extends Component {
           lengthMenu: "_MENU_",
         },
         fnDrawCallback: (t) => {
+          const { selected } = this.state
           let wrapper = $(".dataTables_paginate", t.nTableWrapper)
           wrapper.append(
             '<span class="d-none d-md-block float-right mt-2 mr-2 text-label-page">Page: </span>',
@@ -559,9 +552,17 @@ class BBDataTable extends Component {
             $(t.nTableWrapper).find(".dataTables_paginate").show()
           // }
 
-          if ($(".select-checkbox-all").is(":checked")) {
-            $(".select-checkbox-all").prop("checked", false)
+          let items = $(".select-checkbox-item", t.nTableWrapper)
+          let itemsSelected = []
+          for (let i = 0; i < items.length; i++) {
+            let cbHTML = $(items.get(i))
+            if(selected.includes(cbHTML.data("id"))) {
+              itemsSelected.push(cbHTML.data("id"))
+              cbHTML.prop("checked", true)
+            }
           }
+          let checkedHeader = items.length > 0 && itemsSelected.length === items.length
+          $(".select-checkbox-all").prop("checked", checkedHeader)
         },
       })
 
@@ -740,13 +741,13 @@ class BBDataTable extends Component {
     } catch (e) {}
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps) {
     if (this.inProgress) {
       return
     }
     this.inProgress = true
     try {
-
+        if(prevProps.filters !== this.props.filters) this.dt.ajax.reload()
     } catch (e) {}
     setTimeout(() => {
       this.inProgress = false
@@ -758,16 +759,31 @@ class BBDataTable extends Component {
       .off("change", ".select-checkbox-all")
       .on("change", ".select-checkbox-all", (e) => {
         this.inProgress = true
-        console.log("change all")
         let table = $(e.target).closest("table")
-        let selected = []
+        let itemsId = []
         $(".select-checkbox-item", table).prop(
           "checked",
           $(e.target).is(":checked"),
         )
-        let items = $(".select-checkbox-item:checked", table)
+        let items = $(".select-checkbox-item", table)
         for (let i = 0; i < items.length; i++) {
-          selected.push($(items.get(i)).data("id"))
+          itemsId.push($(items.get(i)).data("id"))
+        }
+          
+        let itemsChecked = $(".select-checkbox-item:checked", table)
+        let selected = this.state.selected
+
+        if(itemsChecked.length > 0) {
+          for (let idx = 0; idx < itemsChecked.length; idx++) {
+            console.log(idx)
+            let id = $(itemsChecked.get(idx)).data("id")
+            if(!selected.includes(id)) {
+              selected.push(id)
+            }
+          }
+        } else {
+          const idsToDelete = new Set(itemsId);
+          selected = selected.filter(id => !idsToDelete.has(id))
         }
         this.setState({
           selected: selected,
@@ -780,23 +796,30 @@ class BBDataTable extends Component {
     $(document)
       .off("change", ".select-checkbox-item")
       .on("change", ".select-checkbox-item", (e) => {
-        console.log("change")
         this.inProgress = true
         let table = $(e.target).closest("table")
-        let selected = []
+        let itemId = $($(e.target).get(0)).data('id')
+        let selectedVal = []
         let items = $(".select-checkbox-item:checked", table)
         for (let i = 0; i < items.length; i++) {
-          selected.push($(items.get(i)).data("id"))
+          selectedVal.push($(items.get(i)).data("id"))
         }
 
         try {
-          if (selected.length < this.dt.table().data().length) {
+          if (selectedVal.length < this.dt.table().data().length) {
             $(".select-checkbox-all:checked", table).prop("checked", false)
           } else {
             $(".select-checkbox-all:not(:checked)", table).prop("checked", true)
           }
         } catch (e) {}
 
+        let selected = this.state.selected
+        if(selected.includes(itemId)) {
+          selected = selected.filter(e => e !== itemId)
+        } else {
+          selected.push(itemId)
+        }
+        
         this.setState({
           selected: selected,
         })
@@ -887,7 +910,6 @@ class BBDataTable extends Component {
               onClick={() => {
                 this.setState({
                   isOpen: false,
-                  selected: false,
                 })
               }}
             >
