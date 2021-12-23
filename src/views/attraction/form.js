@@ -521,6 +521,7 @@ function AttractionForm(props) {
 
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
+      
       for (let i in translated) {
         let tl = translated[i]
         let path = endpoint + "/" + res.data.id + "/translations"

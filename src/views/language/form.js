@@ -55,7 +55,7 @@ function LanguageForm(props) {
       checkCode: true,
     },
     language_alpha_3_code: {
-      required: false,
+      required: true,
       minlength: 3,
       maxlength: 3,
       checkAlpha3: true,
