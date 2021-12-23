@@ -14,7 +14,7 @@ export default class TranslationForm extends Component {
       currentLanguage: "",
       languages: [],
       loading: true,
-
+      translated:{},
     }
 
     this.translated = {}
@@ -52,6 +52,7 @@ export default class TranslationForm extends Component {
         let item = this.props.translations[i]
         this.translated[item.language_code] = item
       }
+      this.setState({translated: this.translated})
       this.hasTranslated = true
       if (this.props.fields) {
         for (let i in this.props.translations) {
@@ -76,9 +77,9 @@ export default class TranslationForm extends Component {
   }
 
   onSelected(e) {
-    console.log(this.translated);
     this.setState({
       currentLanguage: e.target.innerText,
+      translated: this.translated
     })
   }
 
@@ -117,6 +118,9 @@ export default class TranslationForm extends Component {
       }
     }
     
+    this.setState({
+      translated: this.translated,
+    })
     console.log(this.translated)
   }
 
@@ -158,7 +162,7 @@ export default class TranslationForm extends Component {
               }}
             >
               <span className="text-label-input">{lang.language_name}</span>
-              {lang.language_code in this.translated ? (
+              {lang.language_code in this.state.translated ? (
                 ""
               ) : (
                 <i className="fas fa-exclamation-triangle" style={{color: 'red'}}></i>
