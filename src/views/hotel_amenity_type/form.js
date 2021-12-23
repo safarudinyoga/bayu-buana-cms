@@ -49,7 +49,7 @@ function HotelAmenityForm(props) {
       required: true,
       min: 0,
       max: 99,
-      checkCode: formId == null,
+      checkCode: true,
     },
     hotel_amenity_category_hotel_amenity_type: {
       required: false,
@@ -58,7 +58,7 @@ function HotelAmenityForm(props) {
       required: true,
       minlength: 1,
       maxlength: 256,
-      checkName: formId == null,
+      checkName: true,
     },
     hotel_amenity_type_asset: {
       required: false,
@@ -124,6 +124,61 @@ function HotelAmenityForm(props) {
         }
 
         setForm(data)
+
+        if(res.data) {
+          let currentCode = res.data.hotel_amenity_type_code
+          let currentName = res.data.hotel_amenity_type_name
+          $.validator.addMethod(
+            "checkName",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/hotel-amenity-types?filters=["hotel_amenity_type_name","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if(currentName === element.value){
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+
+              return req
+            },
+            "Hotel Amenity Type Name already exists",
+          )
+          $.validator.addMethod(
+            "checkCode",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/hotel-amenity-types?filters=["hotel_amenity_type_code","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if(currentCode === element.value){
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+
+              return req
+            },
+            "Hotel Amenity Type Code already exists",
+          )
+        }
 
       } catch (e) {
         console.error({errorSetForm: e});
@@ -322,7 +377,7 @@ function HotelAmenityForm(props) {
           }
           // onChange={(e) => setForm({...form, hotel_amenity_type_code: e.target.value})}
           disabled={isView || loading}
-          type="text"
+          type="number"
           pattern="\d*"
           minLength="0"
           maxLength="99"
