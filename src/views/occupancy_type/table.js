@@ -29,10 +29,8 @@ export default function OccupancyTypeTable() {
     baseRoute: "/master/occupancy-types/form",
     endpoint: "/master/occupancy-types",
     deleteEndpoint: "/master/batch-actions/delete/occupancy-types",
-    activationEndpoint:
-      "/master/batch-actions/activate/occupancy-types",
-    deactivationEndpoint:
-      "/master/batch-actions/deactivate/occupancy-types",
+    activationEndpoint: "/master/batch-actions/activate/occupancy-types",
+    deactivationEndpoint: "/master/batch-actions/deactivate/occupancy-types",
     columns: [
       {
         title: "Occupancy Type Code",
@@ -41,10 +39,7 @@ export default function OccupancyTypeTable() {
       {
         title: "Occupancy Type Name",
         data: "occupancy_type_name",
-        render: renderColumn(
-          "occupancy_type",
-          "occupancy_type_name",
-        ),
+        render: renderColumn("occupancy_type", "occupancy_type_name"),
       },
       {
         title: "Occupancy",
@@ -53,7 +48,7 @@ export default function OccupancyTypeTable() {
       {
         title: "Is Default",
         data: "is_default",
-        render:rowDefault
+        render: rowDefault,
       },
       {
         searchable: false,
@@ -67,6 +62,7 @@ export default function OccupancyTypeTable() {
         visible: false,
       },
     ],
+    recordName: ["occupancy_type_code", "occupancy_type_name"],
   }
   return <BBDataTable {...params} />
 }
