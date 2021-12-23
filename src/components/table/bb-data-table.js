@@ -741,14 +741,13 @@ class BBDataTable extends Component {
     } catch (e) {}
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     if (this.inProgress) {
       return
     }
     this.inProgress = true
     try {
-      console.log(prevProps, prevState)
-      if(prevProps.filters && prevProps.filters !== this.props.filters) this.dt.ajax.reload()
+        if(prevProps.filters !== this.props.filters) this.dt.ajax.reload()
     } catch (e) {}
     setTimeout(() => {
       this.inProgress = false
