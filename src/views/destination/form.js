@@ -310,6 +310,7 @@ function DestinationForm(props) {
 
   const onSave = async () => {
     let translated = formBuilder.getTranslations()
+    console.log(translated, "onsave")
     setLoading(true)
     let api = new Api()
     try {

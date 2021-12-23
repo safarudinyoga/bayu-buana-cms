@@ -4,6 +4,7 @@ import {Component} from "react"
 import FormHorizontal from "./horizontal"
 import FormInputControl from "./input-control"
 import "./translation-form.css"
+import translation from '../../lib/translation';
 
 export default class TranslationForm extends Component {
   constructor(props) {
@@ -37,6 +38,9 @@ export default class TranslationForm extends Component {
   }
 
   componentDidUpdate() {
+    const {fields, translations} = this.props
+    let emptyTranslation = []
+    console.log(translations)
     if (
       !this.hasTranslated &&
       this.props.translations &&
