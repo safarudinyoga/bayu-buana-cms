@@ -740,13 +740,14 @@ class BBDataTable extends Component {
     } catch (e) {}
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps, prevState) {
     if (this.inProgress) {
       return
     }
     this.inProgress = true
     try {
-      this.dt.ajax.reload()
+      console.log(prevProps, prevState)
+      if(prevProps.filters && prevProps.filters !== this.props.filters) this.dt.ajax.reload()
     } catch (e) {}
     setTimeout(() => {
       this.inProgress = false
@@ -909,7 +910,6 @@ class BBDataTable extends Component {
               onClick={() => {
                 this.setState({
                   isOpen: false,
-                  selected: false,
                 })
               }}
             >
