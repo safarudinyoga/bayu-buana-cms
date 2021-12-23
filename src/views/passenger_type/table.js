@@ -41,7 +41,7 @@ export default function PassengerTypeTable() {
         render: renderColumn("passenger_type", "passenger_type_name"),
       },
       {
-        title: "Passenger Alpha 3 Code",
+        title: "Alpha 3 Code",
         data: "passenger_alpha_3_code",
       },
       {
@@ -56,6 +56,7 @@ export default function PassengerTypeTable() {
         visible: false,
       },
     ],
+    recordName: ["passenger_type_code", "passenger_type_name"],
   }
   return <BBDataTable {...params} />
 }
