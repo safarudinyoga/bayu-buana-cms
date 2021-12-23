@@ -116,14 +116,14 @@ export default function AirportTable() {
           value={selectedCityIds}
           data={selectedCities}
         />
-        <TableDropdownFilter
+        {/* <TableDropdownFilter
           label="Country"
           onChange={onFilterChangeCountries}
           endpoint="/master/countries"
           column="country_name"
           value={selectedCountryIds}
           data={selectedCountries}
-        />
+        /> */}
       </>
     )
   }
