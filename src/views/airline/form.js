@@ -39,6 +39,7 @@ function AirlineForm(props) {
       label: "Airline Name",
       name: "airline_name",
       type: "text",
+      maxLength: 64
     },
   ]
 

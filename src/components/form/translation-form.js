@@ -4,6 +4,7 @@ import {Component} from "react"
 import FormHorizontal from "./horizontal"
 import FormInputControl from "./input-control"
 import "./translation-form.css"
+import translation from '../../lib/translation';
 
 export default class TranslationForm extends Component {
   constructor(props) {
@@ -13,6 +14,7 @@ export default class TranslationForm extends Component {
       currentLanguage: "",
       languages: [],
       loading: true,
+      translated:{},
     }
 
     this.translated = {}
@@ -37,6 +39,9 @@ export default class TranslationForm extends Component {
   }
 
   componentDidUpdate() {
+    const {fields, translations} = this.props
+    let emptyTranslation = []
+    console.log(translations)
     if (
       !this.hasTranslated &&
       this.props.translations &&
@@ -47,6 +52,7 @@ export default class TranslationForm extends Component {
         let item = this.props.translations[i]
         this.translated[item.language_code] = item
       }
+      this.setState({translated: this.translated})
       this.hasTranslated = true
       if (this.props.fields) {
         for (let i in this.props.translations) {
@@ -73,6 +79,7 @@ export default class TranslationForm extends Component {
   onSelected(e) {
     this.setState({
       currentLanguage: e.target.innerText,
+      translated: this.translated
     })
   }
 
@@ -80,7 +87,40 @@ export default class TranslationForm extends Component {
     if (!this.translated[lang]) {
       this.translated[lang] = {language_code: lang}
     }
-    this.translated[lang][name] = e.target.value
+
+    if(this.props.fields && this.props.fields.length > 1){
+      let inField = []
+      this.props.fields.map((field, index) => {
+        let id = "trans-" + lang + "-" + field.name
+        let elem = document.getElementById(id)
+        inField.push(elem.value);
+        // if(!elem.value){
+        //   delete this.translated[lang]
+        // } else {
+        //   this.translated[lang][name] = e.target.value
+        // }
+      })
+      const allEmpty = inField.every(field => {
+        if(!field) return true
+      })
+
+      if(allEmpty){
+        delete this.translated[lang]
+      } else {
+        this.translated[lang][name] = e.target.value
+      }
+
+    } else {
+      if(!e.target.value){
+        delete this.translated[lang]
+      } else {
+        this.translated[lang][name] = e.target.value
+      }
+    }
+    
+    this.setState({
+      translated: this.translated,
+    })
     console.log(this.translated)
   }
 
@@ -122,7 +162,7 @@ export default class TranslationForm extends Component {
               }}
             >
               <span className="text-label-input">{lang.language_name}</span>
-              {lang.language_code in this.translated ? (
+              {lang.language_code in this.state.translated ? (
                 ""
               ) : (
                 <i className="fas fa-exclamation-triangle" style={{color: 'red'}}></i>
@@ -161,7 +201,7 @@ export default class TranslationForm extends Component {
                     type={field.type}                    
                     label={field.label}
                     cl={{lg:5}}
-                    maxLength={field?.maxLength || "4000"}
+                    maxLength={field?.maxLength || "256"}
                   />
                 )
               })}

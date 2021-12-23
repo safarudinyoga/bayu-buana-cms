@@ -133,7 +133,7 @@ function CityForm(props) {
                 url: `${env.API_URL}/master/cities?filters=["city_code","=","${element.value}"]`,
                 success: function (res) {
                   if (res.items.length !== 0) {
-                    if(currentCode == element.value){
+                    if(currentCode === element.value){
                       req = true
                     } else {
                       req = false
@@ -293,7 +293,7 @@ function CityForm(props) {
           disabled={isView || loading}
           type="text"
           minLength="1"
-          maxLength="64"
+          maxLength="256"
         />
 
         <FormInputSelectAjax
@@ -316,7 +316,7 @@ function CityForm(props) {
           value={form.state_province_id}
           name="state_id"
           endpoint="/master/state-provinces"
-          filter={form.country_id}
+          filter={`["country.id", "=", "${form.country_id}"]`}
           column="state_province_name"
           data={stateProvinceData}
           onChange={(e) =>

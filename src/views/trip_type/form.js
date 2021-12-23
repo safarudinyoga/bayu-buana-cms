@@ -7,13 +7,16 @@ import FormBuilder from "components/form/builder"
 import FormInputWrapper from "components/form/input-wrapper"
 import useQuery from "lib/query"
 import {useDispatch} from "react-redux"
-import {setUIParams} from "redux/ui-store"
+import {setAlert, setUIParams} from "redux/ui-store"
+import $ from "jquery"
+import env from "../../config/environment"
 
 const endpoint = "/master/trip-types"
 const backUrl = "/master/trip-types"
 
 function TripTypeForm(props) {
   let dispatch = useDispatch()
+  let formId = props.match.params.id
 
   const isView = useQuery().get("action") === "view"
   const [formBuilder, setFormBuilder] = useState(null)
@@ -38,13 +41,28 @@ function TripTypeForm(props) {
       required: true,
       minlength: 1,
       maxlength: 36,
+      checkCode: true,
     },
     trip_type_name: {
       required: true,
       minlength: 1,
       maxlength: 256,
+      checkName: true
     },
     is_default: {},
+  }
+
+  const validationMessages = {
+    trip_type_name: {
+      required: "Trip Type Name is required",
+      minlength: "Trip Type Name must be at least 1 characters",
+      maxlength: "Trip Type Name cannot be more than 256 characters",
+    },
+    trip_type_code: {
+      required: "Trip Type Code is required",
+      minlength: "Trip Type Code must be at least 1 characters",
+      maxlength: "Trip Type Code cannot be more than 36 characters",
+    },
   }
 
   useEffect(async () => {
@@ -60,7 +78,7 @@ function TripTypeForm(props) {
 
     dispatch(
       setUIParams({
-        title: docTitle,
+        title: isView ? "Trip Type Details" : docTitle,
         breadcrumbs: [
           {
             text: "Master Data Management",
@@ -79,6 +97,62 @@ function TripTypeForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
+
+        if(res.data){
+          let currentCode = res.data.trip_type_code
+          let currentName = res.data.trip_type_name
+
+          $.validator.addMethod(
+            "checkCode",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/trip-types?filters=["trip_type_code","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if(currentCode === element.value){
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+    
+              return req
+            },
+            "Trip Type Code already exists",
+          )
+          $.validator.addMethod(
+            "checkName",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/trip-types?filters=["trip_type_name","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if(currentName.toUpperCase() === element.value.toUpperCase()){
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+    
+              return req
+            },
+            "Trip Type Name already exists",
+          )
+        }
       } catch (e) { }
 
       try {
@@ -88,6 +162,49 @@ function TripTypeForm(props) {
         setTranslations(res.data.items)
       } catch (e) { }
       setLoading(false)
+    } else {
+      $.validator.addMethod(
+        "checkCode",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/trip-types?filters=["trip_type_code","=","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
+
+          return req
+        },
+        "Trip Type Code already exists",
+      )
+      $.validator.addMethod(
+        "checkName",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/trip-types?filters=["trip_type_name","=","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
+
+          return req
+        },
+        "Trip Type Name already exists",
+      )
     }
   }, [])
 
@@ -111,9 +228,19 @@ function TripTypeForm(props) {
         await api.putOrPost(path, tl.id, tl)
       }
     } catch (e) {
+      dispatch(
+        setAlert({
+          message: `Failed to ${formId ? "update" : "save"} this record.`,
+        }),
+      )
     } finally {
       setLoading(false)
       props.history.push(backUrl)
+      dispatch(
+        setAlert({
+          message: `Record ${form.trip_type_code} - ${form.trip_type_name} has been successfully ${formId ? "updated" : "saved"}..`,
+        }),
+      )
     }
   }
 
@@ -128,6 +255,7 @@ function TripTypeForm(props) {
       alertMessage={"Incomplete data"}
       isValid={false}
       rules={validationRules}
+      validationMessages={validationMessages}
     >
       <FormHorizontal>
         <FormInputControl
@@ -138,7 +266,7 @@ function TripTypeForm(props) {
           onChange={(e) => setForm({...form, trip_type_name: e.target.value})}
           disabled={isView || loading}
           type="text"
-          minLength="0"
+          minLength="1"
           maxLength="256"
         />
 

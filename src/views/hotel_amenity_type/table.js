@@ -34,7 +34,7 @@ export default function HotelAmenityTable() {
           ["hotel_amenity_category_names", "like", values[i].hotel_amenity_category_name],
         )
 
-        if(parseInt(i)+1 != values.length) {
+        if(parseInt(i)+1 !== values.length) {
           columns.push(["OR"])
         }
       }
