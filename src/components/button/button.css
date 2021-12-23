@@ -4,6 +4,8 @@
     font-size: 13px;
     font-weight:800;
     color: #FFFFFF;
+    margin-left: 8px;
+    margin-right: 8px;    
   }
 .text-button-cancel{
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -25,7 +27,7 @@
     padding: 5px;
     padding-left: 15px;  
     padding-right: 15px; 
-    border-radius: 8px; 
+    border-radius: 6px; 
   }
 .button-cancel {
     background: #FFFFFF;  
@@ -33,7 +35,7 @@
     padding: 5px;
     padding-left: 15px;  
     padding-right: 15px; 
-    border-radius: 8px; 
+    border-radius: 6px; 
   }
 .button-new {
     background: #F3C244;  

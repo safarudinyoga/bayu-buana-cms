@@ -153,7 +153,7 @@ class TableHeader extends Component {
     return (
       <div className="container-fluid pl-0">
         <div className="row">
-          <div className="col-xs-12 col-sm-12 col-md-4 col-lg-3 col-xl-3 padding-0">
+          <div className="col-xs-12 col-sm-12 col-md-4 col-lg-3 col-xl-3">
             <div className="input-group input-group-with-text">
               <input
                 value={this.state.searchValue}
@@ -177,7 +177,7 @@ class TableHeader extends Component {
               <button
                 onClick={this.toggleFilter}
                 type="button"
-                className="btn btn-link advanced-options-btn float-right float-md-left nopadding"
+                className="btn btn-link advanced-options-btn float-right float-md-left"
               >
                 <span className="mr-2">Advanced Options</span>{" "}
                 {this.state.showFilter ? (
@@ -199,7 +199,7 @@ class TableHeader extends Component {
                 onClick={this.handleClick.bind(this)}
                 className="btn btn-warning float-right button-new"
               >
-                <img src={createIcon} className="mr-1" />
+                <img src={createIcon} className="mr-1" alt="new"/>
                 Create New
               </button>
             </OverlayTrigger>
@@ -269,7 +269,7 @@ class TableHeader extends Component {
                 onClick={this.handleReset.bind(this)}
                 className="btn-table-action-reset"
               >
-                <img src={resetIcon} className="img-circle" alt="reset" />
+                <img src={resetIcon} className="img-fluid"  alt="reset" />
               </Link>
             </OverlayTrigger>
           </div>

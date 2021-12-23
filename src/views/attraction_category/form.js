@@ -44,6 +44,7 @@ function AttractionCategoryForm(props) {
       label: "Description",
       name: "description",
       type: "textarea",
+      maxLength: 4000,
     },
   ]
 
@@ -323,7 +324,7 @@ function AttractionCategoryForm(props) {
           maxLength="4000"
         />
         <FormInputControl
-          label="Icon"
+          label="Attraction Category Icon Image"
           type="image"
           labelRequired="label-required"
           name="attraction_category_asset"

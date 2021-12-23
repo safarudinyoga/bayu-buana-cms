@@ -25,6 +25,7 @@ export default function TripTypeTable() {
 
   let params = {
     title: "Trip Types",
+    titleModal: "Trip Type",
     baseRoute: "/master/trip-types/form",
     endpoint: "/master/trip-types",
     deleteEndpoint: "/master/batch-actions/delete/trip-types",
@@ -43,7 +44,7 @@ export default function TripTypeTable() {
       {
         title: "Is Default",
         data: "is_default",
-        render: (a) => a ? "Yes" : "",
+        render: (a) => a ? "Yes" : "No",
         searchable: false,
       },
       {
@@ -58,6 +59,7 @@ export default function TripTypeTable() {
         visible: false,
       },
     ],
+    recordName: ["trip_type_code", "trip_type_name"],
   }
   return <BBDataTable {...params} />
 }

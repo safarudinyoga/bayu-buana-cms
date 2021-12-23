@@ -407,7 +407,6 @@ function DestinationForm(props) {
       showMedia={true}
       uploadMedia={doUploadMedia}
       mediaData={form}
-      isView={isView}
       moduleName={"destination"}
     >
       <FormHorizontal>
@@ -445,7 +444,7 @@ function DestinationForm(props) {
           value={form.destination_city_id}
           name="destination_city_id"
           endpoint="/master/cities"
-          filter={form.country_id}
+          filter={`["country.id", "=", "${form.country_id}"]`}
           column="city_name"
           data={cityData}
           onChange={(e) =>

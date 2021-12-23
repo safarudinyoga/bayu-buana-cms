@@ -1,9 +1,6 @@
 import React from "react"
 import { default as ReactSelect } from "react-select"
 
-const CaretDownIcon = () => {
-  return <i className="fas fa-caret-down" />;
-};
 const customStyles = {
   option: (provided, state) => ({
     ...provided,
