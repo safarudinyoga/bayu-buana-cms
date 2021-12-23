@@ -531,6 +531,7 @@ class BBDataTable extends Component {
           lengthMenu: "_MENU_",
         },
         fnDrawCallback: (t) => {
+          const { selected } = this.state
           let wrapper = $(".dataTables_paginate", t.nTableWrapper)
           wrapper.append(
             '<span class="d-none d-md-block float-right mt-2 mr-2 text-label-page">Page: </span>',
@@ -551,9 +552,16 @@ class BBDataTable extends Component {
             $(t.nTableWrapper).find(".dataTables_paginate").show()
           // }
 
-          if ($(".select-checkbox-all").is(":checked")) {
-            $(".select-checkbox-all").prop("checked", false)
+          let items = $(".select-checkbox-item", t.nTableWrapper)
+          let itemsSelected = []
+          for (let i = 0; i < items.length; i++) {
+            let cbHTML = $(items.get(i))
+            if(selected.includes(cbHTML.data("id"))) {
+              itemsSelected.push(cbHTML.data("id"))
+              cbHTML.prop("checked", true)
+            }
           }
+            $(".select-checkbox-all").prop("checked", itemsSelected.length === items.length)
         },
       })
 
@@ -745,43 +753,40 @@ class BBDataTable extends Component {
     }, 300)
   }
 
-  onChangeSelect (e) {
-    let table = $(e.target).closest("table")
-    let items = $(".select-checkbox-item", table)
-
-    // console.log(this.state.selected)
-    for (let i = 0; i < items.length; i++) {
-      let includeItem = this.state.selected.includes($(items.get(i)).data("id"))
-      if(includeItem) {
-        // console.log($(items.get(i)).prop('checked', true))
-      }
-    }
-  }
-
   render() {
     $(document)
       .off("change", ".select-checkbox-all")
       .on("change", ".select-checkbox-all", (e) => {
         this.inProgress = true
-        console.log("change all")
         let table = $(e.target).closest("table")
-        let selected = []
+        let itemsId = []
         $(".select-checkbox-item", table).prop(
           "checked",
           $(e.target).is(":checked"),
         )
-        let items = $(".select-checkbox-item:checked", table)
+        let items = $(".select-checkbox-item", table)
         for (let i = 0; i < items.length; i++) {
-          selected.push($(items.get(i)).data("id"))
+          itemsId.push($(items.get(i)).data("id"))
         }
-        let filterValues = this.state.selected.filter(e => selected.indexOf(e) === -1)
-        console.log(filterValues, "filters")
-        console.log(selected, "selected")
+          
+        let itemsChecked = $(".select-checkbox-item:checked", table)
+        let selected = this.state.selected
+
+        if(itemsChecked.length > 0) {
+          for (let idx = 0; idx < itemsChecked.length; idx++) {
+            console.log(idx)
+            let id = $(itemsChecked.get(idx)).data("id")
+            if(!selected.includes(id)) {
+              selected.push(id)
+            }
+          }
+        } else {
+          const idsToDelete = new Set(itemsId);
+          selected = selected.filter(id => !idsToDelete.has(id))
+        }
         this.setState({
-          selected: [...filterValues, ...selected],
-        }, 
-        () => this.onChangeSelect(e)
-        )
+          selected: selected,
+        })
         setTimeout(() => {
           this.inProgress = false
         }, 100)
@@ -790,29 +795,33 @@ class BBDataTable extends Component {
     $(document)
       .off("change", ".select-checkbox-item")
       .on("change", ".select-checkbox-item", (e) => {
-        console.log("change")
         this.inProgress = true
         let table = $(e.target).closest("table")
-        let selected = []
+        let itemId = $($(e.target).get(0)).data('id')
+        let selectedVal = []
         let items = $(".select-checkbox-item:checked", table)
         for (let i = 0; i < items.length; i++) {
-          selected.push($(items.get(i)).data("id"))
+          selectedVal.push($(items.get(i)).data("id"))
         }
 
         try {
-          if (selected.length < this.dt.table().data().length) {
+          if (selectedVal.length < this.dt.table().data().length) {
             $(".select-checkbox-all:checked", table).prop("checked", false)
           } else {
             $(".select-checkbox-all:not(:checked)", table).prop("checked", true)
           }
         } catch (e) {}
-        let filterValues = this.state.selected.filter(e => selected.indexOf(e) === -1)
-        console.log(filterValues, items, "chechke")
+
+        let selected = this.state.selected
+        if(selected.includes(itemId)) {
+          selected = selected.filter(e => e !== itemId)
+        } else {
+          selected.push(itemId)
+        }
+        
         this.setState({
-          selected: [...filterValues, ...selected],
-        },
-          () => this.onChangeSelect(e)
-        )
+          selected: selected,
+        })
         setTimeout(() => {
           this.inProgress = true
         }, 100)
