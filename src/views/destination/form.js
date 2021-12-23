@@ -62,6 +62,7 @@ function DestinationForm(props) {
       label: "Description",
       name: "description",
       type: "textarea",
+      maxLength: 4000
     },
   ]
 
@@ -72,10 +73,10 @@ function DestinationForm(props) {
       maxlength: 256,
       checkName: true,
     },
-    country: {
+    country_id: {
       required: true,
     },
-    city: {
+    destination_city_id: {
       required: true,
     },
     description: {
@@ -107,10 +108,10 @@ function DestinationForm(props) {
     destination_code: {
       required: "Destination Code is required",
     },
-    country: {
+    country_id: {
       required: "Country is required",
     },
-    city: {
+   destination_city_id: {
       required: "City is required",
     },
     destination_asset_desktop: {
@@ -309,6 +310,7 @@ function DestinationForm(props) {
 
   const onSave = async () => {
     let translated = formBuilder.getTranslations()
+
     setLoading(true)
     let api = new Api()
     try {
@@ -405,7 +407,6 @@ function DestinationForm(props) {
       showMedia={true}
       uploadMedia={doUploadMedia}
       mediaData={form}
-      isView={isView}
       moduleName={"destination"}
     >
       <FormHorizontal>
@@ -424,6 +425,7 @@ function DestinationForm(props) {
         <FormInputSelectAjax
           label="Country"
           value={form.country_id}
+          labelRequired="label-required"
           name="country_id"
           endpoint="/master/countries"
           column="country_name"
@@ -438,10 +440,11 @@ function DestinationForm(props) {
 
         <FormInputSelectAjax
           label="City"
+          labelRequired="label-required"
           value={form.destination_city_id}
           name="destination_city_id"
           endpoint="/master/cities"
-          filter={form.country_id}
+          filter={`["country.id", "=", "${form.country_id}"]`}
           column="city_name"
           data={cityData}
           onChange={(e) =>
@@ -460,7 +463,7 @@ function DestinationForm(props) {
           disabled={isView || loading}
           type="textarea"
           minLength="1"
-          maxLength="64"
+          maxLength="4000"
         />
       </FormHorizontal>
 

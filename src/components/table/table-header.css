@@ -37,6 +37,9 @@ button.advanced-options-btn:active {
   color: #212529;
   font-weight: bold;
   font-size: 14px;
+  margin-left: -12px;
+  margin-right: -2px;
+  
 }
 
 .btn-table-action {
@@ -54,9 +57,10 @@ button.advanced-options-btn:active {
 }
 
 .btn-table-action-reset {
-  position: absolute;
+  position: absolute;  
   top: 5px;
-  right: 10px;
+  right: 10px; 
+  width: 60px;
 }
 
 .btn-table-action-dropdown,
@@ -90,7 +94,7 @@ button.advanced-options-btn:active {
   
 }
 .padding-0{
-  padding-right:0;  
+  margin:0;  
 }
 @media (max-width: 768px) {
   .input-group {
@@ -101,7 +105,15 @@ button.advanced-options-btn:active {
     font-weight:bold;
   } 
   .padding-0{
-    margin: 0;  
+    padding-right:0;  
+  }  
+}
+@media (max-width: 577px) {  
+  .btn-table-action-reset {
+    position: absolute;  
+    top: 5px;
+    right: 8px; 
+    width: 50px;
   } 
 }
 .text-input-select{

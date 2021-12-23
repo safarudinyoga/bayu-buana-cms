@@ -32,6 +32,7 @@ export default function AirportTable() {
   let [params, setParams] = useState({
     filters: [],
     title: "Airports",
+    titleModal: "Airport",
     baseRoute: "/master/airports/form",
     endpoint: "/master/airports",
     deleteEndpoint: "/master/batch-actions/delete/airports",
