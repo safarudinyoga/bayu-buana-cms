@@ -57,6 +57,19 @@ function RoomAmenityTypeForm(props) {
     },
   }
 
+  const validationMessage = {
+    room_amenity_category_name: {
+      required: "Room Amenity Category Name is required",
+      minlength: "Room Amenity Category Name must be at least 1 characters",
+      maxlength: "Room Amenity Category Name must be at most 256 characters",
+    },
+    description: {
+      required: "Description is required",
+      minlength: "Description must be at least 1 characters",
+      maxlength: "Description must be at most 4000 characters",
+    },
+  }
+
   useEffect(async () => {
     let api = new Api()
     let formId = props.match.params.id
@@ -65,7 +78,7 @@ function RoomAmenityTypeForm(props) {
     if (!formId) {
       docTitle = "Create Room Amenity Category"
     } else if (isView) {
-      docTitle = "View Room Amenity Category"
+      docTitle = "Room Amenity Category Details"
     }
 
     dispatch(
@@ -169,6 +182,7 @@ function RoomAmenityTypeForm(props) {
       alertMessage={"Incomplete data"}
       isValid={false}
       rules={validationRules}
+      validationMessages={validationMessage}
     >
       <FormHorizontal>
 
