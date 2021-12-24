@@ -64,6 +64,7 @@ export default function RoomAmenityCategoryTable() {
         visible: false,
       },
     ],
+    recordName: "room_amenity_category_name",
   }
   return <BBDataTable {...params} />
 }
