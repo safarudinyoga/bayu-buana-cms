@@ -51,7 +51,7 @@ function AirlineForm(props) {
       checkCode: true,
     },
     numeric_code: {
-      required: true,
+      required: false,
       minlength: 3,
       maxlength: 3,
       checkNumeric: true,
@@ -242,11 +242,15 @@ function AirlineForm(props) {
             async: false,
             url: `${env.API_URL}/master/airlines?filters=["numeric_code","=","${element.value}"]`,
             success: function (res) {
-              if (res.items.length !== 0) {
-                req = false
-              } else {
+              if(!element.value){
                 req = true
-              }
+              } else {
+                if (res.items.length !== 0) {
+                  req = false
+                } else {
+                  req = true
+                }
+              } 
             },
           })
 
@@ -397,6 +401,7 @@ function AirlineForm(props) {
         </FormInputSelectAjax>
         <FormInputControl
           label="Airline Logo Image"
+          labelRequired="label-required"
           type="image"
           name="airline_asset"
           onChange={doUpload}
