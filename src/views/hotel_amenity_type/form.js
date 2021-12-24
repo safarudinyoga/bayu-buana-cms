@@ -163,11 +163,7 @@ function HotelAmenityForm(props) {
                 url: `${env.API_URL}/master/hotel-amenity-types?filters=["hotel_amenity_type_code","=","${element.value}"]`,
                 success: function (res) {
                   if (res.items.length !== 0) {
-                    if(currentCode === element.value){
-                      req = true
-                    } else {
-                      req = false
-                    }
+                    req = currentCode === parseInt(element.value)
                   } else {
                     req = true
                   }
