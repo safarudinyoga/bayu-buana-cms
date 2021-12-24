@@ -7,13 +7,14 @@ import useQuery from "lib/query"
 import React, {useEffect, useState} from "react"
 import {useDispatch} from "react-redux"
 import {withRouter} from "react-router"
-import {setUIParams} from "redux/ui-store"
+import {setAlert, setUIParams} from "redux/ui-store"
 
 const endpoint = "/master/room-amenity-categories"
 const backUrl = "/master/room-amenity-categories"
 
 function RoomAmenityTypeForm(props) {
   let dispatch = useDispatch()
+  let formId = props.match.params.id
 
   const isView = useQuery().get("action") === "view"
   const [formBuilder, setFormBuilder] = useState(null)
@@ -146,7 +147,17 @@ function RoomAmenityTypeForm(props) {
         let path = endpoint + "/" + res.data.id + "/translations"
         await api.putOrPost(path, tl.id, tl)
       }
+      dispatch(
+        setAlert({
+          message: `Record ${form.room_amenity_category_name} has been successfully ${formId ? "updated" : "saved"}.`,
+        }),
+      )
     } catch (e) {
+      dispatch(
+        setAlert({
+          message: `Failed to ${formId ? "update" : "save"} this record.`,
+        }),
+      )
     } finally {
       setLoading(false)
       props.history.push(backUrl)
