@@ -430,9 +430,10 @@ function DestinationForm(props) {
           endpoint="/master/countries"
           column="country_name"
           data={countryData}
-          onChange={(e) =>
+          onChange={(e) => {
             setForm({...form, country_id: e.target.value || null})
-          }
+            $('#attr_city').empty();
+          }}
           disabled={isView || loading}
           type="select"
           placeholder="Country"
@@ -440,6 +441,7 @@ function DestinationForm(props) {
 
         <FormInputSelectAjax
           label="City"
+          id="attr_city"
           labelRequired="label-required"
           value={form.destination_city_id}
           name="destination_city_id"

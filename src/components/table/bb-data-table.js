@@ -486,6 +486,7 @@ class BBDataTable extends Component {
             orderable: false,
             className: "select-checkbox",
             targets: [0],
+            "width": "5%",
           },
           {
             targets: [1, 2],
