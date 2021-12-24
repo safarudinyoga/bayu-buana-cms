@@ -25,6 +25,7 @@ export default function LocationCategoryTable() {
 
   let params = {
     title: "Location Categories",
+    titleModal: "Location Category",
     baseRoute: "/master/location-categories/form",
     endpoint: "/master/location-categories",
     deleteEndpoint: "/master/batch-actions/delete/location-categories",
@@ -53,6 +54,8 @@ export default function LocationCategoryTable() {
         visible: false,
       },
     ],
+    emptyTable: "No location categories found",
+    recordName: ["location_category_code", "location_category_name"],
   }
   return <BBDataTable {...params} />
 }

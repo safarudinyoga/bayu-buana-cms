@@ -25,6 +25,7 @@ export default function CurrencyTable() {
 
   let params = {
     title: "Currencies",
+    titleModal: "Currency",
     baseRoute: "/master/currencies/form",
     endpoint: "/master/currencies",
     deleteEndpoint: "/master/batch-actions/delete/currencies",
@@ -56,6 +57,7 @@ export default function CurrencyTable() {
         visible: false,
       },
     ],
+    emptyTable: "No currencies found",
     recordName: ["currency_code", "currency_name"],
   }
   return <BBDataTable {...params} />

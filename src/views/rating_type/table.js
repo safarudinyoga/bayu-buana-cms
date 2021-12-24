@@ -25,6 +25,7 @@ export default function RatingTypeTable() {
 
   let params = {
     title: "Rating Types",
+    titleModal: "Rating Type",
     baseRoute: "/master/rating-types/form",
     endpoint: "/master/rating-types",
     deleteEndpoint: "/master/batch-actions/delete/rating-types",
@@ -56,6 +57,7 @@ export default function RatingTypeTable() {
         visible: false,
       },
     ],
+    emptyTable: "No rating types found",
     recordName: ["rating_type_code", "rating_type_name"],
   }
   return <BBDataTable {...params} />

@@ -295,7 +295,8 @@ function CityForm(props) {
           minLength="1"
           maxLength="256"
         />
-
+        {
+          !loading &&
         <FormInputSelectAjax
           label="Country"
           labelRequired="label-required"
@@ -310,7 +311,9 @@ function CityForm(props) {
           disabled={isView || loading}
           type="select"
         />
-
+        }
+        {
+          !loading &&
         <FormInputSelectAjax
           label="State / Province"
           value={form.state_province_id}
@@ -325,6 +328,7 @@ function CityForm(props) {
           disabled={isView || loading}
           type="select"
         />
+        }
 
       </FormHorizontal>
 

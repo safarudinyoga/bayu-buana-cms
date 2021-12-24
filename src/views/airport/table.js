@@ -64,6 +64,7 @@ export default function AirportTable() {
         visible: false,
       },
     ],
+    emptyTable: "No airports found",
     recordName: ["airport_code", "airport_name"],
   })
 

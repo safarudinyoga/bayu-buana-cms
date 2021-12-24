@@ -96,6 +96,7 @@ export default function CityTable() {
         visible: false,
       },
     ],
+    emptyTable: "No cities found",
     recordName: ["city_code", "city_name"],
   })
 

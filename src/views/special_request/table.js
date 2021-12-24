@@ -25,6 +25,7 @@ export default function SpecialRequestTable() {
 
   let params = {
     title: "Special Requests",
+    titleModal: "Special Request",
     baseRoute: "/master/special-requests/form",
     endpoint: "/master/special-requests",
     deleteEndpoint: "/master/batch-actions/delete/special-requests",
@@ -52,6 +53,7 @@ export default function SpecialRequestTable() {
         visible: false,
       },
     ],
+    emptyTable: "No special requests found",
     recordName: ["special_request_code", "special_request_name"],
   }
   return <BBDataTable {...params} />

@@ -167,6 +167,8 @@ function RoomAmenityTypeForm(props) {
           minLength="1"
           maxLength="64"
         />
+        {
+          !loading &&
         <FormInputSelectAjax
           label="Room Amenity Category"
           value={form.room_amenity_category_id}
@@ -177,11 +179,8 @@ function RoomAmenityTypeForm(props) {
             setForm({...form, room_amenity_category_id: e.target.value || null})
           }
           disabled={isView || loading}
-          type="select"
-          minLength="0"
-          maxLength="9999"
-        >
-        </FormInputSelectAjax>
+          type="select"/>
+        }
         <FormInputControl
           label="Icon"
           type="image"

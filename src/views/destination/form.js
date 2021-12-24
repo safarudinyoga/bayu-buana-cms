@@ -232,7 +232,7 @@ function DestinationForm(props) {
     
               return req
             },
-            "Destination Code already exists",
+            "Code already exists",
           )
         }
       } catch (e) { }
@@ -245,7 +245,6 @@ function DestinationForm(props) {
       } catch (e) { }
       setLoading(false)
     } else {
-      console.log('atau here')
       setValidationRules({
         ...validationRules,
         destination_asset_desktop: {
@@ -298,7 +297,7 @@ function DestinationForm(props) {
 
           return req
         },
-        "Destination Code already exists",
+        "Code already exists",
       )
     }
   }, [])
@@ -423,7 +422,8 @@ function DestinationForm(props) {
           minLength="1"
           maxLength="256"
         />
-
+        {
+          !loading &&
         <FormInputSelectAjax
           label="Country"
           value={form.country_id}
@@ -440,7 +440,9 @@ function DestinationForm(props) {
           type="select"
           placeholder="Country"
         />
-
+        }
+        {
+          !loading &&
         <FormInputSelectAjax
           label="City"
           id="attr_city"
@@ -458,6 +460,7 @@ function DestinationForm(props) {
           type="select"
           placeholder="City"
         />
+        }
 
         <FormInputControl
           value={form.description}

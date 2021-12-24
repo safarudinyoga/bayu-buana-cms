@@ -24,7 +24,8 @@ export default function AttractionCategoryTable() {
   }, [])
 
   let params = {
-    title: "Attraction Category",
+    title: "Attraction Categories",
+    titleModal: "Attraction Category",
     baseRoute: "/master/attraction-category/form",
     endpoint: "/master/attraction-categories",
     deleteEndpoint: "/master/batch-actions/delete/attraction-categories",
@@ -65,6 +66,7 @@ export default function AttractionCategoryTable() {
         visible: false,
       },
     ],
+    emptyTable: "No attraction categories found",
     recordName: "attraction_category_name",
   }
   return <BBDataTable {...params} />

@@ -25,6 +25,7 @@ export default function RoomAmenityCategoryTable() {
 
   let params = {
     title: "Room Amenity Categories",
+    titleModal: "Room Amenity Category",
     baseRoute: "/master/room-amenity-categories/form",
     endpoint: "/master/room-amenity-categories",
     deleteEndpoint: "/master/batch-actions/delete/room-amenity-categories",
@@ -64,6 +65,7 @@ export default function RoomAmenityCategoryTable() {
         visible: false,
       },
     ],
+    emptyTable: "No room amenity categories found",
     recordName: "room_amenity_category_name",
   }
   return <BBDataTable {...params} />
