@@ -25,6 +25,7 @@ export default function LanguageTable() {
 
   let params = {
     title: "Languages",
+    titleModal: "Language",
     baseRoute: "/master/languages/form",
     endpoint: "/master/languages",
     deleteEndpoint: "/master/batch-actions/delete/languages",
