@@ -487,7 +487,7 @@ function DestinationForm(props) {
           labelRequired="label-required"
           minLength="1"
           maxLength="36"
-          hint="Destination code maximum 3 characters"
+          hint="Destination code maximum 36 characters"
         />
 
       </FormHorizontal>

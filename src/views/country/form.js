@@ -439,9 +439,7 @@ function CountryForm(props) {
           }
           disabled={isView || loading}
           type="select"
-          minLength="0"
-          maxLength="9999"
-          hint="Please Select Lenguages"
+          hint="Please Select Languages"
         />
         }
       </FormHorizontal>
