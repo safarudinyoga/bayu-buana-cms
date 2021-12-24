@@ -148,13 +148,13 @@ function AttractionForm(props) {
       maxlength: 4000,
     },
     attraction_asset_desktop: {
-      required: formId == null,
+      required: true,
     },
     attraction_asset_mobile: {
-      required: formId == null,
+      required: true,
     },
     attraction_asset_tablet: {
-      required: formId == null,
+      required: true,
     },
   });
 
@@ -284,6 +284,23 @@ function AttractionForm(props) {
         if (res.data) {
           setForm({...res.data, country_id: res.data.country.id})
           let currentName = res.data.attraction_name
+
+          let currentDesktopImage = res.data.attraction_asset_desktop?.multimedia_description_id
+          let currentMobileImage = res.data.attraction_asset_mobile?.multimedia_description_id
+          let currentTabletImage = res.data.attraction_asset_tablet?.multimedia_description_id
+
+          setValidationRules({
+            ...validationRules,
+            attraction_asset_desktop: {
+              required: !currentDesktopImage
+            },
+            attraction_asset_mobile: {
+              required: !currentMobileImage
+            },
+            attraction_asset_tablet: {
+              required: !currentTabletImage
+            },
+          })
 
           $.validator.addMethod(
             "checkName",

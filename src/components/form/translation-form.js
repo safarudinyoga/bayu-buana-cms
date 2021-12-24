@@ -245,7 +245,7 @@ export default class TranslationForm extends Component {
             </div>
           </div>
           <div className="col-xs-12 col-sm-8 col-md-8 col-lg-10 translation-form-content card border shadow-none">
-            <div class="row">
+            <div className="row">
               <div
                 className="col-xs-12 col-sm-12 col-md-12 col-lg-6 tab-content card-body-translation"
                 id="v-pills-tabContent"

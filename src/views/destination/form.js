@@ -91,13 +91,13 @@ function DestinationForm(props) {
       checkCode: true,
     },
     destination_asset_desktop: {
-      required: formId == null,
+      required: true,
     },
     destination_asset_mobile: {
-      required: formId == null,
+      required: true,
     },
     destination_asset_tablet: {
-      required: formId == null,
+      required: true,
     },
   })
 
@@ -168,18 +168,20 @@ function DestinationForm(props) {
         if (res.data) {
           let currentName = res.data.destination_name
           let currentCode = res.data.destination_code
-          let currentDesktopImage = res.data.destination_asset_desktop.multimedia_description_id
-          console.log('currentDesktopImage', currentDesktopImage)
+          let currentDesktopImage = res.data.destination_asset_desktop?.multimedia_description_id
+          let currentMobileImage = res.data.destination_asset_mobile?.multimedia_description_id
+          let currentTabletImage = res.data.destination_asset_tablet?.multimedia_description_id
+
           setValidationRules({
             ...validationRules,
             destination_asset_desktop: {
-              required: currentDesktopImage == null
+              required: !currentDesktopImage
             },
             destination_asset_mobile: {
-              required: true
+              required: !currentMobileImage
             },
             destination_asset_tablet: {
-              required: true
+              required: !currentTabletImage
             },
           })
           $.validator.addMethod(
