@@ -1,5 +1,6 @@
 import BBDataTable from "components/table/bb-data-table"
 import rowStatus from "lib/row-status"
+import {renderColumn} from "lib/translation"
 import React, {useEffect} from "react"
 import {useDispatch} from "react-redux"
 import {setUIParams} from "redux/ui-store"
@@ -33,6 +34,7 @@ export default function RoomAmenityCategoryTable() {
       {
         title: "Room Amenity Category Name",
         data: "room_amenity_category_name",
+        render: renderColumn("amenity_category", "room_amenity_category_name"),
       },
       {
         title: "Icon",
