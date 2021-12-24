@@ -21,11 +21,9 @@ function RoomAmenityTypeForm(props) {
   const [translations, setTranslations] = useState([])
   const [id, setId] = useState(null)
   const [form, setForm] = useState({
-    room_amenity_category_code: "",
+    room_amenity_category_name: "",
     is_default: false,
     description: "",
-    room_amenity_category_name: "",
-    room_amenity_category_id: "",
     room_amenity_category_asset: {
       multimedia_description_id: null,
       multimedia_description: {
@@ -47,20 +45,15 @@ function RoomAmenityTypeForm(props) {
   ]
 
   const validationRules = {
-    room_amenity_category_code: {
-      required: true,
-      minlength: 2,
-      maxlength: 2,
-    },
     room_amenity_category_name: {
       required: true,
       minlength: 1,
-      maxlength: 64,
+      maxlength: 256,
     },
     description: {
       required: false,
       minlength: 1,
-      maxlength: 200,
+      maxlength: 4000,
     },
   }
 
@@ -123,6 +116,16 @@ function RoomAmenityTypeForm(props) {
       if (form.room_amenity_category_asset.multimedia_description_id == null) {
         form.room_amenity_category_asset = null
       }
+      // set form to null when value is empty
+      if (form.room_amenity_category_name === "") {
+        form.room_amenity_category_name = null
+      }
+      if (form.description === "") {
+        form.description = null
+      }
+      if (form.room_amenity_category_id === "") {
+        form.room_amenity_category_id = null
+      }
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
       for (let i in translated) {
@@ -170,7 +173,7 @@ function RoomAmenityTypeForm(props) {
       <FormHorizontal>
 
         <FormInputControl
-          label="Room Amenity Type Name"
+          label="Room Amenity Category Name"
           labelRequired="label-required"
           value={form.room_amenity_category_name}
           name="room_amenity_category_name"
@@ -178,7 +181,7 @@ function RoomAmenityTypeForm(props) {
           disabled={isView || loading}
           type="text"
           minLength="1"
-          maxLength="64"
+          maxLength="256"
         />
         <FormInputWrapper label="Is Default" hint="Set is default">
           <div className="form-check form-check-inline">
@@ -221,7 +224,7 @@ function RoomAmenityTypeForm(props) {
           disabled={isView || loading}
           type="textarea"
           minLength="1"
-          maxLength="64"
+          maxLength="4000"
         />
 
         <FormInputControl

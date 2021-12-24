@@ -9,13 +9,13 @@ export default function RoomAmenityCategoryTable() {
   useEffect(() => {
     dispatch(
       setUIParams({
-        title: "Room Amenity Category",
+        title: "Room Amenity Categories",
         breadcrumbs: [
           {
             text: "Master Data Management",
           },
           {
-            text: "Room Amenity Category",
+            text: "Room Amenity Categories",
           },
         ],
       }),
@@ -23,7 +23,7 @@ export default function RoomAmenityCategoryTable() {
   }, [])
 
   let params = {
-    title: "Room Amenity Category",
+    title: "Room Amenity Categories",
     baseRoute: "/master/room-amenity-categories/form",
     endpoint: "/master/room-amenity-categories",
     deleteEndpoint: "/master/batch-actions/delete/room-amenity-categories",
