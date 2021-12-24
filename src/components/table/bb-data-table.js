@@ -486,6 +486,7 @@ class BBDataTable extends Component {
             orderable: false,
             className: "select-checkbox",
             targets: [0],
+            "width": "5%",
           },
           {
             targets: [1, 2],
@@ -741,14 +742,13 @@ class BBDataTable extends Component {
     } catch (e) {}
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     if (this.inProgress) {
       return
     }
     this.inProgress = true
     try {
-      console.log(prevProps, prevState)
-      if(prevProps.filters && prevProps.filters !== this.props.filters) this.dt.ajax.reload()
+        if(prevProps.filters !== this.props.filters) this.dt.ajax.reload()
     } catch (e) {}
     setTimeout(() => {
       this.inProgress = false

@@ -1,19 +1,22 @@
-import {withRouter} from "react-router"
-import React, {useEffect, useState} from "react"
+import { withRouter } from "react-router"
+import React, { useEffect, useState } from "react"
 import Api from "config/api"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
 import FormBuilder from "components/form/builder"
 import FormInputWrapper from "components/form/input-wrapper"
 import useQuery from "lib/query"
-import {useDispatch} from "react-redux"
-import {setUIParams} from "redux/ui-store"
+import { useDispatch } from "react-redux"
+import { setAlert, setUIParams } from "redux/ui-store"
+import $ from "jquery"
+import env from "../../config/environment"
 
 const endpoint = "/master/occupancy-types"
 const backUrl = "/master/occupancy-types"
 
 function OccupancyTypeForm(props) {
   let dispatch = useDispatch()
+  let formId = props.match.params.id
 
   const isView = useQuery().get("action") === "view"
   const [formBuilder, setFormBuilder] = useState(null)
@@ -39,17 +42,35 @@ function OccupancyTypeForm(props) {
       required: true,
       minlength: 1,
       maxlength: 256,
+      checkName: true,
+      noSpace: true,
     },
     is_default: {},
     occupancy: {
       required: true,
+      number: true,
       min: 1,
       max: 4,
+      noSpace: true,
     },
     occupancy_type_code: {
       required: true,
       minlength: 1,
       maxlength: 36,
+      checkCode: true,
+      noSpace: true,
+    },
+  }
+
+  const validationMessages = {
+    occupancy_type_code: {
+      required: "Occupancy Type Code is required.",
+    },
+    occupancy_type_name: {
+      required: "Occupancy Type Name is required.",
+    },
+    occupancy: {
+      required: "Occupancy is required.",
     },
   }
 
@@ -85,15 +106,113 @@ function OccupancyTypeForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
-      } catch (e) { }
+        if (res.data) {
+          let currentName = res.data.occupancy_type_name
+          let currentCode = res.data.occupancy_type_code
+
+          $.validator.addMethod(
+            "checkCode",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/occupancy-types?filters=["occupancy_type_code","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if (currentCode === element.value) {
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+
+              return req
+            },
+            "Code already exists",
+          )
+          $.validator.addMethod(
+            "checkName",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/occupancy-types?filters=["occupancy_type_name","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if (currentName === element.value) {
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+
+              return req
+            },
+            "Occupancy Type Name already exists",
+          )
+        }
+      } catch (e) {}
 
       try {
         let res = await api.get(endpoint + "/" + formId + "/translations", {
           size: 50,
         })
         setTranslations(res.data.items)
-      } catch (e) { }
+      } catch (e) {}
       setLoading(false)
+    } else {
+      $.validator.addMethod(
+        "checkCode",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/occupancy-types?filters=["occupancy_type_code","=","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
+
+          return req
+        },
+        "Code already exists",
+      )
+      $.validator.addMethod(
+        "checkName",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/occupancy-types?filters=["occupancy_type_name","=","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
+
+          return req
+        },
+        "Occupancy Type Name already exists",
+      )
     }
   }, [])
 
@@ -126,9 +245,21 @@ function OccupancyTypeForm(props) {
         await api.putOrPost(path, tl.id, tl)
       }
     } catch (e) {
+      dispatch(
+        setAlert({
+          message: `Failed to ${formId ? "update" : "save"} this record.`,
+        }),
+      )
     } finally {
       setLoading(false)
       props.history.push(backUrl)
+      dispatch(
+        setAlert({
+          message: `Record ${form.occupancy_type_code} - ${
+            form.occupancy_type_name
+          } has been successfully ${formId ? "updated" : "saved"}.`,
+        }),
+      )
     }
   }
   return (
@@ -142,6 +273,7 @@ function OccupancyTypeForm(props) {
       alertMessage={"Incomplete data"}
       isValid={false}
       rules={validationRules}
+      validationMessages={validationMessages}
     >
       <FormHorizontal>
         <FormInputControl
@@ -150,7 +282,7 @@ function OccupancyTypeForm(props) {
           value={form.occupancy_type_name}
           name="occupancy_type_name"
           onChange={(e) =>
-            setForm({...form, occupancy_type_name: e.target.value})
+            setForm({ ...form, occupancy_type_name: e.target.value })
           }
           disabled={isView || loading}
           type="text"
@@ -158,10 +290,7 @@ function OccupancyTypeForm(props) {
           maxLength="256"
         />
 
-        <FormInputWrapper
-          label="Is Default"
-          hint="Set is default"
-        >
+        <FormInputWrapper label="Is Default" hint="Set is default">
           <div className="form-check form-check-inline">
             <input
               className="form-check-input"
@@ -208,7 +337,7 @@ function OccupancyTypeForm(props) {
           labelRequired="label-required"
           value={form.occupancy}
           name="occupancy"
-          onChange={(e) => setForm({...form, occupancy: +e.target.value})}
+          onChange={(e) => setForm({ ...form, occupancy: +e.target.value })}
           disabled={isView || loading}
           type="number"
           min="1"
@@ -222,10 +351,10 @@ function OccupancyTypeForm(props) {
           labelRequired="label-required"
           value={form.occupancy_type_code}
           name="occupancy_type_code"
-          cl={{md:"12"}}
+          cl={{ md: "12" }}
           cr="12"
           onChange={(e) =>
-            setForm({...form, occupancy_type_code: e.target.value})
+            setForm({ ...form, occupancy_type_code: e.target.value })
           }
           disabled={isView || loading}
           type="text"

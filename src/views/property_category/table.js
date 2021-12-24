@@ -25,6 +25,7 @@ export default function PropertyCategoryTable() {
 
   let params = {
     title: "Property Categories",
+    titleModal: "Property Category",
     baseRoute: "/master/property-categories/form",
     endpoint: "/master/property-categories",
     deleteEndpoint: "/master/batch-actions/delete/property-categories",
@@ -53,6 +54,7 @@ export default function PropertyCategoryTable() {
         visible: false,
       },
     ],
+    recordName: ["property_category_code", "property_category_name"],
   }
   return <BBDataTable {...params} />
 }

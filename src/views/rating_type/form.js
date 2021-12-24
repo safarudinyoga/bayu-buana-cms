@@ -54,14 +54,14 @@ function RatingTypeForm(props) {
       required: true,
       min: 0,
       max: 999,
-      checkCode: formId == null,
+      checkCode: true,
     },
 
     rating_type_name: {
       required: true,
       minlength: 1,
       maxlength: 256,
-      checkName: formId == null,
+      checkName: true,
     },
 
     scale: {
@@ -118,6 +118,57 @@ function RatingTypeForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
+        if (res.data) {
+          let currentCode = res.data.rating_type_code
+          let currentName = res.data.rating_type_name
+
+          $.validator.addMethod(
+            "checkCode",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/rating-types?filters=["rating_type_code","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    req = currentCode === parseInt(element.value)
+                  } else {
+                    req = true
+                  }
+                },
+              })
+      
+              return req
+            },
+            "Rating Type Code already exists",
+          )
+          $.validator.addMethod(
+            "checkName",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/rating-types?filters=["rating_type_name","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if(currentName === element.value){
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+      
+              return req
+            },
+            "Rating Type Name already exists",
+          )
+        }
       } catch (e) { }
 
       try {
@@ -127,49 +178,50 @@ function RatingTypeForm(props) {
         setTranslations(res.data.items)
       } catch (e) { }
       setLoading(false)
+    } else {
+      $.validator.addMethod(
+        "checkCode",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/rating-types?filters=["rating_type_code","=","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
+  
+          return req
+        },
+        "Rating Type Code already exists",
+      )
+      $.validator.addMethod(
+        "checkName",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/rating-types?filters=["rating_type_name","=","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
+  
+          return req
+        },
+        "Rating Type Name already exists",
+      )
     }
-    $.validator.addMethod(
-      "checkCode",
-      function (value, element) {
-        var req = false
-        $.ajax({
-          type: "GET",
-          async: false,
-          url: `${env.API_URL}/master/rating-types?filters=["rating_type_code","=","${element.value}"]`,
-          success: function (res) {
-            if (res.items.length !== 0) {
-              req = false
-            } else {
-              req = true
-            }
-          },
-        })
-
-        return req
-      },
-      "Rating Type Code already exists",
-    )
-    $.validator.addMethod(
-      "checkName",
-      function (value, element) {
-        var req = false
-        $.ajax({
-          type: "GET",
-          async: false,
-          url: `${env.API_URL}/master/rating-types?filters=["rating_type_name","=","${element.value}"]`,
-          success: function (res) {
-            if (res.items.length !== 0) {
-              req = false
-            } else {
-              req = true
-            }
-          },
-        })
-
-        return req
-      },
-      "Rating Type Name already exists",
-    )
   }, [])
 
   useEffect(() => {

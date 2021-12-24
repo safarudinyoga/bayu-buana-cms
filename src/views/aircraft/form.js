@@ -1,12 +1,12 @@
-import {withRouter} from "react-router"
-import React, {useEffect, useState} from "react"
+import { withRouter } from "react-router"
+import React, { useEffect, useState } from "react"
 import Api from "config/api"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
 import FormBuilder from "components/form/builder"
 import useQuery from "lib/query"
-import {useDispatch} from "react-redux"
-import {setAlert, setUIParams} from "redux/ui-store"
+import { useDispatch } from "react-redux"
+import { setAlert, setUIParams } from "redux/ui-store"
 import $ from "jquery"
 import env from "../../config/environment"
 
@@ -34,6 +34,7 @@ function AircraftForm(props) {
       label: "Aircraft Name",
       name: "aircraft_name",
       type: "text",
+      maxLength: 64,
     },
   ]
 
@@ -50,14 +51,14 @@ function AircraftForm(props) {
       maxlength: 64,
     },
     icao_code: {
-      required: true,
-      minlength: 4,
+      required: false,
+      minlength: 2,
       maxlength: 4,
-      checkIcao: true,
+      checkIcao: false,
     },
     aircraft_code: {
       required: true,
-      minlength: 4,
+      minlength: 2,
       maxlength: 4,
       checkCode: true,
     },
@@ -67,9 +68,9 @@ function AircraftForm(props) {
     aircraft_name: {
       required: "Aircraft Name is required",
     },
-    icao_code: {
-      required: "Icao Code is required",
-    },
+    // icao_code: {
+    //   required: "Icao Code is required",
+    // },
     model: {
       required: "Model is required",
     },
@@ -126,7 +127,7 @@ function AircraftForm(props) {
                 url: `${env.API_URL}/master/aircraft?filters=["aircraft_name","=","${element.value}"]`,
                 success: function (res) {
                   if (res.items.length !== 0) {
-                    if(currentName === element.value){
+                    if (currentName === element.value) {
                       req = true
                     } else {
                       req = false
@@ -136,7 +137,7 @@ function AircraftForm(props) {
                   }
                 },
               })
-    
+
               return req
             },
             "Aircraft Name already exists",
@@ -151,7 +152,7 @@ function AircraftForm(props) {
                 url: `${env.API_URL}/master/aircraft?filters=["icao_code","=","${element.value}"]`,
                 success: function (res) {
                   if (res.items.length !== 0) {
-                    if(currentIcao === element.value){
+                    if (currentIcao === element.value) {
                       req = true
                     } else {
                       req = false
@@ -161,7 +162,7 @@ function AircraftForm(props) {
                   }
                 },
               })
-    
+
               return req
             },
             "Icao Code already exists",
@@ -176,7 +177,7 @@ function AircraftForm(props) {
                 url: `${env.API_URL}/master/aircraft?filters=["aircraft_code","=","${element.value}"]`,
                 success: function (res) {
                   if (res.items.length !== 0) {
-                    if(currentCode === element.value){
+                    if (currentCode === element.value) {
                       req = true
                     } else {
                       req = false
@@ -191,15 +192,14 @@ function AircraftForm(props) {
             "Aircraft Code already exists",
           )
         }
-
-      } catch (e) { }
+      } catch (e) {}
 
       try {
         let res = await api.get(endpoint + "/" + formId + "/translations", {
           size: 50,
         })
         setTranslations(res.data.items)
-      } catch (e) { }
+      } catch (e) {}
       setLoading(false)
     } else {
       $.validator.addMethod(
@@ -301,7 +301,9 @@ function AircraftForm(props) {
       props.history.push(backUrl)
       dispatch(
         setAlert({
-          message: `Record ${form.aircraft_code} - ${form.aircraft_name} has been successfully ${formId ? "updated" : "saved"}..`,
+          message: `Record ${form.aircraft_code} - ${
+            form.aircraft_name
+          } has been successfully ${formId ? "updated" : "saved"}..`,
         }),
       )
     }
@@ -326,7 +328,7 @@ function AircraftForm(props) {
           labelRequired="label-required"
           value={form.aircraft_name}
           name="aircraft_name"
-          onChange={(e) => setForm({...form, aircraft_name: e.target.value})}
+          onChange={(e) => setForm({ ...form, aircraft_name: e.target.value })}
           disabled={isView || loading}
           type="text"
           minLength="1"
@@ -336,7 +338,7 @@ function AircraftForm(props) {
           value={form.model}
           labelRequired="label-required"
           name="model"
-          onChange={(e) => setForm({...form, model: e.target.value})}
+          onChange={(e) => setForm({ ...form, model: e.target.value })}
           label="Model"
           disabled={isView || loading}
           type="text"
@@ -350,28 +352,27 @@ function AircraftForm(props) {
           value={form.aircraft_code}
           labelRequired="label-required"
           name="aircraft_code"
-          onChange={(e) => setForm({...form, aircraft_code: e.target.value})}
-          cl={{md:"12"}}
+          onChange={(e) => setForm({ ...form, aircraft_code: e.target.value })}
+          cl={{ md: "12" }}
           cr="12"
           disabled={isView || loading}
           label="Aircraft Code"
           type="text"
-          pattern="\d*" 
-          minLength="4"
+          pattern="\d*"
+          minLength="2"
           maxLength="4"
           hint="Aircraft code maximum 4 characters"
         />
         <FormInputControl
           value={form.icao_code}
-          labelRequired="label-required"
           name="icao_code"
-          onChange={(e) => setForm({...form, icao_code: e.target.value})}
-          cl={{md:"12"}}
+          onChange={(e) => setForm({ ...form, icao_code: e.target.value })}
+          cl={{ md: "12" }}
           cr="12"
           disabled={isView || loading}
           label="ICAO Code"
           type="text"
-          minLength="4"
+          minLength="2"
           maxLength="4"
           hint="ICAO Code maximum 4 characters"
         />

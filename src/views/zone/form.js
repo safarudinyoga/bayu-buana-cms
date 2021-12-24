@@ -61,7 +61,7 @@ function ZoneForm(props) {
     zone_code: {
       required: true,
       minlength: 1,
-      maxlength: 16,
+      maxlength: 8,
       checkCode: true,      
     },
   }
@@ -335,8 +335,8 @@ function ZoneForm(props) {
           label="Zone Code"
           labelRequired="label-required"
           minLength="1"
-          maxLength="16"
-          hint="Zone code maximum 16 characters"
+          maxLength="8"
+          hint="Zone code maximum 8 characters"
         />
 
       </FormHorizontal>

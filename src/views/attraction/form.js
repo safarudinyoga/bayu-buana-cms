@@ -148,13 +148,13 @@ function AttractionForm(props) {
       maxlength: 4000,
     },
     attraction_asset_desktop: {
-      required: formId == null,
+      required: true,
     },
     attraction_asset_mobile: {
-      required: formId == null,
+      required: true,
     },
     attraction_asset_tablet: {
-      required: formId == null,
+      required: true,
     },
   });
 
@@ -282,8 +282,25 @@ function AttractionForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         if (res.data) {
-
+          setForm({...res.data, country_id: res.data.country.id})
           let currentName = res.data.attraction_name
+
+          let currentDesktopImage = res.data.attraction_asset_desktop?.multimedia_description_id
+          let currentMobileImage = res.data.attraction_asset_mobile?.multimedia_description_id
+          let currentTabletImage = res.data.attraction_asset_tablet?.multimedia_description_id
+
+          setValidationRules({
+            ...validationRules,
+            attraction_asset_desktop: {
+              required: !currentDesktopImage
+            },
+            attraction_asset_mobile: {
+              required: !currentMobileImage
+            },
+            attraction_asset_tablet: {
+              required: !currentTabletImage
+            },
+          })
 
           $.validator.addMethod(
             "checkName",
@@ -335,12 +352,9 @@ function AttractionForm(props) {
         if (res.data.zone) {
           setZoneData([{...res.data.zone, text: res.data.zone.zone_name}])
         }
-        setForm(res.data)
-        
       } catch (e) {
         console.error(e);
       }
-
       try {
         let res = await api.get(endpoint + "/" + formId + "/translations", {
           size: 50,
@@ -630,7 +644,6 @@ function AttractionForm(props) {
             name="destination_id"
             data={destinationData}
             endpoint="/master/destinations"
-            filter={form.destination_id}
             column="destination_name"
             onChange={(e) =>
               setForm({...form, destination_id: e.target.value || null})
@@ -645,7 +658,6 @@ function AttractionForm(props) {
             name="zone_id"
             data={zoneData}
             endpoint="/master/zones"
-            filter={form.zone_id}
             column="zone_name"
             onChange={(e) =>
               setForm({...form, zone_id: e.target.value || null})
