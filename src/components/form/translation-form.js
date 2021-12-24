@@ -1,10 +1,10 @@
 import Api from "config/api"
 import $ from "jquery"
-import {Component} from "react"
+import { Component } from "react"
 import FormHorizontal from "./horizontal"
 import FormInputControl from "./input-control"
 import "./translation-form.css"
-import translation from '../../lib/translation';
+import translation from "../../lib/translation"
 
 export default class TranslationForm extends Component {
   constructor(props) {
@@ -14,7 +14,7 @@ export default class TranslationForm extends Component {
       currentLanguage: "",
       languages: [],
       loading: true,
-      translated:{},
+      translated: {},
     }
 
     this.translated = {}
@@ -24,9 +24,9 @@ export default class TranslationForm extends Component {
 
   componentDidMount() {
     this.api
-      .get("/master/languages", {size: 50, sort: "-language_name"})
+      .get("/master/languages", { size: 50, sort: "-language_name" })
       .then((res) => {
-        this.setState({languages: res.data.items})
+        this.setState({ languages: res.data.items })
         if (res.data.items.length > 0) {
           this.setState({
             currentLanguage: res.data.items[0].language_name,
@@ -34,12 +34,12 @@ export default class TranslationForm extends Component {
         }
       })
       .finally(() => {
-        this.setState({loading: false})
+        this.setState({ loading: false })
       })
   }
 
   componentDidUpdate() {
-    const {fields, translations} = this.props
+    const { fields, translations } = this.props
     let emptyTranslation = []
     console.log(translations)
     if (
@@ -52,7 +52,7 @@ export default class TranslationForm extends Component {
         let item = this.props.translations[i]
         this.translated[item.language_code] = item
       }
-      this.setState({translated: this.translated})
+      this.setState({ translated: this.translated })
       this.hasTranslated = true
       if (this.props.fields) {
         for (let i in this.props.translations) {
@@ -62,7 +62,7 @@ export default class TranslationForm extends Component {
             let inputId = "trans-" + item.language_code + "-" + field.name
             try {
               document.getElementById(inputId).value = item[field.name] || ""
-            } catch (e) { }
+            } catch (e) {}
           }
         }
       }
@@ -72,52 +72,51 @@ export default class TranslationForm extends Component {
   togglePills() {
     let display = this.state.pillStyle.display === "flex" ? "none" : "flex"
     this.setState({
-      pillStyle: {display: display},
+      pillStyle: { display: display },
     })
   }
 
   onSelected(e) {
     this.setState({
       currentLanguage: e.target.innerText,
-      translated: this.translated
+      translated: this.translated,
     })
   }
 
   onValueChange(lang, name, e) {
     if (!this.translated[lang]) {
-      this.translated[lang] = {language_code: lang}
+      this.translated[lang] = { language_code: lang }
     }
 
-    if(this.props.fields && this.props.fields.length > 1){
+    if (this.props.fields && this.props.fields.length > 1) {
       let inField = []
       this.props.fields.map((field, index) => {
         let id = "trans-" + lang + "-" + field.name
         let elem = document.getElementById(id)
-        inField.push(elem.value);
+        inField.push(elem.value)
         // if(!elem.value){
         //   delete this.translated[lang]
         // } else {
         //   this.translated[lang][name] = e.target.value
         // }
       })
-      const allEmpty = inField.every(field => {
-        if(!field) return true
+      const allEmpty = inField.every((field) => {
+        if (!field) return true
       })
 
-      if(allEmpty){
+      if (allEmpty) {
         delete this.translated[lang]
       } else {
         this.translated[lang][name] = e.target.value
       }
-
     } else {
-      if(!e.target.value){
+      if (!e.target.value) {
         delete this.translated[lang]
       } else {
         this.translated[lang][name] = e.target.value
       }
     }
-    
+
     this.setState({
       translated: this.translated,
     })
@@ -165,7 +164,10 @@ export default class TranslationForm extends Component {
               {lang.language_code in this.state.translated ? (
                 ""
               ) : (
-                <i className="fas fa-exclamation-triangle" style={{color: 'red'}}></i>
+                <i
+                  className="fas fa-exclamation-triangle"
+                  style={{ color: "red" }}
+                ></i>
               )}
             </div>
           </button>
@@ -198,9 +200,9 @@ export default class TranslationForm extends Component {
                       field.name,
                     )}
                     name={field.name + "_" + lang.language_code}
-                    type={field.type}                    
+                    type={field.type}
                     label={field.label}
-                    cl={{lg:5}}
+                    cl={{ lg: 5 }}
                     maxLength={field?.maxLength || "256"}
                   />
                 )
@@ -231,7 +233,7 @@ export default class TranslationForm extends Component {
               <span className="text-label-input">
                 {this.state.currentLanguage}
               </span>
-            </button>            
+            </button>
             <div
               className="nav flex-column nav-pills"
               style={this.state.pillStyle}
@@ -240,15 +242,18 @@ export default class TranslationForm extends Component {
               aria-orientation="vertical"
             >
               {tabPills}
-            </div>            
+            </div>
           </div>
           <div className="col-xs-12 col-sm-8 col-md-8 col-lg-10 translation-form-content card border shadow-none">
-          <div class="row">
-            <div className="col-xs-12 col-sm-12 col-md-12 col-lg-6 tab-content card-body-translation" id="v-pills-tabContent">
-              {tabContents}
+            <div class="row">
+              <div
+                className="col-xs-12 col-sm-12 col-md-12 col-lg-6 tab-content card-body-translation"
+                id="v-pills-tabContent"
+              >
+                {tabContents}
+              </div>
+              <div className="col-lg-6"></div>
             </div>
-            <div className="col-lg-6"></div>
-          </div>
           </div>
         </div>
       </div>
