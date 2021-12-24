@@ -282,7 +282,7 @@ function AttractionForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         if (res.data) {
-
+          setForm({...res.data, country_id: res.data.country.id})
           let currentName = res.data.attraction_name
 
           $.validator.addMethod(
@@ -335,12 +335,9 @@ function AttractionForm(props) {
         if (res.data.zone) {
           setZoneData([{...res.data.zone, text: res.data.zone.zone_name}])
         }
-        setForm(res.data)
-        
       } catch (e) {
         console.error(e);
       }
-
       try {
         let res = await api.get(endpoint + "/" + formId + "/translations", {
           size: 50,
@@ -630,7 +627,6 @@ function AttractionForm(props) {
             name="destination_id"
             data={destinationData}
             endpoint="/master/destinations"
-            filter={form.destination_id}
             column="destination_name"
             onChange={(e) =>
               setForm({...form, destination_id: e.target.value || null})
@@ -645,7 +641,6 @@ function AttractionForm(props) {
             name="zone_id"
             data={zoneData}
             endpoint="/master/zones"
-            filter={form.zone_id}
             column="zone_name"
             onChange={(e) =>
               setForm({...form, zone_id: e.target.value || null})
