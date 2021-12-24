@@ -25,6 +25,7 @@ export default function DestinationGroupTable() {
 
   let params = {
     title: "Destination Groups",
+    titleModal: "Destination Group",
     baseRoute: "/master/destination-groups/form",
     endpoint: "/master/destination-groups",
     deleteEndpoint: "/master/batch-actions/delete/destination-groups",
@@ -52,7 +53,7 @@ export default function DestinationGroupTable() {
       //   visible: false,
       // },
     ],
-    emptyTable: "No Destination Groups found",
+    emptyTable: "No destination groups found",
     recordName: ["destination_group_code", "destination_group_name"],
   }
   return <BBDataTable {...params} />

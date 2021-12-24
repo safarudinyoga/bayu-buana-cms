@@ -25,6 +25,7 @@ export default function RegionTable() {
 
   let params = {
     title: "Regions",
+    titleModal: "Region",
     baseRoute: "/master/regions/form",
     endpoint: "/master/regions",
     deleteEndpoint: "/master/batch-actions/delete/regions",
@@ -52,6 +53,7 @@ export default function RegionTable() {
         visible: false,
       },
     ],
+    emptyTable: "No regions found",
     recordName: ["region_code", "region_name"],
   }
   return <BBDataTable {...params} />

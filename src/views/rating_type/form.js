@@ -310,6 +310,8 @@ function RatingTypeForm(props) {
           minLength="1"
           maxLength="256"
         />
+        {
+          !loading &&
         <FormInputSelectAjax
           label="Rating Symbol"
           labelRequired="label-required"
@@ -327,6 +329,7 @@ function RatingTypeForm(props) {
           <option value="like">Like</option>
           <option value="smiler">Smile</option>
         </FormInputSelectAjax>
+        }
 
         <FormInputControl
           label="Scale"

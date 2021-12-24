@@ -53,6 +53,7 @@ export default function TravelPurposeTable() {
         visible: false,
       },
     ],
+    emptyTable: "No travel purposes found",
     recordName: ["travel_purpose_code", "travel_purpose_name"],
   }
   return <BBDataTable {...params} />

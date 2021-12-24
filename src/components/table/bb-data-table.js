@@ -581,7 +581,11 @@ class BBDataTable extends Component {
 
       dt.on("row-reorder", (e, diff, edit) => {
         if (diff.length > 0) {
-          const module = this.props.title.toLowerCase().split(" ").join("_")
+          let module = this.props.title.toLowerCase().split(" ").join("_")
+          if(this.props.title.includes("/")){
+            module = this.props.title.toLowerCase().replace(/ /g, "").replace("/", "-").split(" ").join("_")
+          }
+          
           let rowID = edit.triggerRow.data().id
           let rowPositionDiff = diff.findIndex(
             (v) => dt.row(v.node).data().id === rowID,

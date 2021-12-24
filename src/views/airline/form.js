@@ -22,6 +22,7 @@ function AirlineForm(props) {
   const [loading, setLoading] = useState(true)
   const [translations, setTranslations] = useState([])
   const [id, setId] = useState(null)
+  const [companyData, setCompanyData] = useState([])
   const [form, setForm] = useState({
     airline_code: "",
     numeric_code: "",
@@ -201,6 +202,10 @@ function AirlineForm(props) {
             },
             "Airline Name already exists",
           )
+
+          if (res.data.company) {
+            setCompanyData([{...res.data.company, text: res.data.company.company_name}])
+          }
         }
       } catch (e) {}
 
@@ -377,28 +382,23 @@ function AirlineForm(props) {
           minLength="1"
           maxLength="64"
         />
-        <FormInputSelectAjax
+        {
+          !loading && 
+          <FormInputSelectAjax
           label="Company Name"
           value={form.company_id}
           name="company_id"
           endpoint="/master/companies"
           column="company_name"
+          data={companyData}
           onChange={(e) =>
             setForm({ ...form, company_id: e.target.value || null })
           }
           disabled={isView || loading}
           type="select"
-          minLength="0"
-          maxLength="9999"
-        >
-          <option value="">None</option>
-          <option value="51d5cb0c-c29e-4682-af20-4b95bc5c6ee3">
-            Company 1
-          </option>
-          <option value="51d5cb0c-c29e-4682-af20-4b95bc5c6ee4">
-            Company 2
-          </option>
-        </FormInputSelectAjax>
+        />
+        }
+
         <FormInputControl
           label="Airline Logo Image"
           labelRequired="label-required"

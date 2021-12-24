@@ -69,6 +69,7 @@ export default function LanguageTable() {
         visible: false,
       },
     ],
+    emptyTable: "No languages found",
     recordName: ["language_code", "language_name"],
   }
   return <BBDataTable {...params} />

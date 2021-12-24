@@ -96,6 +96,7 @@ export default function HotelSupplierTable() {
         visible: false,
       },
     ],
+    emptyTable: "No hotel suppliers found",
     recordName: ["hotel_supplier_code", "hotel_supplier_name"],
   })
 

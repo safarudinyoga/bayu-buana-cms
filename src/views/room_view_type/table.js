@@ -53,6 +53,7 @@ export default function RoomViewTypeTable() {
         visible: false,
       },
     ],
+    emptyTable: "No room view types found",
     recordName: ["room_view_type_code", "room_view_type_name"],
   }
   return <BBDataTable {...params} />
