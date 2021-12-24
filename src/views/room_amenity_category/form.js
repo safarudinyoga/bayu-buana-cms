@@ -7,13 +7,14 @@ import useQuery from "lib/query"
 import React, {useEffect, useState} from "react"
 import {useDispatch} from "react-redux"
 import {withRouter} from "react-router"
-import {setUIParams} from "redux/ui-store"
+import {setAlert, setUIParams} from "redux/ui-store"
 
 const endpoint = "/master/room-amenity-categories"
 const backUrl = "/master/room-amenity-categories"
 
 function RoomAmenityTypeForm(props) {
   let dispatch = useDispatch()
+  let formId = props.match.params.id
 
   const isView = useQuery().get("action") === "view"
   const [formBuilder, setFormBuilder] = useState(null)
@@ -21,11 +22,9 @@ function RoomAmenityTypeForm(props) {
   const [translations, setTranslations] = useState([])
   const [id, setId] = useState(null)
   const [form, setForm] = useState({
-    room_amenity_category_code: "",
+    room_amenity_category_name: "",
     is_default: false,
     description: "",
-    room_amenity_category_name: "",
-    room_amenity_category_id: "",
     room_amenity_category_asset: {
       multimedia_description_id: null,
       multimedia_description: {
@@ -47,20 +46,28 @@ function RoomAmenityTypeForm(props) {
   ]
 
   const validationRules = {
-    room_amenity_category_code: {
-      required: true,
-      minlength: 2,
-      maxlength: 2,
-    },
     room_amenity_category_name: {
       required: true,
       minlength: 1,
-      maxlength: 64,
+      maxlength: 256,
     },
     description: {
       required: false,
       minlength: 1,
-      maxlength: 200,
+      maxlength: 4000,
+    },
+  }
+
+  const validationMessage = {
+    room_amenity_category_name: {
+      required: "Room Amenity Category Name is required",
+      minlength: "Room Amenity Category Name must be at least 1 characters",
+      maxlength: "Room Amenity Category Name must be at most 256 characters",
+    },
+    description: {
+      required: "Description is required",
+      minlength: "Description must be at least 1 characters",
+      maxlength: "Description must be at most 4000 characters",
     },
   }
 
@@ -72,7 +79,7 @@ function RoomAmenityTypeForm(props) {
     if (!formId) {
       docTitle = "Create Room Amenity Category"
     } else if (isView) {
-      docTitle = "View Room Amenity Category"
+      docTitle = "Room Amenity Category Details"
     }
 
     dispatch(
@@ -123,6 +130,16 @@ function RoomAmenityTypeForm(props) {
       if (form.room_amenity_category_asset.multimedia_description_id == null) {
         form.room_amenity_category_asset = null
       }
+      // set form to null when value is empty
+      if (form.room_amenity_category_name === "") {
+        form.room_amenity_category_name = null
+      }
+      if (form.description === "") {
+        form.description = null
+      }
+      if (form.room_amenity_category_id === "") {
+        form.room_amenity_category_id = null
+      }
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
       for (let i in translated) {
@@ -130,7 +147,17 @@ function RoomAmenityTypeForm(props) {
         let path = endpoint + "/" + res.data.id + "/translations"
         await api.putOrPost(path, tl.id, tl)
       }
+      dispatch(
+        setAlert({
+          message: `Record ${form.room_amenity_category_name} has been successfully ${formId ? "updated" : "saved"}.`,
+        }),
+      )
     } catch (e) {
+      dispatch(
+        setAlert({
+          message: `Failed to ${formId ? "update" : "save"} this record.`,
+        }),
+      )
     } finally {
       setLoading(false)
       props.history.push(backUrl)
@@ -166,11 +193,12 @@ function RoomAmenityTypeForm(props) {
       alertMessage={"Incomplete data"}
       isValid={false}
       rules={validationRules}
+      validationMessages={validationMessage}
     >
       <FormHorizontal>
 
         <FormInputControl
-          label="Room Amenity Type Name"
+          label="Room Amenity Category Name"
           labelRequired="label-required"
           value={form.room_amenity_category_name}
           name="room_amenity_category_name"
@@ -178,7 +206,7 @@ function RoomAmenityTypeForm(props) {
           disabled={isView || loading}
           type="text"
           minLength="1"
-          maxLength="64"
+          maxLength="256"
         />
         <FormInputWrapper label="Is Default" hint="Set is default">
           <div className="form-check form-check-inline">
@@ -190,6 +218,7 @@ function RoomAmenityTypeForm(props) {
               value={true}
               checked={form.is_default}
               onChange={(e) => setForm({...form, is_default: true})}
+              disabled={isView || loading}
             />
             <label className="form-check-label" htmlFor="tt-1">
               Yes
@@ -204,6 +233,7 @@ function RoomAmenityTypeForm(props) {
               value={false}
               checked={!form.is_default}
               onChange={(e) => setForm({...form, is_default: false})}
+              disabled={isView || loading}
             />
             <label className="form-check-label" htmlFor="tt-2">
               No
@@ -219,7 +249,7 @@ function RoomAmenityTypeForm(props) {
           disabled={isView || loading}
           type="textarea"
           minLength="1"
-          maxLength="64"
+          maxLength="4000"
         />
 
         <FormInputControl

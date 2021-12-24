@@ -58,7 +58,6 @@ export default class FormInputSelectAjax extends Component {
                 filter = this.props.filter
                 filters = [[this.props.column, "like", params.term],["AND"],JSON.parse(filter)]
               }
-              console.log(filters)
               return {
                 filters: params.term ? JSON.stringify(filters) : filter,
                 sort: this.props.column,

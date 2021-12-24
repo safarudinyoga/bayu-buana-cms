@@ -102,7 +102,7 @@ export default class TableDropdownFilter extends Component {
     <div className="col-xs-12 col-sm-12 col-md-6 col-lg-4">        
       <div className="col-xs-4">      
       <label className="text-label-filter font-weight-bold">{this.props.label}</label>
-      <div class="input-group mb-3 mb-sm-0">
+      <div className="input-group mb-3 mb-sm-0">
       <select  ref={this.select} multiple="multiple">
         {this.props.children}        
       </select>

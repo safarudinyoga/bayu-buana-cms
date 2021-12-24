@@ -13,17 +13,20 @@ export default class FormContainer extends Component {
   }
 
   componentDidMount() {
-    this.validator = this.validate()
-    $.validator.addMethod(
-      "noSpace",
-      function (value, element) {
-        return value.trim() === value
-      },
-      "No space please and don't leave it empty",
-    )
   }
 
-  componentDidUpdate() { }
+  componentDidUpdate(prevprops) {
+    if(prevprops.rules !== this.props.rules) {
+      this.validator = this.validate()
+      $.validator.addMethod(
+        "noSpace",
+        function (value, element) {
+          return value.trim() === value
+        },
+        "No space please and don't leave it empty",
+      )
+    }
+  }
 
   componentWillUnmount() {
     if (this.validator) {
