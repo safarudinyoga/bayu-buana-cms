@@ -190,6 +190,7 @@ function RoomAmenityTypeForm(props) {
               value={true}
               checked={form.is_default}
               onChange={(e) => setForm({...form, is_default: true})}
+              disabled={isView || loading}
             />
             <label className="form-check-label" htmlFor="tt-1">
               Yes
@@ -204,6 +205,7 @@ function RoomAmenityTypeForm(props) {
               value={false}
               checked={!form.is_default}
               onChange={(e) => setForm({...form, is_default: false})}
+              disabled={isView || loading}
             />
             <label className="form-check-label" htmlFor="tt-2">
               No
