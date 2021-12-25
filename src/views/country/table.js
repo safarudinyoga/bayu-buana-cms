@@ -53,6 +53,7 @@ export default function CountryTable() {
         value={selectedRegionIds}
         data={selectedRegions}
         placeholder="Region"
+        filter={`["status", "=", 1]`}
       />
     )
   }

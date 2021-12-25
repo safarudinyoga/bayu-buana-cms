@@ -360,6 +360,7 @@ function HotelAmenityForm(props) {
           data={categoryData}
           endpoint="/master/hotel-amenity-categories"
           column="hotel_amenity_category_name"
+          filter={`["status", "=", 1]`}
           onChange={(e, values) =>
             setForm((prev) => ({
               ...prev,

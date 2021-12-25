@@ -354,6 +354,7 @@ function AirportForm(props) {
             value={form.city_id}
             name="city_id"         
             endpoint="/master/cities"
+            filter={`["status", "=", 1]`}
             column="city_name"
             data={cityData}
             onChange={(e) => setForm({...form, city_id: e.target.value || null})}

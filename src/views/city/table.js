@@ -52,6 +52,8 @@ export default function CityTable() {
         column="country_name"
         value={selectedCountryIds}
         data={selectedCountries}
+        filter={`["status", "=", 1]`}
+        placeholder="Country"
       />
     )
   }

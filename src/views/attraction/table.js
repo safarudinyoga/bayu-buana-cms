@@ -144,6 +144,8 @@ export default function AttractionTable() {
           column="city_name"
           value={selectedCityIds}
           data={selectedCities}
+          filter={`["status", "=", 1]`}
+          placeholder="City"
         />
         <TableDropdownFilter
           label="Country"
@@ -152,6 +154,8 @@ export default function AttractionTable() {
           column="country_name"
           value={selectedCountryIds}
           data={selectedCountries}
+          filter={`["status", "=", 1]`}
+          placeholder="Country"
         />
         <TableDropdownFilter
           label="Attraction Category"
@@ -160,6 +164,8 @@ export default function AttractionTable() {
           column="attraction_category_name"
           value={selectedAttractionCategoryIds}
           data={selectedAttractionCategories}
+          filter={`["status", "=", 1]`}
+          placeholder="Attraction Category"
         />
       </>
     )

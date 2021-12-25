@@ -390,6 +390,7 @@ function AirlineForm(props) {
           name="company_id"
           endpoint="/master/companies"
           column="company_name"
+          filter={`["status", "=", 1]`}
           data={companyData}
           onChange={(e) =>
             setForm({ ...form, company_id: e.target.value || null })

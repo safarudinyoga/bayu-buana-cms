@@ -431,6 +431,7 @@ function DestinationForm(props) {
           name="country_id"
           endpoint="/master/countries"
           column="country_name"
+          filter={`["status", "=", 1]`}
           data={countryData}
           onChange={(e) => {
             setForm({...form, country_id: e.target.value || null})
@@ -450,7 +451,7 @@ function DestinationForm(props) {
           value={form.destination_city_id}
           name="destination_city_id"
           endpoint="/master/cities"
-          filter={`["country.id", "=", "${form.country_id}"]`}
+          filter={`[["country.id", "=", "${form.country_id}"],["AND"],["status", "=", 1]]`}
           column="city_name"
           data={cityData}
           onChange={(e) =>
