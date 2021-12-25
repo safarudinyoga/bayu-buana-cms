@@ -25,7 +25,8 @@ export default function OccupancyTypeTable() {
   }, [])
 
   let params = {
-    title: "Occupancy Type",
+    title: "Occupancy Types",
+    titleModal: "Occupancy Type",
     baseRoute: "/master/occupancy-types/form",
     endpoint: "/master/occupancy-types",
     deleteEndpoint: "/master/batch-actions/delete/occupancy-types",
@@ -62,6 +63,7 @@ export default function OccupancyTypeTable() {
         visible: false,
       },
     ],
+    emptyTable: "No occupancy types found",
     recordName: ["occupancy_type_code", "occupancy_type_name"],
   }
   return <BBDataTable {...params} />

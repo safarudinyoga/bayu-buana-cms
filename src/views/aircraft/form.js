@@ -358,7 +358,6 @@ function AircraftForm(props) {
           disabled={isView || loading}
           label="Aircraft Code"
           type="text"
-          pattern="\d*"
           minLength="2"
           maxLength="4"
           hint="Aircraft code maximum 4 characters"

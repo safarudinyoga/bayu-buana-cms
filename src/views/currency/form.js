@@ -539,7 +539,7 @@ function CurrencyForm(props) {
           type="text"
           minLength="3"
           maxLength="3"
-          hint="Numeric Code maximum 3 characters"
+          hint="Numeric code maximum 3 characters"
         />
       </FormHorizontal>
     </FormBuilder>

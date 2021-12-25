@@ -91,7 +91,7 @@ function RoomAmenityTypeForm(props) {
           },
           {
             link: backUrl,
-            text: "Room Amenity Category",
+            text: "Room Amenity Categories",
           },
           {
             text: docTitle,

@@ -53,6 +53,7 @@ export default function CabinTypeTable() {
         visible: false,
       },
     ],
+    emptyTable: "No cabin types found",
     recordName: ["cabin_type_code", "cabin_type_name"],
   }
   return <BBDataTable {...params} />

@@ -25,6 +25,7 @@ export default function LanguageTable() {
 
   let params = {
     title: "Languages",
+    titleModal: "Language",
     baseRoute: "/master/languages/form",
     endpoint: "/master/languages",
     deleteEndpoint: "/master/batch-actions/delete/languages",
@@ -68,6 +69,7 @@ export default function LanguageTable() {
         visible: false,
       },
     ],
+    emptyTable: "No languages found",
     recordName: ["language_code", "language_name"],
   }
   return <BBDataTable {...params} />

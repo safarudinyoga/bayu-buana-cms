@@ -256,6 +256,8 @@ function ProvinceForm(props) {
     }
   }
 
+  console.log('loading, ', loading)
+
   return (
     <FormBuilder
       onBuild={(el) => setFormBuilder(el)}
@@ -283,6 +285,8 @@ function ProvinceForm(props) {
           minLength="1"
           maxLength="256"
         />
+        {
+          !loading &&
         <FormInputSelectAjax
           label="Subdivision Category"
           value={form.state_province_category_id}
@@ -298,12 +302,14 @@ function ProvinceForm(props) {
           disabled={isView || loading}
           type="select"
         />
+        }
+        {
+          loading ? null :
         <FormInputSelectAjax
           label="Country"
           value={form.country_id}
           name="country_id"
           cl="4"
-          
           endpoint="/master/countries"
           column="country_name"
           data={countryData}
@@ -314,6 +320,7 @@ function ProvinceForm(props) {
           type="select"
           placeholder="Country"
         />
+}
 
       </FormHorizontal>
 

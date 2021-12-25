@@ -554,6 +554,8 @@ function AttractionForm(props) {
             maxLength="256"
           />
 
+          {
+          !loading &&
           <FormInputSelectAjax
             label="Attraction Category"
             value={form.attraction_category_attraction ? form.attraction_category_attraction.map((item) => item.attraction_category_id) : []}
@@ -565,7 +567,8 @@ function AttractionForm(props) {
             disabled={isView || loading}
             type="selectmultiple"
           />
-
+          }
+          
           <FormInputControl
             label={"Address"}
             value={form.address_line}
@@ -576,7 +579,8 @@ function AttractionForm(props) {
             minLength="1"
             maxLength="512"
           />
-
+          {
+          !loading &&
           <FormInputSelectAjax
             label="Country"
             labelRequired="label-required"
@@ -593,7 +597,9 @@ function AttractionForm(props) {
             disabled={isView || loading}
             type="select"
           />
-
+          }
+          {
+          !loading &&
           <FormInputSelectAjax
             label="State/ Province"
             value={form.state_province_id}
@@ -609,7 +615,9 @@ function AttractionForm(props) {
             disabled={isView || loading}
             type="select"
           />
-
+          }
+          {
+          !loading &&
           <FormInputSelectAjax
             label="City"
             value={form.city_id}
@@ -626,6 +634,7 @@ function AttractionForm(props) {
             disabled={isView || loading}
             type="select"
           />
+          }
 
           <FormInputControl
             label={"Zip Code"}
@@ -637,7 +646,8 @@ function AttractionForm(props) {
             minLength="1"
             maxLength="16"
           />
-
+          {
+          !loading &&
           <FormInputSelectAjax
             label="Destination"
             value={form.destination_id}
@@ -651,7 +661,9 @@ function AttractionForm(props) {
             disabled={isView || loading}
             type="select"
           />
-
+          }
+          {
+          !loading &&
           <FormInputSelectAjax
             label="Zone"
             value={form.zone_id}
@@ -665,6 +677,7 @@ function AttractionForm(props) {
             disabled={isView || loading}
             type="select"
           />
+          }
 
           <FormInputControl
             label={"Latitude"}

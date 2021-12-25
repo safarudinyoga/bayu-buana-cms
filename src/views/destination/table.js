@@ -98,6 +98,7 @@ export default function DestinationTable() {
 
   let [params, setParams] = useState({
     title: "Destinations",
+    titleModal: "Destination",
     baseRoute: "/master/destinations/form",
     endpoint: "/master/destinations",
     deleteEndpoint: "/master/batch-actions/delete/destinations",
@@ -133,7 +134,7 @@ export default function DestinationTable() {
         visible: false,
       },
     ],
-    emptyTable: "No destination found",
+    emptyTable: "No destinations found",
     recordName: ["destination_code", "destination_name"],
   })
 
