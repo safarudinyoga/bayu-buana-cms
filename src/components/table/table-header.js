@@ -245,7 +245,7 @@ class TableHeader extends Component {
         >
           <div className="card-body-filter">
             <div className="row">
-              {ExtraFilter ? <ExtraFilter /> : ""}
+              {this.state.showFilter ? ExtraFilter ? <ExtraFilter /> : "" : ""}
 
               {this.props.children}
               <div className="col-xs-12 col-sm-12 col-md-6 col-lg-4">
