@@ -187,7 +187,7 @@ function RoomAmenityTypeForm(props) {
             label="Room Amenity Category"
             value={form.room_amenity_category_id}
             // value={form.attraction_category_attraction ? form.attraction_category_attraction.map((item) => item.attraction_category_id) : []}
-
+            filter={`["status", "=", 1]`}
             name="room_amenity_category_id"
             endpoint="/master/room-amenity-categories"
             column="room_amenity_category_name"

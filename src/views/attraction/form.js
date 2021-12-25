@@ -563,6 +563,7 @@ function AttractionForm(props) {
             data={categoryData}
             endpoint="/master/attraction-categories"
             column="attraction_category_name"
+            filter={`["status", "=", 1]`}
             onChange={(e, values) => setForm(form => ({...form, attraction_category_attraction: values.map(v => ({attraction_category_id: v.id}))}))}
             disabled={isView || loading}
             type="selectmultiple"
@@ -589,6 +590,7 @@ function AttractionForm(props) {
             data={countryData}
             endpoint="/master/countries"
             column="country_name"
+            filter={`["status", "=", 1]`}
             onChange={(e) => {
               setForm({...form, country_id: e.target.value || null})
               $('#attr_state').empty();
@@ -607,7 +609,7 @@ function AttractionForm(props) {
             id="attr_state"
             data={provinceData}
             endpoint="/master/state-provinces"
-            filter={`["country.id", "=", "${form.country_id}"]`}
+            filter={`[["country.id", "=", "${form.country_id}"],["AND"],["status", "=", 1]]`}
             column="state_province_name"
             onChange={(e) =>
               setForm({...form, state_province_id: e.target.value || null})
@@ -626,7 +628,7 @@ function AttractionForm(props) {
             id="attr_city"
             data={cityData}
             endpoint="/master/cities"
-            filter={`["country.id", "=", "${form.country_id}"]`}
+            filter={`[["country.id", "=", "${form.country_id}"],["AND"],["status", "=", 1]]`}
             column="city_name"
             onChange={(e) =>
               setForm({...form, city_id: e.target.value || null})
@@ -655,6 +657,7 @@ function AttractionForm(props) {
             data={destinationData}
             endpoint="/master/destinations"
             column="destination_name"
+            filter={`["status", "=", 1]`}
             onChange={(e) =>
               setForm({...form, destination_id: e.target.value || null})
             }
@@ -671,6 +674,7 @@ function AttractionForm(props) {
             data={zoneData}
             endpoint="/master/zones"
             column="zone_name"
+            filter={`["status", "=", 1]`}
             onChange={(e) =>
               setForm({...form, zone_id: e.target.value || null})
             }

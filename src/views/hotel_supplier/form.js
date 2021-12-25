@@ -291,14 +291,13 @@ function HotelSupplierForm(props) {
           name="supplier_type_id"
           endpoint="/master/supplier-types"
           column="supplier_type_name"
+          filter={`["status", "=", 1]`}
           onChange={(e) =>
             setForm({...form, supplier_type_id: e.target.value || null})
           }
           data={supplierTypeData}
           disabled={isView || loading}
           type="select"
-          minLength="0"
-          maxLength="9999"
         />}
       </FormHorizontal>
 
