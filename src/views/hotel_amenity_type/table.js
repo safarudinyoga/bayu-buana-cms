@@ -64,6 +64,8 @@ export default function HotelAmenityTable() {
           column="hotel_amenity_category_name"
           value={selectedHotelAmenityCategoriesIds}
           data={selectedHotelAmenityCategories}
+          filter={`["status", "=", 1]`}
+          placeholder="Hotel Amenity Category"
         />
       </>
     )

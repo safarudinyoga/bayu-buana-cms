@@ -74,6 +74,7 @@ export default function DestinationTable() {
           value={selectedCityIds}
           data={selectedCities}
           placeholder="City"
+          filter={`["status", "=", 1]`}
         />
         <TableDropdownFilter
           label="Country"
@@ -83,6 +84,7 @@ export default function DestinationTable() {
           value={selectedCountryIds}
           data={selectedCountries}
           placeholder="Country"
+          filter={`["status", "=", 1]`}
         />
       </>
     )
