@@ -16,7 +16,7 @@ export default function RoomAmenityTypeTable() {
             text: "Master Data Management",
           },
           {
-            text: "Room Amenity Type",
+            text: "Room Amenity Types",
           },
         ],
       }),
@@ -25,7 +25,7 @@ export default function RoomAmenityTypeTable() {
 
   let params = {
     title: "Room Amenity Types",
-    titleModal: "Room Amenity Type",
+    titleModal: "Room Amenity Types",
     baseRoute: "/master/room-amenity-types/form",
     endpoint: "/master/room-amenity-types",
     deleteEndpoint: "/master/batch-actions/delete/room-amenity-types",

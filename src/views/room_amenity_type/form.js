@@ -42,13 +42,26 @@ function RoomAmenityTypeForm(props) {
   const validationRules = {
     room_amenity_type_name: {
       required: true,
-      minlength: 3,
-      maxlength: 64,
+      minlength: 1,
+      maxlength: 256,
     },
     room_amenity_type_code: {
       required: true,
-      minlength: 3,
-      maxlength: 3,
+      min: 1,
+      max: 999,
+    },
+  }
+
+  const validationMessages = {
+    room_amenity_type_name: {
+      required: "Room Amenity Type Name is required.",
+      minlength: "Room amenity type name must be at least 1 characters",
+      maxlength: "Room amenity type name must be no more than 256 characters",
+    },
+    room_amenity_type_code: {
+      required: "Room Amenity Type Code is required.",
+      min: "Room amenity type code must be at least 1",
+      max: "Room amenity type code must be no more than 999999",
     },
   }
 
@@ -72,7 +85,7 @@ function RoomAmenityTypeForm(props) {
           },
           {
             link: backUrl,
-            text: "Room Amenity Type",
+            text: "Room Amenity Types",
           },
           {
             text: docTitle,
@@ -154,6 +167,7 @@ function RoomAmenityTypeForm(props) {
       alertMessage={"Incomplete data"}
       isValid={false}
       rules={validationRules}
+      validationMessages={validationMessages}
     >
       <FormHorizontal>
         <FormInputControl
@@ -165,24 +179,27 @@ function RoomAmenityTypeForm(props) {
           disabled={isView || loading}
           type="text"
           minLength="1"
-          maxLength="64"
+          maxLength="256"
         />
         {
           !loading &&
-        <FormInputSelectAjax
-          label="Room Amenity Category"
-          value={form.room_amenity_category_id}
-          name="room_amenity_category_id"
-          endpoint="/master/room-amenity-categories"
-          column="room_amenity_category_name"
-          onChange={(e) =>
-            setForm({...form, room_amenity_category_id: e.target.value || null})
-          }
-          disabled={isView || loading}
-          type="select"/>
+          <FormInputSelectAjax
+            label="Room Amenity Category"
+            value={form.room_amenity_category_id}
+            // value={form.attraction_category_attraction ? form.attraction_category_attraction.map((item) => item.attraction_category_id) : []}
+
+            name="room_amenity_category_id"
+            endpoint="/master/room-amenity-categories"
+            column="room_amenity_category_name"
+            onChange={(e) =>
+              setForm({...form, room_amenity_category_id: e.target.value || null})
+            }
+            // onChange={(e, values) => setForm(form => ({...form, attraction_category_attraction: values.map(v => ({attraction_category_id: v.id}))}))}
+            disabled={isView || loading}
+            type="select" />
         }
         <FormInputControl
-          label="Icon"
+          label="Room Amenity Type Icon Image"
           type="image"
           onChange={doUpload}
           disabled={isView}
@@ -198,12 +215,12 @@ function RoomAmenityTypeForm(props) {
           labelRequired="label-required"
           value={form.room_amenity_type_code}
           name="room_amenity_type_code"
-          cl={{md:"12"}}
+          cl={{md: "12"}}
           cr="12"
           onChange={(e) => setForm({...form, room_amenity_type_code: e.target.value})}
           disabled={isView || loading}
           type="text"
-          minLength="3"
+          minLength="1"
           maxLength="3"
           hint="Room Amenity Type code maximum 3 characters"
         />
