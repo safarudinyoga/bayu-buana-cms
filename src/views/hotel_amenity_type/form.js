@@ -345,6 +345,8 @@ function HotelAmenityForm(props) {
           minLength="1"
           maxLength="256"
         />
+        {
+          !loading &&
         <FormInputSelectAjax
           label="Hotel Amenity Category"
           value={
@@ -370,6 +372,7 @@ function HotelAmenityForm(props) {
           type="selectmultiple"
           placeholder="Hotel Amenity Category"
         />
+        }
         <FormInputControl
           label="Hotel Amenity Type Icon Image"
           type="image"

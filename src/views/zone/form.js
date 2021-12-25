@@ -61,7 +61,7 @@ function ZoneForm(props) {
     zone_code: {
       required: true,
       minlength: 1,
-      maxlength: 16,
+      maxlength: 8,
       checkCode: true,      
     },
   }
@@ -293,6 +293,8 @@ function ZoneForm(props) {
           minLength="1"
           maxLength="256"
         />
+        {
+          !loading &&
         <FormInputSelectAjax
           label="Destination"
           labelRequired="label-required"
@@ -305,11 +307,8 @@ function ZoneForm(props) {
             setForm({...form, destination_id: e.target.value || null})
           }
           disabled={isView || loading}
-          type="select"
-          minLength="0"
-          maxLength="9999"
-        >
-        </FormInputSelectAjax>
+          type="select"/>
+        }
 
         <FormInputControl
           value={form.description}
@@ -335,8 +334,8 @@ function ZoneForm(props) {
           label="Zone Code"
           labelRequired="label-required"
           minLength="1"
-          maxLength="16"
-          hint="Zone code maximum 16 characters"
+          maxLength="8"
+          hint="Zone code maximum 8 characters"
         />
 
       </FormHorizontal>

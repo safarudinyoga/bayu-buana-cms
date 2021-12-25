@@ -360,6 +360,8 @@ function CountryForm(props) {
           minLength="1"
           maxLength="64"
         />
+        {
+          !loading &&
         <FormInputSelectAjax
           label="Time Zone"
           value={form.timezone_id}
@@ -375,6 +377,9 @@ function CountryForm(props) {
           minLength="0"
           maxLength="9999"
         />
+        }
+        {
+          !loading &&
         <FormInputSelectAjax
           label="Currency"
           value={form.currency_id}
@@ -390,6 +395,7 @@ function CountryForm(props) {
           minLength="0"
           maxLength="9999"
         />
+        }
         <FormInputControl
           label="Nationality"
           value={form.nationality}
@@ -400,6 +406,8 @@ function CountryForm(props) {
           minLength="1"
           maxLength="64"
         />
+        {
+          !loading &&
         <FormInputSelectAjax
           label="Region"
           labelRequired="label-required"
@@ -416,6 +424,9 @@ function CountryForm(props) {
           minLength="0"
           maxLength="9999"
         />
+        }
+        {
+          !loading &&
         <FormInputSelectAjax
           label="Default Language"
           value={form.language_id}
@@ -428,10 +439,9 @@ function CountryForm(props) {
           }
           disabled={isView || loading}
           type="select"
-          minLength="0"
-          maxLength="9999"
-          hint="Please Select Lenguages"
+          hint="Please Select Languages"
         />
+        }
       </FormHorizontal>
 
       <FormHorizontal>

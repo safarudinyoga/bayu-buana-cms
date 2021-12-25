@@ -347,17 +347,20 @@ function AirportForm(props) {
           minLength="1"
           maxLength="256"
         />
-        <FormInputSelectAjax
-          label="City"
-          value={form.city_id}
-          name="city_id"         
-          endpoint="/master/cities"
-          column="city_name"
-          data={cityData}
-          onChange={(e) => setForm({...form, city_id: e.target.value || null})}
-          disabled={isView || loading}
-          type="select"
-        />
+        {
+          !loading &&
+          <FormInputSelectAjax
+            label="City"
+            value={form.city_id}
+            name="city_id"         
+            endpoint="/master/cities"
+            column="city_name"
+            data={cityData}
+            onChange={(e) => setForm({...form, city_id: e.target.value || null})}
+            disabled={isView || loading}
+            type="select"
+          />
+        }
       </FormHorizontal>
 
       <FormHorizontal>

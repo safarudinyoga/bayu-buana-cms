@@ -25,6 +25,7 @@ export default function AircraftTable() {
 
   let params = {
     title: "Aircrafts",
+    titleModal: "Aircraft",
     baseRoute: "/master/aircrafts/form",
     endpoint: "/master/aircraft",
     deleteEndpoint: "/master/batch-actions/delete/aircrafts",
@@ -52,6 +53,7 @@ export default function AircraftTable() {
         visible: false,
       },
     ],
+    emptyTable: "No aircrafts found",
     recordName: ["aircraft_code", "aircraft_name"],
   }
   return <BBDataTable {...params} />

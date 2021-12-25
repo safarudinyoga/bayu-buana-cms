@@ -97,6 +97,7 @@ export default function CountryTable() {
         visible: false,
       },
     ],
+    emptyTable: "No countries found",
     recordName: ["country_code", "country_name"],
   })
   return <BBDataTable {...params} extraFilter={extraFilter} onReset={onReset} />

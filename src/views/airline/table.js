@@ -25,6 +25,7 @@ export default function AirlineTable() {
 
   let params = {
     title: "Airlines",
+    titleModal: "Airline",
     baseRoute: "/master/airlines/form",
     endpoint: "/master/airlines",
     deleteEndpoint: "/master/batch-actions/delete/airlines",
@@ -68,6 +69,7 @@ export default function AirlineTable() {
         visible: false,
       },
     ],
+    emptyTable: "No airlines found",
     recordName: ["airline_code", "airline_name"],
   }
   return <BBDataTable {...params} />

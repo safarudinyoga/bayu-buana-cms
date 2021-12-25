@@ -73,7 +73,7 @@
 } */
 
 .dataTable-root .select-checkbox {
-    min-width: 80px;
+    min-width: 70px;
 }
 
 .dataTable-root .select-checkbox .row-handle {
@@ -124,12 +124,6 @@ table.dataTable>tbody>tr.child span.dtr-title {
   display: inline-block;
   min-width: 75px;
   font-weight: bold;
-}
-
-@media (min-width: 338px) and (max-width:767px){
-  .dataTable-root .select-checkbox {
-    min-width: 74px; 
-  }
 }
 
 @media (min-width: 576px) {

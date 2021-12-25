@@ -22,6 +22,7 @@ function AirlineForm(props) {
   const [loading, setLoading] = useState(true)
   const [translations, setTranslations] = useState([])
   const [id, setId] = useState(null)
+  const [companyData, setCompanyData] = useState([])
   const [form, setForm] = useState({
     airline_code: "",
     numeric_code: "",
@@ -51,7 +52,7 @@ function AirlineForm(props) {
       checkCode: true,
     },
     numeric_code: {
-      required: true,
+      required: false,
       minlength: 3,
       maxlength: 3,
       checkNumeric: true,
@@ -201,6 +202,10 @@ function AirlineForm(props) {
             },
             "Airline Name already exists",
           )
+
+          if (res.data.company) {
+            setCompanyData([{...res.data.company, text: res.data.company.company_name}])
+          }
         }
       } catch (e) {}
 
@@ -242,11 +247,15 @@ function AirlineForm(props) {
             async: false,
             url: `${env.API_URL}/master/airlines?filters=["numeric_code","=","${element.value}"]`,
             success: function (res) {
-              if (res.items.length !== 0) {
-                req = false
-              } else {
+              if(!element.value){
                 req = true
-              }
+              } else {
+                if (res.items.length !== 0) {
+                  req = false
+                } else {
+                  req = true
+                }
+              } 
             },
           })
 
@@ -373,30 +382,26 @@ function AirlineForm(props) {
           minLength="1"
           maxLength="64"
         />
-        <FormInputSelectAjax
+        {
+          !loading && 
+          <FormInputSelectAjax
           label="Company Name"
           value={form.company_id}
           name="company_id"
           endpoint="/master/companies"
           column="company_name"
+          data={companyData}
           onChange={(e) =>
             setForm({ ...form, company_id: e.target.value || null })
           }
           disabled={isView || loading}
           type="select"
-          minLength="0"
-          maxLength="9999"
-        >
-          <option value="">None</option>
-          <option value="51d5cb0c-c29e-4682-af20-4b95bc5c6ee3">
-            Company 1
-          </option>
-          <option value="51d5cb0c-c29e-4682-af20-4b95bc5c6ee4">
-            Company 2
-          </option>
-        </FormInputSelectAjax>
+        />
+        }
+
         <FormInputControl
           label="Airline Logo Image"
+          labelRequired="label-required"
           type="image"
           name="airline_asset"
           onChange={doUpload}
@@ -430,7 +435,7 @@ function AirlineForm(props) {
           onChange={(e) => setForm({ ...form, numeric_code: e.target.value })}
           disabled={isView || loading}
           type="number"
-          minlength="3"
+          minLength="3"
           maxLength="3"
           hint="Numeric code maximum 3 characters"
         />

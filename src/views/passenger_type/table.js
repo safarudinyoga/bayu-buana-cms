@@ -25,6 +25,7 @@ export default function PassengerTypeTable() {
 
   let params = {
     title: "Passenger Types",
+    titleModal: "Passenger Type",
     baseRoute: "/master/passenger-types/form",
     endpoint: "/master/passenger-types",
     deleteEndpoint: "/master/batch-actions/delete/passenger-types",
@@ -56,6 +57,7 @@ export default function PassengerTypeTable() {
         visible: false,
       },
     ],
+    emptyTable: "No passenger types found",
     recordName: ["passenger_type_code", "passenger_type_name"],
   }
   return <BBDataTable {...params} />

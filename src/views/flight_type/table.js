@@ -25,6 +25,7 @@ export default function FlightTypeTable() {
 
   let params = {
     title: "Flight Types",
+    titleModal: "Flight Type",
     baseRoute: "/master/flight-types/form",
     endpoint: "/master/flight-types",
     deleteEndpoint: "/master/batch-actions/delete/flight-types",
@@ -52,6 +53,7 @@ export default function FlightTypeTable() {
         visible: false,
       },
     ],
+    emptyTable: "No flight types found",
     recordName: ["flight_type_code", "flight_type_name"],
   }
   return <BBDataTable {...params} />

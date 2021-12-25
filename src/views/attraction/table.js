@@ -33,6 +33,7 @@ export default function AttractionTable() {
 
   let [params, setParams] = useState({
     title: "Attractions",
+    titleModal: "Attraction",
     baseRoute: "/master/attractions/form",
     endpoint: "/master/attractions",
     deleteEndpoint: "/master/batch-actions/delete/attractions",
@@ -68,6 +69,7 @@ export default function AttractionTable() {
         visible: false,
       },
     ],
+    emptyTable: "No attractions found",
     recordName: "attraction_name",
   })
 

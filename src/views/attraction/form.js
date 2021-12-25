@@ -148,13 +148,13 @@ function AttractionForm(props) {
       maxlength: 4000,
     },
     attraction_asset_desktop: {
-      required: formId == null,
+      required: true,
     },
     attraction_asset_mobile: {
-      required: formId == null,
+      required: true,
     },
     attraction_asset_tablet: {
-      required: formId == null,
+      required: true,
     },
   });
 
@@ -284,6 +284,23 @@ function AttractionForm(props) {
         if (res.data) {
           setForm({...res.data, country_id: res.data.country.id})
           let currentName = res.data.attraction_name
+
+          let currentDesktopImage = res.data.attraction_asset_desktop?.multimedia_description_id
+          let currentMobileImage = res.data.attraction_asset_mobile?.multimedia_description_id
+          let currentTabletImage = res.data.attraction_asset_tablet?.multimedia_description_id
+
+          setValidationRules({
+            ...validationRules,
+            attraction_asset_desktop: {
+              required: !currentDesktopImage
+            },
+            attraction_asset_mobile: {
+              required: !currentMobileImage
+            },
+            attraction_asset_tablet: {
+              required: !currentTabletImage
+            },
+          })
 
           $.validator.addMethod(
             "checkName",
@@ -537,6 +554,8 @@ function AttractionForm(props) {
             maxLength="256"
           />
 
+          {
+          !loading &&
           <FormInputSelectAjax
             label="Attraction Category"
             value={form.attraction_category_attraction ? form.attraction_category_attraction.map((item) => item.attraction_category_id) : []}
@@ -548,7 +567,8 @@ function AttractionForm(props) {
             disabled={isView || loading}
             type="selectmultiple"
           />
-
+          }
+          
           <FormInputControl
             label={"Address"}
             value={form.address_line}
@@ -559,7 +579,8 @@ function AttractionForm(props) {
             minLength="1"
             maxLength="512"
           />
-
+          {
+          !loading &&
           <FormInputSelectAjax
             label="Country"
             labelRequired="label-required"
@@ -576,7 +597,9 @@ function AttractionForm(props) {
             disabled={isView || loading}
             type="select"
           />
-
+          }
+          {
+          !loading &&
           <FormInputSelectAjax
             label="State/ Province"
             value={form.state_province_id}
@@ -592,7 +615,9 @@ function AttractionForm(props) {
             disabled={isView || loading}
             type="select"
           />
-
+          }
+          {
+          !loading &&
           <FormInputSelectAjax
             label="City"
             value={form.city_id}
@@ -609,6 +634,7 @@ function AttractionForm(props) {
             disabled={isView || loading}
             type="select"
           />
+          }
 
           <FormInputControl
             label={"Zip Code"}
@@ -620,7 +646,8 @@ function AttractionForm(props) {
             minLength="1"
             maxLength="16"
           />
-
+          {
+          !loading &&
           <FormInputSelectAjax
             label="Destination"
             value={form.destination_id}
@@ -634,7 +661,9 @@ function AttractionForm(props) {
             disabled={isView || loading}
             type="select"
           />
-
+          }
+          {
+          !loading &&
           <FormInputSelectAjax
             label="Zone"
             value={form.zone_id}
@@ -648,6 +677,7 @@ function AttractionForm(props) {
             disabled={isView || loading}
             type="select"
           />
+          }
 
           <FormInputControl
             label={"Latitude"}
