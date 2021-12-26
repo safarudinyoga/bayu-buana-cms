@@ -8,6 +8,7 @@ import React, {useEffect, useState} from "react"
 import {useDispatch} from "react-redux"
 import {withRouter} from "react-router"
 import {setAlert, setUIParams} from "redux/ui-store"
+import $ from "jquery"
 
 const endpoint = "/master/room-amenity-categories"
 const backUrl = "/master/room-amenity-categories"
@@ -56,6 +57,9 @@ function RoomAmenityTypeForm(props) {
       minlength: 1,
       maxlength: 4000,
     },
+    room_amenity_category_asset: {
+      required: false
+    }
   }
 
   const validationMessage = {
@@ -166,18 +170,27 @@ function RoomAmenityTypeForm(props) {
 
   const doUpload = async (e) => {
     try {
-      let api = new Api()
-      let payload = new FormData()
-      payload.append("files", e.target.files[0])
-      let res = await api.post("/multimedia/files", payload)
-      if (res.data) {
-        setForm({
-          ...form,
-          room_amenity_category_asset: {
-            multimedia_description_id: res.data.id,
-            multimedia_description: res.data,
-          },
-        })
+      var files = e.target.files[0];
+      if(files){
+        var filesize = ((files.size/1024)/1024).toFixed(4);
+        if(filesize > 4){
+          alert("Icon size is more than 4MB.");
+          $("#icon").val('');
+          return;
+        }
+        let api = new Api()
+        let payload = new FormData()
+        payload.append("files", e.target.files[0])
+        let res = await api.post("/multimedia/files", payload)
+        if (res.data) {
+          setForm({
+            ...form,
+            room_amenity_category_asset: {
+              multimedia_description_id: res.data.id,
+              multimedia_description: res.data,
+            },
+          })
+        }
       }
     } catch (e) { }
   }
@@ -253,11 +266,13 @@ function RoomAmenityTypeForm(props) {
         />
 
         <FormInputControl
+          id="icon"
           label="Icon"
           type="image"
+          name="room_amenity_category_asset"
           onChange={doUpload}
           disabled={isView}
-          url={form.room_amenity_category_asset.multimedia_description.url}
+          url={form.room_amenity_category_asset?.multimedia_description.url}
           style={{maxWidth: 300, marginTop: 12}}
         />
       </FormHorizontal>

@@ -341,18 +341,27 @@ function AirlineForm(props) {
 
   const doUpload = async (e) => {
     try {
-      let api = new Api()
-      let payload = new FormData()
-      payload.append("files", e.target.files[0])
-      let res = await api.post("/multimedia/files", payload)
-      if (res.data) {
-        setForm({
-          ...form,
-          airline_asset: {
-            multimedia_description_id: res.data.id,
-            multimedia_description: res.data,
-          },
-        })
+      var files = e.target.files[0];
+      if(files){
+        var filesize = ((files.size/1024)/1024).toFixed(4);
+        if(filesize > 4){
+          alert("Airline Logo Image size is more than 4MB.");
+          $("#airline_icon").val('');
+          return;
+        }
+        let api = new Api()
+        let payload = new FormData()
+        payload.append("files", e.target.files[0])
+        let res = await api.post("/multimedia/files", payload)
+        if (res.data) {
+          setForm({
+            ...form,
+            airline_asset: {
+              multimedia_description_id: res.data.id,
+              multimedia_description: res.data,
+            },
+          })
+        }
       }
     } catch (e) {}
   }
@@ -401,6 +410,7 @@ function AirlineForm(props) {
         }
 
         <FormInputControl
+          id="airline_icon"
           label="Airline Logo Image"
           labelRequired="label-required"
           type="image"

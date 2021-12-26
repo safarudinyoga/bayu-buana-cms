@@ -69,14 +69,14 @@ function AttractionCategoryForm(props) {
     },
   }
 
-  const validationMessages = {
+  const [validationMessages, setValidationMessages] = useState({
     attraction_category_name: {
       required: "Attraction Category Name is required.",
     },
     attraction_category_asset: {
       required: "Attraction Category Icon Image is required.",
     },
-  }
+  })
 
   useEffect(async () => {
     let docTitle = "Edit Attraction Category"
@@ -221,19 +221,30 @@ function AttractionCategoryForm(props) {
       )
     }
   }
+  
   const doUpload = async (e) => {
     try {
-      let payload = new FormData()
-      payload.append("files", e.target.files[0])
-      let res = await api.post("/multimedia/files", payload)
-      if (res.data) {
-        setForm({
-          ...form,
-          attraction_category_asset: {
-            multimedia_description_id: res.data.id,
-            multimedia_description: res.data,
-          },
-        })
+      var files = e.target.files[0];
+      if(files){
+        var filesize = ((files.size/1024)/1024).toFixed(4);
+        if(filesize > 4){
+          alert("Attraction Category Icon Image size is more than 4MB.");
+          $("#attr_icon").val('');
+          return;
+        }
+        
+        let payload = new FormData()
+        payload.append("files", e.target.files[0])
+        let res = await api.post("/multimedia/files", payload)
+        if (res.data) {
+          setForm({
+            ...form,
+            attraction_category_asset: {
+              multimedia_description_id: res.data.id,
+              multimedia_description: res.data,
+            },
+          })
+        }
       }
     } catch (e) {}
   }
@@ -324,13 +335,14 @@ function AttractionCategoryForm(props) {
           maxLength="4000"
         />
         <FormInputControl
+          id="attr_icon"
           label="Icon"
           type="image"
           labelRequired="label-required"
           name="attraction_category_asset"
           onChange={doUpload}
           disabled={isView}
-          url={form.attraction_category_asset.multimedia_description.url}
+          url={form.attraction_category_asset?.multimedia_description.url}
           style={{ maxWidth: 300, marginTop: 12 }}
         />
       </FormHorizontal>

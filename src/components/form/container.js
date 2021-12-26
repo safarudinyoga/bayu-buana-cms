@@ -65,7 +65,6 @@ export default class FormContainer extends Component {
     try {
       e.preventDefault()
     } catch (e) { }
-
     if (this.props.onSave) {
       this.props.onSave()
     }
