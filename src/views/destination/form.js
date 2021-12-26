@@ -10,6 +10,7 @@ import {withRouter} from "react-router"
 import {setAlert, setUIParams} from "redux/ui-store"
 import $ from "jquery"
 import env from "../../config/environment"
+import capitalizeFirstLetter from "lib/capitalizeFirstLetter"
 
 const endpoint = "/master/destinations"
 const backUrl = "/master/destinations"
@@ -375,20 +376,29 @@ function DestinationForm(props) {
 
   const doUploadMedia = async (e, media_type = "desktop") => {
     try {
-      let media_code = ["desktop", "tablet", "mobile"].indexOf(media_type) + 1
-      let payload = new FormData()
-      payload.append("files", e.target.files[0])
-      media_type !== "desktop" && payload.append("dimension_category_code", media_code)
+      var files = e.target.files[0];
+      if(files){
+        var filesize = ((files.size/1024)/1024).toFixed(4);
+        if(filesize > 4){
+          alert(`Banner (${capitalizeFirstLetter(media_type)}) Image size is more than 4MB.`);
+          $(`#${media_type}`).val('');
+          return;
+        }
+        let media_code = ["desktop", "tablet", "mobile"].indexOf(media_type) + 1
+        let payload = new FormData()
+        payload.append("files", e.target.files[0])
+        media_type !== "desktop" && payload.append("dimension_category_code", media_code)
 
-      let res = await api.post("/multimedia/files", payload)
-      if (res.data) {
-        setForm({
-          ...form,
-          ["destination_asset_" + media_type]: {
-            multimedia_description_id: res.data.id,
-            multimedia_description: res.data,
-          },
-        })
+        let res = await api.post("/multimedia/files", payload)
+        if (res.data) {
+          setForm({
+            ...form,
+            ["destination_asset_" + media_type]: {
+              multimedia_description_id: res.data.id,
+              multimedia_description: res.data,
+            },
+          })
+        }
       }
     } catch (e) { }
   }

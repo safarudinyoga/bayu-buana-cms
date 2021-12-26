@@ -36,7 +36,7 @@ class FormBuilder extends Component {
         isView={this.props.isView}
         onSave={this.props.onSave}
         onBack={this.onBack.bind(this)}
-        id={this.props.match.params.id}
+        id={this.props.id}
       >
         <FormWrapper>{this.props.children}</FormWrapper>
         {this.props.showMedia && 

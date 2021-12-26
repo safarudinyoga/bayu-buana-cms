@@ -226,19 +226,28 @@ function HotelAmenityCategoryForm(props) {
   }
   const doUpload = async (e) => {
     try {
-      let api = new Api()
-      let payload = new FormData()
-      payload.append("files", e.target.files[0])
-      let res = await api.post("/multimedia/files", payload)
-      console.log(res, "res")
-      if (res.data) {
-        setForm({
-          ...form,
-          hotel_amenity_category_asset: {
-            multimedia_description_id: res.data.id,
-            multimedia_description: res.data,
-          },
-        })
+      var files = e.target.files[0];
+      if(files){
+        var filesize = ((files.size/1024)/1024).toFixed(4);
+        if(filesize > 4){
+          alert("Hotel Amenity Category Icon Image size is more than 4MB.");
+          $("#amenity_icon").val('');
+          return;
+        }
+        let api = new Api()
+        let payload = new FormData()
+        payload.append("files", e.target.files[0])
+        let res = await api.post("/multimedia/files", payload)
+        console.log(res, "res")
+        if (res.data) {
+          setForm({
+            ...form,
+            hotel_amenity_category_asset: {
+              multimedia_description_id: res.data.id,
+              multimedia_description: res.data,
+            },
+          })
+        }
       }
     } catch (e) {}
   }
@@ -323,6 +332,7 @@ function HotelAmenityCategoryForm(props) {
           maxLength="4000"
         />
         <FormInputControl
+          id="amenity_icon"
           label="Hotel Amenity Category Icon Image"
           type="image"
           labelRequired="label-required"
@@ -330,7 +340,7 @@ function HotelAmenityCategoryForm(props) {
           onChange={doUpload}
           disabled={isView}
           accept=".png,.jpg,.jpeg"
-          url={form.hotel_amenity_category_asset.multimedia_description.url}
+          url={form.hotel_amenity_category_asset?.multimedia_description.url}
           style={{ maxWidth: 300, marginTop: 12 }}
         />
       </FormHorizontal>
