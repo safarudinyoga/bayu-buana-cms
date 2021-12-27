@@ -449,7 +449,7 @@ function DestinationForm(props) {
           }}
           disabled={isView || loading}
           type="select"
-          placeholder="Country"
+          placeholder="Please choose"
         />
         }
         {
@@ -469,7 +469,7 @@ function DestinationForm(props) {
           }
           disabled={isView || loading}
           type="select"
-          placeholder="City"
+          placeholder="Please choose"
         />
         }
 
