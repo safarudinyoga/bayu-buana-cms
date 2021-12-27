@@ -18,10 +18,8 @@ export default function RatingTypeLevelTable(props) {
             text: "Master Data Management",
           },
           {
+            link: "/master/rating-types",
             text: "Rating Types",
-          },
-          {
-            text: routeParams.id_rating_type,
           },
           {
             text: "Rating Type Levels",
@@ -35,23 +33,23 @@ export default function RatingTypeLevelTable(props) {
     title: "Rating Type Levels",
     titleModal: "Rating Type Level",
     baseRoute: `/master/rating-types/${routeParams.id_rating_type}/rating-type-levels/form`,
-    endpoint: "/master/rating-type-levels",
+    endpoint: `/master/rating-types/${routeParams.id_rating_type}/levels`,
     deleteEndpoint: "/master/batch-actions/delete/rating-type-levels",
     activationEndpoint: "/master/batch-actions/activate/rating-type-levels",
     deactivationEndpoint: "/master/batch-actions/deactivate/rating-type-levels",
     columns: [
       {
-        title: "Rating Types Code",
-        data: "rating_type_code",
+        title: "Rating Type Level Code",
+        data: "rating_type_level_code",
       },
       {
-        title: "Rating Types Name",
-        data: "rating_type_name",
-        render: renderColumn("rating_type", "rating_type_name"),
+        title: "Rating Type Level Name",
+        data: "rating_type_level_name",
+        render: renderColumn("rating_type_level", "rating_type_level_name"),
       },
       {
-        title: "Rating Symbol",
-        data: "rating_symbol",
+        title: "Rating",
+        data: "rating",
       },
       {
         searchable: false,
@@ -61,12 +59,12 @@ export default function RatingTypeLevelTable(props) {
       },
       {
         title: "Translated Rating Types Name",
-        data: "rating_type_translation.rating_type_name",
+        data: "rating_type_level_translation.rating_type_level_name",
         visible: false,
       },
     ],
     emptyTable: "No rating types found",
-    recordName: ["rating_type_code", "rating_type_name"],
+    recordName: ["rating_type_level_code", "rating_type_level_name"],
   }
   return <BBDataTable {...params} />
 }

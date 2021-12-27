@@ -11,12 +11,13 @@ import {setAlert, setUIParams} from "redux/ui-store"
 import $ from "jquery"
 import env from "../../config/environment"
 
-const endpoint = "/master/rating-types"
-const backUrl = "/master/rating-types/rating-type-levels"
 
 function RatingTypeLevelForm(props) {
   let dispatch = useDispatch()
   let formId = props.match.params.id
+  let ratingTypeId = props.match.params.id_rating_type
+  const backUrl = `/master/rating-types/${ratingTypeId}/rating-type-levels`
+  const endpoint = `/master/rating-types/${ratingTypeId}/levels`
 
   const isView = useQuery().get("action") === "view"
   const [formBuilder, setFormBuilder] = useState(null)
@@ -25,46 +26,34 @@ function RatingTypeLevelForm(props) {
 
   const [id, setId] = useState(null)
   const [form, setForm] = useState({
-    provider: "",
-    rating_symbol: "",
-    rating_type_code: "",
-    rating_type_name: "",
-    scale: "",
+    rating_type_level_code: null,
+    rating_type_level_name: "",
+    rating: null,
   })
   const translationFields = [
     {
-      label: "Rating Type Name",
-      name: "rating_type_name",
+      label: "Rating Type Level Name",
+      name: "rating_type_level_name",
       type: "text",
     },
   ]
 
   const validationRules = {
-    provider: {
-      required: false,
-      minlength: 1,
-      maxlength: 256,
-    },
-
-    rating_symbol: {
-      required: true,
-    },
-
-    rating_type_code: {
+    rating_type_level_code: {
       required: true,
       min: 0,
-      max: 999,
+      max: 99,
       checkCode: true,
     },
 
-    rating_type_name: {
+    rating_type_level_name: {
       required: true,
       minlength: 1,
       maxlength: 256,
       checkName: true,
     },
 
-    scale: {
+    rating: {
       required: true,
       min: 1,
       max: 999,
@@ -72,17 +61,14 @@ function RatingTypeLevelForm(props) {
   }
 
   const validationMessages = {
-    rating_type_name: {
-      required: "Rating Type Name is required",
+    rating_type_level_name: {
+      required: "Rating Type Level Name is required",
     },
-    rating_type_code: {
-      required: "Rating Type Code is required",
+    rating_type_level_code: {
+      required: "Rating Type Level Code is required",
     },
-    scale: {
-      required: "Scale is required",
-    },
-    rating_symbol: {
-      required: "Rating Symbol is required",
+    rating: {
+      required: "Rating is required",
     },
   }
 
@@ -90,15 +76,15 @@ function RatingTypeLevelForm(props) {
     let api = new Api()
     let formId = props.match.params.id
 
-    let docTitle = "Edit Rating Type"
+    let docTitle = "Edit Rating Type Level"
     if (!formId) {
-      docTitle = "Create Rating Type"
+      docTitle = "Create Rating Type Level"
     } else if (isView) {
-      docTitle = "View Rating Type"
+      docTitle = "View Rating Type Level"
     }
     dispatch(
       setUIParams({
-        title: isView ? "Rating Type Details" : docTitle,
+        title: isView ? "Rating Type Level Details" : docTitle,
         breadcrumbs: [
           {
             text: "Master Data Management",
@@ -106,9 +92,6 @@ function RatingTypeLevelForm(props) {
           {
             link: "/master/rating-types",
             text: "Rating Types",
-          },
-          {
-            text: "",
           },
           {
             link: backUrl,
@@ -125,8 +108,8 @@ function RatingTypeLevelForm(props) {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
         if (res.data) {
-          let currentCode = res.data.rating_type_code
-          let currentName = res.data.rating_type_name
+          let currentCode = res.data.rating_type_level_code
+          let currentName = res.data.rating_type_level_name
 
           $.validator.addMethod(
             "checkCode",
@@ -135,7 +118,7 @@ function RatingTypeLevelForm(props) {
               $.ajax({
                 type: "GET",
                 async: false,
-                url: `${env.API_URL}/master/rating-types?filters=["rating_type_code","=","${element.value}"]`,
+                url: `${env.API_URL}/master/rating-types/${ratingTypeId}/levels?filters=["rating_type_level_code","=","${element.value}"]`,
                 success: function (res) {
                   if (res.items.length !== 0) {
                     req = currentCode === parseInt(element.value)
@@ -147,7 +130,7 @@ function RatingTypeLevelForm(props) {
       
               return req
             },
-            "Rating Type Code already exists",
+            "Rating Type Level Code already exists",
           )
           $.validator.addMethod(
             "checkName",
@@ -156,7 +139,7 @@ function RatingTypeLevelForm(props) {
               $.ajax({
                 type: "GET",
                 async: false,
-                url: `${env.API_URL}/master/rating-types?filters=["rating_type_name","=","${element.value}"]`,
+                url: `${env.API_URL}/master/rating-types/${ratingTypeId}/levels?filters=["rating_type_level_name","=","${element.value}"]`,
                 success: function (res) {
                   if (res.items.length !== 0) {
                     if(currentName === element.value){
@@ -172,7 +155,7 @@ function RatingTypeLevelForm(props) {
       
               return req
             },
-            "Rating Type Name already exists",
+            "Rating Type Level Name already exists",
           )
         }
       } catch (e) { }
@@ -192,7 +175,7 @@ function RatingTypeLevelForm(props) {
           $.ajax({
             type: "GET",
             async: false,
-            url: `${env.API_URL}/master/rating-types?filters=["rating_type_code","=","${element.value}"]`,
+            url: `${env.API_URL}/master/rating-types/${ratingTypeId}/levels?filters=["rating_type_level_code","=","${element.value}"]`,
             success: function (res) {
               if (res.items.length !== 0) {
                 req = false
@@ -204,7 +187,7 @@ function RatingTypeLevelForm(props) {
   
           return req
         },
-        "Rating Type Code already exists",
+        "Rating Type Level Code already exists",
       )
       $.validator.addMethod(
         "checkName",
@@ -213,7 +196,7 @@ function RatingTypeLevelForm(props) {
           $.ajax({
             type: "GET",
             async: false,
-            url: `${env.API_URL}/master/rating-types?filters=["rating_type_name","=","${element.value}"]`,
+            url: `${env.API_URL}/master/rating-types/${ratingTypeId}/levels?filters=["rating_type_level_name","=","${element.value}"]`,
             success: function (res) {
               if (res.items.length !== 0) {
                 req = false
@@ -225,7 +208,7 @@ function RatingTypeLevelForm(props) {
   
           return req
         },
-        "Rating Type Name already exists",
+        "Rating Type Level Name already exists",
       )
     }
   }, [])
@@ -242,17 +225,14 @@ function RatingTypeLevelForm(props) {
     setLoading(true)
     let api = new Api()
     try {
-      if (!form.provider) {
-        form.provider = null
+      if (!form.rating_type_level_code) {
+        form.rating_type_level_code = null
       }
-      if (!form.rating_symbol) {
-        form.rating_symbol = null
+      if (!form.rating_type_level_name) {
+        form.rating_type_level_name = null
       }
-      if (!form.rating_type_code) {
-        form.rating_type_code = null
-      }
-      if (!form.rating_type_name) {
-        form.rating_type_name = null
+      if (!form.rating) {
+        form.rating = null
       }
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
@@ -272,7 +252,7 @@ function RatingTypeLevelForm(props) {
       props.history.push(backUrl)
       dispatch(
         setAlert({
-          message: `Record ${form.rating_type_code} - ${form.rating_type_name} has been successfully ${formId ? "updated" : "saved"}..`,
+          message: `Record ${form.rating_type_level_code} - ${form.rating_type_level_name} has been successfully ${formId ? "updated" : "saved"}..`,
         }),
       )
     }
@@ -293,12 +273,12 @@ function RatingTypeLevelForm(props) {
     >
       <FormHorizontal>
         <FormInputControl
-          label="Rating Type Name"
+          label="Rating Type Level Name"
           labelRequired="label-required"
-          value={form.rating_type_name}
-          name="rating_type_name"
+          value={form.rating_type_level_name}
+          name="rating_type_level_name"
           onChange={(e) =>
-            setForm({...form, rating_type_name: e.target.value})
+            setForm({...form, rating_type_level_name: e.target.value})
           }
           disabled={isView || loading}
           type="text"
@@ -307,67 +287,36 @@ function RatingTypeLevelForm(props) {
         />
 
         <FormInputControl
-          label="Provider"
-          value={form.provider}
-          name="provider"
-          onChange={(e) => setForm({...form, provider: e.target.value})}
-          disabled={isView || loading}
-          type="text"
-          minLength="1"
-          maxLength="256"
-        />
-        {
-          !loading &&
-        <FormInputSelectAjax
-          label="Rating Symbol"
+          label="Rating"
           labelRequired="label-required"
-          value={form.rating_symbol}
-          name="rating_symbol"
-          column="rating_symbol"
+          value={form.rating}
+          name="rating"
           onChange={(e) =>
-            setForm({...form, rating_symbol: e.target.value || null})
-          }          
-          disabled={isView || loading}
-          type="select"
-        >
-          <option value="">Please Choose</option>
-          <option value="star">Star</option>
-          <option value="like">Like</option>
-          <option value="smiler">Smile</option>
-        </FormInputSelectAjax>
-        }
-
-        <FormInputControl
-          label="Scale"
-          labelRequired="label-required"
-          value={form.scale}
-          name="scale"
-          onChange={(e) =>
-            setForm({...form, scale: parseInt(e.target.value)})
+            setForm({...form, rating: parseInt(e.target.value)})
           }
           disabled={isView || loading}
           type="number"
           min="1"
-          max="3"
+          max="999"
         />
       </FormHorizontal>
 
       <FormHorizontal>
         <FormInputControl
-          label="Rating Type Code"
+          label="Rating Type Level Code"
           labelRequired="label-required"
-          value={form.rating_type_code}
-          name="rating_type_code"
+          value={form.rating_type_level_code}
+          name="rating_type_level_code"
           cl={{md:"12"}}
           cr="12"
           onChange={(e) =>
-            setForm({...form, rating_type_code: parseInt(e.target.value)})
+            setForm({...form, rating_type_level_code: parseInt(e.target.value)})
           }
           disabled={isView || loading}
           type="number"
-          min="0"
+          min="1"
           max="99"
-          hint="Rating type code maximum 99 characters"
+          hint="Rating type level code maximum 2 digits"
         />
       </FormHorizontal>
     </FormBuilder>
