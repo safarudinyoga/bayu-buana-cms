@@ -36,11 +36,16 @@ export default class Api {
     })
   }
 
-  post(path, data) {
+  post(path, data, config = null) {
     let headers
     if (data instanceof FormData) {
-      headers = {
-        "Content-type": "multipart/form-data",
+      if(!config){
+        headers = {
+          "Content-type": "multipart/form-data",
+        }
+      } else {
+        headers = config
+        headers["Content-type"] = "multipart/form-data"
       }
     }
 
