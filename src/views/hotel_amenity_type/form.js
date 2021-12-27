@@ -313,7 +313,25 @@ function HotelAmenityForm(props) {
         let api = new Api()
         let payload = new FormData()
         payload.append("files", e.target.files[0])
-        let res = await api.post("/multimedia/files", payload)
+
+        let config = {
+          onUploadProgress: function(progressEvent) {
+            let mediaDiv = document.getElementById("media-amenity_type")
+            let progressBar = document.getElementById("progress-amenity_type")
+            mediaDiv.style.display = "none"
+            progressBar.style.display = "block"
+            let percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
+            progressBar.value = percentCompleted;
+            if(progressBar.value == 100){
+              setTimeout(() => {
+                progressBar.style.display = "none"
+                mediaDiv.style.display = "block"
+              }, 1000)
+            }
+          }
+        }
+
+        let res = await api.post("/multimedia/files", payload, config)
         if (res.data) {
           setForm({
             ...form,

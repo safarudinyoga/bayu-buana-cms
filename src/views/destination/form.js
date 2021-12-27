@@ -392,11 +392,11 @@ function DestinationForm(props) {
         let config = {
           onUploadProgress: function(progressEvent) {
             let mediaDiv = document.getElementById("media-"+media_type)
+
             let progressBar = document.getElementById("progress-"+media_type)
             mediaDiv.style.display = "none"
             progressBar.style.display = "block"
             let percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
-            console.log(percentCompleted);
             progressBar.value = percentCompleted;
             if(progressBar.value == 100){
               setTimeout(() => {
