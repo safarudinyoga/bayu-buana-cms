@@ -347,10 +347,11 @@ function RatingTypeForm(props) {
         />
 
         {
-          formId &&
-            <Link to={`/master/rating-types/${formId}/rating-type-levels`} className="btn btn-warning float-left button-new mt-2">
+          formId 
+            ? <Link to={`/master/rating-types/${formId}/rating-type-levels`} className="btn btn-warning float-left button-new mt-2">
               Rating Type Level
             </Link>
+          : null
         }
 
       </FormHorizontal>
