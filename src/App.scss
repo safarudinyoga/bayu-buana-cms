@@ -204,7 +204,46 @@ select.bg-dark-grey > option {
 .select2-container--default .select2-results__option[aria-selected] {
   background-color: gray;
 }
+// .select2-selection__choice {  
+//   padding-right: 4px !important;
+//   padding-left: 4px !important;
+//   background-color: gray !important;
+//   color: white !important;
+//   border: none !important;
+//   border-radius: 3px !important;
+// }
 
+/* Select2 allowClear */
+.select2-selection__clear{
+  position: relative !important;
+  right: 2px !important;
+  bottom: 2px !important;
+  background-color: transparent !important;
+  color: #333333 !important;
+  font-weight: bold !important;
+}
+/* Select2 Icon */
+.select2-selection__arrow b{
+  display:none !important;
+}
+.select2-selection--multiple:before {
+  content: "" !important;
+  position: absolute !important;
+  right: 12px !important;
+  top: 42% !important;
+  border-top: 7px solid #333333 !important;
+  border-left: 6px solid transparent !important;
+  border-right: 6px solid transparent !important;
+}
+.select2-selection:before {    
+  content: "" !important;
+  position: absolute !important;
+  right: 12px !important;
+  top: 42% !important;
+  border-top: 7px solid #333333 !important;
+  border-left: 6px solid transparent !important;
+  border-right: 6px solid transparent !important;
+}
 @media (min-width: 577px) {
   .footer {
     width: auto;

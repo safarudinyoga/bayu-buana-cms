@@ -54,14 +54,16 @@ function AirlineForm(props) {
     numeric_code: {
       required: false,
       minlength: 3,
-      maxlength: 3,
-      checkNumeric: true,
+      maxlength: 3,      
     },
     airline_name: {
       required: true,
       minlength: 1,
       maxlength: 64,
       checkName: true,
+    },
+    company_id:{
+      required: false,
     },
     airline_asset: {
       required: formId == null,
@@ -74,8 +76,7 @@ function AirlineForm(props) {
       minlength: "Airline Name must be at least 1 characters",
       maxlength: "Airline Name cannot be more than 64 characters",
     },
-    numeric_code: {
-      required: "Numeric Code is required",
+    numeric_code: {      
       minlength: "Numeric Code must be at least 3 characters",
       maxlength: "Numeric Code cannot be more than 3 characters",
     },
@@ -208,7 +209,7 @@ function AirlineForm(props) {
           }
         }
       } catch (e) {}
-
+     
       try {
         let res = await api.get(endpoint + "/" + formId + "/translations", {
           size: 50,
@@ -251,9 +252,9 @@ function AirlineForm(props) {
                 req = true
               } else {
                 if (res.items.length !== 0) {
-                  req = false
-                } else {
                   req = true
+                } else {
+                  req = false
                 }
               } 
             },
@@ -303,8 +304,9 @@ function AirlineForm(props) {
         form.company_id = null
       }
       if (!form.numeric_code) {
-        form.numeric_code = null
+        form.numeric_code = null || ""
       }
+      
       if (!form.airline_asset) {
         form.airline_asset = null
       } else {
@@ -417,7 +419,7 @@ function AirlineForm(props) {
           name="company_id"
           endpoint="/master/companies"
           column="company_name"
-          filter={`["status", "=", 1]`}
+          
           data={companyData}
           onChange={(e) =>
             setForm({ ...form, company_id: e.target.value || null })
