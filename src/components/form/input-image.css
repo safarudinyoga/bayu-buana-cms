@@ -46,3 +46,14 @@
   font-size: 80%;
   color: #dc3545;
 }
+
+progress.upload-progress {
+  -webkit-appearance: none;
+  appearance: none;
+}
+progress.upload-progress::-webkit-progress-value{
+  background:rgb(2, 127, 113);
+}
+progress.upload-progress::-moz-progress-bar{
+  background:rgb(2, 127, 113);
+}

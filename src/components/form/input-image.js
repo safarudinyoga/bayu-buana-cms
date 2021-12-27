@@ -46,7 +46,7 @@ export default class FormInputFile extends Component {
             </span>
           </>
         )}
-        <label className="media-label" style={this.props.style}>
+        <label className="media-label" id={"media-"+id} style={this.props.style}>
           {!disabled ? (
             <img src={UploadIcon} className="img-up-icon" alt="up-ic" />
           ) : null}

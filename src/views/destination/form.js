@@ -389,7 +389,26 @@ function DestinationForm(props) {
         payload.append("files", e.target.files[0])
         media_type !== "desktop" && payload.append("dimension_category_code", media_code)
 
-        let res = await api.post("/multimedia/files", payload)
+        let config = {
+          onUploadProgress: function(progressEvent) {
+            let mediaDiv = document.getElementById("media-"+media_type)
+            let progressBar = document.getElementById("progress-"+media_type)
+            mediaDiv.style.display = "none"
+            progressBar.style.display = "block"
+            let percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
+            console.log(percentCompleted);
+            progressBar.value = percentCompleted;
+            if(progressBar.value == 100){
+              setTimeout(() => {
+                progressBar.style.display = "none"
+                mediaDiv.style.display = "block"
+              }, 1000)
+            }
+          }
+        }
+
+        let res = await api.post("/multimedia/files", payload, config)
+        console.log(res);
         if (res.data) {
           setForm({
             ...form,
