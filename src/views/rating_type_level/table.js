@@ -21,6 +21,9 @@ export default function RatingTypeLevelTable(props) {
             text: "Rating Types",
           },
           {
+            text: routeParams.id_rating_type,
+          },
+          {
             text: "Rating Type Levels",
           },
         ],
