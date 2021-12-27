@@ -82,6 +82,8 @@ import ZoneTable from "views/zone/table"
 // Master Employee
 import EmployeeTable from "views/employee/table"
 import EmployeeForm from "views/employee/form"
+import RatingTypeLevelTable from './views/rating_type_level/table';
+import RatingTypeLevelForm from './views/rating_type_level/form';
 
 const App = () => {
   document.title = "Bayu Buana"
@@ -273,6 +275,12 @@ const App = () => {
           </Route>
           <Route path="/master/rating-types/form/:id?">
             <RatingTypeForm />
+          </Route>
+          <Route exact path="/master/rating-types/:id_rating_type/rating-type-levels">
+            <RatingTypeLevelTable />
+          </Route>
+          <Route path="/master/rating-types/:id_rating_type/rating-type-levels/form/:id?">
+            <RatingTypeLevelForm />
           </Route>
           <Route exact path="/master/attraction-categories">
             <AttractionCategoryTable />
