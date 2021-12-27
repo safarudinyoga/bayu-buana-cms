@@ -28,6 +28,7 @@ export default class FormInputSelectAjax extends Component {
           placeholder: this.props.placeholder || 'Please choose',
           theme: "bootstrap4",
           data: this.props.data,
+          allowClear: true
         }
         if (!this.props.children) {
           config.ajax = {

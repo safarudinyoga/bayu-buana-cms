@@ -43,6 +43,7 @@
   font-weight: 500;
   background-color: #5e5e5e;
   color: #ffffff; 
+  white-space: nowrap;
 }
 @media only screen and (max-width: 768px) {
   .dataTable-root table.dataTable thead {
