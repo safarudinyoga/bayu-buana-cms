@@ -1,6 +1,5 @@
 import {withRouter} from "react-router"
 import React, {useEffect, useState} from "react"
-import {Link} from "react-router-dom"
 import Api from "config/api"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
@@ -13,9 +12,9 @@ import $ from "jquery"
 import env from "../../config/environment"
 
 const endpoint = "/master/rating-types"
-const backUrl = "/master/rating-types"
+const backUrl = "/master/rating-types/rating-type-levels"
 
-function RatingTypeForm(props) {
+function RatingTypeLevelForm(props) {
   let dispatch = useDispatch()
   let formId = props.match.params.id
 
@@ -97,7 +96,6 @@ function RatingTypeForm(props) {
     } else if (isView) {
       docTitle = "View Rating Type"
     }
-
     dispatch(
       setUIParams({
         title: isView ? "Rating Type Details" : docTitle,
@@ -106,8 +104,15 @@ function RatingTypeForm(props) {
             text: "Master Data Management",
           },
           {
-            link: backUrl,
+            link: "/master/rating-types",
             text: "Rating Types",
+          },
+          {
+            text: "",
+          },
+          {
+            link: backUrl,
+            text: "Rating Types Level",
           },
           {
             text: docTitle,
@@ -345,14 +350,6 @@ function RatingTypeForm(props) {
           min="1"
           max="3"
         />
-
-        {
-          formId &&
-            <Link to={`/master/rating-types/${formId}/rating-type-levels`} className="nav-link">
-              <p>Rating Type Level</p>
-            </Link>
-        }
-
       </FormHorizontal>
 
       <FormHorizontal>
@@ -377,4 +374,4 @@ function RatingTypeForm(props) {
   )
 }
 
-export default withRouter(RatingTypeForm)
+export default withRouter(RatingTypeLevelForm)
