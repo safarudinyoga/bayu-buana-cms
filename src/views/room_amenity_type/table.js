@@ -16,7 +16,7 @@ export default function RoomAmenityTypeTable() {
             text: "Master Data Management",
           },
           {
-            text: "Room Amenity Type",
+            text: "Room Amenity Types",
           },
         ],
       }),
@@ -24,7 +24,8 @@ export default function RoomAmenityTypeTable() {
   }, [])
 
   let params = {
-    title: "Room Amenity Type",
+    title: "Room Amenity Types",
+    titleModal: "Room Amenity Types",
     baseRoute: "/master/room-amenity-types/form",
     endpoint: "/master/room-amenity-types",
     deleteEndpoint: "/master/batch-actions/delete/room-amenity-types",
@@ -42,7 +43,7 @@ export default function RoomAmenityTypeTable() {
       },
       {
         title: "Icon",
-        data: "airline_asset.multimedia_description.url",
+        data: "room_amenity_type_asset.multimedia_description.url",
         searchable: false,
         orderable: false,
         render: (val, type) => {
@@ -73,6 +74,8 @@ export default function RoomAmenityTypeTable() {
         visible: false,
       },
     ],
+    emptyTable: "No room amenity types found",
+    recordName: "room_amenity_name",
   }
   return <BBDataTable {...params} />
 }

@@ -52,6 +52,8 @@ export default function CityTable() {
         column="country_name"
         value={selectedCountryIds}
         data={selectedCountries}
+        filter={`["status", "=", 1]`}
+        placeholder="Country"
       />
     )
   }
@@ -96,6 +98,7 @@ export default function CityTable() {
         visible: false,
       },
     ],
+    emptyTable: "No cities found",
     recordName: ["city_code", "city_name"],
   })
 

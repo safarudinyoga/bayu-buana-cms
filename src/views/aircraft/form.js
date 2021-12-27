@@ -51,10 +51,10 @@ function AircraftForm(props) {
       maxlength: 64,
     },
     icao_code: {
-      required: true,
-      minlength: 4,
+      required: false,
+      minlength: 2,
       maxlength: 4,
-      checkIcao: true,
+      checkIcao: false,
     },
     aircraft_code: {
       required: true,
@@ -68,9 +68,9 @@ function AircraftForm(props) {
     aircraft_name: {
       required: "Aircraft Name is required",
     },
-    icao_code: {
-      required: "Icao Code is required",
-    },
+    // icao_code: {
+    //   required: "Icao Code is required",
+    // },
     model: {
       required: "Model is required",
     },
@@ -358,7 +358,6 @@ function AircraftForm(props) {
           disabled={isView || loading}
           label="Aircraft Code"
           type="text"
-          pattern="\d*"
           minLength="2"
           maxLength="4"
           hint="Aircraft code maximum 4 characters"
@@ -372,7 +371,7 @@ function AircraftForm(props) {
           disabled={isView || loading}
           label="ICAO Code"
           type="text"
-          minLength="4"
+          minLength="2"
           maxLength="4"
           hint="ICAO Code maximum 4 characters"
         />

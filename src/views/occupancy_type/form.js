@@ -360,7 +360,7 @@ function OccupancyTypeForm(props) {
           type="text"
           minLength="1"
           maxLength="36"
-          hint="Rating type code maximum 2 characters"
+          hint="Rating type code maximum 36 characters"
         />
       </FormHorizontal>
     </FormBuilder>

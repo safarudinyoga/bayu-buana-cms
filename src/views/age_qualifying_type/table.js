@@ -25,6 +25,7 @@ export default function AgeQualifyingTypeTable() {
 
   let params = {
     title: "Age Qualifying Types",
+    titleModal: "Age Qualifying Type",
     baseRoute: "/master/age-qualifying-types/form",
     endpoint: "/master/age-qualifying-types",
     deleteEndpoint: "/master/batch-actions/delete/age-qualifying-types",
@@ -53,6 +54,7 @@ export default function AgeQualifyingTypeTable() {
         visible: false,
       },
     ],
+    emptyTable: "No age qualifying types found",
     recordName: ["age_qualifying_type_code", "age_qualifying_type_name"],
   }
   return <BBDataTable {...params} />

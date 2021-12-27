@@ -10,6 +10,7 @@ import {useDispatch} from "react-redux"
 import {withRouter} from "react-router"
 import {setAlert, setUIParams} from "redux/ui-store"
 import env from "../../config/environment"
+import capitalizeFirstLetter from "lib/capitalizeFirstLetter"
 
 const endpoint = "/master/attractions"
 const backUrl = "/master/attractions"
@@ -505,20 +506,29 @@ function AttractionForm(props) {
 
   const doUploadMedia = async (e, media_type = "desktop") => {
     try {
-      let media_code = ["desktop", "tablet", "mobile"].indexOf(media_type) + 1
-      let payload = new FormData()
-      payload.append("files", e.target.files[0])
-      media_type !== "desktop" && payload.append("dimension_category_code", media_code)
+      var files = e.target.files[0];
+      if(files){
+        var filesize = ((files.size/1024)/1024).toFixed(4);
+        if(filesize > 4){
+          alert(`Banner (${capitalizeFirstLetter(media_type)}) Image size is more than 4MB.`);
+          $(`#${media_type}`).val('');
+          return;
+        }
+        let media_code = ["desktop", "tablet", "mobile"].indexOf(media_type) + 1
+        let payload = new FormData()
+        payload.append("files", e.target.files[0])
+        media_type !== "desktop" && payload.append("dimension_category_code", media_code)
 
-      let res = await api.post("/multimedia/files", payload)
-      if (res.data) {
-        setForm({
-          ...form,
-          ["attraction_asset_" + media_type]: {
-            multimedia_description_id: res.data.id,
-            multimedia_description: res.data,
-          },
-        })
+        let res = await api.post("/multimedia/files", payload)
+        if (res.data) {
+          setForm({
+            ...form,
+            ["attraction_asset_" + media_type]: {
+              multimedia_description_id: res.data.id,
+              multimedia_description: res.data,
+            },
+          })
+        }
       }
     } catch (e) { }
   }
@@ -554,6 +564,8 @@ function AttractionForm(props) {
             maxLength="256"
           />
 
+          {
+          !loading &&
           <FormInputSelectAjax
             label="Attraction Category"
             value={form.attraction_category_attraction ? form.attraction_category_attraction.map((item) => item.attraction_category_id) : []}
@@ -561,11 +573,13 @@ function AttractionForm(props) {
             data={categoryData}
             endpoint="/master/attraction-categories"
             column="attraction_category_name"
+            filter={`["status", "=", 1]`}
             onChange={(e, values) => setForm(form => ({...form, attraction_category_attraction: values.map(v => ({attraction_category_id: v.id}))}))}
             disabled={isView || loading}
             type="selectmultiple"
           />
-
+          }
+          
           <FormInputControl
             label={"Address"}
             value={form.address_line}
@@ -576,7 +590,8 @@ function AttractionForm(props) {
             minLength="1"
             maxLength="512"
           />
-
+          {
+          !loading &&
           <FormInputSelectAjax
             label="Country"
             labelRequired="label-required"
@@ -585,6 +600,7 @@ function AttractionForm(props) {
             data={countryData}
             endpoint="/master/countries"
             column="country_name"
+            filter={`["status", "=", 1]`}
             onChange={(e) => {
               setForm({...form, country_id: e.target.value || null})
               $('#attr_state').empty();
@@ -593,7 +609,9 @@ function AttractionForm(props) {
             disabled={isView || loading}
             type="select"
           />
-
+          }
+          {
+          !loading &&
           <FormInputSelectAjax
             label="State/ Province"
             value={form.state_province_id}
@@ -601,7 +619,7 @@ function AttractionForm(props) {
             id="attr_state"
             data={provinceData}
             endpoint="/master/state-provinces"
-            filter={`["country.id", "=", "${form.country_id}"]`}
+            filter={`[["country.id", "=", "${form.country_id}"],["AND"],["status", "=", 1]]`}
             column="state_province_name"
             onChange={(e) =>
               setForm({...form, state_province_id: e.target.value || null})
@@ -609,7 +627,9 @@ function AttractionForm(props) {
             disabled={isView || loading}
             type="select"
           />
-
+          }
+          {
+          !loading &&
           <FormInputSelectAjax
             label="City"
             value={form.city_id}
@@ -618,7 +638,7 @@ function AttractionForm(props) {
             id="attr_city"
             data={cityData}
             endpoint="/master/cities"
-            filter={`["country.id", "=", "${form.country_id}"]`}
+            filter={`[["country.id", "=", "${form.country_id}"],["AND"],["status", "=", 1]]`}
             column="city_name"
             onChange={(e) =>
               setForm({...form, city_id: e.target.value || null})
@@ -626,6 +646,7 @@ function AttractionForm(props) {
             disabled={isView || loading}
             type="select"
           />
+          }
 
           <FormInputControl
             label={"Zip Code"}
@@ -637,7 +658,8 @@ function AttractionForm(props) {
             minLength="1"
             maxLength="16"
           />
-
+          {
+          !loading &&
           <FormInputSelectAjax
             label="Destination"
             value={form.destination_id}
@@ -645,13 +667,16 @@ function AttractionForm(props) {
             data={destinationData}
             endpoint="/master/destinations"
             column="destination_name"
+            filter={`["status", "=", 1]`}
             onChange={(e) =>
               setForm({...form, destination_id: e.target.value || null})
             }
             disabled={isView || loading}
             type="select"
           />
-
+          }
+          {
+          !loading &&
           <FormInputSelectAjax
             label="Zone"
             value={form.zone_id}
@@ -659,12 +684,14 @@ function AttractionForm(props) {
             data={zoneData}
             endpoint="/master/zones"
             column="zone_name"
+            filter={`["status", "=", 1]`}
             onChange={(e) =>
               setForm({...form, zone_id: e.target.value || null})
             }
             disabled={isView || loading}
             type="select"
           />
+          }
 
           <FormInputControl
             label={"Latitude"}

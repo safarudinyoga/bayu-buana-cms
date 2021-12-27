@@ -74,6 +74,7 @@ export default function DestinationTable() {
           value={selectedCityIds}
           data={selectedCities}
           placeholder="City"
+          filter={`["status", "=", 1]`}
         />
         <TableDropdownFilter
           label="Country"
@@ -83,6 +84,7 @@ export default function DestinationTable() {
           value={selectedCountryIds}
           data={selectedCountries}
           placeholder="Country"
+          filter={`["status", "=", 1]`}
         />
       </>
     )
@@ -98,6 +100,7 @@ export default function DestinationTable() {
 
   let [params, setParams] = useState({
     title: "Destinations",
+    titleModal: "Destination",
     baseRoute: "/master/destinations/form",
     endpoint: "/master/destinations",
     deleteEndpoint: "/master/batch-actions/delete/destinations",
@@ -133,7 +136,7 @@ export default function DestinationTable() {
         visible: false,
       },
     ],
-    emptyTable: "No destination found",
+    emptyTable: "No destinations found",
     recordName: ["destination_code", "destination_name"],
   })
 

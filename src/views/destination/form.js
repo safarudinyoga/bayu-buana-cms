@@ -10,6 +10,7 @@ import {withRouter} from "react-router"
 import {setAlert, setUIParams} from "redux/ui-store"
 import $ from "jquery"
 import env from "../../config/environment"
+import capitalizeFirstLetter from "lib/capitalizeFirstLetter"
 
 const endpoint = "/master/destinations"
 const backUrl = "/master/destinations"
@@ -232,7 +233,7 @@ function DestinationForm(props) {
     
               return req
             },
-            "Destination Code already exists",
+            "Code already exists",
           )
         }
       } catch (e) { }
@@ -245,7 +246,6 @@ function DestinationForm(props) {
       } catch (e) { }
       setLoading(false)
     } else {
-      console.log('atau here')
       setValidationRules({
         ...validationRules,
         destination_asset_desktop: {
@@ -298,7 +298,7 @@ function DestinationForm(props) {
 
           return req
         },
-        "Destination Code already exists",
+        "Code already exists",
       )
     }
   }, [])
@@ -376,20 +376,29 @@ function DestinationForm(props) {
 
   const doUploadMedia = async (e, media_type = "desktop") => {
     try {
-      let media_code = ["desktop", "tablet", "mobile"].indexOf(media_type) + 1
-      let payload = new FormData()
-      payload.append("files", e.target.files[0])
-      media_type !== "desktop" && payload.append("dimension_category_code", media_code)
+      var files = e.target.files[0];
+      if(files){
+        var filesize = ((files.size/1024)/1024).toFixed(4);
+        if(filesize > 4){
+          alert(`Banner (${capitalizeFirstLetter(media_type)}) Image size is more than 4MB.`);
+          $(`#${media_type}`).val('');
+          return;
+        }
+        let media_code = ["desktop", "tablet", "mobile"].indexOf(media_type) + 1
+        let payload = new FormData()
+        payload.append("files", e.target.files[0])
+        media_type !== "desktop" && payload.append("dimension_category_code", media_code)
 
-      let res = await api.post("/multimedia/files", payload)
-      if (res.data) {
-        setForm({
-          ...form,
-          ["destination_asset_" + media_type]: {
-            multimedia_description_id: res.data.id,
-            multimedia_description: res.data,
-          },
-        })
+        let res = await api.post("/multimedia/files", payload)
+        if (res.data) {
+          setForm({
+            ...form,
+            ["destination_asset_" + media_type]: {
+              multimedia_description_id: res.data.id,
+              multimedia_description: res.data,
+            },
+          })
+        }
       }
     } catch (e) { }
   }
@@ -423,7 +432,8 @@ function DestinationForm(props) {
           minLength="1"
           maxLength="256"
         />
-
+        {
+          !loading &&
         <FormInputSelectAjax
           label="Country"
           value={form.country_id}
@@ -431,6 +441,7 @@ function DestinationForm(props) {
           name="country_id"
           endpoint="/master/countries"
           column="country_name"
+          filter={`["status", "=", 1]`}
           data={countryData}
           onChange={(e) => {
             setForm({...form, country_id: e.target.value || null})
@@ -440,7 +451,9 @@ function DestinationForm(props) {
           type="select"
           placeholder="Country"
         />
-
+        }
+        {
+          !loading &&
         <FormInputSelectAjax
           label="City"
           id="attr_city"
@@ -448,7 +461,7 @@ function DestinationForm(props) {
           value={form.destination_city_id}
           name="destination_city_id"
           endpoint="/master/cities"
-          filter={`["country.id", "=", "${form.country_id}"]`}
+          filter={`[["country.id", "=", "${form.country_id}"],["AND"],["status", "=", 1]]`}
           column="city_name"
           data={cityData}
           onChange={(e) =>
@@ -458,6 +471,7 @@ function DestinationForm(props) {
           type="select"
           placeholder="City"
         />
+        }
 
         <FormInputControl
           value={form.description}
@@ -484,7 +498,7 @@ function DestinationForm(props) {
           labelRequired="label-required"
           minLength="1"
           maxLength="36"
-          hint="Destination code maximum 3 characters"
+          hint="Destination code maximum 36 characters"
         />
 
       </FormHorizontal>

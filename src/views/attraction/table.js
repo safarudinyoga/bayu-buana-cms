@@ -33,6 +33,7 @@ export default function AttractionTable() {
 
   let [params, setParams] = useState({
     title: "Attractions",
+    titleModal: "Attraction",
     baseRoute: "/master/attractions/form",
     endpoint: "/master/attractions",
     deleteEndpoint: "/master/batch-actions/delete/attractions",
@@ -68,6 +69,7 @@ export default function AttractionTable() {
         visible: false,
       },
     ],
+    emptyTable: "No attractions found",
     recordName: "attraction_name",
   })
 
@@ -142,6 +144,8 @@ export default function AttractionTable() {
           column="city_name"
           value={selectedCityIds}
           data={selectedCities}
+          filter={`["status", "=", 1]`}
+          placeholder="City"
         />
         <TableDropdownFilter
           label="Country"
@@ -150,6 +154,8 @@ export default function AttractionTable() {
           column="country_name"
           value={selectedCountryIds}
           data={selectedCountries}
+          filter={`["status", "=", 1]`}
+          placeholder="Country"
         />
         <TableDropdownFilter
           label="Attraction Category"
@@ -158,6 +164,8 @@ export default function AttractionTable() {
           column="attraction_category_name"
           value={selectedAttractionCategoryIds}
           data={selectedAttractionCategories}
+          filter={`["status", "=", 1]`}
+          placeholder="Attraction Category"
         />
       </>
     )

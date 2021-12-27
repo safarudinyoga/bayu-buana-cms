@@ -22,6 +22,7 @@ function AirlineForm(props) {
   const [loading, setLoading] = useState(true)
   const [translations, setTranslations] = useState([])
   const [id, setId] = useState(null)
+  const [companyData, setCompanyData] = useState([])
   const [form, setForm] = useState({
     airline_code: "",
     numeric_code: "",
@@ -51,7 +52,7 @@ function AirlineForm(props) {
       checkCode: true,
     },
     numeric_code: {
-      required: true,
+      required: false,
       minlength: 3,
       maxlength: 3,
       checkNumeric: true,
@@ -201,6 +202,10 @@ function AirlineForm(props) {
             },
             "Airline Name already exists",
           )
+
+          if (res.data.company) {
+            setCompanyData([{...res.data.company, text: res.data.company.company_name}])
+          }
         }
       } catch (e) {}
 
@@ -242,11 +247,15 @@ function AirlineForm(props) {
             async: false,
             url: `${env.API_URL}/master/airlines?filters=["numeric_code","=","${element.value}"]`,
             success: function (res) {
-              if (res.items.length !== 0) {
-                req = false
-              } else {
+              if(!element.value){
                 req = true
-              }
+              } else {
+                if (res.items.length !== 0) {
+                  req = false
+                } else {
+                  req = true
+                }
+              } 
             },
           })
 
@@ -332,18 +341,27 @@ function AirlineForm(props) {
 
   const doUpload = async (e) => {
     try {
-      let api = new Api()
-      let payload = new FormData()
-      payload.append("files", e.target.files[0])
-      let res = await api.post("/multimedia/files", payload)
-      if (res.data) {
-        setForm({
-          ...form,
-          airline_asset: {
-            multimedia_description_id: res.data.id,
-            multimedia_description: res.data,
-          },
-        })
+      var files = e.target.files[0];
+      if(files){
+        var filesize = ((files.size/1024)/1024).toFixed(4);
+        if(filesize > 4){
+          alert("Airline Logo Image size is more than 4MB.");
+          $("#airline_icon").val('');
+          return;
+        }
+        let api = new Api()
+        let payload = new FormData()
+        payload.append("files", e.target.files[0])
+        let res = await api.post("/multimedia/files", payload)
+        if (res.data) {
+          setForm({
+            ...form,
+            airline_asset: {
+              multimedia_description_id: res.data.id,
+              multimedia_description: res.data,
+            },
+          })
+        }
       }
     } catch (e) {}
   }
@@ -373,30 +391,28 @@ function AirlineForm(props) {
           minLength="1"
           maxLength="64"
         />
-        <FormInputSelectAjax
+        {
+          !loading && 
+          <FormInputSelectAjax
           label="Company Name"
           value={form.company_id}
           name="company_id"
           endpoint="/master/companies"
           column="company_name"
+          filter={`["status", "=", 1]`}
+          data={companyData}
           onChange={(e) =>
             setForm({ ...form, company_id: e.target.value || null })
           }
           disabled={isView || loading}
           type="select"
-          minLength="0"
-          maxLength="9999"
-        >
-          <option value="">None</option>
-          <option value="51d5cb0c-c29e-4682-af20-4b95bc5c6ee3">
-            Company 1
-          </option>
-          <option value="51d5cb0c-c29e-4682-af20-4b95bc5c6ee4">
-            Company 2
-          </option>
-        </FormInputSelectAjax>
+        />
+        }
+
         <FormInputControl
+          id="airline_icon"
           label="Airline Logo Image"
+          labelRequired="label-required"
           type="image"
           name="airline_asset"
           onChange={doUpload}

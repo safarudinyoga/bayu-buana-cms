@@ -360,12 +360,15 @@ function CountryForm(props) {
           minLength="1"
           maxLength="64"
         />
+        {
+          !loading &&
         <FormInputSelectAjax
           label="Time Zone"
           value={form.timezone_id}
           name="timezone_id"
           endpoint="/master/timezones"
           column="zone_name"
+          filter={`["status", "=", 1]`}
           data={timeZoneData}
           onChange={(e) =>
             setForm({...form, timezone_id: e.target.value || null})
@@ -375,12 +378,16 @@ function CountryForm(props) {
           minLength="0"
           maxLength="9999"
         />
+        }
+        {
+          !loading &&
         <FormInputSelectAjax
           label="Currency"
           value={form.currency_id}
           name="currency_id"
           endpoint="/master/currencies"
           column="currency_name"
+          filter={`["status", "=", 1]`}
           data={currencyData}
           onChange={(e) =>
             setForm({...form, currency_id: e.target.value || null})
@@ -390,6 +397,7 @@ function CountryForm(props) {
           minLength="0"
           maxLength="9999"
         />
+        }
         <FormInputControl
           label="Nationality"
           value={form.nationality}
@@ -400,6 +408,8 @@ function CountryForm(props) {
           minLength="1"
           maxLength="64"
         />
+        {
+          !loading &&
         <FormInputSelectAjax
           label="Region"
           labelRequired="label-required"
@@ -407,31 +417,33 @@ function CountryForm(props) {
           name="region_id"
           endpoint="/master/regions"
           column="region_name"
+          filter={`["status", "=", 1]`}
           data={regionData}
           onChange={(e) =>
             setForm({...form, region_id: e.target.value || null})
           }
           disabled={isView || loading}
           type="select"
-          minLength="0"
-          maxLength="9999"
         />
+        }
+        {
+          !loading &&
         <FormInputSelectAjax
           label="Default Language"
           value={form.language_id}
           name="language_id"
           endpoint="/master/languages"
           column="language_name"
+          filter={`["status", "=", 1]`}
           data={languageData}
           onChange={(e) =>
             setForm({...form, language_id: e.target.value || null})
           }
           disabled={isView || loading}
           type="select"
-          minLength="0"
-          maxLength="9999"
-          hint="Please Select Lenguages"
+          hint="Please Select Languages"
         />
+        }
       </FormHorizontal>
 
       <FormHorizontal>

@@ -64,6 +64,7 @@ export default function AirportTable() {
         visible: false,
       },
     ],
+    emptyTable: "No airports found",
     recordName: ["airport_code", "airport_name"],
   })
 
@@ -115,6 +116,8 @@ export default function AirportTable() {
           column="city_name"
           value={selectedCityIds}
           data={selectedCities}
+          filter={`["status", "=", 1]`}
+          placeholder="City"
         />
         {/* <TableDropdownFilter
           label="Country"

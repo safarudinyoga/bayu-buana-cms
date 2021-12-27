@@ -52,6 +52,8 @@ export default function ZoneTable() {
         column="destination_name"
         value={selectedDestinationIds}
         data={selectedDestinations}
+        filter={`["status", "=", 1]`}
+        placeholder="Destination"
       />
     )
   }
@@ -64,6 +66,7 @@ export default function ZoneTable() {
 
   let [params, setParams] = useState({
     title: "Zones",
+    titleModal: "Zone",
     baseRoute: "/master/zones/form",
     endpoint: "/master/zones",
     deleteEndpoint: "/master/batch-actions/delete/zones",
@@ -95,6 +98,7 @@ export default function ZoneTable() {
         visible: false,
       },
     ],
+    emptyTable: "No zones found",
     recordName: ["zone_code", "zone_name"],
   })
 

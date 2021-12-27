@@ -293,11 +293,14 @@ function ZoneForm(props) {
           minLength="1"
           maxLength="256"
         />
+        {
+          !loading &&
         <FormInputSelectAjax
           label="Destination"
           labelRequired="label-required"
           value={form.destination_id}
           name="destination"
+          filter={`["status", "=", 1]`}
           endpoint="/master/destinations"
           column="destination_name"
           data={destinationData}
@@ -305,11 +308,8 @@ function ZoneForm(props) {
             setForm({...form, destination_id: e.target.value || null})
           }
           disabled={isView || loading}
-          type="select"
-          minLength="0"
-          maxLength="9999"
-        >
-        </FormInputSelectAjax>
+          type="select"/>
+        }
 
         <FormInputControl
           value={form.description}

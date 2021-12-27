@@ -52,6 +52,8 @@ export default function ProvinceTable() {
         column="country_name"
         value={selectedCountryIds}
         data={selectedCountries}
+        filter={`["status", "=", 1]`}
+        placeholder="Country"
       />
     )
   }
@@ -63,8 +65,8 @@ export default function ProvinceTable() {
   }
 
   let [params, setParams] = useState({
-    title: "state-provinces",
-    titleModal: "State / Provinces",
+    title: "State / Provinces",
+    titleModal: "State / Province",
     baseRoute: "/master/provinces/form",
     endpoint: "/master/state-provinces",
     deleteEndpoint: "/master/batch-actions/delete/state-provinces",
@@ -96,6 +98,7 @@ export default function ProvinceTable() {
         visible: false,
       },
     ],
+    emptyTable: "No state / provinces found",
     recordName: ["state_province_code", "state_province_name"],
   })
 

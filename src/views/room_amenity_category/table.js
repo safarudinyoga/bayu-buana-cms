@@ -1,5 +1,6 @@
 import BBDataTable from "components/table/bb-data-table"
 import rowStatus from "lib/row-status"
+import {renderColumn} from "lib/translation"
 import React, {useEffect} from "react"
 import {useDispatch} from "react-redux"
 import {setUIParams} from "redux/ui-store"
@@ -9,13 +10,13 @@ export default function RoomAmenityCategoryTable() {
   useEffect(() => {
     dispatch(
       setUIParams({
-        title: "Room Amenity Category",
+        title: "Room Amenity Categories",
         breadcrumbs: [
           {
             text: "Master Data Management",
           },
           {
-            text: "Room Amenity Category",
+            text: "Room Amenity Categories",
           },
         ],
       }),
@@ -23,7 +24,8 @@ export default function RoomAmenityCategoryTable() {
   }, [])
 
   let params = {
-    title: "Room Amenity Category",
+    title: "Room Amenity Categories",
+    titleModal: "Room Amenity Category",
     baseRoute: "/master/room-amenity-categories/form",
     endpoint: "/master/room-amenity-categories",
     deleteEndpoint: "/master/batch-actions/delete/room-amenity-categories",
@@ -33,6 +35,7 @@ export default function RoomAmenityCategoryTable() {
       {
         title: "Room Amenity Category Name",
         data: "room_amenity_category_name",
+        render: renderColumn("amenity_category", "room_amenity_category_name"),
       },
       {
         title: "Icon",
@@ -62,6 +65,8 @@ export default function RoomAmenityCategoryTable() {
         visible: false,
       },
     ],
+    emptyTable: "No room amenity categories found",
+    recordName: "room_amenity_category_name",
   }
   return <BBDataTable {...params} />
 }

@@ -35,6 +35,7 @@ const MediaForm = ({
 					mediaTypes.map((m_type, i) => (
 						<div className="col-md-4" key={i}>
 							<FormInputFile
+								id={m_type.toLowerCase()}
 								title={isView ? `Banner (${m_type})` : `Banner (${m_type}) Image`}
 								mediaType={m_type.toLowerCase()}
 								onChange={doUpload}

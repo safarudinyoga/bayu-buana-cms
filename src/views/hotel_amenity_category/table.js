@@ -25,6 +25,7 @@ export default function HotelAmenityCategoryTable() {
 
   let params = {
     title: "Hotel Amenity Categories",
+    titleModal: "Hotel Amenity Category",
     baseRoute: "/master/hotel-amenity-categories/form",
     endpoint: "/master/hotel-amenity-categories",
     deleteEndpoint: "/master/batch-actions/delete/hotel-amenity-categories",

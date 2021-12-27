@@ -302,18 +302,27 @@ function HotelAmenityForm(props) {
 
   const doUpload = async (e) => {
     try {
-      let api = new Api()
-      let payload = new FormData()
-      payload.append("files", e.target.files[0])
-      let res = await api.post("/multimedia/files", payload)
-      if (res.data) {
-        setForm({
-          ...form,
-          hotel_amenity_type_asset: {
-            multimedia_description_id: res.data.id,
-            multimedia_description: res.data,
-          },
-        })
+      var files = e.target.files[0];
+      if(files){
+        var filesize = ((files.size/1024)/1024).toFixed(4);
+        if(filesize > 4){
+          alert("Hotel Amenity Type Icon Image size is more than 4MB.");
+          $("#amenity_type").val('');
+          return;
+        }
+        let api = new Api()
+        let payload = new FormData()
+        payload.append("files", e.target.files[0])
+        let res = await api.post("/multimedia/files", payload)
+        if (res.data) {
+          setForm({
+            ...form,
+            hotel_amenity_type_asset: {
+              multimedia_description_id: res.data.id,
+              multimedia_description: res.data,
+            },
+          })
+        }
       }
     } catch (e) {}
   }
@@ -345,6 +354,8 @@ function HotelAmenityForm(props) {
           minLength="1"
           maxLength="256"
         />
+        {
+          !loading &&
         <FormInputSelectAjax
           label="Hotel Amenity Category"
           value={
@@ -358,6 +369,7 @@ function HotelAmenityForm(props) {
           data={categoryData}
           endpoint="/master/hotel-amenity-categories"
           column="hotel_amenity_category_name"
+          filter={`["status", "=", 1]`}
           onChange={(e, values) =>
             setForm((prev) => ({
               ...prev,
@@ -370,7 +382,9 @@ function HotelAmenityForm(props) {
           type="selectmultiple"
           placeholder="Hotel Amenity Category"
         />
+        }
         <FormInputControl
+          id="amenity_type"
           label="Hotel Amenity Type Icon Image"
           type="image"
           name="hotel_amenity_type_asset"

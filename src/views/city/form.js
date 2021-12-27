@@ -295,7 +295,8 @@ function CityForm(props) {
           minLength="1"
           maxLength="256"
         />
-
+        {
+          !loading &&
         <FormInputSelectAjax
           label="Country"
           labelRequired="label-required"
@@ -303,6 +304,7 @@ function CityForm(props) {
           name="country_id"
           endpoint="/master/countries"
           column="country_name"
+          filter={`["status", "=", 1]`}
           data={countryData}
           onChange={(e) =>
             setForm({...form, country_id: e.target.value || null})
@@ -310,13 +312,15 @@ function CityForm(props) {
           disabled={isView || loading}
           type="select"
         />
-
+        }
+        {
+          !loading &&
         <FormInputSelectAjax
           label="State / Province"
           value={form.state_province_id}
           name="state_id"
           endpoint="/master/state-provinces"
-          filter={`["country.id", "=", "${form.country_id}"]`}
+          filter={`[["country.id", "=", "${form.country_id}"],["AND"],["status", "=", 1]]`}
           column="state_province_name"
           data={stateProvinceData}
           onChange={(e) =>
@@ -325,6 +329,7 @@ function CityForm(props) {
           disabled={isView || loading}
           type="select"
         />
+        }
 
       </FormHorizontal>
 

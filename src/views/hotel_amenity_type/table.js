@@ -64,12 +64,15 @@ export default function HotelAmenityTable() {
           column="hotel_amenity_category_name"
           value={selectedHotelAmenityCategoriesIds}
           data={selectedHotelAmenityCategories}
+          filter={`["status", "=", 1]`}
+          placeholder="Hotel Amenity Category"
         />
       </>
     )
   }
   let [params, setParams] = useState({
-    title: "Hotel Amenity Type",
+    title: "Hotel Amenity Types",
+    titleModal: "Hotel Amenity Type",
     baseRoute: "/master/hotel-amenity-types/form",
     endpoint: "/master/hotel-amenity-types",
     deleteEndpoint: "/master/batch-actions/delete/hotel-amenity-types",
