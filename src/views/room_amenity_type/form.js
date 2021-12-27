@@ -8,6 +8,7 @@ import React, {useEffect, useState} from "react"
 import {useDispatch} from "react-redux"
 import {withRouter} from "react-router"
 import {setUIParams} from "redux/ui-store"
+import $ from "jquery"
 
 const endpoint = "/master/room-amenity-types"
 const backUrl = "/master/room-amenity-types"
@@ -50,6 +51,9 @@ function RoomAmenityTypeForm(props) {
       min: 1,
       max: 999,
     },
+    room_amenity_type_asset: {
+      required: false
+    }
   }
 
   const validationMessages = {
@@ -140,18 +144,27 @@ function RoomAmenityTypeForm(props) {
 
   const doUpload = async (e) => {
     try {
-      let api = new Api()
-      let payload = new FormData()
-      payload.append("files", e.target.files[0])
-      let res = await api.post("/multimedia/files", payload)
-      if (res.data) {
-        setForm({
-          ...form,
-          room_amenity_type_asset: {
-            multimedia_description_id: res.data.id,
-            multimedia_description: res.data,
-          },
-        })
+      var files = e.target.files[0];
+      if(files){
+        var filesize = ((files.size/1024)/1024).toFixed(4);
+        if(filesize > 4){
+          alert("Room Amenity Type Icon Image size is more than 4MB.");
+          $("#room_icon").val('');
+          return;
+        }
+        let api = new Api()
+        let payload = new FormData()
+        payload.append("files", e.target.files[0])
+        let res = await api.post("/multimedia/files", payload)
+        if (res.data) {
+          setForm({
+            ...form,
+            room_amenity_type_asset: {
+              multimedia_description_id: res.data.id,
+              multimedia_description: res.data,
+            },
+          })
+        }
       }
     } catch (e) { }
   }
@@ -187,7 +200,7 @@ function RoomAmenityTypeForm(props) {
             label="Room Amenity Category"
             value={form.room_amenity_category_id}
             // value={form.attraction_category_attraction ? form.attraction_category_attraction.map((item) => item.attraction_category_id) : []}
-
+            filter={`["status", "=", 1]`}
             name="room_amenity_category_id"
             endpoint="/master/room-amenity-categories"
             column="room_amenity_category_name"
@@ -199,12 +212,14 @@ function RoomAmenityTypeForm(props) {
             type="select" />
         }
         <FormInputControl
+          id="room_icon"
           label="Room Amenity Type Icon Image"
           type="image"
+          name="room_amenity_type_asset"
           onChange={doUpload}
           disabled={isView}
           accept=".png,.jpg,.jpeg"
-          url={form.room_amenity_type_asset.multimedia_description.url}
+          url={form.room_amenity_type_asset?.multimedia_description.url}
           style={{maxWidth: 300, marginTop: 12}}
         />
       </FormHorizontal>

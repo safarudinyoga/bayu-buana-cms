@@ -19,6 +19,7 @@ export default class FormInputFile extends Component {
 
   render() {
     const {
+      id,
       url,
       disabled,
       onChange,
@@ -50,6 +51,7 @@ export default class FormInputFile extends Component {
             <img src={UploadIcon} className="img-up-icon" alt="up-ic" />
           ) : null}
           <input
+            id={id}
             type="file"
             onChange={(e) => onChange(e, mediaType)}
             className="form-control input-image"

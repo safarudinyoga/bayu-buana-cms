@@ -74,7 +74,7 @@ export default function RoomAmenityTypeTable() {
         visible: false,
       },
     ],
-    emptyTable: "No room amenity categories found",
+    emptyTable: "No room amenity types found",
     recordName: "room_amenity_name",
   }
   return <BBDataTable {...params} />

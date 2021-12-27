@@ -404,18 +404,27 @@ function LanguageForm(props) {
 
   const doUpload = async (e) => {
     try {
-      let api = new Api()
-      let payload = new FormData()
-      payload.append("files", e.target.files[0])
-      let res = await api.post("/multimedia/files", payload)
-      if (res.data) {
-        setForm({
-          ...form,
-          language_asset: {
-            multimedia_description_id: res.data.id,
-            multimedia_description: res.data,
-          },
-        })
+      var files = e.target.files[0];
+      if(files){
+        var filesize = ((files.size/1024)/1024).toFixed(4);
+        if(filesize > 4){
+          alert("Flag size is more than 4MB.");
+          $("#language").val('');
+          return;
+        }
+        let api = new Api()
+        let payload = new FormData()
+        payload.append("files", e.target.files[0])
+        let res = await api.post("/multimedia/files", payload)
+        if (res.data) {
+          setForm({
+            ...form,
+            language_asset: {
+              multimedia_description_id: res.data.id,
+              multimedia_description: res.data,
+            },
+          })
+        }
       }
     } catch (e) {}
   }
@@ -459,6 +468,7 @@ function LanguageForm(props) {
           maxLength="256"
         />
         <FormInputControl
+          id="language"
           label="Flag"
           type="image"
           labelRequired="label-required"
@@ -466,7 +476,7 @@ function LanguageForm(props) {
           onChange={doUpload}
           disabled={isView}
           accept=".png,.jpg,.jpeg"
-          url={form.language_asset.multimedia_description.url}
+          url={form.language_asset?.multimedia_description.url}
           style={{ maxWidth: 300, marginTop: 12 }}
         />
       </FormHorizontal>

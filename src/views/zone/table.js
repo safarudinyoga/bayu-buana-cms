@@ -52,6 +52,8 @@ export default function ZoneTable() {
         column="destination_name"
         value={selectedDestinationIds}
         data={selectedDestinations}
+        filter={`["status", "=", 1]`}
+        placeholder="Destination"
       />
     )
   }

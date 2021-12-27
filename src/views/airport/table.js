@@ -116,6 +116,8 @@ export default function AirportTable() {
           column="city_name"
           value={selectedCityIds}
           data={selectedCities}
+          filter={`["status", "=", 1]`}
+          placeholder="City"
         />
         {/* <TableDropdownFilter
           label="Country"

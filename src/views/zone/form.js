@@ -300,6 +300,7 @@ function ZoneForm(props) {
           labelRequired="label-required"
           value={form.destination_id}
           name="destination"
+          filter={`["status", "=", 1]`}
           endpoint="/master/destinations"
           column="destination_name"
           data={destinationData}

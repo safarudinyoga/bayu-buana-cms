@@ -52,6 +52,8 @@ export default function HotelSupplierTable() {
         column="supplier_type_name"
         value={SelectedSupplierTypeIds}
         data={SelectedSupplierTypes}
+        filter={`["status", "=", 1]`}
+        placeholder="Supplier Type"
       />
     )
   }
