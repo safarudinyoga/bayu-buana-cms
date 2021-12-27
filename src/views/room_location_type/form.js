@@ -6,13 +6,16 @@ import FormInputControl from "components/form/input-control"
 import FormBuilder from "components/form/builder"
 import useQuery from "lib/query"
 import {useDispatch} from "react-redux"
-import {setUIParams} from "redux/ui-store"
+import {setAlert ,setUIParams} from "redux/ui-store"
+import $ from "jquery"
+import env from "../../config/environment"
 
 const endpoint = "/master/room-location-types"
 const backUrl = "/master/room-location-types"
 
 function RoomLocationTypeForm(props) {
   let dispatch = useDispatch()
+  let formId = props.match.params.id
 
   const isView = useQuery().get("action") === "view"
   const [formBuilder, setFormBuilder] = useState(null)
@@ -34,13 +37,28 @@ function RoomLocationTypeForm(props) {
   const validationRules = {
     room_location_type_code: {
       required: true,
-      min: 0,
+      min: 1,
       max: 99,
+      checkCode: true,
     },
     room_location_type_name: {
       required: true,
       minlength: 1,
       maxlength: 256,
+      checkName: true
+    },
+  }
+
+  const validationMessages = {
+    room_location_type_name: {
+      required: "Room Location Type Name is required",
+      minlength: "Room Location Type Name must be at least 1 characters",
+      maxlength: "Room Location Type Name cannot be more than 99 characters",
+    },
+    room_location_type_code: {
+      required: "Room Location Type Code is required",
+      minlength: "Room Location Type Code must be at least 1 characters",
+      maxlength: "Room Location Type Code cannot be more than 256 characters",
     },
   }
 
@@ -76,6 +94,62 @@ function RoomLocationTypeForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
+
+        if(res.data){
+          let currentCode = res.data.room_location_type_code
+          let currentName = res.data.room_location_type_name
+
+          $.validator.addMethod(
+            "checkCode",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/room-location-types?filters=["room_location_type_code","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if(currentCode == element.value){
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+    
+              return req
+            },
+            "Room Location Type Code already exists",
+          )
+          $.validator.addMethod(
+            "checkName",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/room-location-types?filters=["room_location_type_name","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if(currentName.toUpperCase() === element.value.toUpperCase()){
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+    
+              return req
+            },
+            "Room Location Type Name already exists",
+          )
+        }
       } catch (e) { }
 
       try {
@@ -85,6 +159,49 @@ function RoomLocationTypeForm(props) {
         setTranslations(res.data.items)
       } catch (e) { }
       setLoading(false)
+    } else {
+      $.validator.addMethod(
+        "checkCode",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/room-location-types?filters=["room_location_type_code","=","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
+
+          return req
+        },
+        "Room Location Type Code already exists",
+      )
+      $.validator.addMethod(
+        "checkName",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/room-location-types?filters=["room_location_type_name","=","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
+
+          return req
+        },
+        "Room Location Type Name already exists",
+      )
     }
   }, [])
 
@@ -108,9 +225,19 @@ function RoomLocationTypeForm(props) {
         await api.putOrPost(path, tl.id, tl)
       }
     } catch (e) {
+      dispatch(
+        setAlert({
+          message: `Failed to ${formId ? "update" : "save"} this record.`,
+        }),
+      )
     } finally {
       setLoading(false)
       props.history.push(backUrl)
+      dispatch(
+        setAlert({
+          message: `Record ${form.room_location_type_code} - ${form.room_location_type_name} has been successfully ${formId ? "updated" : "saved"}..`,
+        }),
+      )
     }
   }
 
@@ -125,6 +252,7 @@ function RoomLocationTypeForm(props) {
       alertMessage={"Incomplete data"}
       isValid={false}
       rules={validationRules}
+      validationMessages={validationMessages}
     >
       <FormHorizontal>
         <FormInputControl
