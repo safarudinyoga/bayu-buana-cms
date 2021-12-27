@@ -4,7 +4,7 @@ export default class FormInputWrapper extends Component {
   render() {
     const { cl } = this.props
     return (
-      <div className="form-group required row">
+      <div className="form-group required row d-flex align-items-center">
         <span className={`text-label-input col-sm-${cl?.sm||6} col-md-${cl?.md||5} col-lg-${cl?.lg||4} col-form-label ${this.props.labelRequired}`}>
         {this.props.label}
         {this.props.hint ? <i className="fa fa-info-circle hint" title={this.props.hint}></i>: ""}
