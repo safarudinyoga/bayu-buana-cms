@@ -23,8 +23,6 @@ import "./bb-data-table.css"
 import editIcon from "assets/icons/edit.svg"
 import removeIcon from "assets/icons/remove.svg"
 import showIcon from "assets/icons/show.svg"
-import imgBase64 from '../../lib/imgBase64';
-import { saveAsExcel } from "lib/exportExcel"
 
 window.JSZip = JSZip
 
@@ -163,18 +161,6 @@ class BBDataTable extends Component {
         ],
         keys: true,
         destroy: true,
-        initComplete: async (data) => {
-          let items = data.json.items
-          for(let i = 0; i < items.length; i++) {
-            if(items[i].airline_asset?.multimedia_description?.url) {
-              let convertImg = await imgBase64(items[i].airline_asset.multimedia_description.url)
-              // console.log(convertImg)
-              items[i].airline_asset.multimedia_description.base64 = convertImg
-            }
-          }
-          data.json.items = items
-          return data
-        },
         ajax: {
           url: this.api.env.endpoint(this.props.endpoint),
           cache: true,
@@ -434,31 +420,6 @@ class BBDataTable extends Component {
               columns: visibleColumns,
               orthogonal: "myExport",
             },
-            customize: ( xlsx ) => {
-              "here"
-              // var sheet = xlsx.xl.worksheets['sheet1.xml'];
-              // var table = $(this.table.current).DataTable();
-              // var thead = table.table().header(); 
-              // var titles = [];
-              // $(thead).find('th').map(function(){
-              //   titles.push($(this).text());
-              // });
-              // let imgIdx = titles.findIndex(e => e === "Logo" || e === "Icon")
-              // if(imgIdx !== -1) {
-              //   var plainArray = table
-              //     .column(imgIdx)
-              //     .data()
-              //     .toArray();
-              //     let arr = []
-              //     for(let i=0; i< plainArray.length;i++) {
-              //       let img = getBase64Image(plainArray[i])
-              //       arr.push(img)
-              //     }
-              //   console.log(table.rows().data(), "here");
-
-              // }
-                
-            }
           },
           {
             extend: "csvHtml5",
@@ -677,7 +638,6 @@ class BBDataTable extends Component {
           )
           .trigger()
         this.dt.page.len(prevLen).draw()
-        // saveAsExcel(`Bayu Buana - ${this.props.title}`, this.dt)
       }, 500)
     } catch (e) {
       console.log(e.message)
