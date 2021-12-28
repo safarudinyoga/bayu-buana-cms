@@ -21,6 +21,16 @@ export default class FormInputSelectAjax extends Component {
     this.init()
   }
 
+  formatState(type, state){
+    if (!state.id) {
+      return state.text;
+    }
+    var $state = $(
+      `<span class="${type === "selectmultiple" ? "multiple" : ""}">${state.text}</span>`
+    );
+    return $state;
+  }
+
   init() {
     setTimeout(() => {
       try {
@@ -28,7 +38,8 @@ export default class FormInputSelectAjax extends Component {
           placeholder: this.props.placeholder || 'Please choose',
           theme: "bootstrap4",
           data: this.props.data,
-          allowClear: true
+          allowClear: true,
+          templateResult: (state) => this.formatState(this.props.type, state)
         }
         if (!this.props.children) {
           config.ajax = {

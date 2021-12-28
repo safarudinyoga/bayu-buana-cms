@@ -117,7 +117,7 @@ export default class TableDropdownFilter extends Component {
   }
 }
 function formatText (icon) {
-  return $('<span><i class="fas ' + $(icon.element).data('icon') + '"></i> ' + icon.text + '</span>');
+  return $('<span class="multiple" ><i class="fas ' + $(icon.element).data('icon') + '"></i> ' + icon.text + '</span>');
 };
 
 $('.select2-icon').select2({
