@@ -1,12 +1,12 @@
-import {withRouter} from "react-router"
-import React, {useEffect, useState} from "react"
+import { withRouter } from "react-router"
+import React, { useEffect, useState } from "react"
 import Api from "config/api"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
 import FormBuilder from "components/form/builder"
 import useQuery from "lib/query"
-import {useDispatch} from "react-redux"
-import {setAlert ,setUIParams} from "redux/ui-store"
+import { useDispatch } from "react-redux"
+import { setAlert, setUIParams } from "redux/ui-store"
 import $ from "jquery"
 import env from "../../config/environment"
 
@@ -45,7 +45,7 @@ function RoomLocationTypeForm(props) {
       required: true,
       minlength: 1,
       maxlength: 256,
-      checkName: true
+      checkName: true,
     },
   }
 
@@ -70,7 +70,7 @@ function RoomLocationTypeForm(props) {
     if (!formId) {
       docTitle = "Create Room Location Type"
     } else if (isView) {
-      docTitle = "View Room Location Type"
+      docTitle = "Room Location Type Details"
     }
 
     dispatch(
@@ -95,7 +95,7 @@ function RoomLocationTypeForm(props) {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
 
-        if(res.data){
+        if (res.data) {
           let currentCode = res.data.room_location_type_code
           let currentName = res.data.room_location_type_name
 
@@ -109,7 +109,7 @@ function RoomLocationTypeForm(props) {
                 url: `${env.API_URL}/master/room-location-types?filters=["room_location_type_code","=","${element.value}"]`,
                 success: function (res) {
                   if (res.items.length !== 0) {
-                    if(currentCode == element.value){
+                    if (currentCode == element.value) {
                       req = true
                     } else {
                       req = false
@@ -119,10 +119,10 @@ function RoomLocationTypeForm(props) {
                   }
                 },
               })
-    
+
               return req
             },
-            "Room Location Type Code already exists",
+            "Code already exists",
           )
           $.validator.addMethod(
             "checkName",
@@ -134,7 +134,9 @@ function RoomLocationTypeForm(props) {
                 url: `${env.API_URL}/master/room-location-types?filters=["room_location_type_name","=","${element.value}"]`,
                 success: function (res) {
                   if (res.items.length !== 0) {
-                    if(currentName.toUpperCase() === element.value.toUpperCase()){
+                    if (
+                      currentName.toUpperCase() === element.value.toUpperCase()
+                    ) {
                       req = true
                     } else {
                       req = false
@@ -144,20 +146,20 @@ function RoomLocationTypeForm(props) {
                   }
                 },
               })
-    
+
               return req
             },
             "Room Location Type Name already exists",
           )
         }
-      } catch (e) { }
+      } catch (e) {}
 
       try {
         let res = await api.get(endpoint + "/" + formId + "/translations", {
           size: 50,
         })
         setTranslations(res.data.items)
-      } catch (e) { }
+      } catch (e) {}
       setLoading(false)
     } else {
       $.validator.addMethod(
@@ -179,7 +181,7 @@ function RoomLocationTypeForm(props) {
 
           return req
         },
-        "Room Location Type Code already exists",
+        "Code already exists",
       )
       $.validator.addMethod(
         "checkName",
@@ -235,7 +237,9 @@ function RoomLocationTypeForm(props) {
       props.history.push(backUrl)
       dispatch(
         setAlert({
-          message: `Record ${form.room_location_type_code} - ${form.room_location_type_name} has been successfully ${formId ? "updated" : "saved"}..`,
+          message: `Record ${form.room_location_type_code} - ${
+            form.room_location_type_name
+          } has been successfully ${formId ? "updated" : "saved"}.`,
         }),
       )
     }
@@ -261,7 +265,7 @@ function RoomLocationTypeForm(props) {
           value={form.room_location_type_name}
           name="room_location_type_name"
           onChange={(e) =>
-            setForm({...form, room_location_type_name: e.target.value})
+            setForm({ ...form, room_location_type_name: e.target.value })
           }
           disabled={isView || loading}
           type="text"
@@ -276,10 +280,13 @@ function RoomLocationTypeForm(props) {
           labelRequired="label-required"
           value={form.room_location_type_code}
           name="room_location_type_code"
-          cl={{md:"12"}}
+          cl={{ md: "12" }}
           cr="12"
           onChange={(e) =>
-            setForm({...form, room_location_type_code: parseInt(e.target.value)})
+            setForm({
+              ...form,
+              room_location_type_code: parseInt(e.target.value),
+            })
           }
           disabled={isView || loading}
           type="number"

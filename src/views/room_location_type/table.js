@@ -25,6 +25,7 @@ export default function RoomLocationTypeTable() {
 
   let params = {
     title: "Room Location Types",
+    titleModal: "Room Location Type",
     baseRoute: "/master/room-location-types/form",
     endpoint: "/master/room-location-types",
     deleteEndpoint: "/master/batch-actions/delete/room-location-types",
@@ -53,6 +54,7 @@ export default function RoomLocationTypeTable() {
         visible: false,
       },
     ],
+    recordName: ["room_location_type_code", "room_location_type_name"],
   }
   return <BBDataTable {...params} />
 }
