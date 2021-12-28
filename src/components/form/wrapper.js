@@ -5,7 +5,7 @@ export default class FormWrapper extends Component {
     return (
        <div className="row">
       {this.props.children.length > 1 ? (
-        <div className="col-xs-12 col-sm-6 col-md-7 col-lg-6 order-sm-1 mb-4">
+        <div className="col-xs-12 col-sm-6 col-md-7 col-lg-6 order-2 order-sm-1 mb-4">
           {this.props.children[0]}
         </div>
       ) : (
@@ -14,7 +14,7 @@ export default class FormWrapper extends Component {
        <div className="col-lg-1 order-lg-2"></div>
       {this.props.children.length > 1 ? (
        
-        <div className="col-xs-12 col-sm-6 col-md-5 col-lg-5 order-sm-2">
+        <div className="col-xs-12 col-sm-6 col-md-5 col-lg-5 order-1 order-sm-2">
           <div className="card card-default shadow-none border-none bg-block-card">
             <div className="card-body">
               <div className="text-sub-header">{this.props.rightTitle || "For Interface Purpose"}</div>

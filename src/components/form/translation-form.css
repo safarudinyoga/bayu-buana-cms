@@ -74,6 +74,23 @@
     border-bottom-right-radius: 0px;
   }
 }
+.grey { background-color: #ECECEC; }
+.btn {
+  position: relative;
+}
+.ic-select {
+  width: 10px;
+  position: absolute;
+  right: 12px;
+  margin-top: 0;
+}
+.ic-select-up {
+  -moz-transform: rotate(180deg);
+  -webkit-transform: rotate(180deg);
+  -o-transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+  transform: rotate(180deg);
+}
 
 @media (min-width: 576px) {
   .translation-form .translation-form-content {
