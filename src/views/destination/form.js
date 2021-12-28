@@ -408,7 +408,7 @@ function DestinationForm(props) {
         }
 
         let res = await api.post("/multimedia/files", payload, config)
-        console.log(res);
+
         if (res.data) {
           setForm({
             ...form,
