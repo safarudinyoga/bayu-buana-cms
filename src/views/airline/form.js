@@ -437,7 +437,7 @@ function AirlineForm(props) {
           name="airline_asset"
           onChange={doUpload}
           disabled={isView}
-          url={form.airline_asset.multimedia_description.url}
+          url={form.airline_asset?.multimedia_description.url}
           style={{ maxWidth: 300, marginTop: 12 }}
         />
       </FormHorizontal>
