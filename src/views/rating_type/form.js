@@ -1,5 +1,6 @@
 import {withRouter} from "react-router"
 import React, {useEffect, useState} from "react"
+import {Link} from "react-router-dom"
 import Api from "config/api"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
@@ -344,6 +345,15 @@ function RatingTypeForm(props) {
           min="1"
           max="3"
         />
+
+        {
+          formId 
+            ? <Link to={`/master/rating-types/${formId}/rating-type-levels`} className="btn btn-warning float-left button-new mt-2">
+              Rating Type Level
+            </Link>
+          : null
+        }
+
       </FormHorizontal>
 
       <FormHorizontal>

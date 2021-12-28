@@ -4,7 +4,7 @@ import { Component } from "react"
 import FormHorizontal from "./horizontal"
 import FormInputControl from "./input-control"
 import "./translation-form.css"
-import translation from "../../lib/translation"
+import arrowdownIcon from 'assets/icons/arrow-down.svg';
 
 export default class TranslationForm extends Component {
   constructor(props) {
@@ -15,6 +15,7 @@ export default class TranslationForm extends Component {
       languages: [],
       loading: true,
       translated: {},
+      showList: false
     }
 
     this.translated = {}
@@ -73,6 +74,7 @@ export default class TranslationForm extends Component {
     let display = this.state.pillStyle.display === "flex" ? "none" : "flex"
     this.setState({
       pillStyle: { display: display },
+      showList: !this.state.showList,
     })
   }
 
@@ -128,6 +130,8 @@ export default class TranslationForm extends Component {
   }
 
   render() {
+    const {showList} = this.state
+
     $(document)
       .off("click", ".translation-form .nav-link")
       .on("click", ".translation-form .nav-link", (e) => {
@@ -227,12 +231,13 @@ export default class TranslationForm extends Component {
           <div className="col-xs-12 col-sm-4 col-md-4 col-lg-2 translation-tab-container">
             <button
               type="button"
-              className="btn btn-default dropdown-toggle btn-block shadow"
+              className="btn btn-default dropdown-toggle btn-block shadow grey"
               onClick={this.togglePills.bind(this)}
             >
               <span className="text-label-input">
                 {this.state.currentLanguage}
               </span>
+              <img src={arrowdownIcon} alt="ic-select" className={`ic-select ${showList ? "ic-select-up" : null}`}/>
             </button>
             <div
               className="nav flex-column nav-pills"

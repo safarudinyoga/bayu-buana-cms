@@ -46,7 +46,7 @@ export default class FormInputFile extends Component {
             </span>
           </>
         )}
-        <label className="media-label" style={this.props.style}>
+        <label className="media-label" id={"media-"+id} style={this.props.style}>
           {!disabled ? (
             <img src={UploadIcon} className="img-up-icon" alt="up-ic" />
           ) : null}
@@ -62,7 +62,9 @@ export default class FormInputFile extends Component {
             data-msg-accept="Only .png, .jpg, .jpeg file supported"
           />
           <img src={url || NoImage} className="img-fluid img-up" alt="up-img" />
+          
         </label>
+        <progress className="upload-progress" id={"progress-"+id} value="0" max="100" style={{width: '100%', display: 'none'}}></progress>
       </div>
     )
   }

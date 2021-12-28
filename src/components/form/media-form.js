@@ -1,3 +1,4 @@
+import { width } from "dom-helpers"
 import React from "react"
 import FormInputFile from './input-image'
 
@@ -44,6 +45,7 @@ const MediaForm = ({
 								name={moduleName + "_asset_" + m_type.toLowerCase()}
 								disabled={isView}
 							/>
+							{/* <progress className="upload-progress" id={"progress-"+m_type.toLowerCase()} value="0" max="100" style={{width: '100%', display: 'none'}}></progress> */}
 						</div>
 					))
 				}

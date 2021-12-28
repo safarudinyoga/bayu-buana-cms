@@ -3,62 +3,72 @@ import React, {useEffect, useState} from "react"
 import Api from "config/api"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
+import FormInputSelectAjax from "components/form/input-select-ajax"
 import FormBuilder from "components/form/builder"
 import useQuery from "lib/query"
 import {useDispatch} from "react-redux"
-import {setAlert ,setUIParams} from "redux/ui-store"
+import {setAlert, setUIParams} from "redux/ui-store"
 import $ from "jquery"
 import env from "../../config/environment"
 
-const endpoint = "/master/room-location-types"
-const backUrl = "/master/room-location-types"
 
-function RoomLocationTypeForm(props) {
+function RatingTypeLevelForm(props) {
   let dispatch = useDispatch()
   let formId = props.match.params.id
+  let ratingTypeId = props.match.params.id_rating_type
+  const backUrl = `/master/rating-types/${ratingTypeId}/rating-type-levels`
+  const endpoint = `/master/rating-types/${ratingTypeId}/levels`
 
   const isView = useQuery().get("action") === "view"
   const [formBuilder, setFormBuilder] = useState(null)
   const [loading, setLoading] = useState(true)
   const [translations, setTranslations] = useState([])
+
   const [id, setId] = useState(null)
   const [form, setForm] = useState({
-    room_location_type_code: "",
-    room_location_type_name: "",
+    rating_type_level_code: null,
+    rating_type_level_name: "",
+    rating: null,
   })
   const translationFields = [
     {
-      label: "Room Location Type Name",
-      name: "room_location_type_name",
+      label: "Rating Type Level Name",
+      name: "rating_type_level_name",
       type: "text",
     },
   ]
 
   const validationRules = {
-    room_location_type_code: {
+    rating_type_level_code: {
       required: true,
-      min: 1,
+      min: 0,
       max: 99,
       checkCode: true,
     },
-    room_location_type_name: {
+
+    rating_type_level_name: {
       required: true,
       minlength: 1,
       maxlength: 256,
-      checkName: true
+      checkName: true,
+    },
+
+    rating: {
+      required: true,
+      min: 1,
+      max: 999,
     },
   }
 
   const validationMessages = {
-    room_location_type_name: {
-      required: "Room Location Type Name is required",
-      minlength: "Room Location Type Name must be at least 1 characters",
-      maxlength: "Room Location Type Name cannot be more than 99 characters",
+    rating_type_level_name: {
+      required: "Rating Type Level Name is required",
     },
-    room_location_type_code: {
-      required: "Room Location Type Code is required",
-      minlength: "Room Location Type Code must be at least 1 characters",
-      maxlength: "Room Location Type Code cannot be more than 256 characters",
+    rating_type_level_code: {
+      required: "Rating Type Level Code is required",
+    },
+    rating: {
+      required: "Rating is required",
     },
   }
 
@@ -66,23 +76,26 @@ function RoomLocationTypeForm(props) {
     let api = new Api()
     let formId = props.match.params.id
 
-    let docTitle = "Edit Room Location Type"
+    let docTitle = "Edit Rating Type Level"
     if (!formId) {
-      docTitle = "Create Room Location Type"
+      docTitle = "Create Rating Type Level"
     } else if (isView) {
-      docTitle = "View Room Location Type"
+      docTitle = "View Rating Type Level"
     }
-
     dispatch(
       setUIParams({
-        title: docTitle,
+        title: isView ? "Rating Type Level Details" : docTitle,
         breadcrumbs: [
           {
             text: "Master Data Management",
           },
           {
+            link: "/master/rating-types",
+            text: "Rating Types",
+          },
+          {
             link: backUrl,
-            text: "Room Location Types",
+            text: "Rating Types Level",
           },
           {
             text: docTitle,
@@ -94,10 +107,9 @@ function RoomLocationTypeForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
-
-        if(res.data){
-          let currentCode = res.data.room_location_type_code
-          let currentName = res.data.room_location_type_name
+        if (res.data) {
+          let currentCode = res.data.rating_type_level_code
+          let currentName = res.data.rating_type_level_name
 
           $.validator.addMethod(
             "checkCode",
@@ -106,23 +118,19 @@ function RoomLocationTypeForm(props) {
               $.ajax({
                 type: "GET",
                 async: false,
-                url: `${env.API_URL}/master/room-location-types?filters=["room_location_type_code","=","${element.value}"]`,
+                url: `${env.API_URL}/master/rating-types/${ratingTypeId}/levels?filters=["rating_type_level_code","=","${element.value}"]`,
                 success: function (res) {
                   if (res.items.length !== 0) {
-                    if(currentCode == element.value){
-                      req = true
-                    } else {
-                      req = false
-                    }
+                    req = currentCode === parseInt(element.value)
                   } else {
                     req = true
                   }
                 },
               })
-    
+      
               return req
             },
-            "Room Location Type Code already exists",
+            "Rating Type Level Code already exists",
           )
           $.validator.addMethod(
             "checkName",
@@ -131,10 +139,10 @@ function RoomLocationTypeForm(props) {
               $.ajax({
                 type: "GET",
                 async: false,
-                url: `${env.API_URL}/master/room-location-types?filters=["room_location_type_name","=","${element.value}"]`,
+                url: `${env.API_URL}/master/rating-types/${ratingTypeId}/levels?filters=["rating_type_level_name","=","${element.value}"]`,
                 success: function (res) {
                   if (res.items.length !== 0) {
-                    if(currentName.toUpperCase() === element.value.toUpperCase()){
+                    if(currentName === element.value){
                       req = true
                     } else {
                       req = false
@@ -144,10 +152,10 @@ function RoomLocationTypeForm(props) {
                   }
                 },
               })
-    
+      
               return req
             },
-            "Room Location Type Name already exists",
+            "Rating Type Level Name already exists",
           )
         }
       } catch (e) { }
@@ -167,7 +175,7 @@ function RoomLocationTypeForm(props) {
           $.ajax({
             type: "GET",
             async: false,
-            url: `${env.API_URL}/master/room-location-types?filters=["room_location_type_code","=","${element.value}"]`,
+            url: `${env.API_URL}/master/rating-types/${ratingTypeId}/levels?filters=["rating_type_level_code","=","${element.value}"]`,
             success: function (res) {
               if (res.items.length !== 0) {
                 req = false
@@ -176,10 +184,10 @@ function RoomLocationTypeForm(props) {
               }
             },
           })
-
+  
           return req
         },
-        "Room Location Type Code already exists",
+        "Rating Type Level Code already exists",
       )
       $.validator.addMethod(
         "checkName",
@@ -188,7 +196,7 @@ function RoomLocationTypeForm(props) {
           $.ajax({
             type: "GET",
             async: false,
-            url: `${env.API_URL}/master/room-location-types?filters=["room_location_type_name","=","${element.value}"]`,
+            url: `${env.API_URL}/master/rating-types/${ratingTypeId}/levels?filters=["rating_type_level_name","=","${element.value}"]`,
             success: function (res) {
               if (res.items.length !== 0) {
                 req = false
@@ -197,10 +205,10 @@ function RoomLocationTypeForm(props) {
               }
             },
           })
-
+  
           return req
         },
-        "Room Location Type Name already exists",
+        "Rating Type Level Name already exists",
       )
     }
   }, [])
@@ -217,6 +225,15 @@ function RoomLocationTypeForm(props) {
     setLoading(true)
     let api = new Api()
     try {
+      if (!form.rating_type_level_code) {
+        form.rating_type_level_code = null
+      }
+      if (!form.rating_type_level_name) {
+        form.rating_type_level_name = null
+      }
+      if (!form.rating) {
+        form.rating = null
+      }
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
       for (let i in translated) {
@@ -235,7 +252,7 @@ function RoomLocationTypeForm(props) {
       props.history.push(backUrl)
       dispatch(
         setAlert({
-          message: `Record ${form.room_location_type_code} - ${form.room_location_type_name} has been successfully ${formId ? "updated" : "saved"}..`,
+          message: `Record ${form.rating_type_level_code} - ${form.rating_type_level_name} has been successfully ${formId ? "updated" : "saved"}..`,
         }),
       )
     }
@@ -256,38 +273,54 @@ function RoomLocationTypeForm(props) {
     >
       <FormHorizontal>
         <FormInputControl
-          label="Room Location Type Name"
+          label="Rating Type Level Name"
           labelRequired="label-required"
-          value={form.room_location_type_name}
-          name="room_location_type_name"
+          value={form.rating_type_level_name}
+          name="rating_type_level_name"
           onChange={(e) =>
-            setForm({...form, room_location_type_name: e.target.value})
+            setForm({...form, rating_type_level_name: e.target.value})
           }
           disabled={isView || loading}
           type="text"
-          minLength="0"
+          minLength="1"
           maxLength="256"
+        />
+
+        <FormInputControl
+          label="Rating"
+          labelRequired="label-required"
+          value={form.rating}
+          name="rating"
+          onChange={(e) =>
+            setForm({...form, rating: parseInt(e.target.value)})
+          }
+          disabled={isView || loading}
+          type="number"
+          min="1"
+          max="999"
         />
       </FormHorizontal>
 
       <FormHorizontal>
         <FormInputControl
-          label="Room Location Type Code"
+          label="Rating Type Level Code"
           labelRequired="label-required"
-          value={form.room_location_type_code}
-          name="room_location_type_code"
+          value={form.rating_type_level_code}
+          name="rating_type_level_code"
           cl={{md:"12"}}
           cr="12"
           onChange={(e) =>
-            setForm({...form, room_location_type_code: parseInt(e.target.value)})
+            setForm({...form, rating_type_level_code: parseInt(e.target.value)})
           }
           disabled={isView || loading}
           type="number"
-          hint="Room Location Type Code is numeric"
+          min="1"
+          max="99"
+          hint="Rating type level code maximum 2 digits"
         />
       </FormHorizontal>
     </FormBuilder>
   )
 }
 
-export default withRouter(RoomLocationTypeForm)
+export default withRouter(RatingTypeLevelForm)

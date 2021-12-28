@@ -368,7 +368,7 @@ function DestinationForm(props) {
       props.history.push(backUrl)
       dispatch(
         setAlert({
-          message: `Record ${form.destination_code} - ${form.destination_name} has been successfully ${formId ? "updated" : "saved"}..`,
+          message: `Record ${form.destination_code} - ${form.destination_name} has been successfully ${formId ? "updated" : "saved"}.`,
         }),
       )
     }
@@ -389,7 +389,26 @@ function DestinationForm(props) {
         payload.append("files", e.target.files[0])
         media_type !== "desktop" && payload.append("dimension_category_code", media_code)
 
-        let res = await api.post("/multimedia/files", payload)
+        let config = {
+          onUploadProgress: function(progressEvent) {
+            let mediaDiv = document.getElementById("media-"+media_type)
+
+            let progressBar = document.getElementById("progress-"+media_type)
+            mediaDiv.style.display = "none"
+            progressBar.style.display = "block"
+            let percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
+            progressBar.value = percentCompleted;
+            if(progressBar.value == 100){
+              setTimeout(() => {
+                progressBar.style.display = "none"
+                mediaDiv.style.display = "block"
+              }, 1000)
+            }
+          }
+        }
+
+        let res = await api.post("/multimedia/files", payload, config)
+        console.log(res);
         if (res.data) {
           setForm({
             ...form,
@@ -449,7 +468,7 @@ function DestinationForm(props) {
           }}
           disabled={isView || loading}
           type="select"
-          placeholder="Country"
+          placeholder="Please choose"
         />
         }
         {
@@ -469,7 +488,7 @@ function DestinationForm(props) {
           }
           disabled={isView || loading}
           type="select"
-          placeholder="City"
+          placeholder="Please choose"
         />
         }
 
