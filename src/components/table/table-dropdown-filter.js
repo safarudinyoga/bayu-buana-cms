@@ -23,6 +23,16 @@ export default class TableDropdownFilter extends Component {
       
   }
 
+  formatState(type, state){
+    if (!state.id) {
+      return state.text;
+    }
+    var $state = $(
+      `<span class="${type === "selectmultiple" ? "multiple" : ""}">${state.text}</span>`
+    );
+    return $state;
+  }
+
   init() {
     setTimeout(() => {
       try {
@@ -30,6 +40,7 @@ export default class TableDropdownFilter extends Component {
           theme: "bootstrap4",
           data: this.props.data,
           placeholder: this.props.placeholder,
+          templateResult: (state) => this.formatState("selectmultiple", state)
         }
         // if (!this.props.children || this.props.children.length < 1) {
           config.ajax = {
@@ -117,7 +128,7 @@ export default class TableDropdownFilter extends Component {
   }
 }
 function formatText (icon) {
-  return $('<span class="multiple" ><i class="fas ' + $(icon.element).data('icon') + '"></i> ' + icon.text + '</span>');
+  return $('<span><i class="fas ' + $(icon.element).data('icon') + '"></i> ' + icon.text + '</span>');
 };
 
 $('.select2-icon').select2({
