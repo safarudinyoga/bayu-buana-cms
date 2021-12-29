@@ -361,7 +361,7 @@ function HotelAmenityForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Hotel Amenity Type Name"
-          labelRequired="label-required"
+          required={true}
           value={form.hotel_amenity_type_name}
           name="hotel_amenity_type_name"
           onChange={(e) =>
@@ -417,7 +417,7 @@ function HotelAmenityForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Hotel Amenity Type Code"
-          labelRequired="label-required"
+          required={true}
           value={form.hotel_amenity_type_code}
           name="hotel_amenity_type_code"
           cl={{ md: "12" }}

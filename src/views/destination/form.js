@@ -442,7 +442,7 @@ function DestinationForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Destination Name"
-          labelRequired="label-required"
+          required={true}
           value={form.destination_name}
           name="destination_name"
           onChange={(e) => setForm({...form, destination_name: e.target.value})}
@@ -456,7 +456,7 @@ function DestinationForm(props) {
         <FormInputSelectAjax
           label="Country"
           value={form.country_id}
-          labelRequired="label-required"
+          required={true}
           name="country_id"
           endpoint="/master/countries"
           column="country_name"
@@ -476,7 +476,7 @@ function DestinationForm(props) {
         <FormInputSelectAjax
           label="City"
           id="attr_city"
-          labelRequired="label-required"
+          required={true}
           value={form.destination_city_id}
           name="destination_city_id"
           endpoint="/master/cities"
@@ -514,7 +514,7 @@ function DestinationForm(props) {
           disabled={isView || loading}
           type="text"
           label="Destination Code"
-          labelRequired="label-required"
+          required={true}
           minLength="1"
           maxLength="36"
           hint="Destination code maximum 36 characters"

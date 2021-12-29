@@ -285,7 +285,7 @@ function HotelAmenityCategoryForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Hotel Amenity Category Name"
-          labelRequired="label-required"
+          required={true}
           value={form.hotel_amenity_category_name}
           name="hotel_amenity_category_name"
           onChange={(e) =>
@@ -353,7 +353,7 @@ function HotelAmenityCategoryForm(props) {
           id="amenity_icon"
           label="Hotel Amenity Category Icon Image"
           type="image"
-          labelRequired="label-required"
+          required={true}
           name="hotel_amenity_category_asset"
           onChange={doUpload}
           disabled={isView}

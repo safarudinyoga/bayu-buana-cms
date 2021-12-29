@@ -203,7 +203,7 @@ function RoomAmenityTypeForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Room Amenity Type Name"
-          labelRequired="label-required"
+          required={true}
           value={form.room_amenity_type_name}
           name="room_amenity_type_name"
           onChange={(e) => setForm({...form, room_amenity_type_name: e.target.value})}
@@ -245,7 +245,7 @@ function RoomAmenityTypeForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Room Amenity Type Code"
-          labelRequired="label-required"
+          required={true}
           value={form.room_amenity_type_code}
           name="room_amenity_type_code"
           cl={{md: "12"}}

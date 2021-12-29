@@ -338,7 +338,7 @@ function AirportForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Airport Name"
-          labelRequired="label-required"
+          required={true}
           value={form.airport_name}
           name="airport_name"          
           onChange={(e) => setForm({...form, airport_name: e.target.value})}
@@ -367,7 +367,7 @@ function AirportForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Airport Code"
-          labelRequired="label-required"
+          required={true}
           value={form.airport_code}
           name="airport_code"
           cl={{md:"12"}}

@@ -260,7 +260,7 @@ function DestinationGroupForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Destination Group Name"
-          labelRequired="label-required"
+          required={true}
           value={form.destination_group_name}
           name="destination_group_name"
           onChange={(e) =>
@@ -276,7 +276,7 @@ function DestinationGroupForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Destination Group Code"
-          labelRequired="label-required"
+          required={true}
           value={form.destination_group_code}
           name="destination_group_code"
           cl={{ md: "12" }}

@@ -257,7 +257,7 @@ function LocationCategoryForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Location Category Name"
-          labelRequired="label-required"
+          required={true}
           value={form.location_category_name}
           name="location_category_name"
           onChange={(e) =>
@@ -273,7 +273,7 @@ function LocationCategoryForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Location Category Code"
-          labelRequired="label-required"
+          required={true}
           value={form.location_category_code}
           name="location_category_code"
           cl={{md:"12"}}

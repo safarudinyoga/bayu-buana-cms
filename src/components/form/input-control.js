@@ -20,7 +20,7 @@ export default class FormInputControl extends Component {
     return (
       <FormInputWrapper
         label={this.props.label}
-        labelRequired={this.props.labelRequired}
+        required={this.props.required}
         hint={this.props.hint}
         cl={this.props.cl}
         cr={this.props.cr}

@@ -284,7 +284,7 @@ function ZoneForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Zone Name"
-          labelRequired="label-required"
+          required={true}
           value={form.zone_name}
           name="zone_name"
           onChange={(e) => setForm({...form, zone_name: e.target.value})}
@@ -297,7 +297,7 @@ function ZoneForm(props) {
           !loading &&
         <FormInputSelectAjax
           label="Destination"
-          labelRequired="label-required"
+          required={true}
           value={form.destination_id}
           name="destination"
           filter={`["status", "=", 1]`}
@@ -333,7 +333,7 @@ function ZoneForm(props) {
           disabled={isView || loading}
           type="text"
           label="Zone Code"
-          labelRequired="label-required"
+          required={true}
           minLength="1"
           maxLength="8"
           hint="Zone code maximum 8 characters"
