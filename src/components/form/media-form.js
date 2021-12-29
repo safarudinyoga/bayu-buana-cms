@@ -1,4 +1,3 @@
-import { width } from "dom-helpers"
 import React from "react"
 import FormInputFile from './input-image'
 

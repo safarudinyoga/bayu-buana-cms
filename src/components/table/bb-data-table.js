@@ -49,7 +49,6 @@ class BBDataTable extends Component {
   componentDidMount() {
     try {
       this.init()
-      const module = this.props.title.toLowerCase().split(" ").join("_")
     } catch (e) {}
   }
 

@@ -93,6 +93,7 @@ export default class TranslationForm extends Component {
         let id = "trans-" + lang + "-" + field.name
         let elem = document.getElementById(id)
         inField.push(elem.value)
+        return field
       })
       const allEmpty = inField.every((field) => {
         if (!field) return true
