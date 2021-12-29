@@ -13,11 +13,9 @@
   display: inline-block;
   margin-right: 4px;
 }
-
 .dataTable-root .dataTables_paginate {   
   margin-top: 10px !important;
-}
-
+} 
 .dataTable-root .dataTables_paginate .pagination .paginate_button.active a {
   background-color: #5e5e5e;
   border-color: #5e5e5e;
@@ -27,7 +25,30 @@
 .page-link {
   color: #4D4D4D;
 }
-
+@media only screen and (max-width: 425px) {
+  .page-link {
+    color: #4D4D4D ;
+    padding-right: 12px;
+    padding-left: 12px;
+    font-size: 14px;      
+  }  
+}
+@media only screen and (max-width: 375px) {
+  .page-link {
+    color: #4D4D4D;
+    padding-right: 9px;
+    padding-left: 9px;
+    font-size: 13px;      
+  }
+}
+@media only screen and (max-width: 320px) {
+  .page-link {
+    color: #4D4D4D;
+    padding-right: 7px;
+    padding-left: 7px;   
+    font-size: 12px;    
+  }
+}
 .page-item.disabled .page-link {
   color: #A3A3A3;
 }
