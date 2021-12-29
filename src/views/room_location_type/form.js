@@ -261,7 +261,7 @@ function RoomLocationTypeForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Room Location Type Name"
-          labelRequired="label-required"
+          required={true}
           value={form.room_location_type_name}
           name="room_location_type_name"
           onChange={(e) =>
@@ -277,7 +277,7 @@ function RoomLocationTypeForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Room Location Type Code"
-          labelRequired="label-required"
+          required={true}
           value={form.room_location_type_code}
           name="room_location_type_code"
           cl={{ md: "12" }}

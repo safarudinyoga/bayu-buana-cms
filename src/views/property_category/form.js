@@ -261,7 +261,7 @@ function PropertyCategoryForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Property Category Name"
-          labelRequired="label-required"
+          required={true}
           value={form.property_category_name}
           name="property_category_name"
           onChange={(e) =>
@@ -277,7 +277,7 @@ function PropertyCategoryForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Property Category Code"
-          labelRequired="label-required"
+          required={true}
           value={form.property_category_code}
           name="property_category_code"
           cl={{ md: "12" }}
