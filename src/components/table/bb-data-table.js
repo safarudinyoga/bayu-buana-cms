@@ -40,6 +40,7 @@ class BBDataTable extends Component {
       status: "0",
       extraFilters: this.props.filters || [],
       isOpen: false,
+      colSize: "",
     }
     this.inProgress = false
 
@@ -49,7 +50,27 @@ class BBDataTable extends Component {
   componentDidMount() {
     try {
       this.init()
+      this.getWindowDimensions()
     } catch (e) {}
+  }
+
+  componentDidUpdate() {
+    const hasWindow = typeof window !== 'undefined';
+    if(hasWindow) {
+      this.getWindowDimensions()
+    }
+  }
+
+  getWindowDimensions() {
+    const { innerWidth: width, innerHeight: height } = window;
+    let colSize=""
+    if(width <= 320) {
+      colSize="30%"
+    } else if (width <= 450) {
+      colSize="60%"
+    }
+    console.log(colSize, "yuhuus")
+    this.setState({ colSize })
   }
 
   init() {
@@ -435,6 +456,8 @@ class BBDataTable extends Component {
         },
         responsive: true,
         autoWidth: false,
+        scrollX: true,
+        scrollCollapse: false,
         columnDefs: [
           // {
           //   targets: 0,
@@ -460,6 +483,7 @@ class BBDataTable extends Component {
             ordeable: false,
             // className: "table-row-action",
             targets: [columns.length - 1],
+            width: "12%",
           },
         ],
         // select: {
