@@ -262,7 +262,7 @@ function FlightTypeForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Flight Type Name"
-          labelRequired="label-required"
+          required={true}
           value={form.flight_type_name}
           name="flight_type_name"
           onChange={(e) =>
@@ -278,7 +278,7 @@ function FlightTypeForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Flight Type Code"
-          labelRequired="label-required"
+          required={true}
           value={form.flight_type_code}
           name="flight_type_code"
           cl={{md:"12"}}

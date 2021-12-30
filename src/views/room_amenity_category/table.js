@@ -61,7 +61,7 @@ export default function RoomAmenityCategoryTable() {
       },
       {
         title: "Translated Room Amenity Name",
-        data: "room_amenity_category_translation.room_amenity_type_name",
+        data: "room_amenity_category_translation.room_amenity_category_name",
         visible: false,
       },
     ],

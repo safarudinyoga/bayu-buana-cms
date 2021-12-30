@@ -238,7 +238,7 @@ function TripTypeForm(props) {
       props.history.push(backUrl)
       dispatch(
         setAlert({
-          message: `Record ${form.trip_type_code} - ${form.trip_type_name} has been successfully ${formId ? "updated" : "saved"}..`,
+          message: `Record ${form.trip_type_code} - ${form.trip_type_name} has been successfully ${formId ? "updated" : "saved"}.`,
         }),
       )
     }
@@ -260,7 +260,7 @@ function TripTypeForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Trip Type Name"
-          labelRequired="label-required"
+          required={true}
           value={form.trip_type_name}
           name="trip_type_name"
           onChange={(e) => setForm({...form, trip_type_name: e.target.value})}
@@ -310,7 +310,7 @@ function TripTypeForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Trip Type Code"
-          labelRequired="label-required"
+          required={true}
           value={form.trip_type_code}
           name="trip_type_code"
           cl={{md:"12"}}

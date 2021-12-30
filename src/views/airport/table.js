@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react"
 import BBDataTable from "components/table/bb-data-table"
-import TableDropdownFilter from "components/table/table-dropdown-filter"
 import rowStatus from "lib/row-status"
 import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
 import { renderColumn } from "lib/translation"
+import FormInputSelectAjax from 'components/form/input-select-ajax'
 
 export default function AirportTable() {
   let dispatch = useDispatch()
@@ -109,17 +109,20 @@ export default function AirportTable() {
   const extraFilter = () => {
     return (
       <>
-        <TableDropdownFilter
-          label="City"
-          onChange={onFilterChangeCities}
-          endpoint="/master/cities"
-          column="city_name"
-          value={selectedCityIds}
-          data={selectedCities}
-          filter={`["status", "=", 1]`}
-          placeholder="City"
-        />
-        {/* <TableDropdownFilter
+        <FormInputSelectAjax
+            label="City"
+            onChange={onFilterChangeCities}
+            endpoint="/master/cities"
+            column="city_name"
+            value={selectedCityIds}       
+            data={selectedCities}
+            filter={`["status", "=", 1]`}
+            type="selectmultiple"
+            isFilter={true}
+            placeholder="City"
+            allowClear={false}
+          />
+        {/* <FormInputSelectAjax
           label="Country"
           onChange={onFilterChangeCountries}
           endpoint="/master/countries"

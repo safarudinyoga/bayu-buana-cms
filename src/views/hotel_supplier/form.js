@@ -273,7 +273,7 @@ function HotelSupplierForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Hotel Supplier Name"
-          labelRequired="label-required"
+          required={true}
           value={form.hotel_supplier_name}
           name="hotel_supplier_name"
           onChange={(e) =>
@@ -304,7 +304,7 @@ function HotelSupplierForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Hotel Supplier Code"
-          labelRequired="label-required"
+          required={true}
           value={form.hotel_supplier_code}
           name="hotel_supplier_code"
           cl={{md:"12"}}

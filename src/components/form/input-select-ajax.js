@@ -32,13 +32,14 @@ export default class FormInputSelectAjax extends Component {
   }
 
   init() {
+    const {isFilter, allowClear} = this.props
     setTimeout(() => {
       try {
         let config = {
           placeholder: this.props.placeholder || 'Please choose',
           theme: "bootstrap4",
           data: this.props.data,
-          allowClear: true,
+          allowClear: allowClear !== undefined ? allowClear : true,
           templateResult: (state) => this.formatState(this.props.type, state)
         }
         if (!this.props.children) {
@@ -78,7 +79,7 @@ export default class FormInputSelectAjax extends Component {
             },
           }
         }
-        let input = this.select.current.getInput()
+        let input = isFilter ? this.select.current : this.select.current.getInput()
         this.select2 = $(input)
           .not(".select2-hidden-accessible")
           .select2(config)
@@ -122,6 +123,20 @@ export default class FormInputSelectAjax extends Component {
   }
 
   render() {
-    return <FormInputControl ref={this.select} type={this.props.type} {...this.props} />
+    const {isFilter} = this.props
+    return isFilter 
+    ? (
+      <div className="col-xs-12 col-sm-12 col-md-6 col-lg-4">        
+        <div className="col-xs-4">      
+          <label className="text-label-filter font-weight-bold">{this.props.label}</label>
+          <div className="input-group mb-3 mb-sm-0">
+          <select  ref={this.select} multiple="multiple">
+            {this.props.children}        
+          </select>
+          </div>
+        </div>
+      </div>
+    )
+    : <FormInputControl ref={this.select} type={this.props.type} {...this.props} />
   }
 }

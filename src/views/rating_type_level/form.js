@@ -274,7 +274,7 @@ function RatingTypeLevelForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Rating Type Level Name"
-          labelRequired="label-required"
+          required={true}
           value={form.rating_type_level_name}
           name="rating_type_level_name"
           onChange={(e) =>
@@ -288,7 +288,7 @@ function RatingTypeLevelForm(props) {
 
         <FormInputControl
           label="Rating"
-          labelRequired="label-required"
+          required={true}
           value={form.rating}
           name="rating"
           onChange={(e) =>
@@ -304,7 +304,7 @@ function RatingTypeLevelForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Rating Type Level Code"
-          labelRequired="label-required"
+          required={true}
           value={form.rating_type_level_code}
           name="rating_type_level_code"
           cl={{md:"12"}}
