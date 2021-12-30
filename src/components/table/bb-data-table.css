@@ -66,6 +66,10 @@
   color: #ffffff; 
   /* white-space: nowrap; */
 }
+
+.dataTable-root table.dataTable th {
+ vertical-align: top;
+}
 @media only screen and (max-width: 768px) {
   .dataTable-root table.dataTable thead {
     font-size: 13px;
@@ -143,6 +147,7 @@ table.dataTable>tbody>tr.child span.dtr-title {
 }
 .cstm-col-width {
   min-width: 66px !important;
+  word-break: break-all;
 }
 
 @media (min-width: 321px) and (max-width: 450px) {
