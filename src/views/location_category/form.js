@@ -75,7 +75,7 @@ function LocationCategoryForm(props) {
 
     dispatch(
       setUIParams({
-        title: isView ? "Location Category Details" : docTitle,
+        title: docTitle,
         breadcrumbs: [
           {
             text: "Master Data Management",
@@ -235,7 +235,7 @@ function LocationCategoryForm(props) {
       props.history.push(backUrl)
       dispatch(
         setAlert({
-          message: `Record ${form.location_category_code} - ${form.location_category_name} has been successfully ${formId ? "updated" : "saved"}.`,
+          message: `Record ${form.location_category_code} - ${form.location_category_name} has been successfully ${formId ? "updated" : "saved"}..`,
         }),
       )
     }
