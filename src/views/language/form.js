@@ -463,7 +463,7 @@ function LanguageForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Language Name"
-          labelRequired="label-required"
+          required={true}
           value={form.language_name}
           name="language_name"
           onChange={(e) => setForm({ ...form, language_name: e.target.value })}
@@ -474,7 +474,7 @@ function LanguageForm(props) {
         />
         <FormInputControl
           label="Language Native Name"
-          labelRequired="label-required"
+          required={true}
           value={form.language_native_name}
           name="language_native_name"
           onChange={(e) =>
@@ -489,7 +489,7 @@ function LanguageForm(props) {
           id="language"
           label="Flag"
           type="image"
-          labelRequired="label-required"
+          required={true}
           name="language_asset"
           onChange={doUpload}
           disabled={isView}
@@ -502,7 +502,7 @@ function LanguageForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Language Code"
-          labelRequired="label-required"
+          required={true}
           value={form.language_code}
           name="language_code"
           cl={{ md: "12" }}
@@ -516,7 +516,7 @@ function LanguageForm(props) {
         />
         <FormInputControl
           label="Language Alpha 3 Code"
-          labelRequired="label-required"
+          required={true}
           value={form.language_alpha_3_code}
           name="language_alpha_3_code"
           cl={{ md: "12" }}

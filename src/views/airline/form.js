@@ -402,7 +402,7 @@ function AirlineForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Airline Name"
-          labelRequired="label-required"
+          required={true}
           value={form.airline_name}
           name="airline_name"
           onChange={(e) => setForm({ ...form, airline_name: e.target.value })}
@@ -432,12 +432,12 @@ function AirlineForm(props) {
         <FormInputControl
           id="airline_icon"
           label="Airline Logo Image"
-          labelRequired="label-required"
+          required={true}
           type="image"
           name="airline_asset"
           onChange={doUpload}
           disabled={isView}
-          url={form.airline_asset.multimedia_description.url}
+          url={form.airline_asset?.multimedia_description.url}
           style={{ maxWidth: 300, marginTop: 12 }}
         />
       </FormHorizontal>
@@ -445,7 +445,7 @@ function AirlineForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Airline Code"
-          labelRequired="label-required"
+          required={true}
           value={form.airline_code}
           name="airline_code"
           cl={{ md: "12" }}

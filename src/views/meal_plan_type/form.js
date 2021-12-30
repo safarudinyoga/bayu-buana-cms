@@ -257,7 +257,7 @@ function MealPlanTypeForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Meal Plan Type Name"
-          labelRequired="label-required"
+          required={true}
           value={form.meal_plan_type_name}
           name="meal_plan_type_name"
           onChange={(e) =>
@@ -273,7 +273,7 @@ function MealPlanTypeForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Meal Plan Type Code"
-          labelRequired="label-required"
+          required={true}
           value={form.meal_plan_type_code}
           name="meal_plan_type_code"
           cl={{md:"12"}}

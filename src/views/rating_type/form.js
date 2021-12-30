@@ -289,7 +289,7 @@ function RatingTypeForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Rating Type Name"
-          labelRequired="label-required"
+          required={true}
           value={form.rating_type_name}
           name="rating_type_name"
           onChange={(e) =>
@@ -315,7 +315,7 @@ function RatingTypeForm(props) {
           !loading &&
         <FormInputSelectAjax
           label="Rating Symbol"
-          labelRequired="label-required"
+          required={true}
           value={form.rating_symbol}
           name="rating_symbol"
           column="rating_symbol"
@@ -334,7 +334,7 @@ function RatingTypeForm(props) {
 
         <FormInputControl
           label="Scale"
-          labelRequired="label-required"
+          required={true}
           value={form.scale}
           name="scale"
           onChange={(e) =>
@@ -359,7 +359,7 @@ function RatingTypeForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Rating Type Code"
-          labelRequired="label-required"
+          required={true}
           value={form.rating_type_code}
           name="rating_type_code"
           cl={{md:"12"}}

@@ -26,13 +26,12 @@ export default function ProductTypeTable() {
 
   let params = {
     title: "Product Types",
+    titleModal: "Product Type",
     baseRoute: "/master/product-types/form",
     endpoint: "/master/product-types",
     deleteEndpoint: "/master/batch-actions/delete/product-types",
-    activationEndpoint:
-      "/master/batch-actions/activate/product-types",
-    deactivationEndpoint:
-      "/master/batch-actions/deactivate/product-types",
+    activationEndpoint: "/master/batch-actions/activate/product-types",
+    deactivationEndpoint: "/master/batch-actions/deactivate/product-types",
     columns: [
       {
         title: "Product Type Code",
@@ -41,15 +40,12 @@ export default function ProductTypeTable() {
       {
         title: "Product Type Name",
         data: "product_type_name",
-        render: renderColumn(
-          "product_type",
-          "product_type_name",
-        ),
+        render: renderColumn("product_type", "product_type_name"),
       },
       {
         title: "Is Default",
         data: "is_default",
-        render:rowDefault
+        render: rowDefault,
       },
       {
         searchable: false,
@@ -63,6 +59,7 @@ export default function ProductTypeTable() {
         visible: false,
       },
     ],
+    recordName: ["product_type_code", "product_type_name"],
   }
   return <BBDataTable {...params} />
 }

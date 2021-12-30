@@ -572,7 +572,7 @@ function AttractionForm(props) {
         <FormHorizontal>
           <FormInputControl
             label="Attraction Name"
-            labelRequired="label-required"
+            required={true}
             value={form.attraction_name}
             name="attraction_name"
             onChange={(e) => setForm({...form, attraction_name: e.target.value})}
@@ -612,7 +612,7 @@ function AttractionForm(props) {
           !loading &&
           <FormInputSelectAjax
             label="Country"
-            labelRequired="label-required"
+            required={true}
             value={form.country_id}
             name="country_id"
             data={countryData}
@@ -651,7 +651,7 @@ function AttractionForm(props) {
           <FormInputSelectAjax
             label="City"
             value={form.city_id}
-            labelRequired="label-required"
+            required={true}
             name="city_id"
             id="attr_city"
             data={cityData}

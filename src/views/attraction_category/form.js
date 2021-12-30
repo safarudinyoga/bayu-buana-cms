@@ -283,7 +283,7 @@ function AttractionCategoryForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Attraction Category Name"
-          labelRequired="label-required"
+          required={true}
           value={form.attraction_category_name}
           name="attraction_category_name"
           onChange={(e) => {
@@ -298,7 +298,7 @@ function AttractionCategoryForm(props) {
         <FormInputWrapper
           label="Is Default"
           hint="Set is default"
-          labelRequired="label-required"
+          required={true}
         >
           <div className="form-check form-check-inline">
             <input
@@ -355,7 +355,7 @@ function AttractionCategoryForm(props) {
           id="attr_icon"
           label="Icon"
           type="image"
-          labelRequired="label-required"
+          required={true}
           name="attraction_category_asset"
           onChange={doUpload}
           disabled={isView}

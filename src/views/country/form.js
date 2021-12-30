@@ -351,7 +351,7 @@ function CountryForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Country Name"
-          labelRequired="label-required"
+          required={true}
           value={form.country_name}
           name="country_name"
           onChange={(e) => setForm({...form, country_name: e.target.value})}
@@ -412,7 +412,7 @@ function CountryForm(props) {
           !loading &&
         <FormInputSelectAjax
           label="Region"
-          labelRequired="label-required"
+          required={true}
           value={form.region_id}
           name="region_id"
           endpoint="/master/regions"
@@ -449,7 +449,7 @@ function CountryForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Country Code"
-          labelRequired="label-required"
+          required={true}
           value={form.country_code}
           name="country_code"
           cl={{md:"12"}}

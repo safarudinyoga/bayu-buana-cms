@@ -257,7 +257,7 @@ function CabinTypeForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Cabin Type Name"
-          labelRequired="label-required"
+          required={true}
           value={form.cabin_type_name}
           name="cabin_type_name"
           onChange={(e) =>
@@ -273,7 +273,7 @@ function CabinTypeForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Cabin Type Code"
-          labelRequired="label-required"
+          required={true}
           value={form.cabin_type_code}
           name="cabin_type_code"
           cl={{ md: "12" }}

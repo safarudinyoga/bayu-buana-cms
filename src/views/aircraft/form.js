@@ -325,7 +325,7 @@ function AircraftForm(props) {
       <FormHorizontal>
         <FormInputControl
           label={"Aircraft Name"}
-          labelRequired="label-required"
+          required={true}
           value={form.aircraft_name}
           name="aircraft_name"
           onChange={(e) => setForm({ ...form, aircraft_name: e.target.value })}
@@ -336,7 +336,7 @@ function AircraftForm(props) {
         />
         <FormInputControl
           value={form.model}
-          labelRequired="label-required"
+          required={true}
           name="model"
           onChange={(e) => setForm({ ...form, model: e.target.value })}
           label="Model"
@@ -350,7 +350,7 @@ function AircraftForm(props) {
       <FormHorizontal>
         <FormInputControl
           value={form.aircraft_code}
-          labelRequired="label-required"
+          required={true}
           name="aircraft_code"
           onChange={(e) => setForm({ ...form, aircraft_code: e.target.value })}
           cl={{ md: "12" }}

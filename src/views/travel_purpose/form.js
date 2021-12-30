@@ -264,7 +264,7 @@ function TravelPurposeForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Travel Purpose Name"
-          labelRequired="label-required"
+          required={true}
           value={form.travel_purpose_name}
           name="travel_purpose_name"
           onChange={(e) =>
@@ -280,7 +280,7 @@ function TravelPurposeForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Travel Purpose Code"
-          labelRequired="label-required"
+          required={true}
           value={form.travel_purpose_code}
           name="travel_purpose_code"
           cl={{md:"12"}}

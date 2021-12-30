@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react"
 import BBDataTable from "components/table/bb-data-table"
-import TableDropdownFilter from "components/table/table-dropdown-filter"
 import rowStatus from "lib/row-status"
 import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
 import { renderColumn } from "lib/translation"
+import FormInputSelectAjax from 'components/form/input-select-ajax'
 
 export default function HotelAmenityTable() {
   let dispatch = useDispatch()
@@ -56,18 +56,19 @@ export default function HotelAmenityTable() {
 
   const extraFilter = () => {
     return (
-      <>
-        <TableDropdownFilter
-          label="Hotel Amenity Category"
-          onChange={onFilterChangeHotelAmenityCategories}
-          endpoint="/master/hotel-amenity-categories"
-          column="hotel_amenity_category_name"
-          value={selectedHotelAmenityCategoriesIds}
-          data={selectedHotelAmenityCategories}
-          filter={`["status", "=", 1]`}
-          placeholder="Hotel Amenity Category"
-        />
-      </>
+      <FormInputSelectAjax
+        label="Hotel Amenity Category"
+        onChange={onFilterChangeHotelAmenityCategories}
+        endpoint="/master/hotel-amenity-categories"
+        column="hotel_amenity_category_name"
+        value={selectedHotelAmenityCategoriesIds}
+        data={selectedHotelAmenityCategories}
+        filter={`["status", "=", 1]`}
+        placeholder="Hotel Amenity Category"
+        type="selectmultiple"
+        isFilter={true}
+        allowClear={false}
+      />
     )
   }
   let [params, setParams] = useState({
