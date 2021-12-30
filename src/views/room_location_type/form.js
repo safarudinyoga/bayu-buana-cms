@@ -70,12 +70,12 @@ function RoomLocationTypeForm(props) {
     if (!formId) {
       docTitle = "Create Room Location Type"
     } else if (isView) {
-      docTitle = "Room Location Type Details"
+      docTitle = "View Room Location Type"
     }
 
     dispatch(
       setUIParams({
-        title: docTitle,
+        title: isView ? "Room Location Type Details" : docTitle,
         breadcrumbs: [
           {
             text: "Master Data Management",
