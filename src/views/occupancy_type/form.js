@@ -27,7 +27,7 @@ function OccupancyTypeForm(props) {
     occupancy_type_name: "",
     occupancy_type_code: "",
     is_default: false,
-    occupancy: "0",
+    occupancy: "",
   })
   const translationFields = [
     {
@@ -46,9 +46,12 @@ function OccupancyTypeForm(props) {
       noSpace: true,
     },
     is_default: {},
-    occupancy: {           
-      min: 1,     
-      max: 4,
+    occupancy: {
+      required: true, 
+      number: true,    
+      min: 1,
+      minlength: 1,
+      maxlength: 4,
       noSpace: true,
     },
     occupancy_type_code: {
@@ -65,11 +68,12 @@ function OccupancyTypeForm(props) {
       required: "Occupancy Type Code is required.",
     },
     occupancy_type_name: {
-      required: "Occupancy Type Name is required."      
+      required: "Occupancy Type Name is required.",
     },
-    occupancy: {      
-      min: "Occupancy is required.",
-      max: "Please enter a value greater than or equal to 4."
+    occupancy: {
+      required: "Occupancy is required.",
+      min: "Please enter a value greater than or equal to 1.",
+      maxlength: "Please enter a value less than or equal to 4.",
     },
   }
 
@@ -233,7 +237,7 @@ function OccupancyTypeForm(props) {
       if (!form.occupancy_type_code) {
         form.occupancy_type_code = null
       }
-      if (!form.occupancy || form.occupancy === 0) {
+      if (!form.occupancy) {
         form.occupancy = null
       }
       let res = await api.putOrPost(endpoint, id, form)
@@ -337,10 +341,11 @@ function OccupancyTypeForm(props) {
           value={form.occupancy}
           name="occupancy"
           onChange={(e) => setForm({ ...form, occupancy: +e.target.value })}
-          disabled={isView || loading}
+          disabled={isView || loading}  
           type="number"
-          min="1"
-          max="4"
+          min="1" 
+          minLength="1"
+          maxLength="4"        
           hint="Occupation maximum 4 characters"
         />
       </FormHorizontal>
