@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+<svg width="25px" viewBox="0 0 25 25" xmlns="http://www.w3.org/2000/svg">
   <path id="ic_expand_more_24px" d="M 19.824 17 L 15.999 20.708 L 12.175 17 L 11 18.141 L 16 23 L 21 18.141 Z" fill="#fff" stroke="#fff" stroke-width="0.5" />
   <path id="path-1" d="M 19.823 15 L 15.999 11.292 L 12.178 15 L 11 13.858 L 16 9 L 21 13.858 Z" fill="#fff" stroke="#fff" stroke-width="0.5" opacity="0.35"/>
 </svg>
