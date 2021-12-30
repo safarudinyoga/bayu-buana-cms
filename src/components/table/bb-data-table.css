@@ -64,7 +64,7 @@
   font-weight: 500;
   background-color: #5e5e5e;
   color: #ffffff; 
-  white-space: nowrap;
+  /* white-space: nowrap; */
 }
 @media only screen and (max-width: 768px) {
   .dataTable-root table.dataTable thead {
@@ -125,12 +125,6 @@
 
 .fa-trash{
   color: #3E40AE;
-}
-
-.cstm-col-width {
-  min-width: 100px;
-  max-width: 200px !important;
-  width: 50%;  
 }
 
 table.dataTable>tbody>tr.child ul.dtr-details {
@@ -205,13 +199,16 @@ table.dataTable thead .sorting_desc_disabled {
     margin-left: 12px;
 }
 table.dataTable thead .sorting {
-    background-image: url("../../assets/icons/sort-disable.svg")
+  object-fit: contain;
+  background-image: url("../../assets/icons/sort-disable.svg");
 }
 table.dataTable thead .sorting_asc {
-    background-image: url("../../assets/icons/sort-ascending.svg") !important
+  object-fit: contain;
+  background-image: url("../../assets/icons/sort-ascending.svg") !important;
 }
 table.dataTable thead .sorting_desc {
-    background-image: url("../../assets/icons/sort-descending.svg") !important
+  object-fit: contain;
+  background-image: url("../../assets/icons/sort-descending.svg") !important;
 }
 
 
