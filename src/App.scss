@@ -43,10 +43,11 @@ select.bg-dark-grey > option {
 .form-group label {
   font-weight: normal !important;
 }
-.form-group.required .label-required::after {
+.form-group.required .label-required:after {
   color: #d91c1c;
   content: "*";
-  margin-left: 4px;    
+  position: relative;
+  margin-left: 4px;  
 }
 .input:checked {
   background: #027f71;
@@ -59,6 +60,11 @@ select.bg-dark-grey > option {
   .float-left-sm {
     float: left !important;
   }
+}
+
+.hint {
+  color: #6c757d;
+  margin-left: 4px;
 }
 
 .view-only .form-control[disabled] {
@@ -101,14 +107,14 @@ select.bg-dark-grey > option {
 .text-sub-header {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-size: 20px;
-  font-weight: 400;
+  font-weight: 600;
   color: #333333;
   margin-bottom: 10px;
 }
 @media only screen and (max-width: 767px) {
   .text-sub-header {
     font-size: 16px;
-    font-weight: 400;
+    font-weight: 600;
   }
 }
 
