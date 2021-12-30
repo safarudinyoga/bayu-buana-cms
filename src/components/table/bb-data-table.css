@@ -16,6 +16,7 @@
 .dataTable-root .dataTables_paginate {   
   margin-top: 10px !important;
 } 
+
 .dataTable-root .dataTables_paginate .pagination .paginate_button.active a {
   background-color: #5e5e5e;
   border-color: #5e5e5e;
@@ -25,30 +26,7 @@
 .page-link {
   color: #4D4D4D;
 }
-@media only screen and (max-width: 425px) {
-  .page-link {
-    color: #4D4D4D ;
-    padding-right: 12px;
-    padding-left: 12px;
-    font-size: 14px;      
-  }  
-}
-@media only screen and (max-width: 375px) {
-  .page-link {
-    color: #4D4D4D;
-    padding-right: 9px;
-    padding-left: 9px;
-    font-size: 13px;      
-  }
-}
-@media only screen and (max-width: 320px) {
-  .page-link {
-    color: #4D4D4D;
-    padding-right: 7px;
-    padding-left: 7px;   
-    font-size: 12px;    
-  }
-}
+
 .page-item.disabled .page-link {
   color: #A3A3A3;
 }
@@ -66,22 +44,14 @@
   color: #ffffff; 
   /* white-space: nowrap; */
 }
-@media only screen and (max-width: 768px) {
-  .dataTable-root table.dataTable thead {
-    font-size: 13px;
-  }
-}
+
 .dataTable-root table.dataTable tbody {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
   font-size: 15px;
   font-weight: normal; 
   color: #333333;   
 }
-@media only screen and (max-width: 768px) {
-  .dataTable-root table.dataTable tbody {
-    font-size: 13px;
-  }
-}
+
 .dataTable-root table.dataTable td {  
   vertical-align:middle;     
 }
@@ -102,6 +72,7 @@
     margin-left: 5px;    
     cursor: move;
 }
+
 .dataTable-root .table-row-action {
     width: 100px;
     text-align: center;
@@ -133,30 +104,22 @@ table.dataTable>tbody>tr.child ul.dtr-details {
   margin: 0;
   padding: 0;
 }
+
 table.dataTable>tbody>tr.child ul.dtr-details>li {
   padding: 0.5em 20px;
 }
+
 table.dataTable>tbody>tr.child span.dtr-title {
   display: inline-block;
   min-width: 75px;
   font-weight: bold;
 }
 
-@media (min-width: 576px) {
-  .select-checkbox-all {
-    margin: 0;
-    padding:2px;
-  }
-  .cstm-col-width {
-    min-width: none;
-    max-width: none;
-    width: auto;
-  }
-}
 table.dataTable.dtr-inline.collapsed>tbody>tr>td.dtr-control,table.dataTable.dtr-inline.collapsed>tbody>tr>th.dtr-control{
   position:relative;    
   cursor:pointer
 }
+
 table.dataTable.dtr-inline.collapsed>tbody>tr>td.dtr-control:before,table.dataTable.dtr-inline.collapsed>tbody>tr>th.dtr-control:before{
   top:50%;
   left:62px;
@@ -178,10 +141,12 @@ table.dataTable.dtr-inline.collapsed>tbody>tr>td.dtr-control:before,table.dataTa
   content:"\002B";
   background-color:#b7b7b7
 }
+
 table.dataTable.dtr-inline.collapsed>tbody>tr.parent>td.dtr-control:before,table.dataTable.dtr-inline.collapsed>tbody>tr.parent>th.dtr-control:before{
   content:"\2212";
   background-color:#b7b7b7
 }
+
 table.dataTable>tbody>tr.child{
   background-color: hsl(0, 0%, 90%);
   padding:.2em
@@ -198,19 +163,21 @@ table.dataTable thead .sorting_desc_disabled {
     background-position: center right;
     margin-left: 12px;
 }
+
 table.dataTable thead .sorting {
-  object-fit: contain;
+  background-position: 100% 50%;
   background-image: url("../../assets/icons/sort-disable.svg");
 }
+
 table.dataTable thead .sorting_asc {
-  object-fit: contain;
+  background-position: 100% 50%;
   background-image: url("../../assets/icons/sort-ascending.svg") !important;
 }
+
 table.dataTable thead .sorting_desc {
-  object-fit: contain;
+  background-position: 100% 50%;
   background-image: url("../../assets/icons/sort-descending.svg") !important;
 }
-
 
 table.dataTable thead th.sorting:after,
 table.dataTable thead th.sorting_asc:after,
@@ -221,6 +188,7 @@ table.dataTable thead th.sorting_desc:after {
   display: block !important;
   font-family: FontAwesome !important;
 }
+
 table.dataTable thead .sorting:before,
 table.dataTable thead .sorting_asc:before,
 table.dataTable thead .sorting_desc:before,
@@ -228,12 +196,65 @@ table.dataTable thead .sorting_asc_disabled:before,
 table.dataTable thead .sorting_desc_disabled:before { 
   content: "" !important;
 }
+
 table.dataTable thead .sorting:after,
 table.dataTable thead .sorting_asc:after,
 table.dataTable thead .sorting_desc:after,
 table.dataTable thead .sorting_asc_disabled:after,
 table.dataTable thead .sorting_desc_disabled:after {  
   content: "" !important;
+}
+
+@media only screen and (max-width: 320px) {
+  .page-link {
+    color: #4D4D4D;
+    padding-right: 7px;
+    padding-left: 7px;   
+    font-size: 12px;    
+  }
+}
+
+@media only screen and (max-width: 375px) {
+  .page-link {
+    color: #4D4D4D;
+    padding-right: 9px;
+    padding-left: 9px;
+    font-size: 13px;      
+  }
+}
+
+@media only screen and (max-width: 425px) {
+  .page-link {
+    color: #4D4D4D ;
+    padding-right: 12px;
+    padding-left: 12px;
+    font-size: 14px;      
+  }  
+}
+
+@media only screen and (max-width: 768px) {
+  .dataTable-root table.dataTable tbody {
+    font-size: 13px;
+  }
+  .dataTable-root table.dataTable thead {
+    font-size: 13px;
+  }
+}
+
+@media (min-width: 576px) {
+  .select-checkbox-all {
+    margin: 0;
+    padding:2px;
+  }
+  table.dataTable thead .sorting {
+    background-position: 100% 10%;
+  }
+  table.dataTable thead .sorting_asc {
+    background-position: 100% 10%;
+  }
+  table.dataTable thead .sorting_desc {
+    background-position: 100% 10%;
+  }
 }
 
 
