@@ -53,12 +53,12 @@ function RoomLocationTypeForm(props) {
     room_location_type_name: {
       required: "Room Location Type Name is required",
       minlength: "Room Location Type Name must be at least 1 characters",
-      maxlength: "Room Location Type Name cannot be more than 99 characters",
+      maxlength: "Room Location Type Code cannot be more than 256 characters",
     },
     room_location_type_code: {
       required: "Room Location Type Code is required",
       minlength: "Room Location Type Code must be at least 1 characters",
-      maxlength: "Room Location Type Code cannot be more than 256 characters",
+      maxlength: "Room Location Type Name cannot be more than 99 characters",
     },
   }
 
