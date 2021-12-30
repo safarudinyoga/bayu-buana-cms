@@ -10,7 +10,7 @@ export default function RoomAmenityTypeTable() {
   useEffect(() => {
     dispatch(
       setUIParams({
-        title: "Room Amenity Type",
+        title: "Room Amenity Types",
         breadcrumbs: [
           {
             text: "Master Data Management",
