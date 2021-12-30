@@ -264,7 +264,7 @@ function AgeQualifyingTypeForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Age Qualifying Type Name"
-          labelRequired="label-required"
+          required={true}
           value={form.age_qualifying_type_name}
           name="age_qualifying_type_name"
           onChange={(e) =>
@@ -280,7 +280,7 @@ function AgeQualifyingTypeForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Age Qualifying Type Code"
-          labelRequired="label-required"
+          required={true}
           value={form.age_qualifying_type_code}
           name="age_qualifying_type_code"
           cl={{md:"12"}}

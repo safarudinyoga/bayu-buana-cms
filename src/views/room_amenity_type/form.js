@@ -48,6 +48,8 @@ function RoomAmenityTypeForm(props) {
     },
     room_amenity_type_code: {
       required: true,
+      number: true,
+      noSpace: true,
       min: 1,
       max: 999,
     },
@@ -203,7 +205,7 @@ function RoomAmenityTypeForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Room Amenity Type Name"
-          labelRequired="label-required"
+          required={true}
           value={form.room_amenity_type_name}
           name="room_amenity_type_name"
           onChange={(e) => setForm({...form, room_amenity_type_name: e.target.value})}
@@ -245,14 +247,14 @@ function RoomAmenityTypeForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Room Amenity Type Code"
-          labelRequired="label-required"
+          required={true}
           value={form.room_amenity_type_code}
           name="room_amenity_type_code"
           cl={{md: "12"}}
           cr="12"
           onChange={(e) => setForm({...form, room_amenity_type_code: e.target.value})}
           disabled={isView || loading}
-          type="text"
+          type="number"
           minLength="1"
           maxLength="3"
           hint="Room Amenity Type code maximum 3 characters"

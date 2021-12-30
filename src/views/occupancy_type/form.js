@@ -281,7 +281,7 @@ function OccupancyTypeForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Occupancy Type Name"
-          labelRequired="label-required"
+          required={true}
           value={form.occupancy_type_name}
           name="occupancy_type_name"
           onChange={(e) =>
@@ -337,7 +337,7 @@ function OccupancyTypeForm(props) {
         </FormInputWrapper>
         <FormInputControl
           label="Occupancy"
-          labelRequired="label-required"
+          required={true}
           value={form.occupancy}
           name="occupancy"
           onChange={(e) => setForm({ ...form, occupancy: +e.target.value })}
@@ -352,7 +352,7 @@ function OccupancyTypeForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Occupancy Type Code"
-          labelRequired="label-required"
+          required={true}
           value={form.occupancy_type_code}
           name="occupancy_type_code"
           cl={{ md: "12" }}

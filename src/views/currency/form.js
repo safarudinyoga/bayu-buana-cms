@@ -410,7 +410,7 @@ function CurrencyForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Currency Name"
-          labelRequired="label-required"
+          required={true}
           value={form.currency_name}
           name="currency_name"
           onChange={(e) => setForm({...form, currency_name: e.target.value})}
@@ -421,7 +421,7 @@ function CurrencyForm(props) {
         />
         <FormInputControl
           label="Currency Symbol"
-          labelRequired="label-required"
+          required={true}
           value={form.currency_symbol}
           name="currency_symbol"
           onChange={(e) =>
@@ -515,7 +515,7 @@ function CurrencyForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Currency Code"
-          labelRequired="label-required"
+          required={true}
           value={form.currency_code}
           name="currency_code"
           cl={{md:"12"}}
@@ -529,7 +529,7 @@ function CurrencyForm(props) {
         />
         <FormInputControl
           label="Numeric Code"
-          labelRequired="label-required"
+          required={true}
           value={form.numeric_code}
           name="numeric_code"
           cl={{md:"12"}}

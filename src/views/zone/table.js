@@ -1,11 +1,10 @@
 import BBDataTable from "components/table/bb-data-table"
-import TableDropdownFilter from "components/table/table-dropdown-filter"
 import rowStatus from "lib/row-status"
 import { renderColumn } from "lib/translation"
 import React, { useEffect, useState } from "react"
 import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
-
+import FormInputSelectAjax from 'components/form/input-select-ajax'
 export default function ZoneTable() {
   let dispatch = useDispatch()
   useEffect(() => {
@@ -45,7 +44,7 @@ export default function ZoneTable() {
 
   const extraFilter = () => {
     return (
-      <TableDropdownFilter
+      <FormInputSelectAjax
         label="Destination"
         onChange={onFilterChange}
         endpoint="/master/destinations"
@@ -54,6 +53,9 @@ export default function ZoneTable() {
         data={selectedDestinations}
         filter={`["status", "=", 1]`}
         placeholder="Destination"
+        type="selectmultiple"
+        isFilter={true}
+        allowClear={false}
       />
     )
   }

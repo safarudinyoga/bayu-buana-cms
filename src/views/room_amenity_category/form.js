@@ -9,6 +9,7 @@ import {useDispatch} from "react-redux"
 import {withRouter} from "react-router"
 import {setAlert, setUIParams} from "redux/ui-store"
 import $ from "jquery"
+import env from "../../config/environment"
 
 const endpoint = "/master/room-amenity-categories"
 const backUrl = "/master/room-amenity-categories"
@@ -51,6 +52,7 @@ function RoomAmenityTypeForm(props) {
       required: true,
       minlength: 1,
       maxlength: 256,
+      checkName: true
     },
     description: {
       required: false,
@@ -107,6 +109,36 @@ function RoomAmenityTypeForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
+
+        if(res.data) {
+          let currentName = res.data.room_amenity_category_name
+
+          $.validator.addMethod(
+            "checkName",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/room-amenity-categories?filters=["room_amenity_category_name","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if(currentName.toUpperCase() === element.value.toUpperCase()){
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+    
+              return req
+            },
+            "Room Amenity Category Name already exists",
+          )
+        }
       } catch (e) { }
 
       try {
@@ -116,6 +148,28 @@ function RoomAmenityTypeForm(props) {
         setTranslations(res.data.items)
       } catch (e) { }
       setLoading(false)
+    } else {
+      $.validator.addMethod(
+        "checkName",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/room-amenity-categories?filters=["room_amenity_category_name","=","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
+
+          return req
+        },
+        "Room Amenity Category Name already exists",
+      )
     }
   }, [])
 
@@ -230,7 +284,7 @@ function RoomAmenityTypeForm(props) {
 
         <FormInputControl
           label="Room Amenity Category Name"
-          labelRequired="label-required"
+          required={true}
           value={form.room_amenity_category_name}
           name="room_amenity_category_name"
           onChange={(e) => setForm({...form, room_amenity_category_name: e.target.value})}
@@ -285,7 +339,7 @@ function RoomAmenityTypeForm(props) {
 
         <FormInputControl
           id="icon"
-          label="Icon"
+          label="Room Amenity Category Icon Image"
           type="image"
           name="room_amenity_category_asset"
           onChange={doUpload}

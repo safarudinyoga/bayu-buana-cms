@@ -1,10 +1,10 @@
 import BBDataTable from "components/table/bb-data-table"
-import TableDropdownFilter from "components/table/table-dropdown-filter"
 import rowStatus from "lib/row-status"
 import {renderColumn} from "lib/translation"
 import React, {useEffect, useState} from "react"
 import {useDispatch} from "react-redux"
 import {setUIParams} from "redux/ui-store"
+import FormInputSelectAjax from 'components/form/input-select-ajax'
 
 export default function HotelSupplierTable() {
   let dispatch = useDispatch()
@@ -45,7 +45,7 @@ export default function HotelSupplierTable() {
 
   const extraFilter = () => {
     return (
-      <TableDropdownFilter
+      <FormInputSelectAjax
         label="Supplier Type"
         onChange={onFilterChange}
         endpoint="/master/supplier-types"
@@ -54,6 +54,9 @@ export default function HotelSupplierTable() {
         data={SelectedSupplierTypes}
         filter={`["status", "=", 1]`}
         placeholder="Supplier Type"
+        type="selectmultiple"
+        isFilter={true}
+        allowClear={false}
       />
     )
   }

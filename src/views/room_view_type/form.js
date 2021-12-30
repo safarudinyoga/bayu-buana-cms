@@ -259,7 +259,7 @@ function RoomViewTypeForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Room View Type Name"
-          labelRequired="label-required"
+          required={true}
           value={form.room_view_type_name}
           name="room_view_type_name"
           onChange={(e) =>
@@ -275,7 +275,7 @@ function RoomViewTypeForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Room View Type Code"
-          labelRequired="label-required"
+          required={true}
           value={form.room_view_type_code}
           name="room_view_type_code"
           cl={{md:"12"}}
