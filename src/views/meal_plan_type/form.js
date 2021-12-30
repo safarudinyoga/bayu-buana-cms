@@ -75,7 +75,7 @@ function MealPlanTypeForm(props) {
 
     dispatch(
       setUIParams({
-        title: docTitle,
+        title: isView ? "Meal Plan Type Details" : docTitle,
         breadcrumbs: [
           {
             text: "Master Data Management",
