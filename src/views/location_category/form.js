@@ -67,10 +67,13 @@ function LocationCategoryForm(props) {
     let formId = props.match.params.id
 
     let docTitle = "Edit Location Category"
+    let breadcrumbTitle = "Edit Location Category"
     if (!formId) {
       docTitle = "Create Location Category"
+      breadcrumbTitle = "Create Location Category"
     } else if (isView) {
-      docTitle = "View Location Category"
+      docTitle = "Location Category Details"
+      breadcrumbTitle = "View Location Category"
     }
 
     dispatch(
@@ -85,7 +88,7 @@ function LocationCategoryForm(props) {
             text: "Location Categories",
           },
           {
-            text: docTitle,
+            text: breadcrumbTitle,
           },
         ],
       }),
@@ -235,7 +238,7 @@ function LocationCategoryForm(props) {
       props.history.push(backUrl)
       dispatch(
         setAlert({
-          message: `Record ${form.location_category_code} - ${form.location_category_name} has been successfully ${formId ? "updated" : "saved"}..`,
+          message: `Record ${form.location_category_code} - ${form.location_category_name} has been successfully ${formId ? "updated" : "saved"}.`,
         }),
       )
     }
