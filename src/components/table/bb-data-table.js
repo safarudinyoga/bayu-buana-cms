@@ -435,6 +435,7 @@ class BBDataTable extends Component {
         },
         responsive: true,
         autoWidth: false,
+        scrollX: true,
         columnDefs: [
           // {
           //   targets: 0,
