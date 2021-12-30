@@ -238,7 +238,7 @@ function TripTypeForm(props) {
       props.history.push(backUrl)
       dispatch(
         setAlert({
-          message: `Record ${form.trip_type_code} - ${form.trip_type_name} has been successfully ${formId ? "updated" : "saved"}..`,
+          message: `Record ${form.trip_type_code} - ${form.trip_type_name} has been successfully ${formId ? "updated" : "saved"}.`,
         }),
       )
     }
