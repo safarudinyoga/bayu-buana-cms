@@ -167,7 +167,7 @@ class BBDataTable extends Component {
         pagingType: "simple_numbers",
         colReorder: {
           enable: true,
-          iFixedColumnsLeft: 1,
+          iFixedColumnsLeft: 5,
           //   iFixedColumnsRight: 4,
         },
         stateSave: false,
@@ -836,6 +836,7 @@ class BBDataTable extends Component {
             break
         }
       })
+      $.fn.DataTable.ext.pager.numbers_length = 5      
     return (
       <div ref={this.wrapper}>
         <Modal show={this.state.isOpen}>
