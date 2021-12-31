@@ -340,7 +340,7 @@ function OccupancyTypeForm(props) {
           required={true}
           value={form.occupancy}
           name="occupancy"
-          onChange={(e) => setForm({ ...form, occupancy: +e.target.value })}
+          onChange={(e) => setForm({ ...form, occupancy: e.target.value })}
           disabled={isView || loading}  
           type="number"
           min="1" 
