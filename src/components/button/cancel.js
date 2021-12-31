@@ -3,8 +3,8 @@ const {Component} = require("react")
 
 export default class CancelButton extends Component {
   render() {
-    const readOnlyClass = this.props.isView ? "button-save" : "button-cancel"
-    const readClass = this.props.isView ? "text-button-save" : "text-button-cancel"
+    const readOnlyClass = this.props.isView ? "button-cancel" : "button-cancel"
+    const readClass = this.props.isView ? "text-button-cancel" : "text-button-cancel"
     return (
       <button
         onClick={this.props.onClick}
