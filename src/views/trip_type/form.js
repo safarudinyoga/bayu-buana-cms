@@ -125,7 +125,7 @@ function TripTypeForm(props) {
     
               return req
             },
-            "Trip Type Code already exists",
+            "Code already exists",
           )
           $.validator.addMethod(
             "checkName",
@@ -182,7 +182,7 @@ function TripTypeForm(props) {
 
           return req
         },
-        "Trip Type Code already exists",
+        "Code already exists",
       )
       $.validator.addMethod(
         "checkName",
