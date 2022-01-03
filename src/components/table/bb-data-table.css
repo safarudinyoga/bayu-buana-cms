@@ -136,15 +136,41 @@ table.dataTable>tbody>tr.child span.dtr-title {
   word-break: break-all;
 }
 
-@media (min-width: 321px) and (max-width: 375px) {
+@media (min-width: 321px) and (max-width: 399px) {
   .cstm-col-width {
     min-width: 85px !important;
     width: 40% !important;
   }
 }
-@media (min-width: 376px) and (max-width: 450px) {
+@media (min-width: 400px) and (max-width: 410px) {
+  .cstm-col-width {
+    min-width: 100px !important;
+    max-width: 200px !important;
+  }
+}
+@media (min-width: 411px) and (max-width: 420px) {
+  .cstm-col-width {
+    min-width: 112px !important;
+    max-width: 200px !important;
+  }
+}
+
+@media (min-width: 421px) and (max-width: 450px) {
   .cstm-col-width {
     min-width: 117px !important;
+    max-width: 200px !important;
+  }
+}
+
+@media (min-width: 451px) and (max-width: 460px) {
+  .cstm-col-width {
+    min-width: 126px !important;
+    max-width: 200px !important;
+  }
+}
+@media (min-width: 461px) and (max-width: 480px) {
+  .cstm-col-width {
+    min-width: 137px !important;
     max-width: 200px !important;
   }
 }
