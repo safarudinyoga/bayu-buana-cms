@@ -124,7 +124,7 @@ function RoomViewTypeForm(props) {
     
               return req
             },
-            "Room View Type Code already exists",
+            "Code already exists",
           )
           $.validator.addMethod(
             "checkName",
@@ -181,7 +181,7 @@ function RoomViewTypeForm(props) {
 
           return req
         },
-        "Room View Type Code already exists",
+        "Code already exists",
       )
       $.validator.addMethod(
         "checkName",
@@ -237,7 +237,7 @@ function RoomViewTypeForm(props) {
       props.history.push(backUrl)
       dispatch(
         setAlert({
-          message: `Record ${form.room_view_type_code} - ${form.room_view_type_name} has been successfully ${formId ? "updated" : "saved"}..`,
+          message: `Record ${form.room_view_type_code} - ${form.room_view_type_name} has been successfully ${formId ? "updated" : "saved"}.`,
         }),
       )
     }
