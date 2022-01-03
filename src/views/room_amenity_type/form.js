@@ -21,10 +21,11 @@ function RoomAmenityTypeForm(props) {
   const [loading, setLoading] = useState(true)
   const [translations, setTranslations] = useState([])
   const [id, setId] = useState(null)
+  const [categoryData, setCategoryData] = useState([])
   const [form, setForm] = useState({
     room_amenity_type_code: "",
     room_amenity_type_name: "",
-    room_amenity_category_id: "",
+    room_amenity_category_room_amenity_type: [],
     room_amenity_type_asset: {
       multimedia_description_id: null,
       multimedia_description: {
@@ -130,6 +131,19 @@ function RoomAmenityTypeForm(props) {
       if (form.room_amenity_type_asset.multimedia_description_id == null) {
         form.room_amenity_type_asset = null
       }
+
+      if(!form.room_amenity_type_code){
+        form.room_amenity_type_code = null
+      } else {
+        form.room_amenity_type_code = parseInt(form.room_amenity_type_code)
+      }
+
+      if(!form.room_amenity_category_room_amenity_type){
+        form.room_amenity_category_room_amenity_type = null
+      }
+
+      console.log(form)
+      
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
       for (let i in translated) {
@@ -218,18 +232,25 @@ function RoomAmenityTypeForm(props) {
           !loading &&
           <FormInputSelectAjax
             label="Room Amenity Category"
-            value={form.room_amenity_category_id}
+            value={form.room_amenity_category_room_amenity_type ? form.room_amenity_category_room_amenity_type.map((item) => item.room_amenity_category_id) : []}
             // value={form.attraction_category_attraction ? form.attraction_category_attraction.map((item) => item.attraction_category_id) : []}
             filter={`["status", "=", 1]`}
-            name="room_amenity_category_id"
+            name="room_amenity_category_room_amenity_type"
             endpoint="/master/room-amenity-categories"
             column="room_amenity_category_name"
-            onChange={(e) =>
-              setForm({...form, room_amenity_category_id: e.target.value || null})
-            }
-            // onChange={(e, values) => setForm(form => ({...form, attraction_category_attraction: values.map(v => ({attraction_category_id: v.id}))}))}
+            // onChange={(e) =>
+            //   setForm({...form, room_amenity_category_id: e.target.value || null})
+            // }
+            // onChange={(e, values) => setForm(form => ({...form, room_amenity_category: values.map(v => ({room_amenity_category_id: v.id}))}))}
+            onChange={(e, values) => {
+              setForm(form => ({...form, room_amenity_category_room_amenity_type: values.map(v => (
+                {room_amenity_category_id: v.id}
+              ))}))
+
+              // console.log(form)
+            }}
             disabled={isView || loading}
-            type="select" />
+            type="selectmultiple" />
         }
         <FormInputControl
           id="room_icon"

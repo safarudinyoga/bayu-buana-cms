@@ -36,12 +36,12 @@ export default function RoomAmenityTypeTable() {
     columns: [
       {
         title: "Room Amenity Code",
-        data: "room_amenity_code",
+        data: "room_amenity_type_code",
       },
       {
         title: "Room Amenity Name",
-        data: "room_amenity_name",
-        render: renderColumn("airline", "airline_name"),
+        data: "room_amenity_type_name",
+        render: renderColumn("amenity_type", "room_amenity_type_name"),
       },
       {
         title: "Icon",
@@ -62,7 +62,7 @@ export default function RoomAmenityTypeTable() {
       {
         title: "Room Amenity Category",
         data: "room_amenity_category",
-        render: renderColumn("room_amenity_category", "room_amenity_category_name"),
+        render: renderColumn("room_amenity_category", "room_amenity_category_names"),
       },
       {
         searchable: false,
@@ -77,7 +77,7 @@ export default function RoomAmenityTypeTable() {
       },
     ],
     emptyTable: "No room amenity types found",
-    recordName: "room_amenity_name",
+    recordName: "room_amenity_type_name",
   })
 
   useEffect(() => {
