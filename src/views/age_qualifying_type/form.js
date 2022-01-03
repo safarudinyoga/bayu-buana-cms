@@ -119,6 +119,22 @@ function AgeQualifyingTypeForm(props) {
       } catch (e) { }
       setLoading(false)
     }
+
+    CheckDuplicateVal({
+      name: "checkName", 
+      route: "age-qualifying-types", 
+      key: "age_qualifying_type_name", 
+      label: "Age Qualifying Type Name",
+      currentValue: currentData.name,
+    })
+    CheckDuplicateVal({
+      name: "checkCode", 
+      route: "age-qualifying-types", 
+      key: "age_qualifying_type_code", 
+      label: "Code",
+      currentValue: currentData.code,
+      isNumber: true,
+    })
   }, [])
 
   useEffect(() => {
@@ -159,25 +175,6 @@ function AgeQualifyingTypeForm(props) {
     }
   }
 
-  const onChangeValue = async (e, state) => {
-    setForm({...form, [state]: e.target.value})
-    CheckDuplicateVal({
-      name: "checkName", 
-      route: "age-qualifying-types", 
-      key: "age_qualifying_type_name", 
-      label: "Age Qualifying Type Name",
-      currentValue: currentData.name,
-    })
-    CheckDuplicateVal({
-      name: "checkCode", 
-      route: "age-qualifying-types", 
-      key: "age_qualifying_type_code", 
-      label: "Code",
-      currentValue: currentData.code,
-      isNumber: true,
-    })
-  }
-
   return (
     <FormBuilder
       onBuild={(el) => setFormBuilder(el)}
@@ -198,7 +195,7 @@ function AgeQualifyingTypeForm(props) {
           value={form.age_qualifying_type_name}
           name="age_qualifying_type_name"
           onChange={(e) =>
-            onChangeValue(e, "age_qualifying_type_name")
+            setForm({...form, age_qualifying_type_name: e.target.value})
           }
           disabled={isView || loading}
           type="text"
