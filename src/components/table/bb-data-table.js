@@ -146,7 +146,7 @@ class BBDataTable extends Component {
         pagingType: "simple_numbers",
         colReorder: {
           enable: true,
-          iFixedColumnsLeft: 1,
+          iFixedColumnsLeft: 5,
           //   iFixedColumnsRight: 4,
         },
         stateSave: false,
@@ -436,6 +436,7 @@ class BBDataTable extends Component {
         responsive: true,
         autoWidth: false,
         scrollX: true,
+        scrollCollapse: false,
         columnDefs: [
           // {
           //   targets: 0,
@@ -461,6 +462,7 @@ class BBDataTable extends Component {
             ordeable: false,
             // className: "table-row-action",
             targets: [columns.length - 1],
+            width: "12%",
           },
         ],
         // select: {
@@ -724,7 +726,8 @@ class BBDataTable extends Component {
       .off("change", ".select-checkbox-all")
       .on("change", ".select-checkbox-all", (e) => {
         this.inProgress = true
-        let table = $(e.target).closest("table")
+        // let table = $(e.target).closest("table")
+        let table = $("table")
         let itemsId = []
         $(".select-checkbox-item", table).prop(
           "checked",
@@ -762,7 +765,8 @@ class BBDataTable extends Component {
       .off("change", ".select-checkbox-item")
       .on("change", ".select-checkbox-item", (e) => {
         this.inProgress = true
-        let table = $(e.target).closest("table")
+        // let table = $(e.target).closest("table")
+        let table = $("table")
         let itemId = $($(e.target).get(0)).data('id')
         let selectedVal = []
         let items = $(".select-checkbox-item:checked", table)
@@ -813,6 +817,7 @@ class BBDataTable extends Component {
             break
         }
       })
+      $.fn.DataTable.ext.pager.numbers_length = 5      
     return (
       <div ref={this.wrapper}>
         <Modal show={this.state.isOpen}>

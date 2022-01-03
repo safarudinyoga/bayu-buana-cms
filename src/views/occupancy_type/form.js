@@ -73,7 +73,7 @@ function OccupancyTypeForm(props) {
     occupancy: {
       required: "Occupancy is required.",
       min: "Please enter a value greater than or equal to 1.",
-      maxlength: "Please enter a value less than or equal to 4.",
+      maxlength: "Please enter a value less than or equal to 9999.",
     },
   }
 
@@ -340,7 +340,7 @@ function OccupancyTypeForm(props) {
           required={true}
           value={form.occupancy}
           name="occupancy"
-          onChange={(e) => setForm({ ...form, occupancy: +e.target.value })}
+          onChange={(e) => setForm({ ...form, occupancy: e.target.value })}
           disabled={isView || loading}  
           type="number"
           min="1" 
