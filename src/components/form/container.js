@@ -38,6 +38,10 @@ export default class FormContainer extends Component {
 
   validate() {
     return $(this.form.current).validate({
+      onkeyup: function(element) {
+          var $element = $(element);
+          $element.valid();
+      },
       rules: this.props.rules || {},
       messages: this.props.validationMessages || {},
       errorElement: "span",
