@@ -4,6 +4,7 @@ import {renderColumn} from "lib/translation"
 import React, {useEffect, useState} from "react"
 import {useDispatch} from "react-redux"
 import {setUIParams} from "redux/ui-store"
+import FormInputSelectAjax from 'components/form/input-select-ajax'
 
 export default function RoomAmenityTypeTable() {
   let dispatch = useDispatch()
@@ -24,6 +25,7 @@ export default function RoomAmenityTypeTable() {
   }, [])
 
   let [selectedCategories, setSelectedCategories] = useState([])
+  let [selectedCategoryIds, setSelectedCategoryIds] = useState([])
 
   let [params, setParams] = useState({
     title: "Room Amenity Types",
@@ -86,18 +88,54 @@ export default function RoomAmenityTypeTable() {
 
   const onFilterChangeCategories = (e, values) => {
     let ids = []
+    let columns = []
     if (values && values.length > 0) {
       for (let i in values) {
         ids.push(values[i].id)
+        columns.push(
+          ["room_amenity_category_names", "like", values[i].room_amenity_category_name]
+        )
+
+        if(parseInt(i)+1 !== values.length) {
+          columns.push(["OR"])
+        }
       }
     }
-    let findFilter = params.filters ? params.filters.filter(v => v[0] !== "city_id") : []
-    if (ids.length > 0) {
-      setParams({ ...params, filters: [...findFilter, ["city_id", "in", ids]] })
+    let findFilter = params.filters ? params.filters.filter(v => v[0][0] !== "room_amenity_category_names") : []
+    if (columns.length > 0) {
+      setParams({ ...params, filters: [...findFilter, columns] })
     } else {
       setParams({ ...params, filters: [...findFilter] })
     }
     setSelectedCategories(values)
+    setSelectedCategoryIds(ids)
   }
-  return <BBDataTable {...params} />
+
+  const extraFilter = () => {
+    return (
+      <>
+        <FormInputSelectAjax
+          label="Room Amenity Category"
+          onChange={onFilterChangeCategories}
+          endpoint="/master/room-amenity-categories"
+          column="room_amenity_category_name"
+          value={selectedCategoryIds}
+          data={selectedCategories}
+          filter={`["status", "=", 1]`}
+          placeholder="Room Amenity Category"
+          type="selectmultiple"
+          isFilter={true}
+          allowClear={false}
+        />
+      </>
+    )
+  }
+
+  const onReset = () => {
+    setParams({...params, filters:[]})
+    setSelectedCategories([])
+    setSelectedCategoryIds([])
+  }
+
+  return <BBDataTable {...params} extraFilter={extraFilter} onReset={onReset} />
 }

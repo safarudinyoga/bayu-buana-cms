@@ -7,14 +7,16 @@ import useQuery from "lib/query"
 import React, {useEffect, useState} from "react"
 import {useDispatch} from "react-redux"
 import {withRouter} from "react-router"
-import {setUIParams} from "redux/ui-store"
+import {setAlert, setUIParams} from "redux/ui-store"
 import $ from "jquery"
+import env from "../../config/environment"
 
 const endpoint = "/master/room-amenity-types"
 const backUrl = "/master/room-amenity-types"
 
 function RoomAmenityTypeForm(props) {
   let dispatch = useDispatch()
+  let formId = props.match.params.id
 
   const isView = useQuery().get("action") === "view"
   const [formBuilder, setFormBuilder] = useState(null)
@@ -46,6 +48,7 @@ function RoomAmenityTypeForm(props) {
       required: true,
       minlength: 1,
       maxlength: 256,
+      checkName: true,
     },
     room_amenity_type_code: {
       required: true,
@@ -53,6 +56,7 @@ function RoomAmenityTypeForm(props) {
       noSpace: true,
       min: 1,
       max: 999,
+      checkCode: true
     },
     room_amenity_type_asset: {
       required: false
@@ -74,7 +78,7 @@ function RoomAmenityTypeForm(props) {
 
   useEffect(async () => {
     let api = new Api()
-    let formId = props.match.params.id
+    
 
     let docTitle = "Edit Room Amenity Type"
     if (!formId) {
@@ -85,7 +89,7 @@ function RoomAmenityTypeForm(props) {
 
     dispatch(
       setUIParams({
-        title: docTitle,
+        title: isView ? "Room Amenity Type Details" : docTitle,
         breadcrumbs: [
           {
             text: "Master Data Management",
@@ -104,6 +108,71 @@ function RoomAmenityTypeForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
+
+        if(res.data) {
+          let currentCode = res.data.room_amenity_type_code
+          let currentName = res.data.room_amenity_type_name
+
+          $.validator.addMethod(
+            "checkCode",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/room-amenity-types?filters=["room_amenity_type_code","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if (currentCode === parseInt(element.value)) {
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+
+              return req
+            },
+            "Room Amenity Type Code already exists",
+          )
+
+          $.validator.addMethod(
+            "checkName",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/room-amenity-types?filters=["room_amenity_type_name","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if (currentName === element.value) {
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+
+              return req
+            },
+            "Room Amenity Type Name already exists",
+          )
+        }
+
+        if(res.data.room_amenity_category_room_amenity_type){
+          setCategoryData(res.data.room_amenity_category_room_amenity_type.map(value => {
+            if(value.room_amenity_category) {
+              return {id: value.room_amenity_category.id, text: value.room_amenity_category.room_amenity_category_name}
+            }
+          }))
+        }
       } catch (e) { }
 
       try {
@@ -113,6 +182,50 @@ function RoomAmenityTypeForm(props) {
         setTranslations(res.data.items)
       } catch (e) { }
       setLoading(false)
+    } else {
+      $.validator.addMethod(
+        "checkCode",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/room-amenity-types?filters=["room_amenity_type_code","=","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
+
+          return req
+        },
+        "Room Amenity Type Code already exists",
+      )
+
+      $.validator.addMethod(
+        "checkName",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/room-amenity-types?filters=["room_amenity_type_name","=","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
+
+          return req
+        },
+        "Room Amenity Type Name already exists",
+      )
     }
   }, [])
 
@@ -141,8 +254,6 @@ function RoomAmenityTypeForm(props) {
       if(!form.room_amenity_category_room_amenity_type){
         form.room_amenity_category_room_amenity_type = null
       }
-
-      console.log(form)
       
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
@@ -152,9 +263,21 @@ function RoomAmenityTypeForm(props) {
         await api.putOrPost(path, tl.id, tl)
       }
     } catch (e) {
+      dispatch(
+        setAlert({
+          message: `Failed to ${formId ? "update" : "save"} this record.`,
+        }),
+      )
     } finally {
       setLoading(false)
       props.history.push(backUrl)
+      dispatch(
+        setAlert({
+          message: `Record ${form.room_amenity_type_code} - ${
+            form.room_amenity_type_name
+          } has been successfully ${formId ? "updated" : "saved"}..`,
+        }),
+      )
     }
   }
 
@@ -236,6 +359,7 @@ function RoomAmenityTypeForm(props) {
             // value={form.attraction_category_attraction ? form.attraction_category_attraction.map((item) => item.attraction_category_id) : []}
             filter={`["status", "=", 1]`}
             name="room_amenity_category_room_amenity_type"
+            data={categoryData}
             endpoint="/master/room-amenity-categories"
             column="room_amenity_category_name"
             // onChange={(e) =>
