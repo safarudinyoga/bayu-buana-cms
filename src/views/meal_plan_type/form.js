@@ -330,7 +330,7 @@ function MealPlanTypeForm(props) {
           name="meal_plan_type_asset"
           onChange={doUpload}
           disabled={isView}
-          url={form.meal_plan_type_asset?.multimedia_description.url}
+          url={form.meal_plan_type_asset?.multimedia_description?.url}
           style={{maxWidth: 300, marginTop: 12}}
         />
       </FormHorizontal>
