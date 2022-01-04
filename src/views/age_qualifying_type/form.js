@@ -32,10 +32,6 @@ function AgeQualifyingTypeForm(props) {
       type: "text",
     },
   ]
-  const [currentData, setCurrentData] = useState({ 
-    code: null, 
-    name: null
-  })
 
   const validationRules = {
     age_qualifying_type_code: {
@@ -104,9 +100,21 @@ function AgeQualifyingTypeForm(props) {
         setForm(res.data)
 
         if(res.data) {
-          setCurrentData({
-            code:res.data.age_qualifying_type_code,
-            name:res.data.age_qualifying_type_name,
+
+          CheckDuplicateVal({
+            name: "checkName", 
+            route: "age-qualifying-types", 
+            key: "age_qualifying_type_name", 
+            label: "Age Qualifying Type Name",
+            currentValue: res.data.age_qualifying_type_name,
+          })
+          CheckDuplicateVal({
+            name: "checkCode", 
+            route: "age-qualifying-types", 
+            key: "age_qualifying_type_code", 
+            label: "Code",
+            currentValue: res.data.age_qualifying_type_code,
+            isNumber: true,
           })
         }
       } catch (e) { }
@@ -118,23 +126,22 @@ function AgeQualifyingTypeForm(props) {
         setTranslations(res.data.items)
       } catch (e) { }
       setLoading(false)
+    } else {
+      CheckDuplicateVal({
+        name: "checkName", 
+        route: "age-qualifying-types", 
+        key: "age_qualifying_type_name", 
+        label: "Age Qualifying Type Name",
+      })
+      CheckDuplicateVal({
+        name: "checkCode", 
+        route: "age-qualifying-types", 
+        key: "age_qualifying_type_code", 
+        label: "Code",
+      })
     }
 
-    CheckDuplicateVal({
-      name: "checkName", 
-      route: "age-qualifying-types", 
-      key: "age_qualifying_type_name", 
-      label: "Age Qualifying Type Name",
-      currentValue: currentData.name,
-    })
-    CheckDuplicateVal({
-      name: "checkCode", 
-      route: "age-qualifying-types", 
-      key: "age_qualifying_type_code", 
-      label: "Code",
-      currentValue: currentData.code,
-      isNumber: true,
-    })
+    
   }, [])
 
   useEffect(() => {

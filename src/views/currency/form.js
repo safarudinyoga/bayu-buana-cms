@@ -388,7 +388,7 @@ function CurrencyForm(props) {
       props.history.push(backUrl)
       dispatch(
         setAlert({
-          message: `Record ${form.currency_code} - ${form.currency_name} has been successfully ${formId ? "updated" : "saved"}..`,
+          message: `Record ${form.currency_code} - ${form.currency_name} has been successfully ${formId ? "updated" : "saved"}.`,
         }),
       )
     }

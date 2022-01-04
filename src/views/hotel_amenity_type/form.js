@@ -285,7 +285,7 @@ function HotelAmenityForm(props) {
         setAlert({
           message: `Record ${form.hotel_amenity_type_code} - ${
             form.hotel_amenity_type_name
-          } has been successfully ${formId ? "updated" : "saved"}..`,
+          } has been successfully ${formId ? "updated" : "saved"}.`,
         }),
       )
     } catch (e) {

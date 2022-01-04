@@ -86,31 +86,15 @@ export default class TranslationForm extends Component {
     if (!this.translated[lang]) {
       this.translated[lang] = { language_code: lang }
     }
-
-    if (this.props.fields && this.props.fields.length > 1) {
-      let inField = []
-      this.props.fields.map((field, index) => {
-        let id = "trans-" + lang + "-" + field.name
-        let elem = document.getElementById(id)
-        inField.push(elem.value)
-        return field
-      })
-      const allEmpty = inField.every((field) => {
-        if (!field) return true
-      })
-
-      if (allEmpty) {
-        delete this.translated[lang]
-      } else {
-        this.translated[lang][name] = e.target.value
-      }
-    } else {
-      if (!e.target.value) {
-        delete this.translated[lang]
-      } else {
-        this.translated[lang][name] = e.target.value
-      }
-    }
+    
+    let inField = []
+    this.props.fields.map((field, index) => {
+      let id = "trans-" + lang + "-" + field.name
+      let elem = document.getElementById(id)
+      inField.push(elem.value)
+      return field
+    })
+    this.translated[lang][name] = e.target.value
 
     this.setState({
       translated: this.translated,
@@ -120,6 +104,15 @@ export default class TranslationForm extends Component {
 
   getKeyByValue(object, value) {
     return Object.keys(object).find((key) => object[key] === value)
+  }
+
+  showExclamation(lang) {
+    let translated = this.state.translated[lang.language_code]
+    if(translated){
+      let findField = this.props.fields.find((f) => translated[f.name] && translated[f.name] !== "")
+      return !findField
+    }
+    return true
   }
 
   render() {
@@ -158,7 +151,7 @@ export default class TranslationForm extends Component {
               }}
             >
               <span className="text-label-input">{lang.language_name}</span>
-              {lang.language_code in this.state.translated ? (
+              {!this.showExclamation(lang) ? (
                 ""
               ) : (
                 <i

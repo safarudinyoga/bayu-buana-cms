@@ -267,7 +267,7 @@ function RatingTypeForm(props) {
       props.history.push(backUrl)
       dispatch(
         setAlert({
-          message: `Record ${form.rating_type_code} - ${form.rating_type_name} has been successfully ${formId ? "updated" : "saved"}..`,
+          message: `Record ${form.rating_type_code} - ${form.rating_type_name} has been successfully ${formId ? "updated" : "saved"}.`,
         }),
       )
     }
