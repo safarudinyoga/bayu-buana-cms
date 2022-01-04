@@ -186,9 +186,14 @@ function RoomAmenityTypeForm(props) {
     setLoading(true)
     let api = new Api()
     try {
-      if (form.room_amenity_category_asset.multimedia_description_id == null) {
+      if(form.room_amenity_category_asset){
+        if (form.room_amenity_category_asset.multimedia_description_id == null) {
+          form.room_amenity_category_asset = null
+        }
+      } else {
         form.room_amenity_category_asset = null
       }
+      
       // set form to null when value is empty
       if (form.room_amenity_category_name === "") {
         form.room_amenity_category_name = null
@@ -212,6 +217,7 @@ function RoomAmenityTypeForm(props) {
         }),
       )
     } catch (e) {
+      console.log(e)
       dispatch(
         setAlert({
           message: `Failed to ${formId ? "update" : "save"} this record.`,
