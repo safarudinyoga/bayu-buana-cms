@@ -275,7 +275,7 @@ function RoomAmenityTypeForm(props) {
         setAlert({
           message: `Record ${form.room_amenity_type_code} - ${
             form.room_amenity_type_name
-          } has been successfully ${formId ? "updated" : "saved"}..`,
+          } has been successfully ${formId ? "updated" : "saved"}.`,
         }),
       )
     }

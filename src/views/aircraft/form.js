@@ -303,7 +303,7 @@ function AircraftForm(props) {
         setAlert({
           message: `Record ${form.aircraft_code} - ${
             form.aircraft_name
-          } has been successfully ${formId ? "updated" : "saved"}..`,
+          } has been successfully ${formId ? "updated" : "saved"}.`,
         }),
       )
     }
