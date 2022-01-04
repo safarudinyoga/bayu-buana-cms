@@ -199,7 +199,7 @@ function RoomAmenityTypeForm(props) {
         form.room_amenity_category_name = null
       }
       if (form.description === "") {
-        form.description = null
+        form.description = ""
       }
       if (form.room_amenity_category_id === "") {
         form.room_amenity_category_id = null
