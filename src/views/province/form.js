@@ -250,7 +250,7 @@ function ProvinceForm(props) {
       props.history.push(backUrl)
       dispatch(
         setAlert({
-          message: `Record ${form.state_province_code} - ${form.state_province_name} has been successfully ${formId ? "updated" : "saved"}..`,
+          message: `Record ${form.state_province_code} - ${form.state_province_name} has been successfully ${formId ? "updated" : "saved"}.`,
         }),
       )
     }
