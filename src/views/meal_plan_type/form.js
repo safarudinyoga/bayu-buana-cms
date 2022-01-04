@@ -266,8 +266,8 @@ function MealPlanTypeForm(props) {
 
         let config = {
           onUploadProgress: function(progressEvent) {
-            let mediaDiv = document.getElementById("meal-plan-type-icon")
-            let progressBar = document.getElementById("progress-icon")
+            let mediaDiv = document.getElementById("media-meal-plan-type-icon")
+            let progressBar = document.getElementById("progress-meal-plan-type-icon")
             mediaDiv.style.display = "none"
             progressBar.style.display = "block"
             let percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
