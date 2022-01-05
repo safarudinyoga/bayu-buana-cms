@@ -13,9 +13,21 @@ $grey: #818181;
 		align-items: center;
 		background-color: white;
 		font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
 		@media (max-width: 768px) {
-		background: transparent url('../assets/background.png')51.3% 0% no-repeat padding-box;
-		background-size: cover;
+			background:url('../assets/background.png');
+			background-clip: padding-box;
+			background-size: cover;
+		}
+
+		@media (max-width: 480px) {
+			background-position-x: 44.3%;
+			background-position-y: 0%;
+		}
+
+		@media (min-width: 481px) and (max-width: 768px) {
+			background-position-x: 51.3%;
+			background-position-y: 0%;
 		}
 	}
 
@@ -37,15 +49,7 @@ $grey: #818181;
 			object-position: 27% 0%;
 			position: relative;
 		}
-		.caption {
-			position: absolute;
-			z-index: 1;
-			font-size: 1.3em;
-			font-weight: bold;
-			color: #FFFFFF;
-			margin-left: 19%;
-			margin-top: 4.5%;
-		}
+		
 		@media (max-width: 767px) {
 			display: none;
 		}
@@ -53,10 +57,6 @@ $grey: #818181;
 			width: 45%;
 			img {
 				display: none;
-			}
-			.caption {
-				margin-left: 20px;
-				margin-top: 4.5%;
 			}
 		}
 	}
@@ -106,11 +106,16 @@ $grey: #818181;
 				}
 			}
 			.button-save {
+				background-color: rgba(2, 127, 113, 1);
 				&-text {
 					color: white;
 					text-transform: uppercase;
 					font: normal normal bold 16px/26px Segoe UI;
 				}
+			}
+			@media (max-width: 480px) {
+				background-color: rgba(255, 255, 255, 0.97);
+				padding: 15px;
 			}
 			@media (max-width: 768px) {
 				width: 90%;
@@ -127,13 +132,41 @@ $grey: #818181;
 				display: block;
 				margin: 0 auto 17px;
 			}
+
+			@media (max-width: 480px) {
+				color: white;
+			}
 		}
-		@media (max-width: 767px) {
+		@media (max-width: 480px) {
 			width: 100%;
+			background-color: transparent;
+			justify-content: center;
+			padding: 0;
 		}
-		@media (max-width: 768px) {
+		@media (min-width: 481px) and (max-width: 768px) {
 			padding-top: 25%;
 			width: 55%;
 		}
+	}
+}
+
+.caption {
+	position: absolute;
+	z-index: 1;
+	font-size: 1.3em;
+	font-weight: bold;
+	color: #FFFFFF;
+	margin-left: 19%;
+	margin-top: 4.5%;
+
+	@media (max-width: 480px) {
+		top: 0;
+		left: 0;
+		margin-left: 20px;
+	}
+
+	@media (min-width: 481px) and (max-width: 768px) {
+		margin-left: 20px;
+		margin-top: 4.5%;
 	}
 }

@@ -24,6 +24,13 @@ function Login() {
 						<img src={ImageBG} className="img-fluid"/>
 					</div>
 					<div className="card-form">
+						<div className="md-none">
+							<p className="caption">
+								We are, <br/>
+								The Expert Travel Agent <br/> 
+								Partnership
+							</p>
+						</div>
 						<div className="card-form-body">
 							<p className="title p-0 mb-1">Welcome Back!</p>
 							<p className="sub-title p-0 mb-5">Please Sign in to continue</p>
