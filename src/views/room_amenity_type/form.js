@@ -1,7 +1,7 @@
 import FormBuilder from "components/form/builder"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
-import FormInputSelectAjax from "components/form/input-select-ajax"
+import FormInputSelectMultiAjax from "components/form/input-select-multi-ajax"
 import Api from "config/api"
 import useQuery from "lib/query"
 import React, {useEffect, useState} from "react"
@@ -354,7 +354,7 @@ function RoomAmenityTypeForm(props) {
         />
         {
           !loading &&
-          <FormInputSelectAjax
+          <FormInputSelectMultiAjax
             label="Room Amenity Category"
             value={form.room_amenity_category_room_amenity_type ? form.room_amenity_category_room_amenity_type.map((item) => item.room_amenity_category_id) : []}
             // value={form.attraction_category_attraction ? form.attraction_category_attraction.map((item) => item.attraction_category_id) : []}
