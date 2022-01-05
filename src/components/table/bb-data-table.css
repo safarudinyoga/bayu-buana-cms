@@ -86,6 +86,7 @@
 
 .dataTable-root .select-checkbox {
     min-width: 78px;
+    vertical-align: middle !important;
 }
 
 .dataTable-root .select-checkbox .row-handle {
