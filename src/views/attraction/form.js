@@ -2,6 +2,7 @@ import FormBuilder from "components/form/builder"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
 import FormInputSelectAjax from "components/form/input-select-ajax"
+import FormInputSelectMultiAjax from "components/form/input-select-multi-ajax"
 import Api from "config/api"
 import $ from "jquery"
 import useQuery from "lib/query"
@@ -584,7 +585,7 @@ function AttractionForm(props) {
 
           {
           !loading &&
-          <FormInputSelectAjax
+          <FormInputSelectMultiAjax
             label="Attraction Category"
             value={form.attraction_category_attraction ? form.attraction_category_attraction.map((item) => item.attraction_category_id) : []}
             name="attraction_category_attraction"
