@@ -224,8 +224,25 @@ function MealPlanTypeForm(props) {
   const onSave = async () => {
     let translated = formBuilder.getTranslations()
     setLoading(true)
+    console.log(form)
     let api = new Api()
     try {
+      if(form.meal_plan_type_asset){
+        if(form.meal_plan_type_asset.multimedia_description_id == null){
+          form.meal_plan_type_asset = null
+        }
+      } else {
+        form.meal_plan_type_asset = null
+      }
+
+      if(form.meal_plan_type_code === ""){
+        form.meal_plan_type_code = null
+      }
+
+      if(form.meal_plan_type_name === ""){
+        form.meal_plan_type_name = null
+      }
+
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
       for (let i in translated) {
@@ -257,7 +274,7 @@ function MealPlanTypeForm(props) {
         var filesize = ((files.size/1024)/1024).toFixed(4);
         if(filesize > 4){
           alert("Icon size is more than 4MB.");
-          $("#icon").val('');
+          $("#meal-plan-type-icon").val('');
           return;
         }
         let api = new Api()
@@ -330,6 +347,7 @@ function MealPlanTypeForm(props) {
           name="meal_plan_type_asset"
           onChange={doUpload}
           disabled={isView}
+          accept=".png,.jpg,.jpeg"
           url={form.meal_plan_type_asset?.multimedia_description.url}
           style={{maxWidth: 300, marginTop: 12}}
         />

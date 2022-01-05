@@ -29,7 +29,7 @@ export default function RoomAmenityTypeTable() {
 
   let [params, setParams] = useState({
     title: "Room Amenity Types",
-    titleModal: "Room Amenity Types",
+    titleModal: "Room Amenity Type",
     baseRoute: "/master/room-amenity-types/form",
     endpoint: "/master/room-amenity-types",
     deleteEndpoint: "/master/batch-actions/delete/room-amenity-types",
@@ -63,7 +63,7 @@ export default function RoomAmenityTypeTable() {
       },
       {
         title: "Room Amenity Category",
-        data: "room_amenity_category",
+        data: "room_amenity_category_names",
         render: renderColumn("room_amenity_category", "room_amenity_category_names"),
       },
       {
