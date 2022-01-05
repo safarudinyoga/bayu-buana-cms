@@ -84,6 +84,7 @@ import EmployeeTable from "views/employee/table"
 import EmployeeForm from "views/employee/form"
 import RatingTypeLevelTable from './views/rating_type_level/table';
 import RatingTypeLevelForm from './views/rating_type_level/form';
+import Login from './views/login';
 
 const App = () => {
   document.title = "Bayu Buana"
@@ -93,6 +94,9 @@ const App = () => {
         <Switch>
           <Route exact path="/">
             <Dashboard />
+          </Route>
+          <Route path="/login">
+            <Login/>
           </Route>
           {/* all router described here */}
           <Route exact path="/master/trip-types">
