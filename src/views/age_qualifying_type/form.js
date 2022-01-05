@@ -5,10 +5,9 @@ import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
 import FormBuilder from "components/form/builder"
 import useQuery from "lib/query"
-import $ from "jquery"
 import {useDispatch} from "react-redux"
 import { setAlert, setUIParams } from "redux/ui-store"
-import env from "../../config/environment"
+import CheckDuplicateVal from '../../lib/validateForm'
 
 const endpoint = "/master/age-qualifying-types"
 const backUrl = "/master/age-qualifying-types"
@@ -101,59 +100,22 @@ function AgeQualifyingTypeForm(props) {
         setForm(res.data)
 
         if(res.data) {
-          let currentCode = res.data.age_qualifying_type_code
-          let currentName = res.data.age_qualifying_type_name
 
-          $.validator.addMethod(
-            "checkCode",
-            function (value, element) {
-              var req = false
-              $.ajax({
-                type: "GET",
-                async: false,
-                url: `${env.API_URL}/master/age-qualifying-types?filters=["age_qualifying_type_code","=","${element.value}"]`,
-                success: function (res) {
-                  if (res.items.length !== 0) {
-                    if(currentCode == element.value){
-                      req = true
-                    } else {
-                      req = false
-                    }
-                  } else {
-                    req = true
-                  }
-                },
-              })
-    
-              return req
-            },
-            "Code already exists",
-          )
-          $.validator.addMethod(
-            "checkName",
-            function (value, element) {
-              var req = false
-              $.ajax({
-                type: "GET",
-                async: false,
-                url: `${env.API_URL}/master/age-qualifying-types?filters=["age_qualifying_type_name","=","${element.value}"]`,
-                success: function (res) {
-                  if (res.items.length !== 0) {
-                    if(currentName.toUpperCase() === element.value.toUpperCase()){
-                      req = true
-                    } else {
-                      req = false
-                    }
-                  } else {
-                    req = true
-                  }
-                },
-              })
-    
-              return req
-            },
-            "Age Qualifying Type Name already exists",
-          )
+          CheckDuplicateVal({
+            name: "checkName", 
+            route: "age-qualifying-types", 
+            key: "age_qualifying_type_name", 
+            label: "Age Qualifying Type Name",
+            currentValue: res.data.age_qualifying_type_name,
+          })
+          CheckDuplicateVal({
+            name: "checkCode", 
+            route: "age-qualifying-types", 
+            key: "age_qualifying_type_code", 
+            label: "Code",
+            currentValue: res.data.age_qualifying_type_code,
+            isNumber: true,
+          })
         }
       } catch (e) { }
 
@@ -165,49 +127,21 @@ function AgeQualifyingTypeForm(props) {
       } catch (e) { }
       setLoading(false)
     } else {
-      $.validator.addMethod(
-        "checkCode",
-        function (value, element) {
-          var req = false
-          $.ajax({
-            type: "GET",
-            async: false,
-            url: `${env.API_URL}/master/age-qualifying-types?filters=["age_qualifying_type_code","=","${element.value}"]`,
-            success: function (res) {
-              if (res.items.length !== 0) {
-                req = false
-              } else {
-                req = true
-              }
-            },
-          })
-
-          return req
-        },
-        "Code already exists",
-      )
-      $.validator.addMethod(
-        "checkName",
-        function (value, element) {
-          var req = false
-          $.ajax({
-            type: "GET",
-            async: false,
-            url: `${env.API_URL}/master/age-qualifying-types?filters=["age_qualifying_type_name","=","${element.value}"]`,
-            success: function (res) {
-              if (res.items.length !== 0) {
-                req = false
-              } else {
-                req = true
-              }
-            },
-          })
-
-          return req
-        },
-        "Age Qualifying Type Name already exists",
-      )
+      CheckDuplicateVal({
+        name: "checkName", 
+        route: "age-qualifying-types", 
+        key: "age_qualifying_type_name", 
+        label: "Age Qualifying Type Name",
+      })
+      CheckDuplicateVal({
+        name: "checkCode", 
+        route: "age-qualifying-types", 
+        key: "age_qualifying_type_code", 
+        label: "Code",
+      })
     }
+
+    
   }, [])
 
   useEffect(() => {

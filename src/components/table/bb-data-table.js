@@ -40,7 +40,6 @@ class BBDataTable extends Component {
       status: "0",
       extraFilters: this.props.filters || [],
       isOpen: false,
-      colSize: "",
     }
     this.inProgress = false
 
@@ -50,27 +49,7 @@ class BBDataTable extends Component {
   componentDidMount() {
     try {
       this.init()
-      this.getWindowDimensions()
     } catch (e) {}
-  }
-
-  componentDidUpdate() {
-    const hasWindow = typeof window !== 'undefined';
-    if(hasWindow) {
-      this.getWindowDimensions()
-    }
-  }
-
-  getWindowDimensions() {
-    const { innerWidth: width, innerHeight: height } = window;
-    let colSize=""
-    if(width <= 320) {
-      colSize="30%"
-    } else if (width <= 450) {
-      colSize="60%"
-    }
-    console.log(colSize, "yuhuus")
-    this.setState({ colSize })
   }
 
   init() {
@@ -747,7 +726,8 @@ class BBDataTable extends Component {
       .off("change", ".select-checkbox-all")
       .on("change", ".select-checkbox-all", (e) => {
         this.inProgress = true
-        let table = $(e.target).closest("table")
+        // let table = $(e.target).closest("table")
+        let table = $("table")
         let itemsId = []
         $(".select-checkbox-item", table).prop(
           "checked",
@@ -785,7 +765,8 @@ class BBDataTable extends Component {
       .off("change", ".select-checkbox-item")
       .on("change", ".select-checkbox-item", (e) => {
         this.inProgress = true
-        let table = $(e.target).closest("table")
+        // let table = $(e.target).closest("table")
+        let table = $("table")
         let itemId = $($(e.target).get(0)).data('id')
         let selectedVal = []
         let items = $(".select-checkbox-item:checked", table)

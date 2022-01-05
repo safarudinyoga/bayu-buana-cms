@@ -41,6 +41,22 @@ export default function MealPlanTypeTable() {
         render: renderColumn("meal_plan_type", "meal_plan_type_name"),
       },
       {
+        title: "Icon",
+        data: "meal_plan_type_asset.multimedia_description.url",
+        searchable: false,
+        orderable: false,
+        render: (val, type) => {
+          if (type === 'myExport') {
+            return val
+          }
+          if (val) {
+            return '<img src="' + val + '" class="table-image"/>'
+          }
+
+          return ""
+        },
+      },
+      {
         searchable: false,
         title: "Status",
         data: "status",

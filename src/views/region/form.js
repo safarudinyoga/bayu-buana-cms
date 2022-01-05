@@ -231,7 +231,7 @@ function RegionForm(props) {
       props.history.push(backUrl)
       dispatch(
         setAlert({
-          message: `Record ${form.region_code} - ${form.region_name} has been successfully ${formId ? "updated" : "saved"}..`,
+          message: `Record ${form.region_code} - ${form.region_name} has been successfully ${formId ? "updated" : "saved"}.`,
         }),
       )
     }
