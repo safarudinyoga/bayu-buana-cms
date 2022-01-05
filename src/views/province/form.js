@@ -319,7 +319,6 @@ function ProvinceForm(props) {
           }
           disabled={isView || loading}
           type="select"
-          placeholder="Country"
         />
 }
 
