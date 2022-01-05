@@ -1,7 +1,7 @@
 import FormBuilder from "components/form/builder"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
-import FormInputSelectAjax from "components/form/input-select-ajax"
+import FormInputSelectMultiAjax from "components/form/input-select-multi-ajax"
 import Api from "config/api"
 import $ from "jquery"
 import useQuery from "lib/query"
@@ -374,7 +374,7 @@ function HotelAmenityForm(props) {
         />
         {
           !loading &&
-        <FormInputSelectAjax
+        <FormInputSelectMultiAjax
           label="Hotel Amenity Category"
           value={
             form.hotel_amenity_category_hotel_amenity_type
