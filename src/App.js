@@ -79,11 +79,15 @@ import TripTypeTable from "views/trip_type/table"
 import ZoneForm from "views/zone/form"
 import ZoneTable from "views/zone/table"
 
+// Master Hotel Profile Management
+import HotelProfileManagementTable from "views/hotel_profile_management/table"
+import HotelProfileManagementForm from "views/hotel_profile_management/form"
+
 // Master Employee
 import EmployeeTable from "views/employee/table"
 import EmployeeForm from "views/employee/form"
-import RatingTypeLevelTable from './views/rating_type_level/table';
-import RatingTypeLevelForm from './views/rating_type_level/form';
+import RatingTypeLevelTable from "./views/rating_type_level/table"
+import RatingTypeLevelForm from "./views/rating_type_level/form"
 
 const App = () => {
   document.title = "Bayu Buana"
@@ -276,7 +280,10 @@ const App = () => {
           <Route path="/master/rating-types/form/:id?">
             <RatingTypeForm />
           </Route>
-          <Route exact path="/master/rating-types/:id_rating_type/rating-type-levels">
+          <Route
+            exact
+            path="/master/rating-types/:id_rating_type/rating-type-levels"
+          >
             <RatingTypeLevelTable />
           </Route>
           <Route path="/master/rating-types/:id_rating_type/rating-type-levels/form/:id?">
@@ -311,6 +318,14 @@ const App = () => {
           </Route>
           <Route path="/master/product-types/form/:id?">
             <ProductTypeForm />
+          </Route>
+
+          {/* Master Hotel Profile Management */}
+          <Route exact path="/master/hotel-profile-management">
+            <HotelProfileManagementTable />
+          </Route>
+          <Route exact path="/master/hotel-profile-management/form/:id?">
+            <HotelProfileManagementForm />
           </Route>
 
           {/* Master Employee */}
