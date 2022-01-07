@@ -23,7 +23,7 @@ const FormInputFile = ({
         .split(",")
         .map((v) => "image/" + v.substring(1))
         .join(",")
-    : "image/png,image/jpg,image/jpeg"
+    : ".jpeg, .jpg, .png"
 
   const onChangeImg = (e) => {
     let fileTypes = acceptFormat.split(",")
