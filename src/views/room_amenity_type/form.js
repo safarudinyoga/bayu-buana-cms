@@ -137,7 +137,7 @@ function RoomAmenityTypeForm(props) {
 
               return req
             },
-            "Room Amenity Type Code already exists",
+            "Code already exists",
           )
 
           $.validator.addMethod(
@@ -203,7 +203,7 @@ function RoomAmenityTypeForm(props) {
 
           return req
         },
-        "Room Amenity Type Code already exists",
+        "Code already exists",
       )
 
       $.validator.addMethod(

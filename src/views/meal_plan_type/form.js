@@ -224,7 +224,6 @@ function MealPlanTypeForm(props) {
   const onSave = async () => {
     let translated = formBuilder.getTranslations()
     setLoading(true)
-    console.log(form)
     let api = new Api()
     try {
       if(form.meal_plan_type_asset){
