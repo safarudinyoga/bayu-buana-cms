@@ -14,8 +14,8 @@ import Media from "./media"
 import NearbyAttractions from "./nearby-attractions"
 import PointofReferences from "./point-of-references"
 
-const endpoint = "/master/employees"
-const backUrl = "/master/employee"
+const endpoint = "/master/hotel-profile-management"
+const backUrl = "/master/hotel-profile-management"
 
 const EmployeeForm = (props) => {
   let dispatch = useDispatch()

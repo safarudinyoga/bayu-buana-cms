@@ -10,13 +10,13 @@ export default function HotelBrandTable() {
   useEffect(() => {
     dispatch(
       setUIParams({
-        title: "Hotel Brands",
+        title: "Hotel Profile Management",
         breadcrumbs: [
           {
             text: "Master Data Management",
           },
           {
-            text: "Hotel Brands",
+            text: "Hotel Profile Management",
           },
         ],
       }),
@@ -24,37 +24,30 @@ export default function HotelBrandTable() {
   }, [])
 
   let params = {
-    title: "Hotel Brands",
-    titleModal: "Hotel Brand",
-    baseRoute: "/master/hotel-brands/form",
-    endpoint: "/master/hotel-brands",
-    deleteEndpoint: "/master/batch-actions/delete/hotel-brands",
-    activationEndpoint: "/master/batch-actions/activate/hotel-brands",
-    deactivationEndpoint: "/master/batch-actions/deactivate/hotel-brands",
+    title: "Hotel Profile Management",
+    baseRoute: "/master/hotel-profile-management/form",
+    endpoint: "/master/hotel-profile-management",
+    deleteEndpoint: "/master/batch-actions/delete/hotel-profile-management",
+    activationEndpoint:
+      "/master/batch-actions/activate/hotel-profile-management",
+    deactivationEndpoint:
+      "/master/batch-actions/deactivate/hotel-profile-management",
     columns: [
       {
-        title: "Hotel Brand Code",
-        data: "hotel_brand_code",
+        title: "Hotel Name",
+        data: "hotel_name",
       },
       {
-        title: "Hotel Brand Name",
-        data: "hotel_brand_name",
-        render: renderColumn("hotel_brand", "hotel_brand_name"),
+        title: "Location",
+        data: "location",
       },
       {
-        searchable: false,
-        title: "Status",
-        data: "status",
-        render: rowStatus,
-      },
-      {
-        title: "Translated Hotel Brand Name",
-        data: "hotel_brand_translation.hotel_brand_name",
-        visible: false,
+        title: "Chain/Brand",
+        data: "chain_brand",
       },
     ],
-    emptyTable: "No hotel brands found",
-    recordName: ["hotel_brand_code", "hotel_brand_name"],
+    emptyTable: "No hotels found",
+    recordName: "hotel_name",
   }
   return <BBDataTable {...params} />
 }

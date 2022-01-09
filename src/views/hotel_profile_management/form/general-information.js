@@ -9,196 +9,89 @@ import Select from "components/form/select"
 
 const GeneralInformation = (props) => {
   const [selectCountry, setSelectCountry] = useState([])
-  const [selectProvince, setSelectProvince] = useState([])
-  const [selectCity, setSelectCity] = useState([])
-  const [photoProfile, setPhotoProfile] = useState([])
-  const [optionDay, setOptionDay] = useState([])
-  const [optionMonth, setOptionMonth] = useState([])
-  const [optionYear, setOptionYear] = useState([])
-
-  const maxNumber = 1
 
   let api = new Api()
 
   // Initialize form
   const initialForm = {
     // General Information
-    title: { value: "mr", label: "Mr." },
-    firstName: "",
-    middleName: "",
-    lastName: "",
-    // dateOfBirth: "",
-    gender: "male",
-    idCardNumber: "",
+    hotelCode: "",
+    hotelName: "",
+    hotelChain: "",
+    starRating: "",
+    numberOfRooms: "",
 
     // Contacts
-    homePhone: "",
-    mobilePhone: "",
     email: "",
-    otherEmail: "",
+    emailForBookingAcknowledgment: "",
+    phone: "",
+    fax: "",
+    website: "",
 
-    // Current Address
-    currentAddress: "",
-    currentCountry: "",
-    currentProvince: "",
-    currentCity: "",
-    currentZipCode: "",
+    // Address
+    address: "",
+    country: "",
+    province: "",
+    city: "",
+    zipCode: "",
+    destination: "",
+    zone: "",
+    geoLocationLatitude: "",
+    geoLocationLongitude: "",
+    mapImage: "",
 
-    // Permanent Address
-    sameAddress: false,
-    permanentAddress: "",
-    permanentCountry: "",
-    permanentProvince: "",
-    permanentCity: "",
-    permanentZipCode: "",
+    // Other Information
+    propertyType: "",
+    locationCategory: "",
+    constructionYear: "",
+    lastRenovation: "",
+    standardCheckinTime: "",
+    standardCheckoutTime: "",
+    descriptions: "",
+    internalRemark: "",
   }
 
   // Schema for yup
   const validationSchema = Yup.object().shape({
     // General Information
-    title: Yup.object().required("Title is required."),
-    firstName: Yup.string().required("Employee First Name is required."),
-    middleName: Yup.string(),
-    lastName: Yup.string().required("Employee Last Name is required."),
-    // dateOfBirth: Yup.string().required("Date of Birth is required."),
-    gender: Yup.string().required("Gender is required."),
-    idCardNumber: Yup.string(),
+    hotelCode: Yup.string().required("Hotel Code is required."),
+    hotelName: Yup.string().required("Hotel Name is required."),
+    hotelChain: Yup.object(),
+    starRating: Yup.object().required("Star Rating is required."),
+    numberOfRooms: Yup.number(),
 
     // Contacts
-    homePhone: Yup.string().required("Home Phone is required."),
-    mobilePhone: Yup.string().required("Mobile Phone is required."),
     email: Yup.string()
       .email("Email is not valid.")
       .required("Email is required."),
-    otherEmail: Yup.string().email("Email is not valid."),
+    emailForBookingAcknowledgment: Yup.string()
+      .email("Email for Booking Acknowledgment is not valid.")
+      .required("Email for Booking Acknowledgment is required."),
+    phone: Yup.string().required("Phone is required."),
+    fax: Yup.string(),
+    website: Yup.string(),
 
-    // Current Address
-    currentAddress: Yup.string(),
-    currentCountry: Yup.object().required("Country is required."),
-    currentProvince: Yup.object(),
-    currentCity: Yup.object(),
-    currentZipCode: Yup.string(),
+    // Address
+    address: Yup.string(),
+    country: Yup.object().required("Country is required."),
+    province: Yup.object(),
+    city: Yup.object(),
+    zipCode: Yup.string(),
+    destination: Yup.object(),
+    zone: Yup.object(),
+    geoLocationLatitude: Yup.string(),
+    mapImage: Yup.string(),
 
-    // Permanent Address
-    sameAddress: Yup.boolean(),
-    permanentAddress: Yup.string(),
-    permanentCountry: Yup.object().when("sameAddress", {
-      is: false,
-      then: Yup.object().required("Country is required."),
-    }),
-    permanentProvince: Yup.object(),
-    permanentCity: Yup.object(),
-    permanentZipCode: Yup.string(),
+    // Other Information
+    propertyType: Yup.object().required("Property Type is required."),
+    locationCategory: Yup.object().required("Location Category is required."),
+    constructionYear: Yup.string(),
+    lastRenovation: Yup.string(),
+    standardCheckinTime: Yup.string(),
+    standardCheckoutTime: Yup.string(),
+    descriptions: Yup.string(),
+    internalRemark: Yup.string(),
   })
-
-  // Birthday
-  const selectDay = () => {
-    const options = []
-    for (let i = 0; i <= 31; i++) {
-      options.push({
-        label: i,
-        value: i,
-      })
-    }
-    return options
-  }
-  const selectMonth = () => {
-    const options = []
-    const month = Array.from({ length: 12 }, (e, i) => {
-      return new Date(null, i + 1, null).toLocaleDateString("en", {
-        month: "long",
-      })
-    })
-    month.forEach((data, i) => {
-      options.push({
-        label: data,
-        value: i + 1,
-      })
-    })
-    return options
-  }
-  const selectYear = () => {
-    const options = []
-
-    const startYear = 1921
-    const endYear = new Date().getFullYear()
-
-    for (let i = endYear; i >= startYear; i--) {
-      options.push({
-        label: i,
-        value: i,
-      })
-    }
-
-    return options
-  }
-
-  // Country state
-  const handleChangeCountry = async (v) => {
-    try {
-      let res = await api.get(
-        `/master/state-provinces?filters=["country_id","=","${v}"]`,
-      )
-      const options = []
-      res.data.items.forEach((data) => {
-        options.push({
-          label: data.state_province_name,
-          value: data.id,
-        })
-        setSelectProvince(options)
-      })
-    } catch (e) {}
-  }
-  // Province state
-  const handleChangeProvince = async (v) => {
-    try {
-      let res = await api.get(
-        `/master/cities?filters=["province_id","=","${v}"]`,
-      )
-      const options = []
-      res.data.items.forEach((data) => {
-        options.push({
-          label: data.state_province_name,
-          value: data.id,
-        })
-        setSelectCity(options)
-      })
-    } catch (e) {}
-  }
-
-  // Upload profile
-  const onChangePhotoProfile = (imageList, addUpdateIndex) => {
-    // data for submit
-    console.log(imageList, addUpdateIndex)
-    setPhotoProfile(imageList)
-  }
-
-  const SelectField = (FieldProps) => {
-    return (
-      <Select
-        options={FieldProps.options}
-        placeholder={FieldProps.placeholder}
-        {...FieldProps.field}
-        onChange={(option) =>
-          FieldProps.form.setFieldValue(FieldProps.field.name, option)
-        }
-      />
-    )
-  }
-
-  useEffect(async () => {
-    try {
-      let res = await api.get("/master/countries")
-      const options = []
-      res.data.items.forEach((data) => {
-        options.push({
-          label: data.country_name,
-          value: data.id,
-        })
-        setSelectCountry(options)
-      })
-    } catch (e) {}
-  }, [])
 
   return (
     <>
@@ -230,8 +123,6 @@ const GeneralInformation = (props) => {
           //   resetForm()
           //   setSubmitting(false)
           // } catch (e) {}
-
-          return props.handleSelectTab("emergency-contacts")
         }}
       >
         {({
@@ -252,39 +143,90 @@ const GeneralInformation = (props) => {
                 <h3 className="card-heading">General Information</h3>
                 <div style={{ padding: "0 15px 15px" }}>
                   <Row>
-                    <Col sm={8}>
+                    <Col sm={12}>
                       <Form.Group as={Row} className="form-group">
                         <Form.Label column sm={3}>
-                          Title <span className="form-label-required">*</span>
+                          Hotel Code
+                          <span className="form-label-required">*</span>
                         </Form.Label>
                         <Col sm={9}>
-                          <FastField name="title">
+                          <FastField name="hotelCode">
                             {({ field, form }) => (
                               <>
-                                <div style={{ width: 90 }}>
-                                  <Select
-                                    {...field}
-                                    options={[
-                                      { value: "mr", label: "Mr." },
-                                      { value: "mrs", label: "Mrs." },
-                                    ]}
-                                    defaultValue={values.title}
-                                    className={`react-select ${
-                                      form.touched.title && form.errors.title
-                                        ? "is-invalid"
-                                        : null
-                                    }`}
-                                    onChange={(v) => {
-                                      setFieldValue("title", v)
-                                    }}
-                                  />
-                                  {form.touched.title && form.errors.title && (
+                                <Form.Control
+                                  type="text"
+                                  isInvalid={
+                                    form.touched.hotelCode &&
+                                    form.errors.hotelCode
+                                  }
+                                  minLength={1}
+                                  maxLength={128}
+                                  {...field}
+                                />
+                                {form.touched.hotelCode &&
+                                  form.errors.hotelCode && (
                                     <Form.Control.Feedback type="invalid">
-                                      {form.touched.title
-                                        ? form.errors.title
+                                      {form.touched.hotelCode
+                                        ? form.errors.hotelCode
                                         : null}
                                     </Form.Control.Feedback>
                                   )}
+                              </>
+                            )}
+                          </FastField>
+                        </Col>
+                      </Form.Group>
+                      <Form.Group as={Row} className="form-group">
+                        <Form.Label column sm={3}>
+                          Hotel Name
+                          <span className="form-label-required">*</span>
+                        </Form.Label>
+                        <Col sm={9}>
+                          <FastField name="hotelCode">
+                            {({ field, form }) => (
+                              <>
+                                <Form.Control
+                                  type="text"
+                                  isInvalid={
+                                    form.touched.hotelName &&
+                                    form.errors.hotelName
+                                  }
+                                  minLength={1}
+                                  maxLength={128}
+                                  {...field}
+                                />
+                                {form.touched.hotelName &&
+                                  form.errors.hotelName && (
+                                    <Form.Control.Feedback type="invalid">
+                                      {form.touched.hotelName
+                                        ? form.errors.hotelName
+                                        : null}
+                                    </Form.Control.Feedback>
+                                  )}
+                              </>
+                            )}
+                          </FastField>
+                        </Col>
+                      </Form.Group>
+                      <Form.Group as={Row} className="form-group">
+                        <Form.Label column sm={3}>
+                          Hotel Chain
+                        </Form.Label>
+                        <Col sm={9}>
+                          <FastField name="hotelChain">
+                            {({ field, form }) => (
+                              <>
+                                <div style={{ width: 300 }}>
+                                  <Select
+                                    {...field}
+                                    placeholder="Please choose Hotel Chain"
+                                    options={selectCountry}
+                                    className="react-select"
+                                    onChange={(v) => {
+                                      setFieldValue("hotelChain", v)
+                                    }}
+                                    onBlur={setFieldTouched}
+                                  />
                                 </div>
                               </>
                             )}
@@ -293,30 +235,38 @@ const GeneralInformation = (props) => {
                       </Form.Group>
                       <Form.Group as={Row} className="form-group">
                         <Form.Label column sm={3}>
-                          First Name{" "}
+                          Star Rating
                           <span className="form-label-required">*</span>
                         </Form.Label>
                         <Col sm={9}>
-                          <FastField name="firstName">
+                          <FastField name="starRating">
                             {({ field, form }) => (
                               <>
-                                <Form.Control
-                                  type="text"
-                                  isInvalid={
-                                    form.touched.firstName &&
-                                    form.errors.firstName
-                                  }
-                                  maxLength={128}
-                                  {...field}
-                                />
-                                {form.touched.firstName &&
-                                  form.errors.firstName && (
-                                    <Form.Control.Feedback type="invalid">
-                                      {form.touched.firstName
-                                        ? form.errors.firstName
-                                        : null}
-                                    </Form.Control.Feedback>
-                                  )}
+                                <div style={{ width: 300 }}>
+                                  <Select
+                                    {...field}
+                                    placeholder="Please choose Star Rating"
+                                    options={selectCountry}
+                                    className={`react-select ${
+                                      form.touched.starRating &&
+                                      form.errors.starRating
+                                        ? "is-invalid"
+                                        : null
+                                    }`}
+                                    onChange={(v) => {
+                                      setFieldValue("starRating", v)
+                                    }}
+                                    onBlur={setFieldTouched}
+                                  />
+                                  {form.touched.starRating &&
+                                    form.errors.starRating && (
+                                      <Form.Control.Feedback type="invalid">
+                                        {form.touched.starRating
+                                          ? form.errors.starRating
+                                          : null}
+                                      </Form.Control.Feedback>
+                                    )}
+                                </div>
                               </>
                             )}
                           </FastField>
@@ -324,306 +274,45 @@ const GeneralInformation = (props) => {
                       </Form.Group>
                       <Form.Group as={Row} className="form-group">
                         <Form.Label column sm={3}>
-                          Middle Name
-                        </Form.Label>
-                        <Col sm={9}>
-                          <FastField name="middleName">
-                            {({ field }) => (
-                              <Form.Control
-                                {...field}
-                                type="text"
-                                maxLength={128}
-                              />
-                            )}
-                          </FastField>
-                        </Col>
-                      </Form.Group>
-                      <Form.Group as={Row} className="form-group">
-                        <Form.Label column sm={3}>
-                          Last Name{" "}
+                          Number Of Rooms
                           <span className="form-label-required">*</span>
                         </Form.Label>
                         <Col sm={9}>
-                          <FastField name="lastName">
-                            {({ field, form }) => (
+                          <FastField name="numberOfRooms">
+                            {({ field }) => (
                               <>
                                 <Form.Control
+                                  type="number"
+                                  maxLength={9999}
                                   {...field}
-                                  type="text"
-                                  isInvalid={
-                                    form.touched.lastName &&
-                                    form.errors.lastName
-                                  }
-                                  maxLength={128}
                                 />
-                                {form.touched.lastName &&
-                                  form.errors.lastName && (
-                                    <Form.Control.Feedback type="invalid">
-                                      {form.touched.lastName
-                                        ? form.errors.lastName
-                                        : null}
-                                    </Form.Control.Feedback>
-                                  )}
                               </>
                             )}
                           </FastField>
                         </Col>
                       </Form.Group>
-                      <Form.Group as={Row} className="form-group">
-                        <Form.Label column sm={3}>
-                          Date Of Birth{" "}
-                          <span className="form-label-required">*</span>
-                        </Form.Label>
-                        <Col sm={9}>
-                          <div style={{ width: 300, display: "flex" }}>
-                            <div style={{ marginRight: 12 }}>
-                              <Select
-                                options={selectDay()}
-                                className={`react-select ${
-                                  touched.title && Boolean(errors.title)
-                                    ? "is-invalid"
-                                    : ""
-                                }`}
-                                components={{
-                                  IndicatorSeparator: () => null,
-                                }}
-                                style={{ marginRight: 12 }}
-                              />
-                            </div>
-                            <div style={{ marginRight: 12 }}>
-                              <Select
-                                options={selectMonth()}
-                                className={`react-select ${
-                                  touched.title && Boolean(errors.title)
-                                    ? "is-invalid"
-                                    : ""
-                                }`}
-                                components={{
-                                  IndicatorSeparator: () => null,
-                                }}
-                                style={{ marginRight: 12 }}
-                              />
-                            </div>
-                            <div>
-                              <Select
-                                options={selectYear()}
-                                className={`react-select ${
-                                  touched.title && Boolean(errors.title)
-                                    ? "is-invalid"
-                                    : ""
-                                }`}
-                                components={{
-                                  IndicatorSeparator: () => null,
-                                }}
-                                style={{ marginRight: 12 }}
-                              />
-                            </div>
-                          </div>
-                          {touched.title && Boolean(errors.title) && (
-                            <div className="invalid-feedback">
-                              {touched.title ? errors.title : ""}
-                            </div>
-                          )}
-                        </Col>
-                      </Form.Group>
-                      <Form.Group as={Row} className="form-group">
-                        <Form.Label column sm={3}>
-                          Gender <span className="form-label-required">*</span>
-                        </Form.Label>
-                        <Col sm={9}>
-                          <div
-                            style={{
-                              height: 38,
-                              display: "flex",
-                              alignItems: "center",
-                            }}
-                          >
-                            <FastField name="gender">
-                              {({ field, form }) => (
-                                <Form.Check
-                                  {...field}
-                                  checked={values.gender === "male"}
-                                  type="radio"
-                                  label="Male"
-                                  isInvalid={
-                                    form.touched.gender && form.errors.gender
-                                  }
-                                  style={{ marginRight: 30 }}
-                                  inline
-                                  onChange={() =>
-                                    setFieldValue("gender", "male")
-                                  }
-                                />
-                              )}
-                            </FastField>
-                            <FastField name="gender">
-                              {({ field, form }) => (
-                                <Form.Check
-                                  {...field}
-                                  checked={values.gender === "female"}
-                                  type="radio"
-                                  label="Female"
-                                  isInvalid={
-                                    form.touched.gender && form.errors.gender
-                                  }
-                                  inline
-                                  onChange={() =>
-                                    setFieldValue("gender", "female")
-                                  }
-                                />
-                              )}
-                            </FastField>
-                            {touched.gender && errors.gender && (
-                              <Form.Control.Feedback type="invalid">
-                                {touched.gender ? errors.gender : null}
-                              </Form.Control.Feedback>
-                            )}
-                          </div>
-                        </Col>
-                      </Form.Group>
-                      <Form.Group as={Row} className="form-group">
-                        <Form.Label column sm={3}>
-                          ID Card Number (KTP)
-                        </Form.Label>
-                        <Col sm={9}>
-                          <FastField name="idCardNumber">
-                            {({ field }) => (
-                              <Form.Control
-                                {...field}
-                                type="text"
-                                maxLength={36}
-                              />
-                            )}
-                          </FastField>
-                        </Col>
-                      </Form.Group>
-                    </Col>
-                    <Col sm={4}>
-                      <div className="img-profile-wrapper">
-                        <div>
-                          {photoProfile.length == 0 && (
-                            <Image
-                              src="/img/media/profile.svg"
-                              className="img-profile"
-                              roundedCircle
-                            />
-                          )}
-                          <ImageUploading
-                            value={photoProfile}
-                            onChange={onChangePhotoProfile}
-                            maxNumber={maxNumber}
-                            dataURLKey="data_url"
-                          >
-                            {({ imageList, onImageUpload, onImageUpdate }) => (
-                              // write your building UI
-                              <>
-                                {imageList.map((image, index) => (
-                                  <div key={index} className="image-item">
-                                    <Image
-                                      src={image["data_url"]}
-                                      roundedCircle
-                                      className="img-profile"
-                                    />
-                                  </div>
-                                ))}
-                                <Button
-                                  variant="secondary"
-                                  onClick={() =>
-                                    photoProfile.length !== 0
-                                      ? onImageUpload()
-                                      : onImageUpdate(1)
-                                  }
-                                >
-                                  {photoProfile.length !== 0
-                                    ? "CHANGE"
-                                    : "UPLOAD"}{" "}
-                                  PHOTO
-                                </Button>
-                              </>
-                            )}
-                          </ImageUploading>
-                        </div>
-                      </div>
                     </Col>
                   </Row>
                 </div>
                 <h3 className="card-heading">Contacts</h3>
                 <div style={{ padding: "0 15px 15px 15px" }}>
                   <Form.Group as={Row} className="form-group">
-                    <Form.Label column sm={2}>
-                      Home Phone <span className="form-label-required">*</span>
-                    </Form.Label>
-                    <Col sm={10}>
-                      <FastField name="homePhone">
-                        {({ field, form }) => (
-                          <>
-                            <Form.Control
-                              {...field}
-                              type="text"
-                              isInvalid={
-                                form.touched.homePhone && form.errors.homePhone
-                              }
-                              maxLength={32}
-                            />
-                            {form.touched.homePhone &&
-                              form.errors.homePhone && (
-                                <Form.Control.Feedback type="invalid">
-                                  {form.touched.homePhone
-                                    ? form.errors.homePhone
-                                    : null}
-                                </Form.Control.Feedback>
-                              )}
-                          </>
-                        )}
-                      </FastField>
-                    </Col>
-                  </Form.Group>
-                  <Form.Group as={Row} className="form-group">
-                    <Form.Label column sm={2}>
-                      Mobile Phone{" "}
+                    <Form.Label column sm={3}>
+                      Email
                       <span className="form-label-required">*</span>
                     </Form.Label>
-                    <Col sm={10}>
-                      <FastField name="mobilePhone">
-                        {({ field, form }) => (
-                          <>
-                            <Form.Control
-                              {...field}
-                              type="text"
-                              isInvalid={
-                                form.touched.mobilePhone &&
-                                form.errors.mobilePhone
-                              }
-                              maxLength={32}
-                            />
-                            {form.touched.mobilePhone &&
-                              form.errors.mobilePhone && (
-                                <Form.Control.Feedback type="invalid">
-                                  {form.touched.mobilePhone
-                                    ? form.errors.mobilePhone
-                                    : null}
-                                </Form.Control.Feedback>
-                              )}
-                          </>
-                        )}
-                      </FastField>
-                    </Col>
-                  </Form.Group>
-                  <Form.Group as={Row} className="form-group">
-                    <Form.Label column sm={2}>
-                      Email <span className="form-label-required">*</span>
-                    </Form.Label>
-                    <Col sm={10}>
+                    <Col sm={9}>
                       <FastField name="email">
                         {({ field, form }) => (
                           <>
                             <Form.Control
-                              {...field}
                               type="email"
                               isInvalid={
                                 form.touched.email && form.errors.email
                               }
+                              minLength={1}
                               maxLength={256}
+                              {...field}
                             />
                             {form.touched.email && form.errors.email && (
                               <Form.Control.Feedback type="invalid">
@@ -636,29 +325,29 @@ const GeneralInformation = (props) => {
                     </Col>
                   </Form.Group>
                   <Form.Group as={Row} className="form-group">
-                    <Form.Label column sm={2}>
-                      Other Email
+                    <Form.Label column sm={3}>
+                      Email for Booking Acknowledgment
+                      <span className="form-label-required">*</span>
                     </Form.Label>
-                    <Col sm={10}>
-                      <FastField name="otherEmail">
+                    <Col sm={9}>
+                      <FastField name="emailForBookingAcknowledgment">
                         {({ field, form }) => (
                           <>
                             <Form.Control
-                              {...field}
                               type="email"
-                              className={
-                                form.touched.otherEmail &&
-                                form.errors.otherEmail
-                                  ? "is-invalid"
-                                  : null
+                              isInvalid={
+                                form.touched.emailForBookingAcknowledgment &&
+                                form.errors.emailForBookingAcknowledgment
                               }
+                              minLength={1}
                               maxLength={256}
+                              {...field}
                             />
-                            {form.touched.otherEmail &&
-                              form.errors.otherEmail && (
+                            {form.touched.emailForBookingAcknowledgment &&
+                              form.errors.emailForBookingAcknowledgment && (
                                 <Form.Control.Feedback type="invalid">
-                                  {form.touched.otherEmail
-                                    ? form.errors.otherEmail
+                                  {form.touched.emailForBookingAcknowledgment
+                                    ? form.errors.emailForBookingAcknowledgment
                                     : null}
                                 </Form.Control.Feedback>
                               )}
@@ -667,20 +356,87 @@ const GeneralInformation = (props) => {
                       </FastField>
                     </Col>
                   </Form.Group>
+                  <Form.Group as={Row} className="form-group">
+                    <Form.Label column sm={3}>
+                      Phone
+                      <span className="form-label-required">*</span>
+                    </Form.Label>
+                    <Col sm={9}>
+                      <FastField name="phone">
+                        {({ field, form }) => (
+                          <>
+                            <Form.Control
+                              type="text"
+                              isInvalid={
+                                form.touched.phone && form.errors.phone
+                              }
+                              minLength={1}
+                              maxLength={32}
+                              {...field}
+                            />
+                            {form.touched.phone && form.errors.phone && (
+                              <Form.Control.Feedback type="invalid">
+                                {form.touched.phone ? form.errors.phone : null}
+                              </Form.Control.Feedback>
+                            )}
+                          </>
+                        )}
+                      </FastField>
+                    </Col>
+                  </Form.Group>
+                  <Form.Group as={Row} className="form-group">
+                    <Form.Label column sm={3}>
+                      Fax
+                    </Form.Label>
+                    <Col sm={9}>
+                      <FastField name="fax">
+                        {({ field, form }) => (
+                          <>
+                            <Form.Control
+                              type="text"
+                              minLength={1}
+                              maxLength={36}
+                              {...field}
+                            />
+                          </>
+                        )}
+                      </FastField>
+                    </Col>
+                  </Form.Group>
+                  <Form.Group as={Row} className="form-group">
+                    <Form.Label column sm={3}>
+                      Website
+                    </Form.Label>
+                    <Col sm={9}>
+                      <FastField name="website">
+                        {({ field, form }) => (
+                          <>
+                            <Form.Control
+                              type="text"
+                              minLength={1}
+                              maxLength={256}
+                              {...field}
+                            />
+                          </>
+                        )}
+                      </FastField>
+                    </Col>
+                  </Form.Group>
                 </div>
-                <h3 className="card-heading">Current Address</h3>
+                <h3 className="card-heading">Address</h3>
                 <div style={{ padding: "0 15px 15px 15px" }}>
                   <Form.Group as={Row} className="form-group">
-                    <Form.Label column sm={2}>
+                    <Form.Label column sm={3}>
                       Address
                     </Form.Label>
-                    <Col sm={10}>
-                      <FastField name="currentAddress">
+                    <Col sm={9}>
+                      <FastField name="address">
                         {({ field }) => (
                           <Form.Control
                             {...field}
                             as="textarea"
                             rows={3}
+                            minLength={1}
                             maxLength={512}
                           />
                         )}
@@ -688,253 +444,401 @@ const GeneralInformation = (props) => {
                     </Col>
                   </Form.Group>
                   <Form.Group as={Row} className="form-group">
-                    <Form.Label column sm={2}>
-                      Country <span className="form-label-required">*</span>
+                    <Form.Label column sm={3}>
+                      Country
+                      <span className="form-label-required">*</span>
                     </Form.Label>
-                    <Col sm={10}>
-                      {selectCountry.length !== 0 && (
-                        <FastField name="currentCountry">
-                          {({ field, form }) => (
-                            <>
-                              <div style={{ width: 300 }}>
-                                <Select
-                                  {...field}
-                                  placeholder="Please choose"
-                                  options={selectCountry}
-                                  className={`react-select ${
-                                    form.touched.currentCountry &&
-                                    form.errors.currentCountry
-                                      ? "is-invalid"
-                                      : null
-                                  }`}
-                                  onChange={(v) => {
-                                    setFieldValue("currentCountry", v)
-                                    handleChangeCountry(v.value)
-                                    // if (values.currentProvince !== "") {
-                                    //   setFieldValue("currentProvince", "")
-                                    // }
-                                  }}
-                                  onBlur={setFieldTouched}
-                                />
-                                {form.touched.currentCountry &&
-                                  form.errors.currentCountry && (
-                                    <Form.Control.Feedback type="invalid">
-                                      {form.touched.currentCountry
-                                        ? form.errors.currentCountry
-                                        : null}
-                                    </Form.Control.Feedback>
-                                  )}
-                              </div>
-                            </>
-                          )}
-                        </FastField>
-                      )}
-                    </Col>
-                  </Form.Group>
-                  <Form.Group as={Row} className="form-group">
-                    <Form.Label column sm={2}>
-                      State/ Province
-                    </Form.Label>
-                    <Col sm={10}>
-                      <div style={{ width: 300 }}>
-                        <Select
-                          name="currentProvince"
-                          placeholder="Please choose"
-                          options={selectProvince}
-                          onChange={(v) => {
-                            setFieldValue("currentProvince", v)
-                            handleChangeProvince(v.value)
-                          }}
-                          onBlur={setFieldTouched}
-                          isDisabled={values.currentCountry == ""}
-                        />
-                      </div>
-                    </Col>
-                  </Form.Group>
-                  <Form.Group as={Row} className="form-group">
-                    <Form.Label column sm={2}>
-                      City
-                    </Form.Label>
-                    <Col sm={10}>
-                      <div style={{ width: 300 }}>
-                        <Select
-                          name="currentCity"
-                          placeholder="Please choose"
-                          options={selectCity}
-                          onChange={(v) => {
-                            setFieldValue("currentCity", v)
-                          }}
-                          onBlur={setFieldTouched}
-                          isDisabled={values.currentProvince == ""}
-                        />
-                      </div>
-                    </Col>
-                  </Form.Group>
-                  <Form.Group as={Row} className="form-group">
-                    <Form.Label column sm={2}>
-                      ZIP Code
-                    </Form.Label>
-                    <Col sm={10}>
-                      <FastField name="currentZipCode">
-                        {({ field }) => (
-                          <Form.Control {...field} type="text" maxLength={16} />
+                    <Col sm={9}>
+                      <FastField name="country">
+                        {({ field, form }) => (
+                          <>
+                            <div style={{ width: 300 }}>
+                              <Select
+                                {...field}
+                                placeholder="Please choose"
+                                options={selectCountry}
+                                className={`react-select ${
+                                  form.touched.starRating &&
+                                  form.errors.starRating
+                                    ? "is-invalid"
+                                    : null
+                                }`}
+                                onChange={(v) => {
+                                  setFieldValue("starRating", v)
+                                }}
+                                onBlur={setFieldTouched}
+                              />
+                              {form.touched.starRating &&
+                                form.errors.starRating && (
+                                  <Form.Control.Feedback type="invalid">
+                                    {form.touched.starRating
+                                      ? form.errors.starRating
+                                      : null}
+                                  </Form.Control.Feedback>
+                                )}
+                            </div>
+                          </>
                         )}
                       </FastField>
                     </Col>
                   </Form.Group>
+                  <Form.Group as={Row} className="form-group">
+                    <Form.Label column sm={3}>
+                      State/Province
+                    </Form.Label>
+                    <Col sm={9}>
+                      <FastField name="province">
+                        {({ field, form }) => (
+                          <>
+                            <div style={{ width: 300 }}>
+                              <Select
+                                {...field}
+                                placeholder="Please choose"
+                                options={selectCountry}
+                                className="react-select"
+                                onChange={(v) => {
+                                  setFieldValue("province", v)
+                                }}
+                                onBlur={setFieldTouched}
+                              />
+                            </div>
+                          </>
+                        )}
+                      </FastField>
+                    </Col>
+                  </Form.Group>
+                  <Form.Group as={Row} className="form-group">
+                    <Form.Label column sm={3}>
+                      City
+                    </Form.Label>
+                    <Col sm={9}>
+                      <FastField name="city">
+                        {({ field }) => (
+                          <>
+                            <div style={{ width: 300 }}>
+                              <Select
+                                {...field}
+                                placeholder="Please choose"
+                                options={selectCountry}
+                                className="react-select"
+                                onChange={(v) => {
+                                  setFieldValue("province", v)
+                                }}
+                                onBlur={setFieldTouched}
+                              />
+                            </div>
+                          </>
+                        )}
+                      </FastField>
+                    </Col>
+                  </Form.Group>
+                  <Form.Group as={Row} className="form-group">
+                    <Form.Label column sm={3}>
+                      Zip Code
+                    </Form.Label>
+                    <Col sm={9}>
+                      <FastField name="zipCode">
+                        {({ field, form }) => (
+                          <>
+                            <Form.Control
+                              type="text"
+                              minLength={1}
+                              maxLength={16}
+                              {...field}
+                            />
+                          </>
+                        )}
+                      </FastField>
+                    </Col>
+                  </Form.Group>
+                  <Form.Group as={Row} className="form-group">
+                    <Form.Label column sm={3}>
+                      Destination
+                    </Form.Label>
+                    <Col sm={9}>
+                      <FastField name="destination">
+                        {({ field }) => (
+                          <>
+                            <div style={{ width: 300 }}>
+                              <Select
+                                {...field}
+                                placeholder="Please choose"
+                                options={selectCountry}
+                                className="react-select"
+                                onChange={(v) => {
+                                  setFieldValue("destination", v)
+                                }}
+                                onBlur={setFieldTouched}
+                              />
+                            </div>
+                          </>
+                        )}
+                      </FastField>
+                    </Col>
+                  </Form.Group>
+                  <Form.Group as={Row} className="form-group">
+                    <Form.Label column sm={3}>
+                      Zone
+                    </Form.Label>
+                    <Col sm={9}>
+                      <FastField name="zone">
+                        {({ field }) => (
+                          <>
+                            <div style={{ width: 300 }}>
+                              <Select
+                                {...field}
+                                placeholder="Please choose"
+                                options={selectCountry}
+                                className="react-select"
+                                onChange={(v) => {
+                                  setFieldValue("zone", v)
+                                }}
+                                onBlur={setFieldTouched}
+                              />
+                            </div>
+                          </>
+                        )}
+                      </FastField>
+                    </Col>
+                  </Form.Group>
+                  <Form.Group as={Row} className="form-group">
+                    <Form.Label column sm={3}>
+                      Geo Location
+                    </Form.Label>
+                    <Col sm={9}>
+                      <Row>
+                        <Col sm={6}>
+                          <FastField name="geoLocationLatitude">
+                            {({ field }) => (
+                              <>
+                                <Form.Control
+                                  type="text"
+                                  minLength={1}
+                                  maxLength={16}
+                                  placeholder="Latitude"
+                                  {...field}
+                                />
+                              </>
+                            )}
+                          </FastField>
+                        </Col>
+                        <Col sm={6}>
+                          <FastField name="geoLocationLongitude">
+                            {({ field }) => (
+                              <>
+                                <Form.Control
+                                  type="text"
+                                  minLength={1}
+                                  maxLength={16}
+                                  placeholder="Longitude"
+                                  {...field}
+                                />
+                              </>
+                            )}
+                          </FastField>
+                        </Col>
+                      </Row>
+                    </Col>
+                  </Form.Group>
+                  <Form.Group as={Row} className="form-group">
+                    <Form.Label column sm={3}>
+                      Map Image
+                    </Form.Label>
+                    <Col sm={9}>
+                      <Button variant="secondary">ADD MAP IMAGE</Button>
+                    </Col>
+                  </Form.Group>
                 </div>
-                <h3 className="card-heading">Permanent Address</h3>
+                <h3 className="card-heading">Other Information</h3>
                 <div style={{ padding: "0 15px 15px 15px" }}>
                   <Form.Group as={Row} className="form-group">
-                    <Col sm={10}>
-                      <Form.Check
-                        type="checkbox"
-                        label="Same As Current Address"
-                        name="sameAddress"
-                        checked={values.sameAddress}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                      />
-                    </Col>
-                  </Form.Group>
-                  <Form.Group as={Row} className="form-group">
-                    <Form.Label column sm={2}>
-                      Address
+                    <Form.Label column sm={3}>
+                      Property Type
+                      <span className="form-label-required">*</span>
                     </Form.Label>
-                    <Col sm={10}>
-                      <Form.Control
-                        name="permanentAddress"
-                        as="textarea"
-                        rows={3}
-                        maxLength={512}
-                        value={
-                          values.sameAddress
-                            ? values.currentAddress
-                            : values.permanentAddress
-                        }
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        disabled={values.sameAddress}
-                      />
-                    </Col>
-                  </Form.Group>
-                  <Form.Group as={Row} className="form-group">
-                    <Form.Label column sm={2}>
-                      Country <span className="form-label-required">*</span>
-                    </Form.Label>
-                    <Col sm={10}>
-                      {selectCountry.length !== 0 && (
-                        <div style={{ width: 300 }}>
-                          <Select
-                            name="permanentCountry"
-                            value={
-                              values.sameAddress
-                                ? values.currentCountry
-                                : values.permanentCountry
-                            }
-                            placeholder="Please choose"
-                            options={selectCountry}
-                            className={`react-select ${
-                              !values.sameAddress &&
-                              (touched.permanentCountry &&
-                              errors.permanentCountry
-                                ? "is-invalid"
-                                : null)
-                            }`}
-                            onChange={(v) => {
-                              setFieldValue("permanentCountry", v)
-                              handleChangeCountry(v.value)
-                            }}
-                            onBlur={setFieldTouched}
-                            isDisabled={values.sameAddress}
-                          />
-                          {!values.sameAddress && (
-                            <>
-                              {touched.permanentCountry &&
-                                errors.permanentCountry && (
+                    <Col sm={9}>
+                      <FastField name="propertyType">
+                        {({ field, form }) => (
+                          <>
+                            <div style={{ width: 300 }}>
+                              <Select
+                                {...field}
+                                placeholder="Please choose Property Type"
+                                options={selectCountry}
+                                className={`react-select ${
+                                  form.touched.propertyType &&
+                                  form.errors.propertyType
+                                    ? "is-invalid"
+                                    : null
+                                }`}
+                                onChange={(v) => {
+                                  setFieldValue("propertyType", v)
+                                }}
+                                onBlur={setFieldTouched}
+                              />
+                              {form.touched.propertyType &&
+                                form.errors.propertyType && (
                                   <Form.Control.Feedback type="invalid">
-                                    {touched.permanentCountry
-                                      ? errors.permanentCountry
+                                    {form.touched.propertyType
+                                      ? form.errors.propertyType
                                       : null}
                                   </Form.Control.Feedback>
                                 )}
-                            </>
-                          )}
-                        </div>
-                      )}
+                            </div>
+                          </>
+                        )}
+                      </FastField>
                     </Col>
                   </Form.Group>
                   <Form.Group as={Row} className="form-group">
-                    <Form.Label column sm={2}>
-                      State/ Province
+                    <Form.Label column sm={3}>
+                      Location Category
+                      <span className="form-label-required">*</span>
                     </Form.Label>
-                    <Col sm={10}>
-                      <div style={{ width: 300 }}>
-                        <Select
-                          name="permanentProvince"
-                          value={
-                            values.sameAddress
-                              ? values.currentProvince
-                              : values.permanentProvince
-                          }
-                          placeholder="Please choose"
-                          options={selectProvince}
-                          onChange={(v) => {
-                            setFieldValue("permanentProvince", v)
-                            handleChangeProvince(v.value)
-                          }}
-                          onBlur={setFieldTouched}
-                          isDisabled={
-                            values.permanentCountry == "" || values.sameAddress
-                          }
-                        />
-                      </div>
+                    <Col sm={9}>
+                      <FastField name="locationCategory">
+                        {({ field, form }) => (
+                          <>
+                            <div style={{ width: 300 }}>
+                              <Select
+                                {...field}
+                                placeholder=""
+                                options={selectCountry}
+                                className={`react-select ${
+                                  form.touched.locationCategory &&
+                                  form.errors.locationCategory
+                                    ? "is-invalid"
+                                    : null
+                                }`}
+                                onChange={(v) => {
+                                  setFieldValue("locationCategory", v)
+                                }}
+                                onBlur={setFieldTouched}
+                              />
+                              {form.touched.locationCategory &&
+                                form.errors.locationCategory && (
+                                  <Form.Control.Feedback type="invalid">
+                                    {form.touched.locationCategory
+                                      ? form.errors.locationCategory
+                                      : null}
+                                  </Form.Control.Feedback>
+                                )}
+                            </div>
+                          </>
+                        )}
+                      </FastField>
                     </Col>
                   </Form.Group>
                   <Form.Group as={Row} className="form-group">
-                    <Form.Label column sm={2}>
-                      City
+                    <Form.Label column sm={3}>
+                      Construction Year
                     </Form.Label>
-                    <Col sm={10}>
-                      <div style={{ width: 300 }}>
-                        <Select
-                          name="permanentCity"
-                          value={
-                            values.sameAddress
-                              ? values.currentCity
-                              : values.permanentCity
-                          }
-                          placeholder="Please choose"
-                          options={selectCity}
-                          onChange={(v) => {
-                            setFieldValue("permanentCity", v)
-                          }}
-                          onBlur={setFieldTouched}
-                          isDisabled={
-                            values.permanentProvince == "" || values.sameAddress
-                          }
-                        />
-                      </div>
+                    <Col sm={9}>
+                      <FastField name="constructionYear">
+                        {({ field }) => (
+                          <>
+                            <Form.Control
+                              type="text"
+                              minLength={1}
+                              maxLength={16}
+                              {...field}
+                            />
+                          </>
+                        )}
+                      </FastField>
                     </Col>
                   </Form.Group>
                   <Form.Group as={Row} className="form-group">
-                    <Form.Label column sm={2}>
-                      ZIP Code
+                    <Form.Label column sm={3}>
+                      Last Renovation
                     </Form.Label>
-                    <Col sm={10}>
-                      <Form.Control
-                        name="permanentZipCode"
-                        type="text"
-                        maxLength={16}
-                        value={
-                          values.sameAddress
-                            ? values.currentZipCode
-                            : values.permanentZipCode
-                        }
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        disabled={values.sameAddress}
-                      />
+                    <Col sm={9}>
+                      <FastField name="lastRenovation">
+                        {({ field }) => (
+                          <>
+                            <Form.Control
+                              type="text"
+                              minLength={1}
+                              maxLength={16}
+                              {...field}
+                            />
+                          </>
+                        )}
+                      </FastField>
+                    </Col>
+                  </Form.Group>
+                  <Form.Group as={Row} className="form-group">
+                    <Form.Label column sm={3}>
+                      Standard Check-in Time
+                    </Form.Label>
+                    <Col sm={9}>
+                      <FastField name="standardCheckinTime">
+                        {({ field }) => (
+                          <>
+                            <Form.Control
+                              type="text"
+                              minLength={1}
+                              maxLength={16}
+                              {...field}
+                            />
+                          </>
+                        )}
+                      </FastField>
+                    </Col>
+                  </Form.Group>
+                  <Form.Group as={Row} className="form-group">
+                    <Form.Label column sm={3}>
+                      Standard Check-out Time
+                    </Form.Label>
+                    <Col sm={9}>
+                      <FastField name="standardCheckoutTime">
+                        {({ field }) => (
+                          <>
+                            <Form.Control
+                              type="text"
+                              minLength={1}
+                              maxLength={16}
+                              {...field}
+                            />
+                          </>
+                        )}
+                      </FastField>
+                    </Col>
+                  </Form.Group>
+                  <Form.Group as={Row} className="form-group">
+                    <Form.Label column sm={3}>
+                      Descriptions
+                    </Form.Label>
+                    <Col sm={9}>
+                      <FastField name="descriptions">
+                        {({ field }) => (
+                          <Form.Control
+                            {...field}
+                            as="textarea"
+                            rows={3}
+                            minLength={1}
+                            maxLength={512}
+                          />
+                        )}
+                      </FastField>
+                    </Col>
+                  </Form.Group>
+                  <Form.Group as={Row} className="form-group">
+                    <Form.Label column sm={3}>
+                      Internal Remark
+                    </Form.Label>
+                    <Col sm={9}>
+                      <FastField name="internalRemark">
+                        {({ field }) => (
+                          <Form.Control
+                            {...field}
+                            as="textarea"
+                            rows={3}
+                            minLength={1}
+                            maxLength={512}
+                          />
+                        )}
+                      </FastField>
                     </Col>
                   </Form.Group>
                 </div>
