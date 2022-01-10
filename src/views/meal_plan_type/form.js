@@ -136,11 +136,12 @@ function MealPlanTypeForm(props) {
           $.validator.addMethod(
             "checkName",
             function (value, element) {
+              let filters = JSON.stringify(["meal_plan_type_name","=",element.value])
               var req = false
               $.ajax({
                 type: "GET",
                 async: false,
-                url: `${env.API_URL}/master/meal-plan-types?filters=["meal_plan_type_name","=","${element.value}"]`,
+                url: `${env.API_URL}/master/meal-plan-types?filters=${encodeURIComponent(filters)}`,
                 success: function (res) {
                   if (res.items.length !== 0) {
                     if(currentName.toUpperCase() === element.value.toUpperCase()){
@@ -194,10 +195,11 @@ function MealPlanTypeForm(props) {
         "checkName",
         function (value, element) {
           var req = false
+          let filters = JSON.stringify(["meal_plan_type_name","=",element.value])
           $.ajax({
             type: "GET",
             async: false,
-            url: `${env.API_URL}/master/meal-plan-types?filters=["meal_plan_type_name","=","${element.value}"]`,
+            url: `${env.API_URL}/master/meal-plan-types?filters=${encodeURIComponent(filters)}`,
             success: function (res) {
               if (res.items.length !== 0) {
                 req = false
