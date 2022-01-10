@@ -44,7 +44,7 @@ function MealPlanTypeForm(props) {
     meal_plan_type_code: {
       required: true,
       min: 1,
-      max: 99,
+      max: 32767,
       checkCode: true,
     },
     meal_plan_type_name: {
@@ -368,7 +368,7 @@ function MealPlanTypeForm(props) {
           disabled={isView || loading}
           type="number"
           min="0"
-          max="99"
+          max="32767"
           hint="Meal Plan Type Code is numeric"
         />
       </FormHorizontal>

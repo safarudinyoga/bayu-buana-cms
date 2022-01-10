@@ -38,7 +38,7 @@ function LocationCategoryForm(props) {
     location_category_code: {
       required: true,
       min: 1,
-      max: 99,
+      max: 32767,
       checkCode: true,
     },
     location_category_name: {
@@ -287,7 +287,7 @@ function LocationCategoryForm(props) {
           disabled={isView || loading}
           type="number"
           min="0"
-          max="99"
+          max="32767"
           hint="Location Category Code is numeric"
         />
       </FormHorizontal>
