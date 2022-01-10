@@ -1,0 +1,59 @@
+.tab-translation {
+  .nav-pills .nav-link.active,
+  .nav-pills .show > .nav-link {
+    background-color: #fff;
+    font-size: 15px;
+    color: #333333;
+  }
+  .nav-pills .nav-link {
+    background-color: #ececec;
+    font-size: 15px;
+    color: #333333;
+    cursor: pointer;
+    height: 45px;
+    padding: 0 10px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 5px;
+    box-shadow: 0px 3px 6px #00000029;
+    border-left: 1px solid #dddddd;
+    border-top: 1px solid #dddddd;
+    border-bottom: 1px solid #dddddd;
+    border-radius: 4px 0px 0px 4px;
+    i {
+      margin-left: 10px;
+    }
+    &:hover {
+      color: #333333;
+    }
+  }
+  .tab-content {
+    box-shadow: 0px 3px 6px #00000029;
+    border: 1px solid #e1e1e1;
+    border-radius: 0px 8px 8px 8px;
+    padding: 30px;
+    background-color: #fff;
+  }
+  .tab-horizontal {
+    display: flex;
+    justify-content: flex-start;
+    .tab-horizontal-nav {
+      min-width: 200px;
+    }
+    .tab-horizontal-content {
+      flex: 1;
+    }
+  }
+}
+.tab-translation-note {
+  margin-top: 10px;
+  i {
+    margin: 0 8px;
+  }
+  span {
+    color: #333333;
+    font-size: 11px;
+    font-style: italic;
+  }
+}

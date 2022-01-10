@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react"
-import { Card, Form, Row, Col, Button, Image } from "react-bootstrap"
+import { Card, Form, Row, Col, Button, Image, Tab, Nav } from "react-bootstrap"
 import { Formik, FastField, Field } from "formik"
 import * as Yup from "yup"
 import ImageUploading from "react-images-uploading"
+import { Editor } from "react-draft-wysiwyg"
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css"
 
 import Api from "config/api"
 import Select from "components/form/select"
@@ -49,6 +51,9 @@ const GeneralInformation = (props) => {
     standardCheckoutTime: "",
     descriptions: "",
     internalRemark: "",
+    termConditions: "",
+
+    // Translations
   }
 
   // Schema for yup
@@ -91,7 +96,108 @@ const GeneralInformation = (props) => {
     standardCheckoutTime: Yup.string(),
     descriptions: Yup.string(),
     internalRemark: Yup.string(),
+    termConditions: Yup.string(),
   })
+
+  const formTranslation = () => {
+    return (
+      <>
+        <Form.Group as={Row} className="form-group">
+          <Form.Label column sm={3}>
+            Hotel Name
+          </Form.Label>
+          <Col sm={9}>
+            <FastField name="a">
+              {({ field }) => (
+                <>
+                  <Form.Control
+                    type="text"
+                    minLength={1}
+                    maxLength={16}
+                    {...field}
+                  />
+                </>
+              )}
+            </FastField>
+          </Col>
+        </Form.Group>
+        <Form.Group as={Row} className="form-group">
+          <Form.Label column sm={3}>
+            Standard Check-in Time
+          </Form.Label>
+          <Col sm={9}>
+            <FastField name="b">
+              {({ field }) => (
+                <>
+                  <Form.Control
+                    type="text"
+                    minLength={1}
+                    maxLength={16}
+                    {...field}
+                  />
+                </>
+              )}
+            </FastField>
+          </Col>
+        </Form.Group>
+        <Form.Group as={Row} className="form-group">
+          <Form.Label column sm={3}>
+            Standard Check-out Time
+          </Form.Label>
+          <Col sm={9}>
+            <FastField name="c">
+              {({ field }) => (
+                <>
+                  <Form.Control
+                    type="text"
+                    minLength={1}
+                    maxLength={16}
+                    {...field}
+                  />
+                </>
+              )}
+            </FastField>
+          </Col>
+        </Form.Group>
+        <Form.Group as={Row} className="form-group">
+          <Form.Label column sm={3}>
+            Descriptions
+          </Form.Label>
+          <Col sm={9}>
+            <FastField name="d">
+              {({ field }) => (
+                <Form.Control
+                  {...field}
+                  as="textarea"
+                  rows={3}
+                  minLength={1}
+                  maxLength={512}
+                />
+              )}
+            </FastField>
+          </Col>
+        </Form.Group>
+        <Form.Group as={Row} className="form-group">
+          <Form.Label column sm={3}>
+            Internal Remark
+          </Form.Label>
+          <Col sm={9}>
+            <FastField name="e">
+              {({ field }) => (
+                <Form.Control
+                  {...field}
+                  as="textarea"
+                  rows={3}
+                  minLength={1}
+                  maxLength={512}
+                />
+              )}
+            </FastField>
+          </Col>
+        </Form.Group>
+      </>
+    )
+  }
 
   return (
     <>
@@ -841,6 +947,66 @@ const GeneralInformation = (props) => {
                       </FastField>
                     </Col>
                   </Form.Group>
+                  <Form.Group as={Row} className="form-group">
+                    <Form.Label column sm={3}>
+                      Terms & Conditions
+                    </Form.Label>
+                    <Col sm={9}>
+                      <Editor
+                        // editorState={editorState}
+                        toolbarClassName="toolbarClassName"
+                        wrapperClassName="wrapperClassName"
+                        editorClassName="editorClassName"
+                        // onEditorStateChange={this.onEditorStateChange}
+                      />
+                    </Col>
+                  </Form.Group>
+                </div>
+                <h3 className="card-heading-section">Translation</h3>
+                <div className="tab-translation">
+                  <Tab.Container
+                    id="translation-form"
+                    defaultActiveKey="indonesia"
+                  >
+                    <div className="tab-horizontal">
+                      <div className="tab-horizontal-nav">
+                        <Nav variant="pills" className="flex-column">
+                          <Nav.Item>
+                            <Nav.Link eventKey="indonesia">
+                              <span>Indonesia</span>
+                              <i
+                                className="fas fa-exclamation-triangle"
+                                style={{ color: "red" }}
+                              ></i>
+                            </Nav.Link>
+                          </Nav.Item>
+                          <Nav.Item>
+                            <Nav.Link eventKey="chinese-simplified">
+                              <span>Chinese Simplified</span>
+                            </Nav.Link>
+                          </Nav.Item>
+                        </Nav>
+                      </div>
+                      <div className="tab-horizontal-content">
+                        <Tab.Content>
+                          <Tab.Pane eventKey="indonesia">
+                            {formTranslation()}
+                          </Tab.Pane>
+                          <Tab.Pane eventKey="chinese-simplified">
+                            {formTranslation()}
+                          </Tab.Pane>
+                        </Tab.Content>
+                      </div>
+                    </div>
+                  </Tab.Container>
+                  <div className="tab-translation-note">
+                    <span>Note:</span>
+                    <i
+                      className="fas fa-exclamation-triangle"
+                      style={{ color: "red" }}
+                    ></i>
+                    <span>Incomplete data</span>
+                  </div>
                 </div>
               </Card.Body>
             </Card>
