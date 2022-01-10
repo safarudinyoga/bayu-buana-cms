@@ -113,7 +113,8 @@ const GeneralInformation = (props) => {
                   <Form.Control
                     type="text"
                     minLength={1}
-                    maxLength={16}
+                    maxLength={128}
+                    style={{ width: 300 }}
                     {...field}
                   />
                 </>
@@ -133,6 +134,7 @@ const GeneralInformation = (props) => {
                     type="text"
                     minLength={1}
                     maxLength={16}
+                    style={{ width: 100 }}
                     {...field}
                   />
                 </>
@@ -152,6 +154,7 @@ const GeneralInformation = (props) => {
                     type="text"
                     minLength={1}
                     maxLength={16}
+                    style={{ width: 100 }}
                     {...field}
                   />
                 </>
@@ -172,6 +175,7 @@ const GeneralInformation = (props) => {
                   rows={3}
                   minLength={1}
                   maxLength={512}
+                  style={{ width: 362 }}
                 />
               )}
             </FastField>
@@ -190,9 +194,24 @@ const GeneralInformation = (props) => {
                   rows={3}
                   minLength={1}
                   maxLength={512}
+                  style={{ width: 362 }}
                 />
               )}
             </FastField>
+          </Col>
+        </Form.Group>
+        <Form.Group as={Row} className="form-group">
+          <Form.Label column sm={3}>
+            Terms & Conditions
+          </Form.Label>
+          <Col sm={9}>
+            <Editor
+              // editorState={editorState}
+              toolbarClassName="toolbarClassName"
+              wrapperClassName="wrapperClassName"
+              editorClassName="editorClassName"
+              // onEditorStateChange={this.onEditorStateChange}
+            />
           </Col>
         </Form.Group>
       </>
@@ -267,6 +286,7 @@ const GeneralInformation = (props) => {
                                   }
                                   minLength={1}
                                   maxLength={128}
+                                  style={{ width: 150 }}
                                   {...field}
                                 />
                                 {form.touched.hotelCode &&
@@ -288,7 +308,7 @@ const GeneralInformation = (props) => {
                           <span className="form-label-required">*</span>
                         </Form.Label>
                         <Col sm={9}>
-                          <FastField name="hotelCode">
+                          <FastField name="hotelName">
                             {({ field, form }) => (
                               <>
                                 <Form.Control
@@ -299,6 +319,7 @@ const GeneralInformation = (props) => {
                                   }
                                   minLength={1}
                                   maxLength={128}
+                                  style={{ width: 400 }}
                                   {...field}
                                 />
                                 {form.touched.hotelName &&
@@ -322,7 +343,7 @@ const GeneralInformation = (props) => {
                           <FastField name="hotelChain">
                             {({ field, form }) => (
                               <>
-                                <div style={{ width: 300 }}>
+                                <div style={{ width: 400 }}>
                                   <Select
                                     {...field}
                                     placeholder="Please choose Hotel Chain"
@@ -348,7 +369,7 @@ const GeneralInformation = (props) => {
                           <FastField name="starRating">
                             {({ field, form }) => (
                               <>
-                                <div style={{ width: 300 }}>
+                                <div style={{ width: 200 }}>
                                   <Select
                                     {...field}
                                     placeholder="Please choose Star Rating"
@@ -390,6 +411,7 @@ const GeneralInformation = (props) => {
                                 <Form.Control
                                   type="number"
                                   maxLength={9999}
+                                  style={{ width: 100 }}
                                   {...field}
                                 />
                               </>
@@ -418,6 +440,7 @@ const GeneralInformation = (props) => {
                               }
                               minLength={1}
                               maxLength={256}
+                              style={{ width: 400 }}
                               {...field}
                             />
                             {form.touched.email && form.errors.email && (
@@ -447,6 +470,7 @@ const GeneralInformation = (props) => {
                               }
                               minLength={1}
                               maxLength={256}
+                              style={{ width: 400 }}
                               {...field}
                             />
                             {form.touched.emailForBookingAcknowledgment &&
@@ -478,6 +502,7 @@ const GeneralInformation = (props) => {
                               }
                               minLength={1}
                               maxLength={32}
+                              style={{ width: 400 }}
                               {...field}
                             />
                             {form.touched.phone && form.errors.phone && (
@@ -502,6 +527,7 @@ const GeneralInformation = (props) => {
                               type="text"
                               minLength={1}
                               maxLength={36}
+                              style={{ width: 400 }}
                               {...field}
                             />
                           </>
@@ -521,6 +547,7 @@ const GeneralInformation = (props) => {
                               type="text"
                               minLength={1}
                               maxLength={256}
+                              style={{ width: 400 }}
                               {...field}
                             />
                           </>
@@ -544,6 +571,7 @@ const GeneralInformation = (props) => {
                             rows={3}
                             minLength={1}
                             maxLength={512}
+                            style={{ width: 416 }}
                           />
                         )}
                       </FastField>
@@ -596,7 +624,7 @@ const GeneralInformation = (props) => {
                       <FastField name="province">
                         {({ field, form }) => (
                           <>
-                            <div style={{ width: 300 }}>
+                            <div style={{ width: 200 }}>
                               <Select
                                 {...field}
                                 placeholder="Please choose"
@@ -621,7 +649,7 @@ const GeneralInformation = (props) => {
                       <FastField name="city">
                         {({ field }) => (
                           <>
-                            <div style={{ width: 300 }}>
+                            <div style={{ width: 200 }}>
                               <Select
                                 {...field}
                                 placeholder="Please choose"
@@ -650,6 +678,7 @@ const GeneralInformation = (props) => {
                               type="text"
                               minLength={1}
                               maxLength={16}
+                              style={{ width: 100 }}
                               {...field}
                             />
                           </>
@@ -665,7 +694,7 @@ const GeneralInformation = (props) => {
                       <FastField name="destination">
                         {({ field }) => (
                           <>
-                            <div style={{ width: 300 }}>
+                            <div style={{ width: 400 }}>
                               <Select
                                 {...field}
                                 placeholder="Please choose"
@@ -712,8 +741,8 @@ const GeneralInformation = (props) => {
                       Geo Location
                     </Form.Label>
                     <Col sm={9}>
-                      <Row>
-                        <Col sm={6}>
+                      <div style={{ display: "flex" }}>
+                        <div style={{ marginRight: 10 }}>
                           <FastField name="geoLocationLatitude">
                             {({ field }) => (
                               <>
@@ -722,13 +751,14 @@ const GeneralInformation = (props) => {
                                   minLength={1}
                                   maxLength={16}
                                   placeholder="Latitude"
+                                  style={{ width: 150 }}
                                   {...field}
                                 />
                               </>
                             )}
                           </FastField>
-                        </Col>
-                        <Col sm={6}>
+                        </div>
+                        <div>
                           <FastField name="geoLocationLongitude">
                             {({ field }) => (
                               <>
@@ -737,13 +767,14 @@ const GeneralInformation = (props) => {
                                   minLength={1}
                                   maxLength={16}
                                   placeholder="Longitude"
+                                  style={{ width: 150 }}
                                   {...field}
                                 />
                               </>
                             )}
                           </FastField>
-                        </Col>
-                      </Row>
+                        </div>
+                      </div>
                     </Col>
                   </Form.Group>
                   <Form.Group as={Row} className="form-group">
@@ -751,7 +782,9 @@ const GeneralInformation = (props) => {
                       Map Image
                     </Form.Label>
                     <Col sm={9}>
-                      <Button variant="secondary">ADD MAP IMAGE</Button>
+                      <Button variant="secondary" style={{ width: 133 }}>
+                        ADD MAP IMAGE
+                      </Button>
                     </Col>
                   </Form.Group>
                 </div>
@@ -805,7 +838,7 @@ const GeneralInformation = (props) => {
                       <FastField name="locationCategory">
                         {({ field, form }) => (
                           <>
-                            <div style={{ width: 300 }}>
+                            <div style={{ width: 400 }}>
                               <Select
                                 {...field}
                                 placeholder=""
@@ -847,6 +880,7 @@ const GeneralInformation = (props) => {
                               type="text"
                               minLength={1}
                               maxLength={16}
+                              style={{ width: 100 }}
                               {...field}
                             />
                           </>
@@ -866,6 +900,7 @@ const GeneralInformation = (props) => {
                               type="text"
                               minLength={1}
                               maxLength={16}
+                              style={{ width: 100 }}
                               {...field}
                             />
                           </>
@@ -885,6 +920,7 @@ const GeneralInformation = (props) => {
                               type="text"
                               minLength={1}
                               maxLength={16}
+                              style={{ width: 100 }}
                               {...field}
                             />
                           </>
@@ -904,6 +940,7 @@ const GeneralInformation = (props) => {
                               type="text"
                               minLength={1}
                               maxLength={16}
+                              style={{ width: 100 }}
                               {...field}
                             />
                           </>
@@ -924,6 +961,7 @@ const GeneralInformation = (props) => {
                             rows={3}
                             minLength={1}
                             maxLength={512}
+                            style={{ width: 416 }}
                           />
                         )}
                       </FastField>
@@ -942,6 +980,7 @@ const GeneralInformation = (props) => {
                             rows={3}
                             minLength={1}
                             maxLength={512}
+                            style={{ width: 416 }}
                           />
                         )}
                       </FastField>
