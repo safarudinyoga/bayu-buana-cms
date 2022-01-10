@@ -239,6 +239,8 @@ function OccupancyTypeForm(props) {
       }
       if (!form.occupancy) {
         form.occupancy = null
+      } else {
+        form.occupancy = parseInt(form.occupancy)
       }
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
