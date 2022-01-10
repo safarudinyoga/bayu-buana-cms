@@ -40,7 +40,7 @@ function PassengerTypeForm(props) {
       required: true,
       number: true,
       min: 0,
-      max: 99,
+      max: 32767,
       checkTypeCode: true,
       noSpace: true,
     },
