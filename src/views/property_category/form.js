@@ -41,7 +41,7 @@ function PropertyCategoryForm(props) {
       checkCode: true,
       noSpace: true,
       min: 1,
-      max: 99,
+      max: 32767
     },
     property_category_name: {
       required: true,
