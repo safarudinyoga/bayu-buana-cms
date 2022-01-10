@@ -5,7 +5,7 @@ import "admin-lte/dist/css/adminlte.css"
 import "App.scss"
 import "bootstrap/dist/js/bootstrap.js"
 import DashboardWrapper from "components/wrapper/dashboard"
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom"
+import {BrowserRouter as Router, Route, Switch} from "react-router-dom"
 import AgeQualifyingTypeForm from "views/age_qualifying_type/form"
 import AgeQualifyingTypeTable from "views/age_qualifying_type/table"
 import AircraftForm from "views/aircraft/form"
@@ -88,6 +88,10 @@ import EmployeeTable from "views/employee/table"
 import EmployeeForm from "views/employee/form"
 import RatingTypeLevelTable from "./views/rating_type_level/table"
 import RatingTypeLevelForm from "./views/rating_type_level/form"
+
+// Master Invoice Email
+import InvoiceEmailSetupTable from "views/invoice_email_setup/table"
+import InvoiceEmailSetupForm from "views/invoice_email_setup/form"
 
 const App = () => {
   document.title = "Bayu Buana"
@@ -334,6 +338,14 @@ const App = () => {
           </Route>
           <Route path="/master/employee/form/:id?">
             <EmployeeForm />
+          </Route>
+
+          {/* Master Invoice Email Setup */}
+          <Route exact path="/master/invoice-email-setup">
+            <InvoiceEmailSetupTable />
+          </Route>
+          <Route exact path="/master/invoice-email-setup/form/:id?">
+            <InvoiceEmailSetupForm />
           </Route>
         </Switch>
       </DashboardWrapper>
