@@ -406,9 +406,6 @@ function RoomAmenityTypeForm(props) {
           }}
           disabled={isView || loading}
           type="number"
-          minLength="1"
-          maxLength="32767"
-          hint="Room Amenity Type code maximum 32767 characters"
         />
 
       </FormHorizontal>
