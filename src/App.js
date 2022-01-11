@@ -84,7 +84,7 @@ import EmployeeTable from "views/employee/table"
 import EmployeeForm from "views/employee/form"
 import RatingTypeLevelTable from './views/rating_type_level/table';
 import RatingTypeLevelForm from './views/rating_type_level/form';
-import Login from './views/login';
+import Login from './views/auth/login';
 
 const RouteWithProps = ({ path, exact, strict, component: Component, location, auth, ...rest }) => (
   <Route
