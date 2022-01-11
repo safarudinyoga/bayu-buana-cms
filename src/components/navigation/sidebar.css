@@ -39,3 +39,7 @@
 .nav-sidebar .menu-open > .nav-link i.right, .nav-sidebar .menu-is-opening > .nav-link i.right {
   transform: none;
 }
+.nav-treeview .nav-item > .nav-link {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
