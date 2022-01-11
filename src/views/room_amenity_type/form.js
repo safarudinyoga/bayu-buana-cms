@@ -55,7 +55,7 @@ function RoomAmenityTypeForm(props) {
       number: true,
       noSpace: true,
       min: 1,
-      max: 999,
+      max: 32767,
       checkCode: true
     },
     room_amenity_type_asset: {
@@ -137,7 +137,7 @@ function RoomAmenityTypeForm(props) {
 
               return req
             },
-            "Room Amenity Type Code already exists",
+            "Code already exists",
           )
 
           $.validator.addMethod(
@@ -203,7 +203,7 @@ function RoomAmenityTypeForm(props) {
 
           return req
         },
-        "Room Amenity Type Code already exists",
+        "Code already exists",
       )
 
       $.validator.addMethod(
@@ -407,8 +407,8 @@ function RoomAmenityTypeForm(props) {
           disabled={isView || loading}
           type="number"
           minLength="1"
-          maxLength="3"
-          hint="Room Amenity Type code maximum 3 characters"
+          maxLength="32767"
+          hint="Room Amenity Type code maximum 32767 characters"
         />
 
       </FormHorizontal>

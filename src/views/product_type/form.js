@@ -49,7 +49,7 @@ function ProductTypeForm(props) {
       required: true,
       number: true,
       min: 1,
-      max: 99,
+      max: 32767,
       noSpace: true,
       checkCode: true,
     },

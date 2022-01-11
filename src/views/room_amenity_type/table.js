@@ -79,7 +79,7 @@ export default function RoomAmenityTypeTable() {
       },
     ],
     emptyTable: "No room amenity types found",
-    recordName: "room_amenity_type_name",
+    recordName: ["room_amenity_type_code", "room_amenity_type_name"],
   })
 
   useEffect(() => {
