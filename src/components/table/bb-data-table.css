@@ -1,7 +1,9 @@
 .dataTable-root .card > .card-body {
   padding: 0;
 }
-
+.dataTables_scrollHead {
+  margin-top: -1px;
+}
 .dataTable-root .card {
   overflow: hidden;
   border-radius: 0.3rem;
