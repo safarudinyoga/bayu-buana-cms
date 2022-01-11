@@ -90,14 +90,15 @@
     min-width: 78px;
     vertical-align: middle !important;
 }
-@media (min-width: 480px) {
+@media (min-width: 481px) {
   .dataTable-root .select-checkbox {
     min-width: 50px !important;
+    width: 50px !important;
   }
 }
-@media (min-width: 1440px) {
+@media (min-width: 1280px) {
   .dataTable-root .select-checkbox {
-    min-width: 30px !important;
+    min-width: 45px !important;
   }
 }
 .dataTable-root .select-checkbox .row-handle {
@@ -244,15 +245,15 @@ table.dataTable thead .sorting_desc_disabled {
     margin-left: 12px;
 }
 table.dataTable thead .sorting {
-    background-position: 100% 0%;
+    background-position: 100% 30%;
     background-image: url("../../assets/icons/sort-disable.svg")
 }
 table.dataTable thead .sorting_asc {
-  background-position: 100% 0%;
+  background-position: 100% 30%;
     background-image: url("../../assets/icons/sort-ascending.svg") !important
 }
 table.dataTable thead .sorting_desc {
-  background-position: 100% 0%;
+  background-position: 100% 30%;
     background-image: url("../../assets/icons/sort-descending.svg") !important
 }
 
@@ -279,6 +280,9 @@ table.dataTable thead .sorting_desc:after,
 table.dataTable thead .sorting_asc_disabled:after,
 table.dataTable thead .sorting_desc_disabled:after {  
   content: "" !important;
+}
+.table-sm th {
+  padding: 0.4rem 0.3rem;
 }
 
 
