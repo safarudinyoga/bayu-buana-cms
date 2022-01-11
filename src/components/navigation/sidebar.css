@@ -32,9 +32,11 @@
   background-color: #fbc301;
 }
 
-[class*="sidebar-dark-"] {
+.main-sidebar{
   background-color: rgb(2, 127, 113);
-  opacity: 0.85;
+}
+.main-sidebar:hover {
+  opacity: 0.9;
 }
 .nav-sidebar .menu-open > .nav-link i.right, .nav-sidebar .menu-is-opening > .nav-link i.right {
   transform: none;
