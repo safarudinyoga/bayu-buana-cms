@@ -72,7 +72,7 @@ function RoomAmenityTypeForm(props) {
     room_amenity_type_code: {
       required: "Room Amenity Type Code is required.",
       min: "Room amenity type code must be at least 1",
-      max: "Room amenity type code must be no more than 999999",
+      max: "Room amenity type code must be no more than 99999",
       number: "Code format is invalid"
     },
   }
