@@ -23,20 +23,20 @@ const FormInputFile = ({
         .split(",")
         .map((v) => "image/" + v.substring(1))
         .join(",")
-    : ".jpeg, .jpg, .png"
+    : "image/jpeg,image/jpg,image/png"
 
   const onChangeImg = (e) => {
     let fileTypes = acceptFormat.split(",")
     if(fileTypes.includes(e.target?.files[0]?.type)) {
       onChange(e, mediaType)
     } else {
+      e.target.value = null
       dispatch(
         setAlert({
-          message: `File not support.`,
+          message: `File not supported.`,
         }),
       )
     }
-    // console.log(this.form);
   }
 
   return (
