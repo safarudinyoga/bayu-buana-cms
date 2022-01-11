@@ -88,7 +88,16 @@
     min-width: 78px;
     vertical-align: middle !important;
 }
-
+@media (min-width: 480px) {
+  .dataTable-root .select-checkbox {
+    min-width: 50px !important;
+  }
+}
+@media (min-width: 1440px) {
+  .dataTable-root .select-checkbox {
+    min-width: 30px !important;
+  }
+}
 .dataTable-root .select-checkbox .row-handle {
     margin-left: 5px;    
     cursor: move;
