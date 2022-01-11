@@ -1,6 +1,5 @@
 import { withRouter } from "react-router"
-import React, { useEffect, useState } from "react";
-import ImageBG from "../../assets/background.png";
+import React, { useState } from "react";
 import { Form } from "react-bootstrap";
 import AuthWrapper from "components/wrapper/auth"
 
@@ -11,28 +10,36 @@ function Login() {
 		})
 	const [ rememberVal, setCheckBox] = useState(false)
 
+	const onLogin = () => {
+		console.log(form)
+	}
+
 	return (
-		<AuthWrapper>
+		<AuthWrapper
+			buttonTitle="SIGN IN"
+			buttonFn={onLogin}
+		>
 			<p className="title p-0 mb-1">Welcome Back!</p>
 			<p className="sub-title p-0 mb-4 mb-md-5">Please Sign in to continue</p>
+			<Form>
+				<Form.Label>Email</Form.Label>
+				<Form.Control
+					value={form.email}
+					name="email"
+					onChange={(e) => setForm({ ...form, email: e.target.value })}
+					disabled={false}
+					type="email"
+				/>
 
-			<Form.Label>Email</Form.Label>
-			<Form.Control
-				value={form.email}
-				name="email"
-				onChange={(e) => setForm({ ...form, email: e.target.value })}
-				disabled={false}
-				type="email"
-			/>
-
-			<Form.Label className="mt-2">Password</Form.Label>
-			<Form.Control
-				value={form.password}
-				name="password"
-				onChange={(e) => setForm({ ...form, password: e.target.value })}
-				disabled={false}
-				type="password"
-			/>
+				<Form.Label className="mt-2">Password</Form.Label>
+				<Form.Control
+					value={form.password}
+					name="password"
+					onChange={(e) => setForm({ ...form, password: e.target.value })}
+					disabled={false}
+					type="password"
+				/>
+			</Form>
 
 			<div className="row mt-2">
 				<div className="col"> 

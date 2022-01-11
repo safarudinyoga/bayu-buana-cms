@@ -26,7 +26,7 @@ const AuthWrapper = (props) => {
 					<div className="card-form-body">
 						{props.children}
 
-						<BlockButton text="SIGN IN" onClick={() => {}}/>
+						<BlockButton text={props.buttonTitle} onClick={props.buttonFn}/>
 					</div>
 					<div className="card-form-footer position-absolute pb-4">
 						<img src="/img/logo.png" className="bb-logo d-none d-md-block" alt="logo"/>
