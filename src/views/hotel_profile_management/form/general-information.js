@@ -1,16 +1,29 @@
 import React, { useEffect, useState } from "react"
-import { Card, Form, Row, Col, Button, Image, Tab, Nav } from "react-bootstrap"
+import {
+  Card,
+  Form,
+  Row,
+  Col,
+  Button,
+  Image,
+  Tab,
+  Nav,
+  Modal,
+} from "react-bootstrap"
 import { Formik, FastField, Field } from "formik"
 import * as Yup from "yup"
 import ImageUploading from "react-images-uploading"
 import { Editor } from "react-draft-wysiwyg"
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css"
+import { ReactSVG } from "react-svg"
 
 import Api from "config/api"
 import Select from "components/form/select"
 
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css"
+
 const GeneralInformation = (props) => {
   const [selectCountry, setSelectCountry] = useState([])
+  const [modalShow, setModalShow] = useState(false)
 
   let api = new Api()
 
@@ -782,7 +795,11 @@ const GeneralInformation = (props) => {
                       Map Image
                     </Form.Label>
                     <Col sm={9}>
-                      <Button variant="secondary" style={{ width: 133 }}>
+                      <Button
+                        variant="secondary"
+                        style={{ width: 133 }}
+                        onClick={() => setModalShow(true)}
+                      >
                         ADD MAP IMAGE
                       </Button>
                     </Col>
@@ -1068,6 +1085,28 @@ const GeneralInformation = (props) => {
           </Form>
         )}
       </Formik>
+      <Modal
+        show={modalShow}
+        onHide={() => setModalShow(false)}
+        size="lg"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+      >
+        <Modal.Header>
+          <Modal.Title id="contained-modal-title-vcenter">
+            ADD MAP IMAGE
+          </Modal.Title>
+          <div className="modal-close" onClick={props.onHide}>
+            <ReactSVG src="/img/icons/close.svg" />
+          </div>
+        </Modal.Header>
+        <Modal.Body>
+          <Formik></Formik>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button onClick={props.onHide}>Close</Button>
+        </Modal.Footer>
+      </Modal>
     </>
   )
 }
