@@ -25,7 +25,7 @@ export default class TranslationForm extends Component {
 
   componentDidMount() {
     this.api
-      .get("/master/languages", { size: 50, sort: "-language_name" })
+      .get("/master/agent-languages", { size: -1, sort: "sort,language_name" })
       .then((res) => {
         this.setState({ languages: res.data.items })
         if (res.data.items.length > 0) {
