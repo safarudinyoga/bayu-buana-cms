@@ -10,6 +10,8 @@ stages:
 build:
   stage: build
   image: node
+  variables:
+    GIT_SSL_NO_VERIFY: 1
   script: 
     - sed -i 's/REACT_APP_API_BASE_URL=.*/REACT_APP_API_BASE_URL=/g' .env
     - yarn install
