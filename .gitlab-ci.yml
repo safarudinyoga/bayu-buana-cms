@@ -40,7 +40,6 @@ build:
   only:
     refs:
       - master
-      - refactor
 
 release:
   stage: release
@@ -51,7 +50,6 @@ release:
   only:
     refs:
       - master
-      - refactor
   script:
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
     - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/Dockerfile --destination $CI_REGISTRY_IMAGE:$PRODUCTION_CONTAINER_TAG
@@ -69,7 +67,6 @@ deploy_testing:
   only:
     refs:
       - master
-      - refactor
   when: manual
 
 deploy_staging:
@@ -85,5 +82,19 @@ deploy_staging:
   only:
     refs:
       - master
-      - refactor
+  when: manual
+
+deploy_production:
+  stage: "deploy"
+  image: 
+    name: bitnami/kubectl:latest
+    entrypoint: [""]
+  script:
+    - sed -i "s/{API_VERSION}/$(date +%Y%m%d%H%M%S)/g" kubernetes-prod.yml
+    - sed -i "s/{SECRET}/${DOCKER_SECRET}/g" kubernetes-prod.yml
+    - kubectl --kubeconfig="$K8S_DO_SECRET" apply -f kubernetes-prod.yml
+  needs: ["release"]
+  only:
+    refs:
+      - master
   when: manual
