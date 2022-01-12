@@ -1136,6 +1136,7 @@ const GeneralInformation = (props) => {
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
+        className="modal-form"
       >
         <Formik
           initialValues={initialFormModalAddMap}

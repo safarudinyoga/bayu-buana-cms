@@ -54,12 +54,12 @@ const Media = (props) => {
           setFieldValue,
           setFieldTouched,
         }) => (
-          <Form onSubmit={handleSubmit} className="hotel-facilities">
+          <Form onSubmit={handleSubmit}>
             <Card>
               <Card.Body>
-                <h3 className="card-heading">Hotel Facilities</h3>
+                <h3 className="card-heading">Media</h3>
                 <div style={{ padding: "0 15px 15px" }}>
-                  {/* <Accordion defaultActiveKey="0">
+                  <Accordion defaultActiveKey="0">
                     <Card>
                       <Accordion.Toggle as={Card.Header} eventKey="0">
                         Click me!
@@ -76,41 +76,7 @@ const Media = (props) => {
                         <Card.Body>Hello! I'm another body</Card.Body>
                       </Accordion.Collapse>
                     </Card>
-                  </Accordion> */}
-                  <Row>
-                    <Col sm={4}>
-                      <div className="item-facilities">
-                        <h3 className="title">THINGS TO DO</h3>
-                        <Form.Check label="Swimming Pool" />
-                        <Form.Check label="Swimming Pool" />
-                        <Form.Check label="Swimming Pool" />
-                      </div>
-                    </Col>
-                    <Col sm={4}>
-                      <div className="item-facilities">
-                        <h3 className="title">THINGS TO DO</h3>
-                        <Form.Check label="Swimming Pool" />
-                        <Form.Check label="Swimming Pool" />
-                        <Form.Check label="Swimming Pool" />
-                      </div>
-                    </Col>
-                    <Col sm={4}>
-                      <div className="item-facilities">
-                        <h3 className="title">THINGS TO DO</h3>
-                        <Form.Check label="Swimming Pool" />
-                        <Form.Check label="Swimming Pool" />
-                        <Form.Check label="Swimming Pool" />
-                      </div>
-                    </Col>
-                    <Col sm={4}>
-                      <div className="item-facilities">
-                        <h3 className="title">THINGS TO DO</h3>
-                        <Form.Check label="Swimming Pool" />
-                        <Form.Check label="Swimming Pool" />
-                        <Form.Check label="Swimming Pool" />
-                      </div>
-                    </Col>
-                  </Row>
+                  </Accordion>
                 </div>
               </Card.Body>
             </Card>
