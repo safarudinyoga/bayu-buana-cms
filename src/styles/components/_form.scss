@@ -59,6 +59,9 @@ input[id="cb-th"] {
   background-color: hsl(0, 0%, 95%);
   border-color: hsl(0, 0%, 90%);
 }
+.form-check-label {
+  margin-left: 5px;
+}
 .react-select {
   cursor: pointer;
   div,

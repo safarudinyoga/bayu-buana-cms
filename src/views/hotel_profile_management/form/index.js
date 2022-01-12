@@ -14,6 +14,8 @@ import Media from "./media"
 import NearbyAttractions from "./nearby-attractions"
 import PointofReferences from "./point-of-references"
 
+import "./style.scss"
+
 const endpoint = "/master/hotel-profile-management"
 const backUrl = "/master/hotel-profile-management"
 
