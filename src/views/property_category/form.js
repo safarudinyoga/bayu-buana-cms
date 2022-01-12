@@ -41,7 +41,7 @@ function PropertyCategoryForm(props) {
       checkCode: true,
       noSpace: true,
       min: 1,
-      max: 99,
+      max: 32767
     },
     property_category_name: {
       required: true,
@@ -56,8 +56,7 @@ function PropertyCategoryForm(props) {
     property_category_code: {
       required: "Property Category Code is required.",
       number: "Code format is invalid",
-      minlength: "Room Location Type Code must be at least 1 characters",
-      maxlength: "Property Category Code cannot be more than 99 characters",
+      max: "Property category code must be no more than 32767",
     },
     property_category_name: {
       required: "Property Category Name is required.",

@@ -44,7 +44,7 @@ function MealPlanTypeForm(props) {
     meal_plan_type_code: {
       required: true,
       min: 1,
-      max: 99,
+      max: 32767,
       checkCode: true,
     },
     meal_plan_type_name: {
@@ -66,8 +66,7 @@ function MealPlanTypeForm(props) {
     },
     meal_plan_type_code: {
       required: "Meal plan type Code is required",
-      minlength: "Meal plan type Code must be at least 1 characters",
-      maxlength: "Meal plan type Code cannot be more than 36 characters",
+      max: "Meal plan type code must be no more than 32767",
     },
   }
 
@@ -136,11 +135,12 @@ function MealPlanTypeForm(props) {
           $.validator.addMethod(
             "checkName",
             function (value, element) {
+              let filters = JSON.stringify(["meal_plan_type_name","=",element.value])
               var req = false
               $.ajax({
                 type: "GET",
                 async: false,
-                url: `${env.API_URL}/master/meal-plan-types?filters=["meal_plan_type_name","=","${element.value}"]`,
+                url: `${env.API_URL}/master/meal-plan-types?filters=${encodeURIComponent(filters)}`,
                 success: function (res) {
                   if (res.items.length !== 0) {
                     if(currentName.toUpperCase() === element.value.toUpperCase()){
@@ -194,10 +194,11 @@ function MealPlanTypeForm(props) {
         "checkName",
         function (value, element) {
           var req = false
+          let filters = JSON.stringify(["meal_plan_type_name","=",element.value])
           $.ajax({
             type: "GET",
             async: false,
-            url: `${env.API_URL}/master/meal-plan-types?filters=["meal_plan_type_name","=","${element.value}"]`,
+            url: `${env.API_URL}/master/meal-plan-types?filters=${encodeURIComponent(filters)}`,
             success: function (res) {
               if (res.items.length !== 0) {
                 req = false
@@ -226,6 +227,22 @@ function MealPlanTypeForm(props) {
     setLoading(true)
     let api = new Api()
     try {
+      if(form.meal_plan_type_asset){
+        if(form.meal_plan_type_asset.multimedia_description_id == null){
+          form.meal_plan_type_asset = null
+        }
+      } else {
+        form.meal_plan_type_asset = null
+      }
+
+      if(form.meal_plan_type_code === ""){
+        form.meal_plan_type_code = null
+      }
+
+      if(form.meal_plan_type_name === ""){
+        form.meal_plan_type_name = null
+      }
+
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
       for (let i in translated) {
@@ -257,7 +274,7 @@ function MealPlanTypeForm(props) {
         var filesize = ((files.size/1024)/1024).toFixed(4);
         if(filesize > 4){
           alert("Icon size is more than 4MB.");
-          $("#icon").val('');
+          $("#meal-plan-type-icon").val('');
           return;
         }
         let api = new Api()
@@ -330,7 +347,8 @@ function MealPlanTypeForm(props) {
           name="meal_plan_type_asset"
           onChange={doUpload}
           disabled={isView}
-          url={form.meal_plan_type_asset?.multimedia_description?.url}
+          accept=".png,.jpg,.jpeg"
+          url={form.meal_plan_type_asset?.multimedia_description.url}
           style={{maxWidth: 300, marginTop: 12}}
         />
       </FormHorizontal>
@@ -349,7 +367,7 @@ function MealPlanTypeForm(props) {
           disabled={isView || loading}
           type="number"
           min="0"
-          max="99"
+          max="32767"
           hint="Meal Plan Type Code is numeric"
         />
       </FormHorizontal>

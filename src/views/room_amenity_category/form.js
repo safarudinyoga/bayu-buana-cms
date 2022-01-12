@@ -346,11 +346,12 @@ function RoomAmenityTypeForm(props) {
 
         <FormInputControl
           id="icon"
-          label="Room Amenity Category Icon Image"
+          label="Icon"
           type="image"
           name="room_amenity_category_asset"
           onChange={doUpload}
           disabled={isView}
+          accept=".png,.jpg,.jpeg"
           url={form.room_amenity_category_asset?.multimedia_description.url}
           style={{maxWidth: 300, marginTop: 12}}
         />

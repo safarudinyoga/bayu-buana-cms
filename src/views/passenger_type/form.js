@@ -40,7 +40,7 @@ function PassengerTypeForm(props) {
       required: true,
       number: true,
       min: 0,
-      max: 99,
+      max: 32767,
       checkTypeCode: true,
       noSpace: true,
     },
@@ -66,10 +66,11 @@ function PassengerTypeForm(props) {
     passenger_type_code: {
       required: "Passenger Type Code is required.",
       number: "Code format is invalid",
+      max: "Passenger type code must be no more than 32767",
     },
     passenger_alpha_3_code: {
-      minlength: "Code format is invalid",
-      maxlength: "Code format is invalid",
+      minlength: "Passenger Alpha 3 Code must be at least 1 characters",
+      maxlength: "Passenger Alpha 3 Code cannot be more than 3 characters",
     },
   }
 

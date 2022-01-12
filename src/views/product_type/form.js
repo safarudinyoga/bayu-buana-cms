@@ -49,7 +49,7 @@ function ProductTypeForm(props) {
       required: true,
       number: true,
       min: 1,
-      max: 99,
+      max: 32767,
       noSpace: true,
       checkCode: true,
     },
@@ -62,6 +62,7 @@ function ProductTypeForm(props) {
     product_type_code: {
       required: "Product Type Code is required.",
       number: "Code format is invalid",
+      max: "Product Type Code cannot be more than 32767",
     },
   }
 

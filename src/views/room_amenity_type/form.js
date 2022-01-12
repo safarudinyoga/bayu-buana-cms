@@ -55,7 +55,7 @@ function RoomAmenityTypeForm(props) {
       number: true,
       noSpace: true,
       min: 1,
-      max: 999,
+      max: 32767,
       checkCode: true
     },
     room_amenity_type_asset: {
@@ -72,7 +72,8 @@ function RoomAmenityTypeForm(props) {
     room_amenity_type_code: {
       required: "Room Amenity Type Code is required.",
       min: "Room amenity type code must be at least 1",
-      max: "Room amenity type code must be no more than 999999",
+      max: "Room amenity type code must be no more than 32767",
+      number: "Code format is invalid"
     },
   }
 
@@ -136,7 +137,7 @@ function RoomAmenityTypeForm(props) {
 
               return req
             },
-            "Room Amenity Type Code already exists",
+            "Code already exists",
           )
 
           $.validator.addMethod(
@@ -202,7 +203,7 @@ function RoomAmenityTypeForm(props) {
 
           return req
         },
-        "Room Amenity Type Code already exists",
+        "Code already exists",
       )
 
       $.validator.addMethod(
@@ -378,7 +379,7 @@ function RoomAmenityTypeForm(props) {
         }
         <FormInputControl
           id="room_icon"
-          label="Room Amenity Type Icon Image"
+          label="Icon"
           type="image"
           name="room_amenity_type_asset"
           onChange={doUpload}
@@ -398,11 +399,13 @@ function RoomAmenityTypeForm(props) {
           cl={{md: "12"}}
           cr="12"
           onChange={(e) => setForm({...form, room_amenity_type_code: e.target.value})}
+          onKeyPress={(e) => {
+            let charCode = (e.which) ? e.which : e.keyCode
+            if(charCode > 31 && (charCode < 48 || charCode > 57))
+              e.preventDefault()
+          }}
           disabled={isView || loading}
           type="number"
-          minLength="1"
-          maxLength="3"
-          hint="Room Amenity Type code maximum 3 characters"
         />
 
       </FormHorizontal>
