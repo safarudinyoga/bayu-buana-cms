@@ -1,5 +1,24 @@
 .accordion {
-  .card {
-    margin-bottom: 0;
+  > .card {
+    border: 1px solid #d3d3d3;
+    box-shadow: none;
+    &:not(:last-of-type),
+    &:not(:first-of-type) {
+      border-radius: 8px;
+    }
+    &:not(:last-of-type) {
+      border-bottom: 1px solid #d3d3d3;
+    }
+    > .card-header {
+      cursor: pointer;
+      background-color: #f8f8f8;
+      color: #333333;
+      font-size: 15px;
+      border-bottom: none;
+    }
+    .card-body {
+      padding: 28px;
+      border-top: 1px solid #d3d3d3;
+    }
   }
 }
