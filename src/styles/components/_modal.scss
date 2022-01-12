@@ -3,11 +3,30 @@
 }
 .modal-title {
   line-height: inherit;
+  font-size: 20px;
+  text-align: center;
+  flex: 1;
+  margin-top: 15px;
 }
 .modal-header {
-  padding: 20px 20px 0 20px;
+  padding: 15px 20px 0 20px;
 }
 .modal-header,
 .modal-footer {
   border: none;
+}
+.modal-body {
+  padding: 20px 40px;
+}
+.modal-footer {
+  justify-content: flex-start;
+  padding: 0 40px 20px;
+  .btn {
+    &:first-child {
+      margin: 0 16px 0 0;
+    }
+  }
+}
+.modal-lg {
+  max-width: 500px;
 }

@@ -15,11 +15,13 @@ import * as Yup from "yup"
 import ImageUploading from "react-images-uploading"
 import { Editor } from "react-draft-wysiwyg"
 import { ReactSVG } from "react-svg"
+import Dropzone from "react-dropzone-uploader"
 
 import Api from "config/api"
 import Select from "components/form/select"
 
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css"
+import "react-dropzone-uploader/dist/styles.css"
 
 const GeneralInformation = (props) => {
   const [selectCountry, setSelectCountry] = useState([])
@@ -69,6 +71,11 @@ const GeneralInformation = (props) => {
     // Translations
   }
 
+  const initialFormModalAddMap = {
+    caption: "",
+    image: "",
+  }
+
   // Schema for yup
   const validationSchema = Yup.object().shape({
     // General Information
@@ -111,6 +118,45 @@ const GeneralInformation = (props) => {
     internalRemark: Yup.string(),
     termConditions: Yup.string(),
   })
+
+  const validationSchemaModalAddMap = Yup.object().shape({
+    caption: Yup.string().required("Caption is required."),
+    image: Yup.string().required("Hotel Name is required."),
+  })
+
+  const ImageUploader = () => {
+    // specify upload params and url for your files
+    const getUploadParams = ({ meta }) => {
+      return { url: "https://httpbin.org/post" }
+    }
+
+    // called every time a file's `status` changes
+    const handleChangeStatus = ({ meta, file }, status) => {
+      console.log(status, meta, file)
+    }
+
+    // receives array of files that are done uploading when submit button is clicked
+    const handleSubmit = (files, allFiles) => {
+      console.log(files.map((f) => f.meta))
+      allFiles.forEach((f) => f.remove())
+    }
+
+    return (
+      <Dropzone
+        getUploadParams={(e) => console.log(e)}
+        onChangeStatus={(e) => console.log(e)}
+        onSubmit={(e) => console.log(e)}
+        accept="image/*,audio/*,video/*"
+        inputContent={
+          <div className="form-uploader">
+            <ReactSVG src="/img/icons/upload.svg" />
+            <p className="title">Drag and drop files here to upload</p>
+            <p className="note">Maximum file size: 1 MB</p>
+          </div>
+        }
+      />
+    )
+  }
 
   const formTranslation = () => {
     return (
@@ -1087,25 +1133,115 @@ const GeneralInformation = (props) => {
       </Formik>
       <Modal
         show={modalShow}
-        onHide={() => setModalShow(false)}
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
       >
-        <Modal.Header>
-          <Modal.Title id="contained-modal-title-vcenter">
-            ADD MAP IMAGE
-          </Modal.Title>
-          <div className="modal-close" onClick={props.onHide}>
-            <ReactSVG src="/img/icons/close.svg" />
-          </div>
-        </Modal.Header>
-        <Modal.Body>
-          <Formik></Formik>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button onClick={props.onHide}>Close</Button>
-        </Modal.Footer>
+        <Formik
+          initialValues={initialFormModalAddMap}
+          validationSchema={validationSchemaModalAddMap}
+          onSubmit={async (values, { setSubmitting, resetForm }) => {
+            console.log(values)
+            console.log(props)
+            // setSubmitting(true)
+
+            // try {
+            //   let res = await api.post("master/persons", {
+            //     birth_date: "2021-11-13T04:31:17.022Z",
+            //     business_entity_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            //     citizen_country_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            //     gender_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            //     given_name: "string",
+            //     marital_status_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            //     middle_name: "string",
+            //     name_prefix_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            //     name_suffix: "string",
+            //     name_title: "string",
+            //     religion_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            //     surname: "string",
+            //     surname_prefix: "string",
+            //   })
+            //   console.log(res)
+            //   resetForm()
+            //   setSubmitting(false)
+            // } catch (e) {}
+          }}
+        >
+          {({
+            values,
+            errors,
+            touched,
+            dirty,
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            isSubmitting,
+            setFieldValue,
+            setFieldTouched,
+          }) => (
+            <Form onSubmit={handleSubmit}>
+              <Modal.Header>
+                <Modal.Title id="contained-modal-title-vcenter">
+                  ADD MAP IMAGE
+                </Modal.Title>
+                <div
+                  className="modal-close"
+                  onClick={() => setModalShow(false)}
+                >
+                  <ReactSVG src="/img/icons/close.svg" />
+                </div>
+              </Modal.Header>
+              <Modal.Body>
+                <Form.Group as={Row} className="form-group">
+                  <Form.Label column sm={3}>
+                    Caption
+                    <span className="form-label-required">*</span>
+                  </Form.Label>
+                  <Col sm={9}>
+                    <FastField name="zipCode">
+                      {({ field, form }) => (
+                        <>
+                          <Form.Control
+                            type="text"
+                            isInvalid={
+                              form.touched.caption && form.errors.caption
+                            }
+                            maxLength={128}
+                            {...field}
+                          />
+                          {form.touched.caption && form.errors.caption && (
+                            <Form.Control.Feedback type="invalid">
+                              {form.touched.caption
+                                ? form.errors.caption
+                                : null}
+                            </Form.Control.Feedback>
+                          )}
+                        </>
+                      )}
+                    </FastField>
+                  </Col>
+                </Form.Group>
+                <Form.Group as={Row} className="form-group">
+                  <Form.Label column sm={3}>
+                    Image
+                    <span className="form-label-required">*</span>
+                  </Form.Label>
+                  <Col sm={9}>
+                    <ImageUploader />
+                  </Col>
+                </Form.Group>
+              </Modal.Body>
+              <Modal.Footer>
+                <Button variant="primary" type="submit">
+                  SAVE
+                </Button>
+                <Button variant="secondary" onClick={() => setModalShow(false)}>
+                  CANCEL
+                </Button>
+              </Modal.Footer>
+            </Form>
+          )}
+        </Formik>
       </Modal>
     </>
   )
