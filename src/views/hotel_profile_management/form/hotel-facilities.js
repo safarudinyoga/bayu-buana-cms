@@ -58,7 +58,7 @@ const HotelFacilities = (props) => {
             <Card>
               <Card.Body>
                 <h3 className="card-heading">Hotel Facilities</h3>
-                <div style={{ padding: "0 15px 15px" }}>
+                <div style={{ padding: "0 10px 10px" }}>
                   <Row>
                     <Col sm={4}>
                       <div className="item-facilities">

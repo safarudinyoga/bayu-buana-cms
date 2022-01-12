@@ -325,7 +325,7 @@ const GeneralInformation = (props) => {
             <Card>
               <Card.Body>
                 <h3 className="card-heading">General Information</h3>
-                <div style={{ padding: "0 15px 15px" }}>
+                <div style={{ padding: "0 10px 10px" }}>
                   <Row>
                     <Col sm={12}>
                       <Form.Group as={Row} className="form-group">
