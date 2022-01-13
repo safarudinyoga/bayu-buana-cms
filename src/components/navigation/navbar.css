@@ -1,7 +1,7 @@
 .main-header {
   padding-top: 18px;
   padding-bottom: 24px;
-  box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2)
+  box-shadow: 0 2px 4px 0 rgba(0,0,0,0.08);
 }
 
 
@@ -24,8 +24,7 @@
 }
 
 .navbar-img {
-  width: 150px;
-  height: 35px;
+  width: 160px;
   display: inline-block;
   margin-top: -7px;
 }

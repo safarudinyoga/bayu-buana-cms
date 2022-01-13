@@ -1,8 +1,8 @@
-import React, {Component} from "react"
-import {Link} from "react-router-dom"
+import React, { Component } from "react"
+import { Link } from "react-router-dom"
 import BriefCaseIcon from "assets/icons/briefcase.svg"
 import HomeIcon from "assets/icons/home.svg"
-import "./sidebar.css"
+import "./sidebar.scss"
 
 export default class Sidebar extends Component {
   render() {
@@ -18,13 +18,13 @@ export default class Sidebar extends Component {
             >
               <li className="nav-item">
                 <Link to="/" className="nav-link">
-                  <img src={HomeIcon} alt="home_icon"/>
+                  <img src={HomeIcon} alt="home_icon" />
                   <p>Dashboard</p>
                 </Link>
               </li>
               <li className="nav-item">
                 <Link to="#" className="nav-link">
-                  <img src={BriefCaseIcon} alt="briefcase_icon"/>
+                  <img src={BriefCaseIcon} alt="briefcase_icon" />
                   <p>
                     Master Data Management
                     <i className="right fas fa-angle-right"></i>
@@ -56,10 +56,7 @@ export default class Sidebar extends Component {
                     </Link>
                   </li>
                   <li className="nav-item">
-                    <Link
-                      to="/master/attractions"
-                      className="nav-link"
-                    >
+                    <Link to="/master/attractions" className="nav-link">
                       <p>Attraction</p>
                     </Link>
                   </li>
@@ -175,7 +172,10 @@ export default class Sidebar extends Component {
                     </Link>
                   </li>
                   <li className="nav-item">
-                    <Link to="/master/room-amenity-categories" className="nav-link">
+                    <Link
+                      to="/master/room-amenity-categories"
+                      className="nav-link"
+                    >
                       <p>Room Amenity Category</p>
                     </Link>
                   </li>
@@ -217,6 +217,14 @@ export default class Sidebar extends Component {
                   <li className="nav-item">
                     <Link to="/master/zones" className="nav-link">
                       <p>Zones</p>
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link
+                      to="/master/hotel-profile-management"
+                      className="nav-link"
+                    >
+                      <p>Hotel Profile Management</p>
                     </Link>
                   </li>
                 </ul>

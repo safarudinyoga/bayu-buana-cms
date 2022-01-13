@@ -62,6 +62,7 @@ function ProductTypeForm(props) {
     product_type_code: {
       required: "Product Type Code is required.",
       number: "Code format is invalid",
+      max: "Product Type Code cannot be more than 32767",
     },
   }
 

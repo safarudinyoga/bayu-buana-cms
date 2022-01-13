@@ -189,7 +189,7 @@ class TableHeader extends Component {
             )}           
           </div>
 
-          <div className="col-xs-12 col-sm-12 col-md-4 col-lg-6 col-xl-6 mb-2 order-first order-md-last">            
+          <div className="col-xs-12 col-sm-12 col-md-4 col-lg-6 col-xl-6 mb-2 mb-md-0 order-first order-md-last">            
             <OverlayTrigger
               placement="top"
               overlay={<Tooltip>Click to create</Tooltip>}
@@ -239,7 +239,7 @@ class TableHeader extends Component {
         <div
           className={
             this.state.showFilter && !this.props.selected
-              ? "card card-default advanced-filter shadow-none mt-2"
+              ? "card card-default advanced-filter shadow-none my-2"
               : "d-none"
           }
         >

@@ -79,11 +79,20 @@ import TripTypeTable from "views/trip_type/table"
 import ZoneForm from "views/zone/form"
 import ZoneTable from "views/zone/table"
 
+// Master Hotel Profile Management
+import HotelProfileManagementTable from "views/hotel_profile_management/table"
+import HotelProfileManagementForm from "views/hotel_profile_management/form"
+
 // Master Employee
 import EmployeeTable from "views/employee/table"
 import EmployeeForm from "views/employee/form"
 import RatingTypeLevelTable from './views/rating_type_level/table';
 import RatingTypeLevelForm from './views/rating_type_level/form';
+
+// Master Invoice Email
+import InvoiceEmailSetupTable from "views/invoice_email_setup/table"
+import InvoiceEmailSetupForm from "views/invoice_email_setup/form"
+
 import Login from './views/auth/login';
 
 const RouteWithProps = ({ path, exact, strict, component: Component, location, auth, ...rest }) => (
@@ -333,12 +342,28 @@ const DashboardRoutes = () => {
         <ProductTypeForm />
       </Route>
 
+      {/* Master Hotel Profile Management */}
+      <Route exact path="/master/hotel-profile-management">
+        <HotelProfileManagementTable />
+      </Route>
+      <Route exact path="/master/hotel-profile-management/form/:id?">
+        <HotelProfileManagementForm />
+      </Route>
+
       {/* Master Employee */}
       <Route exact path="/master/employee">
         <EmployeeTable />
       </Route>
       <Route path="/master/employee/form/:id?">
         <EmployeeForm />
+      </Route>
+
+      {/* Master Invoice Email Setup */}
+      <Route exact path="/master/invoice-email-setup">
+        <InvoiceEmailSetupTable />
+      </Route>
+      <Route exact path="/master/invoice-email-setup/form/:id?">
+        <InvoiceEmailSetupForm />
       </Route>
     </Switch>
   </DashboardWrapper>
