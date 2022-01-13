@@ -90,10 +90,9 @@ const GeneralInformation = (props) => {
           return new Promise((resolve, reject) => {
             axios
               .get(
-                `${env.API_URL}/master/cabin-types?filters=["cabin_type_code","=","${value}"]`,
+                `${env.API_URL}/master/hotels?filters=["hotel_code","=","${value}"]`,
               )
               .then((res) => {
-                console.log(resolve(res.data.items.length == 0))
                 resolve(res.data.items.length == 0)
               })
               .catch((error) => {
