@@ -21,6 +21,7 @@
 [class*="sidebar-dark-"] .nav-treeview > .nav-item > .nav-link:hover,
 [class*="sidebar-dark-"] .nav-treeview > .nav-item > .nav-link:focus {
   background-color: transparent;
+  color: #fbc301;
 }
 
 [class*="sidebar-dark-"] .sidebar a {
@@ -47,4 +48,11 @@
 .nav-treeview .nav-item > .nav-link {
   padding-top: 5px;
   padding-bottom: 5px;
+  width: calc(250px - 26px - 0.5rem * 2) !important;
+}
+.nav-treeview > .nav-item {
+  padding-left: 26px !important;
+}
+[class*="sidebar-dark-"] .nav-treeview > .nav-item > .nav-link {
+  color: #ffffff;
 }
