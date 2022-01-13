@@ -5,7 +5,7 @@ import "admin-lte/dist/css/adminlte.css"
 import "App.scss"
 import "bootstrap/dist/js/bootstrap.js"
 import DashboardWrapper from "components/wrapper/dashboard"
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom"
+import {BrowserRouter as Router, Route, Switch} from "react-router-dom"
 import AgeQualifyingTypeForm from "views/age_qualifying_type/form"
 import AgeQualifyingTypeTable from "views/age_qualifying_type/table"
 import AircraftForm from "views/aircraft/form"
@@ -79,11 +79,19 @@ import TripTypeTable from "views/trip_type/table"
 import ZoneForm from "views/zone/form"
 import ZoneTable from "views/zone/table"
 
+// Master Hotel Profile Management
+import HotelProfileManagementTable from "views/hotel_profile_management/table"
+import HotelProfileManagementForm from "views/hotel_profile_management/form"
+
 // Master Employee
 import EmployeeTable from "views/employee/table"
 import EmployeeForm from "views/employee/form"
-import RatingTypeLevelTable from './views/rating_type_level/table';
-import RatingTypeLevelForm from './views/rating_type_level/form';
+import RatingTypeLevelTable from "./views/rating_type_level/table"
+import RatingTypeLevelForm from "./views/rating_type_level/form"
+
+// Master Invoice Email
+import InvoiceEmailSetupTable from "views/invoice_email_setup/table"
+import InvoiceEmailSetupForm from "views/invoice_email_setup/form"
 
 const App = () => {
   document.title = "Bayu Buana"
@@ -276,7 +284,10 @@ const App = () => {
           <Route path="/master/rating-types/form/:id?">
             <RatingTypeForm />
           </Route>
-          <Route exact path="/master/rating-types/:id_rating_type/rating-type-levels">
+          <Route
+            exact
+            path="/master/rating-types/:id_rating_type/rating-type-levels"
+          >
             <RatingTypeLevelTable />
           </Route>
           <Route path="/master/rating-types/:id_rating_type/rating-type-levels/form/:id?">
@@ -313,12 +324,28 @@ const App = () => {
             <ProductTypeForm />
           </Route>
 
+          {/* Master Hotel Profile Management */}
+          <Route exact path="/master/hotel-profile-management">
+            <HotelProfileManagementTable />
+          </Route>
+          <Route exact path="/master/hotel-profile-management/form/:id?">
+            <HotelProfileManagementForm />
+          </Route>
+
           {/* Master Employee */}
           <Route exact path="/master/employee">
             <EmployeeTable />
           </Route>
           <Route path="/master/employee/form/:id?">
             <EmployeeForm />
+          </Route>
+
+          {/* Master Invoice Email Setup */}
+          <Route exact path="/master/invoice-email-setup">
+            <InvoiceEmailSetupTable />
+          </Route>
+          <Route exact path="/master/invoice-email-setup/form/:id?">
+            <InvoiceEmailSetupForm />
           </Route>
         </Switch>
       </DashboardWrapper>
