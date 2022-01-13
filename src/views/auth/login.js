@@ -46,7 +46,7 @@ function Login() {
 					<input 
 						type="checkbox" 
 						checked={rememberVal}
-						onClick={() => setCheckBox(!rememberVal)}
+						onChange={() => setCheckBox(!rememberVal)}
 					/>
 					<span onClick={() => setCheckBox(!rememberVal)} className="remember pl-1">
 						Remember Me
