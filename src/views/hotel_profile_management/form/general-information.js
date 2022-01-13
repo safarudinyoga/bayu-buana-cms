@@ -12,19 +12,22 @@ import {
 } from "react-bootstrap"
 import { Formik, FastField, Field } from "formik"
 import * as Yup from "yup"
-import ImageUploading from "react-images-uploading"
 import { Editor } from "react-draft-wysiwyg"
 import { ReactSVG } from "react-svg"
 import Dropzone from "react-dropzone-uploader"
+import axios from "axios"
 
 import Api from "config/api"
+import env from "config/environment"
 import Select from "components/form/select"
+import FormInputSelectAjax from "components/form/input-select-ajax"
 
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css"
 import "react-dropzone-uploader/dist/styles.css"
 
 const GeneralInformation = (props) => {
   const [selectCountry, setSelectCountry] = useState([])
+  const [selectHotelBrand, setSelectHotelBrand] = useState([])
   const [modalShow, setModalShow] = useState(false)
 
   let api = new Api()
@@ -34,7 +37,7 @@ const GeneralInformation = (props) => {
     // General Information
     hotelCode: "",
     hotelName: "",
-    hotelChain: "",
+    hotelBrand: "",
     starRating: "",
     numberOfRooms: "",
 
@@ -75,13 +78,32 @@ const GeneralInformation = (props) => {
     caption: "",
     image: "",
   }
-
   // Schema for yup
   const validationSchema = Yup.object().shape({
     // General Information
-    hotelCode: Yup.string().required("Hotel Code is required."),
+    hotelCode: Yup.string()
+      .required("Hotel Code is required.")
+      .test(
+        "Unique Code",
+        "Hotel Code already exists", // <- key, message
+        (value) => {
+          return new Promise((resolve, reject) => {
+            axios
+              .get(
+                `${env.API_URL}/master/cabin-types?filters=["cabin_type_code","=","${value}"]`,
+              )
+              .then((res) => {
+                console.log(resolve(res.data.items.length == 0))
+                resolve(res.data.items.length == 0)
+              })
+              .catch((error) => {
+                resolve(false)
+              })
+          })
+        },
+      ),
     hotelName: Yup.string().required("Hotel Name is required."),
-    hotelChain: Yup.object(),
+    hotelBrand: Yup.object(),
     starRating: Yup.object().required("Star Rating is required."),
     numberOfRooms: Yup.number(),
 
@@ -282,6 +304,7 @@ const GeneralInformation = (props) => {
       <Formik
         initialValues={initialForm}
         validationSchema={validationSchema}
+        validateOnChange={false}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
           console.log(values)
           console.log(props)
@@ -394,70 +417,40 @@ const GeneralInformation = (props) => {
                           </FastField>
                         </Col>
                       </Form.Group>
-                      <Form.Group as={Row} className="form-group">
-                        <Form.Label column sm={3}>
-                          Hotel Chain
-                        </Form.Label>
-                        <Col sm={9}>
-                          <FastField name="hotelChain">
-                            {({ field, form }) => (
-                              <>
-                                <div style={{ width: 400 }}>
-                                  <Select
-                                    {...field}
-                                    placeholder="Please choose Hotel Chain"
-                                    options={selectCountry}
-                                    className="react-select"
-                                    onChange={(v) => {
-                                      setFieldValue("hotelChain", v)
-                                    }}
-                                    onBlur={setFieldTouched}
-                                  />
-                                </div>
-                              </>
-                            )}
-                          </FastField>
-                        </Col>
-                      </Form.Group>
-                      <Form.Group as={Row} className="form-group">
-                        <Form.Label column sm={3}>
-                          Star Rating
-                          <span className="form-label-required">*</span>
-                        </Form.Label>
-                        <Col sm={9}>
-                          <FastField name="starRating">
-                            {({ field, form }) => (
-                              <>
-                                <div style={{ width: 200 }}>
-                                  <Select
-                                    {...field}
-                                    placeholder="Please choose Star Rating"
-                                    options={selectCountry}
-                                    className={`react-select ${
-                                      form.touched.starRating &&
-                                      form.errors.starRating
-                                        ? "is-invalid"
-                                        : null
-                                    }`}
-                                    onChange={(v) => {
-                                      setFieldValue("starRating", v)
-                                    }}
-                                    onBlur={setFieldTouched}
-                                  />
-                                  {form.touched.starRating &&
-                                    form.errors.starRating && (
-                                      <Form.Control.Feedback type="invalid">
-                                        {form.touched.starRating
-                                          ? form.errors.starRating
-                                          : null}
-                                      </Form.Control.Feedback>
-                                    )}
-                                </div>
-                              </>
-                            )}
-                          </FastField>
-                        </Col>
-                      </Form.Group>
+                      <FormInputSelectAjax
+                        label="Hotel Chain"
+                        required={true}
+                        name="hotel_brand_id"
+                        endpoint="/master/hotel-brands"
+                        column="hotel_brand_name"
+                        filter={`["status", "=", 1]`}
+                        onChange={(e) => {
+                          console.log("yoo")
+                        }}
+                        placeholder="Please choose Hotel Chain"
+                        // disabled={isView || loading}
+                        type="select"
+                        cl={{ md: "3", lg: "3" }}
+                        cr="12"
+                        style={{ width: 400 }}
+                      />
+                      <FormInputSelectAjax
+                        label="Star Rating"
+                        required={true}
+                        name="hotel_brand_id"
+                        endpoint="/master/rating-types"
+                        column="rating_type_name"
+                        filter={`["status", "=", 1]`}
+                        onChange={(e) => {
+                          console.log("yoo")
+                        }}
+                        placeholder="Please choose Hotel Chain"
+                        // disabled={isView || loading}
+                        type="select"
+                        cl={{ md: "3", lg: "3" }}
+                        cr="12"
+                        style={{ width: 300 }}
+                      />
                       <Form.Group as={Row} className="form-group">
                         <Form.Label column sm={3}>
                           Number Of Rooms
