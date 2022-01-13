@@ -6,7 +6,7 @@
 }
 .dataTable-root .card {
   overflow: hidden;
-  border-radius: 0.3rem;
+  border-radius: 8px;
   border: 1px solid #b7b7b7;
 }
 
@@ -144,6 +144,15 @@ table.dataTable>tbody>tr.child span.dtr-title {
   min-width: 75px;
   font-weight: bold;
 }
+
+.table th, .table td {
+  border: none;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: rgb(245, 245, 245);
+}
+
 .cstm-col-width {
   min-width: 66px !important;
   word-break: break-all;
