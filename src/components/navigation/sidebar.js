@@ -1,7 +1,7 @@
-import React, { Component } from "react"
-import { Link } from "react-router-dom"
 import BriefCaseIcon from "assets/icons/briefcase.svg"
 import HomeIcon from "assets/icons/home.svg"
+import React, {Component} from "react"
+import {Link} from "react-router-dom"
 import "./sidebar.scss"
 
 export default class Sidebar extends Component {
@@ -241,6 +241,22 @@ export default class Sidebar extends Component {
                   <li className="nav-item">
                     <Link to="/master/employee" className="nav-link">
                       <p>Master Employee</p>
+                    </Link>
+                  </li>
+                </ul>
+              </li>
+              <li className="nav-item">
+                <Link to="#" className="nav-link">
+                  <img src="/img/icons/users.svg" alt="icon users" />
+                  <p>
+                    Setup and Configurations
+                    <i className="right fas fa-angle-right"></i>
+                  </p>
+                </Link>
+                <ul className="nav nav-treeview">
+                  <li className="nav-item">
+                    <Link to="/master/invoice-email-setup" className="nav-link">
+                      <p>Invoice Email Setup</p>
                     </Link>
                   </li>
                 </ul>
