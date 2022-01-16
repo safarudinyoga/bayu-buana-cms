@@ -37,7 +37,7 @@ const GeneralInformation = (props) => {
     hotelCode: "",
     hotelName: "",
     hotelBrand: null,
-    starRating: "",
+    starRating: null,
     numberOfRooms: "",
 
     // Contacts
@@ -49,9 +49,9 @@ const GeneralInformation = (props) => {
 
     // Address
     address: "",
-    country: "",
-    province: "",
-    city: "",
+    country: null,
+    province: null,
+    city: null,
     zipCode: "",
     destination: "",
     zone: "",
@@ -418,7 +418,6 @@ const GeneralInformation = (props) => {
                       <Form.Group as={Row} className="form-group">
                         <Form.Label column sm={3}>
                           Hotel Chain
-                          <span className="form-label-required">*</span>
                         </Form.Label>
                         <Col sm={9}>
                           <FastField name="hotelBrand">
@@ -432,10 +431,44 @@ const GeneralInformation = (props) => {
                                     setFieldValue("hotelBrand", v)
                                   }
                                   placeholder="Please choose Hotel Chain"
-                                  queryParams={{
-                                    limit: 10,
-                                  }}
                                 />
+                              </div>
+                            )}
+                          </FastField>
+                        </Col>
+                      </Form.Group>
+                      <Form.Group as={Row} className="form-group">
+                        <Form.Label column sm={3}>
+                          Star Rating
+                          <span className="form-label-required">*</span>
+                        </Form.Label>
+                        <Col sm={9}>
+                          <FastField name="starRating">
+                            {({ field, form }) => (
+                              <div style={{ width: 300 }}>
+                                <Select
+                                  {...field}
+                                  url={`master/rating-types`}
+                                  fieldName="rating_type_name"
+                                  onChange={(v) =>
+                                    setFieldValue("starRating", v)
+                                  }
+                                  placeholder="Please choose Star Rating"
+                                  className={`react-select ${
+                                    form.touched.starRating &&
+                                    form.errors.starRating
+                                      ? "is-invalid"
+                                      : null
+                                  }`}
+                                />
+                                {form.touched.starRating &&
+                                  form.errors.starRating && (
+                                    <Form.Control.Feedback type="invalid">
+                                      {form.touched.starRating
+                                        ? form.errors.starRating
+                                        : null}
+                                    </Form.Control.Feedback>
+                                  )}
                               </div>
                             )}
                           </FastField>
@@ -627,33 +660,27 @@ const GeneralInformation = (props) => {
                     <Col sm={9}>
                       <FastField name="country">
                         {({ field, form }) => (
-                          <>
-                            <div style={{ width: 300 }}>
-                              <Select
-                                {...field}
-                                placeholder="Please choose"
-                                options={selectCountry}
-                                className={`react-select ${
-                                  form.touched.starRating &&
-                                  form.errors.starRating
-                                    ? "is-invalid"
-                                    : null
-                                }`}
-                                onChange={(v) => {
-                                  setFieldValue("starRating", v)
-                                }}
-                                onBlur={setFieldTouched}
-                              />
-                              {form.touched.starRating &&
-                                form.errors.starRating && (
-                                  <Form.Control.Feedback type="invalid">
-                                    {form.touched.starRating
-                                      ? form.errors.starRating
-                                      : null}
-                                  </Form.Control.Feedback>
-                                )}
-                            </div>
-                          </>
+                          <div style={{ width: 300 }}>
+                            <Select
+                              {...field}
+                              url={`master/countries`}
+                              fieldName="country_name"
+                              onChange={(v) => setFieldValue("country", v)}
+                              placeholder="Please choose"
+                              className={`react-select ${
+                                form.touched.country && form.errors.country
+                                  ? "is-invalid"
+                                  : null
+                              }`}
+                            />
+                            {form.touched.country && form.errors.country && (
+                              <Form.Control.Feedback type="invalid">
+                                {form.touched.country
+                                  ? form.errors.country
+                                  : null}
+                              </Form.Control.Feedback>
+                            )}
+                          </div>
                         )}
                       </FastField>
                     </Col>
@@ -663,24 +690,23 @@ const GeneralInformation = (props) => {
                       State/Province
                     </Form.Label>
                     <Col sm={9}>
-                      <FastField name="province">
+                      <Field name="province">
                         {({ field, form }) => (
                           <>
                             <div style={{ width: 200 }}>
                               <Select
                                 {...field}
+                                isDisabled={values.country == null}
+                                url={`master/state-provinces`}
+                                urlFilter={`["country_id","=",${values.country?.value}]`}
+                                fieldName="state_province_name"
+                                onChange={(v) => setFieldValue("province", v)}
                                 placeholder="Please choose"
-                                options={selectCountry}
-                                className="react-select"
-                                onChange={(v) => {
-                                  setFieldValue("province", v)
-                                }}
-                                onBlur={setFieldTouched}
                               />
                             </div>
                           </>
                         )}
-                      </FastField>
+                      </Field>
                     </Col>
                   </Form.Group>
                   <Form.Group as={Row} className="form-group">
@@ -688,24 +714,23 @@ const GeneralInformation = (props) => {
                       City
                     </Form.Label>
                     <Col sm={9}>
-                      <FastField name="city">
+                      <Field name="city">
                         {({ field }) => (
                           <>
                             <div style={{ width: 200 }}>
                               <Select
                                 {...field}
+                                isDisabled={values.province == null}
+                                url={`master/cities`}
+                                urlFilter={`["province_id","=",${values.province?.value}]`}
+                                fieldName="city_name"
+                                onChange={(v) => setFieldValue("city", v)}
                                 placeholder="Please choose"
-                                options={selectCountry}
-                                className="react-select"
-                                onChange={(v) => {
-                                  setFieldValue("province", v)
-                                }}
-                                onBlur={setFieldTouched}
                               />
                             </div>
                           </>
                         )}
-                      </FastField>
+                      </Field>
                     </Col>
                   </Form.Group>
                   <Form.Group as={Row} className="form-group">
@@ -739,13 +764,12 @@ const GeneralInformation = (props) => {
                             <div style={{ width: 400 }}>
                               <Select
                                 {...field}
-                                placeholder="Please choose"
-                                options={selectCountry}
-                                className="react-select"
-                                onChange={(v) => {
+                                url={`master/destinations`}
+                                fieldName="destination_name"
+                                onChange={(v) =>
                                   setFieldValue("destination", v)
-                                }}
-                                onBlur={setFieldTouched}
+                                }
+                                placeholder="Please choose"
                               />
                             </div>
                           </>
@@ -764,13 +788,10 @@ const GeneralInformation = (props) => {
                             <div style={{ width: 300 }}>
                               <Select
                                 {...field}
+                                url={`master/zones`}
+                                fieldName="zone_name"
+                                onChange={(v) => setFieldValue("zone", v)}
                                 placeholder="Please choose"
-                                options={selectCountry}
-                                className="react-select"
-                                onChange={(v) => {
-                                  setFieldValue("zone", v)
-                                }}
-                                onBlur={setFieldTouched}
                               />
                             </div>
                           </>

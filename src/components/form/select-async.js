@@ -33,7 +33,7 @@ const customStyles = {
 }
 
 const Select = (props) => {
-  const { fieldName } = props
+  const { fieldName, urlFilter } = props
   const Icon = ({ innerRef, innerProps }) => (
     <img
       src="/img/icons/arrow-down.svg"
@@ -64,9 +64,9 @@ const Select = (props) => {
       .get(
         `${
           env.API_URL
-        }/${url}?sort=${fieldName}&filters=[["status", "=", 1],["AND"],["${fieldName}","like","${search}"]]&size=10&page=${
-          page - 1
-        }`,
+        }/${url}?sort=${fieldName}&filters=[["status", "=", 1],["AND"],["${fieldName}","like","${search}"]${
+          urlFilter !== undefined ? `,["AND"],${urlFilter}` : ""
+        }]&size=10&page=${page - 1}`,
       )
       .then(function (response) {
         return response.data
@@ -117,6 +117,9 @@ const Select = (props) => {
       )}
       get={get}
       debounceTimeout={300}
+      queryParams={{
+        limit: 10,
+      }}
       styles={customStyles}
     />
   )
