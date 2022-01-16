@@ -19,8 +19,7 @@ import axios from "axios"
 
 import Api from "config/api"
 import env from "config/environment"
-import Select from "components/form/select"
-import FormInputSelectAjax from "components/form/input-select-ajax"
+import Select from "components/form/select-async"
 
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css"
 import "react-dropzone-uploader/dist/styles.css"
@@ -37,7 +36,7 @@ const GeneralInformation = (props) => {
     // General Information
     hotelCode: "",
     hotelName: "",
-    hotelBrand: "",
+    hotelBrand: null,
     starRating: "",
     numberOfRooms: "",
 
@@ -416,40 +415,32 @@ const GeneralInformation = (props) => {
                           </FastField>
                         </Col>
                       </Form.Group>
-                      <FormInputSelectAjax
-                        label="Hotel Chain"
-                        required={true}
-                        name="hotel_brand_id"
-                        endpoint="/master/hotel-brands"
-                        column="hotel_brand_name"
-                        filter={`["status", "=", 1]`}
-                        onChange={(e) => {
-                          console.log("yoo")
-                        }}
-                        placeholder="Please choose Hotel Chain"
-                        // disabled={isView || loading}
-                        type="select"
-                        cl={{ md: "3", lg: "3" }}
-                        cr="12"
-                        style={{ width: 400 }}
-                      />
-                      <FormInputSelectAjax
-                        label="Star Rating"
-                        required={true}
-                        name="hotel_brand_id"
-                        endpoint="/master/rating-types"
-                        column="rating_type_name"
-                        filter={`["status", "=", 1]`}
-                        onChange={(e) => {
-                          console.log("yoo")
-                        }}
-                        placeholder="Please choose Hotel Chain"
-                        // disabled={isView || loading}
-                        type="select"
-                        cl={{ md: "3", lg: "3" }}
-                        cr="12"
-                        style={{ width: 300 }}
-                      />
+                      <Form.Group as={Row} className="form-group">
+                        <Form.Label column sm={3}>
+                          Hotel Chain
+                          <span className="form-label-required">*</span>
+                        </Form.Label>
+                        <Col sm={9}>
+                          <FastField name="hotelBrand">
+                            {({ field, form }) => (
+                              <div style={{ width: 300 }}>
+                                <Select
+                                  {...field}
+                                  url={`master/cabin-types`}
+                                  fieldName="cabin_type_name"
+                                  onChange={(v) =>
+                                    setFieldValue("hotelBrand", v)
+                                  }
+                                  placeholder="Please choose Hotel Chain"
+                                  queryParams={{
+                                    limit: 10,
+                                  }}
+                                />
+                              </div>
+                            )}
+                          </FastField>
+                        </Col>
+                      </Form.Group>
                       <Form.Group as={Row} className="form-group">
                         <Form.Label column sm={3}>
                           Number Of Rooms

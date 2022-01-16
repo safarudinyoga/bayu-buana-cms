@@ -42,6 +42,10 @@ export default function HotelBrandTable() {
         data: "hotel_name",
       },
       {
+        title: "Hotel Rating",
+        data: "hotel_rating",
+      },
+      {
         title: "Location",
         data: "location",
       },
