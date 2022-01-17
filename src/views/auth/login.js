@@ -1,56 +1,135 @@
 import { withRouter } from "react-router"
 import React, { useState } from "react";
-import { Form } from "react-bootstrap";
+import { Form, FormCheck, FormGroup, InputGroup } from "react-bootstrap";
 import AuthWrapper from "components/wrapper/auth"
+import { Formik, FastField, Field } from "formik"
+import * as Yup from "yup"
+import { BlockButton } from '../../components/button/block';
 
 function Login() {
-	const [form, setForm] = useState({
+	const [initialForm, setForm] = useState({
 			email: "",
 			password: "",
 		})
+	const [ passType, setPassType] = useState("password")
 	const [ rememberVal, setCheckBox] = useState(false)
 
-	const onLogin = () => {
-		console.log(form)
+	const validationSchema =  Yup.object().shape({
+		email: Yup.string()
+			.required("Email is required.")
+			.email("Email is not a valid email.")
+			.max(256, "email is too long - should be 256 chars maximun."),
+		password: Yup.string()
+			.required("Password is required.")
+			.min(8, "Password is too short - should be 8 chars minimum.")
+			.max(256, "Password is too long - should be 256 chars maximun.")
+			.matches(/^(?=.*\d)(?=.*([a-z]|[A-Z]))([\x20-\x7E]){8,}$/, "Password must be contain letters, numbers, and symbols"),
+	})
+
+	const onSubmit = async (values) => {
+		console.log(values)
 	}
 
+	const FormValidate = ({
+		label, 
+		name,
+		type="text",
+		maxLength=256,
+		placeholder="",
+		endIcon,
+	}) => (
+		<FormGroup>
+			<Form.Label className="mt-2">{label}</Form.Label>
+			<InputGroup>
+				<FastField name={name}>
+					{({field, form}) => (
+						<>
+							<Form.Control
+								type={type}
+								placeholder={placeholder}
+								isInvalid={
+									form.touched[name] && form.errors[name]
+								}
+								maxLength={maxLength}
+								{...field}
+							/>
+							{endIcon ? (
+								<InputGroup.Append>
+									<InputGroup.Text>
+										{endIcon()}
+									</InputGroup.Text>
+								</InputGroup.Append>
+								) 
+							: null}
+							{form.touched[name] &&
+							form.errors[name] && (
+								<Form.Control.Feedback type="invalid">
+								{form.touched[name]
+									? form.errors[name]
+									: null}
+								</Form.Control.Feedback>
+							)}
+						</>
+					)}
+				</FastField>
+			</InputGroup>
+		</FormGroup>
+	)
+
 	return (
-		<AuthWrapper
-			buttonTitle="SIGN IN"
-			buttonFn={onLogin}
-		>
+		<AuthWrapper>
 			<p className="title p-0 mb-1">Welcome Back!</p>
 			<p className="sub-title p-0 mb-4 mb-md-5">Please Sign in to continue</p>
-			<Form>
-				<Form.Label>Email</Form.Label>
-				<Form.Control
-					value={form.email}
-					name="email"
-					onChange={(e) => setForm({ ...form, email: e.target.value })}
-					disabled={false}
-					type="email"
-				/>
-
-				<Form.Label className="mt-2">Password</Form.Label>
-				<Form.Control
-					value={form.password}
-					name="password"
-					onChange={(e) => setForm({ ...form, password: e.target.value })}
-					disabled={false}
-					type="password"
-				/>
-			</Form>
-
+			<Formik
+				initialValues={initialForm}
+				validationSchema={validationSchema}
+				onSubmit={onSubmit}
+			>
+				{
+					({
+						dirty,
+						handleSubmit,
+						isSubmitting,
+					}) => (
+						<Form onSubmit={handleSubmit}>
+							<FormValidate
+								label="Email" 
+								name="email"
+								type="email"
+								maxLength={256}
+								placeholder="Enter your email"
+							/>
+							<FormValidate
+								label="Password" 
+								name="password"
+								type={passType}
+								maxLength={256}
+								placeholder="Enter your password"
+								endIcon={() => (
+									<i 
+									onClick={()=>setPassType(passType === "text" ? "password" : "text" )} 
+									className={`fa ${passType === "password" ? "fa-eye-slash" : "fa-eye" }`}></i>
+								)}
+							/>
+							<BlockButton 
+								text={"SIGN IN"} 
+								disabled={isSubmitting || !dirty}
+								type="submit"
+							/>
+						</Form>
+					)
+				}
+				
+			</Formik>
 			<div className="row mt-2">
 				<div className="col"> 
-					<input 
-						type="checkbox" 
-						checked={rememberVal}
+					<Form.Check
+						inline
+						label="Remember Me"
+						type={"checkbox"}
+						id="custom-inline-checkbox-remember"
 						onChange={() => setCheckBox(!rememberVal)}
 					/>
-					<span onClick={() => setCheckBox(!rememberVal)} className="remember pl-1">
-						Remember Me
-					</span>
 				</div>
 				<div className="col text-right">
 					<a className="forgot-text">Forgot Password?</a>
