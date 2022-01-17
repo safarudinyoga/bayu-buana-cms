@@ -65,8 +65,9 @@ $grey: #818181;
 		z-index: 1;
 		flex-direction: column;
 		align-items: center;
+		justify-content: center;
 		padding: 20px;
-		padding-top: 10%;
+		// padding-top: 10%;
 		height: 100%;
 		width:40%;
 		background-color: #FFFFFF;
@@ -79,6 +80,12 @@ $grey: #818181;
 			.title {
 				font-weight: 600;
 				font-size: 1.6em;
+				line-height: 1em;
+				margin: 0;
+			}
+			.mid-title {
+				font-weight: 600;
+				font-size: 1.1em;
 				line-height: 1em;
 				margin: 0;
 			}
@@ -96,6 +103,10 @@ $grey: #818181;
 				&:hover {
 					cursor: default;
 				}
+			}
+			.back-signin {
+				color: #818181;
+				font-size: 14px;
 			}
 			.forgot-text {
 				padding: 0;
@@ -118,10 +129,7 @@ $grey: #818181;
 			@media (max-width: 480px) {
 				background-color: rgba(255, 255, 255, 0.97);
 				padding: 20px 15px;
-				.title {
-					text-align: center;
-				}
-				.sub-title {
+				.title, .mid-title, .sub-title {
 					text-align: center;
 				}
 			}
