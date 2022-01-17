@@ -14,9 +14,14 @@ export default class FormInputWrapper extends Component {
           {
             notes 
             ? <p className="label-notes">
-              Recommended Size: 70 x 70 pixels <br/>
+              {
+              notes.content 
+              ? notes.content()
+              : <>Recommended Size: 70 x 70 pixels <br/>
               Supported Image: .jpg, .png, .jpeg <br/>
-              File Max: 10 KB
+              File Max: 10 KB</>
+              }
+              
             </p>
             : null
           }
