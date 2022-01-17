@@ -111,6 +111,22 @@ function Login() {
 									className={`fa ${passType === "password" ? "fa-eye-slash" : "fa-eye" }`}></i>
 								)}
 							/>
+							<div className="row mt-3">
+								<div className="col"> 
+									<Form.Check
+										inline
+										label="Remember Me"
+										type={"checkbox"}
+										id="custom-inline-checkbox-remember"
+										onChange={() => setCheckBox(!rememberVal)}
+									/>
+								</div>
+								<div className="col text-right">
+									<Link to="/auth/forgot-password">
+										<p className="forgot-text">Forgot Password?</p>
+									</Link>
+								</div>
+							</div>
 							<BlockButton 
 								text={"SIGN IN"} 
 								disabled={isSubmitting || !dirty}
@@ -121,22 +137,6 @@ function Login() {
 				}
 				
 			</Formik>
-			<div className="row mt-2">
-				<div className="col"> 
-					<Form.Check
-						inline
-						label="Remember Me"
-						type={"checkbox"}
-						id="custom-inline-checkbox-remember"
-						onChange={() => setCheckBox(!rememberVal)}
-					/>
-				</div>
-				<div className="col text-right">
-					<Link to="/auth/forgot-password">
-						<p className="forgot-text">Forgot Password?</p>
-					</Link>
-				</div>
-			</div>
 		</>
 	)
 }
