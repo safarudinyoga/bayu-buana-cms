@@ -1,7 +1,7 @@
 import { withRouter } from "react-router"
 import React, { useState } from "react";
 import { Form, FormGroup, InputGroup } from "react-bootstrap";
-import { Formik, FastField, Field } from "formik"
+import { Formik, FastField } from "formik"
 import * as Yup from "yup"
 import { BlockButton } from '../../components/button/block';
 import { Link } from 'react-router-dom';
