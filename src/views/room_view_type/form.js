@@ -37,10 +37,10 @@ function RoomViewTypeForm(props) {
   const validationRules = {
     room_view_type_code: {
       required: true,
+      number: true,
       minlength: 3,
       maxlength: 256,
       checkCode: true,
-      number: true,
       noSpace: true
     },
     room_view_type_name: {
@@ -59,6 +59,7 @@ function RoomViewTypeForm(props) {
     },
     room_view_type_code: {
       required: "Room View Type Code is required",
+      number: "Code format is invalid",
       minlength: "Room View Type Code must be at least 3 characters",
       maxlength: "Room View Type Code cannot be more than 256 characters",
     },
@@ -111,7 +112,7 @@ function RoomViewTypeForm(props) {
                 url: `${env.API_URL}/master/room-view-types?filters=["room_view_type_code","=","${element.value}"]`,
                 success: function (res) {
                   if (res.items.length !== 0) {
-                    if(currentCode == element.value){
+                    if(currentCode == parseInt(element.value)){
                       req = true
                     } else {
                       req = false
@@ -281,10 +282,10 @@ function RoomViewTypeForm(props) {
           cl={{md:"12"}}
           cr="12"
           onChange={(e) =>
-            setForm({...form, room_view_type_code: parseInt(e.target.value)})
+            setForm({...form, room_view_type_code: e.target.value})
           }
           disabled={isView || loading}
-          type="number"
+          type="text"
           hint="Room View Type Code is numeric"
         />
       </FormHorizontal>
