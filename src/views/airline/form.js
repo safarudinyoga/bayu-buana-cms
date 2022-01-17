@@ -439,6 +439,7 @@ function AirlineForm(props) {
           disabled={isView}
           url={form.airline_asset?.multimedia_description.url}
           style={{ maxWidth: 300, marginTop: 12 }}
+          notes={true}
         />
       </FormHorizontal>
 
