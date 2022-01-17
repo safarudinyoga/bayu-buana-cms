@@ -5,6 +5,7 @@ import "admin-lte/dist/css/adminlte.css"
 import "App.scss"
 import "bootstrap/dist/js/bootstrap.js"
 import DashboardWrapper from "components/wrapper/dashboard"
+import AuthWrapper from 'components/wrapper/auth'
 import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom"
 import AgeQualifyingTypeForm from "views/age_qualifying_type/form"
 import AgeQualifyingTypeTable from "views/age_qualifying_type/table"
@@ -94,6 +95,7 @@ import InvoiceEmailSetupTable from "views/invoice_email_setup/table"
 import InvoiceEmailSetupForm from "views/invoice_email_setup/form"
 
 import Login from './views/auth/login';
+import ForgotPassword from "views/auth/forgot_password"
 
 const RouteWithProps = ({ path, exact, strict, component: Component, location, auth, ...rest }) => (
   <Route
@@ -369,15 +371,26 @@ const DashboardRoutes = () => {
   </DashboardWrapper>
  )
 }
+const AuthRoutes = () => {
+  return (
+    <AuthWrapper>
+      <Route path="/" render={() => <Redirect to="/auth/login"/>} />
+      <Route path="/auth/login">
+        <Login/>
+      </Route>
+      <Route path="/auth/forgot-password">
+        <ForgotPassword/>
+      </Route>
+    </AuthWrapper>
+  )
+}
 
 const App = () => {
   document.title = "Bayu Buana"
   return (
     <Router>
       <Switch>
-        <Route path="/login">
-          <Login/>
-        </Route>
+        <AuthRoutes path="/auth"/>
         <RouteWithProps 
           auth={true} 
           path="/" 
