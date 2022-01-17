@@ -94,8 +94,9 @@ import RatingTypeLevelForm from './views/rating_type_level/form';
 import InvoiceEmailSetupTable from "views/invoice_email_setup/table"
 import InvoiceEmailSetupForm from "views/invoice_email_setup/form"
 
-import Login from './views/auth/login';
+import Login from './views/auth/login'
 import ForgotPassword from "views/auth/forgot_password"
+import OTP from "views/auth/otp"
 
 const RouteWithProps = ({ path, exact, strict, component: Component, location, auth, ...rest }) => (
   <Route
@@ -374,12 +375,15 @@ const DashboardRoutes = () => {
 const AuthRoutes = () => {
   return (
     <AuthWrapper>
-      <Route path="/" render={() => <Redirect to="/auth/login"/>} />
-      <Route path="/auth/login">
+      {/* <Route path="/" render={() => <Redirect to="/auth/login"/>} /> */}
+      <Route exact path="/auth/login">
         <Login/>
       </Route>
-      <Route path="/auth/forgot-password">
+      <Route exact path="/auth/forgot-password">
         <ForgotPassword/>
+      </Route>
+      <Route exact path="/auth/otp">
+        <OTP/>
       </Route>
     </AuthWrapper>
   )
