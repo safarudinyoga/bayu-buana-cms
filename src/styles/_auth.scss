@@ -33,9 +33,9 @@ $grey: #818181;
 
 	&-wrapper {
 		height: 100%;
+		min-height: 600px;
 		width: 100%;
 		display: flex;
-		// overflow: scroll;
 	}
 }
 
@@ -73,6 +73,7 @@ $grey: #818181;
 		opacity: 93%;
 		box-shadow: -10px 3px 6px #00000029;
 		color: $black;
+		position: relative;
 		&-body {
 			width: 75%;
 			.title {
