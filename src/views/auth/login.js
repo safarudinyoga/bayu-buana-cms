@@ -1,10 +1,10 @@
 import { withRouter } from "react-router"
 import React, { useState } from "react";
-import { Form, FormCheck, FormGroup, InputGroup } from "react-bootstrap";
-import AuthWrapper from "components/wrapper/auth"
+import { Form, FormGroup, InputGroup } from "react-bootstrap";
 import { Formik, FastField, Field } from "formik"
 import * as Yup from "yup"
 import { BlockButton } from '../../components/button/block';
+import { Link } from 'react-router-dom';
 
 function Login() {
 	const [initialForm, setForm] = useState({
@@ -77,7 +77,7 @@ function Login() {
 	)
 
 	return (
-		<AuthWrapper>
+		<>
 			<p className="title p-0 mb-1">Welcome Back!</p>
 			<p className="sub-title p-0 mb-4 mb-md-5">Please Sign in to continue</p>
 			<Formik
@@ -132,10 +132,12 @@ function Login() {
 					/>
 				</div>
 				<div className="col text-right">
-					<a className="forgot-text">Forgot Password?</a>
+					<Link to="/auth/forgot-password">
+						<p className="forgot-text">Forgot Password?</p>
+					</Link>
 				</div>
 			</div>
-		</AuthWrapper>
+		</>
 	)
 }
 
