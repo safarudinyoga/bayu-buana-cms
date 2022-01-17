@@ -15,6 +15,7 @@ const FormInputFile = ({
   name,
   mediaType = "desktop",
   style,
+  mediaSpec
 }) => {
 
   let dispatch = useDispatch()
@@ -44,10 +45,10 @@ const FormInputFile = ({
       {title && (
         <>
           <p className="media-title media-title-required">{title}</p>
-          <span className="media-info">
-            Only {accept?.split(",").join(" ") || ".png, .jpg, .jpeg"} file
-            supported.
-          </span>
+          <p className="media-info">
+            Recommended Size: {mediaSpec.size} pixels <br/>
+            Supported Image: {accept?.split(",").join(" ") || ".png, .jpg, .jpeg"} file Max: {mediaSpec.file_size} KB
+          </p>
         </>
       )}
       <label className="media-label" id={"media-"+id} style={style}>

@@ -24,6 +24,7 @@ export default class FormInputControl extends Component {
         hint={this.props.hint}
         cl={this.props.cl}
         cr={this.props.cr}
+        notes={this.props.notes}
       >
         <FormInput ref={this.input} {...this.props} />
       </FormInputWrapper>
