@@ -125,7 +125,7 @@ const Media = (props) => {
                   <Accordion defaultActiveKey="0">
                     <Card>
                       <Accordion.Toggle as={Card.Header} eventKey="0">
-                        HOTEL MAIN
+                        Hotel Main
                       </Accordion.Toggle>
                       <Accordion.Collapse eventKey="0">
                         <Card.Body>
@@ -149,7 +149,7 @@ const Media = (props) => {
                     </Card>
                     <Card>
                       <Accordion.Toggle as={Card.Header} eventKey="1">
-                        ROOM TYPES
+                        Room Type
                       </Accordion.Toggle>
                       <Accordion.Collapse eventKey="1">
                         <Card.Body>
@@ -173,7 +173,7 @@ const Media = (props) => {
                     </Card>
                     <Card>
                       <Accordion.Toggle as={Card.Header} eventKey="2">
-                        FACILITIES
+                        Facilities
                       </Accordion.Toggle>
                       <Accordion.Collapse eventKey="2">
                         <Card.Body>
@@ -271,7 +271,7 @@ const Media = (props) => {
                           <div>
                             <Select
                               {...field}
-                              placeholder="Please choose"
+                              placeholder="Please choose Category"
                               options={selectCountry}
                               className="react-select"
                               onChange={(v) => {
@@ -392,7 +392,7 @@ const Media = (props) => {
                           <div>
                             <Select
                               {...field}
-                              placeholder="Please choose"
+                              placeholder="Please choose Category"
                               options={selectCountry}
                               className="react-select"
                               onChange={(v) => {

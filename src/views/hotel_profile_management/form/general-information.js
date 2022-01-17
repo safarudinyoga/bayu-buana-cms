@@ -12,19 +12,21 @@ import {
 } from "react-bootstrap"
 import { Formik, FastField, Field } from "formik"
 import * as Yup from "yup"
-import ImageUploading from "react-images-uploading"
 import { Editor } from "react-draft-wysiwyg"
 import { ReactSVG } from "react-svg"
 import Dropzone from "react-dropzone-uploader"
+import axios from "axios"
 
 import Api from "config/api"
-import Select from "components/form/select"
+import env from "config/environment"
+import Select from "components/form/select-async"
 
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css"
 import "react-dropzone-uploader/dist/styles.css"
 
 const GeneralInformation = (props) => {
   const [selectCountry, setSelectCountry] = useState([])
+  const [selectHotelBrand, setSelectHotelBrand] = useState([])
   const [modalShow, setModalShow] = useState(false)
 
   let api = new Api()
@@ -34,8 +36,8 @@ const GeneralInformation = (props) => {
     // General Information
     hotelCode: "",
     hotelName: "",
-    hotelChain: "",
-    starRating: "",
+    hotelBrand: null,
+    starRating: null,
     numberOfRooms: "",
 
     // Contacts
@@ -47,9 +49,9 @@ const GeneralInformation = (props) => {
 
     // Address
     address: "",
-    country: "",
-    province: "",
-    city: "",
+    country: null,
+    province: null,
+    city: null,
     zipCode: "",
     destination: "",
     zone: "",
@@ -75,13 +77,31 @@ const GeneralInformation = (props) => {
     caption: "",
     image: "",
   }
-
   // Schema for yup
   const validationSchema = Yup.object().shape({
     // General Information
-    hotelCode: Yup.string().required("Hotel Code is required."),
+    hotelCode: Yup.string()
+      .required("Hotel Code is required.")
+      .test(
+        "Unique Code",
+        "Hotel Code already exists", // <- key, message
+        (value) => {
+          return new Promise((resolve, reject) => {
+            axios
+              .get(
+                `${env.API_URL}/master/hotels?filters=["hotel_code","=","${value}"]`,
+              )
+              .then((res) => {
+                resolve(res.data.items.length == 0)
+              })
+              .catch((error) => {
+                resolve(false)
+              })
+          })
+        },
+      ),
     hotelName: Yup.string().required("Hotel Name is required."),
-    hotelChain: Yup.object(),
+    hotelBrand: Yup.object(),
     starRating: Yup.object().required("Star Rating is required."),
     numberOfRooms: Yup.number(),
 
@@ -282,6 +302,7 @@ const GeneralInformation = (props) => {
       <Formik
         initialValues={initialForm}
         validationSchema={validationSchema}
+        validateOnChange={false}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
           console.log(values)
           console.log(props)
@@ -399,22 +420,19 @@ const GeneralInformation = (props) => {
                           Hotel Chain
                         </Form.Label>
                         <Col sm={9}>
-                          <FastField name="hotelChain">
+                          <FastField name="hotelBrand">
                             {({ field, form }) => (
-                              <>
-                                <div style={{ width: 400 }}>
-                                  <Select
-                                    {...field}
-                                    placeholder="Please choose Hotel Chain"
-                                    options={selectCountry}
-                                    className="react-select"
-                                    onChange={(v) => {
-                                      setFieldValue("hotelChain", v)
-                                    }}
-                                    onBlur={setFieldTouched}
-                                  />
-                                </div>
-                              </>
+                              <div style={{ width: 300 }}>
+                                <Select
+                                  {...field}
+                                  url={`master/cabin-types`}
+                                  fieldName="cabin_type_name"
+                                  onChange={(v) =>
+                                    setFieldValue("hotelBrand", v)
+                                  }
+                                  placeholder="Please choose Hotel Chain"
+                                />
+                              </div>
                             )}
                           </FastField>
                         </Col>
@@ -427,33 +445,31 @@ const GeneralInformation = (props) => {
                         <Col sm={9}>
                           <FastField name="starRating">
                             {({ field, form }) => (
-                              <>
-                                <div style={{ width: 200 }}>
-                                  <Select
-                                    {...field}
-                                    placeholder="Please choose Star Rating"
-                                    options={selectCountry}
-                                    className={`react-select ${
-                                      form.touched.starRating &&
-                                      form.errors.starRating
-                                        ? "is-invalid"
-                                        : null
-                                    }`}
-                                    onChange={(v) => {
-                                      setFieldValue("starRating", v)
-                                    }}
-                                    onBlur={setFieldTouched}
-                                  />
-                                  {form.touched.starRating &&
-                                    form.errors.starRating && (
-                                      <Form.Control.Feedback type="invalid">
-                                        {form.touched.starRating
-                                          ? form.errors.starRating
-                                          : null}
-                                      </Form.Control.Feedback>
-                                    )}
-                                </div>
-                              </>
+                              <div style={{ width: 300 }}>
+                                <Select
+                                  {...field}
+                                  url={`master/rating-types`}
+                                  fieldName="rating_type_name"
+                                  onChange={(v) =>
+                                    setFieldValue("starRating", v)
+                                  }
+                                  placeholder="Please choose Star Rating"
+                                  className={`react-select ${
+                                    form.touched.starRating &&
+                                    form.errors.starRating
+                                      ? "is-invalid"
+                                      : null
+                                  }`}
+                                />
+                                {form.touched.starRating &&
+                                  form.errors.starRating && (
+                                    <Form.Control.Feedback type="invalid">
+                                      {form.touched.starRating
+                                        ? form.errors.starRating
+                                        : null}
+                                    </Form.Control.Feedback>
+                                  )}
+                              </div>
                             )}
                           </FastField>
                         </Col>
@@ -644,33 +660,27 @@ const GeneralInformation = (props) => {
                     <Col sm={9}>
                       <FastField name="country">
                         {({ field, form }) => (
-                          <>
-                            <div style={{ width: 300 }}>
-                              <Select
-                                {...field}
-                                placeholder="Please choose"
-                                options={selectCountry}
-                                className={`react-select ${
-                                  form.touched.starRating &&
-                                  form.errors.starRating
-                                    ? "is-invalid"
-                                    : null
-                                }`}
-                                onChange={(v) => {
-                                  setFieldValue("starRating", v)
-                                }}
-                                onBlur={setFieldTouched}
-                              />
-                              {form.touched.starRating &&
-                                form.errors.starRating && (
-                                  <Form.Control.Feedback type="invalid">
-                                    {form.touched.starRating
-                                      ? form.errors.starRating
-                                      : null}
-                                  </Form.Control.Feedback>
-                                )}
-                            </div>
-                          </>
+                          <div style={{ width: 300 }}>
+                            <Select
+                              {...field}
+                              url={`master/countries`}
+                              fieldName="country_name"
+                              onChange={(v) => setFieldValue("country", v)}
+                              placeholder="Please choose"
+                              className={`react-select ${
+                                form.touched.country && form.errors.country
+                                  ? "is-invalid"
+                                  : null
+                              }`}
+                            />
+                            {form.touched.country && form.errors.country && (
+                              <Form.Control.Feedback type="invalid">
+                                {form.touched.country
+                                  ? form.errors.country
+                                  : null}
+                              </Form.Control.Feedback>
+                            )}
+                          </div>
                         )}
                       </FastField>
                     </Col>
@@ -680,24 +690,23 @@ const GeneralInformation = (props) => {
                       State/Province
                     </Form.Label>
                     <Col sm={9}>
-                      <FastField name="province">
+                      <Field name="province">
                         {({ field, form }) => (
                           <>
                             <div style={{ width: 200 }}>
                               <Select
                                 {...field}
+                                isDisabled={values.country == null}
+                                url={`master/state-provinces`}
+                                urlFilter={`["country_id","=",${values.country?.value}]`}
+                                fieldName="state_province_name"
+                                onChange={(v) => setFieldValue("province", v)}
                                 placeholder="Please choose"
-                                options={selectCountry}
-                                className="react-select"
-                                onChange={(v) => {
-                                  setFieldValue("province", v)
-                                }}
-                                onBlur={setFieldTouched}
                               />
                             </div>
                           </>
                         )}
-                      </FastField>
+                      </Field>
                     </Col>
                   </Form.Group>
                   <Form.Group as={Row} className="form-group">
@@ -705,24 +714,23 @@ const GeneralInformation = (props) => {
                       City
                     </Form.Label>
                     <Col sm={9}>
-                      <FastField name="city">
+                      <Field name="city">
                         {({ field }) => (
                           <>
                             <div style={{ width: 200 }}>
                               <Select
                                 {...field}
+                                isDisabled={values.province == null}
+                                url={`master/cities`}
+                                urlFilter={`["province_id","=",${values.province?.value}]`}
+                                fieldName="city_name"
+                                onChange={(v) => setFieldValue("city", v)}
                                 placeholder="Please choose"
-                                options={selectCountry}
-                                className="react-select"
-                                onChange={(v) => {
-                                  setFieldValue("province", v)
-                                }}
-                                onBlur={setFieldTouched}
                               />
                             </div>
                           </>
                         )}
-                      </FastField>
+                      </Field>
                     </Col>
                   </Form.Group>
                   <Form.Group as={Row} className="form-group">
@@ -756,13 +764,12 @@ const GeneralInformation = (props) => {
                             <div style={{ width: 400 }}>
                               <Select
                                 {...field}
-                                placeholder="Please choose"
-                                options={selectCountry}
-                                className="react-select"
-                                onChange={(v) => {
+                                url={`master/destinations`}
+                                fieldName="destination_name"
+                                onChange={(v) =>
                                   setFieldValue("destination", v)
-                                }}
-                                onBlur={setFieldTouched}
+                                }
+                                placeholder="Please choose"
                               />
                             </div>
                           </>
@@ -781,13 +788,10 @@ const GeneralInformation = (props) => {
                             <div style={{ width: 300 }}>
                               <Select
                                 {...field}
+                                url={`master/zones`}
+                                fieldName="zone_name"
+                                onChange={(v) => setFieldValue("zone", v)}
                                 placeholder="Please choose"
-                                options={selectCountry}
-                                className="react-select"
-                                onChange={(v) => {
-                                  setFieldValue("zone", v)
-                                }}
-                                onBlur={setFieldTouched}
                               />
                             </div>
                           </>
