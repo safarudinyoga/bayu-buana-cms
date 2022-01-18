@@ -496,6 +496,13 @@ function LanguageForm(props) {
           accept=".png,.jpg,.jpeg"
           url={form.language_asset?.multimedia_description.url}
           style={{ maxWidth: 300, marginTop: 12 }}
+          notes={{
+            content: () => <>
+              Recommended Size: 128 x 68 pixels <br/>
+              Supported Image: .jpg, .png, .jpeg <br/>
+              File Max: 10 KB
+            </>
+          }}
         />
       </FormHorizontal>
 

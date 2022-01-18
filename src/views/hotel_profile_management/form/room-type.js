@@ -7,13 +7,11 @@ import { setUIParams } from "redux/ui-store"
 const RoomType = (props) => {
   let params = {
     title: "Hotel Profile Management",
-    baseRoute: "/master/hotel-profile-management/form",
-    endpoint: "/master/hotel-profile-management",
-    deleteEndpoint: "/master/batch-actions/delete/hotel-profile-management",
-    activationEndpoint:
-      "/master/batch-actions/activate/hotel-profile-management",
-    deactivationEndpoint:
-      "/master/batch-actions/deactivate/hotel-profile-management",
+    baseRoute: "/master/room-types/form",
+    endpoint: "/master/room-types",
+    deleteEndpoint: "/master/batch-actions/delete/room-types",
+    activationEndpoint: "/master/batch-actions/activate/room-types",
+    deactivationEndpoint: "/master/batch-actions/deactivate/room-types",
     columns: [
       {
         title: "Room Type",
@@ -32,7 +30,7 @@ const RoomType = (props) => {
         data: "number_of_room",
       },
     ],
-    emptyTable: "No hotels found",
+    emptyTable: "No room types found",
     recordName: "hotel_name",
   }
 

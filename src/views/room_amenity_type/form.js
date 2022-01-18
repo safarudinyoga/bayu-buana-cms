@@ -387,6 +387,7 @@ function RoomAmenityTypeForm(props) {
           accept=".png,.jpg,.jpeg"
           url={form.room_amenity_type_asset?.multimedia_description.url}
           style={{maxWidth: 300, marginTop: 12}}
+          notes={true}
         />
       </FormHorizontal>
 

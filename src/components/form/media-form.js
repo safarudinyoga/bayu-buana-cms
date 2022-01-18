@@ -1,7 +1,11 @@
 import React from "react"
 import FormInputFile from './input-image'
 
-const mediaTypes = ["Desktop", "Tablet", "Mobile"]
+const mediaTypes = [
+	{ type: "Desktop", size: "1200 x 630", file_size: "300" }, 
+	{ type: "Tablet", size: "820 x 430", file_size: "220" }, 
+	{ type: "Mobile", size: "640 x 336", file_size: "100" }, 
+]
 const MediaForm = ({
 	isView = false,
 	data = {
@@ -32,17 +36,18 @@ const MediaForm = ({
 			<p className="text-sub-header">MEDIA</p>
 			<div className="row">
 				{
-					mediaTypes.map((m_type, i) => (
+					mediaTypes.map((m, i) => (
 						<div className="col-md-4" key={i}>
 							<FormInputFile
-								id={m_type.toLowerCase()}
-								title={isView ? `Banner (${m_type})` : `Banner (${m_type}) Image`}
-								mediaType={m_type.toLowerCase()}
+								id={m.type.toLowerCase()}
+								title={isView ? `Banner (${m})` : `Banner (${m.type}) Image`}
+								mediaType={m.type.toLowerCase()}
 								onChange={doUpload}
-								url={data[moduleName + "_asset_" + m_type.toLowerCase()]?.multimedia_description?.url || ""}
+								url={data[moduleName + "_asset_" + m.type.toLowerCase()]?.multimedia_description?.url || ""}
 								accept=".png,.jpg,.jpeg"
-								name={moduleName + "_asset_" + m_type.toLowerCase()}
+								name={moduleName + "_asset_" + m.type.toLowerCase()}
 								disabled={isView}
+								mediaSpec={m}
 							/>
 							{/* <progress className="upload-progress" id={"progress-"+m_type.toLowerCase()} value="0" max="100" style={{width: '100%', display: 'none'}}></progress> */}
 						</div>
