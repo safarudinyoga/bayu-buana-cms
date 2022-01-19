@@ -22,6 +22,8 @@ import CabinTypeForm from "views/cabin_type/form"
 import CabinTypeTable from "views/cabin_type/table"
 import CityForm from "views/city/form"
 import CityTable from "views/city/table"
+import CorporateRatingForm from "views/corporate_rating/form"
+import CorporateRatingTable from "views/corporate_rating/table"
 import CountryForm from "views/country/form"
 import CountryTable from "views/country/table"
 import CurrencyForm from "views/currency/form"
@@ -31,8 +33,12 @@ import DestinationForm from "views/destination/form"
 import DestinationTable from "views/destination/table"
 import DestinationGroupForm from "views/destination_group/form"
 import DestinationGroupTable from "views/destination_group/table"
+import FeeTypeForm from "views/fee_type/form"
+import FeeTypeTable from "views/fee_type/table"
 import FlightTypeForm from "views/flight_type/form"
 import FlightTypeTable from "views/flight_type/table"
+import FrequentTravelerProgramForm from "views/frequent_traveler_program/form"
+import FrequentTravelerProgramTable from "views/frequent_traveler_program/table"
 import HotelAmenityCategoryForm from "views/hotel_amenity_category/form"
 import HotelAmenityCategoryTable from "views/hotel_amenity_category/table"
 import HotelAmenityTypeForm from "views/hotel_amenity_type/form"
@@ -156,13 +162,31 @@ const App = () => {
           </Route>
           <Route path="/master/hotel-brands/form/:id?">
             <HotelBrandForm />
+          </Route>
+          <Route exact path="/master/fee-type">
+            <FeeTypeTable />
+          </Route>
+          <Route path="/master/fee-type/form/:id?">
+            <FeeTypeForm />
           </Route>         
           <Route exact path="/master/flight-types">
             <FlightTypeTable />
           </Route>
           <Route path="/master/flight-types/form/:id?">
             <FlightTypeForm />
-          </Route>         
+          </Route> 
+          <Route exact path="/master/frequent-traveler-program">
+            <FrequentTravelerProgramTable />
+          </Route>
+          <Route path="/master/frequent-traveler-program/form/:id?">
+            <FrequentTravelerProgramForm />
+          </Route>
+          <Route exact path="/master/frequent-traveler-program">
+            <FrequentTravelerProgramTable />
+          </Route>
+          <Route path="/master/frequent-traveler-program/form/:id?">
+            <FrequentTravelerProgramForm />
+          </Route>        
           <Route exact path="/master/destination-groups">
             <DestinationGroupTable />
           </Route>
@@ -231,6 +255,12 @@ const App = () => {
           </Route>          
           <Route exact path="/master/countries">
             <CountryTable />
+          </Route>
+          <Route exact path="/master/corporate-rating">
+            <CorporateRatingTable />
+          </Route>
+          <Route path="/master/corporate-rating/form/:id?">
+            <CorporateRatingForm />
           </Route>
           <Route path="/master/countries/form/:id?">
             <CountryForm />
