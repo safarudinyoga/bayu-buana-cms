@@ -244,6 +244,16 @@ export default class Sidebar extends Component {
                     </Link>
                   </li>
                   <li className="nav-item">
+                    <Link to="/master/division" className="nav-link">
+                      <p>Division</p>
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link to="/master/job-title" className="nav-link">
+                      <p>Job Title</p>
+                    </Link>
+                  </li>
+                  <li className="nav-item">
                     <Link to="/master/branch-offices" className="nav-link">
                       <p>Branch Offices</p>
                     </Link>

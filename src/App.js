@@ -99,6 +99,10 @@ import ForgotPassword from "views/auth/forgot_password"
 import OTP from "views/auth/otp"
 import BranchOfficeTable from './views/branch_office/table';
 import BranchOfficeForm from './views/branch_office/form';
+import DivisionForm from './views/division/form';
+import DivisionTable from './views/division/table';
+import JobTitleTable from './views/job-title/table';
+import JobTitleForm from './views/job-title/form';
 
 const RouteWithProps = ({ path, exact, strict, component: Component, location, auth, ...rest }) => (
   <Route
@@ -362,9 +366,23 @@ const DashboardRoutes = () => {
       <Route path="/master/employee/form/:id?">
         <EmployeeForm />
       </Route>
-      {/* Branch Ofice */}
+      {/* Division */}
+      <Route exact path="/master/division">
+        <DivisionTable />
+      </Route>
+      <Route path="/master/division/form/:id?">
+        <DivisionForm />
+      </Route>
+      {/* Job Title */}
+      <Route exact path="/master/job-title">
+        <JobTitleTable />
+      </Route>
+      <Route path="/master/job-title/form/:id?">
+        <JobTitleForm />
+      </Route>
+      {/* Branch Office */}
       <Route exact path="/master/branch-offices">
-        <BranchOfficeTable/>
+        <BranchOfficeTable />
       </Route>
       <Route path="/master/branch-offices/form/:id?">
         <BranchOfficeForm/>
