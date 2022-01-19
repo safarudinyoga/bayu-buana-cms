@@ -4,16 +4,18 @@ import Api from "config/api"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
 import FormBuilder from "components/form/builder"
+import FormInputSelectAjax from "components/form/input-select-ajax"
 import useQuery from "lib/query"
 import {useDispatch} from "react-redux"
 import {setAlert, setUIParams} from "redux/ui-store"
 import $ from "jquery"
 import env from "../../config/environment"
 
-const endpoint = "/master/room-view-types"
-const backUrl = "/master/room-view-types"
 
-function RoomViewTypeForm(props) {
+const endpoint = "/master/hotels"
+const backUrl = "/master/corporate-rating"
+
+function FeeTypeForm(props) {
   let dispatch = useDispatch()
   let formId = props.match.params.id
 
@@ -21,47 +23,54 @@ function RoomViewTypeForm(props) {
   const [formBuilder, setFormBuilder] = useState(null)
   const [loading, setLoading] = useState(true)
   const [translations, setTranslations] = useState([])
+  const [subdivisionData, setSubdivisionData] = useState([])
+  const [countryData, setCountryData] = useState([])
   const [id, setId] = useState(null)
   const [form, setForm] = useState({
-    room_view_type_code: "",
-    room_view_type_name: "",
+    country_id: "",
+    state_province_category_id: "",
+    rating_code: "",
+    rating_name: "",
+    rating: "",
   })
   const translationFields = [
     {
-      label: "Room View Type Name",
-      name: "room_view_type_name",
+      label: "Rating Name",
+      name: "rating-name",
       type: "text",
-    },
+    },   
   ]
 
   const validationRules = {
-    room_view_type_code: {
-      required: true,
-      number: true,
-      minlength: 3,
-      maxlength: 256,
-      checkCode: true,
-      noSpace: true
-    },
-    room_view_type_name: {
+    rating_code: {
       required: true,
       minlength: 1,
       maxlength: 256,
-      checkName: true
+      checkCode: true,
+    },
+    rating_name: {
+      required: true,
+      minlength: 1,
+      maxlength: 256,
+      checkName: true,
+    },
+    rating: {
+      required: true,
+      minlength: 1,
+      maxlength: 256,
+      checkName: true,
     },
   }
 
   const validationMessages = {
-    room_view_type_name: {
-      required: "Room View Type Name is required",
-      minlength: "Room View Type Name must be at least 1 characters",
-      maxlength: "Room View Type Name cannot be more than 256 characters",
+    rating_name: {
+      required: "Rating Name is required",
     },
-    room_view_type_code: {
-      required: "Room View Type Code is required",
-      number: "Code format is invalid",
-      minlength: "Room View Type Code must be at least 3 characters",
-      maxlength: "Room View Type Code cannot be more than 256 characters",
+    rating_code: {
+      required: "Rating Code is required",
+    },
+    rating: {
+      required: "Rating Code is required",
     },
   }
 
@@ -69,23 +78,23 @@ function RoomViewTypeForm(props) {
     let api = new Api()
     let formId = props.match.params.id
 
-    let docTitle = "Edit Room View Type"
+    let docTitle = "Edit Corporate Rating"
     if (!formId) {
-      docTitle = "Create Room View Type"
+      docTitle = "Create Corporate Rating"
     } else if (isView) {
-      docTitle = "View Room View Type"
+      docTitle = "Corporate Rating Details"
     }
 
     dispatch(
       setUIParams({
-        title: isView ? "Room View Type Details" : docTitle,
+        title: isView ? "Corporate Rating Details" : docTitle,
         breadcrumbs: [
           {
-            text: "Master Data Management",
+            text: "Setup and Configurations",
           },
           {
             link: backUrl,
-            text: "Room View Types",
+            text: "Corporate Rating",
           },
           {
             text: docTitle,
@@ -97,36 +106,17 @@ function RoomViewTypeForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
+        if (res.data.state_province_category) {
+          setSubdivisionData([{...res.data.state_province_category, text: res.data.state_province_category.state_province_category_name}])
+        }
+        if (res.data.country) {
+          setCountryData([{...res.data.country, text: res.data.country.country_name}])
+        }
 
-        if(res.data){
-          let currentCode = res.data.room_view_type_code
-          let currentName = res.data.room_view_type_name
+        if (res.data) {
+          let currentCode = res.data.state_province_code
+          let currentName = res.data.state_province_name
 
-          $.validator.addMethod(
-            "checkCode",
-            function (value, element) {
-              var req = false
-              $.ajax({
-                type: "GET",
-                async: false,
-                url: `${env.API_URL}/master/room-view-types?filters=["room_view_type_code","=","${element.value}"]`,
-                success: function (res) {
-                  if (res.items.length !== 0) {
-                    if(currentCode == parseInt(element.value)){
-                      req = true
-                    } else {
-                      req = false
-                    }
-                  } else {
-                    req = true
-                  }
-                },
-              })
-    
-              return req
-            },
-            "Code already exists",
-          )
           $.validator.addMethod(
             "checkName",
             function (value, element) {
@@ -134,10 +124,10 @@ function RoomViewTypeForm(props) {
               $.ajax({
                 type: "GET",
                 async: false,
-                url: `${env.API_URL}/master/room-view-types?filters=["room_view_type_name","=","${element.value}"]`,
+                url: `${env.API_URL}/master/hotels?filters=["state_province_name","=","${element.value}"]`,
                 success: function (res) {
                   if (res.items.length !== 0) {
-                    if(currentName.toUpperCase() === element.value.toUpperCase()){
+                    if(currentName === element.value){
                       req = true
                     } else {
                       req = false
@@ -150,7 +140,32 @@ function RoomViewTypeForm(props) {
     
               return req
             },
-            "Room View Type Name already exists",
+            "Rating Name already exists",
+          )
+          $.validator.addMethod(
+            "checkCode",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/hotels?filters=["state_province_code","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if(currentCode === element.value){
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+    
+              return req
+            },
+            "Rating Code already exists",
           )
         }
       } catch (e) { }
@@ -164,34 +179,13 @@ function RoomViewTypeForm(props) {
       setLoading(false)
     } else {
       $.validator.addMethod(
-        "checkCode",
-        function (value, element) {
-          var req = false
-          $.ajax({
-            type: "GET",
-            async: false,
-            url: `${env.API_URL}/master/room-view-types?filters=["room_view_type_code","=","${element.value}"]`,
-            success: function (res) {
-              if (res.items.length !== 0) {
-                req = false
-              } else {
-                req = true
-              }
-            },
-          })
-
-          return req
-        },
-        "Code already exists",
-      )
-      $.validator.addMethod(
         "checkName",
         function (value, element) {
           var req = false
           $.ajax({
             type: "GET",
             async: false,
-            url: `${env.API_URL}/master/room-view-types?filters=["room_view_type_name","=","${element.value}"]`,
+            url: `${env.API_URL}/master/hotels?filters=["state_province_name","=","${element.value}"]`,
             success: function (res) {
               if (res.items.length !== 0) {
                 req = false
@@ -203,7 +197,28 @@ function RoomViewTypeForm(props) {
 
           return req
         },
-        "Room View Type Name already exists",
+        "Rating Name already exists",
+      )
+      $.validator.addMethod(
+        "checkCode",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/hotels?filters=["state_province_code","=","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
+
+          return req
+        },
+        "Rating Code already exists",
       )
     }
   }, [])
@@ -220,6 +235,13 @@ function RoomViewTypeForm(props) {
     setLoading(true)
     let api = new Api()
     try {
+      if (!form.country_id) {
+        form.country_id = null
+      }
+
+      if (!form.state_province_category_id) {
+        form.state_province_category_id = null
+      }
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
       for (let i in translated) {
@@ -238,11 +260,13 @@ function RoomViewTypeForm(props) {
       props.history.push(backUrl)
       dispatch(
         setAlert({
-          message: `Record ${form.room_view_type_code} - ${form.room_view_type_name} has been successfully ${formId ? "updated" : "saved"}.`,
+          message: `Record ${form.state_province_code} - ${form.state_province_name} has been successfully ${formId ? "updated" : "saved"}.`,
         }),
       )
     }
   }
+
+  console.log('loading, ', loading)
 
   return (
     <FormBuilder
@@ -259,38 +283,55 @@ function RoomViewTypeForm(props) {
     >
       <FormHorizontal>
         <FormInputControl
-          label="Room View Type Name"
+          label="Rating Name"
           required={true}
-          value={form.room_view_type_name}
-          name="room_view_type_name"
-          onChange={(e) =>
-            setForm({...form, room_view_type_name: e.target.value})
-          }
+          value={form.state_province_name}
+          name="fee_type_name"
+          cl="4"          
+          onChange={(e) => setForm({...form, state_province_name: e.target.value})}
           disabled={isView || loading}
           type="text"
           minLength="1"
           maxLength="256"
+        />       
+        {
+          loading ? null :
+          <FormInputControl
+          label="Rating"
+          required={true}
+          value={form.address_line}
+          name="address_line"
+          onChange={(e) => setForm({...form, address_line: e.target.value})}
+          disabled={isView || loading}
+          type="text"
+          minLength="1"
+          maxLength="512"
         />
-      </FormHorizontal>
+        }
 
+      </FormHorizontal>
       <FormHorizontal>
         <FormInputControl
-          label="Room View Type Code"
+          label="Rating Code"
           required={true}
-          value={form.room_view_type_code}
-          name="room_view_type_code"
+          value={form.flight_type_code}
+          name="fee_type_code"
           cl={{md:"12"}}
           cr="12"
           onChange={(e) =>
-            setForm({...form, room_view_type_code: e.target.value})
+            setForm({...form, flight_type_code: e.target.value})
           }
           disabled={isView || loading}
           type="text"
-          hint="Room View Type Code is numeric"
+          minLength="1"
+          maxLength="36"
+          hint="Rating Code maximum 36 characters"
         />
       </FormHorizontal>
+
+      
     </FormBuilder>
   )
 }
 
-export default withRouter(RoomViewTypeForm)
+export default withRouter(FeeTypeForm)

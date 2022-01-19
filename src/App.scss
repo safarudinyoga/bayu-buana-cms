@@ -3,6 +3,7 @@
 @import "./styles/components/_form.scss";
 @import "./styles/components/_button.scss";
 @import "./styles/components/_image.scss";
+@import "./styles/_auth.scss";
 @import "./styles/components/_tabs.scss";
 @import "./styles/components/_modal.scss";
 @import "./styles/components/_accordion.scss";
@@ -133,6 +134,11 @@ select.bg-dark-grey > option {
     padding-left: 4px;
     color: #333333;
   }
+}
+.label-notes {
+  font: italic normal normal 0.7em "Segoe UI";
+  color: #818181;
+  letter-spacing: 0;
 }
 .icon-red {
   color: #dc3545;
