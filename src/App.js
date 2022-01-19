@@ -97,6 +97,8 @@ import InvoiceEmailSetupForm from "views/invoice_email_setup/form"
 import Login from './views/auth/login'
 import ForgotPassword from "views/auth/forgot_password"
 import OTP from "views/auth/otp"
+import BranchOfficeTable from './views/branch_office/table';
+import BranchOfficeForm from './views/branch_office/form';
 
 const RouteWithProps = ({ path, exact, strict, component: Component, location, auth, ...rest }) => (
   <Route
@@ -359,6 +361,13 @@ const DashboardRoutes = () => {
       </Route>
       <Route path="/master/employee/form/:id?">
         <EmployeeForm />
+      </Route>
+      {/* Branch Ofice */}
+      <Route exact path="/master/branch-offices">
+        <BranchOfficeTable/>
+      </Route>
+      <Route path="/master/branch-offices/form/:id?">
+        <BranchOfficeForm/>
       </Route>
 
       {/* Master Invoice Email Setup */}
