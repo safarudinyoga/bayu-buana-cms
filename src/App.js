@@ -94,6 +94,7 @@ import ZoneTable from "views/zone/table"
 // Master Hotel Profile Management
 import HotelProfileManagementTable from "views/hotel_profile_management/table"
 import HotelProfileManagementForm from "views/hotel_profile_management/form"
+import HotelRoomTypeForm from "views/hotel_profile_management/form/room_type/form"
 
 // Master Employee
 import EmployeeTable from "views/employee/table"
@@ -391,6 +392,12 @@ const DashboardRoutes = () => {
         </Route>
         <Route exact path="/master/hotel-profile-management/form/:id?">
           <HotelProfileManagementForm />
+        </Route>
+        <Route
+          exact
+          path="/master/hotel-profile-management/room-type/form/:id?"
+        >
+          <HotelRoomTypeForm />
         </Route>
 
         {/* Master Employee */}

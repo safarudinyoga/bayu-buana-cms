@@ -362,28 +362,6 @@ const GeneralInformation = (props) => {
         onSubmit={async (values, { setSubmitting, resetForm }) => {
           console.log(values)
           console.log(props)
-          // setSubmitting(true)
-
-          // try {
-          //   let res = await api.post("master/persons", {
-          //     birth_date: "2021-11-13T04:31:17.022Z",
-          //     business_entity_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-          //     citizen_country_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-          //     gender_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-          //     given_name: "string",
-          //     marital_status_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-          //     middle_name: "string",
-          //     name_prefix_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-          //     name_suffix: "string",
-          //     name_title: "string",
-          //     religion_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-          //     surname: "string",
-          //     surname_prefix: "string",
-          //   })
-          //   console.log(res)
-          //   resetForm()
-          //   setSubmitting(false)
-          // } catch (e) {}
         }}
       >
         {({
