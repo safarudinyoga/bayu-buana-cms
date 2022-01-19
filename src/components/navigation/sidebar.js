@@ -79,6 +79,11 @@ export default class Sidebar extends Component {
                     </Link>
                   </li>
                   <li className="nav-item">
+                    <Link to="/master/corporate-rating" className="nav-link">
+                      <p>Corporate Rating</p>
+                    </Link>
+                  </li>
+                  <li className="nav-item">
                     <Link to="/master/countries" className="nav-link">
                       <p>Country</p>
                     </Link>
@@ -99,8 +104,18 @@ export default class Sidebar extends Component {
                     </Link>
                   </li>
                   <li className="nav-item">
+                    <Link to="/master/fee-types" className="nav-link">
+                      <p>Fee Type</p>
+                    </Link>
+                  </li>
+                  <li className="nav-item">
                     <Link to="/master/flight-types" className="nav-link">
                       <p>Flight Type</p>
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link to="/master/frequent-traveler-program" className="nav-link">
+                      <p>Frequent Traveler Program</p>
                     </Link>
                   </li>
                   <li className="nav-item">
