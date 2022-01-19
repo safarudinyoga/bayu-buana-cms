@@ -68,7 +68,7 @@ function AttractionForm(props) {
     },
     building_room: {
       minlength: 1,
-      maxlength: 512,
+      maxlength: 64,
     },
     country_id: {
       required: true,
@@ -77,7 +77,7 @@ function AttractionForm(props) {
       required: false,
     },
     city_id: {
-      required: true,
+      required: false,
     },
     postal_code: {
       required: false,
@@ -115,15 +115,15 @@ function AttractionForm(props) {
     operational_hour: {
       required: false,
       minlength: 1,
-      maxlength: 4000,
+      maxlength: 512,
     },
   });
 
   const validationMessages = {
     branch_office_name: {
-      required: "Branch/Company Name is required",
-      minlength: "Branch/Company Name must be at least 1 characters",
-      maxlength: "Branch/Company Name cannot be more than 64 characters",
+      required: "Company/Branch Name is required",
+      minlength: "Company/Branch Name must be at least 1 characters",
+      maxlength: "Company/Branch Name cannot be more than 64 characters",
     },
     address_line: {
       minlength: "Address must be at least 1 characters",
@@ -198,26 +198,26 @@ function AttractionForm(props) {
     $.validator.addMethod(
       "validEmail", function (value, element){
         return this.optional( element ) || /^\b[A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b$/i.test( value );
-      }, "Please enter a valid email address"
+      }, "Email is not valid"
     );
 
-    let docTitle = "Edit Branch Offices"
+    let docTitle = "Edit Branch Office"
     if (!formId) {
-      docTitle = "Create Branch Offices"
+      docTitle = "Create Branch Office"
     } else if (isView) {
       docTitle = "Branch Offices Details"
     }
 
     dispatch(
       setUIParams({
-        title: docTitle,
+        title: !formId ? "New Branch Office": docTitle,
         breadcrumbs: [
           {
             text: "Employment Management",
           },
           {
             link: backUrl,
-            text: "Branch Offices",
+            text: "Branch Office",
           },
           {
             text: docTitle,
@@ -435,9 +435,9 @@ function AttractionForm(props) {
             name="building_room"
             onChange={(e) => setForm({...form, building_room: e.target.value})}
             disabled={isView || loading}
-            type="textarea"
+            type="text"
             minLength="1"
-            maxLength="512"
+            maxLength="64"
           />
           {
           !loading &&
@@ -482,7 +482,6 @@ function AttractionForm(props) {
           <FormInputSelectAjax
             label="City"
             value={form.city_id}
-            required={true}
             name="city_id"
             id="attr_city"
             data={cityData}
@@ -531,7 +530,7 @@ function AttractionForm(props) {
           />
 
           <FormInputControl
-            label={"Phone"}
+            label={"Phone Number"}
             value={form.phone_number}
             name="phone_number"
             onChange={(e) => setForm({...form, phone_number: e.target.value})}
@@ -571,7 +570,7 @@ function AttractionForm(props) {
             disabled={isView || loading}
             type="textarea"
             minLength="1"
-            maxLength="4000"
+            maxLength="512"
           />
         </FormHorizontal>
       </div>
