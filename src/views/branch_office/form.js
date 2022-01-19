@@ -13,8 +13,8 @@ import {setAlert, setUIParams} from "redux/ui-store"
 import env from "../../config/environment"
 import capitalizeFirstLetter from "lib/capitalizeFirstLetter"
 
-const endpoint = "/master/branch_offices"
-const backUrl = "/master/branch_offices"
+const endpoint = "/master/branch-offices"
+const backUrl = "/master/branch-offices"
 
 function AttractionForm(props) {
   let api = new Api()

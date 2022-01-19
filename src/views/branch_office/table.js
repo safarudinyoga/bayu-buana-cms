@@ -11,7 +11,7 @@ export default function BranchOfficeTable() {
   useEffect(() => {
     dispatch(
       setUIParams({
-        title: "Branch Offices",
+        title: "Manage Branch Offices",
         breadcrumbs: [
           {
             text: "Employment Management",
