@@ -28,8 +28,13 @@ const HotelRoomType = (props) => {
     roomView: "",
     roomLocation: "",
     roomClassification: "",
-    roomSize: "",
+    roomSizeNumber: "",
+    roomSizeMeasure: "",
     maximumOccupancy: "",
+
+    // Translation
+    translationRoomTypeName: "",
+    translationDescription: "",
   }
 
   // Schema for yup
@@ -37,7 +42,7 @@ const HotelRoomType = (props) => {
     roomTypeName: Yup.string()
       .required("Room Type Name is required.")
       .test(
-        "Unique Name",
+        "Check Room Type Name",
         "Room Type Name already exists", // <- key, message
         (value) => {
           return new Promise((resolve, reject) => {
@@ -59,8 +64,32 @@ const HotelRoomType = (props) => {
     roomView: Yup.string(),
     roomLocation: Yup.string(),
     roomClassification: Yup.string(),
-    roomSize: Yup.string(),
+    roomSizeNumber: Yup.string(),
+    roomSizeMeasure: Yup.string(),
     maximumOccupancy: Yup.string(),
+
+    // Translation
+    translationRoomTypeName: Yup.string()
+      .required("Room Type Name is required.")
+      .test(
+        "Check Translation Room Type Name",
+        "Room Type Name already exists", // <- key, message
+        (value) => {
+          return new Promise((resolve, reject) => {
+            axios
+              .get(
+                `${env.API_URL}/master/room-types?filters=["room_type_name","=","${value}"]`,
+              )
+              .then((res) => {
+                resolve(res.data.items.length == 0)
+              })
+              .catch((error) => {
+                resolve(false)
+              })
+          })
+        },
+      ),
+    translationDescription: Yup.string(),
   })
 
   useEffect(async () => {
@@ -91,6 +120,50 @@ const HotelRoomType = (props) => {
       }),
     )
   })
+
+  const formTranslation = () => {
+    return (
+      <>
+        <Form.Group as={Row} className="form-group">
+          <Form.Label column sm={3}>
+            Room Type Name
+          </Form.Label>
+          <Col sm={9}>
+            <FastField name="translationRoomTypeName">
+              {({ field }) => (
+                <>
+                  <Form.Control
+                    type="text"
+                    minLength={1}
+                    maxLength={128}
+                    {...field}
+                  />
+                </>
+              )}
+            </FastField>
+          </Col>
+        </Form.Group>
+        <Form.Group as={Row} className="form-group">
+          <Form.Label column sm={3}>
+            Descriptions
+          </Form.Label>
+          <Col sm={9}>
+            <FastField name="translationDescription">
+              {({ field }) => (
+                <Form.Control
+                  {...field}
+                  as="textarea"
+                  rows={3}
+                  minLength={1}
+                  maxLength={4000}
+                />
+              )}
+            </FastField>
+          </Col>
+        </Form.Group>
+      </>
+    )
+  }
 
   return (
     <Formik
@@ -192,7 +265,7 @@ const HotelRoomType = (props) => {
                     <Form.Label column sm={2}>
                       Room View
                     </Form.Label>
-                    <Col sm={3}>
+                    <Col sm={10}>
                       <FastField name="roomView">
                         {({ field, form }) => (
                           <Select
@@ -210,7 +283,7 @@ const HotelRoomType = (props) => {
                     <Form.Label column sm={2}>
                       Room Location
                     </Form.Label>
-                    <Col sm={3}>
+                    <Col sm={10}>
                       <FastField name="roomLocation">
                         {({ field, form }) => (
                           <Select
@@ -228,7 +301,7 @@ const HotelRoomType = (props) => {
                     <Form.Label column sm={2}>
                       Room Classification
                     </Form.Label>
-                    <Col sm={3}>
+                    <Col sm={10}>
                       <FastField name="roomClassification">
                         {({ field, form }) => (
                           <Select
@@ -244,10 +317,140 @@ const HotelRoomType = (props) => {
                       </FastField>
                     </Col>
                   </Form.Group>
+                  <Form.Group as={Row} className="form-group">
+                    <Form.Label column sm={2}>
+                      Room Size
+                    </Form.Label>
+                    <Col sm={10}>
+                      <Row>
+                        <Col>
+                          <FastField name="roomSizeNumber">
+                            {({ field }) => (
+                              <>
+                                <Form.Control type="text" {...field} />
+                              </>
+                            )}
+                          </FastField>
+                        </Col>
+                        <Col>
+                          <FastField name="roomSizeMeasure">
+                            {({ field, form }) => (
+                              <Select
+                                {...field}
+                                url={`master/unit-of-measures`}
+                                fieldName="unit_of_measure_name"
+                                onChange={(v) =>
+                                  setFieldValue("roomSizeMeasure", v)
+                                }
+                                placeholder="Please choose Room Location"
+                              />
+                            )}
+                          </FastField>
+                        </Col>
+                      </Row>
+                    </Col>
+                  </Form.Group>
+                  <Form.Group as={Row} className="form-group">
+                    <Form.Label column sm={2}>
+                      Maximum Occupancy
+                    </Form.Label>
+                    <Col sm={10}>
+                      <FastField name="maximumOccupancy">
+                        {({ field }) => (
+                          <Form.Control
+                            type="number"
+                            minLength={1}
+                            maxLength={128}
+                            {...field}
+                          />
+                        )}
+                      </FastField>
+                    </Col>
+                  </Form.Group>
+                  <Form.Group as={Row} className="form-group">
+                    <Col sm={12}>
+                      <FastField name="maximumOccupancy">
+                        {({ field }) => (
+                          <Form.Check label="Non-Smoking Room" {...field} />
+                        )}
+                      </FastField>
+                    </Col>
+                  </Form.Group>
+
+                  <h3
+                    className="card-heading-section"
+                    style={{ marginTop: 40 }}
+                  >
+                    Translation
+                  </h3>
+                  <div
+                    className="tab-translation"
+                    style={{ padding: "0 20px 20px 20px" }}
+                  >
+                    <Tab.Container
+                      id="translation-form"
+                      defaultActiveKey="indonesia"
+                    >
+                      <div className="tab-horizontal">
+                        <div className="tab-horizontal-nav">
+                          <Nav variant="pills" className="flex-column">
+                            <Nav.Item>
+                              <Nav.Link eventKey="indonesia">
+                                <span>Indonesia</span>
+                                <i
+                                  className="fas fa-exclamation-triangle"
+                                  style={{ color: "red" }}
+                                ></i>
+                              </Nav.Link>
+                            </Nav.Item>
+                            <Nav.Item>
+                              <Nav.Link eventKey="chinese-simplified">
+                                <span>Chinese Simplified</span>
+                              </Nav.Link>
+                            </Nav.Item>
+                          </Nav>
+                        </div>
+                        <div className="tab-horizontal-content">
+                          <Tab.Content>
+                            <Tab.Pane eventKey="indonesia">
+                              {formTranslation()}
+                            </Tab.Pane>
+                            <Tab.Pane eventKey="chinese-simplified">
+                              {formTranslation()}
+                            </Tab.Pane>
+                          </Tab.Content>
+                        </div>
+                      </div>
+                    </Tab.Container>
+                    <div className="tab-translation-note">
+                      <span>Note:</span>
+                      <i
+                        className="fas fa-exclamation-triangle"
+                        style={{ color: "red" }}
+                      ></i>
+                      <span>Incomplete data</span>
+                    </div>
+                  </div>
                 </Col>
               </Row>
             </Card.Body>
           </Card>
+          <div style={{ marginBottom: 30, marginTop: 30, display: "flex" }}>
+            <Button
+              variant="primary"
+              type="submit"
+              disabled={isSubmitting || !dirty}
+              style={{ marginRight: 15 }}
+            >
+              SAVE
+            </Button>
+            <Button
+              variant="secondary"
+              onClick={() => props.history.push(backUrl)}
+            >
+              CANCEL
+            </Button>
+          </div>
         </Form>
       )}
     </Formik>
