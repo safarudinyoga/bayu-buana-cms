@@ -7,7 +7,7 @@ import { setUIParams } from "redux/ui-store"
 
 const RoomType = (props) => {
   let params = {
-    title: "Hotel Profile Management",
+    title: "Room Type Setup",
     baseRoute: "/master/hotel-profile-management/room-type/form",
     endpoint: "/master/room-types",
     deleteEndpoint: "/master/batch-actions/delete/room-types",
