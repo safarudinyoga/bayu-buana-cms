@@ -104,7 +104,7 @@ export default class Sidebar extends Component {
                     </Link>
                   </li>
                   <li className="nav-item">
-                    <Link to="/master/fee-types" className="nav-link">
+                    <Link to="/master/fee-type" className="nav-link">
                       <p>Fee Type</p>
                     </Link>
                   </li>
@@ -212,6 +212,11 @@ export default class Sidebar extends Component {
                   <li className="nav-item">
                     <Link to="/master/special-requests" className="nav-link">
                       <p>Special Request</p>
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link to="/master/standard-markup" className="nav-link">
+                      <p>Standar Markup</p>
                     </Link>
                   </li>
                   <li className="nav-item">

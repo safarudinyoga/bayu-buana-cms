@@ -105,6 +105,12 @@ import RatingTypeLevelForm from "./views/rating_type_level/form"
 import InvoiceEmailSetupTable from "views/invoice_email_setup/table"
 import InvoiceEmailSetupForm from "views/invoice_email_setup/form"
 
+// Master Standadard Markup
+import StandardMarkupTable from "views/standard_markup/standard_markup"
+import StandardMarkupFlightForm from "views/standard_markup/form/flight_form"
+import StandardMarkupHotelForm from "views/standard_markup/form/hotel_form"
+import StandardMarkupOtherForm from "views/standard_markup/form/other_form"
+
 import Login from "./views/auth/login"
 import ForgotPassword from "views/auth/forgot_password"
 import OTP from "views/auth/otp"
@@ -247,6 +253,18 @@ const DashboardRoutes = () => {
         </Route>
         <Route path="/master/special-requests/form/:id?">
           <SpecialRequestForm />
+        </Route>
+        <Route exact path="/master/standard-markup">
+          <StandardMarkupTable />
+        </Route>
+        <Route path="/master/standard-markup/form/flight-form/:id?">
+          <StandardMarkupFlightForm />
+        </Route>
+        <Route path="/master/standard-markup/form/hotel-form/:id?">
+          <StandardMarkupHotelForm />
+        </Route>
+        <Route path="/master/standard-markup/form/other-form/:id?">
+          <StandardMarkupOtherForm />
         </Route>
         <Route exact path="/master/currencies">
           <CurrencyTable />
