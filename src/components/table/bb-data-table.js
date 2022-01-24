@@ -818,6 +818,7 @@ class BBDataTable extends Component {
         let id = $(this).data("id")
         let name = $(this).data("name")
         let base = me.props.baseRoute || ""
+        $('[data-toggle="tooltip"]').tooltip("hide")
         switch ($(this).data("action")) {
           case "edit":
             me.props.history.push(base + "/" + id)

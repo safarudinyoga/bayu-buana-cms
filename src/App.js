@@ -114,6 +114,12 @@ import StandardMarkupOtherForm from "views/standard_markup/form/other_form"
 import Login from "./views/auth/login"
 import ForgotPassword from "views/auth/forgot_password"
 import OTP from "views/auth/otp"
+import BranchOfficeTable from './views/branch_office/table';
+import BranchOfficeForm from './views/branch_office/form';
+import DivisionForm from './views/division/form';
+import DivisionTable from './views/division/table';
+import JobTitleTable from './views/job-title/table';
+import JobTitleForm from './views/job-title/form';
 
 const RouteWithProps = ({
   path,
@@ -417,6 +423,27 @@ const DashboardRoutes = () => {
         </Route>
         <Route path="/master/employee/form/:id?">
           <EmployeeForm />
+        </Route>
+        {/* Division */}
+        <Route exact path="/master/division">
+          <DivisionTable />
+        </Route>
+        <Route path="/master/division/form/:id?">
+          <DivisionForm />
+        </Route>
+        {/* Job Title */}
+        <Route exact path="/master/job-title">
+          <JobTitleTable />
+        </Route>
+        <Route path="/master/job-title/form/:id?">
+          <JobTitleForm />
+        </Route>
+        {/* Branch Office */}
+        <Route exact path="/master/branch-offices">
+          <BranchOfficeTable />
+        </Route>
+        <Route path="/master/branch-offices/form/:id?">
+          <BranchOfficeForm/>
         </Route>
 
         {/* Master Invoice Email Setup */}
