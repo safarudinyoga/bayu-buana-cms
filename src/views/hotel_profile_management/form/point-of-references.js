@@ -4,7 +4,7 @@ import BBDataTable from "components/table/bb-data-table"
 import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
 
-const PointofReferences = (props) => {
+const PointofReferences = () => {
   let dispatch = useDispatch()
   useEffect(() => {
     dispatch(
