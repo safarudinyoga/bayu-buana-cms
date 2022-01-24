@@ -1,11 +1,10 @@
 import Api from "config/api"
 import useQuery from "lib/query"
 import React, {useEffect, useState} from "react"
-import {Button, Card, Col, Nav, Row, Tab, TabContent} from "react-bootstrap"
+import {Button, Col, Form, Row, Tab, Tabs} from "react-bootstrap"
 import {useDispatch} from "react-redux"
 import {withRouter} from "react-router"
 import {setUIParams} from "redux/ui-store"
-
 
 const endpoint = "/master/employees"
 const backUrl = "/master/employee"
@@ -70,6 +69,23 @@ const InvoiceEmailSetupForm = (props) => {
         setId(props.match.params.id)
     }, [props.match.params.id])
 
+    const [content, setContent] = useState(['Email Content', 'Push Notification'])
+
+    // api https://bbdev.monstercode.net/api/v1/master/agent-languages?size=-1&sort=sort,language_name
+    const [languages, setLanguages] = useState([])
+    const [firstLanguage, setFirstLanguage] = useState({})
+    useEffect(async () => {
+        let api = new Api()
+        api.get("/master/agent-languages?size=-1&sort=sort,language_name").then(res => {
+            setLanguages(res.data.items)
+        })
+    }, []);
+
+    const borderStyle = {
+        border: "1px solid #ddd",
+        borderRadius: "4px",
+    }
+
     return (
         <Row>
             <Col md={1}>
@@ -83,73 +99,68 @@ const InvoiceEmailSetupForm = (props) => {
                 </div>
             </Col>
             <Col md={11}>
-                <Nav variant="tabs" defaultActiveKey="english">
-                    <Nav.Item>
-                        <Nav.Link
-                            eventKey="english"
-                            onClick={function noRefCheck() { }}
-                        >
-                            Default (English)
-                        </Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item>
-                        <Nav.Link
-                            eventKey="chinese"
-                            onClick={function noRefCheck() { }}
-                        >
-                            Chinese Simplified
-                        </Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item>
-                        <Nav.Link
-                            eventKey="chinese-traditional"
-                            onClick={function noRefCheck() { }}
-                        >
-                            Chinese Traditional
-                        </Nav.Link>
-                    </Nav.Item>
-                </Nav>
-                <TabContent activeTab="1">
-                    <Tab.Pane eventKey="english">
-                        <Row>
-                            <Col sm="12">
-                                <h4>
-                                    Tab 1 Contents
-                                </h4>
-                            </Col>
-                        </Row>
-                    </Tab.Pane>
-                    <Tab.Pane eventKey="chinese">
-                        <Row>
-                            <Col sm="6">
-                                <Card body>
-                                    <Card.Title>
-                                        Special Title Treatment
-                                    </Card.Title>
-                                    <Card.Text>
-                                        With supporting text below as a natural lead-in to additional content.
-                                    </Card.Text>
-                                    <Button>
-                                        Go somewhere
-                                    </Button>
-                                </Card>
-                            </Col>
-                            <Col sm="6">
-                                <Card body>
-                                    <Card.Title>
-                                        Special Title Treatment
-                                    </Card.Title>
-                                    <Card.Text>
-                                        With supporting text below as a natural lead-in to additional content.
-                                    </Card.Text>
-                                    <Button>
-                                        Go somewhere
-                                    </Button>
-                                </Card>
-                            </Col>
-                        </Row>
-                    </Tab.Pane>
-                </TabContent>
+                <div style={borderStyle}>
+                    <Tabs defaultActiveKey={languages[0]?.language_code} className="mb-3">
+                        {languages.map((item, index) => {
+                            return (
+                                <Tab eventKey={item.language_code} title={item.language_name} key={index} >
+                                    <Row className="p-3" style={{border: 1, borderColor: '#ccc'}}>
+                                        <Col md={12}>
+                                            <Form.Group as={Row} className="form-group">
+                                                <Form.Label column sm={3}>
+                                                    Invoice Email Name{" "}
+                                                    <span className="form-label-required">*</span>
+                                                </Form.Label>
+                                                <Col sm={9}>
+                                                    <Form.Control type="text" placeholder="Invoice Per Transactional Email"></Form.Control>
+                                                </Col>
+                                            </Form.Group>
+                                            <Form.Group as={Row} className="form-group">
+                                                <Form.Label column sm={3}>
+                                                    Email Type{" "}
+                                                    <span className="form-label-required">*</span>
+                                                </Form.Label>
+                                                <Col sm={9}>
+                                                    <Form.Control type="text" placeholder="Invoice Per Transactional"></Form.Control>
+                                                </Col>
+                                            </Form.Group>
+                                            <Form.Group as={Row} className="form-group">
+                                                <Form.Label column sm={3}>
+                                                    Email Subject{" "}
+                                                    <span className="form-label-required">*</span>
+                                                </Form.Label>
+                                                <Col sm={9}>
+                                                    <Form.Control type="text" placeholder="{{invoice_number}} Bayu Buana Invoice For {{corporate_name}}"></Form.Control>
+                                                </Col>
+                                            </Form.Group>
+                                        </Col>
+                                    </Row>
+                                    <div style={borderStyle} className="m-3">
+                                        <Row>
+                                            <Col md={12}>
+                                                <Tabs defaultActiveKey={'Email Content'} className="mb-3">
+                                                    {content.map((item, index) => {
+                                                        return (
+                                                            <Tab eventKey={item} title={item} key={index}>
+                                                                <Row className="p-3">
+                                                                    <Form.Control as="textarea" rows={3}></Form.Control>
+                                                                </Row>
+                                                                <Row className="p-3">
+                                                                    <Button className={'mr-1'} variant="secondary">PREVIEW</Button>
+                                                                    <Button variant="primary">SEND TEST</Button>
+                                                                </Row>
+                                                            </Tab>
+                                                        )
+                                                    })}
+                                                </Tabs>
+                                            </Col>
+                                        </Row>
+                                    </div>
+                                </Tab>
+                            )
+                        })}
+                    </Tabs>
+                </div>
             </Col>
         </Row >
     )
