@@ -12,6 +12,9 @@ import {withRouter} from "react-router"
 import {setAlert, setUIParams} from "redux/ui-store"
 import env from "../../config/environment"
 import capitalizeFirstLetter from "lib/capitalizeFirstLetter"
+import FormInputWrapper from "components/form/input-wrapper"
+import FormInput from "components/form/input"
+import { Col, Row } from 'react-bootstrap';
 
 const endpoint = "/master/branch-offices"
 const backUrl = "/master/branch-offices"
@@ -505,29 +508,40 @@ function AttractionForm(props) {
             type="text"
             minLength="1"
             maxLength="16"
+            style={{width: 100}}
           />
 
-          <FormInputControl
-            label={"Latitude"}
-            value={form.latitude}
-            name="latitude"
-            onChange={(e) => setForm({...form, latitude: e.target.value})}
-            disabled={isView || loading}
-            type="text"
-            minLength="1"
-            maxLength="16"
-          />
-
-          <FormInputControl
-            label={"Longitude"}
-            value={form.longitude}
-            name="longitude"
-            onChange={(e) => setForm({...form, longitude: e.target.value})}
-            disabled={isView || loading}
-            type="text"
-            minLength="1"
-            maxLength="16"
-          />
+          <FormInputWrapper
+            label={"Geo Location"}
+            required={false}
+          >
+            <Row>
+              <Col md={6}>
+                <FormInput
+                  placeholder={"Latitude"}
+                  value={form.latitude}
+                  name="latitude"
+                  onChange={(e) => setForm({...form, latitude: e.target.value})}
+                  disabled={isView || loading}
+                  type="text"
+                  minLength="1"
+                  maxLength="16"
+                />
+              </Col>
+              <Col md={6}>
+                <FormInput 
+                  placeholder={"Longitude"}
+                  value={form.longitude}
+                  name="longitude"
+                  onChange={(e) => setForm({...form, longitude: e.target.value})}
+                  disabled={isView || loading}
+                  type="text"
+                  minLength="1"
+                  maxLength="16"
+                />
+              </Col>
+            </Row>
+          </FormInputWrapper>
 
           <FormInputControl
             label={"Phone Number"}
