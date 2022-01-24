@@ -16,10 +16,10 @@ import FormInputWrapper from "components/form/input-wrapper"
 import FormInput from "components/form/input"
 import { Col, Row } from 'react-bootstrap';
 
-const endpoint = "/master/branch-offices"
+const endpoint = "/master/offices"
 const backUrl = "/master/branch-offices"
 
-function AttractionForm(props) {
+function OfficeForm(props) {
   let api = new Api()
   let dispatch = useDispatch()
   const isView = useQuery().get("action") === "view"
@@ -36,8 +36,8 @@ function AttractionForm(props) {
   const [zoneData, setZoneData] = useState([])
 
   const [form, setForm] = useState({
-    branch_office_name: "",
-    attraction_address: "",
+    office_name: "",
+    address_line: "",
     country_id: "",
     state_province_id: "",
     city_id: "",
@@ -47,18 +47,18 @@ function AttractionForm(props) {
     email: "",
     phone_number: "",
     fax_number: "",
-    operational_hour: "",
+    operation_hours: "",
   })
   const translationFields = [
     {
       label: "Company/Branch Name",
-      name: "branch_office_name",
+      name: "office_name",
       type: "text",
     },
   ]
 
   const [validationRules, setValidationRules] = useState({
-    branch_office_name: {
+    office_name: {
       required: true,
       minlength: 1,
       maxlength: 256,
@@ -115,7 +115,7 @@ function AttractionForm(props) {
       maxlength: 32,
       fax: true
     },
-    operational_hour: {
+    operation_hours: {
       required: false,
       minlength: 1,
       maxlength: 512,
@@ -123,7 +123,7 @@ function AttractionForm(props) {
   });
 
   const validationMessages = {
-    branch_office_name: {
+    office_name: {
       required: "Company/Branch Name is required",
       minlength: "Company/Branch Name must be at least 1 characters",
       maxlength: "Company/Branch Name cannot be more than 64 characters",
@@ -175,7 +175,7 @@ function AttractionForm(props) {
       minlength: "Fax must be at least 1 characters",
       maxlength: "Fax cannot be more than 32 characters",
     },
-    operational_hour: {
+    operation_hours: {
       required: "Operational Hours is required",
       minlength: "Operational Hours must be at least 1 characters",
       maxlength: "Operational Hours cannot be more than 4000 characters",
@@ -233,17 +233,17 @@ function AttractionForm(props) {
         let res = await api.get(endpoint + "/" + formId)
         if (res.data) {
           setForm({...res.data, country_id: res.data.country.id})
-          let currentName = res.data.branch_office_name
+          let currentName = res.data.office_name
 
           $.validator.addMethod(
             "checkName",
             function (value, element) {
               var req = false
-              let filters = JSON.stringify(["branch_office_name","=",element.value])
+              let filters = JSON.stringify(["office_name","=",element.value])
               $.ajax({
                 type: "GET",
                 async: false,
-                url: `${env.API_URL}/master/branch_offices?filters=${encodeURIComponent(filters)}`,
+                url: `${env.API_URL}/master/offices?filters=${encodeURIComponent(filters)}`,
                 success: function (res) {
                   if (res.items.length !== 0) {
                     if (currentName === element.value) {
@@ -259,7 +259,7 @@ function AttractionForm(props) {
 
               return req
             },
-            "Attraction Name already exists",
+            "Office Name already exists",
           )
         }
 
@@ -306,11 +306,11 @@ function AttractionForm(props) {
         "checkName",
         function (value, element) {
           var req = false
-          let filters = JSON.stringify(["branch_office_name","=",element.value])
+          let filters = JSON.stringify(["office_name","=",element.value])
           $.ajax({
             type: "GET",
             async: false,
-            url: `${env.API_URL}/master/branch_offices?filters=${encodeURIComponent(filters)}`,
+            url: `${env.API_URL}/master/offices?filters=${encodeURIComponent(filters)}`,
             success: function (res) {
               if (res.items.length !== 0) {
                 req = false
@@ -322,7 +322,7 @@ function AttractionForm(props) {
 
           return req
         },
-        "Attraction Name already exists",
+        "Offices Name already exists",
       )
     }
   }, [])
@@ -338,8 +338,8 @@ function AttractionForm(props) {
     let translated = formBuilder.getTranslations()
     setLoading(true)
     try {
-      if (!form.attraction_address) {
-        form.attraction_address = null
+      if (!form.address_line) {
+        form.address_line = null
       }
       if (!form.state_province_id) {
         form.state_province_id = null
@@ -366,10 +366,10 @@ function AttractionForm(props) {
       if (!form.fax_number) {
         form.fax_number = null
       }
-      if (!form.operational_hour) {
-        form.operational_hour = null
+      if (!form.operation_hours) {
+        form.operation_hours = null
       }
-
+      console.log(form)
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
       
@@ -390,7 +390,7 @@ function AttractionForm(props) {
       props.history.push(backUrl)
       dispatch(
         setAlert({
-          message: `Record ${form.branch_office_name} has been successfully ${formId ? "updated" : "saved"}.`,
+          message: `Record ${form.office_name} has been successfully ${formId ? "updated" : "saved"}.`,
         }),
       )
     }
@@ -414,9 +414,9 @@ function AttractionForm(props) {
           <FormInputControl
             label="Company/Branch Name"
             required={true}
-            value={form.branch_office_name}
-            name="branch_office_name"
-            onChange={(e) => setForm({...form, branch_office_name: e.target.value})}
+            value={form.office_name}
+            name="office_name"
+            onChange={(e) => setForm({...form, office_name: e.target.value})}
             disabled={isView || loading}
             type="text"
             minLength="1"
@@ -465,7 +465,7 @@ function AttractionForm(props) {
           {
           !loading &&
           <FormInputSelectAjax
-            label="State/ Province"
+            label="State/Province"
             value={form.state_province_id}
             name="state_id"
             id="attr_state"
@@ -577,9 +577,9 @@ function AttractionForm(props) {
           />
 
           <FormInputControl
-            value={form.operational_hour}
-            name="operational_hour"
-            onChange={(e) => setForm({...form, operational_hour: e.target.value})}
+            value={form.operation_hours}
+            name="operation_hours"
+            onChange={(e) => setForm({...form, operation_hours: e.target.value})}
             label="Operational Hours"
             disabled={isView || loading}
             type="textarea"
@@ -592,4 +592,4 @@ function AttractionForm(props) {
   )
 }
 
-export default withRouter(AttractionForm)
+export default withRouter(OfficeForm)
