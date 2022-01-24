@@ -3,8 +3,7 @@
 }
 .dataTable-root thead th:last-child,
 .dataTable-root tbody td:last-child {
-  width: 10% !important;
-  text-align: center;
+  width: 12% !important;
 }
 .dataTables_scrollHead {
   margin-top: -1px;
@@ -136,7 +135,7 @@
 }
 
 table.dataTable > tbody > tr.child ul.dtr-details {
-  display: inline-block;
+  /* display: inline-block; */
   list-style-type: none;
   margin: 0;
   padding: 0;
@@ -145,11 +144,15 @@ table.dataTable > tbody > tr.child ul.dtr-details > li {
   padding: 0.5em 20px;
 }
 table.dataTable > tbody > tr.child span.dtr-title {
-  display: inline-block;
+  display: inline-flex;
   min-width: 75px;
+  width: 40%;
   font-weight: bold;
 }
-
+table.dataTable > tbody > tr.child span.dtr-data {
+  display: inline-flex;
+  width: 58%;
+}
 .table th,
 .table td {
   border: none;
@@ -211,7 +214,10 @@ table.dataTable > tbody > tr.child span.dtr-title {
   .cstm-col-width {
     min-width: 100px;
     max-width: 280px !important;
-    /* width: 50%; */
+  }
+  .dataTable-root thead th:last-child,
+  .dataTable-root tbody td:last-child {
+    text-align: center;
   }
 }
 table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control,
