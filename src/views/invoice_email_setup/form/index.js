@@ -1,10 +1,9 @@
 import Api from "config/api"
 import useQuery from "lib/query"
 import React, {useEffect, useState} from "react"
-import {Col, Nav, Row, Tab} from "react-bootstrap"
+import {Button, Card, Col, Nav, Row, Tab, TabContent} from "react-bootstrap"
 import {useDispatch} from "react-redux"
 import {withRouter} from "react-router"
-import {ReactSVG} from "react-svg"
 import {setUIParams} from "redux/ui-store"
 
 
@@ -13,34 +12,25 @@ const backUrl = "/master/employee"
 
 const InvoiceEmailSetupForm = (props) => {
     let dispatch = useDispatch()
-
     let api = new Api()
-
     const [tabKey, setTabKey] = useState("general-information")
-    const [selectJobTitle, setSelectJobTitle] = useState([])
-    const [selectDivision, setSelectDivision] = useState([])
-    const [selectBranchOffice, setSelectBranchOffice] = useState([])
 
     const isView = useQuery().get("action") === "view"
     const [loading, setLoading] = useState(true)
     const [id, setId] = useState(null)
     const [form, setForm] = useState({
-        id: "",
-        aircraft_name: "",
-        model: "",
-        icao_code: "",
-        aircraft_code: "",
+
     })
 
     useEffect(async () => {
         let api = new Api()
         let formId = props.match.params.id
 
-        let docTitle = "Edit Employee"
+        let docTitle = "Email Template 1 - Edit Invoice Per Transaction Email"
         if (!formId) {
-            docTitle = "Create Hotel Profile"
+            docTitle = "Edit Invoice Email Setup"
         } else if (isView) {
-            docTitle = "Employee Details"
+            docTitle = "Invoice Email Setup Details"
         }
 
         dispatch(
@@ -48,11 +38,15 @@ const InvoiceEmailSetupForm = (props) => {
                 title: docTitle,
                 breadcrumbs: [
                     {
-                        text: "Master Data Management",
+                        text: "Setup and Configuration",
                     },
                     {
                         link: backUrl,
-                        text: "Hotel Profile Management",
+                        text: "Invoice Email Setup",
+                    },
+                    {
+                        link: backUrl,
+                        text: "Email Template 1",
                     },
                     {
                         text: docTitle,
@@ -69,47 +63,6 @@ const InvoiceEmailSetupForm = (props) => {
         }
     }, [])
 
-    // Select tabs
-    const handleSelectTab = async (key) => {
-        setTabKey(key)
-
-        if (key == "employment") {
-            try {
-                let res = await api.get("/master/job-titles")
-                const options = []
-                res.data.items.forEach((data) => {
-                    options.push({
-                        label: data.job_title_name,
-                        value: data.id,
-                    })
-                    setSelectJobTitle(options)
-                })
-            } catch (e) { }
-            try {
-                let res = await api.get("/master/divisions")
-                const options = []
-                res.data.items.forEach((data) => {
-                    options.push({
-                        label: data.division_name,
-                        value: data.id,
-                    })
-                    setSelectDivision(options)
-                })
-            } catch (e) { }
-            try {
-                let res = await api.get("/master/divisions")
-                const options = []
-                res.data.items.forEach((data) => {
-                    options.push({
-                        label: data.division_name,
-                        value: data.id,
-                    })
-                    setSelectBranchOffice(options)
-                })
-            } catch (e) { }
-        }
-    }
-
     useEffect(() => {
         if (!props.match.params.id) {
             setLoading(false)
@@ -118,84 +71,87 @@ const InvoiceEmailSetupForm = (props) => {
     }, [props.match.params.id])
 
     return (
-        <Tab.Container activeKey={tabKey} onSelect={handleSelectTab}>
-            <Row>
-                <Col sm={3}>
-                    <Nav variant="pills" className="flex-column nav-side">
-                        <Nav.Item>
-                            <Nav.Link eventKey="general-information">
-                                <div>
-                                    <ReactSVG src="/img/icons/general-information.svg" />
-                                    <span>General Information</span>
-                                </div>
-                            </Nav.Link>
-                        </Nav.Item>
-                        <Nav.Item>
-                            <Nav.Link eventKey="room-type">
-                                <div>
-                                    <ReactSVG src="/img/icons/emergency-contacts.svg" />
-                                    <span>Room Type</span>
-                                </div>
-                            </Nav.Link>
-                        </Nav.Item>
-                        <Nav.Item>
-                            <Nav.Link eventKey="hotel-facilities">
-                                <div>
-                                    <ReactSVG src="/img/icons/emergency-contacts.svg" />
-                                    <span>Hotel Facilities</span>
-                                </div>
-                            </Nav.Link>
-                        </Nav.Item>
-                        <Nav.Item>
-                            <Nav.Link eventKey="media">
-                                <div>
-                                    <ReactSVG src="/img/icons/emergency-contacts.svg" />
-                                    <span>Media</span>
-                                </div>
-                            </Nav.Link>
-                        </Nav.Item>
-                        <Nav.Item>
-                            <Nav.Link eventKey="nearby-attractions">
-                                <div>
-                                    <ReactSVG src="/img/icons/emergency-contacts.svg" />
-                                    <span>Nearby Attractions</span>
-                                </div>
-                            </Nav.Link>
-                        </Nav.Item>
-                        <Nav.Item>
-                            <Nav.Link eventKey="point-of-references">
-                                <div>
-                                    <ReactSVG src="/img/icons/emergency-contacts.svg" />
-                                    <span>Point of References</span>
-                                </div>
-                            </Nav.Link>
-                        </Nav.Item>
-                    </Nav>
-                </Col>
-                <Col sm={9}>
-                    <Tab.Content>
-                        <Tab.Pane eventKey="general-information">
-                            <p>Hello</p>
-                        </Tab.Pane>
-                        <Tab.Pane eventKey="room-type">
-                            <p>Hello</p>
-                        </Tab.Pane>
-                        <Tab.Pane eventKey="hotel-facilities">
-                            <p>Hello</p>
-                        </Tab.Pane>
-                        <Tab.Pane eventKey="media">
-                            <p>Hello</p>
-                        </Tab.Pane>
-                        <Tab.Pane eventKey="nearby-attractions">
-                            <p>Hello</p>
-                        </Tab.Pane>
-                        <Tab.Pane eventKey="point-of-references">
-                            <p>Hello</p>
-                        </Tab.Pane>
-                    </Tab.Content>
-                </Col>
-            </Row>
-        </Tab.Container>
+        <Row>
+            <Col md={1}>
+                <div style={{width: 70, backgroundColor: '#ccc', height: 70, borderRadius: 15, padding: 10, alignContent: 'center', textAlign: 'center', marginBottom: 10}}>
+                    <img src="/img/icons/users.svg" alt="icon users"></img>
+                    <p>Variable</p>
+                </div>
+                <div style={{width: 70, backgroundColor: '#ccc', height: 70, borderRadius: 15, padding: 10, alignContent: 'center', textAlign: 'center'}}>
+                    <img src="/img/icons/users.svg" alt="icon users"></img>
+                    <p>Widget</p>
+                </div>
+            </Col>
+            <Col md={11}>
+                <Nav variant="tabs" defaultActiveKey="english">
+                    <Nav.Item>
+                        <Nav.Link
+                            eventKey="english"
+                            onClick={function noRefCheck() { }}
+                        >
+                            Default (English)
+                        </Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item>
+                        <Nav.Link
+                            eventKey="chinese"
+                            onClick={function noRefCheck() { }}
+                        >
+                            Chinese Simplified
+                        </Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item>
+                        <Nav.Link
+                            eventKey="chinese-traditional"
+                            onClick={function noRefCheck() { }}
+                        >
+                            Chinese Traditional
+                        </Nav.Link>
+                    </Nav.Item>
+                </Nav>
+                <TabContent activeTab="1">
+                    <Tab.Pane eventKey="english">
+                        <Row>
+                            <Col sm="12">
+                                <h4>
+                                    Tab 1 Contents
+                                </h4>
+                            </Col>
+                        </Row>
+                    </Tab.Pane>
+                    <Tab.Pane eventKey="chinese">
+                        <Row>
+                            <Col sm="6">
+                                <Card body>
+                                    <Card.Title>
+                                        Special Title Treatment
+                                    </Card.Title>
+                                    <Card.Text>
+                                        With supporting text below as a natural lead-in to additional content.
+                                    </Card.Text>
+                                    <Button>
+                                        Go somewhere
+                                    </Button>
+                                </Card>
+                            </Col>
+                            <Col sm="6">
+                                <Card body>
+                                    <Card.Title>
+                                        Special Title Treatment
+                                    </Card.Title>
+                                    <Card.Text>
+                                        With supporting text below as a natural lead-in to additional content.
+                                    </Card.Text>
+                                    <Button>
+                                        Go somewhere
+                                    </Button>
+                                </Card>
+                            </Col>
+                        </Row>
+                    </Tab.Pane>
+                </TabContent>
+            </Col>
+        </Row >
     )
 }
 
