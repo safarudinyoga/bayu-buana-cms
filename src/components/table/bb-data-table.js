@@ -89,9 +89,7 @@ class BBDataTable extends Component {
       title: "Actions",
       render: function (value, display, row) {
         $(function () {
-          $('[data-toggle="tooltip"]').tooltip({
-            placement: "top",
-          })
+          $('[data-toggle="tooltip"]').tooltip()
         })
         function tooltipCust(x) {
           if (x.matches) {
@@ -125,17 +123,17 @@ class BBDataTable extends Component {
           }, {})
 
         return (
-          '<a href="javascript:void(0);" data-toggle="tooltip" class="table-row-action-item" data-action="edit" data-id="' +
+          '<a href="javascript:void(0);" data-toggle="tooltip" data-placement="bottom" class="table-row-action-item" data-action="edit" data-id="' +
           row.id +
           '" title="Click to edit"><img src="' +
           editIcon +
           '" /></a>' +
-          '<a href="javascript:void(0);" data-toggle="tooltip" class="table-row-action-item" data-action="view" data-id="' +
+          '<a href="javascript:void(0);" data-toggle="tooltip" data-placement="bottom" class="table-row-action-item" data-action="view" data-id="' +
           row.id +
           '" title="Click to view details"><img src="' +
           showIcon +
           '"/></a>' +
-          '<a href="javascript:void(0);" data-toggle="tooltip" class="table-row-action-item" data-action="delete" data-id="' +
+          '<a href="javascript:void(0);" data-toggle="tooltip" data-placement="bottom" class="table-row-action-item" data-action="delete" data-id="' +
           row.id +
           '" data-name="' +
           cvtRecordName +
@@ -818,6 +816,7 @@ class BBDataTable extends Component {
         let id = $(this).data("id")
         let name = $(this).data("name")
         let base = me.props.baseRoute || ""
+        $('[data-toggle="tooltip"]').tooltip("hide")
         switch ($(this).data("action")) {
           case "edit":
             me.props.history.push(base + "/" + id)

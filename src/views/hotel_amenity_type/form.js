@@ -306,7 +306,7 @@ function HotelAmenityForm(props) {
       if(files){
         var filesize = ((files.size/1024)/1024).toFixed(4);
         if(filesize > 4){
-          alert("Hotel Amenity Type Icon Image size is more than 4MB.");
+          alert("Icon size is more than 4MB.");
           $("#amenity_type").val('');
           return;
         }
@@ -403,7 +403,7 @@ function HotelAmenityForm(props) {
         }
         <FormInputControl
           id="amenity_type"
-          label="Hotel Amenity Type Icon Image"
+          label="Icon"
           type="image"
           name="hotel_amenity_type_asset"
           onChange={doUpload}

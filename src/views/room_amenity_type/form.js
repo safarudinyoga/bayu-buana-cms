@@ -288,7 +288,7 @@ function RoomAmenityTypeForm(props) {
       if(files){
         var filesize = ((files.size/1024)/1024).toFixed(4);
         if(filesize > 4){
-          alert("Room Amenity Type Icon Image size is more than 4MB.");
+          alert("Icon size is more than 4MB.");
           $("#room_icon").val('');
           return;
         }
