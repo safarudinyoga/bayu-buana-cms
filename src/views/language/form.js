@@ -80,8 +80,8 @@ function LanguageForm(props) {
   const validationMessages = {
     language_code: {
       required: "Language Code is required",
-      minlength: "Language Code must be at least 3 characters",
-      maxlength: "Language Code cannot be more than 3 characters",
+      minlength: "Language Code must be at least 2 characters",
+      maxlength: "Language Code cannot be more than 2 characters",
     },
     language_name: {
       required: "Language Name is required",
