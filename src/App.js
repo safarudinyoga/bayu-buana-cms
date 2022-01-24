@@ -111,6 +111,10 @@ import StandardMarkupFlightForm from "views/standard_markup/form/flight_form"
 import StandardMarkupHotelForm from "views/standard_markup/form/hotel_form"
 import StandardMarkupOtherForm from "views/standard_markup/form/other_form"
 
+// Master Exchange Rate
+import ExchageRateTable from "views/exchange_rate/table"
+import ExchangeRateForm from "views/exchange_rate/form"
+
 import Login from "./views/auth/login"
 import ForgotPassword from "views/auth/forgot_password"
 import OTP from "views/auth/otp"
@@ -452,6 +456,14 @@ const DashboardRoutes = () => {
         </Route>
         <Route exact path="/master/invoice-email-setup/form/:id?">
           <InvoiceEmailSetupForm />
+        </Route>
+
+        {/* Master Exhange Rate */}
+        <Route exact path="/master/exchange-rate">
+          <ExchageRateTable />
+        </Route>
+        <Route exact path="/master/exchange-rate/form/:id?">
+          <ExchangeRateForm />
         </Route>
       </Switch>
     </DashboardWrapper>
