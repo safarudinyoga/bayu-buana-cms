@@ -85,6 +85,9 @@ import EmployeeForm from "views/employee/form"
 import RatingTypeLevelTable from './views/rating_type_level/table';
 import RatingTypeLevelForm from './views/rating_type_level/form';
 
+import FlightCommisionTable from "views/setup_flight_commision/table";
+import FlightCommisionForm from "views/setup_flight_commision/form"
+
 const App = () => {
   document.title = "Bayu Buana"
   return (
@@ -319,6 +322,13 @@ const App = () => {
           </Route>
           <Route path="/master/employee/form/:id?">
             <EmployeeForm />
+          </Route>
+
+          <Route exact path="/master/setup-flight-commision">
+            <FlightCommisionTable />
+          </Route>
+          <Route path="/master/setup-flight-commision/form/:id?">
+            <FlightCommisionForm />
           </Route>
         </Switch>
       </DashboardWrapper>
