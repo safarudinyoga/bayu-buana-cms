@@ -40,7 +40,7 @@ const MediaForm = ({
 						<div className="col-md-4" key={i}>
 							<FormInputFile
 								id={m.type.toLowerCase()}
-								title={isView ? `Banner (${m})` : `Banner (${m.type}) Image`}
+								title={isView ? `Banner (${m.type})` : `Banner (${m.type}) Image`}
 								mediaType={m.type.toLowerCase()}
 								onChange={doUpload}
 								url={data[moduleName + "_asset_" + m.type.toLowerCase()]?.multimedia_description?.url || ""}
