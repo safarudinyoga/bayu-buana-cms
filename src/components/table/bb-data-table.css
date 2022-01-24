@@ -152,6 +152,7 @@ table.dataTable > tbody > tr.child span.dtr-title {
 table.dataTable > tbody > tr.child span.dtr-data {
   display: inline-flex;
   width: 58%;
+  align-items: center;
 }
 .table th,
 .table td {
