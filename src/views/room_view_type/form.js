@@ -38,7 +38,7 @@ function RoomViewTypeForm(props) {
     room_view_type_code: {
       required: true,
       number: true,
-      minlength: 3,
+      minlength: 1,
       maxlength: 256,
       checkCode: true,
       noSpace: true
@@ -60,7 +60,7 @@ function RoomViewTypeForm(props) {
     room_view_type_code: {
       required: "Room View Type Code is required",
       number: "Code format is invalid",
-      minlength: "Room View Type Code must be at least 3 characters",
+      minlength: "Room View Type Code must be at least 1 characters",
       maxlength: "Room View Type Code cannot be more than 256 characters",
     },
   }
@@ -220,6 +220,14 @@ function RoomViewTypeForm(props) {
     setLoading(true)
     let api = new Api()
     try {
+      if (!form.room_view_type_name) {
+        form.room_view_type_name = null
+      }
+      if (!form.room_view_type_code) {
+        form.room_view_type_code = null
+      } else {
+        form.room_view_type_code = parseInt(form.room_view_type_code)
+      }
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
       for (let i in translated) {
