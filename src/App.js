@@ -114,8 +114,8 @@ import StandardMarkupOtherForm from "views/standard_markup/form/other_form"
 import Login from "./views/auth/login"
 import ForgotPassword from "views/auth/forgot_password"
 import OTP from "views/auth/otp"
-import BranchOfficeTable from './views/branch_office/table';
-import BranchOfficeForm from './views/branch_office/form';
+import OfficeTable from './views/branch_office/table';
+import OfficeForm from './views/branch_office/form';
 import DivisionForm from './views/division/form';
 import DivisionTable from './views/division/table';
 import JobTitleTable from './views/job-title/table';
@@ -440,10 +440,10 @@ const DashboardRoutes = () => {
         </Route>
         {/* Branch Office */}
         <Route exact path="/master/branch-offices">
-          <BranchOfficeTable />
+          <OfficeTable />
         </Route>
         <Route path="/master/branch-offices/form/:id?">
-          <BranchOfficeForm/>
+          <OfficeForm/>
         </Route>
 
         {/* Master Invoice Email Setup */}

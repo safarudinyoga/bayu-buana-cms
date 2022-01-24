@@ -6,7 +6,7 @@ import { setUIParams } from "redux/ui-store"
 import { renderColumn } from "lib/translation"
 import FormInputSelectAjax from "components/form/input-select-ajax"
 
-export default function BranchOfficeTable() {
+export default function OfficeTable() {
   let dispatch = useDispatch()
   useEffect(() => {
     dispatch(
@@ -31,31 +31,32 @@ export default function BranchOfficeTable() {
 
   let [params, setParams] = useState({
     title: "Branch Offices",
+    titleModal: "Branch Office",
     baseRoute: "/master/branch-offices/form",
-    endpoint: "/master/branch-offices",
-    deleteEndpoint: "/master/batch-actions/delete/branch-offices",
-    activationEndpoint: "/master/batch-actions/activate/branch-offices",
-    deactivationEndpoint: "/master/batch-actions/deactivate/branch-offices",
+    endpoint: "/master/offices",
+    deleteEndpoint: "/master/batch-actions/delete/offices",
+    activationEndpoint: "/master/batch-actions/activate/offices",
+    deactivationEndpoint: "/master/batch-actions/deactivate/offices",
     columns: [
       {
         title: "Company/Branch Name",
-        data: "branch_office_name",
+        data: "office_name",
       },
       {
         title: "Address",
-        data: "branch_office_address",
+        data: "address_line",
       },
       {
         title: "Phone Number",
-        data: "branch_office_phone",
+        data: "phone_number",
       },
       {
         title: "Operational Hour",
-        data: "branch_office_operational_hours",
+        data: "operation_hours",
       },
     ],
     emptyTable: "No Branch Offices found",
-    recordName: ["branch_office_code", "branch_office_name"],
+    recordName: "office_name",
   })
 
   const onFilterChangeCountries = (e, values) => {
