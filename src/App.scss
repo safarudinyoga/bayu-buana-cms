@@ -3,6 +3,10 @@
 @import "./styles/components/_form.scss";
 @import "./styles/components/_button.scss";
 @import "./styles/components/_image.scss";
+@import "./styles/_auth.scss";
+@import "./styles/components/_tabs.scss";
+@import "./styles/components/_modal.scss";
+@import "./styles/components/_accordion.scss";
 
 .content-wrapper {
   background-color: #ffffff;
@@ -37,7 +41,7 @@ select.bg-dark-grey > option {
 }
 
 .bg-block-card {
-  background-color: #f5f7f9;
+  background-color: #f3f4f4;
 }
 
 .form-group label {
@@ -47,7 +51,7 @@ select.bg-dark-grey > option {
   color: #d91c1c;
   content: "*";
   position: relative;
-  margin-left: 4px;  
+  margin-left: 4px;
 }
 .input:checked {
   background: #027f71;
@@ -107,9 +111,9 @@ select.bg-dark-grey > option {
 .text-sub-header {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-size: 20px;
-  font-weight: 500;
+  font-weight: 600;
   color: #333333;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 }
 @media only screen and (max-width: 767px) {
   .text-sub-header {
@@ -124,15 +128,19 @@ select.bg-dark-grey > option {
   font-weight: 500;
   color: #333333;
 
-  &-paginate{
+  &-paginate {
     font-family: "Segoe UI";
     font-size: 13px;
-    padding-left: 4px;    
+    padding-left: 4px;
     color: #333333;
-    
   }
 }
-.icon-red{
+.label-notes {
+  font: italic normal normal 0.7em "Segoe UI";
+  color: #818181;
+  letter-spacing: 0;
+}
+.icon-red {
   color: #dc3545;
 }
 .text-label-page {
@@ -141,7 +149,7 @@ select.bg-dark-grey > option {
   font-weight: bold;
   color: #333333;
   margin-bottom: 120px;
-  }
+}
 
 @media only screen and (max-width: 768px) {
   .text-label-input {
@@ -184,9 +192,9 @@ select.bg-dark-grey > option {
 }
 
 /* Select Custom */
-.select2 {
-  max-width: 300px;
-}
+// .select2 {
+// max-width: 400px;
+// }
 .select2-container--bootstrap4 .select2-selection {
   border-radius: 8px !important;
 }
@@ -204,7 +212,7 @@ select.bg-dark-grey > option {
 .select2-container--default .select2-results__option[aria-selected] {
   background-color: gray;
 }
-// .select2-selection__choice {  
+// .select2-selection__choice {
 //   padding-right: 4px !important;
 //   padding-left: 4px !important;
 //   background-color: gray !important;
@@ -214,7 +222,7 @@ select.bg-dark-grey > option {
 // }
 
 /* Select2 allowClear */
-.select2-selection__clear{
+.select2-selection__clear {
   position: relative !important;
   right: 2px !important;
   bottom: 2px !important;
@@ -223,8 +231,8 @@ select.bg-dark-grey > option {
   font-weight: bold !important;
 }
 /* Select2 Icon */
-.select2-selection__arrow b{
-  display:none !important;
+.select2-selection__arrow b {
+  display: none !important;
 }
 .select2-selection--multiple:before {
   content: "" !important;
@@ -235,7 +243,7 @@ select.bg-dark-grey > option {
   border-left: 6px solid transparent !important;
   border-right: 6px solid transparent !important;
 }
-.select2-selection:before {    
+.select2-selection:before {
   content: "" !important;
   position: absolute !important;
   right: 12px !important;
@@ -263,22 +271,22 @@ select.bg-dark-grey > option {
 }
 
 /* Dropdown Custom */
-.dropdown-menu{
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+.dropdown-menu {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-size: 15px;
-  font-weight:500;
+  font-weight: 500;
   color: #333333;
 }
-.dropdown-menu :hover {  
+.dropdown-menu :hover {
   background-color: #027f71;
   color: white;
 }
 
 @media (max-width: 768px) {
   .tooltip {
-    visibility: hidden;  
-  }    
+    visibility: hidden;
+  }
 }
-.z-index-reset{
+.z-index-reset {
   z-index: 0;
 }

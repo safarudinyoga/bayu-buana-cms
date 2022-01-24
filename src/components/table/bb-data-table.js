@@ -60,7 +60,7 @@ class BBDataTable extends Component {
       searchable: false,
       orderable: false,
       title:
-        '<input type="checkbox" id="cb-th" class="select-checkbox-all"/>',
+        '<svg class="float-left row-handle nopadding" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none"></svg><input type="checkbox" id="cb-th" class="select-checkbox-all ml-2 mr-1"/>',
       render: function (val, display, row) {
         return (
           '<svg class="float-left row-handle nopadding" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none"><rect id="backgroundrect" width="100%" height="100%" x="0" y="0" fill="none" stroke="none"/><path d="M7.098360577225684,13 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 z" fill="#707070" id="svg_1" class=""/><path d="M11.901639938354492,13 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 z" fill="#707070" id="svg_2" class=""/></svg> <input type="checkbox" data-id="' +
@@ -88,6 +88,11 @@ class BBDataTable extends Component {
       orderable: false,
       title: "Actions",
       render: function (value, display, row) {
+        $(function () {
+          $('[data-toggle="tooltip"]').tooltip({
+            placement: "top",
+          })
+        })
         function tooltipCust(x) {
           if (x.matches) {
             $(function () {
@@ -377,22 +382,24 @@ class BBDataTable extends Component {
                     for (var c in columns) {
                       let tempFilters = columns[c]
                       for (var f in filters) {
-                        tempFilters = tempFilters + ',["AND"],' + JSON.stringify(filters[f])
+                        tempFilters =
+                          tempFilters + ',["AND"],' + JSON.stringify(filters[f])
                       }
                       extraFilters.push(tempFilters)
                     }
                     overrideParams.filters =
-                    "[" + extraFilters.join(',["OR"],') + "]"
-                  }else{
+                      "[" + extraFilters.join(',["OR"],') + "]"
+                  } else {
                     overrideParams.filters =
-                    "[" + columns.join(',["OR"],') + "]"
+                      "[" + columns.join(',["OR"],') + "]"
                   }
                 }
               } else if (filters.length) {
                 extraFilters = []
                 for (var x in filters) {
                   extraFilters.push(JSON.stringify(filters[x]))
-                  if (x < filters.length-1) extraFilters.push(JSON.stringify(["AND"]))
+                  if (x < filters.length - 1)
+                    extraFilters.push(JSON.stringify(["AND"]))
                 }
                 overrideParams.filters = "[" + extraFilters.join(",") + "]"
               }
@@ -448,7 +455,7 @@ class BBDataTable extends Component {
             orderable: false,
             className: "select-checkbox",
             targets: [0],
-            "width": "5%",
+            width: "5%",
           },
           {
             targets: [1, 2],
@@ -511,21 +518,22 @@ class BBDataTable extends Component {
           //   $(t.nTableWrapper).find(".dataTables_info").hide()
           //   $(t.nTableWrapper).find(".dataTables_paginate").hide()
           // } else {
-            $(t.nTableWrapper).find(".dataTables_length").show()
-            $(t.nTableWrapper).find(".dataTables_info").show()
-            $(t.nTableWrapper).find(".dataTables_paginate").show()
+          $(t.nTableWrapper).find(".dataTables_length").show()
+          $(t.nTableWrapper).find(".dataTables_info").show()
+          $(t.nTableWrapper).find(".dataTables_paginate").show()
           // }
 
           let items = $(".select-checkbox-item", t.nTableWrapper)
           let itemsSelected = []
           for (let i = 0; i < items.length; i++) {
             let cbHTML = $(items.get(i))
-            if(selected.includes(cbHTML.data("id"))) {
+            if (selected.includes(cbHTML.data("id"))) {
               itemsSelected.push(cbHTML.data("id"))
               cbHTML.prop("checked", true)
             }
           }
-          let checkedHeader = items.length > 0 && itemsSelected.length === items.length
+          let checkedHeader =
+            items.length > 0 && itemsSelected.length === items.length
           $(".select-checkbox-all").prop("checked", checkedHeader)
         },
       })
@@ -545,10 +553,15 @@ class BBDataTable extends Component {
       dt.on("row-reorder", (e, diff, edit) => {
         if (diff.length > 0) {
           let module = this.props.title.toLowerCase().split(" ").join("_")
-          if(this.props.title.includes("/")){
-            module = this.props.title.toLowerCase().replace(/ /g, "").replace("/", "-").split(" ").join("_")
+          if (this.props.title.includes("/")) {
+            module = this.props.title
+              .toLowerCase()
+              .replace(/ /g, "")
+              .replace("/", "-")
+              .split(" ")
+              .join("_")
           }
-          
+
           let rowID = edit.triggerRow.data().id
           let rowPositionDiff = diff.findIndex(
             (v) => dt.row(v.node).data().id === rowID,
@@ -714,7 +727,7 @@ class BBDataTable extends Component {
     }
     this.inProgress = true
     try {
-        if(prevProps.filters !== this.props.filters) this.dt.ajax.reload()
+      if (prevProps.filters !== this.props.filters) this.dt.ajax.reload()
     } catch (e) {}
     setTimeout(() => {
       this.inProgress = false
@@ -737,21 +750,21 @@ class BBDataTable extends Component {
         for (let i = 0; i < items.length; i++) {
           itemsId.push($(items.get(i)).data("id"))
         }
-          
+
         let itemsChecked = $(".select-checkbox-item:checked", table)
         let selected = this.state.selected
 
-        if(itemsChecked.length > 0) {
+        if (itemsChecked.length > 0) {
           for (let idx = 0; idx < itemsChecked.length; idx++) {
             console.log(idx)
             let id = $(itemsChecked.get(idx)).data("id")
-            if(!selected.includes(id)) {
+            if (!selected.includes(id)) {
               selected.push(id)
             }
           }
         } else {
-          const idsToDelete = new Set(itemsId);
-          selected = selected.filter(id => !idsToDelete.has(id))
+          const idsToDelete = new Set(itemsId)
+          selected = selected.filter((id) => !idsToDelete.has(id))
         }
         this.setState({
           selected: selected,
@@ -767,7 +780,7 @@ class BBDataTable extends Component {
         this.inProgress = true
         // let table = $(e.target).closest("table")
         let table = $("table")
-        let itemId = $($(e.target).get(0)).data('id')
+        let itemId = $($(e.target).get(0)).data("id")
         let selectedVal = []
         let items = $(".select-checkbox-item:checked", table)
         for (let i = 0; i < items.length; i++) {
@@ -783,12 +796,12 @@ class BBDataTable extends Component {
         } catch (e) {}
 
         let selected = this.state.selected
-        if(selected.includes(itemId)) {
-          selected = selected.filter(e => e !== itemId)
+        if (selected.includes(itemId)) {
+          selected = selected.filter((e) => e !== itemId)
         } else {
           selected.push(itemId)
         }
-        
+
         this.setState({
           selected: selected,
         })
@@ -817,7 +830,7 @@ class BBDataTable extends Component {
             break
         }
       })
-      $.fn.DataTable.ext.pager.numbers_length = 5      
+    $.fn.DataTable.ext.pager.numbers_length = 5
     return (
       <div ref={this.wrapper}>
         <Modal show={this.state.isOpen}>

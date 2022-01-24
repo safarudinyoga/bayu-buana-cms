@@ -1,8 +1,8 @@
-import React, {Component} from "react"
-import {Link} from "react-router-dom"
 import BriefCaseIcon from "assets/icons/briefcase.svg"
 import HomeIcon from "assets/icons/home.svg"
-import "./sidebar.css"
+import React, {Component} from "react"
+import {Link} from "react-router-dom"
+import "./sidebar.scss"
 
 export default class Sidebar extends Component {
   render() {
@@ -18,13 +18,13 @@ export default class Sidebar extends Component {
             >
               <li className="nav-item">
                 <Link to="/" className="nav-link">
-                  <img src={HomeIcon} alt="home_icon"/>
+                  <img src={HomeIcon} alt="home_icon" />
                   <p>Dashboard</p>
                 </Link>
               </li>
               <li className="nav-item">
                 <Link to="#" className="nav-link">
-                  <img src={BriefCaseIcon} alt="briefcase_icon"/>
+                  <img src={BriefCaseIcon} alt="briefcase_icon" />
                   <p>
                     Master Data Management
                     <i className="right fas fa-angle-right"></i>
@@ -56,10 +56,7 @@ export default class Sidebar extends Component {
                     </Link>
                   </li>
                   <li className="nav-item">
-                    <Link
-                      to="/master/attractions"
-                      className="nav-link"
-                    >
+                    <Link to="/master/attractions" className="nav-link">
                       <p>Attraction</p>
                     </Link>
                   </li>
@@ -79,6 +76,11 @@ export default class Sidebar extends Component {
                   <li className="nav-item">
                     <Link to="/master/cities" className="nav-link">
                       <p>City</p>
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link to="/master/corporate-rating" className="nav-link">
+                      <p>Corporate Rating</p>
                     </Link>
                   </li>
                   <li className="nav-item">
@@ -102,8 +104,18 @@ export default class Sidebar extends Component {
                     </Link>
                   </li>
                   <li className="nav-item">
+                    <Link to="/master/fee-type" className="nav-link">
+                      <p>Fee Type</p>
+                    </Link>
+                  </li>
+                  <li className="nav-item">
                     <Link to="/master/flight-types" className="nav-link">
                       <p>Flight Type</p>
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link to="/master/frequent-traveler-program" className="nav-link">
+                      <p>Frequent Traveler Program</p>
                     </Link>
                   </li>
                   <li className="nav-item">
@@ -175,7 +187,10 @@ export default class Sidebar extends Component {
                     </Link>
                   </li>
                   <li className="nav-item">
-                    <Link to="/master/room-amenity-categories" className="nav-link">
+                    <Link
+                      to="/master/room-amenity-categories"
+                      className="nav-link"
+                    >
                       <p>Room Amenity Category</p>
                     </Link>
                   </li>
@@ -200,6 +215,11 @@ export default class Sidebar extends Component {
                     </Link>
                   </li>
                   <li className="nav-item">
+                    <Link to="/master/standard-markup" className="nav-link">
+                      <p>Standar Markup</p>
+                    </Link>
+                  </li>
+                  <li className="nav-item">
                     <Link to="/master/provinces" className="nav-link">
                       <p>State / Province</p>
                     </Link>
@@ -219,6 +239,14 @@ export default class Sidebar extends Component {
                       <p>Zones</p>
                     </Link>
                   </li>
+                  <li className="nav-item">
+                    <Link
+                      to="/master/hotel-profile-management"
+                      className="nav-link"
+                    >
+                      <p>Hotel Profile Management</p>
+                    </Link>
+                  </li>
                 </ul>
               </li>
               <li className="nav-item">
@@ -233,6 +261,22 @@ export default class Sidebar extends Component {
                   <li className="nav-item">
                     <Link to="/master/employee" className="nav-link">
                       <p>Master Employee</p>
+                    </Link>
+                  </li>
+                </ul>
+              </li>
+              <li className="nav-item">
+                <Link to="#" className="nav-link">
+                  <img src="/img/icons/users.svg" alt="icon users" />
+                  <p>
+                    Setup and Configurations
+                    <i className="right fas fa-angle-right"></i>
+                  </p>
+                </Link>
+                <ul className="nav nav-treeview">
+                  <li className="nav-item">
+                    <Link to="/master/invoice-email-setup" className="nav-link">
+                      <p>Invoice Email Setup</p>
                     </Link>
                   </li>
                 </ul>

@@ -1,10 +1,17 @@
 .dataTable-root .card > .card-body {
   padding: 0;
 }
-
+.dataTable-root thead th:last-child,
+.dataTable-root tbody td:last-child {
+  width: 10% !important;
+  text-align: center;
+}
+.dataTables_scrollHead {
+  margin-top: -1px;
+}
 .dataTable-root .card {
   overflow: hidden;
-  border-radius: 0.3rem;
+  border-radius: 8px;
   border: 1px solid #b7b7b7;
 }
 
@@ -13,9 +20,9 @@
   display: inline-block;
   margin-right: 4px;
 }
-.dataTable-root .dataTables_paginate {   
+.dataTable-root .dataTables_paginate {
   margin-top: 10px !important;
-} 
+}
 .dataTable-root .dataTables_paginate .pagination .paginate_button.active a {
   background-color: #5e5e5e;
   border-color: #5e5e5e;
@@ -23,19 +30,19 @@
 }
 
 .page-link {
-  color: #4D4D4D;
+  color: #4d4d4d;
 }
 
 @media only screen and (max-width: 320px) {
   .page-link {
-    color: #4D4D4D;
+    color: #4d4d4d;
     padding-right: 10px;
-    padding-left: 10px;   
-    font-size: 12px;    
+    padding-left: 10px;
+    font-size: 12px;
   }
 }
 .page-item.disabled .page-link {
-  color: #A3A3A3;
+  color: #a3a3a3;
 }
 
 .dataTable-root table.dataTable {
@@ -44,17 +51,17 @@
 }
 
 .dataTable-root table.dataTable thead {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-size: 16px;
   font-weight: 500;
   background-color: #5e5e5e;
-  color: #ffffff; 
+  color: #ffffff;
   /* white-space: nowrap; */
 }
 
 .dataTable-root table.dataTable th {
- vertical-align: top;
- word-break: break-word;
+  vertical-align: top;
+  word-break: break-word;
 }
 @media only screen and (max-width: 768px) {
   .dataTable-root table.dataTable thead {
@@ -62,18 +69,18 @@
   }
 }
 .dataTable-root table.dataTable tbody {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-size: 15px;
-  font-weight: normal; 
-  color: #333333;   
+  font-weight: normal;
+  color: #333333;
 }
 @media only screen and (max-width: 768px) {
   .dataTable-root table.dataTable tbody {
     font-size: 13px;
   }
 }
-.dataTable-root table.dataTable td {  
-  vertical-align:middle;     
+.dataTable-root table.dataTable td {
+  vertical-align: middle;
 }
 
 /* .dataTable-root table.dataTable thead > tr > th:nth-child(1) {
@@ -85,62 +92,73 @@
 } */
 
 .dataTable-root .select-checkbox {
-    min-width: 78px;
-    vertical-align: middle !important;
+  min-width: 78px;
+  vertical-align: middle !important;
 }
-@media (min-width: 480px) {
+@media (min-width: 481px) {
   .dataTable-root .select-checkbox {
     min-width: 50px !important;
+    width: 50px !important;
   }
 }
-@media (min-width: 1440px) {
+@media (min-width: 1280px) {
   .dataTable-root .select-checkbox {
-    min-width: 30px !important;
+    min-width: 45px !important;
   }
 }
 .dataTable-root .select-checkbox .row-handle {
-    margin-left: 5px;    
-    cursor: move;
+  margin-left: 5px;
+  cursor: move;
 }
 .dataTable-root .table-row-action {
-    width: 100px;
-    text-align: center;
+  width: 100px;
+  text-align: center;
 }
 
 .dataTable-root .table-row-action-item {
-    color: #3E40AE;
+  color: #3e40ae;
 }
 
 .dataTables_processing {
-    display: none !important;
+  display: none !important;
 }
 
-.fa-edit{
-  color: #3E40AE;
+.fa-edit {
+  color: #3e40ae;
 }
 
-.fa-eye{
-  color: #3E40AE;
+.fa-eye {
+  color: #3e40ae;
 }
 
-.fa-trash{
-  color: #3E40AE;
+.fa-trash {
+  color: #3e40ae;
 }
 
-table.dataTable>tbody>tr.child ul.dtr-details {
+table.dataTable > tbody > tr.child ul.dtr-details {
   display: inline-block;
   list-style-type: none;
   margin: 0;
   padding: 0;
 }
-table.dataTable>tbody>tr.child ul.dtr-details>li {
+table.dataTable > tbody > tr.child ul.dtr-details > li {
   padding: 0.5em 20px;
 }
-table.dataTable>tbody>tr.child span.dtr-title {
+table.dataTable > tbody > tr.child span.dtr-title {
   display: inline-block;
   min-width: 75px;
   font-weight: bold;
 }
+
+.table th,
+.table td {
+  border: none;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: rgb(245, 245, 245);
+}
+
 .cstm-col-width {
   min-width: 66px !important;
   word-break: break-all;
@@ -188,7 +206,7 @@ table.dataTable>tbody>tr.child span.dtr-title {
 @media (min-width: 576px) {
   .select-checkbox-all {
     margin: 0;
-    padding:2px;
+    padding: 2px;
   }
   .cstm-col-width {
     min-width: 100px;
@@ -196,38 +214,47 @@ table.dataTable>tbody>tr.child span.dtr-title {
     /* width: 50%; */
   }
 }
-table.dataTable.dtr-inline.collapsed>tbody>tr>td.dtr-control,table.dataTable.dtr-inline.collapsed>tbody>tr>th.dtr-control{
-  position:relative;    
-  cursor:pointer
+table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control,
+table.dataTable.dtr-inline.collapsed > tbody > tr > th.dtr-control {
+  position: relative;
+  cursor: pointer;
 }
-table.dataTable.dtr-inline.collapsed>tbody>tr>td.dtr-control:before,table.dataTable.dtr-inline.collapsed>tbody>tr>th.dtr-control:before{
-  top:50%;
-  left:62px;
-  height:1em;
-  width:1em;
-  margin-top:-8px;  
-  display:block;
+table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control:before,
+table.dataTable.dtr-inline.collapsed > tbody > tr > th.dtr-control:before {
+  top: 50%;
+  left: 62px;
+  height: 1em;
+  width: 1em;
+  margin-top: -8px;
+  display: block;
   font-weight: bold;
-  position:absolute;
-  color:white;
-  border:.15em solid #b7b7b7;
-  border-radius:1em;
-  box-shadow:0 0 .2em #b7b7b7;
-  box-sizing:content-box;
-  text-align:center;
-  text-indent:0 !important;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  line-height:0.9em;
-  content:"\002B";
-  background-color:#b7b7b7
+  position: absolute;
+  color: white;
+  border: 0.15em solid #b7b7b7;
+  border-radius: 1em;
+  box-shadow: 0 0 0.2em #b7b7b7;
+  box-sizing: content-box;
+  text-align: center;
+  text-indent: 0 !important;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 0.9em;
+  content: "\002B";
+  background-color: #b7b7b7;
 }
-table.dataTable.dtr-inline.collapsed>tbody>tr.parent>td.dtr-control:before,table.dataTable.dtr-inline.collapsed>tbody>tr.parent>th.dtr-control:before{
-  content:"\2212";
-  background-color:#b7b7b7
+table.dataTable.dtr-inline.collapsed
+  > tbody
+  > tr.parent
+  > td.dtr-control:before,
+table.dataTable.dtr-inline.collapsed
+  > tbody
+  > tr.parent
+  > th.dtr-control:before {
+  content: "\2212";
+  background-color: #b7b7b7;
 }
-table.dataTable>tbody>tr.child{
+table.dataTable > tbody > tr.child {
   background-color: hsl(0, 0%, 90%);
-  padding:.2em
+  padding: 0.2em;
 }
 
 table.dataTable thead .sorting,
@@ -235,25 +262,24 @@ table.dataTable thead .sorting_asc,
 table.dataTable thead .sorting_desc,
 table.dataTable thead .sorting_asc_disabled,
 table.dataTable thead .sorting_desc_disabled {
-    cursor: pointer;
-    *cursor: hand;
-    background-repeat: no-repeat;
-    background-position: center right;
-    margin-left: 12px;
+  cursor: pointer;
+  *cursor: hand;
+  background-repeat: no-repeat;
+  background-position: center right;
+  margin-left: 12px;
 }
 table.dataTable thead .sorting {
-    background-position: 100% 0%;
-    background-image: url("../../assets/icons/sort-disable.svg")
+  background-position: 100% 30%;
+  background-image: url("../../assets/icons/sort-disable.svg");
 }
 table.dataTable thead .sorting_asc {
-  background-position: 100% 0%;
-    background-image: url("../../assets/icons/sort-ascending.svg") !important
+  background-position: 100% 30%;
+  background-image: url("../../assets/icons/sort-ascending.svg") !important;
 }
 table.dataTable thead .sorting_desc {
-  background-position: 100% 0%;
-    background-image: url("../../assets/icons/sort-descending.svg") !important
+  background-position: 100% 30%;
+  background-image: url("../../assets/icons/sort-descending.svg") !important;
 }
-
 
 table.dataTable thead th.sorting:after,
 table.dataTable thead th.sorting_asc:after,
@@ -268,15 +294,16 @@ table.dataTable thead .sorting:before,
 table.dataTable thead .sorting_asc:before,
 table.dataTable thead .sorting_desc:before,
 table.dataTable thead .sorting_asc_disabled:before,
-table.dataTable thead .sorting_desc_disabled:before { 
+table.dataTable thead .sorting_desc_disabled:before {
   content: "" !important;
 }
 table.dataTable thead .sorting:after,
 table.dataTable thead .sorting_asc:after,
 table.dataTable thead .sorting_desc:after,
 table.dataTable thead .sorting_asc_disabled:after,
-table.dataTable thead .sorting_desc_disabled:after {  
+table.dataTable thead .sorting_desc_disabled:after {
   content: "" !important;
 }
-
-
+.table-sm th {
+  padding: 0.4rem 0.3rem;
+}

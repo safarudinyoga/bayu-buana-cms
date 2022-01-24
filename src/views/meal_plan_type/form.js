@@ -66,8 +66,7 @@ function MealPlanTypeForm(props) {
     },
     meal_plan_type_code: {
       required: "Meal plan type Code is required",
-      minlength: "Meal plan type Code must be at least 1 characters",
-      maxlength: "Meal plan type Code cannot be more than 36 characters",
+      max: "Meal plan type code must be no more than 32767",
     },
   }
 
@@ -351,6 +350,7 @@ function MealPlanTypeForm(props) {
           accept=".png,.jpg,.jpeg"
           url={form.meal_plan_type_asset?.multimedia_description.url}
           style={{maxWidth: 300, marginTop: 12}}
+          notes={true}
         />
       </FormHorizontal>
 

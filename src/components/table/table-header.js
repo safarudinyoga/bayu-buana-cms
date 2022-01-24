@@ -1,18 +1,18 @@
 import downloadIcon from "assets/download.svg"
-import printIcon from "assets/printer.svg"
-import resetIcon from "assets/reset.svg"
+import arrowdownIcon from "assets/icons/arrow-down.svg"
 import createIcon from "assets/icons/create.svg"
 import downIcon from "assets/icons/double-down.svg"
 import upIcon from "assets/icons/double-up.svg"
 import dropdownIcon from "assets/icons/dropdownArrow.svg"
-import arrowdownIcon from "assets/icons/arrow-down.svg"
-import { Component } from "react"
-import { OverlayTrigger, Tooltip } from "react-bootstrap"
-import { Link, withRouter } from "react-router-dom"
+import printIcon from "assets/printer.svg"
+import resetIcon from "assets/reset.svg"
+import {debounce} from "lodash"
+import {Component} from "react"
+import {OverlayTrigger, Tooltip} from "react-bootstrap"
+import {Link, withRouter} from "react-router-dom"
+import Select, {components} from "react-select"
 import "../button/button.css"
 import "./table-header.css"
-import Select, { components } from "react-select"
-import { debounce } from "lodash"
 
 const DownIcon = () => {
   return <img src={arrowdownIcon} alt="down" />;
@@ -27,7 +27,7 @@ const DropdownIndicator = props => {
 const customStyles = {
   option: (provided, state) => ({
     ...provided,
-    color: "black",    
+    color: "black",
     backgroundColor: state.isSelected ? "white" : "white",
     padding: 10,
     fontFamily: "Segoe UI, Tahoma, Geneva, Verdana, sans-serif",
@@ -44,7 +44,7 @@ const customStyles = {
     width: 120,
     marginTop: -1,
     marginLeft: 8,
-    border: "1px solid #DADEDF",   
+    border: "1px solid #DADEDF",
     fontSize: 13,
     fontFamily: "Segoe UI, Tahoma, Geneva, Verdana, sans-serif",
     backgroundColor: "white",
@@ -56,20 +56,20 @@ const customStyles = {
   singleValue: (provided, state) => {
     const opacity = state.isDisabled ? 0.5 : 1
     const transition = "opacity 300ms"
-    return { ...provided, opacity, transition }
+    return {...provided, opacity, transition}
   },
 }
 const options = [
-  { value: "0", label: "All" },
-  { value: "1", label: "Active" },
-  { value: "3", label: "Inactive" },
+  {value: "0", label: "All"},
+  {value: "1", label: "Active"},
+  {value: "3", label: "Inactive"},
 ]
 class TableHeader extends Component {
   constructor(props) {
     super(props)
     this.state = {
       showFilter: false,
-      showAdvancedOptions: true,
+      showAdvancedOptions: props.showAdvancedOptions ?? true,
       searchValue: "",
       statusValue: "0",
     }
@@ -104,7 +104,7 @@ class TableHeader extends Component {
     if (this.props.onStatus) {
       this.props.onStatus(statusValue.value)
     }
-    this.setState({ statusValue })
+    this.setState({statusValue})
   }
 
   handleReset() {
@@ -162,17 +162,17 @@ class TableHeader extends Component {
                 onChange={this.handleSearch.bind(this)}
                 maxLength={256}
                 minLength={1}
-              />              
+              />
               <div className="input-group-append">
                 <span className="input-group-text">
                   <i className="fas fa-search"></i>
-                </span> 
-              </div>             
+                </span>
+              </div>
             </div>
-         </div> 
-         
-            
-          <div className="col-xs-12 col-sm-12 col-md-4 col-lg-3 col-xl-3 padding-0">  
+          </div>
+
+
+          <div className="col-xs-12 col-sm-12 col-md-4 col-lg-3 col-xl-3 padding-0">
             {this.state.showAdvancedOptions && (
               <button
                 onClick={this.toggleFilter}
@@ -186,10 +186,10 @@ class TableHeader extends Component {
                   <img src={downIcon} alt="down" />
                 )}
               </button>
-            )}           
+            )}
           </div>
 
-          <div className="col-xs-12 col-sm-12 col-md-4 col-lg-6 col-xl-6 mb-2 order-first order-md-last">            
+          <div className="col-xs-12 col-sm-12 col-md-4 col-lg-6 col-xl-6 mb-2 mb-md-0 order-first order-md-last">
             <OverlayTrigger
               placement="top"
               overlay={<Tooltip>Click to create</Tooltip>}
@@ -199,7 +199,7 @@ class TableHeader extends Component {
                 onClick={this.handleClick.bind(this)}
                 className="btn btn-warning float-right button-new"
               >
-                <img src={createIcon} className="mr-1" alt="new"/>
+                <img src={createIcon} className="mr-1" alt="new" />
                 Create New
               </button>
             </OverlayTrigger>
@@ -234,12 +234,12 @@ class TableHeader extends Component {
                 />
               </Link>
             </OverlayTrigger>
-          </div>         
+          </div>
         </div>
         <div
           className={
             this.state.showFilter && !this.props.selected
-              ? "card card-default advanced-filter shadow-none mt-2"
+              ? "card card-default advanced-filter shadow-none my-2"
               : "d-none"
           }
         >
@@ -252,8 +252,8 @@ class TableHeader extends Component {
                 <div className="row">
                   <div className="col-xs-4">
                     <label className="text-label-filter ml-2 font-weight-bold">Status :</label>
-                    <Select                      
-                      components={{ IndicatorSeparator: () => null, DropdownIndicator }}
+                    <Select
+                      components={{IndicatorSeparator: () => null, DropdownIndicator}}
                       value={options[this.state.statusValue]}
                       onChange={this.handleStatus.bind(this)}
                       styles={customStyles}
@@ -269,7 +269,7 @@ class TableHeader extends Component {
                 onClick={this.handleReset.bind(this)}
                 className="btn-table-action-reset"
               >
-                <img src={resetIcon} className="img-fluid"  alt="reset" />
+                <img src={resetIcon} className="img-fluid" alt="reset" />
               </Link>
             </OverlayTrigger>
           </div>

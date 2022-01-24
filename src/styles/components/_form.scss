@@ -14,24 +14,22 @@ label:not(.form-check-label):not(.custom-file-label) {
 input[type="radio"] {
   width: 16px;
   height: 16px;
-  accent-color: #027F71;
+  accent-color: #027f71;
 }
 /* CheckBox Custom */
-input[type=checkbox] { 
-  accent-color: #027F71; 
-  width: 16px; 
-  height: 16px;  
+input[type="checkbox"] {
+  accent-color: #027f71;
+  width: 16px;
+  height: 16px;
 }
-input[id=cb-th] {
+input[id="cb-th"] {
   position: relative;
-  top: -0.16em;
-  margin-left: 29px;
+  top: -0.1em;
   vertical-align: middle;
 }
 .form-control {
   width: 100%;
   border-radius: 8px;
-  
 }
 .form-label-required {
   color: #ff0000;
@@ -43,7 +41,7 @@ input[id=cb-th] {
   position: relative;
   &.active {
     .form-control {
-      padding-right:12px;
+      padding-right: 12px;
     }
     .input-group-loader {
       display: block;
@@ -60,6 +58,9 @@ input[id=cb-th] {
 .form-control[readonly] {
   background-color: hsl(0, 0%, 95%);
   border-color: hsl(0, 0%, 90%);
+}
+.form-check-label {
+  margin-left: 5px;
 }
 .react-select {
   cursor: pointer;
@@ -90,5 +91,30 @@ input[id=cb-th] {
 }
 
 .custom-select {
-  background: #fff url("../../assets/icons/Icon_paging.svg") right 0.75rem center/8px 10px no-repeat;
+  background: #fff url("../../assets/icons/Icon_paging.svg") right 0.75rem
+    center/8px 10px no-repeat;
+}
+
+.form-uploader {
+  text-align: center;
+  > div {
+    margin-bottom: 5px;
+  }
+  p {
+    margin: 0;
+  }
+  .title {
+    font-size: 11px;
+    margin-bottom: 5px;
+  }
+  .note {
+    font-size: 10px;
+  }
+}
+
+.dzu-dropzone {
+  border: 1px dashed #d3d3d3 !important;
+  border-radius: 8px !important;
+  min-height: 123px !important;
+  overflow: auto !important;
 }

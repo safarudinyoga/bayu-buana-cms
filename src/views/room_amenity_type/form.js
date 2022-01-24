@@ -72,7 +72,7 @@ function RoomAmenityTypeForm(props) {
     room_amenity_type_code: {
       required: "Room Amenity Type Code is required.",
       min: "Room amenity type code must be at least 1",
-      max: "Room amenity type code must be no more than 999999",
+      max: "Room amenity type code must be no more than 32767",
       number: "Code format is invalid"
     },
   }
@@ -387,6 +387,7 @@ function RoomAmenityTypeForm(props) {
           accept=".png,.jpg,.jpeg"
           url={form.room_amenity_type_asset?.multimedia_description.url}
           style={{maxWidth: 300, marginTop: 12}}
+          notes={true}
         />
       </FormHorizontal>
 
@@ -406,9 +407,6 @@ function RoomAmenityTypeForm(props) {
           }}
           disabled={isView || loading}
           type="number"
-          minLength="1"
-          maxLength="32767"
-          hint="Room Amenity Type code maximum 32767 characters"
         />
 
       </FormHorizontal>
