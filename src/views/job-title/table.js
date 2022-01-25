@@ -51,7 +51,7 @@ export default function JobTitleTable() {
         visible: false,
       },
     ],
-    emptyTable: "No Job Title found",
+    emptyTable: "No job title found",
     recordName: ["job_title_code", "job_title_name"],
   })
 
