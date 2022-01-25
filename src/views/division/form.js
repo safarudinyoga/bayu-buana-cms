@@ -11,8 +11,8 @@ import {setAlert, setUIParams} from "redux/ui-store"
 import FormInputSelectAjax from "../../components/form/input-select-ajax"
 import env from "../../config/environment"
 
-const endpoint = "/master/division"
-const backUrl = "/master/division"
+const endpoint = "/master/divisions"
+const backUrl = "/master/divisions"
 
 function DivisionForm(props) {
   let dispatch = useDispatch()
@@ -25,9 +25,10 @@ function DivisionForm(props) {
   const [supplierTypeData, setSupplierTypeData] = useState([])
   const [id, setId] = useState(null)
   const [form, setForm] = useState({
+    depth:0,
     division_code: "",
     division_name: "",
-    parent_id: "",
+    parent_division_id: "",
     manager_id: "",
   })
   const translationFields = [
@@ -53,7 +54,7 @@ function DivisionForm(props) {
       checkName: true,
       noSpace: true,
     },
-    parent_id: {},
+    parent_division_id: {},
     manager_id: {},
   }
 
@@ -68,17 +69,20 @@ function DivisionForm(props) {
       minlength: "Division name must be at least 1 characters",
       maxlength: "Division name cannot be longer than 256 characters",
     },
-    parent_id: {},
+    parent_division_id: {},
   }
 
   useEffect(async () => {
     let api = new Api()    
 
     let docTitle = "Edit Division"
+    let bcTitle = docTitle
     if (!formId) {
-      docTitle = "Create Division"
+      docTitle = "Create New Division"
+      bcTitle = "Create Division"
     } else if (isView) {
-      docTitle = "Division Details"
+      docTitle = "Division"
+      bcTitle = "Division Details"
     }
 
     dispatch(
@@ -86,14 +90,14 @@ function DivisionForm(props) {
         title: docTitle,
         breadcrumbs: [
           {
-            text: "Employment Management",
+            text: "Employee Management",
           },
           {
             link: backUrl,
             text: "Division",
           },
           {
-            text: docTitle,
+            text: bcTitle,
           },
         ],
       }),
@@ -116,7 +120,7 @@ function DivisionForm(props) {
               $.ajax({
                 type: "GET",
                 async: false,
-                url: `${env.API_URL}/master/division?filters=["division_code","=","${element.value}"]`,
+                url: `${env.API_URL}/master/divisions?filters=["division_code","=","${element.value}"]`,
                 success: function (res) {
                   if (res.items.length !== 0) {
                     if (currentCode === element.value) {
@@ -132,7 +136,7 @@ function DivisionForm(props) {
 
               return req
             },
-            "Code already exists",
+            "Division Code already exists",
           )
 
           $.validator.addMethod(
@@ -142,7 +146,7 @@ function DivisionForm(props) {
               $.ajax({
                 type: "GET",
                 async: false,
-                url: `${env.API_URL}/master/division?filters=["division_name","=","${element.value}"]`,
+                url: `${env.API_URL}/master/divisions?filters=["division_name","=","${element.value}"]`,
                 success: function (res) {
                   if (res.items.length !== 0) {
                     if (currentName === element.value) {
@@ -179,7 +183,7 @@ function DivisionForm(props) {
           $.ajax({
             type: "GET",
             async: false,
-            url: `${env.API_URL}/master/division?filters=["division_code","=","${element.value}"]`,
+            url: `${env.API_URL}/master/divisions?filters=["division_code","=","${element.value}"]`,
             success: function (res) {
               if (res.items.length !== 0) {
                 req = false
@@ -192,7 +196,7 @@ function DivisionForm(props) {
           console.log(req)
           return req
         },
-        "Code already exists",
+        "Division Code already exists",
       )
 
       $.validator.addMethod(
@@ -202,7 +206,7 @@ function DivisionForm(props) {
           $.ajax({
             type: "GET",
             async: false,
-            url: `${env.API_URL}/master/division?filters=["division_name","=","${element.value}"]`,
+            url: `${env.API_URL}/master/divisions?filters=["division_name","=","${element.value}"]`,
             success: function (res) {
               if (res.items.length !== 0) {
                 req = false
@@ -231,8 +235,13 @@ function DivisionForm(props) {
     setLoading(true)
     let api = new Api()
     try {
-      if (!form.parent_id) {
-        form.parent_id = null
+      if (!form.parent_division_id) {
+        form.parent_division_id = null
+      } else {
+        form.depth = parseInt(form.depth) + 1
+      }
+      if (!form.manager_id) {
+        form.manager_id = null
       }
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
@@ -241,19 +250,19 @@ function DivisionForm(props) {
         let path = endpoint + "/" + res.data.id + "/translations"
         await api.putOrPost(path, tl.id, tl)
       }
-    } catch (e) {
-      dispatch(
-        setAlert({
-          message: `Failed to ${formId ? "update" : "save"} this record.`,
-        }),
-      )
-    } finally {
+
       setLoading(false)
       props.history.push(backUrl)
       dispatch(
         setAlert({
-          message: `Record ${form.division_code} - ${form.division_name
-            } has been successfully ${formId ? "updated" : "saved"}.`,
+          message: `Record ${form.division_name} has been successfully saved.`,
+        }),
+      )
+    } catch (e) {
+      setLoading(false)
+      dispatch(
+        setAlert({
+          message: `Failed to save this record.`,
         }),
       )
     }
@@ -265,6 +274,8 @@ function DivisionForm(props) {
       isView={isView || loading}
       onSave={onSave}
       back={backUrl}
+      txtBack={formId ? "BACK" : "CANCEL"}
+      txtSave={formId ? "UPDATE" : "SAVE"}
       translations={translations}
       translationFields={translationFields}
       alertMessage={"Incomplete data"}
@@ -274,7 +285,7 @@ function DivisionForm(props) {
     >
       <FormHorizontal>
         <FormInputControl
-          label="Name"
+          label={isView ? "Division Name" : "Name"}
           required={true}
           value={form.division_name}
           name="division_name"
@@ -289,32 +300,34 @@ function DivisionForm(props) {
 
         {(formId === undefined || !loading) && <FormInputSelectAjax
           label="Parent Division"
-          value={form.parent_id}
-          name="parent_id"
+          value={form.parent_division_id}
+          name="parent_division_id"
           endpoint="/master/parent-division"
           column="parent_name"
           filter={`["status", "=", 1]`}
           onChange={(e) =>
-            setForm({...form, parent_id: e.target.value || null})
+            setForm({...form, parent_division_id: e.target.value || null})
           }
           data={supplierTypeData}
           disabled={isView || loading}
           type="select"
+          placeholder="Select Parent Division"
         />}
 
         {(formId === undefined || !loading) && <FormInputSelectAjax
           label="Manager"
-          value={form.parent_id}
-          name="parent_id"
+          value={form.manager_id}
+          name="manager_id"
           endpoint="/master/manager"
           column="manager_name"
           filter={`["status", "=", 1]`}
           onChange={(e) =>
-            setForm({...form, parent_id: e.target.value || null})
+            setForm({...form, manager_id: e.target.value || null})
           }
           data={supplierTypeData}
           disabled={isView || loading}
           type="select"
+          placeholder="Select Manager"
         />}
       </FormHorizontal>
 

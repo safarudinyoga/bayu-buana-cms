@@ -12,7 +12,7 @@ export default function DivisionTable() {
         title: "Division",
         breadcrumbs: [
           {
-            text: "Employment Management",
+            text: "Employee Management",
           },
           {
             text: "Division",
@@ -25,11 +25,11 @@ export default function DivisionTable() {
   let [params, setParams] = useState({
     title: "Division",
     titleModal: "Division",
-    baseRoute: "/master/division/form",
-    endpoint: "/master/division",
-    deleteEndpoint: "/master/batch-actions/delete/division",
-    activationEndpoint: "/master/batch-actions/activate/division",
-    deactivationEndpoint: "/master/batch-actions/deactivate/division",
+    baseRoute: "/master/divisions/form",
+    endpoint: "/master/divisions",
+    deleteEndpoint: "/master/batch-actions/delete/divisions",
+    activationEndpoint: "/master/batch-actions/activate/divisions",
+    deactivationEndpoint: "/master/batch-actions/deactivate/divisions",
     columns: [
       {
         title: "Code",
@@ -41,11 +41,11 @@ export default function DivisionTable() {
       },
       {
         title: "Parent Division",
-        data: "parent.parent_name",
+        data: "parent_division.parent_division_name",
       },
       {
         title: "Manager",
-        data: "manager.manager_manager",
+        data: "manager.manager_name",
       },
       {
         searchable: false,
@@ -59,7 +59,7 @@ export default function DivisionTable() {
         visible: false,
       },
     ],
-    emptyTable: "No Division found",
+    emptyTable: "No division found",
     recordName: ["division_code", "division_name"],
   })
 

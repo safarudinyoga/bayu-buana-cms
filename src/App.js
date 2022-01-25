@@ -429,10 +429,10 @@ const DashboardRoutes = () => {
           <EmployeeForm />
         </Route>
         {/* Division */}
-        <Route exact path="/master/division">
+        <Route exact path="/master/divisions">
           <DivisionTable />
         </Route>
-        <Route path="/master/division/form/:id?">
+        <Route path="/master/divisions/form/:id?">
           <DivisionForm />
         </Route>
         {/* Job Title */}

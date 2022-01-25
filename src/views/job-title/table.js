@@ -12,7 +12,7 @@ export default function JobTitleTable() {
         title: "Job Title",
         breadcrumbs: [
           {
-            text: "Employment Management",
+            text: "Employee Management",
           },
           {
             text: "Job Title",
@@ -26,10 +26,10 @@ export default function JobTitleTable() {
     title: "Job Title",
     titleModal: "Job Title",
     baseRoute: "/master/job-title/form",
-    endpoint: "/master/job-title",
-    deleteEndpoint: "/master/batch-actions/delete/job-title",
-    activationEndpoint: "/master/batch-actions/activate/job-title",
-    deactivationEndpoint: "/master/batch-actions/deactivate/job-title",
+    endpoint: "/master/job-titles",
+    deleteEndpoint: "/master/batch-actions/delete/job-titles",
+    activationEndpoint: "/master/batch-actions/activate/job-titles",
+    deactivationEndpoint: "/master/batch-actions/deactivate/job-titles",
     columns: [
       {
         title: "Job Title Code",
@@ -51,7 +51,7 @@ export default function JobTitleTable() {
         visible: false,
       },
     ],
-    emptyTable: "No Job Title found",
+    emptyTable: "No job title found",
     recordName: ["job_title_code", "job_title_name"],
   })
 
