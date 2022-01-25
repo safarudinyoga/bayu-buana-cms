@@ -89,7 +89,7 @@ class BBDataTable extends Component {
       title: "Actions",
       render: function (value, display, row) {
         $(function () {
-          $('[data-toggle="tooltip"]').tooltip()
+          $('[data-toggle="tooltip"]').tooltip({placement: 'top'})
         })
         function tooltipCust(x) {
           if (x.matches) {
@@ -440,7 +440,7 @@ class BBDataTable extends Component {
         },
         responsive: true,
         autoWidth: false,
-        scrollX: true,
+        // scrollX: true,
         scrollCollapse: false,
         columnDefs: [
           // {
