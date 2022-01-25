@@ -131,63 +131,51 @@ const HotelForm = (props) => {
           <Form onSubmit={handleSubmit}>
             <Card>
               <Card.Body>
-                <div style={{ padding: "0 10px 10px" }}>
-                  <Row>
-                    <Col sm={12}>
-                      <Form.Group as={Row} className="form-group">
-                        <Form.Label column sm={3}>
-                          Preset Name
-                          <span className="form-label-required">*</span>
-                        </Form.Label>
-                        <Col sm={9}>
-                          <FastField name="hotelCode">
-                            {({ field, form }) => (
-                              <>
-                                <Form.Control
-                                  type="text"
-                                  isInvalid={
-                                    form.touched.hotelCode &&
-                                    form.errors.hotelCode
-                                  }
-                                  minLength={1}
-                                  maxLength={128}
-                                  style={{ width: 150 }}
-                                  {...field}
-                                />
-                                {form.touched.hotelCode &&
-                                  form.errors.hotelCode && (
-                                    <Form.Control.Feedback type="invalid">
-                                      {form.touched.hotelCode
-                                        ? form.errors.hotelCode
-                                        : null}
-                                    </Form.Control.Feedback>
-                                  )}
-                              </>
-                            )}
-                          </FastField>
-                        </Col>
-                      </Form.Group>
-                      <Form.Group as={Row} className="form-group">
-                        <Form.Label column sm={3}>
-                          Description
-                        </Form.Label>
-                        <Col sm={9}>
-                          <FastField name="address">
-                            {({ field }) => (
-                              <Form.Control
-                                {...field}
-                                as="textarea"
-                                rows={3}
-                                minLength={1}
-                                maxLength={512}
-                                style={{ width: 416 }}
-                              />
-                            )}
-                          </FastField>
-                        </Col>
-                      </Form.Group>                      
+                <div style={{ padding: "0 2px 2px" }}>
+                <Form.Group as={Row} className="mb-3">
+                    <Form.Label column md={2}>
+                      Preset Name
+                      <span className="form-label-required">*</span>
+                    </Form.Label>
+                    <Col sm={10}>
+                      <FastField name="hotelCode">
+                        {({ field, form }) => (
+                          <>
+                            <Form.Control
+                              type="text"
+                              isInvalid={
+                                form.touched.hotelCode && form.errors.hotelCode
+                              }
+                              minLength={1}
+                              maxLength={128}
+                              style={{ maxWidth: 300 }}
+                              {...field}
+                            />
+                            {form.touched.hotelCode &&
+                              form.errors.hotelCode && (
+                                <Form.Control.Feedback type="invalid">
+                                  {form.touched.hotelCode
+                                    ? form.errors.hotelCode
+                                    : null}
+                                </Form.Control.Feedback>
+                              )}
+                          </>
+                        )}
+                      </FastField>
                     </Col>
-                  </Row>
+                  </Form.Group>
+
+                  <Form.Group as={Row} className="mb-3">
+                    <Form.Label column md={2}>
+                      Description
+                    </Form.Label>
+                    <Col sm={10}>
+                      <Form.Control
+                        as="textarea"
+                        style={{ height: "88px", maxWidth: "416px" }}
+                      />
+                    </Col>
+                  </Form.Group>
                 </div>
                 <h3 className="card-heading"></h3>
                 <div style={{ padding: "0 15px 15px 15px" }}>
@@ -210,7 +198,7 @@ const HotelForm = (props) => {
             </div>
           </Form>
         )}
-      </Formik>
+      </Formik> 
     </>
   )
 }
