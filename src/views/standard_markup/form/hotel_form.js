@@ -1,25 +1,14 @@
 import React, { useEffect, useState } from "react"
 import { withRouter, useHistory } from "react-router"
-import {
-  Card,
-  Form,
-  Row,
-  Col,
-  Button,
-  Image,
-  Tab,
-  Nav,
-  Modal,
-} from "react-bootstrap"
+import { Card, Form, Row, Col, Button, Modal } from "react-bootstrap"
+import createIcon from "assets/icons/create.svg"
+import { ReactSVG } from "react-svg"
 import { Formik, FastField, Field } from "formik"
 import * as Yup from "yup"
-import { Editor } from "react-draft-wysiwyg"
-import { ReactSVG } from "react-svg"
-import Dropzone from "react-dropzone-uploader"
 import axios from "axios"
 
 import { useDispatch } from "react-redux"
-import { setAlert, setUIParams } from "redux/ui-store"
+import { setUIParams } from "redux/ui-store"
 import Api from "config/api"
 import env from "config/environment"
 import Select from "components/form/select-async"
@@ -29,6 +18,184 @@ import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css"
 import "react-dropzone-uploader/dist/styles.css"
 
 const backUrl = "/master/standard-markup"
+
+function HotelModal(props) {
+  return (
+    <Modal
+      {...props}
+      size="md"
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+    >
+      <Modal.Body>
+        <div style={{ padding: "0 2px 2px" }}>
+          <div className="mb-5">
+            <div className="modal-button-close" onClick={props.onHide}>
+              <ReactSVG src="/img/icons/close.svg" />
+            </div>
+            <p className="modals-header mt-3">ADD HOTEL OVERRIDE MARKUP</p>
+          </div>
+
+          <Form>
+            <Form.Group as={Row} className="mb-3">
+              <Form.Label column sm={4}>
+                Destination
+                <span className="form-label-required">*</span>
+              </Form.Label>
+              <Col sm={7}>
+                <FastField name="hotelBrand">
+                  {({ field, form }) => (
+                    <div style={{ maxWidth: 600 }}>
+                      <Select
+                        {...field}
+                        url={`master/destinations`}
+                        fieldName="destination_name"
+                        placeholder="Please choose"
+                      />
+                    </div>
+                  )}
+                </FastField>
+              </Col>
+            </Form.Group>
+
+            <Form.Group as={Row} className="form-group">
+              <Form.Label column sm={4}>
+                Airline Service Type
+              </Form.Label>
+              <Col sm={7}>
+                <FastField name="hotelBrand">
+                  {({ field, form }) => (
+                    <div style={{ maxWidth: 600 }}>
+                      <Select
+                        {...field}
+                        url={`master/airlines`}
+                        fieldName="airline_name"
+                        placeholder="Please choose"
+                      />
+                    </div>
+                  )}
+                </FastField>
+              </Col>
+            </Form.Group>
+
+            <Form.Group as={Row} className="form-group">
+              <Form.Label column sm={4}>
+                Specified Airline
+              </Form.Label>
+              <Col sm={7}>
+                <FastField name="hotelBrand">
+                  {({ field, form }) => (
+                    <div style={{ maxWidth: 600 }}>
+                      <Select {...field} placeholder="Please choose" />
+                    </div>
+                  )}
+                </FastField>
+              </Col>
+            </Form.Group>
+            <Form.Group as={Row} className="form-group">
+              <Form.Label column sm={4}>
+                Specified Source
+              </Form.Label>
+              <Col sm={7}>
+                <FastField name="hotelBrand">
+                  {({ field, form }) => (
+                    <div style={{ maxWidth: 600 }}>
+                      <Select {...field} placeholder="Please choose" />
+                    </div>
+                  )}
+                </FastField>
+              </Col>
+            </Form.Group>
+            <Form.Group as={Row} className="mb-3">
+              <Form.Label column md={4}>
+                Mark-up
+                <span className="form-label-required">*</span>
+              </Form.Label>
+              <Col md={8}>
+                <Row className="mt-md-2">
+                  <Col lg={12}>
+                    <Row>
+                      <Col sm={12} md={12} lg={12}>
+                        <Form.Group>
+                          <Form.Check type="radio" label="Fixed Amount" />
+                        </Form.Group>
+                      </Col>
+                      <Col sm={12} md={5}>
+                        <Form.Group as={Row} className="mb-xs-3">
+                          <Form.Label
+                            column
+                            xs={2}
+                            md={3}
+                            lg={3}                            
+                          >
+                            IDR
+                          </Form.Label>
+                          <Col xs={10} md={9} lg={9}>
+                            <Form.Control style={{ maxWidth: "220px" }} />
+                          </Col>
+                        </Form.Group>
+                      </Col>
+                      <Col sm={12} md={4}>
+                        <Form.Group className="mb-3 ml-5 ml-md-0">
+                          <Col>
+                            <Form.Check type="radio" label="/RoomNight" />
+                            <Form.Check type="radio" label="/Room" />
+                            <Form.Check type="radio" label="/Transaction" />
+                          </Col>
+                        </Form.Group>
+                      </Col>
+                    </Row>
+                  </Col>
+                  <Col lg={12}>
+                    <Row>
+                      <Col sm={12} md={12} lg={12}>
+                        <Form.Group>
+                          <Form.Check type="radio" label="Percentage" />
+                        </Form.Group>
+                      </Col>
+                      <Col xs={3} md={3} lg={3} className="ml-4 ml-md-0">
+                        <Form.Group as={Row} className="mb-3">
+                          <Col>
+                            <Form.Control style={{ maxWidth: "80px" }} />
+                          </Col>
+                          <span className="text-lg mt-1">%</span>
+                        </Form.Group>
+                      </Col>
+                      <Col xs={7} md={9} lg={9}>
+                        <Form.Group className="">
+                          <Col>
+                            <Form.Check
+                              type="checkbox"
+                              label="Include Taxed"
+                              className="mt-2"
+                            />
+                          </Col>
+                        </Form.Group>
+                      </Col>
+                    </Row>
+                  </Col>
+                </Row>
+              </Col>
+            </Form.Group>
+
+            <div style={{ marginBottom: 30, marginTop: 30, display: "flex" }}>
+              <Button
+                variant="primary"
+                type="submit"
+                style={{ marginRight: 15 }}
+              >
+                SAVE
+              </Button>
+              <Button variant="secondary" onClick={props.onHide}>
+                CANCEL
+              </Button>
+            </div>
+          </Form>
+        </div>
+      </Modal.Body>
+    </Modal>
+  )
+}
 
 const HotelForm = (props) => {
   const history = useHistory()
@@ -65,117 +232,15 @@ const HotelForm = (props) => {
   })
   // Initialize form
   const initialForm = {
-    // General Information
-    hotelCode: "",
-    hotelName: "",
-    hotelBrand: null,
-    starRating: null,
-    numberOfRooms: "",
-
-    // Contacts
-    email: "",
-    emailForBookingAcknowledgment: "",
-    phone: "",
-    fax: "",
-    website: "",
-
-    // Address
-    address: "",
-    country: null,
-    province: null,
-    city: null,
-    zipCode: "",
-    destination: "",
-    zone: "",
-    geoLocationLatitude: "",
-    geoLocationLongitude: "",
-    mapImage: "",
-
-    // Other Information
-    propertyType: "",
-    locationCategory: "",
-    constructionYear: "",
-    lastRenovation: "",
-    standardCheckinTime: "",
-    standardCheckoutTime: "",
-    descriptions: "",
-    internalRemark: "",
-    termConditions: "",
-
     // Translations
   }
 
-  const initialFormModalAddMap = {
-    caption: "",
-    image: "",
-  }
+  const initialFormModalAddMap = {}
 
   // Schema for yup
-  const validationSchema = Yup.object().shape({
-    // General Information
-    hotelCode: Yup.string()
-      .required("Hotel Code is required.")
-      .test(
-        "Unique Code",
-        "Hotel Code already exists", // <- key, message
-        (value) => {
-          return new Promise((resolve, reject) => {
-            axios
-              .get(
-                `${env.API_URL}/master/hotels?filters=["hotel_code","=","${value}"]`,
-              )
-              .then((res) => {
-                resolve(res.data.items.length == 0)
-              })
-              .catch((error) => {
-                resolve(false)
-              })
-          })
-        },
-      ),
-    hotelName: Yup.string().required("Hotel Name is required."),
-    hotelBrand: Yup.object(),
-    starRating: Yup.object().required("Star Rating is required."),
-    numberOfRooms: Yup.number(),
+  const validationSchema = Yup.object().shape({})
 
-    // Contacts
-    email: Yup.string()
-      .email("Email is not valid.")
-      .required("Email is required."),
-    emailForBookingAcknowledgment: Yup.string()
-      .email("Email for Booking Acknowledgment is not valid.")
-      .required("Email for Booking Acknowledgment is required."),
-    phone: Yup.string().required("Phone is required."),
-    fax: Yup.string(),
-    website: Yup.string(),
-
-    // Address
-    address: Yup.string(),
-    country: Yup.object().required("Country is required."),
-    province: Yup.object(),
-    city: Yup.object(),
-    zipCode: Yup.string(),
-    destination: Yup.object(),
-    zone: Yup.object(),
-    geoLocationLatitude: Yup.string(),
-    mapImage: Yup.string(),
-
-    // Other Information
-    propertyType: Yup.object().required("Property Type is required."),
-    locationCategory: Yup.object().required("Location Category is required."),
-    constructionYear: Yup.string(),
-    lastRenovation: Yup.string(),
-    standardCheckinTime: Yup.string(),
-    standardCheckoutTime: Yup.string(),
-    descriptions: Yup.string(),
-    internalRemark: Yup.string(),
-    termConditions: Yup.string(),
-  })
-
-  const validationSchemaModalAddMap = Yup.object().shape({
-    caption: Yup.string().required("Caption is required."),
-    image: Yup.string().required("Hotel Name is required."),
-  })
+  const validationSchemaModalAddMap = Yup.object().shape({})
 
   return (
     <>
@@ -225,271 +290,216 @@ const HotelForm = (props) => {
           <Form onSubmit={handleSubmit}>
             <Card>
               <Card.Body>
-                <div style={{ padding: "0 10px 10px" }}>
-                  <Row>
-                    <Col sm={12}>
-                      <Form.Group as={Row} className="form-group">
-                        <Form.Label column sm={3}>
-                          Preset Name
-                          <span className="form-label-required">*</span>
-                        </Form.Label>
-                        <Col sm={9}>
-                          <FastField name="hotelCode">
-                            {({ field, form }) => (
-                              <>
-                                <Form.Control
-                                  type="text"
-                                  isInvalid={
-                                    form.touched.hotelCode &&
-                                    form.errors.hotelCode
-                                  }
-                                  minLength={1}
-                                  maxLength={128}
-                                  style={{ width: 150 }}
-                                  {...field}
-                                />
-                                {form.touched.hotelCode &&
-                                  form.errors.hotelCode && (
-                                    <Form.Control.Feedback type="invalid">
-                                      {form.touched.hotelCode
-                                        ? form.errors.hotelCode
-                                        : null}
-                                    </Form.Control.Feedback>
-                                  )}
-                              </>
-                            )}
-                          </FastField>
-                        </Col>
-                      </Form.Group>
-                      <Form.Group as={Row} className="form-group">
-                        <Form.Label column sm={3}>
-                          Description
-                        </Form.Label>
-                        <Col sm={9}>
-                          <FastField name="address">
-                            {({ field }) => (
-                              <Form.Control
-                                {...field}
-                                as="textarea"
-                                rows={3}
-                                minLength={1}
-                                maxLength={512}
-                                style={{ width: 416 }}
-                              />
-                            )}
-                          </FastField>
-                        </Col>
-                      </Form.Group>
-                      <Form.Group as={Row} className="form-group">
-                        <Form.Label column sm={3}>
-                          Domestic Hotel Mark-up
-                          <span className="form-label-required">*</span>
-                        </Form.Label>
-                        <Col sm={9}>
-                          <Row>
-                            <Col sm={6}>
-                              <Form.Check type="radio" label="Fixed Amount" className="mb-2"/>
-                              <Row>
-                                <Col sm={5}>
-                                  <Form.Group as={Row} className="form-group">
-                                    <Form.Label column sm={3}>
-                                      IDR
-                                    </Form.Label>
-                                    <Col sm={9}>
-                                      <FastField name="hotelCode">
-                                        {({ field, form }) => (
-                                          <>
-                                            <Form.Control
-                                              type="text"
-                                              isInvalid={
-                                                form.touched.hotelCode &&
-                                                form.errors.hotelCode
-                                              }
-                                              minLength={1}
-                                              maxLength={128}
-                                              style={{ width: 150 }}
-                                              {...field}
-                                            />
-                                            {form.touched.hotelCode &&
-                                              form.errors.hotelCode && (
-                                                <Form.Control.Feedback type="invalid">
-                                                  {form.touched.hotelCode
-                                                    ? form.errors.hotelCode
-                                                    : null}
-                                                </Form.Control.Feedback>
-                                              )}
-                                          </>
-                                        )}
-                                      </FastField>
-                                    </Col>
-                                  </Form.Group>
-                                </Col>
-                                <Col sm={7}>
-                                  <Form.Check
-                                    type="radio"
-                                    label="/Room Night"
-                                  />
-                                  <Form.Check type="radio" label="/Room" />
-                                  <Form.Check
-                                    type="radio"
-                                    label="/Transaction"
-                                  />
-                                </Col>
-                              </Row>
-                            </Col>
-                            <Col sm={6}>
-                              <Form.Check type="radio" label="Percentage" className="mb-2"/>
-                              <Row>
-                                <Col sm={5}>
-                                <Form.Group as={Row} className="form-group">                                    
-                                    <Col sm={3}>
-                                      <FastField name="hotelCode">
-                                        {({ field, form }) => (
-                                          <>
-                                            <Form.Control
-                                              type="text"
-                                              isInvalid={
-                                                form.touched.hotelCode &&
-                                                form.errors.hotelCode
-                                              }
-                                              minLength={1}
-                                              maxLength={128}
-                                              style={{ width: 40 }}
-                                              {...field}
-                                            />
-                                            {form.touched.hotelCode &&
-                                              form.errors.hotelCode && (
-                                                <Form.Control.Feedback type="invalid">
-                                                  {form.touched.hotelCode
-                                                    ? form.errors.hotelCode
-                                                    : null}
-                                                </Form.Control.Feedback>
-                                              )}
-                                          </>
-                                        )}
-                                      </FastField>
-                                    </Col>
-                                    <Form.Label column sm={9}>
-                                      %
-                                    </Form.Label>
-                                  </Form.Group>
-                                </Col>
-                                <Col sm={7}>
-                                  <Form.Check label="Include Taxed" />
-                                </Col>
-                              </Row>
-                            </Col>
-                          </Row>
-                        </Col>
-                      </Form.Group>
-                      <Form.Group as={Row} className="form-group">
-                        <Form.Label column sm={3}>
-                          International Hotel Mark-up
-                          <span className="form-label-required">*</span>
-                        </Form.Label>
-                        <Col sm={9}>
-                          <Row>
-                            <Col sm={6}>
-                              <Form.Check type="radio" label="Fixed Amount" className="mb-2" />
-                              <Row>
-                                <Col sm={5}>
-                                <Form.Group as={Row} className="form-group">
-                                    <Form.Label column sm={3}>
-                                      IDR
-                                    </Form.Label>
-                                    <Col sm={9}>
-                                      <FastField name="hotelCode">
-                                        {({ field, form }) => (
-                                          <>
-                                            <Form.Control
-                                              type="text"
-                                              isInvalid={
-                                                form.touched.hotelCode &&
-                                                form.errors.hotelCode
-                                              }
-                                              minLength={1}
-                                              maxLength={128}
-                                              style={{ width: 150 }}
-                                              {...field}
-                                            />
-                                            {form.touched.hotelCode &&
-                                              form.errors.hotelCode && (
-                                                <Form.Control.Feedback type="invalid">
-                                                  {form.touched.hotelCode
-                                                    ? form.errors.hotelCode
-                                                    : null}
-                                                </Form.Control.Feedback>
-                                              )}
-                                          </>
-                                        )}
-                                      </FastField>
-                                    </Col>
-                                  </Form.Group>
-                                </Col>
-                                <Col sm={7}>
-                                  <Form.Check
-                                    type="radio"
-                                    label="/Room Night"
-                                  />
-                                  <Form.Check type="radio" label="/Room" />
-                                  <Form.Check
-                                    type="radio"
-                                    label="/Transaction"
-                                  />
-                                </Col>
-                              </Row>
-                            </Col>
-                            <Col sm={6}>
-                              <Form.Check type="radio" label="Percentage" className="mb-2" />
-                              <Row>
-                                <Col sm={5}>
-                                <Form.Group as={Row} className="form-group">                                    
-                                    <Col sm={3}>
-                                      <FastField name="hotelCode">
-                                        {({ field, form }) => (
-                                          <>
-                                            <Form.Control
-                                              type="text"
-                                              isInvalid={
-                                                form.touched.hotelCode &&
-                                                form.errors.hotelCode
-                                              }
-                                              minLength={1}
-                                              maxLength={128}
-                                              style={{ width: 40 }}
-                                              {...field}
-                                            />
-                                            {form.touched.hotelCode &&
-                                              form.errors.hotelCode && (
-                                                <Form.Control.Feedback type="invalid">
-                                                  {form.touched.hotelCode
-                                                    ? form.errors.hotelCode
-                                                    : null}
-                                                </Form.Control.Feedback>
-                                              )}
-                                          </>
-                                        )}
-                                      </FastField>
-                                    </Col>
-                                    <Form.Label column sm={9}>
-                                      %
-                                    </Form.Label>
-                                  </Form.Group>
-                                </Col>
-                                <Col sm={7}>
-                                  <Form.Check label="Include Taxed" />
-                                </Col>
-                              </Row>
-                            </Col>
-                          </Row>
-                        </Col>
-                      </Form.Group>
+                <div style={{ padding: "0 2px 2px" }}>
+                  <Form.Group as={Row} className="mb-3">
+                    <Form.Label column md={2}>
+                      Preset Name
+                      <span className="form-label-required">*</span>
+                    </Form.Label>
+                    <Col sm={10}>
+                      <FastField name="res">
+                        {({ field, form }) => (
+                          <>
+                            <Form.Control
+                              type="text"
+                              isInvalid={
+                                form.touched.hotelCode && form.errors.hotelCode
+                              }
+                              minLength={1}
+                              maxLength={128}
+                              style={{ maxWidth: 300 }}
+                              {...field}
+                            />
+                            {form.touched.hotelCode &&
+                              form.errors.hotelCode && (
+                                <Form.Control.Feedback type="invalid">
+                                  {form.touched.hotelCode
+                                    ? form.errors.hotelCode
+                                    : null}
+                                </Form.Control.Feedback>
+                              )}
+                          </>
+                        )}
+                      </FastField>
                     </Col>
-                  </Row>
+                  </Form.Group>
+
+                  <Form.Group as={Row} className="mb-3">
+                    <Form.Label column md={2}>
+                      Description
+                    </Form.Label>
+                    <Col sm={10}>
+                      <Form.Control
+                        as="textarea"
+                        style={{ height: "88px", maxWidth: "416px" }}
+                      />
+                    </Col>
+                  </Form.Group>
+
+                  <Form.Group as={Row} className="mb-3">
+                    <Form.Label column md={2}>
+                      Domestic Hotel Mark-up
+                      <span className="form-label-required">*</span>
+                    </Form.Label>
+                    <Col md={10}>
+                      <Row className="mt-md-2">
+                        <Col lg={6}>
+                          <Row>
+                            <Col sm={12} md={3} lg={12}>
+                              <Form.Group>
+                                <Form.Check type="radio" label="Fixed Amount" />
+                              </Form.Group>
+                            </Col>
+                            <Col sm={12} md={5} className="ml-lg-4">
+                              <Form.Group as={Row} className="mb-xs-3">
+                                <Form.Label
+                                  column
+                                  xs={2}
+                                  md={3}
+                                  lg={5}
+                                  className="ml-xs-4"
+                                >
+                                  IDR
+                                </Form.Label>
+                                <Col xs={10} md={9} lg={7}>
+                                  <Form.Control style={{ maxWidth: "220px" }} />
+                                </Col>
+                              </Form.Group>
+                            </Col>
+                            <Col sm={12} md={4}>
+                              <Form.Group className="mb-3 ml-5 ml-md-0">
+                                <Col>
+                                  <Form.Check type="radio" label="/RoomNight" />
+                                  <Form.Check type="radio" label="/Room" />
+                                  <Form.Check
+                                    type="radio"
+                                    label="/Transaction"
+                                  />
+                                </Col>
+                              </Form.Group>
+                            </Col>
+                          </Row>
+                        </Col>
+                        <Col lg={6}>
+                          <Row>
+                            <Col sm={12} md={3} lg={12}>
+                              <Form.Group>
+                                <Form.Check type="radio" label="Percentage" />
+                              </Form.Group>
+                            </Col>
+                            <Col xs={3} md={2} lg={3} className="ml-4 ml-md-0">
+                              <Form.Group as={Row} className="mb-3">
+                                <Col>
+                                  <Form.Control style={{ maxWidth: "80px" }} />
+                                </Col>
+                                <span className="text-lg mt-1">%</span>
+                              </Form.Group>
+                            </Col>
+                            <Col xs={7} md={6} lg={9}>
+                              <Form.Group className="">
+                                <Col>
+                                  <Form.Check
+                                    type="checkbox"
+                                    label="Include Taxed"
+                                    className="mt-2"
+                                  />
+                                </Col>
+                              </Form.Group>
+                            </Col>
+                          </Row>
+                        </Col>
+                      </Row>
+                    </Col>
+                  </Form.Group>
+                  <Form.Group as={Row} className="mb-3">
+                    <Form.Label column md={2}>
+                      International Hotel Mark-up
+                      <span className="form-label-required">*</span>
+                    </Form.Label>
+                    <Col md={10}>
+                      <Row className="mt-md-2">
+                        <Col lg={6}>
+                          <Row>
+                            <Col sm={12} md={3} lg={12}>
+                              <Form.Group>
+                                <Form.Check type="radio" label="Fixed Amount" />
+                              </Form.Group>
+                            </Col>
+                            <Col sm={12} md={5} className="ml-lg-4">
+                              <Form.Group as={Row} className="mb-xs-3">
+                                <Form.Label
+                                  column
+                                  xs={2}
+                                  md={3}
+                                  lg={5}
+                                  className="ml-xs-4"
+                                >
+                                  IDR
+                                </Form.Label>
+                                <Col xs={10} md={9} lg={7}>
+                                  <Form.Control style={{ maxWidth: "220px" }} />
+                                </Col>
+                              </Form.Group>
+                            </Col>
+                            <Col sm={12} md={4}>
+                              <Form.Group className="mb-3 ml-5 ml-md-0">
+                                <Col>
+                                  <Form.Check type="radio" label="/RoomNight" />
+                                  <Form.Check type="radio" label="/Room" />
+                                  <Form.Check
+                                    type="radio"
+                                    label="/Transaction"
+                                  />
+                                </Col>
+                              </Form.Group>
+                            </Col>
+                          </Row>
+                        </Col>
+                        <Col lg={6}>
+                          <Row>
+                            <Col sm={12} md={3} lg={12}>
+                              <Form.Group>
+                                <Form.Check type="radio" label="Percentage" />
+                              </Form.Group>
+                            </Col>
+                            <Col xs={3} md={2} lg={3} className="ml-4 ml-md-0">
+                              <Form.Group as={Row} className="mb-3">
+                                <Col>
+                                  <Form.Control style={{ maxWidth: "80px" }} />
+                                </Col>
+                                <span className="text-lg mt-1">%</span>
+                              </Form.Group>
+                            </Col>
+                            <Col xs={7} md={6} lg={9}>
+                              <Form.Group className="">
+                                <Col>
+                                  <Form.Check
+                                    type="checkbox"
+                                    label="Include Taxed"
+                                    className="mt-2"
+                                  />
+                                </Col>
+                              </Form.Group>
+                            </Col>
+                          </Row>
+                        </Col>
+                      </Row>
+                    </Col>
+                  </Form.Group>
                 </div>
                 <h3 className="card-heading"></h3>
                 <div style={{ padding: "0 15px 15px 15px" }}>
-                  <HotelTabel />
+                  <button
+                    className="btn float-right button-override"
+                    onClick={() => setModalShow(true)}
+                  >
+                    <img src={createIcon} className="mr-1" alt="new" />
+                    Add Override Mark-up
+                  </button>
+                  <HotelModal
+                    show={modalShow}
+                    onHide={() => setModalShow(false)}
+                  />
                 </div>
               </Card.Body>
             </Card>

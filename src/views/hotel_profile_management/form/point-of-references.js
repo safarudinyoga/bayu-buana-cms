@@ -4,7 +4,7 @@ import BBDataTable from "components/table/bb-data-table"
 import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
 
-const PointofReferences = () => {
+const PointofReferences = (props) => {
   let dispatch = useDispatch()
   useEffect(() => {
     dispatch(
@@ -52,7 +52,9 @@ const PointofReferences = () => {
       <Card.Body>
         <h3 className="card-heading">Point of References</h3>
         <div style={{ padding: "0 10px 10px" }}>
-          <BBDataTable {...params} />
+          {props.history.location.hash == "#point-of-references" && (
+            <BBDataTable {...params} />
+          )}
         </div>
       </Card.Body>
     </Card>

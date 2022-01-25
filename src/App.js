@@ -112,9 +112,19 @@ import StandardMarkupFlightForm from "views/standard_markup/form/flight_form"
 import StandardMarkupHotelForm from "views/standard_markup/form/hotel_form"
 import StandardMarkupOtherForm from "views/standard_markup/form/other_form"
 
+// Master Exchange Rate
+import ExchageRateTable from "views/exchange_rate/table"
+import ExchangeRateForm from "views/exchange_rate/form"
+
 import Login from "./views/auth/login"
 import ForgotPassword from "views/auth/forgot_password"
 import OTP from "views/auth/otp"
+import OfficeTable from './views/branch_office/table';
+import OfficeForm from './views/branch_office/form';
+import DivisionForm from './views/division/form';
+import DivisionTable from './views/division/table';
+import JobTitleTable from './views/job-title/table';
+import JobTitleForm from './views/job-title/form';
 
 const RouteWithProps = ({
   path,
@@ -425,6 +435,27 @@ const DashboardRoutes = () => {
         <Route path="/master/employee/form/:id?">
           <EmployeeForm />
         </Route>
+        {/* Division */}
+        <Route exact path="/master/divisions">
+          <DivisionTable />
+        </Route>
+        <Route path="/master/divisions/form/:id?">
+          <DivisionForm />
+        </Route>
+        {/* Job Title */}
+        <Route exact path="/master/job-title">
+          <JobTitleTable />
+        </Route>
+        <Route path="/master/job-title/form/:id?">
+          <JobTitleForm />
+        </Route>
+        {/* Branch Office */}
+        <Route exact path="/master/branch-offices">
+          <OfficeTable />
+        </Route>
+        <Route path="/master/branch-offices/form/:id?">
+          <OfficeForm/>
+        </Route>
 
         {/* Master Invoice Email Setup */}
         <Route exact path="/master/invoice-email-setup">
@@ -432,6 +463,14 @@ const DashboardRoutes = () => {
         </Route>
         <Route exact path="/master/invoice-email-setup/form/:id?">
           <InvoiceEmailSetupForm />
+        </Route>
+
+        {/* Master Exhange Rate */}
+        <Route exact path="/master/exchange-rate">
+          <ExchageRateTable />
+        </Route>
+        <Route exact path="/master/exchange-rate/form/:id?">
+          <ExchangeRateForm />
         </Route>
       </Switch>
     </DashboardWrapper>

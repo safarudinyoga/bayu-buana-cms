@@ -86,7 +86,7 @@ function AirlineForm(props) {
       maxlength: "Airline Code cannot be more than 2 characters",
     },
     airline_asset: {
-      required: "Airline Logo Image is required",
+      required: "Logo is required",
     },
   }
 
@@ -347,7 +347,7 @@ function AirlineForm(props) {
       if(files){
         var filesize = ((files.size/1024)/1024).toFixed(4);
         if(filesize > 4){
-          alert("Airline Logo Image size is more than 4MB.");
+          alert("Logo size is more than 4MB.");
           $("#airline_icon").val('');
           return;
         }
@@ -431,7 +431,7 @@ function AirlineForm(props) {
 
         <FormInputControl
           id="airline_icon"
-          label="Airline Logo Image"
+          label="Logo"
           required={true}
           type="image"
           name="airline_asset"

@@ -33,11 +33,11 @@ export default function RatingTypeTable() {
     deactivationEndpoint: "/master/batch-actions/deactivate/rating-types",
     columns: [
       {
-        title: "Rating Types Code",
+        title: "Rating Type Code",
         data: "rating_type_code",
       },
       {
-        title: "Rating Types Name",
+        title: "Rating Type Name",
         data: "rating_type_name",
         render: renderColumn("rating_type", "rating_type_name"),
       },
