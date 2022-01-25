@@ -216,7 +216,7 @@ export default class Sidebar extends Component {
                   </li>
                   {/* <li className="nav-item">
                     <Link to="/master/standard-markup" className="nav-link">
-                      <p>Standar Markup</p>
+                      <p>Standard Markup</p>
                     </Link>
                   </li> */}
                   <li className="nav-item">
