@@ -78,11 +78,11 @@ export default class Sidebar extends Component {
                       <p>City</p>
                     </Link>
                   </li>
-                  <li className="nav-item">
+                  {/* <li className="nav-item">
                     <Link to="/master/corporate-rating" className="nav-link">
                       <p>Corporate Rating</p>
                     </Link>
-                  </li>
+                  </li> */}
                   <li className="nav-item">
                     <Link to="/master/countries" className="nav-link">
                       <p>Country</p>
@@ -103,21 +103,21 @@ export default class Sidebar extends Component {
                       <p>Destination Group</p>
                     </Link>
                   </li>
-                  <li className="nav-item">
+                  {/* <li className="nav-item">
                     <Link to="/master/fee-type" className="nav-link">
                       <p>Fee Type</p>
                     </Link>
-                  </li>
+                  </li> */}
                   <li className="nav-item">
                     <Link to="/master/flight-types" className="nav-link">
                       <p>Flight Type</p>
                     </Link>
                   </li>
-                  <li className="nav-item">
+                  {/* <li className="nav-item">
                     <Link to="/master/frequent-traveler-program" className="nav-link">
                       <p>Frequent Traveler Program</p>
                     </Link>
-                  </li>
+                  </li> */}
                   <li className="nav-item">
                     <Link
                       to="/master/hotel-amenity-categories"
@@ -214,11 +214,11 @@ export default class Sidebar extends Component {
                       <p>Special Request</p>
                     </Link>
                   </li>
-                  <li className="nav-item">
+                  {/* <li className="nav-item">
                     <Link to="/master/standard-markup" className="nav-link">
                       <p>Standar Markup</p>
                     </Link>
-                  </li>
+                  </li> */}
                   <li className="nav-item">
                     <Link to="/master/provinces" className="nav-link">
                       <p>State / Province</p>
@@ -239,14 +239,14 @@ export default class Sidebar extends Component {
                       <p>Zones</p>
                     </Link>
                   </li>
-                  <li className="nav-item">
+                  {/* <li className="nav-item">
                     <Link
                       to="/master/hotel-profile-management"
                       className="nav-link"
                     >
                       <p>Hotel Profile Management</p>
                     </Link>
-                  </li>
+                  </li> */}
                 </ul>
               </li>
               <li className="nav-item">
