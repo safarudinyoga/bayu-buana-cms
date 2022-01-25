@@ -35,3 +35,26 @@
     max-width: 500px;
   }
 }
+.modal-button-close{
+  position: relative;
+  float: right; 
+  top: -20px;
+  right: -2px;
+}
+.modals-header{
+  font-weight: 600;
+  text-align: center;  
+  letter-spacing: 1.2px;
+  color: #333333;
+  text-transform: uppercase;
+  opacity: 1;
+}
+.button-override{
+  background-color: #F3C244 !important;  
+  border: 1px solid #F3C244 !important;
+  padding: 5px !important;
+  color: #333333 !important;
+  padding-left: 15px !important;  
+  padding-right: 15px !important; 
+  border-radius: 8px !important; 
+}

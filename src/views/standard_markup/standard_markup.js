@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react"
+import { useLocation } from "react-router-dom"
 import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
 import { Tabs, TabPane, Row } from "react-bootstrap"
@@ -7,14 +8,15 @@ import HotelTable from "./table/hotel_table"
 import OtherTable from "./table/other_table"
 import infoIcon from "assets/icons/information.svg"
 import { ReactSVG } from "react-svg"
-import "../../styles/components/_tabs_horisontal.scss"
 
 const ControlledTabs = () => {
   const [key, setKey] = useState("flight")
+  
+
   return (
     <Tabs
       id="standard-markup"
-      activeKey={key}
+      defaultActiveKey={key}
       onSelect={(k) => setKey(k)}
       className="mb-4"
       mountOnEnter={true}
