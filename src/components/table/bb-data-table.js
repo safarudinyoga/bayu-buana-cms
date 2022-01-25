@@ -87,9 +87,10 @@ class BBDataTable extends Component {
       searchable: false,
       orderable: false,
       title: "Actions",
-      render: function (value, display, row) {
+      render: function (value, display, row, meta) {
+        let placement = meta.row > 0 ? 'top' : 'bottom'
         $(function () {
-          $('[data-toggle="tooltip"]').tooltip({placement: 'top'})
+          $('[data-toggle="tooltip"]').tooltip()
         })
         function tooltipCust(x) {
           if (x.matches) {
@@ -123,17 +124,17 @@ class BBDataTable extends Component {
           }, {})
 
         return (
-          '<a href="javascript:void(0);" data-toggle="tooltip" data-placement="bottom" class="table-row-action-item" data-action="edit" data-id="' +
+          '<a href="javascript:void(0);" data-toggle="tooltip" data-placement="'+placement+'" class="table-row-action-item" data-action="edit" data-id="' +
           row.id +
           '" title="Click to edit"><img src="' +
           editIcon +
           '" /></a>' +
-          '<a href="javascript:void(0);" data-toggle="tooltip" data-placement="bottom" class="table-row-action-item" data-action="view" data-id="' +
+          '<a href="javascript:void(0);" data-toggle="tooltip" data-placement="'+placement+'" class="table-row-action-item" data-action="view" data-id="' +
           row.id +
           '" title="Click to view details"><img src="' +
           showIcon +
           '"/></a>' +
-          '<a href="javascript:void(0);" data-toggle="tooltip" data-placement="bottom" class="table-row-action-item" data-action="delete" data-id="' +
+          '<a href="javascript:void(0);" data-toggle="tooltip" data-placement="'+placement+'" class="table-row-action-item" data-action="delete" data-id="' +
           row.id +
           '" data-name="' +
           cvtRecordName +
