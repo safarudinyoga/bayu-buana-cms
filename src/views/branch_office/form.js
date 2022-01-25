@@ -344,6 +344,9 @@ function OfficeForm(props) {
       if (!form.state_province_id) {
         form.state_province_id = null
       }
+      if (!form.city_id) {
+        form.city_id = null
+      }
       if (!form.postal_code) {
         form.postal_code = null
       }
