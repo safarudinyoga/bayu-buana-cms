@@ -46,8 +46,8 @@ const GeneralInformation = (props) => {
     // General Information
     hotelCode: "",
     hotelName: "",
-    hotelBrand: null,
-    starRating: null,
+    hotelBrand: "",
+    starRating: "",
     numberOfRooms: "",
 
     // Contacts
@@ -59,9 +59,9 @@ const GeneralInformation = (props) => {
 
     // Address
     address: "",
-    country: null,
-    province: null,
-    city: null,
+    country: "",
+    province: "",
+    city: "",
     zipCode: "",
     destination: "",
     zone: "",
