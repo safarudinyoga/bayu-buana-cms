@@ -302,7 +302,7 @@ function DivisionForm(props) {
           label="Parent Division"
           value={form.parent_division_id}
           name="parent_division_id"
-          endpoint="/master/parent-division"
+          endpoint="/master/employees"
           column="parent_name"
           filter={`["status", "=", 1]`}
           onChange={(e) =>
