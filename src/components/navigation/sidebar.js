@@ -294,6 +294,11 @@ export default class Sidebar extends Component {
                       <p>Invoice Email Setup</p>
                     </Link>
                   </li>
+                  <li className="nav-item">
+                    <Link to="/master/setup-flight-commision" className="nav-link">
+                      <p>Setup Flight Commision</p>
+                    </Link>
+                  </li>
                 </ul>
               </li>
             </ul>
