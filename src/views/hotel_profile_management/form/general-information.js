@@ -16,6 +16,9 @@ import { Editor } from "react-draft-wysiwyg"
 import { ReactSVG } from "react-svg"
 import Dropzone from "react-dropzone-uploader"
 import axios from "axios"
+import useQuery from "lib/query"
+import { useDispatch } from "react-redux"
+import { setAlert, setUIParams } from "redux/ui-store"
 
 import Api from "config/api"
 import env from "config/environment"
@@ -24,10 +27,17 @@ import Select from "components/form/select-async"
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css"
 import "react-dropzone-uploader/dist/styles.css"
 
+const endpoint = "/master/hotels"
+
 const GeneralInformation = (props) => {
+  const isView = useQuery().get("action") === "view"
+  let dispatch = useDispatch()
+
   const [selectCountry, setSelectCountry] = useState([])
   const [selectHotelBrand, setSelectHotelBrand] = useState([])
   const [modalShow, setModalShow] = useState(false)
+  const [translations, setTranslations] = useState([])
+  const [loading, setLoading] = useState(true)
 
   let api = new Api()
 
@@ -36,8 +46,8 @@ const GeneralInformation = (props) => {
     // General Information
     hotelCode: "",
     hotelName: "",
-    hotelBrand: null,
-    starRating: null,
+    hotelBrand: "",
+    starRating: "",
     numberOfRooms: "",
 
     // Contacts
@@ -49,9 +59,9 @@ const GeneralInformation = (props) => {
 
     // Address
     address: "",
-    country: null,
-    province: null,
-    city: null,
+    country: "",
+    province: "",
+    city: "",
     zipCode: "",
     destination: "",
     zone: "",
@@ -74,8 +84,8 @@ const GeneralInformation = (props) => {
   }
 
   const initialFormModalAddMap = {
-    caption: "",
-    image: "",
+    modalCaption: "",
+    modalImage: "",
   }
   // Schema for yup
   const validationSchema = Yup.object().shape({
@@ -140,8 +150,8 @@ const GeneralInformation = (props) => {
   })
 
   const validationSchemaModalAddMap = Yup.object().shape({
-    caption: Yup.string().required("Caption is required."),
-    image: Yup.string().required("Hotel Name is required."),
+    modalCaption: Yup.string().required("Caption is required."),
+    modalImage: Yup.string().required("Image is required."),
   })
 
   const ImageUploader = () => {
@@ -166,7 +176,9 @@ const GeneralInformation = (props) => {
         getUploadParams={(e) => console.log(e)}
         onChangeStatus={(e) => console.log(e)}
         onSubmit={(e) => console.log(e)}
-        accept="image/*,audio/*,video/*"
+        accept="image/png, image/jpg, image/jpeg"
+        multiple={false}
+        maxSize={1000000}
         inputContent={
           <div className="form-uploader">
             <ReactSVG src="/img/icons/upload.svg" />
@@ -297,6 +309,50 @@ const GeneralInformation = (props) => {
     )
   }
 
+  useEffect(async () => {
+    let api = new Api()
+    let formId = ""
+
+    let docTitle = "Edit Aircraft"
+    if (!formId) {
+      docTitle = "Create Aircraft"
+    } else if (isView) {
+      docTitle = "View Aircraft"
+    }
+
+    dispatch(
+      setUIParams({
+        title: isView ? "Aircraft Details" : docTitle,
+        breadcrumbs: [
+          {
+            text: "Master Data Management",
+          },
+          {
+            link: props.backUrl,
+            text: "Aircrafts",
+          },
+          {
+            text: docTitle,
+          },
+        ],
+      }),
+    )
+    if (formId) {
+      try {
+        let res = await api.get(endpoint + "/" + formId)
+      } catch (e) {}
+
+      try {
+        let res = await api.get(endpoint + "/" + formId + "/translations", {
+          size: 50,
+        })
+        setTranslations(res.data.items)
+      } catch (e) {}
+      setLoading(false)
+    } else {
+    }
+  }, [])
+
   return (
     <>
       <Formik
@@ -306,28 +362,6 @@ const GeneralInformation = (props) => {
         onSubmit={async (values, { setSubmitting, resetForm }) => {
           console.log(values)
           console.log(props)
-          // setSubmitting(true)
-
-          // try {
-          //   let res = await api.post("master/persons", {
-          //     birth_date: "2021-11-13T04:31:17.022Z",
-          //     business_entity_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-          //     citizen_country_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-          //     gender_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-          //     given_name: "string",
-          //     marital_status_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-          //     middle_name: "string",
-          //     name_prefix_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-          //     name_suffix: "string",
-          //     name_title: "string",
-          //     religion_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-          //     surname: "string",
-          //     surname_prefix: "string",
-          //   })
-          //   console.log(res)
-          //   resetForm()
-          //   setSubmitting(false)
-          // } catch (e) {}
         }}
       >
         {({
@@ -665,7 +699,11 @@ const GeneralInformation = (props) => {
                               {...field}
                               url={`master/countries`}
                               fieldName="country_name"
-                              onChange={(v) => setFieldValue("country", v)}
+                              onChange={(v) => {
+                                setFieldValue("country", v)
+                                setFieldValue("province", null)
+                                setFieldValue("city", null)
+                              }}
                               placeholder="Please choose"
                               className={`react-select ${
                                 form.touched.country && form.errors.country
@@ -869,18 +907,12 @@ const GeneralInformation = (props) => {
                             <div style={{ width: 300 }}>
                               <Select
                                 {...field}
-                                placeholder="Please choose Property Type"
-                                options={selectCountry}
-                                className={`react-select ${
-                                  form.touched.propertyType &&
-                                  form.errors.propertyType
-                                    ? "is-invalid"
-                                    : null
-                                }`}
-                                onChange={(v) => {
+                                url={`master/property-categories`}
+                                fieldName="property_category_name"
+                                onChange={(v) =>
                                   setFieldValue("propertyType", v)
-                                }}
-                                onBlur={setFieldTouched}
+                                }
+                                placeholder="Please choose Property Type"
                               />
                               {form.touched.propertyType &&
                                 form.errors.propertyType && (
@@ -908,18 +940,13 @@ const GeneralInformation = (props) => {
                             <div style={{ width: 400 }}>
                               <Select
                                 {...field}
-                                placeholder=""
-                                options={selectCountry}
-                                className={`react-select ${
-                                  form.touched.locationCategory &&
-                                  form.errors.locationCategory
-                                    ? "is-invalid"
-                                    : null
-                                }`}
-                                onChange={(v) => {
+                                isMulti
+                                url={`master/location-categories`}
+                                fieldName="location_category_name"
+                                onChange={(v) =>
                                   setFieldValue("locationCategory", v)
-                                }}
-                                onBlur={setFieldTouched}
+                                }
+                                placeholder=""
                               />
                               {form.touched.locationCategory &&
                                 form.errors.locationCategory && (
@@ -1203,24 +1230,26 @@ const GeneralInformation = (props) => {
                     <span className="form-label-required">*</span>
                   </Form.Label>
                   <Col sm={9}>
-                    <FastField name="zipCode">
+                    <FastField name="modalCaption">
                       {({ field, form }) => (
                         <>
                           <Form.Control
                             type="text"
                             isInvalid={
-                              form.touched.caption && form.errors.caption
+                              form.touched.modalCaption &&
+                              form.errors.modalCaption
                             }
                             maxLength={128}
                             {...field}
                           />
-                          {form.touched.caption && form.errors.caption && (
-                            <Form.Control.Feedback type="invalid">
-                              {form.touched.caption
-                                ? form.errors.caption
-                                : null}
-                            </Form.Control.Feedback>
-                          )}
+                          {form.touched.modalCaption &&
+                            form.errors.modalCaption && (
+                              <Form.Control.Feedback type="invalid">
+                                {form.touched.modalCaption
+                                  ? form.errors.modalCaption
+                                  : null}
+                              </Form.Control.Feedback>
+                            )}
                         </>
                       )}
                     </FastField>
@@ -1232,7 +1261,30 @@ const GeneralInformation = (props) => {
                     <span className="form-label-required">*</span>
                   </Form.Label>
                   <Col sm={9}>
-                    <ImageUploader />
+                    <Field name="modalImage">
+                      {({ field, form }) => (
+                        <>
+                          <div
+                            className={
+                              form.touched.modalImage && form.errors.modalImage
+                                ? "is-invalid"
+                                : null
+                            }
+                          >
+                            <ImageUploader {...field} />
+                          </div>
+
+                          {form.touched.modalImage &&
+                            form.errors.modalImage && (
+                              <Form.Control.Feedback type="invalid">
+                                {form.touched.modalImage
+                                  ? form.errors.modalImage
+                                  : null}
+                              </Form.Control.Feedback>
+                            )}
+                        </>
+                      )}
+                    </Field>
                   </Col>
                 </Form.Group>
               </Modal.Body>

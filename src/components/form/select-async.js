@@ -117,6 +117,7 @@ const Select = (props) => {
       )}
       get={get}
       debounceTimeout={300}
+      onBlur={() => false}
       queryParams={{
         limit: 10,
       }}
