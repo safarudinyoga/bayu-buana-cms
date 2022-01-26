@@ -1,7 +1,7 @@
 import BriefCaseIcon from "assets/icons/briefcase.svg"
 import HomeIcon from "assets/icons/home.svg"
-import React, {Component} from "react"
-import {Link} from "react-router-dom"
+import React, { Component } from "react"
+import { Link } from "react-router-dom"
 import "./sidebar.scss"
 
 export default class Sidebar extends Component {
@@ -216,7 +216,7 @@ export default class Sidebar extends Component {
                   </li>
                   {/* <li className="nav-item">
                     <Link to="/master/standard-markup" className="nav-link">
-                      <p>Standar Markup</p>
+                      <p>Standard Markup</p>
                     </Link>
                   </li> */}
                   <li className="nav-item">

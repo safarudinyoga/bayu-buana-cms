@@ -4,7 +4,7 @@ import BBDataTable from "components/table/bb-data-table"
 import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
 
-const PointofReferences = () => {
+const PointofReferences = (props) => {
   let dispatch = useDispatch()
   useEffect(() => {
     dispatch(
@@ -23,30 +23,28 @@ const PointofReferences = () => {
   }, [])
 
   let params = {
-    title: "Hotel Profile Management",
-    baseRoute: "/master/hotel-profile-management/form",
-    endpoint: "/master/hotel-profile-management",
-    deleteEndpoint: "/master/batch-actions/delete/hotel-profile-management",
-    activationEndpoint:
-      "/master/batch-actions/activate/hotel-profile-management",
-    deactivationEndpoint:
-      "/master/batch-actions/deactivate/hotel-profile-management",
+    title: "Point of Reference",
+    baseRoute: "/master/hotel-profile-management/point-of-references/form",
+    endpoint: "/master/reference-points",
+    deleteEndpoint: "/master/batch-actions/delete/reference-points",
+    activationEndpoint: "/master/batch-actions/activate/reference-points",
+    deactivationEndpoint: "/master/batch-actions/deactivate/reference-points",
     columns: [
       {
-        title: "Hotel Name",
-        data: "hotel_name",
+        title: "Point of Reference",
+        data: "reference_point_name",
       },
       {
-        title: "Location",
-        data: "location",
+        title: "Categories",
+        data: "reference_point_category.reference_point_category_name",
       },
       {
-        title: "Chain/Brand",
-        data: "chain_brand",
+        title: "Distance",
+        data: "reference_point_category_distance",
       },
     ],
-    emptyTable: "No hotels found",
-    recordName: "hotel_name",
+    emptyTable: "No point of references found",
+    recordName: "reference_point_name",
   }
 
   return (
@@ -54,7 +52,9 @@ const PointofReferences = () => {
       <Card.Body>
         <h3 className="card-heading">Point of References</h3>
         <div style={{ padding: "0 10px 10px" }}>
-          <BBDataTable {...params} />
+          {props.history.location.hash == "#point-of-references" && (
+            <BBDataTable {...params} />
+          )}
         </div>
       </Card.Body>
     </Card>

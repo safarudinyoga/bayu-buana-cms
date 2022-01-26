@@ -31,7 +31,7 @@ export default function HotelBrandTable() {
 
   let [params, setParams] = useState({
     title: "Hotel Profile Management",
-    baseRoute: "/master/hotel-profile-management/form",
+    baseRoute: "/master/hotel-profile-management/form#general-information",
     endpoint: "/master/hotels",
     deleteEndpoint: "/master/batch-actions/delete/hotels",
     activationEndpoint: "/master/batch-actions/activate/hotels",
