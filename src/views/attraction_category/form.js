@@ -74,7 +74,7 @@ function AttractionCategoryForm(props) {
       required: "Attraction Category Name is required.",
     },
     attraction_category_asset: {
-      required: "Attraction Category Icon Image is required.",
+      required: "Icon is required.",
     },
   })
 
@@ -228,7 +228,7 @@ function AttractionCategoryForm(props) {
       if(files){
         var filesize = ((files.size/1024)/1024).toFixed(4);
         if(filesize > 4){
-          alert("Attraction Category Icon Image size is more than 4MB.");
+          alert("Icon size is more than 4MB.");
           $("#attr_icon").val('');
           return;
         }

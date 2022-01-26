@@ -94,6 +94,7 @@ import ZoneTable from "views/zone/table"
 // Master Hotel Profile Management
 import HotelProfileManagementTable from "views/hotel_profile_management/table"
 import HotelProfileManagementForm from "views/hotel_profile_management/form"
+import HotelRoomTypeForm from "views/hotel_profile_management/form/room_type/form"
 
 // Master Employee
 import EmployeeTable from "views/employee/table"
@@ -114,10 +115,19 @@ import StandardMarkupOtherForm from "views/standard_markup/form/other_form"
 // Master Setup Flight Commision
 import FlightCommisionTable from "views/setup_flight_commision/table";
 import FlightCommisionForm from "views/setup_flight_commision/form"
+// Master Exchange Rate
+import ExchageRateTable from "views/exchange_rate/table"
+import ExchangeRateForm from "views/exchange_rate/form"
 
 import Login from "./views/auth/login"
 import ForgotPassword from "views/auth/forgot_password"
 import OTP from "views/auth/otp"
+import OfficeTable from './views/branch_office/table';
+import OfficeForm from './views/branch_office/form';
+import DivisionForm from './views/division/form';
+import DivisionTable from './views/division/table';
+import JobTitleTable from './views/job-title/table';
+import JobTitleForm from './views/job-title/form';
 
 const RouteWithProps = ({
   path,
@@ -414,6 +424,12 @@ const DashboardRoutes = () => {
         <Route exact path="/master/hotel-profile-management/form/:id?">
           <HotelProfileManagementForm />
         </Route>
+        <Route
+          exact
+          path="/master/hotel-profile-management/room-type/form/:id?"
+        >
+          <HotelRoomTypeForm />
+        </Route>
 
         {/* Master Employee */}
         <Route exact path="/master/employee">
@@ -421,6 +437,27 @@ const DashboardRoutes = () => {
         </Route>
         <Route path="/master/employee/form/:id?">
           <EmployeeForm />
+        </Route>
+        {/* Division */}
+        <Route exact path="/master/divisions">
+          <DivisionTable />
+        </Route>
+        <Route path="/master/divisions/form/:id?">
+          <DivisionForm />
+        </Route>
+        {/* Job Title */}
+        <Route exact path="/master/job-title">
+          <JobTitleTable />
+        </Route>
+        <Route path="/master/job-title/form/:id?">
+          <JobTitleForm />
+        </Route>
+        {/* Branch Office */}
+        <Route exact path="/master/branch-offices">
+          <OfficeTable />
+        </Route>
+        <Route path="/master/branch-offices/form/:id?">
+          <OfficeForm/>
         </Route>
 
         {/* Master Invoice Email Setup */}
@@ -437,6 +474,14 @@ const DashboardRoutes = () => {
         </Route>
         <Route exact path="/master/setup-flight-commision/form/:id?">
           <FlightCommisionForm />
+        </Route>
+        
+        {/* Master Exhange Rate */}
+        <Route exact path="/master/exchange-rate">
+          <ExchageRateTable />
+        </Route>
+        <Route exact path="/master/exchange-rate/form/:id?">
+          <ExchangeRateForm />
         </Route>
       </Switch>
     </DashboardWrapper>

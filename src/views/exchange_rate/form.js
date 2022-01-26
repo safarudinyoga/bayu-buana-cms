@@ -1,19 +1,19 @@
-import {withRouter} from "react-router"
-import React, {useEffect, useState} from "react"
+import { withRouter } from "react-router"
+import React, { useEffect, useState } from "react"
 import Api from "config/api"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
 import FormBuilder from "components/form/builder"
 import useQuery from "lib/query"
-import {useDispatch} from "react-redux"
-import {setAlert, setUIParams} from "redux/ui-store"
+import { useDispatch } from "react-redux"
+import { setAlert, setUIParams } from "redux/ui-store"
 import $ from "jquery"
 import env from "../../config/environment"
 
-const endpoint = "/master/room-view-types"
-const backUrl = "/master/room-view-types"
+const endpoint = "/master/aircraft"
+const backUrl = "/master/aircrafts"
 
-function RoomViewTypeForm(props) {
+function ExchangeRateForm(props) {
   let dispatch = useDispatch()
   let formId = props.match.params.id
 
@@ -23,45 +23,59 @@ function RoomViewTypeForm(props) {
   const [translations, setTranslations] = useState([])
   const [id, setId] = useState(null)
   const [form, setForm] = useState({
-    room_view_type_code: "",
-    room_view_type_name: "",
+    id: "",
+    aircraft_name: "",
+    model: "",
+    icao_code: "",
+    aircraft_code: "",
   })
   const translationFields = [
     {
-      label: "Room View Type Name",
-      name: "room_view_type_name",
+      label: "Aircraft Name",
+      name: "aircraft_name",
       type: "text",
+      maxLength: 64,
     },
   ]
 
   const validationRules = {
-    room_view_type_code: {
+    aircraft_name: {
       required: true,
-      number: true,
       minlength: 1,
-      maxlength: 256,
-      checkCode: true,
-      noSpace: true
+      maxlength: 64,
+      checkName: true,
     },
-    room_view_type_name: {
+    model: {
       required: true,
       minlength: 1,
-      maxlength: 256,
-      checkName: true
+      maxlength: 64,
+    },
+    icao_code: {
+      required: false,
+      minlength: 2,
+      maxlength: 4,
+      checkIcao: false,
+    },
+    aircraft_code: {
+      required: true,
+      minlength: 2,
+      maxlength: 4,
+      checkCode: true,
     },
   }
 
   const validationMessages = {
-    room_view_type_name: {
-      required: "Room View Type Name is required",
-      minlength: "Room View Type Name must be at least 1 characters",
-      maxlength: "Room View Type Name cannot be more than 256 characters",
+    aircraft_name: {
+      required: "Aircraft Name is required",
     },
-    room_view_type_code: {
-      required: "Room View Type Code is required",
-      number: "Code format is invalid",
-      minlength: "Room View Type Code must be at least 1 characters",
-      maxlength: "Room View Type Code cannot be more than 256 characters",
+    // icao_code: {
+    //   required: "Icao Code is required",
+    // },
+    model: {
+      required: "Model is required",
+    },
+    aircraft_code: {
+      required: "Aircraft Code is required",
     },
   }
 
@@ -69,23 +83,23 @@ function RoomViewTypeForm(props) {
     let api = new Api()
     let formId = props.match.params.id
 
-    let docTitle = "Edit Room View Type"
+    let docTitle = "Edit Aircraft"
     if (!formId) {
-      docTitle = "Create Room View Type"
+      docTitle = "Create Aircraft"
     } else if (isView) {
-      docTitle = "View Room View Type"
+      docTitle = "View Aircraft"
     }
 
     dispatch(
       setUIParams({
-        title: isView ? "Room View Type Details" : docTitle,
+        title: isView ? "Aircraft Details" : docTitle,
         breadcrumbs: [
           {
             text: "Master Data Management",
           },
           {
             link: backUrl,
-            text: "Room View Types",
+            text: "Aircrafts",
           },
           {
             text: docTitle,
@@ -98,35 +112,11 @@ function RoomViewTypeForm(props) {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
 
-        if(res.data){
-          let currentCode = res.data.room_view_type_code
-          let currentName = res.data.room_view_type_name
+        if (res.data) {
+          let currentCode = res.data.aircraft_code
+          let currentIcao = res.data.icao_code
+          let currentName = res.data.aircraft_name
 
-          $.validator.addMethod(
-            "checkCode",
-            function (value, element) {
-              var req = false
-              $.ajax({
-                type: "GET",
-                async: false,
-                url: `${env.API_URL}/master/room-view-types?filters=["room_view_type_code","=","${element.value}"]`,
-                success: function (res) {
-                  if (res.items.length !== 0) {
-                    if(currentCode == parseInt(element.value)){
-                      req = true
-                    } else {
-                      req = false
-                    }
-                  } else {
-                    req = true
-                  }
-                },
-              })
-    
-              return req
-            },
-            "Code already exists",
-          )
           $.validator.addMethod(
             "checkName",
             function (value, element) {
@@ -134,10 +124,10 @@ function RoomViewTypeForm(props) {
               $.ajax({
                 type: "GET",
                 async: false,
-                url: `${env.API_URL}/master/room-view-types?filters=["room_view_type_name","=","${element.value}"]`,
+                url: `${env.API_URL}/master/aircraft?filters=["aircraft_name","=","${element.value}"]`,
                 success: function (res) {
                   if (res.items.length !== 0) {
-                    if(currentName.toUpperCase() === element.value.toUpperCase()){
+                    if (currentName === element.value) {
                       req = true
                     } else {
                       req = false
@@ -147,43 +137,71 @@ function RoomViewTypeForm(props) {
                   }
                 },
               })
-    
+
               return req
             },
-            "Room View Type Name already exists",
+            "Aircraft Name already exists",
+          )
+          $.validator.addMethod(
+            "checkIcao",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/aircraft?filters=["icao_code","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if (currentIcao === element.value) {
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+
+              return req
+            },
+            "Icao Code already exists",
+          )
+          $.validator.addMethod(
+            "checkCode",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/aircraft?filters=["aircraft_code","=","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if (currentCode === element.value) {
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+              return req
+            },
+            "Aircraft Code already exists",
           )
         }
-      } catch (e) { }
+      } catch (e) {}
 
       try {
         let res = await api.get(endpoint + "/" + formId + "/translations", {
           size: 50,
         })
         setTranslations(res.data.items)
-      } catch (e) { }
+      } catch (e) {}
       setLoading(false)
     } else {
-      $.validator.addMethod(
-        "checkCode",
-        function (value, element) {
-          var req = false
-          $.ajax({
-            type: "GET",
-            async: false,
-            url: `${env.API_URL}/master/room-view-types?filters=["room_view_type_code","=","${element.value}"]`,
-            success: function (res) {
-              if (res.items.length !== 0) {
-                req = false
-              } else {
-                req = true
-              }
-            },
-          })
-
-          return req
-        },
-        "Code already exists",
-      )
       $.validator.addMethod(
         "checkName",
         function (value, element) {
@@ -191,7 +209,7 @@ function RoomViewTypeForm(props) {
           $.ajax({
             type: "GET",
             async: false,
-            url: `${env.API_URL}/master/room-view-types?filters=["room_view_type_name","=","${element.value}"]`,
+            url: `${env.API_URL}/master/aircraft?filters=["aircraft_name","=","${element.value}"]`,
             success: function (res) {
               if (res.items.length !== 0) {
                 req = false
@@ -203,7 +221,49 @@ function RoomViewTypeForm(props) {
 
           return req
         },
-        "Room View Type Name already exists",
+        "Aircraft Name already exists",
+      )
+      $.validator.addMethod(
+        "checkIcao",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/aircraft?filters=["icao_code","=","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
+
+          return req
+        },
+        "Icao Code already exists",
+      )
+      $.validator.addMethod(
+        "checkCode",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/aircraft?filters=["aircraft_code","=","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
+
+          return req
+        },
+        "Aircraft Code already exists",
       )
     }
   }, [])
@@ -220,13 +280,8 @@ function RoomViewTypeForm(props) {
     setLoading(true)
     let api = new Api()
     try {
-      if (!form.room_view_type_name) {
-        form.room_view_type_name = null
-      }
-      if (!form.room_view_type_code) {
-        form.room_view_type_code = null
-      } else {
-        form.room_view_type_code = parseInt(form.room_view_type_code)
+      if (!form.model) {
+        form.model = null
       }
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
@@ -246,7 +301,9 @@ function RoomViewTypeForm(props) {
       props.history.push(backUrl)
       dispatch(
         setAlert({
-          message: `Record ${form.room_view_type_code} - ${form.room_view_type_name} has been successfully ${formId ? "updated" : "saved"}.`,
+          message: `Record ${form.aircraft_code} - ${
+            form.aircraft_name
+          } has been successfully ${formId ? "updated" : "saved"}.`,
         }),
       )
     }
@@ -267,38 +324,60 @@ function RoomViewTypeForm(props) {
     >
       <FormHorizontal>
         <FormInputControl
-          label="Room View Type Name"
+          label={"Aircraft Name"}
           required={true}
-          value={form.room_view_type_name}
-          name="room_view_type_name"
-          onChange={(e) =>
-            setForm({...form, room_view_type_name: e.target.value})
-          }
+          value={form.aircraft_name}
+          name="aircraft_name"
+          onChange={(e) => setForm({ ...form, aircraft_name: e.target.value })}
           disabled={isView || loading}
           type="text"
           minLength="1"
-          maxLength="256"
+          maxLength="64"
+        />
+        <FormInputControl
+          value={form.model}
+          required={true}
+          name="model"
+          onChange={(e) => setForm({ ...form, model: e.target.value })}
+          label="Model"
+          disabled={isView || loading}
+          type="text"
+          minLength="1"
+          maxLength="64"
         />
       </FormHorizontal>
 
       <FormHorizontal>
         <FormInputControl
-          label="Room View Type Code"
+          value={form.aircraft_code}
           required={true}
-          value={form.room_view_type_code}
-          name="room_view_type_code"
-          cl={{md:"12"}}
+          name="aircraft_code"
+          onChange={(e) => setForm({ ...form, aircraft_code: e.target.value })}
+          cl={{ md: "12" }}
           cr="12"
-          onChange={(e) =>
-            setForm({...form, room_view_type_code: e.target.value})
-          }
           disabled={isView || loading}
+          label="Aircraft Code"
           type="text"
-          hint="Room View Type Code is numeric"
+          minLength="2"
+          maxLength="4"
+          hint="Aircraft code maximum 4 characters"
+        />
+        <FormInputControl
+          value={form.icao_code}
+          name="icao_code"
+          onChange={(e) => setForm({ ...form, icao_code: e.target.value })}
+          cl={{ md: "12" }}
+          cr="12"
+          disabled={isView || loading}
+          label="ICAO Code"
+          type="text"
+          minLength="2"
+          maxLength="4"
+          hint="ICAO Code maximum 4 characters"
         />
       </FormHorizontal>
     </FormBuilder>
   )
 }
 
-export default withRouter(RoomViewTypeForm)
+export default withRouter(ExchangeRateForm)

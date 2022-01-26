@@ -6,18 +6,18 @@ import { setUIParams } from "redux/ui-store"
 import { renderColumn } from "lib/translation"
 import FormInputSelectAjax from "components/form/input-select-ajax"
 
-export default function HotelBrandTable() {
+export default function OfficeTable() {
   let dispatch = useDispatch()
   useEffect(() => {
     dispatch(
       setUIParams({
-        title: "Hotel Profile Management",
+        title: "Manage Branch Office",
         breadcrumbs: [
           {
-            text: "Master Data Management",
+            text: "Employment Management",
           },
           {
-            text: "Hotel Profile Management",
+            text: "Branch Offices",
           },
         ],
       }),
@@ -30,32 +30,33 @@ export default function HotelBrandTable() {
   let [selectedCountryIds, setSelectedCountryIds] = useState([])
 
   let [params, setParams] = useState({
-    title: "Hotel Profile Management",
-    baseRoute: "/master/hotel-profile-management/form#general-information",
-    endpoint: "/master/hotels",
-    deleteEndpoint: "/master/batch-actions/delete/hotels",
-    activationEndpoint: "/master/batch-actions/activate/hotels",
-    deactivationEndpoint: "/master/batch-actions/deactivate/hotels",
+    title: "Branch Offices",
+    titleModal: "Branch Office",
+    baseRoute: "/master/branch-offices/form",
+    endpoint: "/master/offices",
+    deleteEndpoint: "/master/batch-actions/delete/offices",
+    activationEndpoint: "/master/batch-actions/activate/offices",
+    deactivationEndpoint: "/master/batch-actions/deactivate/offices",
     columns: [
       {
-        title: "Hotel Name",
-        data: "hotel_name",
+        title: "Company/Branch Name",
+        data: "office_name",
       },
       {
-        title: "Hotel Rating",
-        data: "hotel_rating",
+        title: "Address",
+        data: "address_line",
       },
       {
-        title: "Location",
-        data: "location",
+        title: "Phone Number",
+        data: "phone_number",
       },
       {
-        title: "Chain/Brand",
-        data: "hotel_brand_id",
+        title: "Operational Hour",
+        data: "operation_hours",
       },
     ],
-    emptyTable: "No hotels found",
-    recordName: "hotel_name",
+    emptyTable: "No Branch Offices found",
+    recordName: "office_name",
   })
 
   const onFilterChangeCountries = (e, values) => {

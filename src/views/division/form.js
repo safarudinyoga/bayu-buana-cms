@@ -1,94 +1,103 @@
-import {withRouter} from "react-router"
-import React, {useEffect, useState} from "react"
-import Api from "config/api"
+import FormBuilder from "components/form/builder"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
-import FormBuilder from "components/form/builder"
-import useQuery from "lib/query"
-import {useDispatch} from "react-redux"
-import {setAlert, setUIParams} from "redux/ui-store"
+import Api from "config/api"
 import $ from "jquery"
+import useQuery from "lib/query"
+import React, {useEffect, useState} from "react"
+import {useDispatch} from "react-redux"
+import {withRouter} from "react-router"
+import {setAlert, setUIParams} from "redux/ui-store"
+import FormInputSelectAjax from "../../components/form/input-select-ajax"
 import env from "../../config/environment"
 
-const endpoint = "/master/room-view-types"
-const backUrl = "/master/room-view-types"
+const endpoint = "/master/divisions"
+const backUrl = "/master/divisions"
 
-function RoomViewTypeForm(props) {
+function DivisionForm(props) {
   let dispatch = useDispatch()
-  let formId = props.match.params.id
 
+  let formId = props.match.params.id
   const isView = useQuery().get("action") === "view"
   const [formBuilder, setFormBuilder] = useState(null)
   const [loading, setLoading] = useState(true)
   const [translations, setTranslations] = useState([])
+  const [supplierTypeData, setSupplierTypeData] = useState([])
   const [id, setId] = useState(null)
   const [form, setForm] = useState({
-    room_view_type_code: "",
-    room_view_type_name: "",
+    depth:0,
+    division_code: "",
+    division_name: "",
+    parent_division_id: "",
+    manager_id: "",
   })
   const translationFields = [
     {
-      label: "Room View Type Name",
-      name: "room_view_type_name",
+      label: "Name",
+      name: "division_name",
       type: "text",
     },
   ]
 
   const validationRules = {
-    room_view_type_code: {
+    division_code: {
       required: true,
-      number: true,
       minlength: 1,
-      maxlength: 256,
+      maxlength: 36,
       checkCode: true,
-      noSpace: true
+      noSpace: true,      
     },
-    room_view_type_name: {
+    division_name: {
       required: true,
       minlength: 1,
       maxlength: 256,
-      checkName: true
+      checkName: true,
+      noSpace: true,
     },
+    parent_division_id: {},
+    manager_id: {},
   }
 
   const validationMessages = {
-    room_view_type_name: {
-      required: "Room View Type Name is required",
-      minlength: "Room View Type Name must be at least 1 characters",
-      maxlength: "Room View Type Name cannot be more than 256 characters",
+    division_code: {
+      required: "Division Code is required.",
+      minlength: "Division code must be at least 1 characters",
+      maxlength: "Division code cannot be longer than 36 characters",
     },
-    room_view_type_code: {
-      required: "Room View Type Code is required",
-      number: "Code format is invalid",
-      minlength: "Room View Type Code must be at least 1 characters",
-      maxlength: "Room View Type Code cannot be more than 256 characters",
+    division_name: {
+      required: "Division Name is required.",
+      minlength: "Division name must be at least 1 characters",
+      maxlength: "Division name cannot be longer than 256 characters",
     },
+    parent_division_id: {},
   }
 
   useEffect(async () => {
-    let api = new Api()
-    let formId = props.match.params.id
+    let api = new Api()    
 
-    let docTitle = "Edit Room View Type"
+    let docTitle = "Edit Division"
+    let bcTitle = docTitle
     if (!formId) {
-      docTitle = "Create Room View Type"
+      docTitle = "Create New Division"
+      bcTitle = "Create Division"
     } else if (isView) {
-      docTitle = "View Room View Type"
+      docTitle = "Division"
+      bcTitle = "Division Details"
     }
 
     dispatch(
       setUIParams({
-        title: isView ? "Room View Type Details" : docTitle,
+        title: docTitle,
         breadcrumbs: [
           {
-            text: "Master Data Management",
+            text: "Employee Management",
           },
           {
             link: backUrl,
-            text: "Room View Types",
+            text: "Division",
           },
           {
-            text: docTitle,
+            text: bcTitle,
           },
         ],
       }),
@@ -96,11 +105,13 @@ function RoomViewTypeForm(props) {
     if (formId) {
       try {
         let res = await api.get(endpoint + "/" + formId)
-        setForm(res.data)
-
-        if(res.data){
-          let currentCode = res.data.room_view_type_code
-          let currentName = res.data.room_view_type_name
+        setForm(res.data);
+        if (res.data.parent) {
+          setSupplierTypeData([{...res.data.parent, text: res.data.parent.parent_name}])
+        }
+        if (res.data) {
+          let currentCode = res.data.division_code
+          let currentName = res.data.division_name
 
           $.validator.addMethod(
             "checkCode",
@@ -109,10 +120,10 @@ function RoomViewTypeForm(props) {
               $.ajax({
                 type: "GET",
                 async: false,
-                url: `${env.API_URL}/master/room-view-types?filters=["room_view_type_code","=","${element.value}"]`,
+                url: `${env.API_URL}/master/divisions?filters=["division_code","=","${element.value}"]`,
                 success: function (res) {
                   if (res.items.length !== 0) {
-                    if(currentCode == parseInt(element.value)){
+                    if (currentCode === element.value) {
                       req = true
                     } else {
                       req = false
@@ -122,11 +133,12 @@ function RoomViewTypeForm(props) {
                   }
                 },
               })
-    
+
               return req
             },
-            "Code already exists",
+            "Division Code already exists",
           )
+
           $.validator.addMethod(
             "checkName",
             function (value, element) {
@@ -134,10 +146,10 @@ function RoomViewTypeForm(props) {
               $.ajax({
                 type: "GET",
                 async: false,
-                url: `${env.API_URL}/master/room-view-types?filters=["room_view_type_name","=","${element.value}"]`,
+                url: `${env.API_URL}/master/divisions?filters=["division_name","=","${element.value}"]`,
                 success: function (res) {
                   if (res.items.length !== 0) {
-                    if(currentName.toUpperCase() === element.value.toUpperCase()){
+                    if (currentName === element.value) {
                       req = true
                     } else {
                       req = false
@@ -147,12 +159,13 @@ function RoomViewTypeForm(props) {
                   }
                 },
               })
-    
+
               return req
             },
-            "Room View Type Name already exists",
+            "Division Name already exists",
           )
         }
+
       } catch (e) { }
 
       try {
@@ -170,7 +183,7 @@ function RoomViewTypeForm(props) {
           $.ajax({
             type: "GET",
             async: false,
-            url: `${env.API_URL}/master/room-view-types?filters=["room_view_type_code","=","${element.value}"]`,
+            url: `${env.API_URL}/master/divisions?filters=["division_code","=","${element.value}"]`,
             success: function (res) {
               if (res.items.length !== 0) {
                 req = false
@@ -180,10 +193,12 @@ function RoomViewTypeForm(props) {
             },
           })
 
+          console.log(req)
           return req
         },
-        "Code already exists",
+        "Division Code already exists",
       )
+
       $.validator.addMethod(
         "checkName",
         function (value, element) {
@@ -191,7 +206,7 @@ function RoomViewTypeForm(props) {
           $.ajax({
             type: "GET",
             async: false,
-            url: `${env.API_URL}/master/room-view-types?filters=["room_view_type_name","=","${element.value}"]`,
+            url: `${env.API_URL}/master/divisions?filters=["division_name","=","${element.value}"]`,
             success: function (res) {
               if (res.items.length !== 0) {
                 req = false
@@ -203,7 +218,7 @@ function RoomViewTypeForm(props) {
 
           return req
         },
-        "Room View Type Name already exists",
+        "Division Name already exists",
       )
     }
   }, [])
@@ -220,13 +235,13 @@ function RoomViewTypeForm(props) {
     setLoading(true)
     let api = new Api()
     try {
-      if (!form.room_view_type_name) {
-        form.room_view_type_name = null
-      }
-      if (!form.room_view_type_code) {
-        form.room_view_type_code = null
+      if (!form.parent_division_id) {
+        form.parent_division_id = null
       } else {
-        form.room_view_type_code = parseInt(form.room_view_type_code)
+        form.depth = parseInt(form.depth) + 1
+      }
+      if (!form.manager_id) {
+        form.manager_id = null
       }
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
@@ -235,18 +250,19 @@ function RoomViewTypeForm(props) {
         let path = endpoint + "/" + res.data.id + "/translations"
         await api.putOrPost(path, tl.id, tl)
       }
-    } catch (e) {
-      dispatch(
-        setAlert({
-          message: `Failed to ${formId ? "update" : "save"} this record.`,
-        }),
-      )
-    } finally {
+
       setLoading(false)
       props.history.push(backUrl)
       dispatch(
         setAlert({
-          message: `Record ${form.room_view_type_code} - ${form.room_view_type_name} has been successfully ${formId ? "updated" : "saved"}.`,
+          message: `Record ${form.division_name} has been successfully saved.`,
+        }),
+      )
+    } catch (e) {
+      setLoading(false)
+      dispatch(
+        setAlert({
+          message: `Failed to save this record.`,
         }),
       )
     }
@@ -258,6 +274,8 @@ function RoomViewTypeForm(props) {
       isView={isView || loading}
       onSave={onSave}
       back={backUrl}
+      txtBack={formId ? "BACK" : "CANCEL"}
+      txtSave={formId ? "UPDATE" : "SAVE"}
       translations={translations}
       translationFields={translationFields}
       alertMessage={"Incomplete data"}
@@ -267,38 +285,72 @@ function RoomViewTypeForm(props) {
     >
       <FormHorizontal>
         <FormInputControl
-          label="Room View Type Name"
+          label={isView ? "Division Name" : "Name"}
           required={true}
-          value={form.room_view_type_name}
-          name="room_view_type_name"
+          value={form.division_name}
+          name="division_name"
           onChange={(e) =>
-            setForm({...form, room_view_type_name: e.target.value})
+            setForm({...form, division_name: e.target.value})
           }
           disabled={isView || loading}
           type="text"
           minLength="1"
           maxLength="256"
         />
+
+        {(formId === undefined || !loading) && <FormInputSelectAjax
+          label="Parent Division"
+          value={form.parent_division_id}
+          name="parent_division_id"
+          endpoint="/master/parent-division"
+          column="parent_name"
+          filter={`["status", "=", 1]`}
+          onChange={(e) =>
+            setForm({...form, parent_division_id: e.target.value || null})
+          }
+          data={supplierTypeData}
+          disabled={isView || loading}
+          type="select"
+          placeholder="Select Parent Division"
+        />}
+
+        {(formId === undefined || !loading) && <FormInputSelectAjax
+          label="Manager"
+          value={form.manager_id}
+          name="manager_id"
+          endpoint="/master/manager"
+          column="manager_name"
+          filter={`["status", "=", 1]`}
+          onChange={(e) =>
+            setForm({...form, manager_id: e.target.value || null})
+          }
+          data={supplierTypeData}
+          disabled={isView || loading}
+          type="select"
+          placeholder="Select Manager"
+        />}
       </FormHorizontal>
 
       <FormHorizontal>
         <FormInputControl
-          label="Room View Type Code"
+          label="Code"
           required={true}
-          value={form.room_view_type_code}
-          name="room_view_type_code"
+          value={form.division_code}
+          name="division_code"
           cl={{md:"12"}}
           cr="12"
           onChange={(e) =>
-            setForm({...form, room_view_type_code: e.target.value})
+            setForm({...form, division_code: e.target.value})
           }
           disabled={isView || loading}
           type="text"
-          hint="Room View Type Code is numeric"
+          minLength="1"
+          maxLength="36"
+          hint="Division Code maximum 36 characters"
         />
       </FormHorizontal>
     </FormBuilder>
   )
 }
 
-export default withRouter(RoomViewTypeForm)
+export default withRouter(DivisionForm)

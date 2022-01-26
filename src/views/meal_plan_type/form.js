@@ -342,7 +342,7 @@ function MealPlanTypeForm(props) {
 
         <FormInputControl
           id="meal-plan-type-icon"
-          label="Meal Plan Type Icon Image"
+          label="Icon"
           type="image"
           name="meal_plan_type_asset"
           onChange={doUpload}

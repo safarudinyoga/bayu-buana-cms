@@ -3,7 +3,9 @@
   src: url('./assets/fonts/segoeuihis.woff') format('woff'),
        url('./assets/fonts/segoeuihis.ttf') format('truetype');
 }
-
+html {
+  overflow-y: scroll;
+}
 body {
   margin: 0;
   font-family: "Segoe UI", sans-serif !important;
