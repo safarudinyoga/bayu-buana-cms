@@ -5,13 +5,20 @@ import Api from "config/api"
 import { FastField, Field, Formik } from 'formik'
 import { Card, Col, Row, Form, Button } from 'react-bootstrap'
 import Select from 'components/form/select'
+import DatePicker from "react-datepicker"
+
+import "react-datepicker/dist/react-datepicker.css";
 
 const GeneralInformation = (props) => {
   const [airline, setAirline] = useState([])
   const [origin, setOrigin] = useState("")
   const [destination, setDestination] = useState()
   const [periodOfIssue, setPeriodOfIssue] = useState()
+  const [periodOfIssueStart, setPeriodOfIssueStart] = useState(new Date())
+  const [periodOfIssueEnd, setPeriodOfIssueEnd] = useState(new Date())
   const [periodOfDeparture, setPeriodOfDeparture] = useState()
+  const [periodOfDepartureStart, setPeriodOfDepartureStart] = useState(new Date())
+  const [periodOfDepartureEnd, setPeriodOfDepartureEnd] = useState(new Date())
   const [commision, setCommision] = useState(0)
 
   let api = new Api()
@@ -165,27 +172,13 @@ const GeneralInformation = (props) => {
                                 />
                               </Col>
                               <Col sm={4}>
-                                <Form.Control
-                                  type="text"
-                                  inline
-                                  isInvalid={
-                                    form.touched.issueSpecifiedStart &&
-                                    form.errors.issueSpecifiedStart
-                                  }
-                                />
+                                <DatePicker className="form-control" selected={periodOfIssueStart} onChange={(date) => setPeriodOfIssueStart(date)} />
                               </Col>
                               <Col sm={1}>
                                 to
                               </Col>
                               <Col sm={4}>
-                                <Form.Control
-                                  type="text"
-                                  inline
-                                  isInvalid={
-                                    form.touched.issueSpecifiedEnd &&
-                                    form.errors.issueSpecifiedEnd
-                                  }
-                                />
+                                <DatePicker className="form-control" selected={periodOfIssueEnd} onChange={(date) => setPeriodOfIssueEnd(date)} />
                               </Col>
                             </Row>
                           )}
@@ -232,27 +225,13 @@ const GeneralInformation = (props) => {
                                 />
                               </Col>
                               <Col sm={4}>
-                                <Form.Control
-                                  type="text"
-                                  inline
-                                  isInvalid={
-                                    form.touched.departureSpecifiedStart &&
-                                    form.errors.departureSpecifiedStart
-                                  }
-                                />
+                                <DatePicker className="form-control" selected={periodOfDepartureStart} onChange={(date) => setPeriodOfDepartureStart(date)} />
                               </Col>
                               <Col sm={1}>
                                 to
                               </Col>
                               <Col sm={4}>
-                                <Form.Control
-                                  type="text"
-                                  inline
-                                  isInvalid={
-                                    form.touched.departureSpecifiedEnd &&
-                                    form.errors.departureSpecifiedEnd
-                                  }
-                                />
+                                <DatePicker className="form-control" selected={periodOfDepartureEnd} onChange={(date) => setPeriodOfDepartureEnd(date)} />
                               </Col>
                             </Row>
                           )}

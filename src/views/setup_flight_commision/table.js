@@ -24,11 +24,11 @@ export default function SetupFlightCommisionTable() {
 
   let params = {
     title: "Setup Flight Commision",
-    baseRoute: "/master/employee/form",
-    endpoint: "/master/employees",
-    deleteEndpoint: "/master/batch-actions/delete/employees",
-    activationEndpoint: "/master/batch-actions/activate/employees",
-    deactivationEndpoint: "/master/batch-actions/deactivate/employees",
+    baseRoute: "/master/setup-flight-commision/form",
+    endpoint: "/master/setup-flight-commisions",
+    deleteEndpoint: "/master/batch-actions/delete/setup-flight-commisions",
+    activationEndpoint: "/master/batch-actions/activate/setup-flight-commisions",
+    deactivationEndpoint: "/master/batch-actions/deactivate/setup-flight-commisions",
     columns: [
       {
         title: "Airline",
