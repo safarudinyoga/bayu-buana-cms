@@ -55,7 +55,7 @@ function Login() {
 			let res = await api.post("/user/login", values)
 
 			let date = new Date();
-			date.setTime(date.getTime() + (res.data.expires_in * 10));
+			date.setTime(date.getTime() + (res.data.expires_in * 1000));
 			Cookies.set('ut', res.data.access_token, {expires: date})
 
 			if (rememberMe) {
