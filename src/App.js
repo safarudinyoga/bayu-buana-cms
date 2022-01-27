@@ -508,7 +508,7 @@ const AuthRoutes = () => {
 
 
 const App = () => {
-  let auth = Cookies.get('userToken')
+  let auth = Cookies.get('ut')
   document.title = "Bayu Buana"
   return (
     <Router>
