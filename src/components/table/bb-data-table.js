@@ -23,6 +23,7 @@ import "./bb-data-table.css"
 import editIcon from "assets/icons/edit.svg"
 import removeIcon from "assets/icons/remove.svg"
 import showIcon from "assets/icons/show.svg"
+import Cookies from "js-cookie"
 
 window.JSZip = JSZip
 
@@ -153,6 +154,12 @@ class BBDataTable extends Component {
     })
 
     const initialize = () => {
+      let headers = {}
+      let auth = Cookies.get('ut')
+      if (auth) {
+        headers = { Authorization : `Bearer ${auth}` }
+      }
+
       let dt = $(this.table.current).DataTable({
         pagingType: "simple_numbers",
         colReorder: {
@@ -173,6 +180,7 @@ class BBDataTable extends Component {
         destroy: true,
         ajax: {
           url: this.api.env.endpoint(this.props.endpoint),
+          headers: headers,
           cache: true,
           dataSrc: (json) => {
             this.inProgress = false
