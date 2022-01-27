@@ -10,12 +10,21 @@ import Cookies from 'js-cookie'
 
 function Login() {
 	const history = useHistory()
-	const [initialForm, setForm] = useState({
-			username: "",
-			password: "",
-		})
 	const [ passType, setPassType] = useState("password")
 	const [ rememberMe, setRememberMe] = useState(false)
+
+	let cookie_rm = Cookies.get("remember_acc");
+	let form = {
+		username: "",
+		password: "",
+	}
+	if(cookie_rm) {
+		form = {
+			username: JSON.parse(cookie_rm).username,
+			password: JSON.parse(cookie_rm).password,
+		}
+	}
+	const [initialForm, setForm] = useState(form)
 
 	const validationSchema =  Yup.object().shape({
 		username: Yup.string()
@@ -34,20 +43,21 @@ function Login() {
 		if (token) {
 			history.push("/");
 		}
-		let local_remember = Cookies.get("remember_acc");
-		if(local_remember) {
-			let value = JSON.parse(local_remember);
-			setRememberMe(true);
-			setForm({...initialForm, username: value.username});
-		}
+		if(cookie_rm) setRememberMe(true)
 	}, []);
 
 	const onSubmit = async (values, a) => {
 		let api = new Api()
 		try {
 			let res = await api.post("/user/login", values)
+			console.log(rememberMe)
 			Cookies.set('userToken', res.data.access_token)
-			if(rememberMe) Cookies.set('remember_acc', JSON.stringify(values))
+			if (rememberMe) {
+				Cookies.set('remember_acc', JSON.stringify(values))
+			} else {
+				let rememberCookie = Cookies.get('remember_acc')
+				if(rememberCookie) Cookies.remove('remember_acc')
+			}
 			window.location.reload()
 		} catch(e) {
 			console.log(e)
@@ -143,6 +153,7 @@ function Login() {
 										type={"checkbox"}
 										id="custom-inline-checkbox-remember"
 										onChange={() => setRememberMe(!rememberMe)}
+										checked={rememberMe}
 									/>
 								</div>
 								<div className="col text-right">
@@ -153,7 +164,7 @@ function Login() {
 							</div>
 							<BlockButton 
 								text={"SIGN IN"} 
-								disabled={isSubmitting || !dirty}
+								disabled={isSubmitting}
 								type="submit"
 							/>
 						</Form>
