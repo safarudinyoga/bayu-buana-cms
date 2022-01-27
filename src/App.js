@@ -112,6 +112,9 @@ import StandardMarkupFlightForm from "views/standard_markup/form/flight_form"
 import StandardMarkupHotelForm from "views/standard_markup/form/hotel_form"
 import StandardMarkupOtherForm from "views/standard_markup/form/other_form"
 
+// Master Setup Flight Commision
+import FlightCommisionTable from "views/setup_flight_commision/table";
+import FlightCommisionForm from "views/setup_flight_commision/form"
 // Master Exchange Rate
 import ExchageRateTable from "views/exchange_rate/table"
 import ExchangeRateForm from "views/exchange_rate/form"
@@ -465,6 +468,14 @@ const DashboardRoutes = () => {
           <InvoiceEmailSetupForm />
         </Route>
 
+        {/* Master Setup Flight Commission */}
+        <Route exact path="/master/setup-flight-commision">
+          <FlightCommisionTable />
+        </Route>
+        <Route exact path="/master/setup-flight-commision/form/:id?">
+          <FlightCommisionForm />
+        </Route>
+        
         {/* Master Exhange Rate */}
         <Route exact path="/master/exchange-rate">
           <ExchageRateTable />
@@ -492,6 +503,8 @@ const AuthRoutes = () => {
     </AuthWrapper>
   )
 }
+
+
 
 const App = () => {
   document.title = "Bayu Buana"

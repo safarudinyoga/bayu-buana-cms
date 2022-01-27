@@ -288,7 +288,6 @@ function RoomAmenityTypeForm(props) {
       validationMessages={validationMessage}
     >
       <FormHorizontal>
-
         <FormInputControl
           label="Room Amenity Category Name"
           required={true}
