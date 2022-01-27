@@ -4,8 +4,15 @@ import avatar2 from "admin-lte/dist/img/user8-128x128.jpg"
 import infoIcon from "assets/icons/information.svg"
 import notifIcon from "assets/icons/notification.svg"
 import menuIcon from "assets/icons/navigation/menu.svg"
+import Cookies from "js-cookie"
 
 export default class Navbar extends Component {
+
+  signout = async () => {
+    Cookies.remove("userToken");
+    this.props.history.push("/auth/login");
+  };
+
   render() {
     return (
       <nav className="main-header navbar navbar-expand navbar-white navbar-light">
@@ -81,7 +88,7 @@ export default class Navbar extends Component {
               <a href="/" className="dropdown-item">
                 <i className="fas fa-unlock mr-2"></i> Change Password
               </a>
-              <a href="/" className="dropdown-item">
+              <a href="/" className="dropdown-item" onClick={() => this.signout()}>
                 <i className="fas fa-sign-out-alt mr-2"></i> Sign Out
               </a>
             </div>
