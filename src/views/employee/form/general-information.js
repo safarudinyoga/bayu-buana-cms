@@ -3,8 +3,10 @@ import { Card, Form, Row, Col, Button, Image } from "react-bootstrap"
 import { Formik, FastField, Field } from "formik"
 import * as Yup from "yup"
 import ImageUploading from "react-images-uploading"
+import axios from "axios"
 
 import Api from "config/api"
+import env from "config/environment"
 import Select from "components/form/select"
 
 const GeneralInformation = (props) => {
@@ -69,7 +71,25 @@ const GeneralInformation = (props) => {
     mobilePhone: Yup.string().required("Mobile Phone is required."),
     email: Yup.string()
       .email("Email is not valid.")
-      .required("Email is required."),
+      .required("Email is required.")
+      .test(
+        "Unique Email Contacts",
+        "Email already exists", // <- key, message
+        (value) => {
+          return new Promise((resolve, reject) => {
+            axios
+              .get(
+                `${env.API_URL}/master/employees?filters=["email","=","${value}"]`,
+              )
+              .then((res) => {
+                resolve(res.data.items.length == 0)
+              })
+              .catch((error) => {
+                resolve(false)
+              })
+          })
+        },
+      ),
     otherEmail: Yup.string().email("Email is not valid."),
 
     // Current Address
@@ -306,6 +326,7 @@ const GeneralInformation = (props) => {
                                     form.touched.firstName &&
                                     form.errors.firstName
                                   }
+                                  minLength={1}
                                   maxLength={128}
                                   {...field}
                                 />
@@ -332,6 +353,7 @@ const GeneralInformation = (props) => {
                               <Form.Control
                                 {...field}
                                 type="text"
+                                minLength={1}
                                 maxLength={128}
                               />
                             )}
@@ -354,6 +376,7 @@ const GeneralInformation = (props) => {
                                     form.touched.lastName &&
                                     form.errors.lastName
                                   }
+                                  minLength={1}
                                   maxLength={128}
                                 />
                                 {form.touched.lastName &&
@@ -375,8 +398,8 @@ const GeneralInformation = (props) => {
                           <span className="form-label-required">*</span>
                         </Form.Label>
                         <Col sm={9}>
-                          <div style={{ width: 300, display: "flex" }}>
-                            <div style={{ marginRight: 12 }}>
+                          <div style={{ width: 400, display: "flex" }}>
+                            <div style={{ marginRight: 12, flex: 1 }}>
                               <Select
                                 options={selectDay()}
                                 className={`react-select ${
@@ -390,7 +413,7 @@ const GeneralInformation = (props) => {
                                 style={{ marginRight: 12 }}
                               />
                             </div>
-                            <div style={{ marginRight: 12 }}>
+                            <div style={{ marginRight: 12, flex: 1 }}>
                               <Select
                                 options={selectMonth()}
                                 className={`react-select ${
@@ -404,7 +427,7 @@ const GeneralInformation = (props) => {
                                 style={{ marginRight: 12 }}
                               />
                             </div>
-                            <div>
+                            <div style={{ flex: 1 }}>
                               <Select
                                 options={selectYear()}
                                 className={`react-select ${
@@ -491,6 +514,7 @@ const GeneralInformation = (props) => {
                               <Form.Control
                                 {...field}
                                 type="text"
+                                minLength={1}
                                 maxLength={36}
                               />
                             )}
@@ -534,10 +558,10 @@ const GeneralInformation = (props) => {
                                       : onImageUpdate(1)
                                   }
                                 >
-                                  {photoProfile.length !== 0
+                                  {/* {photoProfile.length !== 0
                                     ? "CHANGE"
-                                    : "UPLOAD"}{" "}
-                                  PHOTO
+                                    : "UPLOAD"}                                */}
+                                  User Profile Image
                                 </Button>
                               </>
                             )}
@@ -563,6 +587,7 @@ const GeneralInformation = (props) => {
                               isInvalid={
                                 form.touched.homePhone && form.errors.homePhone
                               }
+                              minLength={1}
                               maxLength={32}
                             />
                             {form.touched.homePhone &&
@@ -594,6 +619,7 @@ const GeneralInformation = (props) => {
                                 form.touched.mobilePhone &&
                                 form.errors.mobilePhone
                               }
+                              minLength={1}
                               maxLength={32}
                             />
                             {form.touched.mobilePhone &&
@@ -623,6 +649,7 @@ const GeneralInformation = (props) => {
                               isInvalid={
                                 form.touched.email && form.errors.email
                               }
+                              minLength={1}
                               maxLength={256}
                             />
                             {form.touched.email && form.errors.email && (
@@ -652,6 +679,7 @@ const GeneralInformation = (props) => {
                                   ? "is-invalid"
                                   : null
                               }
+                              minLength={1}
                               maxLength={256}
                             />
                             {form.touched.otherEmail &&
@@ -681,6 +709,7 @@ const GeneralInformation = (props) => {
                             {...field}
                             as="textarea"
                             rows={3}
+                            minLength={1}
                             maxLength={512}
                           />
                         )}
@@ -777,7 +806,12 @@ const GeneralInformation = (props) => {
                     <Col sm={10}>
                       <FastField name="currentZipCode">
                         {({ field }) => (
-                          <Form.Control {...field} type="text" maxLength={16} />
+                          <Form.Control
+                            {...field}
+                            type="text"
+                            minLength={1}
+                            maxLength={16}
+                          />
                         )}
                       </FastField>
                     </Col>
@@ -806,6 +840,7 @@ const GeneralInformation = (props) => {
                         name="permanentAddress"
                         as="textarea"
                         rows={3}
+                        minLength={1}
                         maxLength={512}
                         value={
                           values.sameAddress
@@ -925,6 +960,7 @@ const GeneralInformation = (props) => {
                       <Form.Control
                         name="permanentZipCode"
                         type="text"
+                        minLength={1}
                         maxLength={16}
                         value={
                           values.sameAddress

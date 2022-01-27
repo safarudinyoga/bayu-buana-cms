@@ -149,6 +149,7 @@ const Employment = (props) => {
                             name="employeeId"
                             type="text"
                             value={values.employeeId}
+                            minLength={1}
                             maxLength={36}
                             isInvalid={
                               checkEmployeeId ||
@@ -300,6 +301,7 @@ const Employment = (props) => {
                             name="npwp"
                             type="text"
                             value={values.npwp}
+                            minLength={1}
                             maxLength={36}
                             onChange={handleChange}
                             onBlur={handleBlur}

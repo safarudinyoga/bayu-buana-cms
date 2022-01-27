@@ -84,6 +84,7 @@ const EmergencyContacts = (props) => {
                         name="fullNameEmergency1"
                         type="text"
                         value={values.fullNameEmergency1}
+                        minLength={1}
                         maxLength={128}
                         onChange={handleChange}
                         onBlur={handleBlur}
@@ -99,6 +100,7 @@ const EmergencyContacts = (props) => {
                         name="phoneNumberEmergency1"
                         type="text"
                         value={values.phoneNumberEmergency1}
+                        minLength={1}
                         maxLength={32}
                         onChange={handleChange}
                         onBlur={handleBlur}
@@ -114,6 +116,7 @@ const EmergencyContacts = (props) => {
                         name="relationshipEmergency1"
                         type="text"
                         value={values.relationshipEmergency1}
+                        minLength={1}
                         maxLength={36}
                         onChange={handleChange}
                         onBlur={handleBlur}
@@ -132,6 +135,7 @@ const EmergencyContacts = (props) => {
                         name="fullNameEmergency2"
                         type="text"
                         value={values.fullNameEmergency2}
+                        minLength={1}
                         maxLength={128}
                         onChange={handleChange}
                         onBlur={handleBlur}
@@ -147,6 +151,7 @@ const EmergencyContacts = (props) => {
                         name="phoneNumberEmergency2"
                         type="text"
                         value={values.phoneNumberEmergency2}
+                        minLength={1}
                         maxLength={32}
                         onChange={handleChange}
                         onBlur={handleBlur}
@@ -162,6 +167,7 @@ const EmergencyContacts = (props) => {
                         name="relationshipEmergency2"
                         type="text"
                         value={values.relationshipEmergency2}
+                        minLength={1}
                         maxLength={36}
                         onChange={handleChange}
                         onBlur={handleBlur}

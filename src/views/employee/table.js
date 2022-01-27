@@ -33,7 +33,7 @@ export default function EmployeeTable() {
     columns: [
       {
         title: "Employee ID",
-        data: "employee_id",
+        data: "employee_number",
       },
       {
         title: "Full Name",
