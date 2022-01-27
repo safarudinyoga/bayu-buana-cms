@@ -9,7 +9,7 @@ import Cookies from "js-cookie"
 export default class Navbar extends Component {
 
   signout = async () => {
-    Cookies.remove("userToken");
+    Cookies.remove("ut");
     this.props.history.push("/auth/login");
   };
 
