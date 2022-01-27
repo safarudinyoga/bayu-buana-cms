@@ -299,6 +299,11 @@ export default class Sidebar extends Component {
                       <p>Setup Flight Commision</p>
                     </Link>
                   </li>
+                  <li className="nav-item">
+                    <Link to="/master/integration-partner" className="nav-link">
+                      <p>Integration Partner</p>
+                    </Link>
+                  </li>
                 </ul>
               </li>
             </ul>

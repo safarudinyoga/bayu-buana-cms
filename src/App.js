@@ -118,6 +118,8 @@ import FlightCommisionForm from "views/setup_flight_commision/form"
 // Master Exchange Rate
 import ExchageRateTable from "views/exchange_rate/table"
 import ExchangeRateForm from "views/exchange_rate/form"
+// Master Integration Partner
+import IntegrationPartnerTable from "views/integration_partner/table"
 
 import Login from "./views/auth/login"
 import ForgotPassword from "views/auth/forgot_password"
@@ -224,6 +226,12 @@ const DashboardRoutes = () => {
           <FeeTypeTable />
         </Route>
         <Route path="/master/fee-type/form/:id?">
+          <FeeTypeForm />
+        </Route>
+        <Route exact path="/master/integration-partner">
+          <IntegrationPartnerTable />
+        </Route>
+        <Route path="/master/integration-partner/form/:id?">
           <FeeTypeForm />
         </Route>
         <Route exact path="/master/flight-types">
