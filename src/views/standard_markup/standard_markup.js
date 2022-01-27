@@ -11,24 +11,25 @@ import { ReactSVG } from "react-svg"
 
 const ControlledTabs = () => {
   const [key, setKey] = useState("flight")
-  
 
   return (
     <Tabs
       id="standard-markup"
-      defaultActiveKey={key}
+      activeKey={key}
       onSelect={(k) => setKey(k)}
       className="mb-4"
       mountOnEnter={true}
+      unmountOnExit={true}
+      className=""
     >
       <TabPane
         className="m-3"
         eventKey="flight"
         title={
-          <Row>
-            <ReactSVG src="/img/icons/tabs/plane.svg" />
-            <span className="ml-2">Flight</span>
-          </Row>
+          <div className="d-md-flex flex-row bd-highlight">
+            <ReactSVG className="tabs-icon" src="/img/icons/tabs/plane.svg" />
+            <span className="ml-md-2 tabs-text">FLIGHT</span>
+          </div>
         }
       >
         <FlightTable />
@@ -37,10 +38,10 @@ const ControlledTabs = () => {
         className="m-3"
         eventKey="hotel"
         title={
-          <Row>
-            <ReactSVG src="/img/icons/tabs/hotel.svg" />
-            <span className="ml-2">Hotel</span>
-          </Row>
+          <div className="d-md-flex flex-row">
+            <ReactSVG className="tabs-icon" src="/img/icons/tabs/hotel.svg" />
+            <span className="ml-md-2 tabs-text">HOTEL</span>
+          </div>
         }
       >
         <HotelTable />
@@ -49,10 +50,10 @@ const ControlledTabs = () => {
         className="m-3"
         eventKey="other"
         title={
-          <Row>
-            <ReactSVG src="/img/icons/tabs/other.svg" />
-            <span className="ml-2">Other</span>
-          </Row>
+          <div className="d-md-flex flex-row">
+            <ReactSVG className="tabs-icon" src="/img/icons/tabs/other.svg" />
+            <span className="ml-md-2 tabs-text">OTHER</span>
+          </div>
         }
       >
         <OtherTable />
