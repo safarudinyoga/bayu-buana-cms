@@ -23,6 +23,7 @@ import "./bb-data-table.css"
 import editIcon from "assets/icons/edit.svg"
 import removeIcon from "assets/icons/remove.svg"
 import showIcon from "assets/icons/show.svg"
+import Cookies from "js-cookie"
 
 window.JSZip = JSZip
 
@@ -40,6 +41,7 @@ class BBDataTable extends Component {
       status: "0",
       extraFilters: this.props.filters || [],
       isOpen: false,
+      itemInfo: ""
     }
     this.inProgress = false
 
@@ -82,7 +84,8 @@ class BBDataTable extends Component {
     } catch (e) {}
 
     const allowed = [this.props.recordName]
-    const { recordName } = this.props
+    const { recordName, msgType } = this.props
+    const self = this
     columns.push({
       searchable: false,
       orderable: false,
@@ -112,7 +115,12 @@ class BBDataTable extends Component {
                 .join(" - ")
             : row[recordName]
           : ""
-
+        console.log(display, row)
+        let itemInfo = msgType === "colon"
+          ? `'${recordName[0].split("_").join(" ")}: ${row[recordName[0]]}
+          ${recordName[1].split("_").join(" ")}: ${row[recordName[1]]}'`
+          : cvtRecordName
+        self.setState({ itemInfo })
         var x = window.matchMedia("(max-width: 768px)")
         tooltipCust(x)
         x.addListener(tooltipCust)
@@ -146,6 +154,12 @@ class BBDataTable extends Component {
     })
 
     const initialize = () => {
+      let headers = {}
+      let auth = Cookies.get('ut')
+      if (auth) {
+        headers = { Authorization : `Bearer ${auth}` }
+      }
+
       let dt = $(this.table.current).DataTable({
         pagingType: "simple_numbers",
         colReorder: {
@@ -166,6 +180,7 @@ class BBDataTable extends Component {
         destroy: true,
         ajax: {
           url: this.api.env.endpoint(this.props.endpoint),
+          headers: headers,
           cache: true,
           dataSrc: (json) => {
             this.inProgress = false
@@ -842,7 +857,9 @@ class BBDataTable extends Component {
                 : this.props.title
               : this.props.title}
           </ModalHeader>
-          <ModalBody>Are you sure you want to delete this?</ModalBody>
+          <ModalBody>Are you sure you want to delete {
+            this.props.showInfoDelete ? this.state.itemInfo : "this"
+          }?</ModalBody>
           <ModalFooter>
             <Button
               variant="danger"
@@ -855,7 +872,7 @@ class BBDataTable extends Component {
                     .delete(this.props.endpoint + "/" + this.state.id)
                     .then(() => {
                       this.props.setAlert({
-                        message: `Record ${this.state.name} was successfully deleted.`,
+                        message: `Record ${this.state.itemInfo} was successfully deleted.`,
                       })
                     })
                     .catch(function (error) {
