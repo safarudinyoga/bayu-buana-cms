@@ -9,8 +9,6 @@ import Api from "config/api"
 import Cookies from 'js-cookie'
 import { useDispatch } from "react-redux"
 import { setAlert } from "redux/ui-store"
-import env from "config/environment"
-import axios from "axios"
 
 function Login() {
 	const dispatch = useDispatch()
@@ -59,7 +57,7 @@ function Login() {
 			let date = new Date();
 			date.setTime(date.getTime() + (res.data.expires_in));
 			Cookies.set('ut', res.data.access_token, {expires: date})
-			
+
 			if (rememberMe) {
 				Cookies.set('remember_acc', JSON.stringify(values))
 			} else {
