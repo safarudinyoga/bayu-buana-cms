@@ -139,11 +139,11 @@ const Employment = (props) => {
                   <h3 className="card-heading">Employment</h3>
                   <div style={{ padding: "0 15px 15px" }}>
                     <Form.Group as={Row} className="form-group">
-                      <Form.Label column sm={2}>
+                      <Form.Label column sm={3}>
                         Employee ID{" "}
                         <span className="form-label-required">*</span>
                       </Form.Label>
-                      <Col sm={10}>
+                      <Col sm={9}>
                         <div style={{ maxWidth: 250 }}>
                           <Form.Control
                             name="employeeId"
@@ -175,10 +175,10 @@ const Employment = (props) => {
                       </Col>
                     </Form.Group>
                     <Form.Group as={Row} className="form-group">
-                      <Form.Label column sm={2}>
+                      <Form.Label column sm={3}>
                         Job Title <span className="form-label-required">*</span>
                       </Form.Label>
-                      <Col sm={10}>
+                      <Col sm={9}>
                         <div style={{ width: 300 }}>
                           <Select
                             name="jobTitle"
@@ -207,10 +207,10 @@ const Employment = (props) => {
                       </Col>
                     </Form.Group>
                     <Form.Group as={Row} className="form-group">
-                      <Form.Label column sm={2}>
+                      <Form.Label column sm={3}>
                         Division
                       </Form.Label>
-                      <Col sm={10}>
+                      <Col sm={9}>
                         <div style={{ width: 300 }}>
                           <Select
                             name="division"
@@ -230,10 +230,10 @@ const Employment = (props) => {
                       </Col>
                     </Form.Group>
                     <Form.Group as={Row} className="form-group">
-                      <Form.Label column sm={2}>
+                      <Form.Label column sm={3}>
                         Branch Office
                       </Form.Label>
-                      <Col sm={10}>
+                      <Col sm={9}>
                         <div style={{ width: 300 }}>
                           <Select
                             name="branchOffice"
@@ -253,10 +253,10 @@ const Employment = (props) => {
                       </Col>
                     </Form.Group>
                     <Form.Group as={Row} className="form-group">
-                      <Form.Label column sm={2}>
+                      <Form.Label column sm={3}>
                         Hiring Date
                       </Form.Label>
-                      <Col sm={10}>
+                      <Col sm={9}>
                         <div style={{ width: 300, display: "flex" }}>
                           <div style={{ marginRight: 12 }}>
                             <Select
@@ -292,10 +292,10 @@ const Employment = (props) => {
                       </Col>
                     </Form.Group>
                     <Form.Group as={Row} className="form-group">
-                      <Form.Label column sm={2}>
+                      <Form.Label column sm={3}>
                         NPWP
                       </Form.Label>
-                      <Col sm={10}>
+                      <Col sm={9}>
                         <div style={{ maxWidth: 250 }}>
                           <Form.Control
                             name="npwp"
@@ -316,15 +316,15 @@ const Employment = (props) => {
                         </Form.Label>
                         <div
                           style={{
-                            padding: "0 20px",
+                            padding: "0 0 0 35px",
                           }}
                         >
                           <Form.Group as={Row} className="form-group">
-                            <Form.Label column sm={5}>
+                            <Form.Label column sm={6}>
                               Job Title{" "}
                               <span className="form-label-required">*</span>
                             </Form.Label>
-                            <Col sm={7}>
+                            <Col sm={6}>
                               <div style={{ width: 300 }}>
                                 <Select
                                   name="additionalJobTitle"
@@ -357,10 +357,10 @@ const Employment = (props) => {
                             </Col>
                           </Form.Group>
                           <Form.Group as={Row} className="form-group">
-                            <Form.Label column sm={5}>
+                            <Form.Label column sm={6}>
                               Division
                             </Form.Label>
-                            <Col sm={7}>
+                            <Col sm={6}>
                               <div style={{ width: 300 }}>
                                 <Select
                                   name="additionalDivision"

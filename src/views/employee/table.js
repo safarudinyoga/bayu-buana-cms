@@ -1,9 +1,11 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import BBDataTable from "components/table/bb-data-table"
 import rowStatus from "lib/row-status"
 import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
 import { renderColumn } from "lib/translation"
+
+import FormInputSelectAjax from "components/form/input-select-ajax"
 
 export default function EmployeeTable() {
   let dispatch = useDispatch()
@@ -23,7 +25,14 @@ export default function EmployeeTable() {
     )
   }, [])
 
-  let params = {
+  let [selectedJobTitle, setSelectedJobTitle] = useState([])
+  let [selectedJobTitleIds, setSelectedJobTitleIds] = useState([])
+  let [selectedDivision, setSelectedDivision] = useState([])
+  let [selectedDivisionIds, setSelectedDivisionIds] = useState([])
+  let [selectedOffice, setSelectedOffice] = useState([])
+  let [selectedOfficeIds, setSelectedOfficeIds] = useState([])
+
+  let [params, setParams] = useState({
     title: "Employee",
     baseRoute: "/master/employee/form",
     endpoint: "/master/employees",
@@ -69,6 +78,134 @@ export default function EmployeeTable() {
     ],
     emptyTable: "No employees found",
     btnDownload: ".buttons-csv",
+  })
+
+  const onFilterChangeJobTitle = (e, values) => {
+    let ids = []
+    let columns = []
+    if (values && values.length > 0) {
+      for (let i in values) {
+        ids.push(values[i].id)
+        columns.push(["job_title_name", "like", values[i].job_title_name])
+
+        if (parseInt(i) + 1 !== values.length) {
+          columns.push(["OR"])
+        }
+      }
+    }
+    let findFilter = params.filters
+      ? params.filters.filter((v) => v[0][0] !== "job_title_name")
+      : []
+    if (columns.length > 0) {
+      setParams({ ...params, filters: [...findFilter, columns] })
+    } else {
+      setParams({ ...params, filters: [...findFilter] })
+    }
+    setSelectedJobTitle(values)
+    setSelectedJobTitleIds(ids)
   }
-  return <BBDataTable {...params} />
+
+  const onFilterChangeDivision = (e, values) => {
+    let ids = []
+    let columns = []
+    if (values && values.length > 0) {
+      for (let i in values) {
+        ids.push(values[i].id)
+        columns.push(["division_name", "like", values[i].division_name])
+
+        if (parseInt(i) + 1 !== values.length) {
+          columns.push(["OR"])
+        }
+      }
+    }
+    let findFilter = params.filters
+      ? params.filters.filter((v) => v[0][0] !== "division_name")
+      : []
+    if (columns.length > 0) {
+      setParams({ ...params, filters: [...findFilter, columns] })
+    } else {
+      setParams({ ...params, filters: [...findFilter] })
+    }
+    setSelectedDivision(values)
+    setSelectedDivisionIds(ids)
+  }
+
+  const onFilterChangeOffice = (e, values) => {
+    let ids = []
+    let columns = []
+    if (values && values.length > 0) {
+      for (let i in values) {
+        ids.push(values[i].id)
+        columns.push(["office_name", "like", values[i].office_name])
+
+        if (parseInt(i) + 1 !== values.length) {
+          columns.push(["OR"])
+        }
+      }
+    }
+    let findFilter = params.filters
+      ? params.filters.filter((v) => v[0][0] !== "office_name")
+      : []
+    if (columns.length > 0) {
+      setParams({ ...params, filters: [...findFilter, columns] })
+    } else {
+      setParams({ ...params, filters: [...findFilter] })
+    }
+    setSelectedOffice(values)
+    setSelectedOfficeIds(ids)
+  }
+
+  const extraFilter = () => {
+    return (
+      <>
+        <FormInputSelectAjax
+          label="Job Title"
+          onChange={onFilterChangeJobTitle}
+          endpoint="/master/job-titles"
+          column="job_title_name"
+          value={selectedJobTitleIds}
+          data={selectedJobTitle}
+          filter={`["status", "=", 1]`}
+          type="selectmultiple"
+          isFilter={true}
+          allowClear={false}
+          placeholder="Please choose"
+        />
+        <FormInputSelectAjax
+          label="Division"
+          onChange={onFilterChangeDivision}
+          endpoint="/master/divisions"
+          column="division_name"
+          value={selectedDivisionIds}
+          data={selectedDivision}
+          filter={`["status", "=", 1]`}
+          type="selectmultiple"
+          isFilter={true}
+          allowClear={false}
+          placeholder="Please choose"
+        />
+        <FormInputSelectAjax
+          label="Branch Office"
+          onChange={onFilterChangeOffice}
+          endpoint="/master/offices"
+          column="office_name"
+          value={selectedOfficeIds}
+          data={selectedOffice}
+          filter={`["status", "=", 1]`}
+          type="selectmultiple"
+          isFilter={true}
+          allowClear={false}
+          placeholder="Please choose"
+        />
+      </>
+    )
+  }
+
+  const onReset = () => {
+    setParams({ ...params, filters: [] })
+    setSelectedJobTitle([])
+    setSelectedJobTitleIds([])
+  }
+
+  return <BBDataTable {...params} extraFilter={extraFilter} onReset={onReset} />
 }
