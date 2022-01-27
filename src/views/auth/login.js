@@ -63,7 +63,6 @@ function Login() {
 			}
 			window.location.reload()
 		} catch(e) {
-			console.log(e.response.data.message)
 			dispatch(
 				setAlert({
 				  message: e.response.data.message,
