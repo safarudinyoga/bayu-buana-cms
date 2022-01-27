@@ -7,8 +7,11 @@ import { BlockButton } from '../../components/button/block'
 import { Link, useHistory } from 'react-router-dom'
 import Api from "config/api"
 import Cookies from 'js-cookie'
+import { useDispatch } from "react-redux"
+import { setAlert } from "redux/ui-store"
 
 function Login() {
+	const dispatch = useDispatch()
 	const history = useHistory()
 	const [ passType, setPassType] = useState("password")
 	const [ rememberMe, setRememberMe] = useState(false)
@@ -60,7 +63,12 @@ function Login() {
 			}
 			window.location.reload()
 		} catch(e) {
-			console.log(e)
+			console.log(e.response.data.message)
+			dispatch(
+				setAlert({
+				  message: e.response.data.message,
+				}),
+			  )
 		}
 	}
 
