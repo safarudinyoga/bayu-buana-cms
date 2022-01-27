@@ -1,10 +1,11 @@
 import React, { useState } from "react"
 import { Card, Form, Row, Col, Button } from "react-bootstrap"
 import Select from "react-select"
-import { Formik } from "formik"
+import { Formik, Field } from "formik"
 import * as Yup from "yup"
 import { useDebouncedCallback } from "use-debounce"
 import { useToggleState } from "use-toggle-state"
+import { default as SelectAsync } from "components/form/select-async"
 
 import Api from "config/api"
 
@@ -179,31 +180,34 @@ const Employment = (props) => {
                         Job Title <span className="form-label-required">*</span>
                       </Form.Label>
                       <Col sm={9}>
-                        <div style={{ width: 300 }}>
-                          <Select
-                            name="jobTitle"
-                            options={selectJobTitle}
-                            placeholder="Please choose"
-                            className={`react-select ${
-                              touched.jobTitle && errors.jobTitle
-                                ? "is-invalid"
-                                : null
-                            }`}
-                            components={{
-                              IndicatorSeparator: () => null,
-                            }}
-                            onChange={(e) => {
-                              handleChange(e)
-                              setFieldValue("jobTitle", e)
-                            }}
-                            onBlur={handleBlur}
-                          />
-                          {touched.jobTitle && errors.jobTitle && (
-                            <Form.Control.Feedback type="invalid">
-                              {touched.jobTitle ? errors.jobTitle : null}
-                            </Form.Control.Feedback>
+                        <Field name="jobTitle">
+                          {({ field, form }) => (
+                            <div style={{ width: 300 }}>
+                              <SelectAsync
+                                {...field}
+                                url={`master/job-titles`}
+                                fieldName="job_title_name"
+                                onChange={(v) => {
+                                  setFieldValue("jobTitle", v)
+                                }}
+                                placeholder="Please choose"
+                                className={`react-select ${
+                                  form.touched.jobTitle && form.errors.jobTitle
+                                    ? "is-invalid"
+                                    : null
+                                }`}
+                              />
+                              {form.touched.jobTitle &&
+                                form.errors.jobTitle && (
+                                  <Form.Control.Feedback type="invalid">
+                                    {form.touched.jobTitle
+                                      ? form.errors.jobTitle
+                                      : null}
+                                  </Form.Control.Feedback>
+                                )}
+                            </div>
                           )}
-                        </div>
+                        </Field>
                       </Col>
                     </Form.Group>
                     <Form.Group as={Row} className="form-group">
@@ -212,20 +216,21 @@ const Employment = (props) => {
                       </Form.Label>
                       <Col sm={9}>
                         <div style={{ width: 300 }}>
-                          <Select
-                            name="division"
-                            options={selectDivision}
-                            placeholder="Please choose"
-                            className="react-select"
-                            components={{
-                              IndicatorSeparator: () => null,
-                            }}
-                            onChange={(e) => {
-                              handleChange(e)
-                              setFieldValue("division", e)
-                            }}
-                            onBlur={handleBlur}
-                          />
+                          <Field name="division">
+                            {({ field, form }) => (
+                              <div style={{ width: 300 }}>
+                                <SelectAsync
+                                  {...field}
+                                  url={`master/divisions`}
+                                  fieldName="division_name"
+                                  onChange={(v) => {
+                                    setFieldValue("division", v)
+                                  }}
+                                  placeholder="Please choose"
+                                />
+                              </div>
+                            )}
+                          </Field>
                         </div>
                       </Col>
                     </Form.Group>
@@ -235,20 +240,21 @@ const Employment = (props) => {
                       </Form.Label>
                       <Col sm={9}>
                         <div style={{ width: 300 }}>
-                          <Select
-                            name="branchOffice"
-                            options={selectBranchOffice}
-                            placeholder="Please choose"
-                            className="react-select"
-                            components={{
-                              IndicatorSeparator: () => null,
-                            }}
-                            onChange={(e) => {
-                              handleChange(e)
-                              setFieldValue("branchOffice", e)
-                            }}
-                            onBlur={handleBlur}
-                          />
+                          <Field name="branchOffice">
+                            {({ field, form }) => (
+                              <div style={{ width: 300 }}>
+                                <SelectAsync
+                                  {...field}
+                                  url={`master/offices`}
+                                  fieldName="office_name"
+                                  onChange={(v) => {
+                                    setFieldValue("branchOffice", v)
+                                  }}
+                                  placeholder="Please choose"
+                                />
+                              </div>
+                            )}
+                          </Field>
                         </div>
                       </Col>
                     </Form.Group>
@@ -325,35 +331,35 @@ const Employment = (props) => {
                               <span className="form-label-required">*</span>
                             </Form.Label>
                             <Col sm={6}>
-                              <div style={{ width: 300 }}>
-                                <Select
-                                  name="additionalJobTitle"
-                                  options={selectJobTitle}
-                                  placeholder="Please choose"
-                                  className={`react-select ${
-                                    touched.additionalJobTitle &&
-                                    errors.additionalJobTitle
-                                      ? "is-invalid"
-                                      : null
-                                  }`}
-                                  components={{
-                                    IndicatorSeparator: () => null,
-                                  }}
-                                  onChange={(e) => {
-                                    handleChange(e)
-                                    setFieldValue("additionalJobTitle", e)
-                                  }}
-                                  onBlur={handleBlur}
-                                />
-                                {touched.additionalJobTitle &&
-                                  errors.additionalJobTitle && (
-                                    <Form.Control.Feedback type="invalid">
-                                      {touched.additionalJobTitle
-                                        ? errors.additionalJobTitle
-                                        : null}
-                                    </Form.Control.Feedback>
-                                  )}
-                              </div>
+                              <Field name="additionalJobTitle">
+                                {({ field, form }) => (
+                                  <div style={{ width: 300 }}>
+                                    <SelectAsync
+                                      {...field}
+                                      url={`master/job-titles`}
+                                      fieldName="job_title_name"
+                                      onChange={(v) => {
+                                        setFieldValue("additionalJobTitle", v)
+                                      }}
+                                      placeholder="Please choose"
+                                      className={`react-select ${
+                                        form.touched.additionalJobTitle &&
+                                        form.errors.additionalJobTitle
+                                          ? "is-invalid"
+                                          : null
+                                      }`}
+                                    />
+                                    {form.touched.additionalJobTitle &&
+                                      form.errors.additionalJobTitle && (
+                                        <Form.Control.Feedback type="invalid">
+                                          {form.touched.additionalJobTitle
+                                            ? form.errors.additionalJobTitle
+                                            : null}
+                                        </Form.Control.Feedback>
+                                      )}
+                                  </div>
+                                )}
+                              </Field>
                             </Col>
                           </Form.Group>
                           <Form.Group as={Row} className="form-group">
@@ -362,20 +368,21 @@ const Employment = (props) => {
                             </Form.Label>
                             <Col sm={6}>
                               <div style={{ width: 300 }}>
-                                <Select
-                                  name="additionalDivision"
-                                  options={selectDivision}
-                                  placeholder="Please choose"
-                                  className="react-select"
-                                  components={{
-                                    IndicatorSeparator: () => null,
-                                  }}
-                                  onChange={(e) => {
-                                    handleChange(e)
-                                    setFieldValue("additionalDivision", e)
-                                  }}
-                                  onBlur={handleBlur}
-                                />
+                                <Field name="additionalDivision">
+                                  {({ field, form }) => (
+                                    <div style={{ width: 300 }}>
+                                      <SelectAsync
+                                        {...field}
+                                        url={`master/divisions`}
+                                        fieldName="division_name"
+                                        onChange={(v) => {
+                                          setFieldValue("additionalDivision", v)
+                                        }}
+                                        placeholder="Please choose"
+                                      />
+                                    </div>
+                                  )}
+                                </Field>
                               </div>
                             </Col>
                           </Form.Group>
