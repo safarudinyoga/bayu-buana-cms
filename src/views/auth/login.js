@@ -9,6 +9,8 @@ import Api from "config/api"
 import Cookies from 'js-cookie'
 import { useDispatch } from "react-redux"
 import { setAlert } from "redux/ui-store"
+import env from "config/environment"
+import axios from "axios"
 
 function Login() {
 	const dispatch = useDispatch()
@@ -42,7 +44,7 @@ function Login() {
 	})
 
 	useEffect(() => {
-		const token = Cookies.get("userToken");
+		const token = Cookies.get("ut");
 		if (token) {
 			history.push("/");
 		}
@@ -53,8 +55,11 @@ function Login() {
 		let api = new Api()
 		try {
 			let res = await api.post("/user/login", values)
-			console.log(rememberMe)
-			Cookies.set('userToken', res.data.access_token)
+
+			let date = new Date();
+			date.setTime(date.getTime() + (res.data.expires_in));
+			Cookies.set('ut', res.data.access_token, {expires: date})
+			
 			if (rememberMe) {
 				Cookies.set('remember_acc', JSON.stringify(values))
 			} else {
