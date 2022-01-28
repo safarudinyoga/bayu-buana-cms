@@ -1,9 +1,18 @@
 import { withRouter } from "react-router"
-import React from "react"
+import React, { useEffect } from "react"
 import ImageBG from "../../assets/background.png"
-import { BlockButton } from '../button/block';
+import { useSnackbar } from "react-simple-snackbar"
+import { useSelector } from "react-redux"
 
 const AuthWrapper = (props) => {
+	const stateAlert = useSelector((state) => state.ui.alert)
+	const [openSnackbar, closeSnackbar] = useSnackbar({
+	  position: "bottom-right",
+	})
+
+	useEffect(() => {
+		stateAlert && openSnackbar(stateAlert.message)
+	  }, [stateAlert])
 	return (
 		<div className="auth-page">
 			<div className="auth-wrapper">

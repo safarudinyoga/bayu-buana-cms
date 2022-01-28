@@ -4,14 +4,21 @@ import React, { useEffect } from "react"
 import { useSelector } from "react-redux"
 import Breadcrumb from "components/navigation/breadcrumb"
 import { useSnackbar } from "react-simple-snackbar"
+import { useHistory } from "react-router-dom"
+import Cookies from "js-cookie"
 
 const DashboardWrapper = (props) => {
+  const history = useHistory()
   const stateAlert = useSelector((state) => state.ui.alert)
   const [openSnackbar, closeSnackbar] = useSnackbar({
     position: "bottom-right",
   })
 
   useEffect(() => {
+    history.listen((location, action) => {
+      if(!Cookies.get('ut')) window.location.reload()
+    });
+
     document.body.className = [
       "hold-transition",
       "sidebar-mini",
