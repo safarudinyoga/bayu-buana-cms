@@ -127,6 +127,7 @@ import OfficeTable from './views/branch_office/table';
 import OfficeForm from './views/branch_office/form';
 import DivisionForm from './views/division/form';
 import DivisionTable from './views/division/table';
+import DivisionHierarchy from './views/division/hierarchy';
 import JobTitleTable from './views/job-title/table';
 import JobTitleForm from './views/job-title/form';
 
@@ -445,6 +446,9 @@ const DashboardRoutes = () => {
         </Route>
         <Route path="/master/divisions/form/:id?">
           <DivisionForm />
+        </Route>
+        <Route path="/master/divisions/hierarchy/:id?">
+          <DivisionHierarchy />
         </Route>
         {/* Job Title */}
         <Route exact path="/master/job-title">
