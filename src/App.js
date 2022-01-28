@@ -12,6 +12,7 @@ import {
   Switch,
   Redirect,
 } from "react-router-dom"
+import Cookies from 'js-cookie'
 import AgeQualifyingTypeForm from "views/age_qualifying_type/form"
 import AgeQualifyingTypeTable from "views/age_qualifying_type/table"
 import AircraftForm from "views/aircraft/form"
@@ -118,6 +119,8 @@ import FlightCommisionForm from "views/setup_flight_commision/form"
 // Master Exchange Rate
 import ExchageRateTable from "views/exchange_rate/table"
 import ExchangeRateForm from "views/exchange_rate/form"
+// Master Integration Partner
+import IntegrationPartnerTable from "views/integration_partner/table"
 
 import Login from "./views/auth/login"
 import ForgotPassword from "views/auth/forgot_password"
@@ -149,7 +152,7 @@ const RouteWithProps = ({
       ) : (
         <Redirect
           to={{
-            pathname: "/",
+            pathname: "/auth/login",
             state: { from: props.location },
           }}
         />
@@ -224,6 +227,12 @@ const DashboardRoutes = () => {
           <FeeTypeTable />
         </Route>
         <Route path="/master/fee-type/form/:id?">
+          <FeeTypeForm />
+        </Route>
+        <Route exact path="/master/integration-partner">
+          <IntegrationPartnerTable />
+        </Route>
+        <Route path="/master/integration-partner/form/:id?">
           <FeeTypeForm />
         </Route>
         <Route exact path="/master/flight-types">
@@ -507,12 +516,13 @@ const AuthRoutes = () => {
 
 
 const App = () => {
+  let auth = Cookies.get('ut')
   document.title = "Bayu Buana"
   return (
     <Router>
       <Switch>
         <AuthRoutes path="/auth" />
-        <RouteWithProps auth={true} path="/" component={DashboardRoutes} />
+        <RouteWithProps auth={auth} path="/" component={DashboardRoutes} />
       </Switch>
     </Router>
   )

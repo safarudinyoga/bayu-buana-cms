@@ -1,21 +1,36 @@
 import { withRouter } from "react-router"
-import React, { useState } from "react";
-import { Form, FormGroup, InputGroup } from "react-bootstrap";
+import React, { useState, useEffect } from "react"
+import { Form, FormGroup, InputGroup } from "react-bootstrap"
 import { Formik, FastField } from "formik"
 import * as Yup from "yup"
-import { BlockButton } from '../../components/button/block';
-import { Link } from 'react-router-dom';
+import { BlockButton } from '../../components/button/block'
+import { Link, useHistory } from 'react-router-dom'
+import Api from "config/api"
+import Cookies from 'js-cookie'
+import { useDispatch } from "react-redux"
+import { setAlert } from "redux/ui-store"
 
 function Login() {
-	const [initialForm, setForm] = useState({
-			email: "",
-			password: "",
-		})
+	const dispatch = useDispatch()
+	const history = useHistory()
 	const [ passType, setPassType] = useState("password")
-	const [ rememberVal, setCheckBox] = useState(false)
+	const [ rememberMe, setRememberMe] = useState(false)
+
+	let cookie_rm = Cookies.get("remember_acc");
+	let form = {
+		username: "",
+		password: "",
+	}
+	if(cookie_rm) {
+		form = {
+			username: JSON.parse(cookie_rm).username,
+			password: JSON.parse(cookie_rm).password,
+		}
+	}
+	const [initialForm, setForm] = useState(form)
 
 	const validationSchema =  Yup.object().shape({
-		email: Yup.string()
+		username: Yup.string()
 			.required("Email is required.")
 			.email("Email is not a valid email.")
 			.max(256, "email is too long - should be 256 chars maximun."),
@@ -23,11 +38,40 @@ function Login() {
 			.required("Password is required.")
 			.min(8, "Password is too short - should be 8 chars minimum.")
 			.max(256, "Password is too long - should be 256 chars maximun.")
-			.matches(/^(?=.*\d)(?=.*([a-z]|[A-Z]))([\x20-\x7E]){8,}$/, "Password must be contain letters, numbers, and symbols"),
+			// .matches(/^(?=.*\d)(?=.*([a-z]|[A-Z]))([\x20-\x7E]){8,}$/, "Password must be contain letters, numbers, and symbols"),
 	})
 
-	const onSubmit = async (values) => {
-		console.log(values)
+	useEffect(() => {
+		const token = Cookies.get("ut");
+		if (token) {
+			history.push("/");
+		}
+		if(cookie_rm) setRememberMe(true)
+	}, []);
+
+	const onSubmit = async (values, a) => {
+		let api = new Api()
+		try {
+			let res = await api.post("/user/login", values)
+
+			let date = new Date();
+			date.setTime(date.getTime() + (res.data.expires_in * 1000));
+			Cookies.set('ut', res.data.access_token, {expires: date})
+
+			if (rememberMe) {
+				Cookies.set('remember_acc', JSON.stringify(values))
+			} else {
+				let rememberCookie = Cookies.get('remember_acc')
+				if(rememberCookie) Cookies.remove('remember_acc')
+			}
+			window.location.reload()
+		} catch(e) {
+			dispatch(
+				setAlert({
+				  message: e.response.data.message,
+				}),
+			  )
+		}
 	}
 
 	const FormValidate = ({
@@ -94,7 +138,7 @@ function Login() {
 						<Form onSubmit={handleSubmit}>
 							<FormValidate
 								label="Email" 
-								name="email"
+								name="username"
 								type="email"
 								maxLength={256}
 								placeholder="Enter your email"
@@ -118,7 +162,8 @@ function Login() {
 										label="Remember Me"
 										type={"checkbox"}
 										id="custom-inline-checkbox-remember"
-										onChange={() => setCheckBox(!rememberVal)}
+										onChange={() => setRememberMe(!rememberMe)}
+										checked={rememberMe}
 									/>
 								</div>
 								<div className="col text-right">
@@ -129,7 +174,7 @@ function Login() {
 							</div>
 							<BlockButton 
 								text={"SIGN IN"} 
-								disabled={isSubmitting || !dirty}
+								disabled={isSubmitting}
 								type="submit"
 							/>
 						</Form>
