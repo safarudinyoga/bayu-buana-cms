@@ -3,9 +3,12 @@ import { Card, Form, Row, Col, Button, Image } from "react-bootstrap"
 import { Formik, FastField, Field } from "formik"
 import * as Yup from "yup"
 import ImageUploading from "react-images-uploading"
+import axios from "axios"
 
 import Api from "config/api"
+import env from "config/environment"
 import Select from "components/form/select"
+import { default as SelectAsync } from "components/form/select-async"
 
 const GeneralInformation = (props) => {
   const [selectCountry, setSelectCountry] = useState([])
@@ -69,7 +72,25 @@ const GeneralInformation = (props) => {
     mobilePhone: Yup.string().required("Mobile Phone is required."),
     email: Yup.string()
       .email("Email is not valid.")
-      .required("Email is required."),
+      .required("Email is required.")
+      .test(
+        "Unique Email Contacts",
+        "Email already exists", // <- key, message
+        (value) => {
+          return new Promise((resolve, reject) => {
+            axios
+              .get(
+                `${env.API_URL}/master/employees?filters=["email","=","${value}"]`,
+              )
+              .then((res) => {
+                resolve(res.data.items.length == 0)
+              })
+              .catch((error) => {
+                resolve(false)
+              })
+          })
+        },
+      ),
     otherEmail: Yup.string().email("Email is not valid."),
 
     // Current Address
@@ -252,12 +273,12 @@ const GeneralInformation = (props) => {
                 <h3 className="card-heading">General Information</h3>
                 <div style={{ padding: "0 15px 15px" }}>
                   <Row>
-                    <Col sm={8}>
+                    <Col sm={9}>
                       <Form.Group as={Row} className="form-group">
-                        <Form.Label column sm={3}>
+                        <Form.Label column sm={4}>
                           Title <span className="form-label-required">*</span>
                         </Form.Label>
-                        <Col sm={9}>
+                        <Col sm={8}>
                           <FastField name="title">
                             {({ field, form }) => (
                               <>
@@ -292,11 +313,11 @@ const GeneralInformation = (props) => {
                         </Col>
                       </Form.Group>
                       <Form.Group as={Row} className="form-group">
-                        <Form.Label column sm={3}>
+                        <Form.Label column sm={4}>
                           First Name{" "}
                           <span className="form-label-required">*</span>
                         </Form.Label>
-                        <Col sm={9}>
+                        <Col sm={8}>
                           <FastField name="firstName">
                             {({ field, form }) => (
                               <>
@@ -306,6 +327,7 @@ const GeneralInformation = (props) => {
                                     form.touched.firstName &&
                                     form.errors.firstName
                                   }
+                                  minLength={1}
                                   maxLength={128}
                                   {...field}
                                 />
@@ -323,15 +345,16 @@ const GeneralInformation = (props) => {
                         </Col>
                       </Form.Group>
                       <Form.Group as={Row} className="form-group">
-                        <Form.Label column sm={3}>
+                        <Form.Label column sm={4}>
                           Middle Name
                         </Form.Label>
-                        <Col sm={9}>
+                        <Col sm={8}>
                           <FastField name="middleName">
                             {({ field }) => (
                               <Form.Control
                                 {...field}
                                 type="text"
+                                minLength={1}
                                 maxLength={128}
                               />
                             )}
@@ -339,11 +362,11 @@ const GeneralInformation = (props) => {
                         </Col>
                       </Form.Group>
                       <Form.Group as={Row} className="form-group">
-                        <Form.Label column sm={3}>
+                        <Form.Label column sm={4}>
                           Last Name{" "}
                           <span className="form-label-required">*</span>
                         </Form.Label>
-                        <Col sm={9}>
+                        <Col sm={8}>
                           <FastField name="lastName">
                             {({ field, form }) => (
                               <>
@@ -354,6 +377,7 @@ const GeneralInformation = (props) => {
                                     form.touched.lastName &&
                                     form.errors.lastName
                                   }
+                                  minLength={1}
                                   maxLength={128}
                                 />
                                 {form.touched.lastName &&
@@ -370,13 +394,13 @@ const GeneralInformation = (props) => {
                         </Col>
                       </Form.Group>
                       <Form.Group as={Row} className="form-group">
-                        <Form.Label column sm={3}>
+                        <Form.Label column sm={4}>
                           Date Of Birth{" "}
                           <span className="form-label-required">*</span>
                         </Form.Label>
-                        <Col sm={9}>
-                          <div style={{ width: 300, display: "flex" }}>
-                            <div style={{ marginRight: 12 }}>
+                        <Col sm={8}>
+                          <div style={{ width: 400, display: "flex" }}>
+                            <div style={{ marginRight: 12, flex: 1 }}>
                               <Select
                                 options={selectDay()}
                                 className={`react-select ${
@@ -390,7 +414,7 @@ const GeneralInformation = (props) => {
                                 style={{ marginRight: 12 }}
                               />
                             </div>
-                            <div style={{ marginRight: 12 }}>
+                            <div style={{ marginRight: 12, flex: 1 }}>
                               <Select
                                 options={selectMonth()}
                                 className={`react-select ${
@@ -404,7 +428,7 @@ const GeneralInformation = (props) => {
                                 style={{ marginRight: 12 }}
                               />
                             </div>
-                            <div>
+                            <div style={{ flex: 1 }}>
                               <Select
                                 options={selectYear()}
                                 className={`react-select ${
@@ -427,10 +451,10 @@ const GeneralInformation = (props) => {
                         </Col>
                       </Form.Group>
                       <Form.Group as={Row} className="form-group">
-                        <Form.Label column sm={3}>
+                        <Form.Label column sm={4}>
                           Gender <span className="form-label-required">*</span>
                         </Form.Label>
-                        <Col sm={9}>
+                        <Col sm={8}>
                           <div
                             style={{
                               height: 38,
@@ -482,15 +506,16 @@ const GeneralInformation = (props) => {
                         </Col>
                       </Form.Group>
                       <Form.Group as={Row} className="form-group">
-                        <Form.Label column sm={3}>
+                        <Form.Label column sm={4}>
                           ID Card Number (KTP)
                         </Form.Label>
-                        <Col sm={9}>
+                        <Col sm={8}>
                           <FastField name="idCardNumber">
                             {({ field }) => (
                               <Form.Control
                                 {...field}
                                 type="text"
+                                minLength={1}
                                 maxLength={36}
                               />
                             )}
@@ -498,8 +523,11 @@ const GeneralInformation = (props) => {
                         </Col>
                       </Form.Group>
                     </Col>
-                    <Col sm={4}>
-                      <div className="img-profile-wrapper">
+                    <Col sm={3}>
+                      <div
+                        className="img-profile-wrapper"
+                        style={{ textAlign: "center" }}
+                      >
                         <div>
                           {photoProfile.length == 0 && (
                             <Image
@@ -513,8 +541,14 @@ const GeneralInformation = (props) => {
                             onChange={onChangePhotoProfile}
                             maxNumber={maxNumber}
                             dataURLKey="data_url"
+                            acceptType={["png", "jpg", "jpeg"]}
                           >
-                            {({ imageList, onImageUpload, onImageUpdate }) => (
+                            {({
+                              imageList,
+                              onImageUpload,
+                              onImageUpdate,
+                              errors,
+                            }) => (
                               // write your building UI
                               <>
                                 {imageList.map((image, index) => (
@@ -534,11 +568,20 @@ const GeneralInformation = (props) => {
                                       : onImageUpdate(1)
                                   }
                                 >
-                                  {photoProfile.length !== 0
+                                  {/* {photoProfile.length !== 0
                                     ? "CHANGE"
-                                    : "UPLOAD"}{" "}
-                                  PHOTO
+                                    : "UPLOAD"}                                */}
+                                  User Profile Image
                                 </Button>
+                                {errors && (
+                                  <>
+                                    {errors.acceptType && (
+                                      <p className="img-error-label">
+                                        Only .png, .jpg, .jpeg file supported
+                                      </p>
+                                    )}
+                                  </>
+                                )}
                               </>
                             )}
                           </ImageUploading>
@@ -550,10 +593,10 @@ const GeneralInformation = (props) => {
                 <h3 className="card-heading">Contacts</h3>
                 <div style={{ padding: "0 15px 15px 15px" }}>
                   <Form.Group as={Row} className="form-group">
-                    <Form.Label column sm={2}>
+                    <Form.Label column sm={3}>
                       Home Phone <span className="form-label-required">*</span>
                     </Form.Label>
-                    <Col sm={10}>
+                    <Col sm={9}>
                       <FastField name="homePhone">
                         {({ field, form }) => (
                           <>
@@ -563,6 +606,7 @@ const GeneralInformation = (props) => {
                               isInvalid={
                                 form.touched.homePhone && form.errors.homePhone
                               }
+                              minLength={1}
                               maxLength={32}
                             />
                             {form.touched.homePhone &&
@@ -579,11 +623,11 @@ const GeneralInformation = (props) => {
                     </Col>
                   </Form.Group>
                   <Form.Group as={Row} className="form-group">
-                    <Form.Label column sm={2}>
+                    <Form.Label column sm={3}>
                       Mobile Phone{" "}
                       <span className="form-label-required">*</span>
                     </Form.Label>
-                    <Col sm={10}>
+                    <Col sm={9}>
                       <FastField name="mobilePhone">
                         {({ field, form }) => (
                           <>
@@ -594,6 +638,7 @@ const GeneralInformation = (props) => {
                                 form.touched.mobilePhone &&
                                 form.errors.mobilePhone
                               }
+                              minLength={1}
                               maxLength={32}
                             />
                             {form.touched.mobilePhone &&
@@ -610,10 +655,10 @@ const GeneralInformation = (props) => {
                     </Col>
                   </Form.Group>
                   <Form.Group as={Row} className="form-group">
-                    <Form.Label column sm={2}>
+                    <Form.Label column sm={3}>
                       Email <span className="form-label-required">*</span>
                     </Form.Label>
-                    <Col sm={10}>
+                    <Col sm={9}>
                       <FastField name="email">
                         {({ field, form }) => (
                           <>
@@ -623,6 +668,7 @@ const GeneralInformation = (props) => {
                               isInvalid={
                                 form.touched.email && form.errors.email
                               }
+                              minLength={1}
                               maxLength={256}
                             />
                             {form.touched.email && form.errors.email && (
@@ -636,10 +682,10 @@ const GeneralInformation = (props) => {
                     </Col>
                   </Form.Group>
                   <Form.Group as={Row} className="form-group">
-                    <Form.Label column sm={2}>
+                    <Form.Label column sm={3}>
                       Other Email
                     </Form.Label>
-                    <Col sm={10}>
+                    <Col sm={9}>
                       <FastField name="otherEmail">
                         {({ field, form }) => (
                           <>
@@ -652,6 +698,7 @@ const GeneralInformation = (props) => {
                                   ? "is-invalid"
                                   : null
                               }
+                              minLength={1}
                               maxLength={256}
                             />
                             {form.touched.otherEmail &&
@@ -671,16 +718,17 @@ const GeneralInformation = (props) => {
                 <h3 className="card-heading">Current Address</h3>
                 <div style={{ padding: "0 15px 15px 15px" }}>
                   <Form.Group as={Row} className="form-group">
-                    <Form.Label column sm={2}>
+                    <Form.Label column sm={3}>
                       Address
                     </Form.Label>
-                    <Col sm={10}>
+                    <Col sm={9}>
                       <FastField name="currentAddress">
                         {({ field }) => (
                           <Form.Control
                             {...field}
                             as="textarea"
                             rows={3}
+                            minLength={1}
                             maxLength={512}
                           />
                         )}
@@ -688,96 +736,109 @@ const GeneralInformation = (props) => {
                     </Col>
                   </Form.Group>
                   <Form.Group as={Row} className="form-group">
-                    <Form.Label column sm={2}>
-                      Country <span className="form-label-required">*</span>
+                    <Form.Label column sm={3}>
+                      Country
+                      <span className="form-label-required">*</span>
                     </Form.Label>
-                    <Col sm={10}>
-                      {selectCountry.length !== 0 && (
-                        <FastField name="currentCountry">
-                          {({ field, form }) => (
-                            <>
-                              <div style={{ width: 300 }}>
-                                <Select
-                                  {...field}
-                                  placeholder="Please choose"
-                                  options={selectCountry}
-                                  className={`react-select ${
-                                    form.touched.currentCountry &&
-                                    form.errors.currentCountry
-                                      ? "is-invalid"
-                                      : null
-                                  }`}
-                                  onChange={(v) => {
-                                    setFieldValue("currentCountry", v)
-                                    handleChangeCountry(v.value)
-                                    // if (values.currentProvince !== "") {
-                                    //   setFieldValue("currentProvince", "")
-                                    // }
-                                  }}
-                                  onBlur={setFieldTouched}
-                                />
-                                {form.touched.currentCountry &&
-                                  form.errors.currentCountry && (
-                                    <Form.Control.Feedback type="invalid">
-                                      {form.touched.currentCountry
-                                        ? form.errors.currentCountry
-                                        : null}
-                                    </Form.Control.Feedback>
-                                  )}
-                              </div>
-                            </>
-                          )}
-                        </FastField>
-                      )}
+                    <Col sm={9}>
+                      <FastField name="currentCountry">
+                        {({ field, form }) => (
+                          <div style={{ width: 300 }}>
+                            <SelectAsync
+                              {...field}
+                              url={`master/countries`}
+                              fieldName="country_name"
+                              onChange={(v) => {
+                                setFieldValue("currentCountry", v)
+                                setFieldValue("currentProvince", null)
+                                setFieldValue("currentCity", null)
+                              }}
+                              placeholder="Please choose"
+                              className={`react-select ${
+                                form.touched.currentCountry &&
+                                form.errors.currentCountry
+                                  ? "is-invalid"
+                                  : null
+                              }`}
+                            />
+                            {form.touched.currentCountry &&
+                              form.errors.currentCountry && (
+                                <Form.Control.Feedback type="invalid">
+                                  {form.touched.currentCountry
+                                    ? form.errors.currentCountry
+                                    : null}
+                                </Form.Control.Feedback>
+                              )}
+                          </div>
+                        )}
+                      </FastField>
                     </Col>
                   </Form.Group>
                   <Form.Group as={Row} className="form-group">
-                    <Form.Label column sm={2}>
-                      State/ Province
+                    <Form.Label column sm={3}>
+                      State/Province
                     </Form.Label>
-                    <Col sm={10}>
-                      <div style={{ width: 300 }}>
-                        <Select
-                          name="currentProvince"
-                          placeholder="Please choose"
-                          options={selectProvince}
-                          onChange={(v) => {
-                            setFieldValue("currentProvince", v)
-                            handleChangeProvince(v.value)
-                          }}
-                          onBlur={setFieldTouched}
-                          isDisabled={values.currentCountry == ""}
-                        />
-                      </div>
+                    <Col sm={9}>
+                      <Field name="currentProvince">
+                        {({ field, form }) => (
+                          <>
+                            <div style={{ width: 200 }}>
+                              <SelectAsync
+                                {...field}
+                                isDisabled={values.currentCountry == null}
+                                url={`master/state-provinces`}
+                                urlFilter={`["country_id","=",${values.currentCountry?.value}]`}
+                                fieldName="state_province_name"
+                                onChange={(v) =>
+                                  setFieldValue("currentProvince", v)
+                                }
+                                placeholder="Please choose"
+                              />
+                            </div>
+                          </>
+                        )}
+                      </Field>
                     </Col>
                   </Form.Group>
                   <Form.Group as={Row} className="form-group">
-                    <Form.Label column sm={2}>
+                    <Form.Label column sm={3}>
                       City
                     </Form.Label>
-                    <Col sm={10}>
-                      <div style={{ width: 300 }}>
-                        <Select
-                          name="currentCity"
-                          placeholder="Please choose"
-                          options={selectCity}
-                          onChange={(v) => {
-                            setFieldValue("currentCity", v)
-                          }}
-                          onBlur={setFieldTouched}
-                          isDisabled={values.currentProvince == ""}
-                        />
-                      </div>
+                    <Col sm={9}>
+                      <Field name="currentCity">
+                        {({ field }) => (
+                          <>
+                            <div style={{ width: 200 }}>
+                              <SelectAsync
+                                {...field}
+                                isDisabled={values.currentProvince == null}
+                                url={`master/cities`}
+                                urlFilter={`["province_id","=",${values.currentProvince?.value}]`}
+                                fieldName="city_name"
+                                onChange={(v) =>
+                                  setFieldValue("currentCity", v)
+                                }
+                                placeholder="Please choose"
+                              />
+                            </div>
+                          </>
+                        )}
+                      </Field>
                     </Col>
                   </Form.Group>
                   <Form.Group as={Row} className="form-group">
-                    <Form.Label column sm={2}>
+                    <Form.Label column sm={3}>
                       ZIP Code
                     </Form.Label>
-                    <Col sm={10}>
+                    <Col sm={9}>
                       <FastField name="currentZipCode">
                         {({ field }) => (
-                          <Form.Control {...field} type="text" maxLength={16} />
+                          <Form.Control
+                            {...field}
+                            type="text"
+                            minLength={1}
+                            maxLength={16}
+                          />
                         )}
                       </FastField>
                     </Col>
@@ -786,7 +847,7 @@ const GeneralInformation = (props) => {
                 <h3 className="card-heading">Permanent Address</h3>
                 <div style={{ padding: "0 15px 15px 15px" }}>
                   <Form.Group as={Row} className="form-group">
-                    <Col sm={10}>
+                    <Col sm={9}>
                       <Form.Check
                         type="checkbox"
                         label="Same As Current Address"
@@ -798,14 +859,15 @@ const GeneralInformation = (props) => {
                     </Col>
                   </Form.Group>
                   <Form.Group as={Row} className="form-group">
-                    <Form.Label column sm={2}>
+                    <Form.Label column sm={3}>
                       Address
                     </Form.Label>
-                    <Col sm={10}>
+                    <Col sm={9}>
                       <Form.Control
                         name="permanentAddress"
                         as="textarea"
                         rows={3}
+                        minLength={1}
                         maxLength={512}
                         value={
                           values.sameAddress
@@ -819,10 +881,10 @@ const GeneralInformation = (props) => {
                     </Col>
                   </Form.Group>
                   <Form.Group as={Row} className="form-group">
-                    <Form.Label column sm={2}>
+                    <Form.Label column sm={3}>
                       Country <span className="form-label-required">*</span>
                     </Form.Label>
-                    <Col sm={10}>
+                    <Col sm={9}>
                       {selectCountry.length !== 0 && (
                         <div style={{ width: 300 }}>
                           <Select
@@ -865,10 +927,10 @@ const GeneralInformation = (props) => {
                     </Col>
                   </Form.Group>
                   <Form.Group as={Row} className="form-group">
-                    <Form.Label column sm={2}>
+                    <Form.Label column sm={3}>
                       State/ Province
                     </Form.Label>
-                    <Col sm={10}>
+                    <Col sm={9}>
                       <div style={{ width: 300 }}>
                         <Select
                           name="permanentProvince"
@@ -892,10 +954,10 @@ const GeneralInformation = (props) => {
                     </Col>
                   </Form.Group>
                   <Form.Group as={Row} className="form-group">
-                    <Form.Label column sm={2}>
+                    <Form.Label column sm={3}>
                       City
                     </Form.Label>
-                    <Col sm={10}>
+                    <Col sm={9}>
                       <div style={{ width: 300 }}>
                         <Select
                           name="permanentCity"
@@ -918,13 +980,14 @@ const GeneralInformation = (props) => {
                     </Col>
                   </Form.Group>
                   <Form.Group as={Row} className="form-group">
-                    <Form.Label column sm={2}>
+                    <Form.Label column sm={3}>
                       ZIP Code
                     </Form.Label>
-                    <Col sm={10}>
+                    <Col sm={9}>
                       <Form.Control
                         name="permanentZipCode"
                         type="text"
+                        minLength={1}
                         maxLength={16}
                         value={
                           values.sameAddress
