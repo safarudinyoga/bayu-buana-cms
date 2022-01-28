@@ -524,7 +524,10 @@ const GeneralInformation = (props) => {
                       </Form.Group>
                     </Col>
                     <Col sm={3}>
-                      <div className="img-profile-wrapper">
+                      <div
+                        className="img-profile-wrapper"
+                        style={{ textAlign: "center" }}
+                      >
                         <div>
                           {photoProfile.length == 0 && (
                             <Image
@@ -538,8 +541,14 @@ const GeneralInformation = (props) => {
                             onChange={onChangePhotoProfile}
                             maxNumber={maxNumber}
                             dataURLKey="data_url"
+                            acceptType={["png", "jpg", "jpeg"]}
                           >
-                            {({ imageList, onImageUpload, onImageUpdate }) => (
+                            {({
+                              imageList,
+                              onImageUpload,
+                              onImageUpdate,
+                              errors,
+                            }) => (
                               // write your building UI
                               <>
                                 {imageList.map((image, index) => (
@@ -564,6 +573,15 @@ const GeneralInformation = (props) => {
                                     : "UPLOAD"}                                */}
                                   User Profile Image
                                 </Button>
+                                {errors && (
+                                  <>
+                                    {errors.acceptType && (
+                                      <p className="img-error-label">
+                                        Only .png, .jpg, .jpeg file supported
+                                      </p>
+                                    )}
+                                  </>
+                                )}
                               </>
                             )}
                           </ImageUploading>
