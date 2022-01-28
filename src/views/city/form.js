@@ -245,6 +245,9 @@ function CityForm(props) {
       if (!form.country_id) {
         form.country_id = null
       }
+      if(!form.state_province_id) {
+        form.state_province_id = "00000000-0000-0000-0000-000000000000"
+      }
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
       for (let i in translated) {

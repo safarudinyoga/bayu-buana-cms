@@ -415,19 +415,19 @@ function AttractionForm(props) {
     setLoading(true)
     try {
       if (!form.attraction_address) {
-        form.attraction_address = null
+        form.attraction_address = ""
       }
       if (!form.state_province_id) {
-        form.state_province_id = null
+        form.state_province_id = "00000000-0000-0000-0000-000000000000"
       }
       if (!form.postal_code) {
-        form.postal_code = null
+        form.postal_code = ""
       }
       if (!form.destination_id) {
-        form.destination_id = null
+        form.destination_id = "00000000-0000-0000-0000-000000000000"
       }
       if (!form.zone_id) {
-        form.zone_id = null
+        form.zone_id = "00000000-0000-0000-0000-000000000000"
       }
       if (!form.latitude) {
         form.latitude = null
@@ -440,16 +440,16 @@ function AttractionForm(props) {
         form.longitude = parseFloat(form.longitude);
       }
       if (!form.email) {
-        form.email = null
+        form.email = ""
       }
       if (!form.phone_number) {
-        form.phone_number = null
+        form.phone_number = ""
       }
       if (!form.fax_number) {
-        form.fax_number = null
+        form.fax_number = ""
       }
       if (!form.description) {
-        form.description = null
+        form.description = ""
       }
       if (!form.attraction_category_attraction) {
         form.attraction_category_attraction = null
