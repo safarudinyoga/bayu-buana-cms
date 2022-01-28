@@ -76,14 +76,15 @@ const EmergencyContacts = (props) => {
                 <h3 className="card-heading">Emergency Contact 1</h3>
                 <div style={{ padding: "0 15px 15px" }}>
                   <Form.Group as={Row} className="form-group">
-                    <Form.Label column sm={2}>
+                    <Form.Label column sm={3}>
                       Full Name
                     </Form.Label>
-                    <Col sm={10}>
+                    <Col sm={9}>
                       <Form.Control
                         name="fullNameEmergency1"
                         type="text"
                         value={values.fullNameEmergency1}
+                        minLength={1}
                         maxLength={128}
                         onChange={handleChange}
                         onBlur={handleBlur}
@@ -91,14 +92,15 @@ const EmergencyContacts = (props) => {
                     </Col>
                   </Form.Group>
                   <Form.Group as={Row} className="form-group">
-                    <Form.Label column sm={2}>
+                    <Form.Label column sm={3}>
                       Phone Number
                     </Form.Label>
-                    <Col sm={10}>
+                    <Col sm={9}>
                       <Form.Control
                         name="phoneNumberEmergency1"
                         type="text"
                         value={values.phoneNumberEmergency1}
+                        minLength={1}
                         maxLength={32}
                         onChange={handleChange}
                         onBlur={handleBlur}
@@ -106,14 +108,15 @@ const EmergencyContacts = (props) => {
                     </Col>
                   </Form.Group>
                   <Form.Group as={Row} className="form-group">
-                    <Form.Label column sm={2}>
+                    <Form.Label column sm={3}>
                       Relationship
                     </Form.Label>
-                    <Col sm={10}>
+                    <Col sm={9}>
                       <Form.Control
                         name="relationshipEmergency1"
                         type="text"
                         value={values.relationshipEmergency1}
+                        minLength={1}
                         maxLength={36}
                         onChange={handleChange}
                         onBlur={handleBlur}
@@ -124,14 +127,15 @@ const EmergencyContacts = (props) => {
                 <h3 className="card-heading">Emergency Contact 2</h3>
                 <div style={{ padding: "0 15px 15px" }}>
                   <Form.Group as={Row} className="form-group">
-                    <Form.Label column sm={2}>
+                    <Form.Label column sm={3}>
                       Full Name
                     </Form.Label>
-                    <Col sm={10}>
+                    <Col sm={9}>
                       <Form.Control
                         name="fullNameEmergency2"
                         type="text"
                         value={values.fullNameEmergency2}
+                        minLength={1}
                         maxLength={128}
                         onChange={handleChange}
                         onBlur={handleBlur}
@@ -139,14 +143,15 @@ const EmergencyContacts = (props) => {
                     </Col>
                   </Form.Group>
                   <Form.Group as={Row} className="form-group">
-                    <Form.Label column sm={2}>
+                    <Form.Label column sm={3}>
                       Phone Number
                     </Form.Label>
-                    <Col sm={10}>
+                    <Col sm={9}>
                       <Form.Control
                         name="phoneNumberEmergency2"
                         type="text"
                         value={values.phoneNumberEmergency2}
+                        minLength={1}
                         maxLength={32}
                         onChange={handleChange}
                         onBlur={handleBlur}
@@ -154,14 +159,15 @@ const EmergencyContacts = (props) => {
                     </Col>
                   </Form.Group>
                   <Form.Group as={Row} className="form-group">
-                    <Form.Label column sm={2}>
+                    <Form.Label column sm={3}>
                       Relationship
                     </Form.Label>
-                    <Col sm={10}>
+                    <Col sm={9}>
                       <Form.Control
                         name="relationshipEmergency2"
                         type="text"
                         value={values.relationshipEmergency2}
+                        minLength={1}
                         maxLength={36}
                         onChange={handleChange}
                         onBlur={handleBlur}
