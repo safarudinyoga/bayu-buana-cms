@@ -51,6 +51,7 @@
     "react-select-async-paginate": "^0.6.1",
     "react-select-fetch": "^0.4.0",
     "react-simple-snackbar": "^1.1.11",
+    "react-sortable-tree": "^2.8.0",
     "react-svg": "^14.1.1",
     "select2": "^4.0",
     "throttle-debounce": "^3.0.1",
