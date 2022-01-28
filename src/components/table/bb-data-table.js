@@ -85,7 +85,6 @@ class BBDataTable extends Component {
 
     const allowed = [this.props.recordName]
     const { recordName, msgType } = this.props
-    const self = this
     columns.push({
       searchable: false,
       orderable: false,
@@ -115,12 +114,7 @@ class BBDataTable extends Component {
                 .join(" - ")
             : row[recordName]
           : ""
-        console.log(display, row)
-        let itemInfo = msgType === "colon"
-          ? `'${recordName[0].split("_").join(" ")}: ${row[recordName[0]]}
-          ${recordName[1].split("_").join(" ")}: ${row[recordName[1]]}'`
-          : cvtRecordName
-        self.setState({ itemInfo })
+
         var x = window.matchMedia("(max-width: 768px)")
         tooltipCust(x)
         x.addListener(tooltipCust)
@@ -720,12 +714,13 @@ class BBDataTable extends Component {
     })
   }
 
-  deleteAction(id, name) {
+  deleteAction(id, name, info) {
     this.setState({
       isOpen: true,
       deleteType: "single",
       id: id,
       name: name,
+      info: info || name
     })
   }
 
@@ -831,6 +826,7 @@ class BBDataTable extends Component {
         e.preventDefault()
         let id = $(this).data("id")
         let name = $(this).data("name")
+        let info = $(this).data("info")
         let base = me.props.baseRoute || ""
         $('[data-toggle="tooltip"]').tooltip("hide")
         switch ($(this).data("action")) {
@@ -841,7 +837,7 @@ class BBDataTable extends Component {
             me.props.history.push(base + "/" + id + "?action=view")
             break
           default:
-            me.deleteAction.bind(me)(id, name)
+            me.deleteAction.bind(me)(id, name, info)
             break
         }
       })
@@ -858,7 +854,7 @@ class BBDataTable extends Component {
               : this.props.title}
           </ModalHeader>
           <ModalBody>Are you sure you want to delete {
-            this.props.showInfoDelete ? this.state.itemInfo : "this"
+            this.props.showInfoDelete ? `'${this.state.info}'` : "this"
           }?</ModalBody>
           <ModalFooter>
             <Button
@@ -872,7 +868,7 @@ class BBDataTable extends Component {
                     .delete(this.props.endpoint + "/" + this.state.id)
                     .then(() => {
                       this.props.setAlert({
-                        message: `Record ${this.state.itemInfo} was successfully deleted.`,
+                        message: `Record ${this.state.name} was successfully deleted.`,
                       })
                     })
                     .catch(function (error) {

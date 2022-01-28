@@ -51,6 +51,7 @@
     "react-select-async-paginate": "^0.6.1",
     "react-select-fetch": "^0.4.0",
     "react-simple-snackbar": "^1.1.11",
+    "react-sortable-tree": "^2.8.0",
     "react-svg": "^14.1.1",
     "select2": "^4.0",
     "throttle-debounce": "^3.0.1",
@@ -58,6 +59,9 @@
     "use-toggle-state": "^1.1.1",
     "web-vitals": "^1.0.1",
     "yup": "^0.32.11"
+  },
+  "resolution": {
+    "react-error-overlay": "^6.0.9"
   },
   "devDependencies": {
     "@popperjs/core": "^2.10.2",

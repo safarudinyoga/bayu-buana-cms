@@ -190,8 +190,6 @@ function JobTitleForm(props) {
               }
             },
           })
-
-          console.log(req)
           return req
         },
         "Job TItle Code already exists",
