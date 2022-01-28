@@ -188,7 +188,7 @@ function HotelAmenityCategoryForm(props) {
         form.hotel_amenity_category_name = null
       }
       if (!form.description) {
-        form.description = null
+        form.description = formId ? "" : null
       }
 
       if (!form.hotel_amenity_category_asset) {

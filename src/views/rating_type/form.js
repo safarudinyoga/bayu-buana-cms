@@ -238,7 +238,7 @@ function RatingTypeForm(props) {
     let api = new Api()
     try {
       if (!form.provider) {
-        form.provider = null
+        form.provider = ""
       }
       if (!form.rating_symbol) {
         form.rating_symbol = null

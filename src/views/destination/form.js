@@ -323,7 +323,7 @@ function DestinationForm(props) {
         form.destination_city_id = null
       }
       if (!form.description) {
-        form.description = null
+        form.description = ""
       }
 
       if (!form.destination_asset_desktop) {

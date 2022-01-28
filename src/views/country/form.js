@@ -292,22 +292,38 @@ function CountryForm(props) {
     let api = new Api()
     try {
       if (!form.country_alpha_3_code) {
-        form.country_alpha_3_code = null
+        if(formId) {
+          form.country_alpha_3_code = ""
+        } else {
+          form.country_alpha_3_code = null
+        }
       }
       if (!form.numeric_code) {
-        form.numeric_code = null
+        form.numeric_code = ""
       }
       if (!form.timezone_id) {
-        form.timezone_id = null
+        if (formId) {
+          form.timezone_id = "00000000-0000-0000-0000-000000000000"
+        } else {
+          form.timezone_id = null
+        }
       }
       if (!form.currency_id) {
-        form.currency_id = null
+        if(formId) {
+          form.currency_id = "00000000-0000-0000-0000-000000000000"
+        }else {
+          form.currency_id = null
+        }
       }
       if (!form.nationality) {
-        form.nationality = null
+        form.nationality = ""
       }
       if (!form.language_id) {
-        form.language_id = null
+        if(formId) {
+          form.language_id = "00000000-0000-0000-0000-000000000000"
+        } else {
+          form.language_id = null
+        }
       }
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
