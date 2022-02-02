@@ -2,7 +2,6 @@ import FormBuilder from "components/form/builder"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
 import FormInputSelectAjax from "components/form/input-select-ajax"
-import FormInputSelectMultiAjax from "components/form/input-select-multi-ajax"
 import Api from "config/api"
 import $ from "jquery"
 import useQuery from "lib/query"
@@ -11,7 +10,6 @@ import {useDispatch} from "react-redux"
 import {withRouter} from "react-router"
 import {setAlert, setUIParams} from "redux/ui-store"
 import env from "../../config/environment"
-import capitalizeFirstLetter from "lib/capitalizeFirstLetter"
 import FormInputWrapper from "components/form/input-wrapper"
 import FormInput from "components/form/input"
 import { Col, Row } from 'react-bootstrap';
@@ -28,16 +26,14 @@ function OfficeForm(props) {
   const [loading, setLoading] = useState(true)
   const [translations, setTranslations] = useState([])
   const [id, setId] = useState(null)
-  const [categoryData, setCategoryData] = useState([])
   const [countryData, setCountryData] = useState([])
   const [provinceData, setProvinceData] = useState([])
   const [cityData, setCityData] = useState([])
-  const [destinationData, setDestinationData] = useState([])
-  const [zoneData, setZoneData] = useState([])
 
   const [form, setForm] = useState({
     office_name: "",
     address_line: "",
+    building_room: "",
     country_id: "",
     state_province_id: "",
     city_id: "",
@@ -51,7 +47,7 @@ function OfficeForm(props) {
   })
   const translationFields = [
     {
-      label: "Company/Branch Name",
+      label: "Company/ Branch Name",
       name: "office_name",
       type: "text",
     },
@@ -124,23 +120,23 @@ function OfficeForm(props) {
 
   const validationMessages = {
     office_name: {
-      required: "Company/Branch Name is required",
-      minlength: "Company/Branch Name must be at least 1 characters",
-      maxlength: "Company/Branch Name cannot be more than 64 characters",
+      required: "Company/ Branch Name is required",
+      minlength: "Company/ Branch Name must be at least 1 characters",
+      maxlength: "Company/ Branch Name cannot be more than 64 characters",
     },
     address_line: {
       minlength: "Address must be at least 1 characters",
       maxlength: "Address cannot be more than 512 characters",
     },
     building_room: {
-      minlength: "Building room must be at least 1 characters",
-      maxlength: "Building room cannot be more than 512 characters",
+      minlength: "Building, Room must be at least 1 characters",
+      maxlength: "Building, Room cannot be more than 512 characters",
     },
     country_id: {
       required: "Country is required",
     },
     state_province_id: {
-      required: "State/Province is required",
+      required: "State/ Province is required",
     },
     city_id: {
       required: "City is required",
@@ -208,7 +204,7 @@ function OfficeForm(props) {
     if (!formId) {
       docTitle = "Create Branch Office"
     } else if (isView) {
-      docTitle = "Branch Offices Details"
+      docTitle = "Branch Office Details"
     }
 
     dispatch(
@@ -216,7 +212,7 @@ function OfficeForm(props) {
         title: !formId ? "New Branch Office": docTitle,
         breadcrumbs: [
           {
-            text: "Employment Management",
+            text: "Management",
           },
           {
             link: backUrl,
@@ -272,12 +268,6 @@ function OfficeForm(props) {
         if (res.data.city) {
           setCityData([{...res.data.city, text: res.data.city.city_name}])
         }
-        if (res.data.destination) {
-          setDestinationData([{...res.data.destination, text: res.data.destination.destination_name}])
-        }
-        if (res.data.zone) {
-          setZoneData([{...res.data.zone, text: res.data.zone.zone_name}])
-        }
       } catch (e) {
         console.error(e);
       }
@@ -286,22 +276,9 @@ function OfficeForm(props) {
           size: 50,
         })
         setTranslations(res.data.items)
-      } catch (e) { }
+      } catch (e) { console.error(e);}
       setLoading(false)
     } else {
-      setValidationRules({
-        ...validationRules,
-        attraction_asset_desktop: {
-          required: true
-        },
-        attraction_asset_mobile: {
-          required: true
-        },
-        attraction_asset_tablet: {
-          required: true
-        },
-      })
-
       $.validator.addMethod(
         "checkName",
         function (value, element) {
@@ -340,6 +317,9 @@ function OfficeForm(props) {
     try {
       if (!form.address_line) {
         form.address_line = null
+      }
+      if (!form.building_room) {
+        form.building_room = null
       }
       if (!form.state_province_id) {
         form.state_province_id = null
@@ -415,7 +395,7 @@ function OfficeForm(props) {
       <div className="col-lg-12">
         <FormHorizontal>
           <FormInputControl
-            label="Company/Branch Name"
+            label="Company/ Branch Name"
             required={true}
             value={form.office_name}
             name="office_name"
@@ -436,7 +416,7 @@ function OfficeForm(props) {
             maxLength="512"
           />
           <FormInputControl
-            label={"Building Room"}
+            label={"Building, Room"}
             value={form.building_room}
             name="building_room"
             onChange={(e) => setForm({...form, building_room: e.target.value})}
@@ -547,7 +527,7 @@ function OfficeForm(props) {
           </FormInputWrapper>
 
           <FormInputControl
-            label={"Phone Number"}
+            label={formId ? "Phone" : "Phone Number"}
             value={form.phone_number}
             name="phone_number"
             onChange={(e) => setForm({...form, phone_number: e.target.value})}

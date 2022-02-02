@@ -22,7 +22,8 @@ function DivisionForm(props) {
   const [formBuilder, setFormBuilder] = useState(null)
   const [loading, setLoading] = useState(true)
   const [translations, setTranslations] = useState([])
-  const [supplierTypeData, setSupplierTypeData] = useState([])
+  const [parentDivisionTypeData, setParentDivisionTypeData] = useState([])
+  const [employeeData, setEmployeeData] = useState([])
   const [id, setId] = useState(null)
   const [form, setForm] = useState({
     depth:0,
@@ -106,8 +107,11 @@ function DivisionForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data);
-        if (res.data.parent) {
-          setSupplierTypeData([{...res.data.parent, text: res.data.parent.parent_name}])
+        if (res.data.parent_division) {
+          setParentDivisionTypeData([{...res.data.parent_division, id: res.data.parent_division_id, text: res.data.parent_division.division_name}])
+        }
+        if (res.data.employee) {
+          setEmployeeData([{...res.data.employee, text: res.data.employee.employee_name}])
         }
         if (res.data) {
           let currentCode = res.data.division_code
@@ -270,8 +274,6 @@ function DivisionForm(props) {
       isView={isView || loading}
       onSave={onSave}
       back={backUrl}
-      txtBack={formId ? "BACK" : "CANCEL"}
-      txtSave={formId ? "UPDATE" : "SAVE"}
       translations={translations}
       translationFields={translationFields}
       alertMessage={"Incomplete data"}
@@ -298,13 +300,13 @@ function DivisionForm(props) {
           label="Parent Division"
           value={form.parent_division_id}
           name="parent_division_id"
-          endpoint="/master/employees"
-          column="full_name"
-          filter={`["status", "=", 1]`}
+          endpoint="/master/divisions"
+          column="division_name"
+          filter={formId ? `[["id","!=", "${formId}"],["and"],["status", "=", 1]]` : `["status", "=", 1]`}
           onChange={(e) =>
             setForm({...form, parent_division_id: e.target.value || null})
           }
-          data={supplierTypeData}
+          data={parentDivisionTypeData}
           disabled={isView || loading}
           type="select"
           placeholder="Select Parent Division"
@@ -314,13 +316,13 @@ function DivisionForm(props) {
           label="Manager"
           value={form.manager_id}
           name="manager_id"
-          endpoint="/master/manager"
-          column="manager_name"
+          endpoint="/master/employees"
+          column="employee_name"
           filter={`["status", "=", 1]`}
           onChange={(e) =>
             setForm({...form, manager_id: e.target.value || null})
           }
-          data={supplierTypeData}
+          data={employeeData}
           disabled={isView || loading}
           type="select"
           placeholder="Select Manager"
