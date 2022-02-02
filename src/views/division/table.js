@@ -23,7 +23,6 @@ export default function DivisionTable() {
   }, [])
 
   let [params, setParams] = useState({
-    isCheckbox: false,
     title: "Division",
     titleModal: "Division",
     baseRoute: "/master/divisions/form",
@@ -42,7 +41,7 @@ export default function DivisionTable() {
       },
       {
         title: "Parent Division",
-        data: "parent_division.division_name",
+        data: "parent_division.parent_division_name",
       },
       {
         title: "Manager",

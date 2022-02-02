@@ -23,7 +23,6 @@ export default function JobTitleTable() {
   }, [])
 
   let [params, setParams] = useState({
-    isCheckbox: false,
     title: "Job Title",
     titleModal: "Job Title",
     baseRoute: "/master/job-title/form",
