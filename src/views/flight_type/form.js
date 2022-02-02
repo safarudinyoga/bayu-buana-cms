@@ -107,14 +107,10 @@ function FlightTypeForm(props) {
               $.ajax({
                 type: "GET",
                 async: false,
-                url: `${env.API_URL}/master/flight-types?filters=["flight_type_code","=","${element.value}"]`,
+                url: `${env.API_URL}/master/flight-types?filters=["flight_type_code","like","${element.value}"]`,
                 success: function (res) {
                   if (res.items.length !== 0) {
-                    if (currentCode === element.value) {
-                      req = true
-                    } else {
-                      req = false
-                    }
+                    req = false
                   } else {
                     req = true
                   }
@@ -169,7 +165,7 @@ function FlightTypeForm(props) {
           $.ajax({
             type: "GET",
             async: false,
-            url: `${env.API_URL}/master/flight-types?filters=["flight_type_code","=","${element.value}"]`,
+            url: `${env.API_URL}/master/flight-types?filters=["flight_type_code","like","${element.value}"]`,
             success: function (res) {
               if (res.items.length !== 0) {
                 req = false
