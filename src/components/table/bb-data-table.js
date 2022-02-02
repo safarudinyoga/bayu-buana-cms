@@ -40,6 +40,7 @@ class BBDataTable extends Component {
       selected: [],
       status: "0",
       extraFilters: this.props.filters || [],
+      isCheckbox: this.props.isCheckbox ?? true,
       isOpen: false,
       itemInfo: ""
     }
@@ -58,7 +59,7 @@ class BBDataTable extends Component {
     this.inProgress = true
     $.fn.dataTableExt.errMode = "none"
     let columns = []
-    columns.push({
+    columns.push(this.state.isCheckbox && {
       searchable: false,
       orderable: false,
       title:
