@@ -153,16 +153,10 @@ function LanguageForm(props) {
               $.ajax({
                 type: "GET",
                 async: false,
-                url: `${env.API_URL}/master/languages?filters=["language_code","=","${element.value}"]`,
+                url: `${env.API_URL}/master/languages?filters=["language_code","like","${element.value}"]`,
                 success: function (res) {
                   if (res.items.length !== 0) {
-                    if (
-                      currentCode.toUpperCase() === element.value.toUpperCase()
-                    ) {
-                      req = true
-                    } else {
-                      req = false
-                    }
+                    req = false
                   } else {
                     req = true
                   }
@@ -274,7 +268,7 @@ function LanguageForm(props) {
           $.ajax({
             type: "GET",
             async: false,
-            url: `${env.API_URL}/master/languages?filters=["language_code","=","${element.value}"]`,
+            url: `${env.API_URL}/master/languages?filters=["language_code","like","${element.value}"]`,
             success: function (res) {
               if (res.items.length !== 0) {
                 req = false

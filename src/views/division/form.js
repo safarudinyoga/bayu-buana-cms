@@ -120,14 +120,10 @@ function DivisionForm(props) {
               $.ajax({
                 type: "GET",
                 async: false,
-                url: `${env.API_URL}/master/divisions?filters=["division_code","=","${element.value}"]`,
+                url: `${env.API_URL}/master/divisions?filters=["division_code","like","${element.value}"]`,
                 success: function (res) {
                   if (res.items.length !== 0) {
-                    if (currentCode === element.value) {
-                      req = true
-                    } else {
-                      req = false
-                    }
+                    req = false
                   } else {
                     req = true
                   }
@@ -183,7 +179,7 @@ function DivisionForm(props) {
           $.ajax({
             type: "GET",
             async: false,
-            url: `${env.API_URL}/master/divisions?filters=["division_code","=","${element.value}"]`,
+            url: `${env.API_URL}/master/divisions?filters=["division_code","like","${element.value}"]`,
             success: function (res) {
               if (res.items.length !== 0) {
                 req = false
