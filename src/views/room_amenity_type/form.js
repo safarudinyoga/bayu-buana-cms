@@ -255,10 +255,6 @@ function RoomAmenityTypeForm(props) {
       if(!form.room_amenity_category_room_amenity_type){
         form.room_amenity_category_room_amenity_type = null
       }
-
-      if(form.room_amenity_category_room_amenity_type.length === 0){
-        form.room_amenity_category_room_amenity_type = "00000000-0000-0000-0000-000000000000"
-      }
       
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
