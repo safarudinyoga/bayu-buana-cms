@@ -156,7 +156,13 @@ function LanguageForm(props) {
                 url: `${env.API_URL}/master/languages?filters=["language_code","like","${element.value}"]`,
                 success: function (res) {
                   if (res.items.length !== 0) {
-                    req = false
+                    if (
+                      currentCode.toUpperCase() === element.value.toUpperCase()
+                    ) {
+                      req = true
+                    } else {
+                      req = false
+                    }
                   } else {
                     req = true
                   }

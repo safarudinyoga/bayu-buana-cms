@@ -127,7 +127,11 @@ function AirportForm(props) {
                 url: `${env.API_URL}/master/airports?filters=["airport_code","like","${element.value}"]`,
                 success: function (res) {
                   if (res.items.length !== 0) {
+                    if(currentCode === element.value){
+                      req = true
+                    } else {
                       req = false
+                    }
                   } else {
                     req = true
                   }
