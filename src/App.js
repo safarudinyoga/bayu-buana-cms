@@ -12,6 +12,7 @@ import {
   Switch,
   Redirect,
 } from "react-router-dom"
+import Cookies from 'js-cookie'
 import AgeQualifyingTypeForm from "views/age_qualifying_type/form"
 import AgeQualifyingTypeTable from "views/age_qualifying_type/table"
 import AircraftForm from "views/aircraft/form"
@@ -94,6 +95,7 @@ import ZoneTable from "views/zone/table"
 // Master Hotel Profile Management
 import HotelProfileManagementTable from "views/hotel_profile_management/table"
 import HotelProfileManagementForm from "views/hotel_profile_management/form"
+import HotelRoomTypeForm from "views/hotel_profile_management/form/room_type/form"
 
 // Master Employee
 import EmployeeTable from "views/employee/table"
@@ -111,9 +113,25 @@ import StandardMarkupFlightForm from "views/standard_markup/form/flight_form"
 import StandardMarkupHotelForm from "views/standard_markup/form/hotel_form"
 import StandardMarkupOtherForm from "views/standard_markup/form/other_form"
 
+// Master Setup Flight Commision
+import FlightCommisionTable from "views/setup_flight_commision/table";
+import FlightCommisionForm from "views/setup_flight_commision/form"
+// Master Exchange Rate
+import ExchageRateTable from "views/exchange_rate/table"
+import ExchangeRateForm from "views/exchange_rate/form"
+// Master Integration Partner
+import IntegrationPartnerTable from "views/integration_partner/table"
+
 import Login from "./views/auth/login"
 import ForgotPassword from "views/auth/forgot_password"
 import OTP from "views/auth/otp"
+import OfficeTable from './views/branch_office/table';
+import OfficeForm from './views/branch_office/form';
+import DivisionForm from './views/division/form';
+import DivisionTable from './views/division/table';
+import DivisionHierarchy from './views/division/hierarchy';
+import JobTitleTable from './views/job-title/table';
+import JobTitleForm from './views/job-title/form';
 
 const RouteWithProps = ({
   path,
@@ -135,7 +153,7 @@ const RouteWithProps = ({
       ) : (
         <Redirect
           to={{
-            pathname: "/",
+            pathname: "/auth/login",
             state: { from: props.location },
           }}
         />
@@ -210,6 +228,12 @@ const DashboardRoutes = () => {
           <FeeTypeTable />
         </Route>
         <Route path="/master/fee-type/form/:id?">
+          <FeeTypeForm />
+        </Route>
+        <Route exact path="/master/integration-partner">
+          <IntegrationPartnerTable />
+        </Route>
+        <Route path="/master/integration-partner/form/:id?">
           <FeeTypeForm />
         </Route>
         <Route exact path="/master/flight-types">
@@ -410,6 +434,12 @@ const DashboardRoutes = () => {
         <Route exact path="/master/hotel-profile-management/form/:id?">
           <HotelProfileManagementForm />
         </Route>
+        <Route
+          exact
+          path="/master/hotel-profile-management/room-type/form/:id?"
+        >
+          <HotelRoomTypeForm />
+        </Route>
 
         {/* Master Employee */}
         <Route exact path="/master/employee">
@@ -418,6 +448,30 @@ const DashboardRoutes = () => {
         <Route path="/master/employee/form/:id?">
           <EmployeeForm />
         </Route>
+        {/* Division */}
+        <Route exact path="/master/divisions">
+          <DivisionTable />
+        </Route>
+        <Route path="/master/divisions/form/:id?">
+          <DivisionForm />
+        </Route>
+        <Route path="/master/divisions/hierarchy/:id?">
+          <DivisionHierarchy />
+        </Route>
+        {/* Job Title */}
+        <Route exact path="/master/job-title">
+          <JobTitleTable />
+        </Route>
+        <Route path="/master/job-title/form/:id?">
+          <JobTitleForm />
+        </Route>
+        {/* Branch Office */}
+        <Route exact path="/master/branch-offices">
+          <OfficeTable />
+        </Route>
+        <Route path="/master/branch-offices/form/:id?">
+          <OfficeForm/>
+        </Route>
 
         {/* Master Invoice Email Setup */}
         <Route exact path="/master/invoice-email-setup">
@@ -425,6 +479,22 @@ const DashboardRoutes = () => {
         </Route>
         <Route exact path="/master/invoice-email-setup/form/:id?">
           <InvoiceEmailSetupForm />
+        </Route>
+
+        {/* Master Setup Flight Commission */}
+        <Route exact path="/master/setup-flight-commision">
+          <FlightCommisionTable />
+        </Route>
+        <Route exact path="/master/setup-flight-commision/form/:id?">
+          <FlightCommisionForm />
+        </Route>
+        
+        {/* Master Exhange Rate */}
+        <Route exact path="/master/exchange-rate">
+          <ExchageRateTable />
+        </Route>
+        <Route exact path="/master/exchange-rate/form/:id?">
+          <ExchangeRateForm />
         </Route>
       </Switch>
     </DashboardWrapper>
@@ -447,13 +517,16 @@ const AuthRoutes = () => {
   )
 }
 
+
+
 const App = () => {
+  let auth = Cookies.get('ut')
   document.title = "Bayu Buana"
   return (
     <Router>
       <Switch>
         <AuthRoutes path="/auth" />
-        <RouteWithProps auth={true} path="/" component={DashboardRoutes} />
+        <RouteWithProps auth={auth} path="/" component={DashboardRoutes} />
       </Switch>
     </Router>
   )

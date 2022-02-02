@@ -74,7 +74,7 @@ function HotelAmenityCategoryForm(props) {
       required: "Is Default is required.",
     },
     hotel_amenity_category_asset: {
-      required: "Hotel Amenity Category Icon Image is required.",
+      required: "Icon is required.",
     },
   }
 
@@ -188,7 +188,7 @@ function HotelAmenityCategoryForm(props) {
         form.hotel_amenity_category_name = null
       }
       if (!form.description) {
-        form.description = null
+        form.description = formId ? "" : null
       }
 
       if (!form.hotel_amenity_category_asset) {
@@ -230,7 +230,7 @@ function HotelAmenityCategoryForm(props) {
       if(files){
         var filesize = ((files.size/1024)/1024).toFixed(4);
         if(filesize > 4){
-          alert("Hotel Amenity Category Icon Image size is more than 4MB.");
+          alert("Icon size is more than 4MB.");
           $("#amenity_icon").val('');
           return;
         }
@@ -351,7 +351,7 @@ function HotelAmenityCategoryForm(props) {
         />
         <FormInputControl
           id="amenity_icon"
-          label="Hotel Amenity Category Icon Image"
+          label="Icon"
           type="image"
           required={true}
           name="hotel_amenity_category_asset"

@@ -118,3 +118,9 @@ input[id="cb-th"] {
   min-height: 123px !important;
   overflow: auto !important;
 }
+
+.is-invalid {
+  .dzu-dropzone {
+    border-color: #dc3545 !important;
+  }
+}

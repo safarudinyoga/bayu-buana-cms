@@ -280,7 +280,7 @@ function PassengerTypeForm(props) {
     let api = new Api()
     try {
       if (!form.passenger_alpha_3_code) {
-        form.passenger_alpha_3_code = null
+        form.passenger_alpha_3_code = formId ? "" : null
       }
       let res = await api.putOrPost(endpoint, id, {
         ...form,

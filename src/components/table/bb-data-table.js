@@ -23,6 +23,7 @@ import "./bb-data-table.css"
 import editIcon from "assets/icons/edit.svg"
 import removeIcon from "assets/icons/remove.svg"
 import showIcon from "assets/icons/show.svg"
+import Cookies from "js-cookie"
 
 window.JSZip = JSZip
 
@@ -40,6 +41,7 @@ class BBDataTable extends Component {
       status: "0",
       extraFilters: this.props.filters || [],
       isOpen: false,
+      itemInfo: ""
     }
     this.inProgress = false
 
@@ -82,16 +84,15 @@ class BBDataTable extends Component {
     } catch (e) {}
 
     const allowed = [this.props.recordName]
-    const { recordName } = this.props
+    const { recordName, msgType } = this.props
     columns.push({
       searchable: false,
       orderable: false,
       title: "Actions",
-      render: function (value, display, row) {
+      render: function (value, display, row, meta) {
+        let placement = meta.row > 0 ? 'top' : 'bottom'
         $(function () {
-          $('[data-toggle="tooltip"]').tooltip({
-            placement: "top",
-          })
+          $('[data-toggle="tooltip"]').tooltip()
         })
         function tooltipCust(x) {
           if (x.matches) {
@@ -125,17 +126,17 @@ class BBDataTable extends Component {
           }, {})
 
         return (
-          '<a href="javascript:void(0);" data-toggle="tooltip" class="table-row-action-item" data-action="edit" data-id="' +
+          '<a href="javascript:void(0);" data-toggle="tooltip" data-placement="'+placement+'" class="table-row-action-item" data-action="edit" data-id="' +
           row.id +
           '" title="Click to edit"><img src="' +
           editIcon +
           '" /></a>' +
-          '<a href="javascript:void(0);" data-toggle="tooltip" class="table-row-action-item" data-action="view" data-id="' +
+          '<a href="javascript:void(0);" data-toggle="tooltip" data-placement="'+placement+'" class="table-row-action-item" data-action="view" data-id="' +
           row.id +
           '" title="Click to view details"><img src="' +
           showIcon +
           '"/></a>' +
-          '<a href="javascript:void(0);" data-toggle="tooltip" class="table-row-action-item" data-action="delete" data-id="' +
+          '<a href="javascript:void(0);" data-toggle="tooltip" data-placement="'+placement+'" class="table-row-action-item" data-action="delete" data-id="' +
           row.id +
           '" data-name="' +
           cvtRecordName +
@@ -147,6 +148,12 @@ class BBDataTable extends Component {
     })
 
     const initialize = () => {
+      let headers = {}
+      let auth = Cookies.get('ut')
+      if (auth) {
+        headers = { Authorization : `Bearer ${auth}` }
+      }
+
       let dt = $(this.table.current).DataTable({
         pagingType: "simple_numbers",
         colReorder: {
@@ -167,6 +174,7 @@ class BBDataTable extends Component {
         destroy: true,
         ajax: {
           url: this.api.env.endpoint(this.props.endpoint),
+          headers: headers,
           cache: true,
           dataSrc: (json) => {
             this.inProgress = false
@@ -442,7 +450,7 @@ class BBDataTable extends Component {
         },
         responsive: true,
         autoWidth: false,
-        scrollX: true,
+        // scrollX: true,
         scrollCollapse: false,
         columnDefs: [
           // {
@@ -706,12 +714,13 @@ class BBDataTable extends Component {
     })
   }
 
-  deleteAction(id, name) {
+  deleteAction(id, name, info) {
     this.setState({
       isOpen: true,
       deleteType: "single",
       id: id,
       name: name,
+      info: info || name
     })
   }
 
@@ -817,7 +826,9 @@ class BBDataTable extends Component {
         e.preventDefault()
         let id = $(this).data("id")
         let name = $(this).data("name")
+        let info = $(this).data("info")
         let base = me.props.baseRoute || ""
+        $('[data-toggle="tooltip"]').tooltip("hide")
         switch ($(this).data("action")) {
           case "edit":
             me.props.history.push(base + "/" + id)
@@ -826,7 +837,7 @@ class BBDataTable extends Component {
             me.props.history.push(base + "/" + id + "?action=view")
             break
           default:
-            me.deleteAction.bind(me)(id, name)
+            me.deleteAction.bind(me)(id, name, info)
             break
         }
       })
@@ -842,7 +853,9 @@ class BBDataTable extends Component {
                 : this.props.title
               : this.props.title}
           </ModalHeader>
-          <ModalBody>Are you sure you want to delete this?</ModalBody>
+          <ModalBody>Are you sure you want to delete {
+            this.props.showInfoDelete ? `'${this.state.info}'` : "this"
+          }?</ModalBody>
           <ModalFooter>
             <Button
               variant="danger"

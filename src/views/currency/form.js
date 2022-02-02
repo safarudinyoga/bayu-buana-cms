@@ -359,16 +359,16 @@ function CurrencyForm(props) {
     let api = new Api()
     try {
       if (!form.minor_unit_name) {
-        form.minor_unit_name = null
+        form.minor_unit_name = ""
       }
       if (!form.minor_unit) {
-        form.minor_unit = null
+        form.minor_unit = formId ? 0 : null
       }
       if (!form.standard_precision) {
-        form.standard_precision = null
+        form.standard_precision = formId ? 0 : null
       }
       if (!form.price_precision) {
-        form.price_precision = null
+        form.price_precision =formId ? 0 : null
       }
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)

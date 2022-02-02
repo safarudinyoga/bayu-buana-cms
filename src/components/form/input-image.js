@@ -47,7 +47,7 @@ const FormInputFile = ({
           <p className="media-title media-title-required">{title}</p>
           <p className="media-info">
             Recommended Size: {mediaSpec.size} pixels <br/>
-            Supported Image: {accept?.split(",").join(" ") || ".png, .jpg, .jpeg"} file Max: {mediaSpec.file_size} KB
+            Supported Image: {accept?.split(",").join(" ") || ".png, .jpg, .jpeg"} File Max: {mediaSpec.file_size} KB
           </p>
         </>
       )}

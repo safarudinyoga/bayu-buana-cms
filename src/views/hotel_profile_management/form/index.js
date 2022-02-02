@@ -1,5 +1,5 @@
-import { withRouter } from "react-router"
 import React, { useEffect, useState } from "react"
+import { withRouter } from "react-router"
 import Api from "config/api"
 import { ReactSVG } from "react-svg"
 import { Row, Col, Tab, Nav } from "react-bootstrap"
@@ -8,7 +8,7 @@ import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
 
 import GeneralInformation from "./general-information"
-import RoomType from "./room-type"
+import RoomType from "./room_type/table"
 import HotelFacilities from "./hotel-facilities"
 import Media from "./media"
 import NearbyAttractions from "./nearby-attractions"
@@ -24,7 +24,14 @@ const EmployeeForm = (props) => {
 
   let api = new Api()
 
-  const [tabKey, setTabKey] = useState("general-information")
+  const tabKeyGeneralInformation = "general-information"
+  const tabKeyRoomType = "room-type"
+  const tabKeyHotelFacilities = "hotel-facilities"
+  const tabKeyMedia = "media"
+  const tabKeyNearbyAttractions = "nearby-attractions"
+  const tabKeyPointOfReferences = "point-of-references"
+
+  const [tabKey, setTabKey] = useState(tabKeyGeneralInformation)
   const [selectJobTitle, setSelectJobTitle] = useState([])
   const [selectDivision, setSelectDivision] = useState([])
   const [selectBranchOffice, setSelectBranchOffice] = useState([])
@@ -81,40 +88,25 @@ const EmployeeForm = (props) => {
   const handleSelectTab = async (key) => {
     setTabKey(key)
 
-    if (key == "employment") {
-      try {
-        let res = await api.get("/master/job-titles")
-        const options = []
-        res.data.items.forEach((data) => {
-          options.push({
-            label: data.job_title_name,
-            value: data.id,
-          })
-          setSelectJobTitle(options)
-        })
-      } catch (e) {}
-      try {
-        let res = await api.get("/master/divisions")
-        const options = []
-        res.data.items.forEach((data) => {
-          options.push({
-            label: data.division_name,
-            value: data.id,
-          })
-          setSelectDivision(options)
-        })
-      } catch (e) {}
-      try {
-        let res = await api.get("/master/divisions")
-        const options = []
-        res.data.items.forEach((data) => {
-          options.push({
-            label: data.division_name,
-            value: data.id,
-          })
-          setSelectBranchOffice(options)
-        })
-      } catch (e) {}
+    switch (key) {
+      case tabKeyGeneralInformation:
+        props.history.push(`#${tabKeyGeneralInformation}`)
+        break
+      case tabKeyRoomType:
+        props.history.push(`#${tabKeyRoomType}`)
+        break
+      case tabKeyHotelFacilities:
+        props.history.push(`#${tabKeyHotelFacilities}`)
+        break
+      case tabKeyMedia:
+        props.history.push(`#${tabKeyMedia}`)
+        break
+      case tabKeyNearbyAttractions:
+        props.history.push(`#${tabKeyNearbyAttractions}`)
+        break
+      case tabKeyPointOfReferences:
+        props.history.push(`#${tabKeyPointOfReferences}`)
+        break
     }
   }
 
@@ -122,6 +114,8 @@ const EmployeeForm = (props) => {
     if (!props.match.params.id) {
       setLoading(false)
     }
+    props.history.push(props.history.location.hash)
+    setTabKey(props.history.location.hash.substr(1))
     setId(props.match.params.id)
   }, [props.match.params.id])
 
@@ -131,7 +125,7 @@ const EmployeeForm = (props) => {
         <Col sm={3}>
           <Nav variant="pills" className="flex-column nav-side">
             <Nav.Item>
-              <Nav.Link eventKey="general-information">
+              <Nav.Link eventKey={tabKeyGeneralInformation}>
                 <div>
                   <ReactSVG src="/img/icons/general-information.svg" />
                   <span>General Information</span>
@@ -139,7 +133,7 @@ const EmployeeForm = (props) => {
               </Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link eventKey="room-type">
+              <Nav.Link eventKey={tabKeyRoomType}>
                 <div>
                   <ReactSVG src="/img/icons/emergency-contacts.svg" />
                   <span>Room Type</span>
@@ -147,7 +141,7 @@ const EmployeeForm = (props) => {
               </Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link eventKey="hotel-facilities">
+              <Nav.Link eventKey={tabKeyHotelFacilities}>
                 <div>
                   <ReactSVG src="/img/icons/emergency-contacts.svg" />
                   <span>Hotel Facilities</span>
@@ -155,7 +149,7 @@ const EmployeeForm = (props) => {
               </Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link eventKey="media">
+              <Nav.Link eventKey={tabKeyMedia}>
                 <div>
                   <ReactSVG src="/img/icons/emergency-contacts.svg" />
                   <span>Media</span>
@@ -163,7 +157,7 @@ const EmployeeForm = (props) => {
               </Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link eventKey="nearby-attractions">
+              <Nav.Link eventKey={tabKeyNearbyAttractions}>
                 <div>
                   <ReactSVG src="/img/icons/emergency-contacts.svg" />
                   <span>Nearby Attractions</span>
@@ -171,7 +165,7 @@ const EmployeeForm = (props) => {
               </Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link eventKey="point-of-references">
+              <Nav.Link eventKey={tabKeyPointOfReferences}>
                 <div>
                   <ReactSVG src="/img/icons/emergency-contacts.svg" />
                   <span>Point of References</span>
@@ -182,42 +176,42 @@ const EmployeeForm = (props) => {
         </Col>
         <Col sm={9}>
           <Tab.Content>
-            <Tab.Pane eventKey="general-information">
+            <Tab.Pane eventKey={tabKeyGeneralInformation}>
               <GeneralInformation
                 history={props.history}
                 backUrl={backUrl}
                 handleSelectTab={(v) => handleSelectTab(v)}
               />
             </Tab.Pane>
-            <Tab.Pane eventKey="room-type">
+            <Tab.Pane eventKey={tabKeyRoomType}>
               <RoomType
                 history={props.history}
                 backUrl={backUrl}
                 handleSelectTab={(v) => handleSelectTab(v)}
               />
             </Tab.Pane>
-            <Tab.Pane eventKey="hotel-facilities">
+            <Tab.Pane eventKey={tabKeyHotelFacilities}>
               <HotelFacilities
                 history={props.history}
                 backUrl={backUrl}
                 handleSelectTab={(v) => handleSelectTab(v)}
               />
             </Tab.Pane>
-            <Tab.Pane eventKey="media">
+            <Tab.Pane eventKey={tabKeyMedia}>
               <Media
                 history={props.history}
                 backUrl={backUrl}
                 handleSelectTab={(v) => handleSelectTab(v)}
               />
             </Tab.Pane>
-            <Tab.Pane eventKey="nearby-attractions">
+            <Tab.Pane eventKey={tabKeyNearbyAttractions}>
               <NearbyAttractions
                 history={props.history}
                 backUrl={backUrl}
                 handleSelectTab={(v) => handleSelectTab(v)}
               />
             </Tab.Pane>
-            <Tab.Pane eventKey="point-of-references">
+            <Tab.Pane eventKey={tabKeyPointOfReferences}>
               <PointofReferences
                 history={props.history}
                 backUrl={backUrl}

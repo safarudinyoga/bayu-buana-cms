@@ -6,9 +6,9 @@ import { setUIParams } from "redux/ui-store"
 
 const NearbyAttractions = (props) => {
   let params = {
-    title: "Hotel Profile Management",
-    baseRoute: "/master/hotel-profile-management/form",
-    endpoint: "/master/hotel-profile-management",
+    title: "Nearby Attractions",
+    baseRoute: "/master/hotel-profile-management/nearby-attractions/form",
+    endpoint: "/master/attractions",
     deleteEndpoint: "/master/batch-actions/delete/hotel-profile-management",
     activationEndpoint:
       "/master/batch-actions/activate/hotel-profile-management",
@@ -16,19 +16,19 @@ const NearbyAttractions = (props) => {
       "/master/batch-actions/deactivate/hotel-profile-management",
     columns: [
       {
-        title: "Hotel Name",
-        data: "hotel_name",
+        title: "Nearby Attraction",
+        data: "attraction_name",
       },
       {
-        title: "Location",
-        data: "location",
+        title: "Categories",
+        data: "attraction_category_names",
       },
       {
-        title: "Chain/Brand",
-        data: "chain_brand",
+        title: "Distance (km)",
+        data: "attraction_distance",
       },
     ],
-    emptyTable: "No hotels found",
+    emptyTable: "No nearby attractions found",
     recordName: "hotel_name",
   }
 
@@ -37,7 +37,9 @@ const NearbyAttractions = (props) => {
       <Card.Body>
         <h3 className="card-heading">Nearby Attractions</h3>
         <div style={{ padding: "0 10px 10px" }}>
-          <BBDataTable {...params} />
+          {props.history.location.hash == "#nearby-attractions" && (
+            <BBDataTable {...params} />
+          )}
         </div>
       </Card.Body>
     </Card>

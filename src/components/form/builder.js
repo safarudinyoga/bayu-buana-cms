@@ -36,6 +36,8 @@ class FormBuilder extends Component {
         isView={this.props.isView}
         onSave={this.props.onSave}
         onBack={this.onBack.bind(this)}
+        txtsave={this.props.txtSave}
+        txtback={this.props.txtBack}
         id={this.props.id}
       >
         <FormWrapper>{this.props.children}</FormWrapper>

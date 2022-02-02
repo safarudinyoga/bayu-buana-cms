@@ -9,7 +9,7 @@ stages:
 
 build:
   stage: build
-  image: node
+  image: node:14
   variables:
     GIT_SSL_NO_VERIFY: 1
   script: 

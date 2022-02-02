@@ -230,7 +230,7 @@ function HotelSupplierForm(props) {
     let api = new Api()
     try {
       if (!form.supplier_type_id) {
-        form.supplier_type_id = null
+        form.supplier_type_id = formId ? "00000000-0000-0000-0000-000000000000" : null
       }
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
