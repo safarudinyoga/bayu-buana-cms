@@ -152,11 +152,11 @@ function AircraftForm(props) {
                 url: `${env.API_URL}/master/aircraft?filters=["icao_code","like","${element.value}"]`,
                 success: function (res) {
                   if (res.items.length !== 0) {
-                    // if (currentIcao === element.value) {
-                    //   req = true
-                    // } else {
+                    if (currentIcao === element.value) {
+                      req = true
+                    } else {
                       req = false
-                    // }
+                    }
                   } else {
                     req = true
                   }
@@ -177,7 +177,11 @@ function AircraftForm(props) {
                 url: `${env.API_URL}/master/aircraft?filters=["aircraft_code","like","${element.value}"]`,
                 success: function (res) {
                   if (res.items.length !== 0) {
+                    if (currentCode === element.value) {
+                      req = true
+                    } else {
                       req = false
+                    }
                   } else {
                     req = true
                   }

@@ -121,7 +121,7 @@ function RoomAmenityTypeForm(props) {
               $.ajax({
                 type: "GET",
                 async: false,
-                url: `${env.API_URL}/master/room-amenity-types?filters=["room_amenity_type_code","=","${element.value}"]`,
+                url: `${env.API_URL}/master/room-amenity-types?filters=["room_amenity_type_code","like","${element.value}"]`,
                 success: function (res) {
                   if (res.items.length !== 0) {
                     if (currentCode === parseInt(element.value)) {
@@ -193,7 +193,6 @@ function RoomAmenityTypeForm(props) {
             async: false,
             url: `${env.API_URL}/master/room-amenity-types?filters=["room_amenity_type_code","like","${element.value}"]`,
             success: function (res) {
-              console.log(res.items, "==> items")
               if (res.items.length !== 0) {
                 req = false
               } else {

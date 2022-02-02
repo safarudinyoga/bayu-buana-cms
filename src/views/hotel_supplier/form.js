@@ -117,7 +117,11 @@ function HotelSupplierForm(props) {
                 url: `${env.API_URL}/master/hotel-suppliers?filters=["hotel_supplier_code","like","${element.value}"]`,
                 success: function (res) {
                   if (res.items.length !== 0) {
-                    req = false
+                    if (currentCode === element.value) {
+                      req = true
+                    } else {
+                      req = false
+                    }
                   } else {
                     req = true
                   }

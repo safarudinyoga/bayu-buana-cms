@@ -183,7 +183,11 @@ function CurrencyForm(props) {
                 url: `${env.API_URL}/master/currencies?filters=["currency_code","like","${element.value}"]`,
                 success: function (res) {
                   if (res.items.length !== 0) {
-                    req = false
+                    if(currentCode === element.value){
+                      req = true
+                    } else {
+                      req = false
+                    }
                   } else {
                     req = true
                   }
