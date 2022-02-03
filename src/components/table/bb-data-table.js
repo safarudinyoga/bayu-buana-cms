@@ -94,7 +94,7 @@ class BBDataTable extends Component {
       render: function (value, display, row, meta) {
         let placement = meta.row > 0 ? 'top' : 'bottom'
         $(function () {
-          $('[data-toggle="tooltip"]').tooltip()
+          $('[data-toggle="tooltip"]').tooltip({trigger: "hover"})
         })
         function tooltipCust(x) {
           if (x.matches) {
