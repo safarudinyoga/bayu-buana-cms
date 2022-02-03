@@ -63,7 +63,8 @@ export default function DivisionTable() {
     emptyTable: "No division found",
     recordName: ["division_code", "division_name"],
     showInfoDelete: true,
+    switchStatus: true,
   })
 
-  return <BBDataTable {...params} {...params} />
+  return <BBDataTable {...params}/>
 }

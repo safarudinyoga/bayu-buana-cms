@@ -57,6 +57,7 @@ class BBDataTable extends Component {
 
   init() {
     this.inProgress = true
+    let self = this
     $.fn.dataTableExt.errMode = "none"
     let columns = []
     columns.push(this.state.isCheckbox && {
@@ -126,24 +127,22 @@ class BBDataTable extends Component {
             return obj
           }, {})
 
+        let showSwitch = self.props.switchStatus
+        let checked = ""
+        if (showSwitch) {
+          checked = row.status == 1 ? "checked" : ""
+        }
+
         return (
-          '<a href="javascript:void(0);" data-toggle="tooltip" data-placement="'+placement+'" class="table-row-action-item" data-action="edit" data-id="' +
-          row.id +
-          '" title="Click to edit"><img src="' +
-          editIcon +
-          '" /></a>' +
-          '<a href="javascript:void(0);" data-toggle="tooltip" data-placement="'+placement+'" class="table-row-action-item" data-action="view" data-id="' +
-          row.id +
-          '" title="Click to view details"><img src="' +
-          showIcon +
-          '"/></a>' +
-          '<a href="javascript:void(0);" data-toggle="tooltip" data-placement="'+placement+'" class="table-row-action-item" data-action="delete" data-id="' +
-          row.id +
-          '" data-name="' +
-          cvtRecordName +
-          '" title="Click to delete"><img src="' +
-          removeIcon +
-          '" /></a>'
+          `
+          <a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item" data-action="edit" data-id="${row.id}" title="Click to edit"><img src="${editIcon}"/></a>
+          <a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item" data-action="view" data-id="${row.id}" title="Click to view details"><img src="${showIcon}"/></a>
+          <a href="javascript:void(0);" class="${showSwitch ? "d-inline" : "d-none"} custom-switch custom-switch-bb table-row-action-item" data-id="${row.id}" data-action="update_status">
+            <input type="checkbox" class="custom-control-input check-status" id="customSwitch${row.id}" ${checked} data-action="update_status">
+            <label class="custom-control-label" for="customSwitch${row.id}" data-action="update_status"></label>
+          </a>
+          <a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item" data-action="delete" data-id="${row.id}" data-name="${cvtRecordName}" title="Click to delete"><img src="${removeIcon}" /></a>
+          `
         )
       },
     })
@@ -478,7 +477,7 @@ class BBDataTable extends Component {
             ordeable: false,
             // className: "table-row-action",
             targets: [columns.length - 1],
-            width: "12%",
+            width: "20%",
           },
         ],
         // select: {
@@ -725,6 +724,11 @@ class BBDataTable extends Component {
     })
   }
 
+  updateStatus(id, name, info) {
+    console.log(id, "<kkkk halo");
+    alert("halooo");
+  }
+
   componentWillUnmount() {
     try {
       this.dt.destroy()
@@ -836,6 +840,9 @@ class BBDataTable extends Component {
             break
           case "view":
             me.props.history.push(base + "/" + id + "?action=view")
+            break
+          case "update_status":
+            me.updateStatus.bind(me)(id, name, info)
             break
           default:
             me.deleteAction.bind(me)(id, name, info)
