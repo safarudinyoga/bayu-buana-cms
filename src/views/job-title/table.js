@@ -55,6 +55,7 @@ export default function JobTitleTable() {
     emptyTable: "No job title found",
     recordName: ["job_title_code", "job_title_name"],
     showInfoDelete: true,
+    switchStatus: true,
   })
 
   return <BBDataTable {...params} {...params} />
