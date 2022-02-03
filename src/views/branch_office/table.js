@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react"
 import BBDataTable from "components/table/bb-data-table"
 import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
+import { renderColumn } from "lib/translation"
 
 export default function OfficeTable() {
   let dispatch = useDispatch()
@@ -35,6 +36,7 @@ export default function OfficeTable() {
       {
         title: "Company/ Branch Name",
         data: "office_name",
+        render: renderColumn("office", "office_name"),
       },
       {
         title: "Address",
