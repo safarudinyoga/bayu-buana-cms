@@ -161,7 +161,7 @@ class BBDataTable extends Component {
           iFixedColumnsLeft: 5,
           //   iFixedColumnsRight: 4,
         },
-        stateSave: false,
+        stateSave: true,
         serverSide: true,
         processing: true,
         displayLength: 10,
@@ -744,6 +744,7 @@ class BBDataTable extends Component {
   }
 
   componentWillUnmount() {
+    window.location.reload();
     try {
       this.dt.destroy()
     } catch (e) {}
