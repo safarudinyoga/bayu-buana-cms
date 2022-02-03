@@ -122,6 +122,13 @@ import ExchangeRateForm from "views/exchange_rate/form"
 // Master Integration Partner
 import IntegrationPartnerTable from "views/integration_partner/table"
 
+// Master Manage Corporate
+import CorporateTable from "views/manage_corporate/table"
+import CorporateForm from "views/manage_corporate/form"
+
+// User Profile
+import UserProfile from "views/user_profile/form"
+
 import Login from "./views/auth/login"
 import ForgotPassword from "views/auth/forgot_password"
 import OTP from "views/auth/otp"
@@ -496,6 +503,19 @@ const DashboardRoutes = () => {
         <Route exact path="/master/exchange-rate/form/:id?">
           <ExchangeRateForm />
         </Route>
+
+        {/* Master Manage Corporate */}
+        <Route exact path="/master/corporate">
+          <CorporateTable />
+        </Route>
+        <Route exact path="/master/corporate/form/:id?">
+          <CorporateForm />
+        </Route>
+
+        <Route exact path="/profile">
+          <UserProfile />
+        </Route>
+
       </Switch>
     </DashboardWrapper>
   )
