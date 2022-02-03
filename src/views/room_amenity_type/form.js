@@ -121,7 +121,7 @@ function RoomAmenityTypeForm(props) {
               $.ajax({
                 type: "GET",
                 async: false,
-                url: `${env.API_URL}/master/room-amenity-types?filters=["room_amenity_type_code","=","${element.value}"]`,
+                url: `${env.API_URL}/master/room-amenity-types?filters=["room_amenity_type_code","like","${element.value}"]`,
                 success: function (res) {
                   if (res.items.length !== 0) {
                     if (currentCode === parseInt(element.value)) {
@@ -191,7 +191,7 @@ function RoomAmenityTypeForm(props) {
           $.ajax({
             type: "GET",
             async: false,
-            url: `${env.API_URL}/master/room-amenity-types?filters=["room_amenity_type_code","=","${element.value}"]`,
+            url: `${env.API_URL}/master/room-amenity-types?filters=["room_amenity_type_code","like","${element.value}"]`,
             success: function (res) {
               if (res.items.length !== 0) {
                 req = false
@@ -254,10 +254,6 @@ function RoomAmenityTypeForm(props) {
 
       if(!form.room_amenity_category_room_amenity_type){
         form.room_amenity_category_room_amenity_type = null
-      }
-
-      if(form.room_amenity_category_room_amenity_type.length === 0){
-        form.room_amenity_category_room_amenity_type = "00000000-0000-0000-0000-000000000000"
       }
       
       let res = await api.putOrPost(endpoint, id, form)

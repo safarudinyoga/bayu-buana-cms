@@ -124,7 +124,7 @@ function AirportForm(props) {
               $.ajax({
                 type: "GET",
                 async: false,
-                url: `${env.API_URL}/master/airports?filters=["airport_code","=","${element.value}"]`,
+                url: `${env.API_URL}/master/airports?filters=["airport_code","like","${element.value}"]`,
                 success: function (res) {
                   if (res.items.length !== 0) {
                     if(currentCode === element.value){
@@ -212,7 +212,7 @@ function AirportForm(props) {
           $.ajax({
             type: "GET",
             async: false,
-            url: `${env.API_URL}/master/airports?filters=["airport_code","=","${element.value}"]`,
+            url: `${env.API_URL}/master/airports?filters=["airport_code","like","${element.value}"]`,
             success: function (res) {
               if (res.items.length !== 0) {
                 req = false

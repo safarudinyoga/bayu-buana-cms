@@ -686,7 +686,7 @@ function AttractionForm(props) {
             data={destinationData}
             endpoint="/master/destinations"
             column="destination_name"
-            filter={`["status", "=", 1]`}
+            filter={`[["country.id", "=", "${form.country_id}"],["AND"],["status", "=", 1]]`}
             onChange={(e) =>
               setForm({...form, destination_id: e.target.value || null})
             }
@@ -703,7 +703,7 @@ function AttractionForm(props) {
             data={zoneData}
             endpoint="/master/zones"
             column="zone_name"
-            filter={`["status", "=", 1]`}
+            filter={`[["destination.id", "=", "${form.destination_id}"],["AND"],["status", "=", 1]]`}
             onChange={(e) =>
               setForm({...form, zone_id: e.target.value || null})
             }

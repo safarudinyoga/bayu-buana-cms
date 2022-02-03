@@ -217,7 +217,7 @@ function DestinationForm(props) {
               $.ajax({
                 type: "GET",
                 async: false,
-                url: `${env.API_URL}/master/destinations?filters=["destination_code","=","${element.value}"]`,
+                url: `${env.API_URL}/master/destinations?filters=["destination_code","like","${element.value}"]`,
                 success: function (res) {
                   if (res.items.length !== 0) {
                     if(currentCode === element.value){
@@ -286,7 +286,7 @@ function DestinationForm(props) {
           $.ajax({
             type: "GET",
             async: false,
-            url: `${env.API_URL}/master/destinations?filters=["destination_code","=","${element.value}"]`,
+            url: `${env.API_URL}/master/destinations?filters=["destination_code","like","${element.value}"]`,
             success: function (res) {
               if (res.items.length !== 0) {
                 req = false
