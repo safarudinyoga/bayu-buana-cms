@@ -54,6 +54,7 @@ export default function OfficeTable() {
     emptyTable: "No offices found",
     recordName: "office_name",
     showInfoDelete: true,
+    switchStatus: true,
   })
 
   
