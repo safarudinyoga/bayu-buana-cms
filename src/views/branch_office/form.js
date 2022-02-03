@@ -53,7 +53,7 @@ function OfficeForm(props) {
     },
   ]
 
-  const [validationRules, setValidationRules] = useState({
+  const validationRules = {
     office_name: {
       required: true,
       minlength: 1,
@@ -116,7 +116,7 @@ function OfficeForm(props) {
       minlength: 1,
       maxlength: 512,
     },
-  });
+  };
 
   const validationMessages = {
     office_name: {
