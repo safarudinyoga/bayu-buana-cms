@@ -137,8 +137,8 @@ class BBDataTable extends Component {
           `
           <a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item" data-action="edit" data-id="${row.id}" title="Click to edit"><img src="${editIcon}"/></a>
           <a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item" data-action="view" data-id="${row.id}" title="Click to view details"><img src="${showIcon}"/></a>
-          <a href="javascript:void(0);" class="${showSwitch ? "d-inline" : "d-none"} custom-switch custom-switch-bb table-row-action-item" data-id="${row.id}" data-action="update_status">
-            <input type="checkbox" class="custom-control-input check-status" id="customSwitch${row.id}" ${checked} data-action="update_status">
+          <a href="javascript:void(0);" class="${showSwitch ? "d-inline" : "d-none"} custom-switch custom-switch-bb table-row-action-item" data-id="${row.id}" data-action="update_status" data-status="${row.status}">
+            <input type="checkbox" class="custom-control-input check-status-${row.id}" id="customSwitch${row.id}" ${checked} data-action="update_status">
             <label class="custom-control-label" for="customSwitch${row.id}" data-action="update_status"></label>
           </a>
           <a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item" data-action="delete" data-id="${row.id}" data-name="${cvtRecordName}" title="Click to delete"><img src="${removeIcon}" /></a>
@@ -724,9 +724,23 @@ class BBDataTable extends Component {
     })
   }
 
-  updateStatus(id, name, info) {
-    console.log(id, "<kkkk halo");
-    alert("halooo");
+  updateStatus(id, item) {
+    let status = $(item).data("status")
+    let table = $("table")
+    let switchBtn = $(`.check-status-${id}`, table)
+    if (status === 1) {
+      switchBtn.prop("checked", false)
+      $(item).data("status", '3')
+      this.setState({
+        selected: [id]
+      }, () => this.onStatusUpdate(3))
+    } else {
+      switchBtn.prop("checked", true)
+      $(item).data("status", '1')
+      this.setState({
+        selected: [id]
+      }, () => this.onStatusUpdate(1))
+    }
   }
 
   componentWillUnmount() {
@@ -842,7 +856,7 @@ class BBDataTable extends Component {
             me.props.history.push(base + "/" + id + "?action=view")
             break
           case "update_status":
-            me.updateStatus.bind(me)(id, name, info)
+            me.updateStatus.bind(me)(id, this)
             break
           default:
             me.deleteAction.bind(me)(id, name, info)
@@ -923,7 +937,7 @@ class BBDataTable extends Component {
         </Modal>
         <TableHeader
           {...this.props}
-          selected={this.state.selected.length > 0}
+          selected={this.state.selected.length > 0 && !this.props.switchStatus}
           hideFilter={this.state.hideFilter}
           extraFilter={this.props.extraFilter}
           onSearch={this.onSearch.bind(this)}

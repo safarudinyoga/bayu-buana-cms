@@ -296,6 +296,9 @@ select.bg-dark-grey > option {
   vertical-align: middle;
   vertical-align: -webkit-baseline-middle;
 }
+.custom-switch .custom-control-label {
+  cursor: pointer;
+}
 .custom-switch .custom-control-label::before {
   height: 0.7rem;
 }
