@@ -55,6 +55,7 @@ export default function OfficeTable() {
     recordName: "office_name",
     showInfoDelete: true,
     switchStatus: true,
+    titleInfoDelete: 'Company/ Branch Name: '
   })
 
   

@@ -161,7 +161,7 @@ class BBDataTable extends Component {
           iFixedColumnsLeft: 5,
           //   iFixedColumnsRight: 4,
         },
-        stateSave: true,
+        stateSave: false,
         serverSide: true,
         processing: true,
         displayLength: 10,
@@ -715,12 +715,13 @@ class BBDataTable extends Component {
   }
 
   deleteAction(id, name, info) {
+    let titleInfo = this.props.titleInfoDelete ? this.props.titleInfoDelete : ""
     this.setState({
       isOpen: true,
       deleteType: "single",
       id: id,
       name: name,
-      info: info || name
+      info: titleInfo + "" + `${info || name}`
     })
   }
 
