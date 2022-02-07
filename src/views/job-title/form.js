@@ -247,7 +247,7 @@ function JobTitleForm(props) {
       props.history.push(backUrl)
       dispatch(
         setAlert({
-          message: `Record 'Job Title: ${form.job_title_name
+          message: `Record '${form.job_title_name
             }' has been successfully saved.`,
         }),
       )
