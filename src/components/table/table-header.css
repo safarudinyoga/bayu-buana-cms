@@ -63,6 +63,12 @@ button.advanced-options-btn:active {
   width: 60px;
 }
 
+.menu-link {
+  font-style: italic;
+  font-size: 15px;
+  vertical-align: middle;
+}
+
 .btn-table-action-dropdown,
 .btn-table-action-dropdown:focus,
 .btn-table-action-dropdown:active {
