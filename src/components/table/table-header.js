@@ -75,7 +75,7 @@ const StatusSelect = (props) => {
           onChange={props.onChange}
           styles={customStyles}
           options={props.options}
-          placeholder="pelase choose"
+          placeholder="Please choose"
         />
     </>
   )
@@ -269,12 +269,9 @@ class TableHeader extends Component {
                 <div className="row">
                   <div className="col-xs-4">
                     <StatusSelect
-                      components={{IndicatorSeparator: () => null, DropdownIndicator}}
                       value={customFilterValue ? customFilterValue.value : this.state.statusValue}
                       onChange={this.handleStatus.bind(this)}
-                      styles={customStyles}
                       options={customFilterValue ? customFilterValue.options : options}
-                      placeholder="Please choose"
                     />
                   </div>
                 </div>
