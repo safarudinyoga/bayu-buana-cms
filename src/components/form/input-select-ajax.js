@@ -51,7 +51,15 @@ export default class FormInputSelectAjax extends Component {
               }
 
               json.items.forEach((item) => {
-                item.text = item[this.props.column]
+                console.log(item)
+                if(this.props.column.includes(".")){
+                  const results = this.props.column.split(".");
+                  if(item[results[0]]){
+                    item.text = item[results[0]][results[1]]
+                  }
+                }else{
+                  item.text = item[this.props.column]
+                }
               })
 
               return {
@@ -65,6 +73,7 @@ export default class FormInputSelectAjax extends Component {
               if (this.props.onRequest) {
                 return this.props.onRequest(params)
               }
+
               let filters = [this.props.column, "like", params.term]
               let filter = "";
               if(this.props.filter){
@@ -73,7 +82,7 @@ export default class FormInputSelectAjax extends Component {
               }
               return {
                 filters: params.term ? JSON.stringify(filters) : filter,
-                sort: this.props.column,
+                sort: this.props.sort ? this.props.sort : this.props.column,
                 size: 999999,
                 page: params.page && params.page - 1 ? params.page - 1 : 0,
               }
