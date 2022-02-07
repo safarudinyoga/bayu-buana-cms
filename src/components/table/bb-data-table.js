@@ -133,6 +133,13 @@ class BBDataTable extends Component {
           checked = row.status == 1 ? "checked" : ""
         }
 
+
+        let infoDelete = self.props.infoDelete
+        let info = ""
+        if(infoDelete) {
+          info = infoDelete.map(v => v.title + " : " + row[v.recordName]).join(" ")
+        }
+
         return (
           `
           <a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item" data-action="edit" data-id="${row.id}" title="Click to edit"><img src="${editIcon}"/></a>
@@ -141,7 +148,7 @@ class BBDataTable extends Component {
             <input type="checkbox" class="custom-control-input check-status-${row.id}" id="customSwitch${row.id}" ${checked} data-action="update_status">
             <label class="custom-control-label" for="customSwitch${row.id}" data-action="update_status"></label>
           </a>
-          <a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item" data-action="delete" data-id="${row.id}" data-name="${cvtRecordName}" title="Click to delete"><img src="${removeIcon}" /></a>
+          <a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item" data-action="delete" data-id="${row.id}" data-name="${cvtRecordName}" ${infoDelete ? `data-info="${info}"` : ""}  title="Click to delete"><img src="${removeIcon}" /></a>
           `
         )
       },
@@ -715,13 +722,13 @@ class BBDataTable extends Component {
   }
 
   deleteAction(id, name, info) {
-    let titleInfo = this.props.titleInfoDelete ? this.props.titleInfoDelete : ""
+    // let titleInfo = this.props.titleInfoDelete ? this.props.titleInfoDelete : ""
     this.setState({
       isOpen: true,
       deleteType: "single",
       id: id,
       name: name,
-      info: titleInfo + "" + `${info || name}`
+      info: info || name
     })
   }
 
@@ -892,7 +899,7 @@ class BBDataTable extends Component {
                     .delete(this.props.endpoint + "/" + this.state.id)
                     .then(() => {
                       this.props.setAlert({
-                        message: `Record ${this.state.name} was successfully deleted.`,
+                        message: `Record ${this.props.showInfoDelete ? `'${this.state.info}'` : this.state.name} was successfully deleted.`,
                       })
                     })
                     .catch(function (error) {
