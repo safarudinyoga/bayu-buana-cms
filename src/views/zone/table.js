@@ -47,11 +47,14 @@ export default function ZoneTable() {
       <FormInputSelectAjax
         label="Destination"
         onChange={onFilterChange}
-        endpoint="/master/destinations"
-        column="destination_name"
+        endpoint="/master/zones"
+        column="destination.destination_name"
+        sort="destination_id"
+        isGrouping={true}
+        fieldGroup="destination_id"
         value={selectedDestinationIds}
         data={selectedDestinations}
-        filter={`["status", "=", 1]`}
+        filter={`[["destination_id", "is not", null],["AND"],["status", "=", 1]]`}
         placeholder="Destination"
         type="selectmultiple"
         isFilter={true}

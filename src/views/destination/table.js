@@ -69,11 +69,14 @@ export default function DestinationTable() {
         <FormInputSelectAjax
           label="City"
           onChange={onFilterChangeCities}
-          endpoint="/master/cities"
-          column="city_name"
+          endpoint="/master/destinations"
+          column="destination_city.city_name"
+          sort="destination_city_id"
+          isGrouping={true}
+          fieldGroup="destination_city_id"
           value={selectedCityIds}
           data={selectedCities}
-          filter={`["status", "=", 1]`}
+          filter={`[["destination_city_id", "is not", null],["AND"],["status", "=", 1]]`}
           type="selectmultiple"
           isFilter={true}
           allowClear={false}
@@ -82,11 +85,14 @@ export default function DestinationTable() {
         <FormInputSelectAjax
           label="Country"
           onChange={onFilterChangeCountries}
-          endpoint="/master/countries"
-          column="country_name"
+          endpoint="/master/destinations"
+          column="country.country_name"
+          sort="country_id"
+          isGrouping={true}
+          fieldGroup="country_id"
           value={selectedCountryIds}
           data={selectedCountries}
-          filter={`["status", "=", 1]`}
+          filter={`[["country_id", "is not", null],["AND"],["status", "=", 1]]`}
           placeholder="Country"
           type="selectmultiple"
           isFilter={true}

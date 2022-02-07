@@ -48,11 +48,14 @@ export default function HotelSupplierTable() {
       <FormInputSelectAjax
         label="Supplier Type"
         onChange={onFilterChange}
-        endpoint="/master/supplier-types"
-        column="supplier_type_name"
+        endpoint="/master/hotel-suppliers"
+        column="supplier_type.supplier_type_name"
+        sort="supplier_type_id"
+        isGrouping={true}
+        fieldGroup="supplier_type_id"
         value={SelectedSupplierTypeIds}
         data={SelectedSupplierTypes}
-        filter={`["status", "=", 1]`}
+        filter={`[["supplier_type_id", "is not", null],["AND"],["status", "=", 1]]`}
         placeholder="Supplier Type"
         type="selectmultiple"
         isFilter={true}
