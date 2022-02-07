@@ -107,7 +107,7 @@ function DivisionForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data);
-        if (res.data.parent_division) {
+        if (res.data.parent_division && res.data.parent_division_id) {
           setParentDivisionTypeData([{...res.data.parent_division, id: res.data.parent_division_id, text: res.data.parent_division.division_name}])
         }
         if (res.data.manager) {
