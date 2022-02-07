@@ -60,7 +60,7 @@ class BBDataTable extends Component {
     let self = this
     $.fn.dataTableExt.errMode = "none"
     let columns = []
-    columns.push(this.state.isCheckbox && {
+    columns.push(this.state.isCheckbox  ? {
       searchable: false,
       orderable: false,
       title:
@@ -72,6 +72,9 @@ class BBDataTable extends Component {
           '" class="float-left select-checkbox-item ml-2 mr-1"/>'
         )
       },
+    } : {
+      searchable: false,
+      orderable: false
     })
 
     let visibleColumns = []
