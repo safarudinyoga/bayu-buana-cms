@@ -64,6 +64,13 @@ export default function DivisionTable() {
     recordName: ["division_code", "division_name"],
     showInfoDelete: true,
     switchStatus: true,
+    customFilterStatus: {
+      value: "",
+      options: [
+        {value: "1", label: "Active"},
+        {value: "3", label: "Inactive"},
+      ]
+    }
   })
 
   return <BBDataTable {...params}/>

@@ -499,7 +499,7 @@ function OfficeForm(props) {
             required={false}
           >
             <Row>
-              <Col md={6}>
+              <Col xs={6}>
                 <FormInput
                   placeholder={"Latitude"}
                   value={form.latitude}
@@ -511,7 +511,7 @@ function OfficeForm(props) {
                   maxLength="16"
                 />
               </Col>
-              <Col md={6}>
+              <Col xs={6}>
                 <FormInput 
                   placeholder={"Longitude"}
                   value={form.longitude}
