@@ -274,7 +274,7 @@ class TableHeader extends Component {
                       onChange={this.handleStatus.bind(this)}
                       styles={customStyles}
                       options={customFilterValue ? customFilterValue.options : options}
-                      placeholder="pelase choose"
+                      placeholder="Please choose"
                     />
                   </div>
                 </div>
