@@ -46,7 +46,7 @@ export default function DivisionTable() {
       },
       {
         title: "Manager",
-        data: "employee.employee_name",
+        data: "manager.given_name",
       },
       {
         searchable: false,
