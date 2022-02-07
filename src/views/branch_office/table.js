@@ -50,10 +50,19 @@ export default function OfficeTable() {
         title: "Operational Hour",
         data: "operation_hours",
       },
+      {
+        title: "Translated Company/ Branch Office Name",
+        data: "office_translation.office_name",
+        visible: false,
+      },
     ],
     emptyTable: "No offices found",
     recordName: "office_name",
     showInfoDelete: true,
+    switchStatus: true,
+    infoDelete: [
+      {title: "Company/ Branch Name", recordName: "office_name"}, 
+    ],
   })
 
   

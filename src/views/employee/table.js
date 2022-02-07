@@ -78,6 +78,7 @@ export default function EmployeeTable() {
     ],
     emptyTable: "No employees found",
     btnDownload: ".buttons-csv",
+    switchStatus: true,
   })
 
   const onFilterChangeJobTitle = (e, values) => {

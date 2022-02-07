@@ -255,7 +255,7 @@ function OfficeForm(props) {
 
               return req
             },
-            "Office Name already exists",
+            "Company/ Branch Name already exists",
           )
         }
 
@@ -299,7 +299,7 @@ function OfficeForm(props) {
 
           return req
         },
-        "Offices Name already exists",
+        "Company/ Branch Name already exists",
       )
     }
   }, [])
@@ -373,7 +373,7 @@ function OfficeForm(props) {
       props.history.push(backUrl)
       dispatch(
         setAlert({
-          message: `Record ${form.office_name} has been successfully ${formId ? "updated" : "saved"}.`,
+          message: `Record ${form.office_name} has been successfully saved.`,
         }),
       )
     }
@@ -499,7 +499,7 @@ function OfficeForm(props) {
             required={false}
           >
             <Row>
-              <Col md={6}>
+              <Col xs={6}>
                 <FormInput
                   placeholder={"Latitude"}
                   value={form.latitude}
@@ -511,7 +511,7 @@ function OfficeForm(props) {
                   maxLength="16"
                 />
               </Col>
-              <Col md={6}>
+              <Col xs={6}>
                 <FormInput 
                   placeholder={"Longitude"}
                   value={form.longitude}

@@ -57,9 +57,10 @@ class BBDataTable extends Component {
 
   init() {
     this.inProgress = true
+    let self = this
     $.fn.dataTableExt.errMode = "none"
     let columns = []
-    columns.push(this.state.isCheckbox && {
+    columns.push(this.state.isCheckbox  ? {
       searchable: false,
       orderable: false,
       title:
@@ -71,6 +72,9 @@ class BBDataTable extends Component {
           '" class="float-left select-checkbox-item ml-2 mr-1"/>'
         )
       },
+    } : {
+      searchable: false,
+      orderable: false
     })
 
     let visibleColumns = []
@@ -93,7 +97,7 @@ class BBDataTable extends Component {
       render: function (value, display, row, meta) {
         let placement = meta.row > 0 ? 'top' : 'bottom'
         $(function () {
-          $('[data-toggle="tooltip"]').tooltip()
+          $('[data-toggle="tooltip"]').tooltip({trigger: "hover"})
         })
         function tooltipCust(x) {
           if (x.matches) {
@@ -126,24 +130,29 @@ class BBDataTable extends Component {
             return obj
           }, {})
 
+        let showSwitch = self.props.switchStatus
+        let checked = ""
+        if (showSwitch) {
+          checked = row.status == 1 ? "checked" : ""
+        }
+
+
+        let infoDelete = self.props.infoDelete
+        let info = ""
+        if(infoDelete) {
+          info = infoDelete.map(v => v.title + " : " + row[v.recordName]).join(" ")
+        }
+
         return (
-          '<a href="javascript:void(0);" data-toggle="tooltip" data-placement="'+placement+'" class="table-row-action-item" data-action="edit" data-id="' +
-          row.id +
-          '" title="Click to edit"><img src="' +
-          editIcon +
-          '" /></a>' +
-          '<a href="javascript:void(0);" data-toggle="tooltip" data-placement="'+placement+'" class="table-row-action-item" data-action="view" data-id="' +
-          row.id +
-          '" title="Click to view details"><img src="' +
-          showIcon +
-          '"/></a>' +
-          '<a href="javascript:void(0);" data-toggle="tooltip" data-placement="'+placement+'" class="table-row-action-item" data-action="delete" data-id="' +
-          row.id +
-          '" data-name="' +
-          cvtRecordName +
-          '" title="Click to delete"><img src="' +
-          removeIcon +
-          '" /></a>'
+          `
+          <a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item" data-action="edit" data-id="${row.id}" title="Click to edit"><img src="${editIcon}"/></a>
+          <a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item" data-action="view" data-id="${row.id}" title="Click to view details"><img src="${showIcon}"/></a>
+          <a href="javascript:void(0);" class="${showSwitch ? "d-inline" : "d-none"} custom-switch custom-switch-bb table-row-action-item" data-id="${row.id}" data-action="update_status" data-status="${row.status}">
+            <input type="checkbox" class="custom-control-input check-status-${row.id}" id="customSwitch${row.id}" ${checked} data-action="update_status">
+            <label class="custom-control-label" for="customSwitch${row.id}" data-action="update_status"></label>
+          </a>
+          <a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item" data-action="delete" data-id="${row.id}" data-name="${cvtRecordName}" ${infoDelete ? `data-info="${info}"` : ""}  title="Click to delete"><img src="${removeIcon}" /></a>
+          `
         )
       },
     })
@@ -162,7 +171,7 @@ class BBDataTable extends Component {
           iFixedColumnsLeft: 5,
           //   iFixedColumnsRight: 4,
         },
-        stateSave: true,
+        stateSave: false,
         serverSide: true,
         processing: true,
         displayLength: 10,
@@ -478,7 +487,7 @@ class BBDataTable extends Component {
             ordeable: false,
             // className: "table-row-action",
             targets: [columns.length - 1],
-            width: "12%",
+            width: "20%",
           },
         ],
         // select: {
@@ -716,6 +725,7 @@ class BBDataTable extends Component {
   }
 
   deleteAction(id, name, info) {
+    // let titleInfo = this.props.titleInfoDelete ? this.props.titleInfoDelete : ""
     this.setState({
       isOpen: true,
       deleteType: "single",
@@ -723,6 +733,25 @@ class BBDataTable extends Component {
       name: name,
       info: info || name
     })
+  }
+
+  updateStatus(id, item) {
+    let status = $(item).data("status")
+    let table = $("table")
+    let switchBtn = $(`.check-status-${id}`, table)
+    if (status === 1) {
+      switchBtn.prop("checked", false)
+      $(item).data("status", '3')
+      this.setState({
+        selected: [id]
+      }, () => this.onStatusUpdate(3))
+    } else {
+      switchBtn.prop("checked", true)
+      $(item).data("status", '1')
+      this.setState({
+        selected: [id]
+      }, () => this.onStatusUpdate(1))
+    }
   }
 
   componentWillUnmount() {
@@ -838,6 +867,9 @@ class BBDataTable extends Component {
           case "view":
             me.props.history.push(base + "/" + id + "?action=view")
             break
+          case "update_status":
+            me.updateStatus.bind(me)(id, this)
+            break
           default:
             me.deleteAction.bind(me)(id, name, info)
             break
@@ -870,7 +902,7 @@ class BBDataTable extends Component {
                     .delete(this.props.endpoint + "/" + this.state.id)
                     .then(() => {
                       this.props.setAlert({
-                        message: `Record ${this.state.name} was successfully deleted.`,
+                        message: `Record ${this.props.showInfoDelete ? `'${this.state.info}'` : this.state.name} was successfully deleted.`,
                       })
                     })
                     .catch(function (error) {
@@ -917,7 +949,7 @@ class BBDataTable extends Component {
         </Modal>
         <TableHeader
           {...this.props}
-          selected={this.state.selected.length > 0}
+          selected={this.state.selected.length > 0 && !this.props.switchStatus}
           hideFilter={this.state.hideFilter}
           extraFilter={this.props.extraFilter}
           onSearch={this.onSearch.bind(this)}
