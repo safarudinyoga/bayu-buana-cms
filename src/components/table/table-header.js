@@ -167,6 +167,9 @@ class TableHeader extends Component {
   render() {
     const ExtraFilter = this.props.extraFilter
     const { customFilterStatus } = this.props
+
+    const {pathname} = this.props.location;
+    console.log(pathname);
     return (
       <div className="container-fluid pl-0">
         <div className="row">
@@ -189,7 +192,7 @@ class TableHeader extends Component {
           </div>
 
 
-          <div className="col-xs-12 col-sm-12 col-md-4 col-lg-3 col-xl-3 padding-0">
+          <div className="col-xs-12 col-sm-12 col-md-4 col-lg-5 col-xl-5 padding-0 align-middle">
             {this.state.showAdvancedOptions && (
               <button
                 onClick={this.toggleFilter}
@@ -204,9 +207,18 @@ class TableHeader extends Component {
                 )}
               </button>
             )}
+
+            { pathname === "/master/divisions" &&
+            <Link
+              to="/master/divisions/hierarchy"
+              className="menu-link ml-5"
+            >
+             View Hierarchy
+            </Link>
+            }
           </div>
 
-          <div className="col-xs-12 col-sm-12 col-md-4 col-lg-6 col-xl-6 mb-2 mb-md-0 order-first order-md-last">
+          <div className="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-2 mb-md-0 order-first order-md-last">
             <OverlayTrigger
               placement="top"
               overlay={<Tooltip>Click to create</Tooltip>}
