@@ -166,7 +166,7 @@ class TableHeader extends Component {
 
   render() {
     const ExtraFilter = this.props.extraFilter
-    const { customFilterValue } = this.props
+    const { customFilterStatus } = this.props
     return (
       <div className="container-fluid pl-0">
         <div className="row">
@@ -269,9 +269,9 @@ class TableHeader extends Component {
                 <div className="row">
                   <div className="col-xs-4">
                     <StatusSelect
-                      value={customFilterValue ? customFilterValue.value : this.state.statusValue}
+                      value={customFilterStatus ? customFilterStatus.value : this.state.statusValue}
                       onChange={this.handleStatus.bind(this)}
-                      options={customFilterValue ? customFilterValue.options : options}
+                      options={customFilterStatus ? customFilterStatus.options : options}
                     />
                   </div>
                 </div>

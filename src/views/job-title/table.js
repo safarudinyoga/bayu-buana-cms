@@ -60,13 +60,13 @@ export default function JobTitleTable() {
       {title: "Job Title Name", recordName: "job_title_name"}
     ],
     switchStatus: true,
-    customFilterValue: {
-    value: "",
-    options: [
-      {value: "1", label: "Active"},
-      {value: "3", label: "Inactive"},
-    ]
-    }
+    customFilterStatus: {
+      value: "",
+      options: [
+        {value: "1", label: "Active"},
+        {value: "3", label: "Inactive"},
+      ]
+    },
   })
 
   return <BBDataTable {...params} {...params} />
