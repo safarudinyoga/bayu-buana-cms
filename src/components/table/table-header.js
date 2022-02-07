@@ -41,7 +41,7 @@ const customStyles = {
   control: (base, state) => ({
     ...base,
     height: 10,
-    width: 120,
+    width: 135,
     marginTop: -1,
     marginLeft: 8,
     border: "1px solid #DADEDF",
@@ -64,6 +64,22 @@ const options = [
   {value: "1", label: "Active"},
   {value: "3", label: "Inactive"},
 ]
+
+const StatusSelect = (props) => {
+  return (
+    <>
+      <label className="text-label-filter ml-2 font-weight-bold">Status :</label>
+        <Select
+          components={{IndicatorSeparator: () => null, DropdownIndicator}}
+          value={props.options[props.value]}
+          onChange={props.onChange}
+          styles={customStyles}
+          options={props.options}
+          placeholder="Please choose"
+        />
+    </>
+  )
+}
 class TableHeader extends Component {
   constructor(props) {
     super(props)
@@ -150,6 +166,7 @@ class TableHeader extends Component {
 
   render() {
     const ExtraFilter = this.props.extraFilter
+    const { customFilterStatus } = this.props
     return (
       <div className="container-fluid pl-0">
         <div className="row">
@@ -251,13 +268,10 @@ class TableHeader extends Component {
               <div className="col-xs-12 col-sm-12 col-md-6 col-lg-4">
                 <div className="row">
                   <div className="col-xs-4">
-                    <label className="text-label-filter ml-2 font-weight-bold">Status :</label>
-                    <Select
-                      components={{IndicatorSeparator: () => null, DropdownIndicator}}
-                      value={options[this.state.statusValue]}
+                    <StatusSelect
+                      value={customFilterStatus ? customFilterStatus.value : this.state.statusValue}
                       onChange={this.handleStatus.bind(this)}
-                      styles={customStyles}
-                      options={options}
+                      options={customFilterStatus ? customFilterStatus.options : options}
                     />
                   </div>
                 </div>
