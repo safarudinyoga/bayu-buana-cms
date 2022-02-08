@@ -108,11 +108,6 @@ export default class Sidebar extends Component {
                       <p>Flight Type</p>
                     </Link>
                   </li>
-                  {/* <li className="nav-item">
-                    <Link to="/master/frequent-traveler-program" className="nav-link">
-                      <p>Frequent Traveler Program</p>
-                    </Link>
-                  </li> */}
                   <li className="nav-item">
                     <Link
                       to="/master/hotel-amenity-categories"
@@ -284,9 +279,14 @@ export default class Sidebar extends Component {
                   </p>
                 </Link>
                 <ul className="nav nav-treeview">
-                <li className="nav-item">
+                  <li className="nav-item">
                     <Link to="/master/corporate-rating" className="nav-link">
                       <p>Corporate Rating</p>
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link to="/master/frequent-traveler-program" className="nav-link">
+                      <p>Frequent Traveler Program</p>
                     </Link>
                   </li>
                   <li className="nav-item">
