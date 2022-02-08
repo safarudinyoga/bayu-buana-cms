@@ -4,6 +4,7 @@ import { Formik, FastField, Field } from "formik"
 import * as Yup from "yup"
 import ImageUploading from "react-images-uploading"
 import axios from "axios"
+import _ from "lodash"
 
 import Api from "config/api"
 import env from "config/environment"
@@ -23,8 +24,10 @@ const GeneralInformation = (props) => {
 
   let api = new Api()
 
+
+
   // Initialize form
-  const initialForm = {
+  const [initialForm, setInitialForm] = useState({
     // General Information
     title: { value: "mr", label: "Mr." },
     firstName: "",
@@ -54,7 +57,7 @@ const GeneralInformation = (props) => {
     permanentProvince: "",
     permanentCity: "",
     permanentZipCode: "",
-  }
+  })
 
   // Schema for yup
   const validationSchema = Yup.object().shape({
@@ -221,14 +224,101 @@ const GeneralInformation = (props) => {
     } catch (e) {}
   }, [])
 
+  useEffect(async () => {
+    try {
+      let res = await api.get("/user/profile")
+      let data = res.data;
+      console.log(data);
+      setInitialForm({
+        ...initialForm,
+        title: _.isEmpty(data.name_prefix) ? "" : {
+          ...initialForm.title,
+          value: data.name_prefix.name_prefix_code.toLowerCase(),
+          label: data.name_prefix.name_prefix_name
+        },
+        firstName: data.given_name ? data.given_name : "",
+        middleName: data.middle_name ? data.middle_name : "",
+        lastName: data.surname ? data.surname : "",
+        gender: data.gender ? data.gender.gender_name.toLowerCase() : "",
+        idCardNumber: data.ktp ? data.ktp : "",
+        
+        // Contacts
+        homePhone: data.contact.phone_number ? data.contact.phone_number : "",
+        mobilePhone: data.contact.mobile_phone_number ? data.contact.mobile_phone_number : "",
+        email: data.contact.email ? data.contact.email : "",
+        otherEmail: data.contact.other_email ? data.contact.other_email : "",
+
+        // Current Address
+        currentAddress: data.address.address_line ? data.address.address_line : "",
+        currentCountry: data.address.country ? {
+          value: data.address.country_id,
+          label: data.address.country.country_name
+        } : "",
+        currentProvince: data.address.state_province ? {
+          value: data.address.state_province_id,
+          label: data.address.state_province.state_province_name
+        } : "",
+        currentCity: data.address.city ? {
+          value: data.address.city_id,
+          label: data.address.city.city_name
+        } : "",
+        currentZipCode: data.address.postal_code ? data.address.postal_code : "",
+
+        // Permanent Address
+        permanentAddress: data.permanent_address.address_line ? data.permanent_address.address_line : "",
+        permanentCountry: data.permanent_address.country ? {
+          value: data.permanent_address.country_id,
+          label: data.permanent_address.country.country_name,
+        } : "",
+        permanentProvince: data.permanent_address.state_province ? {
+          value: data.permanent_address.state_province_id,
+          label: data.permanent_address.state_province.state_province_name,
+        } : "",
+        permanentCity: data.permanent_address.city ? {
+          value: data.permanent_address.city_id,
+          label: data.permanent_address.city.city_name
+        } : "",
+        permanentZipCode: data.permanent_address.postal_code ? data.permanent_address.postal_code : ""
+      });
+    } catch(e) {}
+  }, [])
+
   return (
     <>
       <Formik
+        enableReinitialize
         initialValues={initialForm}
         validationSchema={validationSchema}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
           console.log(values)
           console.log(props)
+
+          let formatted = {
+            address: {
+              address_line: values.currentAddress,
+              country_id: values.currentCountry.value,
+              county: values.currentCountry.label,
+              state_province_id: values.currentProvince.value,
+              state_province_other: values.currentProvince.label,
+              city_id: values.currentCity.value,
+              city_other: values.currentCity.label,
+              postal_code: values.currentZipCode
+            },
+            contact: {
+              email: values.email,
+              mobile_phone_number: values.mobilePhone,
+              other_email: values.otherEmail,
+              phone_number: values.homePhone
+            },
+            ktp: values.idCardNumber,
+            given_name: values.firstName,
+            middle_name: values.middleName,
+            surname: values.lastName,
+          }
+
+          let res = await api.put("user/profile", formatted)
+          console.log(res);
+
           // setSubmitting(true)
 
           // try {
