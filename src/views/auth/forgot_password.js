@@ -27,7 +27,6 @@ function ForgotPassword() {
 		let api = new Api()
 		try {
 			let res = await api.post("/user/forgot-password", values)
-			console.log(res.data)
 			dispatch(
 				setAlert({
 				  message: res.data.message,
