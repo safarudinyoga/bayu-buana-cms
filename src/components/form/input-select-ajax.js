@@ -107,7 +107,7 @@ export default class FormInputSelectAjax extends Component {
               return {
                 filters: params.term ? JSON.stringify(filters) : filter,
                 sort: this.props.sort ? this.props.sort : this.props.column,
-                size: 999999,
+                size: -1,
                 page: params.page && params.page - 1 ? params.page - 1 : 0,
               }
             },
