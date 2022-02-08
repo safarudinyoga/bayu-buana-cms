@@ -1,13 +1,17 @@
 import { withRouter } from "react-router"
-import React, { useState } from "react";
-import { Form, FormGroup, InputGroup } from "react-bootstrap";
+import React, { useState } from "react"
+import { Form, FormGroup, InputGroup } from "react-bootstrap"
 import { Formik, FastField, Field } from "formik"
 import * as Yup from "yup"
-import { BlockButton } from '../../components/button/block';
-import { Link, useHistory } from 'react-router-dom';
+import { BlockButton } from '../../components/button/block'
+import { Link, useHistory } from 'react-router-dom'
+import Api from "config/api"
+import { useDispatch } from "react-redux"
+import { setAlert } from "redux/ui-store"
 
 function ForgotPassword() {
 	let history = useHistory()
+	const dispatch = useDispatch()
 	const [initialForm, setForm] = useState({
 			email: "",
 		})
@@ -20,8 +24,24 @@ function ForgotPassword() {
 	})
 
 	const onSubmit = async (values) => {
-		console.log(values)
-		history.push("/auth/otp")
+		let api = new Api()
+		try {
+			let res = await api.post("/user/forgot-password", values)
+			console.log(res.data)
+			dispatch(
+				setAlert({
+				  message: res.data.message,
+				}),
+			  )
+			history.push("/auth/otp")
+
+		} catch (e) {
+			dispatch(
+				setAlert({
+				  message: e.response.data.message,
+				}),
+			  )
+		}
 	}
 
 	const FormValidate = ({
