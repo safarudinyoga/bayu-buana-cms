@@ -78,11 +78,6 @@ export default class Sidebar extends Component {
                       <p>City</p>
                     </Link>
                   </li>
-                  {/* <li className="nav-item">
-                    <Link to="/master/corporate-rating" className="nav-link">
-                      <p>Corporate Rating</p>
-                    </Link>
-                  </li> */}
                   <li className="nav-item">
                     <Link to="/master/countries" className="nav-link">
                       <p>Country</p>
@@ -289,6 +284,11 @@ export default class Sidebar extends Component {
                   </p>
                 </Link>
                 <ul className="nav nav-treeview">
+                <li className="nav-item">
+                    <Link to="/master/corporate-rating" className="nav-link">
+                      <p>Corporate Rating</p>
+                    </Link>
+                  </li>
                   <li className="nav-item">
                     <Link to="/master/invoice-email-setup" className="nav-link">
                       <p>Invoice Email Setup</p>
