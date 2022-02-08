@@ -6,6 +6,7 @@ import {setUIParams} from "redux/ui-store"
 import FormContainer from '../../components/form/container';
 import SortableTree from 'react-sortable-tree';
 import 'react-sortable-tree/style.css'; // This only needs to be imported once in your app
+import '../../styles/components/_hierarchy.scss'
 
 const endpoint = "/master/divisions"
 const backUrl = "/master/divisions"
@@ -74,6 +75,12 @@ function DivisionHierarchy(props) {
         treeData={data}
         onChange={treeData => setTree(treeData)}
         isVirtualized={false}
+        canDrag={false}
+        generateNodeProps = {
+          ({ node, path }) => ({
+            title: (<span style={{maxWidth: 100}}><i className="hie-ic fas fa-users" aria-hidden="true"></i>{node.title.substring(0,40)}</span>)
+          })
+        }
         />
       }
     </FormContainer>

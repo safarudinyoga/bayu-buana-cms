@@ -48,12 +48,15 @@ export default function CountryTable() {
       <FormInputSelectAjax
         label="Region"
         onChange={onFilterChange}
-        endpoint="/master/regions"
-        column="region_name"
+        endpoint="/master/countries"
+        column="region.region_name"
+        sort="region_id"
+        isGrouping={true}
+        fieldGroup="region_id"
         value={selectedRegionIds}
         data={selectedRegions}
         placeholder="Region"
-        filter={`["status", "=", 1]`}
+        filter={`[["region_id", "is not", null],["AND"],["status", "=", 1]]`}
         type="selectmultiple"
         isFilter={true}
         allowClear={false}

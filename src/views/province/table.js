@@ -48,11 +48,14 @@ export default function ProvinceTable() {
       <FormInputSelectAjax
         label="Country"
         onChange={onFilterChange}
-        endpoint="/master/countries"
-        column="country_name"
+        endpoint="/master/state-provinces"
+        column="country.country_name"
+        sort="country_id"
+        isGrouping={true}
+        fieldGroup="country_id"
         value={selectedCountryIds}
         data={selectedCountries}
-        filter={`["status", "=", 1]`}
+        filter={`[["country_id", "is not", null],["AND"],["status", "=", 1]]`}
         placeholder="Country"
         type="selectmultiple"
         isFilter={true}

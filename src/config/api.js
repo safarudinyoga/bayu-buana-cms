@@ -15,8 +15,8 @@ export default class Api {
     const auth = Cookies.get('ut')
     this.axios.defaults.headers.common["Accept"] = "application/json"
     this.axios.defaults.headers.common["Accept-Language"] = "en"
-    this.axios.defaults.headers.common["X-User-ID"] =
-    "2e93596b-a8e1-4bb0-b7fd-1315cb37c7c3"
+    // this.axios.defaults.headers.common["X-User-ID"] =
+    // "2e93596b-a8e1-4bb0-b7fd-1315cb37c7c3"
     if (auth) {
       this.axios.defaults.headers.common["Authorization"] = `Bearer ${auth}`
       this.axios.defaults.headers.get["Authorization"] = `Bearer ${auth}`

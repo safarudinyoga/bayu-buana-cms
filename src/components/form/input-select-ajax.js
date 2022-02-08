@@ -31,8 +31,19 @@ export default class FormInputSelectAjax extends Component {
     return $state;
   }
 
+  groupBy (array, key) {
+    // Return the end result
+    return array.reduce((result, currentValue) => {
+      // If an array already present for key, push it to the array. Else create an array and push the object
+      (result[currentValue[key]] = result[currentValue[key]] || []).push(
+        currentValue
+      );
+      // Return the current iteration `result` value, this will be taken as next iteration `result` value and accumulate
+      return result;
+    }, {}); // empty object is the initial value for result object
+  };
   init() {
-    const {isFilter, allowClear} = this.props
+    const {isGrouping, isFilter, allowClear} = this.props
     setTimeout(() => {
       try {
         let config = {
@@ -50,12 +61,33 @@ export default class FormInputSelectAjax extends Component {
                 return this.onResponse(json)
               }
 
-              json.items.forEach((item) => {
-                item.text = item[this.props.column]
+              var filtered = json.items;
+              if(isGrouping){
+                const ids = json.items.map((item, index)=>{
+                  return item[this.props.fieldGroup]
+                })
+                filtered = json.items.filter((item, index) => {
+                  return !ids.includes(item[this.props.fieldGroup], index + 1)
+                })
+              }
+
+              filtered.forEach((item) => {
+                console.log(item)
+                if(this.props.column.includes(".")){
+                  const results = this.props.column.split(".");
+                  if(isGrouping){
+                    item.id   = item[this.props.fieldGroup]
+                  }
+                  if(item[results[0]]){
+                    item.text = item[results[0]][results[1]]
+                  }
+                }else{
+                  item.text = item[this.props.column]
+                }
               })
 
               return {
-                results: json.items,
+                results: filtered,
                 pagination: {
                   mode: json.last === false,
                 },
@@ -65,6 +97,7 @@ export default class FormInputSelectAjax extends Component {
               if (this.props.onRequest) {
                 return this.props.onRequest(params)
               }
+
               let filters = [this.props.column, "like", params.term]
               let filter = "";
               if(this.props.filter){
@@ -73,8 +106,8 @@ export default class FormInputSelectAjax extends Component {
               }
               return {
                 filters: params.term ? JSON.stringify(filters) : filter,
-                sort: this.props.column,
-                size: 999999,
+                sort: this.props.sort ? this.props.sort : this.props.column,
+                size: -1,
                 page: params.page && params.page - 1 ? params.page - 1 : 0,
               }
             },
