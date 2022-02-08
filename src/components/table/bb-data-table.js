@@ -667,7 +667,7 @@ class BBDataTable extends Component {
       setTimeout(() => {
         this.dt
           .buttons(
-            this.props.btnDownload ? this.prop.btnDownload : ".buttons-excel",
+            this.props.btnDownload ? this.props.btnDownload : ".buttons-excel",
           )
           .trigger()
         this.dt.page.len(prevLen).draw()

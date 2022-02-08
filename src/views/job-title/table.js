@@ -55,6 +55,7 @@ export default function JobTitleTable() {
     emptyTable: "No job title found",
     recordName: ["job_title_code", "job_title_name"],
     showInfoDelete: true,
+    btnDownload: ".buttons-csv",
     infoDelete: [
       {title: "Job Title Code", recordName: "job_title_code"}, 
       {title: "Job Title Name", recordName: "job_title_name"}
