@@ -106,6 +106,10 @@ export default function FrequentTravelerProgramTable() {
     ],
     emptyTable: "No frequent traveler program found",
     recordName: ["loyalty_program_name"],
+    showInfoDelete: true,
+    infoDelete: [
+      {title: "Loyalty Name", recordName: "loyalty_program_name"}, 
+    ],
   })
 
   return <BBDataTable {...params} extraFilter={extraFilter} onReset={onReset} />

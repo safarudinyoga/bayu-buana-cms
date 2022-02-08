@@ -270,6 +270,22 @@ export default class Sidebar extends Component {
                   </li>
                 </ul>
               </li>
+              {/* <li className="nav-item">
+                <Link to="#" className="nav-link">
+                  <img src="/img/icons/users.svg" alt="icon users" />
+                  <p>
+                    Exchange Rate
+                    <i className="right fas fa-angle-right"></i>
+                  </p>
+                </Link>
+                <ul className="nav nav-treeview">
+                  <li className="nav-item">
+                    <Link to="/master/exchange-rate" className="nav-link">
+                      <p>Exchange Rate</p>
+                    </Link>
+                  </li>
+                </ul>
+              </li> */}
               <li className="nav-item">
                 <Link to="#" className="nav-link">
                   <img src="/img/icons/users.svg" alt="icon users" />
@@ -289,7 +305,7 @@ export default class Sidebar extends Component {
                       <p>Frequent Traveler Program</p>
                     </Link>
                   </li>
-                  <li className="nav-item">
+                  {/* <li className="nav-item">
                     <Link to="/master/invoice-email-setup" className="nav-link">
                       <p>Invoice Email Setup</p>
                     </Link>
@@ -303,7 +319,7 @@ export default class Sidebar extends Component {
                     <Link to="/master/integration-partner" className="nav-link">
                       <p>Integration Partner</p>
                     </Link>
-                  </li>
+                  </li> */}
                 </ul>
               </li>
             </ul>
