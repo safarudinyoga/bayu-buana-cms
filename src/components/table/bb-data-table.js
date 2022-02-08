@@ -136,6 +136,7 @@ class BBDataTable extends Component {
           checked = row.status == 1 ? "checked" : ""
         }
 
+        let hideDetail = self.props.hideDetail
 
         let infoDelete = self.props.infoDelete
         let info = ""
@@ -146,7 +147,7 @@ class BBDataTable extends Component {
         return (
           `
           <a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item" data-action="edit" data-id="${row.id}" title="Click to edit"><img src="${editIcon}"/></a>
-          <a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item" data-action="view" data-id="${row.id}" title="Click to view details"><img src="${showIcon}"/></a>
+          <a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="${hideDetail ? "d-none" : "d-inline"} table-row-action-item" data-action="view" data-id="${row.id}" title="Click to view details"><img src="${showIcon}"/></a>
           <a href="javascript:void(0);" class="${showSwitch ? "d-inline" : "d-none"} custom-switch custom-switch-bb table-row-action-item" data-id="${row.id}" data-action="update_status" data-status="${row.status}">
             <input type="checkbox" class="custom-control-input check-status-${row.id}" id="customSwitch${row.id}" ${checked} data-action="update_status">
             <label class="custom-control-label" for="customSwitch${row.id}" data-action="update_status"></label>
@@ -667,7 +668,7 @@ class BBDataTable extends Component {
       setTimeout(() => {
         this.dt
           .buttons(
-            this.props.btnDownload ? this.prop.btnDownload : ".buttons-excel",
+            this.props.btnDownload ? this.props.btnDownload : ".buttons-excel",
           )
           .trigger()
         this.dt.page.len(prevLen).draw()
