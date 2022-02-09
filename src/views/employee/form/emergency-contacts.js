@@ -55,6 +55,7 @@ const EmergencyContacts = (props) => {
         //   resetForm()
         //   setSubmitting(false)
         // } catch (e) {}
+        return props.handleSelectTab("employment")
       }}
     >
       {({

@@ -33,36 +33,58 @@ export default function EmployeeTable() {
   let [selectedOfficeIds, setSelectedOfficeIds] = useState([])
 
   let [params, setParams] = useState({
+    isCheckbox: false,
     title: "Employee",
+    titleModal: "Employee",
     baseRoute: "/master/employee/form",
     endpoint: "/master/employees",
     deleteEndpoint: "/master/batch-actions/delete/employees",
-    activationEndpoint: "/master/batch-actions/activate/employees",
-    deactivationEndpoint: "/master/batch-actions/deactivate/employees",
+    activationEndpoint: "/master/batch-actions/activate/employee",
+    deactivationEndpoint: "/master/batch-actions/deactivate/employee",
     columns: [
+      // {
+      //   mData: "IMAGE",
+      //   aTargets: [0],
+      //   render: function (data) {
+      //     return '<img src="https://bbdev.monstercode.net/files/b3986414-5c5f-45a3-be6f-4fedcce2d022.png"/>'
+      //   },
+      // },
+
       {
         title: "Employee ID",
         data: "employee_number",
       },
       {
         title: "Full Name",
-        data: "full_name",
-        render: renderColumn("full_name", "full_name"),
+        data: "person",
+        render: (data) => {
+          return data?.given_name + " " + data.middle_name + " " + data?.surname
+        },
       },
       {
         title: "Email",
-        data: "email",
-        render: renderColumn("email", "email"),
+        data: "user_account.email",
       },
       {
         title: "Job Title",
-        data: "job_title",
-        render: renderColumn("job_title", "job_title"),
+        data: { job_title: "job_title", division: "division" },
+        render: (data) => {
+          {
+            if (data?.job_title?.job_title_name === undefined) {
+              return null
+            } else {
+              return (
+                data?.job_title?.job_title_name +
+                "<br/> " +
+                data?.division?.division_name
+              )
+            }
+          }
+        },
       },
       {
         title: "Branch Office",
-        data: "branch_office",
-        render: renderColumn("branch_office", "branch_office"),
+        data: "office.office_name",
       },
       {
         title: "Hire Date",
@@ -77,8 +99,15 @@ export default function EmployeeTable() {
       },
     ],
     emptyTable: "No employees found",
-    btnDownload: ".buttons-csv",
+    recordName: ["employee_number", "person.given_name"],
     switchStatus: true,
+    customFilterStatus: {
+      value: "",
+      options: [
+        { value: "1", label: "Active" },
+        { value: "3", label: "Inactive" },
+      ],
+    },
   })
 
   const onFilterChangeJobTitle = (e, values) => {
