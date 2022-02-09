@@ -38,20 +38,30 @@ function DivisionHierarchy(props) {
       }),
     )
       let res = await api.get(endpoint, {
-        size: 9999,
+        size: -1,
         sort: "sort"
       })
       let items = res.data.items;
+
+      var parent = items.filter((item, index) => {
+        return item["parent_division_id"] == null
+      })
+
+      var child = items.filter((item, index) => {
+        return item["parent_division_id"] != null
+      })
+
       var dataTree = [];
-      for(var i = 0; i< items.length; i++){
-        var title = items[i].division_name;
+      for(var i = 0; i< parent.length; i++){
+        var title = parent[i].division_name;
         var children = [];
-        if(items[i].parent_division_id){
-          title = items[i].parent_division.division_name
-          let childrenTitle = {
-            title: items[i].division_name
+        for(var j = 0; j< child.length; j++){
+          if(child[j].parent_division_id == parent[i].id){
+            let childrenTitle = {
+              title: child[j].division_name
+            }
+            children.push(childrenTitle)
           }
-          children.push(childrenTitle)
         }
         let data = {
           title: title,

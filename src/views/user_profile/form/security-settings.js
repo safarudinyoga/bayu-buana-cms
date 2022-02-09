@@ -28,6 +28,8 @@ const SecuritySettings = (props) => {
       validationSchema={validationSchema}
       onSubmit={async (values, { setSubmitting, resetForm }) => {
         console.log(values)
+
+        return props.handleSelectTab("subscriptions")
       }}
     >
       {({
