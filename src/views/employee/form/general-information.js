@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { Card, Form, Row, Col, Button, Image } from "react-bootstrap"
-import { Formik, FastField, Field } from "formik"
+import { Formik, FastField, Field, ErrorMessage } from "formik"
+import DateView from "react-datepicker"
 import * as Yup from "yup"
 import ImageUploading from "react-images-uploading"
 import axios from "axios"
@@ -26,19 +27,19 @@ const GeneralInformation = (props) => {
   // Initialize form
   const initialForm = {
     // General Information
-    title: { value: "mr", label: "Mr." },
-    firstName: "",
-    middleName: "",
-    lastName: "",
-    // dateOfBirth: "",
-    gender: "male",
-    idCardNumber: "",
+    name_prefix_id: "",
+    given_name: "",
+    middle_name: "",
+    surname: "",
+    dateOfBirth: [],
+    gender_id: "",
+    ktp: "",
 
     // Contacts
-    homePhone: "",
-    mobilePhone: "",
+    phone_number_home: "",
+    phone_number_mobile: "",
     email: "",
-    otherEmail: "",
+    other_email: "",
 
     // Current Address
     currentAddress: "",
@@ -59,17 +60,33 @@ const GeneralInformation = (props) => {
   // Schema for yup
   const validationSchema = Yup.object().shape({
     // General Information
-    title: Yup.object().required("Title is required."),
-    firstName: Yup.string().required("Employee First Name is required."),
-    middleName: Yup.string(),
-    lastName: Yup.string().required("Employee Last Name is required."),
-    // dateOfBirth: Yup.string().required("Date of Birth is required."),
-    gender: Yup.string().required("Gender is required."),
-    idCardNumber: Yup.string(),
+    name_prefix_id: Yup.object().required("Title is required."),
+    given_name: Yup.string().required("Employee First Name is required."),
+    middle_name: Yup.string(),
+    surname: Yup.string().required("Employee Last Name is required."),
+
+    dateOfBirth: Yup.array()
+      .of(
+        Yup.object().shape({
+          value: Yup.string().required("Date of Birth is required."),
+          label: Yup.string().required("Date of Birth is required."),
+        }),
+      )
+      .test({
+        test: (val) =>
+          val.every(({ value, label }, index) => {
+            if (index === 0 || index === val.length - 1) {
+              return !!value && !!label
+            }
+            return true
+          }),
+      }),
+    gender_id: Yup.string().required("Gender is required."),
+    ktp: Yup.string(),
 
     // Contacts
-    homePhone: Yup.string().required("Home Phone is required."),
-    mobilePhone: Yup.string().required("Mobile Phone is required."),
+    phone_number_home: Yup.string().required("Home Phone is required."),
+    phone_number_mobile: Yup.string().required("Mobile Phone is required."),
     email: Yup.string()
       .email("Email is not valid.")
       .required("Email is required.")
@@ -91,7 +108,7 @@ const GeneralInformation = (props) => {
           })
         },
       ),
-    otherEmail: Yup.string().email("Email is not valid."),
+    other_email: Yup.string().email("Email is not valid."),
 
     // Current Address
     currentAddress: Yup.string(),
@@ -117,12 +134,14 @@ const GeneralInformation = (props) => {
     const options = []
     for (let i = 0; i <= 31; i++) {
       options.push({
-        label: i,
         value: i,
+        label: i,
       })
     }
+
     return options
   }
+
   const selectMonth = () => {
     const options = []
     const month = Array.from({ length: 12 }, (e, i) => {
@@ -132,8 +151,8 @@ const GeneralInformation = (props) => {
     })
     month.forEach((data, i) => {
       options.push({
-        label: data,
         value: i + 1,
+        label: data,
       })
     })
     return options
@@ -146,8 +165,8 @@ const GeneralInformation = (props) => {
 
     for (let i = endYear; i >= startYear; i--) {
       options.push({
-        label: i,
         value: i,
+        label: i,
       })
     }
 
@@ -226,31 +245,46 @@ const GeneralInformation = (props) => {
       <Formik
         initialValues={initialForm}
         validationSchema={validationSchema}
-        onSubmit={async (values, { setSubmitting, resetForm }) => {
-          console.log(values)
-          console.log(props)
-          // setSubmitting(true)
-
-          // try {
-          //   let res = await api.post("master/persons", {
-          //     birth_date: "2021-11-13T04:31:17.022Z",
-          //     business_entity_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-          //     citizen_country_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-          //     gender_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-          //     given_name: "string",
-          //     marital_status_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-          //     middle_name: "string",
-          //     name_prefix_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-          //     name_suffix: "string",
-          //     name_title: "string",
-          //     religion_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-          //     surname: "string",
-          //     surname_prefix: "string",
-          //   })
-          //   console.log(res)
-          //   resetForm()
-          //   setSubmitting(false)
-          // } catch (e) {}
+        onSubmit={async (values, { setSubmitting, resetForm }) => {         
+          setSubmitting(true)
+          try {
+            let res = await api.post("master/persons", {
+              //...values,
+              name_prefix_id: values.name_prefix_id.value,
+              given_name: values.given_name,
+              middle_name: values.middle_name,
+              surname: values.surname,
+              birth_date: new Date(
+                ...[
+                  values.dateOfBirth[2].value,
+                  values.dateOfBirth[1].value,
+                  values.dateOfBirth[0].value,
+                ],
+              ),
+              gender_id: values.gender_id,
+              ktp: values.ktp,
+              //phone_number_home : values.phone_number_home,
+              //phone_number_mobile: values.phone_number_mobile,
+              email: values.email,
+              //other_email: values.other_email,
+              address: {
+                address_line: values.currentAddress,
+                country_id: values.currentCountry.value,
+                state_province_id: values.currentProvince.value,
+                city_id: values.currentCity.value,
+                postal_code: values.currentZipCode,
+              },
+              permanent_address: {
+                address_line: values.permanentAddress,
+                country_id: values.permanentCountry.value,
+                state_province_id: values.permanentProvince.value,
+                city_id: values.permanentCity.value,
+                postal_code: values.permanentZipCode,
+              },
+            })
+            console.log(res)            
+            setSubmitting(false)
+          } catch (e) {}
 
           return props.handleSelectTab("emergency-contacts")
         }}
@@ -279,63 +313,75 @@ const GeneralInformation = (props) => {
                           Title <span className="form-label-required">*</span>
                         </Form.Label>
                         <Col sm={8}>
-                          <FastField name="title">
+                          <FastField name="name_prefix_id">
                             {({ field, form }) => (
                               <>
                                 <div style={{ width: 90 }}>
                                   <Select
                                     {...field}
                                     options={[
-                                      { value: "mr", label: "Mr." },
-                                      { value: "mrs", label: "Mrs." },
+                                      {
+                                        value:
+                                          "db24d53c-7d36-4770-8598-dc36174750af",
+                                        label: "Mr.",
+                                      },
+                                      {
+                                        value:
+                                          "55287b39-e9e6-4da5-ad9e-c4bb275ccda9",
+                                        label: "Mrs.",
+                                      },
                                     ]}
-                                    defaultValue={values.title}
+                                    defaultValue={values.name_prefix_id}
+                                    placeholder="Mr"
                                     className={`react-select ${
-                                      form.touched.title && form.errors.title
+                                      form.touched.name_prefix_id &&
+                                      form.errors.name_prefix_id
                                         ? "is-invalid"
                                         : null
                                     }`}
                                     onChange={(v) => {
-                                      setFieldValue("title", v)
+                                      setFieldValue("name_prefix_id", v)
                                     }}
                                   />
-                                  {form.touched.title && form.errors.title && (
-                                    <Form.Control.Feedback type="invalid">
-                                      {form.touched.title
-                                        ? form.errors.title
-                                        : null}
-                                    </Form.Control.Feedback>
-                                  )}
+                                  {form.touched.name_prefix_id &&
+                                    form.errors.name_prefix_id && (
+                                      <Form.Control.Feedback type="invalid">
+                                        {form.touched.name_prefix_id
+                                          ? form.errors.name_prefix_id
+                                          : null}
+                                      </Form.Control.Feedback>
+                                    )}
                                 </div>
                               </>
                             )}
                           </FastField>
                         </Col>
                       </Form.Group>
+
                       <Form.Group as={Row} className="form-group">
                         <Form.Label column sm={4}>
                           First Name{" "}
                           <span className="form-label-required">*</span>
                         </Form.Label>
                         <Col sm={8}>
-                          <FastField name="firstName">
+                          <FastField name="given_name">
                             {({ field, form }) => (
                               <>
                                 <Form.Control
                                   type="text"
                                   isInvalid={
-                                    form.touched.firstName &&
-                                    form.errors.firstName
+                                    form.touched.given_name &&
+                                    form.errors.given_name
                                   }
                                   minLength={1}
                                   maxLength={128}
                                   {...field}
                                 />
-                                {form.touched.firstName &&
-                                  form.errors.firstName && (
+                                {form.touched.given_name &&
+                                  form.errors.given_name && (
                                     <Form.Control.Feedback type="invalid">
-                                      {form.touched.firstName
-                                        ? form.errors.firstName
+                                      {form.touched.given_name
+                                        ? form.errors.given_name
                                         : null}
                                     </Form.Control.Feedback>
                                   )}
@@ -349,7 +395,7 @@ const GeneralInformation = (props) => {
                           Middle Name
                         </Form.Label>
                         <Col sm={8}>
-                          <FastField name="middleName">
+                          <FastField name="middle_name">
                             {({ field }) => (
                               <Form.Control
                                 {...field}
@@ -367,24 +413,23 @@ const GeneralInformation = (props) => {
                           <span className="form-label-required">*</span>
                         </Form.Label>
                         <Col sm={8}>
-                          <FastField name="lastName">
+                          <FastField name="surname">
                             {({ field, form }) => (
                               <>
                                 <Form.Control
                                   {...field}
                                   type="text"
                                   isInvalid={
-                                    form.touched.lastName &&
-                                    form.errors.lastName
+                                    form.touched.surname && form.errors.surname
                                   }
                                   minLength={1}
                                   maxLength={128}
                                 />
-                                {form.touched.lastName &&
-                                  form.errors.lastName && (
+                                {form.touched.surname &&
+                                  form.errors.surname && (
                                     <Form.Control.Feedback type="invalid">
-                                      {form.touched.lastName
-                                        ? form.errors.lastName
+                                      {form.touched.surname
+                                        ? form.errors.surname
                                         : null}
                                     </Form.Control.Feedback>
                                   )}
@@ -401,53 +446,69 @@ const GeneralInformation = (props) => {
                         <Col sm={8}>
                           <div style={{ width: 400, display: "flex" }}>
                             <div style={{ marginRight: 12, flex: 1 }}>
-                              <Select
-                                options={selectDay()}
-                                className={`react-select ${
-                                  touched.title && Boolean(errors.title)
-                                    ? "is-invalid"
-                                    : ""
-                                }`}
-                                components={{
-                                  IndicatorSeparator: () => null,
-                                }}
-                                style={{ marginRight: 12 }}
-                              />
+                              <FastField name="dateOfBirth">
+                                {({ field, form }) => (
+                                  <div style={{ width: 90 }}>
+                                    <Select
+                                      {...field}
+                                      options={selectDay()}
+                                      defaultValue={values.dateOfBirth[0]}
+                                      onChange={(v) => {
+                                        setFieldValue("dateOfBirth[0]", v)
+                                      }}
+                                    />
+                                  </div>
+                                )}
+                              </FastField>
                             </div>
                             <div style={{ marginRight: 12, flex: 1 }}>
-                              <Select
-                                options={selectMonth()}
-                                className={`react-select ${
-                                  touched.title && Boolean(errors.title)
-                                    ? "is-invalid"
-                                    : ""
-                                }`}
-                                components={{
-                                  IndicatorSeparator: () => null,
-                                }}
-                                style={{ marginRight: 12 }}
-                              />
+                              <FastField name="dateOfBirth[1]">
+                                {({ field, form }) => (
+                                  <div style={{ width: 90 }}>
+                                    <Select
+                                      {...field}
+                                      options={selectMonth()}
+                                      defaultValue={values.dateOfBirth[1]}
+                                      onChange={(v) => {
+                                        setFieldValue("dateOfBirth[1]", v)
+                                      }}
+                                    />
+                                  </div>
+                                )}
+                              </FastField>
                             </div>
                             <div style={{ flex: 1 }}>
-                              <Select
-                                options={selectYear()}
-                                className={`react-select ${
-                                  touched.title && Boolean(errors.title)
-                                    ? "is-invalid"
-                                    : ""
-                                }`}
-                                components={{
-                                  IndicatorSeparator: () => null,
-                                }}
-                                style={{ marginRight: 12 }}
-                              />
+                              <FastField name="dateOfBirth[2]">
+                                {({ field, form }) => (
+                                  <div style={{ width: 90 }}>
+                                    <Select
+                                      {...field}
+                                      options={selectYear()}
+                                      defaultValue={values.dateOfBirth[2]}
+                                      className={`react-select ${
+                                        form.touched.dateOfBirth &&
+                                        form.errors.dateOfBirth
+                                          ? "is-invalid"
+                                          : null
+                                      }`}
+                                      onChange={(v) => {
+                                        setFieldValue("dateOfBirth[2]", v)
+                                      }}
+                                    />
+                                  </div>
+                                )}
+                              </FastField>
+                              <ErrorMessage name="dateOfBirth[]">
+                                {(msg) => (
+                                  <div
+                                    style={{ color: "red", fontSize: "12px" }}
+                                  >
+                                    {msg}
+                                  </div>
+                                )}
+                              </ErrorMessage>
                             </div>
                           </div>
-                          {touched.title && Boolean(errors.title) && (
-                            <div className="invalid-feedback">
-                              {touched.title ? errors.title : ""}
-                            </div>
-                          )}
                         </Col>
                       </Form.Group>
                       <Form.Group as={Row} className="form-group">
@@ -462,47 +523,55 @@ const GeneralInformation = (props) => {
                               alignItems: "center",
                             }}
                           >
-                            <FastField name="gender">
+                            <FastField name="gender_id">
                               {({ field, form }) => (
                                 <Form.Check
                                   {...field}
-                                  checked={values.gender === "male"}
+                                  checked={
+                                    values.gender_id ===
+                                    "db24d53c-7d36-4770-8598-dc36174750af"
+                                  }
                                   type="radio"
                                   label="Male"
-                                  isInvalid={
-                                    form.touched.gender && form.errors.gender
-                                  }
                                   style={{ marginRight: 30 }}
                                   inline
                                   onChange={() =>
-                                    setFieldValue("gender", "male")
+                                    setFieldValue(
+                                      "gender_id",
+                                      "db24d53c-7d36-4770-8598-dc36174750af",
+                                    )
                                   }
                                 />
                               )}
                             </FastField>
-                            <FastField name="gender">
+                            <FastField name="gender_id">
                               {({ field, form }) => (
                                 <Form.Check
                                   {...field}
-                                  checked={values.gender === "female"}
+                                  checked={
+                                    values.gender_id ===
+                                    "db24d53c-7d36-4770-8598-dc36174750ad"
+                                  }
                                   type="radio"
                                   label="Female"
-                                  isInvalid={
-                                    form.touched.gender && form.errors.gender
-                                  }
                                   inline
                                   onChange={() =>
-                                    setFieldValue("gender", "female")
+                                    setFieldValue(
+                                      "gender_id",
+                                      "db24d53c-7d36-4770-8598-dc36174750ad",
+                                    )
                                   }
                                 />
                               )}
                             </FastField>
-                            {touched.gender && errors.gender && (
-                              <Form.Control.Feedback type="invalid">
-                                {touched.gender ? errors.gender : null}
-                              </Form.Control.Feedback>
-                            )}
                           </div>
+                          <ErrorMessage name="gender_id">
+                            {(msg) => (
+                              <div style={{ color: "red", fontSize: "12px" }}>
+                                {msg}
+                              </div>
+                            )}
+                          </ErrorMessage>
                         </Col>
                       </Form.Group>
                       <Form.Group as={Row} className="form-group">
@@ -510,7 +579,7 @@ const GeneralInformation = (props) => {
                           ID Card Number (KTP)
                         </Form.Label>
                         <Col sm={8}>
-                          <FastField name="idCardNumber">
+                          <FastField name="ktp">
                             {({ field }) => (
                               <Form.Control
                                 {...field}
@@ -597,23 +666,24 @@ const GeneralInformation = (props) => {
                       Home Phone <span className="form-label-required">*</span>
                     </Form.Label>
                     <Col sm={9}>
-                      <FastField name="homePhone">
+                      <FastField name="phone_number_home">
                         {({ field, form }) => (
                           <>
                             <Form.Control
                               {...field}
                               type="text"
                               isInvalid={
-                                form.touched.homePhone && form.errors.homePhone
+                                form.touched.phone_number_home &&
+                                form.errors.phone_number_home
                               }
                               minLength={1}
                               maxLength={32}
                             />
-                            {form.touched.homePhone &&
-                              form.errors.homePhone && (
+                            {form.touched.phone_number_home &&
+                              form.errors.phone_number_home && (
                                 <Form.Control.Feedback type="invalid">
-                                  {form.touched.homePhone
-                                    ? form.errors.homePhone
+                                  {form.touched.phone_number_home
+                                    ? form.errors.phone_number_home
                                     : null}
                                 </Form.Control.Feedback>
                               )}
@@ -628,24 +698,24 @@ const GeneralInformation = (props) => {
                       <span className="form-label-required">*</span>
                     </Form.Label>
                     <Col sm={9}>
-                      <FastField name="mobilePhone">
+                      <FastField name="phone_number_mobile">
                         {({ field, form }) => (
                           <>
                             <Form.Control
                               {...field}
                               type="text"
                               isInvalid={
-                                form.touched.mobilePhone &&
-                                form.errors.mobilePhone
+                                form.touched.phone_number_mobile &&
+                                form.errors.phone_number_mobile
                               }
                               minLength={1}
                               maxLength={32}
                             />
-                            {form.touched.mobilePhone &&
-                              form.errors.mobilePhone && (
+                            {form.touched.phone_number_mobile &&
+                              form.errors.phone_number_mobile && (
                                 <Form.Control.Feedback type="invalid">
-                                  {form.touched.mobilePhone
-                                    ? form.errors.mobilePhone
+                                  {form.touched.phone_number_mobile
+                                    ? form.errors.phone_number_mobile
                                     : null}
                                 </Form.Control.Feedback>
                               )}
@@ -686,26 +756,26 @@ const GeneralInformation = (props) => {
                       Other Email
                     </Form.Label>
                     <Col sm={9}>
-                      <FastField name="otherEmail">
+                      <FastField name="other_email">
                         {({ field, form }) => (
                           <>
                             <Form.Control
                               {...field}
                               type="email"
                               className={
-                                form.touched.otherEmail &&
-                                form.errors.otherEmail
+                                form.touched.other_email &&
+                                form.errors.other_email
                                   ? "is-invalid"
                                   : null
                               }
                               minLength={1}
                               maxLength={256}
                             />
-                            {form.touched.otherEmail &&
-                              form.errors.otherEmail && (
+                            {form.touched.other_email &&
+                              form.errors.other_email && (
                                 <Form.Control.Feedback type="invalid">
-                                  {form.touched.otherEmail
-                                    ? form.errors.otherEmail
+                                  {form.touched.other_email
+                                    ? form.errors.other_email
                                     : null}
                                 </Form.Control.Feedback>
                               )}
