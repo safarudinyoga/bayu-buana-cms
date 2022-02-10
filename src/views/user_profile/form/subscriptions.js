@@ -29,6 +29,15 @@ const Subscriptions = (props) => {
       initialValues={initialForm}
       onSubmit={async (values, { setSubmitting, resetForm }) => {
         console.log(values)
+
+        let formatted = {
+          user_setting: {
+            receive_travel_deals: values.dealSubscription,
+            receive_other_information: values.newsletterSubscription
+          }
+        }
+
+        let res = await api.put("user/profile", formatted)
       }}
     >
       {({
