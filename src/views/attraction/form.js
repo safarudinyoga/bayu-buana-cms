@@ -697,7 +697,7 @@ function AttractionForm(props) {
             filter={`[["country.id", "=", "${form.country_id}"],["AND"],["destination_city.id", "=", "${form.city_id}"],["AND"],["status", "=", 1]]`}
             onChange={(e) => {
               $('#attr_zone').empty();
-              setForm({...form, destination_id: e.target.value || null})
+              setForm({...form, destination_id: e.target.value || null, zone_id: null})
             }
             }
             disabled={isView || loading}
