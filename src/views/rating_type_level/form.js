@@ -55,7 +55,7 @@ function RatingTypeLevelForm(props) {
 
     rating: {
       required: true,
-      min: 1,
+      min: 0,
       max: 999,
     },
   }
@@ -296,7 +296,7 @@ function RatingTypeLevelForm(props) {
           }
           disabled={isView || loading}
           type="number"
-          min="1"
+          min="0"
           max="999"
         />
       </FormHorizontal>
