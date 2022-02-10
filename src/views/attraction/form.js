@@ -618,7 +618,7 @@ function AttractionForm(props) {
             column="country_name"
             filter={`["status", "=", 1]`}
             onChange={(e) => {
-              setForm({...form, country_id: e.target.value || null})
+              setForm({...form, country_id: e.target.value || null, state_province_id: null, city_id: null, destination_id: null, zone_id: null})
               $('#attr_state').empty();
               $('#attr_city').empty();
               $('#attr_dest').empty();
@@ -644,7 +644,7 @@ function AttractionForm(props) {
                 $('#attr_city').empty();
                 $('#attr_dest').empty();
                 $('#attr_zone').empty();
-                setForm({...form, state_province_id: e.target.value || null})
+                setForm({...form, state_province_id: e.target.value || null, city_id: null, destination_id: null, zone_id: null})
               }
             }
             disabled={isView || loading}
@@ -666,7 +666,7 @@ function AttractionForm(props) {
             onChange={(e) => {
               $('#attr_dest').empty();
               $('#attr_zone').empty();
-              setForm({...form, city_id: e.target.value || null})
+              setForm({...form, city_id: e.target.value || null, destination_id: null, zone_id: null})
             }
             }
             disabled={isView || loading}
