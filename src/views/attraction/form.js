@@ -100,7 +100,7 @@ function AttractionForm(props) {
       required: true,
     },
     state_province_id: {
-      required: false,
+      required: true,
     },
     city_id: {
       required: true,
@@ -417,9 +417,6 @@ function AttractionForm(props) {
       if (!form.attraction_address) {
         form.attraction_address = ""
       }
-      if (!form.state_province_id) {
-        form.state_province_id = "00000000-0000-0000-0000-000000000000"
-      }
       if (!form.postal_code) {
         form.postal_code = ""
       }
@@ -635,8 +632,9 @@ function AttractionForm(props) {
           !loading &&
           <FormInputSelectAjax
             label="State/ Province"
+            required={true}
             value={form.state_province_id}
-            name="state_id"
+            name="state_province_id"
             id="attr_state"
             data={provinceData}
             endpoint="/master/state-provinces"

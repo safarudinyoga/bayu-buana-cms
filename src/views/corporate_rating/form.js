@@ -39,8 +39,8 @@ function CorporateRatingForm(props) {
   const validationRules = {
     corporate_rating_type_code: {
       required: true,
-      minlength: 1,
-      maxlength: 256,
+      min: 1,
+      max: 32767,
       checkCode: true,
     },
     corporate_rating_type_name: {
@@ -301,13 +301,13 @@ function CorporateRatingForm(props) {
           cl={{md:"12"}}
           cr="12"
           onChange={(e) =>
-            setForm({...form, corporate_rating_type_code: e.target.value})
+            setForm({...form, corporate_rating_type_code: parseInt(e.target.value)})
           }
           disabled={isView || loading}
-          type="text"
-          minLength="1"
-          maxLength="36"
-          hint="Corporate Rating Code maximum 36 characters"
+          type="number"
+          min="0"
+          max="32767"
+          hint="Location Category Code is numeric"
         />
       </FormHorizontal>
 
