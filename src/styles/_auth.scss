@@ -33,7 +33,7 @@ $grey: #818181;
 
 	&-wrapper {
 		height: 100%;
-		min-height: 600px;
+		min-height: 586px;
 		width: 100%;
 		display: flex;
 	}
@@ -160,7 +160,7 @@ $grey: #818181;
 			padding: 0;
 		}
 		@media (min-width: 481px) and (max-width: 768px) {
-			padding-top: 25%;
+			// padding-top: 0;
 			width: 55%;
 		}
 	}

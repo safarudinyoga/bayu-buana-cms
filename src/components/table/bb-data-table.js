@@ -472,7 +472,7 @@ class BBDataTable extends Component {
           // },
           {
             orderable: false,
-            className: "select-checkbox",
+            className: !this.state.isCheckbox ? "wo-checkbox": "select-checkbox",
             targets: [0],
             width: "5%",
           },
