@@ -284,7 +284,7 @@ function AttractionForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         if (res.data) {
-          setForm({...res.data, country_id: res.data.country.id})
+          setForm({...res.data, country_id: res.data.country.id, state_province_id: res.data.state_province.id, city_id: res.data.city.id, destination_id: res.data.destination.id, zone_id: res.data.zone.id})
           let currentName = res.data.attraction_name
 
           let currentDesktopImage = res.data.attraction_asset_desktop?.multimedia_description_id
