@@ -569,7 +569,7 @@ class BBDataTable extends Component {
         }, 500)
       })
 
-      dt.on("row-reorder", (e, diff, edit) => {
+      dt.on("row-reorder", async (e, diff, edit) => {
         if (diff.length > 0) {
           let module = this.props.title.toLowerCase().split(" ").join("_")
           if (this.props.title.includes("/")) {
@@ -587,14 +587,14 @@ class BBDataTable extends Component {
           )
           let targetIdx = rowPositionDiff === 0 ? 1 : diff.length - 2
           let sort = dt.row(diff[targetIdx].node)?.data()?.sort || 0
-          this.api
-            .post(`/master/batch-actions/sort/${module}`, { id: rowID, sort })
-            .then((res) => {
-              console.log(res)
-            })
-            .catch((e) => {
-              console.log(e)
-            })
+          console.log(edit.triggerRow.data().airline_code, sort)
+          try {
+            let res = await this.api.post(`/master/batch-actions/sort/${module}`, { id: rowID, sort })
+            console.log(res)
+            $(this.table.current).DataTable().draw(false)
+          } catch (e) {
+            console.log(e)
+          }
         }
       })
 
