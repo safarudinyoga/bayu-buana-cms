@@ -284,7 +284,7 @@ function AttractionForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         if (res.data) {
-          setForm({...res.data, country_id: res.data.country.id, state_province_id: res.data.state_province.id, city_id: res.data.city.id, destination_id: res.data.destination ? res.data.destination.id : "", zone_id: res.data.zone ? res.data.zone.id : ""})
+          setForm({...res.data, country_id: res.data.country.id, state_province_id: res.data.state_province.id, city_id: res.data.city.id, destination_id: res.data.destination ? res.data.destination.id : "", zone_id: res.data.zone ? res.data.zone.id : "", longitude: res.data.longitude != 0 ? res.data.longitude : "", latitude: res.data.latitude != 0 ? res.data.latitude : ""})
           let currentName = res.data.attraction_name
 
           let currentDesktopImage = res.data.attraction_asset_desktop?.multimedia_description_id
@@ -427,12 +427,12 @@ function AttractionForm(props) {
         form.zone_id = "00000000-0000-0000-0000-000000000000"
       }
       if (!form.latitude) {
-        form.latitude = null
+        form.latitude = 0
       } else {
         form.latitude = parseFloat(form.latitude)
       }
       if (!form.longitude) {
-        form.longitude = null
+        form.longitude = 0
       } else {
         form.longitude = parseFloat(form.longitude);
       }
