@@ -624,6 +624,8 @@ function AttractionForm(props) {
               setForm({...form, country_id: e.target.value || null})
               $('#attr_state').empty();
               $('#attr_city').empty();
+              $('#attr_dest').empty();
+              $('#attr_zone').empty();
             }}
             disabled={isView || loading}
             type="select"
@@ -640,8 +642,12 @@ function AttractionForm(props) {
             endpoint="/master/state-provinces"
             filter={`[["country.id", "=", "${form.country_id}"],["AND"],["status", "=", 1]]`}
             column="state_province_name"
-            onChange={(e) =>
-              setForm({...form, state_province_id: e.target.value || null})
+            onChange={(e) => {
+                $('#attr_city').empty();
+                $('#attr_dest').empty();
+                $('#attr_zone').empty();
+                setForm({...form, state_province_id: e.target.value || null})
+              }
             }
             disabled={isView || loading}
             type="select"
@@ -657,10 +663,13 @@ function AttractionForm(props) {
             id="attr_city"
             data={cityData}
             endpoint="/master/cities"
-            filter={`[["country.id", "=", "${form.country_id}"],["AND"],["status", "=", 1]]`}
+            filter={`[["country.id", "=", "${form.country_id}"],["AND"],["state_province.id", "=", "${form.state_province_id}"],["AND"],["status", "=", 1]]`}
             column="city_name"
-            onChange={(e) =>
+            onChange={(e) => {
+              $('#attr_dest').empty();
+              $('#attr_zone').empty();
               setForm({...form, city_id: e.target.value || null})
+            }
             }
             disabled={isView || loading}
             type="select"
@@ -683,12 +692,15 @@ function AttractionForm(props) {
             label="Destination"
             value={form.destination_id}
             name="destination_id"
+            id="attr_dest"
             data={destinationData}
             endpoint="/master/destinations"
             column="destination_name"
             filter={`[["country.id", "=", "${form.country_id}"],["AND"],["destination_city.id", "=", "${form.city_id}"],["AND"],["status", "=", 1]]`}
-            onChange={(e) =>
+            onChange={(e) => {
+              $('#attr_zone').empty();
               setForm({...form, destination_id: e.target.value || null})
+            }
             }
             disabled={isView || loading}
             type="select"
@@ -701,6 +713,7 @@ function AttractionForm(props) {
             value={form.zone_id}
             name="zone_id"
             data={zoneData}
+            id="attr_zone"
             endpoint="/master/zones"
             column="zone_name"
             filter={`[["destination.id", "=", "${form.destination_id}"],["AND"],["status", "=", 1]]`}
