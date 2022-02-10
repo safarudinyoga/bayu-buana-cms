@@ -36,6 +36,9 @@ const GeneralInformation = (props) => {
     // dateOfBirth: "",
     gender: "male",
     idCardNumber: "",
+    dobDay: { value: 1, label: 1 },
+    dobMonth: { value: 1, label: 1 },
+    dobYear: { value: 1921, label: 1921 },
 
     // Contacts
     homePhone: "",
@@ -69,6 +72,9 @@ const GeneralInformation = (props) => {
     // dateOfBirth: Yup.string().required("Date of Birth is required."),
     gender: Yup.string().required("Gender is required."),
     idCardNumber: Yup.string(),
+    dobDay: Yup.number(),
+    dobMonth: Yup.number(),
+    dobYear: Yup.number(),
 
     // Contacts
     homePhone: Yup.string().required("Home Phone is required."),
@@ -229,6 +235,7 @@ const GeneralInformation = (props) => {
       let res = await api.get("/user/profile")
       let data = res.data;
       console.log(data);
+      console.log(parseInt(data.birth_date.split("-")[2]))
       setInitialForm({
         ...initialForm,
         title: _.isEmpty(data.name_prefix) ? "" : {
@@ -239,8 +246,27 @@ const GeneralInformation = (props) => {
         firstName: data.given_name ? data.given_name : "",
         middleName: data.middle_name ? data.middle_name : "",
         lastName: data.surname ? data.surname : "",
-        gender: data.gender ? data.gender.gender_name.toLowerCase() : "",
+        gender: _.isEmpty(data.gender) ? "" : data.gender.gender_name.toLowerCase(),
         idCardNumber: data.ktp ? data.ktp : "",
+        dobDay: data.birth_date ? {
+          ...initialForm.dobDay,
+          value: parseInt(data.birth_date.split("-")[2]),
+          label: parseInt(data.birth_date.split("-")[2]), 
+        } : {
+          ...initialForm.dobDay,
+          value: 1,
+          label: 1,
+        },
+        dobMonth: data.birth_date ? {
+          ...initialForm.dobMonth,
+          value: parseInt(data.birth_date.split("-")[1]),
+          label: parseInt(data.birth_date.split("-")[1]), 
+        }: {
+          ...initialForm.dobMonth,
+          value: 1,
+          label: 1,
+        },
+        dobYear: data.birth_date ? data.birth_date.split("-")[0] : 1921,
         
         // Contacts
         homePhone: data.contact.phone_number ? data.contact.phone_number : "",
@@ -288,20 +314,23 @@ const GeneralInformation = (props) => {
       <Formik
         enableReinitialize
         initialValues={initialForm}
-        validationSchema={validationSchema}
+        // validationSchema={validationSchema}
+        validator={() => ({})}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
           console.log(values)
-          console.log(props)
+          // console.log(props)
+
+          let day = values.dobDay.value < 10 ? ("0"+values.dobDay.value) : values.dobDay.value;
+          let month = values.dobMonth.value < 10 ? ("0"+values.dobMonth.value) : values.dobMonth.value;
+
+          console.log(values.currentCountry);
 
           let formatted = {
             address: {
-              address_line: values.currentAddress,
-              country_id: values.currentCountry.value,
-              county: values.currentCountry.label,
+              address_line: values.currentAddress ? values.currentAddress : "",
+              country_id: values.currentCountry.value ? values.currentCountry.value : "",
               state_province_id: values.currentProvince.value,
-              state_province_other: values.currentProvince.label,
               city_id: values.currentCity.value,
-              city_other: values.currentCity.label,
               postal_code: values.currentZipCode
             },
             contact: {
@@ -314,10 +343,13 @@ const GeneralInformation = (props) => {
             given_name: values.firstName,
             middle_name: values.middleName,
             surname: values.lastName,
+            birth_date: values.dobYear+"-"+month+"-"+day,
+            name_prefix: {},
           }
+          console.log(formatted);
 
           let res = await api.put("user/profile", formatted)
-          console.log(res);
+          // console.log(res);
 
           // setSubmitting(true)
 
@@ -493,6 +525,7 @@ const GeneralInformation = (props) => {
                             <div style={{ marginRight: 12, flex: 1 }}>
                               <Select
                                 options={selectDay()}
+                                defaultValue={values.dobDay}
                                 className={`react-select ${
                                   touched.title && Boolean(errors.title)
                                     ? "is-invalid"
@@ -507,6 +540,7 @@ const GeneralInformation = (props) => {
                             <div style={{ marginRight: 12, flex: 1 }}>
                               <Select
                                 options={selectMonth()}
+                                defaultValue={values.dobMonth}
                                 className={`react-select ${
                                   touched.title && Boolean(errors.title)
                                     ? "is-invalid"
@@ -521,6 +555,7 @@ const GeneralInformation = (props) => {
                             <div style={{ flex: 1 }}>
                               <Select
                                 options={selectYear()}
+                                defaultValue={values.dobYear}
                                 className={`react-select ${
                                   touched.title && Boolean(errors.title)
                                     ? "is-invalid"
