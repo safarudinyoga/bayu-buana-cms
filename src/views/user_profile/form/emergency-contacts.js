@@ -61,6 +61,22 @@ const EmergencyContacts = (props) => {
       validationSchema={validationSchema}
       onSubmit={async (values, { setSubmitting, resetForm }) => {
         console.log(values)
+
+        let formatted = {
+          emergency_contact: {
+            contact_name: values.fullNameEmergency1,
+            contact_phone_number: values.phoneNumberEmergency1,
+            relationship: values.relationshipEmergency1
+          },
+          emergency_contact2: {
+            contact_name: values.fullNameEmergency2,
+            contact_phone_number: values.phoneNumberEmergency2,
+            relationship: values.relationshipEmergency2
+          }
+        }
+
+        let res = await api.put("user/profile", formatted)
+        console.log(res);
         // setSubmitting(true)
 
         // try {
