@@ -25,6 +25,7 @@ function CityForm(props) {
   const [id, setId] = useState(null)
   const [countryData, setCountryData] = useState([])
   const [stateProvinceData, setStateProvinceData] = useState([])
+  const [reqData, setReqData] = useState(null)
   const [form, setForm] = useState({
     city_code: "",
     city_name: "",
@@ -56,7 +57,8 @@ function CityForm(props) {
       required: true
     },
     state_province_id: {
-      required: false
+      required: true,
+      checkName: true,
     }
   }
 
@@ -73,6 +75,9 @@ function CityForm(props) {
     },
     country_id: {
       required: "Country is required"
+    },
+    state_province_id: {
+      required: "State / Province is required"
     },
   }
 
@@ -118,62 +123,8 @@ function CityForm(props) {
         if (res.data.state_province) {
           setStateProvinceData([{...res.data.state_province, text: res.data.state_province.state_province_name}])
         }
-
         if(res.data) {
-          let currentCode = res.data.city_code
-          let currentName = res.data.city_name
-
-          $.validator.addMethod(
-            "checkCode",
-            function (value, element) {
-              var req = false
-              $.ajax({
-                type: "GET",
-                async: false,
-                url: `${env.API_URL}/master/cities?filters=["city_code","like","${element.value}"]`,
-                success: function (res) {
-                  if (res.items.length !== 0) {
-                    if(currentCode === element.value){
-                      req = true
-                    } else {
-                      req = false
-                    }
-                  } else {
-                    req = true
-                  }
-                },
-              })
-    
-              return req
-            },
-            "Code already exists",
-          )
-
-          $.validator.addMethod(
-            "checkName",
-            function (value, element) {
-              var req = false
-              $.ajax({
-                type: "GET",
-                async: false,
-                url: `${env.API_URL}/master/cities?filters=["city_name","=","${element.value}"]`,
-                success: function (res) {
-                  if (res.items.length !== 0) {
-                    if(currentName.toUpperCase() === element.value.toUpperCase()){
-                      req = true
-                    } else {
-                      req = false
-                    }
-                  } else {
-                    req = true
-                  }
-                },
-              })
-              
-              return req
-            },
-            "City Name already exists",
-          )
+          setReqData(res.data)
         }
       } catch (e) { }
 
@@ -184,7 +135,69 @@ function CityForm(props) {
         setTranslations(res.data.items)
       } catch (e) { }
       setLoading(false)
+    }
+  }, [])
+
+  useEffect(async() => {
+    if (formId) {
+      if(reqData) {
+        let currentCode = reqData.city_code
+        let currentName = reqData.city_name
+        let provinceId = form.state_province_id
+
+        $.validator.addMethod(
+          "checkCode",
+          function (value, element) {
+            var req = false
+            $.ajax({
+              type: "GET",
+              async: false,
+              url: `${env.API_URL}/master/cities?filters=["city_code","like","${element.value}"]`,
+              success: function (res) {
+                if (res.items.length !== 0) {
+                  if(currentCode === element.value){
+                    req = true
+                  } else {
+                    req = false
+                  }
+                } else {
+                  req = true
+                }
+              },
+            })
+  
+            return req
+          },
+          "Code already exists",
+        )
+        $.validator.addMethod(
+          "checkName",
+          function (value, element) {
+            var req = false
+            $.ajax({
+              type: "GET",
+              async: false,
+              url: `${env.API_URL}/master/cities?filters=[["city_name","=","${element.value}"],["AND"],["state_province_id","=","${provinceId}"]]`,
+              success: function (res) {
+                if (res.items.length !== 0) {
+                  if(currentName.toUpperCase() === element.value.toUpperCase() && provinceId === reqData.state_province_id){
+                    req = true
+                  } else {
+                    req = false
+                  }
+                } else {
+                  req = true
+                }
+              },
+            })
+            console.log(req)
+            return req
+          },
+          "City Name already exists",
+        )
+      }
     } else {
+      
       $.validator.addMethod(
         "checkCode",
         function (value, element) {
@@ -213,7 +226,7 @@ function CityForm(props) {
           $.ajax({
             type: "GET",
             async: false,
-            url: `${env.API_URL}/master/cities?filters=["city_name","=","${element.value}"]`,
+            url: `${env.API_URL}/master/cities?filters=[["city_name","=","${element.value}"],["AND"],["state_province_id","=","${form.state_province_id}"]]`,
             success: function (res) {
               if (res.items.length !== 0) {
                 req = false
@@ -228,7 +241,7 @@ function CityForm(props) {
         "City Name already exists",
       )
     }
-  }, [])
+  }, [reqData, form])
 
   useEffect(() => {
     if (!props.match.params.id) {
@@ -322,6 +335,7 @@ function CityForm(props) {
           label="State / Province"
           value={form.state_province_id}
           name="state_id"
+          required={true}
           endpoint="/master/state-provinces"
           filter={`[["country.id", "=", "${form.country_id}"],["AND"],["status", "=", 1]]`}
           column="state_province_name"
