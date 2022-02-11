@@ -258,7 +258,7 @@ const GeneralInformation = (props) => {
         ...initialForm,
         title: _.isEmpty(data.name_prefix) ? "" : {
           ...initialForm.title,
-          value: data.name_prefix.name_prefix_code.toLowerCase(),
+          value: data.name_prefix.id,
           label: data.name_prefix.name_prefix_name
         },
         firstName: data.given_name ? data.given_name : "",
@@ -342,10 +342,10 @@ const GeneralInformation = (props) => {
           let formatted = {
             address: {
               address_line: values.currentAddress ? values.currentAddress : "",
-              country_id: values.currentCountry.value ? values.currentCountry.value : "",
-              state_province_id: values.currentProvince.value,
-              city_id: values.currentCity.value,
-              postal_code: values.currentZipCode
+              country_id: values.currentCountry ? values.currentCountry.value : "",
+              state_province_id: values.currentProvince ? values.currentProvince.value : "",
+              city_id: values.currentCity ? values.currentCity.value : "",
+              postal_code: values.currentZipCode ? values.currentZipCode : ""
             },
             contact: {
               email: values.email,
@@ -359,7 +359,20 @@ const GeneralInformation = (props) => {
             surname: values.lastName,
             birth_date: values.dobYear+"-"+month+"-"+day,
             name_prefix_id: values.title.value,
-            gender_id: values.gender
+            gender_id: values.gender,
+            permanent_address: values.sameAddress ? {
+              address_line: values.currentAddress ? values.currentAddress : "",
+              country_id: values.currentCountry ? values.currentCountry.value : "",
+              state_province_id: values.currentProvince ? values.currentProvince.value : "",
+              city_id: values.currentCity ? values.currentCity.value : "",
+              postal_code: values.currentZipCode ? values.currentZipCode : ""
+            } : {
+              address_line: values.permanentAddress ? values.permanentAddress : "",
+              country_id: values.permanentCountry ? values.permanentCountry.value : "",
+              state_province_id: values.permanentProvince ? values.permanentProvince.value : "",
+              city_id: values.permanentCity ? values.permanentCity.value : "",
+              postal_code: values.permanentZipCode ? values.permanentZipCode : "" 
+            }
           }
           console.log(formatted);
 
