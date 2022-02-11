@@ -53,7 +53,7 @@ const Subscriptions = (props) => {
         setFieldTouched,
       }) => {
         return (
-          <Form>
+          <Form onSubmit={handleSubmit}>
             <Card>
               <Card.Body>
               <h3 className="card-heading">Subscriptions</h3>
@@ -67,7 +67,7 @@ const Subscriptions = (props) => {
                     type="switch"
                     id="deals-subscription"
                     name="deals-subscription"
-                    // checked={values.dealSubscription}
+                    checked={values.dealSubscription}
                     onChange={handleChange}
                     onBlur={handleBlur}
                   />
@@ -82,7 +82,7 @@ const Subscriptions = (props) => {
                     type="switch"
                     id="newsletter-subscription"
                     name="newsletter-subscription"
-                    // checked={values.newsletterSubscription}
+                    checked={values.newsletterSubscription}
                     onChange={handleChange}
                     onBlur={handleBlur}
                   />
