@@ -43,7 +43,7 @@ export default class FormInputSelectAjax extends Component {
     }, {}); // empty object is the initial value for result object
   };
   init() {
-    const {isGrouping, isFilter, allowClear} = this.props
+    const {isGrouping, isArray, isFilter, allowClear} = this.props
     setTimeout(() => {
       try {
         let config = {
@@ -69,10 +69,30 @@ export default class FormInputSelectAjax extends Component {
                 filtered = json.items.filter((item, index) => {
                   return !ids.includes(item[this.props.fieldGroup], index + 1)
                 })
+                if(isArray){
+                  const datas = json.items.map((item, index)=>{
+                    return item[this.props.fieldArray]
+                  })
+                  var dataMerge = [];
+                  for (var i = 0; i < datas.length; i++) {
+                    for (var j = 0; j < datas[i].length; j++) {
+                      const results = this.props.column.split(".");
+                      if(datas[i][j][results[0]]){
+                        dataMerge = dataMerge.concat(datas[i]);
+                      }
+                    }
+                  }
+                  const ids = dataMerge.map((item, index)=>{
+                    return item[this.props.fieldGroup]
+                  })
+                  filtered = dataMerge.filter((item, index) => {
+                    return !ids.includes(item[this.props.fieldGroup], index + 1)
+                  })
+
+                }
               }
 
               filtered.forEach((item) => {
-                console.log(item)
                 if(this.props.column.includes(".")){
                   const results = this.props.column.split(".");
                   if(isGrouping){
