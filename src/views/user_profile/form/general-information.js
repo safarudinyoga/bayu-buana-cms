@@ -15,6 +15,8 @@ const GeneralInformation = (props) => {
   const [selectCountry, setSelectCountry] = useState([])
   const [selectProvince, setSelectProvince] = useState([])
   const [selectCity, setSelectCity] = useState([])
+  const [selectNamePrefix, setSelectNamePrefix] = useState([])
+  const [selectGender, setSelectGender] = useState([])
   const [photoProfile, setPhotoProfile] = useState([])
   const [optionDay, setOptionDay] = useState([])
   const [optionMonth, setOptionMonth] = useState([])
@@ -124,7 +126,7 @@ const GeneralInformation = (props) => {
   // Birthday
   const selectDay = () => {
     const options = []
-    for (let i = 0; i <= 31; i++) {
+    for (let i = 1; i <= 31; i++) {
       options.push({
         label: i,
         value: i,
@@ -230,6 +232,22 @@ const GeneralInformation = (props) => {
     } catch (e) {}
   }, [])
 
+  useEffect(async() => {
+    try {
+      let res = await api.get("/master/name-prefixes")
+      const options = []
+      res.data.items.forEach((data) => {
+        options.push({
+          label: data.name_prefix_name,
+          value: data.id,
+        })
+        setSelectNamePrefix(options)
+      })
+    } catch(e) {
+
+    }
+  }, [])
+
   useEffect(async () => {
     try {
       let res = await api.get("/user/profile")
@@ -246,23 +264,19 @@ const GeneralInformation = (props) => {
         firstName: data.given_name ? data.given_name : "",
         middleName: data.middle_name ? data.middle_name : "",
         lastName: data.surname ? data.surname : "",
-        gender: _.isEmpty(data.gender) ? "" : data.gender.gender_name.toLowerCase(),
+        gender: _.isEmpty(data.gender) ? "" : data.gender.id,
         idCardNumber: data.ktp ? data.ktp : "",
         dobDay: data.birth_date ? {
-          ...initialForm.dobDay,
           value: parseInt(data.birth_date.split("-")[2]),
           label: parseInt(data.birth_date.split("-")[2]), 
         } : {
-          ...initialForm.dobDay,
           value: 1,
           label: 1,
         },
         dobMonth: data.birth_date ? {
-          ...initialForm.dobMonth,
           value: parseInt(data.birth_date.split("-")[1]),
           label: parseInt(data.birth_date.split("-")[1]), 
         }: {
-          ...initialForm.dobMonth,
           value: 1,
           label: 1,
         },
@@ -344,7 +358,8 @@ const GeneralInformation = (props) => {
             middle_name: values.middleName,
             surname: values.lastName,
             birth_date: values.dobYear+"-"+month+"-"+day,
-            name_prefix: {},
+            name_prefix_id: values.title.value,
+            gender_id: values.gender
           }
           console.log(formatted);
 
@@ -402,15 +417,13 @@ const GeneralInformation = (props) => {
                         </Form.Label>
                         <Col sm={8}>
                           <FastField name="title">
+                            
                             {({ field, form }) => (
                               <>
                                 <div style={{ width: 90 }}>
                                   <Select
                                     {...field}
-                                    options={[
-                                      { value: "mr", label: "Mr." },
-                                      { value: "mrs", label: "Mrs." },
-                                    ]}
+                                    options={selectNamePrefix}
                                     defaultValue={values.title}
                                     className={`react-select ${
                                       form.touched.title && form.errors.title
@@ -540,7 +553,7 @@ const GeneralInformation = (props) => {
                             <div style={{ marginRight: 12, flex: 1 }}>
                               <Select
                                 options={selectMonth()}
-                                defaultValue={values.dobMonth}
+                                defaultValue={values.dobMonth.value}
                                 className={`react-select ${
                                   touched.title && Boolean(errors.title)
                                     ? "is-invalid"
@@ -591,7 +604,7 @@ const GeneralInformation = (props) => {
                               {({ field, form }) => (
                                 <Form.Check
                                   {...field}
-                                  checked={values.gender === "male"}
+                                  checked={values.gender === "db24d53c-7d36-4770-8598-dc36174750af"}
                                   type="radio"
                                   label="Male"
                                   isInvalid={
@@ -600,7 +613,7 @@ const GeneralInformation = (props) => {
                                   style={{ marginRight: 30 }}
                                   inline
                                   onChange={() =>
-                                    setFieldValue("gender", "male")
+                                    setFieldValue("gender", "db24d53c-7d36-4770-8598-dc36174750af")
                                   }
                                 />
                               )}
@@ -609,7 +622,7 @@ const GeneralInformation = (props) => {
                               {({ field, form }) => (
                                 <Form.Check
                                   {...field}
-                                  checked={values.gender === "female"}
+                                  checked={values.gender === "db24d53c-7d36-4770-8598-dc36174750ad"}
                                   type="radio"
                                   label="Female"
                                   isInvalid={
@@ -617,7 +630,7 @@ const GeneralInformation = (props) => {
                                   }
                                   inline
                                   onChange={() =>
-                                    setFieldValue("gender", "female")
+                                    setFieldValue("gender", "db24d53c-7d36-4770-8598-dc36174750ad")
                                   }
                                 />
                               )}
