@@ -232,7 +232,7 @@ function RatingTypeLevelForm(props) {
         form.rating_type_level_name = null
       }
       if (!form.rating) {
-        form.rating = null
+        form.rating = 0
       }
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)

@@ -284,7 +284,7 @@ function AttractionForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         if (res.data) {
-          setForm({...res.data, country_id: res.data.country.id, state_province_id: res.data.state_province.id, city_id: res.data.city.id, destination_id: res.data.destination.id, zone_id: res.data.zone.id})
+          setForm({...res.data, country_id: res.data.country.id, state_province_id: res.data.state_province.id, city_id: res.data.city.id, destination_id: res.data.destination ? res.data.destination.id : "", zone_id: res.data.zone ? res.data.zone.id : "", longitude: res.data.longitude != 0 ? res.data.longitude : "", latitude: res.data.latitude != 0 ? res.data.latitude : ""})
           let currentName = res.data.attraction_name
 
           let currentDesktopImage = res.data.attraction_asset_desktop?.multimedia_description_id
@@ -427,12 +427,12 @@ function AttractionForm(props) {
         form.zone_id = "00000000-0000-0000-0000-000000000000"
       }
       if (!form.latitude) {
-        form.latitude = null
+        form.latitude = 0
       } else {
         form.latitude = parseFloat(form.latitude)
       }
       if (!form.longitude) {
-        form.longitude = null
+        form.longitude = 0
       } else {
         form.longitude = parseFloat(form.longitude);
       }
@@ -618,7 +618,7 @@ function AttractionForm(props) {
             column="country_name"
             filter={`["status", "=", 1]`}
             onChange={(e) => {
-              setForm({...form, country_id: e.target.value || null})
+              setForm({...form, country_id: e.target.value || null, state_province_id: null, city_id: null, destination_id: null, zone_id: null})
               $('#attr_state').empty();
               $('#attr_city').empty();
               $('#attr_dest').empty();
@@ -644,7 +644,7 @@ function AttractionForm(props) {
                 $('#attr_city').empty();
                 $('#attr_dest').empty();
                 $('#attr_zone').empty();
-                setForm({...form, state_province_id: e.target.value || null})
+                setForm({...form, state_province_id: e.target.value || null, city_id: null, destination_id: null, zone_id: null})
               }
             }
             disabled={isView || loading}
@@ -666,7 +666,7 @@ function AttractionForm(props) {
             onChange={(e) => {
               $('#attr_dest').empty();
               $('#attr_zone').empty();
-              setForm({...form, city_id: e.target.value || null})
+              setForm({...form, city_id: e.target.value || null, destination_id: null, zone_id: null})
             }
             }
             disabled={isView || loading}
@@ -697,7 +697,7 @@ function AttractionForm(props) {
             filter={`[["country.id", "=", "${form.country_id}"],["AND"],["destination_city.id", "=", "${form.city_id}"],["AND"],["status", "=", 1]]`}
             onChange={(e) => {
               $('#attr_zone').empty();
-              setForm({...form, destination_id: e.target.value || null})
+              setForm({...form, destination_id: e.target.value || null, zone_id: null})
             }
             }
             disabled={isView || loading}
