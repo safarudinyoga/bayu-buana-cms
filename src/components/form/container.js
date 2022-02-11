@@ -60,7 +60,11 @@ export default class FormContainer extends Component {
         $(element).removeClass("is-invalid")
       },
       submitHandler: (e) => {
-        this.onSubmit(e)
+        var $element = $(e);
+        $element.valid();
+        if($element.valid()) {
+          this.onSubmit(e)
+        }
       },
     })
   }
