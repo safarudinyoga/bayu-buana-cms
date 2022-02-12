@@ -30,7 +30,7 @@ function CorporateRatingForm(props) {
   })
   const translationFields = [
     {
-      label: "Corporate Rating Name",
+      label: "Rating Name",
       name: "corporate_rating_type_name",
       type: "text",
     },   
@@ -40,7 +40,7 @@ function CorporateRatingForm(props) {
     corporate_rating_type_code: {
       required: true,
       min: 1,
-      max: 32767,
+      max: 36,
       checkCode: true,
     },
     corporate_rating_type_name: {
@@ -58,10 +58,10 @@ function CorporateRatingForm(props) {
 
   const validationMessages = {
     corporate_rating_type_name: {
-      required: "Corporate Rating Name is required",
+      required: "Rating Name is required",
     },
     corporate_rating_type_code: {
-      required: "Corporate Rating Code is required",
+      required: "Rating Code is required",
     },
   }
 
@@ -126,7 +126,7 @@ function CorporateRatingForm(props) {
     
               return req
             },
-            "Corporate Rating Name already exists",
+            "Rating Name already exists",
           )
           $.validator.addMethod(
             "checkCode",
@@ -153,7 +153,7 @@ function CorporateRatingForm(props) {
     
               return req
             },
-            "Corporate Rating Code already exists",
+            "Rating Code already exists",
           )
         }
       } catch (e) { }
@@ -185,7 +185,7 @@ function CorporateRatingForm(props) {
 
           return req
         },
-        "Corporate Rating Name already exists",
+        "Rating Name already exists",
       )
       $.validator.addMethod(
         "checkCode",
@@ -206,7 +206,7 @@ function CorporateRatingForm(props) {
 
           return req
         },
-        "Corporate Rating Code already exists",
+        "Rating Code already exists",
       )
     }
   }, [])
@@ -306,7 +306,7 @@ function CorporateRatingForm(props) {
           disabled={isView || loading}
           type="number"
           min="0"
-          max="32767"
+          max="36"
           hint="Location Category Code is numeric"
         />
       </FormHorizontal>

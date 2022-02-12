@@ -46,7 +46,7 @@ export default function FrequentTravelerProgramTable() {
   const extraFilter = () => {
     return (
       <FormInputSelectAjax
-        label="Product Type"
+        label="Program Type"
         onChange={onFilterChange}
         endpoint="/master/loyalty-programs"
         column="product_type.product_type_name"
@@ -107,6 +107,7 @@ export default function FrequentTravelerProgramTable() {
     emptyTable: "No frequent traveler program found",
     recordName: ["loyalty_program_name"],
     showInfoDelete: true,
+    btnDownload: ".buttons-csv",
     infoDelete: [
       {title: "Loyalty Name", recordName: "loyalty_program_name"}, 
     ],

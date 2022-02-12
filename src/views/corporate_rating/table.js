@@ -55,6 +55,7 @@ export default function CorporateRatingTable() {
     ],
     emptyTable: "No Corporate Rating found",
     recordName: "corporate_rating_type_name",
+    btnDownload: ".buttons-csv",
     showInfoDelete: true,
     infoDelete: [
       {title: "Rating Name", recordName: "corporate_rating_type_name"}, 
