@@ -43,7 +43,7 @@ export default function RoomAmenityTypeTable() {
       {
         title: "Room Amenity Name",
         data: "room_amenity_type_name",
-        render: renderColumn("amenity_type", "room_amenity_type_name"),
+        render: renderColumn("room_amenity_type", "room_amenity_type_name"),
       },
       {
         title: "Icon",
