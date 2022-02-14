@@ -305,6 +305,13 @@ const GeneralInformation = (props) => {
         currentZipCode: data.address.postal_code ? data.address.postal_code : "",
 
         // Permanent Address
+        sameAddress: (
+          data.permanent_address.address_line == data.address.address_line && 
+          data.permanent_address.country_id == data.address.country_id &&
+          data.permanent_address.city_id == data.address.city_id &&
+          data.permanent_address.state_province_id == data.address.state_province_id &&
+          data.permanent_address.postal_code == data.address.postal_code
+        ) ? true : false,
         permanentAddress: data.permanent_address.address_line ? data.permanent_address.address_line : "",
         permanentCountry: data.permanent_address.country ? {
           value: data.permanent_address.country_id,
@@ -938,7 +945,7 @@ const GeneralInformation = (props) => {
                                 {...field}
                                 isDisabled={values.currentCountry == null}
                                 url={`master/state-provinces`}
-                                urlFilter={`["country_id","=",${values.currentCountry?.value}]`}
+                                urlFilter={`["country_id","=","${values.currentCountry?.value}"]`}
                                 fieldName="state_province_name"
                                 onChange={(v) =>
                                   setFieldValue("currentProvince", v)
@@ -964,7 +971,7 @@ const GeneralInformation = (props) => {
                                 {...field}
                                 isDisabled={values.currentProvince == null}
                                 url={`master/cities`}
-                                urlFilter={`["province_id","=",${values.currentProvince?.value}]`}
+                                urlFilter={`["province_id","=","${values.currentProvince?.value}"]`}
                                 fieldName="city_name"
                                 onChange={(v) =>
                                   setFieldValue("currentCity", v)
@@ -1038,15 +1045,17 @@ const GeneralInformation = (props) => {
                     <Col sm={9}>
                       {selectCountry.length !== 0 && (
                         <div style={{ width: 300 }}>
-                          <Select
+                          <SelectAsync
                             name="permanentCountry"
+                            url={`master/countries`}
                             value={
                               values.sameAddress
                                 ? values.currentCountry
                                 : values.permanentCountry
                             }
                             placeholder="Please choose"
-                            options={selectCountry}
+                            fieldName="country_name"
+                            // options={selectCountry}
                             className={`react-select ${
                               !values.sameAddress &&
                               (touched.permanentCountry &&
@@ -1056,6 +1065,8 @@ const GeneralInformation = (props) => {
                             }`}
                             onChange={(v) => {
                               setFieldValue("permanentCountry", v)
+                              setFieldValue("permanentProvince", null)
+                              setFieldValue("permanentCity", null)
                               handleChangeCountry(v.value)
                             }}
                             onBlur={setFieldTouched}
@@ -1083,15 +1094,18 @@ const GeneralInformation = (props) => {
                     </Form.Label>
                     <Col sm={9}>
                       <div style={{ width: 300 }}>
-                        <Select
+                        <SelectAsync
                           name="permanentProvince"
+                          url={`master/state-provinces`}
+                          urlFilter={`["country_id","=","${values.permanentCountry?.value}"]`}
+                          fieldName="state_province_name"
                           value={
                             values.sameAddress
                               ? values.currentProvince
                               : values.permanentProvince
                           }
                           placeholder="Please choose"
-                          options={selectProvince}
+                          // options={selectProvince}
                           onChange={(v) => {
                             setFieldValue("permanentProvince", v)
                             handleChangeProvince(v.value)
@@ -1110,15 +1124,18 @@ const GeneralInformation = (props) => {
                     </Form.Label>
                     <Col sm={9}>
                       <div style={{ width: 300 }}>
-                        <Select
+                        <SelectAsync
                           name="permanentCity"
+                          url={`master/cities`}
+                          urlFilter={`["province_id","=","${values.currentProvince?.value}"]`}
+                          fieldName="city_name"
                           value={
                             values.sameAddress
                               ? values.currentCity
                               : values.permanentCity
                           }
                           placeholder="Please choose"
-                          options={selectCity}
+                          // options={selectCity}
                           onChange={(v) => {
                             setFieldValue("permanentCity", v)
                           }}
