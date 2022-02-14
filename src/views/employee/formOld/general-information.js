@@ -16,7 +16,7 @@ const GeneralInformation = (props) => {
   const [selectProvince, setSelectProvince] = useState([])
   const [selectCity, setSelectCity] = useState([])
   const [photoProfile, setPhotoProfile] = useState([])
-  const [optionDay, setOptionDay] = useState([])
+  const [optionGander, setOptionGander] = useState([])
   const [optionMonth, setOptionMonth] = useState([])
   const [optionYear, setOptionYear] = useState([])
 
@@ -34,14 +34,12 @@ const GeneralInformation = (props) => {
     dateOfBirth: [],
     gender_id: "",
     ktp: "",
-
-    // Contacts
+    //Contacts
     phone_number_home: "",
     phone_number_mobile: "",
     email: "",
     other_email: "",
-
-    // Current Address
+    //Current Address
     currentAddress: "",
     currentCountry: "",
     currentProvince: "",
@@ -245,46 +243,87 @@ const GeneralInformation = (props) => {
       <Formik
         initialValues={initialForm}
         validationSchema={validationSchema}
-        onSubmit={async (values, { setSubmitting, resetForm }) => {         
-          setSubmitting(true)
-          try {
-            let res = await api.post("master/persons", {
-              //...values,
-              name_prefix_id: values.name_prefix_id.value,
-              given_name: values.given_name,
-              middle_name: values.middle_name,
-              surname: values.surname,
-              birth_date: new Date(
-                ...[
-                  values.dateOfBirth[2].value,
-                  values.dateOfBirth[1].value,
-                  values.dateOfBirth[0].value,
-                ],
-              ),
-              gender_id: values.gender_id,
-              ktp: values.ktp,
-              //phone_number_home : values.phone_number_home,
-              //phone_number_mobile: values.phone_number_mobile,
-              email: values.email,
-              //other_email: values.other_email,
-              address: {
-                address_line: values.currentAddress,
-                country_id: values.currentCountry.value,
-                state_province_id: values.currentProvince.value,
-                city_id: values.currentCity.value,
-                postal_code: values.currentZipCode,
-              },
-              permanent_address: {
-                address_line: values.permanentAddress,
-                country_id: values.permanentCountry.value,
-                state_province_id: values.permanentProvince.value,
-                city_id: values.permanentCity.value,
-                postal_code: values.permanentZipCode,
-              },
-            })
-            console.log(res)            
+        onSubmit={async (values, { setSubmitting, resetForm }) => {
+          const payload = {
+            ...values,
+            name_prefix_id: values.name_prefix_id.value,
+            given_name: values.given_name,
+            middle_name: values.middle_name,
+            surname: values.surname,
+            birth_date: new Date(
+              ...[
+                values.dateOfBirth[2].value,
+                values.dateOfBirth[1].value,
+                values.dateOfBirth[0].value,
+              ],
+            ),
+            gender_id: values.gender_id,
+            ktp: values.ktp,
+            //phone_number_home : values.phone_number_home,
+            //phone_number_mobile: values.phone_number_mobile,
+            email: values.email,
+            //other_email: values.other_email,
+            address: {
+              address_line: values.currentAddress,
+              country_id: values.currentCountry.value,
+              state_province_id: values.currentProvince.value,
+              city_id: values.currentCity.value,
+              postal_code: values.currentZipCode,
+            },
+            permanent_address: {
+              address_line: values.permanentAddress,
+              country_id: values.permanentCountry.value,
+              state_province_id: values.permanentProvince.value,
+              city_id: values.permanentCity.value,
+              postal_code: values.permanentZipCode,
+            },
+          }
+          setTimeout(() => {
+            alert(JSON.stringify(payload, null, 2))
             setSubmitting(false)
-          } catch (e) {}
+          }, 1000)
+          console.log(payload)
+          console.log(props)
+
+          // setSubmitting(true)
+          // try {
+          //   let res = await api.post("master/persons", {
+          //     //...values,
+          //     name_prefix_id: values.name_prefix_id.value,
+          //     given_name: values.given_name,
+          //     middle_name: values.middle_name,
+          //     surname: values.surname,
+          //     birth_date: new Date(
+          //       ...[
+          //         values.dateOfBirth[2].value,
+          //         values.dateOfBirth[1].value,
+          //         values.dateOfBirth[0].value,
+          //       ],
+          //     ),
+          //     gender_id: values.gender_id,
+          //     ktp: values.ktp,
+          //     //phone_number_home : values.phone_number_home,
+          //     //phone_number_mobile: values.phone_number_mobile,
+          //     email: values.email,
+          //     //other_email: values.other_email,
+          //     address: {
+          //       address_line: values.currentAddress,
+          //       country_id: values.currentCountry.value,
+          //       state_province_id: values.currentProvince.value,
+          //       city_id: values.currentCity.value,
+          //       postal_code: values.currentZipCode,
+          //     },
+          //     permanent_address: {
+          //       address_line: values.permanentAddress,
+          //       country_id: values.permanentCountry.value,
+          //       state_province_id: values.permanentProvince.value,
+          //       city_id: values.permanentCity.value,
+          //       postal_code: values.permanentZipCode,
+          //     },
+          //   })
+          //   console.log(res)
+          //   setSubmitting(false)
+          // } catch (e) {}
 
           return props.handleSelectTab("emergency-contacts")
         }}
@@ -301,6 +340,7 @@ const GeneralInformation = (props) => {
           setFieldValue,
           setFieldTouched,
         }) => (
+          
           <Form onSubmit={handleSubmit}>
             <Card>
               <Card.Body>
@@ -445,69 +485,67 @@ const GeneralInformation = (props) => {
                         </Form.Label>
                         <Col sm={8}>
                           <div style={{ width: 400, display: "flex" }}>
-                            <div style={{ marginRight: 12, flex: 1 }}>
-                              <FastField name="dateOfBirth">
-                                {({ field, form }) => (
-                                  <div style={{ width: 90 }}>
-                                    <Select
-                                      {...field}
-                                      options={selectDay()}
-                                      defaultValue={values.dateOfBirth[0]}
-                                      onChange={(v) => {
-                                        setFieldValue("dateOfBirth[0]", v)
-                                      }}
-                                    />
-                                  </div>
-                                )}
-                              </FastField>
-                            </div>
-                            <div style={{ marginRight: 12, flex: 1 }}>
-                              <FastField name="dateOfBirth[1]">
-                                {({ field, form }) => (
-                                  <div style={{ width: 90 }}>
-                                    <Select
-                                      {...field}
-                                      options={selectMonth()}
-                                      defaultValue={values.dateOfBirth[1]}
-                                      onChange={(v) => {
-                                        setFieldValue("dateOfBirth[1]", v)
-                                      }}
-                                    />
-                                  </div>
-                                )}
-                              </FastField>
-                            </div>
-                            <div style={{ flex: 1 }}>
-                              <FastField name="dateOfBirth[2]">
-                                {({ field, form }) => (
-                                  <div style={{ width: 90 }}>
-                                    <Select
-                                      {...field}
-                                      options={selectYear()}
-                                      defaultValue={values.dateOfBirth[2]}
-                                      className={`react-select ${
-                                        form.touched.dateOfBirth &&
-                                        form.errors.dateOfBirth
-                                          ? "is-invalid"
-                                          : null
-                                      }`}
-                                      onChange={(v) => {
-                                        setFieldValue("dateOfBirth[2]", v)
-                                      }}
-                                    />
-                                  </div>
-                                )}
-                              </FastField>
-                              <ErrorMessage name="dateOfBirth[]">
-                                {(msg) => (
-                                  <div
-                                    style={{ color: "red", fontSize: "12px" }}
-                                  >
-                                    {msg}
-                                  </div>
-                                )}
-                              </ErrorMessage>
-                            </div>
+                            
+                              <div style={{ marginRight: 12, flex: 1 }}>
+                                <FastField name="dateOfBirth[0]">
+                                  {({ field, form }) => (
+                                    <div style={{ width: 90 }}>
+                                      <Select
+                                        {...field}
+                                        options={selectDay()}
+                                        defaultValue={values.dateOfBirth[0]}
+                                        onChange={(v) => {
+                                          setFieldValue("dateOfBirth[0]", v)
+                                        }}
+                                      />
+                                    </div>
+                                  )}
+                                </FastField>
+                              </div>
+                              <div style={{ marginRight: 12, flex: 1 }}>
+                                <FastField name="dateOfBirth[1]">
+                                  {({ field, form }) => (
+                                    <div style={{ width: 90 }}>
+                                      <Select
+                                        {...field}
+                                        options={selectMonth()}
+                                        defaultValue={values.dateOfBirth[1]}
+                                        onChange={(v) => {
+                                          setFieldValue("dateOfBirth[1]", v)
+                                        }}
+                                      />
+                                    </div>
+                                  )}
+                                </FastField>
+                              </div>
+                              <div style={{ flex: 1 }}>
+                                <FastField name="dateOfBirth[2]">
+                                  {({ field, form }) => (
+                                    <div style={{ width: 90 }}>
+                                      <Select
+                                        {...field}
+                                        options={selectYear()}
+                                        defaultValue={values.dateOfBirth[2]}
+                                        className={`react-select ${
+                                          form.touched.dateOfBirth &&
+                                          form.errors.dateOfBirth
+                                            ? "is-invalid"
+                                            : null
+                                        }`}
+                                        onChange={(v) => {
+                                          setFieldValue("dateOfBirth[2]", v)
+                                        }}
+                                      />
+                                    </div>
+                                  )}
+                                </FastField>
+                              </div>
+                            
+                            <ErrorMessage name={"dateOfBirth"}>
+                              {(msg) => (
+                                <div style={{ color: "red" }}>{msg}</div>
+                              )}
+                            </ErrorMessage>
                           </div>
                         </Col>
                       </Form.Group>
@@ -1090,8 +1128,11 @@ const GeneralInformation = (props) => {
               </Button>
             </div>
           </Form>
+          
         )}
+         
       </Formik>
+     
     </>
   )
 }

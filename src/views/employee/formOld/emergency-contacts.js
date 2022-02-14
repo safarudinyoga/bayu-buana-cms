@@ -39,6 +39,7 @@ const EmergencyContacts = (props) => {
       validationSchema={validationSchema}
       onSubmit={async (values, { setSubmitting, resetForm }) => {
         console.log(values)
+        console.log(props)
         // setSubmitting(true)
 
         // try {
