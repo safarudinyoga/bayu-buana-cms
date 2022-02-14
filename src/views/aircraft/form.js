@@ -298,7 +298,7 @@ function AircraftForm(props) {
       )
     } finally {
       setLoading(false)
-      props.history.push(backUrl)
+      props.history.goBack()
       dispatch(
         setAlert({
           message: `Record ${form.aircraft_code} - ${

@@ -365,7 +365,7 @@ function DestinationForm(props) {
       )
     } finally {
       setLoading(false)
-      props.history.push(backUrl)
+      props.history.goBack()
       dispatch(
         setAlert({
           message: `Record ${form.destination_code} - ${form.destination_name} has been successfully ${formId ? "updated" : "saved"}.`,

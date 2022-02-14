@@ -167,9 +167,8 @@ class TableHeader extends Component {
   render() {
     const ExtraFilter = this.props.extraFilter
     const { customFilterStatus } = this.props
-
     const {pathname} = this.props.location;
-    console.log(pathname);
+
     return (
       <div className="container-fluid pl-0">
         <div className="row">

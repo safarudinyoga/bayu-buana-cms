@@ -24,7 +24,8 @@ class FormBuilder extends Component {
 
   onBack() {
     if (this.props.back) {
-      this.props.history.push(this.props.back)
+      // this.props.history.push(this.props.back)
+      this.props.history.goBack()
     }
   }
 

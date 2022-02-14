@@ -242,7 +242,7 @@ function CorporateRatingForm(props) {
       )
     } finally {
       setLoading(false)
-      props.history.push(backUrl)
+      props.history.goBack()
       dispatch(
         setAlert({
           message: `Record ${form.corporate_rating_type_code} - ${form.corporate_rating_type_name} has been successfully ${formId ? "updated" : "saved"}.`,

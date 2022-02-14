@@ -45,7 +45,7 @@ class BBDataTable extends Component {
       itemInfo: ""
     }
     this.inProgress = false
-
+    this.queryParams = new URLSearchParams(this.props.location.search)
     this.api = new Api()
   }
 
@@ -165,6 +165,11 @@ class BBDataTable extends Component {
         headers = { Authorization : `Bearer ${auth}` }
       }
 
+      let displayStart = 0;
+      if(this.queryParams.get("page")) {
+        displayStart = 10 * (this.queryParams.get("page")-1)
+      }
+
       let dt = $(this.table.current).DataTable({
         pagingType: "simple_numbers",
         colReorder: {
@@ -176,7 +181,7 @@ class BBDataTable extends Component {
         serverSide: true,
         processing: true,
         displayLength: 10,
-        displayStart: 0,
+        displayStart: displayStart,
         lengthMenu: [
           [10, 25, 50, 100, -1],
           [10, 25, 50, 100, "All"],
@@ -563,7 +568,7 @@ class BBDataTable extends Component {
             try {
               dt.responsive.rebuild()
               dt.responsive.recalc()
-              dt.columns.adjust().draw()
+              // dt.columns.adjust().draw()
             } catch (e) {}
           }
         }, 500)
@@ -596,6 +601,12 @@ class BBDataTable extends Component {
             console.log(e)
           }
         }
+      })
+
+      dt.on('page.dt', async () => {
+        var info = dt.page.info();
+        this.queryParams.set("page", info.page+1)
+        this.props.history.replace({ pathname: this.props.location.pathname, search: `?page=${info.page+1}`})
       })
 
       this.dt = dt
@@ -756,7 +767,6 @@ class BBDataTable extends Component {
   }
 
   componentWillUnmount() {
-    window.location.reload();
     try {
       this.dt.destroy()
     } catch (e) {}

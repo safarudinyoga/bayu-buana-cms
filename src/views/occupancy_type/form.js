@@ -257,7 +257,7 @@ function OccupancyTypeForm(props) {
       )
     } finally {
       setLoading(false)
-      props.history.push(backUrl)
+      props.history.goBack()
       dispatch(
         setAlert({
           message: `Record ${form.occupancy_type_code} - ${
