@@ -140,6 +140,10 @@ import DivisionHierarchy from './views/division/hierarchy';
 import JobTitleTable from './views/job-title/table';
 import JobTitleForm from './views/job-title/form';
 
+// User Access Type
+import UserAccessTypeTable from "views/user_access_type/table"
+import UserAccessTypeForm from "views/user_access_type/form"
+
 const RouteWithProps = ({
   path,
   exact,
@@ -514,6 +518,14 @@ const DashboardRoutes = () => {
 
         <Route exact path="/profile">
           <UserProfile />
+        </Route>
+
+        {/* User Access Type */}
+        <Route exact path="/master/user-access-type">
+          <UserAccessTypeTable />
+        </Route>
+        <Route path="/master/user-access-type/form/:id?">
+          <UserAccessTypeForm />
         </Route>
 
       </Switch>

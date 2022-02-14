@@ -322,6 +322,22 @@ export default class Sidebar extends Component {
                   </li> */}
                 </ul>
               </li>
+              <li className="nav-item">
+                <Link to="#" className="nav-link">
+                  <img src="/img/icons/users.svg" alt="icon users" />
+                  <p>
+                    User &amp; Access Management
+                    <i className="right fas fa-angle-right"></i>
+                  </p>
+                </Link>
+                <ul className="nav nav-treeview">
+                  <li className="nav-item">
+                    <Link to="/master/user-access-type" className="nav-link">
+                      <p>User Access Type</p>
+                    </Link>
+                  </li>
+                </ul>
+              </li>
             </ul>
           </nav>
         </div>
