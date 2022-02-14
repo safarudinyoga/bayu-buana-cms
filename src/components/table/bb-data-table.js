@@ -568,7 +568,7 @@ class BBDataTable extends Component {
             try {
               dt.responsive.rebuild()
               dt.responsive.recalc()
-              dt.columns.adjust().draw()
+              // dt.columns.adjust().draw()
             } catch (e) {}
           }
         }, 500)
