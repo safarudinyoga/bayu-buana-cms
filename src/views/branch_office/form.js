@@ -370,7 +370,7 @@ function OfficeForm(props) {
       )
     } finally {
       setLoading(false)
-      props.history.push(backUrl)
+      props.history.goBack()
       dispatch(
         setAlert({
           message: `Record ${form.office_name} has been successfully saved.`,

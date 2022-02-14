@@ -296,7 +296,7 @@ function HotelAmenityForm(props) {
       )
     } finally {
       setLoading(false)
-      props.history.push(backUrl)
+      props.history.goBack()
     }
   }
 

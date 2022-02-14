@@ -225,7 +225,7 @@ function RoomAmenityTypeForm(props) {
       )
     } finally {
       setLoading(false)
-      props.history.push(backUrl)
+      props.history.goBack()
     }
   }
 

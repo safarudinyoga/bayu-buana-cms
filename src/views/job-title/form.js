@@ -244,7 +244,7 @@ function JobTitleForm(props) {
 
 
       setLoading(false)
-      props.history.push(backUrl)
+      props.history.goBack()
       dispatch(
         setAlert({
           message: `Record '${form.job_title_name

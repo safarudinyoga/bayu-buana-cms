@@ -236,7 +236,7 @@ function RoomLocationTypeForm(props) {
       )
     } finally {
       setLoading(false)
-      props.history.push(backUrl)
+      props.history.goBack()
       dispatch(
         setAlert({
           message: `Record ${form.room_location_type_code} - ${

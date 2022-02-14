@@ -258,7 +258,7 @@ function MealPlanTypeForm(props) {
       )
     } finally {
       setLoading(false)
-      props.history.push(backUrl)
+      props.history.goBack()
       dispatch(
         setAlert({
           message: `Record ${form.meal_plan_type_code} - ${form.meal_plan_type_name} has been successfully ${formId ? "updated" : "saved"}.`,

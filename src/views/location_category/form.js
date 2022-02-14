@@ -234,7 +234,7 @@ function LocationCategoryForm(props) {
       )
     } finally {
       setLoading(false)
-      props.history.push(backUrl)
+      props.history.goBack()
       dispatch(
         setAlert({
           message: `Record ${form.location_category_code} - ${form.location_category_name} has been successfully ${formId ? "updated" : "saved"}.`,

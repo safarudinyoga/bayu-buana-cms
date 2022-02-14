@@ -177,7 +177,7 @@ function HotelBrandForm(props) {
       )
     } finally {
       setLoading(false)
-      props.history.push(backUrl)
+      props.history.goBack()
       dispatch(
         setAlert({
           message: `Record ${form.hotel_brand_code} - ${form.hotel_brand_name
