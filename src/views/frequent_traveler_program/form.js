@@ -260,7 +260,7 @@ function FrequentTravelerProgramForm(props) {
           disabled={isView || loading}
           type="textarea"
           minLength="1"
-          maxLength="512"
+          maxLength="4000"
         />
         }
       </FormHorizontal>
