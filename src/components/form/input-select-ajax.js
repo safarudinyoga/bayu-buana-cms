@@ -63,12 +63,22 @@ export default class FormInputSelectAjax extends Component {
 
               var filtered = json.items;
               if(isGrouping){
-                const ids = json.items.map((item, index)=>{
+                var ids = json.items.map((item, index)=>{
                   return item[this.props.fieldGroup]
                 })
                 filtered = json.items.filter((item, index) => {
                   return !ids.includes(item[this.props.fieldGroup], index + 1)
                 })
+                if(this.props.fieldGroup.includes(".")){
+                  const results = this.props.fieldGroup.split(".");
+                  ids = json.items.map((item, index)=>{
+                    return item[results[0]][results[1]]
+                  })
+                  filtered = json.items.filter((item, index) => {
+                    return !ids.includes(item[results[0]][results[1]], index + 1)
+                  })
+                }
+
                 if(isArray){
                   const datas = json.items.map((item, index)=>{
                     return item[this.props.fieldArray]
@@ -97,6 +107,10 @@ export default class FormInputSelectAjax extends Component {
                   const results = this.props.column.split(".");
                   if(isGrouping){
                     item.id   = item[this.props.fieldGroup]
+                    if(this.props.fieldGroup.includes(".")){
+                      const results = this.props.fieldGroup.split(".");
+                      item.id   = item[results[0]][results[1]]
+                    }
                   }
                   if(item[results[0]]){
                     item.text = item[results[0]][results[1]]

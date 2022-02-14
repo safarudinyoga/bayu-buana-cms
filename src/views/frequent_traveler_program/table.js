@@ -35,7 +35,7 @@ export default function FrequentTravelerProgramTable() {
       }
     }
     if (ids.length > 0) {
-      setParams({ ...params, filters: [["product_type_id", "in", ids]] })
+      setParams({ ...params, filters: [["product_type.id", "in", ids]] })
     } else {
       setParams({ ...params, filters: [] })
     }
@@ -50,12 +50,12 @@ export default function FrequentTravelerProgramTable() {
         onChange={onFilterChange}
         endpoint="/master/loyalty-programs"
         column="product_type.product_type_name"
-        sort="product_type_id"
+        sort="id"
         isGrouping={true}
-        fieldGroup="product_type_id"
+        fieldGroup="product_type.id"
         value={selectedProductTypeIds}
         data={selectedProductTypes}
-        filter={`[["product_type_id", "is not", null],["AND"],["status", "=", 1]]`}
+        filter={`["status", "=", 1]`}
         placeholder="Please choose"
         type="selectmultiple"
         isFilter={true}
@@ -100,7 +100,7 @@ export default function FrequentTravelerProgramTable() {
       },      
       {
         title: "Translated Frequent Traveler Program",
-        data: "loyalty_program.loyalty_program_name",
+        data: "loyalty_program_translation.loyalty_program_name",
         visible: false,
       },   
     ],
@@ -111,6 +111,13 @@ export default function FrequentTravelerProgramTable() {
     infoDelete: [
       {title: "Loyalty Name", recordName: "loyalty_program_name"}, 
     ],
+    customFilterStatus: {
+      value: "",
+      options: [
+        {value: "1", label: "Active"},
+        {value: "3", label: "Inactive"},
+      ]
+    }
   })
 
   return <BBDataTable {...params} extraFilter={extraFilter} onReset={onReset} />
