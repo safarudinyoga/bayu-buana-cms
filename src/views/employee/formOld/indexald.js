@@ -28,11 +28,7 @@ const EmployeeForm = (props) => {
   const [loading, setLoading] = useState(true)
   const [id, setId] = useState(null)
   const [form, setForm] = useState({
-    id: "",
-    aircraft_name: "",
-    model: "",
-    icao_code: "",
-    aircraft_code: "",
+    
   })
 
   useEffect(async () => {

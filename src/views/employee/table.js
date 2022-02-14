@@ -63,7 +63,7 @@ export default function EmployeeTable() {
       },
       {
         title: "Email",
-        data: "user_account.email",
+        data: "email",
       },
       {
         title: "Job Title",
