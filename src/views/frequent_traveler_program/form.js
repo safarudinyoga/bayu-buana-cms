@@ -197,7 +197,7 @@ function FrequentTravelerProgramForm(props) {
       )
     } finally {
       setLoading(false)
-      props.history.push(backUrl)
+      props.history.goBack()
       dispatch(
         setAlert({
           message: `Record ${form.loyalty_program_name} has been successfully ${formId ? "updated" : "saved"}.`,

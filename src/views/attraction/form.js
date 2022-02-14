@@ -493,7 +493,7 @@ function AttractionForm(props) {
       )
     } finally {
       setLoading(false)
-      props.history.push(backUrl)
+      props.history.goBack()
       dispatch(
         setAlert({
           message: `Record ${form.attraction_name} has been successfully ${formId ? "updated" : "saved"}.`,

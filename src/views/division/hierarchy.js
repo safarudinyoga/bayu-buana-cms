@@ -74,7 +74,7 @@ function DivisionHierarchy(props) {
   }, [])
 
   const onBack = () => {
-    props.history.push(backUrl)
+    props.history.goBack()
   }
   return (
     <FormContainer

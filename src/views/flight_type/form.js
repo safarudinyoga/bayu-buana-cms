@@ -235,7 +235,7 @@ function FlightTypeForm(props) {
       )
     } finally {
       setLoading(false)
-      props.history.push(backUrl)
+      props.history.goBack()
       dispatch(
         setAlert({
           message: `Record ${form.flight_type_code} - ${

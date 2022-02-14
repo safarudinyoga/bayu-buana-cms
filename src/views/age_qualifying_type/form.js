@@ -171,7 +171,7 @@ function AgeQualifyingTypeForm(props) {
       )
     } finally {
       setLoading(false)
-      props.history.push(backUrl)
+      props.history.goBack()
       dispatch(
         setAlert({
           message: `Record ${form.age_qualifying_type_code} - ${

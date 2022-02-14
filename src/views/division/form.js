@@ -256,7 +256,7 @@ function DivisionForm(props) {
       }
 
       setLoading(false)
-      props.history.push(backUrl)
+      props.history.goBack()
       dispatch(
         setAlert({
           message: `Record ${form.division_name} has been successfully saved.`,

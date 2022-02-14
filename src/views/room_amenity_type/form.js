@@ -271,7 +271,7 @@ function RoomAmenityTypeForm(props) {
       )
     } finally {
       setLoading(false)
-      props.history.push(backUrl)
+      props.history.goBack()
       dispatch(
         setAlert({
           message: `Record ${form.room_amenity_type_code} - ${

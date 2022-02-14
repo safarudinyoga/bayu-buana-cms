@@ -247,7 +247,7 @@ function HotelSupplierForm(props) {
       )
     } finally {
       setLoading(false)
-      props.history.push(backUrl)
+      props.history.goBack()
       dispatch(
         setAlert({
           message: `Record ${form.hotel_supplier_code} - ${form.hotel_supplier_name
