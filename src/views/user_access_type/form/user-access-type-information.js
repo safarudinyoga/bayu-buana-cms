@@ -1,20 +1,19 @@
-import {withRouter} from "react-router"
-import React, {useEffect, useState} from "react"
+import { withRouter } from "react-router"
+import React, { useEffect, useState } from "react"
 import Api from "config/api"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
 import FormBuilder from "components/form/builder"
-import FormInputSelectAjax from "components/form/input-select-ajax"
 import useQuery from "lib/query"
-import {useDispatch} from "react-redux"
-import {setAlert, setUIParams} from "redux/ui-store"
+import { useDispatch } from "react-redux"
+import { setAlert } from "redux/ui-store"
 import $ from "jquery"
-import env from "../../config/environment"
+import env from "../../../config/environment"
 
-const endpoint = "/master/loyalty-programs"
-const backUrl = "/master/frequent-traveler-program"
+const endpoint = "/master/user-types"
+const backUrl = "/master/user-access-type"
 
-function FrequentTravelerProgramForm(props) {
+function UserAccessTypeInformation(props) {
   let dispatch = useDispatch()
   let formId = props.match.params.id
 
@@ -22,86 +21,55 @@ function FrequentTravelerProgramForm(props) {
   const [formBuilder, setFormBuilder] = useState(null)
   const [loading, setLoading] = useState(true)
   const [translations, setTranslations] = useState([])
-  const [productTypeData, setProductTypeData] = useState([])
   const [id, setId] = useState(null)
   const [form, setForm] = useState({
-    loyalty_program_name: "",
-    product_type_id: "",
-    description: ""
+    user_type_code: "",
+    user_type_name: "",
   })
   const translationFields = [
     {
-      label: "Loyalty Name",
-      name: "loyalty_program_name",
+      label: "Name",
+      name: "user_type_name",
       type: "text",
-    },
-    {
-      label: "Description",
-      name: "description",
-      type: "textarea",
-      maxLength: 4000
+      maxLength: 64,
     },
   ]
 
   const validationRules = {
-    loyalty_program_name: {
+    user_type_name: {
       required: true,
       minlength: 1,
-      maxlength: 256,
+      maxlength: 64,
       checkName: true,
     },
-    product_type_id: {
+    user_type_code: {
       required: true,
-    }
+      minlength: 2,
+      maxlength: 4,
+      checkCode: true,
+    },
   }
 
   const validationMessages = {
-    loyalty_program_name: {
-      required: "Loyalty Name is required",
+    user_type_name: {
+      required: "Name is required",
     },
-    product_type_id: {
-      required: "Type is required",
+    user_type_code: {
+      required: "Code is required",
     },
   }
 
   useEffect(async () => {
     let api = new Api()
     let formId = props.match.params.id
-
-    let docTitle = "Edit Frequent Traveler Program"
-    if (!formId) {
-      docTitle = "Create Frequent Traveler Program"
-    } else if (isView) {
-      docTitle = "Frequent Traveler Program Details"
-    }
-
-    dispatch(
-      setUIParams({
-        title: isView ? "Frequent Traveler Program Details" : docTitle,
-        breadcrumbs: [
-          {
-            text: "Setup and Configurations",
-          },
-          {
-            link: backUrl,
-            text: "Frequent Traveler Program",
-          },
-          {
-            text: docTitle,
-          },
-        ],
-      }),
-    )
     if (formId) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
-        
-        if (res.data.product_type) {
-          setProductTypeData([{...res.data.product_type, text: res.data.product_type.product_type_name}])
-        }
+
         if (res.data) {
-          let currentName = res.data.loyalty_program_name
+          let currentCode = res.data.user_type_code
+          let currentName = res.data.user_type_name
 
           $.validator.addMethod(
             "checkName",
@@ -110,10 +78,10 @@ function FrequentTravelerProgramForm(props) {
               $.ajax({
                 type: "GET",
                 async: false,
-                url: `${env.API_URL}/master/loyalty-programs?filters=["loyalty_program_name","=","${element.value}"]`,
+                url: `${env.API_URL}/master/user-types?filters=["user_type_name","=","${element.value}"]`,
                 success: function (res) {
                   if (res.items.length !== 0) {
-                    if(currentName === element.value){
+                    if (currentName === element.value) {
                       req = true
                     } else {
                       req = false
@@ -123,20 +91,44 @@ function FrequentTravelerProgramForm(props) {
                   }
                 },
               })
-    
+
               return req
             },
-            "Loyalty Name already exists",
+            "Name already exists",
+          )
+          $.validator.addMethod(
+            "checkCode",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/user-types?filters=["user_type_code","like","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if (currentCode === element.value) {
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+              return req
+            },
+            "Code already exists",
           )
         }
-      } catch (e) { }
+      } catch (e) {}
 
       try {
         let res = await api.get(endpoint + "/" + formId + "/translations", {
           size: 50,
         })
         setTranslations(res.data.items)
-      } catch (e) { }
+      } catch (e) {}
       setLoading(false)
     } else {
       $.validator.addMethod(
@@ -146,7 +138,7 @@ function FrequentTravelerProgramForm(props) {
           $.ajax({
             type: "GET",
             async: false,
-            url: `${env.API_URL}/master/loyalty-programs?filters=["loyalty_program_name","=","${element.value}"]`,
+            url: `${env.API_URL}/master/user-types?filters=["user_type_name","=","${element.value}"]`,
             success: function (res) {
               if (res.items.length !== 0) {
                 req = false
@@ -158,7 +150,28 @@ function FrequentTravelerProgramForm(props) {
 
           return req
         },
-        "Loyalty Name already exists",
+        "Name already exists",
+      )
+      $.validator.addMethod(
+        "checkCode",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/user-types?filters=["user_type_code","like","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
+
+          return req
+        },
+        "Code already exists",
       )
     }
   }, [])
@@ -175,12 +188,8 @@ function FrequentTravelerProgramForm(props) {
     setLoading(true)
     let api = new Api()
     try {
-      if (!form.product_type_id) {
-        form.product_type_id = null
-      }
-
-      if (!form.description) {
-        form.description = null
+      if (!form.model) {
+        form.model = null
       }
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
@@ -197,12 +206,7 @@ function FrequentTravelerProgramForm(props) {
       )
     } finally {
       setLoading(false)
-      props.history.goBack()
-      dispatch(
-        setAlert({
-          message: `Record ${form.loyalty_program_name} has been successfully ${formId ? "updated" : "saved"}.`,
-        }),
-      )
+      props.handleSelectTab("module-access")
     }
   }
 
@@ -218,54 +222,42 @@ function FrequentTravelerProgramForm(props) {
       isValid={false}
       rules={validationRules}
       validationMessages={validationMessages}
+      showHeaderTitle={true}
+      headerTitle={"User Access Type Information"}
+      txtSave={"SAVE & NEXT"}
     >
       <FormHorizontal>
         <FormInputControl
-          label="Loyalty Name"
+          label="Name"
           required={true}
-          value={form.loyalty_program_name}
-          name="loyalty_program_name"
-          cl="4"          
-          onChange={(e) => setForm({...form, loyalty_program_name: e.target.value})}
+          value={form.user_type_name}
+          name="user_type_name"
+          onChange={(e) => setForm({ ...form, user_type_name: e.target.value })}
           disabled={isView || loading}
           type="text"
           minLength="1"
-          maxLength="256"
+          maxLength="64"
         />
-        {
-        !loading &&
-          <FormInputSelectAjax
-            label="Type"
-            required={true}
-            value={form.product_type_id}
-            name="product_type_id"
-            data={productTypeData}
-            endpoint="/master/product-types"
-            column="product_type_name"
-            onChange={(e) => {
-              setForm({...form, product_type_id: e.target.value || null})
-            }}
-            filter={`["status", "=", 1]`}
-            disabled={isView || loading}
-            type="select"
-          />
-        }
-        {
-          !loading &&
-          <FormInputControl
-          label="Description"
-          value={form.description}
-          name="description"
-          onChange={(e) => setForm({...form, description: e.target.value})}
+      </FormHorizontal>
+
+      <FormHorizontal>
+        <FormInputControl
+          value={form.user_type_code}
+          required={true}
+          name="user_type_code"
+          onChange={(e) => setForm({ ...form, user_type_code: e.target.value })}
+          cl={{ md: "12" }}
+          cr="12"
           disabled={isView || loading}
-          type="textarea"
-          minLength="1"
-          maxLength="4000"
+          label="Code"
+          type="text"
+          minLength="2"
+          maxLength="4"
+          hint="Code maximum 4 characters"
         />
-        }
       </FormHorizontal>
     </FormBuilder>
   )
 }
 
-export default withRouter(FrequentTravelerProgramForm)
+export default withRouter(UserAccessTypeInformation)

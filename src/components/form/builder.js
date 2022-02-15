@@ -41,6 +41,7 @@ class FormBuilder extends Component {
         txtback={this.props.txtBack}
         id={this.props.id}
       >
+        {this.props.showHeaderTitle && <h3 className="card-heading">{this.props.headerTitle}</h3> }
         <FormWrapper>{this.props.children}</FormWrapper>
         {this.props.showMedia && 
           <MediaForm 

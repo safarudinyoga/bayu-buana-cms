@@ -900,7 +900,7 @@ class BBDataTable extends Component {
               : this.props.title}
           </ModalHeader>
           <ModalBody>Are you sure you want to delete {
-            this.props.showInfoDelete ? `'${this.state.info}'` : "this"
+            this.props.showInfoDelete ? this.state.selected.length > 0 ? "this" : `'${this.state.info}'` : "this"
           }?</ModalBody>
           <ModalFooter>
             <Button
