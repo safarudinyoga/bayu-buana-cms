@@ -51,16 +51,24 @@ class FormBuilder extends Component {
             moduleName={this.props.moduleName}
           />
           }
-        <TranslationForm
-          ref={this.translationForm}
-          translations={this.props.translations}
-          isView={this.props.isView}
-          fields={this.props.translationFields}
-        />
-        <FormAlert
-          isValid={this.props.isValid}
-          message={this.props.alertMessage}
-        />
+        {
+          this.props.hideTranslation ? "" : (
+            <>
+              <TranslationForm
+                ref={this.translationForm}
+                translations={this.props.translations}
+                isView={this.props.isView}
+                fields={this.props.translationFields}
+              />
+              <FormAlert
+                isValid={this.props.isValid}
+                message={this.props.alertMessage}
+              />
+            </>
+          )
+        }
+        
+        
       </FormContainer>
     )
   }
