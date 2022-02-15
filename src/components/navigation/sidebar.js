@@ -288,7 +288,7 @@ export default class Sidebar extends Component {
               </li> */}
               <li className="nav-item">
                 <Link to="#" className="nav-link">
-                  <img src="/img/icons/users.svg" alt="icon users" />
+                  <img src="/img/icons/ic_settings.svg" alt="icon users" />
                   <p>
                     Setup and Configurations
                     <i className="right fas fa-angle-right"></i>
