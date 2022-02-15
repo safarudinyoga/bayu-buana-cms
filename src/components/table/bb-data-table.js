@@ -24,6 +24,7 @@ import editIcon from "assets/icons/edit.svg"
 import removeIcon from "assets/icons/remove.svg"
 import showIcon from "assets/icons/show.svg"
 import Cookies from "js-cookie"
+import CancelButton from 'components/button/cancel';
 
 window.JSZip = JSZip
 
@@ -958,6 +959,7 @@ class BBDataTable extends Component {
             </Button>
           </ModalFooter>
         </Modal>
+        {ModalCreate()}
         <TableHeader
           {...this.props}
           selected={this.state.selected.length > 0 && !this.props.switchStatus}
@@ -983,6 +985,29 @@ class BBDataTable extends Component {
       </div>
     )
   }
+}
+
+const ModalCreate = () => {
+  return (
+    <Modal 
+      show={true} 
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+    >
+      <Modal.Header closeButton>
+        <Modal.Title id="contained-modal-title-vcenter">
+          ADD EXCHANGE RATE
+        </Modal.Title>
+      </Modal.Header>
+      <ModalBody>
+        
+      </ModalBody>
+      <ModalFooter>
+        <Button>SAVE</Button>
+        <CancelButton/>
+      </ModalFooter>
+    </Modal>
+  )
 }
 
 const mapStateToProps = ({ ui }) => {
