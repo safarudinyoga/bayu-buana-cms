@@ -47,9 +47,11 @@ function HotelAmenityForm(props) {
   const validationRules = {
     hotel_amenity_type_code: {
       required: true,
-      min: 0,
-      max: 99,
+      min: 1,
+      max: 32767,
       checkCode: true,
+      noSpace: true,
+      number:true
     },
     hotel_amenity_category_hotel_amenity_type: {
       required: false,
@@ -71,6 +73,7 @@ function HotelAmenityForm(props) {
     },
     hotel_amenity_type_code: {
       required: "Hotel Amenity Type Code is required",
+      max: "Hotel Amenity Type Code cannot be more than 32767",
     },
     hotel_amenity_type_asset: {
       required: "Hotel Amenity Type Image is required",
@@ -257,9 +260,7 @@ function HotelAmenityForm(props) {
     try {
       if (!form.hotel_amenity_type_code) {
         form.hotel_amenity_type_code = null
-      } else {
-        form.hotel_amenity_type_code = parseInt(form.hotel_amenity_type_code)
-      }
+      } 
       if (!form.hotel_amenity_type_name) {
         form.hotel_amenity_type_name = null
       }
@@ -273,7 +274,11 @@ function HotelAmenityForm(props) {
           form.hotel_amenity_type_asset = null
         }
       }
-      let res = await api.putOrPost(endpoint, id, form)
+
+      let res = await api.putOrPost(endpoint, id, {
+        ...form,
+        hotel_amenity_type_code: parseInt(form.hotel_amenity_type_code),
+      })
       setId(res.data.id)
       for (let i in translated) {
         let tl = translated[i]
@@ -424,18 +429,11 @@ function HotelAmenityForm(props) {
           cl={{ md: "12" }}
           cr="12"
           onChange={(e) =>
-            setForm({
-              ...form,
-              hotel_amenity_type_code: parseInt(e.target.value),
-            })
+            setForm({...form,hotel_amenity_type_code: e.target.value,})
           }
           // onChange={(e) => setForm({...form, hotel_amenity_type_code: e.target.value})}
           disabled={isView || loading}
           type="number"
-          pattern="\d*"
-          minLength="0"
-          maxLength="99"
-          hint="Hotel Amenity type code maximum 2 characters"
         />
       </FormHorizontal>
     </FormBuilder>

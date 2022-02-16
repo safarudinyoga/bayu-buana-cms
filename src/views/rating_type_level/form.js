@@ -41,9 +41,11 @@ function RatingTypeLevelForm(props) {
   const validationRules = {
     rating_type_level_code: {
       required: true,
-      min: 0,
-      max: 99,
+      min: 1,
+      max: 32767,
       checkCode: true,
+      noSpace: true,
+      number:true
     },
 
     rating_type_level_name: {
@@ -66,6 +68,7 @@ function RatingTypeLevelForm(props) {
     },
     rating_type_level_code: {
       required: "Rating Type Level Code is required",
+      max: "Rating Type Level Code cannot be more than 32767",
     },
     rating: {
       required: "Rating is required",
@@ -314,9 +317,6 @@ function RatingTypeLevelForm(props) {
           }
           disabled={isView || loading}
           type="number"
-          min="1"
-          max="99"
-          hint="Rating type level code maximum 2 digits"
         />
       </FormHorizontal>
     </FormBuilder>
