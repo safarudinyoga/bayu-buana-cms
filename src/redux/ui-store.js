@@ -37,7 +37,7 @@ export const uiStore = createSlice({
   },
 })
 
-export const { setTitle, setBreadcrumbs, setAlert, setCreateModal, setUIParams } =
+export const { setTitle, setBreadcrumbs, setAlert, setCreateModal, setReloadTable, setUIParams } =
   uiStore.actions
 
 export default uiStore.reducer
