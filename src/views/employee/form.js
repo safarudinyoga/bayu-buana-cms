@@ -11,7 +11,7 @@ import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
 import ImageUploading from "react-images-uploading"
 import TextError from "components/formik/textError"
-import { Form, Formik, ErrorMessage } from "formik"
+import { Form, Field, Formik, ErrorMessage } from "formik"
 import * as Yup from "yup"
 
 const endpoint = "/master/employees"
@@ -24,18 +24,22 @@ const EmployeeForm = (props) => {
   const isView = useQuery().get("action") === "view"
   const [tabKey, setTabKey] = useState("general-information")
   const [photoProfile, setPhotoProfile] = useState([])
+  //console.log("imagessss", photoProfile)
   const maxNumber = 1
+  const [sameAddress, setSameAddress] = useState(false)
 
   const [loading, setLoading] = useState(true)
   const [id, setId] = useState(null)
   const [formValues, setFormValues] = useState(null)
   const [optionGender, setOptionGender] = useState([])
   const [additionalRole, setAdditionalRole] = useState(false)
-  //console.log("data respon", formValues)
+  console.log("data respon", formValues)
 
   useEffect(async () => {
     let api = new Api()
     let formId = props.match.params.id
+
+    console.log("idParams", formId)
     let docTitle = "Edit Employee"
     let breadcrumbTitle = "Edit Employee"
     if (!formId) {
@@ -66,16 +70,39 @@ const EmployeeForm = (props) => {
       try {
         let res = await api.get(endpoint + "/" + formId)
         let data = res.data
+        //setFormValues({...res.data,})
+
         setFormValues({
           ...data,
-          name_prefix: data.name_prefix.name_prefix_name,
-          hire_date: data.hire_date.split(/-|T/, 3),
-          job_title_id: data.job_title.job_title_name,
-          division_id: data.division.division_name,
-          office_id: data.office.office_name,
-          //birth_date: data.birth_date.split(/-|T/, 3),
+          name_prefix_id: data.name_prefix.name_prefix_name,
+          country_id: data.address.country.country_name,
+          state_province_id: data.address.state_province.state_province_name,
+          city_id: data.address.city.city_name,
+          permanent_country_id: data.permanent_address.country.country_name,
+          permanent_state_province_id:
+            data.permanent_address.state_province.state_province_name,
+          permanent_city_id: data.permanent_address.city.city_name,
+          birth_date: data.birth_date.split("-", 3),
+          // job_title_id: data.job_title.job_title_name,
+          // division_id: data.division.division_name,
+          // office_id: data.office.office_name,
+          // birth_date: data.birth_date.split("-", 3),
         })
+        //handleSameAddress
+        if (
+          data.address.address_line === data.permanent_address.address_line &&
+          data.address.country_id === data.permanent_address.country_id &&
+          data.address.state_province_id ===
+            data.permanent_address.state_province_id &&
+          data.address.city_id === data.permanent_address.city_id &&
+          data.address.postal_code === data.address.postal_code
+        ) {
+          setSameAddress(true)
+        } else {
+          setSameAddress(false)
+        }
       } catch (e) {}
+
       setLoading(false)
     }
   }, [])
@@ -104,7 +131,7 @@ const EmployeeForm = (props) => {
   // Upload profile
   const onChangePhotoProfile = (imageList, addUpdateIndex) => {
     // data for submit
-    console.log(imageList, addUpdateIndex)
+    console.log("image ", imageList)
     setPhotoProfile(imageList)
   }
   // Birthday
@@ -118,7 +145,6 @@ const EmployeeForm = (props) => {
     }
     return options
   }
-
   const selectMonth = () => {
     const options = []
     const month = Array.from({ length: 12 }, (e, i) => {
@@ -146,6 +172,17 @@ const EmployeeForm = (props) => {
     }
     return options
   }
+  function formatDate(date) {
+    var d = new Date(date),
+      month = "" + (d.getMonth() + 1),
+      day = "" + d.getDate(),
+      year = d.getFullYear()
+
+    if (month.length < 2) month = "0" + month
+    if (day.length < 2) day = "0" + day
+
+    return [year, month, day].join("-")
+  }
 
   const initialValues = {
     //GeneralInformation
@@ -156,10 +193,19 @@ const EmployeeForm = (props) => {
     birth_date: [],
     gender_id: "",
     ktp: "",
+    // employee_asset: {
+    //   multimedia_description: {
+    //     url: "photoProfile.data_url",
+    //   },
+    // },
+
     //Contacts
-    email: "",
-    phone_number_home: "",
-    phone_number_mobile: "",
+    contact: {
+      phone_number: "",
+      mobile_phone_number: "",
+      email: "",
+      other_email: "",
+    },
     //Address
     address: {
       address_line: "",
@@ -168,7 +214,6 @@ const EmployeeForm = (props) => {
       city_id: "",
       postal_code: "",
     },
-    sameAddress: false,
     permanent_address: {
       address_line: "",
       country_id: "",
@@ -180,19 +225,19 @@ const EmployeeForm = (props) => {
     emergency_contact: {
       contact_name: "",
       contact_phone_number: "",
-      relation_ship: "",
+      relationship: "",
     },
     emergency_contact2: {
       contact_name: "",
       contact_phone_number: "",
-      relation_ship: "",
+      relationship: "",
     },
     //Employment
     employee_number: "",
     job_title_id: "",
-    division_id: "",
-    office_id: "",
-    hire_date: [],
+    // division_id: "",
+    // office_id: "",
+    // hire_date: [],
     npwp: "",
   }
   //
@@ -202,33 +247,36 @@ const EmployeeForm = (props) => {
     surname: Yup.string().required("Employee Last Name is required."),
     birth_date: Yup.array().min(3, "Date of Birth is required."),
     gender_id: Yup.string().required("Gender is required."),
-    email: Yup.string()
-      .email("Email is not valid.")
-      .required("Email is required.")
-      .test(
-        "Unique Email Contacts",
-        "Email already exists", // <- key, message
-        (value) => {
-          return new Promise((resolve, reject) => {
-            axios
-              .get(
-                `${env.API_URL}/master/employees?filters=["email","=","${value}"]`,
-              )
-              .then((res) => {
-                resolve(res.data.items.length == 0)
-              })
-              .catch((error) => {
-                resolve(false)
-              })
-          })
-        },
-      ),
-    other_email: Yup.string().email("Email is not valid."),
-    phone_number_home: Yup.string().required("Home Phone is required."),
-    phone_number_mobile: Yup.string().required("Mobile Phone is required."),
+    contact: Yup.object().shape({
+      email: Yup.string()
+        .email("Email is not valid.")
+        .required("Email is required.")
+        .test(
+          "Unique Email Contacts",
+          "Email already exists", // <- key, message
+          (value) => {
+            return new Promise((resolve, reject) => {
+              axios
+                .get(
+                  `${env.API_URL}/master/employees?filters=["email","=","${value}"]`,
+                )
+                .then((res) => {
+                  resolve(res.data.items.length == 0)
+                })
+                .catch((error) => {
+                  resolve(false)
+                })
+            })
+          },
+        ),
+      other_email: Yup.string().email("Email is not valid."),
+      phone_number: Yup.string().required("Home Phone is required."),
+      mobile_phone_number: Yup.string().required("Mobile Phone is required."),
+    }),
     employee_number: Yup.string().required("Employee Number is required."),
-    sameAddress: Yup.boolean(),
-    // address: Yup.object({country_id: Yup.string().required("Country is required.")}),
+    //sameAddress: Yup.boolean(),
+    //address: Yup.object({country_id: Yup.string().required("Country is required.")}),
+    //permanent_address: Yup.object({country_id: Yup.string().required("Country is required.")}),
     job_title_id: Yup.object().required("Job Title is required."),
   })
 
@@ -239,7 +287,26 @@ const EmployeeForm = (props) => {
         setSubmitting(true)
         try {
           let res = await api.post("master/employees", {
-            ...values,
+            name_prefix_id: values.name_prefix_id.value,
+            given_name: values.given_name,
+            middle_name: values.middle_name,
+            surname: values.surname,
+            birth_date: formatDate([
+              values.birth_date[2].value,
+              values.birth_date[1].value,
+              values.birth_date[0].value,
+            ]),
+            gender_id: values.gender_id,
+            ktp: values.ktp,
+            employee_asset: {
+              multimedia_description_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            },
+            contact: {
+              email: values.contact.email,
+              mobile_phone_number: values.contact.mobile_phone_number,
+              other_email: values.contact.other_email,
+              phone_number: values.contact.phone_number,
+            },
             address: {
               address_line: values.address.address_line,
               country_id: values.address.country_id.value,
@@ -247,29 +314,6 @@ const EmployeeForm = (props) => {
               city_id: values.address.city_id.value,
               postal_code: values.address.postal_code,
             },
-            birth_date: new Date(
-              ...[
-                values.birth_date[2].value,
-                values.birth_date[1].value,
-                values.birth_date[0].value,
-              ],
-            ),
-            division_id: values.division_id.value,
-            employee_asset: {
-              multimedia_description: {
-                url: "https://bbdev.monstercode.net/files/b3986414-5c5f-45a3-be6f-4fedcce2d022.png",
-              },
-            },
-            hire_date: new Date(
-              ...[
-                values.hire_date[2].value,
-                values.hire_date[1].value,
-                values.hire_date[0].value,
-              ],
-            ),
-            job_title_id: values.job_title_id.value,
-            name_prefix_id: values.name_prefix_id.value,
-            office_id: values.office_id.value,
             permanent_address: {
               address_line: values.permanent_address.address_line,
               country_id: values.permanent_address.country_id.value,
@@ -278,15 +322,39 @@ const EmployeeForm = (props) => {
               city_id: values.permanent_address.city_id.value,
               postal_code: values.permanent_address.postal_code,
             },
+            emergency_contact: {
+              contact_name: values.emergency_contact.contact_name,
+              contact_phone_number:
+                values.emergency_contact.contact_phone_number,
+              relationship: values.emergency_contact.relationship,
+            },
+            emergency_contact2: {
+              contact_name: values.emergency_contact2.contact_name,
+              contact_phone_number:
+                values.emergency_contact2.contact_phone_number,
+              relationship: values.emergency_contact2.relationship,
+            },
+            employee_number: values.employee_number,
+            //job_title_id: values.job_title_id.value,
+            //division_id: values.division_id.value,
+            //office_id: values.office_id.value,
+            //birth_date: [values.birth_date[2].value,values.birth_date[1].value,values.birth_date[0].value,].join("-"),
+            // hire_date: formatDate([
+            //   values.hire_date[2].value,
+            //   values.hire_date[1].value,
+            //   values.hire_date[0].value,
+            // ]),
+            npwp: values.npwp,
           })
           console.log("data", res)
           setSubmitting(false)
         } catch (e) {}
       }}
       validationSchema={validationSchema}
+      validateOnMount
       enableReinitialize
     >
-      {(formik, isSubmitting) => {
+      {(formik) => {
         console.log("formik", formik)
         return (
           <Form>
@@ -332,7 +400,9 @@ const EmployeeForm = (props) => {
                               required="label-required"
                               label="Title"
                               name="name_prefix_id"
-                              placeholder={formik.values.name_prefix || "Mr."}
+                              placeholder={
+                                formik.values.name_prefix_id || "Mr."
+                              }
                               url={`master/name-prefixes`}
                               fieldName={"name_prefix_name"}
                               onChange={(v) => {
@@ -373,7 +443,9 @@ const EmployeeForm = (props) => {
                                     <FormikControl
                                       control="selectOnly"
                                       name="birth_date[0]"
-                                      placeholder="Date"
+                                      placeholder={
+                                        formik.values.birth_date[2] || "Date"
+                                      }
                                       options={selectDay()}
                                       onChange={(v) => {
                                         formik.setFieldValue("birth_date[0]", v)
@@ -385,7 +457,9 @@ const EmployeeForm = (props) => {
                                     <FormikControl
                                       control="selectOnly"
                                       name="birth_date[1]"
-                                      placeholder="Month"
+                                      placeholder={
+                                        formik.values.birth_date[1] || "Month"
+                                      }
                                       options={selectMonth()}
                                       onChange={(v) => {
                                         formik.setFieldValue("birth_date[1]", v)
@@ -397,7 +471,9 @@ const EmployeeForm = (props) => {
                                     <FormikControl
                                       control="selectOnly"
                                       name="birth_date[2]"
-                                      placeholder="Year"
+                                      placeholder={
+                                        formik.values.birth_date[0] || "Year"
+                                      }
                                       options={selectYear()}
                                       onChange={(v) => {
                                         formik.setFieldValue("birth_date[2]", v)
@@ -441,7 +517,11 @@ const EmployeeForm = (props) => {
                                 <div>
                                   {photoProfile.length == 0 && (
                                     <Image
-                                      src="/img/media/profile.svg"
+                                      src={
+                                        formik.values.employee_asset
+                                          ?.multimedia_description?.url ||
+                                        "/img/media/profile.svg"
+                                      }
                                       className="img-profile"
                                       roundedCircle
                                     />
@@ -505,33 +585,177 @@ const EmployeeForm = (props) => {
                           </div>
                           <h3 className="card-heading">Contacts</h3>
                           <div style={{ padding: "0 15px 15px" }}>
-                            <FormikControl
+                            <Row className="form-group required">
+                              <Col md={3} lg={3}>
+                                <label
+                                  className="text-label-input"
+                                  
+                                >
+                                  Home Phone
+                                  <span className="label-required" />
+                                </label>
+                              </Col>
+                              <Col md={9} lg={9}>
+                                <Field id="contact.phone_number" name="contact.phone_number">
+                                  {({ field, form, meta }) => (
+                                    <div>
+                                      <input
+                                        {...field}                                        
+                                        type="text"                                        
+                                        style={{ maxWidth: 200 }}
+                                        className={
+                                          form.touched.contact?.phone_number &&
+                                          form.errors.contact?.phone_number
+                                            ? "form-control is-invalid"
+                                            : "form-control"
+                                        }
+                                      />
+                                      {form.touched.contact?.phone_number &&
+                                      form.errors.contact?.phone_number ? (
+                                        <div className="invalid-feedback">
+                                          {form.errors.contact.phone_number}
+                                        </div>
+                                      ) : null}
+                                    </div>
+                                  )}
+                                </Field>
+                              </Col>
+                            </Row>
+                            <Row className="form-group required">
+                              <Col md={3} lg={3}>
+                                <label
+                                  className="text-label-input"
+                                  
+                                >
+                                 Mobile Phone
+                                  <span className="label-required" />
+                                </label>
+                              </Col>
+                              <Col md={9} lg={9}>
+                                <Field id="contact.mobile_phone_number" name="contact.mobile_phone_number">
+                                  {({ field, form, meta }) => (
+                                    <div>
+                                      <input
+                                        {...field}                                        
+                                        type="text"                                        
+                                        style={{ maxWidth: 200 }}
+                                        className={
+                                          form.touched.contact?.mobile_phone_number &&
+                                          form.errors.contact?.mobile_phone_number
+                                            ? "form-control is-invalid"
+                                            : "form-control"
+                                        }
+                                      />
+                                      {form.touched.contact?.mobile_phone_number &&
+                                      form.errors.contact?.mobile_phone_number ? (
+                                        <div className="invalid-feedback">
+                                          {form.errors.contact.mobile_phone_number}
+                                        </div>
+                                      ) : null}
+                                    </div>
+                                  )}
+                                </Field>
+                              </Col>
+                            </Row>
+                            <Row className="form-group required">
+                              <Col md={3} lg={3}>
+                                <label
+                                  className="text-label-input"
+                                  
+                                >
+                                 Email
+                                  <span className="label-required" />
+                                </label>
+                              </Col>
+                              <Col md={9} lg={9}>
+                                <Field id="contact.email" name="contact.email">
+                                  {({ field, form, meta }) => (
+                                    <div>
+                                      <input
+                                        {...field}                                        
+                                        type="text"                                        
+                                        style={{ maxWidth: 200 }}
+                                        className={
+                                          form.touched.contact?.email &&
+                                          form.errors.contact?.email
+                                            ? "form-control is-invalid"
+                                            : "form-control"
+                                        }
+                                      />
+                                      {form.touched.contact?.email &&
+                                      form.errors.contact?.email ? (
+                                        <div className="invalid-feedback">
+                                          {form.errors.contact.email}
+                                        </div>
+                                      ) : null}
+                                    </div>
+                                  )}
+                                </Field>
+                              </Col>
+                            </Row>
+                            <Row className="form-group required">
+                              <Col md={3} lg={3}>
+                                <label
+                                  className="text-label-input"
+                                  
+                                >
+                                 Other Email
+                                  <span className="label-required" />
+                                </label>
+                              </Col>
+                              <Col md={9} lg={9}>
+                                <Field id="contact.other_email" name="contact.other_email">
+                                  {({ field, form, meta }) => (
+                                    <div>
+                                      <input
+                                        {...field}                                        
+                                        type="text"                                        
+                                        style={{ maxWidth: 200 }}
+                                        className={
+                                          form.touched.contact?.other_email &&
+                                          form.errors.contact?.other_email
+                                            ? "form-control is-invalid"
+                                            : "form-control"
+                                        }
+                                      />
+                                      {form.touched.contact?.other_email &&
+                                      form.errors.contact?.other_email ? (
+                                        <div className="invalid-feedback">
+                                          {form.errors.contact.other_email}
+                                        </div>
+                                      ) : null}
+                                    </div>
+                                  )}
+                                </Field>
+                              </Col>
+                            </Row>
+                            {/* <FormikControl
                               control="input"
                               required="label-required"
                               label="Home Phone"
-                              name="phone_number_home"
+                              name="contact.phone_number"
                               style={{ maxWidth: 200 }}
-                            />
-                            <FormikControl
+                            /> */}
+                            {/* <FormikControl
                               control="input"
                               required="label-required"
                               label="Mobile Phone"
-                              name="phone_number_mobile"
+                              name="contact.mobile_phone_number"
                               style={{ maxWidth: 200 }}
-                            />
-                            <FormikControl
+                            /> */}
+                            {/* <FormikControl
                               control="input"
                               required="label-required"
                               label="Email"
-                              name="email"
+                              name="contact.email"
                               style={{ maxWidth: 250 }}
                             />
                             <FormikControl
                               control="input"
                               label="Other Email"
-                              name="other_email"
+                              name="contact.other_email"
                               style={{ maxWidth: 250 }}
-                            />
+                            /> */}
                           </div>
                           <h3 className="card-heading">Current Address</h3>
                           <div style={{ padding: "0 15px 15px" }}>
@@ -551,8 +775,15 @@ const EmployeeForm = (props) => {
                               fieldName={"country_name"}
                               onChange={(v) => {
                                 formik.setFieldValue("address.country_id", v)
+                                formik.setFieldValue(
+                                  "address.state_province_id",
+                                  null,
+                                )
+                                formik.setFieldValue("address.city_id", null)
                               }}
-                              placeholder="Please Choose"
+                              placeholder={
+                                formik.values.country_id || "Please Choose"
+                              }
                               style={{ maxWidth: 300 }}
                             />
                             <FormikControl
@@ -567,8 +798,12 @@ const EmployeeForm = (props) => {
                                   "address.state_province_id",
                                   v,
                                 )
+                                formik.setFieldValue("address.city_id", null)
                               }}
-                              placeholder="Please Choose"
+                              placeholder={
+                                formik.values.state_province_id ||
+                                "Please Choose"
+                              }
                               style={{ maxWidth: 200 }}
                             />
                             <FormikControl
@@ -581,7 +816,9 @@ const EmployeeForm = (props) => {
                               onChange={(v) => {
                                 formik.setFieldValue("address.city_id", v)
                               }}
-                              placeholder="Please Choose"
+                              placeholder={
+                                formik.values.city_id || "Please Choose"
+                              }
                               style={{ maxWidth: 200 }}
                             />
                             <FormikControl
@@ -598,39 +835,36 @@ const EmployeeForm = (props) => {
                               type="checkbox"
                               label="Same As Current Address"
                               name="sameAddress"
-                              checked={formik.values.sameAddress}
+                              checked={sameAddress}
                               onChange={() => {
-                                formik.setFieldValue(
-                                  "sameAddress",
-                                  !formik.values.sameAddress,
-                                )
+                                setSameAddress(!sameAddress)
                                 formik.setFieldValue(
                                   "permanent_address.address_line",
-                                  formik.values.sameAddress
+                                  sameAddress
                                     ? ""
                                     : formik.values.address.address_line,
                                 )
                                 formik.setFieldValue(
                                   "permanent_address.country_id",
-                                  formik.values.sameAddress
+                                  sameAddress
                                     ? ""
                                     : formik.values.address.country_id,
                                 )
                                 formik.setFieldValue(
                                   "permanent_address.state_province_id",
-                                  formik.values.sameAddress
+                                  sameAddress
                                     ? ""
                                     : formik.values.address.state_province_id,
                                 )
                                 formik.setFieldValue(
                                   "permanent_address.city_id",
-                                  formik.values.sameAddress
+                                  sameAddress
                                     ? ""
                                     : formik.values.address.city_id,
                                 )
                                 formik.setFieldValue(
                                   "permanent_address.postal_code",
-                                  formik.values.sameAddress
+                                  sameAddress
                                     ? ""
                                     : formik.values.address.postal_code,
                                 )
@@ -658,8 +892,19 @@ const EmployeeForm = (props) => {
                                   "permanent_address.country_id",
                                   v,
                                 )
+                                formik.setFieldValue(
+                                  "permanent_address.state_province_id",
+                                  null,
+                                )
+                                formik.setFieldValue(
+                                  "permanent_address.city_id",
+                                  null,
+                                )
                               }}
-                              placeholder="Please Choose"
+                              placeholder={
+                                formik.values.permanent_country_id ||
+                                "Please Choose"
+                              }
                               style={{ maxWidth: 300 }}
                               isDisabled={formik.values.sameAddress}
                             />
@@ -675,8 +920,15 @@ const EmployeeForm = (props) => {
                                   "permanent_address.state_province_id",
                                   v,
                                 )
+                                formik.setFieldValue(
+                                  "permanent_address.city_id",
+                                  null,
+                                )
                               }}
-                              placeholder="Please Choose"
+                              placeholder={
+                                formik.values.permanent_state_province_id ||
+                                "Please Choose"
+                              }
                               style={{ maxWidth: 200 }}
                               isDisabled={formik.values.sameAddress}
                             />
@@ -693,7 +945,10 @@ const EmployeeForm = (props) => {
                                   v,
                                 )
                               }}
-                              placeholder="Please Choose"
+                              placeholder={
+                                formik.values.permanent_city_id ||
+                                "Please Choose"
+                              }
                               style={{ maxWidth: 200 }}
                               isDisabled={formik.values.sameAddress}
                             />
@@ -750,7 +1005,7 @@ const EmployeeForm = (props) => {
                             <FormikControl
                               control="input"
                               label="Relationship"
-                              name="emergency_contact.relation_ship"
+                              name="emergency_contact.relationship"
                               style={{ maxWidth: 200 }}
                             />
                           </div>
@@ -771,7 +1026,7 @@ const EmployeeForm = (props) => {
                             <FormikControl
                               control="input"
                               label="Relationship"
-                              name="emergency_contact2.relation_ship"
+                              name="emergency_contact2.relationship"
                               style={{ maxWidth: 200 }}
                             />
                           </div>
@@ -794,7 +1049,7 @@ const EmployeeForm = (props) => {
                         </Button>
                         <Button
                           variant="secondary"
-                          onClick={() => history.goBack()}
+                          onClick={() => setTabKey("general-information")}
                         >
                           CANCEL
                         </Button>
@@ -872,9 +1127,7 @@ const EmployeeForm = (props) => {
                                         formik.setFieldValue("hire_date[0]", v)
                                       }}
                                       options={selectDay()}
-                                      placeholder={
-                                        formik.values.hire_date[2] || "Date"
-                                      }
+                                      placeholder={"Date"}
                                       style={{ maxWidth: 240 }}
                                     />
                                   </div>
@@ -882,9 +1135,7 @@ const EmployeeForm = (props) => {
                                     <FormikControl
                                       control="selectOnly"
                                       name="hire_date[1]"
-                                      placeholder={
-                                        formik.values.hire_date[1] || "Month"
-                                      }
+                                      placeholder={"Month"}
                                       options={selectMonth()}
                                       onChange={(v) => {
                                         formik.setFieldValue("hire_date[1]", v)
@@ -896,9 +1147,7 @@ const EmployeeForm = (props) => {
                                     <FormikControl
                                       control="selectOnly"
                                       name="hire_date[2]"
-                                      placeholder={
-                                        formik.values.hire_date[0] || "Year"
-                                      }
+                                      placeholder={"Year"}
                                       options={selectYear()}
                                       onChange={(v) => {
                                         formik.setFieldValue("hire_date[2]", v)
@@ -921,7 +1170,7 @@ const EmployeeForm = (props) => {
                               <div style={{ padding: "0 15px 15px" }}>
                                 <h6 className="mt-2">Employment</h6>
                                 <div className="p-2">
-                                  <FormikControl
+                                  {/* <FormikControl
                                     control="selectAsync"
                                     required="label-required"
                                     label="Job Title"
@@ -951,7 +1200,7 @@ const EmployeeForm = (props) => {
                                       "Please Choose"
                                     }
                                     style={{ maxWidth: 200 }}
-                                  />
+                                  /> */}
                                 </div>
                               </div>
                             </>
@@ -980,14 +1229,14 @@ const EmployeeForm = (props) => {
                         <Button
                           variant="primary"
                           type="submit"
-                          disabled={formik.isValidating}
+                          //disabled={!(formik.dirty && formik.isValid)}
                           style={{ marginRight: 15 }}
                         >
                           SAVE
                         </Button>
                         <Button
                           variant="secondary"
-                          onClick={() => history.goBack()}
+                          onClick={() => setTabKey("emergency-contacts")}
                         >
                           CANCEL
                         </Button>
