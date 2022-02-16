@@ -168,13 +168,19 @@ table.dataTable > tbody > tr.child span.dtr-data {
   word-break: break-all;
 }
 
+.custom-col-width {
+  min-width: 86px !important;
+  word-break: break-all;
+}
+
 .wo-checkbox {
+  margin-left: auto;
   min-width: 20px !important;
   max-width: 20px !important;
 }
 
 .wo-checkbox::before {
-  left: 5px !important;
+  left: 6px !important;
 }
 
 @media (min-width: 768px) {
@@ -187,39 +193,79 @@ table.dataTable > tbody > tr.child span.dtr-data {
 
 @media (min-width: 321px) and (max-width: 390px) {
   .cstm-col-width {
-    min-width: 85px !important;
+    min-width: 88px !important;
     width: 40% !important;
   }
 }
 @media (min-width: 391px) and (max-width: 410px) {
   .cstm-col-width {
-    min-width: 100px !important;
+    min-width: 105px !important;
     max-width: 200px !important;
+    height: 20% !important;
   }
 }
 @media (min-width: 411px) and (max-width: 420px) {
   .cstm-col-width {
-    min-width: 112px !important;
+    min-width: 116px !important;
     max-width: 200px !important;
   }
 }
 
 @media (min-width: 421px) and (max-width: 450px) {
   .cstm-col-width {
-    min-width: 117px !important;
+    min-width: 133px !important;
     max-width: 200px !important;
   }
 }
 
 @media (min-width: 451px) and (max-width: 460px) {
   .cstm-col-width {
-    min-width: 126px !important;
+    min-width: 135px !important;
     max-width: 200px !important;
   }
 }
 @media (min-width: 461px) and (max-width: 480px) {
   .cstm-col-width {
-    min-width: 137px !important;
+    min-width: 146px !important;
+    max-width: 200px !important;
+  }
+}
+
+@media (min-width: 321px) and (max-width: 390px) {
+  .custom-col-width {
+    min-width: 115px !important;
+    width: 40% !important;
+  }
+}
+@media (min-width: 391px) and (max-width: 410px) {
+  .custom-col-width {
+    min-width: 134px !important;
+    max-width: 200px !important;
+  }
+}
+@media (min-width: 411px) and (max-width: 420px) {
+  .custom-col-width {
+    min-width: 138px !important;
+    max-width: 200px !important;
+  }
+}
+
+@media (min-width: 421px) and (max-width: 450px) {
+  .custom-col-width {
+    min-width: 150px !important;
+    max-width: 200px !important;
+  }
+}
+
+@media (min-width: 451px) and (max-width: 460px) {
+  .custom-col-width {
+    min-width: 162px !important;
+    max-width: 200px !important;
+  }
+}
+@media (min-width: 461px) and (max-width: 480px) {
+  .custom-col-width {
+    min-width: 166px !important;
     max-width: 200px !important;
   }
 }
