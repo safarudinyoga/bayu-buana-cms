@@ -283,26 +283,26 @@ const GeneralInformation = (props) => {
         dobYear: data.birth_date ? data.birth_date.split("-")[0] : 1921,
         
         // Contacts
-        homePhone: data.contact.phone_number ? data.contact.phone_number : "",
-        mobilePhone: data.contact.mobile_phone_number ? data.contact.mobile_phone_number : "",
-        email: data.contact.email ? data.contact.email : "",
-        otherEmail: data.contact.other_email ? data.contact.other_email : "",
+        homePhone: _.isEmpty(data.contact) ? "" : data.contact.phone_number ? data.contact.phone_number : "",
+        mobilePhone: _.isEmpty(data.contact) ? "" : data.contact.mobile_phone_number ? data.contact.mobile_phone_number : "",
+        email: _.isEmpty(data.contact) ? "" : data.contact.email ? data.contact.email : "",
+        otherEmail: _.isEmpty(data.contact) ? "" : data.contact.other_email ? data.contact.other_email : "",
 
         // Current Address
-        currentAddress: data.address.address_line ? data.address.address_line : "",
-        currentCountry: data.address.country ? {
+        currentAddress: _.isEmpty(data.address) ? "" : data.address.address_line ? data.address.address_line : "",
+        currentCountry: _.isEmpty(data.address) ? "" : data.address.country ? {
           value: data.address.country_id,
           label: data.address.country.country_name
         } : "",
-        currentProvince: data.address.state_province ? {
+        currentProvince: _.isEmpty(data.address) ? "" : data.address.state_province ? {
           value: data.address.state_province_id,
           label: data.address.state_province.state_province_name
         } : "",
-        currentCity: data.address.city ? {
+        currentCity: _.isEmpty(data.address) ? "" : data.address.city ? {
           value: data.address.city_id,
           label: data.address.city.city_name
         } : "",
-        currentZipCode: data.address.postal_code ? data.address.postal_code : "",
+        currentZipCode: _.isEmpty(data.address) ? "" : data.address.postal_code ? data.address.postal_code : "",
 
         // Permanent Address
         sameAddress: (
@@ -312,20 +312,20 @@ const GeneralInformation = (props) => {
           data.permanent_address.state_province_id == data.address.state_province_id &&
           data.permanent_address.postal_code == data.address.postal_code
         ) ? true : false,
-        permanentAddress: data.permanent_address.address_line ? data.permanent_address.address_line : "",
-        permanentCountry: data.permanent_address.country ? {
+        permanentAddress: _.isEmpty(data.permanent_address) ? "" : data.permanent_address.address_line ? data.permanent_address.address_line : "",
+        permanentCountry: _.isEmpty(data.permanent_address) ? "" : data.permanent_address.country ? {
           value: data.permanent_address.country_id,
           label: data.permanent_address.country.country_name,
         } : "",
-        permanentProvince: data.permanent_address.state_province ? {
+        permanentProvince: _.isEmpty(data.permanent_address) ? "" : data.permanent_address.state_province ? {
           value: data.permanent_address.state_province_id,
           label: data.permanent_address.state_province.state_province_name,
         } : "",
-        permanentCity: data.permanent_address.city ? {
+        permanentCity: _.isEmpty(data.permanent_address) ? "" : data.permanent_address.city ? {
           value: data.permanent_address.city_id,
           label: data.permanent_address.city.city_name
         } : "",
-        permanentZipCode: data.permanent_address.postal_code ? data.permanent_address.postal_code : ""
+        permanentZipCode: _.isEmpty(data.permanent_address) ? "" : data.permanent_address.postal_code ? data.permanent_address.postal_code : ""
       });
     } catch(e) {}
   }, [])
