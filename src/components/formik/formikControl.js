@@ -6,6 +6,7 @@ import SelectOnly from "./select"
 import SelectAsync from "./selectAsync"
 import Checkbox from './checkbox'
 import Radio from './radioForm'
+import Switch from "./switch"
 // import CheckboxGroup from './CheckboxGroup'
 // import DatePicker from './DatePicker'
 // import ChakraInput from './ChakraInput'
@@ -27,6 +28,8 @@ function FormikControl(props) {
       return <Checkbox {...rest} />
     case 'radio':
       return <Radio {...rest} />
+    case "switch":
+      return <Switch {...rest} />
     // case 'date':
     //   return <DatePicker {...rest} />
     // case 'chakraInput':
