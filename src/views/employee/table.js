@@ -56,18 +56,14 @@ export default function EmployeeTable() {
       },
       {
         title: "Full Name",
-        data: {given_name: "given_name", middle_name: "middle_name", surname: "surName"},
-        render: (data) => {     
-          if (data.given_name === undefined) {
-            return null
-          }else{     
+        data: "person",
+        render: (data) => {
           return data?.given_name + " " + data?.middle_name + " " + data?.surname
-          }
         },
       },
       {
         title: "Email",
-        data: "contact.email",
+        data: "email",
       },
       {
         title: "Job Title",
