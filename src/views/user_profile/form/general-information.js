@@ -12,15 +12,19 @@ import Select from "components/form/select"
 import { default as SelectAsync } from "components/form/select-async"
 
 const GeneralInformation = (props) => {
-  const [selectCountry, setSelectCountry] = useState([])
-  const [selectProvince, setSelectProvince] = useState([])
-  const [selectCity, setSelectCity] = useState([])
+  const [selectCurrentCountry, setSelectCurrentCountry] = useState([])
+  const [selectCurrentProvince, setSelectCurrentProvince] = useState([])
+  const [selectCurrentCity, setSelectCurrentCity] = useState([])
+  const [selectPermanentCountry, setSelectPermanentCountry] = useState([])
+  const [selectPermanentProvince, setSelectPermanentProvince] = useState([])
+  const [selectPermanentCity, setSelectPermanentCity] = useState([])
   const [selectNamePrefix, setSelectNamePrefix] = useState([])
   const [selectGender, setSelectGender] = useState([])
   const [photoProfile, setPhotoProfile] = useState([])
   const [optionDay, setOptionDay] = useState([])
   const [optionMonth, setOptionMonth] = useState([])
   const [optionYear, setOptionYear] = useState([])
+  const [defaultValue, setDefaultValue] = useState([])
 
   const maxNumber = 1
 
@@ -165,36 +169,91 @@ const GeneralInformation = (props) => {
     return options
   }
 
-  // Country state
-  const handleChangeCountry = async (v) => {
+  // Current Country state
+  const handleChangeCurrentCountry = async (v) => {
     try {
       let res = await api.get(
         `/master/state-provinces?filters=["country_id","=","${v}"]`,
       )
       const options = []
-      res.data.items.forEach((data) => {
-        options.push({
-          label: data.state_province_name,
-          value: data.id,
+      if(res.data.items.length > 0){
+        res.data.items.forEach((data) => {
+          options.push({
+            label: data.state_province_name,
+            value: data.id,
+          })
+          
+          setSelectCurrentProvince(options)
         })
-        setSelectProvince(options)
-      })
+      } else {
+        setSelectCurrentProvince([])
+      }
+      
     } catch (e) {}
   }
-  // Province state
-  const handleChangeProvince = async (v) => {
+
+  // Permanent Country state
+  const handleChangePermanentCountry = async (v) => {
+    try {
+      let res = await api.get(
+        `/master/state-provinces?filters=["country_id","=","${v}"]`,
+      )
+      const options = []
+      if(res.data.items.length > 0){
+        res.data.items.forEach((data) => {
+          options.push({
+            label: data.state_province_name,
+            value: data.id,
+          })
+          
+          setSelectPermanentProvince(options)
+        })
+      } else {
+        setSelectPermanentProvince([])
+      }
+      
+    } catch (e) {}
+  }
+  // Current Province state
+  const handleChangeCurrentProvince = async (v) => {
     try {
       let res = await api.get(
         `/master/cities?filters=["province_id","=","${v}"]`,
       )
       const options = []
-      res.data.items.forEach((data) => {
-        options.push({
-          label: data.state_province_name,
-          value: data.id,
+      if(res.data.items.length > 0){
+        res.data.items.forEach((data) => {
+          options.push({
+            label: data.state_province_name,
+            value: data.id,
+          })
+          setSelectCurrentCity(options)
         })
-        setSelectCity(options)
-      })
+      } else {
+        setSelectCurrentCity([])
+      }
+      
+    } catch (e) {}
+  }
+  // Permanent Province state
+  const handleChangePermanentProvince = async (v) => {
+    try {
+      let res = await api.get(
+        `/master/cities?filters=["province_id","=","${v}"]`,
+      )
+      const options = []
+      if(res.data.items.length > 0){
+        res.data.items.forEach((data) => {
+          options.push({
+            label: data.state_province_name,
+            value: data.id,
+          })
+          setSelectPermanentCity(options)
+        })
+      } else {
+        setSelectPermanentCity([])
+      }
+      
     } catch (e) {}
   }
 
@@ -227,7 +286,8 @@ const GeneralInformation = (props) => {
           label: data.country_name,
           value: data.id,
         })
-        setSelectCountry(options)
+        setSelectCurrentCountry(options)
+        setSelectPermanentCountry(options)
       })
     } catch (e) {}
   }, [])
@@ -910,6 +970,7 @@ const GeneralInformation = (props) => {
                                 setFieldValue("currentCountry", v)
                                 setFieldValue("currentProvince", null)
                                 setFieldValue("currentCity", null)
+                                handleChangeCurrentCountry(v.value)
                               }}
                               placeholder="Please choose"
                               className={`react-select ${
@@ -941,7 +1002,7 @@ const GeneralInformation = (props) => {
                         {({ field, form }) => (
                           <>
                             <div style={{ width: 200 }}>
-                              <SelectAsync
+                              {/* <SelectAsync
                                 {...field}
                                 isDisabled={values.currentCountry == null}
                                 url={`master/state-provinces`}
@@ -951,6 +1012,16 @@ const GeneralInformation = (props) => {
                                   setFieldValue("currentProvince", v)
                                 }
                                 placeholder="Please choose"
+                              /> */}
+                              <Select
+                                {...field}
+                                placeholder="Please choose"
+                                options={selectCurrentProvince}
+                                onChange={(v) => {
+                                  setFieldValue("currentProvince", v)
+                                  handleChangeCurrentProvince(v.value)
+                                }}
+                                isDisabled={values.currentCountry == null}
                               />
                             </div>
                           </>
@@ -967,7 +1038,7 @@ const GeneralInformation = (props) => {
                         {({ field }) => (
                           <>
                             <div style={{ width: 200 }}>
-                              <SelectAsync
+                              {/* <SelectAsync
                                 {...field}
                                 isDisabled={values.currentProvince == null}
                                 url={`master/cities`}
@@ -977,6 +1048,14 @@ const GeneralInformation = (props) => {
                                   setFieldValue("currentCity", v)
                                 }
                                 placeholder="Please choose"
+                              /> */}
+                              <Select
+                                placeholder="Please choose"
+                                options={selectCurrentCity}
+                                onChange={(v) => {
+                                  setFieldValue("currentCity", v)
+                                }}
+                                isDisabled={values.currentProvince == null}
                               />
                             </div>
                           </>
@@ -1043,7 +1122,7 @@ const GeneralInformation = (props) => {
                       Country <span className="form-label-required">*</span>
                     </Form.Label>
                     <Col sm={9}>
-                      {selectCountry.length !== 0 && (
+                      {selectPermanentCountry.length !== 0 && (
                         <div style={{ width: 300 }}>
                           <SelectAsync
                             name="permanentCountry"
@@ -1067,7 +1146,7 @@ const GeneralInformation = (props) => {
                               setFieldValue("permanentCountry", v)
                               setFieldValue("permanentProvince", null)
                               setFieldValue("permanentCity", null)
-                              handleChangeCountry(v.value)
+                              handleChangePermanentCountry(v.value)
                             }}
                             onBlur={setFieldTouched}
                             isDisabled={values.sameAddress}
@@ -1094,21 +1173,18 @@ const GeneralInformation = (props) => {
                     </Form.Label>
                     <Col sm={9}>
                       <div style={{ width: 300 }}>
-                        <SelectAsync
+                        <Select
                           name="permanentProvince"
-                          url={`master/state-provinces`}
-                          urlFilter={`["country_id","=","${values.permanentCountry?.value}"]`}
-                          fieldName="state_province_name"
                           value={
                             values.sameAddress
                               ? values.currentProvince
                               : values.permanentProvince
                           }
                           placeholder="Please choose"
-                          // options={selectProvince}
+                          options={selectPermanentProvince}
                           onChange={(v) => {
                             setFieldValue("permanentProvince", v)
-                            handleChangeProvince(v.value)
+                            handleChangePermanentProvince(v.value)
                           }}
                           onBlur={setFieldTouched}
                           isDisabled={
@@ -1124,18 +1200,15 @@ const GeneralInformation = (props) => {
                     </Form.Label>
                     <Col sm={9}>
                       <div style={{ width: 300 }}>
-                        <SelectAsync
+                        <Select
                           name="permanentCity"
-                          url={`master/cities`}
-                          urlFilter={`["province_id","=","${values.currentProvince?.value}"]`}
-                          fieldName="city_name"
                           value={
                             values.sameAddress
                               ? values.currentCity
                               : values.permanentCity
                           }
                           placeholder="Please choose"
-                          // options={selectCity}
+                          options={selectPermanentCity}
                           onChange={(v) => {
                             setFieldValue("permanentCity", v)
                           }}
