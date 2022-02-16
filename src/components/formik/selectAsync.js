@@ -16,17 +16,18 @@ function selectAsync(props) {
     fieldName,
     urlFilter,
     isDisabled,    
+    size,  
     ...rest
   } = props
   return (
     <Row className="form-group required">
-      <Col column md={3} lg={3}>
+      <Col md={size?.label?.md || 3} lg={size?.label?.lg || 3}>
         <label className="text-label-input" htmlFor={name}>
           {label}
           <span className={required || ""} />
         </label>
       </Col>
-      <Col md={9} lg={9}>
+      <Col md={size?.value?.md || 9} lg={size?.value?.lg || 9}>
         <FastField id={name} name={name} {...rest}>
           {({ field, form, meta }) => (
             <div style={style}>
