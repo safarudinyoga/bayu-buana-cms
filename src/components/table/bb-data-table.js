@@ -483,7 +483,7 @@ class BBDataTable extends Component {
           },
           {
             targets: [1, 2],
-            className: "cstm-col-width",
+            className: !this.state.isCheckbox ? "custom-col-width": "cstm-col-width",
           },
           //   {
           //     responsivePriority: 10001,
