@@ -1,272 +1,27 @@
 import { withRouter } from "react-router"
-import React, { useEffect, useState } from "react"
+import React, { useState, useEffect } from "react"
+import { Form, FormGroup, InputGroup, Button } from "react-bootstrap"
+import { Formik, FastField } from "formik"
+import * as Yup from "yup"
 import Api from "config/api"
-import FormHorizontal from "components/form/horizontal"
-import FormInputControl from "components/form/input-control"
-import FormBuilder from "components/form/builder"
-import useQuery from "lib/query"
 import { useDispatch } from "react-redux"
-import { setAlert, setUIParams } from "redux/ui-store"
-import $ from "jquery"
-import env from "../../config/environment"
+import { setAlert, setCreateModal } from "redux/ui-store"
+import CancelButton from "components/button/cancel"
+import FormikControl from "../../components/formik/formikControl"
 
-const endpoint = "/master/aircraft"
-const backUrl = "/master/aircrafts"
+function ExchangeRateCreate(props) {
+	const dispatch = useDispatch()
+  const API = new Api()
 
-function ExchangeRateForm(props) {
-  let dispatch = useDispatch()
-  let formId = props.match.params.id
-
-  const isView = useQuery().get("action") === "view"
-  const [formBuilder, setFormBuilder] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [translations, setTranslations] = useState([])
+	let form = {
+		from_currency: "",
+		to_currency: "",
+		multiply_rate: "",
+		is_automatic: false,
+	}
+	const [initialForm, setForm] = useState(form)
   const [id, setId] = useState(null)
-  const [form, setForm] = useState({
-    id: "",
-    aircraft_name: "",
-    model: "",
-    icao_code: "",
-    aircraft_code: "",
-  })
-  const translationFields = [
-    {
-      label: "Aircraft Name",
-      name: "aircraft_name",
-      type: "text",
-      maxLength: 64,
-    },
-  ]
-
-  const validationRules = {
-    aircraft_name: {
-      required: true,
-      minlength: 1,
-      maxlength: 64,
-      checkName: true,
-    },
-    model: {
-      required: true,
-      minlength: 1,
-      maxlength: 64,
-    },
-    icao_code: {
-      required: false,
-      minlength: 2,
-      maxlength: 4,
-      checkIcao: false,
-    },
-    aircraft_code: {
-      required: true,
-      minlength: 2,
-      maxlength: 4,
-      checkCode: true,
-    },
-  }
-
-  const validationMessages = {
-    aircraft_name: {
-      required: "Aircraft Name is required",
-    },
-    // icao_code: {
-    //   required: "Icao Code is required",
-    // },
-    model: {
-      required: "Model is required",
-    },
-    aircraft_code: {
-      required: "Aircraft Code is required",
-    },
-  }
-
-  useEffect(async () => {
-    let api = new Api()
-    let formId = props.match.params.id
-
-    let docTitle = "Edit Aircraft"
-    if (!formId) {
-      docTitle = "Create Aircraft"
-    } else if (isView) {
-      docTitle = "View Aircraft"
-    }
-
-    dispatch(
-      setUIParams({
-        title: isView ? "Aircraft Details" : docTitle,
-        breadcrumbs: [
-          {
-            text: "Master Data Management",
-          },
-          {
-            link: backUrl,
-            text: "Aircrafts",
-          },
-          {
-            text: docTitle,
-          },
-        ],
-      }),
-    )
-    if (formId) {
-      try {
-        let res = await api.get(endpoint + "/" + formId)
-        setForm(res.data)
-
-        if (res.data) {
-          let currentCode = res.data.aircraft_code
-          let currentIcao = res.data.icao_code
-          let currentName = res.data.aircraft_name
-
-          $.validator.addMethod(
-            "checkName",
-            function (value, element) {
-              var req = false
-              $.ajax({
-                type: "GET",
-                async: false,
-                url: `${env.API_URL}/master/aircraft?filters=["aircraft_name","=","${element.value}"]`,
-                success: function (res) {
-                  if (res.items.length !== 0) {
-                    if (currentName === element.value) {
-                      req = true
-                    } else {
-                      req = false
-                    }
-                  } else {
-                    req = true
-                  }
-                },
-              })
-
-              return req
-            },
-            "Aircraft Name already exists",
-          )
-          $.validator.addMethod(
-            "checkIcao",
-            function (value, element) {
-              var req = false
-              $.ajax({
-                type: "GET",
-                async: false,
-                url: `${env.API_URL}/master/aircraft?filters=["icao_code","=","${element.value}"]`,
-                success: function (res) {
-                  if (res.items.length !== 0) {
-                    if (currentIcao === element.value) {
-                      req = true
-                    } else {
-                      req = false
-                    }
-                  } else {
-                    req = true
-                  }
-                },
-              })
-
-              return req
-            },
-            "Icao Code already exists",
-          )
-          $.validator.addMethod(
-            "checkCode",
-            function (value, element) {
-              var req = false
-              $.ajax({
-                type: "GET",
-                async: false,
-                url: `${env.API_URL}/master/aircraft?filters=["aircraft_code","=","${element.value}"]`,
-                success: function (res) {
-                  if (res.items.length !== 0) {
-                    if (currentCode === element.value) {
-                      req = true
-                    } else {
-                      req = false
-                    }
-                  } else {
-                    req = true
-                  }
-                },
-              })
-              return req
-            },
-            "Aircraft Code already exists",
-          )
-        }
-      } catch (e) {}
-
-      try {
-        let res = await api.get(endpoint + "/" + formId + "/translations", {
-          size: 50,
-        })
-        setTranslations(res.data.items)
-      } catch (e) {}
-      setLoading(false)
-    } else {
-      $.validator.addMethod(
-        "checkName",
-        function (value, element) {
-          var req = false
-          $.ajax({
-            type: "GET",
-            async: false,
-            url: `${env.API_URL}/master/aircraft?filters=["aircraft_name","=","${element.value}"]`,
-            success: function (res) {
-              if (res.items.length !== 0) {
-                req = false
-              } else {
-                req = true
-              }
-            },
-          })
-
-          return req
-        },
-        "Aircraft Name already exists",
-      )
-      $.validator.addMethod(
-        "checkIcao",
-        function (value, element) {
-          var req = false
-          $.ajax({
-            type: "GET",
-            async: false,
-            url: `${env.API_URL}/master/aircraft?filters=["icao_code","=","${element.value}"]`,
-            success: function (res) {
-              if (res.items.length !== 0) {
-                req = false
-              } else {
-                req = true
-              }
-            },
-          })
-
-          return req
-        },
-        "Icao Code already exists",
-      )
-      $.validator.addMethod(
-        "checkCode",
-        function (value, element) {
-          var req = false
-          $.ajax({
-            type: "GET",
-            async: false,
-            url: `${env.API_URL}/master/aircraft?filters=["aircraft_code","=","${element.value}"]`,
-            success: function (res) {
-              if (res.items.length !== 0) {
-                req = false
-              } else {
-                req = true
-              }
-            },
-          })
-
-          return req
-        },
-        "Aircraft Code already exists",
-      )
-    }
-  }, [])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     if (!props.match.params.id) {
@@ -275,109 +30,159 @@ function ExchangeRateForm(props) {
     setId(props.match.params.id)
   }, [props.match.params.id])
 
-  const onSave = async () => {
-    let translated = formBuilder.getTranslations()
-    setLoading(true)
-    let api = new Api()
-    try {
-      if (!form.model) {
-        form.model = null
-      }
-      let res = await api.putOrPost(endpoint, id, form)
-      setId(res.data.id)
-      for (let i in translated) {
-        let tl = translated[i]
-        let path = endpoint + "/" + res.data.id + "/translations"
-        await api.putOrPost(path, tl.id, tl)
-      }
-    } catch (e) {
-      dispatch(
-        setAlert({
-          message: `Failed to ${formId ? "update" : "save"} this record.`,
-        }),
-      )
-    } finally {
-      setLoading(false)
-      props.history.goBack()
-      dispatch(
-        setAlert({
-          message: `Record ${form.aircraft_code} - ${
-            form.aircraft_name
-          } has been successfully ${formId ? "updated" : "saved"}.`,
-        }),
-      )
-    }
+  const checkExchangeRate = async () => {
+    let res = await API.get("/master/currency-conversion", {
+      size: 50,
+    })
   }
 
-  return (
-    <FormBuilder
-      onBuild={(el) => setFormBuilder(el)}
-      isView={isView || loading}
-      onSave={onSave}
-      back={backUrl}
-      translations={translations}
-      translationFields={translationFields}
-      alertMessage={"Incomplete data"}
-      isValid={false}
-      rules={validationRules}
-      validationMessages={validationMessages}
-    >
-      <FormHorizontal>
-        <FormInputControl
-          label={"Aircraft Name"}
-          required={true}
-          value={form.aircraft_name}
-          name="aircraft_name"
-          onChange={(e) => setForm({ ...form, aircraft_name: e.target.value })}
-          disabled={isView || loading}
-          type="text"
-          minLength="1"
-          maxLength="64"
-        />
-        <FormInputControl
-          value={form.model}
-          required={true}
-          name="model"
-          onChange={(e) => setForm({ ...form, model: e.target.value })}
-          label="Model"
-          disabled={isView || loading}
-          type="text"
-          minLength="1"
-          maxLength="64"
-        />
-      </FormHorizontal>
+  Yup.addMethod(Yup.object, 'pairCurrency', function(propertyPath, message) {
+    return this.test('unique', message, function(field) {
+      if (field && this.parent[propertyPath]) {
+        return field.value !== this.parent[propertyPath]?.value
+      } else {
+        return true
+      }
+    })
+  })
+  Yup.addMethod(Yup.object, 'uniqueExchangeRate', function(message) {
+    return this.test('unique', message, function(field) {
+      if(this.parent.to_currency && this.parent.from_currency) {
+        return checkExchangeRate(this.parent.to_currency && this.parent.from_currency)
+      } else {
+        return true
+      }
+    })
+  })
+	const validationSchema =  Yup.object().shape({
+    from_currency: Yup.object()
+      .required("From Currency is required.")
+      .pairCurrency('to_currency', 'From Currency and To Currency must be different.')
+      // .uniqueExchangeRate('Exchange rate already exists')
+      ,
+    to_currency: Yup.object()
+      .required("To Currency is required.")
+      .pairCurrency('from_currency', 'From Currency and To Currency must be different.')
+      // .uniqueExchangeRate('Exchange rate already exists.')
+      ,
+    multiply_rate: Yup.number().required("Multiply Rate is required."),
+  })
 
-      <FormHorizontal>
-        <FormInputControl
-          value={form.aircraft_code}
-          required={true}
-          name="aircraft_code"
-          onChange={(e) => setForm({ ...form, aircraft_code: e.target.value })}
-          cl={{ md: "12" }}
-          cr="12"
-          disabled={isView || loading}
-          label="Aircraft Code"
-          type="text"
-          minLength="2"
-          maxLength="4"
-          hint="Aircraft code maximum 4 characters"
-        />
-        <FormInputControl
-          value={form.icao_code}
-          name="icao_code"
-          onChange={(e) => setForm({ ...form, icao_code: e.target.value })}
-          cl={{ md: "12" }}
-          cr="12"
-          disabled={isView || loading}
-          label="ICAO Code"
-          type="text"
-          minLength="2"
-          maxLength="4"
-          hint="ICAO Code maximum 4 characters"
-        />
-      </FormHorizontal>
-    </FormBuilder>
-  )
+	const onSubmit = async (values, a) => {
+		try {
+      let form = {
+        conversion_rate_type: "C",
+        from_currency: values.from_currency.value,
+        to_currency: values.to_currency.value,
+        multiply_rate: parseFloat(values.multiply_rate),
+        is_automatic: values.is_automatic,
+      }
+      let res = await API.putOrPost("/master/currency-conversions", id, form)
+			console.log(res)
+		} catch(e) {
+			dispatch(
+				setAlert({
+				  message: e.response.data.message,
+				}),
+			  )
+		}
+	}
+  const formSize = {
+    label: {
+      md: 5,
+      lg: 5
+    },
+    value: {
+      md: 7,
+      lg: 7
+    }
+  }
+	return (
+			<Formik
+				initialValues={initialForm}
+				validationSchema={validationSchema}
+				onSubmit={onSubmit}
+			>
+				{
+					({
+						dirty,
+						handleSubmit,
+						isSubmitting,
+            setFieldValue,
+            values,
+					}) => (
+						<Form onSubmit={handleSubmit}>
+              <FormikControl
+                control="selectAsync"
+                required="label-required"
+                label="From Currency"
+                name="from_currency"
+                placeholder={values.from_currency || "Please choose"}
+                url={`master/currencies`}
+                fieldName={"currency_name"}
+                onChange={(v) => {
+                  setFieldValue("from_currency", v)
+                }}
+                style={{ maxWidth: 250 }}
+                size={formSize}
+              />
+
+							<FormikControl
+                control="selectAsync"
+                required="label-required"
+                label="To Currency"
+                name="to_currency"
+                placeholder={values.to_currency || "Please choose"}
+                url={`master/currencies`}
+                fieldName={"currency_name"}
+                onChange={(v) => {
+                  setFieldValue("to_currency", v)
+                }}
+                style={{ maxWidth: 250 }}
+                size={formSize}
+              />
+
+              <FormikControl
+                control="input"
+                required="label-required"
+                label="Multiply Rate"
+                name="multiply_rate"
+                style={{ maxWidth: 250 }}
+                size={formSize}
+              />
+
+              <FormikControl
+                control="switch"
+                label="Disabled Automatic Update"
+                name="is_automatic"
+                value={values.is_automatic}
+                onChange={(v) => setFieldValue("is_automatic", v)}
+                size={formSize}
+              />
+
+              <div
+                style={{
+                  marginBottom: 30,
+                  marginTop: 30,
+                  display: "flex",
+                }}
+              >
+                <Button
+                  variant="primary"
+                  type="submit"
+                  disabled={isSubmitting}
+                  style={{ marginRight: 15 }}
+                >
+                  SAVE
+                </Button>
+                <CancelButton onClick={() => dispatch(setCreateModal(false))}/>
+              </div>
+						</Form>
+					)
+				}
+				
+			</Formik>
+	)
 }
 
-export default withRouter(ExchangeRateForm)
+export default withRouter(ExchangeRateCreate) 
