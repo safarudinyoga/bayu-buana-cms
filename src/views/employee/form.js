@@ -357,7 +357,7 @@ const EmployeeForm = (props) => {
         } else {
           try {
             let res = await api.put(`master/employees/${formId}`, {
-              name_prefix_id: values.name_prefix_id.value || values.name_prefix_id,
+              name_prefix_id: values.name_prefix_id.value,
               given_name: values.given_name,
               middle_name: values.middle_name,
               surname: values.surname,
@@ -405,20 +405,22 @@ const EmployeeForm = (props) => {
                 relationship: values.emergency_contact2.relationship,
               },
               employee_number: values.employee_number,
-              //job_title_id: values.job_title_id.value,
-              //division_id: values.division_id.value,
-              //office_id: values.office_id.value,
-              //birth_date: [values.birth_date[2].value,values.birth_date[1].value,values.birth_date[0].value,].join("-"),
-              // hire_date: formatDate([
-              //   values.hire_date[2].value,
-              //   values.hire_date[1].value,
-              //   values.hire_date[0].value,
-              // ]),
+              job_title_id: values.job_title_id.value,
+              division_id: values.division_id.value,
+              office_id: values.office_id.value,
+              birth_date: [values.birth_date[2].value,values.birth_date[1].value,values.birth_date[0].value,].join("-"),
+              hire_date: formatDate([
+                values.hire_date[2].value,
+                values.hire_date[1].value,
+                values.hire_date[0].value,
+              ]),
               npwp: values.npwp,
             })
             console.log("dataupdate", res)
             setSubmitting(false)
-          } catch (e) {}
+          } catch (e) {
+            console.log('er', e)
+          }
         }
         
       }}
