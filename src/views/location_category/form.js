@@ -53,7 +53,7 @@ function LocationCategoryForm(props) {
     location_category_name: {
       required: "Location category Name is required",
       minlength: "Location category Name must be at least 1 characters",
-      maxlength: "Location category Name cannot be more than 99 characters",
+      maxlength: "Location category Name cannot be more than 256 characters",
     },
     location_category_code: {
       required: "Location category Code is required",
