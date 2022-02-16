@@ -12,25 +12,15 @@ import Select from "components/form/select"
 import { default as SelectAsync } from "components/form/select-async"
 
 const GeneralInformation = (props) => {
-  const [selectCurrentCountry, setSelectCurrentCountry] = useState([])
   const [selectCurrentProvince, setSelectCurrentProvince] = useState([])
   const [selectCurrentCity, setSelectCurrentCity] = useState([])
   const [selectPermanentCountry, setSelectPermanentCountry] = useState([])
   const [selectPermanentProvince, setSelectPermanentProvince] = useState([])
   const [selectPermanentCity, setSelectPermanentCity] = useState([])
   const [selectNamePrefix, setSelectNamePrefix] = useState([])
-  const [selectGender, setSelectGender] = useState([])
   const [photoProfile, setPhotoProfile] = useState([])
-  const [optionDay, setOptionDay] = useState([])
-  const [optionMonth, setOptionMonth] = useState([])
-  const [optionYear, setOptionYear] = useState([])
-  const [defaultValue, setDefaultValue] = useState([])
-
   const maxNumber = 1
-
   let api = new Api()
-
-
 
   // Initialize form
   const [initialForm, setInitialForm] = useState({
@@ -257,21 +247,7 @@ const GeneralInformation = (props) => {
   // Upload profile
   const onChangePhotoProfile = (imageList, addUpdateIndex) => {
     // data for submit
-    console.log(imageList, addUpdateIndex)
     setPhotoProfile(imageList)
-  }
-
-  const SelectField = (FieldProps) => {
-    return (
-      <Select
-        options={FieldProps.options}
-        placeholder={FieldProps.placeholder}
-        {...FieldProps.field}
-        onChange={(option) =>
-          FieldProps.form.setFieldValue(FieldProps.field.name, option)
-        }
-      />
-    )
   }
 
   useEffect(async () => {
@@ -283,7 +259,6 @@ const GeneralInformation = (props) => {
           label: data.country_name,
           value: data.id,
         })
-        setSelectCurrentCountry(options)
         setSelectPermanentCountry(options)
       })
     } catch (e) {}
@@ -309,8 +284,6 @@ const GeneralInformation = (props) => {
     try {
       let res = await api.get("/user/profile")
       let data = res.data;
-      console.log(data);
-      console.log(parseInt(data.birth_date.split("-")[2]))
       setInitialForm({
         ...initialForm,
         title: _.isEmpty(data.name_prefix) ? "" : {
@@ -364,7 +337,7 @@ const GeneralInformation = (props) => {
           label: data.address.state_province.state_province_name
         } : "",
         currentCity: _.isEmpty(data.address) ? "" : data.address.city ? {
-          value: data.address.city_id,
+          value: data.address.city.id,
           label: data.address.city.city_name
         } : "",
         currentZipCode: _.isEmpty(data.address) ? "" : data.address.postal_code ? data.address.postal_code : "",
@@ -403,14 +376,9 @@ const GeneralInformation = (props) => {
         validationSchema={validationSchema}
         validator={() => ({})}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
-          console.log(values)
-          // console.log(props)
-
           let day = values.dobDay.value < 10 ? ("0"+values.dobDay.value) : values.dobDay.value;
           let month = values.dobMonth.value < 10 ? ("0"+values.dobMonth.value) : values.dobMonth.value;
           let year = values.dobYear.value;
-
-          console.log(month);
 
           let formatted = {
             address: {
@@ -450,31 +418,6 @@ const GeneralInformation = (props) => {
           console.log(formatted);
 
           let res = await api.put("user/profile", formatted)
-          // console.log(res);
-
-          // setSubmitting(true)
-
-          // try {
-          //   let res = await api.post("master/persons", {
-          //     birth_date: "2021-11-13T04:31:17.022Z",
-          //     business_entity_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-          //     citizen_country_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-          //     gender_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-          //     given_name: "string",
-          //     marital_status_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-          //     middle_name: "string",
-          //     name_prefix_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-          //     name_suffix: "string",
-          //     name_title: "string",
-          //     religion_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-          //     surname: "string",
-          //     surname_prefix: "string",
-          //   })
-          //   console.log(res)
-          //   resetForm()
-          //   setSubmitting(false)
-          // } catch (e) {}
-
           return props.handleSelectTab("emergency-contacts")
         }}
       >
@@ -1065,6 +1008,7 @@ const GeneralInformation = (props) => {
                                 placeholder="Please choose"
                               /> */}
                               <Select
+                                {...field}
                                 placeholder="Please choose"
                                 options={selectCurrentCity}
                                 onChange={(v) => {
