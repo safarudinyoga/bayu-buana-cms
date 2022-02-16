@@ -201,7 +201,6 @@ table.dataTable > tbody > tr.child span.dtr-data {
   .cstm-col-width {
     min-width: 105px !important;
     max-width: 200px !important;
-    height: 20% !important;
   }
 }
 @media (min-width: 411px) and (max-width: 420px) {
