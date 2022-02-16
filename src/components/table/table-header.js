@@ -11,6 +11,8 @@ import {Component} from "react"
 import {OverlayTrigger, Tooltip} from "react-bootstrap"
 import {Link, withRouter} from "react-router-dom"
 import Select, {components} from "react-select"
+import { connect } from "react-redux"
+import { setCreateModal } from "redux/ui-store"
 import "../button/button.css"
 import "./table-header.css"
 
@@ -102,7 +104,11 @@ class TableHeader extends Component {
   }
 
   handleClick() {
-    this.props.history.push(this.props.baseRoute || "/master/aircraft/form")
+    if(this.props.createOnModal) {
+      this.props.setCreateModal(true)
+    } else {
+      this.props.history.push(this.props.baseRoute || "/master/aircraft/form")
+    }
   }
 
   handleSearchDebounce = debounce((text) => this.props.onSearch(text), 500)
@@ -345,4 +351,8 @@ class TableHeader extends Component {
   }
 }
 
-export default withRouter(TableHeader)
+const mapDispatchToProps = (dispatch) => ({
+  setCreateModal: (payload) => dispatch(setCreateModal(payload)),
+})
+
+export default connect(null, mapDispatchToProps)(withRouter(TableHeader))
