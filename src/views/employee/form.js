@@ -39,7 +39,7 @@ const EmployeeForm = (props) => {
     let api = new Api()
     let formId = props.match.params.id
 
-    console.log("idParams", formId)
+
     let docTitle = "Edit Employee"
     let breadcrumbTitle = "Edit Employee"
     if (!formId) {
@@ -74,7 +74,7 @@ const EmployeeForm = (props) => {
 
         setFormValues({
           ...data,
-          name_prefix_id: data.name_prefix.name_prefix_name,
+          name_prefixName: data.name_prefix.name_prefix_name,
           country_id: data.address.country.country_name,
           state_province_id: data.address.state_province.state_province_name,
           city_id: data.address.city.city_name,
@@ -242,7 +242,7 @@ const EmployeeForm = (props) => {
   }
   //
   const validationSchema = Yup.object({
-    name_prefix_id: Yup.object().required("Title is required."),
+    name_prefix_id: Yup.object().required("Title is required."),    
     given_name: Yup.string().required("Employee First Name is required."),
     surname: Yup.string().required("Employee Last Name is required."),
     birth_date: Yup.array().min(3, "Date of Birth is required."),
@@ -284,71 +284,143 @@ const EmployeeForm = (props) => {
     <Formik
       initialValues={formValues || initialValues}
       onSubmit={async (values, { setSubmitting }) => {
+        let formId = props.match.params.id
+
+        
         setSubmitting(true)
-        try {
-          let res = await api.post("master/employees", {
-            name_prefix_id: values.name_prefix_id.value,
-            given_name: values.given_name,
-            middle_name: values.middle_name,
-            surname: values.surname,
-            birth_date: formatDate([
-              values.birth_date[2].value,
-              values.birth_date[1].value,
-              values.birth_date[0].value,
-            ]),
-            gender_id: values.gender_id,
-            ktp: values.ktp,
-            employee_asset: {
-              multimedia_description_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-            },
-            contact: {
-              email: values.contact.email,
-              mobile_phone_number: values.contact.mobile_phone_number,
-              other_email: values.contact.other_email,
-              phone_number: values.contact.phone_number,
-            },
-            address: {
-              address_line: values.address.address_line,
-              country_id: values.address.country_id.value,
-              state_province_id: values.address.state_province_id.value,
-              city_id: values.address.city_id.value,
-              postal_code: values.address.postal_code,
-            },
-            permanent_address: {
-              address_line: values.permanent_address.address_line,
-              country_id: values.permanent_address.country_id.value,
-              state_province_id:
-                values.permanent_address.state_province_id.value,
-              city_id: values.permanent_address.city_id.value,
-              postal_code: values.permanent_address.postal_code,
-            },
-            emergency_contact: {
-              contact_name: values.emergency_contact.contact_name,
-              contact_phone_number:
-                values.emergency_contact.contact_phone_number,
-              relationship: values.emergency_contact.relationship,
-            },
-            emergency_contact2: {
-              contact_name: values.emergency_contact2.contact_name,
-              contact_phone_number:
-                values.emergency_contact2.contact_phone_number,
-              relationship: values.emergency_contact2.relationship,
-            },
-            employee_number: values.employee_number,
-            //job_title_id: values.job_title_id.value,
-            //division_id: values.division_id.value,
-            //office_id: values.office_id.value,
-            //birth_date: [values.birth_date[2].value,values.birth_date[1].value,values.birth_date[0].value,].join("-"),
-            // hire_date: formatDate([
-            //   values.hire_date[2].value,
-            //   values.hire_date[1].value,
-            //   values.hire_date[0].value,
-            // ]),
-            npwp: values.npwp,
-          })
-          console.log("data", res)
-          setSubmitting(false)
-        } catch (e) {}
+        if (formId === undefined){
+          try {
+            let res = await api.post("master/employees", {
+              name_prefix_id: values.name_prefix_id.value,
+              given_name: values.given_name,
+              middle_name: values.middle_name,
+              surname: values.surname,
+              birth_date: formatDate([
+                values.birth_date[2].value,
+                values.birth_date[1].value,
+                values.birth_date[0].value,
+              ]),
+              gender_id: values.gender_id,
+              ktp: values.ktp,
+              employee_asset: {
+                multimedia_description_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+              },
+              contact: {
+                email: values.contact.email,
+                mobile_phone_number: values.contact.mobile_phone_number,
+                other_email: values.contact.other_email,
+                phone_number: values.contact.phone_number,
+              },
+              address: {
+                address_line: values.address.address_line,
+                country_id: values.address.country_id.value,
+                state_province_id: values.address.state_province_id.value,
+                city_id: values.address.city_id.value,
+                postal_code: values.address.postal_code,
+              },
+              permanent_address: {
+                address_line: values.permanent_address.address_line,
+                country_id: values.permanent_address.country_id.value,
+                state_province_id:
+                  values.permanent_address.state_province_id.value,
+                city_id: values.permanent_address.city_id.value,
+                postal_code: values.permanent_address.postal_code,
+              },
+              emergency_contact: {
+                contact_name: values.emergency_contact.contact_name,
+                contact_phone_number:
+                  values.emergency_contact.contact_phone_number,
+                relationship: values.emergency_contact.relationship,
+              },
+              emergency_contact2: {
+                contact_name: values.emergency_contact2.contact_name,
+                contact_phone_number:
+                  values.emergency_contact2.contact_phone_number,
+                relationship: values.emergency_contact2.relationship,
+              },
+              employee_number: values.employee_number,
+              //job_title_id: values.job_title_id.value,
+              //division_id: values.division_id.value,
+              //office_id: values.office_id.value,
+              //birth_date: [values.birth_date[2].value,values.birth_date[1].value,values.birth_date[0].value,].join("-"),
+              // hire_date: formatDate([
+              //   values.hire_date[2].value,
+              //   values.hire_date[1].value,
+              //   values.hire_date[0].value,
+              // ]),
+              npwp: values.npwp,
+            })
+            console.log("data", res)
+            setSubmitting(false)
+          } catch (e) {}
+        //ProsesUpdate
+        } else {
+          try {
+            let res = await api.put(`master/employees/${formId}`, {
+              name_prefix_id: values.name_prefix_id.value || values.name_prefix_id,
+              given_name: values.given_name,
+              middle_name: values.middle_name,
+              surname: values.surname,
+              birth_date: formatDate([
+                values.birth_date[2].value,
+                values.birth_date[1].value,
+                values.birth_date[0].value,
+              ]) || values.birth_date,
+              gender_id: values.gender_id,
+              ktp: values.ktp,
+              employee_asset: {
+                multimedia_description_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+              },
+              contact: {
+                email: values.contact.email,
+                mobile_phone_number: values.contact.mobile_phone_number,
+                other_email: values.contact.other_email,
+                phone_number: values.contact.phone_number,
+              },
+              address: {
+                address_line: values.address.address_line,
+                country_id: values.address.country_id.value || values.address.country_id,
+                state_province_id: values.address.state_province_id.value || values.address.state_province_id,
+                city_id: values.address.city_id.value || values.address.city_id,
+                postal_code: values.address.postal_code,
+              },
+              permanent_address: {
+                address_line: values.permanent_address.address_line,
+                country_id: values.permanent_address.country_id.value || values.permanent_address.country_id,
+                state_province_id:
+                  values.permanent_address.state_province_id.value || values.permanent_address.state_province_id,
+                city_id: values.permanent_address.city_id.value || values.permanent_address.city_id,
+                postal_code: values.permanent_address.postal_code,
+              },
+              emergency_contact: {
+                contact_name: values.emergency_contact.contact_name,
+                contact_phone_number:
+                  values.emergency_contact.contact_phone_number,
+                relationship: values.emergency_contact.relationship,
+              },
+              emergency_contact2: {
+                contact_name: values.emergency_contact2.contact_name,
+                contact_phone_number:
+                  values.emergency_contact2.contact_phone_number,
+                relationship: values.emergency_contact2.relationship,
+              },
+              employee_number: values.employee_number,
+              //job_title_id: values.job_title_id.value,
+              //division_id: values.division_id.value,
+              //office_id: values.office_id.value,
+              //birth_date: [values.birth_date[2].value,values.birth_date[1].value,values.birth_date[0].value,].join("-"),
+              // hire_date: formatDate([
+              //   values.hire_date[2].value,
+              //   values.hire_date[1].value,
+              //   values.hire_date[0].value,
+              // ]),
+              npwp: values.npwp,
+            })
+            console.log("dataupdate", res)
+            setSubmitting(false)
+          } catch (e) {}
+        }
+        
       }}
       validationSchema={validationSchema}
       validateOnMount
@@ -401,7 +473,7 @@ const EmployeeForm = (props) => {
                               label="Title"
                               name="name_prefix_id"
                               placeholder={
-                                formik.values.name_prefix_id || "Mr."
+                                formik.values.name_prefixName || "Mr."
                               }
                               url={`master/name-prefixes`}
                               fieldName={"name_prefix_name"}
