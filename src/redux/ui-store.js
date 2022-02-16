@@ -30,9 +30,10 @@ export const uiStore = createSlice({
     },
     setCreateModal: (state, action) => {
       state.showCreateModal = action.payload
+      state.reloadTable = !action.payload
     },
     setReloadTable: (state, action) => {
-      state.showCreateModal = action.payload
+      state.reloadTable = action.payload
     },
   },
 })

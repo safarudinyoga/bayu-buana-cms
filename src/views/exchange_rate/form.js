@@ -79,12 +79,18 @@ function ExchangeRateCreate(props) {
       }
       let res = await API.putOrPost("/master/currency-conversions", id, form)
 			console.log(res)
+      dispatch(setCreateModal(false))
+      dispatch(
+				setAlert({
+				  message: `Record 'From Currency: ${form.from_currency} and To Currency: ${form.to_currency}' has been successfully saved.`,
+				}),
+      )
 		} catch(e) {
 			dispatch(
 				setAlert({
-				  message: e.response.data.message,
+				  message: "Failed to save this record.",
 				}),
-			  )
+      )
 		}
 	}
   const formSize = {
