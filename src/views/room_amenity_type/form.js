@@ -67,7 +67,7 @@ function RoomAmenityTypeForm(props) {
     room_amenity_type_name: {
       required: "Room Amenity Type Name is required.",
       minlength: "Room amenity type name must be at least 1 characters",
-      maxlength: "Room amenity type name must be no more than 256 characters",
+      maxlength: "Room amenity type name cannot be more than 256 characters",
     },
     room_amenity_type_code: {
       required: "Room Amenity Type Code is required.",
@@ -271,7 +271,7 @@ function RoomAmenityTypeForm(props) {
       )
     } finally {
       setLoading(false)
-      props.history.push(backUrl)
+      props.history.goBack()
       dispatch(
         setAlert({
           message: `Record ${form.room_amenity_type_code} - ${

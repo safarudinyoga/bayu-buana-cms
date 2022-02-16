@@ -69,7 +69,7 @@ function RoomAmenityTypeForm(props) {
     room_amenity_category_name: {
       required: "Room Amenity Category Name is required",
       minlength: "Room Amenity Category Name must be at least 1 characters",
-      maxlength: "Room Amenity Category Name must be at most 256 characters",
+      maxlength: "Room Amenity Category Name cannot be more than 256 characters",
     },
     description: {
       required: "Description is required",
@@ -225,7 +225,7 @@ function RoomAmenityTypeForm(props) {
       )
     } finally {
       setLoading(false)
-      props.history.push(backUrl)
+      props.history.goBack()
     }
   }
 

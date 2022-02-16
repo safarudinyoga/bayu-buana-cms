@@ -228,7 +228,7 @@ function OfficeForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         if (res.data) {
-          setForm({...res.data, country_id: res.data.country.id})
+          setForm({...res.data, country_id: res.data.country.id, longitude: res.data.longitude != 0 ? res.data.longitude : "", latitude: res.data.latitude != 0 ? res.data.latitude : ""})
           let currentName = res.data.office_name
 
           $.validator.addMethod(
@@ -316,41 +316,41 @@ function OfficeForm(props) {
     setLoading(true)
     try {
       if (!form.address_line) {
-        form.address_line = null
+        form.address_line = ""
       }
       if (!form.building_room) {
-        form.building_room = null
+        form.building_room = ""
       }
       if (!form.state_province_id) {
-        form.state_province_id = null
+        form.state_province_id = "00000000-0000-0000-0000-000000000000"
       }
       if (!form.city_id) {
-        form.city_id = null
+        form.city_id = "00000000-0000-0000-0000-000000000000"
       }
       if (!form.postal_code) {
-        form.postal_code = null
+        form.postal_code = ""
       }
       if (!form.latitude) {
-        form.latitude = null
+        form.latitude = 0
       } else {
         form.latitude = parseFloat(form.latitude)
       }
       if (!form.longitude) {
-        form.longitude = null
+        form.longitude = 0
       } else {
         form.longitude = parseFloat(form.longitude);
       }
       if (!form.email) {
-        form.email = null
+        form.email = ""
       }
       if (!form.phone_number) {
-        form.phone_number = null
+        form.phone_number = ""
       }
       if (!form.fax_number) {
-        form.fax_number = null
+        form.fax_number = ""
       }
       if (!form.operation_hours) {
-        form.operation_hours = null
+        form.operation_hours = ""
       }
       console.log(form)
       let res = await api.putOrPost(endpoint, id, form)
@@ -370,7 +370,7 @@ function OfficeForm(props) {
       )
     } finally {
       setLoading(false)
-      props.history.push(backUrl)
+      props.history.goBack()
       dispatch(
         setAlert({
           message: `Record ${form.office_name} has been successfully saved.`,

@@ -45,7 +45,7 @@ class BBDataTable extends Component {
       itemInfo: ""
     }
     this.inProgress = false
-
+    this.queryParams = new URLSearchParams(this.props.location.search)
     this.api = new Api()
   }
 
@@ -136,6 +136,7 @@ class BBDataTable extends Component {
           checked = row.status == 1 ? "checked" : ""
         }
 
+        let hideDetail = self.props.hideDetail
 
         let infoDelete = self.props.infoDelete
         let info = ""
@@ -146,7 +147,7 @@ class BBDataTable extends Component {
         return (
           `
           <a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item" data-action="edit" data-id="${row.id}" title="Click to edit"><img src="${editIcon}"/></a>
-          <a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item" data-action="view" data-id="${row.id}" title="Click to view details"><img src="${showIcon}"/></a>
+          <a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="${hideDetail ? "d-none" : "d-inline"} table-row-action-item" data-action="view" data-id="${row.id}" title="Click to view details"><img src="${showIcon}"/></a>
           <a href="javascript:void(0);" class="${showSwitch ? "d-inline" : "d-none"} custom-switch custom-switch-bb table-row-action-item" data-id="${row.id}" data-action="update_status" data-status="${row.status}">
             <input type="checkbox" class="custom-control-input check-status-${row.id}" id="customSwitch${row.id}" ${checked} data-action="update_status">
             <label class="custom-control-label" for="customSwitch${row.id}" data-action="update_status"></label>
@@ -164,6 +165,11 @@ class BBDataTable extends Component {
         headers = { Authorization : `Bearer ${auth}` }
       }
 
+      let displayStart = 0;
+      if(this.queryParams.get("page")) {
+        displayStart = 10 * (this.queryParams.get("page")-1)
+      }
+
       let dt = $(this.table.current).DataTable({
         pagingType: "simple_numbers",
         colReorder: {
@@ -175,7 +181,7 @@ class BBDataTable extends Component {
         serverSide: true,
         processing: true,
         displayLength: 10,
-        displayStart: 0,
+        displayStart: displayStart,
         lengthMenu: [
           [10, 25, 50, 100, -1],
           [10, 25, 50, 100, "All"],
@@ -471,7 +477,7 @@ class BBDataTable extends Component {
           // },
           {
             orderable: false,
-            className: "select-checkbox",
+            className: !this.state.isCheckbox ? "wo-checkbox": "select-checkbox",
             targets: [0],
             width: "5%",
           },
@@ -562,13 +568,13 @@ class BBDataTable extends Component {
             try {
               dt.responsive.rebuild()
               dt.responsive.recalc()
-              dt.columns.adjust().draw()
+              // dt.columns.adjust().draw()
             } catch (e) {}
           }
         }, 500)
       })
 
-      dt.on("row-reorder", (e, diff, edit) => {
+      dt.on("row-reorder", async (e, diff, edit) => {
         if (diff.length > 0) {
           let module = this.props.title.toLowerCase().split(" ").join("_")
           if (this.props.title.includes("/")) {
@@ -586,15 +592,21 @@ class BBDataTable extends Component {
           )
           let targetIdx = rowPositionDiff === 0 ? 1 : diff.length - 2
           let sort = dt.row(diff[targetIdx].node)?.data()?.sort || 0
-          this.api
-            .post(`/master/batch-actions/sort/${module}`, { id: rowID, sort })
-            .then((res) => {
-              console.log(res)
-            })
-            .catch((e) => {
-              console.log(e)
-            })
+          console.log(edit.triggerRow.data().airline_code, sort)
+          try {
+            let res = await this.api.post(`/master/batch-actions/sort/${module}`, { id: rowID, sort })
+            console.log(res)
+            $(this.table.current).DataTable().draw(false)
+          } catch (e) {
+            console.log(e)
+          }
         }
+      })
+
+      dt.on('page.dt', async () => {
+        var info = dt.page.info();
+        this.queryParams.set("page", info.page+1)
+        this.props.history.replace({ pathname: this.props.location.pathname, search: `?page=${info.page+1}`})
       })
 
       this.dt = dt
@@ -667,7 +679,7 @@ class BBDataTable extends Component {
       setTimeout(() => {
         this.dt
           .buttons(
-            this.props.btnDownload ? this.prop.btnDownload : ".buttons-excel",
+            this.props.btnDownload ? this.props.btnDownload : ".buttons-excel",
           )
           .trigger()
         this.dt.page.len(prevLen).draw()
@@ -755,7 +767,6 @@ class BBDataTable extends Component {
   }
 
   componentWillUnmount() {
-    window.location.reload();
     try {
       this.dt.destroy()
     } catch (e) {}
@@ -888,7 +899,7 @@ class BBDataTable extends Component {
               : this.props.title}
           </ModalHeader>
           <ModalBody>Are you sure you want to delete {
-            this.props.showInfoDelete ? `'${this.state.info}'` : "this"
+            this.props.showInfoDelete ? this.state.selected.length > 0 ? "this" : `'${this.state.info}'` : "this"
           }?</ModalBody>
           <ModalFooter>
             <Button

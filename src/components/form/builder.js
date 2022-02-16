@@ -24,7 +24,8 @@ class FormBuilder extends Component {
 
   onBack() {
     if (this.props.back) {
-      this.props.history.push(this.props.back)
+      // this.props.history.push(this.props.back)
+      this.props.history.goBack()
     }
   }
 
@@ -40,6 +41,7 @@ class FormBuilder extends Component {
         txtback={this.props.txtBack}
         id={this.props.id}
       >
+        {this.props.showHeaderTitle && <h3 className="card-heading">{this.props.headerTitle}</h3> }
         <FormWrapper>{this.props.children}</FormWrapper>
         {this.props.showMedia && 
           <MediaForm 
@@ -49,16 +51,24 @@ class FormBuilder extends Component {
             moduleName={this.props.moduleName}
           />
           }
-        <TranslationForm
-          ref={this.translationForm}
-          translations={this.props.translations}
-          isView={this.props.isView}
-          fields={this.props.translationFields}
-        />
-        <FormAlert
-          isValid={this.props.isValid}
-          message={this.props.alertMessage}
-        />
+        {
+          this.props.hideTranslation ? "" : (
+            <>
+              <TranslationForm
+                ref={this.translationForm}
+                translations={this.props.translations}
+                isView={this.props.isView}
+                fields={this.props.translationFields}
+              />
+              <FormAlert
+                isValid={this.props.isValid}
+                message={this.props.alertMessage}
+              />
+            </>
+          )
+        }
+        
+        
       </FormContainer>
     )
   }

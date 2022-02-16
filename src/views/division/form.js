@@ -107,11 +107,11 @@ function DivisionForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data);
-        if (res.data.parent_division) {
+        if (res.data.parent_division && res.data.parent_division_id) {
           setParentDivisionTypeData([{...res.data.parent_division, id: res.data.parent_division_id, text: res.data.parent_division.division_name}])
         }
-        if (res.data.employee) {
-          setEmployeeData([{...res.data.employee, text: res.data.employee.employee_name}])
+        if (res.data.manager) {
+          setEmployeeData([{...res.data.manager, text: res.data.manager.given_name}])
         }
         if (res.data) {
           let currentCode = res.data.division_code
@@ -256,7 +256,7 @@ function DivisionForm(props) {
       }
 
       setLoading(false)
-      props.history.push(backUrl)
+      props.history.goBack()
       dispatch(
         setAlert({
           message: `Record ${form.division_name} has been successfully saved.`,
@@ -306,7 +306,7 @@ function DivisionForm(props) {
           name="parent_division_id"
           endpoint="/master/divisions"
           column="division_name"
-          filter={formId ? `[["id","!=", "${formId}"],["and"],["status", "=", 1]]` : `["status", "=", 1]`}
+          filter={`[["parent_division_id","is",null],["and"],["status", "=", 1]]`}
           onChange={(e) =>
             setForm({...form, parent_division_id: e.target.value || null})
           }
@@ -321,7 +321,8 @@ function DivisionForm(props) {
           value={form.manager_id}
           name="manager_id"
           endpoint="/master/employees"
-          column="employee_name"
+          column="person.given_name"
+          sort="employee_number"
           filter={`["status", "=", 1]`}
           onChange={(e) =>
             setForm({...form, manager_id: e.target.value || null})

@@ -446,7 +446,7 @@ const HotelRoomType = (props) => {
             </Button>
             <Button
               variant="secondary"
-              onClick={() => props.history.push(backUrl)}
+              onClick={() => props.history.goBack()}
             >
               CANCEL
             </Button>

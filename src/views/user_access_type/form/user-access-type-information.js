@@ -1,141 +1,75 @@
-import FormBuilder from "components/form/builder"
+import { withRouter } from "react-router"
+import React, { useEffect, useState } from "react"
+import Api from "config/api"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
-import Api from "config/api"
-import $ from "jquery"
+import FormBuilder from "components/form/builder"
 import useQuery from "lib/query"
-import React, {useEffect, useState} from "react"
-import {useDispatch} from "react-redux"
-import {withRouter} from "react-router"
-import {setAlert, setUIParams} from "redux/ui-store"
-import FormInputSelectAjax from "../../components/form/input-select-ajax"
-import env from "../../config/environment"
+import { useDispatch } from "react-redux"
+import { setAlert } from "redux/ui-store"
+import $ from "jquery"
+import env from "../../../config/environment"
 
-const endpoint = "/master/job-titles"
-const backUrl = "/master/job-title"
+const endpoint = "/master/user-types"
+const backUrl = "/master/user-access-type"
 
-function JobTitleForm(props) {
+function UserAccessTypeInformation(props) {
   let dispatch = useDispatch()
-
   let formId = props.match.params.id
+
   const isView = useQuery().get("action") === "view"
   const [formBuilder, setFormBuilder] = useState(null)
   const [loading, setLoading] = useState(true)
   const [translations, setTranslations] = useState([])
-  const [supplierTypeData, setSupplierTypeData] = useState([])
   const [id, setId] = useState(null)
   const [form, setForm] = useState({
-    job_title_code: "",
-    job_title_name: "",
-    parent_id: "",
-    manager_id: "",
+    user_type_code: "",
+    user_type_name: "",
   })
   const translationFields = [
     {
       label: "Name",
-      name: "job_title_name",
+      name: "user_type_name",
       type: "text",
+      maxLength: 64,
     },
   ]
 
   const validationRules = {
-    job_title_code: {
+    user_type_name: {
       required: true,
       minlength: 1,
-      maxlength: 36,
-      checkCode: true,
-      noSpace: true,      
-    },
-    job_title_name: {
-      required: true,
-      minlength: 1,
-      maxlength: 256,
+      maxlength: 64,
       checkName: true,
-      noSpace: true,
     },
-    parent_id: {},
-    manager_id: {},
+    user_type_code: {
+      required: true,
+      minlength: 2,
+      maxlength: 4,
+      checkCode: true,
+    },
   }
 
   const validationMessages = {
-    job_title_code: {
-      required: "Job Title Code is required.",
-      minlength: "Job Title code must be at least 1 characters",
-      maxlength: "Job Title code cannot be longer than 36 characters",
+    user_type_name: {
+      required: "Name is required",
     },
-    job_title_name: {
-      required: "Job Title Name is required.",
-      minlength: "Job Title name must be at least 1 characters",
-      maxlength: "Job Title name cannot be longer than 256 characters",
+    user_type_code: {
+      required: "Code is required",
     },
   }
 
   useEffect(async () => {
-    let api = new Api()    
-
-    let bcTitle = "Edit Job Title"
-    let docTitle = bcTitle
-    if (!formId) {
-      bcTitle = "Create Job Title"
-      docTitle = "Create New Job Title"
-    } else if (isView) {
-      bcTitle = "Job Title Details"
-      docTitle = bcTitle
-    }
-
-    dispatch(
-      setUIParams({
-        title: docTitle,
-        breadcrumbs: [
-          {
-            text: "Employee Management",
-          },
-          {
-            link: backUrl,
-            text: "Job Title",
-          },
-          {
-            text: bcTitle,
-          },
-        ],
-      }),
-    )
+    let api = new Api()
+    let formId = props.match.params.id
     if (formId) {
       try {
         let res = await api.get(endpoint + "/" + formId)
-        setForm(res.data);
-        if (res.data.parent) {
-          setSupplierTypeData([{...res.data.parent, text: res.data.parent.parent_name}])
-        }
+        setForm(res.data)
+
         if (res.data) {
-          let currentCode = res.data.job_title_code
-          let currentName = res.data.job_title_name
-
-          $.validator.addMethod(
-            "checkCode",
-            function (value, element) {
-              var req = false
-              $.ajax({
-                type: "GET",
-                async: false,
-                url: `${env.API_URL}/master/job-titles?filters=["job_title_code","=","${element.value}"]`,
-                success: function (res) {
-                  if (res.items.length !== 0) {
-                    if (currentCode === element.value) {
-                      req = true
-                    } else {
-                      req = false
-                    }
-                  } else {
-                    req = true
-                  }
-                },
-              })
-
-              return req
-            },
-            "Job TItle Code already exists",
-          )
+          let currentCode = res.data.user_type_code
+          let currentName = res.data.user_type_name
 
           $.validator.addMethod(
             "checkName",
@@ -144,7 +78,7 @@ function JobTitleForm(props) {
               $.ajax({
                 type: "GET",
                 async: false,
-                url: `${env.API_URL}/master/job-titles?filters=["job_title_name","=","${element.value}"]`,
+                url: `${env.API_URL}/master/user-types?filters=["user_type_name","=","${element.value}"]`,
                 success: function (res) {
                   if (res.items.length !== 0) {
                     if (currentName === element.value) {
@@ -160,41 +94,43 @@ function JobTitleForm(props) {
 
               return req
             },
-            "Job Title Name already exists",
+            "Name already exists",
+          )
+          $.validator.addMethod(
+            "checkCode",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/user-types?filters=["user_type_code","like","${element.value}"]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if (currentCode === element.value) {
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+              return req
+            },
+            "Code already exists",
           )
         }
-
-      } catch (e) { }
+      } catch (e) {}
 
       try {
         let res = await api.get(endpoint + "/" + formId + "/translations", {
           size: 50,
         })
         setTranslations(res.data.items)
-      } catch (e) { }
+      } catch (e) {}
       setLoading(false)
     } else {
-      $.validator.addMethod(
-        "checkCode",
-        function (value, element) {
-          var req = false
-          $.ajax({
-            type: "GET",
-            async: false,
-            url: `${env.API_URL}/master/job-titles?filters=["job_title_code","=","${element.value}"]`,
-            success: function (res) {
-              if (res.items.length !== 0) {
-                req = false
-              } else {
-                req = true
-              }
-            },
-          })
-          return req
-        },
-        "Job TItle Code already exists",
-      )
-
       $.validator.addMethod(
         "checkName",
         function (value, element) {
@@ -202,7 +138,7 @@ function JobTitleForm(props) {
           $.ajax({
             type: "GET",
             async: false,
-            url: `${env.API_URL}/master/job-titles?filters=["job_title_name","=","${element.value}"]`,
+            url: `${env.API_URL}/master/user-types?filters=["user_type_name","=","${element.value}"]`,
             success: function (res) {
               if (res.items.length !== 0) {
                 req = false
@@ -214,7 +150,28 @@ function JobTitleForm(props) {
 
           return req
         },
-        "Job Title Name already exists",
+        "Name already exists",
+      )
+      $.validator.addMethod(
+        "checkCode",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/user-types?filters=["user_type_code","like","${element.value}"]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
+
+          return req
+        },
+        "Code already exists",
       )
     }
   }, [])
@@ -231,8 +188,8 @@ function JobTitleForm(props) {
     setLoading(true)
     let api = new Api()
     try {
-      if (!form.parent_id) {
-        form.parent_id = null
+      if (!form.model) {
+        form.model = null
       }
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
@@ -241,24 +198,15 @@ function JobTitleForm(props) {
         let path = endpoint + "/" + res.data.id + "/translations"
         await api.putOrPost(path, tl.id, tl)
       }
-
-
-      setLoading(false)
-      props.history.goBack()
-      dispatch(
-        setAlert({
-          message: `Record '${form.job_title_name
-            }' has been successfully saved.`,
-        }),
-      )
     } catch (e) {
-      setLoading(false)
       dispatch(
         setAlert({
-          message: `Failed to save this record.`,
+          message: `Failed to ${formId ? "update" : "save"} this record.`,
         }),
       )
     } finally {
+      setLoading(false)
+      props.handleSelectTab("module-access")
     }
   }
 
@@ -274,43 +222,42 @@ function JobTitleForm(props) {
       isValid={false}
       rules={validationRules}
       validationMessages={validationMessages}
+      showHeaderTitle={true}
+      headerTitle={"User Access Type Information"}
+      txtSave={"SAVE & NEXT"}
     >
       <FormHorizontal>
         <FormInputControl
           label="Name"
           required={true}
-          value={form.job_title_name}
-          name="job_title_name"
-          onChange={(e) =>
-            setForm({...form, job_title_name: e.target.value})
-          }
+          value={form.user_type_name}
+          name="user_type_name"
+          onChange={(e) => setForm({ ...form, user_type_name: e.target.value })}
           disabled={isView || loading}
           type="text"
           minLength="1"
-          maxLength="256"
+          maxLength="64"
         />
       </FormHorizontal>
 
       <FormHorizontal>
         <FormInputControl
-          label="Code"
+          value={form.user_type_code}
           required={true}
-          value={form.job_title_code}
-          name="job_title_code"
-          cl={{md:"12"}}
+          name="user_type_code"
+          onChange={(e) => setForm({ ...form, user_type_code: e.target.value })}
+          cl={{ md: "12" }}
           cr="12"
-          onChange={(e) =>
-            setForm({...form, job_title_code: e.target.value})
-          }
           disabled={isView || loading}
+          label="Code"
           type="text"
-          minLength="1"
-          maxLength="36"
-          hint="Job Title Code maximum 36 characters"
+          minLength="2"
+          maxLength="4"
+          hint="Code maximum 4 characters"
         />
       </FormHorizontal>
     </FormBuilder>
   )
 }
 
-export default withRouter(JobTitleForm)
+export default withRouter(UserAccessTypeInformation)

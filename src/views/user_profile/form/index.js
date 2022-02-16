@@ -49,12 +49,11 @@ const UserProfile = (props) => {
         ],
       }),
     )
-    try {
-      let res = await api.get(endpoint)
-      console.log(res);
-      setForm(res.data)
-    } catch (e) {}
-    setLoading(false)
+    // try {
+    //   let res = await api.get(endpoint)
+    //   setForm(res.data)
+    // } catch (e) {}
+    // setLoading(false)
   }, [])
 
   const handleSelectTab = async (key) => {

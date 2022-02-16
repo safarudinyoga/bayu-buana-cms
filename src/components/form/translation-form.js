@@ -189,13 +189,11 @@ export default class TranslationForm extends Component {
                       lang.language_code,
                       field.name,
                     )}
-                    // name={field.name + "_" + lang.language_code}
-                    name={field.name}
+                    name={field.name + "_" + lang.language_code}
                     type={field.type}
                     label={field.label}
                     cl={{ lg: 5 }}
                     maxLength={field?.maxLength || "256"}
-                    required={field?.required || false}
                   />
                 )
               })}

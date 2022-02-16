@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Card, Form, Row, Col, Button } from "react-bootstrap"
 import { Formik } from "formik"
 import * as Yup from "yup"
@@ -8,7 +8,7 @@ const EmergencyContacts = (props) => {
   let api = new Api()
 
   // Initialize form
-  const initialForm = {
+  const [initialForm, setIntialForm] = useState({
     // Emergency Contact 1
     fullNameEmergency1: "",
     phoneNumberEmergency1: "",
@@ -18,7 +18,7 @@ const EmergencyContacts = (props) => {
     fullNameEmergency2: "",
     phoneNumberEmergency2: "",
     relationshipEmergency2: "",
-  }
+  })
 
   // Schema for yup
   const validationSchema = Yup.object().shape({
@@ -33,12 +33,50 @@ const EmergencyContacts = (props) => {
     relationshipEmergency2: Yup.string(),
   })
 
+  useEffect(async () => {
+    try {
+      let res = await api.get("/user/profile")
+      let data = res.data;
+      setIntialForm({
+        ...initialForm,
+        
+        // Emergency Contact 1
+        fullNameEmergency1: data.emergency_contact.contact_name ? data.emergency_contact.contact_name : "",
+        phoneNumberEmergency1: data.emergency_contact.contact_phone_number ? data.emergency_contact.contact_phone_number : "",
+        relationshipEmergency1: data.emergency_contact.relationship ? data.emergency_contact.relationship : "",
+
+        // Emergency Contact 2
+        fullNameEmergency2: data.emergency_contact2.contact_name ? data.emergency_contact2.contact_name : "",
+        phoneNumberEmergency2: data.emergency_contact2.contact_phone_number ? data.emergency_contact2.contact_phone_number : "",
+        relationshipEmergency2: data.emergency_contact2.relationship ? data.emergency_contact2.relationship : "",
+
+      })
+    } catch(e) {}
+  }, [])
+
   return (
     <Formik
+      enableReinitialize
       initialValues={initialForm}
       validationSchema={validationSchema}
       onSubmit={async (values, { setSubmitting, resetForm }) => {
         console.log(values)
+
+        let formatted = {
+          emergency_contact: {
+            contact_name: values.fullNameEmergency1,
+            contact_phone_number: values.phoneNumberEmergency1,
+            relationship: values.relationshipEmergency1
+          },
+          emergency_contact2: {
+            contact_name: values.fullNameEmergency2,
+            contact_phone_number: values.phoneNumberEmergency2,
+            relationship: values.relationshipEmergency2
+          }
+        }
+
+        let res = await api.put("user/profile", formatted)
+        console.log(res);
         // setSubmitting(true)
 
         // try {
@@ -55,6 +93,8 @@ const EmergencyContacts = (props) => {
         //   resetForm()
         //   setSubmitting(false)
         // } catch (e) {}
+
+        return props.handleSelectTab("security-settings")
       }}
     >
       {({

@@ -53,9 +53,11 @@ function RatingTypeForm(props) {
 
     rating_type_code: {
       required: true,
-      min: 0,
-      max: 999,
+      min: 1,
+      max: 32767,
       checkCode: true,
+      noSpace: true,
+      number:true
     },
 
     rating_type_name: {
@@ -78,6 +80,7 @@ function RatingTypeForm(props) {
     },
     rating_type_code: {
       required: "Rating Type Code is required",
+      max: "Rating Type Code cannot be more than 32767",
     },
     scale: {
       required: "Scale is required",
@@ -249,7 +252,10 @@ function RatingTypeForm(props) {
       if (!form.rating_type_name) {
         form.rating_type_name = null
       }
-      let res = await api.putOrPost(endpoint, id, form)
+      let res = await api.putOrPost(endpoint, id, {
+        ...form,
+        rating_type_code: parseInt(form.rating_type_code),
+      })
       setId(res.data.id)
       for (let i in translated) {
         let tl = translated[i]
@@ -264,7 +270,7 @@ function RatingTypeForm(props) {
       )
     } finally {
       setLoading(false)
-      props.history.push(backUrl)
+      props.history.goBack()
       dispatch(
         setAlert({
           message: `Record ${form.rating_type_code} - ${form.rating_type_name} has been successfully ${formId ? "updated" : "saved"}.`,
@@ -365,13 +371,10 @@ function RatingTypeForm(props) {
           cl={{md:"12"}}
           cr="12"
           onChange={(e) =>
-            setForm({...form, rating_type_code: parseInt(e.target.value)})
+            setForm({...form, rating_type_code: e.target.value})
           }
           disabled={isView || loading}
           type="number"
-          min="0"
-          max="99"
-          hint="Rating type code maximum 99 characters"
         />
       </FormHorizontal>
     </FormBuilder>

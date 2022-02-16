@@ -14,7 +14,7 @@ export default function FrequentTravelerProgramTable() {
         title: "Frequent Traveler Program",
         breadcrumbs: [
           {
-            text: "Master Data Management",
+            text: "Setup and Configurations",
           },
           {
             text: "Frequent Traveler Program",
@@ -24,8 +24,8 @@ export default function FrequentTravelerProgramTable() {
     )
   }, [])
 
-  let [selectedCountries, setSelectedCountries] = useState([])
-  let [selectedCountryIds, setSelectedCountryIds] = useState([])
+  let [selectedProductTypes, setSelectedProductTypes] = useState([])
+  let [selectedProductTypeIds, setSelectedProductTypeIds] = useState([])
 
   const onFilterChange = (e, values) => {
     let ids = []
@@ -35,12 +35,12 @@ export default function FrequentTravelerProgramTable() {
       }
     }
     if (ids.length > 0) {
-      setParams({ ...params, filters: [["country_id", "in", ids]] })
+      setParams({ ...params, filters: [["product_type.id", "in", ids]] })
     } else {
       setParams({ ...params, filters: [] })
     }
-    setSelectedCountries(values)
-    setSelectedCountryIds(ids)
+    setSelectedProductTypes(values)
+    setSelectedProductTypeIds(ids)
   }
 
   const extraFilter = () => {
@@ -48,12 +48,15 @@ export default function FrequentTravelerProgramTable() {
       <FormInputSelectAjax
         label="Program Type"
         onChange={onFilterChange}
-        endpoint="/master/hotels"
-        column="type"
-        value={selectedCountryIds}
-        data={selectedCountries}
+        endpoint="/master/loyalty-programs"
+        column="product_type.product_type_name"
+        sort="id"
+        isGrouping={true}
+        fieldGroup="product_type.id"
+        value={selectedProductTypeIds}
+        data={selectedProductTypes}
         filter={`["status", "=", 1]`}
-        placeholder="Type"
+        placeholder="Please choose"
         type="selectmultiple"
         isFilter={true}
         allowClear={false}
@@ -63,26 +66,27 @@ export default function FrequentTravelerProgramTable() {
 
   const onReset = () => {
     setParams({ ...params, filters: [] })
-    setSelectedCountries([])
-    setSelectedCountryIds([])
+    setSelectedProductTypes([])
+    setSelectedProductTypeIds([])
   }
 
   let [params, setParams] = useState({
     title: "Frequent Traveler Program",
     titleModal: "Frequent Traveler Program",
     baseRoute: "/master/frequent-traveler-program/form",
-    endpoint: "/master/hotels",
-    deleteEndpoint: "/master/batch-actions/delete/hotels",
-    activationEndpoint: "/master/batch-actions/activate/hotels",
-    deactivationEndpoint: "/master/batch-actions/deactivate/hotels",
+    endpoint: "/master/loyalty-programs",
+    deleteEndpoint: "/master/batch-actions/delete/loyalty-program",
+    activationEndpoint: "/master/batch-actions/activate/loyalty-programs",
+    deactivationEndpoint: "/master/batch-actions/deactivate/loyalty-programs",
     columns: [
       {
         title: "Loyalty Name",
-        data: "loyalty_name",
+        data: "loyalty_program_name",
+        render: renderColumn("loyalty_program", "loyalty_program_name"),  
       },
       {
         title: "Type",
-        data: "type",        
+        data: "product_type.product_type_name",        
       },
       {
         title: "Description",
@@ -94,9 +98,26 @@ export default function FrequentTravelerProgramTable() {
         data: "status",
         render: rowStatus,
       },      
+      {
+        title: "Translated Frequent Traveler Program",
+        data: "loyalty_program_translation.loyalty_program_name",
+        visible: false,
+      },   
     ],
     emptyTable: "No frequent traveler program found",
-    recordName: ["loyalty_name"],
+    recordName: ["loyalty_program_name"],
+    showInfoDelete: true,
+    btnDownload: ".buttons-csv",
+    infoDelete: [
+      {title: "Loyalty Name", recordName: "loyalty_program_name"}, 
+    ],
+    customFilterStatus: {
+      value: "",
+      options: [
+        {value: "1", label: "Active"},
+        {value: "3", label: "Inactive"},
+      ]
+    }
   })
 
   return <BBDataTable {...params} extraFilter={extraFilter} onReset={onReset} />

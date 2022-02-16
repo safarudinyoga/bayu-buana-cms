@@ -36,8 +36,8 @@ function AgeQualifyingTypeForm(props) {
   const validationRules = {
     age_qualifying_type_code: {
       required: true,
-      min: 0,
-      max: 99,
+      min: 1,
+      max: 32767,
       checkCode: true,
       noSpace: true,
       number:true
@@ -53,8 +53,7 @@ function AgeQualifyingTypeForm(props) {
   const validationMessages = {
     age_qualifying_type_code: {
       required: "Age Qualifying Type Code is required.",
-      minlength: "Age Qualifying Type Code must be at least 0 characters",
-      maxlength: "Age Qualifying Type Code cannot be more than 99 characters",
+      max: "Age Qualifying Type Code cannot be more than 32767",
     },
     age_qualifying_type_name: {
       required: "Age Qualifying Type Name is required",
@@ -156,7 +155,10 @@ function AgeQualifyingTypeForm(props) {
     setLoading(true)
     let api = new Api()
     try {
-      let res = await api.putOrPost(endpoint, id, form)
+      let res = await api.putOrPost(endpoint, id, {
+        ...form,
+        age_qualifying_type_code: parseInt(form.age_qualifying_type_code),
+      })
       setId(res.data.id)
       for (let i in translated) {
         let tl = translated[i]
@@ -171,7 +173,7 @@ function AgeQualifyingTypeForm(props) {
       )
     } finally {
       setLoading(false)
-      props.history.push(backUrl)
+      props.history.goBack()
       dispatch(
         setAlert({
           message: `Record ${form.age_qualifying_type_code} - ${
@@ -220,13 +222,10 @@ function AgeQualifyingTypeForm(props) {
           cl={{md:"12"}}
           cr="12"
           onChange={(e) =>
-            setForm({...form, age_qualifying_type_code: parseInt(e.target.value)})
+            setForm({...form, age_qualifying_type_code: e.target.value})
           }
           disabled={isView || loading}
           type="number"
-          min="0"
-          max="99"
-          hint="Numeric value"
         />
       </FormHorizontal>
     </FormBuilder>

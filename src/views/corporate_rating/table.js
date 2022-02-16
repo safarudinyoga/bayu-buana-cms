@@ -1,20 +1,18 @@
 import BBDataTable from "components/table/bb-data-table"
-import rowStatus from "lib/row-status"
 import { renderColumn } from "lib/translation"
 import React, { useEffect, useState } from "react"
 import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
-import FormInputSelectAjax from 'components/form/input-select-ajax'
 
 export default function CorporateRatingTable() {
   let dispatch = useDispatch()
   useEffect(() => {
     dispatch(
       setUIParams({
-        title: "Corporate Rating",
+        title: "Corporate Ratings",
         breadcrumbs: [
           {
-            text: "Master Data Management",
+            text: "Setup and Configurations",
           },
           {
             text: "Corporate Rating",
@@ -24,62 +22,45 @@ export default function CorporateRatingTable() {
     )
   }, [])
 
-  let [selectedCountries, setSelectedCountries] = useState([])
-  let [selectedCountryIds, setSelectedCountryIds] = useState([])
-
-  const onFilterChange = (e, values) => {
-    let ids = []
-    if (values && values.length > 0) {
-      for (let i in values) {
-        ids.push(values[i].id)
-      }
-    }
-    if (ids.length > 0) {
-      setParams({ ...params, filters: [["country_id", "in", ids]] })
-    } else {
-      setParams({ ...params, filters: [] })
-    }
-    setSelectedCountries(values)
-    setSelectedCountryIds(ids)
-  }  
-
-  const onReset = () => {
-    setParams({ ...params, filters: [] })
-    setSelectedCountries([])
-    setSelectedCountryIds([])
-  }
-
   let [params, setParams] = useState({
+    isCheckbox: false,
+    showAdvancedOptions: false,
+    hideDetail: true,
     title: "Corporate Rating",
     titleModal: "Corporate Rating",
     baseRoute: "/master/corporate-rating/form",
-    endpoint: "/master/hotels",
-    deleteEndpoint: "/master/batch-actions/delete/hotels",
-    activationEndpoint: "/master/batch-actions/activate/hotels",
-    deactivationEndpoint: "/master/batch-actions/deactivate/hotels",
+    endpoint: "/master/corporate-rating-types",
+    deleteEndpoint: "/master/batch-actions/delete/corporate-rating-type",
+    activationEndpoint: "/master/batch-actions/activate/corporate-rating-type",
+    deactivationEndpoint: "/master/batch-actions/deactivate/corporate-rating-type",
     columns: [
       {
         title: "Rating Code",
-        data: "rating-code",
+        data: "corporate_rating_type_code",
       },
       {
         title: "Rating Name",
-        data: "rating-name",        
+        data: "corporate_rating_type_name", 
+        render: renderColumn("corporate_rating_type", "corporate_rating_type_name"),       
       },
       {
         title: "Rating",
-        data: "rating",
+        data: "scale",
       },
       {
-        searchable: false,
-        title: "Status",
-        data: "status",
-        render: rowStatus,
-      },      
+        title: "Translated Corporate Rating Type",
+        data: "corporate_rating_type_translation.corporate_rating_type_name",
+        visible: false,
+      },     
     ],
     emptyTable: "No Corporate Rating found",
-    recordName: ["rating-code", "rating-name"],
+    recordName: "corporate_rating_type_name",
+    btnDownload: ".buttons-csv",
+    showInfoDelete: true,
+    infoDelete: [
+      {title: "Rating Name", recordName: "corporate_rating_type_name"}, 
+    ],
   })
 
-  return <BBDataTable {...params} onReset={onReset} />
+  return <BBDataTable {...params} />
 }

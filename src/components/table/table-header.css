@@ -63,6 +63,12 @@ button.advanced-options-btn:active {
   width: 60px;
 }
 
+.menu-link {
+  font-style: italic;
+  font-size: 15px;
+  vertical-align: middle;
+}
+
 .btn-table-action-dropdown,
 .btn-table-action-dropdown:focus,
 .btn-table-action-dropdown:active {
@@ -78,7 +84,7 @@ button.advanced-options-btn:active {
 .advanced-filter {
     background-color: #f5f7f9;
     border: 1px solid #ced3db;
-    padding-bottom: 24px ;
+    /* padding-bottom: 24px ; */
 }
 .text-filter{
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;

@@ -41,9 +41,11 @@ function RatingTypeLevelForm(props) {
   const validationRules = {
     rating_type_level_code: {
       required: true,
-      min: 0,
-      max: 99,
+      min: 1,
+      max: 32767,
       checkCode: true,
+      noSpace: true,
+      number:true
     },
 
     rating_type_level_name: {
@@ -55,7 +57,7 @@ function RatingTypeLevelForm(props) {
 
     rating: {
       required: true,
-      min: 1,
+      min: 0,
       max: 999,
     },
   }
@@ -66,6 +68,7 @@ function RatingTypeLevelForm(props) {
     },
     rating_type_level_code: {
       required: "Rating Type Level Code is required",
+      max: "Rating Type Level Code cannot be more than 32767",
     },
     rating: {
       required: "Rating is required",
@@ -232,7 +235,7 @@ function RatingTypeLevelForm(props) {
         form.rating_type_level_name = null
       }
       if (!form.rating) {
-        form.rating = null
+        form.rating = 0
       }
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
@@ -249,7 +252,7 @@ function RatingTypeLevelForm(props) {
       )
     } finally {
       setLoading(false)
-      props.history.push(backUrl)
+      props.history.goBack()
       dispatch(
         setAlert({
           message: `Record ${form.rating_type_level_code} - ${form.rating_type_level_name} has been successfully ${formId ? "updated" : "saved"}.`,
@@ -296,7 +299,7 @@ function RatingTypeLevelForm(props) {
           }
           disabled={isView || loading}
           type="number"
-          min="1"
+          min="0"
           max="999"
         />
       </FormHorizontal>
@@ -314,9 +317,6 @@ function RatingTypeLevelForm(props) {
           }
           disabled={isView || loading}
           type="number"
-          min="1"
-          max="99"
-          hint="Rating type level code maximum 2 digits"
         />
       </FormHorizontal>
     </FormBuilder>

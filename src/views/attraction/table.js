@@ -80,7 +80,7 @@ export default function AttractionTable() {
       for (let i in values) {
         ids.push(values[i].id)
         columns.push(
-          ["attraction_category_names", "like", values[i].attraction_category_name],
+          ["attraction_category_names", "like", values[i].text],
         )
 
         if(parseInt(i)+1 !== values.length) {
@@ -138,39 +138,50 @@ export default function AttractionTable() {
     return (
       <>
         <FormInputSelectAjax
-          label="City"
-          onChange={onFilterChangeCities}
-          endpoint="/master/cities"
-          column="city_name"
-          value={selectedCityIds}       
-          data={selectedCities}
-          filter={`["status", "=", 1]`}
-          type="selectmultiple"
-          isFilter={true}
-          allowClear={false}
-          placeholder="City"
-        />
-        <FormInputSelectAjax
           label="Country"
           onChange={onFilterChangeCountries}
-          endpoint="/master/countries"
-          column="country_name"
+          endpoint="/master/attractions"
+          column="country.country_name"
+          sort="country_id"
+          isGrouping={true}
+          fieldGroup="country_id"
           value={selectedCountryIds}
           data={selectedCountries}
-          filter={`["status", "=", 1]`}
+          filter={`[["country_id", "is not", null],["AND"],["status", "=", 1]]`}
           placeholder="Country"
           type="selectmultiple"
           isFilter={true}
           allowClear={false}
         />
         <FormInputSelectAjax
+          label="City"
+          onChange={onFilterChangeCities}
+          endpoint="/master/attractions"
+          column="city.city_name"
+          sort="city_id"
+          isGrouping={true}
+          fieldGroup="city_id"
+          value={selectedCityIds}       
+          data={selectedCities}
+          filter={`[["city_id", "is not", null],["AND"],["status", "=", 1]]`}
+          type="selectmultiple"
+          isFilter={true}
+          allowClear={false}
+          placeholder="City"
+        />
+        <FormInputSelectAjax
           label="Attraction Category"
           onChange={onFilterChangeAttractionCategories}
-          endpoint="/master/attraction-categories"
-          column="attraction_category_name"
+          endpoint="/master/attractions"
+          column="attraction_category.attraction_category_name"
+          sort="attraction_category_names"
+          isGrouping={true}
+          fieldGroup="attraction_category_id"
+          isArray={true}
+          fieldArray="attraction_category_attraction"
           value={selectedAttractionCategoryIds}
           data={selectedAttractionCategories}
-          filter={`["status", "=", 1]`}
+          filter={`[["attraction_category_names", "is not", null],["AND"],["status", "=", 1]]`}
           placeholder="Attraction Category"
           type="selectmultiple"
           isFilter={true}

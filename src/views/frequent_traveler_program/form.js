@@ -11,8 +11,7 @@ import {setAlert, setUIParams} from "redux/ui-store"
 import $ from "jquery"
 import env from "../../config/environment"
 
-
-const endpoint = "/master/hotels"
+const endpoint = "/master/loyalty-programs"
 const backUrl = "/master/frequent-traveler-program"
 
 function FrequentTravelerProgramForm(props) {
@@ -23,43 +22,44 @@ function FrequentTravelerProgramForm(props) {
   const [formBuilder, setFormBuilder] = useState(null)
   const [loading, setLoading] = useState(true)
   const [translations, setTranslations] = useState([])
-  const [subdivisionData, setSubdivisionData] = useState([])
-  const [countryData, setCountryData] = useState([])
+  const [productTypeData, setProductTypeData] = useState([])
   const [id, setId] = useState(null)
   const [form, setForm] = useState({
-    country_id: "",
-    state_province_category_id: "",
-    loyalty_name: "",
-    type: ""
+    loyalty_program_name: "",
+    product_type_id: "",
+    description: ""
   })
   const translationFields = [
     {
       label: "Loyalty Name",
-      name: "loyalty_name",
+      name: "loyalty_program_name",
       type: "text",
+    },
+    {
+      label: "Description",
+      name: "description",
+      type: "textarea",
+      maxLength: 4000
     },
   ]
 
   const validationRules = {
-    loyalty_name: {
-      required: true,
-      minlength: 1,
-      maxlength: 256,
-      checkCode: true,
-    },
-    type: {
+    loyalty_program_name: {
       required: true,
       minlength: 1,
       maxlength: 256,
       checkName: true,
+    },
+    product_type_id: {
+      required: true,
     }
   }
 
   const validationMessages = {
-    loyalty_name: {
+    loyalty_program_name: {
       required: "Loyalty Name is required",
     },
-    type: {
+    product_type_id: {
       required: "Type is required",
     },
   }
@@ -96,16 +96,12 @@ function FrequentTravelerProgramForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
-        if (res.data.state_province_category) {
-          setSubdivisionData([{...res.data.state_province_category, text: res.data.state_province_category.state_province_category_name}])
+        
+        if (res.data.product_type) {
+          setProductTypeData([{...res.data.product_type, text: res.data.product_type.product_type_name}])
         }
-        if (res.data.country) {
-          setCountryData([{...res.data.country, text: res.data.country.country_name}])
-        }
-
         if (res.data) {
-          let currentCode = res.data.state_province_code
-          let currentName = res.data.state_province_name
+          let currentName = res.data.loyalty_program_name
 
           $.validator.addMethod(
             "checkName",
@@ -114,7 +110,7 @@ function FrequentTravelerProgramForm(props) {
               $.ajax({
                 type: "GET",
                 async: false,
-                url: `${env.API_URL}/master/hotels?filters=["state_province_name","=","${element.value}"]`,
+                url: `${env.API_URL}/master/loyalty-programs?filters=["loyalty_program_name","=","${element.value}"]`,
                 success: function (res) {
                   if (res.items.length !== 0) {
                     if(currentName === element.value){
@@ -130,32 +126,7 @@ function FrequentTravelerProgramForm(props) {
     
               return req
             },
-            "State Province Name already exists",
-          )
-          $.validator.addMethod(
-            "checkCode",
-            function (value, element) {
-              var req = false
-              $.ajax({
-                type: "GET",
-                async: false,
-                url: `${env.API_URL}/master/hotels?filters=["state_province_code","=","${element.value}"]`,
-                success: function (res) {
-                  if (res.items.length !== 0) {
-                    if(currentCode === element.value){
-                      req = true
-                    } else {
-                      req = false
-                    }
-                  } else {
-                    req = true
-                  }
-                },
-              })
-    
-              return req
-            },
-            "State Province Code already exists",
+            "Loyalty Name already exists",
           )
         }
       } catch (e) { }
@@ -175,7 +146,7 @@ function FrequentTravelerProgramForm(props) {
           $.ajax({
             type: "GET",
             async: false,
-            url: `${env.API_URL}/master/hotels?filters=["state_province_name","=","${element.value}"]`,
+            url: `${env.API_URL}/master/loyalty-programs?filters=["loyalty_program_name","=","${element.value}"]`,
             success: function (res) {
               if (res.items.length !== 0) {
                 req = false
@@ -187,28 +158,7 @@ function FrequentTravelerProgramForm(props) {
 
           return req
         },
-        "State Province Name already exists",
-      )
-      $.validator.addMethod(
-        "checkCode",
-        function (value, element) {
-          var req = false
-          $.ajax({
-            type: "GET",
-            async: false,
-            url: `${env.API_URL}/master/hotels?filters=["state_province_code","=","${element.value}"]`,
-            success: function (res) {
-              if (res.items.length !== 0) {
-                req = false
-              } else {
-                req = true
-              }
-            },
-          })
-
-          return req
-        },
-        "State Province Code already exists",
+        "Loyalty Name already exists",
       )
     }
   }, [])
@@ -225,12 +175,12 @@ function FrequentTravelerProgramForm(props) {
     setLoading(true)
     let api = new Api()
     try {
-      if (!form.country_id) {
-        form.country_id = null
+      if (!form.product_type_id) {
+        form.product_type_id = null
       }
 
-      if (!form.state_province_category_id) {
-        form.state_province_category_id = null
+      if (!form.description) {
+        form.description = null
       }
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
@@ -247,16 +197,14 @@ function FrequentTravelerProgramForm(props) {
       )
     } finally {
       setLoading(false)
-      props.history.push(backUrl)
+      props.history.goBack()
       dispatch(
         setAlert({
-          message: `Record ${form.state_province_code} - ${form.state_province_name} has been successfully ${formId ? "updated" : "saved"}.`,
+          message: `Record ${form.loyalty_program_name} has been successfully ${formId ? "updated" : "saved"}.`,
         }),
       )
     }
   }
-
-  console.log('loading, ', loading)
 
   return (
     <FormBuilder
@@ -275,47 +223,47 @@ function FrequentTravelerProgramForm(props) {
         <FormInputControl
           label="Loyalty Name"
           required={true}
-          value={form.state_province_name}
-          name="state_province_name"
+          value={form.loyalty_program_name}
+          name="loyalty_program_name"
           cl="4"          
-          onChange={(e) => setForm({...form, state_province_name: e.target.value})}
+          onChange={(e) => setForm({...form, loyalty_program_name: e.target.value})}
           disabled={isView || loading}
           type="text"
           minLength="1"
           maxLength="256"
         />
+        {
+        !loading &&
+          <FormInputSelectAjax
+            label="Type"
+            required={true}
+            value={form.product_type_id}
+            name="product_type_id"
+            data={productTypeData}
+            endpoint="/master/product-types"
+            column="product_type_name"
+            onChange={(e) => {
+              setForm({...form, product_type_id: e.target.value || null})
+            }}
+            filter={`["status", "=", 1]`}
+            disabled={isView || loading}
+            type="select"
+          />
+        }
         {
           !loading &&
           <FormInputControl
-          label="Type"
-          required={true}
-          value={form.state_province_name}
-          name="type"
-          cl="4"          
-          onChange={(e) => setForm({...form, state_province_name: e.target.value})}
-          disabled={isView || loading}
-          type="text"
-          minLength="1"
-          maxLength="256"
-        />
-        }
-        {
-          loading ? null :
-          <FormInputControl
           label="Description"
-          value={form.address_line}
-          name="address_line"
-          onChange={(e) => setForm({...form, address_line: e.target.value})}
+          value={form.description}
+          name="description"
+          onChange={(e) => setForm({...form, description: e.target.value})}
           disabled={isView || loading}
           type="textarea"
           minLength="1"
-          maxLength="512"
+          maxLength="4000"
         />
-}
-
+        }
       </FormHorizontal>
-
-      
     </FormBuilder>
   )
 }

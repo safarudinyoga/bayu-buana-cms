@@ -258,7 +258,7 @@ function ZoneForm(props) {
       )
     } finally {
       setLoading(false)
-      props.history.push(backUrl)
+      props.history.goBack()
       dispatch(
         setAlert({
           message: `Record ${form.zone_code} - ${form.zone_name

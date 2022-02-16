@@ -1,10 +1,45 @@
 import { Formik } from 'formik';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, Col, Form, Row, Button } from 'react-bootstrap';
+import Api from "config/api"
 
 const Subscriptions = (props) => {
+  let api = new Api()
+
+  const [initialForm, setInitialForm] = useState({
+    dealSubscription: false,
+    newsletterSubscription: false,
+  })
+
+  useEffect(async () => {
+    try {
+      let res = await api.get("/user/profile")
+      let data = res.data;
+      setInitialForm({
+        ...initialForm,
+        dealSubscription: data.user_setting.receive_travel_deals,
+        newsletterSubscription: data.user_setting.receive_other_information
+      })
+    } catch(e) {}
+  }, [])
+
   return (
-    <Formik>
+    <Formik
+      enableReinitialize
+      initialValues={initialForm}
+      onSubmit={async (values, { setSubmitting, resetForm }) => {
+        console.log(values)
+
+        let formatted = {
+          user_setting: {
+            receive_travel_deals: values.dealSubscription,
+            receive_other_information: values.newsletterSubscription
+          }
+        }
+
+        let res = await api.put("user/profile", formatted)
+      }}
+    >
       {({
         values,
         errors,
@@ -18,7 +53,7 @@ const Subscriptions = (props) => {
         setFieldTouched,
       }) => {
         return (
-          <Form>
+          <Form onSubmit={handleSubmit}>
             <Card>
               <Card.Body>
               <h3 className="card-heading">Subscriptions</h3>
@@ -28,7 +63,15 @@ const Subscriptions = (props) => {
                     Receive Travel Deals and Special Offers
                   </Form.Label>
                   <Col sm={6}>
-                    <Form.Switch />
+                  <Form.Check 
+                    type="switch"
+                    id="deals-subscription"
+                    name="deals-subscription"
+                    checked={values.dealSubscription}
+                    onChange={(e) => 
+                      setFieldValue("dealSubscription", !values.dealSubscription)
+                    }
+                  />
                   </Col>
                 </Form.Group>
                 <Form.Group as={Row} className="form-group">
@@ -36,7 +79,15 @@ const Subscriptions = (props) => {
                     Receive Newsletters
                   </Form.Label>
                   <Col sm={6}>
-                    <Form.Switch />
+                  <Form.Check 
+                    type="switch"
+                    id="newsletter-subscription"
+                    name="newsletter-subscription"
+                    checked={values.newsletterSubscription}
+                    onChange={(e) => 
+                      setFieldValue("newsletterSubscription", !values.newsletterSubscription)
+                    }
+                  />
                   </Col>
                 </Form.Group>
               </div>

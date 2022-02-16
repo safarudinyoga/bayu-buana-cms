@@ -1,52 +1,71 @@
 import { withRouter } from "react-router"
-import React, { useState, useRef, useEffect } from "react";
-import { Form, FormGroup, InputGroup } from "react-bootstrap";
+import React, { useState, useRef, useEffect } from "react"
+import { Form, FormGroup, InputGroup } from "react-bootstrap"
 import { Formik, FastField, Field } from "formik"
 import * as Yup from "yup"
-import { BlockButton } from '../../components/button/block';
-import { Link, useHistory } from 'react-router-dom';
+import { BlockButton } from '../../components/button/block'
+import { Link, useHistory } from 'react-router-dom'
+import Api from "config/api"
+import { useDispatch } from "react-redux"
+import { setAlert } from "redux/ui-store"
 
 function OTP(props) {
 	let history = useHistory()
+	const dispatch = useDispatch()
 
 	const [initialForm, setForm] = useState({
-		otp: "",
+		code: "",
 	})
 	const [ passType, setPassType] = useState("password")
 
-	const {initialMinute = 0,initialSeconds = 10} = props;
-    const [ minutes, setMinutes ] = useState(initialMinute);
-    const [seconds, setSeconds ] =  useState(initialSeconds);
+	const {initialMinute = 0,initialSeconds = 10} = props
+    const [ minutes, setMinutes ] = useState(initialMinute)
+    const [seconds, setSeconds ] =  useState(initialSeconds)
     useEffect(()=>{
     let myInterval = setInterval(() => {
             if (seconds > 0) {
-                setSeconds(seconds - 1);
+                setSeconds(seconds - 1)
             }
             if (seconds === 0) {
                 if (minutes === 0) {
                     clearInterval(myInterval)
                 } else {
-                    setMinutes(minutes - 1);
-                    setSeconds(59);
+                    setMinutes(minutes - 1)
+                    setSeconds(59)
                 }
             } 
         }, 1000)
         return ()=> {
-            clearInterval(myInterval);
-          };
-    });
+            clearInterval(myInterval)
+          }
+    })
 
 
 	const validationSchema =  Yup.object().shape({
-		otp: Yup.string()
+		code: Yup.string()
 			.required("OTP code is required.")
 			.min(4, "OTP code is too short - should be 4 chars minimum.")
 			.max(256, "OTP code is too long - should be 256 chars maximun."),
 	})
 
 	const onSubmit = async (values) => {
-		console.log(values)
-		history.push("/")
+		let api = new Api()
+		try {
+			let res = await api.post("/user/reset-password", values)
+			dispatch(
+				setAlert({
+				  message: res.data.message,
+				}),
+			  )
+			history.push("/")
+
+		} catch (e) {
+			dispatch(
+				setAlert({
+				  message: e.response.data.message,
+				}),
+			  )
+		}
 	}
 
 	const FormValidate = ({
@@ -112,7 +131,7 @@ function OTP(props) {
 						<Form onSubmit={handleSubmit}>
 							<FormValidate
 								label="OTP Code" 
-								name="otp"
+								name="code"
 								type={passType}
 								maxLength={256}
 								placeholder="Enter your OTP code"

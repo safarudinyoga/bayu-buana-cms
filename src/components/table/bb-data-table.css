@@ -168,6 +168,23 @@ table.dataTable > tbody > tr.child span.dtr-data {
   word-break: break-all;
 }
 
+.wo-checkbox {
+  min-width: 20px !important;
+  max-width: 20px !important;
+}
+
+.wo-checkbox::before {
+  left: 5px !important;
+}
+
+@media (min-width: 768px) {
+  .wo-checkbox {
+    width: 10px !important;
+    min-width: 10px !important;
+    max-width: 10px !important;
+  }
+}
+
 @media (min-width: 321px) and (max-width: 390px) {
   .cstm-col-width {
     min-width: 85px !important;

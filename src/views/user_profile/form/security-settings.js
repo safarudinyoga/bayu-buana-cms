@@ -1,10 +1,11 @@
 import { Formik } from 'formik';
-import { values } from 'lodash-es';
 import React from 'react';
 import { Card, Form, Row, Col, Button, Image } from "react-bootstrap"
 import * as Yup from "yup"
+import Api from "config/api"
 
 const SecuritySettings = (props) => {
+  let api = new Api()
 
   // Initialize form
   const initialForm = {
@@ -28,6 +29,15 @@ const SecuritySettings = (props) => {
       validationSchema={validationSchema}
       onSubmit={async (values, { setSubmitting, resetForm }) => {
         console.log(values)
+
+        let formatted = {
+          old_password: values.oldPassword,
+          new_password: values.newPassword,
+        }
+
+        let res = await api.put("user/profile", formatted)
+
+        return props.handleSelectTab("subscriptions")
       }}
     >
       {({

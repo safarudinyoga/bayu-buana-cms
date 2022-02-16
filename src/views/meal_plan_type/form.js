@@ -62,7 +62,7 @@ function MealPlanTypeForm(props) {
     meal_plan_type_name: {
       required: "Meal plan type Name is required",
       minlength: "Meal plan type Name must be at least 1 characters",
-      maxlength: "Meal plan type Name cannot be more than 99 characters",
+      maxlength: "Meal plan type Name cannot be more than 256 characters",
     },
     meal_plan_type_code: {
       required: "Meal plan type Code is required",
@@ -258,7 +258,7 @@ function MealPlanTypeForm(props) {
       )
     } finally {
       setLoading(false)
-      props.history.push(backUrl)
+      props.history.goBack()
       dispatch(
         setAlert({
           message: `Record ${form.meal_plan_type_code} - ${form.meal_plan_type_name} has been successfully ${formId ? "updated" : "saved"}.`,
