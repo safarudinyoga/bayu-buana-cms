@@ -58,7 +58,7 @@ export default function EmployeeTable() {
         title: "Full Name",
         data: "person",
         render: (data) => {
-          return data?.given_name + " " + data.middle_name + " " + data?.surname
+          return data?.given_name + " " + data?.middle_name + " " + data?.surname
         },
       },
       {

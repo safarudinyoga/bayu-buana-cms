@@ -12,15 +12,19 @@ import Select from "components/form/select"
 import { default as SelectAsync } from "components/form/select-async"
 
 const GeneralInformation = (props) => {
-  const [selectCountry, setSelectCountry] = useState([])
-  const [selectProvince, setSelectProvince] = useState([])
-  const [selectCity, setSelectCity] = useState([])
+  const [selectCurrentCountry, setSelectCurrentCountry] = useState([])
+  const [selectCurrentProvince, setSelectCurrentProvince] = useState([])
+  const [selectCurrentCity, setSelectCurrentCity] = useState([])
+  const [selectPermanentCountry, setSelectPermanentCountry] = useState([])
+  const [selectPermanentProvince, setSelectPermanentProvince] = useState([])
+  const [selectPermanentCity, setSelectPermanentCity] = useState([])
   const [selectNamePrefix, setSelectNamePrefix] = useState([])
   const [selectGender, setSelectGender] = useState([])
   const [photoProfile, setPhotoProfile] = useState([])
   const [optionDay, setOptionDay] = useState([])
   const [optionMonth, setOptionMonth] = useState([])
   const [optionYear, setOptionYear] = useState([])
+  const [defaultValue, setDefaultValue] = useState([])
 
   const maxNumber = 1
 
@@ -31,7 +35,7 @@ const GeneralInformation = (props) => {
   // Initialize form
   const [initialForm, setInitialForm] = useState({
     // General Information
-    title: { value: "mr", label: "Mr." },
+    title: { value: "db24d53c-7d36-4770-8598-dc36174750af", label: "Mr" },
     firstName: "",
     middleName: "",
     lastName: "",
@@ -39,7 +43,7 @@ const GeneralInformation = (props) => {
     gender: "male",
     idCardNumber: "",
     dobDay: { value: 1, label: 1 },
-    dobMonth: { value: 1, label: 1 },
+    dobMonth: { value: 1, label: "January" },
     dobYear: { value: 1921, label: 1921 },
 
     // Contacts
@@ -74,9 +78,6 @@ const GeneralInformation = (props) => {
     // dateOfBirth: Yup.string().required("Date of Birth is required."),
     gender: Yup.string().required("Gender is required."),
     idCardNumber: Yup.string(),
-    dobDay: Yup.number(),
-    dobMonth: Yup.number(),
-    dobYear: Yup.number(),
 
     // Contacts
     homePhone: Yup.string().required("Home Phone is required."),
@@ -165,36 +166,91 @@ const GeneralInformation = (props) => {
     return options
   }
 
-  // Country state
-  const handleChangeCountry = async (v) => {
+  // Current Country state
+  const handleChangeCurrentCountry = async (v) => {
     try {
       let res = await api.get(
         `/master/state-provinces?filters=["country_id","=","${v}"]`,
       )
       const options = []
-      res.data.items.forEach((data) => {
-        options.push({
-          label: data.state_province_name,
-          value: data.id,
+      if(res.data.items.length > 0){
+        res.data.items.forEach((data) => {
+          options.push({
+            label: data.state_province_name,
+            value: data.id,
+          })
+          
+          setSelectCurrentProvince(options)
         })
-        setSelectProvince(options)
-      })
+      } else {
+        setSelectCurrentProvince([])
+      }
+      
     } catch (e) {}
   }
-  // Province state
-  const handleChangeProvince = async (v) => {
+
+  // Permanent Country state
+  const handleChangePermanentCountry = async (v) => {
     try {
       let res = await api.get(
-        `/master/cities?filters=["province_id","=","${v}"]`,
+        `/master/state-provinces?filters=["country_id","=","${v}"]`,
       )
       const options = []
-      res.data.items.forEach((data) => {
-        options.push({
-          label: data.state_province_name,
-          value: data.id,
+      if(res.data.items.length > 0){
+        res.data.items.forEach((data) => {
+          options.push({
+            label: data.state_province_name,
+            value: data.id,
+          })
+          
+          setSelectPermanentProvince(options)
         })
-        setSelectCity(options)
-      })
+      } else {
+        setSelectPermanentProvince([])
+      }
+      
+    } catch (e) {}
+  }
+  // Current Province state
+  const handleChangeCurrentProvince = async (v) => {
+    try {
+      let res = await api.get(
+        `/master/cities?filters=["state_province_id","=","${v}"]`,
+      )
+      const options = []
+      if(res.data.items.length > 0){
+        res.data.items.forEach((data) => {
+          options.push({
+            label: data.city_name,
+            value: data.id,
+          })
+          setSelectCurrentCity(options)
+        })
+      } else {
+        setSelectCurrentCity([])
+      }
+      
+    } catch (e) {}
+  }
+  // Permanent Province state
+  const handleChangePermanentProvince = async (v) => {
+    try {
+      let res = await api.get(
+        `/master/cities?filters=["state_province_id","=","${v}"]`,
+      )
+      const options = []
+      if(res.data.items.length > 0){
+        res.data.items.forEach((data) => {
+          options.push({
+            label: data.city_name,
+            value: data.id,
+          })
+          setSelectPermanentCity(options)
+        })
+      } else {
+        setSelectPermanentCity([])
+      }
+      
     } catch (e) {}
   }
 
@@ -227,7 +283,8 @@ const GeneralInformation = (props) => {
           label: data.country_name,
           value: data.id,
         })
-        setSelectCountry(options)
+        setSelectCurrentCountry(options)
+        setSelectPermanentCountry(options)
       })
     } catch (e) {}
   }, [])
@@ -275,12 +332,20 @@ const GeneralInformation = (props) => {
         },
         dobMonth: data.birth_date ? {
           value: parseInt(data.birth_date.split("-")[1]),
-          label: parseInt(data.birth_date.split("-")[1]), 
+          label: new Date(null, parseInt(data.birth_date.split("-")[1]), null).toLocaleDateString("en", {
+            month: "long",
+          }), 
         }: {
           value: 1,
           label: 1,
         },
-        dobYear: data.birth_date ? data.birth_date.split("-")[0] : 1921,
+        dobYear: data.birth_date ? {
+          value: parseInt(data.birth_date.split("-")[0]),
+          label: parseInt(data.birth_date.split("-")[0]),  
+        } : {
+          value: 1921,
+          label: 1921,
+        },
         
         // Contacts
         homePhone: _.isEmpty(data.contact) ? "" : data.contact.phone_number ? data.contact.phone_number : "",
@@ -335,7 +400,7 @@ const GeneralInformation = (props) => {
       <Formik
         enableReinitialize
         initialValues={initialForm}
-        // validationSchema={validationSchema}
+        validationSchema={validationSchema}
         validator={() => ({})}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
           console.log(values)
@@ -343,15 +408,16 @@ const GeneralInformation = (props) => {
 
           let day = values.dobDay.value < 10 ? ("0"+values.dobDay.value) : values.dobDay.value;
           let month = values.dobMonth.value < 10 ? ("0"+values.dobMonth.value) : values.dobMonth.value;
+          let year = values.dobYear.value;
 
-          console.log(values.currentCountry);
+          console.log(month);
 
           let formatted = {
             address: {
               address_line: values.currentAddress ? values.currentAddress : "",
               country_id: values.currentCountry ? values.currentCountry.value : "",
               state_province_id: values.currentProvince ? values.currentProvince.value : "",
-              city_id: values.currentCity ? values.currentCity.value : "",
+              city_id: values.currentCity ? values.currentCity.value : {},
               postal_code: values.currentZipCode ? values.currentZipCode : ""
             },
             contact: {
@@ -364,7 +430,7 @@ const GeneralInformation = (props) => {
             given_name: values.firstName,
             middle_name: values.middleName,
             surname: values.lastName,
-            birth_date: values.dobYear+"-"+month+"-"+day,
+            birth_date: year+"-"+month+"-"+day,
             name_prefix_id: values.title.value,
             gender_id: values.gender,
             permanent_address: values.sameAddress ? {
@@ -558,7 +624,7 @@ const GeneralInformation = (props) => {
                             <div style={{ marginRight: 12, flex: 1 }}>
                               <Select
                                 options={selectDay()}
-                                defaultValue={values.dobDay}
+                                value={values.dobDay}
                                 className={`react-select ${
                                   touched.title && Boolean(errors.title)
                                     ? "is-invalid"
@@ -568,12 +634,15 @@ const GeneralInformation = (props) => {
                                   IndicatorSeparator: () => null,
                                 }}
                                 style={{ marginRight: 12 }}
+                                onChange={(v) => {
+                                  setFieldValue("dobDay", v)
+                                }}
                               />
                             </div>
                             <div style={{ marginRight: 12, flex: 1 }}>
                               <Select
                                 options={selectMonth()}
-                                defaultValue={values.dobMonth.value}
+                                value={values.dobMonth}
                                 className={`react-select ${
                                   touched.title && Boolean(errors.title)
                                     ? "is-invalid"
@@ -583,12 +652,15 @@ const GeneralInformation = (props) => {
                                   IndicatorSeparator: () => null,
                                 }}
                                 style={{ marginRight: 12 }}
+                                onChange={(v) => {
+                                  setFieldValue("dobMonth", v)
+                                }}
                               />
                             </div>
                             <div style={{ flex: 1 }}>
                               <Select
                                 options={selectYear()}
-                                defaultValue={values.dobYear}
+                                value={values.dobYear}
                                 className={`react-select ${
                                   touched.title && Boolean(errors.title)
                                     ? "is-invalid"
@@ -598,6 +670,9 @@ const GeneralInformation = (props) => {
                                   IndicatorSeparator: () => null,
                                 }}
                                 style={{ marginRight: 12 }}
+                                onChange={(v) => {
+                                  setFieldValue("dobYear", v)
+                                }}
                               />
                             </div>
                           </div>
@@ -910,6 +985,7 @@ const GeneralInformation = (props) => {
                                 setFieldValue("currentCountry", v)
                                 setFieldValue("currentProvince", null)
                                 setFieldValue("currentCity", null)
+                                handleChangeCurrentCountry(v.value)
                               }}
                               placeholder="Please choose"
                               className={`react-select ${
@@ -941,7 +1017,7 @@ const GeneralInformation = (props) => {
                         {({ field, form }) => (
                           <>
                             <div style={{ width: 200 }}>
-                              <SelectAsync
+                              {/* <SelectAsync
                                 {...field}
                                 isDisabled={values.currentCountry == null}
                                 url={`master/state-provinces`}
@@ -951,6 +1027,16 @@ const GeneralInformation = (props) => {
                                   setFieldValue("currentProvince", v)
                                 }
                                 placeholder="Please choose"
+                              /> */}
+                              <Select
+                                {...field}
+                                placeholder="Please choose"
+                                options={selectCurrentProvince}
+                                onChange={(v) => {
+                                  setFieldValue("currentProvince", v)
+                                  handleChangeCurrentProvince(v.value)
+                                }}
+                                isDisabled={values.currentCountry == null}
                               />
                             </div>
                           </>
@@ -967,16 +1053,24 @@ const GeneralInformation = (props) => {
                         {({ field }) => (
                           <>
                             <div style={{ width: 200 }}>
-                              <SelectAsync
+                              {/* <SelectAsync
                                 {...field}
                                 isDisabled={values.currentProvince == null}
                                 url={`master/cities`}
-                                urlFilter={`["province_id","=","${values.currentProvince?.value}"]`}
+                                urlFilter={`["state_province_id","=","${values.currentProvince?.value}"]`}
                                 fieldName="city_name"
                                 onChange={(v) =>
                                   setFieldValue("currentCity", v)
                                 }
                                 placeholder="Please choose"
+                              /> */}
+                              <Select
+                                placeholder="Please choose"
+                                options={selectCurrentCity}
+                                onChange={(v) => {
+                                  setFieldValue("currentCity", v)
+                                }}
+                                isDisabled={values.currentProvince == null}
                               />
                             </div>
                           </>
@@ -1043,7 +1137,7 @@ const GeneralInformation = (props) => {
                       Country <span className="form-label-required">*</span>
                     </Form.Label>
                     <Col sm={9}>
-                      {selectCountry.length !== 0 && (
+                      {selectPermanentCountry.length !== 0 && (
                         <div style={{ width: 300 }}>
                           <SelectAsync
                             name="permanentCountry"
@@ -1067,7 +1161,7 @@ const GeneralInformation = (props) => {
                               setFieldValue("permanentCountry", v)
                               setFieldValue("permanentProvince", null)
                               setFieldValue("permanentCity", null)
-                              handleChangeCountry(v.value)
+                              handleChangePermanentCountry(v.value)
                             }}
                             onBlur={setFieldTouched}
                             isDisabled={values.sameAddress}
@@ -1094,21 +1188,18 @@ const GeneralInformation = (props) => {
                     </Form.Label>
                     <Col sm={9}>
                       <div style={{ width: 300 }}>
-                        <SelectAsync
+                        <Select
                           name="permanentProvince"
-                          url={`master/state-provinces`}
-                          urlFilter={`["country_id","=","${values.permanentCountry?.value}"]`}
-                          fieldName="state_province_name"
                           value={
                             values.sameAddress
                               ? values.currentProvince
                               : values.permanentProvince
                           }
                           placeholder="Please choose"
-                          // options={selectProvince}
+                          options={selectPermanentProvince}
                           onChange={(v) => {
                             setFieldValue("permanentProvince", v)
-                            handleChangeProvince(v.value)
+                            handleChangePermanentProvince(v.value)
                           }}
                           onBlur={setFieldTouched}
                           isDisabled={
@@ -1124,18 +1215,15 @@ const GeneralInformation = (props) => {
                     </Form.Label>
                     <Col sm={9}>
                       <div style={{ width: 300 }}>
-                        <SelectAsync
+                        <Select
                           name="permanentCity"
-                          url={`master/cities`}
-                          urlFilter={`["province_id","=","${values.currentProvince?.value}"]`}
-                          fieldName="city_name"
                           value={
                             values.sameAddress
                               ? values.currentCity
                               : values.permanentCity
                           }
                           placeholder="Please choose"
-                          // options={selectCity}
+                          options={selectPermanentCity}
                           onChange={(v) => {
                             setFieldValue("permanentCity", v)
                           }}

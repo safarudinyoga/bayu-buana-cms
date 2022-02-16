@@ -177,7 +177,7 @@ function CityForm(props) {
             $.ajax({
               type: "GET",
               async: false,
-              url: `${env.API_URL}/master/cities?filters=[["city_name","=","${element.value}"],["AND"],["state_province_id","=","${provinceId}"]]`,
+              url: `${env.API_URL}/master/cities?filters=[["city_name","like","${element.value}"],["AND"],["state_province_id","=","${provinceId}"]]`,
               success: function (res) {
                 if (res.items.length !== 0) {
                   if(currentName.toUpperCase() === element.value.toUpperCase() && provinceId === reqData.state_province_id){
@@ -226,7 +226,7 @@ function CityForm(props) {
           $.ajax({
             type: "GET",
             async: false,
-            url: `${env.API_URL}/master/cities?filters=[["city_name","=","${element.value}"],["AND"],["state_province_id","=","${form.state_province_id}"]]`,
+            url: `${env.API_URL}/master/cities?filters=[["city_name","like","${element.value}"],["AND"],["state_province_id","=","${form.state_province_id}"]]`,
             success: function (res) {
               if (res.items.length !== 0) {
                 req = false

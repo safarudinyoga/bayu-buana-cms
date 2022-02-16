@@ -38,8 +38,10 @@ function RoomLocationTypeForm(props) {
     room_location_type_code: {
       required: true,
       min: 1,
-      max: 99,
+      max: 32767,
       checkCode: true,
+      noSpace: true,
+      number:true
     },
     room_location_type_name: {
       required: true,
@@ -57,8 +59,7 @@ function RoomLocationTypeForm(props) {
     },
     room_location_type_code: {
       required: "Room Location Type Code is required",
-      minlength: "Room Location Type Code must be at least 1 characters",
-      maxlength: "Room Location Type Code cannot be more than 99 characters",
+      max: "Room Location Type Code cannot be more than 32767",
     },
   }
 
@@ -221,7 +222,10 @@ function RoomLocationTypeForm(props) {
     setLoading(true)
     let api = new Api()
     try {
-      let res = await api.putOrPost(endpoint, id, form)
+      let res = await api.putOrPost(endpoint, id, {
+        ...form,
+        room_location_type_code: parseInt(form.room_location_type_code),
+      })
       setId(res.data.id)
       for (let i in translated) {
         let tl = translated[i]
@@ -292,7 +296,6 @@ function RoomLocationTypeForm(props) {
           }
           disabled={isView || loading}
           type="number"
-          hint="Room Location Type Code is numeric"
         />
       </FormHorizontal>
     </FormBuilder>

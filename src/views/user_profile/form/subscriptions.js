@@ -68,8 +68,9 @@ const Subscriptions = (props) => {
                     id="deals-subscription"
                     name="deals-subscription"
                     checked={values.dealSubscription}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
+                    onChange={(e) => 
+                      setFieldValue("dealSubscription", !values.dealSubscription)
+                    }
                   />
                   </Col>
                 </Form.Group>
@@ -83,8 +84,9 @@ const Subscriptions = (props) => {
                     id="newsletter-subscription"
                     name="newsletter-subscription"
                     checked={values.newsletterSubscription}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
+                    onChange={(e) => 
+                      setFieldValue("newsletterSubscription", !values.newsletterSubscription)
+                    }
                   />
                   </Col>
                 </Form.Group>
