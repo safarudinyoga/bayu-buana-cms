@@ -43,7 +43,7 @@ const GeneralInformation = (props) => {
     gender: "male",
     idCardNumber: "",
     dobDay: { value: 1, label: 1 },
-    dobMonth: { value: 1, label: 1 },
+    dobMonth: { value: 1, label: "January" },
     dobYear: { value: 1921, label: 1921 },
 
     // Contacts
@@ -78,9 +78,6 @@ const GeneralInformation = (props) => {
     // dateOfBirth: Yup.string().required("Date of Birth is required."),
     gender: Yup.string().required("Gender is required."),
     idCardNumber: Yup.string(),
-    dobDay: Yup.number(),
-    dobMonth: Yup.number(),
-    dobYear: Yup.number(),
 
     // Contacts
     homePhone: Yup.string().required("Home Phone is required."),
@@ -335,12 +332,20 @@ const GeneralInformation = (props) => {
         },
         dobMonth: data.birth_date ? {
           value: parseInt(data.birth_date.split("-")[1]),
-          label: parseInt(data.birth_date.split("-")[1]), 
+          label: new Date(null, parseInt(data.birth_date.split("-")[1]), null).toLocaleDateString("en", {
+            month: "long",
+          }), 
         }: {
           value: 1,
           label: 1,
         },
-        dobYear: data.birth_date ? data.birth_date.split("-")[0] : 1921,
+        dobYear: data.birth_date ? {
+          value: parseInt(data.birth_date.split("-")[0]),
+          label: parseInt(data.birth_date.split("-")[0]),  
+        } : {
+          value: 1921,
+          label: 1921,
+        },
         
         // Contacts
         homePhone: _.isEmpty(data.contact) ? "" : data.contact.phone_number ? data.contact.phone_number : "",
@@ -395,7 +400,7 @@ const GeneralInformation = (props) => {
       <Formik
         enableReinitialize
         initialValues={initialForm}
-        // validationSchema={validationSchema}
+        validationSchema={validationSchema}
         validator={() => ({})}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
           console.log(values)
@@ -404,14 +409,14 @@ const GeneralInformation = (props) => {
           let day = values.dobDay.value < 10 ? ("0"+values.dobDay.value) : values.dobDay.value;
           let month = values.dobMonth.value < 10 ? ("0"+values.dobMonth.value) : values.dobMonth.value;
 
-          console.log(values.currentCountry);
+          console.log(month);
 
           let formatted = {
             address: {
               address_line: values.currentAddress ? values.currentAddress : "",
               country_id: values.currentCountry ? values.currentCountry.value : "",
               state_province_id: values.currentProvince ? values.currentProvince.value : "",
-              city_id: values.currentCity ? values.currentCity.value : "",
+              city_id: values.currentCity ? values.currentCity.value : {},
               postal_code: values.currentZipCode ? values.currentZipCode : ""
             },
             contact: {
@@ -424,7 +429,7 @@ const GeneralInformation = (props) => {
             given_name: values.firstName,
             middle_name: values.middleName,
             surname: values.lastName,
-            birth_date: values.dobYear+"-"+month+"-"+day,
+            birth_date: values.dobYear.value+"-"+month+"-"+day,
             name_prefix_id: values.title.value,
             gender_id: values.gender,
             permanent_address: values.sameAddress ? {
@@ -618,7 +623,7 @@ const GeneralInformation = (props) => {
                             <div style={{ marginRight: 12, flex: 1 }}>
                               <Select
                                 options={selectDay()}
-                                defaultValue={values.dobDay}
+                                value={values.dobDay}
                                 className={`react-select ${
                                   touched.title && Boolean(errors.title)
                                     ? "is-invalid"
@@ -633,7 +638,7 @@ const GeneralInformation = (props) => {
                             <div style={{ marginRight: 12, flex: 1 }}>
                               <Select
                                 options={selectMonth()}
-                                defaultValue={values.dobMonth.value}
+                                value={values.dobMonth}
                                 className={`react-select ${
                                   touched.title && Boolean(errors.title)
                                     ? "is-invalid"
@@ -648,7 +653,7 @@ const GeneralInformation = (props) => {
                             <div style={{ flex: 1 }}>
                               <Select
                                 options={selectYear()}
-                                defaultValue={values.dobYear}
+                                value={values.dobYear}
                                 className={`react-select ${
                                   touched.title && Boolean(errors.title)
                                     ? "is-invalid"
