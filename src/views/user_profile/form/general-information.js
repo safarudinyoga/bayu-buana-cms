@@ -35,7 +35,7 @@ const GeneralInformation = (props) => {
   // Initialize form
   const [initialForm, setInitialForm] = useState({
     // General Information
-    title: { value: "mr", label: "Mr." },
+    title: { value: "db24d53c-7d36-4770-8598-dc36174750af", label: "Mr" },
     firstName: "",
     middleName: "",
     lastName: "",
@@ -215,13 +215,13 @@ const GeneralInformation = (props) => {
   const handleChangeCurrentProvince = async (v) => {
     try {
       let res = await api.get(
-        `/master/cities?filters=["province_id","=","${v}"]`,
+        `/master/cities?filters=["state_province_id","=","${v}"]`,
       )
       const options = []
       if(res.data.items.length > 0){
         res.data.items.forEach((data) => {
           options.push({
-            label: data.state_province_name,
+            label: data.city_name,
             value: data.id,
           })
           setSelectCurrentCity(options)
@@ -236,13 +236,13 @@ const GeneralInformation = (props) => {
   const handleChangePermanentProvince = async (v) => {
     try {
       let res = await api.get(
-        `/master/cities?filters=["province_id","=","${v}"]`,
+        `/master/cities?filters=["state_province_id","=","${v}"]`,
       )
       const options = []
       if(res.data.items.length > 0){
         res.data.items.forEach((data) => {
           options.push({
-            label: data.state_province_name,
+            label: data.city_name,
             value: data.id,
           })
           setSelectPermanentCity(options)
@@ -408,6 +408,7 @@ const GeneralInformation = (props) => {
 
           let day = values.dobDay.value < 10 ? ("0"+values.dobDay.value) : values.dobDay.value;
           let month = values.dobMonth.value < 10 ? ("0"+values.dobMonth.value) : values.dobMonth.value;
+          let year = values.dobYear.value;
 
           console.log(month);
 
@@ -429,7 +430,7 @@ const GeneralInformation = (props) => {
             given_name: values.firstName,
             middle_name: values.middleName,
             surname: values.lastName,
-            birth_date: values.dobYear.value+"-"+month+"-"+day,
+            birth_date: year+"-"+month+"-"+day,
             name_prefix_id: values.title.value,
             gender_id: values.gender,
             permanent_address: values.sameAddress ? {
@@ -633,6 +634,9 @@ const GeneralInformation = (props) => {
                                   IndicatorSeparator: () => null,
                                 }}
                                 style={{ marginRight: 12 }}
+                                onChange={(v) => {
+                                  setFieldValue("dobDay", v)
+                                }}
                               />
                             </div>
                             <div style={{ marginRight: 12, flex: 1 }}>
@@ -648,6 +652,9 @@ const GeneralInformation = (props) => {
                                   IndicatorSeparator: () => null,
                                 }}
                                 style={{ marginRight: 12 }}
+                                onChange={(v) => {
+                                  setFieldValue("dobMonth", v)
+                                }}
                               />
                             </div>
                             <div style={{ flex: 1 }}>
@@ -663,6 +670,9 @@ const GeneralInformation = (props) => {
                                   IndicatorSeparator: () => null,
                                 }}
                                 style={{ marginRight: 12 }}
+                                onChange={(v) => {
+                                  setFieldValue("dobYear", v)
+                                }}
                               />
                             </div>
                           </div>
@@ -1047,7 +1057,7 @@ const GeneralInformation = (props) => {
                                 {...field}
                                 isDisabled={values.currentProvince == null}
                                 url={`master/cities`}
-                                urlFilter={`["province_id","=","${values.currentProvince?.value}"]`}
+                                urlFilter={`["state_province_id","=","${values.currentProvince?.value}"]`}
                                 fieldName="city_name"
                                 onChange={(v) =>
                                   setFieldValue("currentCity", v)
