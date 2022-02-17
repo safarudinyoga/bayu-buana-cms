@@ -82,7 +82,7 @@ export default class Navbar extends Component {
                   </div>
                 </div>
               </a>
-              <a href="/" className="dropdown-item">
+              <a href="/profile" className="dropdown-item">
                 <i className="fas fa-user mr-2"></i> My Profile
               </a>
               <a href="/" className="dropdown-item">
