@@ -14,58 +14,16 @@ function inputForm(props) {
     required,
     ...rest
   } = props
-  const objectName = name.split(".")
-  if (objectName.length > 1) {
-    return (
-      <Row className="form-group required">
-        <Col md={3} lg={3}>
-          <label className="text-label-input" htmlFor={name}>
-            {label}
-            <span className={required || ""} />
-          </label>
-        </Col>
-        <Col md={9} lg={9}>
-          <Field id={name} name={name} >
-            {({ field, form, meta }) => (
-              <div>
-                <input
-                  {...field}
-                  {...rest}
-                  type={type || "text"}
-                  style={style}
-                  minLength={minLength}
-                  maxLength={maxLength}
-                  placeholder={placeholder || ""}
-                  className={
-                    form.touched[objectName[0]]?.[objectName[1]] &&
-                    form.errors[objectName[0]]?.[objectName[1]]
-                      ? "form-control is-invalid"
-                      : "form-control"
-                  }
-                />
-                {form.touched[objectName[0]]?.[objectName[1]] &&
-                form.errors[objectName[0]]?.[objectName[1]] ? (
-                  <div className="invalid-feedback">
-                    {form.errors[objectName[0]]?.[objectName[1]]}
-                  </div>
-                ) : null}
-              </div>
-            )}
-          </Field>
-        </Col>
-      </Row>
-    )
-  }
   return (
     <Row className="form-group required">
       <Col md={3} lg={3}>
         <label className="text-label-input" htmlFor={name}>
           {label}
-          <span className={required || ""} />
+          <span className={required || ""}/>
         </label>
       </Col>
-      <Col md={9} lg={9}>
-        <Field id={name} name={name}>
+      <Col  md={9} lg={9}>
+        <Field id={name} name={name} >
           {({ field, form, meta }) => (
             <div>
               <input
