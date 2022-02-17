@@ -68,13 +68,15 @@ const options = [
 const StatusSelect = (props) => {
   return (
     <>
-      <label className="text-label-filter ml-2 font-weight-bold">Status :</label>
+        
+
         <Select
           components={{IndicatorSeparator: () => null, DropdownIndicator}}
           value={props.options[props.value]}
           onChange={props.onChange}
           styles={customStyles}
           options={props.options}
+          statusLabel={props.statusLabel}
           placeholder="Please choose"
         />
     </>
@@ -211,6 +213,7 @@ class TableHeader extends Component {
             <Link
               to="/master/divisions/hierarchy"
               className="menu-link ml-5"
+              title="Click to view division hierarchy"
             >
              View Hierarchy
             </Link>
@@ -279,6 +282,7 @@ class TableHeader extends Component {
               <div className="col-xs-12 col-sm-12 col-md-6 col-lg-4">
                 <div className="row">
                   <div className="col-xs-4">
+                  <label className="text-label-filter ml-2 font-weight-bold">{this.props.statusLabel || "Status :"}</label>
                     <StatusSelect
                       value={customFilterStatus ? customFilterStatus.value : this.state.statusValue}
                       onChange={this.handleStatus.bind(this)}
