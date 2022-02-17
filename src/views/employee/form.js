@@ -401,7 +401,7 @@ const EmployeeForm = (props) => {
           try {
             let res = await api.post("master/employees", Data)
             console.log("data", res)
-            setSubmitting(false)
+            setSubmitting(false || history.goBack())
           } catch (e) {}         
         } else {
            //ProsesUpdateData
