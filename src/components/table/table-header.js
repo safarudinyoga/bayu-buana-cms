@@ -68,8 +68,6 @@ const options = [
 const StatusSelect = (props) => {
   return (
     <>
-        
-
         <Select
           components={{IndicatorSeparator: () => null, DropdownIndicator}}
           value={props.options[props.value]}
