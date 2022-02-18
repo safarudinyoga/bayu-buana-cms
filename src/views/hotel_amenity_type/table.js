@@ -109,6 +109,7 @@ export default function HotelAmenityTable() {
       {
         title: "Hotel Amenity Category",
         data: "hotel_amenity_category_names",
+        render: (val) => !val ? "" : val,
       },
       {
         searchable: false,

@@ -91,6 +91,7 @@ export default function HotelSupplierTable() {
       {
         title: "Supplier Type",
         data: "supplier_type.supplier_type_name",
+        render: (val) => !val ? "" : val,
       },
       {
         searchable: false,
