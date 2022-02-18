@@ -44,6 +44,9 @@ const UserProfile = (props) => {
         title: docTitle,
         breadcrumbs: [
           {
+            text: "Management",
+          },
+          {
             text: docTitle,
           },
         ],
