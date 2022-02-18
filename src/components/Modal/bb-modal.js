@@ -18,7 +18,7 @@ const ModalCreate = ({show, onClick, modalContent}) => {
 			</Modal.Title>
 		</Modal.Header>
 		<ModalBody>
-			<Content/>
+			{modalContent ? <Content/> : null}
 		</ModalBody>
 		</Modal>
 	)

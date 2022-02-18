@@ -119,6 +119,7 @@ import FlightCommisionForm from "views/setup_flight_commision/form"
 // Master Exchange Rate
 import ExchageRateTable from "views/exchange_rate/table"
 import ExchangeRateForm from "views/exchange_rate/form"
+import ExchangeRateHistory from "views/exchange_rate/history"
 // Master Integration Partner
 import IntegrationPartnerTable from "views/integration_partner/table"
 
@@ -506,6 +507,9 @@ const DashboardRoutes = () => {
         </Route>
         <Route exact path="/master/exchange-rate/form/:id?">
           <ExchangeRateForm />
+        </Route>
+        <Route exact path="/master/exchange-rate/history/:id?">
+          <ExchangeRateHistory />
         </Route>
 
         {/* Master Manage Corporate */}

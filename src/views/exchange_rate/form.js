@@ -2,6 +2,7 @@ import { withRouter } from "react-router"
 import React, { useState, useEffect } from "react"
 import { Form, FormGroup, InputGroup, Button } from "react-bootstrap"
 import { Formik, FastField } from "formik"
+import useQuery from "lib/query"
 import * as Yup from "yup"
 import Api from "config/api"
 import { useDispatch } from "react-redux"
@@ -12,6 +13,7 @@ import FormikControl from "../../components/formik/formikControl"
 function ExchangeRateCreate(props) {
 	const dispatch = useDispatch()
   const API = new Api()
+  const isView = useQuery().get("action") === "view"
 
 	let form = {
 		from_currency: "",
@@ -131,6 +133,7 @@ function ExchangeRateCreate(props) {
                 }}
                 style={{ maxWidth: 250 }}
                 size={formSize}
+                isDisabled={isView || loading}
               />
 
 							<FormikControl
@@ -146,6 +149,7 @@ function ExchangeRateCreate(props) {
                 }}
                 style={{ maxWidth: 250 }}
                 size={formSize}
+                isDisabled={isView || loading}
               />
 
               <FormikControl
@@ -155,6 +159,7 @@ function ExchangeRateCreate(props) {
                 name="multiply_rate"
                 style={{ maxWidth: 250 }}
                 size={formSize}
+                disabled={isView || loading}
               />
 
               <FormikControl
@@ -164,6 +169,7 @@ function ExchangeRateCreate(props) {
                 value={values.is_automatic}
                 onChange={(v) => setFieldValue("is_automatic", v)}
                 size={formSize}
+                disabled={isView || loading}
               />
 
               <div

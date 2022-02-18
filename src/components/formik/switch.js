@@ -9,7 +9,8 @@ function inputForm(props) {
     name,
     value,
     size,
-    onChange
+    onChange,
+    disabled,
   } = props
   return (
     <Row className="form-group">
@@ -27,6 +28,7 @@ function inputForm(props) {
             uncheckedIcon={false}
             width={27}
             height={15}
+            disabled={disabled}
           />
         </div>
       </Col>
