@@ -208,13 +208,17 @@ class TableHeader extends Component {
             )}
 
             { pathname === "/master/divisions" &&
-            <Link
-              to="/master/divisions/hierarchy"
-              className="menu-link ml-5"
-              title="Click to view division hierarchy"
-            >
-             View Hierarchy
-            </Link>
+              <OverlayTrigger
+                placement="top"
+                overlay={<Tooltip>Click to view division hierarchy</Tooltip>}
+              >
+                <Link
+                  to="/master/divisions/hierarchy"
+                  className="menu-link ml-5"
+                >
+                View Hierarchy
+                </Link>
+              </OverlayTrigger>
             }
           </div>
 
