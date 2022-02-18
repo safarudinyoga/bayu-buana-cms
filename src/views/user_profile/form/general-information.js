@@ -62,9 +62,9 @@ const GeneralInformation = (props) => {
   const validationSchema = Yup.object().shape({
     // General Information
     title: Yup.object().required("Title is required."),
-    firstName: Yup.string().required("Employee First Name is required."),
+    firstName: Yup.string().required("First Name is required."),
     middleName: Yup.string(),
-    lastName: Yup.string().required("Employee Last Name is required."),
+    lastName: Yup.string().required("Last Name is required."),
     // dateOfBirth: Yup.string().required("Date of Birth is required."),
     gender: Yup.string().required("Gender is required."),
     idCardNumber: Yup.string(),
