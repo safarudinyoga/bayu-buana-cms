@@ -23,12 +23,11 @@ function textAreaForm(props) {
         </label>
       </Col>
       <Col md={9} lg={9}>
-        <Field id={name} name={name}>
+        <Field id={name} name={name} {...rest}>
           {({ field, form, meta }) => (
             <div>
               <textarea                
-                {...field} 
-                {...rest}               
+                {...field}                              
                 style={style}
                 minLength={minLength}
                 maxLength={maxLength}
