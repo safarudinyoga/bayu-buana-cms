@@ -84,7 +84,7 @@ export default function RoomAmenityTypeTable() {
   })
 
   useEffect(() => {
-    console.log(params.filters)
+
   }, [params])
 
   const onFilterChangeCategories = (e, values) => {
