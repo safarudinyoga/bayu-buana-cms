@@ -247,6 +247,7 @@ const GeneralInformation = (props) => {
   // Upload profile
   const onChangePhotoProfile = (imageList, addUpdateIndex) => {
     // data for submit
+    console.log(imageList, addUpdateIndex)
     setPhotoProfile(imageList)
   }
 
@@ -715,7 +716,6 @@ const GeneralInformation = (props) => {
                           <ImageUploading
                             value={photoProfile}
                             onChange={onChangePhotoProfile}
-                            maxNumber={maxNumber}
                             dataURLKey="data_url"
                             acceptType={["png", "jpg", "jpeg"]}
                           >
@@ -738,10 +738,10 @@ const GeneralInformation = (props) => {
                                 ))}
                                 <Button
                                   variant="secondary"
-                                  onClick={() =>
+                                  onClick={() => 
                                     photoProfile.length !== 0
                                       ? onImageUpload()
-                                      : onImageUpdate(1)
+                                      : onImageUpdate(0)
                                   }
                                 >
                                   {/* {photoProfile.length !== 0
@@ -1024,7 +1024,7 @@ const GeneralInformation = (props) => {
                   </Form.Group>
                   <Form.Group as={Row} className="form-group">
                     <Form.Label column sm={3}>
-                      ZIP Code
+                      Zip Code
                     </Form.Label>
                     <Col sm={9}>
                       <FastField name="currentZipCode">
@@ -1181,7 +1181,7 @@ const GeneralInformation = (props) => {
                   </Form.Group>
                   <Form.Group as={Row} className="form-group">
                     <Form.Label column sm={3}>
-                      ZIP Code
+                      Zip Code
                     </Form.Label>
                     <Col sm={9}>
                       <Form.Control

@@ -9,8 +9,8 @@ function inputForm(props) {
     type,
     style,
     placeholder,
-    maxLength,
-    minLength,
+    maxlength,
+    minlength,
     required,
     ...rest
   } = props
@@ -25,7 +25,7 @@ function inputForm(props) {
           </label>
         </Col>
         <Col md={9} lg={9}>
-          <Field id={name} name={name} >
+          <Field id={name} name={name} {...rest} >
             {({ field, form, meta }) => (
               <div>
                 <input
@@ -33,8 +33,8 @@ function inputForm(props) {
                   {...rest}
                   type={type || "text"}
                   style={style}
-                  minLength={minLength}
-                  maxLength={maxLength}
+                  minLength={minlength}
+                  maxLength={maxlength}
                   placeholder={placeholder || ""}
                   className={
                     form.touched[objectName[0]]?.[objectName[1]] &&
@@ -65,7 +65,7 @@ function inputForm(props) {
         </label>
       </Col>
       <Col md={9} lg={9}>
-        <Field id={name} name={name}>
+        <Field id={name} name={name} {...rest}>
           {({ field, form, meta }) => (
             <div>
               <input
@@ -73,8 +73,8 @@ function inputForm(props) {
                 {...rest}
                 type={type || "text"}
                 style={style}
-                minLength={minLength}
-                maxLength={maxLength}
+                minLength={minlength}
+                maxLength={maxlength}
                 placeholder={placeholder || ""}
                 className={
                   form.touched[name] && form.errors[name]
