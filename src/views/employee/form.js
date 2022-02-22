@@ -22,8 +22,7 @@ const EmployeeForm = (props) => {
   let api = new Api()
   const isView = useQuery().get("action") === "view"
   const [tabKey, setTabKey] = useState("general-information")
-  const [photoProfile, setPhotoProfile] = useState({})
-  console.log("data Image", photoProfile)
+  const [photoProfile, setPhotoProfile] = useState({})  
   const maxNumber = 1
   const [sameAddress, setSameAddress] = useState(false)
 
@@ -45,7 +44,7 @@ const EmployeeForm = (props) => {
     } else if (isView) {
       docTitle = "Employee Details"
       breadcrumbTitle = "View Employee"
-    }    
+    }
     dispatch(
       setUIParams({
         title: docTitle,
@@ -86,7 +85,7 @@ const EmployeeForm = (props) => {
           name_prefix_id: {
             label: data.name_prefix.name_prefix_name,
             value: data.name_prefix_id,
-          },          
+          },
           address: {
             address_line: data.address.address_line,
             country_id: {
@@ -102,7 +101,7 @@ const EmployeeForm = (props) => {
               value: data.address.city_id,
             },
             postal_code: data.address.postal_code,
-          },
+          },          
           permanent_address: {
             address_line: data.permanent_address.address_line,
             country_id: {
@@ -120,8 +119,8 @@ const EmployeeForm = (props) => {
             postal_code: data.permanent_address.postal_code,
           },
           job_title_id: {
-            label: data?.job_title?.job_title_name,
-            value: data?.job_title?.id,
+            label: data.job_title.job_title_name,
+            value: data.job_title.id,
           },
           division_id: {
             label: data.division.division_name,
@@ -198,8 +197,8 @@ const EmployeeForm = (props) => {
         payload.append("files", e.target.files[0])
         let res = await api.post("/multimedia/files", payload)
         if (res.data) {
-          setFormValues({
-            ...formValues,
+          setPhotoProfile({
+            ...photoProfile,
             employee_asset: {
               multimedia_description_id: res.data.id,
               multimedia_description: res.data,
@@ -213,7 +212,7 @@ const EmployeeForm = (props) => {
   // Birthday
   const selectDay = () => {
     const options = []
-    for (let i = 0; i <= 31; i++) {
+    for (let i = 1; i < 32; i++) {
       options.push({
         value: i,
         label: i,
@@ -251,8 +250,8 @@ const EmployeeForm = (props) => {
   //FormatDate XXXX-XX-XX
   function formatDate(date) {
     var d = new Date(date),
+      day = "" + (d.getDate() + 1),
       month = "" + (d.getMonth() + 1),
-      day = "" + d.getDate(),
       year = d.getFullYear()
     if (month.length < 2) month = "0" + month
     if (day.length < 2) day = "0" + day
@@ -268,9 +267,6 @@ const EmployeeForm = (props) => {
     birth_date: [],
     gender_id: "",
     ktp: "",
-    employee_asset: {
-      multimedia_description_id: "",
-    },
 
     //Contacts
     contact: {
@@ -365,7 +361,6 @@ const EmployeeForm = (props) => {
     employee_number: Yup.string().required("Employee Number is required."),
     //sameAddress: Yup.boolean(),
     address: Yup.object().shape({
-
       country_id: Yup.object().required("Country is required."),
     }),
     permanent_address: Yup.object().shape({
@@ -379,8 +374,8 @@ const EmployeeForm = (props) => {
       initialValues={formValues || initialValues}
       validationSchema={validationSchema}
       onSubmit={async (values, { setSubmitting }) => {
+        
         let formId = props.match.params.id
-
         const Data = {
           name_prefix_id: values.name_prefix_id.value,
           given_name: values.given_name,
@@ -395,7 +390,7 @@ const EmployeeForm = (props) => {
           ktp: values.ktp,
           employee_asset: {
             multimedia_description_id:
-              values.employee_asset?.multimedia_description_id,
+              photoProfile.employee_asset?.multimedia_description_id,
           },
           contact: {
             email: values.contact.email,
@@ -439,7 +434,6 @@ const EmployeeForm = (props) => {
           ]),
           npwp: values.npwp,
         }
-
         setSubmitting(true)
         if (formId === undefined) {
           //ProsesCreateData
@@ -524,7 +518,7 @@ const EmployeeForm = (props) => {
                               name="given_name"
                               style={{ maxWidth: 250 }}
                               disabled={isView}
-                              maxlength="128"                                                            
+                              maxlength="128"
                             />
                             <FormikControl
                               control="input"
@@ -638,8 +632,9 @@ const EmployeeForm = (props) => {
                                     onChange={onChangePhotoProfile}
                                     disabled={isView}
                                     url={
-                                      formik.values.employee_asset
-                                        ?.multimedia_description?.url 
+                                      photoProfile.employee_asset
+                                        ?.multimedia_description?.url || formik.values.employee_asset
+                                        ?.multimedia_description?.url
                                     }
                                     style={{ maxWidth: 300, marginTop: 12 }}
                                   />
