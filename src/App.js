@@ -556,8 +556,7 @@ const getAuth = async() => {
     let refresh_token = Cookies.get('rt')
     if(!auth && refresh_token) {
       let API = new Api()
-      let res = API.refreshToken(refresh_token)
-      console.log(res)
+      let res = await API.refreshToken(refresh_token)
     }
   
     return auth
@@ -576,7 +575,6 @@ const App = () => {
       let isAuth = await getAuth()
       setAuth(isAuth)
     }
-
     checkAuth()
   }, [auth])
   return (
