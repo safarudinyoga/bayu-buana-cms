@@ -242,8 +242,12 @@ function RoomAmenityTypeForm(props) {
     setLoading(true)
     let api = new Api()
     try {
-      if (form.room_amenity_type_asset.multimedia_description_id == null) {
+      if (!form.room_amenity_type_asset) {
         form.room_amenity_type_asset = null
+      } else {
+        if (!form.room_amenity_type_asset.multimedia_description_id) {
+          form.room_amenity_type_asset = null
+        }
       }
 
       if(!form.room_amenity_type_code){
@@ -264,6 +268,7 @@ function RoomAmenityTypeForm(props) {
         await api.putOrPost(path, tl.id, tl)
       }
     } catch (e) {
+      console.log('err', e)
       dispatch(
         setAlert({
           message: `Failed to ${formId ? "update" : "save"} this record.`,
@@ -357,22 +362,15 @@ function RoomAmenityTypeForm(props) {
           <FormInputSelectMultiAjax
             label="Room Amenity Category"
             value={form.room_amenity_category_room_amenity_type ? form.room_amenity_category_room_amenity_type.map((item) => item.room_amenity_category_id) : []}
-            // value={form.attraction_category_attraction ? form.attraction_category_attraction.map((item) => item.attraction_category_id) : []}
             filter={`["status", "=", 1]`}
             name="room_amenity_category_room_amenity_type"
             data={categoryData}
             endpoint="/master/room-amenity-categories"
             column="room_amenity_category_name"
-            // onChange={(e) =>
-            //   setForm({...form, room_amenity_category_id: e.target.value || null})
-            // }
-            // onChange={(e, values) => setForm(form => ({...form, room_amenity_category: values.map(v => ({room_amenity_category_id: v.id}))}))}
             onChange={(e, values) => {
               setForm(form => ({...form, room_amenity_category_room_amenity_type: values.map(v => (
                 {room_amenity_category_id: v.id}
               ))}))
-
-              // console.log(form)
             }}
             disabled={isView || loading}
             type="selectmultiple" />

@@ -183,7 +183,8 @@ function CityForm(props) {
                   if(currentName.toUpperCase() === element.value.toUpperCase() && provinceId === reqData.state_province_id){
                     req = true
                   } else {
-                    req = false
+                    let duplicateVal = res.items.find( e => e.city_name.toUpperCase() === element.value.toUpperCase())
+                    req = !duplicateVal
                   }
                 } else {
                   req = true
@@ -229,7 +230,8 @@ function CityForm(props) {
             url: `${env.API_URL}/master/cities?filters=[["city_name","like","${element.value}"],["AND"],["state_province_id","=","${form.state_province_id}"]]`,
             success: function (res) {
               if (res.items.length !== 0) {
-                req = false
+                let duplicateVal = res.items.find( e => e.city_name.toUpperCase() === element.value.toUpperCase())
+                req = !duplicateVal
               } else {
                 req = true
               }

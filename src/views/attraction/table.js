@@ -56,6 +56,7 @@ export default function AttractionTable() {
       {
         title: "Attraction Category",
         data: "attraction_category_names",
+        render: (val) => !val ? "" : val,
       },
       {
         searchable: false,
