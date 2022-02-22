@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react"
+import React from "react"
 import "@fortawesome/fontawesome-free/css/all.css"
 import "admin-lte"
 import "admin-lte/dist/css/adminlte.css"
@@ -143,7 +143,6 @@ import JobTitleForm from './views/job-title/form';
 // User Access Type
 import UserAccessTypeTable from "views/user_access_type/table"
 import UserAccessTypeForm from "views/user_access_type/form"
-import Api from "config/api"
 
 const RouteWithProps = ({
   path,
@@ -550,35 +549,9 @@ const AuthRoutes = () => {
   )
 }
 
-const getAuth = async() => {
-  try {
-    let auth = Cookies.get('ut')
-    let refresh_token = Cookies.get('rt')
-    if(!auth && refresh_token) {
-      let API = new Api()
-      let res = API.refreshToken(refresh_token)
-      console.log(res)
-    }
-  
-    return auth
-  } catch (err) {
-    throw err
-  }
-}
-
 const App = () => {
+  let auth = Cookies.get('ut')
   document.title = "Bayu Buana"
-
-  const[auth, setAuth] = useState(true)
-
-  useEffect(() => {
-    const checkAuth = async () => {
-      let isAuth = await getAuth()
-      setAuth(isAuth)
-    }
-
-    checkAuth()
-  }, [auth])
   return (
     <Router>
       <Switch>
