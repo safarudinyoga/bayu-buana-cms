@@ -22,7 +22,7 @@ const EmployeeForm = (props) => {
   let api = new Api()
   const isView = useQuery().get("action") === "view"
   const [tabKey, setTabKey] = useState("general-information")
-  const [photoProfile, setPhotoProfile] = useState({})  
+  const [photoProfile, setPhotoProfile] = useState({})
   const maxNumber = 1
   const [sameAddress, setSameAddress] = useState(false)
 
@@ -101,7 +101,7 @@ const EmployeeForm = (props) => {
               value: data.address.city_id,
             },
             postal_code: data.address.postal_code,
-          },          
+          },
           permanent_address: {
             address_line: data.permanent_address.address_line,
             country_id: {
@@ -257,7 +257,6 @@ const EmployeeForm = (props) => {
     if (day.length < 2) day = "0" + day
     return [year, month, day].join("-")
   }
-
   const initialValues = {
     //GeneralInformation
     name_prefix_id: "",
@@ -374,7 +373,6 @@ const EmployeeForm = (props) => {
       initialValues={formValues || initialValues}
       validationSchema={validationSchema}
       onSubmit={async (values, { setSubmitting }) => {
-        
         let formId = props.match.params.id
         const Data = {
           name_prefix_id: values.name_prefix_id.value,
@@ -633,7 +631,8 @@ const EmployeeForm = (props) => {
                                     disabled={isView}
                                     url={
                                       photoProfile.employee_asset
-                                        ?.multimedia_description?.url || formik.values.employee_asset
+                                        ?.multimedia_description?.url ||
+                                      formik.values.employee_asset
                                         ?.multimedia_description?.url
                                     }
                                     style={{ maxWidth: 300, marginTop: 12 }}
