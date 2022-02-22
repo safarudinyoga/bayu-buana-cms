@@ -42,7 +42,7 @@ function Login() {
 	})
 
 	useEffect(() => {
-		const token = Cookies.get("ut");
+		const token = Cookies.get("ut")
 		if (token) {
 			history.push("/");
 		}
@@ -60,6 +60,7 @@ function Login() {
 
 			if (rememberMe) {
 				Cookies.set('remember_acc', JSON.stringify(values))
+				Cookies.set('rt', res.data.refresh_token)
 			} else {
 				let rememberCookie = Cookies.get('remember_acc')
 				if(rememberCookie) Cookies.remove('remember_acc')

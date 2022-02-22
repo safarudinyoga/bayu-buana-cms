@@ -74,4 +74,24 @@ export default class Api {
       throw error
     })
   }
+
+  async refreshToken(token) {
+    try {
+      console.log(env)
+      let res = await axios.post(env.API_BASE_URL+"/oauth2/token", {
+        client_id: "my-client-id",
+        client_secret: "password",
+        grant_type: "refresh_token",
+        refresh_token: token,
+      },  {
+        headers: {
+          'Content-Type': "application/x-www-form-urlencoded",
+        }
+      })
+
+      console.log(res)
+    } catch (err) {
+      throw err
+    }
+  }
 }

@@ -10,6 +10,7 @@ export default class Navbar extends Component {
 
   signout = async () => {
     Cookies.remove("ut");
+    Cookies.remove("rt");
     this.props.history.push("/auth/login");
   };
 
