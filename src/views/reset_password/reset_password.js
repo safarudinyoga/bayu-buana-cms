@@ -9,49 +9,39 @@ import Api from "config/api"
 import { useDispatch } from "react-redux"
 import { setAlert } from "redux/ui-store"
 
-function OTP(props) {
-	let history = useHistory()
+function ResetPassword(props) {
+	const history = useHistory()
 	const dispatch = useDispatch()
+	const queryParams = new URLSearchParams(history.location.search)
+	const resetCode = queryParams.get('reset_password_code')
+	const API = new Api()
 
 	const [initialForm, setForm] = useState({
-		code: "",
+		new_password: "",
+		confirm_password: "",
 	})
-	const [ passType, setPassType] = useState("password")
-
-	const {initialMinute = 0,initialSeconds = 10} = props
-    const [ minutes, setMinutes ] = useState(initialMinute)
-    const [seconds, setSeconds ] =  useState(initialSeconds)
-    useEffect(()=>{
-    let myInterval = setInterval(() => {
-            if (seconds > 0) {
-                setSeconds(seconds - 1)
-            }
-            if (seconds === 0) {
-                if (minutes === 0) {
-                    clearInterval(myInterval)
-                } else {
-                    setMinutes(minutes - 1)
-                    setSeconds(59)
-                }
-            } 
-        }, 1000)
-        return ()=> {
-            clearInterval(myInterval)
-          }
-    })
-
+	const [ passType, setPassType] = useState({
+		new_password: "password",
+		confirm_password: "password"
+	})
 
 	const validationSchema =  Yup.object().shape({
-		code: Yup.string()
-			.required("OTP code is required.")
-			.min(4, "OTP code is too short - should be 4 chars minimum.")
-			.max(256, "OTP code is too long - should be 256 chars maximun."),
+		new_password: Yup.string()
+			.required("Password is required.")
+			.min(8, "Password is too short - should be 8 chars minimum.")
+			.max(256, "Password is too long - should be 256 chars maximun.")
+			.matches(/^(?=.*\d)(?=.*([a-z]|[A-Z]))([\x20-\x7E]){8,}$/, "Password must be contain letters, numbers, and symbols"),
+		confirm_password: Yup.string()
+			.required("Password is required.")
+			.min(8, "Password is too short - should be 8 chars minimum.")
+			.max(256, "Password is too long - should be 256 chars maximun.")
+			.matches(/^(?=.*\d)(?=.*([a-z]|[A-Z]))([\x20-\x7E]){8,}$/, "Password must be contain letters, numbers, and symbols"),
 	})
 
 	const onSubmit = async (values) => {
-		let api = new Api()
 		try {
-			let res = await api.post("/user/reset-password", values)
+			values.code = resetCode
+			let res = await API.post("/user/reset-password", values)
 			dispatch(
 				setAlert({
 				  message: res.data.message,
@@ -64,7 +54,7 @@ function OTP(props) {
 				setAlert({
 				  message: e.response.data.message,
 				}),
-			  )
+			)
 		}
 	}
 
@@ -115,8 +105,8 @@ function OTP(props) {
 	)
 	return (
 		<>
-			<p className="mid-title p-0 mb-1">Please check your email</p>
-			<p className="sub-title p-0 mb-3">Enter OTP Code from email</p>
+			<p className="mid-title p-0 mb-1">Reset your password</p>
+			<p className="sub-title p-0 mb-3">Insert new password and confirm password</p>
 			<Formik
 				initialValues={initialForm}
 				validationSchema={validationSchema}
@@ -130,28 +120,35 @@ function OTP(props) {
 					}) => (
 						<Form onSubmit={handleSubmit}>
 							<FormValidate
-								label="OTP Code" 
-								name="code"
-								type={passType}
+								label="New Password" 
+								name="new_password"
+								type={passType.new_password}
 								maxLength={256}
-								placeholder="Enter your OTP code"
+								placeholder="new password"
 								endIcon={() => (
 									<i 
-									onClick={()=>setPassType(passType === "text" ? "password" : "text" )} 
-									className={`fa ${passType === "password" ? "fa-eye-slash" : "fa-eye" }`}></i>
+									onClick={() => setPassType({ ...passType, new_password: passType.new_password === "text" ? "password" : "text"})} 
+									className={`fa ${passType.new_password === "password" ? "fa-eye-slash" : "fa-eye" }`}></i>
+								)}
+							/>
+
+							<FormValidate
+								label="Confirm New Password" 
+								name="confirm_password"
+								type={passType.confirm_password}
+								maxLength={256}
+								placeholder="confirm password"
+								endIcon={() => (
+									<i 
+									onClick={() => setPassType({ ...passType, confirm_password: passType.confirm_password === "text" ? "password" : "text"})} 
+									className={`fa ${passType.confirm_password === "password" ? "fa-eye-slash" : "fa-eye" }`}></i>
 								)}
 							/>
 							<BlockButton 
-								text={"Confirm"} 
+								text={"reset password"} 
 								disabled={isSubmitting || !dirty}
 								type="submit"
 							/>
-
-							<div className="mt-2">
-								<p className="back-signin">
-									Waiting for OTP confirmation {minutes < 10 ? "0"+minutes : minutes} : {seconds < 10 ? "0"+seconds : seconds}
-								</p>
-							</div>
 						</Form>
 					)
 				}
@@ -161,4 +158,4 @@ function OTP(props) {
 	)
 }
 
-export default withRouter(OTP) 
+export default withRouter(ResetPassword) 

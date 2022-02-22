@@ -143,6 +143,7 @@ import JobTitleForm from './views/job-title/form';
 // User Access Type
 import UserAccessTypeTable from "views/user_access_type/table"
 import UserAccessTypeForm from "views/user_access_type/form"
+import ResetPassword from "views/reset_password/reset_password"
 
 const RouteWithProps = ({
   path,
@@ -535,7 +536,6 @@ const DashboardRoutes = () => {
 const AuthRoutes = () => {
   return (
     <AuthWrapper>
-      {/* <Route path="/" render={() => <Redirect to="/auth/login"/>} /> */}
       <Route exact path="/auth/login">
         <Login />
       </Route>
@@ -544,6 +544,9 @@ const AuthRoutes = () => {
       </Route>
       <Route exact path="/auth/otp">
         <OTP />
+      </Route>
+      <Route exact path="/auth/reset-password">
+        <ResetPassword />
       </Route>
     </AuthWrapper>
   )
