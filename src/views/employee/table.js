@@ -4,6 +4,7 @@ import rowStatus from "lib/row-status"
 import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
 import { renderColumn } from "lib/translation"
+import moment from "moment"
 
 import FormInputSelectAjax from "components/form/input-select-ajax"
 
@@ -31,6 +32,8 @@ export default function EmployeeTable() {
   let [selectedDivisionIds, setSelectedDivisionIds] = useState([])
   let [selectedOffice, setSelectedOffice] = useState([])
   let [selectedOfficeIds, setSelectedOfficeIds] = useState([])
+  console.log("division", selectedDivisionIds)
+  console.log("office", selectedOfficeIds)
 
   let [params, setParams] = useState({
     isCheckbox: false,
@@ -106,7 +109,12 @@ export default function EmployeeTable() {
       {
         title: "Hire Date",
         data: "hire_date",
-        render: renderColumn("hire_date", "hire_date"),
+        render: function (data, type, row) {
+          if (type === "sort" || type === "type") {
+            return data
+          }
+          return moment(data).format("D MMM YYYY")
+        },
       },
       {
         searchable: false,
@@ -129,22 +137,19 @@ export default function EmployeeTable() {
 
   const onFilterChangeJobTitle = (e, values) => {
     let ids = []
-    let columns = []
     if (values && values.length > 0) {
       for (let i in values) {
         ids.push(values[i].id)
-        columns.push(["job_title_name", "like", values[i].text])
-
-        if (parseInt(i) + 1 !== values.length) {
-          columns.push(["OR"])
-        }
       }
     }
     let findFilter = params.filters
-      ? params.filters.filter((v) => v[0][0] !== "job_title_name")
+      ? params.filters.filter((v) => v[0] !== "job_title.id")
       : []
-    if (columns.length > 0) {
-      setParams({ ...params, filters: [...findFilter, columns] })
+    if (ids.length > 0) {
+      setParams({
+        ...params,
+        filters: [...findFilter, ["job_title.id", "in", ids]],
+      })
     } else {
       setParams({ ...params, filters: [...findFilter] })
     }
@@ -202,11 +207,14 @@ export default function EmployeeTable() {
         <FormInputSelectAjax
           label="Job Title"
           onChange={onFilterChangeJobTitle}
-          endpoint="/master/job-titles"
-          column="job_title_name"
+          endpoint="/master/employees"
+          column="job_title.job_title_name"
+          sort="job_title.id"
+          isGrouping={true}
+          fieldGroup="job_title.id"
           value={selectedJobTitleIds}
           data={selectedJobTitle}
-          filter={`["status", "=", 1]`}
+          filter={`[["job_title.id", "is not", null],["AND"],["status", "=", 1]]`}
           type="selectmultiple"
           isFilter={true}
           allowClear={false}
@@ -219,6 +227,7 @@ export default function EmployeeTable() {
           column="division.division_name"
           sort="division.id"
           isGrouping={true}
+          fieldGroup="division.id"
           value={selectedDivisionIds}
           data={selectedDivision}
           filter={`[["division.id", "is not", null],["AND"],["status", "=", 1]]`}
