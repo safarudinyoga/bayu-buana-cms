@@ -224,7 +224,7 @@ const EmergencyContacts = (props) => {
                 disabled={!dirty}
                 style={{ marginRight: 15 }}
               >
-                SAVE & NEXT
+                SAVE
               </Button>
               <Button
                 variant="secondary"

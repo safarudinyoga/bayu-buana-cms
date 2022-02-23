@@ -162,7 +162,7 @@ const GeneralInformation = (props) => {
   const handleChangeCurrentCountry = async (v) => {
     try {
       let res = await api.get(
-        `/master/state-provinces?filters=["country_id","=","${v}"]`,
+        `/master/state-provinces?filters=["country_id","=","${v}"]&sort=state_province_name`,
       )
       const options = []
       if(res.data.items.length > 0){
@@ -185,7 +185,7 @@ const GeneralInformation = (props) => {
   const handleChangePermanentCountry = async (v) => {
     try {
       let res = await api.get(
-        `/master/state-provinces?filters=["country_id","=","${v}"]`,
+        `/master/state-provinces?filters=["country_id","=","${v}"]&sort=state_province_name`,
       )
       const options = []
       if(res.data.items.length > 0){
@@ -207,7 +207,7 @@ const GeneralInformation = (props) => {
   const handleChangeCurrentProvince = async (v) => {
     try {
       let res = await api.get(
-        `/master/cities?filters=["state_province_id","=","${v}"]`,
+        `/master/cities?filters=["state_province_id","=","${v}"]&sort=city_name`,
       )
       const options = []
       if(res.data.items.length > 0){
@@ -228,7 +228,7 @@ const GeneralInformation = (props) => {
   const handleChangePermanentProvince = async (v) => {
     try {
       let res = await api.get(
-        `/master/cities?filters=["state_province_id","=","${v}"]`,
+        `/master/cities?filters=["state_province_id","=","${v}"]&sort=city_name`,
       )
       const options = []
       if(res.data.items.length > 0){
@@ -1224,7 +1224,7 @@ const GeneralInformation = (props) => {
                 disabled={isSubmitting || !dirty}
                 style={{ marginRight: 15 }}
               >
-                SAVE & NEXT
+                SAVE
               </Button>
               <Button
                 variant="secondary"
