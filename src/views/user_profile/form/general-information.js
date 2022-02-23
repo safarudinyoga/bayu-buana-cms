@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Card, Form, Row, Col, Button, Image } from "react-bootstrap"
+import { Card, Form, Row, Col, Button, Image, CloseButton } from "react-bootstrap"
 import { Formik, FastField, Field } from "formik"
 import * as Yup from "yup"
 import ImageUploading from "react-images-uploading"
@@ -20,6 +20,8 @@ const GeneralInformation = (props) => {
   const [selectNamePrefix, setSelectNamePrefix] = useState([])
   const [photoProfile, setPhotoProfile] = useState([])
   const maxNumber = 1
+
+  const [showCloseBtn, setShowCloseBtn] = useState(false)
   let api = new Api()
 
   // Initialize form
@@ -723,16 +725,28 @@ const GeneralInformation = (props) => {
                               imageList,
                               onImageUpload,
                               onImageUpdate,
+                              onImageRemove,
                               errors,
                             }) => (
                               // write your building UI
                               <>
                                 {imageList.map((image, index) => (
-                                  <div key={index} className="image-item">
+                                  <div key={index} className="image-item"
+                                    onMouseEnter={e => {
+                                      setShowCloseBtn(true)
+                                    }}
+                                    onMouseLeave={e => {
+                                      setShowCloseBtn(false)
+                                    }}
+                                  >
                                     <Image
                                       src={image["data_url"]}
                                       roundedCircle
                                       className="img-profile"
+                                    />
+                                    <CloseButton
+                                      style={{display: showCloseBtn ? "block" : "none"}}
+                                      onClick={() => onImageRemove(0)} 
                                     />
                                   </div>
                                 ))}
