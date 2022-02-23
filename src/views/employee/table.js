@@ -32,108 +32,7 @@ export default function EmployeeTable() {
   let [selectedDivisionIds, setSelectedDivisionIds] = useState([])
   let [selectedOffice, setSelectedOffice] = useState([])
   let [selectedOfficeIds, setSelectedOfficeIds] = useState([])
-  console.log("division", selectedDivisionIds)
-  console.log("office", selectedOfficeIds)
-
-  let [params, setParams] = useState({
-    isCheckbox: false,
-    title: "Employee",
-    titleModal: "Employee",
-    baseRoute: "/master/employee/form",
-    endpoint: "/master/employees",
-    deleteEndpoint: "/master/batch-actions/delete/employees",
-    activationEndpoint: "/master/batch-actions/activate/employee",
-    deactivationEndpoint: "/master/batch-actions/deactivate/employee",
-    columns: [
-      {
-        title: "Employee ID",
-        data: { employee_number: "employee_number", employee_asset: "url" },
-        render: (data) => {
-          if (data.employee_asset.multimedia_description === undefined) {
-            return (
-              `<img class="image-profile-tabel mr-2" src="https://bbdev.monstercode.net/files/b3986414-5c5f-45a3-be6f-4fedcce2d022.png"/>` +
-              " " +
-              data?.employee_number
-            )
-          } else {
-            return (
-              `<img class="image-profile-tabel mr-2" src="${data?.employee_asset?.multimedia_description?.url}"/>` +
-              " " +
-              data?.employee_number
-            )
-          }
-        },
-      },
-      {
-        title: "Full Name",
-        data: {
-          given_name: "given_name",
-          middle_name: "middle_name",
-          surname: "surName",
-        },
-        render: (data) => {
-          if (data.given_name === undefined) {
-            return null
-          } else {
-            return (
-              data?.given_name + " " + data?.middle_name + " " + data?.surname
-            )
-          }
-        },
-      },
-      {
-        title: "Email",
-        data: "contact.email",
-      },
-      {
-        title: "Job Title",
-        data: { job_title: "job_title", division: "division" },
-        render: (data) => {
-          {
-            if (data?.job_title?.job_title_name === undefined) {
-              return null
-            } else {
-              return (
-                data?.job_title?.job_title_name +
-                "<br/> " +
-                data?.division?.division_name
-              )
-            }
-          }
-        },
-      },
-      {
-        title: "Branch Office",
-        data: "office.office_name",
-      },
-      {
-        title: "Hire Date",
-        data: "hire_date",
-        render: function (data, type, row) {
-          if (type === "sort" || type === "type") {
-            return data
-          }
-          return moment(data).format("D MMM YYYY")
-        },
-      },
-      {
-        searchable: false,
-        title: "Status",
-        data: "status",
-        render: rowStatus,
-      },
-    ],
-    emptyTable: "No employees found",
-    recordName: ["employee_number", "person.given_name"],
-    switchStatus: true,
-    customFilterStatus: {
-      value: "",
-      options: [
-        { value: "1", label: "Active" },
-        { value: "3", label: "Inactive" },
-      ],
-    },
-  })
+ 
 
   const onFilterChangeJobTitle = (e, values) => {
     let ids = []
@@ -265,6 +164,106 @@ export default function EmployeeTable() {
     setSelectedOffice([])
     setSelectedOfficeIds([])
   }
+  let [params, setParams] = useState({
+    isCheckbox: false,
+    title: "Employee",
+    titleModal: "Employee",
+    baseRoute: "/master/employee/form",
+    endpoint: "/master/employees",
+    deleteEndpoint: "/master/batch-actions/delete/employees",
+    activationEndpoint: "/master/batch-actions/activate/employee",
+    deactivationEndpoint: "/master/batch-actions/deactivate/employee",
+    columns: [
+      {
+        title: "Employee ID",
+        data: { employee_number: "employee_number", employee_asset: "url" },
+        render: (data) => {
+          if (data.employee_asset.multimedia_description === undefined) {
+            return (
+              `<img class="image-profile-tabel mr-2" src="https://bbdev.monstercode.net/files/b3986414-5c5f-45a3-be6f-4fedcce2d022.png"/>` +
+              " " +
+              data?.employee_number
+            )
+          } else {
+            return (
+              `<img class="image-profile-tabel mr-2" src="${data?.employee_asset?.multimedia_description?.url}"/>` +
+              " " +
+              data?.employee_number
+            )
+          }
+        },
+      },
+      {
+        title: "Full Name",
+        data: {
+          given_name: "given_name",
+          middle_name: "middle_name",
+          surname: "surName",
+        },
+        render: (data) => {
+          if (data.given_name === undefined) {
+            return null
+          } else {
+            return (
+              data?.given_name + " " + data?.middle_name + " " + data?.surname
+            )
+          }
+        },
+      },
+      {
+        title: "Email",
+        data: "contact.email",
+      },
+      {
+        title: "Job Title",
+        data: { job_title: "job_title", division: "division" },
+        render: (data) => {
+          {
+            if (data?.job_title?.job_title_name === undefined) {
+              return null
+            } else {
+              return (
+                data?.job_title?.job_title_name +
+                "<br/> " +
+                data?.division?.division_name
+              )
+            }
+          }
+        },
+      },
+      {
+        title: "Branch Office",
+        data: "office.office_name",
+      },
+      {
+        title: "Hire Date",
+        data: "hire_date",
+        render: function (data, type, row) {
+          if (type === "sort" || type === "type") {
+            return data
+          }
+          return moment(data).format("D MMM YYYY")
+        },
+      },
+      {
+        searchable: false,
+        title: "Status",
+        data: "status",
+        render: rowStatus,
+      },
+    ],
+    emptyTable: "No employees found",
+    recordName: ["employee_number", "person.given_name"],
+    switchStatus: true,
+    customFilterStatus: {
+      value: "",
+      options: [
+        {value: "1", label: "Active"},
+        {value: "3", label: "Inactive"},
+      ]
+    },
+    statusLabel: "Status"
+  })
 
   return <BBDataTable {...params} extraFilter={extraFilter} onReset={onReset} />
 }

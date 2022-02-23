@@ -25,13 +25,12 @@ function inputForm(props) {
           </label>
         </Col>
         <Col md={9} lg={9}>
-          <Field id={name} name={name} {...rest} >
+          <Field id={name} name={name} type={type} {...rest}  >
             {({ field, form, meta }) => (
               <div>
                 <input
                   {...field}
-                  {...rest}
-                  type={type || "text"}
+                  {...rest}                  
                   style={style}
                   minLength={minlength}
                   maxLength={maxlength}
@@ -65,13 +64,12 @@ function inputForm(props) {
         </label>
       </Col>
       <Col md={9} lg={9}>
-        <Field id={name} name={name} {...rest}>
+        <Field id={name} name={name} type={type} {...rest}>
           {({ field, form, meta }) => (
             <div>
               <input
                 {...field}
-                {...rest}
-                type={type || "text"}
+                {...rest}                
                 style={style}
                 minLength={minlength}
                 maxLength={maxlength}
