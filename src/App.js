@@ -1,4 +1,4 @@
-import React from "react"
+import React, {useEffect, useState} from "react"
 import "@fortawesome/fontawesome-free/css/all.css"
 import "admin-lte"
 import "admin-lte/dist/css/adminlte.css"
@@ -571,7 +571,6 @@ const getAuth = async() => {
 }
 
 const App = () => {
-  let auth = Cookies.get('ut')
   document.title = "Bayu Buana"
 
   const[auth, setAuth] = useState(true)
