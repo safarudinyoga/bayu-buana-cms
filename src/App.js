@@ -143,6 +143,10 @@ import JobTitleForm from './views/job-title/form';
 // User Access Type
 import UserAccessTypeTable from "views/user_access_type/table"
 import UserAccessTypeForm from "views/user_access_type/form"
+import ResetPassword from "views/reset_password/reset_password"
+
+
+import Api from "config/api"
 
 const RouteWithProps = ({
   path,
@@ -535,7 +539,6 @@ const DashboardRoutes = () => {
 const AuthRoutes = () => {
   return (
     <AuthWrapper>
-      {/* <Route path="/" render={() => <Redirect to="/auth/login"/>} /> */}
       <Route exact path="/auth/login">
         <Login />
       </Route>
@@ -545,13 +548,41 @@ const AuthRoutes = () => {
       <Route exact path="/auth/otp">
         <OTP />
       </Route>
+      <Route exact path="/auth/reset-password">
+        <ResetPassword />
+      </Route>
     </AuthWrapper>
   )
+}
+
+const getAuth = async() => {
+  try {
+    let auth = Cookies.get('ut')
+    let refresh_token = Cookies.get('rt')
+    if(!auth && refresh_token) {
+      let API = new Api()
+      let res = await API.refreshToken(refresh_token)
+    }
+  
+    return auth
+  } catch (err) {
+    throw err
+  }
 }
 
 const App = () => {
   let auth = Cookies.get('ut')
   document.title = "Bayu Buana"
+
+  const[auth, setAuth] = useState(true)
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      let isAuth = await getAuth()
+      setAuth(isAuth)
+    }
+    checkAuth()
+  }, [auth])
   return (
     <Router>
       <Switch>

@@ -7,17 +7,60 @@ function selectAsync(props) {
   const {
     name,
     options,
-    style,
-    placeholder,
+    style,    
     onChange,
+    isDisabled,
+    placeholder,
     url,
     label,
     required,
     fieldName,
-    urlFilter,
-    isDisabled,    
+    urlFilter,    
     ...rest
   } = props
+  const objectName = name.split(".")
+  if (objectName.length > 1) {
+    return (
+      <Row className="form-group required">
+        <Col column md={3} lg={3}>
+          <label className="text-label-input" htmlFor={name}>
+            {label}
+            <span className={required || ""} />
+          </label>
+        </Col>
+        <Col md={9} lg={9}>
+          <FastField id={name} name={name} {...rest}>
+            {({ field, form, meta }) => (
+              <div style={style}>
+                <Select
+                  {...field}  
+                  {...rest}               
+                  url={url}
+                  isDisabled={isDisabled}
+                  placeholder={placeholder || ""}
+                  fieldName={fieldName}
+                  urlFilter={urlFilter}
+                  onChange={onChange}                  
+                  className={`react-select ${
+                    form.touched[objectName[0]]?.[objectName[1]] &&
+                    form.errors[objectName[0]]?.[objectName[1]]
+                      ? "is-invalid"
+                      : null
+                  }`}
+                />
+                {form.touched[objectName[0]]?.[objectName[1]] &&
+                form.errors[objectName[0]]?.[objectName[1]] ? (
+                  <div className="invalid-feedback">
+                    {form.errors[objectName[0]]?.[objectName[1]]}
+                  </div>
+                ) : null}
+              </div>
+            )}
+          </FastField>
+        </Col>
+      </Row>
+    )
+  }
   return (
     <Row className="form-group required">
       <Col column md={3} lg={3}>
@@ -31,17 +74,18 @@ function selectAsync(props) {
           {({ field, form, meta }) => (
             <div style={style}>
               <Select
-                {...field}               
-                isDisabled={isDisabled}                 
+                {...field}
+                {...rest}                
                 url={url}
+                isDisabled={isDisabled}
+                placeholder={placeholder || ""}
                 fieldName={fieldName}
-                urlFilter={urlFilter}
-                onChange={onChange}
-                placeholder={placeholder}
+                urlFilter={urlFilter}                
+                onChange={onChange}                
                 className={`react-select ${
                   form.touched[name] && form.errors[name] ? "is-invalid" : null
                 }`}
-              />              
+              />
               {form.touched[name] && form.errors[name] ? (
                 <div className="invalid-feedback">{form.errors[name]}</div>
               ) : null}

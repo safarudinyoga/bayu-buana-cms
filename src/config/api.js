@@ -1,6 +1,7 @@
 import axios from "axios"
 import Cookies from "js-cookie"
 import env from "./environment"
+var queryString = require('qs');
 
 export default class Api {
   constructor() {
@@ -77,21 +78,31 @@ export default class Api {
 
   async refreshToken(token) {
     try {
-      console.log(env)
-      let res = await axios.post(env.API_BASE_URL+"/oauth2/token", {
-        client_id: "my-client-id",
-        client_secret: "password",
-        grant_type: "refresh_token",
-        refresh_token: token,
-      },  {
+      let data = queryString.stringify({
+				client_id: "my-client-id",
+				client_secret: "password",
+				grant_type: "refresh_token",
+				refresh_token: token,
+			})
+
+      let res = await axios.post(env.API_BASE_URL+"/oauth2/token", data, {
         headers: {
-          'Content-Type': "application/x-www-form-urlencoded",
+          "Accept": "application/json",
+					"Content-Type": "application/x-www-form-urlencoded"
         }
       })
 
-      console.log(res)
+      let date = new Date();
+			date.setTime(date.getTime() + (res.data.expires_in));
+      Cookies.set('ut', res.data.access_token, {expires: date})
+      Cookies.set('rt', res.data.refresh_token)
+
+      return res.data.access_token
     } catch (err) {
-      throw err
+      console.log(err)
+      Cookies.remove("ut");
+      Cookies.remove("rt");
+      this.props.history.push("/auth/login");
     }
   }
 }

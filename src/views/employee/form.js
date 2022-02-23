@@ -9,9 +9,8 @@ import env from "config/environment"
 import { ReactSVG } from "react-svg"
 import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
-import ImageUploading from "react-images-uploading"
 import TextError from "components/formik/textError"
-import { Form, Field, Formik, ErrorMessage } from "formik"
+import { Form, Formik, ErrorMessage } from "formik"
 import * as Yup from "yup"
 
 const endpoint = "/master/employees"
@@ -23,8 +22,7 @@ const EmployeeForm = (props) => {
   let api = new Api()
   const isView = useQuery().get("action") === "view"
   const [tabKey, setTabKey] = useState("general-information")
-  const [photoProfile, setPhotoProfile] = useState([])
-  //console.log("imagessss", photoProfile)
+  const [photoProfile, setPhotoProfile] = useState({})
   const maxNumber = 1
   const [sameAddress, setSameAddress] = useState(false)
 
@@ -38,7 +36,6 @@ const EmployeeForm = (props) => {
   useEffect(async () => {
     let api = new Api()
     let formId = props.match.params.id
-
     let docTitle = "Edit Employee"
     let breadcrumbTitle = "Edit Employee"
     if (!formId) {
@@ -48,13 +45,12 @@ const EmployeeForm = (props) => {
       docTitle = "Employee Details"
       breadcrumbTitle = "View Employee"
     }
-    console.log("isView", isView)
     dispatch(
       setUIParams({
         title: docTitle,
         breadcrumbs: [
           {
-            text: "Employee Management",
+            text: "Employment Management",
           },
           {
             link: backUrl,
@@ -122,10 +118,16 @@ const EmployeeForm = (props) => {
             },
             postal_code: data.permanent_address.postal_code,
           },
-          job_title_id: {label : data.job_title.job_title_name, value : data.job_title.id},
-          division_id: {label : data.division.division_name, value : data.division.id},
-          office_id: {label : data.office.office_name, value : data.office.id},
-          
+          job_title_id: {
+            label: data.job_title.job_title_name,
+            value: data.job_title.id,
+          },
+          division_id: {
+            label: data.division.division_name,
+            value: data.division.id,
+          },
+          office_id: { label: data.office.office_name, value: data.office.id },
+
           hire_date: [
             {
               value: parseInt(data.hire_date.substring(8, 10)),
@@ -181,15 +183,36 @@ const EmployeeForm = (props) => {
     setOptionGender(options)
   }, [])
   // Upload profile
-  const onChangePhotoProfile = (imageList, addUpdateIndex) => {
-    // data for submit
-    console.log("image ", imageList)
-    setPhotoProfile(imageList)
+  const onChangePhotoProfile = async (e) => {
+    try {
+      var files = e.target.files[0]
+      if (files) {
+        var filesize = (files.size / 1024 / 1024).toFixed(4)
+        if (filesize > 4) {
+          alert("Logo size is more than 4MB.")
+          return
+        }
+        let api = new Api()
+        let payload = new FormData()
+        payload.append("files", e.target.files[0])
+        let res = await api.post("/multimedia/files", payload)
+        if (res.data) {
+          setPhotoProfile({
+            ...photoProfile,
+            employee_asset: {
+              multimedia_description_id: res.data.id,
+              multimedia_description: res.data,
+            },
+          })
+        }
+      }
+    } catch (e) {}
   }
+
   // Birthday
   const selectDay = () => {
     const options = []
-    for (let i = 0; i <= 31; i++) {
+    for (let i = 1; i < 32; i++) {
       options.push({
         value: i,
         label: i,
@@ -227,14 +250,13 @@ const EmployeeForm = (props) => {
   //FormatDate XXXX-XX-XX
   function formatDate(date) {
     var d = new Date(date),
+      day = "" + (d.getDate() + 1),
       month = "" + (d.getMonth() + 1),
-      day = "" + d.getDate(),
       year = d.getFullYear()
     if (month.length < 2) month = "0" + month
     if (day.length < 2) day = "0" + day
     return [year, month, day].join("-")
   }
-
   const initialValues = {
     //GeneralInformation
     name_prefix_id: "",
@@ -244,11 +266,6 @@ const EmployeeForm = (props) => {
     birth_date: [],
     gender_id: "",
     ktp: "",
-    // employee_asset: {
-    //   multimedia_description: {
-    //     url: "photoProfile.data_url",
-    //   },
-    // },
 
     //Contacts
     contact: {
@@ -306,18 +323,34 @@ const EmployeeForm = (props) => {
           "Unique Email Contacts",
           "Email already exists", // <- key, message
           (value) => {
-            return new Promise((resolve, reject) => {
-              axios
-                .get(
-                  `${env.API_URL}/master/employees?filters=["email","=","${value}"]`,
-                )
-                .then((res) => {
-                  resolve(res.data.items.length == 0)
-                })
-                .catch((error) => {
-                  resolve(false)
-                })
-            })
+            let formId = props.match.params.id
+            if (formId === undefined) {
+              return new Promise((resolve, reject) => {
+                axios
+                  .get(
+                    `${env.API_URL}/master/employees?filters=["contact.email","=","${value}"]`,
+                  )
+                  .then((res) => {
+                    resolve(res.data.items.length == 0)
+                  })
+                  .catch((error) => {
+                    resolve(false)
+                  })
+              })
+            } else {
+              return new Promise((resolve, reject) => {
+                axios
+                  .get(
+                    `${env.API_URL}/master/employees?filters=["email","=","${value}"]`,
+                  )
+                  .then((res) => {
+                    resolve(res.data.items.length == 0)
+                  })
+                  .catch((error) => {
+                    resolve(false)
+                  })
+              })
+            }
           },
         ),
       other_email: Yup.string().email("Email is not valid."),
@@ -326,8 +359,12 @@ const EmployeeForm = (props) => {
     }),
     employee_number: Yup.string().required("Employee Number is required."),
     //sameAddress: Yup.boolean(),
-    //address: Yup.object({country_id: Yup.string().required("Country is required.")}),
-    //permanent_address: Yup.object({country_id: Yup.string().required("Country is required.")}),
+    address: Yup.object().shape({
+      country_id: Yup.object().required("Country is required."),
+    }),
+    permanent_address: Yup.object().shape({
+      country_id: Yup.object().required("Country is required."),
+    }),
     job_title_id: Yup.object().required("Job Title is required."),
   })
 
@@ -335,7 +372,7 @@ const EmployeeForm = (props) => {
     <Formik
       initialValues={formValues || initialValues}
       validationSchema={validationSchema}
-      onSubmit={async (values, { setSubmitting }) => {       
+      onSubmit={async (values, { setSubmitting }) => {
         let formId = props.match.params.id
         const Data = {
           name_prefix_id: values.name_prefix_id.value,
@@ -350,7 +387,8 @@ const EmployeeForm = (props) => {
           gender_id: values.gender_id,
           ktp: values.ktp,
           employee_asset: {
-            multimedia_description_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            multimedia_description_id:
+              photoProfile.employee_asset?.multimedia_description_id,
           },
           contact: {
             email: values.contact.email,
@@ -386,7 +424,7 @@ const EmployeeForm = (props) => {
           employee_number: values.employee_number,
           job_title_id: values.job_title_id.value,
           division_id: values.division_id.value,
-          office_id: values.office_id.value,          
+          office_id: values.office_id.value,
           hire_date: formatDate([
             values.hire_date[2].value,
             values.hire_date[1].value,
@@ -394,25 +432,23 @@ const EmployeeForm = (props) => {
           ]),
           npwp: values.npwp,
         }
-
         setSubmitting(true)
         if (formId === undefined) {
-           //ProsesCreateData
+          //ProsesCreateData
           try {
             let res = await api.post("master/employees", Data)
             console.log("data", res)
             setSubmitting(false || history.goBack())
-          } catch (e) {}         
+          } catch (e) {}
         } else {
-           //ProsesUpdateData
+          //ProsesUpdateData
           try {
             let res = await api.put(`master/employees/${formId}`, Data)
             console.log("dataupdate", res)
             setSubmitting(false || history.goBack())
-            
           } catch (e) {}
         }
-      }}      
+      }}
       validateOnMount
       enableReinitialize
     >
@@ -480,6 +516,7 @@ const EmployeeForm = (props) => {
                               name="given_name"
                               style={{ maxWidth: 250 }}
                               disabled={isView}
+                              maxlength="128"
                             />
                             <FormikControl
                               control="input"
@@ -487,6 +524,7 @@ const EmployeeForm = (props) => {
                               name="middle_name"
                               style={{ maxWidth: 250 }}
                               disabled={isView}
+                              maxlength="128"
                             />
                             <FormikControl
                               control="input"
@@ -495,6 +533,7 @@ const EmployeeForm = (props) => {
                               name="surname"
                               style={{ maxWidth: 250 }}
                               disabled={isView}
+                              maxlength="128"
                             />
                             <Row className="form-group required">
                               <Col column md={3} lg={3}>
@@ -559,6 +598,7 @@ const EmployeeForm = (props) => {
                               label="Gender"
                               name="gender_id"
                               options={optionGender}
+                              disabled={isView}
                             />
 
                             <FormikControl
@@ -567,6 +607,7 @@ const EmployeeForm = (props) => {
                               name="ktp"
                               style={{ maxWidth: 250 }}
                               disabled={isView}
+                              maxlength="36"
                             />
 
                             <div
@@ -581,70 +622,21 @@ const EmployeeForm = (props) => {
                                 style={{ textAlign: "center" }}
                               >
                                 <div>
-                                  {photoProfile.length == 0 && (
-                                    <Image
-                                      src={
-                                        formik.values.employee_asset
-                                          ?.multimedia_description?.url ||
-                                        "/img/media/profile.svg"
-                                      }
-                                      className="img-profile"
-                                      roundedCircle
-                                    />
-                                  )}
-                                  <ImageUploading
-                                    value={photoProfile}
+                                  <FormikControl
+                                    control="imageProfile"
+                                    id="employee_icon"
+                                    type="imageProfile"
+                                    name="employee_asset"
                                     onChange={onChangePhotoProfile}
-                                    maxNumber={maxNumber}
-                                    dataURLKey="data_url"
-                                    acceptType={["png", "jpg", "jpeg"]}
-                                  >
-                                    {({
-                                      imageList,
-                                      onImageUpload,
-                                      onImageUpdate,
-                                      errors,
-                                    }) => (
-                                      // write your building UI
-                                      <>
-                                        {imageList.map((image, index) => (
-                                          <div
-                                            key={index}
-                                            className="image-item"
-                                          >
-                                            <Image
-                                              src={image["data_url"]}
-                                              roundedCircle
-                                              className="img-profile"
-                                            />
-                                          </div>
-                                        ))}
-                                        <Button
-                                          variant="secondary"
-                                          onClick={() =>
-                                            photoProfile.length !== 0
-                                              ? onImageUpload()
-                                              : onImageUpdate(1)
-                                          }
-                                        >
-                                          {/* {photoProfile.length !== 0
-                                    ? "CHANGE"
-                                    : "UPLOAD"}                                */}
-                                          User Profile Image
-                                        </Button>
-                                        {errors && (
-                                          <>
-                                            {errors.acceptType && (
-                                              <p className="img-error-label">
-                                                Only .png, .jpg, .jpeg file
-                                                supported
-                                              </p>
-                                            )}
-                                          </>
-                                        )}
-                                      </>
-                                    )}
-                                  </ImageUploading>
+                                    disabled={isView}
+                                    url={
+                                      photoProfile.employee_asset
+                                        ?.multimedia_description?.url ||
+                                      formik.values.employee_asset
+                                        ?.multimedia_description?.url
+                                    }
+                                    style={{ maxWidth: 300, marginTop: 12 }}
+                                  />
                                 </div>
                               </div>
                             </div>
@@ -658,6 +650,8 @@ const EmployeeForm = (props) => {
                               name="contact.phone_number"
                               style={{ maxWidth: 200 }}
                               disabled={isView}
+                              minlength="1"
+                              maxlength="32"
                             />
                             <FormikControl
                               control="input"
@@ -666,6 +660,8 @@ const EmployeeForm = (props) => {
                               name="contact.mobile_phone_number"
                               style={{ maxWidth: 200 }}
                               disabled={isView}
+                              minlength="1"
+                              maxlength="32"
                             />
                             <FormikControl
                               control="input"
@@ -692,6 +688,8 @@ const EmployeeForm = (props) => {
                               rows={3}
                               style={{ maxWidth: 416 }}
                               disabled={isView}
+                              minLength="1"
+                              maxLength="512"
                             />
                             <FormikControl
                               control="selectAsync"
@@ -750,6 +748,8 @@ const EmployeeForm = (props) => {
                               name="address.postal_code"
                               style={{ maxWidth: 100 }}
                               disabled={isView}
+                              minLength="1"
+                              maxLength="16"
                             />
                           </div>
                           <h3 className="card-heading">Permanent Address</h3>
@@ -804,6 +804,8 @@ const EmployeeForm = (props) => {
                               rows={3}
                               style={{ maxWidth: 416 }}
                               disabled={isView || sameAddress}
+                              minlength="1"
+                              maxlength="512"
                             />
                             <FormikControl
                               control="selectAsync"
@@ -883,6 +885,8 @@ const EmployeeForm = (props) => {
                               name="permanent_address.postal_code"
                               style={{ maxWidth: 100 }}
                               disabled={isView || sameAddress}
+                              minlength="1"
+                              maxlength="16"
                             />
                           </div>
                         </Card.Body>
@@ -897,7 +901,7 @@ const EmployeeForm = (props) => {
                         <Button
                           variant="primary"
                           onClick={() => setTabKey("emergency-contacts")}
-                          disabled={formik.isValidating}
+                          disabled={formik.isSubmitting}
                           style={{ marginRight: 15 }}
                         >
                           SAVE & NEXT
@@ -921,6 +925,8 @@ const EmployeeForm = (props) => {
                               name="emergency_contact.contact_name"
                               style={{ maxWidth: 250 }}
                               disabled={isView}
+                              minlength="1"
+                              maxlength="128"
                             />
                             <FormikControl
                               control="input"
@@ -928,6 +934,8 @@ const EmployeeForm = (props) => {
                               name="emergency_contact.contact_phone_number"
                               style={{ maxWidth: 200 }}
                               disabled={isView}
+                              minlength="1"
+                              maxlength="32"
                             />
                             <FormikControl
                               control="input"
@@ -935,6 +943,8 @@ const EmployeeForm = (props) => {
                               name="emergency_contact.relationship"
                               style={{ maxWidth: 200 }}
                               disabled={isView}
+                              minlength="1"
+                              maxlength="36"
                             />
                           </div>
                           <h3 className="card-heading">Emergency Contact 2</h3>
@@ -945,6 +955,8 @@ const EmployeeForm = (props) => {
                               name="emergency_contact2.contact_name"
                               style={{ maxWidth: 250 }}
                               disabled={isView}
+                              minlength="1"
+                              maxlength="128"
                             />
                             <FormikControl
                               control="input"
@@ -952,6 +964,8 @@ const EmployeeForm = (props) => {
                               name="emergency_contact2.contact_phone_number"
                               style={{ maxWidth: 200 }}
                               disabled={isView}
+                              minlength="1"
+                              maxlength="32"
                             />
                             <FormikControl
                               control="input"
@@ -959,6 +973,8 @@ const EmployeeForm = (props) => {
                               name="emergency_contact2.relationship"
                               style={{ maxWidth: 200 }}
                               disabled={isView}
+                              minlength="1"
+                              maxlength="36"
                             />
                           </div>
                         </Card.Body>
@@ -973,7 +989,7 @@ const EmployeeForm = (props) => {
                         <Button
                           variant="primary"
                           onClick={() => setTabKey("employment")}
-                          disabled={formik.isValidating}
+                          disabled={formik.isValid}
                           style={{ marginRight: 15 }}
                         >
                           SAVE & NEXT
@@ -998,6 +1014,8 @@ const EmployeeForm = (props) => {
                               name="employee_number"
                               style={{ maxWidth: 250 }}
                               disabled={isView}
+                              minlength="1"
+                              maxlength="36"
                             />
                             <FormikControl
                               control="selectAsync"
@@ -1009,9 +1027,7 @@ const EmployeeForm = (props) => {
                               onChange={(v) => {
                                 formik.setFieldValue("job_title_id", v)
                               }}
-                              placeholder={
-                                formik.values.job_title_id || "Please Choose"
-                              }
+                              placeholder={"Please Choose"}
                               style={{ maxWidth: 200 }}
                               isDisabled={isView}
                             />
@@ -1024,9 +1040,7 @@ const EmployeeForm = (props) => {
                               onChange={(v) => {
                                 formik.setFieldValue("division_id", v)
                               }}
-                              placeholder={
-                                formik.values.division_id || "Please Choose"
-                              }
+                              placeholder={"Please Choose"}
                               style={{ maxWidth: 200 }}
                               isDisabled={isView}
                             />
@@ -1039,9 +1053,7 @@ const EmployeeForm = (props) => {
                               onChange={(v) => {
                                 formik.setFieldValue("office_id", v)
                               }}
-                              placeholder={
-                                formik.values.office_id || "Please Choose"
-                              }
+                              placeholder={"Please Choose"}
                               style={{ maxWidth: 200 }}
                               isDisabled={isView}
                             />
@@ -1102,6 +1114,8 @@ const EmployeeForm = (props) => {
                               name="npwp"
                               style={{ maxWidth: 200 }}
                               disabled={isView}
+                              minlength="1"
+                              maxlength="32"
                             />
                           </div>
                           {additionalRole && (
@@ -1168,9 +1182,8 @@ const EmployeeForm = (props) => {
                         <Button
                           variant="primary"
                           type="submit"
-                          disabled={!(formik.dirty && formik.isValid)}
+                          disabled={!(formik.dirty || formik.isValid)}
                           style={{ marginRight: 15 }}
-                          
                         >
                           SAVE
                         </Button>

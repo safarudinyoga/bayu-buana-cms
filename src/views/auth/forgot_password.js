@@ -31,8 +31,11 @@ function ForgotPassword() {
 				setAlert({
 				  message: res.data.message,
 				}),
-			  )
-			history.push("/auth/otp")
+			)
+			history.push({
+				pathname: "/auth/reset-password", 
+				search:`?reset_password_code=`
+			})
 
 		} catch (e) {
 			dispatch(
