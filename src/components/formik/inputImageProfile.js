@@ -15,7 +15,7 @@ const FormInputFile = ({
   name,
   mediaType = "desktop",
   style,
-  mediaSpec,  
+  mediaSpec,
 }) => {
   let dispatch = useDispatch()
   const acceptFormat = accept
@@ -52,11 +52,7 @@ const FormInputFile = ({
           </p>
         </>
       )}
-      <label
-        className="media-label items-center"
-        id={"media-" + id}
-        style={style}
-      >
+      <label className="media-label" id={"media-" + id} style={style}>
         <input
           id={id}
           type="file"
@@ -67,16 +63,17 @@ const FormInputFile = ({
           accept={acceptFormat}
           data-rule-required="true"
           data-msg-accept="Only .png, .jpg, .jpeg file supported"
-        />          
-        <img
-          src={url || NoImage}
-          className="img-circle img-up"
-          alt="up-img"
-          width="125"
-          height="125"
         />
-        <div className="button-image mt-2">UPLOAD PHOTO</div>
-            
+        <div className="d-flex flex-column flex-md-row flex-lg-column justify-content-center pl-5 pl-md-0 pl-lg-0 mb-2">
+          <div>
+            <img
+              src={url || NoImage}
+              className="img-circle img-up image-profile-form"
+              alt="up-img"
+            />
+          </div>
+          <div className="button-image mt-2 mt-md-5 mt-lg-2 ml-0 ml-md-4 ml-lg-2">UPLOAD PHOTO</div>
+        </div>
       </label>
     </div>
   )
