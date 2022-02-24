@@ -54,7 +54,6 @@ function Login() {
 		if (token) {
 			history.push("/");
 		} else {
-			console.log(refresh_token)
 			if(refresh_token && refresh_token !== '') {
 				checkAuth()
 			}

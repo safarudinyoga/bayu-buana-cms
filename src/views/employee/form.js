@@ -12,20 +12,22 @@ import { setUIParams } from "redux/ui-store"
 import TextError from "components/formik/textError"
 import { Form, Formik, ErrorMessage } from "formik"
 import * as Yup from "yup"
+import { useSnackbar } from 'react-simple-snackbar'
 
 const endpoint = "/master/employees"
 const backUrl = "/master/employee"
-
+const options = {
+  position: 'bottom-right',  
+}
 const EmployeeForm = (props) => {
+  const [openSnackbar] = useSnackbar(options)
   const history = useHistory()
   let dispatch = useDispatch()
   let api = new Api()
   const isView = useQuery().get("action") === "view"
   const [tabKey, setTabKey] = useState("general-information")
-  const [photoProfile, setPhotoProfile] = useState({})
-  const maxNumber = 1
+  const [photoProfile, setPhotoProfile] = useState({})  
   const [sameAddress, setSameAddress] = useState(false)
-
   const [loading, setLoading] = useState(true)
   const [id, setId] = useState(null)
   const [formValues, setFormValues] = useState(null)
@@ -67,7 +69,7 @@ const EmployeeForm = (props) => {
         let res = await api.get(endpoint + "/" + formId)
         let data = res.data
         setFormValues({
-          ...data,
+          ...data,          
           birth_date: [
             {
               value: parseInt(data.birth_date.substring(8, 10)),
@@ -83,8 +85,8 @@ const EmployeeForm = (props) => {
             },
           ],
           name_prefix_id: {
-            label: data.name_prefix.name_prefix_name,
-            value: data.name_prefix_id,
+            label: data?.name_prefix?.name_prefix_name,
+            value: data?.name_prefix_id,
           },
           address: {
             address_line: data.address.address_line,
@@ -93,14 +95,14 @@ const EmployeeForm = (props) => {
               value: data.address.country_id,
             },
             state_province_id: {
-              label: data.address.state_province.state_province_name,
-              value: data.address.state_province_id,
+              label: data?.address?.state_province?.state_province_name || "Please choose",
+              value: data?.address?.state_province_id || null,
             },
             city_id: {
-              label: data.address.city.city_name,
-              value: data.address.city_id,
+              label: data?.address?.city?.city_name || "Please choose",
+              value: data?.address?.city_id || null,
             },
-            postal_code: data.address.postal_code,
+            postal_code: data?.address?.postal_code,
           },
           permanent_address: {
             address_line: data.permanent_address.address_line,
@@ -109,12 +111,12 @@ const EmployeeForm = (props) => {
               value: data.permanent_address.country_id,
             },
             state_province_id: {
-              label: data.permanent_address.state_province.state_province_name,
-              value: data.permanent_address.state_province_id,
+              label: data.permanent_address?.state_province?.state_province_name || "Please choose",
+              value: data.permanent_address?.state_province_id || null,
             },
             city_id: {
-              label: data.permanent_address.city.city_name,
-              value: data.permanent_address.city_id,
+              label: data.permanent_address?.city?.city_name || "Please choose",
+              value: data.permanent_address?.city_id || null,
             },
             postal_code: data.permanent_address.postal_code,
           },
@@ -123,11 +125,10 @@ const EmployeeForm = (props) => {
             value: data.job_title.id,
           },
           division_id: {
-            label: data.division.division_name,
-            value: data.division.id,
+            label: data?.division?.division_name || "Please choose",
+            value: data?.division?.id || null,
           },
-          office_id: { label: data.office.office_name, value: data.office.id },
-
+          office_id: { label: data?.office?.office_name || "Please choose", value: data?.office?.id || null },
           hire_date: [
             {
               value: parseInt(data.hire_date.substring(8, 10)),
@@ -142,6 +143,9 @@ const EmployeeForm = (props) => {
               label: parseInt(data.hire_date.substring(0, 4)),
             },
           ],
+
+
+          
         })
         //handleSameAddress
         if (
@@ -259,12 +263,12 @@ const EmployeeForm = (props) => {
   }
   const initialValues = {
     //GeneralInformation
-    name_prefix_id: "",
+    name_prefix_id: {value : "db24d53c-7d36-4770-8598-dc36174750af", label: "Mr"},
     given_name: "",
     middle_name: "",
     surname: "",
     birth_date: [],
-    gender_id: "",
+    gender_id: "db24d53c-7d36-4770-8598-dc36174750af",
     ktp: "",
 
     //Contacts
@@ -278,15 +282,15 @@ const EmployeeForm = (props) => {
     address: {
       address_line: "",
       country_id: "",
-      state_province_id: "",
-      city_id: "",
+      state_province_id: {value : null, label : "Please choose"},
+      city_id: {value : null, label : "Please choose"},
       postal_code: "",
     },
     permanent_address: {
       address_line: "",
       country_id: "",
-      state_province_id: "",
-      city_id: "",
+      state_province_id: {value : null, label : "Please choose"},
+      city_id: {value : null, label : "Please choose"},
       postal_code: "",
     },
     //EmergencyContact
@@ -308,7 +312,8 @@ const EmployeeForm = (props) => {
     hire_date: [],
     npwp: "",
   }
-  //
+  // Validasi number
+  const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
   const validationSchema = Yup.object({
     name_prefix_id: Yup.object().required("Title is required."),
     given_name: Yup.string().required("Employee First Name is required."),
@@ -331,7 +336,7 @@ const EmployeeForm = (props) => {
                     `${env.API_URL}/master/employees?filters=["contact.email","=","${value}"]`,
                   )
                   .then((res) => {
-                    resolve(res.data.items.length == 0)
+                    resolve(res.data.items.length === 0)
                   })
                   .catch((error) => {
                     resolve(false)
@@ -341,10 +346,10 @@ const EmployeeForm = (props) => {
               return new Promise((resolve, reject) => {
                 axios
                   .get(
-                    `${env.API_URL}/master/employees?filters=["email","=","${value}"]`,
+                    `${env.API_URL}/master/employees?filters=["contact.email","=","${value}"]`,
                   )
                   .then((res) => {
-                    resolve(res.data.items.length == 0)
+                    resolve(res.data.items.length === 1)
                   })
                   .catch((error) => {
                     resolve(false)
@@ -354,16 +359,25 @@ const EmployeeForm = (props) => {
           },
         ),
       other_email: Yup.string().email("Email is not valid."),
-      phone_number: Yup.string().required("Home Phone is required."),
-      mobile_phone_number: Yup.string().required("Mobile Phone is required."),
+      phone_number: Yup.string().matches(phoneRegExp, 'Home Phone is not valid').required("Home Phone is required."),
+      mobile_phone_number: Yup.string().matches(phoneRegExp, 'Mobile Phone is not valid').required("Mobile Phone is required."),
     }),
     employee_number: Yup.string().required("Employee Number is required."),
     //sameAddress: Yup.boolean(),
-    address: Yup.object().shape({
-      country_id: Yup.object().required("Country is required."),
+    address: Yup.object().shape({  
+      address_line: Yup.string(),
+      country_id: Yup.object().required("Country is required."), 
+      state_province_id: Yup.object().shape({value : Yup.string().nullable(), label : Yup.string().nullable()}),
+      city_id: Yup.object().shape({value : Yup.string().nullable(), label : Yup.string().nullable()}),     
+      postal_code: Yup.string(),                
     }),
-    permanent_address: Yup.object().shape({
+    permanent_address: Yup.object().shape({     
+      address_line: Yup.string(),
       country_id: Yup.object().required("Country is required."),
+      //state_province_id: Yup.object().shape({value : Yup.string().nullable(), label : Yup.string().nullable()}),
+      state_province_id: Yup.object().shape({value : Yup.string().nullable(), label : Yup.string().nullable()}),
+      city_id: Yup.object().shape({value : Yup.string().nullable(), label : Yup.string().nullable()}),       
+      postal_code: Yup.string(),      
     }),
     job_title_id: Yup.object().required("Job Title is required."),
   })
@@ -436,15 +450,15 @@ const EmployeeForm = (props) => {
         if (formId === undefined) {
           //ProsesCreateData
           try {
-            let res = await api.post("master/employees", Data)
-            console.log("data", res)
+            let res = await api.post("master/employees", Data)            
+            openSnackbar(`Record ${values.employee_number} - ${values.given_name}" has been successfully saved.`)
             setSubmitting(false || history.goBack())
           } catch (e) {}
         } else {
           //ProsesUpdateData
           try {
             let res = await api.put(`master/employees/${formId}`, Data)
-            console.log("dataupdate", res)
+            openSnackbar(`Record ${values.employee_number} - ${values.given_name}" has been successfully update.`)
             setSubmitting(false || history.goBack())
           } catch (e) {}
         }
@@ -647,6 +661,7 @@ const EmployeeForm = (props) => {
                               control="input"
                               required="label-required"
                               label="Home Phone"
+                              type="number"
                               name="contact.phone_number"
                               style={{ maxWidth: 200 }}
                               disabled={isView}
@@ -657,6 +672,7 @@ const EmployeeForm = (props) => {
                               control="input"
                               required="label-required"
                               label="Mobile Phone"
+                              type="number"
                               name="contact.mobile_phone_number"
                               style={{ maxWidth: 200 }}
                               disabled={isView}
@@ -670,6 +686,7 @@ const EmployeeForm = (props) => {
                               name="contact.email"
                               style={{ maxWidth: 250 }}
                               disabled={isView}
+                              maxlength="256"
                             />
                             <FormikControl
                               control="input"
@@ -677,6 +694,7 @@ const EmployeeForm = (props) => {
                               name="contact.other_email"
                               style={{ maxWidth: 250 }}
                               disabled={isView}
+                              maxlength="256"
                             />
                           </div>
                           <h3 className="card-heading">Current Address</h3>
@@ -702,17 +720,17 @@ const EmployeeForm = (props) => {
                                 formik.setFieldValue("address.country_id", v)
                                 formik.setFieldValue(
                                   "address.state_province_id",
-                                  null,
+                                  {value : null, label : "Please choose"},
                                 )
-                                formik.setFieldValue("address.city_id", null)
+                                formik.setFieldValue("address.city_id", {value : null, label : "Please choose"})
                               }}
-                              placeholder={"Please Choose"}
+                              placeholder={"Please choose"}
                               style={{ maxWidth: 300 }}
                               isDisabled={isView}
                             />
                             <FormikControl
                               control="selectAsync"
-                              label="State/Province"
+                              label="State/ Province"
                               name="address.state_province_id"
                               url={`master/state-provinces`}
                               urlFilter={`["country_id","=",${formik.values.currentCountry?.value}]`}
@@ -722,9 +740,9 @@ const EmployeeForm = (props) => {
                                   "address.state_province_id",
                                   v,
                                 )
-                                formik.setFieldValue("address.city_id", null)
+                                formik.setFieldValue("address.city_id", {value : null, label : "Please choose"})
                               }}
-                              placeholder={"Please Choose"}
+                              placeholder={"Please choose"}
                               style={{ maxWidth: 200 }}
                               isDisabled={isView}
                             />
@@ -738,13 +756,13 @@ const EmployeeForm = (props) => {
                               onChange={(v) => {
                                 formik.setFieldValue("address.city_id", v)
                               }}
-                              placeholder={"Please Choose"}
+                              placeholder={"Please choose"}
                               style={{ maxWidth: 200 }}
                               isDisabled={isView}
                             />
                             <FormikControl
                               control="input"
-                              label="ZIP Code"
+                              label="Zip Code"
                               name="address.postal_code"
                               style={{ maxWidth: 100 }}
                               disabled={isView}
@@ -804,8 +822,8 @@ const EmployeeForm = (props) => {
                               rows={3}
                               style={{ maxWidth: 416 }}
                               disabled={isView || sameAddress}
-                              minlength="1"
-                              maxlength="512"
+                              minLength="1"
+                              maxLength="512"
                             />
                             <FormikControl
                               control="selectAsync"
@@ -821,23 +839,23 @@ const EmployeeForm = (props) => {
                                 )
                                 formik.setFieldValue(
                                   "permanent_address.state_province_id",
-                                  null,
+                                  {value : null, label : "Please choose"},
                                 )
                                 formik.setFieldValue(
                                   "permanent_address.city_id",
-                                  null,
+                                  {value : null, label : "Please choose"},
                                 )
                               }}
                               placeholder={
                                 formik.values.permanent_country_id ||
-                                "Please Choose"
+                                "Please choose"
                               }
                               style={{ maxWidth: 300 }}
                               isDisabled={isView || sameAddress}
                             />
                             <FormikControl
                               control="selectAsync"
-                              label="State/Province"
+                              label="State/ Province"
                               name="permanent_address.state_province_id"
                               url={`master/state-provinces`}
                               urlFilter={`["country_id","=",${formik.values.currentCountry?.value}]`}
@@ -849,12 +867,12 @@ const EmployeeForm = (props) => {
                                 )
                                 formik.setFieldValue(
                                   "permanent_address.city_id",
-                                  null,
+                                  {value : null, label : "Please choose"},
                                 )
                               }}
                               placeholder={
                                 formik.values.permanent_state_province_id ||
-                                "Please Choose"
+                                "Please choose"
                               }
                               style={{ maxWidth: 200 }}
                               isDisabled={isView || sameAddress}
@@ -871,27 +889,23 @@ const EmployeeForm = (props) => {
                                   "permanent_address.city_id",
                                   v,
                                 )
-                              }}
-                              placeholder={
-                                formik.values.permanent_city_id ||
-                                "Please Choose"
-                              }
+                              }}                              
                               style={{ maxWidth: 200 }}
                               isDisabled={isView || sameAddress}
                             />
                             <FormikControl
                               control="input"
-                              label="ZIP Code"
+                              label="Zip Code"
                               name="permanent_address.postal_code"
                               style={{ maxWidth: 100 }}
                               disabled={isView || sameAddress}
-                              minlength="1"
-                              maxlength="16"
+                              minLength="1"
+                              maxLength="16"
                             />
                           </div>
                         </Card.Body>
                       </Card>
-                      <div
+                      <div className="mb-5 ml-1 row justify-content-md-start justify-content-center"
                         style={{
                           marginBottom: 30,
                           marginTop: 30,
@@ -979,7 +993,7 @@ const EmployeeForm = (props) => {
                           </div>
                         </Card.Body>
                       </Card>
-                      <div
+                      <div className="mb-5 ml-1 row justify-content-md-start justify-content-center"
                         style={{
                           marginBottom: 30,
                           marginTop: 30,
@@ -1027,7 +1041,7 @@ const EmployeeForm = (props) => {
                               onChange={(v) => {
                                 formik.setFieldValue("job_title_id", v)
                               }}
-                              placeholder={"Please Choose"}
+                              placeholder={"Please choose"}
                               style={{ maxWidth: 200 }}
                               isDisabled={isView}
                             />
@@ -1040,7 +1054,7 @@ const EmployeeForm = (props) => {
                               onChange={(v) => {
                                 formik.setFieldValue("division_id", v)
                               }}
-                              placeholder={"Please Choose"}
+                              placeholder={"Please choose"}
                               style={{ maxWidth: 200 }}
                               isDisabled={isView}
                             />
@@ -1053,7 +1067,7 @@ const EmployeeForm = (props) => {
                               onChange={(v) => {
                                 formik.setFieldValue("office_id", v)
                               }}
-                              placeholder={"Please Choose"}
+                              placeholder={"Please choose"}
                               style={{ maxWidth: 200 }}
                               isDisabled={isView}
                             />
@@ -1135,7 +1149,7 @@ const EmployeeForm = (props) => {
                                     }}
                                     placeholder={
                                       formik.values.job_title_id ||
-                                      "Please Choose"
+                                      "Please choose"
                                     }
                                     style={{ maxWidth: 200 }}
                                   />
@@ -1150,7 +1164,7 @@ const EmployeeForm = (props) => {
                                     }}
                                     placeholder={
                                       formik.values.division_id ||
-                                      "Please Choose"
+                                      "Please choose"
                                     }
                                     style={{ maxWidth: 200 }}
                                   /> */}
@@ -1172,7 +1186,7 @@ const EmployeeForm = (props) => {
                           </div>
                         </Card.Body>
                       </Card>
-                      <div
+                      <div className="mb-5 ml-1 row justify-content-md-start justify-content-center"
                         style={{
                           marginBottom: 30,
                           marginTop: 30,
@@ -1182,7 +1196,7 @@ const EmployeeForm = (props) => {
                         <Button
                           variant="primary"
                           type="submit"
-                          disabled={!(formik.dirty || formik.isValid)}
+                          disabled={!(formik.dirty || formik.isValid)}                         
                           style={{ marginRight: 15 }}
                         >
                           SAVE
