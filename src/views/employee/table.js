@@ -219,8 +219,12 @@ export default function EmployeeTable() {
         data: { job_title: "job_title", division: "division" },
         render: (data) => {
           {
-            if (data?.job_title?.job_title_name === undefined) {
-              return null
+            if (data?.division?.division_name === undefined ) {
+              return (
+                data?.job_title?.job_title_name +
+                "<br/> " +
+                ""
+              )                         
             } else {
               return (
                 data?.job_title?.job_title_name +

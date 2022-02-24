@@ -12,12 +12,11 @@ function select(props) {
     ...rest
   } = props
   return (    
-        <FastField id={name} name={name}>
+        <FastField id={name} name={name} {...rest}>
           {({ field, form, meta }) => (
             <div style={style}>
               <Select
-                {...field}
-                {...rest}
+                {...field}                
                 options={options}                              
                 onChange={onChange}                
                 placeholder={placeholder || ""}
