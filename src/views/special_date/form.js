@@ -9,6 +9,7 @@ import { withRouter } from "react-router"
 import { setAlert, setUIParams } from 'redux/ui-store';
 import DatePicker from "react-datepicker"
 import FormInputWrapper from "components/form/input-wrapper";
+import FormInputDatePeriod from "components/form/input-date-period";
 
 const endpoint = "/master/agent-special-dates"
 const backUrl = "/master/special-date"
@@ -113,7 +114,7 @@ function SpecialDateForm(props) {
       alertMessage={"Incomplete Data"}
       isValid={false}
     >
-      <FormHorizontal>
+      <FormHorizontal style={{height: 350}}>
         <FormInputControl
           label="Special Date Name"
           required={true}
@@ -124,6 +125,15 @@ function SpecialDateForm(props) {
           type="text"
           minLength="1"
           maxLength="256"
+        />
+        <FormInputDatePeriod 
+          label="Periode"
+          required={true}
+          dateStart={form.special_date_start}
+          dateEnd={form.special_date_end}
+          dateStartOnChange={(date) => setForm({...form, special_date_start: date})}
+          dateEndOnChange={(date) => setForm({...form, special_date_end: date})}
+          recurring={true}
         />
       </FormHorizontal>
 

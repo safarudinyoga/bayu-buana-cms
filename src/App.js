@@ -151,6 +151,10 @@ import StandardAncillaryFeeFlightForm from "views/standard_ancillary_fee/form/fl
 import StandardAncillaryFeeHotelForm from "views/standard_ancillary_fee/form/hotel_form"
 import StandardAncillaryFeeOtherForm from "views/standard_ancillary_fee/form/other_form"
 
+// Special Date
+import SpecialDateTable from "views/special_date/table"
+import SpecialDateForm from "views/special_date/form"
+
 
 import Api from "config/api"
 
@@ -549,6 +553,14 @@ const DashboardRoutes = () => {
         </Route>
         <Route path="/master/user-access-type/form/:id?">
           <UserAccessTypeForm />
+        </Route>
+
+        {/* Master Special Date */}
+        <Route exact path="/master/special-date">
+          <SpecialDateTable />
+        </Route>
+        <Route path="/master/special-date/form/:id?">
+          <SpecialDateForm />
         </Route>
 
       </Switch>

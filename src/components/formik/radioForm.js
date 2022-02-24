@@ -7,13 +7,13 @@ function RadioButtons(props) {
   const { label, name, options, required, ...rest } = props
   return (
     <Row className="form-group required">
-      <Col md={3} lg={3}>
+      <Col md={3} lg={4}>
         <label className="text-label-input" htmlFor={name}>
           {label}
           <span className={required || ""} />
         </label>
       </Col>
-      <Col>
+      <Col md={9} lg={8}>
         <div
           style={{
             height: 38,

@@ -22,13 +22,13 @@ function selectAsync(props) {
   if (objectName.length > 1) {
     return (
       <Row className="form-group required">
-        <Col column md={3} lg={3}>
+        <Col column md={3} lg={4}>
           <label className="text-label-input" htmlFor={name}>
             {label}
             <span className={required || ""} />
           </label>
         </Col>
-        <Col md={9} lg={9}>
+        <Col md={9} lg={8}>
           <FastField id={name} name={name} {...rest}>
             {({ field, form, meta }) => (
               <div style={style}>
@@ -63,13 +63,13 @@ function selectAsync(props) {
   }
   return (
     <Row className="form-group required">
-      <Col column md={3} lg={3}>
+      <Col column md={3} lg={4}>
         <label className="text-label-input" htmlFor={name}>
           {label}
           <span className={required || ""} />
         </label>
       </Col>
-      <Col md={9} lg={9}>
+      <Col md={9} lg={8}>
         <FastField id={name} name={name} {...rest}>
           {({ field, form, meta }) => (
             <div style={style}>
