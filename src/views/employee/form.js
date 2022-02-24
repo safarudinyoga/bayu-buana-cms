@@ -95,11 +95,11 @@ const EmployeeForm = (props) => {
               value: data.address.country_id,
             },
             state_province_id: {
-              label: data?.address?.state_province?.state_province_name || "Please Choose",
+              label: data?.address?.state_province?.state_province_name || "Please choose",
               value: data?.address?.state_province_id || null,
             },
             city_id: {
-              label: data?.address?.city?.city_name || "Please Choose",
+              label: data?.address?.city?.city_name || "Please choose",
               value: data?.address?.city_id || null,
             },
             postal_code: data?.address?.postal_code,
@@ -111,11 +111,11 @@ const EmployeeForm = (props) => {
               value: data.permanent_address.country_id,
             },
             state_province_id: {
-              label: data.permanent_address?.state_province?.state_province_name || "Please Choose",
+              label: data.permanent_address?.state_province?.state_province_name || "Please choose",
               value: data.permanent_address?.state_province_id || null,
             },
             city_id: {
-              label: data.permanent_address?.city?.city_name || "Please Choose",
+              label: data.permanent_address?.city?.city_name || "Please choose",
               value: data.permanent_address?.city_id || null,
             },
             postal_code: data.permanent_address.postal_code,
@@ -125,10 +125,25 @@ const EmployeeForm = (props) => {
             value: data.job_title.id,
           },
           division_id: {
-            label: data?.division?.division_name || "Please Choose",
+            label: data?.division?.division_name || "Please choose",
             value: data?.division?.id || null,
           },
-          office_id: { label: data?.office?.office_name || "Please Choose", value: data?.office?.id || null },
+          office_id: { label: data?.office?.office_name || "Please choose", value: data?.office?.id || null },
+          hire_date: [
+            {
+              value: parseInt(data.hire_date.substring(8, 10)),
+              label: parseInt(data.hire_date.substring(8, 10)),
+            },
+            {
+              value: parseInt(data.hire_date.substring(5, 7)),
+              label: parseInt(data.hire_date.substring(5, 7)),
+            },
+            {
+              value: parseInt(data.hire_date.substring(0, 4)),
+              label: parseInt(data.hire_date.substring(0, 4)),
+            },
+          ],
+
 
           
         })
@@ -258,8 +273,8 @@ const EmployeeForm = (props) => {
 
     //Contacts
     contact: {
-      phone_number: null,
-      mobile_phone_number: null,
+      phone_number: "",
+      mobile_phone_number: "",
       email: "",
       other_email: "",
     },
@@ -267,15 +282,15 @@ const EmployeeForm = (props) => {
     address: {
       address_line: "",
       country_id: "",
-      state_province_id: {value : null, label : "Please Choose"},
-      city_id: {value : null, label : "Please Choose"},
+      state_province_id: {value : null, label : "Please choose"},
+      city_id: {value : null, label : "Please choose"},
       postal_code: "",
     },
     permanent_address: {
       address_line: "",
       country_id: "",
-      state_province_id: {value : null, label : "Please Choose"},
-      city_id: {value : null, label : "Please Choose"},
+      state_province_id: {value : null, label : "Please choose"},
+      city_id: {value : null, label : "Please choose"},
       postal_code: "",
     },
     //EmergencyContact
@@ -297,7 +312,8 @@ const EmployeeForm = (props) => {
     hire_date: [],
     npwp: "",
   }
-  //
+  // Validasi number
+  const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
   const validationSchema = Yup.object({
     name_prefix_id: Yup.object().required("Title is required."),
     given_name: Yup.string().required("Employee First Name is required."),
@@ -343,8 +359,8 @@ const EmployeeForm = (props) => {
           },
         ),
       other_email: Yup.string().email("Email is not valid."),
-      phone_number: Yup.number().typeError('no specify a number').required("Home Phone is required."),
-      mobile_phone_number: Yup.number().typeError('no specify a number').required("Mobile Phone is required."),
+      phone_number: Yup.string().matches(phoneRegExp, 'Home Phone is not valid').required("Home Phone is required."),
+      mobile_phone_number: Yup.string().matches(phoneRegExp, 'Mobile Phone is not valid').required("Mobile Phone is required."),
     }),
     employee_number: Yup.string().required("Employee Number is required."),
     //sameAddress: Yup.boolean(),
@@ -704,11 +720,11 @@ const EmployeeForm = (props) => {
                                 formik.setFieldValue("address.country_id", v)
                                 formik.setFieldValue(
                                   "address.state_province_id",
-                                  {value : null, label : "Please Choose"},
+                                  {value : null, label : "Please choose"},
                                 )
-                                formik.setFieldValue("address.city_id", {value : null, label : "Please Choose"})
+                                formik.setFieldValue("address.city_id", {value : null, label : "Please choose"})
                               }}
-                              placeholder={"Please Choose"}
+                              placeholder={"Please choose"}
                               style={{ maxWidth: 300 }}
                               isDisabled={isView}
                             />
@@ -724,9 +740,9 @@ const EmployeeForm = (props) => {
                                   "address.state_province_id",
                                   v,
                                 )
-                                formik.setFieldValue("address.city_id", {value : null, label : "Please Choose"})
+                                formik.setFieldValue("address.city_id", {value : null, label : "Please choose"})
                               }}
-                              placeholder={"Please Choose"}
+                              placeholder={"Please choose"}
                               style={{ maxWidth: 200 }}
                               isDisabled={isView}
                             />
@@ -740,7 +756,7 @@ const EmployeeForm = (props) => {
                               onChange={(v) => {
                                 formik.setFieldValue("address.city_id", v)
                               }}
-                              placeholder={"Please Choose"}
+                              placeholder={"Please choose"}
                               style={{ maxWidth: 200 }}
                               isDisabled={isView}
                             />
@@ -823,16 +839,16 @@ const EmployeeForm = (props) => {
                                 )
                                 formik.setFieldValue(
                                   "permanent_address.state_province_id",
-                                  {value : null, label : "Please Choose"},
+                                  {value : null, label : "Please choose"},
                                 )
                                 formik.setFieldValue(
                                   "permanent_address.city_id",
-                                  {value : null, label : "Please Choose"},
+                                  {value : null, label : "Please choose"},
                                 )
                               }}
                               placeholder={
                                 formik.values.permanent_country_id ||
-                                "Please Choose"
+                                "Please choose"
                               }
                               style={{ maxWidth: 300 }}
                               isDisabled={isView || sameAddress}
@@ -851,12 +867,12 @@ const EmployeeForm = (props) => {
                                 )
                                 formik.setFieldValue(
                                   "permanent_address.city_id",
-                                  {value : null, label : "Please Choose"},
+                                  {value : null, label : "Please choose"},
                                 )
                               }}
                               placeholder={
                                 formik.values.permanent_state_province_id ||
-                                "Please Choose"
+                                "Please choose"
                               }
                               style={{ maxWidth: 200 }}
                               isDisabled={isView || sameAddress}
@@ -1025,7 +1041,7 @@ const EmployeeForm = (props) => {
                               onChange={(v) => {
                                 formik.setFieldValue("job_title_id", v)
                               }}
-                              placeholder={"Please Choose"}
+                              placeholder={"Please choose"}
                               style={{ maxWidth: 200 }}
                               isDisabled={isView}
                             />
@@ -1038,7 +1054,7 @@ const EmployeeForm = (props) => {
                               onChange={(v) => {
                                 formik.setFieldValue("division_id", v)
                               }}
-                              placeholder={"Please Choose"}
+                              placeholder={"Please choose"}
                               style={{ maxWidth: 200 }}
                               isDisabled={isView}
                             />
@@ -1051,7 +1067,7 @@ const EmployeeForm = (props) => {
                               onChange={(v) => {
                                 formik.setFieldValue("office_id", v)
                               }}
-                              placeholder={"Please Choose"}
+                              placeholder={"Please choose"}
                               style={{ maxWidth: 200 }}
                               isDisabled={isView}
                             />
@@ -1133,7 +1149,7 @@ const EmployeeForm = (props) => {
                                     }}
                                     placeholder={
                                       formik.values.job_title_id ||
-                                      "Please Choose"
+                                      "Please choose"
                                     }
                                     style={{ maxWidth: 200 }}
                                   />
@@ -1148,7 +1164,7 @@ const EmployeeForm = (props) => {
                                     }}
                                     placeholder={
                                       formik.values.division_id ||
-                                      "Please Choose"
+                                      "Please choose"
                                     }
                                     style={{ maxWidth: 200 }}
                                   /> */}
