@@ -145,6 +145,10 @@ import UserAccessTypeTable from "views/user_access_type/table"
 import UserAccessTypeForm from "views/user_access_type/form"
 import ResetPassword from "views/reset_password/reset_password"
 
+// Special Date
+import SpecialDateTable from "views/special_date/table"
+import SpecialDateForm from "views/special_date/form"
+
 
 import Api from "config/api"
 
@@ -530,6 +534,14 @@ const DashboardRoutes = () => {
         </Route>
         <Route path="/master/user-access-type/form/:id?">
           <UserAccessTypeForm />
+        </Route>
+
+        {/* Master Special Date */}
+        <Route exact path="/master/special-date">
+          <SpecialDateTable />
+        </Route>
+        <Route path="/master/special-date/form/:id?">
+          <SpecialDateForm />
         </Route>
 
       </Switch>
