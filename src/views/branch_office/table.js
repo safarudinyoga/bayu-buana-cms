@@ -12,7 +12,7 @@ export default function OfficeTable() {
         title: "Manage Branch Office",
         breadcrumbs: [
           {
-            text: "Employee Management",
+            text: "Employment Management",
           },
           {
             text: "Branch Offices",
