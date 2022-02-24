@@ -18,6 +18,14 @@
     }
 }
 
+.card-header-tabs {
+    margin-right: 0;
+    margin-left: 0;
+}
+.tabs-text {
+    text-transform: uppercase;
+}
+
 @media (max-width: 480px) {
     .tabs-icon {
         padding-left: 24px !important;
@@ -55,6 +63,11 @@
     }
 }
 
+.active > .fee-tabs-title{
+    color: #027F71 !important;
+    font-weight: bold;
+}
+
 .nav-tabs .nav-link:hover {
     color: #818181 !important;
 
@@ -68,6 +81,8 @@
 .nav-tabs {
     border-bottom: none !important;
     background-color: #F5F5F5 !important;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
 
     @media (max-width: 480px) {
         border-bottom: none !important;
