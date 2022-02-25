@@ -1,11 +1,14 @@
-import { Formik } from 'formik';
-import React from 'react';
-import { Card, Form, Row, Col, Button, Image } from "react-bootstrap"
+import { FastField, Formik } from 'formik';
+import React, { useState } from 'react';
+import { Card, Form, Row, Col, Button, InputGroup, FormGroup } from "react-bootstrap"
 import * as Yup from "yup"
 import Api from "config/api"
 
 const SecuritySettings = (props) => {
   let api = new Api()
+  const [ oldPassType, setOldPassType] = useState("password")
+  const [ newPassType, setNewPassType] = useState("password")
+  const [ confirmPassType, setConfirmPassType] = useState("password")
 
   // Initialize form
   const initialForm = {
@@ -18,10 +21,56 @@ const SecuritySettings = (props) => {
   // Schema for yup
   const validationSchema = Yup.object().shape({
     // Change Password
-    oldPassword: Yup.string(),
-    newPassword: Yup.string(),
-    confirmPassword: Yup.string().oneOf([Yup.ref('newPassword'), null], 'New Password must match'),
+    oldPassword: Yup.string().required("Old Password is required"),
+    newPassword: Yup.string().required("New Password is required"),
+    confirmPassword: Yup.string().required("Confirm password is required").oneOf([Yup.ref('newPassword'), null], 'New Password must match'),
   })
+
+  const FormValidate = ({
+    label,
+    name,
+    type="password",
+    placeholder="",
+    endIcon,
+  }) => (
+    <FormGroup as={Row}>
+      <Form.Label className="mt-2" column sm={3}>{label}</Form.Label>
+      <Col sm={9}>
+        <InputGroup>
+          <FastField name={name}>
+            {({ field, form }) => (
+              <>
+                <Form.Control
+                  type={type}
+                  placeholder={placeholder}
+                  isInvalid={
+                    form.touched[name] && form.errors[name]
+                  }
+                  {...field}
+                />
+                {
+                  endIcon ? (
+                    <InputGroup.Append>
+                      <InputGroup.Text>
+                        {endIcon()}
+                      </InputGroup.Text>
+                    </InputGroup.Append>
+                  ) : null
+                }
+                {form.touched[name] && form.errors[name] && (
+                  <Form.Control.Feedback type="invalid">
+                    {form.touched[name]
+                      ? form.errors[name]
+                      : null}
+                  </Form.Control.Feedback>
+                )}
+              </>
+            )}
+          </FastField>
+        </InputGroup>
+      </Col>
+    </FormGroup>
+  )
 
   return (
     <Formik
@@ -68,48 +117,39 @@ const SecuritySettings = (props) => {
 
                 <h3 className="card-heading">Change Password</h3>
                 <div style={{ padding: "0 15px 15px" }}>
-                  <Form.Group as={Row} className="form-group">
-                    <Form.Label column sm={3}>
-                      Old Password
-                    </Form.Label>
-                    <Col sm={9}>
-                      <Form.Control 
-                        name="oldPassword"
-                        type="password"
-                        value={values.oldPassword}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                      />
-                    </Col>
-                  </Form.Group>
-                  <Form.Group as={Row} className="form-group">
-                    <Form.Label column sm={3}>
-                      New Password
-                    </Form.Label>
-                    <Col sm={9}>
-                      <Form.Control 
-                        name="newPassword"
-                        type="password"
-                        value={values.newPassword}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                      />
-                    </Col>
-                  </Form.Group>
-                  <Form.Group as={Row} className="form-group">
-                    <Form.Label column sm={3}>
-                      Confirm Password
-                    </Form.Label>
-                    <Col sm={9}>
-                      <Form.Control 
-                        name="confirmPassword"
-                        type="password"
-                        value={values.confirmPassword}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                      />
-                    </Col>
-                  </Form.Group>
+                  <FormValidate
+                    label="Old Password"
+                    name="oldPassword"
+                    type={oldPassType}
+                    placeholder="Enter your password"
+                    endIcon={() => (
+                      <i 
+                      onClick={() => setOldPassType(oldPassType === "text" ? "password" : "text")}
+                      className={`fa ${oldPassType === "password" ? "fa-eye-slash" : "fa-eye"}`}></i>
+                    )}
+                  />
+                  <FormValidate
+                    label="New Password"
+                    name="newPassword"
+                    type={newPassType}
+                    placeholder="Enter your new password"
+                    endIcon={() => (
+                      <i 
+                      onClick={() => setNewPassType(newPassType === "text" ? "password" : "text")}
+                      className={`fa ${newPassType === "password" ? "fa-eye-slash" : "fa-eye"}`}></i>
+                    )}
+                  />
+                  <FormValidate
+                    label="Confirm New Password"
+                    name="confirmPassword"
+                    type={confirmPassType}
+                    placeholder="Enter your password"
+                    endIcon={() => (
+                      <i 
+                      onClick={() => setConfirmPassType(confirmPassType === "text" ? "password" : "text")}
+                      className={`fa ${confirmPassType === "password" ? "fa-eye-slash" : "fa-eye"}`}></i>
+                    )}
+                  />
                 </div>
               </Card.Body>
             </Card>
