@@ -310,6 +310,11 @@ export default class Sidebar extends Component {
                       <p>Frequent Traveler Program</p>
                     </Link>
                   </li>
+                  <li className="nav-item">
+                    <Link to="/master/general-setup" className="nav-link">
+                      <p>General Setup</p>
+                    </Link>
+                  </li>
                   {/* <li className="nav-item">
                     <Link to="/master/invoice-email-setup" className="nav-link">
                       <p>Invoice Email Setup</p>
