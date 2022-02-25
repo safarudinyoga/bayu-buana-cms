@@ -27,7 +27,8 @@ function textAreaForm(props) {
           {({ field, form, meta }) => (
             <div>
               <textarea                
-                {...field}                              
+                {...field}
+                {...rest}                              
                 style={style}
                 minLength={minLength}
                 maxLength={maxLength}
