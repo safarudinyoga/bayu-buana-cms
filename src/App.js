@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react"
+import React, {useEffect, useState} from "react"
 import "@fortawesome/fontawesome-free/css/all.css"
 import "admin-lte"
 import "admin-lte/dist/css/adminlte.css"
@@ -146,6 +146,16 @@ import UserAccessTypeTable from "views/user_access_type/table"
 import UserAccessTypeForm from "views/user_access_type/form"
 import ResetPassword from "views/reset_password/reset_password"
 
+// Master Standard Ancillary Fee
+import StandardAncillaryFee from './views/standard_ancillary_fee/standard_ancillary_fee';
+import StandardAncillaryFeeFlightForm from "views/standard_ancillary_fee/form/flight_form"
+import StandardAncillaryFeeHotelForm from "views/standard_ancillary_fee/form/hotel_form"
+import StandardAncillaryFeeOtherForm from "views/standard_ancillary_fee/form/other_form"
+
+// Special Date
+import SpecialDateTable from "views/special_date/table"
+import SpecialDateForm from "views/special_date/form"
+
 
 import Api from "config/api"
 
@@ -263,6 +273,19 @@ const DashboardRoutes = () => {
         </Route>
         <Route path="/master/frequent-traveler-program/form/:id?">
           <FrequentTravelerProgramForm />
+        </Route>
+        {/* Standard Ancillary Fee */}
+        <Route exact path="/master/standard-ancillary-fee">
+          <StandardAncillaryFee />
+        </Route>
+        <Route path="/master/standard-ancillary-fee/form/flight-form/:id?">
+          <StandardAncillaryFeeFlightForm />
+        </Route>
+        <Route path="/master/standard-ancillary-fee/form/hotel-form/:id?">
+          <StandardAncillaryFeeHotelForm />
+        </Route>
+        <Route path="/master/standard-ancillary-fee/form/other-form/:id?">
+          <StandardAncillaryFeeOtherForm />
         </Route>
         <Route exact path="/master/destination-groups">
           <DestinationGroupTable />
@@ -537,6 +560,14 @@ const DashboardRoutes = () => {
         </Route>
         <Route path="/master/user-access-type/form/:id?">
           <UserAccessTypeForm />
+        </Route>
+
+        {/* Master Special Date */}
+        <Route exact path="/master/special-date">
+          <SpecialDateTable />
+        </Route>
+        <Route path="/master/special-date/form/:id?">
+          <SpecialDateForm />
         </Route>
 
       </Switch>

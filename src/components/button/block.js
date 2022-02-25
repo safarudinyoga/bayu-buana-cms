@@ -5,16 +5,17 @@ export const BlockButton = ({
     onClick = () => {},
     text = "sign in",
     disabled =  false,
-    type = "button"
+    type = "button",
+    buttonType = "button-save"
 }) => {
     return (
     <button 
-        className=" btn btn-block button-save mt-4"
+        className={`btn btn-block mt-4 ${buttonType}`}
         onClick={onClick}
         disabled={disabled}
         type={type}
     >
-        <div className="text-button-block">{text}</div>
+        <div className={buttonType === "button-save" ? "text-button-block-white" : "text-button-block"}>{text}</div>
     </button>
     )
 }

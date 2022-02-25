@@ -32,10 +32,7 @@ function ForgotPassword() {
 				  message: res.data.message,
 				}),
 			)
-			history.push({
-				pathname: "/auth/reset-password", 
-				search:`?reset_password_code=`
-			})
+			history.push("/auth/login")
 
 		} catch (e) {
 			dispatch(
@@ -94,7 +91,7 @@ function ForgotPassword() {
 
 	return (
 		<>
-			<p className="mid-title p-0 mb-3">Forgot Password</p>
+			<p className="mid-title p-0 mb-3">Forgotten Password?</p>
 			<Formik
 				initialValues={initialForm}
 				validationSchema={validationSchema}
@@ -112,20 +109,19 @@ function ForgotPassword() {
 								name="email"
 								type="email"
 								maxLength={256}
-								placeholder="Enter your email"
+								placeholder="Email"
 							/>
 							<BlockButton 
-								text={"Reset Password"} 
+								text={"Request"} 
 								disabled={isSubmitting || !dirty}
 								type="submit"
 							/>
 
-							<div className="mt-2">
-								<Link to="/auth/login" className="back-signin">
-								<i className="fa fa-arrow-left mr-1"></i>
-								Back to Sign In
-								</Link>
-							</div>
+							<BlockButton 
+								text={"Cancel"} 
+								onClick={() => history.goBack()}
+								buttonType="button-cancel"
+							/>
 						</Form>
 					)
 				}

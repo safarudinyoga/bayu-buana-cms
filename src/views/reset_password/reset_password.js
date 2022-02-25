@@ -25,17 +25,31 @@ function ResetPassword(props) {
 		confirm_password: "password"
 	})
 
+	Yup.addMethod(Yup.string, 'matchPassword', function(propertyPath, message) {
+		return this.test('unique', message, function(field) {
+			if (field && this.parent[propertyPath]) {
+			  console.log(field, this.parent[propertyPath])
+			return field === this.parent[propertyPath]
+		  } else {
+			return true
+		  }
+		})
+	  })
+	
+
 	const validationSchema =  Yup.object().shape({
 		new_password: Yup.string()
-			.required("Password is required.")
-			.min(8, "Password is too short - should be 8 chars minimum.")
-			.max(256, "Password is too long - should be 256 chars maximun.")
-			.matches(/^(?=.*\d)(?=.*([a-z]|[A-Z]))([\x20-\x7E]){8,}$/, "Password must be contain letters, numbers, and symbols"),
+			.required("New password is required.")
+			.min(8, "New password is too short - should be 8 chars minimum.")
+			.max(256, "New password is too long - should be 256 chars maximun.")
+			// .matches(/^(?=.*\d)(?=.*([a-z]|[A-Z]))([\x20-\x7E]){8,}$/, "Password must be contain letters, numbers, and symbols")
+			.matchPassword('confirm_password', 'New password and confirm password does not match.'),
 		confirm_password: Yup.string()
-			.required("Password is required.")
-			.min(8, "Password is too short - should be 8 chars minimum.")
-			.max(256, "Password is too long - should be 256 chars maximun.")
-			.matches(/^(?=.*\d)(?=.*([a-z]|[A-Z]))([\x20-\x7E]){8,}$/, "Password must be contain letters, numbers, and symbols"),
+			.required("Confirm password is required.")
+			.min(8, "Confirm password is too short - should be 8 chars minimum.")
+			.max(256, "Confirm password is too long - should be 256 chars maximun.")
+			// .matches(/^(?=.*\d)(?=.*([a-z]|[A-Z]))([\x20-\x7E]){8,}$/, "Password must be contain letters, numbers, and symbols")
+			.matchPassword('new_password', 'New password and confirm password does not match.'),
 	})
 
 	const onSubmit = async (values) => {
@@ -106,7 +120,6 @@ function ResetPassword(props) {
 	return (
 		<>
 			<p className="mid-title p-0 mb-1">Reset your password</p>
-			<p className="sub-title p-0 mb-3">Insert new password and confirm password</p>
 			<Formik
 				initialValues={initialForm}
 				validationSchema={validationSchema}
@@ -124,7 +137,7 @@ function ResetPassword(props) {
 								name="new_password"
 								type={passType.new_password}
 								maxLength={256}
-								placeholder="new password"
+								placeholder="New password"
 								endIcon={() => (
 									<i 
 									onClick={() => setPassType({ ...passType, new_password: passType.new_password === "text" ? "password" : "text"})} 
@@ -133,11 +146,11 @@ function ResetPassword(props) {
 							/>
 
 							<FormValidate
-								label="Confirm New Password" 
+								label="Confirm Password" 
 								name="confirm_password"
 								type={passType.confirm_password}
 								maxLength={256}
-								placeholder="confirm password"
+								placeholder="Confirm password"
 								endIcon={() => (
 									<i 
 									onClick={() => setPassType({ ...passType, confirm_password: passType.confirm_password === "text" ? "password" : "text"})} 

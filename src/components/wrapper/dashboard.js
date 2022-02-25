@@ -5,8 +5,7 @@ import { useSelector } from "react-redux"
 import Breadcrumb from "components/navigation/breadcrumb"
 import { useSnackbar } from "react-simple-snackbar"
 import { useHistory } from "react-router-dom"
-import Cookies from "js-cookie" 
-import Api from "config/api"
+import Cookies from "js-cookie"
 
 const DashboardWrapper = (props) => {
   const history = useHistory()
@@ -14,22 +13,10 @@ const DashboardWrapper = (props) => {
   const [openSnackbar, closeSnackbar] = useSnackbar({
     position: "bottom-right",
   })
-  const API = new Api()
 
   useEffect(() => {
     history.listen((location, action) => {
-      if(!Cookies.get('ut')) {
-        let rt = Cookies.get('rt')
-        if(rt) {
-          
-          API.refreshToken(rt)
-          .then((res) => {
-            console.log(res)
-          })
-        } else {
-          window.location.reload()
-        }
-      }
+      if(!Cookies.get('ut')) window.location.reload()
     });
 
     document.body.className = [

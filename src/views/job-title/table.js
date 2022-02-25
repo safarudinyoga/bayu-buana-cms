@@ -12,7 +12,7 @@ export default function JobTitleTable() {
         title: "Job Title",
         breadcrumbs: [
           {
-            text: "Employee Management",
+            text: "Employment Management",
           },
           {
             text: "Job Title",
