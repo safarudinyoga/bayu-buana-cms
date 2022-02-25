@@ -671,7 +671,7 @@ const EmployeeForm = (props) => {
                                               v,
                                             )
                                           }}
-                                          style={{ maxWidth: 240 }}
+                                          style={{ minWidth: 110, maxWidth: 240 }}
                                           isDisabled={isView}
                                         />
                                       </div>
@@ -1070,8 +1070,8 @@ const EmployeeForm = (props) => {
                                   name="emergency_contact.relationship"
                                   style={{ maxWidth: 200 }}
                                   disabled={isView}
-                                  minLength="1"
-                                  maxLength="36"
+                                  minlength="1"
+                                  maxlength="36"
                                 />
                               </div>
                             </Col>
@@ -1097,8 +1097,8 @@ const EmployeeForm = (props) => {
                                   name="emergency_contact2.contact_phone_number"
                                   style={{ maxWidth: 200 }}
                                   disabled={isView}
-                                  minLength="1"
-                                  maxLength="32"
+                                  minlength="1"
+                                  maxlength="32"
                                 />
                                 <FormikControl
                                   control="input"
@@ -1153,8 +1153,8 @@ const EmployeeForm = (props) => {
                                   name="employee_number"
                                   style={{ maxWidth: 250 }}
                                   disabled={isView}
-                                  minLength="1"
-                                  maxLength="36"
+                                  minlength="1"
+                                  maxlength="36"
                                 />
                                 <FormikControl
                                   control="selectAsync"
