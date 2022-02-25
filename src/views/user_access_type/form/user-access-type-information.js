@@ -10,7 +10,7 @@ import { setAlert } from "redux/ui-store"
 import $ from "jquery"
 import env from "../../../config/environment"
 
-const endpoint = "/master/user-types"
+const endpoint = "/user/user-types"
 const backUrl = "/master/user-access-type"
 
 function UserAccessTypeInformation(props) {
@@ -78,7 +78,7 @@ function UserAccessTypeInformation(props) {
               $.ajax({
                 type: "GET",
                 async: false,
-                url: `${env.API_URL}/master/user-types?filters=["user_type_name","=","${element.value}"]`,
+                url: `${env.API_URL}/user/user-types?filters=["user_type_name","=","${element.value}"]`,
                 success: function (res) {
                   if (res.items.length !== 0) {
                     if (currentName === element.value) {
@@ -103,7 +103,7 @@ function UserAccessTypeInformation(props) {
               $.ajax({
                 type: "GET",
                 async: false,
-                url: `${env.API_URL}/master/user-types?filters=["user_type_code","like","${element.value}"]`,
+                url: `${env.API_URL}/user/user-types?filters=["user_type_code","like","${element.value}"]`,
                 success: function (res) {
                   if (res.items.length !== 0) {
                     if (currentCode === element.value) {
@@ -138,7 +138,7 @@ function UserAccessTypeInformation(props) {
           $.ajax({
             type: "GET",
             async: false,
-            url: `${env.API_URL}/master/user-types?filters=["user_type_name","=","${element.value}"]`,
+            url: `${env.API_URL}/user/user-types?filters=["user_type_name","=","${element.value}"]`,
             success: function (res) {
               if (res.items.length !== 0) {
                 req = false
@@ -159,7 +159,7 @@ function UserAccessTypeInformation(props) {
           $.ajax({
             type: "GET",
             async: false,
-            url: `${env.API_URL}/master/user-types?filters=["user_type_code","like","${element.value}"]`,
+            url: `${env.API_URL}/user/user-types?filters=["user_type_code","like","${element.value}"]`,
             success: function (res) {
               if (res.items.length !== 0) {
                 req = false

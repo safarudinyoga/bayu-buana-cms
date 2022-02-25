@@ -162,7 +162,7 @@ const GeneralInformation = (props) => {
   const handleChangeCurrentCountry = async (v) => {
     try {
       let res = await api.get(
-        `/master/state-provinces?filters=["country_id","=","${v}"]&sort=state_province_name`,
+        `/master/state-provinces?filters=[["country_id","=","${v}"],["AND"],["status","=",1]]&sort=state_province_name`,
       )
       const options = []
       if(res.data.items.length > 0){
@@ -185,7 +185,7 @@ const GeneralInformation = (props) => {
   const handleChangePermanentCountry = async (v) => {
     try {
       let res = await api.get(
-        `/master/state-provinces?filters=["country_id","=","${v}"]&sort=state_province_name`,
+        `/master/state-provinces?filters=[["country_id","=","${v}"],["AND"],["status","=",1]]&sort=state_province_name`,
       )
       const options = []
       if(res.data.items.length > 0){
@@ -207,7 +207,7 @@ const GeneralInformation = (props) => {
   const handleChangeCurrentProvince = async (v) => {
     try {
       let res = await api.get(
-        `/master/cities?filters=["state_province_id","=","${v}"]&sort=city_name`,
+        `/master/cities?filters=[["state_province_id","=","${v}"],["AND"],["status","=",1]]&sort=city_name`,
       )
       const options = []
       if(res.data.items.length > 0){
@@ -228,7 +228,7 @@ const GeneralInformation = (props) => {
   const handleChangePermanentProvince = async (v) => {
     try {
       let res = await api.get(
-        `/master/cities?filters=["state_province_id","=","${v}"]&sort=city_name`,
+        `/master/cities?filters=[["state_province_id","=","${v}"],["AND"],["status","=",1]]&sort=city_name`,
       )
       const options = []
       if(res.data.items.length > 0){
