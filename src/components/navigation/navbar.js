@@ -8,12 +8,6 @@ import Cookies from "js-cookie"
 
 export default class Navbar extends Component {
 
-  signout = async () => {
-    Cookies.remove("ut");
-    Cookies.remove("rt");
-    this.props.history.push("/auth/login");
-  };
-
   render() {
     return (
       <nav className="main-header navbar navbar-expand navbar-white navbar-light">
@@ -89,7 +83,7 @@ export default class Navbar extends Component {
               <a href="/" className="dropdown-item">
                 <i className="fas fa-unlock mr-2"></i> Change Password
               </a>
-              <a href="/" className="dropdown-item" onClick={() => this.signout()}>
+              <a className="dropdown-item cursor-pointer" onClick={() => this.props.signout()}>
                 <i className="fas fa-sign-out-alt mr-2"></i> Sign Out
               </a>
             </div>
