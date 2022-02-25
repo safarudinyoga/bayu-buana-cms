@@ -45,7 +45,7 @@
 @media (max-width: 767px) {
   .breadcrumb-item {
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 11px;
+    font-size: 10px;
     font-weight: normal;
     color: #818181;
     line-height: 140%;
@@ -59,4 +59,13 @@
     margin-left: -6px;    
   }
   
+}
+
+@media (max-width: 480px) {
+  .breadcrumb-item + .breadcrumb-item::before {    
+    padding-right: 0;
+  }
+  .breadcrumb-item{
+    margin-right: 5px;
+  }
 }

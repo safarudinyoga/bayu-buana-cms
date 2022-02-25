@@ -414,6 +414,7 @@ function OfficeForm(props) {
             type="textarea"
             minLength="1"
             maxLength="512"
+            style={{resize: 'none'}}
           />
           <FormInputControl
             label={"Building, Room"}
@@ -482,17 +483,25 @@ function OfficeForm(props) {
           />
           }
 
-          <FormInputControl
+          <FormInputWrapper
             label={"Zip Code"}
-            value={form.postal_code}
-            name="postal_code"
-            onChange={(e) => setForm({...form, postal_code: e.target.value})}
-            disabled={isView || loading}
-            type="text"
-            minLength="1"
-            maxLength="16"
-            style={{width: 100}}
-          />
+            required={false}
+          >
+            <Row>
+              <Col md={3}>
+                <FormInput
+                  label={"Zip Code"}
+                  value={form.postal_code}
+                  name="postal_code"
+                  onChange={(e) => setForm({...form, postal_code: e.target.value})}
+                  disabled={isView || loading}
+                  type="text"
+                  minLength="1"
+                  maxLength="16"
+                />
+              </Col>
+            </Row>
+          </FormInputWrapper>
 
           <FormInputWrapper
             label={"Geo Location"}
