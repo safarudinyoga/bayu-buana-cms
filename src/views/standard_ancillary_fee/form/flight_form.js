@@ -137,7 +137,27 @@ const FlightForm = (props) => {
                     </Col>
                   </Form.Group>
                   
-                  <FeeTabs/>
+                  <FeeTabs
+                    menu={[
+                      {title: "Domestic", sections: [
+                        "Reissue Fee (Reissue & Reroute)", 
+                        "Revalidate Fee", 
+                        "Refund Fee",
+                        "Void Fee (Same Day)", 
+                        "RFP Fee (Contact Fee)", 
+                        "Non-GDS Hotel Booking Process Fee",
+                      ]},
+                      {title: "International", sections: [
+                        "Reissue Fee (Reissue & Reroute)", 
+                        "Revalidate Fee", 
+                        "Refund Fee",
+                        "Void Fee (Same Day)", 
+                        "RFP Fee (Contact Fee)", 
+                        "Non-GDS Hotel Booking Process Fee",
+                      ]},
+                      {title: "Other", sections: ["Emergency Service Assistance 24 Hours Surcharge - Issued Only",]},
+                    ]}
+                  />
 
                 </div>
               </Card.Body>
