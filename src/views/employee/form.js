@@ -288,14 +288,14 @@ const EmployeeForm = (props) => {
     //Address
     address: {
       address_line: "",
-      country_id: "",
+      country_id: { value: null, label: "Please choose" },
       state_province_id: { value: null, label: "Please choose" },
       city_id: { value: null, label: "Please choose" },
       postal_code: "",
     },
     permanent_address: {
       address_line: "",
-      country_id: "",
+      country_id: { value: null, label: "Please choose" },
       state_province_id: { value: null, label: "Please choose" },
       city_id: { value: null, label: "Please choose" },
       postal_code: "",
@@ -313,15 +313,15 @@ const EmployeeForm = (props) => {
     },
     //Employment
     employee_number: "",
-    job_title_id: "",
-    division_id: "",
-    office_id: "",
+    job_title_id: { value: null, label: "Please choose" },
+    division_id: { value: null, label: "Please choose" },
+    office_id: { value: null, label: "Please choose" },
     hire_date: [],
     npwp: "",
   }
   // Validasi number
-  const phoneRegExp =
-    /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
+  const phoneRegExp = /^\d+$/
+  ///^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
   const validationSchema = Yup.object({
     name_prefix_id: Yup.object().required("Title is required."),
     given_name: Yup.string().required("Employee First Name is required."),
@@ -345,6 +345,7 @@ const EmployeeForm = (props) => {
                   )
                   .then((res) => {
                     resolve(res.data.items.length === 0)
+                    console.log("data Email", res.data.items)
                   })
                   .catch((error) => {
                     resolve(false)
@@ -356,8 +357,12 @@ const EmployeeForm = (props) => {
                   .get(
                     `${env.API_URL}/master/employees?filters=["contact.email","=","${value}"]`,
                   )
+
                   .then((res) => {
-                    resolve(res.data.items.length === 1)
+                    resolve(
+                      res.data.items.length === 0 ||
+                        value === formValues.contact.email,
+                    )
                   })
                   .catch((error) => {
                     resolve(false)
@@ -374,7 +379,47 @@ const EmployeeForm = (props) => {
         .matches(phoneRegExp, "Mobile Phone is not valid")
         .required("Mobile Phone is required."),
     }),
-    employee_number: Yup.string().required("Employee Number is required."),
+    employee_number: Yup.string()
+      .required("Employee Number is required.")
+      .test(
+        "Unique Employee Number",
+        "Employee Number already exists", // <- key, message
+        (value) => {
+          let formId = props.match.params.id
+          if (formId === undefined) {
+            return new Promise((resolve, reject) => {
+              axios
+                .get(
+                  `${env.API_URL}/master/employees?filters=["employee_number","=","${value}"]`,
+                )
+                .then((res) => {
+                  resolve(res.data.items.length === 0)
+                })
+                .catch((error) => {
+                  resolve(false)
+                })
+            })
+          } else {
+            return new Promise((resolve, reject) => {
+              axios
+                .get(
+                  `${env.API_URL}/master/employees?filters=["employee_number","=","${value}"]`,
+                )
+
+                .then((res) => {
+                  resolve(
+                    res.data.items.length === 0 ||
+                      value === formValues.employee_number,
+                  )
+                })
+                .catch((error) => {
+                  resolve(false)
+                })
+            })
+          }
+        },
+      ),
+
     //sameAddress: Yup.boolean(),
     address: Yup.object().shape({
       address_line: Yup.string(),
@@ -403,6 +448,7 @@ const EmployeeForm = (props) => {
       postal_code: Yup.string(),
     }),
     job_title_id: Yup.object().required("Job Title is required."),
+    npwp: Yup.number().typeError('NPWP must be a number'),
   })
 
   return (
@@ -476,7 +522,7 @@ const EmployeeForm = (props) => {
           try {
             let res = await api.post("master/employees", Data)
             openSnackbar(
-              `Record ${values.employee_number} - ${values.given_name}" has been successfully saved.`,
+              `Record 'Employee Number: ${values.employee_number} Employee Name: ${values.given_name}' has been successfully saved.`,
             )
             setSubmitting(false || history.goBack())
           } catch (e) {}
@@ -485,7 +531,7 @@ const EmployeeForm = (props) => {
           try {
             let res = await api.put(`master/employees/${formId}`, Data)
             openSnackbar(
-              `Record ${values.employee_number} - ${values.given_name}" has been successfully update.`,
+              `Record 'Employee Number: ${values.employee_number} Employee Name: ${values.given_name}' has been successfully update.`,
             )
             setSubmitting(false || history.goBack())
           } catch (e) {}
@@ -535,8 +581,11 @@ const EmployeeForm = (props) => {
                         <Card.Body>
                           <h3 className="card-heading">General Information</h3>
                           <div style={{ padding: "0 15px 15px" }}>
-                            <Row >
-                              <Col lg={11} className="order-last order-lg-first ">
+                            <Row>
+                              <Col
+                                lg={11}
+                                className="order-last order-lg-first "
+                              >
                                 <FormikControl
                                   control="selectAsync"
                                   required="label-required"
@@ -560,7 +609,7 @@ const EmployeeForm = (props) => {
                                   name="given_name"
                                   style={{ maxWidth: 250 }}
                                   disabled={isView}
-                                  maxlength="128"
+                                  maxLength="128"
                                 />
                                 <FormikControl
                                   control="input"
@@ -568,7 +617,7 @@ const EmployeeForm = (props) => {
                                   name="middle_name"
                                   style={{ maxWidth: 250 }}
                                   disabled={isView}
-                                  maxlength="128"
+                                  maxLength="128"
                                 />
                                 <FormikControl
                                   control="input"
@@ -577,7 +626,7 @@ const EmployeeForm = (props) => {
                                   name="surname"
                                   style={{ maxWidth: 250 }}
                                   disabled={isView}
-                                  maxlength="128"
+                                  maxLength="128"
                                 />
                                 <Row className="form-group required">
                                   <Col column md={3} lg={4}>
@@ -622,7 +671,7 @@ const EmployeeForm = (props) => {
                                               v,
                                             )
                                           }}
-                                          style={{ maxWidth: 240 }}
+                                          style={{ minWidth: 110, maxWidth: 240 }}
                                           isDisabled={isView}
                                         />
                                       </div>
@@ -665,13 +714,14 @@ const EmployeeForm = (props) => {
                                   name="ktp"
                                   style={{ maxWidth: 250 }}
                                   disabled={isView}
-                                  maxlength="36"
+                                  maxLength="36"
                                 />
                               </Col>
-                              <Col lg={1} className="d-flex justify-content-lg-center justify-content-md-start justify-content-center order-first order-lg-last p-0">
-                                <div
-                                                                    
-                                >
+                              <Col
+                                lg={1}
+                                className="d-flex justify-content-lg-center justify-content-md-start justify-content-center order-first order-lg-last p-0"
+                              >
+                                <div>
                                   <div>
                                     <FormikControl
                                       control="imageProfile"
@@ -686,7 +736,6 @@ const EmployeeForm = (props) => {
                                         formik.values.employee_asset
                                           ?.multimedia_description?.url
                                       }
-                                      
                                     />
                                   </div>
                                 </div>
@@ -704,8 +753,8 @@ const EmployeeForm = (props) => {
                                   name="contact.phone_number"
                                   style={{ maxWidth: 200 }}
                                   disabled={isView}
-                                  minlength="1"
-                                  maxlength="32"
+                                  minLength="1"
+                                  maxLength="32"
                                 />
                                 <FormikControl
                                   control="input"
@@ -714,8 +763,8 @@ const EmployeeForm = (props) => {
                                   name="contact.mobile_phone_number"
                                   style={{ maxWidth: 200 }}
                                   disabled={isView}
-                                  minlength="1"
-                                  maxlength="32"
+                                  minLength="1"
+                                  maxLength="32"
                                 />
                                 <FormikControl
                                   control="input"
@@ -724,7 +773,7 @@ const EmployeeForm = (props) => {
                                   name="contact.email"
                                   style={{ maxWidth: 250 }}
                                   disabled={isView}
-                                  maxlength="256"
+                                  maxLength="256"
                                 />
                                 <FormikControl
                                   control="input"
@@ -732,7 +781,7 @@ const EmployeeForm = (props) => {
                                   name="contact.other_email"
                                   style={{ maxWidth: 250 }}
                                   disabled={isView}
-                                  maxlength="256"
+                                  maxLength="256"
                                 />
                               </div>
                             </Col>
@@ -1003,18 +1052,17 @@ const EmployeeForm = (props) => {
                                   name="emergency_contact.contact_name"
                                   style={{ maxWidth: 250 }}
                                   disabled={isView}
-                                  minlength="1"
-                                  maxlength="128"
+                                  minLength="1"
+                                  maxLength="128"
                                 />
                                 <FormikControl
                                   control="input"
                                   label="Phone Number"
-                                  type="number"
                                   name="emergency_contact.contact_phone_number"
                                   style={{ maxWidth: 200 }}
                                   disabled={isView}
-                                  minlength="1"
-                                  maxlength="32"
+                                  minLength="1"
+                                  maxLength="32"
                                 />
                                 <FormikControl
                                   control="input"
@@ -1040,13 +1088,12 @@ const EmployeeForm = (props) => {
                                   name="emergency_contact2.contact_name"
                                   style={{ maxWidth: 250 }}
                                   disabled={isView}
-                                  minlength="1"
-                                  maxlength="128"
+                                  minLength="1"
+                                  maxLength="128"
                                 />
                                 <FormikControl
                                   control="input"
                                   label="Phone Number"
-                                  type="number"
                                   name="emergency_contact2.contact_phone_number"
                                   style={{ maxWidth: 200 }}
                                   disabled={isView}
@@ -1059,8 +1106,8 @@ const EmployeeForm = (props) => {
                                   name="emergency_contact2.relationship"
                                   style={{ maxWidth: 200 }}
                                   disabled={isView}
-                                  minlength="1"
-                                  maxlength="36"
+                                  minLength="1"
+                                  maxLength="36"
                                 />
                               </div>
                             </Col>
@@ -1213,12 +1260,13 @@ const EmployeeForm = (props) => {
                                 </Row>
                                 <FormikControl
                                   control="input"
+                                  type="text"
                                   label="NPWP"
                                   name="npwp"
                                   style={{ maxWidth: 200 }}
                                   disabled={isView}
                                   minlength="1"
-                                  maxlength="32"
+                                  maxlength="36"
                                 />
                               </div>
                             </Col>

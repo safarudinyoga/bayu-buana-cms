@@ -60,6 +60,8 @@ const GeneralInformation = (props) => {
     permanentZipCode: "",
   })
 
+  const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
+
   // Schema for yup
   const validationSchema = Yup.object().shape({
     // General Information
@@ -72,8 +74,13 @@ const GeneralInformation = (props) => {
     idCardNumber: Yup.string(),
 
     // Contacts
-    homePhone: Yup.string().required("Home Phone is required."),
-    mobilePhone: Yup.string().required("Mobile Phone is required."),
+    
+    homePhone: Yup.string()
+          .required("Home Phone is required.")
+          .matches(phoneRegExp, 'Home Phone is not valid'),
+    mobilePhone: Yup.string()
+          .required("Mobile Phone is required.")
+          .matches(phoneRegExp, 'Mobile Phone is not valid'),
     email: Yup.string()
       .email("Email is not valid.")
       .required("Email is required.")
@@ -162,7 +169,7 @@ const GeneralInformation = (props) => {
   const handleChangeCurrentCountry = async (v) => {
     try {
       let res = await api.get(
-        `/master/state-provinces?filters=["country_id","=","${v}"]&sort=state_province_name`,
+        `/master/state-provinces?filters=[["country_id","=","${v}"],["AND"],["status","=",1]]&sort=state_province_name`,
       )
       const options = []
       if(res.data.items.length > 0){
@@ -185,7 +192,7 @@ const GeneralInformation = (props) => {
   const handleChangePermanentCountry = async (v) => {
     try {
       let res = await api.get(
-        `/master/state-provinces?filters=["country_id","=","${v}"]&sort=state_province_name`,
+        `/master/state-provinces?filters=[["country_id","=","${v}"],["AND"],["status","=",1]]&sort=state_province_name`,
       )
       const options = []
       if(res.data.items.length > 0){
@@ -207,7 +214,7 @@ const GeneralInformation = (props) => {
   const handleChangeCurrentProvince = async (v) => {
     try {
       let res = await api.get(
-        `/master/cities?filters=["state_province_id","=","${v}"]&sort=city_name`,
+        `/master/cities?filters=[["state_province_id","=","${v}"],["AND"],["status","=",1]]&sort=city_name`,
       )
       const options = []
       if(res.data.items.length > 0){
@@ -228,7 +235,7 @@ const GeneralInformation = (props) => {
   const handleChangePermanentProvince = async (v) => {
     try {
       let res = await api.get(
-        `/master/cities?filters=["state_province_id","=","${v}"]&sort=city_name`,
+        `/master/cities?filters=[["state_province_id","=","${v}"],["AND"],["status","=",1]]&sort=city_name`,
       )
       const options = []
       if(res.data.items.length > 0){
@@ -566,7 +573,7 @@ const GeneralInformation = (props) => {
                           <span className="form-label-required">*</span>
                         </Form.Label>
                         <Col sm={8}>
-                          <div style={{ width: 400, display: "flex" }}>
+                          <div style={{ width: 320, display: "flex" }}>
                             <div style={{ marginRight: 12, flex: 1 }}>
                               <Select
                                 options={selectDay()}
@@ -579,7 +586,7 @@ const GeneralInformation = (props) => {
                                 components={{
                                   IndicatorSeparator: () => null,
                                 }}
-                                style={{ marginRight: 12 }}
+                                style={{ marginRight: 12}}
                                 onChange={(v) => {
                                   setFieldValue("dobDay", v)
                                 }}
