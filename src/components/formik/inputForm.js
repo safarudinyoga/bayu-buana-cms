@@ -9,8 +9,8 @@ function inputForm(props) {
     type,
     style,
     placeholder,
-    maxlength,
-    minlength,
+    maxLength,
+    minLength,
     required,
     ...rest
   } = props
@@ -32,8 +32,8 @@ function inputForm(props) {
                   {...field}
                   type={type || "text"}                  
                   style={style}
-                  minLength={minlength}
-                  maxLength={maxlength}
+                  minLength={minLength}
+                  maxLength={maxLength}
                   placeholder={placeholder || ""}
                   className={
                     form.touched[objectName[0]]?.[objectName[1]] &&
@@ -71,8 +71,8 @@ function inputForm(props) {
                 {...field}
                 type={type || "text"}               
                 style={style}
-                minLength={minlength}
-                maxLength={maxlength}
+                minLength={minLength}
+                maxLength={maxLength}
                 placeholder={placeholder || ""}
                 className={
                   form.touched[name] && form.errors[name]
