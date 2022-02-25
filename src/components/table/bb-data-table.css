@@ -175,12 +175,12 @@ table.dataTable > tbody > tr.child span.dtr-data {
 
 .wo-checkbox {
   margin-left: auto;
-  min-width: 20px !important;
-  max-width: 20px !important;
+  min-width: 26px !important;
+  max-width: 26px !important;
 }
 
 .wo-checkbox::before {
-  left: 6px !important;
+  left: 11px !important;
 }
 
 @media (min-width: 768px) {
