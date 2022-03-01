@@ -18,8 +18,13 @@
   font-size: 14px;
   font-weight:800;
   color: #5E5E5E;
-}   
+}
 .text-button-block{
+  color: #333333;
+  text-transform: uppercase;
+  font: normal normal bold 16px/26px Segoe UI;
+}
+.text-button-block-white{
   color: white;
   text-transform: uppercase;
   font: normal normal bold 16px/26px Segoe UI;

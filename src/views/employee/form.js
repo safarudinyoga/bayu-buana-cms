@@ -448,6 +448,7 @@ const EmployeeForm = (props) => {
       postal_code: Yup.string(),
     }),
     job_title_id: Yup.object().required("Job Title is required."),
+    npwp: Yup.number().typeError('NPWP must be a number'),
   })
 
   return (
@@ -670,7 +671,7 @@ const EmployeeForm = (props) => {
                                               v,
                                             )
                                           }}
-                                          style={{ maxWidth: 240 }}
+                                          style={{ minWidth: 110, maxWidth: 240 }}
                                           isDisabled={isView}
                                         />
                                       </div>
@@ -1057,7 +1058,6 @@ const EmployeeForm = (props) => {
                                 <FormikControl
                                   control="input"
                                   label="Phone Number"
-                                  type="number"
                                   name="emergency_contact.contact_phone_number"
                                   style={{ maxWidth: 200 }}
                                   disabled={isView}
@@ -1070,8 +1070,8 @@ const EmployeeForm = (props) => {
                                   name="emergency_contact.relationship"
                                   style={{ maxWidth: 200 }}
                                   disabled={isView}
-                                  minLength="1"
-                                  maxLength="36"
+                                  minlength="1"
+                                  maxlength="36"
                                 />
                               </div>
                             </Col>
@@ -1094,12 +1094,11 @@ const EmployeeForm = (props) => {
                                 <FormikControl
                                   control="input"
                                   label="Phone Number"
-                                  type="number"
                                   name="emergency_contact2.contact_phone_number"
                                   style={{ maxWidth: 200 }}
                                   disabled={isView}
-                                  minLength="1"
-                                  maxLength="32"
+                                  minlength="1"
+                                  maxlength="32"
                                 />
                                 <FormikControl
                                   control="input"
@@ -1154,8 +1153,8 @@ const EmployeeForm = (props) => {
                                   name="employee_number"
                                   style={{ maxWidth: 250 }}
                                   disabled={isView}
-                                  minLength="1"
-                                  maxLength="36"
+                                  minlength="1"
+                                  maxlength="36"
                                 />
                                 <FormikControl
                                   control="selectAsync"
@@ -1261,12 +1260,13 @@ const EmployeeForm = (props) => {
                                 </Row>
                                 <FormikControl
                                   control="input"
+                                  type="text"
                                   label="NPWP"
                                   name="npwp"
                                   style={{ maxWidth: 200 }}
                                   disabled={isView}
-                                  minLength="1"
-                                  maxLength="32"
+                                  minlength="1"
+                                  maxlength="36"
                                 />
                               </div>
                             </Col>

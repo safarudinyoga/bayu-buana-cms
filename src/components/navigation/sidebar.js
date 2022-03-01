@@ -210,6 +210,11 @@ export default class Sidebar extends Component {
                     </Link>
                   </li> */}
                   <li className="nav-item">
+                    <Link to="/master/standard-ancillary-fee" className="nav-link">
+                      <p>Standard Ancillary Fee</p>
+                    </Link>
+                  </li>
+                  <li className="nav-item">
                     <Link to="/master/provinces" className="nav-link">
                       <p>State / Province</p>
                     </Link>
@@ -303,6 +308,11 @@ export default class Sidebar extends Component {
                   <li className="nav-item">
                     <Link to="/master/frequent-traveler-program" className="nav-link">
                       <p>Frequent Traveler Program</p>
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link to="/master/general-setup" className="nav-link">
+                      <p>General Setup</p>
                     </Link>
                   </li>
                   {/* <li className="nav-item">

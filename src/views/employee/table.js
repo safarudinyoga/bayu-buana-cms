@@ -256,6 +256,8 @@ export default function EmployeeTable() {
         render: rowStatus,
       },
     ],
+    module: "employees",
+    btnDownload: ".buttons-csv",
     emptyTable: "No employees found",
     recordName: ["employee_number", "person.given_name"],
     switchStatus: true,

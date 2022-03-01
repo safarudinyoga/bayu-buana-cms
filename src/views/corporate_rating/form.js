@@ -107,10 +107,11 @@ function CorporateRatingForm(props) {
             "checkName",
             function (value, element) {
               var req = false
+              let filters = JSON.stringify(["corporate_rating_type_name","=",element.value])
               $.ajax({
                 type: "GET",
                 async: false,
-                url: `${env.API_URL}/master/corporate-rating-types?filters=["corporate_rating_type_name","=","${element.value}"]`,
+                url: `${env.API_URL}/master/corporate-rating-types?filters=${encodeURIComponent(filters)}`,
                 success: function (res) {
                   if (res.items.length !== 0) {
                     if(currentName == element.value){
@@ -170,10 +171,11 @@ function CorporateRatingForm(props) {
         "checkName",
         function (value, element) {
           var req = false
+          let filters = JSON.stringify(["corporate_rating_type_name","=",element.value])
           $.ajax({
             type: "GET",
             async: false,
-            url: `${env.API_URL}/master/corporate-rating-types?filters=["corporate_rating_type_name","=","${element.value}"]`,
+            url: `${env.API_URL}/master/corporate-rating-types?filters=${encodeURIComponent(filters)}`,
             success: function (res) {
               if (res.items.length !== 0) {
                 req = false

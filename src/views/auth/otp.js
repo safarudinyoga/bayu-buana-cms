@@ -57,7 +57,7 @@ function OTP(props) {
 				  message: res.data.message,
 				}),
 			  )
-			history.push("/")
+			history.push("/auth/login")
 
 		} catch (e) {
 			dispatch(

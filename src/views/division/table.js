@@ -12,7 +12,7 @@ export default function DivisionTable() {
         title: "Division",
         breadcrumbs: [
           {
-            text: "Employee Management",
+            text: "Employment Management",
           },
           {
             text: "Division",

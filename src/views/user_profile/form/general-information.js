@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Card, Form, Row, Col, Button, Image } from "react-bootstrap"
+import { Card, Form, Row, Col, Button, Image, CloseButton } from "react-bootstrap"
 import { Formik, FastField, Field } from "formik"
 import * as Yup from "yup"
 import ImageUploading from "react-images-uploading"
@@ -20,6 +20,8 @@ const GeneralInformation = (props) => {
   const [selectNamePrefix, setSelectNamePrefix] = useState([])
   const [photoProfile, setPhotoProfile] = useState([])
   const maxNumber = 1
+
+  const [showCloseBtn, setShowCloseBtn] = useState(false)
   let api = new Api()
 
   // Initialize form
@@ -58,6 +60,8 @@ const GeneralInformation = (props) => {
     permanentZipCode: "",
   })
 
+  const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
+
   // Schema for yup
   const validationSchema = Yup.object().shape({
     // General Information
@@ -70,8 +74,13 @@ const GeneralInformation = (props) => {
     idCardNumber: Yup.string(),
 
     // Contacts
-    homePhone: Yup.string().required("Home Phone is required."),
-    mobilePhone: Yup.string().required("Mobile Phone is required."),
+    
+    homePhone: Yup.string()
+          .required("Home Phone is required.")
+          .matches(phoneRegExp, 'Home Phone is not valid'),
+    mobilePhone: Yup.string()
+          .required("Mobile Phone is required.")
+          .matches(phoneRegExp, 'Mobile Phone is not valid'),
     email: Yup.string()
       .email("Email is not valid.")
       .required("Email is required.")
@@ -160,7 +169,7 @@ const GeneralInformation = (props) => {
   const handleChangeCurrentCountry = async (v) => {
     try {
       let res = await api.get(
-        `/master/state-provinces?filters=["country_id","=","${v}"]`,
+        `/master/state-provinces?filters=[["country_id","=","${v}"],["AND"],["status","=",1]]&sort=state_province_name`,
       )
       const options = []
       if(res.data.items.length > 0){
@@ -183,7 +192,7 @@ const GeneralInformation = (props) => {
   const handleChangePermanentCountry = async (v) => {
     try {
       let res = await api.get(
-        `/master/state-provinces?filters=["country_id","=","${v}"]`,
+        `/master/state-provinces?filters=[["country_id","=","${v}"],["AND"],["status","=",1]]&sort=state_province_name`,
       )
       const options = []
       if(res.data.items.length > 0){
@@ -205,7 +214,7 @@ const GeneralInformation = (props) => {
   const handleChangeCurrentProvince = async (v) => {
     try {
       let res = await api.get(
-        `/master/cities?filters=["state_province_id","=","${v}"]`,
+        `/master/cities?filters=[["state_province_id","=","${v}"],["AND"],["status","=",1]]&sort=city_name`,
       )
       const options = []
       if(res.data.items.length > 0){
@@ -226,7 +235,7 @@ const GeneralInformation = (props) => {
   const handleChangePermanentProvince = async (v) => {
     try {
       let res = await api.get(
-        `/master/cities?filters=["state_province_id","=","${v}"]`,
+        `/master/cities?filters=[["state_province_id","=","${v}"],["AND"],["status","=",1]]&sort=city_name`,
       )
       const options = []
       if(res.data.items.length > 0){
@@ -247,6 +256,7 @@ const GeneralInformation = (props) => {
   // Upload profile
   const onChangePhotoProfile = (imageList, addUpdateIndex) => {
     // data for submit
+    console.log(imageList, addUpdateIndex)
     setPhotoProfile(imageList)
   }
 
@@ -563,7 +573,7 @@ const GeneralInformation = (props) => {
                           <span className="form-label-required">*</span>
                         </Form.Label>
                         <Col sm={8}>
-                          <div style={{ width: 400, display: "flex" }}>
+                          <div style={{ width: 320, display: "flex" }}>
                             <div style={{ marginRight: 12, flex: 1 }}>
                               <Select
                                 options={selectDay()}
@@ -576,7 +586,7 @@ const GeneralInformation = (props) => {
                                 components={{
                                   IndicatorSeparator: () => null,
                                 }}
-                                style={{ marginRight: 12 }}
+                                style={{ marginRight: 12}}
                                 onChange={(v) => {
                                   setFieldValue("dobDay", v)
                                 }}
@@ -715,7 +725,6 @@ const GeneralInformation = (props) => {
                           <ImageUploading
                             value={photoProfile}
                             onChange={onChangePhotoProfile}
-                            maxNumber={maxNumber}
                             dataURLKey="data_url"
                             acceptType={["png", "jpg", "jpeg"]}
                           >
@@ -723,25 +732,37 @@ const GeneralInformation = (props) => {
                               imageList,
                               onImageUpload,
                               onImageUpdate,
+                              onImageRemove,
                               errors,
                             }) => (
                               // write your building UI
                               <>
                                 {imageList.map((image, index) => (
-                                  <div key={index} className="image-item">
+                                  <div key={index} className="image-item"
+                                    onMouseEnter={e => {
+                                      setShowCloseBtn(true)
+                                    }}
+                                    onMouseLeave={e => {
+                                      setShowCloseBtn(false)
+                                    }}
+                                  >
                                     <Image
                                       src={image["data_url"]}
                                       roundedCircle
                                       className="img-profile"
                                     />
+                                    <CloseButton
+                                      style={{display: showCloseBtn ? "block" : "none"}}
+                                      onClick={() => onImageRemove(0)} 
+                                    />
                                   </div>
                                 ))}
                                 <Button
                                   variant="secondary"
-                                  onClick={() =>
+                                  onClick={() => 
                                     photoProfile.length !== 0
                                       ? onImageUpload()
-                                      : onImageUpdate(1)
+                                      : onImageUpdate(0)
                                   }
                                 >
                                   {/* {photoProfile.length !== 0
@@ -1024,7 +1045,7 @@ const GeneralInformation = (props) => {
                   </Form.Group>
                   <Form.Group as={Row} className="form-group">
                     <Form.Label column sm={3}>
-                      ZIP Code
+                      Zip Code
                     </Form.Label>
                     <Col sm={9}>
                       <FastField name="currentZipCode">
@@ -1181,7 +1202,7 @@ const GeneralInformation = (props) => {
                   </Form.Group>
                   <Form.Group as={Row} className="form-group">
                     <Form.Label column sm={3}>
-                      ZIP Code
+                      Zip Code
                     </Form.Label>
                     <Col sm={9}>
                       <Form.Control
@@ -1210,7 +1231,7 @@ const GeneralInformation = (props) => {
                 disabled={isSubmitting || !dirty}
                 style={{ marginRight: 15 }}
               >
-                SAVE & NEXT
+                SAVE
               </Button>
               <Button
                 variant="secondary"
