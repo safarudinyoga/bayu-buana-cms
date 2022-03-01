@@ -27,6 +27,7 @@ export default function ExchageRateTable() {
   let params = {
     isCheckbox: false,
     showAdvancedOptions: false,
+    createOnModal: true,
     title: "Exchange Rates",
     titleModal: "Exchange Rate",
     baseRoute: "/master/exchange-rate/form",
@@ -37,7 +38,7 @@ export default function ExchageRateTable() {
     columns: [
       {
         title: "From Currency",
-        data: "from_currency.currency_code",
+        data: "currency.currency_code",
       },
       {
         title: "To Currency",
@@ -50,7 +51,6 @@ export default function ExchageRateTable() {
     ],
     emptyTable: "No exchange rate found",
     recordName: ["from_currency.currency_code", "to_currency.currency_code"],
-    createOnModal: true,
   }
   return <BBDataTable {...params} modalContent={Form} />
 }

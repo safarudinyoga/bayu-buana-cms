@@ -880,7 +880,12 @@ class BBDataTable extends Component {
         $('[data-toggle="tooltip"]').tooltip("hide")
         switch ($(this).data("action")) {
           case "edit":
-            me.props.history.push(base + "/" + id)
+            if(me.props.createOnModal) {
+              me.props.setCreateModal(true)
+              // me.props.history.replace({ pathname: me.props.location.pathname, search: `?id=84938493`})
+            } else {
+              me.props.history.push(base + "/" + id)
+            }
             break
           case "view":
             me.props.history.push(base + "/" + id + "?action=view")

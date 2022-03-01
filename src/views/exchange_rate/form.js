@@ -23,7 +23,9 @@ function ExchangeRateCreate(props) {
 	}
 	const [initialForm, setForm] = useState(form)
   const [id, setId] = useState(null)
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
+
+  console.log(props.history)
 
   useEffect(() => {
     if (!props.match.params.id) {
@@ -74,10 +76,12 @@ function ExchangeRateCreate(props) {
 		try {
       let form = {
         conversion_rate_type: "C",
-        from_currency: values.from_currency.value,
-        to_currency: values.to_currency.value,
-        multiply_rate: parseFloat(values.multiply_rate),
+        from_currency_id: values.from_currency.value,
         is_automatic: values.is_automatic,
+        multiply_rate: parseFloat(values.multiply_rate),
+        to_currency_id: values.to_currency.value,
+        valid_from: new Date(),
+        valid_to: new Date(),
       }
       let res = await API.putOrPost("/master/currency-conversions", id, form)
 			console.log(res)
