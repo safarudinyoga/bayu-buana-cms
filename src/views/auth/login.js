@@ -16,6 +16,7 @@ function Login() {
 	const [ passType, setPassType] = useState("password")
 	const [ rememberMe, setRememberMe] = useState(false)
 
+	const api = new Api()
 	let cookie_rm = Cookies.get("remember_acc");
 	let form = {
 		username: "",
@@ -42,24 +43,35 @@ function Login() {
 	})
 
 	useEffect(() => {
-		const token = Cookies.get("ut");
+		const token = Cookies.get("ut")
+		let refresh_token = Cookies.get('rt')
+
+		const checkAuth = async () => {
+			await api.refreshToken(refresh_token)
+			window.location.reload()
+		}
+
 		if (token) {
 			history.push("/");
+		} else {
+			if(refresh_token && refresh_token !== '') {
+				checkAuth()
+			}
 		}
 		if(cookie_rm) setRememberMe(true)
 	}, []);
 
 	const onSubmit = async (values, a) => {
-		let api = new Api()
 		try {
 			let res = await api.post("/user/login", values)
 
 			let date = new Date();
-			date.setTime(date.getTime() + (res.data.expires_in * 1000));
+			date.setTime(date.getTime() + (res.data.expires_in));
 			Cookies.set('ut', res.data.access_token, {expires: date})
 
 			if (rememberMe) {
 				Cookies.set('remember_acc', JSON.stringify(values))
+				Cookies.set('rt', res.data.refresh_token)
 			} else {
 				let rememberCookie = Cookies.get('remember_acc')
 				if(rememberCookie) Cookies.remove('remember_acc')

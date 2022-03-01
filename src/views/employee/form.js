@@ -9,25 +9,25 @@ import env from "config/environment"
 import { ReactSVG } from "react-svg"
 import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
-import ImageUploading from "react-images-uploading"
 import TextError from "components/formik/textError"
-import { Form, Field, Formik, ErrorMessage } from "formik"
+import { Form, Formik, ErrorMessage } from "formik"
 import * as Yup from "yup"
+import { useSnackbar } from "react-simple-snackbar"
 
 const endpoint = "/master/employees"
 const backUrl = "/master/employee"
-
+const options = {
+  position: "bottom-right",
+}
 const EmployeeForm = (props) => {
+  const [openSnackbar] = useSnackbar(options)
   const history = useHistory()
   let dispatch = useDispatch()
   let api = new Api()
   const isView = useQuery().get("action") === "view"
   const [tabKey, setTabKey] = useState("general-information")
-  const [photoProfile, setPhotoProfile] = useState([])
-  //console.log("imagessss", photoProfile)
-  const maxNumber = 1
+  const [photoProfile, setPhotoProfile] = useState({})
   const [sameAddress, setSameAddress] = useState(false)
-
   const [loading, setLoading] = useState(true)
   const [id, setId] = useState(null)
   const [formValues, setFormValues] = useState(null)
@@ -38,8 +38,6 @@ const EmployeeForm = (props) => {
   useEffect(async () => {
     let api = new Api()
     let formId = props.match.params.id
-
-
     let docTitle = "Edit Employee"
     let breadcrumbTitle = "Edit Employee"
     if (!formId) {
@@ -54,7 +52,7 @@ const EmployeeForm = (props) => {
         title: docTitle,
         breadcrumbs: [
           {
-            text: "Employee Management",
+            text: "Employment Management",
           },
           {
             link: backUrl,
@@ -70,23 +68,88 @@ const EmployeeForm = (props) => {
       try {
         let res = await api.get(endpoint + "/" + formId)
         let data = res.data
-        //setFormValues({...res.data,})
-
         setFormValues({
           ...data,
-          name_prefixName: data.name_prefix.name_prefix_name,
-          country_id: data.address.country.country_name,
-          state_province_id: data.address.state_province.state_province_name,
-          city_id: data.address.city.city_name,
-          permanent_country_id: data.permanent_address.country.country_name,
-          permanent_state_province_id:
-            data.permanent_address.state_province.state_province_name,
-          permanent_city_id: data.permanent_address.city.city_name,
-          birth_date: data.birth_date.split("-", 3),
-          // job_title_id: data.job_title.job_title_name,
-          // division_id: data.division.division_name,
-          // office_id: data.office.office_name,
-          // birth_date: data.birth_date.split("-", 3),
+          birth_date: [
+            {
+              value: parseInt(data.birth_date.substring(8, 10)),
+              label: parseInt(data.birth_date.substring(8, 10)),
+            },
+            {
+              value: parseInt(data.birth_date.substring(5, 7)),
+              label: parseInt(data.birth_date.substring(5, 7)),
+            },
+            {
+              value: parseInt(data.birth_date.substring(0, 4)),
+              label: parseInt(data.birth_date.substring(0, 4)),
+            },
+          ],
+          name_prefix_id: {
+            label: data?.name_prefix?.name_prefix_name,
+            value: data?.name_prefix_id,
+          },
+          address: {
+            address_line: data.address.address_line,
+            country_id: {
+              label: data.address.country.country_name,
+              value: data.address.country_id,
+            },
+            state_province_id: {
+              label:
+                data?.address?.state_province?.state_province_name ||
+                "Please choose",
+              value: data?.address?.state_province_id || null,
+            },
+            city_id: {
+              label: data?.address?.city?.city_name || "Please choose",
+              value: data?.address?.city_id || null,
+            },
+            postal_code: data?.address?.postal_code,
+          },
+          permanent_address: {
+            address_line: data.permanent_address.address_line,
+            country_id: {
+              label: data.permanent_address.country.country_name,
+              value: data.permanent_address.country_id,
+            },
+            state_province_id: {
+              label:
+                data.permanent_address?.state_province?.state_province_name ||
+                "Please choose",
+              value: data.permanent_address?.state_province_id || null,
+            },
+            city_id: {
+              label: data.permanent_address?.city?.city_name || "Please choose",
+              value: data.permanent_address?.city_id || null,
+            },
+            postal_code: data.permanent_address.postal_code,
+          },
+          job_title_id: {
+            label: data.job_title.job_title_name,
+            value: data.job_title.id,
+          },
+          division_id: {
+            label: data?.division?.division_name || "Please choose",
+            value: data?.division?.id || null,
+          },
+          office_id: {
+            label: data?.office?.office_name || "Please choose",
+            value: data?.office?.id || null,
+          },
+          hire_date: [
+            {
+              value: parseInt(data.hire_date.substring(8, 10)),
+              label: parseInt(data.hire_date.substring(8, 10)),
+            },
+            {
+              value: parseInt(data.hire_date.substring(5, 7)),
+              label: parseInt(data.hire_date.substring(5, 7)),
+            },
+            {
+              value: parseInt(data.hire_date.substring(0, 4)),
+              label: parseInt(data.hire_date.substring(0, 4)),
+            },
+          ],
         })
         //handleSameAddress
         if (
@@ -118,7 +181,6 @@ const EmployeeForm = (props) => {
     const options = []
     try {
       let res = await api.get("/master/genders")
-
       res.data.items.forEach((data) => {
         options.push({
           key: data.gender_name,
@@ -129,15 +191,36 @@ const EmployeeForm = (props) => {
     setOptionGender(options)
   }, [])
   // Upload profile
-  const onChangePhotoProfile = (imageList, addUpdateIndex) => {
-    // data for submit
-    console.log("image ", imageList)
-    setPhotoProfile(imageList)
+  const onChangePhotoProfile = async (e) => {
+    try {
+      var files = e.target.files[0]
+      if (files) {
+        var filesize = (files.size / 1024 / 1024).toFixed(4)
+        if (filesize > 4) {
+          alert("Logo size is more than 4MB.")
+          return
+        }
+        let api = new Api()
+        let payload = new FormData()
+        payload.append("files", e.target.files[0])
+        let res = await api.post("/multimedia/files", payload)
+        if (res.data) {
+          setPhotoProfile({
+            ...photoProfile,
+            employee_asset: {
+              multimedia_description_id: res.data.id,
+              multimedia_description: res.data,
+            },
+          })
+        }
+      }
+    } catch (e) {}
   }
+
   // Birthday
   const selectDay = () => {
     const options = []
-    for (let i = 0; i <= 31; i++) {
+    for (let i = 1; i < 32; i++) {
       options.push({
         value: i,
         label: i,
@@ -172,32 +255,28 @@ const EmployeeForm = (props) => {
     }
     return options
   }
+  //FormatDate XXXX-XX-XX
   function formatDate(date) {
     var d = new Date(date),
+      day = "" + (d.getDate() + 1),
       month = "" + (d.getMonth() + 1),
-      day = "" + d.getDate(),
       year = d.getFullYear()
-
     if (month.length < 2) month = "0" + month
     if (day.length < 2) day = "0" + day
-
     return [year, month, day].join("-")
   }
-
   const initialValues = {
     //GeneralInformation
-    name_prefix_id: "",
+    name_prefix_id: {
+      value: "db24d53c-7d36-4770-8598-dc36174750af",
+      label: "Mr",
+    },
     given_name: "",
     middle_name: "",
     surname: "",
     birth_date: [],
-    gender_id: "",
+    gender_id: "db24d53c-7d36-4770-8598-dc36174750af",
     ktp: "",
-    // employee_asset: {
-    //   multimedia_description: {
-    //     url: "photoProfile.data_url",
-    //   },
-    // },
 
     //Contacts
     contact: {
@@ -209,16 +288,16 @@ const EmployeeForm = (props) => {
     //Address
     address: {
       address_line: "",
-      country_id: "",
-      state_province_id: "",
-      city_id: "",
+      country_id: { value: null, label: "Please choose" },
+      state_province_id: { value: null, label: "Please choose" },
+      city_id: { value: null, label: "Please choose" },
       postal_code: "",
     },
     permanent_address: {
       address_line: "",
-      country_id: "",
-      state_province_id: "",
-      city_id: "",
+      country_id: { value: null, label: "Please choose" },
+      state_province_id: { value: null, label: "Please choose" },
+      city_id: { value: null, label: "Please choose" },
       postal_code: "",
     },
     //EmergencyContact
@@ -234,15 +313,17 @@ const EmployeeForm = (props) => {
     },
     //Employment
     employee_number: "",
-    job_title_id: "",
-    // division_id: "",
-    // office_id: "",
-    // hire_date: [],
+    job_title_id: { value: null, label: "Please choose" },
+    division_id: { value: null, label: "Please choose" },
+    office_id: { value: null, label: "Please choose" },
+    hire_date: [],
     npwp: "",
   }
-  //
+  // Validasi number
+  const phoneRegExp = /^\d+$/
+  ///^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
   const validationSchema = Yup.object({
-    name_prefix_id: Yup.object().required("Title is required."),    
+    name_prefix_id: Yup.object().required("Title is required."),
     given_name: Yup.string().required("Employee First Name is required."),
     surname: Yup.string().required("Employee Last Name is required."),
     birth_date: Yup.array().min(3, "Date of Birth is required."),
@@ -255,176 +336,207 @@ const EmployeeForm = (props) => {
           "Unique Email Contacts",
           "Email already exists", // <- key, message
           (value) => {
+            let formId = props.match.params.id
+            if (formId === undefined) {
+              return new Promise((resolve, reject) => {
+                axios
+                  .get(
+                    `${env.API_URL}/master/employees?filters=["contact.email","=","${value}"]`,
+                  )
+                  .then((res) => {
+                    resolve(res.data.items.length === 0)
+                    console.log("data Email", res.data.items)
+                  })
+                  .catch((error) => {
+                    resolve(false)
+                  })
+              })
+            } else {
+              return new Promise((resolve, reject) => {
+                axios
+                  .get(
+                    `${env.API_URL}/master/employees?filters=["contact.email","=","${value}"]`,
+                  )
+
+                  .then((res) => {
+                    resolve(
+                      res.data.items.length === 0 ||
+                        value === formValues.contact.email,
+                    )
+                  })
+                  .catch((error) => {
+                    resolve(false)
+                  })
+              })
+            }
+          },
+        ),
+      other_email: Yup.string().email("Email is not valid."),
+      phone_number: Yup.string()
+        .matches(phoneRegExp, "Home Phone is not valid")
+        .required("Home Phone is required."),
+      mobile_phone_number: Yup.string()
+        .matches(phoneRegExp, "Mobile Phone is not valid")
+        .required("Mobile Phone is required."),
+    }),
+    employee_number: Yup.string()
+      .required("Employee Number is required.")
+      .test(
+        "Unique Employee Number",
+        "Employee Number already exists", // <- key, message
+        (value) => {
+          let formId = props.match.params.id
+          if (formId === undefined) {
             return new Promise((resolve, reject) => {
               axios
                 .get(
-                  `${env.API_URL}/master/employees?filters=["email","=","${value}"]`,
+                  `${env.API_URL}/master/employees?filters=["employee_number","=","${value}"]`,
                 )
                 .then((res) => {
-                  resolve(res.data.items.length == 0)
+                  resolve(res.data.items.length === 0)
                 })
                 .catch((error) => {
                   resolve(false)
                 })
             })
-          },
-        ),
-      other_email: Yup.string().email("Email is not valid."),
-      phone_number: Yup.string().required("Home Phone is required."),
-      mobile_phone_number: Yup.string().required("Mobile Phone is required."),
-    }),
-    employee_number: Yup.string().required("Employee Number is required."),
+          } else {
+            return new Promise((resolve, reject) => {
+              axios
+                .get(
+                  `${env.API_URL}/master/employees?filters=["employee_number","=","${value}"]`,
+                )
+
+                .then((res) => {
+                  resolve(
+                    res.data.items.length === 0 ||
+                      value === formValues.employee_number,
+                  )
+                })
+                .catch((error) => {
+                  resolve(false)
+                })
+            })
+          }
+        },
+      ),
+
     //sameAddress: Yup.boolean(),
-    //address: Yup.object({country_id: Yup.string().required("Country is required.")}),
-    //permanent_address: Yup.object({country_id: Yup.string().required("Country is required.")}),
+    address: Yup.object().shape({
+      address_line: Yup.string(),
+      country_id: Yup.object().required("Country is required."),
+      state_province_id: Yup.object().shape({
+        value: Yup.string().nullable(),
+        label: Yup.string().nullable(),
+      }),
+      city_id: Yup.object().shape({
+        value: Yup.string().nullable(),
+        label: Yup.string().nullable(),
+      }),
+      postal_code: Yup.string(),
+    }),
+    permanent_address: Yup.object().shape({
+      address_line: Yup.string(),
+      country_id: Yup.object().required("Country is required."),
+      state_province_id: Yup.object().shape({
+        value: Yup.string().nullable(),
+        label: Yup.string().nullable(),
+      }),
+      city_id: Yup.object().shape({
+        value: Yup.string().nullable(),
+        label: Yup.string().nullable(),
+      }),
+      postal_code: Yup.string(),
+    }),
     job_title_id: Yup.object().required("Job Title is required."),
+    npwp: Yup.number().typeError('NPWP must be a number'),
   })
 
   return (
     <Formik
       initialValues={formValues || initialValues}
+      validationSchema={validationSchema}
       onSubmit={async (values, { setSubmitting }) => {
         let formId = props.match.params.id
-
-        
-        setSubmitting(true)
-        if (formId === undefined){
-          try {
-            let res = await api.post("master/employees", {
-              name_prefix_id: values.name_prefix_id.value,
-              given_name: values.given_name,
-              middle_name: values.middle_name,
-              surname: values.surname,
-              birth_date: formatDate([
-                values.birth_date[2].value,
-                values.birth_date[1].value,
-                values.birth_date[0].value,
-              ]),
-              gender_id: values.gender_id,
-              ktp: values.ktp,
-              employee_asset: {
-                multimedia_description_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-              },
-              contact: {
-                email: values.contact.email,
-                mobile_phone_number: values.contact.mobile_phone_number,
-                other_email: values.contact.other_email,
-                phone_number: values.contact.phone_number,
-              },
-              address: {
-                address_line: values.address.address_line,
-                country_id: values.address.country_id.value,
-                state_province_id: values.address.state_province_id.value,
-                city_id: values.address.city_id.value,
-                postal_code: values.address.postal_code,
-              },
-              permanent_address: {
-                address_line: values.permanent_address.address_line,
-                country_id: values.permanent_address.country_id.value,
-                state_province_id:
-                  values.permanent_address.state_province_id.value,
-                city_id: values.permanent_address.city_id.value,
-                postal_code: values.permanent_address.postal_code,
-              },
-              emergency_contact: {
-                contact_name: values.emergency_contact.contact_name,
-                contact_phone_number:
-                  values.emergency_contact.contact_phone_number,
-                relationship: values.emergency_contact.relationship,
-              },
-              emergency_contact2: {
-                contact_name: values.emergency_contact2.contact_name,
-                contact_phone_number:
-                  values.emergency_contact2.contact_phone_number,
-                relationship: values.emergency_contact2.relationship,
-              },
-              employee_number: values.employee_number,
-              //job_title_id: values.job_title_id.value,
-              //division_id: values.division_id.value,
-              //office_id: values.office_id.value,
-              //birth_date: [values.birth_date[2].value,values.birth_date[1].value,values.birth_date[0].value,].join("-"),
-              // hire_date: formatDate([
-              //   values.hire_date[2].value,
-              //   values.hire_date[1].value,
-              //   values.hire_date[0].value,
-              // ]),
-              npwp: values.npwp,
-            })
-            console.log("data", res)
-            setSubmitting(false)
-          } catch (e) {}
-        //ProsesUpdate
-        } else {
-          try {
-            let res = await api.put(`master/employees/${formId}`, {
-              name_prefix_id: values.name_prefix_id.value,
-              given_name: values.given_name,
-              middle_name: values.middle_name,
-              surname: values.surname,
-              birth_date: formatDate([
-                values.birth_date[2].value,
-                values.birth_date[1].value,
-                values.birth_date[0].value,
-              ]) || values.birth_date,
-              gender_id: values.gender_id,
-              ktp: values.ktp,
-              employee_asset: {
-                multimedia_description_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-              },
-              contact: {
-                email: values.contact.email,
-                mobile_phone_number: values.contact.mobile_phone_number,
-                other_email: values.contact.other_email,
-                phone_number: values.contact.phone_number,
-              },
-              address: {
-                address_line: values.address.address_line,
-                country_id: values.address.country_id.value || values.address.country_id,
-                state_province_id: values.address.state_province_id.value || values.address.state_province_id,
-                city_id: values.address.city_id.value || values.address.city_id,
-                postal_code: values.address.postal_code,
-              },
-              permanent_address: {
-                address_line: values.permanent_address.address_line,
-                country_id: values.permanent_address.country_id.value || values.permanent_address.country_id,
-                state_province_id:
-                  values.permanent_address.state_province_id.value || values.permanent_address.state_province_id,
-                city_id: values.permanent_address.city_id.value || values.permanent_address.city_id,
-                postal_code: values.permanent_address.postal_code,
-              },
-              emergency_contact: {
-                contact_name: values.emergency_contact.contact_name,
-                contact_phone_number:
-                  values.emergency_contact.contact_phone_number,
-                relationship: values.emergency_contact.relationship,
-              },
-              emergency_contact2: {
-                contact_name: values.emergency_contact2.contact_name,
-                contact_phone_number:
-                  values.emergency_contact2.contact_phone_number,
-                relationship: values.emergency_contact2.relationship,
-              },
-              employee_number: values.employee_number,
-              job_title_id: values.job_title_id.value,
-              division_id: values.division_id.value,
-              office_id: values.office_id.value,
-              birth_date: [values.birth_date[2].value,values.birth_date[1].value,values.birth_date[0].value,].join("-"),
-              hire_date: formatDate([
-                values.hire_date[2].value,
-                values.hire_date[1].value,
-                values.hire_date[0].value,
-              ]),
-              npwp: values.npwp,
-            })
-            console.log("dataupdate", res)
-            setSubmitting(false)
-          } catch (e) {
-            console.log('er', e)
-          }
+        const Data = {
+          name_prefix_id: values.name_prefix_id.value,
+          given_name: values.given_name,
+          middle_name: values.middle_name,
+          surname: values.surname,
+          birth_date: formatDate([
+            values.birth_date[2].value,
+            values.birth_date[1].value,
+            values.birth_date[0].value,
+          ]),
+          gender_id: values.gender_id,
+          ktp: values.ktp,
+          employee_asset: {
+            multimedia_description_id:
+              photoProfile.employee_asset?.multimedia_description_id,
+          },
+          contact: {
+            email: values.contact.email,
+            mobile_phone_number: values.contact.mobile_phone_number,
+            other_email: values.contact.other_email,
+            phone_number: values.contact.phone_number,
+          },
+          address: {
+            address_line: values.address.address_line,
+            country_id: values.address.country_id.value,
+            state_province_id: values.address.state_province_id.value,
+            city_id: values.address.city_id.value,
+            postal_code: values.address.postal_code,
+          },
+          permanent_address: {
+            address_line: values.permanent_address.address_line,
+            country_id: values.permanent_address.country_id.value,
+            state_province_id: values.permanent_address.state_province_id.value,
+            city_id: values.permanent_address.city_id.value,
+            postal_code: values.permanent_address.postal_code,
+          },
+          emergency_contact: {
+            contact_name: values.emergency_contact.contact_name,
+            contact_phone_number:
+              "" + values.emergency_contact.contact_phone_number,
+            relationship: values.emergency_contact.relationship,
+          },
+          emergency_contact2: {
+            contact_name: values.emergency_contact2.contact_name,
+            contact_phone_number:
+              "" + values.emergency_contact2.contact_phone_number,
+            relationship: values.emergency_contact2.relationship,
+          },
+          employee_number: values.employee_number,
+          job_title_id: values.job_title_id.value,
+          division_id: values.division_id.value,
+          office_id: values.office_id.value,
+          hire_date: formatDate([
+            values.hire_date[2].value,
+            values.hire_date[1].value,
+            values.hire_date[0].value,
+          ]),
+          npwp: values.npwp,
         }
-        
+        setSubmitting(true)
+        if (formId === undefined) {
+          //ProsesCreateData
+          try {
+            let res = await api.post("master/employees", Data)
+            openSnackbar(
+              `Record 'Employee Number: ${values.employee_number} Employee Name: ${values.given_name}' has been successfully saved.`,
+            )
+            setSubmitting(false || history.goBack())
+          } catch (e) {}
+        } else {
+          //ProsesUpdateData
+          try {
+            let res = await api.put(`master/employees/${formId}`, Data)
+            openSnackbar(
+              `Record 'Employee Number: ${values.employee_number} Employee Name: ${values.given_name}' has been successfully update.`,
+            )
+            setSubmitting(false || history.goBack())
+          } catch (e) {}
+        }
       }}
-      validationSchema={validationSchema}
       validateOnMount
       enableReinitialize
     >
@@ -469,574 +581,442 @@ const EmployeeForm = (props) => {
                         <Card.Body>
                           <h3 className="card-heading">General Information</h3>
                           <div style={{ padding: "0 15px 15px" }}>
-                            <FormikControl
-                              control="selectAsync"
-                              required="label-required"
-                              label="Title"
-                              name="name_prefix_id"
-                              placeholder={
-                                formik.values.name_prefixName || "Mr."
-                              }
-                              url={`master/name-prefixes`}
-                              fieldName={"name_prefix_name"}
-                              onChange={(v) => {
-                                formik.setFieldValue("name_prefix_id", v)
-                              }}
-                              style={{ maxWidth: 120 }}
-                            />
-                            <FormikControl
-                              control="input"
-                              required="label-required"
-                              label="First Name"
-                              name="given_name"
-                              style={{ maxWidth: 250 }}
-                            />
-                            <FormikControl
-                              control="input"
-                              label="Middle Name"
-                              name="middle_name"
-                              style={{ maxWidth: 250 }}
-                            />
-                            <FormikControl
-                              control="input"
-                              required="label-required"
-                              label="Last Name"
-                              name="surname"
-                              style={{ maxWidth: 250 }}
-                            />
-                            <Row className="form-group required">
-                              <Col column md={3} lg={3}>
-                                <label className="text-label-input">
-                                  Date Of Birth
-                                  <span className="label-required" />
-                                </label>
-                              </Col>
-                              <Col className="mb-2" md={9} lg={9}>
-                                <div style={{ width: 400, display: "flex" }}>
-                                  <div style={{ marginRight: 12, flex: 1 }}>
-                                    <FormikControl
-                                      control="selectOnly"
-                                      name="birth_date[0]"
-                                      placeholder={
-                                        formik.values.birth_date[2] || "Date"
-                                      }
-                                      options={selectDay()}
-                                      onChange={(v) => {
-                                        formik.setFieldValue("birth_date[0]", v)
-                                      }}
-                                      style={{ maxWidth: 240 }}
+                            <Row>
+                              <Col
+                                lg={11}
+                                className="order-last order-lg-first "
+                              >
+                                <FormikControl
+                                  control="selectAsync"
+                                  required="label-required"
+                                  label="Title"
+                                  name="name_prefix_id"
+                                  placeholder={
+                                    formik.values.name_prefixName || "Mr."
+                                  }
+                                  url={`master/name-prefixes`}
+                                  fieldName={"name_prefix_name"}
+                                  onChange={(v) => {
+                                    formik.setFieldValue("name_prefix_id", v)
+                                  }}
+                                  style={{ maxWidth: 120 }}
+                                  isDisabled={isView}
+                                />
+                                <FormikControl
+                                  control="input"
+                                  required="label-required"
+                                  label="First Name"
+                                  name="given_name"
+                                  style={{ maxWidth: 250 }}
+                                  disabled={isView}
+                                  maxLength="128"
+                                />
+                                <FormikControl
+                                  control="input"
+                                  label="Middle Name"
+                                  name="middle_name"
+                                  style={{ maxWidth: 250 }}
+                                  disabled={isView}
+                                  maxLength="128"
+                                />
+                                <FormikControl
+                                  control="input"
+                                  required="label-required"
+                                  label="Last Name"
+                                  name="surname"
+                                  style={{ maxWidth: 250 }}
+                                  disabled={isView}
+                                  maxLength="128"
+                                />
+                                <Row className="form-group required">
+                                  <Col column md={3} lg={4}>
+                                    <label className="text-label-input">
+                                      Date Of Birth
+                                      <span className="label-required" />
+                                    </label>
+                                  </Col>
+                                  <Col className="mb-2" md={9} lg={8}>
+                                    <div
+                                      style={{ maxWidth: 400, display: "flex" }}
+                                    >
+                                      <div style={{ marginRight: 12, flex: 1 }}>
+                                        <FormikControl
+                                          control="selectOnly"
+                                          name="birth_date[0]"
+                                          placeholder={
+                                            formik.values.day || "Date"
+                                          }
+                                          options={selectDay()}
+                                          onChange={(v) => {
+                                            formik.setFieldValue(
+                                              "birth_date[0]",
+                                              v,
+                                            )
+                                          }}
+                                          style={{ maxWidth: 240 }}
+                                          isDisabled={isView}
+                                        />
+                                      </div>
+                                      <div style={{ marginRight: 12, flex: 1 }}>
+                                        <FormikControl
+                                          control="selectOnly"
+                                          name="birth_date[1]"
+                                          placeholder={
+                                            formik.values.month || "Month"
+                                          }
+                                          options={selectMonth()}
+                                          onChange={(v) => {
+                                            formik.setFieldValue(
+                                              "birth_date[1]",
+                                              v,
+                                            )
+                                          }}
+                                          style={{ minWidth: 110, maxWidth: 240 }}
+                                          isDisabled={isView}
+                                        />
+                                      </div>
+                                      <div style={{ marginRight: 12, flex: 1 }}>
+                                        <FormikControl
+                                          control="selectOnly"
+                                          name="birth_date[2]"
+                                          placeholder={
+                                            formik.values.year || "Year"
+                                          }
+                                          options={selectYear()}
+                                          onChange={(v) => {
+                                            formik.setFieldValue(
+                                              "birth_date[2]",
+                                              v,
+                                            )
+                                          }}
+                                          style={{ maxWidth: 240 }}
+                                          isDisabled={isView}
+                                        />
+                                      </div>
+                                    </div>
+                                    <ErrorMessage
+                                      component={TextError}
+                                      name="birth_date"
                                     />
-                                  </div>
-                                  <div style={{ marginRight: 12, flex: 1 }}>
-                                    <FormikControl
-                                      control="selectOnly"
-                                      name="birth_date[1]"
-                                      placeholder={
-                                        formik.values.birth_date[1] || "Month"
-                                      }
-                                      options={selectMonth()}
-                                      onChange={(v) => {
-                                        formik.setFieldValue("birth_date[1]", v)
-                                      }}
-                                      style={{ maxWidth: 240 }}
-                                    />
-                                  </div>
-                                  <div style={{ marginRight: 12, flex: 1 }}>
-                                    <FormikControl
-                                      control="selectOnly"
-                                      name="birth_date[2]"
-                                      placeholder={
-                                        formik.values.birth_date[0] || "Year"
-                                      }
-                                      options={selectYear()}
-                                      onChange={(v) => {
-                                        formik.setFieldValue("birth_date[2]", v)
-                                      }}
-                                      style={{ maxWidth: 240 }}
-                                    />
-                                  </div>
-                                </div>
-                                <ErrorMessage
-                                  component={TextError}
-                                  name="birth_date"
+                                  </Col>
+                                </Row>
+                                <FormikControl
+                                  control="radio"
+                                  required="label-required"
+                                  label="Gender"
+                                  name="gender_id"
+                                  options={optionGender}
+                                  disabled={isView}
+                                />
+                                <FormikControl
+                                  control="input"
+                                  label="ID Card Number (KTP)"
+                                  name="ktp"
+                                  style={{ maxWidth: 250 }}
+                                  disabled={isView}
+                                  maxLength="36"
                                 />
                               </Col>
-                            </Row>
-                            <FormikControl
-                              control="radio"
-                              required="label-required"
-                              label="Gender"
-                              name="gender_id"
-                              options={optionGender}
-                            />
-
-                            <FormikControl
-                              control="input"
-                              label="ID Card Number (KTP)"
-                              name="ktp"
-                              style={{ maxWidth: 250 }}
-                            />
-
-                            <div
-                              style={{
-                                position: "absolute",
-                                right: "5%",
-                                top: "80px",
-                              }}
-                            >
-                              <div
-                                className="img-profile-wrapper"
-                                style={{ textAlign: "center" }}
+                              <Col
+                                lg={1}
+                                className="d-flex justify-content-lg-center justify-content-md-start justify-content-center order-first order-lg-last p-0"
                               >
                                 <div>
-                                  {photoProfile.length == 0 && (
-                                    <Image
-                                      src={
-                                        formik.values.employee_asset
+                                  <div>
+                                    <FormikControl
+                                      control="imageProfile"
+                                      id="employee_icon"
+                                      type="imageProfile"
+                                      name="employee_asset"
+                                      onChange={onChangePhotoProfile}
+                                      disabled={isView}
+                                      url={
+                                        photoProfile.employee_asset
                                           ?.multimedia_description?.url ||
-                                        "/img/media/profile.svg"
+                                        formik.values.employee_asset
+                                          ?.multimedia_description?.url
                                       }
-                                      className="img-profile"
-                                      roundedCircle
                                     />
-                                  )}
-                                  <ImageUploading
-                                    value={photoProfile}
-                                    onChange={onChangePhotoProfile}
-                                    maxNumber={maxNumber}
-                                    dataURLKey="data_url"
-                                    acceptType={["png", "jpg", "jpeg"]}
-                                  >
-                                    {({
-                                      imageList,
-                                      onImageUpload,
-                                      onImageUpdate,
-                                      errors,
-                                    }) => (
-                                      // write your building UI
-                                      <>
-                                        {imageList.map((image, index) => (
-                                          <div
-                                            key={index}
-                                            className="image-item"
-                                          >
-                                            <Image
-                                              src={image["data_url"]}
-                                              roundedCircle
-                                              className="img-profile"
-                                            />
-                                          </div>
-                                        ))}
-                                        <Button
-                                          variant="secondary"
-                                          onClick={() =>
-                                            photoProfile.length !== 0
-                                              ? onImageUpload()
-                                              : onImageUpdate(1)
-                                          }
-                                        >
-                                          {/* {photoProfile.length !== 0
-                                    ? "CHANGE"
-                                    : "UPLOAD"}                                */}
-                                          User Profile Image
-                                        </Button>
-                                        {errors && (
-                                          <>
-                                            {errors.acceptType && (
-                                              <p className="img-error-label">
-                                                Only .png, .jpg, .jpeg file
-                                                supported
-                                              </p>
-                                            )}
-                                          </>
-                                        )}
-                                      </>
-                                    )}
-                                  </ImageUploading>
+                                  </div>
                                 </div>
-                              </div>
-                            </div>
+                              </Col>
+                            </Row>
                           </div>
                           <h3 className="card-heading">Contacts</h3>
-                          <div style={{ padding: "0 15px 15px" }}>
-                            <Row className="form-group required">
-                              <Col md={3} lg={3}>
-                                <label
-                                  className="text-label-input"
-                                  
-                                >
-                                  Home Phone
-                                  <span className="label-required" />
-                                </label>
-                              </Col>
-                              <Col md={9} lg={9}>
-                                <Field id="contact.phone_number" name="contact.phone_number">
-                                  {({ field, form, meta }) => (
-                                    <div>
-                                      <input
-                                        {...field}                                        
-                                        type="text"                                        
-                                        style={{ maxWidth: 200 }}
-                                        className={
-                                          form.touched.contact?.phone_number &&
-                                          form.errors.contact?.phone_number
-                                            ? "form-control is-invalid"
-                                            : "form-control"
-                                        }
-                                      />
-                                      {form.touched.contact?.phone_number &&
-                                      form.errors.contact?.phone_number ? (
-                                        <div className="invalid-feedback">
-                                          {form.errors.contact.phone_number}
-                                        </div>
-                                      ) : null}
-                                    </div>
-                                  )}
-                                </Field>
-                              </Col>
-                            </Row>
-                            <Row className="form-group required">
-                              <Col md={3} lg={3}>
-                                <label
-                                  className="text-label-input"
-                                  
-                                >
-                                 Mobile Phone
-                                  <span className="label-required" />
-                                </label>
-                              </Col>
-                              <Col md={9} lg={9}>
-                                <Field id="contact.mobile_phone_number" name="contact.mobile_phone_number">
-                                  {({ field, form, meta }) => (
-                                    <div>
-                                      <input
-                                        {...field}                                        
-                                        type="text"                                        
-                                        style={{ maxWidth: 200 }}
-                                        className={
-                                          form.touched.contact?.mobile_phone_number &&
-                                          form.errors.contact?.mobile_phone_number
-                                            ? "form-control is-invalid"
-                                            : "form-control"
-                                        }
-                                      />
-                                      {form.touched.contact?.mobile_phone_number &&
-                                      form.errors.contact?.mobile_phone_number ? (
-                                        <div className="invalid-feedback">
-                                          {form.errors.contact.mobile_phone_number}
-                                        </div>
-                                      ) : null}
-                                    </div>
-                                  )}
-                                </Field>
-                              </Col>
-                            </Row>
-                            <Row className="form-group required">
-                              <Col md={3} lg={3}>
-                                <label
-                                  className="text-label-input"
-                                  
-                                >
-                                 Email
-                                  <span className="label-required" />
-                                </label>
-                              </Col>
-                              <Col md={9} lg={9}>
-                                <Field id="contact.email" name="contact.email">
-                                  {({ field, form, meta }) => (
-                                    <div>
-                                      <input
-                                        {...field}                                        
-                                        type="text"                                        
-                                        style={{ maxWidth: 200 }}
-                                        className={
-                                          form.touched.contact?.email &&
-                                          form.errors.contact?.email
-                                            ? "form-control is-invalid"
-                                            : "form-control"
-                                        }
-                                      />
-                                      {form.touched.contact?.email &&
-                                      form.errors.contact?.email ? (
-                                        <div className="invalid-feedback">
-                                          {form.errors.contact.email}
-                                        </div>
-                                      ) : null}
-                                    </div>
-                                  )}
-                                </Field>
-                              </Col>
-                            </Row>
-                            <Row className="form-group required">
-                              <Col md={3} lg={3}>
-                                <label
-                                  className="text-label-input"
-                                  
-                                >
-                                 Other Email
-                                  <span className="label-required" />
-                                </label>
-                              </Col>
-                              <Col md={9} lg={9}>
-                                <Field id="contact.other_email" name="contact.other_email">
-                                  {({ field, form, meta }) => (
-                                    <div>
-                                      <input
-                                        {...field}                                        
-                                        type="text"                                        
-                                        style={{ maxWidth: 200 }}
-                                        className={
-                                          form.touched.contact?.other_email &&
-                                          form.errors.contact?.other_email
-                                            ? "form-control is-invalid"
-                                            : "form-control"
-                                        }
-                                      />
-                                      {form.touched.contact?.other_email &&
-                                      form.errors.contact?.other_email ? (
-                                        <div className="invalid-feedback">
-                                          {form.errors.contact.other_email}
-                                        </div>
-                                      ) : null}
-                                    </div>
-                                  )}
-                                </Field>
-                              </Col>
-                            </Row>
-                            {/* <FormikControl
-                              control="input"
-                              required="label-required"
-                              label="Home Phone"
-                              name="contact.phone_number"
-                              style={{ maxWidth: 200 }}
-                            /> */}
-                            {/* <FormikControl
-                              control="input"
-                              required="label-required"
-                              label="Mobile Phone"
-                              name="contact.mobile_phone_number"
-                              style={{ maxWidth: 200 }}
-                            /> */}
-                            {/* <FormikControl
-                              control="input"
-                              required="label-required"
-                              label="Email"
-                              name="contact.email"
-                              style={{ maxWidth: 250 }}
-                            />
-                            <FormikControl
-                              control="input"
-                              label="Other Email"
-                              name="contact.other_email"
-                              style={{ maxWidth: 250 }}
-                            /> */}
-                          </div>
+                          <Row>
+                            <Col lg={11}>
+                              <div style={{ padding: "0 15px 15px" }}>
+                                <FormikControl
+                                  control="input"
+                                  required="label-required"
+                                  label="Home Phone"
+                                  name="contact.phone_number"
+                                  style={{ maxWidth: 200 }}
+                                  disabled={isView}
+                                  minLength="1"
+                                  maxLength="32"
+                                />
+                                <FormikControl
+                                  control="input"
+                                  required="label-required"
+                                  label="Mobile Phone"
+                                  name="contact.mobile_phone_number"
+                                  style={{ maxWidth: 200 }}
+                                  disabled={isView}
+                                  minLength="1"
+                                  maxLength="32"
+                                />
+                                <FormikControl
+                                  control="input"
+                                  required="label-required"
+                                  label="Email"
+                                  name="contact.email"
+                                  style={{ maxWidth: 250 }}
+                                  disabled={isView}
+                                  maxLength="256"
+                                />
+                                <FormikControl
+                                  control="input"
+                                  label="Other Email"
+                                  name="contact.other_email"
+                                  style={{ maxWidth: 250 }}
+                                  disabled={isView}
+                                  maxLength="256"
+                                />
+                              </div>
+                            </Col>
+                            <Col lg={1}></Col>
+                          </Row>
                           <h3 className="card-heading">Current Address</h3>
-                          <div style={{ padding: "0 15px 15px" }}>
-                            <FormikControl
-                              control="textarea"
-                              label="Address"
-                              name="address.address_line"
-                              rows={3}
-                              style={{ maxWidth: 416 }}
-                            />
-                            <FormikControl
-                              control="selectAsync"
-                              required="label-required"
-                              label="Country"
-                              name="address.country_id"
-                              url={`master/countries`}
-                              fieldName={"country_name"}
-                              onChange={(v) => {
-                                formik.setFieldValue("address.country_id", v)
-                                formik.setFieldValue(
-                                  "address.state_province_id",
-                                  null,
-                                )
-                                formik.setFieldValue("address.city_id", null)
-                              }}
-                              placeholder={
-                                formik.values.country_id || "Please Choose"
-                              }
-                              style={{ maxWidth: 300 }}
-                            />
-                            <FormikControl
-                              control="selectAsync"
-                              label="State/Province"
-                              name="address.state_province_id"
-                              url={`master/state-provinces`}
-                              urlFilter={`["country_id","=",${formik.values.currentCountry?.value}]`}
-                              fieldName={"state_province_name"}
-                              onChange={(v) => {
-                                formik.setFieldValue(
-                                  "address.state_province_id",
-                                  v,
-                                )
-                                formik.setFieldValue("address.city_id", null)
-                              }}
-                              placeholder={
-                                formik.values.state_province_id ||
-                                "Please Choose"
-                              }
-                              style={{ maxWidth: 200 }}
-                            />
-                            <FormikControl
-                              control="selectAsync"
-                              label="City"
-                              name="address.city_id"
-                              url={`master/cities`}
-                              urlFilter={`["province_id","=",${formik.values.currentProvince?.value}]`}
-                              fieldName={"city_name"}
-                              onChange={(v) => {
-                                formik.setFieldValue("address.city_id", v)
-                              }}
-                              placeholder={
-                                formik.values.city_id || "Please Choose"
-                              }
-                              style={{ maxWidth: 200 }}
-                            />
-                            <FormikControl
-                              control="input"
-                              label="ZIP Code"
-                              name="address.postal_code"
-                              style={{ maxWidth: 100 }}
-                            />
-                          </div>
+                          <Row>
+                            <Col lg={11}>
+                              <div style={{ padding: "0 15px 15px" }}>
+                                <FormikControl
+                                  control="textarea"
+                                  label="Address"
+                                  name="address.address_line"
+                                  rows={3}
+                                  style={{ maxWidth: 416 }}
+                                  disabled={isView}
+                                  minLength="1"
+                                  maxLength="512"
+                                />
+                                <FormikControl
+                                  control="selectAsync"
+                                  required="label-required"
+                                  label="Country"
+                                  name="address.country_id"
+                                  url={`master/countries`}
+                                  fieldName={"country_name"}
+                                  onChange={(v) => {
+                                    formik.setFieldValue(
+                                      "address.country_id",
+                                      v,
+                                    )
+                                    formik.setFieldValue(
+                                      "address.state_province_id",
+                                      { value: null, label: "Please choose" },
+                                    )
+                                    formik.setFieldValue("address.city_id", {
+                                      value: null,
+                                      label: "Please choose",
+                                    })
+                                  }}
+                                  placeholder={"Please choose"}
+                                  style={{ maxWidth: 300 }}
+                                  isDisabled={isView}
+                                />
+                                <FormikControl
+                                  control="selectAsync"
+                                  label="State/ Province"
+                                  name="address.state_province_id"
+                                  url={`master/state-provinces`}
+                                  urlFilter={`["country_id","=",${formik.values.currentCountry?.value}]`}
+                                  fieldName={"state_province_name"}
+                                  onChange={(v) => {
+                                    formik.setFieldValue(
+                                      "address.state_province_id",
+                                      v,
+                                    )
+                                    formik.setFieldValue("address.city_id", {
+                                      value: null,
+                                      label: "Please choose",
+                                    })
+                                  }}
+                                  placeholder={"Please choose"}
+                                  style={{ maxWidth: 200 }}
+                                  isDisabled={isView}
+                                />
+                                <FormikControl
+                                  control="selectAsync"
+                                  label="City"
+                                  name="address.city_id"
+                                  url={`master/cities`}
+                                  urlFilter={`["province_id","=",${formik.values.currentProvince?.value}]`}
+                                  fieldName={"city_name"}
+                                  onChange={(v) => {
+                                    formik.setFieldValue("address.city_id", v)
+                                  }}
+                                  placeholder={"Please choose"}
+                                  style={{ maxWidth: 200 }}
+                                  isDisabled={isView}
+                                />
+                                <FormikControl
+                                  control="input"
+                                  label="Zip Code"
+                                  name="address.postal_code"
+                                  style={{ maxWidth: 100 }}
+                                  disabled={isView}
+                                  minLength="1"
+                                  maxLength="16"
+                                />
+                              </div>
+                            </Col>
+                            <Col lg={1}></Col>
+                          </Row>
                           <h3 className="card-heading">Permanent Address</h3>
-                          <div style={{ padding: "0 15px 15px" }}>
-                            <FormikControl
-                              control="checkboxOnly"
-                              type="checkbox"
-                              label="Same As Current Address"
-                              name="sameAddress"
-                              checked={sameAddress}
-                              onChange={() => {
-                                setSameAddress(!sameAddress)
-                                formik.setFieldValue(
-                                  "permanent_address.address_line",
-                                  sameAddress
-                                    ? ""
-                                    : formik.values.address.address_line,
-                                )
-                                formik.setFieldValue(
-                                  "permanent_address.country_id",
-                                  sameAddress
-                                    ? ""
-                                    : formik.values.address.country_id,
-                                )
-                                formik.setFieldValue(
-                                  "permanent_address.state_province_id",
-                                  sameAddress
-                                    ? ""
-                                    : formik.values.address.state_province_id,
-                                )
-                                formik.setFieldValue(
-                                  "permanent_address.city_id",
-                                  sameAddress
-                                    ? ""
-                                    : formik.values.address.city_id,
-                                )
-                                formik.setFieldValue(
-                                  "permanent_address.postal_code",
-                                  sameAddress
-                                    ? ""
-                                    : formik.values.address.postal_code,
-                                )
-                              }}
-                              onBlur={formik.handleBlur}
-                              style={{ maxWidth: 416 }}
-                            />
-                            <FormikControl
-                              control="textarea"
-                              label="Address"
-                              name="permanent_address.address_line"
-                              rows={3}
-                              style={{ maxWidth: 416 }}
-                              disabled={formik.values.sameAddress}
-                            />
-                            <FormikControl
-                              control="selectAsync"
-                              required="label-required"
-                              label="Country"
-                              name="permanent_address.country_id"
-                              url={`master/countries`}
-                              fieldName={"country_name"}
-                              onChange={(v) => {
-                                formik.setFieldValue(
-                                  "permanent_address.country_id",
-                                  v,
-                                )
-                                formik.setFieldValue(
-                                  "permanent_address.state_province_id",
-                                  null,
-                                )
-                                formik.setFieldValue(
-                                  "permanent_address.city_id",
-                                  null,
-                                )
-                              }}
-                              placeholder={
-                                formik.values.permanent_country_id ||
-                                "Please Choose"
-                              }
-                              style={{ maxWidth: 300 }}
-                              isDisabled={formik.values.sameAddress}
-                            />
-                            <FormikControl
-                              control="selectAsync"
-                              label="State/Province"
-                              name="permanent_address.state_province_id"
-                              url={`master/state-provinces`}
-                              urlFilter={`["country_id","=",${formik.values.currentCountry?.value}]`}
-                              fieldName={"state_province_name"}
-                              onChange={(v) => {
-                                formik.setFieldValue(
-                                  "permanent_address.state_province_id",
-                                  v,
-                                )
-                                formik.setFieldValue(
-                                  "permanent_address.city_id",
-                                  null,
-                                )
-                              }}
-                              placeholder={
-                                formik.values.permanent_state_province_id ||
-                                "Please Choose"
-                              }
-                              style={{ maxWidth: 200 }}
-                              isDisabled={formik.values.sameAddress}
-                            />
-                            <FormikControl
-                              control="selectAsync"
-                              label="City"
-                              name="permanent_address.city_id"
-                              url={`master/cities`}
-                              urlFilter={`["province_id","=",${formik.values.currentProvince?.value}]`}
-                              fieldName={"city_name"}
-                              onChange={(v) => {
-                                formik.setFieldValue(
-                                  "permanent_address.city_id",
-                                  v,
-                                )
-                              }}
-                              placeholder={
-                                formik.values.permanent_city_id ||
-                                "Please Choose"
-                              }
-                              style={{ maxWidth: 200 }}
-                              isDisabled={formik.values.sameAddress}
-                            />
-                            <FormikControl
-                              control="input"
-                              label="ZIP Code"
-                              name="permanent_address.postal_code"
-                              style={{ maxWidth: 100 }}
-                              disabled={formik.values.sameAddress}
-                            />
-                          </div>
+                          <Row>
+                            <Col lg={11}>
+                              <div style={{ padding: "0 15px 15px" }}>
+                                <FormikControl
+                                  control="checkboxOnly"
+                                  type="checkbox"
+                                  label="Same As Current Address"
+                                  name="sameAddress"
+                                  checked={sameAddress}
+                                  onChange={() => {
+                                    setSameAddress(!sameAddress)
+                                    formik.setFieldValue(
+                                      "permanent_address.address_line",
+                                      sameAddress
+                                        ? ""
+                                        : formik.values.address.address_line,
+                                    )
+                                    formik.setFieldValue(
+                                      "permanent_address.country_id",
+                                      sameAddress
+                                        ? ""
+                                        : formik.values.address.country_id,
+                                    )
+                                    formik.setFieldValue(
+                                      "permanent_address.state_province_id",
+                                      sameAddress
+                                        ? ""
+                                        : formik.values.address
+                                            .state_province_id,
+                                    )
+                                    formik.setFieldValue(
+                                      "permanent_address.city_id",
+                                      sameAddress
+                                        ? ""
+                                        : formik.values.address.city_id,
+                                    )
+                                    formik.setFieldValue(
+                                      "permanent_address.postal_code",
+                                      sameAddress
+                                        ? ""
+                                        : formik.values.address.postal_code,
+                                    )
+                                  }}
+                                  onBlur={formik.handleBlur}
+                                  style={{ maxWidth: 416 }}
+                                  disabled={isView}
+                                />
+                                <FormikControl
+                                  control="textarea"
+                                  label="Address"
+                                  name="permanent_address.address_line"
+                                  rows={3}
+                                  style={{ maxWidth: 416 }}
+                                  disabled={isView || sameAddress}
+                                  minLength="1"
+                                  maxLength="512"
+                                />
+                                <FormikControl
+                                  control="selectAsync"
+                                  required="label-required"
+                                  label="Country"
+                                  name="permanent_address.country_id"
+                                  url={`master/countries`}
+                                  fieldName={"country_name"}
+                                  onChange={(v) => {
+                                    formik.setFieldValue(
+                                      "permanent_address.country_id",
+                                      v,
+                                    )
+                                    formik.setFieldValue(
+                                      "permanent_address.state_province_id",
+                                      { value: null, label: "Please choose" },
+                                    )
+                                    formik.setFieldValue(
+                                      "permanent_address.city_id",
+                                      { value: null, label: "Please choose" },
+                                    )
+                                  }}
+                                  placeholder={
+                                    formik.values.permanent_country_id ||
+                                    "Please choose"
+                                  }
+                                  style={{ maxWidth: 300 }}
+                                  isDisabled={isView || sameAddress}
+                                />
+                                <FormikControl
+                                  control="selectAsync"
+                                  label="State/ Province"
+                                  name="permanent_address.state_province_id"
+                                  url={`master/state-provinces`}
+                                  urlFilter={`["country_id","=",${formik.values.currentCountry?.value}]`}
+                                  fieldName={"state_province_name"}
+                                  onChange={(v) => {
+                                    formik.setFieldValue(
+                                      "permanent_address.state_province_id",
+                                      v,
+                                    )
+                                    formik.setFieldValue(
+                                      "permanent_address.city_id",
+                                      { value: null, label: "Please choose" },
+                                    )
+                                  }}
+                                  placeholder={
+                                    formik.values.permanent_state_province_id ||
+                                    "Please choose"
+                                  }
+                                  style={{ maxWidth: 200 }}
+                                  isDisabled={isView || sameAddress}
+                                />
+                                <FormikControl
+                                  control="selectAsync"
+                                  label="City"
+                                  name="permanent_address.city_id"
+                                  url={`master/cities`}
+                                  urlFilter={`["province_id","=",${formik.values.currentProvince?.value}]`}
+                                  fieldName={"city_name"}
+                                  onChange={(v) => {
+                                    formik.setFieldValue(
+                                      "permanent_address.city_id",
+                                      v,
+                                    )
+                                  }}
+                                  style={{ maxWidth: 200 }}
+                                  isDisabled={isView || sameAddress}
+                                />
+                                <FormikControl
+                                  control="input"
+                                  label="Zip Code"
+                                  name="permanent_address.postal_code"
+                                  style={{ maxWidth: 100 }}
+                                  disabled={isView || sameAddress}
+                                  minLength="1"
+                                  maxLength="16"
+                                />
+                              </div>
+                            </Col>
+                            <Col lg={1}></Col>
+                          </Row>
                         </Card.Body>
                       </Card>
                       <div
+                        className="mb-5 ml-1 row justify-content-md-start justify-content-center"
                         style={{
                           marginBottom: 30,
                           marginTop: 30,
@@ -1046,10 +1026,10 @@ const EmployeeForm = (props) => {
                         <Button
                           variant="primary"
                           onClick={() => setTabKey("emergency-contacts")}
-                          disabled={formik.isValidating}
+                          disabled={formik.isSubmitting}
                           style={{ marginRight: 15 }}
                         >
-                          SAVE & NEXT
+                          {props.match.params.id ? "SAVE" : "SAVE & NEXT"}
                         </Button>
                         <Button
                           variant="secondary"
@@ -1063,50 +1043,80 @@ const EmployeeForm = (props) => {
                       <Card>
                         <Card.Body>
                           <h3 className="card-heading">Emergency Contact 1</h3>
-                          <div style={{ padding: "0 15px 15px" }}>
-                            <FormikControl
-                              control="input"
-                              label="Full Name"
-                              name="emergency_contact.contact_name"
-                              style={{ maxWidth: 250 }}
-                            />
-                            <FormikControl
-                              control="input"
-                              label="Phone Number"
-                              name="emergency_contact.contact_phone_number"
-                              style={{ maxWidth: 200 }}
-                            />
-                            <FormikControl
-                              control="input"
-                              label="Relationship"
-                              name="emergency_contact.relationship"
-                              style={{ maxWidth: 200 }}
-                            />
-                          </div>
+                          <Row>
+                            <Col lg={11}>
+                              <div style={{ padding: "0 15px 15px" }}>
+                                <FormikControl
+                                  control="input"
+                                  label="Full Name"
+                                  name="emergency_contact.contact_name"
+                                  style={{ maxWidth: 250 }}
+                                  disabled={isView}
+                                  minLength="1"
+                                  maxLength="128"
+                                />
+                                <FormikControl
+                                  control="input"
+                                  label="Phone Number"
+                                  name="emergency_contact.contact_phone_number"
+                                  style={{ maxWidth: 200 }}
+                                  disabled={isView}
+                                  minLength="1"
+                                  maxLength="32"
+                                />
+                                <FormikControl
+                                  control="input"
+                                  label="Relationship"
+                                  name="emergency_contact.relationship"
+                                  style={{ maxWidth: 200 }}
+                                  disabled={isView}
+                                  minlength="1"
+                                  maxlength="36"
+                                />
+                              </div>
+                            </Col>
+                            <Col lg={1}></Col>
+                          </Row>
+
                           <h3 className="card-heading">Emergency Contact 2</h3>
-                          <div style={{ padding: "0 15px 15px" }}>
-                            <FormikControl
-                              control="input"
-                              label="Full Name"
-                              name="emergency_contact2.contact_name"
-                              style={{ maxWidth: 250 }}
-                            />
-                            <FormikControl
-                              control="input"
-                              label="Phone Number"
-                              name="emergency_contact2.contact_phone_number"
-                              style={{ maxWidth: 200 }}
-                            />
-                            <FormikControl
-                              control="input"
-                              label="Relationship"
-                              name="emergency_contact2.relationship"
-                              style={{ maxWidth: 200 }}
-                            />
-                          </div>
+                          <Row>
+                            <Col lg={11}>
+                              <div style={{ padding: "0 15px 15px" }}>
+                                <FormikControl
+                                  control="input"
+                                  label="Full Name"
+                                  name="emergency_contact2.contact_name"
+                                  style={{ maxWidth: 250 }}
+                                  disabled={isView}
+                                  minLength="1"
+                                  maxLength="128"
+                                />
+                                <FormikControl
+                                  control="input"
+                                  label="Phone Number"
+                                  name="emergency_contact2.contact_phone_number"
+                                  style={{ maxWidth: 200 }}
+                                  disabled={isView}
+                                  minlength="1"
+                                  maxlength="32"
+                                />
+                                <FormikControl
+                                  control="input"
+                                  label="Relationship"
+                                  name="emergency_contact2.relationship"
+                                  style={{ maxWidth: 200 }}
+                                  disabled={isView}
+                                  minLength="1"
+                                  maxLength="36"
+                                />
+                              </div>
+                            </Col>
+                            <Col lg={1}></Col>
+                          </Row>
                         </Card.Body>
                       </Card>
                       <div
+                        className="mb-5 ml-1 row justify-content-md-start justify-content-center"
                         style={{
                           marginBottom: 30,
                           marginTop: 30,
@@ -1116,10 +1126,10 @@ const EmployeeForm = (props) => {
                         <Button
                           variant="primary"
                           onClick={() => setTabKey("employment")}
-                          disabled={formik.isValidating}
+                          disabled={formik.isValid}
                           style={{ marginRight: 15 }}
                         >
-                          SAVE & NEXT
+                          {props.match.params.id ? "SAVE" : "SAVE & NEXT"}
                         </Button>
                         <Button
                           variant="secondary"
@@ -1133,112 +1143,136 @@ const EmployeeForm = (props) => {
                       <Card>
                         <Card.Body>
                           <h3 className="card-heading">Employment</h3>
-                          <div style={{ padding: "0 15px 15px" }}>
-                            <FormikControl
-                              control="input"
-                              required="label-required"
-                              label="Employee ID"
-                              name="employee_number"
-                              style={{ maxWidth: 250 }}
-                            />
-                            <FormikControl
-                              control="selectAsync"
-                              required="label-required"
-                              label="Job Title"
-                              name="job_title_id"
-                              url={`master/job-titles`}
-                              fieldName={"job_title_name"}
-                              onChange={(v) => {
-                                formik.setFieldValue("job_title_id", v)
-                              }}
-                              placeholder={
-                                formik.values.job_title_id || "Please Choose"
-                              }
-                              style={{ maxWidth: 200 }}
-                            />
-                            <FormikControl
-                              control="selectAsync"
-                              label="Division"
-                              name="division_id"
-                              url={`master/divisions`}
-                              fieldName={"division_name"}
-                              onChange={(v) => {
-                                formik.setFieldValue("division_id", v)
-                              }}
-                              placeholder={
-                                formik.values.division_id || "Please Choose"
-                              }
-                              style={{ maxWidth: 200 }}
-                            />
-                            <FormikControl
-                              control="selectAsync"
-                              label="Branch Office"
-                              name="office_id"
-                              url={`master/offices`}
-                              fieldName={"office_name"}
-                              onChange={(v) => {
-                                formik.setFieldValue("office_id", v)
-                              }}
-                              placeholder={
-                                formik.values.office_id || "Please Choose"
-                              }
-                              style={{ maxWidth: 200 }}
-                            />
-                            <Row className="required">
-                              <Col column md={3} lg={3}>
-                                <label className="text-label-input">
-                                  Hiring Date
-                                  <span className="label-required" />
-                                </label>
-                              </Col>
-                              <Col className="mb-2" md={9} lg={9}>
-                                <div style={{ width: 400, display: "flex" }}>
-                                  <div style={{ marginRight: 12, flex: 1 }}>
-                                    <FormikControl
-                                      control="selectOnly"
-                                      name="hire_date[0]"
-                                      onChange={(v) => {
-                                        formik.setFieldValue("hire_date[0]", v)
-                                      }}
-                                      options={selectDay()}
-                                      placeholder={"Date"}
-                                      style={{ maxWidth: 240 }}
-                                    />
-                                  </div>
-                                  <div style={{ marginRight: 12, flex: 1 }}>
-                                    <FormikControl
-                                      control="selectOnly"
-                                      name="hire_date[1]"
-                                      placeholder={"Month"}
-                                      options={selectMonth()}
-                                      onChange={(v) => {
-                                        formik.setFieldValue("hire_date[1]", v)
-                                      }}
-                                      style={{ maxWidth: 240 }}
-                                    />
-                                  </div>
-                                  <div style={{ marginRight: 12, flex: 1 }}>
-                                    <FormikControl
-                                      control="selectOnly"
-                                      name="hire_date[2]"
-                                      placeholder={"Year"}
-                                      options={selectYear()}
-                                      onChange={(v) => {
-                                        formik.setFieldValue("hire_date[2]", v)
-                                      }}
-                                      style={{ maxWidth: 240 }}
-                                    />
-                                  </div>
-                                </div>
-                              </Col>
-                            </Row>
-                            <FormikControl
-                              control="input"
-                              label="NPWP"
-                              name="npwp"
-                              style={{ maxWidth: 200 }}
-                            />
-                          </div>
+                          <Row>
+                            <Col lg={11}>
+                              <div style={{ padding: "0 15px 15px" }}>
+                                <FormikControl
+                                  control="input"
+                                  required="label-required"
+                                  label="Employee ID"
+                                  name="employee_number"
+                                  style={{ maxWidth: 250 }}
+                                  disabled={isView}
+                                  minlength="1"
+                                  maxlength="36"
+                                />
+                                <FormikControl
+                                  control="selectAsync"
+                                  required="label-required"
+                                  label="Job Title"
+                                  name="job_title_id"
+                                  url={`master/job-titles`}
+                                  fieldName={"job_title_name"}
+                                  onChange={(v) => {
+                                    formik.setFieldValue("job_title_id", v)
+                                  }}
+                                  placeholder={"Please choose"}
+                                  style={{ maxWidth: 200 }}
+                                  isDisabled={isView}
+                                />
+                                <FormikControl
+                                  control="selectAsync"
+                                  label="Division"
+                                  name="division_id"
+                                  url={`master/divisions`}
+                                  fieldName={"division_name"}
+                                  onChange={(v) => {
+                                    formik.setFieldValue("division_id", v)
+                                  }}
+                                  placeholder={"Please choose"}
+                                  style={{ maxWidth: 200 }}
+                                  isDisabled={isView}
+                                />
+                                <FormikControl
+                                  control="selectAsync"
+                                  label="Branch Office"
+                                  name="office_id"
+                                  url={`master/offices`}
+                                  fieldName={"office_name"}
+                                  onChange={(v) => {
+                                    formik.setFieldValue("office_id", v)
+                                  }}
+                                  placeholder={"Please choose"}
+                                  style={{ maxWidth: 200 }}
+                                  isDisabled={isView}
+                                />
+                                <Row className="required">
+                                  <Col column md={3} lg={4}>
+                                    <label className="text-label-input">
+                                      Hiring Date
+                                      <span className="label-required" />
+                                    </label>
+                                  </Col>
+                                  <Col className="mb-2" md={9} lg={8}>
+                                    <div
+                                      style={{ maxWidth: 400, display: "flex" }}
+                                    >
+                                      <div style={{ marginRight: 12, flex: 1 }}>
+                                        <FormikControl
+                                          control="selectOnly"
+                                          name="hire_date[0]"
+                                          onChange={(v) => {
+                                            formik.setFieldValue(
+                                              "hire_date[0]",
+                                              v,
+                                            )
+                                          }}
+                                          options={selectDay()}
+                                          placeholder={"Date"}
+                                          style={{ maxWidth: 240 }}
+                                          isDisabled={isView}
+                                        />
+                                      </div>
+                                      <div style={{ marginRight: 12, flex: 1 }}>
+                                        <FormikControl
+                                          control="selectOnly"
+                                          name="hire_date[1]"
+                                          placeholder={"Month"}
+                                          options={selectMonth()}
+                                          onChange={(v) => {
+                                            formik.setFieldValue(
+                                              "hire_date[1]",
+                                              v,
+                                            )
+                                          }}
+                                          style={{ maxWidth: 240 }}
+                                          isDisabled={isView}
+                                        />
+                                      </div>
+                                      <div style={{ marginRight: 12, flex: 1 }}>
+                                        <FormikControl
+                                          control="selectOnly"
+                                          name="hire_date[2]"
+                                          placeholder={"Year"}
+                                          options={selectYear()}
+                                          onChange={(v) => {
+                                            formik.setFieldValue(
+                                              "hire_date[2]",
+                                              v,
+                                            )
+                                          }}
+                                          style={{ maxWidth: 240 }}
+                                          isDisabled={isView}
+                                        />
+                                      </div>
+                                    </div>
+                                  </Col>
+                                </Row>
+                                <FormikControl
+                                  control="input"
+                                  type="text"
+                                  label="NPWP"
+                                  name="npwp"
+                                  style={{ maxWidth: 200 }}
+                                  disabled={isView}
+                                  minlength="1"
+                                  maxlength="36"
+                                />
+                              </div>
+                            </Col>
+                            <Col lg={1}></Col>
+                          </Row>
+
                           {additionalRole && (
                             <>
                               <div style={{ padding: "0 15px 15px" }}>
@@ -1256,7 +1290,7 @@ const EmployeeForm = (props) => {
                                     }}
                                     placeholder={
                                       formik.values.job_title_id ||
-                                      "Please Choose"
+                                      "Please choose"
                                     }
                                     style={{ maxWidth: 200 }}
                                   />
@@ -1271,7 +1305,7 @@ const EmployeeForm = (props) => {
                                     }}
                                     placeholder={
                                       formik.values.division_id ||
-                                      "Please Choose"
+                                      "Please choose"
                                     }
                                     style={{ maxWidth: 200 }}
                                   /> */}
@@ -1294,6 +1328,7 @@ const EmployeeForm = (props) => {
                         </Card.Body>
                       </Card>
                       <div
+                        className="mb-5 ml-1 row justify-content-md-start justify-content-center"
                         style={{
                           marginBottom: 30,
                           marginTop: 30,
@@ -1303,7 +1338,7 @@ const EmployeeForm = (props) => {
                         <Button
                           variant="primary"
                           type="submit"
-                          //disabled={!(formik.dirty && formik.isValid)}
+                          disabled={!(formik.dirty || formik.isValid)}
                           style={{ marginRight: 15 }}
                         >
                           SAVE

@@ -27,10 +27,10 @@ export default function UserAccessTypeTable() {
     title: "User Access Type",
     titleModal: "User Access Type",
     baseRoute: "/master/user-access-type/form",
-    endpoint: "/master/user-types",
-    deleteEndpoint: "/master/batch-actions/delete/user-types",
-    activationEndpoint: "/master/batch-actions/activate/user-types",
-    deactivationEndpoint: "/master/batch-actions/deactivate/user-types",
+    endpoint: "/user/user-types",
+    deleteEndpoint: "/user/batch-actions/delete/user-types",
+    activationEndpoint: "/user/batch-actions/activate/user-types",
+    deactivationEndpoint: "/user/batch-actions/deactivate/user-types",
     columns: [
 
       {

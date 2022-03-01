@@ -1,14 +1,16 @@
 import Sidebar from "components/navigation/sidebar"
 import Navbar from "components/navigation/navbar"
 import React, { useEffect } from "react"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import Breadcrumb from "components/navigation/breadcrumb"
 import { useSnackbar } from "react-simple-snackbar"
 import { useHistory } from "react-router-dom"
 import Cookies from "js-cookie"
+import { setAlert } from "redux/ui-store"
 
 const DashboardWrapper = (props) => {
   const history = useHistory()
+  const dispatch = useDispatch()
   const stateAlert = useSelector((state) => state.ui.alert)
   const [openSnackbar, closeSnackbar] = useSnackbar({
     position: "bottom-right",
@@ -33,9 +35,22 @@ const DashboardWrapper = (props) => {
     stateAlert && openSnackbar(stateAlert.message)
   }, [stateAlert])
 
+
+
+  const signout = async () => {
+    dispatch(setAlert({
+      message: `You have been successfully logged out!`,
+    }))
+    setTimeout(() => {
+      Cookies.remove("ut");
+      Cookies.remove("rt");
+      history.push("/auth/login");
+    }, 700);
+  };
+
   return (
     <div>
-      <Navbar />
+      <Navbar signout={signout} />
       <Sidebar />
       <div className="content-wrapper">
         <div className="container-fluid pb-5 pl-3">

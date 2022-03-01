@@ -16,19 +16,19 @@ function textAreaForm(props) {
   } = props
   return (
     <Row className="form-group required">
-      <Col column md={3} lg={3}>
+      <Col column md={3} lg={4}>
         <label className="text-label-input" htmlFor={name}>
           {label}
           <span className={required || ""}/>
         </label>
       </Col>
-      <Col md={9} lg={9}>
-        <Field id={name} name={name}>
+      <Col md={9} lg={8}>
+        <Field id={name} name={name} {...rest}>
           {({ field, form, meta }) => (
             <div>
               <textarea                
-                {...field} 
-                {...rest}               
+                {...field}
+                {...rest}                              
                 style={style}
                 minLength={minLength}
                 maxLength={maxLength}

@@ -12,7 +12,7 @@ export default function DivisionTable() {
         title: "Division",
         breadcrumbs: [
           {
-            text: "Employee Management",
+            text: "Employment Management",
           },
           {
             text: "Division",
@@ -74,7 +74,8 @@ export default function DivisionTable() {
         {value: "1", label: "Active"},
         {value: "3", label: "Inactive"},
       ]
-    }
+    },
+    statusLabel: "Status"
   })
 
   return <BBDataTable {...params}/>

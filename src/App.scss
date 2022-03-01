@@ -320,3 +320,29 @@ select.bg-dark-grey > option {
 .custom-control-label::before {
   border-color: #dee2e6;
 }
+//Employee Tabel/Form Image Profile
+.image-profile-tabel{  
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;  
+}
+.image-profile-form{
+  width: 125px;
+  height: 125px;
+  border-radius: 50%;
+}
+@media (max-width: 425px) {
+  .image-profile-form{
+    width: 103px;
+    height: 103px;
+    border-radius: 50%;
+  }
+}
+@media only screen and (width: 768px) {
+  .image-profile-form{
+    width: 81px;
+    height: 81px;
+    border-radius: 50%;
+  }
+}
+

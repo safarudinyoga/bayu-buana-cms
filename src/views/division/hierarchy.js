@@ -25,7 +25,7 @@ function DivisionHierarchy(props) {
         title: docTitle,
         breadcrumbs: [
           {
-            text: "Employee Management",
+            text: "Employment Management",
           },
           {
             link: backUrl,

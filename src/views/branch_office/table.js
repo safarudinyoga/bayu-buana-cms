@@ -12,7 +12,7 @@ export default function OfficeTable() {
         title: "Manage Branch Office",
         breadcrumbs: [
           {
-            text: "Employee Management",
+            text: "Employment Management",
           },
           {
             text: "Branch Offices",
@@ -25,6 +25,7 @@ export default function OfficeTable() {
   let [params, setParams] = useState({
     isCheckbox: false,
     showAdvancedOptions: false,
+    responsiveTablet: true,
     title: "Branch Offices",
     titleModal: "Company/ Branch Office",
     baseRoute: "/master/branch-offices/form",

@@ -209,7 +209,8 @@ function CountryForm(props) {
                     if(currentCountry.toUpperCase() === element.value.toUpperCase()){
                       req = true
                     } else {
-                      req = false
+                      let duplicateVal = res.items.find( e => e.country_name.toUpperCase() === element.value.toUpperCase())
+                      req = !duplicateVal
                     }
                   } else {
                     req = true
@@ -264,7 +265,8 @@ function CountryForm(props) {
             url: `${env.API_URL}/master/countries?filters=["country_name","like","${element.value}"]`,
             success: function (res) {
               if (res.items.length !== 0) {
-                req = false
+                let duplicateVal = res.items.find( e => e.country_name.toUpperCase() === element.value.toUpperCase())
+                req = !duplicateVal
               } else {
                 req = true
               }

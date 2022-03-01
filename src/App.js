@@ -1,4 +1,4 @@
-import React from "react"
+import React, {useEffect, useState} from "react"
 import "@fortawesome/fontawesome-free/css/all.css"
 import "admin-lte"
 import "admin-lte/dist/css/adminlte.css"
@@ -54,6 +54,7 @@ import HotelBrandForm from "views/hotel_brand/form"
 import HotelBrandTable from "views/hotel_brand/table"
 import HotelSupplierForm from "views/hotel_supplier/form"
 import HotelSupplierTable from "views/hotel_supplier/table"
+import GeneralSetup from "views/general-setup"
 import LanguageForm from "views/language/form"
 import LanguageTable from "views/language/table"
 import LocationCategoryForm from "views/location_category/form"
@@ -107,7 +108,7 @@ import RatingTypeLevelForm from "./views/rating_type_level/form"
 import InvoiceEmailSetupTable from "views/invoice_email_setup/table"
 import InvoiceEmailSetupForm from "views/invoice_email_setup/form"
 
-// Master Standadard Markup
+// Master Standard Markup
 import StandardMarkupTable from "views/standard_markup/standard_markup"
 import StandardMarkupFlightForm from "views/standard_markup/form/flight_form"
 import StandardMarkupHotelForm from "views/standard_markup/form/hotel_form"
@@ -144,6 +145,20 @@ import JobTitleForm from './views/job-title/form';
 // User Access Type
 import UserAccessTypeTable from "views/user_access_type/table"
 import UserAccessTypeForm from "views/user_access_type/form"
+import ResetPassword from "views/reset_password/reset_password"
+
+// Master Standard Ancillary Fee
+import StandardAncillaryFee from './views/standard_ancillary_fee/standard_ancillary_fee';
+import StandardAncillaryFeeFlightForm from "views/standard_ancillary_fee/form/flight_form"
+import StandardAncillaryFeeHotelForm from "views/standard_ancillary_fee/form/hotel_form"
+import StandardAncillaryFeeOtherForm from "views/standard_ancillary_fee/form/other_form"
+
+// Special Date
+import SpecialDateTable from "views/special_date/table"
+import SpecialDateForm from "views/special_date/form"
+
+
+import Api from "config/api"
 
 const RouteWithProps = ({
   path,
@@ -259,6 +274,19 @@ const DashboardRoutes = () => {
         </Route>
         <Route path="/master/frequent-traveler-program/form/:id?">
           <FrequentTravelerProgramForm />
+        </Route>
+        {/* Standard Ancillary Fee */}
+        <Route exact path="/master/standard-ancillary-fee">
+          <StandardAncillaryFee />
+        </Route>
+        <Route path="/master/standard-ancillary-fee/form/flight-form/:id?">
+          <StandardAncillaryFeeFlightForm />
+        </Route>
+        <Route path="/master/standard-ancillary-fee/form/hotel-form/:id?">
+          <StandardAncillaryFeeHotelForm />
+        </Route>
+        <Route path="/master/standard-ancillary-fee/form/other-form/:id?">
+          <StandardAncillaryFeeOtherForm />
         </Route>
         <Route exact path="/master/destination-groups">
           <DestinationGroupTable />
@@ -524,12 +552,26 @@ const DashboardRoutes = () => {
           <UserProfile />
         </Route>
 
+        {/* Master General Setup*/}
+        <Route exact path="/master/general-setup">
+          <GeneralSetup />
+        </Route>
+
+
         {/* User Access Type */}
         <Route exact path="/master/user-access-type">
           <UserAccessTypeTable />
         </Route>
         <Route path="/master/user-access-type/form/:id?">
           <UserAccessTypeForm />
+        </Route>
+
+        {/* Master Special Date */}
+        <Route exact path="/master/special-date">
+          <SpecialDateTable />
+        </Route>
+        <Route path="/master/special-date/form/:id?">
+          <SpecialDateForm />
         </Route>
 
       </Switch>
@@ -539,7 +581,6 @@ const DashboardRoutes = () => {
 const AuthRoutes = () => {
   return (
     <AuthWrapper>
-      {/* <Route path="/" render={() => <Redirect to="/auth/login"/>} /> */}
       <Route exact path="/auth/login">
         <Login />
       </Route>
@@ -549,15 +590,40 @@ const AuthRoutes = () => {
       <Route exact path="/auth/otp">
         <OTP />
       </Route>
+      <Route exact path="/auth/reset-password">
+        <ResetPassword />
+      </Route>
     </AuthWrapper>
   )
 }
 
-
+const getAuth = async() => {
+  try {
+    let auth = Cookies.get('ut')
+    let refresh_token = Cookies.get('rt')
+    if(!auth && refresh_token) {
+      let API = new Api()
+      let res = await API.refreshToken(refresh_token)
+    }
+  
+    return auth
+  } catch (err) {
+    throw err
+  }
+}
 
 const App = () => {
-  let auth = Cookies.get('ut')
   document.title = "Bayu Buana"
+
+  const[auth, setAuth] = useState(true)
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      let isAuth = await getAuth()
+      setAuth(isAuth)
+    }
+    checkAuth()
+  }, [auth])
   return (
     <Router>
       <Switch>

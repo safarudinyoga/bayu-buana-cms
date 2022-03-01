@@ -91,6 +91,7 @@ export default function ProvinceTable() {
       {
         title: "Country",
         data: "country.country_name",
+        render: (val) => !val ? "" : val,
       },
       {
         searchable: false,

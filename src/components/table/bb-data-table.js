@@ -90,7 +90,7 @@ class BBDataTable extends Component {
     } catch (e) {}
 
     const allowed = [this.props.recordName]
-    const { recordName, msgType } = this.props
+    const { recordName, msgType, module } = this.props
     columns.push({
       searchable: false,
       orderable: false,
@@ -149,7 +149,7 @@ class BBDataTable extends Component {
           `
           <a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item" data-action="edit" data-id="${row.id}" title="Click to edit"><img src="${editIcon}"/></a>
           <a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="${hideDetail ? "d-none" : "d-inline"} table-row-action-item" data-action="view" data-id="${row.id}" title="Click to view details"><img src="${showIcon}"/></a>
-          <a href="javascript:void(0);" class="${showSwitch ? "d-inline" : "d-none"} custom-switch custom-switch-bb table-row-action-item" data-id="${row.id}" data-action="update_status" data-status="${row.status}">
+          <a href="javascript:void(0);" class="${showSwitch ? "d-inline" : "d-none"} custom-switch custom-switch-bb table-row-action-item" data-id="${module == 'employees' ? row.employee_id: row.id}" data-action="update_status" data-status="${row.status}" data-toggle="tooltip" data-placement="${placement}" title="${row.status == 1 ? "Deactivate" : "Activate"}">
             <input type="checkbox" class="custom-control-input check-status-${row.id}" id="customSwitch${row.id}" ${checked} data-action="update_status">
             <label class="custom-control-label" for="customSwitch${row.id}" data-action="update_status"></label>
           </a>
@@ -370,6 +370,7 @@ class BBDataTable extends Component {
                 if (simpleSort === true) {
                   let order = params.order[0]
                   if (params.columns[order.column].orderable !== false) {
+                    console.log('params.columns[order.column].data', params.columns[order.column].data)
                     overrideParams.sort = order.dir !== "desc" ? "" : "-"
                     overrideParams.sort += params.columns[order.column].data
                   }
@@ -378,6 +379,7 @@ class BBDataTable extends Component {
                   for (var o in params.order) {
                     let order = params.order[o]
                     if (params.columns[order.column].orderable !== false) {
+                      console.log('params.columns[order.column].data 2', params.columns[order.column].data)
                       let sort = order.dir !== "desc" ? "" : "-"
                       orders.push(sort + params.columns[order.column].data)
                     }

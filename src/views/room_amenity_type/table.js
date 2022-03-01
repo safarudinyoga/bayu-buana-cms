@@ -65,6 +65,7 @@ export default function RoomAmenityTypeTable() {
         title: "Room Amenity Category",
         data: "room_amenity_category_names",
         render: renderColumn("room_amenity_category", "room_amenity_category_names"),
+        // render: (val) => !val ? "" : val,
       },
       {
         searchable: false,
@@ -83,7 +84,7 @@ export default function RoomAmenityTypeTable() {
   })
 
   useEffect(() => {
-    console.log(params.filters)
+
   }, [params])
 
   const onFilterChangeCategories = (e, values) => {
