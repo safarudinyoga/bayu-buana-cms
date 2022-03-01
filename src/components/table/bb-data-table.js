@@ -25,6 +25,7 @@ import removeIcon from "assets/icons/remove.svg"
 import showIcon from "assets/icons/show.svg"
 import Cookies from "js-cookie"
 import ModalCreate from "components/Modal/bb-modal"
+import customPrint from '../../lib/customPrint'
 
 window.JSZip = JSZip
 
@@ -43,7 +44,7 @@ class BBDataTable extends Component {
       extraFilters: this.props.filters || [],
       isCheckbox: this.props.isCheckbox ?? true,
       isOpen: false,
-      itemInfo: ""
+      itemInfo: "",
     }
     this.inProgress = false
     this.queryParams = new URLSearchParams(this.props.location.search)
@@ -91,6 +92,7 @@ class BBDataTable extends Component {
 
     const allowed = [this.props.recordName]
     const { recordName, msgType, module } = this.props
+    const isOpenNewTab = this.props.isOpenNewTab ?? true
     columns.push({
       searchable: false,
       orderable: false,
@@ -364,7 +366,6 @@ class BBDataTable extends Component {
                 : Math.round(params.start / params.length)
 
               overrideParams.page += parseInt(pageStartAt)
-
               if (params.order.length > 0) {
                 overrideParams.sort = ""
                 if (simpleSort === true) {
@@ -442,6 +443,9 @@ class BBDataTable extends Component {
             exportOptions: {
               stripHtml: false,
               columns: visibleColumns,
+            },
+            action: function ( e, dt, node, config ) {
+              customPrint(e, dt, node, config, isOpenNewTab)
             },
           },
           {
@@ -600,7 +604,6 @@ class BBDataTable extends Component {
             let res = await this.api.post(`/master/batch-actions/sort/${module}`, { id: rowID, sort })
             $(this.table.current).DataTable().draw(false)
           } catch (e) {
-            console.log(e)
           }
         }
       })
@@ -687,7 +690,6 @@ class BBDataTable extends Component {
         this.dt.page.len(prevLen).draw()
       }, 500)
     } catch (e) {
-      console.log(e.message)
     }
   }
 
