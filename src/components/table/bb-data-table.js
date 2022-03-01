@@ -24,6 +24,7 @@ import editIcon from "assets/icons/edit.svg"
 import removeIcon from "assets/icons/remove.svg"
 import showIcon from "assets/icons/show.svg"
 import Cookies from "js-cookie"
+import customPrint from '../../lib/customPrint'
 
 window.JSZip = JSZip
 
@@ -42,7 +43,7 @@ class BBDataTable extends Component {
       extraFilters: this.props.filters || [],
       isCheckbox: this.props.isCheckbox ?? true,
       isOpen: false,
-      itemInfo: ""
+      itemInfo: "",
     }
     this.inProgress = false
     this.queryParams = new URLSearchParams(this.props.location.search)
@@ -90,6 +91,7 @@ class BBDataTable extends Component {
 
     const allowed = [this.props.recordName]
     const { recordName, msgType, module } = this.props
+    const isOpenNewTab = this.props.isOpenNewTab ?? true
     columns.push({
       searchable: false,
       orderable: false,
@@ -363,13 +365,11 @@ class BBDataTable extends Component {
                 : Math.round(params.start / params.length)
 
               overrideParams.page += parseInt(pageStartAt)
-
               if (params.order.length > 0) {
                 overrideParams.sort = ""
                 if (simpleSort === true) {
                   let order = params.order[0]
                   if (params.columns[order.column].orderable !== false) {
-                    console.log('params.columns[order.column].data', params.columns[order.column].data)
                     overrideParams.sort = order.dir !== "desc" ? "" : "-"
                     overrideParams.sort += params.columns[order.column].data
                   }
@@ -378,7 +378,6 @@ class BBDataTable extends Component {
                   for (var o in params.order) {
                     let order = params.order[o]
                     if (params.columns[order.column].orderable !== false) {
-                      console.log('params.columns[order.column].data 2', params.columns[order.column].data)
                       let sort = order.dir !== "desc" ? "" : "-"
                       orders.push(sort + params.columns[order.column].data)
                     }
@@ -442,6 +441,9 @@ class BBDataTable extends Component {
             exportOptions: {
               stripHtml: false,
               columns: visibleColumns,
+            },
+            action: function ( e, dt, node, config ) {
+              customPrint(e, dt, node, config, isOpenNewTab)
             },
           },
           {
@@ -594,13 +596,10 @@ class BBDataTable extends Component {
           )
           let targetIdx = rowPositionDiff === 0 ? 1 : diff.length - 2
           let sort = dt.row(diff[targetIdx].node)?.data()?.sort || 0
-          console.log(edit.triggerRow.data().airline_code, sort)
           try {
             let res = await this.api.post(`/master/batch-actions/sort/${module}`, { id: rowID, sort })
-            console.log(res)
             $(this.table.current).DataTable().draw(false)
           } catch (e) {
-            console.log(e)
           }
         }
       })
@@ -687,7 +686,6 @@ class BBDataTable extends Component {
         this.dt.page.len(prevLen).draw()
       }, 500)
     } catch (e) {
-      console.log(e.message)
     }
   }
 
@@ -809,7 +807,6 @@ class BBDataTable extends Component {
 
         if (itemsChecked.length > 0) {
           for (let idx = 0; idx < itemsChecked.length; idx++) {
-            console.log(idx)
             let id = $(itemsChecked.get(idx)).data("id")
             if (!selected.includes(id)) {
               selected.push(id)
