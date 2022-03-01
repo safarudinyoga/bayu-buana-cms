@@ -1,0 +1,7 @@
+.bb-modal-header {
+    border-bottom: none !important;
+}
+.bb-modal-footer {
+    border-top: none !important;
+    justify-content: flex-start !important;
+}

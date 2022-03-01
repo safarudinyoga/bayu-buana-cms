@@ -18,12 +18,13 @@ import { Button, Modal, ModalBody, ModalFooter } from "react-bootstrap"
 import ModalHeader from "react-bootstrap/esm/ModalHeader"
 import { withRouter } from "react-router"
 import { connect } from "react-redux"
-import { setAlert } from "redux/ui-store"
+import { setAlert, setCreateModal, setReloadTable } from "redux/ui-store"
 import "./bb-data-table.css"
 import editIcon from "assets/icons/edit.svg"
 import removeIcon from "assets/icons/remove.svg"
 import showIcon from "assets/icons/show.svg"
 import Cookies from "js-cookie"
+import ModalCreate from "components/Modal/bb-modal"
 import customPrint from '../../lib/customPrint'
 
 window.JSZip = JSZip
@@ -383,9 +384,12 @@ class BBDataTable extends Component {
                     }
                   }
                   overrideParams.sort = orders.join(",")
+                  if(orders.join(",") !== this.queryParams.get('sort')) {
+                    this.queryParams.set('page', 1)
+                  }
                 }
               } else {
-                overrideParams.sort = "sort"
+                overrideParams.sort = this.queryParams.has('sort') ? this.queryParams.get('sort') : 'sort'
               }
               if (params.search.value) {
                 let searchValue = params.search.value.replace(/^\s+|\s+$/g, "")
@@ -429,7 +433,7 @@ class BBDataTable extends Component {
                 overrideParams.filters = "[" + extraFilters.join(",") + "]"
               }
             } catch (e) {}
-
+            this.queryParams.set('sort', overrideParams.sort)
             return overrideParams
           },
         },
@@ -530,6 +534,8 @@ class BBDataTable extends Component {
           lengthMenu: "_MENU_",
         },
         fnDrawCallback: (t) => {
+
+      
           const { selected } = this.state
           let wrapper = $(".dataTables_paginate", t.nTableWrapper)
           wrapper.append(
@@ -550,7 +556,6 @@ class BBDataTable extends Component {
           $(t.nTableWrapper).find(".dataTables_info").show()
           $(t.nTableWrapper).find(".dataTables_paginate").show()
           // }
-
           let items = $(".select-checkbox-item", t.nTableWrapper)
           let itemsSelected = []
           for (let i = 0; i < items.length; i++) {
@@ -563,6 +568,17 @@ class BBDataTable extends Component {
           let checkedHeader =
             items.length > 0 && itemsSelected.length === items.length
           $(".select-checkbox-all").prop("checked", checkedHeader)
+
+          this.queryParams.sort()
+          let query = ''
+          for(let pair of this.queryParams.entries()) {
+            if(query == '') query += '?'
+            if(query.length > 1 ) query += '&'
+            query += pair[0] + '=' + pair[1]
+          }
+          if(query !== '') {
+          this.props.history.replace({ pathname: this.props.location.pathname, search: query})
+          }
         },
       })
 
@@ -577,7 +593,6 @@ class BBDataTable extends Component {
           }
         }, 500)
       })
-
       dt.on("row-reorder", async (e, diff, edit) => {
         if (diff.length > 0) {
           let module = this.props.title.toLowerCase().split(" ").join("_")
@@ -607,7 +622,6 @@ class BBDataTable extends Component {
       dt.on('page.dt', async () => {
         var info = dt.page.info();
         this.queryParams.set("page", info.page+1)
-        this.props.history.replace({ pathname: this.props.location.pathname, search: `?page=${info.page+1}`})
       })
 
       this.dt = dt
@@ -776,6 +790,10 @@ class BBDataTable extends Component {
     if (this.inProgress) {
       return
     }
+    if (this.props.reloadTable) {
+      this.dt.ajax.reload()
+      this.props.setReloadTable(false)
+    }
     this.inProgress = true
     try {
       if (prevProps.filters !== this.props.filters) this.dt.ajax.reload()
@@ -872,7 +890,12 @@ class BBDataTable extends Component {
         $('[data-toggle="tooltip"]').tooltip("hide")
         switch ($(this).data("action")) {
           case "edit":
-            me.props.history.push(base + "/" + id)
+            if(me.props.createOnModal) {
+              me.props.setCreateModal(true)
+              // me.props.history.replace({ pathname: me.props.location.pathname, search: `?id=84938493`})
+            } else {
+              me.props.history.push(base + "/" + id)
+            }
             break
           case "view":
             me.props.history.push(base + "/" + id + "?action=view")
@@ -957,8 +980,14 @@ class BBDataTable extends Component {
             </Button>
           </ModalFooter>
         </Modal>
+        <ModalCreate 
+          show={this.props.showCreateModal}
+          onClick={() => this.props.setCreateModal(false)}
+          modalContent={this.props.modalContent}
+        />
         <TableHeader
           {...this.props}
+          createOnModal={this.props.createOnModal}
           selected={this.state.selected.length > 0 && !this.props.switchStatus}
           hideFilter={this.state.hideFilter}
           extraFilter={this.props.extraFilter}
@@ -987,11 +1016,15 @@ class BBDataTable extends Component {
 const mapStateToProps = ({ ui }) => {
   return {
     stateAlert: ui.alert,
+    showCreateModal: ui.showCreateModal,
+    reloadTable: ui.reloadTable,
   }
 }
 
 const mapDispatchToProps = (dispatch) => ({
   setAlert: (payload) => dispatch(setAlert(payload)),
+  setCreateModal: (payload) => dispatch(setCreateModal(payload)),
+  setReloadTable: (payload) => dispatch(setReloadTable(payload)),
 })
 
 export default connect(
