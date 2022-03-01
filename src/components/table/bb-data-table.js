@@ -384,9 +384,12 @@ class BBDataTable extends Component {
                     }
                   }
                   overrideParams.sort = orders.join(",")
+                  if(orders.join(",") !== this.queryParams.get('sort')) {
+                    this.queryParams.set('page', 1)
+                  }
                 }
               } else {
-                overrideParams.sort = "sort"
+                overrideParams.sort = this.queryParams.has('sort') ? this.queryParams.get('sort') : 'sort'
               }
               if (params.search.value) {
                 let searchValue = params.search.value.replace(/^\s+|\s+$/g, "")
@@ -431,7 +434,6 @@ class BBDataTable extends Component {
               }
             } catch (e) {}
             this.queryParams.set('sort', overrideParams.sort)
-            console.log(this.queryParams.entries())
             return overrideParams
           },
         },
@@ -567,7 +569,16 @@ class BBDataTable extends Component {
             items.length > 0 && itemsSelected.length === items.length
           $(".select-checkbox-all").prop("checked", checkedHeader)
 
-          // console.log(this.queryParams.has('page') || this.queryParams.has('sort'))
+          this.queryParams.sort()
+          let query = ''
+          for(let pair of this.queryParams.entries()) {
+            if(query == '') query += '?'
+            if(query.length > 1 ) query += '&'
+            query += pair[0] + '=' + pair[1]
+          }
+          if(query !== '') {
+          this.props.history.replace({ pathname: this.props.location.pathname, search: query})
+          }
         },
       })
 
@@ -611,7 +622,6 @@ class BBDataTable extends Component {
       dt.on('page.dt', async () => {
         var info = dt.page.info();
         this.queryParams.set("page", info.page+1)
-        this.props.history.replace({ pathname: this.props.location.pathname, search: `?page=${info.page+1}`})
       })
 
       this.dt = dt
