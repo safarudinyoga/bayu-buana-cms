@@ -320,8 +320,9 @@ const EmployeeForm = (props) => {
     npwp: "",
   }
   // Validasi number
-  const phoneRegExp = /^\d+$/
-  ///^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
+  const phoneRegExp = /^\d+$/  
+  const numberSimbol = /^[0-9!@#$%-._^&*()_+\-=\[\]{};':"\\|,.<>\/?]*$/
+  //const numberSimbol = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
   const validationSchema = Yup.object({
     name_prefix_id: Yup.object().required("Title is required."),
     given_name: Yup.string().required("Employee First Name is required."),
@@ -448,7 +449,7 @@ const EmployeeForm = (props) => {
       postal_code: Yup.string(),
     }),
     job_title_id: Yup.object().required("Job Title is required."),
-    npwp: Yup.number().typeError('NPWP must be a number'),
+    npwp: Yup.string().matches(numberSimbol, "NPWP must be a number"),
   })
 
   return (
@@ -522,7 +523,7 @@ const EmployeeForm = (props) => {
           try {
             let res = await api.post("master/employees", Data)
             openSnackbar(
-              `Record 'Employee Number: ${values.employee_number} Employee Name: ${values.given_name}' has been successfully saved.`,
+              `Record 'Employee Number: ${values.employee_number} Employee Name: ${values.given_name + " " + values?.middle_name + " " + values.surname}' has been successfully saved.`,
             )
             setSubmitting(false || history.goBack())
           } catch (e) {}
@@ -531,7 +532,7 @@ const EmployeeForm = (props) => {
           try {
             let res = await api.put(`master/employees/${formId}`, Data)
             openSnackbar(
-              `Record 'Employee Number: ${values.employee_number} Employee Name: ${values.given_name}' has been successfully update.`,
+              `Record 'Employee Number: ${values.employee_number} Employee Name: ${values.given_name + " " + values?.middle_name + " " + values.surname}' has been successfully update.`,
             )
             setSubmitting(false || history.goBack())
           } catch (e) {}
@@ -917,8 +918,7 @@ const EmployeeForm = (props) => {
                                         ? ""
                                         : formik.values.address.postal_code,
                                     )
-                                  }}
-                                  onBlur={formik.handleBlur}
+                                  }}                                  
                                   style={{ maxWidth: 416 }}
                                   disabled={isView}
                                 />
@@ -953,10 +953,7 @@ const EmployeeForm = (props) => {
                                       { value: null, label: "Please choose" },
                                     )
                                   }}
-                                  placeholder={
-                                    formik.values.permanent_country_id ||
-                                    "Please choose"
-                                  }
+                                  placeholder={"Please choose"}
                                   style={{ maxWidth: 300 }}
                                   isDisabled={isView || sameAddress}
                                 />
@@ -977,10 +974,7 @@ const EmployeeForm = (props) => {
                                       { value: null, label: "Please choose" },
                                     )
                                   }}
-                                  placeholder={
-                                    formik.values.permanent_state_province_id ||
-                                    "Please choose"
-                                  }
+                                  placeholder={"Please choose"}
                                   style={{ maxWidth: 200 }}
                                   isDisabled={isView || sameAddress}
                                 />
@@ -997,6 +991,7 @@ const EmployeeForm = (props) => {
                                       v,
                                     )
                                   }}
+                                  placeholder={"Please choose"}
                                   style={{ maxWidth: 200 }}
                                   isDisabled={isView || sameAddress}
                                 />
@@ -1133,7 +1128,7 @@ const EmployeeForm = (props) => {
                         </Button>
                         <Button
                           variant="secondary"
-                          onClick={() => setTabKey("general-information")}
+                          onClick={() => history.goBack()}
                         >
                           CANCEL
                         </Button>
@@ -1345,7 +1340,7 @@ const EmployeeForm = (props) => {
                         </Button>
                         <Button
                           variant="secondary"
-                          onClick={() => setTabKey("emergency-contacts")}
+                          onClick={() => history.goBack()}
                         >
                           CANCEL
                         </Button>
