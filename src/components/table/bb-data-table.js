@@ -370,7 +370,6 @@ class BBDataTable extends Component {
                 if (simpleSort === true) {
                   let order = params.order[0]
                   if (params.columns[order.column].orderable !== false) {
-                    console.log('params.columns[order.column].data', params.columns[order.column].data)
                     overrideParams.sort = order.dir !== "desc" ? "" : "-"
                     overrideParams.sort += params.columns[order.column].data
                   }
@@ -379,7 +378,6 @@ class BBDataTable extends Component {
                   for (var o in params.order) {
                     let order = params.order[o]
                     if (params.columns[order.column].orderable !== false) {
-                      console.log('params.columns[order.column].data 2', params.columns[order.column].data)
                       let sort = order.dir !== "desc" ? "" : "-"
                       orders.push(sort + params.columns[order.column].data)
                     }
@@ -431,7 +429,8 @@ class BBDataTable extends Component {
                 overrideParams.filters = "[" + extraFilters.join(",") + "]"
               }
             } catch (e) {}
-
+            this.queryParams.set('sort', overrideParams.sort)
+            console.log(this.queryParams.entries())
             return overrideParams
           },
         },
@@ -529,6 +528,8 @@ class BBDataTable extends Component {
           lengthMenu: "_MENU_",
         },
         fnDrawCallback: (t) => {
+
+      
           const { selected } = this.state
           let wrapper = $(".dataTables_paginate", t.nTableWrapper)
           wrapper.append(
@@ -549,7 +550,6 @@ class BBDataTable extends Component {
           $(t.nTableWrapper).find(".dataTables_info").show()
           $(t.nTableWrapper).find(".dataTables_paginate").show()
           // }
-
           let items = $(".select-checkbox-item", t.nTableWrapper)
           let itemsSelected = []
           for (let i = 0; i < items.length; i++) {
@@ -562,6 +562,8 @@ class BBDataTable extends Component {
           let checkedHeader =
             items.length > 0 && itemsSelected.length === items.length
           $(".select-checkbox-all").prop("checked", checkedHeader)
+
+          // console.log(this.queryParams.has('page') || this.queryParams.has('sort'))
         },
       })
 
@@ -576,7 +578,6 @@ class BBDataTable extends Component {
           }
         }, 500)
       })
-
       dt.on("row-reorder", async (e, diff, edit) => {
         if (diff.length > 0) {
           let module = this.props.title.toLowerCase().split(" ").join("_")
@@ -595,10 +596,8 @@ class BBDataTable extends Component {
           )
           let targetIdx = rowPositionDiff === 0 ? 1 : diff.length - 2
           let sort = dt.row(diff[targetIdx].node)?.data()?.sort || 0
-          console.log(edit.triggerRow.data().airline_code, sort)
           try {
             let res = await this.api.post(`/master/batch-actions/sort/${module}`, { id: rowID, sort })
-            console.log(res)
             $(this.table.current).DataTable().draw(false)
           } catch (e) {
             console.log(e)
@@ -814,7 +813,6 @@ class BBDataTable extends Component {
 
         if (itemsChecked.length > 0) {
           for (let idx = 0; idx < itemsChecked.length; idx++) {
-            console.log(idx)
             let id = $(itemsChecked.get(idx)).data("id")
             if (!selected.includes(id)) {
               selected.push(id)
