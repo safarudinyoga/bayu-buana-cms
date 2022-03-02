@@ -1,0 +1,17 @@
+@media (max-width:480px) {
+    .employee-form {
+        display: none;
+    }
+    .mobile-form {
+        display: block;
+    }
+}
+
+@media (min-width:481px) {
+    .employee-form {
+        display: block;
+    }
+    .mobile-form {
+        display: none;
+    }
+}

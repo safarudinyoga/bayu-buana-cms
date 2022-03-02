@@ -97,6 +97,7 @@ const SecuritySettings = (props) => {
         handleChange,
         handleBlur,
         handleSubmit,
+        isValid,
         isSubmitting,
         setFieldValue,
         setFieldTouched,
@@ -157,14 +158,14 @@ const SecuritySettings = (props) => {
               <Button
                 variant="primary"
                 type="submit"
-                disabled={!dirty}
+                disabled={!dirty || !isValid}
                 style={{ marginRight: 15 }}
               >
                 SAVE
               </Button>
               <Button
                 variant="secondary"
-                onClick={() => props.history.push(props.backUrl)}
+                onClick={() => props.history.push("/")}
               >
                 CANCEL
               </Button>
