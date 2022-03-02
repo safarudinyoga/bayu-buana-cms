@@ -68,6 +68,7 @@ export default function JobTitleTable() {
         {value: "3", label: "Inactive"},
       ]
     },
+    isOpenNewTab: false
   })
 
   return <BBDataTable {...params} {...params} />
