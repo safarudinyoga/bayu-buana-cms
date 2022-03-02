@@ -11,7 +11,6 @@ import {setAlert, setUIParams} from "redux/ui-store"
 import $ from "jquery"
 import env from "../../config/environment"
 
-
 const endpoint = "/master/state-provinces"
 const backUrl = "/master/provinces"
 
@@ -25,6 +24,7 @@ function ProvinceForm(props) {
   const [translations, setTranslations] = useState([])
   const [subdivisionData, setSubdivisionData] = useState([])
   const [countryData, setCountryData] = useState([])
+  const [reqData, setReqData] = useState(null)
   const [id, setId] = useState(null)
   const [form, setForm] = useState({
     country_id: "",
@@ -103,60 +103,8 @@ function ProvinceForm(props) {
           setCountryData([{...res.data.country, text: res.data.country.country_name}])
         }
 
-        if (res.data) {
-          let currentCode = res.data.state_province_code
-          let currentName = res.data.state_province_name
-
-          $.validator.addMethod(
-            "checkName",
-            function (value, element) {
-              var req = false
-              $.ajax({
-                type: "GET",
-                async: false,
-                url: `${env.API_URL}/master/state-provinces?filters=["state_province_name","=","${element.value}"]`,
-                success: function (res) {
-                  if (res.items.length !== 0) {
-                    if(currentName === element.value){
-                      req = true
-                    } else {
-                      req = false
-                    }
-                  } else {
-                    req = true
-                  }
-                },
-              })
-    
-              return req
-            },
-            "State Province Name already exists",
-          )
-          $.validator.addMethod(
-            "checkCode",
-            function (value, element) {
-              var req = false
-              $.ajax({
-                type: "GET",
-                async: false,
-                url: `${env.API_URL}/master/state-provinces?filters=["state_province_code","=","${element.value}"]`,
-                success: function (res) {
-                  if (res.items.length !== 0) {
-                    if(currentCode === element.value){
-                      req = true
-                    } else {
-                      req = false
-                    }
-                  } else {
-                    req = true
-                  }
-                },
-              })
-    
-              return req
-            },
-            "State Province Code already exists",
-          )
+        if(res.data) {
+          setReqData(res.data)
         }
       } catch (e) { }
 
@@ -167,7 +115,70 @@ function ProvinceForm(props) {
         setTranslations(res.data.items)
       } catch (e) { }
       setLoading(false)
+    }
+  }, [])
+
+  useEffect(async() => {
+    if (formId) {
+      if(reqData) {
+        let currentCode = reqData.state_province_code
+        let currentName = reqData.state_province_name
+        let countryId = form.country_id
+
+        $.validator.addMethod(
+          "checkName",
+          function (value, element) {
+            var req = false
+            $.ajax({
+              type: "GET",
+              async: false,
+              url: `${env.API_URL}/master/state-provinces?filters=[["state_province_name","like","${element.value}"],["AND"],["country_id","=","${countryId}"]]`,
+              success: function (res) {
+                if (res.items.length !== 0) {
+                  if(currentName.toUpperCase() === element.value.toUpperCase() && countryId === reqData.country_id){
+                    req = true
+                  } else {
+                    let duplicateVal = res.items.find( e => e.state_province_name.toUpperCase() === element.value.toUpperCase())
+                    req = !duplicateVal
+                  }
+                } else {
+                  req = true
+                }
+              },
+            })
+  
+            return req
+          },
+          "State Province Name already exists",
+        )
+        $.validator.addMethod(
+          "checkCode",
+          function (value, element) {
+            var req = false
+            $.ajax({
+              type: "GET",
+              async: false,
+              url: `${env.API_URL}/master/state-provinces?filters=["state_province_code","=","${element.value}"]`,
+              success: function (res) {
+                if (res.items.length !== 0) {
+                  if(currentCode === element.value){
+                    req = true
+                  } else {
+                    req = false
+                  }
+                } else {
+                  req = true
+                }
+              },
+            })
+  
+            return req
+          },
+          "State Province Code already exists",
+        )
+      }
     } else {
+      
       $.validator.addMethod(
         "checkName",
         function (value, element) {
@@ -175,10 +186,11 @@ function ProvinceForm(props) {
           $.ajax({
             type: "GET",
             async: false,
-            url: `${env.API_URL}/master/state-provinces?filters=["state_province_name","=","${element.value}"]`,
+            url: `${env.API_URL}/master/state-provinces?filters=[["state_province_name","like","${element.value}"],["AND"],["country_id","=","${form.country_id}"]]`,
             success: function (res) {
               if (res.items.length !== 0) {
-                req = false
+                let duplicateVal = res.items.find( e => e.state_province_name.toUpperCase() === element.value.toUpperCase())
+                req = !duplicateVal
               } else {
                 req = true
               }
@@ -211,7 +223,7 @@ function ProvinceForm(props) {
         "State Province Code already exists",
       )
     }
-  }, [])
+  }, [reqData, form])
 
   useEffect(() => {
     if (!props.match.params.id) {

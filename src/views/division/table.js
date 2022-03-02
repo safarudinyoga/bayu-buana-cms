@@ -75,7 +75,8 @@ export default function DivisionTable() {
         {value: "3", label: "Inactive"},
       ]
     },
-    statusLabel: "Status"
+    statusLabel: "Status",
+    isOpenNewTab: false
   })
 
   return <BBDataTable {...params}/>

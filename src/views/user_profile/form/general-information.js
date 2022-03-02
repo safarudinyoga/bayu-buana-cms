@@ -440,6 +440,7 @@ const GeneralInformation = (props) => {
           handleBlur,
           handleSubmit,
           isSubmitting,
+          isValid,
           setFieldValue,
           setFieldTouched,
         }) => (
@@ -738,7 +739,7 @@ const GeneralInformation = (props) => {
                               // write your building UI
                               <>
                                 {imageList.map((image, index) => (
-                                  <div key={index} className="image-item"
+                                  <div key={index} className="image-item" style={{position: "relative"}}
                                     onMouseEnter={e => {
                                       setShowCloseBtn(true)
                                     }}
@@ -752,7 +753,7 @@ const GeneralInformation = (props) => {
                                       className="img-profile"
                                     />
                                     <CloseButton
-                                      style={{display: showCloseBtn ? "block" : "none"}}
+                                      style={{position: "absolute", top: 0, right: 0, display: showCloseBtn ? "block" : "none"}}
                                       onClick={() => onImageRemove(0)} 
                                     />
                                   </div>
@@ -1228,14 +1229,14 @@ const GeneralInformation = (props) => {
               <Button
                 variant="primary"
                 type="submit"
-                disabled={isSubmitting || !dirty}
+                disabled={isSubmitting || !dirty || !isValid}
                 style={{ marginRight: 15 }}
               >
                 SAVE
               </Button>
               <Button
                 variant="secondary"
-                onClick={() => props.history.push(props.backUrl)}
+                onClick={() => props.history.push("/")}
               >
                 CANCEL
               </Button>

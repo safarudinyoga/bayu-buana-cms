@@ -105,6 +105,7 @@ const EmergencyContacts = (props) => {
         handleChange,
         handleBlur,
         handleSubmit,
+        isValid,
         isSubmitting,
         setFieldValue,
         setFieldTouched,
@@ -138,7 +139,8 @@ const EmergencyContacts = (props) => {
                     <Col sm={9}>
                       <Form.Control
                         name="phoneNumberEmergency1"
-                        type="text"
+                        type="tel"
+                        pattern="^[+]?[0-9]{9,12}$"
                         value={values.phoneNumberEmergency1}
                         minLength={1}
                         maxLength={32}
@@ -189,7 +191,8 @@ const EmergencyContacts = (props) => {
                     <Col sm={9}>
                       <Form.Control
                         name="phoneNumberEmergency2"
-                        type="text"
+                        type="tel"
+                        pattern="^[+]?[0-9]{9,12}$"
                         value={values.phoneNumberEmergency2}
                         minLength={1}
                         maxLength={32}
@@ -221,14 +224,14 @@ const EmergencyContacts = (props) => {
               <Button
                 variant="primary"
                 type="submit"
-                disabled={!dirty}
+                disabled={!dirty || !isValid}
                 style={{ marginRight: 15 }}
               >
                 SAVE
               </Button>
               <Button
                 variant="secondary"
-                onClick={() => props.history.push(props.backUrl)}
+                onClick={() => props.history.push("/")}
               >
                 CANCEL
               </Button>
