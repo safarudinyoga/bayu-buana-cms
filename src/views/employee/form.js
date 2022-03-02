@@ -35,9 +35,13 @@ const EmployeeForm = (props) => {
   const [formValues, setFormValues] = useState(null)
   const [optionGender, setOptionGender] = useState([])
   const [additionalRole, setAdditionalRole] = useState(false)
+<<<<<<< HEAD
   const [months, setMonths] = useState ({value: 1, label:""})
   const [years, setYears] = useState ({value: 2000, label:""}) 
   //console.log("data respon", formValues)
+=======
+  console.log("data respon", formValues)
+>>>>>>> master
 
   useEffect(async () => {
     let api = new Api()
@@ -72,7 +76,6 @@ const EmployeeForm = (props) => {
       try {
         let res = await api.get(endpoint + "/" + formId)
         let data = res.data
-       
         setFormValues({
           ...data,
           birth_date: [
@@ -82,7 +85,7 @@ const EmployeeForm = (props) => {
             },
             {
               value: parseInt(data.birth_date.substring(5, 7)),
-              label: monthNames[parseInt(data.birth_date.substring(5, 7)) - 1],
+              label: parseInt(data.birth_date.substring(5, 7)),
             },
             {
               value: parseInt(data.birth_date.substring(0, 4)),
@@ -148,7 +151,7 @@ const EmployeeForm = (props) => {
             },
             {
               value: parseInt(data.hire_date.substring(5, 7)),
-              label: monthNames[parseInt(data.hire_date.substring(5, 7))-1],
+              label: parseInt(data.hire_date.substring(5, 7)),
             },
             {
               value: parseInt(data.hire_date.substring(0, 4)),
@@ -223,16 +226,9 @@ const EmployeeForm = (props) => {
   }
 
   // Birthday
-  //Day
-  const dateObj = new Date();
-  const dayToday = dateObj.getUTCDate()  
-  const daysInMonth = (monthx, yearx) => {
-    return new Date(yearx, monthx, 0).getDate()+1;
-  } 
-  console.log("data", years.value)
-  const selectDay = () => {  
+  const selectDay = () => {
     const options = []
-    for (let i = 1; i < daysInMonth(months.value, years.value); i++) {
+    for (let i = 1; i < 32; i++) {
       options.push({
         value: i,
         label: i,
@@ -240,14 +236,14 @@ const EmployeeForm = (props) => {
     }
     return options
   }
-  //Month
-  const monthNames = ["January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December"
-  ]
-  const monthToday = monthNames[dateObj.getUTCMonth()]
   const selectMonth = () => {
-    const options = []    
-    monthNames.forEach((data, i) => {
+    const options = []
+    const month = Array.from({ length: 12 }, (e, i) => {
+      return new Date(null, i + 1, null).toLocaleDateString("en", {
+        month: "long",
+      })
+    })
+    month.forEach((data, i) => {
       options.push({
         value: i + 1,
         label: data,
@@ -255,8 +251,6 @@ const EmployeeForm = (props) => {
     })
     return options
   }
-  //Year
-  const yearToday = dateObj.getUTCFullYear()
   const selectYear = () => {
     const options = []
     const startYear = 1921
@@ -662,7 +656,11 @@ const EmployeeForm = (props) => {
                                               control="selectOnly"
                                               name="birth_date[0]"
                                               placeholder={
+<<<<<<< HEAD
                                                 dayToday
+=======
+                                                formik.values.day || "Date"
+>>>>>>> master
                                               }
                                               options={selectDay()}
                                               onChange={(v) => {
@@ -680,7 +678,11 @@ const EmployeeForm = (props) => {
                                               control="selectOnly"
                                               name="birth_date[1]"
                                               placeholder={
+<<<<<<< HEAD
                                                 monthToday
+=======
+                                                formik.values.month || "Month"
+>>>>>>> master
                                               }
                                               options={selectMonth()}
                                               onChange={(v) => {
@@ -688,7 +690,10 @@ const EmployeeForm = (props) => {
                                                   "birth_date[1]",
                                                   v,
                                                 )
+<<<<<<< HEAD
                                                 setMonths(v)
+=======
+>>>>>>> master
                                               }}
                                               style={{ minWidth: 110, maxWidth: 240 }}
                                               isDisabled={isView}
@@ -699,7 +704,11 @@ const EmployeeForm = (props) => {
                                               control="selectOnly"
                                               name="birth_date[2]"
                                               placeholder={
+<<<<<<< HEAD
                                                 yearToday
+=======
+                                                formik.values.year || "Year"
+>>>>>>> master
                                               }
                                               options={selectYear()}
                                               onChange={(v) => {
@@ -707,7 +716,10 @@ const EmployeeForm = (props) => {
                                                   "birth_date[2]",
                                                   v,
                                                 )
+<<<<<<< HEAD
                                                 setYears(v)
+=======
+>>>>>>> master
                                               }}
                                               style={{ maxWidth: 240 }}
                                               isDisabled={isView}
@@ -823,6 +835,35 @@ const EmployeeForm = (props) => {
                                     maxLength="512"
                                   />
                                   <FormikControl
+<<<<<<< HEAD
+=======
+                                    control="input"
+                                    label="Other Email"
+                                    name="contact.other_email"
+                                    style={{ maxWidth: 250 }}
+                                    disabled={isView}
+                                    maxLength="256"
+                                  />
+                                </div>
+                              </Col>
+                              <Col lg={1}></Col>
+                            </Row>
+                            <h3 className="card-heading">Current Address</h3>
+                            <Row>
+                              <Col lg={11}>
+                                <div style={{ padding: "0 15px 15px" }}>
+                                  <FormikControl
+                                    control="textarea"
+                                    label="Address"
+                                    name="address.address_line"
+                                    rows={3}
+                                    style={{ maxWidth: 416 }}
+                                    disabled={isView}
+                                    minLength="1"
+                                    maxLength="512"
+                                  />
+                                  <FormikControl
+>>>>>>> master
                                     control="selectAsync"
                                     required="label-required"
                                     label="Country"
