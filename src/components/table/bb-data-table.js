@@ -491,18 +491,51 @@ class BBDataTable extends Component {
           },
           {
             targets: [1, 2],
-            className: !this.state.isCheckbox ? "custom-col-width": "cstm-col-width",
+            className: !this.state.isCheckbox ? module == "employee" ? "" : "custom-col-width": "cstm-col-width",
           },
           //   {
           //     responsivePriority: 10001,
           //     targets: [1, 3],
           //   },
           {
-            ordeable: false,
+              // The `data` parameter refers to the data for the cell (defined by the
+              // `data` option, which defaults to the column being worked with, in
+              // this case `data: 0`.
+              "render": function ( data, type, row ) {
+                var datas = data;
+                if(module == 'employee'){
+                  datas = data +' '+ row.middle_name + ' ' + row.surname;
+                }
+                  return datas
+              },
+              "targets": module == 'employee' ? 3 : ''
+          },
+          {
+              // The `data` parameter refers to the data for the cell (defined by the
+              // `data` option, which defaults to the column being worked with, in
+              // this case `data: 0`.
+              "render": function ( data, type, row ) {
+                var datas = data;
+                if(module == 'employee'){
+                  let division = "";
+                  if(row.division.division_name){
+                    division = row.division.division_name
+                  }
+
+                  datas = data +' '+ division;
+                }
+                  return datas
+              },
+              "targets": module == 'employee' ? 7 : ''
+          },
+          { visible: false,  targets: module == 'employee' ? [ 4, 5, 8 ] : [] },
+          {
+            orderable: false,
             // className: "table-row-action",
             targets: [columns.length - 1],
             width: "20%",
           },
+          
         ],
         // select: {
         //   style: "multi",
