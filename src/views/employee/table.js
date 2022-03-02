@@ -174,40 +174,43 @@ export default function EmployeeTable() {
     deactivationEndpoint: "/master/batch-actions/deactivate/employee",
     columns: [
       {
-        title: "Employee ID",
-        data: { employee_number: "employee_number", employee_asset: "url" },
+        title: "",
+        data: "employee_asset.multimedia_description.url",
         render: (data) => {
-          if (data.employee_asset.multimedia_description === undefined) {
+          if (data === undefined) {
             return (
               `<img class="image-profile-tabel mr-2" src="https://bbdev.monstercode.net/files/b3986414-5c5f-45a3-be6f-4fedcce2d022.png"/>` +
-              " " +
-              data?.employee_number
+              " "
             )
           } else {
             return (
-              `<img class="image-profile-tabel mr-2" src="${data?.employee_asset?.multimedia_description?.url}"/>` +
-              " " +
-              data?.employee_number
+              `<img class="image-profile-tabel mr-2" src="${data}"/>` +
+              " " 
             )
           }
         },
+        sortable: false,
+        searchable: false
+      },
+      {
+        title: "Employee ID",
+        data: "employee_number"
       },
       {
         title: "Full Name",
-        data: {
-          given_name: "given_name",
-          middle_name: "middle_name",
-          surname: "surname",
-        },
-        render: (data) => {
-          if (data.given_name === undefined) {
-            return null
-          } else {
-            return (
-              data?.given_name + " " + data?.middle_name + " " + data?.surname
-            )
-          }
-        },
+        data: "given_name",
+      },
+      {
+        title: "",
+        data: "middle_name",
+        sortable: false,
+        searchable: false
+      },
+      {
+        title: "",
+        data: "surname",
+        sortable: false,
+        searchable: false
       },
       {
         title: "Email",
@@ -215,20 +218,13 @@ export default function EmployeeTable() {
       },
       {
         title: "Job Title",
-        data: { job_title: "job_title", division: "division" },
-        render: (data) => {
-          {
-            if (data?.division?.division_name === undefined) {
-              return data?.job_title?.job_title_name + "<br/> " + ""
-            } else {
-              return (
-                data?.job_title?.job_title_name +
-                "<br/> " +
-                data?.division?.division_name
-              )
-            }
-          }
-        },
+        data: "job_title.job_title_name",
+      },
+      {
+        title: "",
+        data: "division.division_name",
+        sortable: false,
+        searchable: false
       },
       {
         title: "Branch Office",

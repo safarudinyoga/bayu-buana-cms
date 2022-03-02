@@ -1078,7 +1078,11 @@ const EmployeeForm = (props) => {
                             marginTop: 30,
                             display: "flex",
                           }}
+<<<<<<< HEAD
                         >                          
+=======
+                        >
+>>>>>>> master
                           <Button
                               variant="primary"
                               onClick={() => setTabKey("emergency-contacts")}
