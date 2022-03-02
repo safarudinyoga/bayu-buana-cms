@@ -64,7 +64,8 @@ function Login() {
 	const onSubmit = async (values, a) => {
 		try {
 			let res = await api.post("/user/login", values)
-
+			await getMenu()
+			
 			let date = new Date();
 			date.setTime(date.getTime() + (res.data.expires_in));
 			Cookies.set('ut', res.data.access_token, {expires: date})
@@ -82,7 +83,23 @@ function Login() {
 				setAlert({
 				  message: e.response.data.message,
 				}),
-			  )
+			)
+		}
+	}
+
+	const getMenu = async() => {
+		try {
+			let {data} = await api.get('/master/menu-links?size=999')
+			let parentMenu = data.items.filter(m => !m.parent_link_id)
+			let menu = parentMenu.map(pm => {
+				pm.submenu = data.items.filter(m => m.parent_link_id === pm.id)
+				return pm
+			})
+			let stringifyMenu = JSON.stringify(menu)
+			localStorage.setItem('menu', stringifyMenu)
+		} catch(e) {
+			console.log(e)
+			throw e
 		}
 	}
 
