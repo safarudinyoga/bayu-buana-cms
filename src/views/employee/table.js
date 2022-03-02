@@ -32,7 +32,6 @@ export default function EmployeeTable() {
   let [selectedDivisionIds, setSelectedDivisionIds] = useState([])
   let [selectedOffice, setSelectedOffice] = useState([])
   let [selectedOfficeIds, setSelectedOfficeIds] = useState([])
- 
 
   const onFilterChangeJobTitle = (e, values) => {
     let ids = []
@@ -198,7 +197,7 @@ export default function EmployeeTable() {
         data: {
           given_name: "given_name",
           middle_name: "middle_name",
-          surname: "surName",
+          surname: "surname",
         },
         render: (data) => {
           if (data.given_name === undefined) {
@@ -219,12 +218,8 @@ export default function EmployeeTable() {
         data: { job_title: "job_title", division: "division" },
         render: (data) => {
           {
-            if (data?.division?.division_name === undefined ) {
-              return (
-                data?.job_title?.job_title_name +
-                "<br/> " +
-                ""
-              )                         
+            if (data?.division?.division_name === undefined) {
+              return data?.job_title?.job_title_name + "<br/> " + ""
             } else {
               return (
                 data?.job_title?.job_title_name +
@@ -256,20 +251,26 @@ export default function EmployeeTable() {
         render: rowStatus,
       },
     ],
-    module: "employees",
+    module: "employee",
     btnDownload: ".buttons-csv",
     emptyTable: "No employees found",
-    recordName: ["employee_number", "person.given_name"],
+    recordName: ["employee_number", "given_name",],
+    showInfoDelete: true,
     switchStatus: true,
+    infoDelete: [
+      { title: "Employee Number", recordName: "employee_number" },
+      { title: "Employee Name", recordName: "given_name" },
+    ],
     customFilterStatus: {
       value: "",
       options: [
-        {value: "1", label: "Active"},
-        {value: "3", label: "Inactive"},
-      ]
+        { value: "1", label: "Active" },
+        { value: "3", label: "Inactive" },
+      ],
     },
-    statusLabel: "Status"
+    statusLabel: "Status",
   })
+  console.log("dataDelete,", params)
 
   return <BBDataTable {...params} extraFilter={extraFilter} onReset={onReset} />
 }

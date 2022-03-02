@@ -2,6 +2,7 @@ import React, { useEffect } from "react"
 import BBDataTable from "components/table/bb-data-table"
 import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
+import Form from "./form"
 
 export default function ExchageRateTable() {
   let dispatch = useDispatch()
@@ -18,9 +19,15 @@ export default function ExchageRateTable() {
     )
   }, [])
 
+
+  // const Form = () => {
+  //   return <h1>Halo</h1>
+  // }
+
   let params = {
     isCheckbox: false,
     showAdvancedOptions: false,
+    createOnModal: true,
     title: "Exchange Rates",
     titleModal: "Exchange Rate",
     baseRoute: "/master/exchange-rate/form",
@@ -31,7 +38,7 @@ export default function ExchageRateTable() {
     columns: [
       {
         title: "From Currency",
-        data: "from_currency.currency_code",
+        data: "currency.currency_code",
       },
       {
         title: "To Currency",
@@ -45,5 +52,5 @@ export default function ExchageRateTable() {
     emptyTable: "No exchange rate found",
     recordName: ["from_currency.currency_code", "to_currency.currency_code"],
   }
-  return <BBDataTable {...params} />
+  return <BBDataTable {...params} modalContent={Form} />
 }

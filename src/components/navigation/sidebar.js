@@ -270,7 +270,7 @@ export default class Sidebar extends Component {
                   </li>
                 </ul>
               </li>
-              {/* <li className="nav-item">
+              <li className="nav-item">
                 <Link to="#" className="nav-link">
                   <img src="/img/icons/users.svg" alt="icon users" />
                   <p>
@@ -285,7 +285,7 @@ export default class Sidebar extends Component {
                     </Link>
                   </li>
                 </ul>
-              </li> */}
+              </li>
               <li className="nav-item">
                 <Link to="#" className="nav-link">
                   <img src="/img/icons/ic_settings.svg" alt="icon users" />
