@@ -1069,19 +1069,6 @@ const EmployeeForm = (props) => {
                           }}
                         >
                           <Button
-                            variant="primary"
-                            onClick={() => setTabKey("emergency-contacts")}
-                            disabled={formik.isSubmitting}
-                            style={{ marginRight: 15 }}
-                          >
-                            {props.match.params.id ? "SAVE" : "SAVE & NEXT"}
-                          </Button>
-                          <Button
-                            variant="secondary"
-                            onClick={() => history.goBack()}
-                          >
-                          </Button>
-                          <Button
                               variant="primary"
                               onClick={() => setTabKey("emergency-contacts")}
                               disabled={formik.isSubmitting}
