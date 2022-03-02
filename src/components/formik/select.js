@@ -16,7 +16,8 @@ function select(props) {
           {({ field, form, meta }) => (
             <div style={style}>
               <Select
-                {...field}                
+                {...field}
+                {...rest}                
                 options={options}                              
                 onChange={onChange}                
                 placeholder={placeholder || ""}

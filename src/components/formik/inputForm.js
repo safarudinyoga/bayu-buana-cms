@@ -12,6 +12,7 @@ function inputForm(props) {
     maxLength,
     minLength,
     required,
+    size,
     ...rest
   } = props
   const objectName = name.split(".")
@@ -25,11 +26,12 @@ function inputForm(props) {
           </label>
         </Col>
         <Col md={9} lg={8}>
-          <Field id={name} name={name} {...rest}  >
+          <Field id={name} name={name} {...rest}>
             {({ field, form, meta }) => (
               <div>
                 <input
                   {...field}
+                  {...rest}
                   type={type || "text"}                  
                   style={style}
                   minLength={minLength}
@@ -57,18 +59,19 @@ function inputForm(props) {
   }
   return (
     <Row className="form-group required">
-      <Col md={3} lg={4}>
+      <Col md={size?.label?.md || 3} lg={size?.label?.lg || 4}>
         <label className="text-label-input" htmlFor={name}>
           {label}
           <span className={required || ""} />
         </label>
       </Col>
-      <Col md={9} lg={8}>
+      <Col  md={size?.value?.md || 9} lg={size?.value?.lg || 8}>
         <Field id={name} name={name}  {...rest}>
           {({ field, form, meta }) => (
             <div>
               <input
                 {...field}
+                {...rest}
                 type={type || "text"}               
                 style={style}
                 minLength={minLength}

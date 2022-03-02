@@ -25,6 +25,7 @@ export default function OfficeTable() {
   let [params, setParams] = useState({
     isCheckbox: false,
     showAdvancedOptions: false,
+    responsiveTablet: true,
     title: "Branch Offices",
     titleModal: "Company/ Branch Office",
     baseRoute: "/master/branch-offices/form",
@@ -63,6 +64,7 @@ export default function OfficeTable() {
     infoDelete: [
       {title: "Company/ Branch Office Name", recordName: "office_name"}, 
     ],
+    isOpenNewTab: false
   })
 
   

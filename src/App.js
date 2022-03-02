@@ -54,6 +54,7 @@ import HotelBrandForm from "views/hotel_brand/form"
 import HotelBrandTable from "views/hotel_brand/table"
 import HotelSupplierForm from "views/hotel_supplier/form"
 import HotelSupplierTable from "views/hotel_supplier/table"
+import GeneralSetup from "views/general-setup"
 import LanguageForm from "views/language/form"
 import LanguageTable from "views/language/table"
 import LocationCategoryForm from "views/location_category/form"
@@ -107,7 +108,7 @@ import RatingTypeLevelForm from "./views/rating_type_level/form"
 import InvoiceEmailSetupTable from "views/invoice_email_setup/table"
 import InvoiceEmailSetupForm from "views/invoice_email_setup/form"
 
-// Master Standadard Markup
+// Master Standard Markup
 import StandardMarkupTable from "views/standard_markup/standard_markup"
 import StandardMarkupFlightForm from "views/standard_markup/form/flight_form"
 import StandardMarkupHotelForm from "views/standard_markup/form/hotel_form"
@@ -119,6 +120,7 @@ import FlightCommisionForm from "views/setup_flight_commision/form"
 // Master Exchange Rate
 import ExchageRateTable from "views/exchange_rate/table"
 import ExchangeRateForm from "views/exchange_rate/form"
+import ExchangeRateHistory from "views/exchange_rate/history"
 // Master Integration Partner
 import IntegrationPartnerTable from "views/integration_partner/table"
 
@@ -534,6 +536,9 @@ const DashboardRoutes = () => {
         <Route exact path="/master/exchange-rate/form/:id?">
           <ExchangeRateForm />
         </Route>
+        <Route exact path="/master/exchange-rate/history/:id?">
+          <ExchangeRateHistory />
+        </Route>
 
         {/* Master Manage Corporate */}
         <Route exact path="/master/corporate">
@@ -546,6 +551,12 @@ const DashboardRoutes = () => {
         <Route exact path="/profile">
           <UserProfile />
         </Route>
+
+        {/* Master General Setup*/}
+        <Route exact path="/master/general-setup">
+          <GeneralSetup />
+        </Route>
+
 
         {/* User Access Type */}
         <Route exact path="/master/user-access-type">

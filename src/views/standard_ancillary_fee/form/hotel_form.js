@@ -138,11 +138,11 @@ const HotelForm = (props) => {
                   </Form.Group>
                   
                   <FeeTabs
-                    // menu={[
-                    //   {title: "Domestic", sections: ["Modify Hotel Fee", "Hotel Refund Fee", "Non-GDS Hotel Booking Process Fee"]},
-                    //   {title: "International", sections: ["Modify Hotel Fee", "Hotel Refund Fee", "Non-GDS Hotel Booking Process Fee"]},
-                    //   {title: "Other", sections: ["Modify Hotel Fee", "Hotel Refund Fee", "Non-GDS Hotel Booking Process Fee"]},
-                    // ]}
+                    menu={[
+                      {title: "Domestic", sections: ["Modify Hotel Fee", "Hotel Refund Fee", "Non-GDS Hotel Booking Process Fee"]},
+                      {title: "International", sections: ["Modify Hotel Fee", "Hotel Refund Fee", "Non-GDS Hotel Booking Process Fee"]},
+                      {title: "Other", sections: ["Emergency Service Assistance 24 Hours Surcharge - Issued Only"]},
+                    ]}
                   />
 
                 </div>

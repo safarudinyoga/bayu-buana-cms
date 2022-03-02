@@ -23,6 +23,10 @@
   background-color: transparent;
 }
 
+.cursor-pointer {
+  cursor: pointer;
+}
+
 .navbar-img {
   width: 160px;
   display: inline-block;

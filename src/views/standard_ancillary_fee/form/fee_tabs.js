@@ -88,9 +88,8 @@ const Fees = (props) => {
   )
 }
 
-export const FeeTabs = () => {
-    const [key, setKey] = useState("flight")
-  
+export const FeeTabs = (props) => {
+    const [key, setKey] = useState(props.menu[0].title)
     return (
       <div className="card">
   
@@ -103,27 +102,18 @@ export const FeeTabs = () => {
           unmountOnExit={true}
           className=""
         >
-          <TabPane
-            className="m-3"
-            eventKey="flight"
-            title={<span className="ml-md-2 tabs-text fee-tabs-title">Domestic</span>}
-          >
-            <Fees sections={["Modify Hotel Fee", "Hotel Refund Fee", "Non-GDS Hotel Booking Process Fee"]} />
-          </TabPane>
-          <TabPane
-            className="m-3"
-            eventKey="hotel"
-            title={<span className="ml-md-2 tabs-text fee-tabs-title">Hotel</span>}
-          >
-            <Fees sections={["Modify Hotel Fee", "Hotel Refund Fee", "Non-GDS Hotel Booking Process Fee"]} />
-          </TabPane>
-          <TabPane
-            className="m-3"
-            eventKey="other"
-            title={<span className="ml-md-2 tabs-text fee-tabs-title">Other</span>}
-          >
-            <Fees sections={["Emergency Service Assistance 24 Hours Surcharge - Issued Only"]} />
-          </TabPane>
+        {
+            props.menu.map((menu, i) => (
+              <TabPane
+                key={i}
+                className="m-3"
+                eventKey={menu.title}
+                title={<span className="ml-md-2 tabs-text fee-tabs-title">{menu.title}</span>}
+              >
+                <Fees sections={menu.sections} />
+              </TabPane>
+            ))
+          }
         </Tabs>
       </div>
     )
