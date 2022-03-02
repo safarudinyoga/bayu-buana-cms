@@ -605,6 +605,10 @@ class BBDataTable extends Component {
               .join("_")
           }
 
+          if(module == "frequent_traveler_program"){
+            module = "loyalty_programs"
+          }
+
           let rowID = edit.triggerRow.data().id
           let rowPositionDiff = diff.findIndex(
             (v) => dt.row(v.node).data().id === rowID,
