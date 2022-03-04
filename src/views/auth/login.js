@@ -10,6 +10,7 @@ import Cookies from 'js-cookie'
 import { useDispatch } from "react-redux"
 import { setAlert } from "redux/ui-store"
 import {encrypt, decrypt} from "lib/bb-crypt"
+import getMenu from '../../config/menu';
 
 function Login() {
 	const dispatch = useDispatch()
@@ -89,22 +90,6 @@ function Login() {
 				  message: e.response.data.message,
 				}),
 			)
-		}
-	}
-
-	const getMenu = async() => {
-		try {
-			let {data} = await api.get('/master/menu-links?size=999')
-			let parentMenu = data.items.filter(m => !m.parent_link_id)
-			let menu = parentMenu.map(pm => {
-				pm.submenu = data.items.filter(m => m.parent_link_id === pm.id)
-				return pm
-			})
-			let stringifyMenu = JSON.stringify(menu)
-			localStorage.setItem('menu', stringifyMenu)
-		} catch(e) {
-			console.log(e)
-			throw e
 		}
 	}
 
