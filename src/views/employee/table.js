@@ -107,7 +107,7 @@ export default function EmployeeTable() {
           onChange={onFilterChangeJobTitle}
           endpoint="/master/employees"
           column="job_title.job_title_name"
-          sort="job_title.id"
+          sort="job_title.job_title_name"
           isGrouping={true}
           fieldGroup="job_title.id"
           value={selectedJobTitleIds}
@@ -123,7 +123,7 @@ export default function EmployeeTable() {
           onChange={onFilterChangeDivision}
           endpoint="/master/employees"
           column="division.division_name"
-          sort="division.id"
+          sort="division.division_name"
           isGrouping={true}
           fieldGroup="division.id"
           value={selectedDivisionIds}
@@ -139,7 +139,7 @@ export default function EmployeeTable() {
           onChange={onFilterChangeOffice}
           endpoint="/master/employees"
           column="office.office_name"
-          sort="office.id"
+          sort="office.office_name"
           isGrouping={true}
           fieldGroup="office.id"
           value={selectedOfficeIds}
