@@ -35,13 +35,7 @@ const EmployeeForm = (props) => {
   const [formValues, setFormValues] = useState(null)
   const [optionGender, setOptionGender] = useState([])
   const [additionalRole, setAdditionalRole] = useState(false)
-<<<<<<< HEAD
-  const [months, setMonths] = useState ({value: 1, label:""})
-  const [years, setYears] = useState ({value: 2000, label:""}) 
-  //console.log("data respon", formValues)
-=======
   console.log("data respon", formValues)
->>>>>>> master
 
   useEffect(async () => {
     let api = new Api()
@@ -656,11 +650,7 @@ const EmployeeForm = (props) => {
                                               control="selectOnly"
                                               name="birth_date[0]"
                                               placeholder={
-<<<<<<< HEAD
-                                                dayToday
-=======
                                                 formik.values.day || "Date"
->>>>>>> master
                                               }
                                               options={selectDay()}
                                               onChange={(v) => {
@@ -678,11 +668,7 @@ const EmployeeForm = (props) => {
                                               control="selectOnly"
                                               name="birth_date[1]"
                                               placeholder={
-<<<<<<< HEAD
-                                                monthToday
-=======
                                                 formik.values.month || "Month"
->>>>>>> master
                                               }
                                               options={selectMonth()}
                                               onChange={(v) => {
@@ -690,10 +676,6 @@ const EmployeeForm = (props) => {
                                                   "birth_date[1]",
                                                   v,
                                                 )
-<<<<<<< HEAD
-                                                setMonths(v)
-=======
->>>>>>> master
                                               }}
                                               style={{ minWidth: 110, maxWidth: 240 }}
                                               isDisabled={isView}
@@ -704,11 +686,7 @@ const EmployeeForm = (props) => {
                                               control="selectOnly"
                                               name="birth_date[2]"
                                               placeholder={
-<<<<<<< HEAD
-                                                yearToday
-=======
                                                 formik.values.year || "Year"
->>>>>>> master
                                               }
                                               options={selectYear()}
                                               onChange={(v) => {
@@ -716,10 +694,6 @@ const EmployeeForm = (props) => {
                                                   "birth_date[2]",
                                                   v,
                                                 )
-<<<<<<< HEAD
-                                                setYears(v)
-=======
->>>>>>> master
                                               }}
                                               style={{ maxWidth: 240 }}
                                               isDisabled={isView}
@@ -819,24 +793,40 @@ const EmployeeForm = (props) => {
                                 </Col>
                                 <Col lg={1}></Col>
                               </Row>
-                            
-                            <h3 className="card-heading">Current Address</h3>
+                            <h3 className="card-heading">Contacts</h3>
                             <Row>
                               <Col lg={11}>
                                 <div style={{ padding: "0 15px 15px" }}>
                                   <FormikControl
-                                    control="textarea"
-                                    label="Address"
-                                    name="address.address_line"
-                                    rows={3}
-                                    style={{ maxWidth: 416 }}
+                                    control="input"
+                                    required="label-required"
+                                    label="Home Phone"
+                                    name="contact.phone_number"
+                                    style={{ maxWidth: 200 }}
                                     disabled={isView}
                                     minLength="1"
-                                    maxLength="512"
+                                    maxLength="32"
                                   />
                                   <FormikControl
-<<<<<<< HEAD
-=======
+                                    control="input"
+                                    required="label-required"
+                                    label="Mobile Phone"
+                                    name="contact.mobile_phone_number"
+                                    style={{ maxWidth: 200 }}
+                                    disabled={isView}
+                                    minLength="1"
+                                    maxLength="32"
+                                  />
+                                  <FormikControl
+                                    control="input"
+                                    required="label-required"
+                                    label="Email"
+                                    name="contact.email"
+                                    style={{ maxWidth: 250 }}
+                                    disabled={isView}
+                                    maxLength="256"
+                                  />
+                                  <FormikControl
                                     control="input"
                                     label="Other Email"
                                     name="contact.other_email"
@@ -863,7 +853,6 @@ const EmployeeForm = (props) => {
                                     maxLength="512"
                                   />
                                   <FormikControl
->>>>>>> master
                                     control="selectAsync"
                                     required="label-required"
                                     label="Country"
@@ -1078,11 +1067,7 @@ const EmployeeForm = (props) => {
                             marginTop: 30,
                             display: "flex",
                           }}
-<<<<<<< HEAD
-                        >                          
-=======
                         >
->>>>>>> master
                           <Button
                               variant="primary"
                               onClick={() => setTabKey("emergency-contacts")}
@@ -1182,7 +1167,20 @@ const EmployeeForm = (props) => {
                             marginTop: 30,
                             display: "flex",
                           }}
-                        >                          
+                        >
+                          <Button
+                            variant="primary"
+                            onClick={() => setTabKey("employment")}
+                            disabled={formik.isValid}
+                            style={{ marginRight: 15 }}
+                          >
+                            {props.match.params.id ? "SAVE" : "SAVE & NEXT"}
+                          </Button>
+                          <Button
+                            variant="secondary"
+                            onClick={() => history.goBack()}
+                          >
+                            </Button>
                             <Button
                               variant="primary"
                               onClick={() => setTabKey("employment")}
@@ -1278,7 +1276,7 @@ const EmployeeForm = (props) => {
                                                 )
                                               }}
                                               options={selectDay()}
-                                              placeholder={dayToday}
+                                              placeholder={"Date"}
                                               style={{ maxWidth: 240 }}
                                               isDisabled={isView}
                                             />
@@ -1287,14 +1285,13 @@ const EmployeeForm = (props) => {
                                             <FormikControl
                                               control="selectOnly"
                                               name="hire_date[1]"
-                                              placeholder={monthToday}
+                                              placeholder={"Month"}
                                               options={selectMonth()}
                                               onChange={(v) => {
                                                 formik.setFieldValue(
                                                   "hire_date[1]",
                                                   v,
                                                 )
-                                                setMonths(v)
                                               }}
                                               style={{ minWidth: 120, maxWidth: 240 }}
                                               isDisabled={isView}
@@ -1304,14 +1301,13 @@ const EmployeeForm = (props) => {
                                             <FormikControl
                                               control="selectOnly"
                                               name="hire_date[2]"
-                                              placeholder={yearToday}
+                                              placeholder={"Year"}
                                               options={selectYear()}
                                               onChange={(v) => {
                                                 formik.setFieldValue(
                                                   "hire_date[2]",
                                                   v,
                                                 )
-                                                setYears(v)
                                               }}
                                               style={{ maxWidth: 240 }}
                                               isDisabled={isView}
