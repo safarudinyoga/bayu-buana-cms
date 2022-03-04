@@ -30,6 +30,7 @@ const SecuritySettings = (props) => {
     label,
     name,
     type="password",
+    maxLength=256,
     placeholder="",
     endIcon,
   }) => (
@@ -46,6 +47,7 @@ const SecuritySettings = (props) => {
                   isInvalid={
                     form.touched[name] && form.errors[name]
                   }
+                  maxLength={maxLength}
                   {...field}
                 />
                 {

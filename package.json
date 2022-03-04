@@ -55,6 +55,7 @@
     "react-sortable-tree": "^2.8.0",
     "react-svg": "^14.1.1",
     "react-switch": "^6.0.0",
+    "rooks": "^5.1.0",
     "select2": "^4.0",
     "throttle-debounce": "^3.0.1",
     "use-debounce": "^7.0.1",
