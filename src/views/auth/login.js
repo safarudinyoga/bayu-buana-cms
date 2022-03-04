@@ -9,6 +9,7 @@ import Api from "config/api"
 import Cookies from 'js-cookie'
 import { useDispatch } from "react-redux"
 import { setAlert } from "redux/ui-store"
+import {encrypt, decrypt} from "lib/bb-crypt"
 
 function Login() {
 	const dispatch = useDispatch()
@@ -17,15 +18,17 @@ function Login() {
 	const [ rememberMe, setRememberMe] = useState(false)
 
 	const api = new Api()
-	let cookie_rm = Cookies.get("remember_acc");
+	let cookie_rm = Cookies.get("persist_code");
 	let form = {
 		username: "",
 		password: "",
 	}
 	if(cookie_rm) {
+		let acc = decrypt(cookie_rm)
+		acc = JSON.parse(acc)
 		form = {
-			username: JSON.parse(cookie_rm).username,
-			password: JSON.parse(cookie_rm).password,
+			username: acc.username,
+			password: acc.password,
 		}
 	}
 	const [initialForm, setForm] = useState(form)
@@ -71,11 +74,13 @@ function Login() {
 			Cookies.set('ut', res.data.access_token, {expires: date})
 
 			if (rememberMe) {
-				Cookies.set('remember_acc', JSON.stringify(values))
+				let acc = JSON.stringify(values)
+				acc = encrypt(acc)
+				Cookies.set('persist_code', acc)
 				Cookies.set('rt', res.data.refresh_token)
 			} else {
-				let rememberCookie = Cookies.get('remember_acc')
-				if(rememberCookie) Cookies.remove('remember_acc')
+				let rememberCookie = Cookies.get('persist_code')
+				if(rememberCookie) Cookies.remove('persist_code')
 			}
 			window.location.reload()
 		} catch(e) {
