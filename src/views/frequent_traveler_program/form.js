@@ -110,13 +110,14 @@ function FrequentTravelerProgramForm(props) {
               $.ajax({
                 type: "GET",
                 async: false,
-                url: `${env.API_URL}/master/loyalty-programs?filters=["loyalty_program_name","=","${element.value}"]`,
+                url: `${env.API_URL}/master/loyalty-programs?filters=["loyalty_program_name","like","${element.value}"]`,
                 success: function (res) {
                   if (res.items.length !== 0) {
-                    if(currentName === element.value){
+                    if(currentName.toUpperCase() === element.value.toUpperCase()){
                       req = true
                     } else {
-                      req = false
+                      let checkVal = res.items.find( e => e.loyalty_program_name.toUpperCase() === element.value.toUpperCase())
+                      req = !checkVal
                     }
                   } else {
                     req = true
@@ -146,10 +147,11 @@ function FrequentTravelerProgramForm(props) {
           $.ajax({
             type: "GET",
             async: false,
-            url: `${env.API_URL}/master/loyalty-programs?filters=["loyalty_program_name","=","${element.value}"]`,
+            url: `${env.API_URL}/master/loyalty-programs?filters=["loyalty_program_name","like","${element.value}"]`,
             success: function (res) {
               if (res.items.length !== 0) {
-                req = false
+                let checkVal = res.items.find( e => e.loyalty_program_name.toUpperCase() === element.value.toUpperCase())
+                req = !checkVal
               } else {
                 req = true
               }
