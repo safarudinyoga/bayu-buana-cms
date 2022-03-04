@@ -255,7 +255,7 @@ export default function EmployeeTable() {
     switchStatus: true,
     infoDelete: [
       { title: "Employee Number", recordName: "employee_number" },
-      { title: "Employee Name", recordName: "given_name" },
+      { title: "Employee Name", recordName: ["given_name", "middle_name", "surname"] },
     ],
     customFilterStatus: {
       value: "",
