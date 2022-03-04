@@ -30,6 +30,7 @@ const SecuritySettings = (props) => {
     label,
     name,
     type="password",
+    maxLength=256,
     placeholder="",
     endIcon,
   }) => (
@@ -46,6 +47,7 @@ const SecuritySettings = (props) => {
                   isInvalid={
                     form.touched[name] && form.errors[name]
                   }
+                  maxLength={maxLength}
                   {...field}
                 />
                 {
@@ -154,12 +156,12 @@ const SecuritySettings = (props) => {
                 </div>
               </Card.Body>
             </Card>
-            <div style={{ marginBottom: 30, marginTop: 30, display: "flex" }}>
+            <div className="mb-5 ml-1 row justify-content-md-start justify-content-center">
               <Button
                 variant="primary"
                 type="submit"
                 disabled={!dirty || !isValid}
-                style={{ marginRight: 15 }}
+                style={{ marginRight: 15, width: '80px'  }}
               >
                 SAVE
               </Button>

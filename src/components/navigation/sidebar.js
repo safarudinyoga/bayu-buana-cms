@@ -1,12 +1,10 @@
-import BriefCaseIcon from "assets/icons/briefcase.svg"
-import HomeIcon from "assets/icons/home.svg"
 import React, { Component } from "react"
 import { Link } from "react-router-dom"
 import { connect } from "react-redux"
 import "./sidebar.scss"
+import getMenu from '../../config/menu';
 
 const SubMenu = ({menu}) => {
-  console.log(menu)
   return (
     <li className="nav-item">
       <Link
@@ -44,8 +42,24 @@ const ParentMenu = ({menu}) => {
 }
 class Sidebar extends Component {
 
-  render() {
+  state = {
+    menu : []
+  }
+
+  async componentDidMount () {
     let menu = JSON.parse(localStorage.getItem('menu'))
+    if(menu && menu.length > 0) {
+      this.setState({menu})
+    } else {
+      try {
+        let menu = await getMenu()
+        this.setState({menu})
+      } catch (e) {console.log(e)}
+    }
+  }
+
+  render() {
+    const { menu } = this.state
     return (
       <aside className="main-sidebar sidebar-dark-primary elevation-4">
         <div className="sidebar">

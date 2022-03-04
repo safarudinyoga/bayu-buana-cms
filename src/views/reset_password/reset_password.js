@@ -42,13 +42,13 @@ function ResetPassword(props) {
 			.required("New password is required.")
 			.min(8, "New password is too short - should be 8 chars minimum.")
 			.max(256, "New password is too long - should be 256 chars maximun.")
-			// .matches(/^(?=.*\d)(?=.*([a-z]|[A-Z]))([\x20-\x7E]){8,}$/, "Password must be contain letters, numbers, and symbols")
+			.matches(/^(?=.*\d)(?=.*([a-z]|[A-Z]))([\x20-\x7E]){8,}$/, "Password must be contain letters, numbers, and symbols")
 			.matchPassword('confirm_password', 'New password and confirm password does not match.'),
 		confirm_password: Yup.string()
 			.required("Confirm password is required.")
 			.min(8, "Confirm password is too short - should be 8 chars minimum.")
 			.max(256, "Confirm password is too long - should be 256 chars maximun.")
-			// .matches(/^(?=.*\d)(?=.*([a-z]|[A-Z]))([\x20-\x7E]){8,}$/, "Password must be contain letters, numbers, and symbols")
+			.matches(/^(?=.*\d)(?=.*([a-z]|[A-Z]))([\x20-\x7E]){8,}$/, "Password must be contain letters, numbers, and symbols")
 			.matchPassword('new_password', 'New password and confirm password does not match.'),
 	})
 

@@ -38,7 +38,7 @@ const AuthWrapper = (props) => {
 					<div className="card-form-footer position-absolute pb-4">
 						<img src="/img/logo.png" className="bb-logo d-none d-md-block" alt="logo"/>
 						<img src="/img/logo_w.png" className="bb-logo d-md-none" alt="logo"/>
-						&copy; 2021 - {new Date().getFullYear()} Bayu Buana Travel Services. All Rights Reserved.
+						<p>&copy; 2021 - {new Date().getFullYear()} Bayu Buana Travel Services. All Rights Reserved.</p>
 					</div>
 				</div>
 			</div>
