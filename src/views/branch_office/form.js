@@ -394,17 +394,26 @@ function OfficeForm(props) {
     >
       <div className="col-lg-12">
         <FormHorizontal>
-          <FormInputControl
-            label="Company/ Branch Name"
+          <FormInputWrapper
+            label={"Company/ Branch Name"}
             required={true}
-            value={form.office_name}
-            name="office_name"
-            onChange={(e) => setForm({...form, office_name: e.target.value})}
-            disabled={isView || loading}
-            type="text"
-            minLength="1"
-            maxLength="256"
-          />
+          >
+            <Row>
+              <Col md={9}>
+                <FormInput
+                  required={true}
+                  value={form.office_name}
+                  name="office_name"
+                  onChange={(e) => setForm({...form, office_name: e.target.value})}
+                  disabled={isView || loading}
+                  type="text"
+                  minLength="1"
+                  maxLength="256"
+                />
+              </Col>
+            </Row>
+          </FormInputWrapper>
+
           <FormInputControl
             label={"Address"}
             value={form.address_line}
@@ -508,65 +517,93 @@ function OfficeForm(props) {
             required={false}
           >
             <Row>
-              <Col xs={6}>
-                <FormInput
-                  placeholder={"Latitude"}
-                  value={form.latitude}
-                  name="latitude"
-                  onChange={(e) => setForm({...form, latitude: e.target.value})}
-                  disabled={isView || loading}
-                  type="text"
-                  minLength="1"
-                  maxLength="16"
-                />
+              <Col md={6}>
+                <Row>
+                  <Col xs={6}>
+                    <FormInput
+                      placeholder={"Latitude"}
+                      value={form.latitude}
+                      name="latitude"
+                      onChange={(e) => setForm({...form, latitude: e.target.value})}
+                      disabled={isView || loading}
+                      type="text"
+                      minLength="1"
+                      maxLength="16"
+                    />
+                  </Col>
+                  <Col xs={6}>
+                    <FormInput 
+                      placeholder={"Longitude"}
+                      value={form.longitude}
+                      name="longitude"
+                      onChange={(e) => setForm({...form, longitude: e.target.value})}
+                      disabled={isView || loading}
+                      type="text"
+                      minLength="1"
+                      maxLength="16"
+                    />
+                  </Col>
+                </Row>
               </Col>
-              <Col xs={6}>
-                <FormInput 
-                  placeholder={"Longitude"}
-                  value={form.longitude}
-                  name="longitude"
-                  onChange={(e) => setForm({...form, longitude: e.target.value})}
+            </Row>
+          </FormInputWrapper>
+
+          <FormInputWrapper
+            label={formId ? "Phone" : "Phone Number"}
+            required={false}
+          >
+            <Row>
+              <Col md={6}>
+                <FormInput
+                  value={form.phone_number}
+                  name="phone_number"
+                  onChange={(e) => setForm({...form, phone_number: e.target.value})}
                   disabled={isView || loading}
                   type="text"
                   minLength="1"
-                  maxLength="16"
+                  maxLength="32"
                 />
               </Col>
             </Row>
           </FormInputWrapper>
 
-          <FormInputControl
-            label={formId ? "Phone" : "Phone Number"}
-            value={form.phone_number}
-            name="phone_number"
-            onChange={(e) => setForm({...form, phone_number: e.target.value})}
-            disabled={isView || loading}
-            type="text"
-            minLength="1"
-            maxLength="32"
-          />
-
-          <FormInputControl
+          <FormInputWrapper
             label={"Fax"}
-            value={form.fax_number}
-            name="fax_number"
-            onChange={(e) => setForm({...form, fax_number: e.target.value})}
-            disabled={isView || loading}
-            type="text"
-            minLength="1"
-            maxLength="32"
-          />
+            required={false}
+          >
+            <Row>
+              <Col md={6}>
+                <FormInput
+                  value={form.fax_number}
+                  name="fax_number"
+                  onChange={(e) => setForm({...form, fax_number: e.target.value})}
+                  disabled={isView || loading}
+                  type="text"
+                  minLength="1"
+                  maxLength="32"
+                />
+              </Col>
+            </Row>
+          </FormInputWrapper>
 
-          <FormInputControl
+          <FormInputWrapper
             label={"Email"}
-            value={form.email}
-            name="email"
-            onChange={(e) => setForm({...form, email: e.target.value})}
-            disabled={isView || loading}
-            type="text"
-            minLength="1"
-            maxLength="256"
-          />
+            required={true}
+          >
+            <Row>
+              <Col md={9}>
+                <FormInput
+                  value={form.email}
+                  name="email"
+                  onChange={(e) => setForm({...form, email: e.target.value})}
+                  disabled={isView || loading}
+                  type="text"
+                  minLength="1"
+                  maxLength="256"
+                />
+              </Col>
+            </Row>
+          </FormInputWrapper>
 
           <FormInputControl
             value={form.operation_hours}
