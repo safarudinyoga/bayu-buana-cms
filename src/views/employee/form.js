@@ -35,6 +35,8 @@ const EmployeeForm = (props) => {
   const [formValues, setFormValues] = useState(null)
   const [optionGender, setOptionGender] = useState([])
   const [additionalRole, setAdditionalRole] = useState(false)
+  const [months, setMonths] = useState ({value: 1, label:""})
+  const [years, setYears] = useState ({value: 2000, label:""}) 
   console.log("data respon", formValues)
 
   useEffect(async () => {
@@ -79,7 +81,7 @@ const EmployeeForm = (props) => {
             },
             {
               value: parseInt(data.birth_date.substring(5, 7)),
-              label: parseInt(data.birth_date.substring(5, 7)),
+              label: monthNames[parseInt(data.birth_date.substring(5, 7)) - 1],
             },
             {
               value: parseInt(data.birth_date.substring(0, 4)),
@@ -145,7 +147,7 @@ const EmployeeForm = (props) => {
             },
             {
               value: parseInt(data.hire_date.substring(5, 7)),
-              label: parseInt(data.hire_date.substring(5, 7)),
+              label: monthNames[parseInt(data.birth_date.substring(5, 7)) - 1],
             },
             {
               value: parseInt(data.hire_date.substring(0, 4)),
@@ -220,9 +222,16 @@ const EmployeeForm = (props) => {
   }
 
   // Birthday
-  const selectDay = () => {
+  //Day
+  const dateObj = new Date();
+  const dayToday = dateObj.getUTCDate()  
+  const daysInMonth = (monthx, yearx) => {
+    return new Date(yearx, monthx, 0).getDate()+1;
+  } 
+  console.log("data", years.value)
+  const selectDay = () => {  
     const options = []
-    for (let i = 1; i < 32; i++) {
+    for (let i = 1; i < daysInMonth(months.value, years.value); i++) {
       options.push({
         value: i,
         label: i,
@@ -230,14 +239,14 @@ const EmployeeForm = (props) => {
     }
     return options
   }
+  //Month
+  const monthNames = ["January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"
+  ]
+  const monthToday = monthNames[dateObj.getUTCMonth()]
   const selectMonth = () => {
-    const options = []
-    const month = Array.from({ length: 12 }, (e, i) => {
-      return new Date(null, i + 1, null).toLocaleDateString("en", {
-        month: "long",
-      })
-    })
-    month.forEach((data, i) => {
+    const options = []    
+    monthNames.forEach((data, i) => {
       options.push({
         value: i + 1,
         label: data,
@@ -245,6 +254,8 @@ const EmployeeForm = (props) => {
     })
     return options
   }
+  //Year
+  const yearToday = dateObj.getUTCFullYear()
   const selectYear = () => {
     const options = []
     const startYear = 1921
@@ -450,6 +461,12 @@ const EmployeeForm = (props) => {
       }),
       postal_code: Yup.string(),
     }),
+    emergency_contact: Yup.object().shape({      
+      contact_phone_number: Yup.string().matches(phoneRegExp, "Phone Number is not valid"),      
+    }),
+    emergency_contact2: Yup.object().shape({      
+      contact_phone_number: Yup.string().matches(phoneRegExp, "Phone Number is not valid"),      
+    }),
     job_title_id: Yup.object().required("Job Title is required."),
     npwp: Yup.string().matches(numberSimbol, "NPWP must be a number"),
   })
@@ -650,14 +667,14 @@ const EmployeeForm = (props) => {
                                               control="selectOnly"
                                               name="birth_date[0]"
                                               placeholder={
-                                                formik.values.day || "Date"
+                                                dayToday
                                               }
                                               options={selectDay()}
                                               onChange={(v) => {
                                                 formik.setFieldValue(
                                                   "birth_date[0]",
                                                   v,
-                                                )
+                                                )                                                
                                               }}
                                               style={{ maxWidth: 240 }}
                                               isDisabled={isView}
@@ -668,7 +685,7 @@ const EmployeeForm = (props) => {
                                               control="selectOnly"
                                               name="birth_date[1]"
                                               placeholder={
-                                                formik.values.month || "Month"
+                                                monthToday
                                               }
                                               options={selectMonth()}
                                               onChange={(v) => {
@@ -676,6 +693,7 @@ const EmployeeForm = (props) => {
                                                   "birth_date[1]",
                                                   v,
                                                 )
+                                                setMonths(v)
                                               }}
                                               style={{ minWidth: 110, maxWidth: 240 }}
                                               isDisabled={isView}
@@ -686,7 +704,7 @@ const EmployeeForm = (props) => {
                                               control="selectOnly"
                                               name="birth_date[2]"
                                               placeholder={
-                                                formik.values.year || "Year"
+                                                yearToday
                                               }
                                               options={selectYear()}
                                               onChange={(v) => {
@@ -694,6 +712,7 @@ const EmployeeForm = (props) => {
                                                   "birth_date[2]",
                                                   v,
                                                 )
+                                                setYears(v)
                                               }}
                                               style={{ maxWidth: 240 }}
                                               isDisabled={isView}
@@ -792,52 +811,7 @@ const EmployeeForm = (props) => {
                                   </div>
                                 </Col>
                                 <Col lg={1}></Col>
-                              </Row>
-                            <h3 className="card-heading">Contacts</h3>
-                            <Row>
-                              <Col lg={11}>
-                                <div style={{ padding: "0 15px 15px" }}>
-                                  <FormikControl
-                                    control="input"
-                                    required="label-required"
-                                    label="Home Phone"
-                                    name="contact.phone_number"
-                                    style={{ maxWidth: 200 }}
-                                    disabled={isView}
-                                    minLength="1"
-                                    maxLength="32"
-                                  />
-                                  <FormikControl
-                                    control="input"
-                                    required="label-required"
-                                    label="Mobile Phone"
-                                    name="contact.mobile_phone_number"
-                                    style={{ maxWidth: 200 }}
-                                    disabled={isView}
-                                    minLength="1"
-                                    maxLength="32"
-                                  />
-                                  <FormikControl
-                                    control="input"
-                                    required="label-required"
-                                    label="Email"
-                                    name="contact.email"
-                                    style={{ maxWidth: 250 }}
-                                    disabled={isView}
-                                    maxLength="256"
-                                  />
-                                  <FormikControl
-                                    control="input"
-                                    label="Other Email"
-                                    name="contact.other_email"
-                                    style={{ maxWidth: 250 }}
-                                    disabled={isView}
-                                    maxLength="256"
-                                  />
-                                </div>
-                              </Col>
-                              <Col lg={1}></Col>
-                            </Row>
+                              </Row>                            
                             <h3 className="card-heading">Current Address</h3>
                             <Row>
                               <Col lg={11}>
@@ -1168,19 +1142,7 @@ const EmployeeForm = (props) => {
                             display: "flex",
                           }}
                         >
-                          <Button
-                            variant="primary"
-                            onClick={() => setTabKey("employment")}
-                            disabled={formik.isValid}
-                            style={{ marginRight: 15 }}
-                          >
-                            {props.match.params.id ? "SAVE" : "SAVE & NEXT"}
-                          </Button>
-                          <Button
-                            variant="secondary"
-                            onClick={() => history.goBack()}
-                          >
-                            </Button>
+                          
                             <Button
                               variant="primary"
                               onClick={() => setTabKey("employment")}
@@ -1273,10 +1235,10 @@ const EmployeeForm = (props) => {
                                                 formik.setFieldValue(
                                                   "hire_date[0]",
                                                   v,
-                                                )
+                                                )                                                
                                               }}
                                               options={selectDay()}
-                                              placeholder={"Date"}
+                                              placeholder={dayToday}
                                               style={{ maxWidth: 240 }}
                                               isDisabled={isView}
                                             />
@@ -1285,13 +1247,14 @@ const EmployeeForm = (props) => {
                                             <FormikControl
                                               control="selectOnly"
                                               name="hire_date[1]"
-                                              placeholder={"Month"}
+                                              placeholder={monthToday}
                                               options={selectMonth()}
                                               onChange={(v) => {
                                                 formik.setFieldValue(
                                                   "hire_date[1]",
                                                   v,
                                                 )
+                                                setMonths(v)
                                               }}
                                               style={{ minWidth: 120, maxWidth: 240 }}
                                               isDisabled={isView}
@@ -1301,13 +1264,14 @@ const EmployeeForm = (props) => {
                                             <FormikControl
                                               control="selectOnly"
                                               name="hire_date[2]"
-                                              placeholder={"Year"}
+                                              placeholder={yearToday}
                                               options={selectYear()}
                                               onChange={(v) => {
                                                 formik.setFieldValue(
                                                   "hire_date[2]",
                                                   v,
                                                 )
+                                                setYears(v)
                                               }}
                                               style={{ maxWidth: 240 }}
                                               isDisabled={isView}
