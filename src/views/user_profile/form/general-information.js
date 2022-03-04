@@ -5,6 +5,7 @@ import * as Yup from "yup"
 import ImageUploading from "react-images-uploading"
 import axios from "axios"
 import _ from "lodash"
+import "./user-profile-form.css"
 
 import Api from "config/api"
 import env from "config/environment"
@@ -445,7 +446,7 @@ const GeneralInformation = (props) => {
           setFieldTouched,
         }) => (
           <Form onSubmit={handleSubmit}>
-            <Card>
+            <Card className="mb-0">
               <Card.Body>
                 <h3 className="card-heading">General Information</h3>
                 <div style={{ padding: "0 15px 15px" }}>
@@ -587,7 +588,7 @@ const GeneralInformation = (props) => {
                                 components={{
                                   IndicatorSeparator: () => null,
                                 }}
-                                style={{ marginRight: 12}}
+                                style={{ marginRight: 12 }}
                                 onChange={(v) => {
                                   setFieldValue("dobDay", v)
                                 }}
@@ -1223,9 +1224,25 @@ const GeneralInformation = (props) => {
                     </Col>
                   </Form.Group>
                 </div>
+                <div style={{ marginBottom: 30, marginTop: 30 }} className="mobile-button">
+                  <Button
+                    variant="primary"
+                    type="submit"
+                    disabled={isSubmitting || !dirty || !isValid}
+                    style={{ marginRight: 15 }}
+                  >
+                    SAVE
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    onClick={() => props.history.push("/")}
+                  >
+                    CANCEL
+                  </Button>
+                </div>
               </Card.Body>
             </Card>
-            <div style={{ marginBottom: 30, marginTop: 30, display: "flex" }}>
+            <div style={{ marginBottom: 30, marginTop: 30, display: "flex" }} className="user-profile-button">
               <Button
                 variant="primary"
                 type="submit"

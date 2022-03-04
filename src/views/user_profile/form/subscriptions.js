@@ -92,9 +92,25 @@ const Subscriptions = (props) => {
                   </Col>
                 </Form.Group>
               </div>
+              <div style={{ marginBottom: 30, marginTop: 30 }} className="mobile-button">
+              <Button
+                variant="primary"
+                type="submit"
+                disabled={!dirty || !isValid}
+                style={{ marginRight: 15 }}
+              >
+                SAVE
+              </Button>
+              <Button
+                variant="secondary"
+                onClick={() => props.history.push("/")}
+              >
+                CANCEL
+              </Button>
+            </div>
               </Card.Body>
             </Card>
-            <div style={{ marginBottom: 30, marginTop: 30, display: "flex" }}>
+            <div style={{ marginBottom: 30, marginTop: 30, display: "flex" }} className="user-profile-button">
               <Button
                 variant="primary"
                 type="submit"
