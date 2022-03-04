@@ -5,11 +5,8 @@ import * as Yup from "yup"
 import ImageUploading from "react-images-uploading"
 import axios from "axios"
 import _ from "lodash"
-<<<<<<< HEAD
 import "./user-profile-form.css"
-=======
 import { useWindowSize } from "rooks"
->>>>>>> master
 
 import Api from "config/api"
 import env from "config/environment"
