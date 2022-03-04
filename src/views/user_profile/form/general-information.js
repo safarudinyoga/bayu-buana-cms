@@ -5,7 +5,11 @@ import * as Yup from "yup"
 import ImageUploading from "react-images-uploading"
 import axios from "axios"
 import _ from "lodash"
+<<<<<<< HEAD
 import "./user-profile-form.css"
+=======
+import { useWindowSize } from "rooks"
+>>>>>>> master
 
 import Api from "config/api"
 import env from "config/environment"
@@ -21,9 +25,12 @@ const GeneralInformation = (props) => {
   const [selectNamePrefix, setSelectNamePrefix] = useState([])
   const [photoProfile, setPhotoProfile] = useState([])
   const maxNumber = 1
+  const { innerWidth, innerHeight, outerHeight, outerWidth } = useWindowSize();
 
   const [showCloseBtn, setShowCloseBtn] = useState(false)
   let api = new Api()
+
+  
 
   // Initialize form
   const [initialForm, setInitialForm] = useState({
@@ -127,21 +134,39 @@ const GeneralInformation = (props) => {
   // Birthday
   const selectDay = () => {
     const options = []
-    for (let i = 1; i <= 31; i++) {
-      options.push({
-        label: i,
-        value: i,
-      })
+    const today = new Date();
+    let currentYear = today.getFullYear();
+    let currentMonth = today.getMonth()+1;
+    let currentDate = today.getDate()
+    if(initialForm.dobYear.value === currentYear && initialForm.dobMonth.value === currentMonth){
+      for (let i = 1; i <= currentDate; i++) {
+        options.push({
+          label: i,
+          value: i,
+        })
+      }
+    } else {
+      for (let i = 1; i <= 31; i++) {
+        options.push({
+          label: i,
+          value: i,
+        })
+      }
     }
+    
     return options
   }
   const selectMonth = () => {
     const options = []
-    const month = Array.from({ length: 12 }, (e, i) => {
+    const today = new Date();
+    let currentYear = today.getFullYear();
+    let currentMonth = today.getMonth()+1;
+    const month = Array.from({ length: initialForm.dobYear.value === currentYear ? currentMonth : 12 }, (e, i) => {
       return new Date(null, i + 1, null).toLocaleDateString("en", {
         month: "long",
       })
     })
+    
     month.forEach((data, i) => {
       options.push({
         label: data,
@@ -185,6 +210,24 @@ const GeneralInformation = (props) => {
       } else {
         setSelectCurrentProvince([])
       }
+
+      let res2 = await api.get(
+        `/master/cities?filters=[["country_id","=","${v}"],["AND"],["status","=",1]]&sort=city_name`,
+      )
+      const optionsCity = []
+      if(res2.data.items.length > 0){
+        res2.data.items.forEach((data) => {
+          optionsCity.push({
+            label: data.city_name,
+            value: data.id,
+          })
+          
+          setSelectCurrentCity(optionsCity)
+        })
+      } else {
+        setSelectCurrentCity([])
+      }
+      
       
     } catch (e) {}
   }
@@ -208,23 +251,19 @@ const GeneralInformation = (props) => {
       } else {
         setSelectPermanentProvince([])
       }
-      
-    } catch (e) {}
-  }
-  // Current Province state
-  const handleChangeCurrentProvince = async (v) => {
-    try {
-      let res = await api.get(
-        `/master/cities?filters=[["state_province_id","=","${v}"],["AND"],["status","=",1]]&sort=city_name`,
+
+      let res2 = await api.get(
+        `/master/cities?filters=[["country_id","=","${v}"],["AND"],["status","=",1]]&sort=city_name`,
       )
-      const options = []
-      if(res.data.items.length > 0){
-        res.data.items.forEach((data) => {
-          options.push({
+      const optionsCity = []
+      if(res2.data.items.length > 0){
+        res2.data.items.forEach((data) => {
+          optionsCity.push({
             label: data.city_name,
             value: data.id,
           })
-          setSelectCurrentCity(options)
+          
+          setSelectCurrentCity(optionsCity)
         })
       } else {
         setSelectCurrentCity([])
@@ -232,27 +271,48 @@ const GeneralInformation = (props) => {
       
     } catch (e) {}
   }
-  // Permanent Province state
-  const handleChangePermanentProvince = async (v) => {
-    try {
-      let res = await api.get(
-        `/master/cities?filters=[["state_province_id","=","${v}"],["AND"],["status","=",1]]&sort=city_name`,
-      )
-      const options = []
-      if(res.data.items.length > 0){
-        res.data.items.forEach((data) => {
-          options.push({
-            label: data.city_name,
-            value: data.id,
-          })
-          setSelectPermanentCity(options)
-        })
-      } else {
-        setSelectPermanentCity([])
-      }
+  // Current Province state
+  // const handleChangeCurrentProvince = async (v) => {
+  //   try {
+  //     let res = await api.get(
+  //       `/master/cities?filters=[["state_province_id","=","${v}"],["AND"],["status","=",1]]&sort=city_name`,
+  //     )
+  //     const options = []
+  //     if(res.data.items.length > 0){
+  //       res.data.items.forEach((data) => {
+  //         options.push({
+  //           label: data.city_name,
+  //           value: data.id,
+  //         })
+  //         setSelectCurrentCity(options)
+  //       })
+  //     } else {
+  //       setSelectCurrentCity([])
+  //     }
       
-    } catch (e) {}
-  }
+  //   } catch (e) {}
+  // }
+  // // Permanent Province state
+  // const handleChangePermanentProvince = async (v) => {
+  //   try {
+  //     let res = await api.get(
+  //       `/master/cities?filters=[["state_province_id","=","${v}"],["AND"],["status","=",1]]&sort=city_name`,
+  //     )
+  //     const options = []
+  //     if(res.data.items.length > 0){
+  //       res.data.items.forEach((data) => {
+  //         options.push({
+  //           label: data.city_name,
+  //           value: data.id,
+  //         })
+  //         setSelectPermanentCity(options)
+  //       })
+  //     } else {
+  //       setSelectPermanentCity([])
+  //     }
+      
+  //   } catch (e) {}
+  // }
 
   // Upload profile
   const onChangePhotoProfile = (imageList, addUpdateIndex) => {
@@ -451,6 +511,86 @@ const GeneralInformation = (props) => {
                 <h3 className="card-heading">General Information</h3>
                 <div style={{ padding: "0 15px 15px" }}>
                   <Row>
+                  {
+                      innerWidth > 578 ? "" : (
+                        <div style={{ height: 170, margin: "0 auto" }}>
+                          <div
+                            className="img-profile-wrapper"
+                            style={{ textAlign: "center" }}
+                          >
+                            <div>
+                              {photoProfile.length == 0 && (
+                                <Image
+                                  src="/img/media/profile.svg"
+                                  className="img-profile"
+                                  roundedCircle
+                                />
+                              )}
+                              <ImageUploading
+                                value={photoProfile}
+                                onChange={onChangePhotoProfile}
+                                dataURLKey="data_url"
+                                acceptType={["png", "jpg", "jpeg"]}
+                              >
+                                {({
+                                  imageList,
+                                  onImageUpload,
+                                  onImageUpdate,
+                                  onImageRemove,
+                                  errors,
+                                }) => (
+                                  // write your building UI
+                                  <>
+                                    {imageList.map((image, index) => (
+                                      <div key={index} className="image-item" style={{position: "relative"}}
+                                        onMouseEnter={e => {
+                                          setShowCloseBtn(true)
+                                        }}
+                                        onMouseLeave={e => {
+                                          setShowCloseBtn(false)
+                                        }}
+                                      >
+                                        <Image
+                                          src={image["data_url"]}
+                                          roundedCircle
+                                          className="img-profile"
+                                        />
+                                        <CloseButton
+                                          style={{position: "absolute", top: 0, right: 0, display: showCloseBtn ? "block" : "none"}}
+                                          onClick={() => onImageRemove(0)} 
+                                        />
+                                      </div>
+                                    ))}
+                                    <Button
+                                      variant="secondary"
+                                      onClick={() => 
+                                        photoProfile.length !== 0
+                                          ? onImageUpload()
+                                          : onImageUpdate(0)
+                                      }
+                                    >
+                                      {/* {photoProfile.length !== 0
+                                        ? "CHANGE"
+                                        : "UPLOAD"}                                */}
+                                      UPLOAD PHOTO
+                                    </Button>
+                                    {errors && (
+                                      <>
+                                        {errors.acceptType && (
+                                          <p className="img-error-label">
+                                            Only .png, .jpg, .jpeg file supported
+                                          </p>
+                                        )}
+                                      </>
+                                    )}
+                                  </>
+                                )}
+                              </ImageUploading>
+                            </div>
+                          </div>
+                        </div>
+                      )
+                    }
                     <Col sm={9}>
                       <Form.Group as={Row} className="form-group">
                         <Form.Label column sm={4}>
@@ -594,7 +734,7 @@ const GeneralInformation = (props) => {
                                 }}
                               />
                             </div>
-                            <div style={{ marginRight: 12, flex: 1 }}>
+                            <div style={{ marginRight: 12, flex: 2 }}>
                               <Select
                                 options={selectMonth()}
                                 value={values.dobMonth}
@@ -609,6 +749,10 @@ const GeneralInformation = (props) => {
                                 style={{ marginRight: 12 }}
                                 onChange={(v) => {
                                   setFieldValue("dobMonth", v)
+                                  setInitialForm({
+                                    ...initialForm,
+                                    dobMonth: v
+                                  })
                                 }}
                               />
                             </div>
@@ -627,6 +771,10 @@ const GeneralInformation = (props) => {
                                 style={{ marginRight: 12 }}
                                 onChange={(v) => {
                                   setFieldValue("dobYear", v)
+                                  setInitialForm({
+                                    ...initialForm,
+                                    dobYear: v
+                                  })
                                 }}
                               />
                             </div>
@@ -711,82 +859,87 @@ const GeneralInformation = (props) => {
                         </Col>
                       </Form.Group>
                     </Col>
-                    <Col sm={3} style={{ height: 170 }}>
-                      <div
-                        className="img-profile-wrapper"
-                        style={{ textAlign: "center" }}
-                      >
-                        <div>
-                          {photoProfile.length == 0 && (
-                            <Image
-                              src="/img/media/profile.svg"
-                              className="img-profile"
-                              roundedCircle
-                            />
-                          )}
-                          <ImageUploading
-                            value={photoProfile}
-                            onChange={onChangePhotoProfile}
-                            dataURLKey="data_url"
-                            acceptType={["png", "jpg", "jpeg"]}
+                    {
+                      innerWidth <= 577 ? "" : (
+                        <Col sm={3} style={{ height: 170 }}>
+                          <div
+                            className="img-profile-wrapper"
+                            style={{ textAlign: "center" }}
                           >
-                            {({
-                              imageList,
-                              onImageUpload,
-                              onImageUpdate,
-                              onImageRemove,
-                              errors,
-                            }) => (
-                              // write your building UI
-                              <>
-                                {imageList.map((image, index) => (
-                                  <div key={index} className="image-item" style={{position: "relative"}}
-                                    onMouseEnter={e => {
-                                      setShowCloseBtn(true)
-                                    }}
-                                    onMouseLeave={e => {
-                                      setShowCloseBtn(false)
-                                    }}
-                                  >
-                                    <Image
-                                      src={image["data_url"]}
-                                      roundedCircle
-                                      className="img-profile"
-                                    />
-                                    <CloseButton
-                                      style={{position: "absolute", top: 0, right: 0, display: showCloseBtn ? "block" : "none"}}
-                                      onClick={() => onImageRemove(0)} 
-                                    />
-                                  </div>
-                                ))}
-                                <Button
-                                  variant="secondary"
-                                  onClick={() => 
-                                    photoProfile.length !== 0
-                                      ? onImageUpload()
-                                      : onImageUpdate(0)
-                                  }
-                                >
-                                  {/* {photoProfile.length !== 0
-                                    ? "CHANGE"
-                                    : "UPLOAD"}                                */}
-                                  User Profile Image
-                                </Button>
-                                {errors && (
+                            <div>
+                              {photoProfile.length == 0 && (
+                                <Image
+                                  src="/img/media/profile.svg"
+                                  className="img-profile"
+                                  roundedCircle
+                                />
+                              )}
+                              <ImageUploading
+                                value={photoProfile}
+                                onChange={onChangePhotoProfile}
+                                dataURLKey="data_url"
+                                acceptType={["png", "jpg", "jpeg"]}
+                              >
+                                {({
+                                  imageList,
+                                  onImageUpload,
+                                  onImageUpdate,
+                                  onImageRemove,
+                                  errors,
+                                }) => (
+                                  // write your building UI
                                   <>
-                                    {errors.acceptType && (
-                                      <p className="img-error-label">
-                                        Only .png, .jpg, .jpeg file supported
-                                      </p>
+                                    {imageList.map((image, index) => (
+                                      <div key={index} className="image-item" style={{position: "relative"}}
+                                        onMouseEnter={e => {
+                                          setShowCloseBtn(true)
+                                        }}
+                                        onMouseLeave={e => {
+                                          setShowCloseBtn(false)
+                                        }}
+                                      >
+                                        <Image
+                                          src={image["data_url"]}
+                                          roundedCircle
+                                          className="img-profile"
+                                        />
+                                        <CloseButton
+                                          style={{position: "absolute", top: 0, right: 0, display: showCloseBtn ? "block" : "none"}}
+                                          onClick={() => onImageRemove(0)} 
+                                        />
+                                      </div>
+                                    ))}
+                                    <Button
+                                      variant="secondary"
+                                      onClick={() => 
+                                        photoProfile.length !== 0
+                                          ? onImageUpload()
+                                          : onImageUpdate(0)
+                                      }
+                                    >
+                                      {/* {photoProfile.length !== 0
+                                        ? "CHANGE"
+                                        : "UPLOAD"}                                */}
+                                      UPLOAD PHOTO
+                                    </Button>
+                                    {errors && (
+                                      <>
+                                        {errors.acceptType && (
+                                          <p className="img-error-label">
+                                            Only .png, .jpg, .jpeg file supported
+                                          </p>
+                                        )}
+                                      </>
                                     )}
                                   </>
                                 )}
-                              </>
-                            )}
-                          </ImageUploading>
-                        </div>
-                      </div>
-                    </Col>
+                              </ImageUploading>
+                            </div>
+                          </div>
+                        </Col>
+                      )
+                    }
+                    
                   </Row>
                 </div>
                 <h3 className="card-heading">Contacts</h3>
@@ -1000,7 +1153,6 @@ const GeneralInformation = (props) => {
                                 options={selectCurrentProvince}
                                 onChange={(v) => {
                                   setFieldValue("currentProvince", v)
-                                  handleChangeCurrentProvince(v.value)
                                 }}
                                 isDisabled={values.currentCountry == null}
                               />
@@ -1037,7 +1189,7 @@ const GeneralInformation = (props) => {
                                 onChange={(v) => {
                                   setFieldValue("currentCity", v)
                                 }}
-                                isDisabled={values.currentProvince == null}
+                                isDisabled={values.currentCountry == null}
                               />
                             </div>
                           </>
@@ -1166,7 +1318,6 @@ const GeneralInformation = (props) => {
                           options={selectPermanentProvince}
                           onChange={(v) => {
                             setFieldValue("permanentProvince", v)
-                            handleChangePermanentProvince(v.value)
                           }}
                           onBlur={setFieldTouched}
                           isDisabled={
@@ -1196,7 +1347,7 @@ const GeneralInformation = (props) => {
                           }}
                           onBlur={setFieldTouched}
                           isDisabled={
-                            values.permanentProvince == "" || values.sameAddress
+                            values.permanentCountry == "" || values.sameAddress
                           }
                         />
                       </div>
@@ -1242,12 +1393,12 @@ const GeneralInformation = (props) => {
                 </div>
               </Card.Body>
             </Card>
-            <div style={{ marginBottom: 30, marginTop: 30, display: "flex" }} className="user-profile-button">
+            <div className="mb-5 ml-1 row justify-content-md-start justify-content-center user-profile-button">
               <Button
                 variant="primary"
                 type="submit"
                 disabled={isSubmitting || !dirty || !isValid}
-                style={{ marginRight: 15 }}
+                style={{ marginRight: 15, width: '80px' }}
               >
                 SAVE
               </Button>

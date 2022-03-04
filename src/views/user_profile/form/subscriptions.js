@@ -110,12 +110,12 @@ const Subscriptions = (props) => {
             </div>
               </Card.Body>
             </Card>
-            <div style={{ marginBottom: 30, marginTop: 30, display: "flex" }} className="user-profile-button">
+            <div className="mb-5 ml-1 row justify-content-md-start justify-content-center user-profile-button">
               <Button
                 variant="primary"
                 type="submit"
                 disabled={!dirty || !isValid}
-                style={{ marginRight: 15 }}
+                style={{ marginRight: 15, width: '80px'  }}
               >
                 SAVE
               </Button>

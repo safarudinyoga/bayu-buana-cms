@@ -9,6 +9,8 @@ import Api from "config/api"
 import Cookies from 'js-cookie'
 import { useDispatch } from "react-redux"
 import { setAlert } from "redux/ui-store"
+import {encrypt, decrypt} from "lib/bb-crypt"
+import getMenu from '../../config/menu';
 
 function Login() {
 	const dispatch = useDispatch()
@@ -17,15 +19,17 @@ function Login() {
 	const [ rememberMe, setRememberMe] = useState(false)
 
 	const api = new Api()
-	let cookie_rm = Cookies.get("remember_acc");
+	let cookie_rm = Cookies.get("persist_code");
 	let form = {
 		username: "",
 		password: "",
 	}
 	if(cookie_rm) {
+		let acc = decrypt(cookie_rm)
+		acc = JSON.parse(acc)
 		form = {
-			username: JSON.parse(cookie_rm).username,
-			password: JSON.parse(cookie_rm).password,
+			username: acc.username,
+			password: acc.password,
 		}
 	}
 	const [initialForm, setForm] = useState(form)
@@ -71,11 +75,13 @@ function Login() {
 			Cookies.set('ut', res.data.access_token, {expires: date})
 
 			if (rememberMe) {
-				Cookies.set('remember_acc', JSON.stringify(values))
+				let acc = JSON.stringify(values)
+				acc = encrypt(acc)
+				Cookies.set('persist_code', acc)
 				Cookies.set('rt', res.data.refresh_token)
 			} else {
-				let rememberCookie = Cookies.get('remember_acc')
-				if(rememberCookie) Cookies.remove('remember_acc')
+				let rememberCookie = Cookies.get('persist_code')
+				if(rememberCookie) Cookies.remove('persist_code')
 			}
 			window.location.reload()
 		} catch(e) {
@@ -84,22 +90,6 @@ function Login() {
 				  message: e.response.data.message,
 				}),
 			)
-		}
-	}
-
-	const getMenu = async() => {
-		try {
-			let {data} = await api.get('/master/menu-links?size=999')
-			let parentMenu = data.items.filter(m => !m.parent_link_id)
-			let menu = parentMenu.map(pm => {
-				pm.submenu = data.items.filter(m => m.parent_link_id === pm.id)
-				return pm
-			})
-			let stringifyMenu = JSON.stringify(menu)
-			localStorage.setItem('menu', stringifyMenu)
-		} catch(e) {
-			console.log(e)
-			throw e
 		}
 	}
 
@@ -150,7 +140,7 @@ function Login() {
 	)
 
 	return (
-		<>
+		<div className="card-form-body-login">
 			<p className="title p-0 mb-1">Welcome Back!</p>
 			<p className="sub-title p-0 mb-4 mb-md-5">Please Sign in to continue</p>
 			<Formik
@@ -211,7 +201,7 @@ function Login() {
 				}
 				
 			</Formik>
-		</>
+		</div>
 	)
 }
 
