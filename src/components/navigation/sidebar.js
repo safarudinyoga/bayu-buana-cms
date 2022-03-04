@@ -6,7 +6,6 @@ import { connect } from "react-redux"
 import "./sidebar.scss"
 
 const SubMenu = ({menu}) => {
-  console.log(menu)
   return (
     <li className="nav-item">
       <Link
