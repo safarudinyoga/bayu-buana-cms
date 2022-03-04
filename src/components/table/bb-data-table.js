@@ -144,7 +144,17 @@ class BBDataTable extends Component {
         let infoDelete = self.props.infoDelete
         let info = ""
         if(infoDelete) {
-          info = infoDelete.map(v => v.title + " : " + row[v.recordName]).join(" ")
+          info = infoDelete.map(v => {
+            let data = v.recordName
+            let result = Array.isArray(data);
+            let title = ""
+            if(result){
+              title = data.map(v => row[v]).join(" ")
+            }else{
+              title = row[data]
+            }
+            return v.title + " : " + title
+          }).join(" ")
         }
 
         return (
