@@ -155,7 +155,7 @@ function Login() {
 	)
 
 	return (
-		<>
+		<div className="card-form-body-login">
 			<p className="title p-0 mb-1">Welcome Back!</p>
 			<p className="sub-title p-0 mb-4 mb-md-5">Please Sign in to continue</p>
 			<Formik
@@ -216,7 +216,7 @@ function Login() {
 				}
 				
 			</Formik>
-		</>
+		</div>
 	)
 }
 
