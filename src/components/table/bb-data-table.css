@@ -170,6 +170,7 @@ table.dataTable > tbody > tr.child span.dtr-data {
 
 .custom-col-width {
   min-width: 86px !important;
+  max-width: 100px !important;
   word-break: break-all;
 }
 
