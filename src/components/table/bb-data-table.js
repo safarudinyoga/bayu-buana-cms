@@ -191,6 +191,7 @@ class BBDataTable extends Component {
           //   iFixedColumnsRight: 4,
         },
         stateSave: false,
+        fixedColumn: true,
         serverSide: true,
         processing: true,
         displayLength: 10,
@@ -500,13 +501,13 @@ class BBDataTable extends Component {
             width: "5%",
           },
           {
-            targets: [1, 2],
+            targets: [1, 2, 3],
             className: !this.state.isCheckbox ? module == "employee" ? "" : "custom-col-width": "cstm-col-width",
           },
-          //   {
-          //     responsivePriority: 10001,
-          //     targets: [1, 3],
-          //   },
+            {
+              responsivePriority: 10001,
+              targets: [1, 3],
+            },
           {
               // The `data` parameter refers to the data for the cell (defined by the
               // `data` option, which defaults to the column being worked with, in
@@ -539,12 +540,12 @@ class BBDataTable extends Component {
               "targets": module == 'employee' ? 7 : ''
           },
           { visible: false,  targets: module == 'employee' ? [ 4, 5, 8 ] : [] },
-          {
-            orderable: false,
+          // {
+          //   orderable: false,
             // className: "table-row-action",
-            targets: [columns.length - 1],
-            width: "20%",
-          },
+          //   targets: [columns.length - 1],
+          //   width: "20%",
+          // },
           
         ],
         // select: {
