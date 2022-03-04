@@ -212,7 +212,7 @@ table.dataTable > tbody > tr.child span.dtr-data {
 
 @media (min-width: 421px) and (max-width: 450px) {
   .cstm-col-width {
-    min-width: 133px !important;
+    min-width: 118px !important;
     max-width: 200px !important;
   }
 }
@@ -251,7 +251,7 @@ table.dataTable > tbody > tr.child span.dtr-data {
 
 @media (min-width: 421px) and (max-width: 450px) {
   .custom-col-width {
-    min-width: 150px !important;
+    min-width: 145px !important;
     max-width: 200px !important;
   }
 }
