@@ -40,13 +40,7 @@
 .main-sidebar:hover {
   opacity: 0.9;
 }
-.nav-sidebar .nav-link > .right, .nav-sidebar .nav-link > p > .right {
-  right: 0 !important;
-  top: 0;
-  padding-top: 3px;
-  margin-left: 3px;
-  position: initial !important;
-}
+
 @media (min-width: 992px) {
   .sidebar-mini.sidebar-collapse .main-sidebar:hover, .sidebar-mini.sidebar-collapse .main-sidebar.sidebar-focused {
       width: 250px;
