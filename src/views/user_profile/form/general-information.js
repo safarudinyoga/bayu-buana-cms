@@ -11,6 +11,7 @@ import Api from "config/api"
 import env from "config/environment"
 import Select from "components/form/select"
 import { default as SelectAsync } from "components/form/select-async"
+import { auto } from "@popperjs/core"
 
 const GeneralInformation = (props) => {
   const [selectCurrentProvince, setSelectCurrentProvince] = useState([])
@@ -20,6 +21,7 @@ const GeneralInformation = (props) => {
   const [selectPermanentCity, setSelectPermanentCity] = useState([])
   const [selectNamePrefix, setSelectNamePrefix] = useState([])
   const [photoProfile, setPhotoProfile] = useState([])
+  const [photoData, setPhotoData] = useState()
   const maxNumber = 1
   const { innerWidth, innerHeight, outerHeight, outerWidth } = useWindowSize();
 
@@ -259,10 +261,10 @@ const GeneralInformation = (props) => {
             value: data.id,
           })
           
-          setSelectCurrentCity(optionsCity)
+          setSelectPermanentCity(optionsCity)
         })
       } else {
-        setSelectCurrentCity([])
+        setSelectPermanentCity([])
       }
       
     } catch (e) {}
@@ -310,12 +312,27 @@ const GeneralInformation = (props) => {
   //   } catch (e) {}
   // }
 
+  const doUpload = async (imageList) => {
+    try {
+      let payload = new FormData()
+      payload.append("files", imageList[0].file)
+
+      let res = await api.post("/multimedia/files", payload)
+      setPhotoData(res.data.id)
+    } catch(e) {
+
+    }
+  }
+
   // Upload profile
   const onChangePhotoProfile = (imageList, addUpdateIndex) => {
     // data for submit
     console.log(imageList, addUpdateIndex)
     setPhotoProfile(imageList)
+    doUpload(imageList)
   }
+
+
 
   useEffect(async () => {
     try {
@@ -351,6 +368,7 @@ const GeneralInformation = (props) => {
     try {
       let res = await api.get("/user/profile")
       let data = res.data;
+      console.log("DATA", data)
       setInitialForm({
         ...initialForm,
         title: _.isEmpty(data.name_prefix) ? "" : {
@@ -432,6 +450,9 @@ const GeneralInformation = (props) => {
         } : "",
         permanentZipCode: _.isEmpty(data.permanent_address) ? "" : data.permanent_address.postal_code ? data.permanent_address.postal_code : ""
       });
+      setPhotoProfile([{
+        data_url: data.employee_asset.multimedia_description.url
+      }])
     } catch(e) {}
   }, [])
 
@@ -460,6 +481,9 @@ const GeneralInformation = (props) => {
               mobile_phone_number: values.mobilePhone,
               other_email: values.otherEmail,
               phone_number: values.homePhone
+            },
+            employee_asset: {
+              multimedia_description_id: photoData,
             },
             ktp: values.idCardNumber,
             given_name: values.firstName,
@@ -502,91 +526,175 @@ const GeneralInformation = (props) => {
           setFieldTouched,
         }) => (
           <Form onSubmit={handleSubmit}>
-            <Card>
+            <Card style={{marginBottom: 0}}>
               <Card.Body>
-                <h3 className="card-heading">General Information</h3>
+                {props.isMobile ? "" : <h3 className="card-heading">General Information</h3>}
                 <div style={{ padding: "0 15px 15px" }}>
                   <Row>
                   {
-                      innerWidth > 578 ? "" : (
-                        <div style={{ height: 170, margin: "0 auto" }}>
-                          <div
-                            className="img-profile-wrapper"
-                            style={{ textAlign: "center" }}
-                          >
-                            <div>
-                              {photoProfile.length == 0 && (
-                                <Image
-                                  src="/img/media/profile.svg"
-                                  className="img-profile"
-                                  roundedCircle
-                                />
-                              )}
-                              <ImageUploading
-                                value={photoProfile}
-                                onChange={onChangePhotoProfile}
-                                dataURLKey="data_url"
-                                acceptType={["png", "jpg", "jpeg"]}
-                              >
-                                {({
-                                  imageList,
-                                  onImageUpload,
-                                  onImageUpdate,
-                                  onImageRemove,
-                                  errors,
-                                }) => (
-                                  // write your building UI
-                                  <>
-                                    {imageList.map((image, index) => (
-                                      <div key={index} className="image-item" style={{position: "relative"}}
-                                        onMouseEnter={e => {
-                                          setShowCloseBtn(true)
-                                        }}
-                                        onMouseLeave={e => {
-                                          setShowCloseBtn(false)
-                                        }}
-                                      >
-                                        <Image
-                                          src={image["data_url"]}
-                                          roundedCircle
-                                          className="img-profile"
-                                        />
-                                        <CloseButton
-                                          style={{position: "absolute", top: 0, right: 0, display: showCloseBtn ? "block" : "none"}}
-                                          onClick={() => onImageRemove(0)} 
-                                        />
-                                      </div>
-                                    ))}
-                                    <Button
-                                      variant="secondary"
-                                      onClick={() => 
-                                        photoProfile.length !== 0
-                                          ? onImageUpload()
-                                          : onImageUpdate(0)
-                                      }
+                    // Tablet
+                    innerWidth > 480 && innerWidth <= 768 ? (
+                      <div>
+                        <div
+                          className="img-profile-wrapper"
+                          style={{marginBottom: 20}}
+                        >
+                          <Row>
+                            {photoProfile.length == 0 && (
+                              <Image
+                                src="/img/media/profile.svg"
+                                className="img-profile"
+                                roundedCircle
+                              />
+                            )}
+                            <ImageUploading
+                              value={photoProfile}
+                              onChange={onChangePhotoProfile}
+                              dataURLKey="data_url"
+                              acceptType={["png", "jpg", "jpeg"]}
+                            >
+                              {({
+                                imageList,
+                                onImageUpload,
+                                onImageUpdate,
+                                onImageRemove,
+                                errors,
+                              }) => (
+                                // write your building UI
+                                <>
+                                  {imageList.map((image, index) => (
+                                    <div key={index} className="image-item" style={{position: "relative"}}
+                                      onMouseEnter={e => {
+                                        setShowCloseBtn(true)
+                                      }}
+                                      onMouseLeave={e => {
+                                        setShowCloseBtn(false)
+                                      }}
                                     >
-                                      {/* {photoProfile.length !== 0
-                                        ? "CHANGE"
-                                        : "UPLOAD"}                                */}
-                                      UPLOAD PHOTO
-                                    </Button>
-                                    {errors && (
-                                      <>
-                                        {errors.acceptType && (
-                                          <p className="img-error-label">
-                                            Only .png, .jpg, .jpeg file supported
-                                          </p>
-                                        )}
-                                      </>
-                                    )}
-                                  </>
-                                )}
-                              </ImageUploading>
-                            </div>
+                                      <Image
+                                        src={image["data_url"]}
+                                        roundedCircle
+                                        className="img-profile"
+                                      />
+                                      <CloseButton
+                                        style={{position: "absolute", top: 0, right: 0, display: showCloseBtn ? "block" : "none"}}
+                                        onClick={() => onImageRemove(0)} 
+                                      />
+                                    </div>
+                                  ))}
+                                  <Button
+                                    variant="secondary"
+                                    style={{margin: "auto 20px"}}
+                                    onClick={() => 
+                                      photoProfile.length !== 0
+                                        ? onImageUpload()
+                                        : onImageUpdate(0)
+                                    }
+                                  >
+                                    {/* {photoProfile.length !== 0
+                                      ? "CHANGE"
+                                      : "UPLOAD"}                                */}
+                                    UPLOAD PHOTO
+                                  </Button>
+                                  {errors && (
+                                    <>
+                                      {errors.acceptType && (
+                                        <p className="img-error-label">
+                                          Only .png, .jpg, .jpeg file supported
+                                        </p>
+                                      )}
+                                    </>
+                                  )}
+                                </>
+                              )}
+                            </ImageUploading>
+                          </Row>
+                        </div>
+                      </div>
+                    ) : ""
+                  }
+                  {
+                    // Mobile
+                    innerWidth > 480 ? "" : (
+                      <div style={{ height: 170, margin: "0 auto" }}>
+                        <div
+                          className="img-profile-wrapper"
+                          style={{ textAlign: "center" }}
+                        >
+                          <div>
+                            {photoProfile.length == 0 && (
+                              <Image
+                                src="/img/media/profile.svg"
+                                className="img-profile"
+                                roundedCircle
+                              />
+                            )}
+                            <ImageUploading
+                              value={photoProfile}
+                              onChange={onChangePhotoProfile}
+                              dataURLKey="data_url"
+                              acceptType={["png", "jpg", "jpeg"]}
+                            >
+                              {({
+                                imageList,
+                                onImageUpload,
+                                onImageUpdate,
+                                onImageRemove,
+                                errors,
+                              }) => (
+                                // write your building UI
+                                <>
+                                  {imageList.map((image, index) => (
+                                    <div key={index} className="image-item" style={{position: "relative"}}
+                                      onMouseEnter={e => {
+                                        setShowCloseBtn(true)
+                                      }}
+                                      onMouseLeave={e => {
+                                        setShowCloseBtn(false)
+                                      }}
+                                    >
+                                      <Image
+                                        src={image["data_url"]}
+                                        roundedCircle
+                                        className="img-profile"
+                                      />
+                                      <CloseButton
+                                        style={{position: "absolute", top: 0, right: 0, display: showCloseBtn ? "block" : "none"}}
+                                        onClick={() => onImageRemove(0)} 
+                                      />
+                                    </div>
+                                  ))}
+                                  <Button
+                                    variant="secondary"
+                                    onClick={() => 
+                                      photoProfile.length !== 0
+                                        ? onImageUpload()
+                                        : onImageUpdate(0)
+                                    }
+                                  >
+                                    {/* {photoProfile.length !== 0
+                                      ? "CHANGE"
+                                      : "UPLOAD"}                                */}
+                                    UPLOAD PHOTO
+                                  </Button>
+                                  {errors && (
+                                    <>
+                                      {errors.acceptType && (
+                                        <p className="img-error-label">
+                                          Only .png, .jpg, .jpeg file supported
+                                        </p>
+                                      )}
+                                    </>
+                                  )}
+                                </>
+                              )}
+                            </ImageUploading>
                           </div>
                         </div>
-                      )
-                    }
+                      </div>
+                    )
+
+                  }
                     <Col sm={9}>
                       <Form.Group as={Row} className="form-group">
                         <Form.Label column sm={4}>
@@ -855,8 +963,9 @@ const GeneralInformation = (props) => {
                         </Col>
                       </Form.Group>
                     </Col>
+                    
                     {
-                      innerWidth <= 577 ? "" : (
+                      innerWidth <= 768 ? "" : (
                         <Col sm={3} style={{ height: 170 }}>
                           <div
                             className="img-profile-wrapper"
@@ -1371,24 +1480,48 @@ const GeneralInformation = (props) => {
                     </Col>
                   </Form.Group>
                 </div>
+                {
+                  props.isMobile ? (
+                    <div className="mb-5 ml-1 row justify-content-md-start justify-content-center">
+                      <Button
+                        variant="primary"
+                        type="submit"
+                        disabled={isSubmitting || !dirty || !isValid}
+                        style={{ marginRight: 15 }}
+                      >
+                        SAVE
+                      </Button>
+                      <Button
+                        variant="secondary"
+                        onClick={() => props.history.push("/")}
+                      >
+                        CANCEL
+                      </Button>
+                    </div>
+                  ) : ""
+                }
               </Card.Body>
             </Card>
-            <div className="mb-5 ml-1 row justify-content-md-start justify-content-center">
-              <Button
-                variant="primary"
-                type="submit"
-                disabled={isSubmitting || !dirty || !isValid}
-                style={{ marginRight: 15, width: '80px' }}
-              >
-                SAVE
-              </Button>
-              <Button
-                variant="secondary"
-                onClick={() => props.history.push("/")}
-              >
-                CANCEL
-              </Button>
-            </div>
+            {
+              props.isMobile ? "" : (
+                <div className="mt-4 mb-5 ml-1 row justify-content-md-start justify-content-center">
+                  <Button
+                    variant="primary"
+                    type="submit"
+                    disabled={isSubmitting || !dirty || !isValid}
+                    style={{ marginRight: 15 }}
+                  >
+                    SAVE
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    onClick={() => props.history.push("/")}
+                  >
+                    CANCEL
+                  </Button>
+                </div>
+              )
+            }
           </Form>
         )}
       </Formik>

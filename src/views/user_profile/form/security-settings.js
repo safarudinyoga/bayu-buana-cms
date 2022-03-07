@@ -106,7 +106,7 @@ const SecuritySettings = (props) => {
       }) => {
         return (
           <Form onSubmit={handleSubmit}>
-            <Card>
+            <Card style={{marginBottom: 0}}>
               <Card.Body>
                 <h3 className="card-heading">Two Factor Authentication</h3>
                 <div style={{ padding: "0 15px 40px 0" }}>
@@ -154,24 +154,49 @@ const SecuritySettings = (props) => {
                     )}
                   />
                 </div>
+
+                {
+                  props.isMobile ? (
+                    <div className="mb-5 ml-1 row justify-content-md-start justify-content-center">
+                      <Button
+                        variant="primary"
+                        type="submit"
+                        disabled={!dirty || !isValid}
+                        style={{ marginRight: 15 }}
+                      >
+                        SAVE
+                      </Button>
+                      <Button
+                        variant="secondary"
+                        onClick={() => props.history.push("/")}
+                      >
+                        CANCEL
+                      </Button>
+                    </div>
+                  ) : ""
+                }
               </Card.Body>
             </Card>
-            <div className="mb-5 ml-1 row justify-content-md-start justify-content-center">
-              <Button
-                variant="primary"
-                type="submit"
-                disabled={!dirty || !isValid}
-                style={{ marginRight: 15, width: '80px'  }}
-              >
-                SAVE
-              </Button>
-              <Button
-                variant="secondary"
-                onClick={() => props.history.push("/")}
-              >
-                CANCEL
-              </Button>
-            </div>
+            {
+              props.isMobile ? "" : (
+                <div className="mt-4 mb-5 ml-1 row justify-content-md-start justify-content-center">
+                  <Button
+                    variant="primary"
+                    type="submit"
+                    disabled={!dirty || !isValid}
+                    style={{ marginRight: 15 }}
+                  >
+                    SAVE
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    onClick={() => props.history.push("/")}
+                  >
+                    CANCEL
+                  </Button>
+                </div>
+              )
+            }
           </Form>
         )
       }}
