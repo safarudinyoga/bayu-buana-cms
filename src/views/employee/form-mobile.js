@@ -458,6 +458,7 @@ const EmployeeFormMobile = (props) => {
     setCurrentActiveKey(currentActiveKey === key ? null : key);
   };
 
+  console.log(currentActiveKey,"haha")
   return (
     <Formik
       initialValues={formValues || initialValues}
@@ -551,7 +552,7 @@ const EmployeeFormMobile = (props) => {
         console.log("formik", formik)
         return (
           <Form className={props.className}>
-            <Accordion>
+            <Accordion activeKey={currentActiveKey}>
                 <Card className="mb-0">
                     <Accordion.Toggle 
                       as={Card.Header} 
@@ -643,7 +644,7 @@ const EmployeeFormMobile = (props) => {
                                               v,
                                             )
                                           }}
-                                          style={{ maxWidth: 240 }}
+                                          style={{ minWidth:75, maxWidth: 240 }}
                                           isDisabled={isView}
                                         />
                                       </div>
@@ -679,7 +680,7 @@ const EmployeeFormMobile = (props) => {
                                               v,
                                             )
                                           }}
-                                          style={{ maxWidth: 240 }}
+                                          style={{ minWidth: 82, maxWidth: 240 }}
                                           isDisabled={isView}
                                         />
                                       </div>
@@ -1015,7 +1016,7 @@ const EmployeeFormMobile = (props) => {
                       >
                         <Button
                           variant="primary"
-                          onClick={() => setTabKey("emergency-contacts")}
+                          onClick={() => setCurrentActiveKey("emergency-contacts")}
                           disabled={formik.isSubmitting}
                           style={{ marginRight: 15 }}
                         >
@@ -1131,7 +1132,7 @@ const EmployeeFormMobile = (props) => {
                       >
                         <Button
                           variant="primary"
-                          onClick={() => setTabKey("employment")}
+                          onClick={() => setCurrentActiveKey("employment")}
                           disabled={formik.isValid}
                           style={{ marginRight: 15 }}
                         >
@@ -1139,7 +1140,7 @@ const EmployeeFormMobile = (props) => {
                         </Button>
                         <Button
                           variant="secondary"
-                          onClick={() => setTabKey("general-information")}
+                          onClick={() => setCurrentActiveKey("general-information")}
                         >
                           CANCEL
                         </Button>
@@ -1244,7 +1245,7 @@ const EmployeeFormMobile = (props) => {
                                           }}
                                           options={selectDay()}
                                           placeholder={"Date"}
-                                          style={{ maxWidth: 240 }}
+                                          style={{ minWidth: 75, maxWidth: 240 }}
                                           isDisabled={isView}
                                         />
                                       </div>
@@ -1260,7 +1261,7 @@ const EmployeeFormMobile = (props) => {
                                               v,
                                             )
                                           }}
-                                          style={{ minWidth: 120, maxWidth: 240 }}
+                                          style={{ minWidth: 110, maxWidth: 240 }}
                                           isDisabled={isView}
                                         />
                                       </div>
@@ -1276,7 +1277,7 @@ const EmployeeFormMobile = (props) => {
                                               v,
                                             )
                                           }}
-                                          style={{ maxWidth: 240 }}
+                                          style={{ minWidth: 82, maxWidth: 240 }}
                                           isDisabled={isView}
                                         />
                                       </div>
@@ -1338,7 +1339,7 @@ const EmployeeFormMobile = (props) => {
                         </Button>
                         <Button
                           variant="secondary"
-                          onClick={() => setTabKey("emergency-contacts")}
+                          onClick={() => setCurrentActiveKey("emergency-contacts")}
                         >
                           CANCEL
                         </Button>
