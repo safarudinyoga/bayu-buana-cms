@@ -504,10 +504,7 @@ class BBDataTable extends Component {
             targets: [1, 2, 3],
             className: !this.state.isCheckbox ? module == "employee" ? "" : "custom-col-width": "cstm-col-width",
           },
-            {
-              responsivePriority: 10001,
-              targets: [1, 3],
-            },
+          { responsivePriority: 2, targets: [1,2] },
           {
               // The `data` parameter refers to the data for the cell (defined by the
               // `data` option, which defaults to the column being worked with, in
