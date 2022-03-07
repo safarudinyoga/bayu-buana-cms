@@ -2,9 +2,16 @@
   > .card {
     border: 1px solid #d3d3d3;
     box-shadow: none;
-    &:not(:last-of-type),
+    margin-bottom: 0;
+    &:not(:last-of-type) {
+      border-bottom: 0;
+      border-bottom-right-radius: 0;
+      border-bottom-left-radius: 0;
+    }
     &:not(:first-of-type) {
-      border-radius: 8px;
+      // border-radius: 8px;
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
     }
     &:not(:last-of-type) {
       border-bottom: 1px solid #d3d3d3;
@@ -15,6 +22,19 @@
       color: #333333;
       font-size: 15px;
       border-bottom: none;
+
+      > .accordion-header {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        height: inherit;
+
+        svg {
+          width: 25px;
+          height: 25px;
+          margin-right: 20px;
+        }
+      }
     }
     .card-body {
       padding: 28px;
@@ -22,3 +42,5 @@
     }
   }
 }
+
+
