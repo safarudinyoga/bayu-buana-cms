@@ -3,6 +3,7 @@ import { FastField } from "formik"
 import Select from "components/form/select"
 
 function select(props) {
+  
   const {    
     name,
     options,
@@ -17,7 +18,7 @@ function select(props) {
             <div style={style}>
               <Select
                 {...field}
-                {...rest}                
+                {...rest}                               
                 options={options}                              
                 onChange={onChange}                
                 placeholder={placeholder || ""}

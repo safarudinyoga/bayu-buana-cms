@@ -15,7 +15,6 @@ import * as Yup from "yup"
 import { useSnackbar } from "react-simple-snackbar"
 import "./employee-form.css"
 import FormMobile from "./form-mobile"
-import { data } from "jquery"
 
 const endpoint = "/master/employees"
 const backUrl = "/master/employee"
@@ -38,7 +37,6 @@ const EmployeeForm = (props) => {
   const [additionalRole, setAdditionalRole] = useState(false)
   const [months, setMonths] = useState({ value: 1, label: "" })
   const [years, setYears] = useState({ value: 2000, label: "" })
-  console.log("data respon", formValues)
 
   useEffect(async () => {
     let api = new Api()
@@ -222,9 +220,6 @@ const EmployeeForm = (props) => {
     } catch (e) {}
   }
 
-
-  
-
   // Birthday
   //Day
   const dateObj = new Date()
@@ -232,7 +227,6 @@ const EmployeeForm = (props) => {
   const daysInMonth = (monthx, yearx) => {
     return new Date(yearx, monthx, 0).getDate() + 1
   }
-  console.log("data", years.value)
   const selectDay = () => {
     const options = []
     for (let i = 1; i < daysInMonth(months.value, years.value); i++) {
@@ -293,7 +287,6 @@ const EmployeeForm = (props) => {
     if (day.length < 2) day = "0" + day
     return [year, month, day].join("-")
   }
-
   const initialValues = {
     //GeneralInformation
     name_prefix_id: {
@@ -317,14 +310,14 @@ const EmployeeForm = (props) => {
     //Address
     address: {
       address_line: "",
-      country_id: { value: null, label: "Please choose" },
+      country_id: "",
       state_province_id: { value: null, label: "Please choose" },
       city_id: { value: null, label: "Please choose" },
       postal_code: "",
     },
     permanent_address: {
       address_line: "",
-      country_id: { value: null, label: "Please choose" },
+      country_id: "",
       state_province_id: { value: null, label: "Please choose" },
       city_id: { value: null, label: "Please choose" },
       postal_code: "",
@@ -342,14 +335,19 @@ const EmployeeForm = (props) => {
     },
     //Employment
     employee_number: "",
-    job_title_id: { value: null, label: "Please choose" },
+    job_title_id: "",
     division_id: { value: null, label: "Please choose" },
     office_id: { value: null, label: "Please choose" },
-    hire_date: [yearToday, monthToday, dayToday],
+    hire_date: [
+      { value: dayToday, label: dayToday },
+      { value: monthToday, label: monthToday },
+      { value: yearToday, label: yearToday },
+    ],
     npwp: "",
   }
   // Validasi number
   const phoneRegExp = /^\d+$/
+  const phoneNumberPlus = /^[0-9 ()+]+$/
   const numberSimbol = /^[0-9!@#$%-._^&*()_+\-=\[\]{};':"\\|,.<>\/?]*$/
   //const numberSimbol = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
   const validationSchema = Yup.object({
@@ -375,7 +373,6 @@ const EmployeeForm = (props) => {
                   )
                   .then((res) => {
                     resolve(res.data.items.length === 0)
-                    console.log("data Email", res.data.items)
                   })
                   .catch((error) => {
                     resolve(false)
@@ -479,13 +476,13 @@ const EmployeeForm = (props) => {
     }),
     emergency_contact: Yup.object().shape({
       contact_phone_number: Yup.string().matches(
-        numberSimbol,
+        phoneNumberPlus,
         "Phone Number is not valid",
       ),
     }),
     emergency_contact2: Yup.object().shape({
       contact_phone_number: Yup.string().matches(
-        numberSimbol,
+        phoneNumberPlus,
         "Phone Number is not valid",
       ),
     }),
@@ -599,7 +596,6 @@ const EmployeeForm = (props) => {
       enableReinitialize
     >
       {(formik) => {
-        console.log("formik", formik)
         return (
           <Form>
             <FormMobile className="mobile-form"></FormMobile>
@@ -662,6 +658,14 @@ const EmployeeForm = (props) => {
                                       formik.setFieldValue("name_prefix_id", v)
                                     }}
                                     style={{ maxWidth: 120 }}
+                                    components={
+                                      isView
+                                        ? {
+                                            DropdownIndicator: () => null,
+                                            IndicatorSeparator: () => null,
+                                          }
+                                        : null
+                                    }
                                     isDisabled={isView}
                                   />
                                   <FormikControl
@@ -690,6 +694,7 @@ const EmployeeForm = (props) => {
                                     disabled={isView}
                                     maxLength="128"
                                   />
+
                                   <Row className="form-group required">
                                     <Col column md={3} lg={4}>
                                       <label className="text-label-input">
@@ -718,6 +723,16 @@ const EmployeeForm = (props) => {
                                                 v,
                                               )
                                             }}
+                                            components={
+                                              isView
+                                                ? {
+                                                    DropdownIndicator: () =>
+                                                      null,
+                                                    IndicatorSeparator: () =>
+                                                      null,
+                                                  }
+                                                : null
+                                            }
                                             style={{ maxWidth: 240 }}
                                             isDisabled={isView}
                                           />
@@ -737,6 +752,16 @@ const EmployeeForm = (props) => {
                                               )
                                               setMonths(v)
                                             }}
+                                            components={
+                                              isView
+                                                ? {
+                                                    DropdownIndicator: () =>
+                                                      null,
+                                                    IndicatorSeparator: () =>
+                                                      null,
+                                                  }
+                                                : null
+                                            }
                                             style={{
                                               minWidth: 110,
                                               maxWidth: 240,
@@ -759,6 +784,16 @@ const EmployeeForm = (props) => {
                                               )
                                               setYears(v)
                                             }}
+                                            components={
+                                              isView
+                                                ? {
+                                                    DropdownIndicator: () =>
+                                                      null,
+                                                    IndicatorSeparator: () =>
+                                                      null,
+                                                  }
+                                                : null
+                                            }
                                             style={{ maxWidth: 240 }}
                                             isDisabled={isView}
                                           />
@@ -882,11 +917,11 @@ const EmployeeForm = (props) => {
                                       formik.setFieldValue(
                                         "address.country_id",
                                         v,
-                                      )
-                                      formik.setFieldValue(
-                                        "address.state_province_id",
-                                        { value: null, label: "Please choose" },
-                                      )
+                                      )                                      
+                                      formik.setFieldValue("address.state_province_id", {
+                                        value: null,
+                                        label: "Please choose",
+                                      })
                                       formik.setFieldValue("address.city_id", {
                                         value: null,
                                         label: "Please choose",
@@ -894,14 +929,25 @@ const EmployeeForm = (props) => {
                                     }}
                                     placeholder={"Please choose"}
                                     style={{ maxWidth: 300 }}
+                                    components={
+                                      isView
+                                        ? {
+                                            DropdownIndicator: () => null,
+                                            IndicatorSeparator: () => null,
+                                          }
+                                        : null
+                                    }
                                     isDisabled={isView}
-                                  />                                  
+                                  />
                                   <FormikControl
                                     control="selectAsync"
                                     label="State/ Province"
                                     name="address.state_province_id"
-                                    url={`master/state-provinces?filters=["country_id","=","${formik.values.address?.country_id?.value}"]&size=-1`}                        
-                                    fieldName={"state_province_name"}
+                                    url={`master/state-provinces?filters=["country_id","=","${formik.values.address.country_id.value}"]&size=-1`}
+                                    fieldName={"state_province_name"}                                    
+                                    key={JSON.stringify(
+                                      formik.values.address.country_id,
+                                    )}
                                     onChange={(v) => {
                                       formik.setFieldValue(
                                         "address.state_province_id",
@@ -912,23 +958,43 @@ const EmployeeForm = (props) => {
                                         label: "Please choose",
                                       })
                                     }}
+                                    
                                     placeholder={"Please choose"}
                                     style={{ maxWidth: 200 }}
+                                    components={
+                                      isView
+                                        ? {
+                                            DropdownIndicator: () => null,
+                                            IndicatorSeparator: () => null,
+                                          }
+                                        : null
+                                    }
                                     isDisabled={isView}
                                   />
                                   <FormikControl
                                     control="selectAsync"
                                     label="City"
-                                    name="address.city_id"                                    
-                                    url={`master/cities?filters=["state_province_id","=","${formik.values.address?.state_province_id?.value}"]&size=-1`}                                    
+                                    name="address.city_id"
+                                    url={`master/cities?filters=["country_id","=","${formik.values.address.country_id.value}"]&size=-1`}
                                     fieldName={"city_name"}
+                                    key={JSON.stringify(
+                                      formik.values.address.country_id.value,
+                                    )}
                                     onChange={(v) => {
                                       formik.setFieldValue("address.city_id", v)
                                     }}
                                     placeholder={"Please choose"}
                                     style={{ maxWidth: 200 }}
+                                    components={
+                                      isView
+                                        ? {
+                                            DropdownIndicator: () => null,
+                                            IndicatorSeparator: () => null,
+                                          }
+                                        : null
+                                    }
                                     isDisabled={isView}
-                                  />                                  
+                                  />
                                   <FormikControl
                                     control="input"
                                     label="Zip Code"
@@ -1022,14 +1088,25 @@ const EmployeeForm = (props) => {
                                     }}
                                     placeholder={"Please choose"}
                                     style={{ maxWidth: 300 }}
+                                    components={
+                                      isView
+                                        ? {
+                                            DropdownIndicator: () => null,
+                                            IndicatorSeparator: () => null,
+                                          }
+                                        : null
+                                    }
                                     isDisabled={isView || sameAddress}
                                   />
                                   <FormikControl
                                     control="selectAsync"
                                     label="State/ Province"
                                     name="permanent_address.state_province_id"
-                                    url={`master/state-provinces?filters=["country_id","=","${formik.values.permanent_address.country_id.value}"]&size=-1`}                                                                       
+                                    url={`master/state-provinces?filters=["country_id","=","${formik.values.permanent_address.country_id.value}"]&size=-1`}
                                     fieldName={"state_province_name"}
+                                    key={JSON.stringify(
+                                      formik.values.permanent_address.country_id,
+                                    )}
                                     onChange={(v) => {
                                       formik.setFieldValue(
                                         "permanent_address.state_province_id",
@@ -1042,16 +1119,25 @@ const EmployeeForm = (props) => {
                                     }}
                                     placeholder={"Please choose"}
                                     style={{ maxWidth: 200 }}
+                                    components={
+                                      isView
+                                        ? {
+                                            DropdownIndicator: () => null,
+                                            IndicatorSeparator: () => null,
+                                          }
+                                        : null
+                                    }
                                     isDisabled={isView || sameAddress}
                                   />
                                   <FormikControl
                                     control="selectAsync"
                                     label="City"
                                     name="permanent_address.city_id"
-                                    url={`master/cities?filters=["state_province_id","=","${formik.values.permanent_address.state_province_id.value}"]&size=-1`}
-                                    
-                                    
-                                    fieldName={"city_name"}
+                                    url={`master/cities?filters=["country_id","=","${formik.values.address.country_id.value}"]&size=-1`}
+                                    fieldName={"city_name"}                                    
+                                    key={JSON.stringify(
+                                      formik.values.address.country_id,
+                                    )}
                                     onChange={(v) => {
                                       formik.setFieldValue(
                                         "permanent_address.city_id",
@@ -1060,6 +1146,14 @@ const EmployeeForm = (props) => {
                                     }}
                                     placeholder={"Please choose"}
                                     style={{ maxWidth: 200 }}
+                                    components={
+                                      isView
+                                        ? {
+                                            DropdownIndicator: () => null,
+                                            IndicatorSeparator: () => null,
+                                          }
+                                        : null
+                                    }
                                     isDisabled={isView || sameAddress}
                                   />
                                   <FormikControl
@@ -1214,8 +1308,8 @@ const EmployeeForm = (props) => {
                           ) : (
                             <>
                               <Button
-                                variant="primary"   
-                                onClick={() => setTabKey("employment")}                             
+                                variant="primary"
+                                onClick={() => setTabKey("employment")}
                                 disabled={formik.isSubmitting}
                                 style={{ marginRight: 15 }}
                               >
@@ -1228,7 +1322,7 @@ const EmployeeForm = (props) => {
                                 CANCEL
                               </Button>
                             </>
-                          )}                          
+                          )}
                         </div>
                       </Tab.Pane>
                       <Tab.Pane eventKey="employment">
@@ -1260,6 +1354,14 @@ const EmployeeForm = (props) => {
                                     }}
                                     placeholder={"Please choose"}
                                     style={{ maxWidth: 200 }}
+                                    components={
+                                      isView
+                                        ? {
+                                            DropdownIndicator: () => null,
+                                            IndicatorSeparator: () => null,
+                                          }
+                                        : null
+                                    }
                                     isDisabled={isView}
                                   />
                                   <FormikControl
@@ -1273,6 +1375,14 @@ const EmployeeForm = (props) => {
                                     }}
                                     placeholder={"Please choose"}
                                     style={{ maxWidth: 200 }}
+                                    components={
+                                      isView
+                                        ? {
+                                            DropdownIndicator: () => null,
+                                            IndicatorSeparator: () => null,
+                                          }
+                                        : null
+                                    }
                                     isDisabled={isView}
                                   />
                                   <FormikControl
@@ -1286,6 +1396,14 @@ const EmployeeForm = (props) => {
                                     }}
                                     placeholder={"Please choose"}
                                     style={{ maxWidth: 200 }}
+                                    components={
+                                      isView
+                                        ? {
+                                            DropdownIndicator: () => null,
+                                            IndicatorSeparator: () => null,
+                                          }
+                                        : null
+                                    }
                                     isDisabled={isView}
                                   />
                                   <Row className="required">
@@ -1317,6 +1435,16 @@ const EmployeeForm = (props) => {
                                             options={selectDay()}
                                             placeholder={dayToday}
                                             style={{ maxWidth: 240 }}
+                                            components={
+                                              isView
+                                                ? {
+                                                    DropdownIndicator: () =>
+                                                      null,
+                                                    IndicatorSeparator: () =>
+                                                      null,
+                                                  }
+                                                : null
+                                            }
                                             isDisabled={isView}
                                           />
                                         </div>
@@ -1339,6 +1467,16 @@ const EmployeeForm = (props) => {
                                               minWidth: 120,
                                               maxWidth: 240,
                                             }}
+                                            components={
+                                              isView
+                                                ? {
+                                                    DropdownIndicator: () =>
+                                                      null,
+                                                    IndicatorSeparator: () =>
+                                                      null,
+                                                  }
+                                                : null
+                                            }
                                             isDisabled={isView}
                                           />
                                         </div>
@@ -1358,6 +1496,16 @@ const EmployeeForm = (props) => {
                                               setYears(v)
                                             }}
                                             style={{ maxWidth: 240 }}
+                                            components={
+                                              isView
+                                                ? {
+                                                    DropdownIndicator: () =>
+                                                      null,
+                                                    IndicatorSeparator: () =>
+                                                      null,
+                                                  }
+                                                : null
+                                            }
                                             isDisabled={isView}
                                           />
                                         </div>
@@ -1371,7 +1519,7 @@ const EmployeeForm = (props) => {
                                     style={{ maxWidth: 200 }}
                                     disabled={isView}
                                     minLength="1"
-                                    maxLength="32"
+                                    maxLength="36"
                                   />
                                 </div>
                               </Col>
@@ -1455,7 +1603,7 @@ const EmployeeForm = (props) => {
                             <>
                               <Button
                                 variant="primary"
-                                type="submit"                                
+                                type="submit"
                                 disabled={!(formik.dirty || formik.isValid)}
                                 style={{ marginRight: 15 }}
                               >
