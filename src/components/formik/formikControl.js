@@ -24,7 +24,7 @@ function FormikControl(props) {
     case "selectOnly":
       return <SelectOnly {...rest} />
     case "selectAsync":
-      return <SelectAsync{...rest} />
+      return <SelectAsync {...rest} />    
     case 'checkboxOnly':
       return <Checkbox {...rest} />
     case 'radio':

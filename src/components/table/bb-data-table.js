@@ -144,14 +144,24 @@ class BBDataTable extends Component {
         let infoDelete = self.props.infoDelete
         let info = ""
         if(infoDelete) {
-          info = infoDelete.map(v => v.title + " : " + row[v.recordName]).join(" ")
+          info = infoDelete.map(v => {
+            let data = v.recordName
+            let result = Array.isArray(data);
+            let title = ""
+            if(result){
+              title = data.map(v => row[v]).join(" ")
+            }else{
+              title = row[data]
+            }
+            return v.title + " : " + title
+          }).join(" ")
         }
 
         return (
           `
           <a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item" data-action="edit" data-id="${row.id}" title="Click to edit"><img src="${editIcon}"/></a>
           <a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="${hideDetail ? "d-none" : "d-inline"} table-row-action-item" data-action="view" data-id="${row.id}" title="Click to view details"><img src="${showIcon}"/></a>
-          <a href="javascript:void(0);" class="${showSwitch ? "d-inline" : "d-none"} custom-switch custom-switch-bb table-row-action-item" data-id="${module == 'employees' ? row.employee_id: row.id}" data-action="update_status" data-status="${row.status}" data-toggle="tooltip" data-placement="${placement}" title="${row.status == 1 ? "Deactivate" : "Activate"}">
+          <a href="javascript:void(0);" class="${showSwitch ? "d-inline" : "d-none"} custom-switch custom-switch-bb table-row-action-item" data-id="${module == 'employee' ? row.employee_id: row.id}" data-action="update_status" data-status="${row.status}" data-toggle="tooltip" data-placement="${placement}" title="${row.status == 1 ? "Deactivate" : "Activate"}">
             <input type="checkbox" class="custom-control-input check-status-${row.id}" id="customSwitch${row.id}" ${checked} data-action="update_status">
             <label class="custom-control-label" for="customSwitch${row.id}" data-action="update_status"></label>
           </a>
@@ -491,18 +501,51 @@ class BBDataTable extends Component {
           },
           {
             targets: [1, 2],
-            className: !this.state.isCheckbox ? "custom-col-width": "cstm-col-width",
+            className: !this.state.isCheckbox ? module == "employee" ? "" : "custom-col-width": "cstm-col-width",
           },
           //   {
           //     responsivePriority: 10001,
           //     targets: [1, 3],
           //   },
           {
-            ordeable: false,
+              // The `data` parameter refers to the data for the cell (defined by the
+              // `data` option, which defaults to the column being worked with, in
+              // this case `data: 0`.
+              "render": function ( data, type, row ) {
+                var datas = data;
+                if(module == 'employee'){
+                  datas = data +' '+ row.middle_name + ' ' + row.surname;
+                }
+                  return datas
+              },
+              "targets": module == 'employee' ? 3 : ''
+          },
+          {
+              // The `data` parameter refers to the data for the cell (defined by the
+              // `data` option, which defaults to the column being worked with, in
+              // this case `data: 0`.
+              "render": function ( data, type, row ) {
+                var datas = data;
+                if(module == 'employee'){
+                  let division = "";
+                  if(row.division.division_name){
+                    division = row.division.division_name
+                  }
+
+                  datas = data +' '+ division;
+                }
+                  return datas
+              },
+              "targets": module == 'employee' ? 7 : ''
+          },
+          { visible: false,  targets: module == 'employee' ? [ 4, 5, 8 ] : [] },
+          {
+            orderable: false,
             // className: "table-row-action",
             targets: [columns.length - 1],
             width: "20%",
           },
+          
         ],
         // select: {
         //   style: "multi",

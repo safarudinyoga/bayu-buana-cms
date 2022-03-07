@@ -95,7 +95,7 @@ const Subscriptions = (props) => {
               </Card.Body>
               {
                 props.isMobile ? (
-                  <div style={{ marginBottom: 30, marginTop: 30, display: "flex", justifyContent: "center" }}>
+                  <div className="mb-5 ml-1 row justify-content-md-start justify-content-center">
                     <Button
                       variant="primary"
                       type="submit"
@@ -116,7 +116,7 @@ const Subscriptions = (props) => {
             </Card>
             {
               props.isMobile ? "" : (
-                <div style={{ marginBottom: 30, marginTop: 30, display: "flex" }}>
+                <div className="mt-4 mb-5 ml-1 row justify-content-md-start justify-content-center">
                   <Button
                     variant="primary"
                     type="submit"
@@ -134,7 +134,6 @@ const Subscriptions = (props) => {
                 </div>
               )
             }
-            
           </Form>
         )
       }}

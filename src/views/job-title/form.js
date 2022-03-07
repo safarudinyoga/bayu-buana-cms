@@ -115,10 +115,11 @@ function JobTitleForm(props) {
             "checkCode",
             function (value, element) {
               var req = false
+              let filters = JSON.stringify(["job_title_code","=",element.value])
               $.ajax({
                 type: "GET",
                 async: false,
-                url: `${env.API_URL}/master/job-titles?filters=["job_title_code","=","${element.value}"]`,
+                url: `${env.API_URL}/master/job-titles?filters=${encodeURIComponent(filters)}`,
                 success: function (res) {
                   if (res.items.length !== 0) {
                     if (currentCode === element.value) {
@@ -141,10 +142,11 @@ function JobTitleForm(props) {
             "checkName",
             function (value, element) {
               var req = false
+              let filters = JSON.stringify(["job_title_name","=",element.value])
               $.ajax({
                 type: "GET",
                 async: false,
-                url: `${env.API_URL}/master/job-titles?filters=["job_title_name","=","${element.value}"]`,
+                url: `${env.API_URL}/master/job-titles?filters=${encodeURIComponent(filters)}`,
                 success: function (res) {
                   if (res.items.length !== 0) {
                     if (currentName === element.value) {
@@ -178,10 +180,11 @@ function JobTitleForm(props) {
         "checkCode",
         function (value, element) {
           var req = false
+          let filters = JSON.stringify(["job_title_code","=",element.value])
           $.ajax({
             type: "GET",
             async: false,
-            url: `${env.API_URL}/master/job-titles?filters=["job_title_code","=","${element.value}"]`,
+            url: `${env.API_URL}/master/job-titles?filters=${encodeURIComponent(filters)}`,
             success: function (res) {
               if (res.items.length !== 0) {
                 req = false
@@ -199,10 +202,11 @@ function JobTitleForm(props) {
         "checkName",
         function (value, element) {
           var req = false
+          let filters = JSON.stringify(["job_title_name","=",element.value])
           $.ajax({
             type: "GET",
             async: false,
-            url: `${env.API_URL}/master/job-titles?filters=["job_title_name","=","${element.value}"]`,
+            url: `${env.API_URL}/master/job-titles?filters=${encodeURIComponent(filters)}`,
             success: function (res) {
               if (res.items.length !== 0) {
                 req = false
@@ -247,7 +251,7 @@ function JobTitleForm(props) {
       props.history.goBack()
       dispatch(
         setAlert({
-          message: `Record '${form.job_title_name
+          message: `Record '${!formId? "Job Title ": ""}${form.job_title_name
             }' has been successfully saved.`,
         }),
       )

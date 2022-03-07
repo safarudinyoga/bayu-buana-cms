@@ -3,6 +3,7 @@ import rowStatus from "lib/row-status"
 import React, {useEffect, useState} from "react"
 import {useDispatch} from "react-redux"
 import {setUIParams} from "redux/ui-store"
+import { renderColumn } from 'lib/translation';
 
 export default function JobTitleTable() {
   let dispatch = useDispatch()
@@ -39,6 +40,7 @@ export default function JobTitleTable() {
       {
         title: "Job Title Name",
         data: "job_title_name",
+        render: renderColumn("job_title", "job_title_name"),
       },
       {
         searchable: false,

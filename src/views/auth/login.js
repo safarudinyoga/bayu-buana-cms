@@ -9,6 +9,8 @@ import Api from "config/api"
 import Cookies from 'js-cookie'
 import { useDispatch } from "react-redux"
 import { setAlert } from "redux/ui-store"
+import {encrypt, decrypt} from "lib/bb-crypt"
+import getMenu from '../../config/menu';
 
 function Login() {
 	const dispatch = useDispatch()
@@ -17,15 +19,17 @@ function Login() {
 	const [ rememberMe, setRememberMe] = useState(false)
 
 	const api = new Api()
-	let cookie_rm = Cookies.get("remember_acc");
+	let cookie_rm = Cookies.get("persist_code");
 	let form = {
 		username: "",
 		password: "",
 	}
 	if(cookie_rm) {
+		let acc = decrypt(cookie_rm)
+		acc = JSON.parse(acc)
 		form = {
-			username: JSON.parse(cookie_rm).username,
-			password: JSON.parse(cookie_rm).password,
+			username: acc.username,
+			password: acc.password,
 		}
 	}
 	const [initialForm, setForm] = useState(form)
@@ -64,17 +68,20 @@ function Login() {
 	const onSubmit = async (values, a) => {
 		try {
 			let res = await api.post("/user/login", values)
-
+			await getMenu()
+			
 			let date = new Date();
 			date.setTime(date.getTime() + (res.data.expires_in));
 			Cookies.set('ut', res.data.access_token, {expires: date})
 
 			if (rememberMe) {
-				Cookies.set('remember_acc', JSON.stringify(values))
+				let acc = JSON.stringify(values)
+				acc = encrypt(acc)
+				Cookies.set('persist_code', acc)
 				Cookies.set('rt', res.data.refresh_token)
 			} else {
-				let rememberCookie = Cookies.get('remember_acc')
-				if(rememberCookie) Cookies.remove('remember_acc')
+				let rememberCookie = Cookies.get('persist_code')
+				if(rememberCookie) Cookies.remove('persist_code')
 			}
 			window.location.reload()
 		} catch(e) {
@@ -82,7 +89,7 @@ function Login() {
 				setAlert({
 				  message: e.response.data.message,
 				}),
-			  )
+			)
 		}
 	}
 
@@ -133,7 +140,7 @@ function Login() {
 	)
 
 	return (
-		<>
+		<div className="card-form-body-login">
 			<p className="title p-0 mb-1">Welcome Back!</p>
 			<p className="sub-title p-0 mb-4 mb-md-5">Please Sign in to continue</p>
 			<Formik
@@ -194,7 +201,7 @@ function Login() {
 				}
 				
 			</Formik>
-		</>
+		</div>
 	)
 }
 

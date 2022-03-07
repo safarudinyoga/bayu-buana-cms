@@ -91,6 +91,13 @@ export default function FrequentTravelerProgramTable() {
       {
         title: "Description",
         data: "description",
+        render: (data) => {
+          if (data === undefined) {
+            return ""
+          } else {
+            return data
+          }
+        },
       },
       {
         searchable: false,

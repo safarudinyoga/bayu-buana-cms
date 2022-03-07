@@ -54,7 +54,7 @@ $grey: #818181;
 			display: none;
 		}
 		@media (max-width: 768px) {
-			width: 45%;
+			width: 50%;
 			img {
 				display: none;
 			}
@@ -136,12 +136,23 @@ $grey: #818181;
 			@media (max-width: 768px) {
 				width: 90%;
 			}
+
+			&-login {
+				@media (min-width: 481px) and (max-width: 768px) {
+					padding-bottom: 20vh;
+				}
+			}
 		}
 		&-footer {
 			bottom: 0;
 			font-size: 0.83em;
 			color: $grey;
 			padding: 10px;
+			p {
+				text-align: center;
+				margin: 0;
+				padding: 0;
+			}
 
 			.bb-logo {
 				width: 136px;
@@ -152,6 +163,9 @@ $grey: #818181;
 			@media (max-width: 480px) {
 				color: white;
 			}
+			@media (min-width: 481px) and (max-width: 768px) {
+				bottom: 15vh
+			}
 		}
 		@media (max-width: 480px) {
 			width: 100%;
@@ -161,7 +175,8 @@ $grey: #818181;
 		}
 		@media (min-width: 481px) and (max-width: 768px) {
 			// padding-top: 0;
-			width: 55%;
+			width: 50%;
+			opacity: 96%;
 		}
 	}
 }
