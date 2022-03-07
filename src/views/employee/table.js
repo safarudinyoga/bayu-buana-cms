@@ -203,14 +203,12 @@ export default function EmployeeTable() {
       {
         title: "",
         data: "middle_name",
-        sortable: false,
-        searchable: false
+        visible: false
       },
       {
         title: "",
         data: "surname",
-        sortable: false,
-        searchable: false
+        visible: false
       },
       {
         title: "Email",
@@ -223,8 +221,7 @@ export default function EmployeeTable() {
       {
         title: "",
         data: "division.division_name",
-        sortable: false,
-        searchable: false
+        visible: false
       },
       {
         title: "Branch Office",
