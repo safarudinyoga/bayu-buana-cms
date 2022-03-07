@@ -93,23 +93,48 @@ const Subscriptions = (props) => {
                 </Form.Group>
               </div>
               </Card.Body>
+              {
+                props.isMobile ? (
+                  <div style={{ marginBottom: 30, marginTop: 30, display: "flex", justifyContent: "center" }}>
+                    <Button
+                      variant="primary"
+                      type="submit"
+                      disabled={!dirty || !isValid}
+                      style={{ marginRight: 15 }}
+                    >
+                      SAVE
+                    </Button>
+                    <Button
+                      variant="secondary"
+                      onClick={() => props.history.push("/")}
+                    >
+                      CANCEL
+                    </Button>
+                  </div>
+                ) : ""
+              }
             </Card>
-            <div style={{ marginBottom: 30, marginTop: 30, display: "flex" }}>
-              <Button
-                variant="primary"
-                type="submit"
-                disabled={!dirty || !isValid}
-                style={{ marginRight: 15 }}
-              >
-                SAVE
-              </Button>
-              <Button
-                variant="secondary"
-                onClick={() => props.history.push("/")}
-              >
-                CANCEL
-              </Button>
-            </div>
+            {
+              props.isMobile ? "" : (
+                <div style={{ marginBottom: 30, marginTop: 30, display: "flex" }}>
+                  <Button
+                    variant="primary"
+                    type="submit"
+                    disabled={!dirty || !isValid}
+                    style={{ marginRight: 15 }}
+                  >
+                    SAVE
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    onClick={() => props.history.push("/")}
+                  >
+                    CANCEL
+                  </Button>
+                </div>
+              )
+            }
+            
           </Form>
         )
       }}
