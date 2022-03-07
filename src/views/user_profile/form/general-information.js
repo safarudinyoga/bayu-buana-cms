@@ -5,6 +5,7 @@ import * as Yup from "yup"
 import ImageUploading from "react-images-uploading"
 import axios from "axios"
 import _ from "lodash"
+import "./user-profile-form.css"
 import { useWindowSize } from "rooks"
 
 import Api from "config/api"
@@ -832,7 +833,7 @@ const GeneralInformation = (props) => {
                                 components={{
                                   IndicatorSeparator: () => null,
                                 }}
-                                style={{ marginRight: 12}}
+                                style={{ marginRight: 12 }}
                                 onChange={(v) => {
                                   setFieldValue("dobDay", v)
                                 }}

@@ -3,6 +3,7 @@ import { Card, Form, Row, Col, Button } from "react-bootstrap"
 import { Formik } from "formik"
 import * as Yup from "yup"
 import Api from "config/api"
+import "./user-profile-form.css"
 
 const EmergencyContacts = (props) => {
   let api = new Api()
