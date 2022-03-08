@@ -377,3 +377,9 @@ table.dataTable thead .sorting_desc_disabled:after {
 .table-sm th {
   padding: 0.4rem 0.3rem;
 }
+
+@media (max-width: 600px) {
+  .hide-for-mobile {
+      display: none
+  }
+}

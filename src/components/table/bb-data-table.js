@@ -451,6 +451,7 @@ class BBDataTable extends Component {
         buttons: [
           {
             extend: "print",
+            className: "hide-for-mobile",
             header: true,
             footer: false,
             exportOptions: {
