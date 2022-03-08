@@ -21,7 +21,7 @@ const backUrl = "/master/employee"
 const options = {
   position: "bottom-right",
 }
-const EmployeeForm = (props) => {
+const EmployeeFormMobile = (props) => {
   const [openSnackbar] = useSnackbar(options)
   const history = useHistory()
   let dispatch = useDispatch()
