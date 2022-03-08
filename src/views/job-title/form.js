@@ -298,8 +298,8 @@ function JobTitleForm(props) {
           required={!isView}
           value={form.job_title_code}
           name="job_title_code"
-          cl={{md:"12"}}
-          cr={{md:6, lg: 5}}
+          cl={{md:"4"}}
+          cr={{md:8, lg: 5}}
           onChange={(e) =>
             setForm({...form, job_title_code: e.target.value})
           }
