@@ -64,7 +64,8 @@ export default function OfficeTable() {
     infoDelete: [
       {title: "Company/ Branch Office Name", recordName: "office_name"}, 
     ],
-    isOpenNewTab: false
+    isOpenNewTab: false,
+    actionWidthClass: "custom-action",
   })
 
   

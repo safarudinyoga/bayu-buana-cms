@@ -394,25 +394,18 @@ function OfficeForm(props) {
     >
       <div className="col-lg-12">
         <FormHorizontal>
-          <FormInputWrapper
-            label={"Company/ Branch Name"}
+          <FormInputControl
+            label="Company/ Branch Name"
             required={true}
-          >
-            <Row>
-              <Col md={9}>
-                <FormInput
-                  required={true}
-                  value={form.office_name}
-                  name="office_name"
-                  onChange={(e) => setForm({...form, office_name: e.target.value})}
-                  disabled={isView || loading}
-                  type="text"
-                  minLength="1"
-                  maxLength="256"
-                />
-              </Col>
-            </Row>
-          </FormInputWrapper>
+            value={form.office_name}
+            name="office_name"
+            onChange={(e) => setForm({...form, office_name: e.target.value})}
+            disabled={isView || loading}
+            type="text"
+            minLength="1"
+            maxLength="256"
+            cr={{md: 5}}
+          />
 
           <FormInputControl
             label={"Address"}
@@ -453,6 +446,7 @@ function OfficeForm(props) {
             }}
             disabled={isView || loading}
             type="select"
+            cr={{md: 5}}
           />
           }
           {
@@ -471,6 +465,7 @@ function OfficeForm(props) {
             }
             disabled={isView || loading}
             type="select"
+            cr={{md: 4}}
           />
           }
           {
@@ -489,6 +484,7 @@ function OfficeForm(props) {
             }
             disabled={isView || loading}
             type="select"
+            cr={{md: 4}}
           />
           }
 
@@ -586,24 +582,17 @@ function OfficeForm(props) {
             </Row>
           </FormInputWrapper>
 
-          <FormInputWrapper
+          <FormInputControl
             label={"Email"}
-            required={true}
-          >
-            <Row>
-              <Col md={9}>
-                <FormInput
-                  value={form.email}
-                  name="email"
-                  onChange={(e) => setForm({...form, email: e.target.value})}
-                  disabled={isView || loading}
-                  type="text"
-                  minLength="1"
-                  maxLength="256"
-                />
-              </Col>
-            </Row>
-          </FormInputWrapper>
+            value={form.email}
+            name="email"
+            onChange={(e) => setForm({...form, email: e.target.value})}
+            disabled={isView || loading}
+            type="text"
+            minLength="1"
+            maxLength="256"
+            cr={{md: 5}}
+          />
 
           <FormInputControl
             value={form.operation_hours}

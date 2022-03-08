@@ -103,20 +103,24 @@ export default class FormInputSelectAjax extends Component {
               }
 
               filtered.forEach((item) => {
-                if(this.props.column.includes(".")){
-                  const results = this.props.column.split(".");
-                  if(isGrouping){
-                    item.id   = item[this.props.fieldGroup]
-                    if(this.props.fieldGroup.includes(".")){
-                      const results = this.props.fieldGroup.split(".");
-                      item.id   = item[results[0]][results[1]]
+                if(this.props.column) {
+                  if(this.props.column.includes(".")){
+                    const results = this.props.column.split(".");
+                    if(isGrouping){
+                      item.id   = item[this.props.fieldGroup]
+                      if(this.props.fieldGroup.includes(".")){
+                        const results = this.props.fieldGroup.split(".");
+                        item.id   = item[results[0]][results[1]]
+                      }
                     }
+                    if(item[results[0]]){
+                      item.text = item[results[0]][results[1]]
+                    }
+                  }else{
+                    item.text = item[this.props.column]
                   }
-                  if(item[results[0]]){
-                    item.text = item[results[0]][results[1]]
-                  }
-                }else{
-                  item.text = item[this.props.column]
+                } else if(this.props.renderColumn) {
+                  item.text = this.props.renderColumn(item)
                 }
               })
 
