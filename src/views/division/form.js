@@ -321,7 +321,9 @@ function DivisionForm(props) {
           value={form.manager_id}
           name="manager_id"
           endpoint="/master/employees"
-          column="person.given_name"
+          renderColumn= {(item) => {
+            return `${item.given_name} ${item.middle_name} ${item.surname} (${item.job_title.job_title_name})`
+          }}
           sort="employee_number"
           filter={`["status", "=", 1]`}
           onChange={(e) =>
