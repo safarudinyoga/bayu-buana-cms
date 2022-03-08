@@ -373,7 +373,7 @@ const EmployeeForm = (props) => {
               return new Promise((resolve, reject) => {
                 axios
                   .get(
-                    `${env.API_URL}/master/employees?filters=["contact.email","=","${value}"]`,
+                    `${env.API_URL}/master/employees?filters=["contact.email","like","${value}"]`,  
                   )
                   .then((res) => {
                     resolve(res.data.items.length === 0)
@@ -386,7 +386,7 @@ const EmployeeForm = (props) => {
               return new Promise((resolve, reject) => {
                 axios
                   .get(
-                    `${env.API_URL}/master/employees?filters=["contact.email","=","${value}"]`,
+                    `${env.API_URL}/master/employees?filters=["contact.email","like","${value}"]`,
                   )
 
                   .then((res) => {
@@ -421,7 +421,7 @@ const EmployeeForm = (props) => {
             return new Promise((resolve, reject) => {
               axios
                 .get(
-                  `${env.API_URL}/master/employees?filters=["employee_number","=","${value}"]`,
+                  `${env.API_URL}/master/employees?filters=["employee_number","like","${value}"]`,
                 )
                 .then((res) => {
                   resolve(res.data.items.length === 0)
@@ -434,7 +434,7 @@ const EmployeeForm = (props) => {
             return new Promise((resolve, reject) => {
               axios
                 .get(
-                  `${env.API_URL}/master/employees?filters=["employee_number","=","${value}"]`,
+                  `${env.API_URL}/master/employees?filters=["employee_number","like","${value}"]`,
                 )
 
                 .then((res) => {
