@@ -132,7 +132,7 @@ function JobTitleForm(props) {
 
               return req
             },
-            "Job TItle Code already exists",
+            "Job Title Code already exists",
           )
 
           $.validator.addMethod(
@@ -192,7 +192,7 @@ function JobTitleForm(props) {
           })
           return req
         },
-        "Job TItle Code already exists",
+        "Job Title Code already exists",
       )
 
       $.validator.addMethod(
