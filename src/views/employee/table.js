@@ -221,11 +221,25 @@ export default function EmployeeTable() {
       {
         title: "",
         data: "division.division_name",
-        visible: false
+        visible: false,
+        render: (data) => {
+          if (data === undefined) {
+            return ""
+          } else {
+            return data
+          }
+        },
       },
       {
         title: "Branch Office",
         data: "office.office_name",
+        render: (data) => {
+          if (data === undefined) {
+            return ""
+          } else {
+            return data
+          }
+        },
       },
       {
         title: "Hire Date",
