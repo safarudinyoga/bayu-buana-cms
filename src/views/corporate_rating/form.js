@@ -290,6 +290,11 @@ function CorporateRatingForm(props) {
           type="number"
           min="1"
           max="9999"
+          onKeyPress={(event) => {
+            if (!/[0-9]/.test(event.key)) {
+              event.preventDefault();
+            }
+          }}
         />
         }
 
@@ -309,7 +314,11 @@ function CorporateRatingForm(props) {
           type="number"
           min="0"
           max="36"
-          hint="Location Category Code is numeric"
+          onKeyPress={(event) => {
+            if (!/[0-9]/.test(event.key)) {
+              event.preventDefault();
+            }
+          }}
         />
       </FormHorizontal>
 

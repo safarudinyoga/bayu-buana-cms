@@ -159,7 +159,7 @@ class BBDataTable extends Component {
 
         return (
           `
-          <a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item" data-action="edit" data-id="${row.id}" title="Click to edit"><img src="${editIcon}"/></a>
+          <a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item ${hideDetail ? "mr-2" : ""}" data-action="edit" data-id="${row.id}" title="Click to edit"><img src="${editIcon}"/></a>
           <a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="${hideDetail ? "d-none" : "d-inline"} table-row-action-item" data-action="view" data-id="${row.id}" title="Click to view details"><img src="${showIcon}"/></a>
           <a href="javascript:void(0);" class="${showSwitch ? "d-inline" : "d-none"} custom-switch custom-switch-bb table-row-action-item" data-id="${module == 'employee' ? row.employee_id: row.id}" data-action="update_status" data-status="${row.status}" data-toggle="tooltip" data-placement="${placement}" title="${row.status == 1 ? "Deactivate" : "Activate"}">
             <input type="checkbox" class="custom-control-input check-status-${row.id}" id="customSwitch${row.id}" ${checked} data-action="update_status">
@@ -191,6 +191,7 @@ class BBDataTable extends Component {
           //   iFixedColumnsRight: 4,
         },
         stateSave: false,
+        fixedColumn: true,
         serverSide: true,
         processing: true,
         displayLength: 10,
@@ -503,10 +504,7 @@ class BBDataTable extends Component {
             targets: [1, 2],
             className: !this.state.isCheckbox ? module == "employee" ? "" : "custom-col-width": "cstm-col-width",
           },
-          //   {
-          //     responsivePriority: 10001,
-          //     targets: [1, 3],
-          //   },
+          { responsivePriority: 1, targets: [1,2] },
           {
               // The `data` parameter refers to the data for the cell (defined by the
               // `data` option, which defaults to the column being worked with, in
@@ -532,19 +530,19 @@ class BBDataTable extends Component {
                     division = row.division.division_name
                   }
 
-                  datas = data +' '+ division;
+                  datas = data +'<br/>'+ division;
                 }
                   return datas
               },
               "targets": module == 'employee' ? 7 : ''
           },
           { visible: false,  targets: module == 'employee' ? [ 4, 5, 8 ] : [] },
-          {
-            orderable: false,
+          // {
+          //   orderable: false,
             // className: "table-row-action",
-            targets: [columns.length - 1],
-            width: "20%",
-          },
+          //   targets: [columns.length - 1],
+          //   width: "20%",
+          // },
           
         ],
         // select: {
@@ -646,6 +644,10 @@ class BBDataTable extends Component {
               .replace("/", "-")
               .split(" ")
               .join("_")
+          }
+
+          if(module == 'frequent_traveler_program'){
+            module = 'loyalty_programs'
           }
 
           let rowID = edit.triggerRow.data().id
