@@ -22,7 +22,7 @@ const SecuritySettings = (props) => {
   const validationSchema = Yup.object().shape({
     // Change Password
     oldPassword: Yup.string().required("Old Password is required"),
-    newPassword: Yup.string().required("New Password is required"),
+    newPassword: Yup.string().required("New Password is required").notOneOf([Yup.ref('oldPassword'), null], 'New Password must not be same as Old Password'),
     confirmPassword: Yup.string().required("Confirm password is required").oneOf([Yup.ref('newPassword'), null], 'New Password must match'),
   })
 
