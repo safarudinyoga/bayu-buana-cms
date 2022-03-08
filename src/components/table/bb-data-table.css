@@ -1,9 +1,19 @@
 .dataTable-root .card > .card-body {
   padding: 0;
 }
-.dataTable-root thead th:last-child,
-.dataTable-root tbody td:last-child {
+.action-col-width {
   width: 12% !important;
+}
+.custom-action {
+  width: 18% !important;
+}
+@media (min-width: 768px) and (max-width: 813px) {
+  .custom-action {
+    width: 19% !important;
+  }
+  .action-col-width {
+    width: 14% !important;
+  }
 }
 .dataTables_scrollHead {
   margin-top: -1px;

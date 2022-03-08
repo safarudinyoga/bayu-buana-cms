@@ -537,6 +537,10 @@ class BBDataTable extends Component {
               "targets": module == 'employee' ? 7 : ''
           },
           { visible: false,  targets: module == 'employee' ? [ 4, 5, 8 ] : [] },
+          {
+            className: this.props.actionWidthClass || "action-col-width",
+            targets: [columns.length - 1],
+          }
           // {
           //   orderable: false,
             // className: "table-row-action",
