@@ -203,14 +203,12 @@ export default function EmployeeTable() {
       {
         title: "",
         data: "middle_name",
-        sortable: false,
-        searchable: false
+        visible: false
       },
       {
         title: "",
         data: "surname",
-        sortable: false,
-        searchable: false
+        visible: false
       },
       {
         title: "Email",
@@ -223,12 +221,25 @@ export default function EmployeeTable() {
       {
         title: "",
         data: "division.division_name",
-        sortable: false,
-        searchable: false
+        visible: false,
+        render: (data) => {
+          if (data === undefined) {
+            return ""
+          } else {
+            return data
+          }
+        },
       },
       {
         title: "Branch Office",
         data: "office.office_name",
+        render: (data) => {
+          if (data === undefined) {
+            return ""
+          } else {
+            return data
+          }
+        },
       },
       {
         title: "Hire Date",

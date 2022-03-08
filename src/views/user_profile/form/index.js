@@ -9,7 +9,9 @@ import { setUIParams } from "redux/ui-store"
 import GeneralInformation from "./general-information"
 import EmergencyContacts from "./emergency-contacts"
 import SecuritySettings from "./security-settings"
-import Subscriptions from "./subscriptions";
+import Subscriptions from "./subscriptions"
+import UserProfileMobile from "./user-profile-mobile";
+import "./user-profile-form.css"
 
 import { useWindowSize } from "rooks"
 import { Card } from "react-bootstrap";

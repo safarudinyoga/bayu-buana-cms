@@ -452,6 +452,13 @@ const EmployeeFormMobile = (props) => {
     npwp: Yup.number().typeError('NPWP must be a number'),
   })
 
+  const [currentActiveKey, setCurrentActiveKey] = useState(null);
+
+  const toggleActiveKey = (key) => {
+    setCurrentActiveKey(currentActiveKey === key ? null : key);
+  };
+
+  console.log(currentActiveKey,"haha")
   return (
     <Formik
       initialValues={formValues || initialValues}
@@ -545,20 +552,24 @@ const EmployeeFormMobile = (props) => {
         console.log("formik", formik)
         return (
           <Form className={props.className}>
-            <Accordion>
+            <Accordion activeKey={currentActiveKey}>
                 <Card className="mb-0">
-                {/* <Card.Header> */}
-                    <Accordion.Toggle as={Card.Header} eventKey="general-information">
+                    <Accordion.Toggle 
+                      as={Card.Header} 
+                      eventKey="general-information"
+                      style={currentActiveKey === "general-information" ? { backgroundColor: "#dddddd", color: "#038072" } : null} 
+                      onClick={() => { toggleActiveKey("general-information"); }}
+                    >
                         <div style={{ display: "inline-flex" }}>
-                            <ReactSVG src="/img/icons/general-information.svg" />
+                            <ReactSVG 
+                              src="/img/icons/general-information.svg" 
+                              className={currentActiveKey === "general-information" ? "icon-active" : "icon-grey"} 
+                            />
                             <span style={{ paddingLeft: "10px" }}>General Information</span>
                         </div>
                     </Accordion.Toggle>
-                {/* </Card.Header> */}
                 <Accordion.Collapse eventKey="general-information">
                     <Card.Body>
-                    {/* <Card>
-                        <Card.Body> */}
                           <h3 className="card-heading">General Information</h3>
                           <div style={{ padding: "0 15px 15px" }}>
                             <Row>
@@ -633,7 +644,7 @@ const EmployeeFormMobile = (props) => {
                                               v,
                                             )
                                           }}
-                                          style={{ maxWidth: 240 }}
+                                          style={{ minWidth:75, maxWidth: 240 }}
                                           isDisabled={isView}
                                         />
                                       </div>
@@ -669,7 +680,7 @@ const EmployeeFormMobile = (props) => {
                                               v,
                                             )
                                           }}
-                                          style={{ maxWidth: 240 }}
+                                          style={{ minWidth: 82, maxWidth: 240 }}
                                           isDisabled={isView}
                                         />
                                       </div>
@@ -1005,7 +1016,7 @@ const EmployeeFormMobile = (props) => {
                       >
                         <Button
                           variant="primary"
-                          onClick={() => setTabKey("emergency-contacts")}
+                          onClick={() => setCurrentActiveKey("emergency-contacts")}
                           disabled={formik.isSubmitting}
                           style={{ marginRight: 15 }}
                         >
@@ -1022,18 +1033,22 @@ const EmployeeFormMobile = (props) => {
                 </Accordion.Collapse>
                 </Card>
                 <Card className="mb-0">
-                {/* <Card.Header> */}
-                    <Accordion.Toggle as={Card.Header} eventKey="emergency-contacts">
+                    <Accordion.Toggle 
+                      as={Card.Header} 
+                      eventKey="emergency-contacts"
+                      style={currentActiveKey === "emergency-contacts" ? { backgroundColor: "#dddddd", color: "#038072" } : null} 
+                      onClick={() => { toggleActiveKey("emergency-contacts"); }}
+                    >
                         <div style={{ display: "inline-flex" }}>
-                            <ReactSVG src="/img/icons/emergency-contacts.svg" />
+                            <ReactSVG 
+                              src="/img/icons/emergency-contacts.svg" 
+                              className={currentActiveKey === "emergency-contacts" ? "icon-active" : "icon-grey"} 
+                            />
                             <span style={{ paddingLeft: "10px" }}>Emergency Contacts</span>
                         </div>
                     </Accordion.Toggle>
-                {/* </Card.Header> */}
                 <Accordion.Collapse eventKey="emergency-contacts">
                 <Card.Body>
-                {/* <Card>
-                    <Card.Body> */}
                         <h3 className="card-heading">Emergency Contact 1</h3>
                         <Row>
                         <Col lg={11}>
@@ -1117,7 +1132,7 @@ const EmployeeFormMobile = (props) => {
                       >
                         <Button
                           variant="primary"
-                          onClick={() => setTabKey("employment")}
+                          onClick={() => setCurrentActiveKey("employment")}
                           disabled={formik.isValid}
                           style={{ marginRight: 15 }}
                         >
@@ -1125,7 +1140,7 @@ const EmployeeFormMobile = (props) => {
                         </Button>
                         <Button
                           variant="secondary"
-                          onClick={() => setTabKey("general-information")}
+                          onClick={() => setCurrentActiveKey("general-information")}
                         >
                           CANCEL
                         </Button>
@@ -1134,14 +1149,20 @@ const EmployeeFormMobile = (props) => {
                 </Accordion.Collapse>
                 </Card>
                 <Card >
-                {/* <Card.Header> */}
-                    <Accordion.Toggle as={Card.Header} eventKey="employment">
+                    <Accordion.Toggle 
+                      as={Card.Header} 
+                      eventKey="employment"
+                      style={currentActiveKey === "employment" ? { backgroundColor: "#dddddd", color: "#038072" } : null} 
+                      onClick={() => { toggleActiveKey("employment"); }}
+                    >
                         <div style={{ display: "inline-flex" }}>
-                            <ReactSVG src="/img/icons/employment.svg" />
+                            <ReactSVG 
+                              src="/img/icons/employment.svg" 
+                              className={currentActiveKey === "employment" ? "icon-active" : "icon-grey"}  
+                            />
                             <span style={{ paddingLeft: "10px" }}>Employment</span>
                         </div>
                     </Accordion.Toggle>
-                {/* </Card.Header> */}
                 
                 <Accordion.Collapse eventKey="employment">
                     <Card.Body>
@@ -1224,7 +1245,7 @@ const EmployeeFormMobile = (props) => {
                                           }}
                                           options={selectDay()}
                                           placeholder={"Date"}
-                                          style={{ maxWidth: 240 }}
+                                          style={{ minWidth: 75, maxWidth: 240 }}
                                           isDisabled={isView}
                                         />
                                       </div>
@@ -1240,7 +1261,7 @@ const EmployeeFormMobile = (props) => {
                                               v,
                                             )
                                           }}
-                                          style={{ minWidth: 120, maxWidth: 240 }}
+                                          style={{ minWidth: 110, maxWidth: 240 }}
                                           isDisabled={isView}
                                         />
                                       </div>
@@ -1256,7 +1277,7 @@ const EmployeeFormMobile = (props) => {
                                               v,
                                             )
                                           }}
-                                          style={{ maxWidth: 240 }}
+                                          style={{ minWidth: 82, maxWidth: 240 }}
                                           isDisabled={isView}
                                         />
                                       </div>
@@ -1318,7 +1339,7 @@ const EmployeeFormMobile = (props) => {
                         </Button>
                         <Button
                           variant="secondary"
-                          onClick={() => setTabKey("emergency-contacts")}
+                          onClick={() => setCurrentActiveKey("emergency-contacts")}
                         >
                           CANCEL
                         </Button>
