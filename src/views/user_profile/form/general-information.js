@@ -710,6 +710,7 @@ const GeneralInformation = (props) => {
                                   <Select
                                     {...field}
                                     options={selectNamePrefix}
+                                    isDisabled={true}
                                     defaultValue={values.title}
                                     className={`react-select ${
                                       form.touched.title && form.errors.title
@@ -739,11 +740,12 @@ const GeneralInformation = (props) => {
                           <span className="form-label-required">*</span>
                         </Form.Label>
                         <Col sm={8}>
-                          <FastField name="firstName">
+                          <FastField name="firstName" disabled>
                             {({ field, form }) => (
                               <>
                                 <Form.Control
                                   type="text"
+                                  disabled
                                   isInvalid={
                                     form.touched.firstName &&
                                     form.errors.firstName
@@ -775,6 +777,7 @@ const GeneralInformation = (props) => {
                               <Form.Control
                                 {...field}
                                 type="text"
+                                disabled
                                 minLength={1}
                                 maxLength={128}
                               />
@@ -793,6 +796,7 @@ const GeneralInformation = (props) => {
                               <>
                                 <Form.Control
                                   {...field}
+                                  disabled
                                   type="text"
                                   isInvalid={
                                     form.touched.lastName &&
