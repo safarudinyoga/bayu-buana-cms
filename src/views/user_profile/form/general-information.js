@@ -113,8 +113,8 @@ const GeneralInformation = (props) => {
     // Current Address
     currentAddress: Yup.string(),
     currentCountry: Yup.object().required("Country is required."),
-    currentProvince: Yup.object(),
-    currentCity: Yup.object(),
+    currentProvince: Yup.object().nullable(true),
+    currentCity: Yup.object().nullable(true),
     currentZipCode: Yup.string(),
 
     // Permanent Address
@@ -124,8 +124,8 @@ const GeneralInformation = (props) => {
       is: false,
       then: Yup.object().required("Country is required."),
     }),
-    permanentProvince: Yup.object(),
-    permanentCity: Yup.object(),
+    permanentProvince: Yup.object().nullable(true),
+    permanentCity: Yup.object().nullable(true),
     permanentZipCode: Yup.string(),
   })
 
