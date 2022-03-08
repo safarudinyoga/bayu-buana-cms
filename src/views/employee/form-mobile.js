@@ -1431,7 +1431,7 @@ const EmployeeFormMobile = (props) => {
                                           }}
                                           options={selectDay()}
                                           placeholder={dayToday}
-                                          style={{ maxWidth: 240 }}
+                                          style={{ minWidth: 75, maxWidth: 240 }}
                                           components={
                                             isView
                                               ? {
@@ -1459,7 +1459,7 @@ const EmployeeFormMobile = (props) => {
                                             setMonths(v)
                                           }}
                                           style={{
-                                            minWidth: 120,
+                                            minWidth: 110,
                                             maxWidth: 240,
                                           }}
                                           components={
@@ -1488,7 +1488,7 @@ const EmployeeFormMobile = (props) => {
                                             )
                                             setYears(v)
                                           }}
-                                          style={{ maxWidth: 240 }}
+                                          style={{ minWidth: 82, maxWidth: 240 }}
                                           components={
                                             isView
                                               ? {
