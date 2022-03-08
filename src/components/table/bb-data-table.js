@@ -451,7 +451,6 @@ class BBDataTable extends Component {
         buttons: [
           {
             extend: "print",
-            className: "hide-for-mobile",
             header: true,
             footer: false,
             exportOptions: {
@@ -502,10 +501,10 @@ class BBDataTable extends Component {
             width: "5%",
           },
           {
-            targets: [1, 2, 3],
+            targets: [1, 2],
             className: !this.state.isCheckbox ? module == "employee" ? "" : "custom-col-width": "cstm-col-width",
           },
-          { responsivePriority: 2, targets: [1,2] },
+          { responsivePriority: 1, targets: [1,2] },
           {
               // The `data` parameter refers to the data for the cell (defined by the
               // `data` option, which defaults to the column being worked with, in
