@@ -25,8 +25,8 @@ const ParentMenu = ({menu}) => {
         <img src={menu_link_asset.multimedia_description.url} alt={menu_link_asset.multimedia_description.file_name} />
         <p>
           {menu.description}
-          {submenu.length > 0 && <i className="right fas fa-angle-right"></i>}
         </p>
+          {menu.is_expanded && <i className="right fas fa-angle-right"></i>}
       </Link>
       {
         submenu.length > 0 && (

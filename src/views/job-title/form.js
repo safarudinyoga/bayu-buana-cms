@@ -24,6 +24,9 @@ function JobTitleForm(props) {
   const [translations, setTranslations] = useState([])
   const [supplierTypeData, setSupplierTypeData] = useState([])
   const [id, setId] = useState(null)
+  const [disabledSave, setDisabledSave] = useState(true)
+  const [validCode, SetValidCode] = useState(false)
+  const [validName, SetValidName] = useState(false)
   const [form, setForm] = useState({
     job_title_code: "",
     job_title_name: "",
@@ -73,14 +76,11 @@ function JobTitleForm(props) {
   useEffect(async () => {
     let api = new Api()    
 
-    let bcTitle = "Edit Job Title"
-    let docTitle = bcTitle
+    let docTitle = "Edit Job Title"
     if (!formId) {
-      bcTitle = "Create Job Title"
-      docTitle = "Create New Job Title"
+      docTitle = "Create Job Title"
     } else if (isView) {
-      bcTitle = "Job Title Details"
-      docTitle = bcTitle
+      docTitle = "Job Title Details"
     }
 
     dispatch(
@@ -95,7 +95,7 @@ function JobTitleForm(props) {
             text: "Job Title",
           },
           {
-            text: bcTitle,
+            text: docTitle,
           },
         ],
       }),
@@ -133,9 +133,10 @@ function JobTitleForm(props) {
                 },
               })
 
+              SetValidCode(req)
               return req
             },
-            "Job TItle Code already exists",
+            "Job Title Code already exists",
           )
 
           $.validator.addMethod(
@@ -160,6 +161,7 @@ function JobTitleForm(props) {
                 },
               })
 
+              SetValidName(req)
               return req
             },
             "Job Title Name already exists",
@@ -193,9 +195,10 @@ function JobTitleForm(props) {
               }
             },
           })
+          SetValidCode(req)
           return req
         },
-        "Job TItle Code already exists",
+        "Job Title Code already exists",
       )
 
       $.validator.addMethod(
@@ -215,13 +218,25 @@ function JobTitleForm(props) {
               }
             },
           })
-
+          SetValidName(req)
           return req
         },
         "Job Title Name already exists",
       )
     }
   }, [])
+
+  const checkValue = () => {
+    if(validCode && validName && form.job_title_code !== "" && form.job_title_name !== "") {
+      setDisabledSave(false)
+    } else {
+      setDisabledSave(true)
+    }
+  } 
+
+  useEffect(() => {
+    checkValue()
+  }, [form, validCode, validName])
 
   useEffect(() => {
     if (!props.match.params.id) {
@@ -271,6 +286,7 @@ function JobTitleForm(props) {
       onBuild={(el) => setFormBuilder(el)}
       isView={isView || loading}
       onSave={onSave}
+      disabledSave={disabledSave}
       back={backUrl}
       translations={translations}
       translationFields={translationFields}
@@ -282,7 +298,7 @@ function JobTitleForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Name"
-          required={true}
+          required={!isView}
           value={form.job_title_name}
           name="job_title_name"
           onChange={(e) =>
@@ -298,11 +314,11 @@ function JobTitleForm(props) {
       <FormHorizontal>
         <FormInputControl
           label="Code"
-          required={true}
+          required={!isView}
           value={form.job_title_code}
           name="job_title_code"
-          cl={{md:"12"}}
-          cr="12"
+          cl={{md:"4"}}
+          cr={{md:8, lg: 5}}
           onChange={(e) =>
             setForm({...form, job_title_code: e.target.value})
           }

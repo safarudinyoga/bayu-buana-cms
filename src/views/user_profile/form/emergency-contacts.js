@@ -3,6 +3,7 @@ import { Card, Form, Row, Col, Button } from "react-bootstrap"
 import { Formik } from "formik"
 import * as Yup from "yup"
 import Api from "config/api"
+import "./user-profile-form.css"
 
 const EmergencyContacts = (props) => {
   let api = new Api()
@@ -112,7 +113,7 @@ const EmergencyContacts = (props) => {
       }) => {
         return (
           <Form onSubmit={handleSubmit}>
-            <Card>
+            <Card style={{marginBottom: 0}}>
               <Card.Body>
                 <h3 className="card-heading">Emergency Contact 1</h3>
                 <div style={{ padding: "0 15px 15px" }}>
@@ -218,24 +219,48 @@ const EmergencyContacts = (props) => {
                     </Col>
                   </Form.Group>
                 </div>
+                {
+                  props.isMobile ? (
+                    <div className="mb-5 ml-1 row justify-content-md-start justify-content-center">
+                      <Button
+                        variant="primary"
+                        type="submit"
+                        disabled={!dirty || !isValid}
+                        style={{ marginRight: 15 }}
+                      >
+                        SAVE
+                      </Button>
+                      <Button
+                        variant="secondary"
+                        onClick={() => props.history.push("/")}
+                      >
+                        CANCEL
+                      </Button>
+                    </div>
+                  ) : ""
+                }
               </Card.Body>
             </Card>
-            <div className="mb-5 ml-1 row justify-content-md-start justify-content-center">
-              <Button
-                variant="primary"
-                type="submit"
-                disabled={!dirty || !isValid}
-                style={{ marginRight: 15, width: '80px'  }}
-              >
-                SAVE
-              </Button>
-              <Button
-                variant="secondary"
-                onClick={() => props.history.push("/")}
-              >
-                CANCEL
-              </Button>
-            </div>
+            {
+              props.isMobile ? "" : (
+                <div className="mt-4 mb-5 ml-1 row justify-content-md-start justify-content-center">
+                  <Button
+                    variant="primary"
+                    type="submit"
+                    disabled={!dirty || !isValid}
+                    style={{ marginRight: 15 }}
+                  >
+                    SAVE
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    onClick={() => props.history.push("/")}
+                  >
+                    CANCEL
+                  </Button>
+                </div>
+              )
+            }
           </Form>
         )
       }}

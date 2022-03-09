@@ -1,9 +1,19 @@
 .dataTable-root .card > .card-body {
   padding: 0;
 }
-.dataTable-root thead th:last-child,
+/* .dataTable-root thead th:last-child,
 .dataTable-root tbody td:last-child {
   width: 12% !important;
+} */
+@media (min-width: 768px) and (max-width: 813px) {
+  .custom-action {
+    width: 19% !important;
+  }
+}
+@media (min-width: 814px) {
+  .custom-action {
+    width: 18% !important;
+  }
 }
 .dataTables_scrollHead {
   margin-top: -1px;
@@ -170,6 +180,7 @@ table.dataTable > tbody > tr.child span.dtr-data {
 
 .custom-col-width {
   min-width: 86px !important;
+  max-width: 100px !important;
   word-break: break-all;
 }
 
@@ -183,7 +194,7 @@ table.dataTable > tbody > tr.child span.dtr-data {
   left: 11px !important;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 1280px) {
   .wo-checkbox {
     width: 10px !important;
     min-width: 10px !important;
@@ -232,13 +243,13 @@ table.dataTable > tbody > tr.child span.dtr-data {
 
 @media (min-width: 321px) and (max-width: 390px) {
   .custom-col-width {
-    min-width: 115px !important;
+    min-width: 116px !important;
     width: 40% !important;
   }
 }
 @media (min-width: 391px) and (max-width: 410px) {
   .custom-col-width {
-    min-width: 134px !important;
+    min-width: 132px !important;
     max-width: 200px !important;
   }
 }

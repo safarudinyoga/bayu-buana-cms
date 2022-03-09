@@ -40,6 +40,7 @@ class FormBuilder extends Component {
         txtsave={this.props.txtSave}
         txtback={this.props.txtBack}
         id={this.props.id}
+        disabledSave={this.props.disabledSave}
       >
         {this.props.showHeaderTitle && <h3 className="card-heading">{this.props.headerTitle}</h3> }
         <FormWrapper>{this.props.children}</FormWrapper>

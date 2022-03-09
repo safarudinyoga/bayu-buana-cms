@@ -70,7 +70,8 @@ export default function JobTitleTable() {
         {value: "3", label: "Inactive"},
       ]
     },
-    isOpenNewTab: false
+    isOpenNewTab: false,
+    actionWidthClass: "custom-action",
   })
 
   return <BBDataTable {...params} {...params} />
