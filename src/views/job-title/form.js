@@ -24,6 +24,9 @@ function JobTitleForm(props) {
   const [translations, setTranslations] = useState([])
   const [supplierTypeData, setSupplierTypeData] = useState([])
   const [id, setId] = useState(null)
+  const [disabledSave, setDisabledSave] = useState(true)
+  const [validCode, SetValidCode] = useState(false)
+  const [validName, SetValidName] = useState(false)
   const [form, setForm] = useState({
     job_title_code: "",
     job_title_name: "",
@@ -130,6 +133,7 @@ function JobTitleForm(props) {
                 },
               })
 
+              SetValidCode(req)
               return req
             },
             "Job Title Code already exists",
@@ -157,6 +161,7 @@ function JobTitleForm(props) {
                 },
               })
 
+              SetValidName(req)
               return req
             },
             "Job Title Name already exists",
@@ -190,6 +195,7 @@ function JobTitleForm(props) {
               }
             },
           })
+          SetValidCode(req)
           return req
         },
         "Job Title Code already exists",
@@ -212,13 +218,25 @@ function JobTitleForm(props) {
               }
             },
           })
-
+          SetValidName(req)
           return req
         },
         "Job Title Name already exists",
       )
     }
   }, [])
+
+  const checkValue = () => {
+    if(validCode && validName && form.job_title_code !== "" && form.job_title_name !== "") {
+      setDisabledSave(false)
+    } else {
+      setDisabledSave(true)
+    }
+  } 
+
+  useEffect(() => {
+    checkValue()
+  }, [form, validCode, validName])
 
   useEffect(() => {
     if (!props.match.params.id) {
@@ -268,6 +286,7 @@ function JobTitleForm(props) {
       onBuild={(el) => setFormBuilder(el)}
       isView={isView || loading}
       onSave={onSave}
+      disabledSave={disabledSave}
       back={backUrl}
       translations={translations}
       translationFields={translationFields}
