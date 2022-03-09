@@ -99,13 +99,13 @@ const EmployeeForm = (props) => {
             },
             state_province_id: {
               label:
-                data?.address?.state_province?.state_province_name ||
-                "Please choose",
-              value: data?.address?.state_province_id || null,
+                data?.address?.state_province?.state_province_name,
+                
+              value: data?.address?.state_province_id,
             },
             city_id: {
-              label: data?.address?.city?.city_name || "Please choose",
-              value: data?.address?.city_id || null,
+              label: data?.address?.city?.city_name ,
+              value: data?.address?.city_id,
             },
             postal_code: data?.address?.postal_code,
           },
@@ -117,13 +117,12 @@ const EmployeeForm = (props) => {
             },
             state_province_id: {
               label:
-                data.permanent_address?.state_province?.state_province_name ||
-                "Please choose",
-              value: data.permanent_address?.state_province_id || null,
+                data.permanent_address?.state_province?.state_province_name,
+              value: data.permanent_address?.state_province_id,
             },
             city_id: {
-              label: data.permanent_address?.city?.city_name || "Please choose",
-              value: data.permanent_address?.city_id || null,
+              label: data.permanent_address?.city?.city_name,
+              value: data.permanent_address?.city_id,
             },
             postal_code: data.permanent_address.postal_code,
           },
@@ -132,12 +131,12 @@ const EmployeeForm = (props) => {
             value: data.job_title.id,
           },
           division_id: {
-            label: data?.division?.division_name || "Please choose",
-            value: data?.division?.id || null,
+            label: data?.division?.division_name,
+            value: data?.division?.id,
           },
           office_id: {
-            label: data?.office?.office_name || "Please choose",
-            value: data?.office?.id || null,
+            label: data?.office?.office_name,
+            value: data?.office?.id,
           },
           hire_date: [
             {
@@ -280,7 +279,7 @@ const EmployeeForm = (props) => {
   //FormatDate XXXX-XX-XX
   function formatDate(date) {
     var d = new Date(date),
-      day = "" + (d.getDate()),
+      day = "" + d.getDate(),
       month = "" + (d.getMonth() + 1),
       year = d.getFullYear()
     if (month.length < 2) month = "0" + month
@@ -296,11 +295,7 @@ const EmployeeForm = (props) => {
     given_name: "",
     middle_name: "",
     surname: "",
-    birth_date: [
-      { value: dayToday, label: dayToday },
-      { value: monthToday, label: monthToday },
-      { value: yearToday, label: yearToday },
-    ],
+    birth_date: [],
     gender_id: "db24d53c-7d36-4770-8598-dc36174750af",
     ktp: "",
 
@@ -315,15 +310,15 @@ const EmployeeForm = (props) => {
     address: {
       address_line: "",
       country_id: "",
-      state_province_id: { value: null, label: "Please choose" },
-      city_id: { value: null, label: "Please choose" },
+      state_province_id: "",
+      city_id: "",
       postal_code: "",
     },
     permanent_address: {
       address_line: "",
       country_id: "",
-      state_province_id: { value: null, label: "Please choose" },
-      city_id: { value: null, label: "Please choose" },
+      state_province_id: "",
+      city_id: "",
       postal_code: "",
     },
     //EmergencyContact
@@ -340,8 +335,8 @@ const EmployeeForm = (props) => {
     //Employment
     employee_number: "",
     job_title_id: "",
-    division_id: { value: null, label: "Please choose" },
-    office_id: { value: null, label: "Please choose" },
+    division_id: "",
+    office_id: "",
     hire_date: [
       { value: dayToday, label: dayToday },
       { value: monthToday, label: monthToday },
@@ -373,10 +368,10 @@ const EmployeeForm = (props) => {
               return new Promise((resolve, reject) => {
                 axios
                   .get(
-                    `${env.API_URL}/master/employees?filters=["contact.email","like","${value}"]`,  
+                    `${env.API_URL}/master/employees?filters=["contact.email","=","${value}"]`,
                   )
                   .then((res) => {
-                    resolve(res.data.items.length === 0)
+                    resolve(res.data.items.length === 0)                    
                   })
                   .catch((error) => {
                     resolve(false)
@@ -386,7 +381,7 @@ const EmployeeForm = (props) => {
               return new Promise((resolve, reject) => {
                 axios
                   .get(
-                    `${env.API_URL}/master/employees?filters=["contact.email","like","${value}"]`,
+                    `${env.API_URL}/master/employees?filters=["contact.email","=","${value}"]`,
                   )
 
                   .then((res) => {
@@ -421,7 +416,7 @@ const EmployeeForm = (props) => {
             return new Promise((resolve, reject) => {
               axios
                 .get(
-                  `${env.API_URL}/master/employees?filters=["employee_number","like","${value}"]`,
+                  `${env.API_URL}/master/employees?filters=["employee_number","=","${value}"]`,
                 )
                 .then((res) => {
                   resolve(res.data.items.length === 0)
@@ -434,7 +429,7 @@ const EmployeeForm = (props) => {
             return new Promise((resolve, reject) => {
               axios
                 .get(
-                  `${env.API_URL}/master/employees?filters=["employee_number","like","${value}"]`,
+                  `${env.API_URL}/master/employees?filters=["employee_number","=","${value}"]`,
                 )
 
                 .then((res) => {
@@ -650,7 +645,7 @@ const EmployeeForm = (props) => {
                                 >
                                   <FormikControl
                                     control="selectAsync"
-                                    required="label-required"
+                                    required={isView ? "" : "label-required"}
                                     label="Title"
                                     name="name_prefix_id"
                                     placeholder={
@@ -674,7 +669,7 @@ const EmployeeForm = (props) => {
                                   />
                                   <FormikControl
                                     control="input"
-                                    required="label-required"
+                                    required={isView ? "" : "label-required"}
                                     label="First Name"
                                     name="given_name"
                                     style={{ maxWidth: 250 }}
@@ -691,7 +686,7 @@ const EmployeeForm = (props) => {
                                   />
                                   <FormikControl
                                     control="input"
-                                    required="label-required"
+                                    required={isView ? "" : "label-required"}
                                     label="Last Name"
                                     name="surname"
                                     style={{ maxWidth: 250 }}
@@ -703,7 +698,11 @@ const EmployeeForm = (props) => {
                                     <Col column md={3} lg={4}>
                                       <label className="text-label-input">
                                         Date Of Birth
-                                        <span className="label-required" />
+                                        <span
+                                          className={
+                                            isView ? "" : "label-required"
+                                          }
+                                        />
                                       </label>
                                     </Col>
                                     <Col className="mb-2" md={9} lg={8}>
@@ -792,7 +791,7 @@ const EmployeeForm = (props) => {
                                               formik.setFieldValue(
                                                 "birth_date[2]",
                                                 v,
-                                              )                                              
+                                              )
                                               formik.setFieldValue(
                                                 "birth_date[0]",
                                                 {
@@ -825,7 +824,7 @@ const EmployeeForm = (props) => {
                                   </Row>
                                   <FormikControl
                                     control="radio"
-                                    required="label-required"
+                                    required={isView ? "" : "label-required"}
                                     label="Gender"
                                     name="gender_id"
                                     options={optionGender}
@@ -871,7 +870,7 @@ const EmployeeForm = (props) => {
                                 <div style={{ padding: "0 15px 15px" }}>
                                   <FormikControl
                                     control="input"
-                                    required="label-required"
+                                    required={isView ? "" : "label-required"}
                                     label="Home Phone"
                                     name="contact.phone_number"
                                     style={{ maxWidth: 200 }}
@@ -881,7 +880,7 @@ const EmployeeForm = (props) => {
                                   />
                                   <FormikControl
                                     control="input"
-                                    required="label-required"
+                                    required={isView ? "" : "label-required"}
                                     label="Mobile Phone"
                                     name="contact.mobile_phone_number"
                                     style={{ maxWidth: 200 }}
@@ -891,7 +890,7 @@ const EmployeeForm = (props) => {
                                   />
                                   <FormikControl
                                     control="input"
-                                    required="label-required"
+                                    required={isView ? "" : "label-required"}
                                     label="Email"
                                     name="contact.email"
                                     style={{ maxWidth: 250 }}
@@ -926,7 +925,7 @@ const EmployeeForm = (props) => {
                                   />
                                   <FormikControl
                                     control="selectAsync"
-                                    required="label-required"
+                                    required={isView ? "" : "label-required"}
                                     label="Country"
                                     name="address.country_id"
                                     url={`master/countries`}
@@ -935,11 +934,14 @@ const EmployeeForm = (props) => {
                                       formik.setFieldValue(
                                         "address.country_id",
                                         v,
-                                      )                                      
-                                      formik.setFieldValue("address.state_province_id", {
-                                        value: null,
-                                        label: "Please choose",
-                                      })
+                                      )
+                                      formik.setFieldValue(
+                                        "address.state_province_id",
+                                        {
+                                          value: null,
+                                          label: "Please choose",
+                                        },
+                                      )
                                       formik.setFieldValue("address.city_id", {
                                         value: null,
                                         label: "Please choose",
@@ -962,7 +964,7 @@ const EmployeeForm = (props) => {
                                     label="State/ Province"
                                     name="address.state_province_id"
                                     url={`master/state-provinces?sort=state_province_name&filters=[["status", "=", 1],["AND"],["country_id","=","${formik.values.address.country_id.value}"]]&size=-1`}
-                                    fieldName={"state_province_name"}                                    
+                                    fieldName={"state_province_name"}
                                     key={JSON.stringify(
                                       formik.values.address.country_id,
                                     )}
@@ -975,7 +977,7 @@ const EmployeeForm = (props) => {
                                         value: null,
                                         label: "Please choose",
                                       })
-                                    }}                                    
+                                    }}
                                     placeholder={"Please choose"}
                                     style={{ maxWidth: 200 }}
                                     components={
@@ -1084,7 +1086,7 @@ const EmployeeForm = (props) => {
                                   />
                                   <FormikControl
                                     control="selectAsync"
-                                    required="label-required"
+                                    required={isView ? "" : "label-required"}
                                     label="Country"
                                     name="permanent_address.country_id"
                                     url={`master/countries`}
@@ -1120,20 +1122,24 @@ const EmployeeForm = (props) => {
                                     label="State/ Province"
                                     name="permanent_address.state_province_id"
                                     url={`master/state-provinces?sort=state_province_name&filters=[["status", "=", 1],["AND"],["country_id","=","${formik.values.permanent_address.country_id.value}"]]&size=-1&`}
-                                    fieldName={"state_province_name"}                                    
+                                    fieldName={"state_province_name"}
                                     key={JSON.stringify(
-                                      formik.values.permanent_address.country_id,
+                                      formik.values.permanent_address
+                                        .country_id,
                                     )}
                                     onChange={(v) => {
                                       formik.setFieldValue(
                                         "permanent_address.state_province_id",
                                         v,
                                       )
-                                      formik.setFieldValue("permanent_address.city_id", {
-                                        value: null,
-                                        label: "Please choose",
-                                      })
-                                    }}  
+                                      formik.setFieldValue(
+                                        "permanent_address.city_id",
+                                        {
+                                          value: null,
+                                          label: "Please choose",
+                                        },
+                                      )
+                                    }}
                                     placeholder={"Please choose"}
                                     style={{ maxWidth: 200 }}
                                     components={
@@ -1151,9 +1157,10 @@ const EmployeeForm = (props) => {
                                     label="City"
                                     name="permanent_address.city_id"
                                     url={`master/cities?sort=city_name&filters=[["status", "=", 1],["AND"],["country_id","=","${formik.values.permanent_address.country_id.value}"]]&size=-1`}
-                                    fieldName={"city_name"}                                    
+                                    fieldName={"city_name"}
                                     key={JSON.stringify(
-                                      formik.values.permanent_address.city_id.value,
+                                      formik.values.permanent_address.city_id
+                                        .value,
                                     )}
                                     onChange={(v) => {
                                       formik.setFieldValue(
@@ -1351,7 +1358,7 @@ const EmployeeForm = (props) => {
                                 <div style={{ padding: "0 15px 15px" }}>
                                   <FormikControl
                                     control="input"
-                                    required="label-required"
+                                    required={isView ? "" : "label-required"}
                                     label="Employee ID"
                                     name="employee_number"
                                     style={{ maxWidth: 250 }}
@@ -1361,7 +1368,7 @@ const EmployeeForm = (props) => {
                                   />
                                   <FormikControl
                                     control="selectAsync"
-                                    required="label-required"
+                                    required={isView ? "" : "label-required"}
                                     label="Job Title"
                                     name="job_title_id"
                                     url={`master/job-titles`}
@@ -1412,7 +1419,7 @@ const EmployeeForm = (props) => {
                                       formik.setFieldValue("office_id", v)
                                     }}
                                     placeholder={"Please choose"}
-                                    style={{ maxWidth: 200 }}
+                                    style={{ maxWidth: 250 }}
                                     components={
                                       isView
                                         ? {
