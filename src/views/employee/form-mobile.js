@@ -1385,7 +1385,7 @@ const EmployeeFormMobile = (props) => {
                                 className={isView ? "" : "label-required"}
                               />
                             </Col>
-                            <Col>
+                            <Col xs={8}> 
                               <Field
                                 control="input"
                                 name="employee_number"
