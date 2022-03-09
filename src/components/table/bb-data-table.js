@@ -540,6 +540,10 @@ class BBDataTable extends Component {
           {
             className: this.props.actionWidthClass || "",
             targets: [columns.length - 1],
+          },
+          {
+            targets: [columns.length - 3, columns.length - 1],
+            className: module === "branch-office" ? "desktop" : ""
           }
           // {
           //   orderable: false,

@@ -194,7 +194,7 @@ table.dataTable > tbody > tr.child span.dtr-data {
   left: 11px !important;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 1280px) {
   .wo-checkbox {
     width: 10px !important;
     min-width: 10px !important;
