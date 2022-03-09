@@ -545,7 +545,8 @@ function OfficeForm(props) {
           </FormInputWrapper>
 
           <FormInputWrapper
-            label={formId ? "Phone" : "Phone Number"}
+            // label={formId ? "Phone" : "Phone Number"}
+            label="Phone"
             required={false}
           >
             <Row>
