@@ -5,34 +5,71 @@ import { Formik, FastField } from "formik"
 import useQuery from "lib/query"
 import * as Yup from "yup"
 import Api from "config/api"
-import { useDispatch } from "react-redux"
-import { setAlert, setCreateModal } from "redux/ui-store"
+import { useDispatch, useSelector } from "react-redux"
+import { setAlert, setCreateModal, setModalTitle } from "redux/ui-store"
 import CancelButton from "components/button/cancel"
 import FormikControl from "../../components/formik/formikControl"
 
+const endpoint = "/master/currency-conversions"
 function ExchangeRateCreate(props) {
 	const dispatch = useDispatch()
+  const showCreateModal = useSelector((state) => state.ui.showCreateModal)
   const API = new Api()
-  const isView = useQuery().get("action") === "view"
-
-	let form = {
-		from_currency: "",
-		to_currency: "",
-		multiply_rate: "",
-		is_automatic: false,
-	}
-	const [initialForm, setForm] = useState(form)
+  const isView = showCreateModal.disabled_form || props.isView
   const [id, setId] = useState(null)
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
+  const [formValues, setFormValues] = useState(null)
 
-  console.log(props.history)
+  useEffect(async () => {
+    let formId = showCreateModal.id || props.id
+
+    let docTitle = "Edit Exchange Rate"
+    if (!formId) {
+      docTitle = "Add Exchange Rate"
+    } else if (isView) {
+      docTitle = "Exchange Rate Details"
+    }
+
+    dispatch(setModalTitle(docTitle))
+
+    if(formId) {
+      try {
+        let {data} = await API.get(endpoint + "/" + formId)
+        setFormValues({
+          ...data,
+          from_currency_id: {
+            value: data.from_currency.id,
+            label: data.from_currency.currency_name,
+          },
+          to_currency_id: {
+            value: data.to_currency.id,
+            label: data.to_currency.currency_name,
+          }
+        })
+      } catch(e) {
+        console.log(e)
+      }
+    }
+  }, [])
 
   useEffect(() => {
-    if (!props.match.params.id) {
+    if (!showCreateModal.id) {
       setLoading(false)
     }
-    setId(props.match.params.id)
-  }, [props.match.params.id])
+
+    if(formValues) {
+      setLoading(false)
+    }
+
+    setId(showCreateModal.id)
+  }, [showCreateModal.id, formValues])
+
+  const initialValues = {
+		from_currency_id: "",
+		to_currency_id: "",
+		multiply_rate: null,
+		is_automatic: false,
+	}
 
   const checkExchangeRate = async () => {
     let res = await API.get("/master/currency-conversion", {
@@ -51,22 +88,22 @@ function ExchangeRateCreate(props) {
   })
   Yup.addMethod(Yup.object, 'uniqueExchangeRate', function(message) {
     return this.test('unique', message, function(field) {
-      if(this.parent.to_currency && this.parent.from_currency) {
-        return checkExchangeRate(this.parent.to_currency && this.parent.from_currency)
+      if(this.parent.to_currency_id && this.parent.from_currency_id) {
+        return checkExchangeRate(this.parent.to_currency_id && this.parent.from_currency_id)
       } else {
         return true
       }
     })
   })
 	const validationSchema =  Yup.object().shape({
-    from_currency: Yup.object()
+    from_currency_id: Yup.object()
       .required("From Currency is required.")
-      .pairCurrency('to_currency', 'From Currency and To Currency must be different.')
+      .pairCurrency('to_currency_id', 'From Currency and To Currency must be different.')
       // .uniqueExchangeRate('Exchange rate already exists')
       ,
-    to_currency: Yup.object()
+    to_currency_id: Yup.object()
       .required("To Currency is required.")
-      .pairCurrency('from_currency', 'From Currency and To Currency must be different.')
+      .pairCurrency('from_currency_id', 'From Currency and To Currency must be different.')
       // .uniqueExchangeRate('Exchange rate already exists.')
       ,
     multiply_rate: Yup.number().required("Multiply Rate is required."),
@@ -76,19 +113,19 @@ function ExchangeRateCreate(props) {
 		try {
       let form = {
         conversion_rate_type: "C",
-        from_currency_id: values.from_currency.value,
+        from_currency_id: values.from_currency_id.value,
         is_automatic: values.is_automatic,
         multiply_rate: parseFloat(values.multiply_rate),
-        to_currency_id: values.to_currency.value,
+        to_currency_id: values.to_currency_id.value,
         valid_from: new Date(),
         valid_to: new Date(),
       }
       let res = await API.putOrPost("/master/currency-conversions", id, form)
-			console.log(res)
-      dispatch(setCreateModal(false))
+      
+      dispatch(setCreateModal({show: false, id: null, disabled_form: false}))
       dispatch(
 				setAlert({
-				  message: `Record 'From Currency: ${form.from_currency} and To Currency: ${form.to_currency}' has been successfully saved.`,
+				  message: `Record 'From Currency: ${form.from_currency_id} and To Currency: ${form.to_currency_id}' has been successfully saved.`,
 				}),
       )
 		} catch(e) {
@@ -111,9 +148,11 @@ function ExchangeRateCreate(props) {
   }
 	return (
 			<Formik
-				initialValues={initialForm}
+				initialValues={formValues || initialValues}
 				validationSchema={validationSchema}
 				onSubmit={onSubmit}
+        validateOnMount
+        enableReinitialize
 			>
 				{
 					({
@@ -123,17 +162,17 @@ function ExchangeRateCreate(props) {
             setFieldValue,
             values,
 					}) => (
-						<Form onSubmit={handleSubmit}>
+						<Form onSubmit={handleSubmit} className="ml-2">
               <FormikControl
                 control="selectAsync"
                 required="label-required"
                 label="From Currency"
-                name="from_currency"
-                placeholder={values.from_currency || "Please choose"}
+                name="from_currency_id"
+                placeholder={"Please choose"}
                 url={`master/currencies`}
                 fieldName={"currency_name"}
                 onChange={(v) => {
-                  setFieldValue("from_currency", v)
+                  setFieldValue("from_currency_id", v)
                 }}
                 style={{ maxWidth: 250 }}
                 size={formSize}
@@ -144,12 +183,12 @@ function ExchangeRateCreate(props) {
                 control="selectAsync"
                 required="label-required"
                 label="To Currency"
-                name="to_currency"
-                placeholder={values.to_currency || "Please choose"}
+                name="to_currency_id"
+                placeholder={"Please choose"}
                 url={`master/currencies`}
                 fieldName={"currency_name"}
                 onChange={(v) => {
-                  setFieldValue("to_currency", v)
+                  setFieldValue("to_currency_id", v)
                 }}
                 style={{ maxWidth: 250 }}
                 size={formSize}
@@ -176,7 +215,7 @@ function ExchangeRateCreate(props) {
                 disabled={isView || loading}
               />
 
-              <div
+              {!props.hideButton && <div
                 style={{
                   marginBottom: 30,
                   marginTop: 30,
@@ -192,7 +231,7 @@ function ExchangeRateCreate(props) {
                   SAVE
                 </Button>
                 <CancelButton onClick={() => dispatch(setCreateModal(false))}/>
-              </div>
+              </div>}
 						</Form>
 					)
 				}

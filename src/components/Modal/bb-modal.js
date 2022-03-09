@@ -3,7 +3,7 @@ import { Button, Modal, ModalBody, ModalFooter } from "react-bootstrap"
 import CancelButton from 'components/button/cancel'
 import './bb-modal.css'
 
-const ModalCreate = ({show, onClick, modalContent}) => {
+const ModalCreate = ({show, onClick, modalContent, modalTitle}) => {
 	const Content = modalContent
 	return (
 		<Modal 
@@ -13,11 +13,9 @@ const ModalCreate = ({show, onClick, modalContent}) => {
 			centered
 		>
 		<Modal.Header closeButton className="bb-modal-header">
-			<Modal.Title id="contained-modal-title-vcenter">
-				Add Exchange Rate
-			</Modal.Title>
 		</Modal.Header>
-		<ModalBody>
+		<ModalBody className="bb-modal-body">
+			<p className="bb-modal-title">{modalTitle}</p>
 			{modalContent ? <Content/> : null}
 		</ModalBody>
 		</Modal>
