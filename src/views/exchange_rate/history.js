@@ -4,7 +4,9 @@ import Api from "config/api"
 import {useDispatch} from "react-redux"
 import {setAlert, setUIParams} from "redux/ui-store"
 import env from "../../config/environment"
-import { Card, ListGroup, Table } from "react-bootstrap"
+import { Card, ListGroup, Row, Col, Table } from "react-bootstrap"
+import ExchangeRateForm from 'views/exchange_rate/form';
+import HistoryTable from "./history_table/history_table"
 
 function ExchangeRateHistory(props) {
   let dispatch = useDispatch()
@@ -12,14 +14,6 @@ function ExchangeRateHistory(props) {
 
   const [loading, setLoading] = useState(true)
   const [id, setId] = useState(null)
-	const [history, setHistory] = useState([
-		{
-			from_currency: "0.6 (EUR)",
-			to_currency: "0.000006 (EUR)",
-			status: "Changed",
-			user: ""
-		}
-	])
   const [form, setForm] = useState({
     country_id: "",
     state_province_category_id: "",
@@ -57,36 +51,13 @@ function ExchangeRateHistory(props) {
 
   return (
     <>
-			<h4>Exchange Rate History</h4>
-			<Card>
-				<Card.Body>
-					<h3 className="card-heading">Today</h3>
+      <Row>
+        <Col md={5}>
+          <ExchangeRateForm id={formId} hideButton={true} isView={true}/>
+        </Col>
+      </Row>
 
-					<Table striped hover>
-						<tbody>
-							<tr>
-								<td>Andrew Griffits</td>
-								<td>Changed</td>
-								<td>0.6 (EUR) - 0.000059 (EUR)</td>
-								<td>10 Jan 2021 at 10.29</td>
-							</tr>
-							<tr>
-								<td>Andrew Griffits</td>
-								<td>Changed</td>
-								<td>0.6 (EUR) - 0.000059 (EUR)</td>
-								<td>10 Jan 2021 at 10.29</td>
-							</tr>
-							<tr>
-								<td>Andrew Griffits</td>
-								<td>Changed</td>
-								<td>0.6 (EUR) - 0.000059 (EUR)</td>
-								<td>10 Jan 2021 at 10.29</td>
-							</tr>
-						</tbody>
-					</Table>
-					<p className="text-center text-primary"> View more </p>
-				</Card.Body>
-			</Card>
+      <HistoryTable id={formId}/>
     </>
   )
 }

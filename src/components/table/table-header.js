@@ -105,7 +105,7 @@ class TableHeader extends Component {
 
   handleClick() {
     if(this.props.createOnModal) {
-      this.props.setCreateModal(true)
+      this.props.setCreateModal({show: true, disabled_form: false})
     } else {
       this.props.history.push(this.props.baseRoute || "/master/aircraft/form")
     }

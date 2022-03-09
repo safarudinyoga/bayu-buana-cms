@@ -28,9 +28,11 @@ export default function ExchageRateTable() {
     isCheckbox: false,
     showAdvancedOptions: false,
     createOnModal: true,
+    showHistory: true,
     title: "Exchange Rates",
     titleModal: "Exchange Rate",
     baseRoute: "/master/exchange-rate/form",
+    routeHistory: "/master/exchange-rate/history",
     endpoint: "/master/currency-conversions",
     deleteEndpoint: "/master/batch-actions/delete/currency-conversions",
     activationEndpoint: "/master/batch-actions/activate/currency-conversions",
@@ -38,7 +40,7 @@ export default function ExchageRateTable() {
     columns: [
       {
         title: "From Currency",
-        data: "currency.currency_code",
+        data: "from_currency.currency_code",
       },
       {
         title: "To Currency",

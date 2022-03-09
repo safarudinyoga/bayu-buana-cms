@@ -1,0 +1,8 @@
+.badge {
+    padding: 0.4em 2rem !important;
+    border-radius: 1rem !important;
+}
+.badge-bb {
+    background-color: #ECA900;
+    color: #ffffff;
+}
