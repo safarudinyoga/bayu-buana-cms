@@ -98,13 +98,12 @@ const EmployeeForm = (props) => {
               value: data.address.country_id,
             },
             state_province_id: {
-              label:
-                data?.address?.state_province?.state_province_name,
-                
+              label: data?.address?.state_province?.state_province_name,
+
               value: data?.address?.state_province_id,
             },
             city_id: {
-              label: data?.address?.city?.city_name ,
+              label: data?.address?.city?.city_name,
               value: data?.address?.city_id,
             },
             postal_code: data?.address?.postal_code,
@@ -338,9 +337,9 @@ const EmployeeForm = (props) => {
     division_id: "",
     office_id: "",
     hire_date: [
-      { value: dayToday, label: dayToday },
-      { value: monthToday, label: monthToday },
-      { value: yearToday, label: yearToday },
+      { value: dayToday, label: "Day" },
+      { value: monthToday, label: "Month" },
+      { value: yearToday, label: "Year" },
     ],
     npwp: "",
   }
@@ -371,7 +370,7 @@ const EmployeeForm = (props) => {
                     `${env.API_URL}/master/employees?filters=["contact.email","=","${value}"]`,
                   )
                   .then((res) => {
-                    resolve(res.data.items.length === 0)                    
+                    resolve(res.data.items.length === 0)
                   })
                   .catch((error) => {
                     resolve(false)
@@ -718,7 +717,7 @@ const EmployeeForm = (props) => {
                                           <FormikControl
                                             control="selectOnly"
                                             name="birth_date[0]"
-                                            placeholder={dayToday}
+                                            placeholder={"Day"}
                                             options={selectDay()}
                                             onChange={(v) => {
                                               formik.setFieldValue(
@@ -746,7 +745,7 @@ const EmployeeForm = (props) => {
                                           <FormikControl
                                             control="selectOnly"
                                             name="birth_date[1]"
-                                            placeholder={monthToday}
+                                            placeholder={"Month"}
                                             options={selectMonth()}
                                             onChange={(v) => {
                                               formik.setFieldValue(
@@ -785,7 +784,7 @@ const EmployeeForm = (props) => {
                                           <FormikControl
                                             control="selectOnly"
                                             name="birth_date[2]"
-                                            placeholder={yearToday}
+                                            placeholder={"Year"}
                                             options={selectYear()}
                                             onChange={(v) => {
                                               formik.setFieldValue(
