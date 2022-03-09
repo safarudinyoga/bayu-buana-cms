@@ -145,12 +145,36 @@ const GeneralInformation = (props) => {
         })
       }
     } else {
-      for (let i = 1; i <= 31; i++) {
-        options.push({
-          label: i,
-          value: i,
-        })
+      if(initialForm.dobMonth.value === 2 && initialForm.dobYear.value % 4 == 0){
+        for (let i = 1; i <= 29; i++) {
+          options.push({
+            label: i,
+            value: i,
+          })
+        }
+      } else if(initialForm.dobMonth.value === 2 && initialForm.dobYear.value % 4 != 0){
+        for (let i = 1; i <= 28; i++) {
+          options.push({
+            label: i,
+            value: i,
+          })
+        }
+      } else if(initialForm.dobMonth.value === 4 || initialForm.dobMonth.value === 6 || initialForm.dobMonth.value === 9 || initialForm.dobMonth.value === 11) {
+        for (let i = 1; i <= 30; i++) {
+          options.push({
+            label: i,
+            value: i,
+          })
+        }
+      } else {
+        for (let i = 1; i <= 31; i++) {
+          options.push({
+            label: i,
+            value: i,
+          })
+        }
       }
+      
     }
     
     return options
@@ -473,8 +497,8 @@ const GeneralInformation = (props) => {
             address: {
               address_line: values.currentAddress ? values.currentAddress : "",
               country_id: values.currentCountry ? values.currentCountry.value : "",
-              state_province_id: values.currentProvince ? values.currentProvince.value : "",
-              city_id: values.currentCity ? values.currentCity.value : {},
+              state_province_id: values.currentProvince ? values.currentProvince.value : "00000000-0000-0000-0000-000000000000",
+              city_id: values.currentCity ? values.currentCity.value : "00000000-0000-0000-0000-000000000000",
               postal_code: values.currentZipCode ? values.currentZipCode : ""
             },
             contact: {
@@ -496,14 +520,14 @@ const GeneralInformation = (props) => {
             permanent_address: values.sameAddress ? {
               address_line: values.currentAddress ? values.currentAddress : "",
               country_id: values.currentCountry ? values.currentCountry.value : "",
-              state_province_id: values.currentProvince ? values.currentProvince.value : "",
-              city_id: values.currentCity ? values.currentCity.value : "",
+              state_province_id: values.currentProvince ? values.currentProvince.value : "00000000-0000-0000-0000-000000000000",
+              city_id: values.currentCity ? values.currentCity.value : "00000000-0000-0000-0000-000000000000",
               postal_code: values.currentZipCode ? values.currentZipCode : ""
             } : {
               address_line: values.permanentAddress ? values.permanentAddress : "",
               country_id: values.permanentCountry ? values.permanentCountry.value : "",
-              state_province_id: values.permanentProvince ? values.permanentProvince.value : "",
-              city_id: values.permanentCity ? values.permanentCity.value : "",
+              state_province_id: values.permanentProvince ? values.permanentProvince.value : "00000000-0000-0000-0000-000000000000",
+              city_id: values.permanentCity ? values.permanentCity.value : "00000000-0000-0000-0000-000000000000",
               postal_code: values.permanentZipCode ? values.permanentZipCode : "" 
             }
           }
@@ -710,6 +734,7 @@ const GeneralInformation = (props) => {
                                   <Select
                                     {...field}
                                     options={selectNamePrefix}
+                                    isDisabled={true}
                                     defaultValue={values.title}
                                     className={`react-select ${
                                       form.touched.title && form.errors.title
@@ -739,11 +764,12 @@ const GeneralInformation = (props) => {
                           <span className="form-label-required">*</span>
                         </Form.Label>
                         <Col sm={8}>
-                          <FastField name="firstName">
+                          <FastField name="firstName" disabled>
                             {({ field, form }) => (
                               <>
                                 <Form.Control
                                   type="text"
+                                  disabled
                                   isInvalid={
                                     form.touched.firstName &&
                                     form.errors.firstName
@@ -775,6 +801,7 @@ const GeneralInformation = (props) => {
                               <Form.Control
                                 {...field}
                                 type="text"
+                                disabled
                                 minLength={1}
                                 maxLength={128}
                               />
@@ -793,6 +820,7 @@ const GeneralInformation = (props) => {
                               <>
                                 <Form.Control
                                   {...field}
+                                  disabled
                                   type="text"
                                   isInvalid={
                                     form.touched.lastName &&

@@ -24,6 +24,7 @@ export default function OfficeTable() {
 
   let [params, setParams] = useState({
     isCheckbox: false,
+    module: "branch-office",
     showAdvancedOptions: false,
     responsiveTablet: true,
     title: "Branch Offices",
@@ -64,7 +65,8 @@ export default function OfficeTable() {
     infoDelete: [
       {title: "Company/ Branch Office Name", recordName: "office_name"}, 
     ],
-    isOpenNewTab: false
+    isOpenNewTab: false,
+    // actionWidthClass: "custom-action",
   })
 
   

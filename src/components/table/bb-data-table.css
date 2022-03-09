@@ -1,9 +1,19 @@
 .dataTable-root .card > .card-body {
   padding: 0;
 }
-.dataTable-root thead th:last-child,
+/* .dataTable-root thead th:last-child,
 .dataTable-root tbody td:last-child {
   width: 12% !important;
+} */
+@media (min-width: 768px) and (max-width: 813px) {
+  .custom-action {
+    width: 19% !important;
+  }
+}
+@media (min-width: 814px) {
+  .custom-action {
+    width: 18% !important;
+  }
 }
 .dataTables_scrollHead {
   margin-top: -1px;
@@ -184,7 +194,7 @@ table.dataTable > tbody > tr.child span.dtr-data {
   left: 11px !important;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 1280px) {
   .wo-checkbox {
     width: 10px !important;
     min-width: 10px !important;
@@ -376,10 +386,4 @@ table.dataTable thead .sorting_desc_disabled:after {
 }
 .table-sm th {
   padding: 0.4rem 0.3rem;
-}
-
-@media (max-width: 600px) {
-  .hide-for-mobile {
-      display: none
-  }
 }
