@@ -1,7 +1,30 @@
 .bb-modal-header {
     border-bottom: none !important;
+    padding-bottom: 0;
+}
+.bb-modal-body {
+    padding-top: 0;
 }
 .bb-modal-footer {
     border-top: none !important;
     justify-content: flex-start !important;
+}
+.bb-modal-title {
+    font-size: 16px;
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: bold;
+    margin-bottom: 30px;
+}
+.bb-modal-header .close {
+    padding-top: 0;
+    padding-right: 0.5rem;
+}
+
+
+
+@media (min-width: 576px){
+    .modal-dialog {
+        max-width: 515px !important;
+    }
 }
