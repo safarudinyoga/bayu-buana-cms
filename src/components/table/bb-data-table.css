@@ -1,18 +1,18 @@
 .dataTable-root .card > .card-body {
   padding: 0;
 }
-.action-col-width {
+/* .dataTable-root thead th:last-child,
+.dataTable-root tbody td:last-child {
   width: 12% !important;
-}
-.custom-action {
-  width: 18% !important;
-}
+} */
 @media (min-width: 768px) and (max-width: 813px) {
   .custom-action {
     width: 19% !important;
   }
-  .action-col-width {
-    width: 14% !important;
+}
+@media (min-width: 814px) {
+  .custom-action {
+    width: 18% !important;
   }
 }
 .dataTables_scrollHead {
@@ -194,7 +194,7 @@ table.dataTable > tbody > tr.child span.dtr-data {
   left: 11px !important;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 1280px) {
   .wo-checkbox {
     width: 10px !important;
     min-width: 10px !important;

@@ -121,10 +121,11 @@ function DivisionForm(props) {
             "checkCode",
             function (value, element) {
               var req = false
+              let encodeFilters = encodeURIComponent(JSON.stringify(["division_code","like",element.value]))
               $.ajax({
                 type: "GET",
                 async: false,
-                url: `${env.API_URL}/master/divisions?filters=["division_code","like","${element.value}"]`,
+                url: `${env.API_URL}/master/divisions?filters=${encodeFilters}`,
                 success: function (res) {
                   if (res.items.length !== 0) {
                     if (currentCode === element.value) {
@@ -147,10 +148,11 @@ function DivisionForm(props) {
             "checkName",
             function (value, element) {
               var req = false
+              let encodeFilters = encodeURIComponent(JSON.stringify(["division_name","=",element.value]))
               $.ajax({
                 type: "GET",
                 async: false,
-                url: `${env.API_URL}/master/divisions?filters=["division_name","=","${element.value}"]`,
+                url: `${env.API_URL}/master/divisions?filters=${encodeFilters}`,
                 success: function (res) {
                   if (res.items.length !== 0) {
                     if (currentName === element.value) {
@@ -184,10 +186,11 @@ function DivisionForm(props) {
         "checkCode",
         function (value, element) {
           var req = false
+          let encodeFilters = encodeURIComponent(JSON.stringify(["division_code","like",element.value]))
           $.ajax({
             type: "GET",
             async: false,
-            url: `${env.API_URL}/master/divisions?filters=["division_code","like","${element.value}"]`,
+            url: `${env.API_URL}/master/divisions?filters=${encodeFilters}`,
             success: function (res) {
               if (res.items.length !== 0) {
                 req = false
@@ -207,10 +210,11 @@ function DivisionForm(props) {
         "checkName",
         function (value, element) {
           var req = false
+          let encodeFilters = encodeURIComponent(JSON.stringify(["division_name","=",element.value]))
           $.ajax({
             type: "GET",
             async: false,
-            url: `${env.API_URL}/master/divisions?filters=["division_name","=","${element.value}"]`,
+            url: `${env.API_URL}/master/divisions?filters=${encodeFilters}`,
             success: function (res) {
               if (res.items.length !== 0) {
                 req = false

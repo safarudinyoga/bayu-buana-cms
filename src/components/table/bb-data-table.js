@@ -538,8 +538,12 @@ class BBDataTable extends Component {
           },
           { visible: false,  targets: module == 'employee' ? [ 4, 5, 8 ] : [] },
           {
-            className: this.props.actionWidthClass || "action-col-width",
+            className: this.props.actionWidthClass || "",
             targets: [columns.length - 1],
+          },
+          {
+            targets: [columns.length - 3, columns.length - 1],
+            className: module === "branch-office" ? "desktop" : ""
           }
           // {
           //   orderable: false,
