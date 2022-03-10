@@ -36,8 +36,7 @@ const EmployeeForm = (props) => {
   const [optionGender, setOptionGender] = useState([])
   const [additionalRole, setAdditionalRole] = useState(false)
   const [months, setMonths] = useState({ value: 1, label: "" })
-  const [years, setYears] = useState({ value: 2000, label: "" })
-  console.log("dataaaa", months.value)
+  const [years, setYears] = useState({ value: 2000, label: "" })  
 
   useEffect(async () => {
     let api = new Api()
@@ -324,13 +323,13 @@ const EmployeeForm = (props) => {
               return new Promise((resolve, reject) => {
                 axios
                   .get(
-                    `${env.API_URL}/master/employees?filters=["contact.email","=","${value}"]`,
+                    `${env.API_URL}/master/employees?filters=["contact.email","like","${value}"]`,
                   )
                   .then((res) => {
-                    resolve(res.data.items.length === 0)
+                    resolve(!res.data.items.find( e => e.contact.email.toUpperCase() === value.toUpperCase()))
                   })
-                  .catch((error) => {
-                    resolve(false)
+                  .catch((res, error) => {
+                    resolve(res.data.items.find( e => e.contact.email.toUpperCase() === value.toUpperCase()))
                   })
               })
             } else {
@@ -338,16 +337,15 @@ const EmployeeForm = (props) => {
                 axios
                   .get(
                     `${env.API_URL}/master/employees?filters=["contact.email","=","${value}"]`,
-                  )
-
-                  .then((res) => {
+                  )                  
+                  .then((res) => {                    
                     resolve(
-                      res.data.items.length === 0 ||
+                      !res.data.items.find( e => e.contact.email.toUpperCase() === value.toUpperCase()) ||
                         value === formValues.contact.email,
                     )
                   })
-                  .catch((error) => {
-                    resolve(false)
+                  .catch((res, error) => {
+                    resolve(res.data.items.find( e => e.contact.email.toUpperCase() === value.toUpperCase()))
                   })
               })
             }
@@ -653,8 +651,7 @@ const EmployeeForm = (props) => {
       validateOnMount
       enableReinitialize
     >
-      {(formik) => {
-        console.log("formikDesk", formik)
+      {(formik) => {        
         return (
           <Form>
             <FormMobile className="mobile-form"></FormMobile>
