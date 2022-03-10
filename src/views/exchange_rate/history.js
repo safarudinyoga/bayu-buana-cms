@@ -52,7 +52,7 @@ function ExchangeRateHistory(props) {
   return (
     <>
       <Row>
-        <Col md={5}>
+        <Col md={8} lg={5}>
           <ExchangeRateForm id={formId} hideButton={true} isView={true}/>
         </Col>
       </Row>
