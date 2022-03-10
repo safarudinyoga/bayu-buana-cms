@@ -106,7 +106,9 @@ function ExchangeRateCreate(props) {
       .pairCurrency('from_currency_id', 'From Currency and To Currency must be different.')
       // .uniqueExchangeRate('Exchange rate already exists.')
       ,
-    multiply_rate: Yup.number().required("Multiply Rate is required."),
+    multiply_rate: Yup.string()
+      .matches(/^\d{0,15}(\.\d{0,8})?$/, "maximum value: 15 digits with 8 decimal digits")
+      .required("Multiply Rate is required."),
   })
 
 	const onSubmit = async (values, a) => {
