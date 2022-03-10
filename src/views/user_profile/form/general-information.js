@@ -274,7 +274,6 @@ const GeneralInformation = (props) => {
       } else {
         setSelectPermanentProvince([])
       }
-
       let res2 = await api.get(
         `/master/cities?filters=[["country_id","=","${v}"],["AND"],["status","=",1]]&sort=city_name`,
       )
@@ -295,47 +294,47 @@ const GeneralInformation = (props) => {
     } catch (e) {}
   }
   // Current Province state
-  // const handleChangeCurrentProvince = async (v) => {
-  //   try {
-  //     let res = await api.get(
-  //       `/master/cities?filters=[["state_province_id","=","${v}"],["AND"],["status","=",1]]&sort=city_name`,
-  //     )
-  //     const options = []
-  //     if(res.data.items.length > 0){
-  //       res.data.items.forEach((data) => {
-  //         options.push({
-  //           label: data.city_name,
-  //           value: data.id,
-  //         })
-  //         setSelectCurrentCity(options)
-  //       })
-  //     } else {
-  //       setSelectCurrentCity([])
-  //     }
+  const handleChangeCurrentProvince = async (v) => {
+    try {
+      let res = await api.get(
+        `/master/cities?filters=[["state_province_id","=","${v}"],["AND"],["status","=",1]]&sort=city_name`,
+      )
+      const options = []
+      if(res.data.items.length > 0){
+        res.data.items.forEach((data) => {
+          options.push({
+            label: data.city_name,
+            value: data.id,
+          })
+          setSelectCurrentCity(options)
+        })
+      } else {
+        setSelectCurrentCity([])
+      }
       
-  //   } catch (e) {}
-  // }
+    } catch (e) {}
+  }
   // // Permanent Province state
-  // const handleChangePermanentProvince = async (v) => {
-  //   try {
-  //     let res = await api.get(
-  //       `/master/cities?filters=[["state_province_id","=","${v}"],["AND"],["status","=",1]]&sort=city_name`,
-  //     )
-  //     const options = []
-  //     if(res.data.items.length > 0){
-  //       res.data.items.forEach((data) => {
-  //         options.push({
-  //           label: data.city_name,
-  //           value: data.id,
-  //         })
-  //         setSelectPermanentCity(options)
-  //       })
-  //     } else {
-  //       setSelectPermanentCity([])
-  //     }
+  const handleChangePermanentProvince = async (v) => {
+    try {
+      let res = await api.get(
+        `/master/cities?filters=[["state_province_id","=","${v}"],["AND"],["status","=",1]]&sort=city_name`,
+      )
+      const options = []
+      if(res.data.items.length > 0){
+        res.data.items.forEach((data) => {
+          options.push({
+            label: data.city_name,
+            value: data.id,
+          })
+          setSelectPermanentCity(options)
+        })
+      } else {
+        setSelectPermanentCity([])
+      }
       
-  //   } catch (e) {}
-  // }
+    } catch (e) {}
+  }
 
   const doUpload = async (imageList) => {
     try {
@@ -1287,6 +1286,7 @@ const GeneralInformation = (props) => {
                                 options={selectCurrentProvince}
                                 onChange={(v) => {
                                   setFieldValue("currentProvince", v)
+                                  handleChangeCurrentProvince(v.value)
                                 }}
                                 isDisabled={values.currentCountry == null}
                               />
@@ -1452,6 +1452,7 @@ const GeneralInformation = (props) => {
                           options={selectPermanentProvince}
                           onChange={(v) => {
                             setFieldValue("permanentProvince", v)
+                            handleChangePermanentProvince(v.value)
                           }}
                           onBlur={setFieldTouched}
                           isDisabled={
