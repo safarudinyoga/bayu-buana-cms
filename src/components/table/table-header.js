@@ -222,7 +222,8 @@ class TableHeader extends Component {
                   to="/master/divisions/hierarchy"
                   className="menu-link ml-5"
                 >
-                View Hierarchy
+                  <img src="/img/icons/hierarchy.svg" alt="icon users" style={{marginBottom: 3,marginRight: 5}} />
+                  View Hierarchy
                 </Link>
               </OverlayTrigger>
             }
