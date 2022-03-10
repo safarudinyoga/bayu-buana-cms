@@ -15,6 +15,7 @@ const Subscriptions = (props) => {
     try {
       let res = await api.get("/user/profile")
       let data = res.data;
+      console.log(data);
       setInitialForm({
         ...initialForm,
         dealSubscription: data.user_setting.receive_travel_deals,
@@ -96,7 +97,6 @@ const Subscriptions = (props) => {
               <Button
                 variant="primary"
                 type="submit"
-                disabled={!dirty || !isValid}
                 style={{ marginRight: 15 }}
               >
                 SAVE
@@ -115,7 +115,6 @@ const Subscriptions = (props) => {
                     <Button
                       variant="primary"
                       type="submit"
-                      disabled={!dirty || !isValid}
                       style={{ marginRight: 15 }}
                     >
                       SAVE
@@ -136,7 +135,6 @@ const Subscriptions = (props) => {
                   <Button
                     variant="primary"
                     type="submit"
-                    disabled={!dirty || !isValid}
                     style={{ marginRight: 15 }}
                   >
                     SAVE
