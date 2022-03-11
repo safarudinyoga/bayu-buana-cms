@@ -29,36 +29,36 @@ export default function CorporateRatingTable() {
     title: "Corporate Rating",
     titleModal: "Corporate Rating",
     baseRoute: "/master/corporate-rating/form",
-    endpoint: "/master/corporate-rating-types",
-    deleteEndpoint: "/master/batch-actions/delete/corporate-rating-type",
-    activationEndpoint: "/master/batch-actions/activate/corporate-rating-type",
-    deactivationEndpoint: "/master/batch-actions/deactivate/corporate-rating-type",
+    endpoint: "/master/corporate-rating-type-levels",
+    deleteEndpoint: "/master/batch-actions/delete/corporate-rating-type-level",
+    activationEndpoint: "/master/batch-actions/activate/corporate-rating-type-level",
+    deactivationEndpoint: "/master/batch-actions/deactivate/corporate-rating-type-level",
     columns: [
       {
         title: "Rating Code",
-        data: "corporate_rating_type_code",
+        data: "corporate_rating_type_level_code",
       },
       {
         title: "Rating Name",
-        data: "corporate_rating_type_name", 
-        render: renderColumn("corporate_rating_type", "corporate_rating_type_name"),       
+        data: "corporate_rating_type_level_name", 
+        render: renderColumn("corporate_rating_type_level", "corporate_rating_type_level_name"),       
       },
       {
         title: "Rating",
-        data: "scale",
+        data: "rating",
       },
       {
-        title: "Translated Corporate Rating Type",
-        data: "corporate_rating_type_translation.corporate_rating_type_name",
+        title: "Translated Corporate Rating Type Level",
+        data: "corporate_rating_type_level_translation.corporate_rating_type_level_name",
         visible: false,
       },     
     ],
     emptyTable: "No Corporate Rating found",
-    recordName: "corporate_rating_type_name",
+    recordName: "corporate_rating_type_level_name",
     btnDownload: ".buttons-csv",
     showInfoDelete: true,
     infoDelete: [
-      {title: "Rating Name", recordName: "corporate_rating_type_name"}, 
+      {title: "Rating Name", recordName: "corporate_rating_type_level_name"}, 
     ],
   })
 
