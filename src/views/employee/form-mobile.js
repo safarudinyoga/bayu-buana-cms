@@ -1371,7 +1371,7 @@ const EmployeeFormMobile = (props) => {
                 </Accordion.Toggle>
 
                 <Accordion.Collapse eventKey="employment">
-                  <Card.Body>
+                  <Card.Body style={{ height: 750 }}>
                     <h3 className="card-heading">Employment</h3>
                     <Row>
                       <Col lg={11}>
