@@ -105,7 +105,7 @@ class TableHeader extends Component {
 
   handleClick() {
     if(this.props.createOnModal) {
-      this.props.setCreateModal(true)
+      this.props.setCreateModal({show: true, disabled_form: false})
     } else {
       this.props.history.push(this.props.baseRoute || "/master/aircraft/form")
     }
@@ -222,7 +222,8 @@ class TableHeader extends Component {
                   to="/master/divisions/hierarchy"
                   className="menu-link ml-5"
                 >
-                View Hierarchy
+                  <img src="/img/icons/hierarchy.svg" alt="icon users" style={{marginBottom: 3,marginRight: 5}} />
+                  View Hierarchy
                 </Link>
               </OverlayTrigger>
             }

@@ -7,7 +7,7 @@ export default class FormInputWrapper extends Component {
     let col_form_md= cr ? cr.md : cl ? cl.md : 7
     let col_form_lg= cr ? cr.lg : cl ? 12-cl.lg : 8
     return (
-      <div className="form-group required row d-flex align-items-center">
+      <div className={`form-group required row d-flex align-items-${this.props.wrapperAlign || "center"}`}>
         <div className={`col-sm-${cl?.sm||6} col-md-${cl?.md||5} col-lg-${cl?.lg||4} col-form-label`}>
           <span className={`text-label-input ${this.props.required ? "label-required" : ""}`}>
           {this.props.label}

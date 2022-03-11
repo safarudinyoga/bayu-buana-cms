@@ -103,6 +103,9 @@ export default class FormInputSelectAjax extends Component {
               }
 
               filtered.forEach((item) => {
+                if(this.props.val_id) {
+                  item.id = item[this.props.val_id]
+                }
                 if(this.props.column) {
                   if(this.props.column.includes(".")){
                     const results = this.props.column.split(".");

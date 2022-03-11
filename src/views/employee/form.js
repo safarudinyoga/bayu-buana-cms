@@ -36,7 +36,7 @@ const EmployeeForm = (props) => {
   const [optionGender, setOptionGender] = useState([])
   const [additionalRole, setAdditionalRole] = useState(false)
   const [months, setMonths] = useState({ value: 1, label: "" })
-  const [years, setYears] = useState({ value: 2000, label: "" })
+  const [years, setYears] = useState({ value: 1921, label: "" })  
 
   useEffect(async () => {
     let api = new Api()
@@ -71,6 +71,14 @@ const EmployeeForm = (props) => {
       try {
         let res = await api.get(endpoint + "/" + formId)
         let data = res.data
+        setMonths({
+          value: parseInt(data.birth_date.substring(5, 7)),
+          label: monthNames[parseInt(data.birth_date.substring(5, 7)) - 1],
+        })
+        setYears({
+          value: parseInt(data.birth_date.substring(0, 4)),
+          label: parseInt(data.birth_date.substring(0, 4)),
+        })
         setFormValues({
           ...data,
           birth_date: [
@@ -98,13 +106,12 @@ const EmployeeForm = (props) => {
               value: data.address.country_id,
             },
             state_province_id: {
-              label:
-                data?.address?.state_province?.state_province_name,
-                
+              label: data?.address?.state_province?.state_province_name,
+
               value: data?.address?.state_province_id,
             },
             city_id: {
-              label: data?.address?.city?.city_name ,
+              label: data?.address?.city?.city_name,
               value: data?.address?.city_id,
             },
             postal_code: data?.address?.postal_code,
@@ -219,24 +226,7 @@ const EmployeeForm = (props) => {
     } catch (e) {}
   }
 
-  // Birthday
-  //Day
   const dateObj = new Date()
-  const dayToday = dateObj.getUTCDate()
-  const daysInMonth = (monthx, yearx) => {
-    return new Date(yearx, monthx, 0).getDate() + 1
-  }
-  const selectDay = () => {
-    const options = []
-    for (let i = 1; i < daysInMonth(months.value, years.value); i++) {
-      options.push({
-        value: i,
-        label: i,
-      })
-    }
-    return options
-  }
-  //Month
   const monthNames = [
     "January",
     "February",
@@ -251,41 +241,9 @@ const EmployeeForm = (props) => {
     "November",
     "December",
   ]
+  const dayToday = dateObj.getUTCDate()
   const monthToday = monthNames[dateObj.getUTCMonth()]
-  const selectMonth = () => {
-    const options = []
-    monthNames.forEach((data, i) => {
-      options.push({
-        value: i + 1,
-        label: data,
-      })
-    })
-    return options
-  }
-  //Year
   const yearToday = dateObj.getUTCFullYear()
-  const selectYear = () => {
-    const options = []
-    const startYear = 1921
-    const endYear = new Date().getFullYear()
-    for (let i = endYear; i >= startYear; i--) {
-      options.push({
-        value: i,
-        label: i,
-      })
-    }
-    return options
-  }
-  //FormatDate XXXX-XX-XX
-  function formatDate(date) {
-    var d = new Date(date),
-      day = "" + d.getDate(),
-      month = "" + (d.getMonth() + 1),
-      year = d.getFullYear()
-    if (month.length < 2) month = "0" + month
-    if (day.length < 2) day = "0" + day
-    return [year, month, day].join("-")
-  }
   const initialValues = {
     //GeneralInformation
     name_prefix_id: {
@@ -338,12 +296,13 @@ const EmployeeForm = (props) => {
     division_id: "",
     office_id: "",
     hire_date: [
-      { value: dayToday, label: dayToday },
-      { value: monthToday, label: monthToday },
-      { value: yearToday, label: yearToday },
+      { value: dayToday, label: "Day" },
+      { value: monthToday, label: "Month" },
+      { value: yearToday, label: "Year" },
     ],
     npwp: "",
   }
+
   // Validasi number
   const phoneRegExp = /^\d+$/
   const phoneNumberPlus = /^[0-9 ()+]+$/
@@ -368,30 +327,46 @@ const EmployeeForm = (props) => {
               return new Promise((resolve, reject) => {
                 axios
                   .get(
-                    `${env.API_URL}/master/employees?filters=["contact.email","=","${value}"]`,
+                    `${env.API_URL}/master/employees?filters=["contact.email","like","${value}"]`,
                   )
                   .then((res) => {
-                    resolve(res.data.items.length === 0)                    
+                    resolve(
+                      !res.data.items.find(
+                        (e) =>
+                          e.contact.email.toUpperCase() === value.toUpperCase(),
+                      ),
+                    )
                   })
-                  .catch((error) => {
-                    resolve(false)
+                  .catch((res, error) => {
+                    resolve(
+                      res.data.items.find(
+                        (e) =>
+                          e.contact.email.toUpperCase() === value.toUpperCase(),
+                      ),
+                    )
                   })
               })
             } else {
               return new Promise((resolve, reject) => {
                 axios
                   .get(
-                    `${env.API_URL}/master/employees?filters=["contact.email","=","${value}"]`,
+                    `${env.API_URL}/master/employees?filters=["contact.email","like","${value}"]`,
                   )
-
                   .then((res) => {
                     resolve(
-                      res.data.items.length === 0 ||
-                        value === formValues.contact.email,
+                      !res.data.items.find(
+                        (e) =>
+                          e.contact.email.toUpperCase() === value.toUpperCase(),
+                      ) || value === formValues.contact.email,
                     )
                   })
-                  .catch((error) => {
-                    resolve(false)
+                  .catch((res, error) => {
+                    resolve(
+                      res.data.items.find(
+                        (e) =>
+                          e.contact.email.toUpperCase() === value.toUpperCase(),
+                      ),
+                    )
                   })
               })
             }
@@ -488,6 +463,109 @@ const EmployeeForm = (props) => {
     job_title_id: Yup.object().required("Job Title is required."),
     npwp: Yup.string().matches(numberSimbol, "NPWP must be a number"),
   })
+
+  // Birthday
+  //Day
+  const selectDay = () => {
+    const options = []
+    const today = new Date()
+    let currentYear = today.getFullYear()
+    let currentMonth = today.getMonth() + 1
+    let currentDate = today.getDate()
+    if (years.value === currentYear && months.value === currentMonth) {
+      for (let i = 1; i <= currentDate; i++) {
+        options.push({
+          label: i,
+          value: i,
+        })
+      }
+    } else {
+      if (months.value === 2 && years.value % 4 == 0) {
+        for (let i = 1; i <= 29; i++) {
+          options.push({
+            label: i,
+            value: i,
+          })
+        }
+      } else if (months.value === 2 && years.value % 4 != 0) {
+        for (let i = 1; i <= 28; i++) {
+          options.push({
+            label: i,
+            value: i,
+          })
+        }
+      } else if (
+        months.value === 4 ||
+        months.value === 6 ||
+        months.value === 9 ||
+        months.value === 11
+      ) {
+        for (let i = 1; i <= 30; i++) {
+          options.push({
+            label: i,
+            value: i,
+          })
+        }
+      } else {
+        for (let i = 1; i <= 31; i++) {
+          options.push({
+            label: i,
+            value: i,
+          })
+        }
+      }
+    }
+    return options
+  }
+  //Month
+
+  const selectMonth = () => {
+    const options = []
+    const today = new Date()
+    let currentYear = today.getFullYear()
+    let currentMonth = today.getMonth() + 1
+    const month = Array.from(
+      {
+        length: years.value === currentYear ? currentMonth : 12,
+      },
+      (e, i) => {
+        return new Date(null, i + 1, null).toLocaleDateString("en", {
+          month: "long",
+        })
+      },
+    )
+    month.forEach((data, i) => {
+      options.push({
+        value: i + 1,
+        label: data,
+      })
+    })
+    return options
+  }
+  //Year
+
+  const selectYear = () => {
+    const options = []
+    const startYear = 1921
+    const endYear = new Date().getFullYear()
+    for (let i = endYear; i >= startYear; i--) {
+      options.push({
+        value: i,
+        label: i,
+      })
+    }
+    return options
+  }
+  //FormatDate XXXX-XX-XX
+  function formatDate(date) {
+    var d = new Date(date),
+      day = "" + d.getDate(),
+      month = "" + (d.getMonth() + 1),
+      year = d.getFullYear()
+    if (month.length < 2) month = "0" + month
+    if (day.length < 2) day = "0" + day
+    return [year, month, day].join("-")
+  }
 
   return (
     <Formik
@@ -718,7 +796,7 @@ const EmployeeForm = (props) => {
                                           <FormikControl
                                             control="selectOnly"
                                             name="birth_date[0]"
-                                            placeholder={dayToday}
+                                            placeholder={"Day"}
                                             options={selectDay()}
                                             onChange={(v) => {
                                               formik.setFieldValue(
@@ -746,7 +824,7 @@ const EmployeeForm = (props) => {
                                           <FormikControl
                                             control="selectOnly"
                                             name="birth_date[1]"
-                                            placeholder={monthToday}
+                                            placeholder={"Month"}
                                             options={selectMonth()}
                                             onChange={(v) => {
                                               formik.setFieldValue(
@@ -756,8 +834,8 @@ const EmployeeForm = (props) => {
                                               formik.setFieldValue(
                                                 "birth_date[0]",
                                                 {
-                                                  value: "01",
-                                                  label: "1",
+                                                  value: 1,
+                                                  label: 1,
                                                 },
                                               )
                                               setMonths(v)
@@ -785,7 +863,7 @@ const EmployeeForm = (props) => {
                                           <FormikControl
                                             control="selectOnly"
                                             name="birth_date[2]"
-                                            placeholder={yearToday}
+                                            placeholder={"Year"}
                                             options={selectYear()}
                                             onChange={(v) => {
                                               formik.setFieldValue(
@@ -795,7 +873,7 @@ const EmployeeForm = (props) => {
                                               formik.setFieldValue(
                                                 "birth_date[0]",
                                                 {
-                                                  value: "01",
+                                                  value: 1,
                                                   label: "1",
                                                 },
                                               )
@@ -1457,7 +1535,7 @@ const EmployeeForm = (props) => {
                                               )
                                             }}
                                             options={selectDay()}
-                                            placeholder={dayToday}
+                                            placeholder={"Day"}
                                             style={{ maxWidth: 240 }}
                                             components={
                                               isView
@@ -1478,7 +1556,7 @@ const EmployeeForm = (props) => {
                                           <FormikControl
                                             control="selectOnly"
                                             name="hire_date[1]"
-                                            placeholder={monthToday}
+                                            placeholder={"Month"}
                                             options={selectMonth()}
                                             onChange={(v) => {
                                               formik.setFieldValue(
@@ -1488,7 +1566,7 @@ const EmployeeForm = (props) => {
                                               formik.setFieldValue(
                                                 "hire_date[0]",
                                                 {
-                                                  value: "01",
+                                                  value: 1,
                                                   label: "1",
                                                 },
                                               )
@@ -1517,7 +1595,7 @@ const EmployeeForm = (props) => {
                                           <FormikControl
                                             control="selectOnly"
                                             name="hire_date[2]"
-                                            placeholder={yearToday}
+                                            placeholder={"Year"}
                                             options={selectYear()}
                                             onChange={(v) => {
                                               formik.setFieldValue(
@@ -1525,9 +1603,16 @@ const EmployeeForm = (props) => {
                                                 v,
                                               )
                                               formik.setFieldValue(
+                                                "hire_date[1]",
+                                                {
+                                                  value: 0,
+                                                  label: "January",
+                                                },
+                                              )
+                                              formik.setFieldValue(
                                                 "hire_date[0]",
                                                 {
-                                                  value: "01",
+                                                  value: 1,
                                                   label: "1",
                                                 },
                                               )

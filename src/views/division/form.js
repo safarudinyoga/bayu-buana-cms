@@ -323,6 +323,7 @@ function DivisionForm(props) {
         {(formId === undefined || !loading) && <FormInputSelectAjax
           label="Manager"
           value={form.manager_id}
+          val_id="employee_id"
           name="manager_id"
           endpoint="/master/employees"
           renderColumn= {(item) => {

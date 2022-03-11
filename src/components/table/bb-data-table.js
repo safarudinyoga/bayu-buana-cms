@@ -165,6 +165,11 @@ class BBDataTable extends Component {
             <input type="checkbox" class="custom-control-input check-status-${row.id}" id="customSwitch${row.id}" ${checked} data-action="update_status">
             <label class="custom-control-label" for="customSwitch${row.id}" data-action="update_status"></label>
           </a>
+          ${
+            self.props.showHistory 
+            ? `<a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item mr-2" data-action="history" data-id="${row.id}" title="Click to view history"><img src="/img/icons/history.svg"/></a>`
+            : ""
+          }
           <a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item" data-action="delete" data-id="${row.id}" data-name="${cvtRecordName}" ${infoDelete ? `data-info="${info}"` : ""}  title="Click to delete"><img src="${removeIcon}" /></a>
           `
         )
@@ -940,18 +945,25 @@ class BBDataTable extends Component {
         let name = $(this).data("name")
         let info = $(this).data("info")
         let base = me.props.baseRoute || ""
+        let routeHistory = me.props.routeHistory || ""
         $('[data-toggle="tooltip"]').tooltip("hide")
         switch ($(this).data("action")) {
           case "edit":
             if(me.props.createOnModal) {
-              me.props.setCreateModal(true)
-              // me.props.history.replace({ pathname: me.props.location.pathname, search: `?id=84938493`})
+              me.props.setCreateModal({show: true, id, disabled_form: false})
             } else {
               me.props.history.push(base + "/" + id)
             }
             break
           case "view":
-            me.props.history.push(base + "/" + id + "?action=view")
+            if(me.props.createOnModal) {
+              me.props.setCreateModal({show: true, id, disabled_form: true})
+            } else {
+              me.props.history.push(base + "/" + id + "?action=view")
+            }
+            break
+          case "history":
+            me.props.history.push(routeHistory + "/" + id )
             break
           case "update_status":
             me.updateStatus.bind(me)(id, this)
@@ -962,6 +974,8 @@ class BBDataTable extends Component {
         }
       })
     $.fn.DataTable.ext.pager.numbers_length = 5
+
+    const { showCreateModal, modalTitle } = this.props
     return (
       <div ref={this.wrapper}>
         <Modal show={this.state.isOpen}>
@@ -1033,9 +1047,10 @@ class BBDataTable extends Component {
             </Button>
           </ModalFooter>
         </Modal>
-        <ModalCreate 
-          show={this.props.showCreateModal}
-          onClick={() => this.props.setCreateModal(false)}
+        <ModalCreate
+          modalTitle={modalTitle}
+          show={showCreateModal.show}
+          onClick={() => this.props.setCreateModal({show: false, id: null, disabled_form: false})}
           modalContent={this.props.modalContent}
         />
         <TableHeader
@@ -1071,6 +1086,7 @@ const mapStateToProps = ({ ui }) => {
     stateAlert: ui.alert,
     showCreateModal: ui.showCreateModal,
     reloadTable: ui.reloadTable,
+    modalTitle: ui.modalTitle,
   }
 }
 

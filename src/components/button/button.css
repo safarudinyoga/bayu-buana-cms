@@ -55,3 +55,7 @@
   padding-right: 15px; 
   border-radius: 8px; 
 }
+.button-save:disabled, .button-save[disabled] {
+  opacity: 0.65;
+  cursor: not-allowed;
+}

@@ -3,12 +3,18 @@ import React, { useState } from 'react';
 import { Card, Form, Row, Col, Button, InputGroup, FormGroup } from "react-bootstrap"
 import * as Yup from "yup"
 import Api from "config/api"
+import { useSnackbar } from "react-simple-snackbar"
+
+const options = {
+  position: "bottom-right",
+}
 
 const SecuritySettings = (props) => {
   let api = new Api()
   const [ oldPassType, setOldPassType] = useState("password")
   const [ newPassType, setNewPassType] = useState("password")
   const [ confirmPassType, setConfirmPassType] = useState("password")
+  const [openSnackbar] = useSnackbar(options)
 
   // Initialize form
   const initialForm = {
@@ -21,15 +27,27 @@ const SecuritySettings = (props) => {
   // Schema for yup
   const validationSchema = Yup.object().shape({
     // Change Password
-    oldPassword: Yup.string().required("Old Password is required"),
-    newPassword: Yup.string().required("New Password is required").notOneOf([Yup.ref('oldPassword'), null], 'New Password must not be same as Old Password'),
-    confirmPassword: Yup.string().required("Confirm password is required").oneOf([Yup.ref('newPassword'), null], 'New Password must match'),
+    oldPassword: Yup.string()
+                  .required("Old Password is required")
+                  .min(8, "Old Password must be at least 8 characters")
+                  .max(256),
+    newPassword: Yup.string()
+                  .required("New Password is required")
+                  .min(8, "New Password must be at least 8 characters")
+                  .max(256)
+                  .notOneOf([Yup.ref('oldPassword'), null], 'New Password must not be same as Old Password'),
+    confirmPassword: Yup.string()
+                      .required("Confirm password is required")
+                      .min(8, "Confirm Password must be at least 8 characters")
+                      .max(256)
+                      .oneOf([Yup.ref('newPassword'), null], 'New Password must match'),
   })
 
   const FormValidate = ({
     label,
     name,
     type="password",
+    minLength=8,
     maxLength=256,
     placeholder="",
     endIcon,
@@ -48,6 +66,7 @@ const SecuritySettings = (props) => {
                     form.touched[name] && form.errors[name]
                   }
                   maxLength={maxLength}
+                  minLength={minLength}
                   {...field}
                 />
                 {
@@ -79,14 +98,15 @@ const SecuritySettings = (props) => {
       initialValues={initialForm}
       validationSchema={validationSchema}
       onSubmit={async (values, { setSubmitting, resetForm }) => {
-        console.log(values)
-
         let formatted = {
           old_password: values.oldPassword,
           new_password: values.newPassword,
         }
 
         let res = await api.put("user/profile", formatted)
+        openSnackbar(
+          `Password has been successfully changed.`
+        )
 
         return props.handleSelectTab("subscriptions")
       }}
