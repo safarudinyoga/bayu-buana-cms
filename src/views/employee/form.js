@@ -36,7 +36,7 @@ const EmployeeForm = (props) => {
   const [optionGender, setOptionGender] = useState([])
   const [additionalRole, setAdditionalRole] = useState(false)
   const [months, setMonths] = useState({ value: 1, label: "" })
-  const [years, setYears] = useState({ value: 2000, label: "" })  
+  const [years, setYears] = useState({ value: 1921, label: "" })  
 
   useEffect(async () => {
     let api = new Api()
@@ -71,6 +71,14 @@ const EmployeeForm = (props) => {
       try {
         let res = await api.get(endpoint + "/" + formId)
         let data = res.data
+        setMonths({
+          value: parseInt(data.birth_date.substring(5, 7)),
+          label: monthNames[parseInt(data.birth_date.substring(5, 7)) - 1],
+        })
+        setYears({
+          value: parseInt(data.birth_date.substring(0, 4)),
+          label: parseInt(data.birth_date.substring(0, 4)),
+        })
         setFormValues({
           ...data,
           birth_date: [
@@ -245,11 +253,7 @@ const EmployeeForm = (props) => {
     given_name: "",
     middle_name: "",
     surname: "",
-    birth_date: [
-      { value: dayToday, label: "Day" },
-      { value: monthToday, label: "Month" },
-      { value: yearToday, label: "Year" },
-    ],
+    birth_date: [],
     gender_id: "db24d53c-7d36-4770-8598-dc36174750af",
     ktp: "",
 
@@ -326,26 +330,43 @@ const EmployeeForm = (props) => {
                     `${env.API_URL}/master/employees?filters=["contact.email","like","${value}"]`,
                   )
                   .then((res) => {
-                    resolve(!res.data.items.find( e => e.contact.email.toUpperCase() === value.toUpperCase()))
+                    resolve(
+                      !res.data.items.find(
+                        (e) =>
+                          e.contact.email.toUpperCase() === value.toUpperCase(),
+                      ),
+                    )
                   })
                   .catch((res, error) => {
-                    resolve(res.data.items.find( e => e.contact.email.toUpperCase() === value.toUpperCase()))
+                    resolve(
+                      res.data.items.find(
+                        (e) =>
+                          e.contact.email.toUpperCase() === value.toUpperCase(),
+                      ),
+                    )
                   })
               })
             } else {
               return new Promise((resolve, reject) => {
                 axios
                   .get(
-                    `${env.API_URL}/master/employees?filters=["contact.email","=","${value}"]`,
-                  )                  
-                  .then((res) => {                    
+                    `${env.API_URL}/master/employees?filters=["contact.email","like","${value}"]`,
+                  )
+                  .then((res) => {
                     resolve(
-                      !res.data.items.find( e => e.contact.email.toUpperCase() === value.toUpperCase()) ||
-                        value === formValues.contact.email,
+                      !res.data.items.find(
+                        (e) =>
+                          e.contact.email.toUpperCase() === value.toUpperCase(),
+                      ) || value === formValues.contact.email,
                     )
                   })
                   .catch((res, error) => {
-                    resolve(res.data.items.find( e => e.contact.email.toUpperCase() === value.toUpperCase()))
+                    resolve(
+                      res.data.items.find(
+                        (e) =>
+                          e.contact.email.toUpperCase() === value.toUpperCase(),
+                      ),
+                    )
                   })
               })
             }
@@ -651,7 +672,7 @@ const EmployeeForm = (props) => {
       validateOnMount
       enableReinitialize
     >
-      {(formik) => {        
+      {(formik) => {
         return (
           <Form>
             <FormMobile className="mobile-form"></FormMobile>
@@ -848,13 +869,6 @@ const EmployeeForm = (props) => {
                                               formik.setFieldValue(
                                                 "birth_date[2]",
                                                 v,
-                                              )
-                                              formik.setFieldValue(
-                                                "birth_date[1]",
-                                                {
-                                                  value: 1,
-                                                  label: "January",
-                                                },
                                               )
                                               formik.setFieldValue(
                                                 "birth_date[0]",
