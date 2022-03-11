@@ -72,7 +72,7 @@ const FormInputFile = ({
               alt="up-img"
             />
           </div>
-          <div className="button-image mt-2 mt-md-5 mt-lg-2 ml-0 ml-md-4 ml-lg-2">UPLOAD PHOTO</div>
+          <div className="button-image mt-2 mt-md-4 mt-lg-2 ml-0 ml-md-4 ml-lg-2">UPLOAD PHOTO</div>
         </div>
       </label>
     </div>
