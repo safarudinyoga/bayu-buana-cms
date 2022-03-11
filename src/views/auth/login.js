@@ -68,6 +68,7 @@ function Login() {
 	const onSubmit = async (values, a) => {
 		try {
 			let res = await api.post("/user/login", values)
+			console.log(res);
 			await getMenu()
 			
 			let date = new Date();
