@@ -196,7 +196,7 @@ class BBDataTable extends Component {
           //   iFixedColumnsRight: 4,
         },
         stateSave: false,
-        fixedColumn: true,
+        fixedColumns: true,
         serverSide: true,
         processing: true,
         displayLength: 10,
@@ -549,6 +549,10 @@ class BBDataTable extends Component {
           {
             targets: [columns.length - 3, columns.length - 1],
             className: module === "branch-office" ? "desktop" : ""
+          },
+          {
+            targets: [columns.length - 3, columns.length - 1],
+            className: module === "employee" ? "desktop" : ""
           }
           // {
           //   orderable: false,
