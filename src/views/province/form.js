@@ -304,6 +304,7 @@ function ProvinceForm(props) {
           value={form.state_province_category_id}
           name="state_province_category_id"
           cl="4"
+          sort="sort"
           filter={`["status", "=", 1]`}
           endpoint="/master/state-province-categories"
           column="state_province_category_name"
