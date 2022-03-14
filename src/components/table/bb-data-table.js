@@ -549,6 +549,10 @@ class BBDataTable extends Component {
           {
             targets: [columns.length - 3, columns.length - 1],
             className: module === "branch-office" ? "desktop" : ""
+          },
+          {
+            targets: [columns.length - 3, columns.length - 1],
+            className: module === "employee" ? "desktop" : ""
           }
           // {
           //   orderable: false,
