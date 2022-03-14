@@ -692,7 +692,7 @@ const EmployeeFormMobile = (props) => {
       enableReinitialize
     >
       {(formik) => {
-        console.log("formik", formik)
+        // console.log("formik", formik)
         return (
           <Form className={props.className}>
             <Accordion activeKey={currentActiveKey}>
@@ -779,7 +779,7 @@ const EmployeeFormMobile = (props) => {
                           />
 
                           <Row className="form-group required">
-                            <Col column md={3} lg={4}>
+                            <Col md={3} lg={4}>
                               <label className="text-label-input">
                                 Date Of Birth
                                 <span
@@ -1356,8 +1356,8 @@ const EmployeeFormMobile = (props) => {
                             name="emergency_contact.relationship"
                             style={{ maxWidth: 200 }}
                             disabled={isView}
-                            minlength="1"
-                            maxlength="36"
+                            minLength="1"
+                            maxLength="36"
                           />
                         </div>
                       </Col>
@@ -1383,8 +1383,8 @@ const EmployeeFormMobile = (props) => {
                             name="emergency_contact2.contact_phone_number"
                             style={{ maxWidth: 200 }}
                             disabled={isView}
-                            minlength="1"
-                            maxlength="32"
+                            minLength="1"
+                            maxLength="32"
                           />
                           <FormikControl
                             control="input"
@@ -1485,8 +1485,8 @@ const EmployeeFormMobile = (props) => {
                                 name="employee_number"
                                 style={{ maxWidth: 170 }}
                                 disabled={isView}
-                                minlength="1"
-                                maxlength="36"
+                                minLength="1"
+                                maxLength="36"
                                 className="form-control"
                               />
                             </Col>
@@ -1556,7 +1556,7 @@ const EmployeeFormMobile = (props) => {
                             isDisabled={isView}
                           />
                           <Row className="required">
-                            <Col column md={3} lg={4}>
+                            <Col md={3} lg={4}>
                               <label className="text-label-input">
                                 Hiring Date
                                 <span className="label-required" />
