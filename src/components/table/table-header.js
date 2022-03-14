@@ -124,6 +124,10 @@ class TableHeader extends Component {
   }
 
   handleStatus(statusValue) {
+    if(this.props.customFilterStatus){
+      this.props.customFilterStatus.value=""
+    }
+
     if (this.props.onStatus) {
       this.props.onStatus(statusValue.value)
     }
