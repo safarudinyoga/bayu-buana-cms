@@ -1,5 +1,5 @@
 import { FastField, Formik } from 'formik';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, Form, Row, Col, Button, InputGroup, FormGroup } from "react-bootstrap"
 import * as Yup from "yup"
 import Api from "config/api"
@@ -14,6 +14,7 @@ const SecuritySettings = (props) => {
   const [ oldPassType, setOldPassType] = useState("password")
   const [ newPassType, setNewPassType] = useState("password")
   const [ confirmPassType, setConfirmPassType] = useState("password")
+  const [ email, setEmail] = useState("")
   const [openSnackbar] = useSnackbar(options)
 
   // Initialize form
@@ -24,13 +25,39 @@ const SecuritySettings = (props) => {
     confirmPassword: "",
   }
 
+  useEffect(async () => {
+    try {
+      let res = await api.get("/user/profile")
+      setEmail(res.data.contact.email)
+    } catch(e) {
+
+    }
+  }, [])
+
   // Schema for yup
   const validationSchema = Yup.object().shape({
     // Change Password
     oldPassword: Yup.string()
                   .required("Old Password is required")
                   .min(8, "Old Password must be at least 8 characters")
-                  .max(256),
+                  .max(256)
+                  .test(
+                    'valid-password',
+                    'Old Password is incorrect',
+                    async (value, testContext) => {
+                      try {
+                        let res = await api.post("/user/login", {
+                          username: email,
+                          password: value
+                        })
+                        if(res.status == 200){
+                          return true
+                        }
+                      } catch(e) {
+
+                      }
+                    }
+                  ),
     newPassword: Yup.string()
                   .required("New Password is required")
                   .min(8, "New Password must be at least 8 characters")
@@ -103,10 +130,15 @@ const SecuritySettings = (props) => {
           new_password: values.newPassword,
         }
 
-        let res = await api.put("user/profile", formatted)
-        openSnackbar(
-          `Password has been successfully changed.`
-        )
+        try {
+          let res = await api.put("user/profile", formatted)
+          openSnackbar(
+            `Password has been successfully changed.`
+          )
+        } catch(e) {
+
+        }
+        
 
         return props.handleSelectTab("subscriptions")
       }}

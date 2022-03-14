@@ -4,9 +4,16 @@ import { Formik } from "formik"
 import * as Yup from "yup"
 import Api from "config/api"
 import "./user-profile-form.css"
+import { useSnackbar } from "react-simple-snackbar"
+
+const options = {
+  position: "bottom-right",
+}
 
 const EmergencyContacts = (props) => {
   let api = new Api()
+
+  const [openSnackbar] = useSnackbar(options)
 
   // Initialize form
   const [initialForm, setIntialForm] = useState({
@@ -76,8 +83,13 @@ const EmergencyContacts = (props) => {
           }
         }
 
-        let res = await api.put("user/profile", formatted)
-        console.log(res);
+        try {
+          let res = await api.put("user/profile", formatted)
+          openSnackbar(
+            `Your profile has been successfully updated.`
+          )
+        } catch(e) {}
+        
         // setSubmitting(true)
 
         // try {

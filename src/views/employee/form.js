@@ -295,11 +295,7 @@ const EmployeeForm = (props) => {
     job_title_id: "",
     division_id: "",
     office_id: "",
-    hire_date: [
-      { value: dayToday, label: "Day" },
-      { value: monthToday, label: "Month" },
-      { value: yearToday, label: "Year" },
-    ],
+    hire_date: [],
     npwp: "",
   }
 
@@ -673,6 +669,7 @@ const EmployeeForm = (props) => {
       enableReinitialize
     >
       {(formik) => {
+        console.log("Formik Data Desk", formik)
         return (
           <Form>
             <FormMobile className="mobile-form"></FormMobile>
@@ -871,6 +868,13 @@ const EmployeeForm = (props) => {
                                                 v,
                                               )
                                               formik.setFieldValue(
+                                                "birth_date[1]",
+                                                {
+                                                  value: 0,
+                                                  label: "January",
+                                                },
+                                              )
+                                              formik.setFieldValue(
                                                 "birth_date[0]",
                                                 {
                                                   value: 1,
@@ -1008,6 +1012,7 @@ const EmployeeForm = (props) => {
                                     name="address.country_id"
                                     url={`master/countries`}
                                     fieldName={"country_name"}
+                                    
                                     onChange={(v) => {
                                       formik.setFieldValue(
                                         "address.country_id",
@@ -1043,6 +1048,7 @@ const EmployeeForm = (props) => {
                                     name="address.state_province_id"
                                     url={`master/state-provinces?sort=state_province_name&filters=[["status", "=", 1],["AND"],["country_id","=","${formik.values.address.country_id.value}"]]&size=-1`}
                                     fieldName={"state_province_name"}
+                                    isLoading={false}
                                     key={JSON.stringify(
                                       formik.values.address.country_id,
                                     )}
@@ -1197,12 +1203,11 @@ const EmployeeForm = (props) => {
                                     control="selectAsync"
                                     label="State/ Province"
                                     name="permanent_address.state_province_id"
-                                    url={`master/state-provinces?sort=state_province_name&filters=[["status", "=", 1],["AND"],["country_id","=","${formik.values.permanent_address.country_id.value}"]]&size=-1&`}
-                                    fieldName={"state_province_name"}
+                                    url={`master/state-provinces?sort=state_province_name&filters=[["status", "=", 1],["AND"],["country_id","=","${formik.values.permanent_address.country_id.value}"]]&size=-1`}
+                                    fieldName={"state_province_name"}  
                                     key={JSON.stringify(
-                                      formik.values.permanent_address
-                                        .country_id,
-                                    )}
+                                      formik.values.permanent_address.country_id,
+                                    )}                                  
                                     onChange={(v) => {
                                       formik.setFieldValue(
                                         "permanent_address.state_province_id",
@@ -1219,10 +1224,11 @@ const EmployeeForm = (props) => {
                                     placeholder={"Please choose"}
                                     style={{ maxWidth: 200 }}
                                     components={
+                                      
                                       isView
                                         ? {
                                             DropdownIndicator: () => null,
-                                            IndicatorSeparator: () => null,
+                                            IndicatorSeparator: () => null,                                            
                                           }
                                         : null
                                     }

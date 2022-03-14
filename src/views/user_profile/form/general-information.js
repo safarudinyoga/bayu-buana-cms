@@ -7,12 +7,17 @@ import axios from "axios"
 import _ from "lodash"
 import "./user-profile-form.css"
 import { useWindowSize } from "rooks"
+import { useSnackbar } from "react-simple-snackbar"
 
 import Api from "config/api"
 import env from "config/environment"
 import Select from "components/form/select"
 import { default as SelectAsync } from "components/form/select-async"
 import { auto } from "@popperjs/core"
+
+const options = {
+  position: "bottom-right",
+}
 
 const GeneralInformation = (props) => {
   const [selectCurrentProvince, setSelectCurrentProvince] = useState([])
@@ -27,6 +32,7 @@ const GeneralInformation = (props) => {
   const { innerWidth, innerHeight, outerHeight, outerWidth } = useWindowSize();
 
   const [showCloseBtn, setShowCloseBtn] = useState(false)
+  const [openSnackbar] = useSnackbar(options)
   let api = new Api()
 
   
@@ -533,6 +539,9 @@ const GeneralInformation = (props) => {
           console.log(formatted);
 
           let res = await api.put("user/profile", formatted)
+          openSnackbar(
+            `Your profile has been successfully updated.`
+          )
           return props.handleSelectTab("emergency-contacts")
         }}
       >
