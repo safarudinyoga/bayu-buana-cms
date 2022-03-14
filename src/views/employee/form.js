@@ -1109,10 +1109,8 @@ const EmployeeForm = (props) => {
                             <Row>
                               <Col lg={11}>
                                 <div style={{ padding: "0 15px 15px" }}>
-                                  <FormikControl
-                                    control="checkboxOnly"
+                                  <input
                                     type="checkbox"
-                                    label="Same As Current Address"
                                     name="sameAddress"
                                     checked={sameAddress}
                                     onChange={() => {
@@ -1149,9 +1147,9 @@ const EmployeeForm = (props) => {
                                           : formik.values.address.postal_code,
                                       )
                                     }}
-                                    style={{ maxWidth: 416 }}
+                                    style={{ maxWidth: 416, margin: 5, accentColor: "#06846b" }}
                                     disabled={isView}
-                                  />
+                                  /> Same As Current Address
                                   <FormikControl
                                     control="textarea"
                                     label="Address"
