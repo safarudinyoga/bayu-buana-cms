@@ -72,7 +72,7 @@ const StatusSelect = (props) => {
     <>
         <Select
           components={{IndicatorSeparator: () => null, DropdownIndicator}}
-          value={props.options[props.value]}
+          value={props.value != null ? props.options[props.value] : props.value}
           onChange={props.onChange}
           styles={customStyles}
           options={props.options}
@@ -91,6 +91,7 @@ class TableHeader extends Component {
       searchValue: "",
       statusValue: "0",
     }
+
     this.toggleFilter = this.toggleFilter.bind(this)
   }
 
@@ -138,6 +139,11 @@ class TableHeader extends Component {
       searchValue: "",
       statusValue: "0",
     })
+
+    if(this.props.customFilterStatus){
+      this.props.customFilterStatus.value=null
+    }
+
   }
 
   handlePrint() {
