@@ -1,5 +1,7 @@
-import React from "react"
+import React, {useState} from "react"
 import NoImage from "assets/imageNull.png"
+import ImageUploading from "react-images-uploading"
+import { Row,Button, CloseButton, Image } from "react-bootstrap"
 
 import "../form/input-image.css"
 import { useDispatch } from "react-redux"
@@ -16,8 +18,10 @@ const FormInputFile = ({
   mediaType = "desktop",
   style,
   mediaSpec,
+  photoProfile=[],
 }) => {
   let dispatch = useDispatch()
+  const [showCloseBtn, setShowCloseBtn] = useState(false)
   const acceptFormat = accept
     ? accept
         .split(",")
@@ -25,56 +29,77 @@ const FormInputFile = ({
         .join(",")
     : "image/jpeg,image/jpg,image/png"
 
-  const onChangeImg = (e) => {
-    let fileTypes = acceptFormat.split(",")
-    if (fileTypes.includes(e.target?.files[0]?.type)) {
-      onChange(e, mediaType)
-    } else {
-      e.target.value = null
-      dispatch(
-        setAlert({
-          message: `File not supported.`,
-        }),
-      )
-    }
-  }
-
   return (
-    <div className={`image-wrapper ${name}`}>
-      {title && (
-        <>
-          <p className="media-title media-title-required">{title}</p>
-          <p className="media-info">
-            Recommended Size: {mediaSpec.size} pixels <br />
-            Supported Image:{" "}
-            {accept?.split(",").join(" ") || ".png, .jpg, .jpeg"} File Max:{" "}
-            {mediaSpec.file_size} KB
-          </p>
-        </>
-      )}
-      <label className="media-label" id={"media-" + id} style={style}>
-        <input
-          id={id}
-          type="file"
-          onChange={(e) => onChangeImg(e)}
-          className="form-control input-image"
-          name={name}
-          disabled={disabled}
-          accept={acceptFormat}
-          data-rule-required="true"
-          data-msg-accept="Only .png, .jpg, .jpeg file supported"
-        />
-        <div className="d-flex flex-column flex-md-row flex-lg-column justify-content-center pl-5 pl-md-0 pl-lg-0 mb-2">
-          <div>
-            <img
-              src={url || NoImage}
-              className="img-circle img-up image-profile-form"
-              alt="up-img"
-            />
-          </div>
-          <div className="button-image mt-2 mt-md-4 mt-lg-2 ml-0 ml-md-4 ml-lg-2">UPLOAD PHOTO</div>
-        </div>
-      </label>
+    <div
+      className="d-md-flex d-lg-block justify-content-md-center align-items-md-center"
+      style={{marginBottom: 20}}
+    >
+        {photoProfile.length == 0 && (
+          <Image
+            src="/img/media/profile.svg"
+            className="img-profile"
+            roundedCircle
+          />
+        )}
+        <ImageUploading
+          value={photoProfile}
+          onChange={onChange}
+          dataURLKey="data_url"
+          acceptType={["png", "jpg", "jpeg"]}
+        >
+          {({
+            imageList,
+            onImageUpload,
+            onImageUpdate,
+            onImageRemove,
+            errors,
+          }) => (
+            // write your building UI
+            <>
+            {console.log(imageList)}
+              {imageList.map((image, index) => (
+                <div key={index} className="image-item" style={{position: "relative"}}
+                  onMouseEnter={e => {
+                    setShowCloseBtn(true)
+                  }}
+                  onMouseLeave={e => {
+                    setShowCloseBtn(false)
+                  }}
+                >
+                  <Image
+                    src={image["data_url"]}
+                    roundedCircle
+                    className="img-profile"
+                  />
+                  <CloseButton
+                    style={{position: "absolute", top: 0, right: 0, display: showCloseBtn ? "block" : "none"}}
+                    onClick={() => onImageRemove(0)} 
+                  />
+                </div>
+              ))}
+              <Button
+                variant="secondary"
+                className="d-block d-md-flex d-lg-block mt-2 mt-md-0 mt-lg-2 ml-md-3 ml-lg-0"
+                onClick={() => 
+                  photoProfile.length !== 0
+                    ? onImageUpload()
+                    : onImageUpdate(0)
+                }
+              >
+                UPLOAD PHOTO
+              </Button>
+              {errors && (
+                <>
+                  {errors.acceptType && (
+                    <p className="img-error-label">
+                      Only .png, .jpg, .jpeg file supported
+                    </p>
+                  )}
+                </>
+              )}
+            </>
+          )}
+        </ImageUploading>
     </div>
   )
 }
