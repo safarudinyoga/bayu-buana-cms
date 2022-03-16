@@ -112,7 +112,7 @@ class TableHeader extends Component {
     }
   }
 
-  handleSearchDebounce = debounce((text) => this.props.onSearch(text), 500)
+  handleSearchDebounce = debounce((text) => this.props.onSearch(text), 800)
 
   handleSearch(e) {
     this.setState({
