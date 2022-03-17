@@ -1033,8 +1033,9 @@ const EmployeeFormMobile = (props) => {
                             control="selectAsync"
                             label="State/ Province"
                             name="address.state_province_id"
-                            url={`master/state-provinces?sort=state_province_name&filters=[["status", "=", 1],["AND"],["country_id","=","${formik.values.address.country_id.value}"]]&size=-1`}
+                            url={`master/state-provinces`}
                             fieldName={"state_province_name"}
+                            urlFilter={`["country_id","=","${formik.values.address.country_id.value}"]`}
                             key={JSON.stringify(
                               formik.values.address.country_id,
                             )}
@@ -1064,8 +1065,9 @@ const EmployeeFormMobile = (props) => {
                             control="selectAsync"
                             label="City"
                             name="address.city_id"
-                            url={`master/cities?sort=city_name&filters=[["status", "=", 1],["AND"],["country_id","=","${formik.values.address.country_id.value}"]]&size=-1`}
+                            url={`master/cities?sort=city_name`}
                             fieldName={"city_name"}
+                            urlFilter={`["country_id","=","${formik.values.address.country_id.value}"]`}
                             key={JSON.stringify(
                               formik.values.address.country_id.value,
                             )}
@@ -1206,13 +1208,14 @@ const EmployeeFormMobile = (props) => {
                             control="selectAsync"
                             label="State/ Province"
                             name="permanent_address.state_province_id"
-                            url={`master/state-provinces?sort=state_province_name&filters=[["status", "=", 1],["AND"],["country_id","=","${formik.values.permanent_address.country_id.value}"]]&size=-1&`}
+                            url={`master/state-provinces`}
                             fieldName={"state_province_name"}
                             value={
                               sameAddress
                                 ? formik.values.address.state_province_id
                                 : formik.values.permanent_address.state_province_id
                             }
+                            urlFilter={`["country_id","=","${formik.values.permanent_address.country_id.value}"]`}
                             key={JSON.stringify(
                               formik.values.permanent_address.country_id,
                             )}
@@ -1245,13 +1248,17 @@ const EmployeeFormMobile = (props) => {
                             control="selectAsync"
                             label="City"
                             name="permanent_address.city_id"
-                            url={`master/cities?sort=city_name&filters=[["status", "=", 1],["AND"],["country_id","=","${formik.values.permanent_address.country_id.value}"]]&size=-1`}
+                            url={`master/cities`}
                             fieldName={"city_name"}
+<<<<<<< HEAD
                             value={
                               sameAddress
                                 ? formik.values.address.city_id
                                 : formik.values.permanent_address.city_id
                             }
+=======
+                            urlFilter={`["country_id","=","${formik.values.permanent_address.country_id.value}"]`}
+>>>>>>> master
                             key={JSON.stringify(
                               formik.values.permanent_address.city_id.value,
                             )}
