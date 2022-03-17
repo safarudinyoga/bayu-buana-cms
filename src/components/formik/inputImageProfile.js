@@ -77,7 +77,7 @@ const FormInputFile = ({
                   />
                 </div>
               ))}
-              <Button
+              {!disabled && (<Button
                 variant="secondary"
                 className="d-block d-md-flex d-lg-block mt-2 mt-md-0 mt-lg-2 ml-md-3 ml-lg-0"
                 onClick={() => 
@@ -87,7 +87,7 @@ const FormInputFile = ({
                 }
               >
                 UPLOAD PHOTO
-              </Button>
+              </Button>)}
               {errors && (
                 <>
                   {errors.acceptType && (

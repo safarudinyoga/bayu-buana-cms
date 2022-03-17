@@ -36,7 +36,8 @@ const EmployeeFormMobile = (props) => {
   let api = new Api()
   const isView = useQuery().get("action") === "view"
   const [tabKey, setTabKey] = useState("general-information")
-  const [photoProfile, setPhotoProfile] = useState({})
+  const [photoProfile, setPhotoProfile] = useState([])
+  const [photoData, setPhotoData] = useState()
   const [sameAddress, setSameAddress] = useState(false)
   const [loading, setLoading] = useState(true)
   const [id, setId] = useState(null)
@@ -169,6 +170,9 @@ const EmployeeFormMobile = (props) => {
             },
           ],
         })
+        setPhotoProfile([{
+          data_url: data.employee_asset.multimedia_description.url
+        }])
         //handleSameAddress
         if (
           data.address.address_line === data.permanent_address.address_line &&
@@ -209,31 +213,51 @@ const EmployeeFormMobile = (props) => {
     setOptionGender(options)
   }, [])
   // Upload profile
-  const onChangePhotoProfile = async (e) => {
+  const doUpload = async (imageList) => {
     try {
-      var files = e.target.files[0]
-      if (files) {
-        var filesize = (files.size / 1024 / 1024).toFixed(4)
-        if (filesize > 4) {
-          alert("Logo size is more than 4MB.")
-          return
-        }
-        let api = new Api()
-        let payload = new FormData()
-        payload.append("files", e.target.files[0])
-        let res = await api.post("/multimedia/files", payload)
-        if (res.data) {
-          setPhotoProfile({
-            ...photoProfile,
-            employee_asset: {
-              multimedia_description_id: res.data.id,
-              multimedia_description: res.data,
-            },
-          })
-        }
-      }
-    } catch (e) {}
+      let payload = new FormData()
+      payload.append("files", imageList[0].file)
+
+      let res = await api.post("/multimedia/files", payload)
+      setPhotoData(res.data.id)
+    } catch(e) {
+
+    }
   }
+
+  // Upload profile
+  const onChangePhotoProfile = (imageList, addUpdateIndex) => {
+    // data for submit
+    console.log(imageList, addUpdateIndex)
+    setPhotoProfile(imageList)
+    doUpload(imageList)
+  }
+  // // Upload profile
+  // const onChangePhotoProfile = async (e) => {
+  //   try {
+  //     var files = e.target.files[0]
+  //     if (files) {
+  //       var filesize = (files.size / 1024 / 1024).toFixed(4)
+  //       if (filesize > 4) {
+  //         alert("Logo size is more than 4MB.")
+  //         return
+  //       }
+  //       let api = new Api()
+  //       let payload = new FormData()
+  //       payload.append("files", e.target.files[0])
+  //       let res = await api.post("/multimedia/files", payload)
+  //       if (res.data) {
+  //         setPhotoProfile({
+  //           ...photoProfile,
+  //           employee_asset: {
+  //             multimedia_description_id: res.data.id,
+  //             multimedia_description: res.data,
+  //           },
+  //         })
+  //       }
+  //     }
+  //   } catch (e) {}
+  // }
 
   // Birthday
   //Day
@@ -918,20 +942,21 @@ const EmployeeFormMobile = (props) => {
                         >
                           <div>
                             <div>
-                              <FormikControl
-                                control="imageProfile"
-                                id="employee_icon"
-                                type="imageProfile"
-                                name="employee_asset"
-                                onChange={onChangePhotoProfile}
-                                disabled={isView}
-                                url={
-                                  photoProfile.employee_asset
-                                    ?.multimedia_description?.url ||
-                                  formik.values.employee_asset
-                                    ?.multimedia_description?.url
-                                }
-                              />
+                            <FormikControl
+                              control="imageProfile"
+                              id="employee_icon"
+                              type="imageProfile"
+                              name="employee_asset"
+                              onChange={onChangePhotoProfile}
+                              disabled={isView}
+                              photoProfile={photoProfile}
+                              url={
+                                photoProfile.employee_asset
+                                  ?.multimedia_description?.url ||
+                                formik.values.employee_asset
+                                  ?.multimedia_description?.url
+                              }
+                            />
                             </div>
                           </div>
                         </Col>
