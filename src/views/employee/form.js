@@ -161,6 +161,9 @@ const EmployeeForm = (props) => {
             },
           ],
         })
+        setPhotoProfile([{
+          data_url: data.employee_asset.multimedia_description.url
+        }])
         //handleSameAddress
         if (
           data.address.address_line === data.permanent_address.address_line &&
