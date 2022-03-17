@@ -53,6 +53,7 @@ export default function ExchageRateTable() {
     ],
     emptyTable: "No exchange rate found",
     recordName: ["from_currency.currency_code", "to_currency.currency_code"],
+    btnDownload: ".buttons-csv",
   }
   return <BBDataTable {...params} modalContent={Form} />
 }

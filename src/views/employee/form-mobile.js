@@ -692,7 +692,7 @@ const EmployeeFormMobile = (props) => {
       enableReinitialize
     >
       {(formik) => {
-        console.log("formik", formik)
+        // console.log("formik", formik)
         return (
           <Form className={props.className}>
             <Accordion activeKey={currentActiveKey}>
@@ -779,7 +779,7 @@ const EmployeeFormMobile = (props) => {
                           />
 
                           <Row className="form-group required">
-                            <Col column md={3} lg={4}>
+                            <Col md={3} lg={4}>
                               <label className="text-label-input">
                                 Date Of Birth
                                 <span
@@ -1591,7 +1591,7 @@ const EmployeeFormMobile = (props) => {
                             isDisabled={isView}
                           />
                           <Row className="required">
-                            <Col column md={3} lg={4}>
+                            <Col md={3} lg={4}>
                               <label className="text-label-input">
                                 Hiring Date
                                 <span className="label-required" />

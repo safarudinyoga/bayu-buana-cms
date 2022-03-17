@@ -28,7 +28,8 @@ const EmployeeForm = (props) => {
   let api = new Api()
   const isView = useQuery().get("action") === "view"
   const [tabKey, setTabKey] = useState("general-information")
-  const [photoProfile, setPhotoProfile] = useState({})
+  const [photoProfile, setPhotoProfile] = useState([])
+  const [photoData, setPhotoData] = useState()
   const [sameAddress, setSameAddress] = useState(false)
   const [loading, setLoading] = useState(true)
   const [id, setId] = useState(null)
@@ -200,31 +201,51 @@ const EmployeeForm = (props) => {
     setOptionGender(options)
   }, [])
   // Upload profile
-  const onChangePhotoProfile = async (e) => {
+  const doUpload = async (imageList) => {
     try {
-      var files = e.target.files[0]
-      if (files) {
-        var filesize = (files.size / 1024 / 1024).toFixed(4)
-        if (filesize > 4) {
-          alert("Logo size is more than 4MB.")
-          return
-        }
-        let api = new Api()
-        let payload = new FormData()
-        payload.append("files", e.target.files[0])
-        let res = await api.post("/multimedia/files", payload)
-        if (res.data) {
-          setPhotoProfile({
-            ...photoProfile,
-            employee_asset: {
-              multimedia_description_id: res.data.id,
-              multimedia_description: res.data,
-            },
-          })
-        }
-      }
-    } catch (e) {}
+      let payload = new FormData()
+      payload.append("files", imageList[0].file)
+
+      let res = await api.post("/multimedia/files", payload)
+      setPhotoData(res.data.id)
+    } catch(e) {
+
+    }
   }
+
+  // Upload profile
+  const onChangePhotoProfile = (imageList, addUpdateIndex) => {
+    // data for submit
+    console.log(imageList, addUpdateIndex)
+    setPhotoProfile(imageList)
+    doUpload(imageList)
+  }
+
+  // const onChangePhotoProfile = async (e) => {
+  //   try {
+  //     var files = e.target.files[0]
+  //     if (files) {
+  //       var filesize = (files.size / 1024 / 1024).toFixed(4)
+  //       if (filesize > 4) {
+  //         alert("Logo size is more than 4MB.")
+  //         return
+  //       }
+  //       let api = new Api()
+  //       let payload = new FormData()
+  //       payload.append("files", e.target.files[0])
+  //       let res = await api.post("/multimedia/files", payload)
+  //       if (res.data) {
+  //         setPhotoProfile({
+  //           ...photoProfile,
+  //           employee_asset: {
+  //             multimedia_description_id: res.data.id,
+  //             multimedia_description: res.data,
+  //           },
+  //         })
+  //       }
+  //     }
+  //   } catch (e) {}
+  // }
 
   const dateObj = new Date()
   const monthNames = [
@@ -582,8 +603,7 @@ const EmployeeForm = (props) => {
           gender_id: values.gender_id,
           ktp: values.ktp,
           employee_asset: {
-            multimedia_description_id:
-              photoProfile.employee_asset?.multimedia_description_id,
+            multimedia_description_id: photoData
           },
           contact: {
             email: values.contact.email,
@@ -669,7 +689,6 @@ const EmployeeForm = (props) => {
       enableReinitialize
     >
       {(formik) => {
-        console.log("Formik Data Desk", formik)
         return (
           <Form>
             <FormMobile className="mobile-form"></FormMobile>
@@ -715,7 +734,7 @@ const EmployeeForm = (props) => {
                             <div style={{ padding: "0 15px 15px" }}>
                               <Row>
                                 <Col
-                                  lg={11}
+                                  sm={9}
                                   className="order-last order-lg-first "
                                 >
                                   <FormikControl
@@ -770,7 +789,7 @@ const EmployeeForm = (props) => {
                                   />
 
                                   <Row className="form-group required">
-                                    <Col column md={3} lg={4}>
+                                    <Col md={3} lg={4}>
                                       <label className="text-label-input">
                                         Date Of Birth
                                         <span
@@ -922,10 +941,9 @@ const EmployeeForm = (props) => {
                                   />
                                 </Col>
                                 <Col
-                                  lg={1}
-                                  className="d-flex justify-content-lg-center justify-content-md-start justify-content-center order-first order-lg-last p-0"
+                                  lg={3}
                                 >
-                                  <div>
+                                  <div className="d-flex justify-content-lg-end justify-content-md-start justify-content-center order-first order-lg-last p-0">
                                     <div>
                                       <FormikControl
                                         control="imageProfile"
@@ -934,6 +952,7 @@ const EmployeeForm = (props) => {
                                         name="employee_asset"
                                         onChange={onChangePhotoProfile}
                                         disabled={isView}
+                                        photoProfile={photoProfile}
                                         url={
                                           photoProfile.employee_asset
                                             ?.multimedia_description?.url ||
@@ -1517,7 +1536,7 @@ const EmployeeForm = (props) => {
                                     isDisabled={isView}
                                   />
                                   <Row className="required">
-                                    <Col column md={3} lg={4}>
+                                    <Col md={3} lg={4}>
                                       <label className="text-label-input">
                                         Hiring Date
                                         <span className="label-required" />
