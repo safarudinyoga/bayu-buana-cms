@@ -1250,15 +1250,12 @@ const EmployeeFormMobile = (props) => {
                             name="permanent_address.city_id"
                             url={`master/cities`}
                             fieldName={"city_name"}
-<<<<<<< HEAD
                             value={
                               sameAddress
                                 ? formik.values.address.city_id
                                 : formik.values.permanent_address.city_id
                             }
-=======
                             urlFilter={`["country_id","=","${formik.values.permanent_address.country_id.value}"]`}
->>>>>>> master
                             key={JSON.stringify(
                               formik.values.permanent_address.city_id.value,
                             )}
