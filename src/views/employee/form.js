@@ -1180,7 +1180,7 @@ const EmployeeForm = (props) => {
                                     style={{ maxWidth: 416, margin: 5, accentColor: "#06846b" }}
                                     disabled={isView}
                                   /> Same As Current Address
-                                  {sameAddress ? (<div style={{ padding: "0 15px 15px" }}>
+                                  {sameAddress ? (<>
                                   <FormikControl
                                     control="textarea"
                                     label="Address"
@@ -1295,7 +1295,7 @@ const EmployeeForm = (props) => {
                                     minLength="1"
                                     maxLength="16"
                                   />
-                                </div>):(
+                                </>):(
                                 <>
                                 <FormikControl
                                     control="textarea"
