@@ -1085,7 +1085,7 @@ const EmployeeFormMobile = (props) => {
                                           }
                                         : null
                                     }
-                                    disabled={isView || sameAddress}
+                                    isDisabled={isView}
                                   />
                                   <FormikControl
                                     control="selectAsync"
@@ -1093,10 +1093,7 @@ const EmployeeFormMobile = (props) => {
                                     name="address.city_id"
                                     url={`master/cities`}
                                     fieldName={"city_name"}
-                                    urlFilter={ formik.values.address.state_province_id.value === null ? 
-                                      `["country_id","=","${formik.values.address.country_id.value}"]` : 
-                                      `["country_id","=","${formik.values.address.country_id.value}"],["AND"],
-                                      ["state_province_id","=","${formik.values.address.state_province_id.value}"]`}
+                                    urlFilter={`["country_id","=","${formik.values.address.country_id.value}"],["AND"],["state_province_id","=","${formik.values.address.state_province_id.value}"]`}
                                     key={JSON.stringify(
                                       formik.values.address.country_id.value,
                                     )}
@@ -1113,14 +1110,14 @@ const EmployeeFormMobile = (props) => {
                                           }
                                         : null
                                     }
-                                    disabled={isView || sameAddress}
+                                    isDisabled={isView}
                                   />
                                   <FormikControl
                                     control="input"
                                     label="Zip Code"
                                     name="address.postal_code"
                                     style={{ maxWidth: 100 }}
-                                    disabled={isView}
+                                    isDisabled={isView}
                                     minLength="1"
                                     maxLength="16"
                                   />
@@ -1180,7 +1177,7 @@ const EmployeeFormMobile = (props) => {
                             name="address.address_line"
                             rows={3}
                             style={{ maxWidth: 416 }}
-                            disabled={isView || sameAddress}
+                            disabled={isView}
                             minLength="1"
                             maxLength="512"
                           />
@@ -1219,7 +1216,7 @@ const EmployeeFormMobile = (props) => {
                                   }
                                 : null
                             }
-                            isDisabled={isView || sameAddress}
+                            isDisabled={isView}
                           />
                           <FormikControl
                             control="selectAsync"
@@ -1261,9 +1258,9 @@ const EmployeeFormMobile = (props) => {
                             url={`master/cities`}
                             fieldName={"city_name"}
                             urlFilter={`["country_id","=","${formik.values.address.country_id.value}"],["AND"],["state_province_id","=","${formik.values.address.state_province_id.value}"]`}
-                            key={JSON.stringify(
-                              formik.values.address.country_id.value,
-                            )}
+                                    key={JSON.stringify(
+                                      formik.values.address.country_id.value,
+                                    )}
                             onChange={(v) => {
                               formik.setFieldValue("address.city_id", v)
                             }}
@@ -1277,7 +1274,7 @@ const EmployeeFormMobile = (props) => {
                                   }
                                 : null
                             }
-                            isDisabled={isView || sameAddress}
+                            isDisabled={isView}
                           />
                           <FormikControl
                             control="input"
