@@ -1183,7 +1183,7 @@ const EmployeeForm = (props) => {
                                           : formik.values.address.postal_code,
                                       )
                                     }}
-                                    style={{ maxWidth: 416, margin: 5, accentColor: "#06846b" }}
+                                    style={{ maxWidth: 416, marginLeft: 15, accentColor: "#06846b" }}
                                     disabled={isView}
                                   /> Same As Current Address
                                   {sameAddress ? (<>
