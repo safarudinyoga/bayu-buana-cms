@@ -39,6 +39,19 @@
        return out;
     };
   
+    // if ( pages <= buttons ) {
+    //     numbers = _range( 0, pages );
+
+    // } else if ( page <= half ) {
+    //     numbers = _range( 0, buttons);
+
+    // } else if ( page >= pages - 1 - half ) {
+    //     numbers = _range( pages - buttons, pages );
+
+    // } else {
+    //     numbers = _range( page - half, page + half + 1);
+    // }
+  
     if ( pages <= buttons ) {
         numbers = _range( 0, pages );
     }
