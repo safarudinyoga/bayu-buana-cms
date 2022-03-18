@@ -8,12 +8,14 @@ import { Card, Pagination, Row, Col, Table, Badge } from "react-bootstrap"
 import moment from 'moment';
 import "./history_table.css"
 import Select from '../../../components/form/select';
+import ThousandSeparator from '../../../lib/thousand-separator';
 
 const endpoint = "/master/currency-conversions"
 function HistoryTable(props) {
 	const [history, setHistory] = useState([])
 	const [option, setOption] = useState({value: 10, label: 10})
 	const [showViewMore, setViewMore] = useState(true)
+	const [item, setItem] = useState({})
 	const [pageInfo, setPageInfo] = useState({
 		page: 0,
 		total_pages: 1
@@ -31,8 +33,16 @@ function HistoryTable(props) {
 	useEffect(async () => {
 		if(props.id) {
 			fetchHistory(3)
+			getData()
 		}
 	}, [])
+
+	const getData = async () => {
+		try {
+			let {data} = await API.get(`${endpoint}/${props.id}`)
+			setItem(data)
+		} catch(e) {}
+	}
 
 	const fetchHistory = async(size, page=0) => {
 		try {
@@ -128,7 +138,11 @@ function HistoryTable(props) {
 														{d.status === 1 ? "Changed" : ""}
 													</Badge>
 												</td>
-												<td className="text-center">{d.old_value} - {d.new_value}</td>
+												<td className="text-center">
+													{ThousandSeparator(parseFloat(d.old_value))} ({item.from_currency?.currency_code})
+													<i className="mx-2 fas fa-arrow-right"></i> 
+													{ThousandSeparator(parseFloat(d.new_value))} ({item.to_currency?.currency_code})
+												</td>
 												<td className="text-center">{moment(d.created_at).format("DD MMM ")} at {moment(d.created_at).format("HH.MM")}</td>
 											</tr>
 											))
