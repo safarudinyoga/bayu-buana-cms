@@ -836,7 +836,10 @@ const EmployeeForm = (props) => {
                                                   }
                                                 : null
                                             }
-                                            style={{ maxWidth: 240 }}
+                                            style={{ 
+                                              minWidth: 77,
+                                              maxWidth: 240 
+                                            }}
                                             isDisabled={isView}
                                           />
                                         </div>
@@ -918,7 +921,10 @@ const EmployeeForm = (props) => {
                                                   }
                                                 : null
                                             }
-                                            style={{ maxWidth: 240 }}
+                                            style={{ 
+                                              minWidth: 82,
+                                              maxWidth: 240 
+                                            }}
                                             isDisabled={isView}
                                           />
                                         </div>
@@ -1177,7 +1183,7 @@ const EmployeeForm = (props) => {
                                           : formik.values.address.postal_code,
                                       )
                                     }}
-                                    style={{ maxWidth: 416, margin: 5, accentColor: "#06846b" }}
+                                    style={{ maxWidth: 416, marginLeft: 15, accentColor: "#06846b" }}
                                     disabled={isView}
                                   /> Same As Current Address
                                   {sameAddress ? (<>
