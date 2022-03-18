@@ -70,10 +70,12 @@ const FormInputFile = ({
                     roundedCircle
                     className="img-profile"
                   />
-                  <CloseButton
+                  {!disabled && (
+                  <CloseButton                    
                     style={{position: "absolute", top: 0, right: 0, display: showCloseBtn ? "block" : "none"}}
                     onClick={() => onImageRemove(0)} 
                   />
+                  )}
                 </div>
               ))}
               {!disabled && (<Button
