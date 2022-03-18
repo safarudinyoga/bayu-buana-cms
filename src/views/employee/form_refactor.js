@@ -653,7 +653,7 @@ const EmployeeForm = (props) => {
     }
   }
 
-  const GIContent = ({formik}) => (
+  const GIContent = ({formik, validateValue}) => (
     <Tab.Pane eventKey={"general-information"}>
       <Card>
         <Card.Body>
@@ -678,6 +678,7 @@ const EmployeeForm = (props) => {
                 fieldName={"name_prefix_name"}
                 onChange={(v) => {
                   formik.setFieldValue("name_prefix_id", v)
+                  validateValue()
                 }}
                 style={{ maxWidth: 120 }}
                 components={
@@ -814,13 +815,6 @@ const EmployeeForm = (props) => {
                           formik.setFieldValue(
                             "birth_date[2]",
                             v,
-                          )
-                          formik.setFieldValue(
-                            "birth_date[1]",
-                            {
-                              value: 0,
-                              label: "January",
-                            },
                           )
                           formik.setFieldValue(
                             "birth_date[0]",
@@ -962,6 +956,7 @@ const EmployeeForm = (props) => {
                 fieldName={"country_name"}
                 
                 onChange={(v) => {
+                  validateValue()
                   formik.setFieldValue(
                     "address.country_id",
                     v,
@@ -996,11 +991,11 @@ const EmployeeForm = (props) => {
                 name="address.state_province_id"
                 url={`master/state-provinces?sort=state_province_name&filters=[["status", "=", 1],["AND"],["country_id","=","${formik.values.address.country_id.value}"]]&size=-1`}
                 fieldName={"state_province_name"}
-                isLoading={false}
                 key={JSON.stringify(
                   formik.values.address.country_id,
                 )}
                 onChange={(v) => {
+                  validateValue()
                   formik.setFieldValue(
                     "address.state_province_id",
                     v,
@@ -1032,6 +1027,7 @@ const EmployeeForm = (props) => {
                   formik.values.address.country_id.value,
                 )}
                 onChange={(v) => {
+                  validateValue()
                   formik.setFieldValue("address.city_id", v)
                 }}
                 placeholder={"Please choose"}
@@ -1063,49 +1059,48 @@ const EmployeeForm = (props) => {
         <Row>
           <Col lg={11}>
             <div style={{ padding: "0 15px 15px" }}>
-              <FormikControl
-                control="checkboxOnly"
-                type="checkbox"
-                label="Same As Current Address"
-                name="sameAddress"
-                checked={sameAddress}
-                onChange={() => {
-                  setSameAddress(!sameAddress)
-                  formik.setFieldValue(
-                    "permanent_address.address_line",
-                    sameAddress
-                      ? ""
-                      : formik.values.address.address_line,
-                  )
-                  formik.setFieldValue(
-                    "permanent_address.country_id",
-                    sameAddress
-                      ? ""
-                      : formik.values.address.country_id,
-                  )
-                  formik.setFieldValue(
-                    "permanent_address.state_province_id",
-                    sameAddress
-                      ? ""
-                      : formik.values.address
-                          .state_province_id,
-                  )
-                  formik.setFieldValue(
-                    "permanent_address.city_id",
-                    sameAddress
-                      ? ""
-                      : formik.values.address.city_id,
-                  )
-                  formik.setFieldValue(
-                    "permanent_address.postal_code",
-                    sameAddress
-                      ? ""
-                      : formik.values.address.postal_code,
-                  )
-                }}
-                style={{ maxWidth: 416 }}
-                disabled={isView}
-              />
+            <input
+              type="checkbox"
+              name="sameAddress"
+              checked={sameAddress}
+              onChange={() => {
+                validateValue()
+                setSameAddress(!sameAddress)
+                formik.setFieldValue(
+                  "permanent_address.address_line",
+                  sameAddress
+                    ? ""
+                    : formik.values.address.address_line,
+                )
+                formik.setFieldValue(
+                  "permanent_address.country_id",
+                  sameAddress
+                    ? ""
+                    : formik.values.address.country_id,
+                )
+                formik.setFieldValue(
+                  "permanent_address.state_province_id",
+                  sameAddress
+                    ? ""
+                    : formik.values.address
+                        .state_province_id,
+                )
+                formik.setFieldValue(
+                  "permanent_address.city_id",
+                  sameAddress
+                    ? ""
+                    : formik.values.address.city_id,
+                )
+                formik.setFieldValue(
+                  "permanent_address.postal_code",
+                  sameAddress
+                    ? ""
+                    : formik.values.address.postal_code,
+                )
+              }}
+              style={{ maxWidth: 416, margin: 5, accentColor: "#06846b" }}
+              disabled={isView}
+            /> Same As Current Address
               <FormikControl
                 control="textarea"
                 label="Address"
@@ -1118,24 +1113,29 @@ const EmployeeForm = (props) => {
               />
               <FormikControl
                 control="selectAsync"
+                value={formik.values.address.country_id}
                 required={isView ? "" : "label-required"}
                 label="Country"
-                name="permanent_address.country_id"
+                name="address.country_id"
                 url={`master/countries`}
                 fieldName={"country_name"}
+                
                 onChange={(v) => {
                   formik.setFieldValue(
-                    "permanent_address.country_id",
+                    "address.country_id",
                     v,
                   )
                   formik.setFieldValue(
-                    "permanent_address.state_province_id",
-                    { value: null, label: "Please choose" },
+                    "address.state_province_id",
+                    {
+                      value: null,
+                      label: "Please choose",
+                    },
                   )
-                  formik.setFieldValue(
-                    "permanent_address.city_id",
-                    { value: null, label: "Please choose" },
-                  )
+                  formik.setFieldValue("address.city_id", {
+                    value: null,
+                    label: "Please choose",
+                  })
                 }}
                 placeholder={"Please choose"}
                 style={{ maxWidth: 300 }}
@@ -1147,58 +1147,29 @@ const EmployeeForm = (props) => {
                       }
                     : null
                 }
-                isDisabled={isView || sameAddress}
+                isDisabled={isView}
               />
               <FormikControl
+                value={formik.values.address.state_province_id}
                 control="selectAsync"
                 label="State/ Province"
-                name="permanent_address.state_province_id"
-                url={`master/state-provinces?sort=state_province_name&filters=[["status", "=", 1],["AND"],["country_id","=","${formik.values.permanent_address.country_id.value}"]]&size=-1`}
-                fieldName={"state_province_name"}  
+                name="address.state_province_id"
+                url={`master/state-provinces`}
+                fieldName={"state_province_name"}
+                urlFilter={`["country_id","=","${formik.values.address.country_id.value}"]`}
+                isLoading={false}
                 key={JSON.stringify(
-                  formik.values.permanent_address.country_id,
-                )}                                  
-                onChange={(v) => {
-                  formik.setFieldValue(
-                    "permanent_address.state_province_id",
-                    v,
-                  )
-                  formik.setFieldValue(
-                    "permanent_address.city_id",
-                    {
-                      value: null,
-                      label: "Please choose",
-                    },
-                  )
-                }}
-                placeholder={"Please choose"}
-                style={{ maxWidth: 200 }}
-                components={
-                  
-                  isView
-                    ? {
-                        DropdownIndicator: () => null,
-                        IndicatorSeparator: () => null,                                            
-                      }
-                    : null
-                }
-                isDisabled={isView || sameAddress}
-              />
-              <FormikControl
-                control="selectAsync"
-                label="City"
-                name="permanent_address.city_id"
-                url={`master/cities?sort=city_name&filters=[["status", "=", 1],["AND"],["country_id","=","${formik.values.permanent_address.country_id.value}"]]&size=-1`}
-                fieldName={"city_name"}
-                key={JSON.stringify(
-                  formik.values.permanent_address.city_id
-                    .value,
+                  formik.values.address.country_id,
                 )}
                 onChange={(v) => {
                   formik.setFieldValue(
-                    "permanent_address.city_id",
+                    "address.state_province_id",
                     v,
                   )
+                  formik.setFieldValue("address.city_id", {
+                    value: null,
+                    label: "Please choose",
+                  })
                 }}
                 placeholder={"Please choose"}
                 style={{ maxWidth: 200 }}
@@ -1210,7 +1181,33 @@ const EmployeeForm = (props) => {
                       }
                     : null
                 }
-                isDisabled={isView || sameAddress}
+                isDisabled={isView}
+              />
+              <FormikControl
+                value={formik.values.address.city_id}
+                control="selectAsync"
+                label="City"
+                name="address.city_id"
+                url={`master/cities`}
+                fieldName={"city_name"}
+                urlFilter={`["country_id","=","${formik.values.address.country_id.value}"]`}
+                key={JSON.stringify(
+                  formik.values.address.country_id.value,
+                )}
+                onChange={(v) => {
+                  formik.setFieldValue("address.city_id", v)
+                }}
+                placeholder={"Please choose"}
+                style={{ maxWidth: 200 }}
+                components={
+                  isView
+                    ? {
+                        DropdownIndicator: () => null,
+                        IndicatorSeparator: () => null,
+                      }
+                    : null
+                }
+                isDisabled={isView}
               />
               <FormikControl
                 control="input"
@@ -1314,7 +1311,7 @@ const EmployeeForm = (props) => {
   </Tab.Pane>
   )
 
-  const EmploymentsContent = ({formik}) => (
+  const EmploymentsContent = ({formik, validateValue}) => (
     <Tab.Pane eventKey={"employment"}>
       <Card>
         <Card.Body>
@@ -1340,6 +1337,7 @@ const EmployeeForm = (props) => {
                   url={`master/job-titles`}
                   fieldName={"job_title_name"}
                   onChange={(v) => {
+                    validateValue()
                     formik.setFieldValue("job_title_id", v)
                   }}
                   placeholder={"Please choose"}
@@ -1612,7 +1610,7 @@ const EmployeeForm = (props) => {
                 onSubmit={() => setTabKey("emergency-contacts")}
                 onBack={() => {}}
                 onCancel={() => {}}
-                render={(formik) => <GIContent formik={formik}/>}
+                render={({formik, validateValue}) => <GIContent formik={formik} validateValue={validateValue} />}
               />
               <StepContent 
                 eventKey={"emergency-contacts"}
@@ -1620,7 +1618,7 @@ const EmployeeForm = (props) => {
                 onSubmit={() => setTabKey("employment")}
                 onBack={() => {}}
                 onCancel={() => {}}
-                render={(formik) => <ECContent formik={formik}/>}
+                render={({formik}) => <ECContent formik={formik}/>}
               />
               <StepContent 
                 eventKey={"employment"}
@@ -1628,7 +1626,7 @@ const EmployeeForm = (props) => {
                 onSubmit={() => {}}
                 onBack={() => {}}
                 onCancel={() => {}}
-                render={(formik) => <EmploymentsContent formik={formik}/>}
+                render={({formik, validateValue}) => <EmploymentsContent formik={formik} validateValue={validateValue} />}
               />
           </TabContents>
         </Tab.Container>
@@ -1677,6 +1675,7 @@ const TabContents = ({children, initialValues, onSubmit, formId}) => {
   const [stepNumber, setStepNumber] = useState(0);
   const steps = React.Children.toArray(children);
   const [values, setValues] = useState(initialValues);
+  const [disabledBtn, setDisabled] = useState(true)
 
   const step = steps[stepNumber];
   const totalSteps = steps.length;
@@ -1687,8 +1686,11 @@ const TabContents = ({children, initialValues, onSubmit, formId}) => {
     setStepNumber(Math.min(stepNumber + 1));
   }
 
+  useEffect(() => {
+    checkStep()
+  }, [stepNumber])
+
   const handleSubmit = async (values, bag) => {
-    console.log(values, step.props.onSubmit)
     // if (step.props.onSubmit) {
     //   await step.props.onSubmit(values, bag.setSubmitting);
     // }
@@ -1701,6 +1703,36 @@ const TabContents = ({children, initialValues, onSubmit, formId}) => {
     }
   }
 
+  const checkStep = () => {
+    if(stepNumber === 0) {
+      setDisabled(true)
+    } else if(stepNumber === 1) {
+      setDisabled(false)
+    } else if(stepNumber === 2) {
+      setDisabled(true)
+    }
+  }
+
+  const onChange = (values) => {
+    console.log("Values =====>", values)
+    if(stepNumber === 0) {
+      let valid = values.name_prefix_id !== ""
+      && values.given_name !== ""
+      && values.surname !== ""
+      && values.contact.mobile_phone_number !== ""
+      && values.contact.phone_number !== ""
+      && values.contact.email !== ""
+      && values.address.country_id !== ""
+      && values.permanent_address.country_id !== ""
+      setDisabled(!valid)
+    } else if(stepNumber === 1) {
+      setDisabled(false)
+    } else if(stepNumber === 2) {
+      let valid = values.employee_number !== "" && values.job_title_id !== ""
+      setDisabled(!valid)
+    }
+  }
+
   return (
     <Formik
       initialValues={values}
@@ -1710,7 +1742,7 @@ const TabContents = ({children, initialValues, onSubmit, formId}) => {
       enableReinitialize
     >
       {(formik) => {
-        return <Form>
+        return <Form onChange={() => onChange(formik.values)}>
           <Row>
             <Col sm={3}>
               <TabNav moveStep={(idx) => setStepNumber(idx)} />
@@ -1718,7 +1750,7 @@ const TabContents = ({children, initialValues, onSubmit, formId}) => {
             <Col sm={9}>
               <Tab.Content>
                 
-                {step.props.render(formik)}
+                {step.props.render({formik, validateValue : () => onChange(formik.values)})}
 
                 <div
                   className="mb-5 ml-1 row justify-content-md-start justify-content-center"
@@ -1742,7 +1774,7 @@ const TabContents = ({children, initialValues, onSubmit, formId}) => {
                       <Button
                         type="submit"
                         variant="primary"
-                        disabled={!(formik.isValid)}
+                        disabled={disabledBtn}
                         style={{ marginRight: 15 }}
                       >
                         {formId || isLastStep ? "SAVE" : "SAVE & NEXT"}

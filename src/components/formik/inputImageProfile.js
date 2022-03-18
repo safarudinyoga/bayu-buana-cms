@@ -56,7 +56,6 @@ const FormInputFile = ({
           }) => (
             // write your building UI
             <>
-            {console.log(imageList)}
               {imageList.map((image, index) => (
                 <div key={index} className="image-item" style={{position: "relative"}}
                   onMouseEnter={e => {
@@ -71,10 +70,12 @@ const FormInputFile = ({
                     roundedCircle
                     className="img-profile"
                   />
-                  <CloseButton
+                  {!disabled && (
+                  <CloseButton                    
                     style={{position: "absolute", top: 0, right: 0, display: showCloseBtn ? "block" : "none"}}
                     onClick={() => onImageRemove(0)} 
                   />
+                  )}
                 </div>
               ))}
               {!disabled && (<Button
