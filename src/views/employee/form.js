@@ -833,7 +833,10 @@ const EmployeeForm = (props) => {
                                                   }
                                                 : null
                                             }
-                                            style={{ maxWidth: 240 }}
+                                            style={{ 
+                                              minWidth: 77,
+                                              maxWidth: 240 
+                                            }}
                                             isDisabled={isView}
                                           />
                                         </div>
@@ -915,7 +918,10 @@ const EmployeeForm = (props) => {
                                                   }
                                                 : null
                                             }
-                                            style={{ maxWidth: 240 }}
+                                            style={{ 
+                                              minWidth: 82,
+                                              maxWidth: 240 
+                                            }}
                                             isDisabled={isView}
                                           />
                                         </div>
