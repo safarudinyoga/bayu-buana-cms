@@ -140,7 +140,7 @@ const SecuritySettings = (props) => {
         }
         
 
-        return props.handleSelectTab("subscriptions")
+        // return props.handleSelectTab("subscriptions")
       }}
     >
       {({
