@@ -1187,7 +1187,7 @@ const EmployeeForm = (props) => {
                                     name="address.address_line"
                                     rows={3}
                                     style={{ maxWidth: 416 }}
-                                    disabled={isView}
+                                    disabled={isView || sameAddress}
                                     minLength="1"
                                     maxLength="512"
                                   />
@@ -1225,7 +1225,7 @@ const EmployeeForm = (props) => {
                                           }
                                         : null
                                     }
-                                    isDisabled={isView}
+                                    isDisabled={isView || sameAddress}
                                   />
                                   <FormikControl
                                     control="selectAsync"
@@ -1255,7 +1255,7 @@ const EmployeeForm = (props) => {
                                           }
                                         : null
                                     }
-                                    isDisabled={isView}
+                                    isDisabled={isView || sameAddress}
                                   />
                                   <FormikControl
                                     control="selectAsync"
@@ -1280,7 +1280,7 @@ const EmployeeForm = (props) => {
                                           }
                                         : null
                                     }
-                                    isDisabled={isView}
+                                    isDisabled={isView || sameAddress}
                                   />                                  
                                   
                                   <FormikControl
@@ -1288,7 +1288,7 @@ const EmployeeForm = (props) => {
                                     label="Zip Code"
                                     name="address.postal_code"
                                     style={{ maxWidth: 100 }}
-                                    disabled={isView}
+                                    disabled={isView || sameAddress}
                                     minLength="1"
                                     maxLength="16"
                                   />
