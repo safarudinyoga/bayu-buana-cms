@@ -1095,7 +1095,7 @@ const EmployeeFormMobile = (props) => {
                                     fieldName={"city_name"}
                                     urlFilter={`["country_id","=","${formik.values.address.country_id.value}"],["AND"],["state_province_id","=","${formik.values.address.state_province_id.value}"]`}
                                     key={JSON.stringify(
-                                      formik.values.address.country_id.value,
+                                      formik.values.address.state_province_id.value,
                                     )}
                                     onChange={(v) => {
                                       formik.setFieldValue("address.city_id", v)

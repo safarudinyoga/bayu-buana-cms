@@ -11,6 +11,7 @@ import "datatables.net-colreorder-bs4"
 import "datatables.net-responsive-bs4"
 import "datatables.net-rowreorder-bs4"
 import "datatables.net-rowreorder-bs4/css/rowReorder.bootstrap4.css"
+import "../../lib/paginationNoEllipses";
 import $ from "jquery"
 import JSZip from "jszip"
 import React, { Component } from "react"
@@ -170,7 +171,7 @@ class BBDataTable extends Component {
             ? `<a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item mr-2" data-action="history" data-id="${row.id}" title="Click to view history"><img src="/img/icons/history.svg"/></a>`
             : ""
           }
-          <a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item" data-action="delete" data-id="${row.id}" data-name="${cvtRecordName}" ${infoDelete ? `data-info="${info}"` : ""}  title="Click to delete"><img src="${removeIcon}" /></a>
+          <a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item" data-action="delete" data-id="${row.id}" data-name="${cvtRecordName}" ${infoDelete ? `data-info="${info}"` : ""}  title="${module === "exchange-rate" ? "Delete" : "Click to delete"}"><img src="${removeIcon}" /></a>
           `
         )
       },
@@ -189,7 +190,7 @@ class BBDataTable extends Component {
       }
 
       let dt = $(this.table.current).DataTable({
-        pagingType: "simple_numbers",
+        pagingType: "simple_numbers_no_ellipses",
         colReorder: {
           enable: true,
           iFixedColumnsLeft: 5,
