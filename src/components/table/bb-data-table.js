@@ -11,6 +11,7 @@ import "datatables.net-colreorder-bs4"
 import "datatables.net-responsive-bs4"
 import "datatables.net-rowreorder-bs4"
 import "datatables.net-rowreorder-bs4/css/rowReorder.bootstrap4.css"
+import "../../lib/paginationNoEllipses";
 import $ from "jquery"
 import JSZip from "jszip"
 import React, { Component } from "react"
@@ -189,7 +190,7 @@ class BBDataTable extends Component {
       }
 
       let dt = $(this.table.current).DataTable({
-        pagingType: "simple_numbers",
+        pagingType: "simple_numbers_no_ellipses",
         colReorder: {
           enable: true,
           iFixedColumnsLeft: 5,
