@@ -107,7 +107,7 @@ const EmergencyContacts = (props) => {
         //   setSubmitting(false)
         // } catch (e) {}
 
-        return props.handleSelectTab("security-settings")
+        // return props.handleSelectTab("security-settings")
       }}
     >
       {({
