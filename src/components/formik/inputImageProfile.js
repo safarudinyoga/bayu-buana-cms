@@ -56,7 +56,6 @@ const FormInputFile = ({
           }) => (
             // write your building UI
             <>
-            {console.log(imageList)}
               {imageList.map((image, index) => (
                 <div key={index} className="image-item" style={{position: "relative"}}
                   onMouseEnter={e => {

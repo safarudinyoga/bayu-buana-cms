@@ -3,6 +3,7 @@ import BBDataTable from "components/table/bb-data-table"
 import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
 import Form from "./form"
+import ThousandSeparator from '../../lib/thousand-separator';
 
 export default function ExchageRateTable() {
   let dispatch = useDispatch()
@@ -49,11 +50,15 @@ export default function ExchageRateTable() {
       {
         title: "Multiply Rate",
         data: "multiply_rate",
+        render: (val) => (
+          ThousandSeparator(val)
+        )
       },
     ],
     emptyTable: "No exchange rate found",
     recordName: ["from_currency.currency_code", "to_currency.currency_code"],
     btnDownload: ".buttons-csv",
+    module: "exchange-rate"
   }
   return <BBDataTable {...params} modalContent={Form} />
 }

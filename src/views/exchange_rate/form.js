@@ -67,7 +67,7 @@ function ExchangeRateCreate(props) {
   const initialValues = {
 		from_currency_id: "",
 		to_currency_id: "",
-		multiply_rate: null,
+		multiply_rate: "",
 		is_automatic: false,
 	}
 
@@ -224,15 +224,15 @@ function ExchangeRateCreate(props) {
                   display: "flex",
                 }}
               >
-                <Button
+                {!isView && <Button
                   variant="primary"
                   type="submit"
                   disabled={isSubmitting}
                   style={{ marginRight: 15 }}
                 >
                   SAVE
-                </Button>
-                <CancelButton onClick={() => dispatch(setCreateModal(false))}/>
+                </Button>}
+                <CancelButton onClick={() => dispatch(setCreateModal({show: false, id: null, disabled_form: false}))}/>
               </div>}
 						</Form>
 					)
