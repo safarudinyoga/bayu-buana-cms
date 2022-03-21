@@ -101,7 +101,7 @@ import HotelRoomTypeForm from "views/hotel_profile_management/form/room_type/for
 // Master Employee
 import EmployeeTable from "views/employee/table"
 import EmployeeForm from "views/employee/form"
-import EmployeeFormRef from "views/employee/form_refactor"
+import EmployeeFormRef from "views/employee/form2"
 import RatingTypeLevelTable from "./views/rating_type_level/table"
 import RatingTypeLevelForm from "./views/rating_type_level/form"
 
@@ -489,7 +489,7 @@ const DashboardRoutes = () => {
         <Route path="/master/employee/form/:id?">
           <EmployeeForm />
         </Route>
-        <Route path="/master/employee/form_refactor/:id?">
+        <Route path="/master/employee/form2/:id?">
           <EmployeeFormRef />
         </Route>
         {/* Division */}
