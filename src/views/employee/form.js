@@ -443,7 +443,7 @@ const EmployeeForm = (props) => {
       city_id: Yup.object().shape({
         value: Yup.string().nullable(),
         label: Yup.string().nullable(),
-      }),
+      }).nullable(),
       postal_code: Yup.string(),
     }),
     permanent_address: Yup.object().shape({
@@ -456,7 +456,7 @@ const EmployeeForm = (props) => {
       city_id: Yup.object().shape({
         value: Yup.string().nullable(),
         label: Yup.string().nullable(),
-      }),
+      }).nullable(),
       postal_code: Yup.string(),
     }),
   })
