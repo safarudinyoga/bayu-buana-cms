@@ -331,13 +331,6 @@ select.bg-dark-grey > option {
   height: 125px;
   border-radius: 50%;
 }
-@media (max-width: 425px) {
-  .image-profile-form{
-    width: 103px;
-    height: 103px;
-    border-radius: 50%;
-  }
-}
 @media only screen and (width: 768px) {
   .image-profile-form{
     width: 81px;
