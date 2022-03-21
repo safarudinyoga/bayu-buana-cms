@@ -40,8 +40,6 @@ const EmployeeForm = (props) => {
   const [years, setYears] = useState({ value: 1921, label: "" })  
 
   const [finishStep, setStep] = useState(0)
-  const [GIBtnDisabled, setGIBtnDisabled] = useState(true)
-  const [EMPBtnDisabled, setEMPBtnDisabled] = useState(true)
 
   useEffect(() => {
     setLoading(false)
@@ -168,6 +166,7 @@ const EmployeeForm = (props) => {
               label: parseInt(data.hire_date.substring(0, 4)),
             },
           ],
+          same_address: false
           
         })
         if (
@@ -178,9 +177,9 @@ const EmployeeForm = (props) => {
           data.address.city_id === data.permanent_address.city_id &&
           data.address.postal_code === data.address.postal_code
         ) {
-          setSameAddress(true)
+          setFormValues({...formValues, same_address: true})
         } else {
-          setSameAddress(false)
+          setFormValues({...formValues, same_address: false})
         }
         setPhotoProfile([{
           data_url: data.employee_asset.multimedia_description.url
@@ -303,6 +302,7 @@ const EmployeeForm = (props) => {
     office_id: "",
     hire_date: [],
     npwp: "",
+    same_address: false,
   }
 
   // Validasi number
@@ -625,21 +625,126 @@ const EmployeeForm = (props) => {
     return [year, month, day].join("-")
   }
 
-  const onSave = async (values, { setSubmitting }) => {
+  const onSubmit = async (values, { setSubmitting }) => {
     try {
-      if(tabKey === "general-information") {
-        setTabKey("emergency-contacts")
-        setFormValues({...formValues, ...values})
-        setStep(1)
-      } else if(tabKey === "emergency-contacts") {
-        setTabKey("employment")
-        setFormValues({...formValues, ...values})
-        setStep(2)
+      let formId = props.match.params.id
+      setSubmitting(true)
+      if(formId) {
+        await onSave(values, setSubmitting)
       } else {
-        console.log(values)
-        alert("onsave")
+        if(tabKey === "general-information") {
+          setTabKey("emergency-contacts")
+          setFormValues({...formValues, ...values})
+          setStep(1)
+        } else if(tabKey === "emergency-contacts") {
+          setTabKey("employment")
+          setFormValues({...formValues, ...values})
+          setStep(2)
+        } else {
+          await onSave(values, setSubmitting)
+        }
+        setSubmitting(false)
       }
     } catch (e) {
+      console.log(e)
+    }
+  }
+
+  const onSave = async (values, setSubmitting) => {
+    console.log(values)
+    try {
+      let formId = props.match.params.id
+      const Data = {
+      name_prefix_id: values.name_prefix_id.value,
+          given_name: values.given_name,
+          middle_name: values.middle_name,
+          surname: values.surname,
+          birth_date: formatDate([
+            values.birth_date[2].value,
+            values.birth_date[1].value,
+            values.birth_date[0].value,
+          ]),
+          gender_id: values.gender_id,
+          ktp: values.ktp,
+          employee_asset: {
+            multimedia_description_id: photoData
+          },
+          contact: {
+            email: values.contact.email,
+            mobile_phone_number: values.contact.mobile_phone_number,
+            other_email: values.contact.other_email,
+            phone_number: values.contact.phone_number,
+          },
+          address: {
+            address_line: values.address.address_line,
+            country_id: values.address.country_id.value,
+            state_province_id: values.address.state_province_id.value || "00000000-0000-0000-0000-000000000000",
+            city_id: values.address.city_id.value || "00000000-0000-0000-0000-000000000000",
+            postal_code: values.address.postal_code,
+          },
+          permanent_address: {
+            address_line: sameAddress ? values.address.address_line : values.permanent_address.address_line || "",
+            country_id: sameAddress ? values.address.country_id.value : values.permanent_address.country_id.value || "",
+            state_province_id: sameAddress ? values.address.state_province_id.value || "00000000-0000-0000-0000-000000000000" : values.permanent_address.state_province_id.value || "00000000-0000-0000-0000-000000000000",
+            city_id: sameAddress ? values.address.city_id.value || "00000000-0000-0000-0000-000000000000" : values.permanent_address.city_id.value || "00000000-0000-0000-0000-000000000000",
+            postal_code: sameAddress ? values.address.postal_code : values.permanent_address.postal_code || "",
+          },
+          emergency_contact: {
+            contact_name: values.emergency_contact.contact_name,
+            contact_phone_number:
+              "" + values.emergency_contact.contact_phone_number,
+            relationship: values.emergency_contact.relationship,
+          },
+          emergency_contact2: {
+            contact_name: values.emergency_contact2.contact_name,
+            contact_phone_number:
+              "" + values.emergency_contact2.contact_phone_number,
+            relationship: values.emergency_contact2.relationship,
+          },
+          employee_number: values.employee_number,
+          job_title_id: values.job_title_id.value,
+          division_id: values.division_id.value,
+          office_id: values.office_id.value,
+          hire_date: formatDate([
+            values.hire_date[2].value,
+            values.hire_date[1].value,
+            values.hire_date[0].value,
+          ]),
+          npwp: values.npwp,
+        }
+        setSubmitting(true)
+        if (formId === undefined) {
+          //ProsesCreateData
+            let res = await api.post("master/employees", Data)
+            openSnackbar(
+              `Record 'Employee Number: ${
+                values.employee_number
+              } Employee Name: ${
+                values.given_name +
+                " " +
+                values?.middle_name +
+                " " +
+                values.surname
+              }' has been successfully saved.`,
+            )
+            setSubmitting(false || history.goBack())
+        } else {
+          //ProsesUpdateData
+            let res = await api.put(`master/employees/${formId}`, Data)
+            openSnackbar(
+              `Record 'Employee Number: ${
+                values.employee_number
+              } Employee Name: ${
+                values.given_name +
+                " " +
+                values?.middle_name +
+                " " +
+                values.surname
+              }' has been successfully update.`,
+            )
+            setSubmitting(false || history.goBack())
+        }
+    } catch(e) {
       console.log(e)
     }
   }
@@ -651,10 +756,10 @@ const EmployeeForm = (props) => {
         validationSchema={GI_validationSchema}
         validateOnMount
         enableReinitialize
-        onSubmit={onSave}
+        onSubmit={onSubmit}
       >
         {(formik) => (
-          <Form onChange={() => setGIBtnDisabled(false)}>
+          <Form>
             <Card>
               <Card.Body>
                 <h3 className="card-heading">
@@ -678,7 +783,6 @@ const EmployeeForm = (props) => {
                         fieldName={"name_prefix_name"}
                         onChange={(v) => {
                           formik.setFieldValue("name_prefix_id", v)
-                          setGIBtnDisabled(false)
                         }}
                         style={{ maxWidth: 120 }}
                         components={
@@ -749,7 +853,6 @@ const EmployeeForm = (props) => {
                                     "birth_date[0]",
                                     v,
                                   )
-                                  setGIBtnDisabled(false)
                                 }}
                                 components={
                                   isView
@@ -789,7 +892,6 @@ const EmployeeForm = (props) => {
                                     },
                                   )
                                   setMonths(v)
-                                  setGIBtnDisabled(false)
                                 }}
                                 components={
                                   isView
@@ -835,8 +937,7 @@ const EmployeeForm = (props) => {
                                       label: "1",
                                     },
                                   )
-                                  setYears(v)
-                                  setGIBtnDisabled(false)
+                                  // setYears(v)
                                 }}
                                 components={
                                   isView
@@ -986,7 +1087,6 @@ const EmployeeForm = (props) => {
                             value: null,
                             label: "Please choose",
                           })
-                          setGIBtnDisabled(false)
                         }}
                         placeholder={"Please choose"}
                         style={{ maxWidth: 300 }}
@@ -1017,7 +1117,6 @@ const EmployeeForm = (props) => {
                             v,
                           )
                           formik.setFieldValue("address.city_id", null)
-                          setGIBtnDisabled(false)
                         }}
                         placeholder={"Please choose"}
                         style={{ maxWidth: 200 }}
@@ -1043,7 +1142,6 @@ const EmployeeForm = (props) => {
                         )}
                         onChange={(v) => {
                           formik.setFieldValue("address.city_id", v)
-                          setGIBtnDisabled(false)
                         }}
                         placeholder={"Please choose"}
                         style={{ maxWidth: 200 }}
@@ -1078,37 +1176,41 @@ const EmployeeForm = (props) => {
                       <input
                         type="checkbox"
                         name="sameAddress"
-                        checked={sameAddress}
+                        checked={formik.same_address}
                         onChange={() => {
-                          setSameAddress(!sameAddress)
+                          let same_address = !formik.same_address
+                          formik.setFieldValue(
+                            "same_address",
+                            same_address,
+                          )
                           formik.setFieldValue(
                             "permanent_address.address_line",
-                            sameAddress
+                            same_address
                               ? ""
                               : formik.values.address.address_line,
                           )
                           formik.setFieldValue(
                             "permanent_address.country_id",
-                            sameAddress
+                            same_address
                               ? ""
                               : formik.values.address.country_id,
                           )
                           formik.setFieldValue(
                             "permanent_address.state_province_id",
-                            sameAddress
+                            same_address
                               ? ""
                               : formik.values.address
                                   .state_province_id,
                           )
                           formik.setFieldValue(
                             "permanent_address.city_id",
-                            sameAddress
+                            same_address
                               ? ""
                               : formik.values.address.city_id,
                           )
                           formik.setFieldValue(
                             "permanent_address.postal_code",
-                            sameAddress
+                            same_address
                               ? ""
                               : formik.values.address.postal_code,
                           )
@@ -1116,14 +1218,14 @@ const EmployeeForm = (props) => {
                         style={{ maxWidth: 416, marginLeft: 15, accentColor: "#06846b" }}
                         disabled={isView}
                       /> Same As Current Address
-                      {sameAddress ? (<>
+                      {formik.same_address ? (<>
                         <FormikControl
                         control="textarea"
                         label="Address"
                         name="address.address_line"
                         rows={3}
                         style={{ maxWidth: 416 }}
-                        disabled={isView || sameAddress}
+                        disabled={isView || formik.same_address}
                         minLength="1"
                         maxLength="512"
                       />
@@ -1150,7 +1252,6 @@ const EmployeeForm = (props) => {
                             value: null,
                             label: "Please choose",
                           })
-                          setGIBtnDisabled(false)
                         }}
                         placeholder={"Please choose"}
                         style={{ maxWidth: 300 }}
@@ -1162,7 +1263,7 @@ const EmployeeForm = (props) => {
                               }
                             : null
                         }
-                        isDisabled={isView || sameAddress}
+                        isDisabled={isView || formik.same_address}
                       />
                       <FormikControl
                         control="selectAsync"
@@ -1181,7 +1282,6 @@ const EmployeeForm = (props) => {
                             v,
                           )
                           formik.setFieldValue("address.city_id", null)
-                          setGIBtnDisabled(false)
                         }}
                         placeholder={"Please choose"}
                         style={{ maxWidth: 200 }}
@@ -1193,7 +1293,7 @@ const EmployeeForm = (props) => {
                               }
                             : null
                         }
-                        isDisabled={isView || sameAddress}
+                        isDisabled={isView || formik.same_address}
                       />
                       <FormikControl
                         control="selectAsync"
@@ -1207,7 +1307,6 @@ const EmployeeForm = (props) => {
                         )}
                         onChange={(v) => {
                           formik.setFieldValue("address.city_id", v)
-                          setGIBtnDisabled(false)
                         }}
                         placeholder={"Please choose"}
                         style={{ maxWidth: 200 }}
@@ -1219,7 +1318,7 @@ const EmployeeForm = (props) => {
                               }
                             : null
                         }
-                        isDisabled={isView || sameAddress}
+                        isDisabled={isView || formik.same_address}
                       />                                  
                       
                       <FormikControl
@@ -1227,7 +1326,7 @@ const EmployeeForm = (props) => {
                         label="Zip Code"
                         name="address.postal_code"
                         style={{ maxWidth: 100 }}
-                        disabled={isView || sameAddress}
+                        disabled={isView || formik.same_address}
                         minLength="1"
                         maxLength="16"
                       />
@@ -1239,7 +1338,7 @@ const EmployeeForm = (props) => {
                         name="permanent_address.address_line"
                         rows={3}
                         style={{ maxWidth: 416 }}
-                        disabled={isView || sameAddress}
+                        disabled={isView || formik.same_address}
                         minLength="1"
                         maxLength="512"
                       />
@@ -1263,7 +1362,6 @@ const EmployeeForm = (props) => {
                             "permanent_address.city_id",
                             { value: null, label: "Please choose" },
                           )
-                          setGIBtnDisabled(false)
                         }}
                         placeholder={"Please choose"}
                         style={{ maxWidth: 300 }}
@@ -1275,7 +1373,7 @@ const EmployeeForm = (props) => {
                               }
                             : null
                         }
-                        isDisabled={isView || sameAddress}
+                        isDisabled={isView || formik.same_address}
                       />
                       <FormikControl
                         control="selectAsync"
@@ -1299,7 +1397,6 @@ const EmployeeForm = (props) => {
                               label: "Please choose",
                             },
                           )
-                          setGIBtnDisabled(false)
                         }}
                         placeholder={"Please choose"}
                         style={{ maxWidth: 200 }}
@@ -1312,7 +1409,7 @@ const EmployeeForm = (props) => {
                               }
                             : null
                         }
-                        isDisabled={isView || sameAddress}
+                        isDisabled={isView || formik.same_address}
                       />
                       <FormikControl
                         control="selectAsync"
@@ -1329,7 +1426,6 @@ const EmployeeForm = (props) => {
                             "permanent_address.city_id",
                             v,
                           )
-                          setGIBtnDisabled(false)
                         }}
                         placeholder={"Please choose"}
                         style={{ maxWidth: 200 }}
@@ -1341,14 +1437,14 @@ const EmployeeForm = (props) => {
                               }
                             : null
                         }
-                        isDisabled={isView || sameAddress}
+                        isDisabled={isView || formik.same_address}
                       />
                       <FormikControl
                         control="input"
                         label="Zip Code"
                         name="permanent_address.postal_code"
                         style={{ maxWidth: 100 }}
-                        disabled={isView || sameAddress}
+                        disabled={isView || formik.same_address}
                         minLength="1"
                         maxLength="16"
                       />
@@ -1382,7 +1478,7 @@ const EmployeeForm = (props) => {
                 <Button
                   variant="primary"
                   type="submit"
-                  disabled={GIBtnDisabled || formik.isSubmitting}
+                  disabled={!formik.dirty || formik.isSubmitting}
                   style={{ marginRight: 15 }}
                 >
                   {props.match.params.id ? "SAVE" : "SAVE & NEXT"}
@@ -1409,7 +1505,7 @@ const EmployeeForm = (props) => {
         validationSchema={EC_validationSchema}
         validateOnMount
         enableReinitialize
-        onSubmit={onSave}
+        onSubmit={onSubmit}
       >
         {(formik) => (
           <Form>
@@ -1541,7 +1637,7 @@ const EmployeeForm = (props) => {
         validationSchema={Employment_validationSchema}
         validateOnMount
         enableReinitialize
-        onSubmit={onSave}
+        onSubmit={onSubmit}
       >
         {(formik) => (
           <Form>
@@ -1570,7 +1666,6 @@ const EmployeeForm = (props) => {
                         fieldName={"job_title_name"}
                         onChange={(v) => {
                           formik.setFieldValue("job_title_id", v)
-                          setEMPBtnDisabled(false)
                         }}
                         placeholder={"Please choose"}
                         style={{ maxWidth: 200 }}
@@ -1592,7 +1687,6 @@ const EmployeeForm = (props) => {
                         fieldName={"division_name"}
                         onChange={(v) => {
                           formik.setFieldValue("division_id", v)
-                          setEMPBtnDisabled(false)
                         }}
                         placeholder={"Please choose"}
                         style={{ maxWidth: 200 }}
@@ -1614,7 +1708,6 @@ const EmployeeForm = (props) => {
                         fieldName={"office_name"}
                         onChange={(v) => {
                           formik.setFieldValue("office_id", v)
-                          setEMPBtnDisabled(false)
                         }}
                         placeholder={"Please choose"}
                         style={{ maxWidth: 250 }}
@@ -1653,7 +1746,6 @@ const EmployeeForm = (props) => {
                                     "hire_date[0]",
                                     v,
                                   )
-                                  setEMPBtnDisabled(false)
                                 }}
                                 options={selectDay()}
                                 placeholder={"Day"}
@@ -1848,7 +1940,7 @@ const EmployeeForm = (props) => {
                   <Button
                     variant="primary"
                     type="submit"
-                    disabled={EMPBtnDisabled || !(formik.dirty || formik.isValid)}
+                    disabled={!(formik.dirty || formik.isValid)}
                     style={{ marginRight: 15 }}
                   >
                     SAVE
