@@ -1110,7 +1110,7 @@ const EmployeeForm = (props) => {
                                     name="address.city_id"
                                     url={`master/cities`}
                                     fieldName={"city_name"}
-                                    urlFilter={ formik.values.address.state_province_id.value === null ? `["country_id","=","${formik.values.address.country_id.value}"]` : `["country_id","=","${formik.values.address.country_id.value}"],["AND"],["state_province_id","=","${formik.values.address.state_province_id.value}"]`}
+                                    urlFilter={ formik.values.address.state_province_id.value === "00000000-0000-0000-0000-000000000000" ? `["country_id","=","${formik.values.address.country_id.value}"]` : `["country_id","=","${formik.values.address.country_id.value}"],["AND"],["state_province_id","=","${formik.values.address.state_province_id.value}"]`}
                                     key={JSON.stringify(
                                       formik.values.address.state_province_id.value,
                                     )}
@@ -1274,7 +1274,7 @@ const EmployeeForm = (props) => {
                                     name="address.city_id"
                                     url={`master/cities`}
                                     fieldName={"city_name"}
-                                    urlFilter={ formik.values.address.state_province_id.value === null ? `["country_id","=","${formik.values.address.country_id.value}"]` : `["country_id","=","${formik.values.address.country_id.value}"],["AND"],["state_province_id","=","${formik.values.address.state_province_id.value}"]`}
+                                    urlFilter={ formik.values.address.state_province_id.value === "00000000-0000-0000-0000-000000000000" ? `["country_id","=","${formik.values.address.country_id.value}"]` : `["country_id","=","${formik.values.address.country_id.value}"],["AND"],["state_province_id","=","${formik.values.address.state_province_id.value}"]`}
                                     key={JSON.stringify(
                                       formik.values.address.state_province_id.value,
                                     )}
@@ -1390,7 +1390,7 @@ const EmployeeForm = (props) => {
                                     name="permanent_address.city_id"
                                     url={`master/cities`}
                                     fieldName={"city_name"}
-                                    urlFilter={formik.values.permanent_address.state_province_id.value === null ? `["country_id","=","${formik.values.permanent_address.country_id.value}"]` : `["country_id","=","${formik.values.permanent_address.country_id.value}"],["AND"],["state_province_id","=","${formik.values.permanent_address.state_province_id.value}"]`}
+                                    urlFilter={formik.values.permanent_address.state_province_id.value === "00000000-0000-0000-0000-000000000000" ? `["country_id","=","${formik.values.permanent_address.country_id.value}"]` : `["country_id","=","${formik.values.permanent_address.country_id.value}"],["AND"],["state_province_id","=","${formik.values.permanent_address.state_province_id.value}"]`}
                                     key={JSON.stringify(
                                       formik.values.permanent_address.state_province_id.value,
                                     )}
