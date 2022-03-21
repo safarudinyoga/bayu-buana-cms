@@ -107,12 +107,11 @@ const EmployeeForm = (props) => {
               value: data.address.country_id,
             },
             state_province_id: {
-              label: data?.address?.state_province?.state_province_name || !isView ? "Please choose" : "",
-
+              label: data?.address?.state_province?.state_province_name || !isView ? data?.address?.state_province?.state_province_name || "Please choose" : "",
               value: data?.address?.state_province_id,
             },
             city_id: {
-              label: data?.address?.city?.city_name || !isView ? "Please choose" : "",
+              label: data?.address?.city?.city_name || !isView ? data?.address?.city?.city_name || "Please choose" : "",
               value: data?.address?.city_id,
             },
             postal_code: data?.address?.postal_code,
@@ -125,11 +124,11 @@ const EmployeeForm = (props) => {
             },
             state_province_id: {
               label:
-                data.permanent_address?.state_province?.state_province_name || !isView ? "Please choose" : "",
+              data.permanent_address?.state_province?.state_province_name || !isView ? data.permanent_address?.state_province?.state_province_name || "Please choose" : "",
               value: data.permanent_address?.state_province_id,
             },
             city_id: {
-              label: data.permanent_address?.city?.city_name || !isView ? "Please choose" : "",
+              label: data.permanent_address?.city?.city_name || !isView ? data.permanent_address?.city?.city_name || "Please choose" : "" ,
               value: data.permanent_address?.city_id,
             },
             postal_code: data.permanent_address.postal_code,
@@ -139,11 +138,11 @@ const EmployeeForm = (props) => {
             value: data.job_title.id,
           },
           division_id: {
-            label: data?.division?.division_name || !isView ? "Please choose" : "",
+            label: data?.division?.division_name || !isView ? data?.division?.division_name || "Please choose" : "",
             value: data?.division?.id,
           },
           office_id: {
-            label: data?.office?.office_name || !isView ? "Please choose" : "",
+            label: data?.office?.office_name || !isView ? data?.office?.office_name || "Please choose" : "",
             value: data?.office?.id,
           },
           hire_date: [
@@ -1088,7 +1087,10 @@ const EmployeeForm = (props) => {
                                         "address.state_province_id",
                                         v,
                                       )
-                                      formik.setFieldValue("address.city_id", null)
+                                      formik.setFieldValue("address.city_id", {
+                                        value: null,
+                                        label: "Please choose",
+                                      })
                                     }}
                                     placeholder={"Please choose"}
                                     style={{ maxWidth: 200 }}
@@ -1249,7 +1251,10 @@ const EmployeeForm = (props) => {
                                         "address.state_province_id",
                                         v,
                                       )
-                                      formik.setFieldValue("address.city_id", null)
+                                      formik.setFieldValue("address.city_id", {
+                                        value: null,
+                                        label: "Please choose",
+                                      })
                                     }}
                                     placeholder={"Please choose"}
                                     style={{ maxWidth: 200 }}
