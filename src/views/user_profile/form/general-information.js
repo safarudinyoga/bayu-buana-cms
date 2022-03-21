@@ -542,7 +542,7 @@ const GeneralInformation = (props) => {
           openSnackbar(
             `Your profile has been successfully updated.`
           )
-          return props.handleSelectTab("emergency-contacts")
+          // return props.handleSelectTab("emergency-contacts")
         }}
       >
         {({
