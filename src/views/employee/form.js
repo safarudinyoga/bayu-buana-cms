@@ -31,7 +31,6 @@ const EmployeeForm = (props) => {
   const [tabKey, setTabKey] = useState("general-information")
   const [photoProfile, setPhotoProfile] = useState([])
   const [photoData, setPhotoData] = useState()
-  const [sameAddress, setSameAddress] = useState(false)
   const [loading, setLoading] = useState(true)
   const [id, setId] = useState(null)
   const [formValues, setFormValues] = useState(null)
@@ -114,12 +113,12 @@ const EmployeeForm = (props) => {
               value: data.address.country_id,
             },
             state_province_id: {
-              label: data?.address?.state_province?.state_province_name || !isView ? "Please choose" : "",
+              label: data?.address?.state_province ? data?.address?.state_province?.state_province_name : !isView ? "Please choose" : "",
 
               value: data?.address?.state_province_id,
             },
             city_id: {
-              label: data?.address?.city?.city_name || !isView ? "Please choose" : "",
+              label: data?.address?.city ? data?.address?.city?.city_name : !isView ? "Please choose" : "",
               value: data?.address?.city_id,
             },
             postal_code: data?.address?.postal_code,
@@ -132,11 +131,11 @@ const EmployeeForm = (props) => {
             },
             state_province_id: {
               label:
-                data.permanent_address?.state_province?.state_province_name || !isView ? "Please choose" : "",
+                data.permanent_address?.state_province ? data.permanent_address?.state_province?.state_province_name : !isView ? "Please pilih" : "",
               value: data.permanent_address?.state_province_id,
             },
             city_id: {
-              label: data.permanent_address?.city?.city_name || !isView ? "Please choose" : "",
+              label: data.permanent_address?.city ? data.permanent_address?.city?.city_name : !isView ? "Please pilih" : "",
               value: data.permanent_address?.city_id,
             },
             postal_code: data.permanent_address.postal_code,
@@ -180,6 +179,7 @@ const EmployeeForm = (props) => {
       setLoading(false)
     }
   }, [])
+
   useEffect(() => {
     if (!props.match.params.id) {
       setLoading(false)
@@ -600,6 +600,7 @@ const EmployeeForm = (props) => {
           setFormValues({...formValues, ...values})
           setStep(2)
         } else {
+          setFormValues({...formValues, ...values})
           await onSave(values, setSubmitting)
         }
         setSubmitting(false)
@@ -641,11 +642,11 @@ const EmployeeForm = (props) => {
             postal_code: values.address.postal_code,
           },
           permanent_address: {
-            address_line: sameAddress ? values.address.address_line : values.permanent_address.address_line || "",
-            country_id: sameAddress ? values.address.country_id.value : values.permanent_address.country_id.value || "",
-            state_province_id: sameAddress ? values.address.state_province_id.value || "00000000-0000-0000-0000-000000000000" : values.permanent_address.state_province_id.value || "00000000-0000-0000-0000-000000000000",
-            city_id: sameAddress ? values.address.city_id.value || "00000000-0000-0000-0000-000000000000" : values.permanent_address.city_id.value || "00000000-0000-0000-0000-000000000000",
-            postal_code: sameAddress ? values.address.postal_code : values.permanent_address.postal_code || "",
+            address_line: values.same_address ? values.address.address_line : values.permanent_address.address_line || "",
+            country_id: values.same_address ? values.address.country_id.value : values.permanent_address.country_id.value || "",
+            state_province_id: values.same_address ? values.address.state_province_id.value || "00000000-0000-0000-0000-000000000000" : values.permanent_address.state_province_id.value || "00000000-0000-0000-0000-000000000000",
+            city_id: values.same_address ? values.address.city_id.value || "00000000-0000-0000-0000-000000000000" : values.permanent_address.city_id.value || "00000000-0000-0000-0000-000000000000",
+            postal_code: values.same_address ? values.address.postal_code : values.permanent_address.postal_code || "",
           },
           emergency_contact: {
             contact_name: values.emergency_contact.contact_name,
