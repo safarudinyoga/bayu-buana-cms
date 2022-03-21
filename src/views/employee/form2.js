@@ -245,9 +245,6 @@ const EmployeeForm = (props) => {
     "November",
     "December",
   ]
-  const dayToday = dateObj.getUTCDate()
-  const monthToday = monthNames[dateObj.getUTCMonth()]
-  const yearToday = dateObj.getUTCFullYear()
   const initialValues = {
     //GeneralInformation
     name_prefix_id: {
