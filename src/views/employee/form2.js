@@ -26,6 +26,7 @@ const EmployeeForm = (props) => {
   const history = useHistory()
   let dispatch = useDispatch()
   let api = new Api()
+  const ID = props.match.params.id
   const isView = useQuery().get("action") === "view"
   const [tabKey, setTabKey] = useState("general-information")
   const [photoProfile, setPhotoProfile] = useState([])
@@ -42,6 +43,7 @@ const EmployeeForm = (props) => {
   const [finishStep, setStep] = useState(0)
 
   useEffect(() => {
+    console.log(formValues, "<SSSS")
     setLoading(false)
   }, [formValues])
 
@@ -78,6 +80,7 @@ const EmployeeForm = (props) => {
       try {
         let res = await api.get(endpoint + "/" + formId)
         let data = res.data
+        console.log(res, "DDD")
         setMonths({
           value: parseInt(data.birth_date.substring(5, 7)),
           label: monthNames[parseInt(data.birth_date.substring(5, 7)) - 1],
@@ -166,21 +169,9 @@ const EmployeeForm = (props) => {
               label: parseInt(data.hire_date.substring(0, 4)),
             },
           ],
-          same_address: false
+          same_address: checkAddress(data)
           
         })
-        if (
-          data.address.address_line === data.permanent_address.address_line &&
-          data.address.country_id === data.permanent_address.country_id &&
-          data.address.state_province_id ===
-            data.permanent_address.state_province_id &&
-          data.address.city_id === data.permanent_address.city_id &&
-          data.address.postal_code === data.address.postal_code
-        ) {
-          setFormValues({...formValues, same_address: true})
-        } else {
-          setFormValues({...formValues, same_address: false})
-        }
         setPhotoProfile([{
           data_url: data.employee_asset.multimedia_description.url
         }])
@@ -197,6 +188,21 @@ const EmployeeForm = (props) => {
     }
     setId(props.match.params.id)
   }, [props.match.params.id])
+
+  const checkAddress = (data) => {
+    if (
+      data.address.address_line === data.permanent_address.address_line &&
+      data.address.country_id === data.permanent_address.country_id &&
+      data.address.state_province_id ===
+        data.permanent_address.state_province_id &&
+      data.address.city_id === data.permanent_address.city_id &&
+      data.address.postal_code === data.address.postal_code
+    ) {
+      return true
+    } else {
+      return false
+    }
+  }
 
   // Select
   useEffect(async () => {
@@ -617,9 +623,9 @@ const EmployeeForm = (props) => {
   //FormatDate XXXX-XX-XX
   function formatDate(date) {
     var d = new Date(date),
-      day = "" + d.getDate(),
-      month = "" + (d.getMonth() + 1),
-      year = d.getFullYear()
+    day = "" + d.getDate(),
+    month = "" + (d.getMonth() + 1),
+    year = d.getFullYear()
     if (month.length < 2) month = "0" + month
     if (day.length < 2) day = "0" + day
     return [year, month, day].join("-")
@@ -629,6 +635,7 @@ const EmployeeForm = (props) => {
     try {
       let formId = props.match.params.id
       setSubmitting(true)
+
       if(formId) {
         await onSave(values, setSubmitting)
       } else {
@@ -651,15 +658,14 @@ const EmployeeForm = (props) => {
   }
 
   const onSave = async (values, setSubmitting) => {
-    console.log(values)
     try {
       let formId = props.match.params.id
       const Data = {
-      name_prefix_id: values.name_prefix_id.value,
-          given_name: values.given_name,
-          middle_name: values.middle_name,
-          surname: values.surname,
-          birth_date: formatDate([
+        name_prefix_id: values.name_prefix_id.value,
+        given_name: values.given_name,
+        middle_name: values.middle_name,
+        surname: values.surname,
+        birth_date: formatDate([
             values.birth_date[2].value,
             values.birth_date[1].value,
             values.birth_date[0].value,
@@ -712,7 +718,7 @@ const EmployeeForm = (props) => {
           ]),
           npwp: values.npwp,
         }
-        setSubmitting(true)
+
         if (formId === undefined) {
           //ProsesCreateData
             let res = await api.post("master/employees", Data)
@@ -746,6 +752,8 @@ const EmployeeForm = (props) => {
         }
     } catch(e) {
       console.log(e)
+      openSnackbar(`error: ${e}`)
+      setSubmitting(false)
     }
   }
 
@@ -891,7 +899,6 @@ const EmployeeForm = (props) => {
                                       label: 1,
                                     },
                                   )
-                                  setMonths(v)
                                 }}
                                 components={
                                   isView
@@ -926,7 +933,7 @@ const EmployeeForm = (props) => {
                                   formik.setFieldValue(
                                     "birth_date[1]",
                                     {
-                                      value: 0,
+                                      value: 1,
                                       label: "January",
                                     },
                                   )
@@ -1178,39 +1185,38 @@ const EmployeeForm = (props) => {
                         name="sameAddress"
                         checked={formik.same_address}
                         onChange={() => {
-                          let same_address = !formik.same_address
                           formik.setFieldValue(
                             "same_address",
-                            same_address,
+                            !formik.same_address,
                           )
                           formik.setFieldValue(
                             "permanent_address.address_line",
-                            same_address
+                            formik.same_address
                               ? ""
                               : formik.values.address.address_line,
                           )
                           formik.setFieldValue(
                             "permanent_address.country_id",
-                            same_address
+                            formik.same_address
                               ? ""
                               : formik.values.address.country_id,
                           )
                           formik.setFieldValue(
                             "permanent_address.state_province_id",
-                            same_address
+                            formik.same_address
                               ? ""
                               : formik.values.address
                                   .state_province_id,
                           )
                           formik.setFieldValue(
                             "permanent_address.city_id",
-                            same_address
+                            formik.same_address
                               ? ""
                               : formik.values.address.city_id,
                           )
                           formik.setFieldValue(
                             "permanent_address.postal_code",
-                            same_address
+                            formik.same_address
                               ? ""
                               : formik.values.address.postal_code,
                           )
@@ -1478,7 +1484,7 @@ const EmployeeForm = (props) => {
                 <Button
                   variant="primary"
                   type="submit"
-                  disabled={!formik.dirty || formik.isSubmitting}
+                  disabled={finishStep > 0 || props.match.params.id ? formik.setSubmitting : (!formik.dirty || formik.isSubmitting)}
                   style={{ marginRight: 15 }}
                 >
                   {props.match.params.id ? "SAVE" : "SAVE & NEXT"}
@@ -1783,7 +1789,6 @@ const EmployeeForm = (props) => {
                                       label: "1",
                                     },
                                   )
-                                  setMonths(v)
                                 }}
                                 style={{
                                   minWidth: 120,
@@ -1818,7 +1823,7 @@ const EmployeeForm = (props) => {
                                   formik.setFieldValue(
                                     "hire_date[1]",
                                     {
-                                      value: 0,
+                                      value: 1,
                                       label: "January",
                                     },
                                   )
@@ -1829,7 +1834,6 @@ const EmployeeForm = (props) => {
                                       label: "1",
                                     },
                                   )
-                                  setYears(v)
                                 }}
                                 style={{ maxWidth: 240 }}
                                 components={
@@ -1978,7 +1982,7 @@ const EmployeeForm = (props) => {
                   </Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                  <Nav.Link eventKey="emergency-contacts" disabled={finishStep < 1} >
+                  <Nav.Link eventKey="emergency-contacts" disabled={finishStep < 1 && !ID} >
                     <div>
                       <ReactSVG src="/img/icons/emergency-contacts.svg" />
                       <span>Emergency Contacts</span>
@@ -1986,7 +1990,7 @@ const EmployeeForm = (props) => {
                   </Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                  <Nav.Link eventKey="employment" disabled={finishStep < 2} >
+                  <Nav.Link eventKey="employment" disabled={finishStep < 2 && !ID} >
                     <div>
                       <ReactSVG src="/img/icons/employment.svg" />
                       <span>Employment</span>
