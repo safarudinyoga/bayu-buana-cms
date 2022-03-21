@@ -2,9 +2,15 @@ import { Formik } from 'formik';
 import React, { useState, useEffect } from 'react';
 import { Card, Col, Form, Row, Button } from 'react-bootstrap';
 import Api from "config/api"
+import { useSnackbar } from "react-simple-snackbar"
+
+const options = {
+  position: "bottom-right",
+}
 
 const Subscriptions = (props) => {
   let api = new Api()
+  const [openSnackbar] = useSnackbar(options)
 
   const [initialForm, setInitialForm] = useState({
     dealSubscription: false,
@@ -15,6 +21,7 @@ const Subscriptions = (props) => {
     try {
       let res = await api.get("/user/profile")
       let data = res.data;
+      console.log(data);
       setInitialForm({
         ...initialForm,
         dealSubscription: data.user_setting.receive_travel_deals,
@@ -37,7 +44,12 @@ const Subscriptions = (props) => {
           }
         }
 
-        let res = await api.put("user/profile", formatted)
+        try {
+          let res = await api.put("user/profile", formatted)
+          openSnackbar(
+            `Subscriptions has been successfully updated.`
+          )
+        } catch(e) {}
       }}
     >
       {({
@@ -96,7 +108,6 @@ const Subscriptions = (props) => {
               <Button
                 variant="primary"
                 type="submit"
-                disabled={!dirty || !isValid}
                 style={{ marginRight: 15 }}
               >
                 SAVE
@@ -115,7 +126,6 @@ const Subscriptions = (props) => {
                     <Button
                       variant="primary"
                       type="submit"
-                      disabled={!dirty || !isValid}
                       style={{ marginRight: 15 }}
                     >
                       SAVE
@@ -136,7 +146,6 @@ const Subscriptions = (props) => {
                   <Button
                     variant="primary"
                     type="submit"
-                    disabled={!dirty || !isValid}
                     style={{ marginRight: 15 }}
                   >
                     SAVE

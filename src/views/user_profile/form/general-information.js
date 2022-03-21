@@ -7,12 +7,17 @@ import axios from "axios"
 import _ from "lodash"
 import "./user-profile-form.css"
 import { useWindowSize } from "rooks"
+import { useSnackbar } from "react-simple-snackbar"
 
 import Api from "config/api"
 import env from "config/environment"
 import Select from "components/form/select"
 import { default as SelectAsync } from "components/form/select-async"
 import { auto } from "@popperjs/core"
+
+const options = {
+  position: "bottom-right",
+}
 
 const GeneralInformation = (props) => {
   const [selectCurrentProvince, setSelectCurrentProvince] = useState([])
@@ -27,6 +32,7 @@ const GeneralInformation = (props) => {
   const { innerWidth, innerHeight, outerHeight, outerWidth } = useWindowSize();
 
   const [showCloseBtn, setShowCloseBtn] = useState(false)
+  const [openSnackbar] = useSnackbar(options)
   let api = new Api()
 
   
@@ -274,7 +280,6 @@ const GeneralInformation = (props) => {
       } else {
         setSelectPermanentProvince([])
       }
-
       let res2 = await api.get(
         `/master/cities?filters=[["country_id","=","${v}"],["AND"],["status","=",1]]&sort=city_name`,
       )
@@ -295,47 +300,47 @@ const GeneralInformation = (props) => {
     } catch (e) {}
   }
   // Current Province state
-  // const handleChangeCurrentProvince = async (v) => {
-  //   try {
-  //     let res = await api.get(
-  //       `/master/cities?filters=[["state_province_id","=","${v}"],["AND"],["status","=",1]]&sort=city_name`,
-  //     )
-  //     const options = []
-  //     if(res.data.items.length > 0){
-  //       res.data.items.forEach((data) => {
-  //         options.push({
-  //           label: data.city_name,
-  //           value: data.id,
-  //         })
-  //         setSelectCurrentCity(options)
-  //       })
-  //     } else {
-  //       setSelectCurrentCity([])
-  //     }
+  const handleChangeCurrentProvince = async (v) => {
+    try {
+      let res = await api.get(
+        `/master/cities?filters=[["state_province_id","=","${v}"],["AND"],["status","=",1]]&sort=city_name`,
+      )
+      const options = []
+      if(res.data.items.length > 0){
+        res.data.items.forEach((data) => {
+          options.push({
+            label: data.city_name,
+            value: data.id,
+          })
+          setSelectCurrentCity(options)
+        })
+      } else {
+        setSelectCurrentCity([])
+      }
       
-  //   } catch (e) {}
-  // }
+    } catch (e) {}
+  }
   // // Permanent Province state
-  // const handleChangePermanentProvince = async (v) => {
-  //   try {
-  //     let res = await api.get(
-  //       `/master/cities?filters=[["state_province_id","=","${v}"],["AND"],["status","=",1]]&sort=city_name`,
-  //     )
-  //     const options = []
-  //     if(res.data.items.length > 0){
-  //       res.data.items.forEach((data) => {
-  //         options.push({
-  //           label: data.city_name,
-  //           value: data.id,
-  //         })
-  //         setSelectPermanentCity(options)
-  //       })
-  //     } else {
-  //       setSelectPermanentCity([])
-  //     }
+  const handleChangePermanentProvince = async (v) => {
+    try {
+      let res = await api.get(
+        `/master/cities?filters=[["state_province_id","=","${v}"],["AND"],["status","=",1]]&sort=city_name`,
+      )
+      const options = []
+      if(res.data.items.length > 0){
+        res.data.items.forEach((data) => {
+          options.push({
+            label: data.city_name,
+            value: data.id,
+          })
+          setSelectPermanentCity(options)
+        })
+      } else {
+        setSelectPermanentCity([])
+      }
       
-  //   } catch (e) {}
-  // }
+    } catch (e) {}
+  }
 
   const doUpload = async (imageList) => {
     try {
@@ -534,7 +539,10 @@ const GeneralInformation = (props) => {
           console.log(formatted);
 
           let res = await api.put("user/profile", formatted)
-          return props.handleSelectTab("emergency-contacts")
+          openSnackbar(
+            `Your profile has been successfully updated.`
+          )
+          // return props.handleSelectTab("emergency-contacts")
         }}
       >
         {({
@@ -1287,6 +1295,7 @@ const GeneralInformation = (props) => {
                                 options={selectCurrentProvince}
                                 onChange={(v) => {
                                   setFieldValue("currentProvince", v)
+                                  handleChangeCurrentProvince(v.value)
                                 }}
                                 isDisabled={values.currentCountry == null}
                               />
@@ -1452,6 +1461,7 @@ const GeneralInformation = (props) => {
                           options={selectPermanentProvince}
                           onChange={(v) => {
                             setFieldValue("permanentProvince", v)
+                            handleChangePermanentProvince(v.value)
                           }}
                           onBlur={setFieldTouched}
                           isDisabled={

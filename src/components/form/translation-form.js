@@ -181,6 +181,7 @@ export default class TranslationForm extends Component {
               {fields.map((field, index) => {
                 return (
                   <FormInputControl
+                    wrapperAlign="start"
                     disabled={this.props.isView || this.state.loading}
                     key={index}
                     id={"trans-" + lang.language_code + "-" + field.name}

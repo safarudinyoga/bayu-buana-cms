@@ -50,10 +50,11 @@ function OfficeForm(props) {
       label: "Company/ Branch Name",
       name: "office_name",
       type: "text",
+      unique: true
     },
   ]
 
-  const validationRules = {
+  const [validationRules, setValidationRules] = useState({
     office_name: {
       required: true,
       minlength: 1,
@@ -116,7 +117,7 @@ function OfficeForm(props) {
       minlength: 1,
       maxlength: 512,
     },
-  };
+  });
 
   const validationMessages = {
     office_name: {
@@ -178,6 +179,19 @@ function OfficeForm(props) {
     },
   }
 
+  useEffect(async() => {
+    try {
+      let {data} = await api.get("/master/agent-languages", { size: -1, sort: "sort,language_name" })
+      let valRules = {}
+      for (let lang of data.items) {
+        valRules["office_name_"+lang.language_code] = { checkLangName: true }
+      }
+      setValidationRules({...validationRules, ...valRules})
+    } catch (e) {
+
+    }
+  }, [])
+
   useEffect(async () => {
     let formId = props.match.params.id
 
@@ -232,6 +246,35 @@ function OfficeForm(props) {
           let currentName = res.data.office_name
 
           $.validator.addMethod(
+            "checkLangName",
+            function (value, element) {
+              let req = false
+              let lang_code = element.name.slice(12)
+              let filters = JSON.stringify(["office_name","=",element.value])
+              // let filters = JSON.stringify([["language_code", "=", lang_code], ["AND"], ["office_name","=",element.value]])
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/offices?filters=${encodeURIComponent(filters)}`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if (currentName === element.value) {
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+    
+              return req
+            },
+            "Company/ Branch Name already exists",
+          )
+
+          $.validator.addMethod(
             "checkName",
             function (value, element) {
               var req = false
@@ -279,6 +322,30 @@ function OfficeForm(props) {
       } catch (e) { console.error(e);}
       setLoading(false)
     } else {
+      $.validator.addMethod(
+        "checkLangName",
+        function (value, element) {
+          let req = false
+          let lang_code = element.name.slice(12)
+          let filters = JSON.stringify(["office_name","=",element.value])
+          // let filters = JSON.stringify([["language_code", "=", lang_code], ["AND"], ["office_name","=",element.value]])
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/offices?filters=${encodeURIComponent(filters)}`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
+
+          return req
+        },
+        "Company/ Branch Name already exists",
+      )
       $.validator.addMethod(
         "checkName",
         function (value, element) {

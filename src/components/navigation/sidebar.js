@@ -75,7 +75,7 @@ class Sidebar extends Component {
               }
               <li className="nav-item">
                 <Link to="#" className="nav-link">
-                  <img src="/img/icons/users.svg" alt="icon users" />
+                  <img src="/img/icons/exchange-rate.svg" alt="icon users" />
                   <p>
                     Exchange Rate
                     <i className="right fas fa-angle-right"></i>

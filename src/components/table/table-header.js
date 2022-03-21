@@ -72,7 +72,7 @@ const StatusSelect = (props) => {
     <>
         <Select
           components={{IndicatorSeparator: () => null, DropdownIndicator}}
-          value={props.options[props.value]}
+          value={props.value != null ? props.options[props.value] : props.value}
           onChange={props.onChange}
           styles={customStyles}
           options={props.options}
@@ -91,6 +91,7 @@ class TableHeader extends Component {
       searchValue: "",
       statusValue: "0",
     }
+
     this.toggleFilter = this.toggleFilter.bind(this)
   }
 
@@ -111,7 +112,7 @@ class TableHeader extends Component {
     }
   }
 
-  handleSearchDebounce = debounce((text) => this.props.onSearch(text), 500)
+  handleSearchDebounce = debounce((text) => this.props.onSearch(text), 800)
 
   handleSearch(e) {
     this.setState({
@@ -123,6 +124,10 @@ class TableHeader extends Component {
   }
 
   handleStatus(statusValue) {
+    if(this.props.customFilterStatus){
+      this.props.customFilterStatus.value=""
+    }
+
     if (this.props.onStatus) {
       this.props.onStatus(statusValue.value)
     }
@@ -138,6 +143,11 @@ class TableHeader extends Component {
       searchValue: "",
       statusValue: "0",
     })
+
+    if(this.props.customFilterStatus){
+      this.props.customFilterStatus.value=null
+    }
+
   }
 
   handlePrint() {
@@ -222,7 +232,8 @@ class TableHeader extends Component {
                   to="/master/divisions/hierarchy"
                   className="menu-link ml-5"
                 >
-                View Hierarchy
+                  <img src="/img/icons/hierarchy.svg" alt="icon users" style={{marginBottom: 3,marginRight: 5}} />
+                  View Hierarchy
                 </Link>
               </OverlayTrigger>
             }

@@ -16,7 +16,7 @@ function textAreaForm(props) {
   } = props
   return (
     <Row className="form-group required">
-      <Col column md={3} lg={4}>
+      <Col md={3} lg={4}>
         <label className="text-label-input" htmlFor={name}>
           {label}
           <span className={required || ""}/>
