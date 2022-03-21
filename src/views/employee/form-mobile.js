@@ -729,7 +729,7 @@ const EmployeeFormMobile = (props) => {
                       : null
                   }
                   onClick={() => {
-                    toggleActiveKey("general-information")
+                    toggleActiveKey(currentActiveKey === "general-information" ? "" : "general-information")
                   }}
                 >
                   <div style={{ display: "inline-flex" }}>
@@ -1461,7 +1461,7 @@ const EmployeeFormMobile = (props) => {
                       : null
                   }
                   onClick={() => {
-                    toggleActiveKey("emergency-contacts")
+                    toggleActiveKey(currentActiveKey === "emergency-contacts" ? "" : "emergency-contacts")
                   }}
                 >
                   <div style={{ display: "inline-flex" }}>
@@ -1600,7 +1600,7 @@ const EmployeeFormMobile = (props) => {
                       : null
                   }
                   onClick={() => {
-                    toggleActiveKey("employment")
+                    toggleActiveKey(currentActiveKey === "employment" ? "" : "employment")
                   }}
                 >
                   <div style={{ display: "inline-flex" }}>
