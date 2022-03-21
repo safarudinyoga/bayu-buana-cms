@@ -313,51 +313,6 @@ const EmployeeForm = (props) => {
   const phoneNumberPlus = /^[0-9 ()+]+$/
   const numberSimbol = /^[0-9!@#$%-._^&*()_+\-=\[\]{};':"\\|,.<>\/?]*$/
   //const numberSimbol = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
-  const validationSchema = Yup.object({
-    employee_number: Yup.string()
-      .required("Employee Number is required.")
-      .test(
-        "Unique Employee Number",
-        "Employee Number already exists", // <- key, message
-        (value) => {
-          let formId = props.match.params.id
-          if (formId === undefined) {
-            return new Promise((resolve, reject) => {
-              axios
-                .get(
-                  `${env.API_URL}/master/employees?filters=["employee_number","=","${value}"]`,
-                )
-                .then((res) => {
-                  resolve(res.data.items.length === 0)
-                })
-                .catch((error) => {
-                  resolve(false)
-                })
-            })
-          } else {
-            return new Promise((resolve, reject) => {
-              axios
-                .get(
-                  `${env.API_URL}/master/employees?filters=["employee_number","=","${value}"]`,
-                )
-
-                .then((res) => {
-                  resolve(
-                    res.data.items.length === 0 ||
-                      value === formValues.employee_number,
-                  )
-                })
-                .catch((error) => {
-                  resolve(false)
-                })
-            })
-          }
-        },
-      ),
-    
-    job_title_id: Yup.object().required("Job Title is required."),
-    npwp: Yup.string().matches(numberSimbol, "NPWP must be a number"),
-  })
 
   // General Information Validation
   const GI_validationSchema = Yup.object({
