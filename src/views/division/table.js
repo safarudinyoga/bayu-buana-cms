@@ -49,7 +49,7 @@ export default function DivisionTable() {
         data: "manager.given_name",
         render: (data, d, row) => {
           if(row.manager) {
-            return `${row.manager.given_name} ${row.manager.middle_name} ${row.manager.surname}`
+            return `${row.manager.given_name || ""} ${row.manager.middle_name || ""} ${row.manager.surname || ""}`
           } else {
             return ""
           }
