@@ -489,9 +489,6 @@ const DashboardRoutes = () => {
         <Route path="/master/employee/form/:id?">
           <EmployeeForm />
         </Route>
-        <Route path="/master/employee/form2/:id?">
-          <EmployeeFormRef />
-        </Route>
         {/* Division */}
         <Route exact path="/master/divisions">
           <DivisionTable />
