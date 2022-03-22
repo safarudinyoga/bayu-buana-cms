@@ -406,7 +406,11 @@ class BBDataTable extends Component {
                   }
                 }
               } else {
-                overrideParams.sort = this.queryParams.has('sort') ? this.queryParams.get('sort') : 'sort'
+                overrideParams.sort = this.queryParams.has('sort') 
+                ? this.queryParams.get('sort') 
+                : this.props.customSort
+                ? this.props.customSort.join(",")
+                : 'sort'
               }
               if (params.search.value) {
                 let searchValue = params.search.value.replace(/^\s+|\s+$/g, "")
