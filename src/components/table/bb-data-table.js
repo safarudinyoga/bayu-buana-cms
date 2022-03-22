@@ -979,7 +979,11 @@ class BBDataTable extends Component {
             me.updateStatus.bind(me)(id, this)
             break
           default:
-            me.deleteAction.bind(me)(id, name, info)
+            if(me.props.modalDelete) {
+              me.props.setCreateModal({show: true, id, disabled_form: false})
+            }else{
+              me.deleteAction.bind(me)(id, name, info)
+            }
             break
         }
       })
