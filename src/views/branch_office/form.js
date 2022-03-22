@@ -460,6 +460,8 @@ function OfficeForm(props) {
       validationMessages={validationMessages}
     >
       <div className="col-lg-12">
+
+      {console.log(form)}
         <FormHorizontal>
           <FormInputControl
             label="Company/ Branch Name"
@@ -544,7 +546,10 @@ function OfficeForm(props) {
             id="attr_city"
             data={cityData}
             endpoint="/master/cities"
-            filter={`[["country.id", "=", "${form.country_id}"],["AND"],["status", "=", 1]]`}
+            filter={form.state_province_id || form.state_province_id !== "" 
+              ? `[["country.id", "=", "${form.country_id}"],["AND"],["state_province_id", "=", "${form.state_province_id}"],["AND"],["status", "=", 1]]` 
+              : `[["country.id", "=", "${form.country_id}"],["AND"],["status", "=", 1]]`
+            }
             column="city_name"
             onChange={(e) =>
               setForm({...form, city_id: e.target.value || null})
