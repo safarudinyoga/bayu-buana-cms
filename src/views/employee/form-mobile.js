@@ -764,7 +764,7 @@ const EmployeeFormMobile = (props) => {
                     <Button
                       variant="primary"
                       type="submit"
-                      disabled={props.finishStep > 0 || props.match.params.id ? formik.setSubmitting : (!formik.dirty || formik.isSubmitting)}
+                      disabled={props.finishStep > 0 || props.match.params.id ? !formik.isValid : (!formik.dirty || formik.isSubmitting)}
                       style={{ marginRight: 15 }}
                     >
                       {props.match.params.id ? "SAVE" : "SAVE & NEXT"}
@@ -1210,7 +1210,7 @@ const EmployeeFormMobile = (props) => {
                       <Button
                         variant="primary"
                         type="submit"
-                        disabled={!(formik.dirty || formik.isValid)}
+                        disabled={!formik.isValid}
                         style={{ marginRight: 15 }}
                       >
                         SAVE

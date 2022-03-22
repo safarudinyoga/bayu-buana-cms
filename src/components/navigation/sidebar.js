@@ -3,6 +3,7 @@ import { Link } from "react-router-dom"
 import { connect } from "react-redux"
 import "./sidebar.scss"
 import getMenu from '../../config/menu';
+import $ from "jquery"
 
 const SubMenu = ({menu}) => {
   return (
@@ -47,6 +48,7 @@ class Sidebar extends Component {
   }
 
   async componentDidMount () {
+    $('[data-widget="treeview"]').Treeview('init')
     let menu = JSON.parse(localStorage.getItem('menu'))
     if(menu && menu.length > 0) {
       this.setState({menu})
