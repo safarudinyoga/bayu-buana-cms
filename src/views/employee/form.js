@@ -482,6 +482,8 @@ const EmployeeForm = (props) => {
     
     job_title_id: Yup.object().required("Job Title is required."),
     npwp: Yup.string().matches(numberSimbol, "NPWP must be a number"),
+    ...EC_validationSchema.fields,
+    ...GI_validationSchema.fields,
   })
 
   // Birthday
@@ -599,11 +601,11 @@ const EmployeeForm = (props) => {
         if(tabKey === "general-information") {
           setTabKey("emergency-contacts")
           setFormValues({...formValues, ...values})
-          setStep(1)
+          if(finishStep < 1) setStep(1)
         } else if(tabKey === "emergency-contacts") {
           setTabKey("employment")
           setFormValues({...formValues, ...values})
-          setStep(2)
+          if(finishStep < 2) setStep(2)
         } else {
           setFormValues({...formValues, ...values})
           await onSave(values, setSubmitting)
@@ -1441,7 +1443,7 @@ const EmployeeForm = (props) => {
                 <Button
                   variant="primary"
                   type="submit"
-                  disabled={finishStep > 0 || props.match.params.id ? formik.setSubmitting : (!formik.dirty || formik.isSubmitting)}
+                  disabled={finishStep > 0 || props.match.params.id ? !formik.isValid : (!formik.dirty || formik.isSubmitting)}
                   style={{ marginRight: 15 }}
                 >
                   {props.match.params.id ? "SAVE" : "SAVE & NEXT"}
@@ -1901,7 +1903,7 @@ const EmployeeForm = (props) => {
                   <Button
                     variant="primary"
                     type="submit"
-                    disabled={!(formik.dirty || formik.isValid)}
+                    disabled={!formik.isValid}
                     style={{ marginRight: 15 }}
                   >
                     SAVE
