@@ -311,7 +311,7 @@ function DivisionForm(props) {
           name="parent_division_id"
           endpoint="/master/divisions"
           column="division_name"
-          filter={`[["parent_division_id","is",null],["and"],["status", "=", 1]]`}
+          filter={formId ? `[["id","!=","${formId}"],["and"],[["parent_division_id","!=","${formId}"],["or"],["parent_division_id","is",null]]]` : ``}
           onChange={(e) =>
             setForm({...form, parent_division_id: e.target.value || null})
           }
