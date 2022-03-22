@@ -25,8 +25,8 @@ function JobTitleForm(props) {
   const [supplierTypeData, setSupplierTypeData] = useState([])
   const [id, setId] = useState(null)
   const [disabledSave, setDisabledSave] = useState(true)
-  const [validCode, SetValidCode] = useState(false)
-  const [validName, SetValidName] = useState(false)
+  const [validCode, SetValidCode] = useState(formId)
+  const [validName, SetValidName] = useState(formId)
   const [form, setForm] = useState({
     job_title_code: "",
     job_title_name: "",

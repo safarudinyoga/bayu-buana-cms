@@ -1,15 +1,16 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import BBDataTable from "components/table/bb-data-table"
 import { useDispatch } from 'react-redux'
 import { setUIParams } from "redux/ui-store"
 import { renderColumn } from "lib/translation"
+import DatePicker from 'react-datepicker'
 
 export default function SetupFlightCommisionTable() {
   let dispatch = useDispatch()
   useEffect(() => {
     dispatch(
       setUIParams({
-        title: "Setup Flight Commision",
+        title: "Setup Flight Commission",
         breadcrumbs: [
           {
             text: "Master Data Management",
@@ -22,25 +23,120 @@ export default function SetupFlightCommisionTable() {
     )
   }, [])
 
+  const [selectedIssueStart, setSelectedIssueStart] = useState(new Date())
+  const [selectedIssueEnd, setSelectedIssueEnd] = useState(new Date())
+
+  const [selectedDepartureStart, setSelectedDepartureStart] = useState(new Date())
+  const [selectedDepartureEnd, setSelectedDepartureEnd] = useState(new Date())
+
+  // const onFilterChange = (e, values) => {
+  //   let ids = []
+  //   if (values && values.length > 0) {
+  //     for (let i in values) {
+  //       ids.push(values[i].id)
+  //     }
+  //   }
+  //   if (ids.length > 0) {
+  //     setParams({ ...params, filters: [["country_id", "in", ids]] })
+  //   } else {
+  //     setParams({ ...params, filters: [] })
+  //   }
+  //   setSelectedCountries(values)
+  //   setSelectedCountryIds(ids)
+  // }
+
+  const extraFilter = () => {
+    return (
+      <>
+        <div className="col-xs-12 col-sm-12 col-md-6 col-lg-4 mb-3">
+          <div className="col-xs-4">
+            <label className="text-label-filter font-weight-bold">Period of Issue</label>
+            <div className="row mb-3 mb-sm-0 align-items-center">
+              <div className="col-md-5">
+                <DatePicker 
+                  className="form-control"
+                  dateFormat="dd MMMM yyyy"
+                  selected={selectedIssueStart}
+                  onChange={(date) => {
+                    setSelectedIssueStart(date)
+                  }}
+                />
+              </div>
+              <span className="col-md-1"> to </span>
+              <div className="col-md-5">
+                <DatePicker 
+                  className="form-control"
+                  dateFormat="dd MMMM yyyy"
+                  selected={selectedIssueStart}
+                  onChange={(date) => {
+                    setSelectedIssueStart(date)
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="col-xs-12 col-sm-12 col-md-6 col-lg-4 mb-3">
+          <div className="col-xs-4">
+            <label className="text-label-filter font-weight-bold">Period of Departure</label>
+            <div className="row mb-3 mb-sm-0 align-items-center">
+              <div className="col-md-5">
+                <DatePicker 
+                  className="form-control"
+                  dateFormat="dd MMMM yyyy"
+                  selected={selectedIssueStart}
+                  onChange={(date) => {
+                    setSelectedIssueStart(date)
+                  }}
+                />
+              </div>
+              <span className="col-md-1"> to </span>
+              <div className="col-md-5">
+                <DatePicker 
+                  className="form-control"
+                  dateFormat="dd MMMM yyyy"
+                  selected={selectedIssueStart}
+                  onChange={(date) => {
+                    setSelectedIssueStart(date)
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </>
+      
+    )
+  }
+
+  // const onReset = () => {
+  //   setParams({ ...params, filters: [] })
+  //   setSelectedCountries([])
+  //   setSelectedCountryIds([])
+  // }
+
   let params = {
     title: "Setup Flight Commision",
-    baseRoute: "/master/setup-flight-commision/form",
-    endpoint: "/master/setup-flight-commisions",
+    baseRoute: "/master/setup-flight-commission/form",
+    endpoint: "/master/commission-claims",
     deleteEndpoint: "/master/batch-actions/delete/setup-flight-commisions",
     activationEndpoint: "/master/batch-actions/activate/setup-flight-commisions",
     deactivationEndpoint: "/master/batch-actions/deactivate/setup-flight-commisions",
     columns: [
       {
         title: "Airline",
-        data: "airline_name"
+        data: "airline_id"
       },
       {
         title: "Route(s)",
-        data: "route"
+        data: "commission_claim_original_destination",
+        render: (val, type) => {
+
+        }
       },
       {
         title: "Period of Issue",
-        data: "period_issue"
+        data: "commission_claim_departure_date.start_date"
       },
       {
         title: "Period of Departure",
@@ -48,7 +144,7 @@ export default function SetupFlightCommisionTable() {
       },
       {
         title: "Commission",
-        data: "commision"
+        data: "percent"
       }
     ],
     emptyTable: "No setup flight commisions found",
@@ -56,5 +152,5 @@ export default function SetupFlightCommisionTable() {
   }
 
 
-  return <BBDataTable {...params} />
+  return <BBDataTable {...params} extraFilter={extraFilter}/>
 }

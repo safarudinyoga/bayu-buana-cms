@@ -11,7 +11,7 @@ import $ from "jquery"
 import env from "../../config/environment"
 
 
-const endpoint = "/master/corporate-rating-types"
+const endpoint = "/master/corporate-rating-type-levels"
 const backUrl = "/master/corporate-rating"
 
 function CorporateRatingForm(props) {
@@ -24,32 +24,33 @@ function CorporateRatingForm(props) {
   const [translations, setTranslations] = useState([])
   const [id, setId] = useState(null)
   const [form, setForm] = useState({
-    corporate_rating_type_code: "",
-    corporate_rating_type_name: "",
-    scale: "",
+    corporate_rating_type_level_code: "",
+    corporate_rating_type_level_name: "",
+    rating: "",
+    corporate_rating_type_id: ""
   })
   const translationFields = [
     {
       label: "Rating Name",
-      name: "corporate_rating_type_name",
+      name: "corporate_rating_type_level_name",
       type: "text",
     },   
   ]
 
   const validationRules = {
-    corporate_rating_type_code: {
+    corporate_rating_type_level_code: {
       required: true,
       min: 1,
-      max: 36,
+      max: 32767,
       checkCode: true,
     },
-    corporate_rating_type_name: {
+    corporate_rating_type_level_name: {
       required: true,
       minlength: 1,
       maxlength: 256,
       checkName: true,
     },
-    scale: {
+    rating: {
       required: false,
       min: 1,
       max: 9999,
@@ -57,10 +58,10 @@ function CorporateRatingForm(props) {
   }
 
   const validationMessages = {
-    corporate_rating_type_name: {
+    corporate_rating_type_level_name: {
       required: "Rating Name is required",
     },
-    corporate_rating_type_code: {
+    corporate_rating_type_level_code: {
       required: "Rating Code is required",
     },
   }
@@ -93,25 +94,26 @@ function CorporateRatingForm(props) {
         ],
       }),
     )
+    getCorporateRatingType(api);
     if (formId) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
 
         if (res.data) {
-          let currentCode = res.data.corporate_rating_type_code
-          let currentName = res.data.corporate_rating_type_name
+          let currentCode = res.data.corporate_rating_type_level_code
+          let currentName = res.data.corporate_rating_type_level_name
 
           
           $.validator.addMethod(
             "checkName",
             function (value, element) {
               var req = false
-              let filters = JSON.stringify(["corporate_rating_type_name","=",element.value])
+              let filters = JSON.stringify(["corporate_rating_type_level_name","=",element.value])
               $.ajax({
                 type: "GET",
                 async: false,
-                url: `${env.API_URL}/master/corporate-rating-types?filters=${encodeURIComponent(filters)}`,
+                url: `${env.API_URL}/master/corporate-rating-type-levels?filters=${encodeURIComponent(filters)}`,
                 success: function (res) {
                   if (res.items.length !== 0) {
                     if(currentName == element.value){
@@ -132,13 +134,11 @@ function CorporateRatingForm(props) {
           $.validator.addMethod(
             "checkCode",
             function (value, element) {
-              console.log('currentCode', currentCode)
-              console.log('val', element.value)
               var req = false
               $.ajax({
                 type: "GET",
                 async: false,
-                url: `${env.API_URL}/master/corporate-rating-types?filters=["corporate_rating_type_code","=","${element.value}"]`,
+                url: `${env.API_URL}/master/corporate-rating-type-levels?filters=["corporate_rating_type_level_code","=","${element.value}"]`,
                 success: function (res) {
                   if (res.items.length !== 0) {
                     if(currentCode == element.value){
@@ -167,15 +167,16 @@ function CorporateRatingForm(props) {
       } catch (e) { }
       setLoading(false)
     } else {
+      
       $.validator.addMethod(
         "checkName",
         function (value, element) {
           var req = false
-          let filters = JSON.stringify(["corporate_rating_type_name","=",element.value])
+          let filters = JSON.stringify(["corporate_rating_type_level_name","=",element.value])
           $.ajax({
             type: "GET",
             async: false,
-            url: `${env.API_URL}/master/corporate-rating-types?filters=${encodeURIComponent(filters)}`,
+            url: `${env.API_URL}/master/corporate-rating-type-levels?filters=${encodeURIComponent(filters)}`,
             success: function (res) {
               if (res.items.length !== 0) {
                 req = false
@@ -196,7 +197,7 @@ function CorporateRatingForm(props) {
           $.ajax({
             type: "GET",
             async: false,
-            url: `${env.API_URL}/master/corporate-rating-types?filters=["corporate_rating_type_code","=","${element.value}"]`,
+            url: `${env.API_URL}/master/corporate-rating-type-levels?filters=["corporate_rating_type_level_code","=","${element.value}"]`,
             success: function (res) {
               if (res.items.length !== 0) {
                 req = false
@@ -220,13 +221,21 @@ function CorporateRatingForm(props) {
     setId(props.match.params.id)
   }, [props.match.params.id])
 
+  const getCorporateRatingType = async (api) => {
+    let urlRating = '/master/corporate-rating-types?filters=[["corporate_rating_type_code","=","6"],["AND"],["status","=",1]]';
+    let res = await api.get(urlRating)
+    res.data.items.forEach((data) => {
+      setForm({...form, corporate_rating_type_id: data.id})
+    })
+  }
+
   const onSave = async () => {
     let translated = formBuilder.getTranslations()
     setLoading(true)
     let api = new Api()
     try {
-      if (!form.scale) {
-        form.scale = null
+      if (!form.rating) {
+        form.rating = null
       }
 
       let res = await api.putOrPost(endpoint, id, form)
@@ -247,7 +256,7 @@ function CorporateRatingForm(props) {
       props.history.goBack()
       dispatch(
         setAlert({
-          message: `Record ${form.corporate_rating_type_code} - ${form.corporate_rating_type_name} has been successfully ${formId ? "updated" : "saved"}.`,
+          message: `Record ${form.corporate_rating_type_level_code} - ${form.corporate_rating_type_level_name} has been successfully ${formId ? "updated" : "saved"}.`,
         }),
       )
     }
@@ -270,10 +279,10 @@ function CorporateRatingForm(props) {
         <FormInputControl
           label="Rating Name"
           required={true}
-          value={form.corporate_rating_type_name}
-          name="corporate_rating_type_name"
+          value={form.corporate_rating_type_level_name}
+          name="corporate_rating_type_level_name"
           cl="4"          
-          onChange={(e) => setForm({...form, corporate_rating_type_name: e.target.value})}
+          onChange={(e) => setForm({...form, corporate_rating_type_level_name: e.target.value})}
           disabled={isView || loading}
           type="text"
           minLength="1"
@@ -283,9 +292,9 @@ function CorporateRatingForm(props) {
           loading ? null :
           <FormInputControl
           label="Rating"
-          value={form.scale}
-          name="scale"
-          onChange={(e) => setForm({...form, scale: parseInt(e.target.value)})}
+          value={form.rating}
+          name="rating"
+          onChange={(e) => setForm({...form, rating: parseInt(e.target.value)})}
           disabled={isView || loading}
           type="number"
           min="1"
@@ -303,17 +312,17 @@ function CorporateRatingForm(props) {
         <FormInputControl
           label="Rating Code"
           required={true}
-          value={form.corporate_rating_type_code}
-          name="corporate_rating_type_code"
+          value={form.corporate_rating_type_level_code}
+          name="corporate_rating_type_level_code"
           cl={{md:"12"}}
           cr="12"
           onChange={(e) =>
-            setForm({...form, corporate_rating_type_code: parseInt(e.target.value)})
+            setForm({...form, corporate_rating_type_level_code: parseInt(e.target.value)})
           }
           disabled={isView || loading}
           type="number"
-          min="0"
-          max="36"
+          min="1"
+          max="32767"
           onKeyPress={(event) => {
             if (!/[0-9]/.test(event.key)) {
               event.preventDefault();

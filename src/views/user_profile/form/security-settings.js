@@ -1,14 +1,21 @@
 import { FastField, Formik } from 'formik';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, Form, Row, Col, Button, InputGroup, FormGroup } from "react-bootstrap"
 import * as Yup from "yup"
 import Api from "config/api"
+import { useSnackbar } from "react-simple-snackbar"
+
+const options = {
+  position: "bottom-right",
+}
 
 const SecuritySettings = (props) => {
   let api = new Api()
   const [ oldPassType, setOldPassType] = useState("password")
   const [ newPassType, setNewPassType] = useState("password")
   const [ confirmPassType, setConfirmPassType] = useState("password")
+  const [ email, setEmail] = useState("")
+  const [openSnackbar] = useSnackbar(options)
 
   // Initialize form
   const initialForm = {
@@ -18,18 +25,56 @@ const SecuritySettings = (props) => {
     confirmPassword: "",
   }
 
+  useEffect(async () => {
+    try {
+      let res = await api.get("/user/profile")
+      setEmail(res.data.contact.email)
+    } catch(e) {
+
+    }
+  }, [])
+
   // Schema for yup
   const validationSchema = Yup.object().shape({
     // Change Password
-    oldPassword: Yup.string().required("Old Password is required"),
-    newPassword: Yup.string().required("New Password is required").notOneOf([Yup.ref('oldPassword'), null], 'New Password must not be same as Old Password'),
-    confirmPassword: Yup.string().required("Confirm password is required").oneOf([Yup.ref('newPassword'), null], 'New Password must match'),
+    oldPassword: Yup.string()
+                  .required("Old Password is required")
+                  .min(8, "Old Password must be at least 8 characters")
+                  .max(256)
+                  .test(
+                    'valid-password',
+                    'Old Password is incorrect',
+                    async (value, testContext) => {
+                      try {
+                        let res = await api.post("/user/login", {
+                          username: email,
+                          password: value
+                        })
+                        if(res.status == 200){
+                          return true
+                        }
+                      } catch(e) {
+
+                      }
+                    }
+                  ),
+    newPassword: Yup.string()
+                  .required("New Password is required")
+                  .min(8, "New Password must be at least 8 characters")
+                  .max(256)
+                  .notOneOf([Yup.ref('oldPassword'), null], 'New Password must not be same as Old Password'),
+    confirmPassword: Yup.string()
+                      .required("Confirm password is required")
+                      .min(8, "Confirm Password must be at least 8 characters")
+                      .max(256)
+                      .oneOf([Yup.ref('newPassword'), null], 'New Password must match'),
   })
 
   const FormValidate = ({
     label,
     name,
     type="password",
+    minLength=8,
     maxLength=256,
     placeholder="",
     endIcon,
@@ -48,6 +93,7 @@ const SecuritySettings = (props) => {
                     form.touched[name] && form.errors[name]
                   }
                   maxLength={maxLength}
+                  minLength={minLength}
                   {...field}
                 />
                 {
@@ -79,16 +125,22 @@ const SecuritySettings = (props) => {
       initialValues={initialForm}
       validationSchema={validationSchema}
       onSubmit={async (values, { setSubmitting, resetForm }) => {
-        console.log(values)
-
         let formatted = {
           old_password: values.oldPassword,
           new_password: values.newPassword,
         }
 
-        let res = await api.put("user/profile", formatted)
+        try {
+          let res = await api.put("user/profile", formatted)
+          openSnackbar(
+            `Password has been successfully changed.`
+          )
+        } catch(e) {
 
-        return props.handleSelectTab("subscriptions")
+        }
+        
+
+        // return props.handleSelectTab("subscriptions")
       }}
     >
       {({

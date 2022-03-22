@@ -5,8 +5,10 @@ import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
 import { renderColumn } from "lib/translation"
 import moment from "moment"
+import { useWindowSize } from "rooks"
 
 import FormInputSelectAjax from "components/form/input-select-ajax"
+import { findLastIndex } from "lodash"
 
 export default function EmployeeTable() {
   let dispatch = useDispatch()
@@ -32,6 +34,7 @@ export default function EmployeeTable() {
   let [selectedDivisionIds, setSelectedDivisionIds] = useState([])
   let [selectedOffice, setSelectedOffice] = useState([])
   let [selectedOfficeIds, setSelectedOfficeIds] = useState([])
+  const { innerWidth, innerHeight, outerHeight, outerWidth } = useWindowSize();
 
   const onFilterChangeJobTitle = (e, values) => {
     let ids = []
@@ -118,39 +121,84 @@ export default function EmployeeTable() {
           allowClear={false}
           placeholder="Please choose"
         />
-        <FormInputSelectAjax
-          label="Division"
-          onChange={onFilterChangeDivision}
-          endpoint="/master/employees"
-          column="division.division_name"
-          sort="division.division_name"
-          isGrouping={true}
-          fieldGroup="division.id"
-          value={selectedDivisionIds}
-          data={selectedDivision}
-          filter={`[["division.id", "is not", null],["AND"],["status", "=", 1]]`}
-          type="selectmultiple"
-          isFilter={true}
-          allowClear={false}
-          placeholder="Please choose"
-        />
-        <FormInputSelectAjax
-          label="Branch Office"
-          onChange={onFilterChangeOffice}
-          endpoint="/master/employees"
-          column="office.office_name"
-          sort="office.office_name"
-          isGrouping={true}
-          fieldGroup="office.id"
-          value={selectedOfficeIds}
-          data={selectedOffice}
-          filter={`[["office.id", "is not", null],["AND"],["status", "=", 1]]`}
-          type="selectmultiple"
-          isFilter={true}
-          allowClear={false}
-          placeholder="Please choose"
-        />
-      </>
+        
+        {
+          // Tablet
+          innerWidth > 480 && innerWidth <= 768 ? (
+            <>
+            <FormInputSelectAjax
+              label="Branch Office"
+              onChange={onFilterChangeOffice}
+              endpoint="/master/employees"
+              column="office.office_name"
+              sort="office.office_name"
+              isGrouping={true}
+              fieldGroup="office.id"
+              value={selectedOfficeIds}
+              data={selectedOffice}
+              filter={`[["office.id", "is not", null],["AND"],["status", "=", 1]]`}
+              type="selectmultiple"
+              isFilter={true}
+              allowClear={false}
+              placeholder="Please choose"
+            />
+            <FormInputSelectAjax
+              label="Division"
+              onChange={onFilterChangeDivision}
+              endpoint="/master/employees"
+              column="division.division_name"
+              sort="division.division_name"
+              isGrouping={true}
+              fieldGroup="division.id"
+              value={selectedDivisionIds}
+              data={selectedDivision}
+              filter={`[["division.id", "is not", null],["AND"],["status", "=", 1]]`}
+              type="selectmultiple"
+              isFilter={true}
+              allowClear={false}
+              placeholder="Please choose"
+            />
+            </>
+                ) : 
+                <>
+               
+              <FormInputSelectAjax
+                label="Division"
+                onChange={onFilterChangeDivision}
+                endpoint="/master/employees"
+                column="division.division_name"
+                sort="division.division_name"
+                isGrouping={true}
+                fieldGroup="division.id"
+                value={selectedDivisionIds}
+                data={selectedDivision}
+                filter={`[["division.id", "is not", null],["AND"],["status", "=", 1]]`}
+                type="selectmultiple"
+                isFilter={true}
+                allowClear={false}
+                placeholder="Please choose"
+              />
+               <FormInputSelectAjax
+                label="Branch Office"
+                onChange={onFilterChangeOffice}
+                endpoint="/master/employees"
+                column="office.office_name"
+                sort="office.office_name"
+                isGrouping={true}
+                fieldGroup="office.id"
+                value={selectedOfficeIds}
+                data={selectedOffice}
+                filter={`[["office.id", "is not", null],["AND"],["status", "=", 1]]`}
+                type="selectmultiple"
+                isFilter={true}
+                allowClear={false}
+                placeholder="Please choose"
+              />
+              
+              </>
+
+        }
+        </>
     )
   }
 
@@ -278,7 +326,6 @@ export default function EmployeeTable() {
     statusLabel: "Status",
     isOpenNewTab: false
   })
-  console.log("dataDelete,", params)
 
   return <BBDataTable {...params} extraFilter={extraFilter} onReset={onReset} />
 }

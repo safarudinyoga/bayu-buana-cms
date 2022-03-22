@@ -4,8 +4,8 @@ import Api from "config/api"
 import {useDispatch} from "react-redux"
 import {setAlert, setUIParams} from "redux/ui-store"
 import env from "../../config/environment"
-import { Card, ListGroup, Row, Col, Table } from "react-bootstrap"
-import ExchangeRateForm from 'views/exchange_rate/form';
+import { Row, Col, Button } from "react-bootstrap"
+import ExchangeRateForm from 'views/exchange_rate/form'
 import HistoryTable from "./history_table/history_table"
 
 function ExchangeRateHistory(props) {
@@ -50,15 +50,22 @@ function ExchangeRateHistory(props) {
   }, [props.match.params.id])
 
   return (
-    <>
+    <div className="pb-5">
       <Row>
-        <Col md={5}>
+        <Col md={8} lg={5}>
           <ExchangeRateForm id={formId} hideButton={true} isView={true}/>
         </Col>
       </Row>
 
       <HistoryTable id={formId}/>
-    </>
+      <Button
+        className="mt-4 mb-5"
+        variant="secondary"
+        onClick={() => props.history.goBack()}
+      >
+        BACK
+      </Button>
+    </div>
   )
 }
 

@@ -101,6 +101,7 @@ import HotelRoomTypeForm from "views/hotel_profile_management/form/room_type/for
 // Master Employee
 import EmployeeTable from "views/employee/table"
 import EmployeeForm from "views/employee/form"
+import EmployeeFormRef from "views/employee/form2"
 import RatingTypeLevelTable from "./views/rating_type_level/table"
 import RatingTypeLevelForm from "./views/rating_type_level/form"
 
@@ -115,13 +116,13 @@ import StandardMarkupHotelForm from "views/standard_markup/form/hotel_form"
 import StandardMarkupOtherForm from "views/standard_markup/form/other_form"
 
 // Master Setup Flight Commision
-import FlightCommisionTable from "views/setup_flight_commision/table";
+import FlightCommisionTable from "views/setup_flight_commision/table"
 import FlightCommisionForm from "views/setup_flight_commision/form"
 // Master Exchange Rate
 import ExchageRateTable from "views/exchange_rate/table"
 import ExchangeRateForm from "views/exchange_rate/form"
 import ExchangeRateHistory from "views/exchange_rate/history"
-// Master Integration Partner
+// Master Integration PartnerG
 import IntegrationPartnerTable from "views/integration_partner/table"
 
 // Master Manage Corporate
@@ -522,10 +523,10 @@ const DashboardRoutes = () => {
         </Route>
 
         {/* Master Setup Flight Commission */}
-        <Route exact path="/master/setup-flight-commision">
+        <Route exact path="/master/setup-flight-commission">
           <FlightCommisionTable />
         </Route>
-        <Route exact path="/master/setup-flight-commision/form/:id?">
+        <Route exact path="/master/setup-flight-commission/form/:id?">
           <FlightCommisionForm />
         </Route>
         
