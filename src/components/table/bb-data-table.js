@@ -514,7 +514,12 @@ class BBDataTable extends Component {
             targets: [1, 2],
             className: !this.state.isCheckbox ? module == "employee" ? "" : "custom-col-width": "cstm-col-width",
           },
-          { responsivePriority: 1, targets: [1,2] },
+          {
+            targets: [3],
+            className: !module == "loyalty-programs" ? "" : "cstm-col-width-2",
+          },
+          { responsivePriority: 1, targets: 1 },
+          { responsivePriority: 2, targets: 2 },
           {
               // The `data` parameter refers to the data for the cell (defined by the
               // `data` option, which defaults to the column being worked with, in
@@ -978,7 +983,11 @@ class BBDataTable extends Component {
             me.updateStatus.bind(me)(id, this)
             break
           default:
-            me.deleteAction.bind(me)(id, name, info)
+            if(me.props.modalDelete) {
+              me.props.setCreateModal({show: true, id, disabled_form: false})
+            }else{
+              me.deleteAction.bind(me)(id, name, info)
+            }
             break
         }
       })
