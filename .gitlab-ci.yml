@@ -14,8 +14,9 @@ build:
     GIT_SSL_NO_VERIFY: 1
   script: 
     - sed -i 's/REACT_APP_API_BASE_URL=.*/REACT_APP_API_BASE_URL=/g' .env
-    - echo nameserver 8.8.8.8 > /etc/resolv.conf
-    - echo nameserver 8.8.4.4 >> /etc/resolv.conf
+    - uname -a
+    - cat /etc/resolv.conf
+    - cat /etc/hosts
     - yarn install
     - yarn build
     - |
