@@ -326,7 +326,6 @@ export default function EmployeeTable() {
     statusLabel: "Status",
     isOpenNewTab: false
   })
-  console.log("dataDelete,", params)
 
   return <BBDataTable {...params} extraFilter={extraFilter} onReset={onReset} />
 }
