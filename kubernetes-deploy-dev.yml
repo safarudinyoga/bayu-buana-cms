@@ -36,7 +36,7 @@ spec:
     spec:
       hostPID: true
       containers:
-        - image: registry.gitlab.com/kangmasvian/bb-backup:cms-prod
+        - image: registry.tog.co.id/bb/bayu-buana-cms:cms-prod
           name: frontend-service-dev
           imagePullPolicy: Always
           ports:
