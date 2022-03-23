@@ -144,11 +144,11 @@ const EmployeeForm = (props) => {
             value: data.job_title.id,
           },
           division_id: {
-            label: data?.division?.division_name || !isView ? "Please choose" : "",
+            label: data?.division?.division_name ? data?.division?.division_name : !isView ? "Please choose" : "",
             value: data?.division?.id,
           },
           office_id: {
-            label: data?.office?.office_name || !isView ? "Please choose" : "",
+            label: data?.office?.office_name ? data?.office?.office_name : !isView ? "Please choose" : "",
             value: data?.office?.id,
           },
           hire_date: [
@@ -639,9 +639,8 @@ const EmployeeForm = (props) => {
         } else {
           photo_id = photoProfile[0].data_url
         }
-      } else {
-        photo_id = await removeImage(photoData?.id)
       }
+      if(photoData && photoProfile.length === 0) photo_id = await removeImage(photoData?.id)
 
       const Data = {
         name_prefix_id: values.name_prefix_id.value,
