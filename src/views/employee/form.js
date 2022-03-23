@@ -30,7 +30,7 @@ const EmployeeForm = (props) => {
   const isView = useQuery().get("action") === "view"
   const [tabKey, setTabKey] = useState("general-information")
   const [photoProfile, setPhotoProfile] = useState([])
-  const [photoData, setPhotoData] = useState()
+  const [photoData, setPhotoData] = useState(null)
   const [loading, setLoading] = useState(true)
   const [id, setId] = useState(null)
   const [formValues, setFormValues] = useState(null)
@@ -171,6 +171,10 @@ const EmployeeForm = (props) => {
         setPhotoProfile([{
           data_url: data.employee_asset.multimedia_description.url
         }])
+        setPhotoData(data.employee_asset?.multimedia_description ? {
+          id: data.employee_asset.multimedia_description_id,
+          data_url: data.employee_asset.multimedia_description.url
+        } : null)
         //handleSameAddress
        
       } catch (e) {}
@@ -228,8 +232,18 @@ const EmployeeForm = (props) => {
       let payload = new FormData()
       payload.append("files", imageList[0].file)
 
+      if(photoData || photoData !== null) await removeImage(photoData.id)
+
       let res = await api.post("/multimedia/files", payload)
-      setPhotoData(res.data.id)
+      return res.data.id
+    } catch(e) {
+
+    }
+  }
+  const removeImage = async (id) => {
+    try {
+      let res = await api.delete("/multimedia/files/"+id)
+      return null
     } catch(e) {
 
     }
@@ -237,9 +251,7 @@ const EmployeeForm = (props) => {
 
   // Upload profile
   const onChangePhotoProfile = (imageList, addUpdateIndex) => {
-    // data for submit
     setPhotoProfile(imageList)
-    doUpload(imageList)
   }
 
   const dateObj = new Date()
@@ -619,64 +631,76 @@ const EmployeeForm = (props) => {
   const onSave = async (values, setSubmitting) => {
     try {
       let formId = props.match.params.id
+
+      let photo_id = null
+      if(photoProfile.length > 0) {
+        if( !photoData || photoData?.data_url !== photoProfile[0].data_url) {
+          photo_id = await doUpload(photoProfile)
+        } else {
+          photo_id = photoProfile[0].data_url
+        }
+      } else {
+        photo_id = await removeImage(photoData?.id)
+      }
+
       const Data = {
         name_prefix_id: values.name_prefix_id.value,
         given_name: values.given_name,
         middle_name: values.middle_name,
         surname: values.surname,
         birth_date: formatDate([
-            values.birth_date[2].value,
-            values.birth_date[1].value,
-            values.birth_date[0].value,
-          ]),
-          gender_id: values.gender_id,
-          ktp: values.ktp,
-          employee_asset: {
-            multimedia_description_id: photoData
-          },
-          contact: {
-            email: values.contact.email,
-            mobile_phone_number: values.contact.mobile_phone_number,
-            other_email: values.contact.other_email,
-            phone_number: values.contact.phone_number,
-          },
-          address: {
-            address_line: values.address.address_line,
-            country_id: values.address.country_id.value,
-            state_province_id: values.address.state_province_id.value || "00000000-0000-0000-0000-000000000000",
-            city_id: values.address.city_id.value || "00000000-0000-0000-0000-000000000000",
-            postal_code: values.address.postal_code,
-          },
-          permanent_address: {
-            address_line: values.same_address ? values.address.address_line : values.permanent_address.address_line || "",
-            country_id: values.same_address ? values.address.country_id.value : values.permanent_address.country_id.value || "",
-            state_province_id: values.same_address ? values.address.state_province_id.value || "00000000-0000-0000-0000-000000000000" : values.permanent_address.state_province_id.value || "00000000-0000-0000-0000-000000000000",
-            city_id: values.same_address ? values.address.city_id.value || "00000000-0000-0000-0000-000000000000" : values.permanent_address.city_id.value || "00000000-0000-0000-0000-000000000000",
-            postal_code: values.same_address ? values.address.postal_code : values.permanent_address.postal_code || "",
-          },
-          emergency_contact: {
-            contact_name: values.emergency_contact.contact_name,
-            contact_phone_number:
-              "" + values.emergency_contact.contact_phone_number,
-            relationship: values.emergency_contact.relationship,
-          },
-          emergency_contact2: {
-            contact_name: values.emergency_contact2.contact_name,
-            contact_phone_number:
-              "" + values.emergency_contact2.contact_phone_number,
-            relationship: values.emergency_contact2.relationship,
-          },
-          employee_number: values.employee_number,
-          job_title_id: values.job_title_id.value,
-          division_id: values.division_id.value,
-          office_id: values.office_id.value,
-          hire_date: formatDate([
-            values.hire_date[2].value,
-            values.hire_date[1].value,
-            values.hire_date[0].value,
-          ]),
-          npwp: values.npwp,
-        }
+          values.birth_date[2].value,
+          values.birth_date[1].value,
+          values.birth_date[0].value,
+        ]),
+        gender_id: values.gender_id,
+        ktp: values.ktp,
+        employee_asset: {
+          multimedia_description_id: photo_id
+        },
+        contact: {
+          email: values.contact.email,
+          mobile_phone_number: values.contact.mobile_phone_number,
+          other_email: values.contact.other_email,
+          phone_number: values.contact.phone_number,
+        },
+        address: {
+          address_line: values.address.address_line,
+          country_id: values.address.country_id.value,
+          state_province_id: values.address.state_province_id.value || "00000000-0000-0000-0000-000000000000",
+          city_id: values.address.city_id.value || "00000000-0000-0000-0000-000000000000",
+          postal_code: values.address.postal_code,
+        },
+        permanent_address: {
+          address_line: values.same_address ? values.address.address_line : values.permanent_address.address_line || "",
+          country_id: values.same_address ? values.address.country_id.value : values.permanent_address.country_id.value || "",
+          state_province_id: values.same_address ? values.address.state_province_id.value || "00000000-0000-0000-0000-000000000000" : values.permanent_address.state_province_id.value || "00000000-0000-0000-0000-000000000000",
+          city_id: values.same_address ? values.address.city_id.value || "00000000-0000-0000-0000-000000000000" : values.permanent_address.city_id.value || "00000000-0000-0000-0000-000000000000",
+          postal_code: values.same_address ? values.address.postal_code : values.permanent_address.postal_code || "",
+        },
+        emergency_contact: {
+          contact_name: values.emergency_contact.contact_name,
+          contact_phone_number:
+            "" + values.emergency_contact.contact_phone_number,
+          relationship: values.emergency_contact.relationship,
+        },
+        emergency_contact2: {
+          contact_name: values.emergency_contact2.contact_name,
+          contact_phone_number:
+            "" + values.emergency_contact2.contact_phone_number,
+          relationship: values.emergency_contact2.relationship,
+        },
+        employee_number: values.employee_number,
+        job_title_id: values.job_title_id.value,
+        division_id: values.division_id.value,
+        office_id: values.office_id.value,
+        hire_date: formatDate([
+          values.hire_date[2].value,
+          values.hire_date[1].value,
+          values.hire_date[0].value,
+        ]),
+        npwp: values.npwp,
+      }
 
         if (formId === undefined) {
           //ProsesCreateData
