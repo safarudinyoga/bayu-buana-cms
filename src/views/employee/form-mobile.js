@@ -890,7 +890,7 @@ const EmployeeFormMobile = (props) => {
                       <Button
                         variant="primary"
                         type="submit"
-                        disabled={formik.isSubmitting || !formik.isValid}
+                        disabled={props.match.params.id ? (formik.isSubmitting || !formik.isValid) : formik.isSubmitting}
                         style={{ marginRight: 15 }}
                       >
                         {props.match.params.id ? "SAVE" : "SAVE & NEXT"}
