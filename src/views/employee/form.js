@@ -596,6 +596,7 @@ const EmployeeForm = (props) => {
       setSubmitting(true)
 
       if(formId) {
+        setFormValues({...formValues, ...values})
         await onSave(values, setSubmitting)
       } else {
         if(tabKey === "general-information") {
@@ -693,7 +694,7 @@ const EmployeeForm = (props) => {
                 values.surname
               }' has been successfully saved.`,
             )
-            setSubmitting(false || history.goBack())
+            history.goBack()
         } else {
           //ProsesUpdateData
             let res = await api.put(`master/employees/${formId}`, Data)
@@ -708,11 +709,13 @@ const EmployeeForm = (props) => {
                 values.surname
               }' has been successfully update.`,
             )
-            setSubmitting(false || history.goBack())
+            if(tabKey === "employment") history.goBack()
         }
     } catch(e) {
       console.log(e)
       openSnackbar(`error: ${e}`)
+    }
+    finally {
       setSubmitting(false)
     }
   }
@@ -1443,7 +1446,7 @@ const EmployeeForm = (props) => {
                 <Button
                   variant="primary"
                   type="submit"
-                  disabled={finishStep > 0 || props.match.params.id ? !formik.isValid : (!formik.dirty || formik.isSubmitting)}
+                  disabled={finishStep > 0 || props.match.params.id ? (!formik.isValid || formik.isSubmitting) : (!formik.dirty || formik.isSubmitting)}
                   style={{ marginRight: 15 }}
                 >
                   {props.match.params.id ? "SAVE" : "SAVE & NEXT"}
@@ -1575,7 +1578,7 @@ const EmployeeForm = (props) => {
                   <Button
                     variant="primary"
                     type="submit"
-                    disabled={formik.isSubmitting}
+                    disabled={formik.isSubmitting || !formik.isValid}
                     style={{ marginRight: 15 }}
                   >
                     {props.match.params.id ? "SAVE" : "SAVE & NEXT"}
@@ -1903,7 +1906,7 @@ const EmployeeForm = (props) => {
                   <Button
                     variant="primary"
                     type="submit"
-                    disabled={!formik.isValid}
+                    disabled={formik.isSubmitting || !formik.isValid}
                     style={{ marginRight: 15 }}
                   >
                     SAVE
