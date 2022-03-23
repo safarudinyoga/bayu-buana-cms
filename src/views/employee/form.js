@@ -1576,7 +1576,7 @@ const EmployeeForm = (props) => {
                   <Button
                     variant="primary"
                     type="submit"
-                    disabled={props.match.params.id ? (formik.isSubmitting || !formik.isValid) : formik.isSubmitting}
+                    disabled={formik.isSubmitting || !formik.isValid}
                     style={{ marginRight: 15 }}
                   >
                     {props.match.params.id ? "SAVE" : "SAVE & NEXT"}
