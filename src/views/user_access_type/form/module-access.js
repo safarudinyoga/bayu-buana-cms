@@ -4,8 +4,12 @@ import FormHorizontal from "components/form/horizontal"
 import FormBuilder from "components/form/builder"
 import useQuery from "lib/query"
 import BBDataTable from "components/table/bb-data-table"
-import { Table, Form } from "react-bootstrap"
+import { Table } from "react-bootstrap"
 import rowStatus from "lib/row-status"
+import AccessManagerRow from "components/table/access-manager-row"
+import Api from "config/api"
+
+
 const backUrl = "/master/user-access-type"
 
 function ModuleAccess(props) {
@@ -13,7 +17,10 @@ function ModuleAccess(props) {
   const [formBuilder, setFormBuilder] = useState(null)
   const [loading, setLoading] = useState(true)
   const [id, setId] = useState(null)
+  const [modules, setModules] = useState([])
+  const [categories, setCategories] = useState([])
 
+  const api = new Api()
   useEffect(() => {
     if (!props.match.params.id) {
       setLoading(false)
@@ -25,6 +32,42 @@ function ModuleAccess(props) {
     
   }
 
+  useEffect(async () => {
+    try {
+      let res = await api.get('/master/menu-links?size=999&sort=sort')
+      const cat = []
+      const mod = []
+      const comp = []
+
+      res.data.items.forEach((data) => {
+        if(!data.parent_link_id){
+          cat.push(data)
+        } else {
+          mod.push(data)
+        }        
+      })
+
+      console.log(cat);
+      let listMod = mod.map(m => {
+        let catObj = cat.filter(c => m.parent_link_id.includes(c.id))
+        if(catObj.length > 0){
+          let catName = catObj[0].menu_link_name
+          m.categoryName = catName
+          comp.push(
+            <AccessManagerRow moduleName={m.menu_link_name} category={m.categoryName} />
+          )
+        }        
+      })
+      // console.log(comp);
+      setModules(comp)
+    } catch (e) {
+      console.log(e)
+      throw e
+    }
+  }, [])
+  
+
+
   return (
     <FormBuilder
       onBuild={(el) => setFormBuilder(el)}
@@ -35,7 +78,7 @@ function ModuleAccess(props) {
       isValid={true}
       showHeaderTitle={true}
       headerTitle={"Module Access - Manager"}
-      txtSave={"SAVE & NEXT"}
+      txtSave={"SAVE"}
       hideTranslation={true}
     >
       <FormHorizontal>
@@ -53,86 +96,7 @@ function ModuleAccess(props) {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>Company Profile</td>
-              <td>Corporate Management</td>
-              <td>
-                <Form.Check 
-                  type="switch"
-                  id="view-switch-1"
-                />
-              </td>
-              <td>
-                <Form.Check 
-                  type="switch"
-                  id="create-switch-1"
-                />
-              </td>
-              <td>
-                <Form.Check 
-                  type="switch"
-                  id="delete-switch-1"
-                />
-              </td>
-              <td>
-                <Form.Check 
-                  type="switch"
-                  id="edit-switch-1"
-                />
-              </td>
-              <td>
-                <Form.Check 
-                  type="switch"
-                  id="mass-update-switch-1"
-                />
-              </td>
-              <td>
-                <Form.Check 
-                  type="switch"
-                  id="export-switch-1"
-                />
-              </td>
-            </tr>
-            <tr>
-              <td>Employee</td>
-              <td>Corporate Management</td>
-              <td>
-                <Form.Check 
-                  type="switch"
-                  id="view-switch-2"
-                />
-              </td>
-              <td>
-                <Form.Check 
-                  type="switch"
-                  id="create-switch-2"
-                />
-              </td>
-              <td>
-                <Form.Check 
-                  type="switch"
-                  id="delete-switch-2"
-                />
-              </td>
-              <td>
-                <Form.Check 
-                  type="switch"
-                  id="edit-switch-2"
-                />
-              </td>
-              <td>
-                <Form.Check 
-                  type="switch"
-                  id="mass-update-switch-2"
-                />
-              </td>
-              <td>
-                <Form.Check 
-                  type="switch"
-                  id="export-switch-2"
-                />
-              </td>
-            </tr>
+            {modules}
           </tbody>
         </Table>
       </FormHorizontal>
