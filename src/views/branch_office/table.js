@@ -24,6 +24,7 @@ export default function OfficeTable() {
 
   let [params, setParams] = useState({
     isCheckbox: false,
+    customSort:["sort", "office_name"],
     module: "branch-office",
     showAdvancedOptions: false,
     responsiveTablet: true,
