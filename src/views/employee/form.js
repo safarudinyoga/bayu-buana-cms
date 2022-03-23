@@ -130,11 +130,11 @@ const EmployeeForm = (props) => {
             },
             state_province_id: {
               label:
-                data.permanent_address?.state_province ? data.permanent_address?.state_province?.state_province_name : !isView ? "Please pilih" : "",
+              data.permanent_address?.state_province?.state_province_name || !isView ? data.permanent_address?.state_province?.state_province_name || "Please choose" : "",
               value: data.permanent_address?.state_province_id,
             },
             city_id: {
-              label: data.permanent_address?.city ? data.permanent_address?.city?.city_name : !isView ? "Please pilih" : "",
+              label: data.permanent_address?.city?.city_name || !isView ? data.permanent_address?.city?.city_name || "Please choose" : "" ,
               value: data.permanent_address?.city_id,
             },
             postal_code: data.permanent_address.postal_code,
@@ -482,8 +482,6 @@ const EmployeeForm = (props) => {
     
     job_title_id: Yup.object().required("Job Title is required."),
     npwp: Yup.string().matches(numberSimbol, "NPWP must be a number"),
-    ...EC_validationSchema.fields,
-    ...GI_validationSchema.fields,
   })
 
   // Birthday
@@ -596,6 +594,7 @@ const EmployeeForm = (props) => {
       setSubmitting(true)
 
       if(formId) {
+        setFormValues({...formValues, ...values})
         await onSave(values, setSubmitting)
       } else {
         if(tabKey === "general-information") {
@@ -693,7 +692,7 @@ const EmployeeForm = (props) => {
                 values.surname
               }' has been successfully saved.`,
             )
-            setSubmitting(false || history.goBack())
+            history.goBack()
         } else {
           //ProsesUpdateData
             let res = await api.put(`master/employees/${formId}`, Data)
@@ -708,11 +707,13 @@ const EmployeeForm = (props) => {
                 values.surname
               }' has been successfully update.`,
             )
-            setSubmitting(false || history.goBack())
+            if(tabKey === "employment") history.goBack()
         }
     } catch(e) {
       console.log(e)
       openSnackbar(`error: ${e}`)
+    }
+    finally {
       setSubmitting(false)
     }
   }
@@ -1443,7 +1444,7 @@ const EmployeeForm = (props) => {
                 <Button
                   variant="primary"
                   type="submit"
-                  disabled={finishStep > 0 || props.match.params.id ? !formik.isValid : (!formik.dirty || formik.isSubmitting)}
+                  disabled={finishStep > 0 || props.match.params.id ? (!formik.isValid || formik.isSubmitting) : (!formik.dirty || formik.isSubmitting)}
                   style={{ marginRight: 15 }}
                 >
                   {props.match.params.id ? "SAVE" : "SAVE & NEXT"}
@@ -1575,7 +1576,7 @@ const EmployeeForm = (props) => {
                   <Button
                     variant="primary"
                     type="submit"
-                    disabled={formik.isSubmitting}
+                    disabled={formik.isSubmitting || !formik.isValid}
                     style={{ marginRight: 15 }}
                   >
                     {props.match.params.id ? "SAVE" : "SAVE & NEXT"}
