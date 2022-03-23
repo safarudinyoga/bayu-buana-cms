@@ -130,11 +130,11 @@ const EmployeeForm = (props) => {
             },
             state_province_id: {
               label:
-                data.permanent_address?.state_province ? data.permanent_address?.state_province?.state_province_name : !isView ? "Please pilih" : "",
+              data.permanent_address?.state_province?.state_province_name || !isView ? data.permanent_address?.state_province?.state_province_name || "Please choose" : "",
               value: data.permanent_address?.state_province_id,
             },
             city_id: {
-              label: data.permanent_address?.city ? data.permanent_address?.city?.city_name : !isView ? "Please pilih" : "",
+              label: data.permanent_address?.city?.city_name || !isView ? data.permanent_address?.city?.city_name || "Please choose" : "" ,
               value: data.permanent_address?.city_id,
             },
             postal_code: data.permanent_address.postal_code,
@@ -482,8 +482,6 @@ const EmployeeForm = (props) => {
     
     job_title_id: Yup.object().required("Job Title is required."),
     npwp: Yup.string().matches(numberSimbol, "NPWP must be a number"),
-    ...EC_validationSchema.fields,
-    ...GI_validationSchema.fields,
   })
 
   // Birthday
@@ -1906,7 +1904,7 @@ const EmployeeForm = (props) => {
                   <Button
                     variant="primary"
                     type="submit"
-                    disabled={formik.isSubmitting || !formik.isValid}
+                    disabled={!formik.isValid}
                     style={{ marginRight: 15 }}
                   >
                     SAVE
