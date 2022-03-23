@@ -130,11 +130,11 @@ const EmployeeForm = (props) => {
             },
             state_province_id: {
               label:
-                data.permanent_address?.state_province ? data.permanent_address?.state_province?.state_province_name : !isView ? "Please pilih" : "",
+              data.permanent_address?.state_province?.state_province_name || !isView ? data.permanent_address?.state_province?.state_province_name || "Please choose" : "",
               value: data.permanent_address?.state_province_id,
             },
             city_id: {
-              label: data.permanent_address?.city ? data.permanent_address?.city?.city_name : !isView ? "Please pilih" : "",
+              label: data.permanent_address?.city?.city_name || !isView ? data.permanent_address?.city?.city_name || "Please choose" : "" ,
               value: data.permanent_address?.city_id,
             },
             postal_code: data.permanent_address.postal_code,
@@ -482,8 +482,6 @@ const EmployeeForm = (props) => {
     
     job_title_id: Yup.object().required("Job Title is required."),
     npwp: Yup.string().matches(numberSimbol, "NPWP must be a number"),
-    ...EC_validationSchema.fields,
-    ...GI_validationSchema.fields,
   })
 
   // Birthday
@@ -601,11 +599,11 @@ const EmployeeForm = (props) => {
         if(tabKey === "general-information") {
           setTabKey("emergency-contacts")
           setFormValues({...formValues, ...values})
-          if(finishStep < 1) setStep(1)
+          setStep(1)
         } else if(tabKey === "emergency-contacts") {
           setTabKey("employment")
           setFormValues({...formValues, ...values})
-          if(finishStep < 2) setStep(2)
+          setStep(2)
         } else {
           setFormValues({...formValues, ...values})
           await onSave(values, setSubmitting)
@@ -1443,7 +1441,7 @@ const EmployeeForm = (props) => {
                 <Button
                   variant="primary"
                   type="submit"
-                  disabled={finishStep > 0 || props.match.params.id ? !formik.isValid : (!formik.dirty || formik.isSubmitting)}
+                  disabled={finishStep > 0 || props.match.params.id ? formik.setSubmitting : (!formik.dirty || formik.isSubmitting)}
                   style={{ marginRight: 15 }}
                 >
                   {props.match.params.id ? "SAVE" : "SAVE & NEXT"}
@@ -1903,7 +1901,7 @@ const EmployeeForm = (props) => {
                   <Button
                     variant="primary"
                     type="submit"
-                    disabled={!formik.isValid}
+                    disabled={!(formik.dirty || formik.isValid)}
                     style={{ marginRight: 15 }}
                   >
                     SAVE
