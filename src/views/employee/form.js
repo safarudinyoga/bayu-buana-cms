@@ -36,8 +36,10 @@ const EmployeeForm = (props) => {
   const [formValues, setFormValues] = useState(null)
   const [optionGender, setOptionGender] = useState([])
   const [additionalRole, setAdditionalRole] = useState(false)
-  const [months, setMonths] = useState({ value: 1, label: "" })
-  const [years, setYears] = useState({ value: 1921, label: "" })  
+  const [months, setMonths] = useState({ value: null, label: null })
+  const [years, setYears] = useState({ value: null, label: null }) 
+  const [hireMonths, setHireMonths] = useState({ value: null, label: null })
+  const [hireYears, setHireYears] = useState({ value: null, label: null })   
   const [finishStep, setStep] = useState(0)
 
   useEffect(() => {
@@ -84,6 +86,14 @@ const EmployeeForm = (props) => {
         setYears({
           value: parseInt(data.birth_date.substring(0, 4)),
           label: parseInt(data.birth_date.substring(0, 4)),
+        })
+        setHireMonths({
+          value: parseInt(data.hire_date.substring(5, 7)),
+          label: monthNames[parseInt(data.hire_date.substring(5, 7)) - 1],
+        })
+        setHireYears({
+          value: parseInt(data.hire_date.substring(0, 4)),
+          label: parseInt(data.hire_date.substring(0, 4)),
         })
         setFormValues({
           ...data,
@@ -845,6 +855,14 @@ const EmployeeForm = (props) => {
                                     "birth_date[0]",
                                     v,
                                   )
+                                  formik.setFieldValue(
+                                    "birth_date[1]",
+                                    {value : months.value, label : months.label},
+                                  )
+                                  formik.setFieldValue(
+                                    "birth_date[2]",
+                                    {value : years.value, label : years.label},
+                                  )
                                 }}
                                 components={
                                   isView
@@ -871,19 +889,10 @@ const EmployeeForm = (props) => {
                                 name="birth_date[1]"
                                 placeholder={"Month"}
                                 options={selectMonth()}
+                                value={months.value === null ? "" : {value : months.value, label : months.label}}
                                 onChange={(v) => {
-                                  formik.setFieldValue(
-                                    "birth_date[1]",
-                                    v,
-                                  )
-                                  formik.setFieldValue(
-                                    "birth_date[0]",
-                                    {
-                                      value: 1,
-                                      label: 1,
-                                    },
-                                  )
-                                }}
+                                  setMonths(v)                                  
+                                }}                                
                                 components={
                                   isView
                                     ? {
@@ -909,26 +918,10 @@ const EmployeeForm = (props) => {
                                 name="birth_date[2]"
                                 placeholder={"Year"}
                                 options={selectYear()}
+                                value={years.value === null ? "" : {value : years.value, label : years.label}}
                                 onChange={(v) => {
-                                  formik.setFieldValue(
-                                    "birth_date[2]",
-                                    v,
-                                  )
-                                  formik.setFieldValue(
-                                    "birth_date[1]",
-                                    {
-                                      value: 1,
-                                      label: "January",
-                                    },
-                                  )
-                                  formik.setFieldValue(
-                                    "birth_date[0]",
-                                    {
-                                      value: 1,
-                                      label: "1",
-                                    },
-                                  )
-                                  // setYears(v)
+                                  setYears(v)
+                                  setMonths({value : 1, label : "January"})                                  
                                 }}
                                 components={
                                   isView
@@ -1735,6 +1728,14 @@ const EmployeeForm = (props) => {
                                     "hire_date[0]",
                                     v,
                                   )
+                                  formik.setFieldValue(
+                                    "hire_date[1]",
+                                    {value: hireMonths.value, label: hireMonths.label},
+                                  )
+                                  formik.setFieldValue(
+                                    "hire_date[2]",
+                                    {value : hireYears.value, label: hireYears.label},
+                                  )
                                 }}
                                 options={selectDay()}
                                 placeholder={"Day"}
@@ -1760,18 +1761,9 @@ const EmployeeForm = (props) => {
                                 name="hire_date[1]"
                                 placeholder={"Month"}
                                 options={selectMonth()}
+                                value = {hireMonths.value === null ? "" : {value : hireMonths.value, label: hireMonths.label}}
                                 onChange={(v) => {
-                                  formik.setFieldValue(
-                                    "hire_date[1]",
-                                    v,
-                                  )
-                                  formik.setFieldValue(
-                                    "hire_date[0]",
-                                    {
-                                      value: 1,
-                                      label: "1",
-                                    },
-                                  )
+                                  setHireMonths(v)                                  
                                 }}
                                 style={{
                                   minWidth: 120,
@@ -1798,25 +1790,10 @@ const EmployeeForm = (props) => {
                                 name="hire_date[2]"
                                 placeholder={"Year"}
                                 options={selectYear()}
+                                value={hireYears.value === null ? "" : {value: hireYears.value, label: hireYears.label}}
                                 onChange={(v) => {
-                                  formik.setFieldValue(
-                                    "hire_date[2]",
-                                    v,
-                                  )
-                                  formik.setFieldValue(
-                                    "hire_date[1]",
-                                    {
-                                      value: 1,
-                                      label: "January",
-                                    },
-                                  )
-                                  formik.setFieldValue(
-                                    "hire_date[0]",
-                                    {
-                                      value: 1,
-                                      label: "1",
-                                    },
-                                  )
+                                  setHireYears(v)
+                                  setHireMonths({value: 1, label:"January"})
                                 }}
                                 style={{ maxWidth: 240 }}
                                 components={
