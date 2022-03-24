@@ -100,8 +100,7 @@ import HotelRoomTypeForm from "views/hotel_profile_management/form/room_type/for
 
 // Master Employee
 import EmployeeTable from "views/employee/table"
-import EmployeeForm from "views/employee/form"
-import EmployeeFormRef from "views/employee/form2"
+import EmployeeForm from "views/employee/form/index"
 import RatingTypeLevelTable from "./views/rating_type_level/table"
 import RatingTypeLevelForm from "./views/rating_type_level/form"
 
