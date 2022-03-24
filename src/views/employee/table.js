@@ -293,10 +293,15 @@ export default function EmployeeTable() {
         title: "Hire Date",
         data: "hire_date",
         render: function (data, type, row) {
-          if (type === "sort" || type === "type") {
-            return data
+          if (data === undefined) {
+            return "";
+          }else{
+            if (type === "sort" || type === "type") {
+              return data
+            }
+            return moment(data).format("D MMM YYYY")
           }
-          return moment(data).format("D MMM YYYY")
+          
         },
       },
       {
