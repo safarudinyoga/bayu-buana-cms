@@ -151,7 +151,7 @@ const EmployeeForm = (props) => {
             label: data?.office?.office_name ? data?.office?.office_name : !isView ? "Please choose" : "",
             value: data?.office?.id,
           },
-          hire_date: [
+          hire_date: data.hire_date ? [
             {
               value: parseInt(data.hire_date.substring(8, 10)),
               label: parseInt(data.hire_date.substring(8, 10)),
@@ -164,7 +164,7 @@ const EmployeeForm = (props) => {
               value: parseInt(data.hire_date.substring(0, 4)),
               label: parseInt(data.hire_date.substring(0, 4)),
             },
-          ],
+          ] : [],
           same_address: checkAddress(data)
           
         })
@@ -641,7 +641,7 @@ const EmployeeForm = (props) => {
         }
       }
       if(photoData && photoProfile.length === 0) photo_id = await removeImage(photoData?.id)
-
+      console.log(values.hire_date)
       const Data = {
         name_prefix_id: values.name_prefix_id.value,
         given_name: values.given_name,
@@ -693,11 +693,11 @@ const EmployeeForm = (props) => {
         job_title_id: values.job_title_id.value,
         division_id: values.division_id.value,
         office_id: values.office_id.value,
-        hire_date: formatDate([
+        hire_date: values.hire_date.length > 0 ? formatDate([
           values.hire_date[2].value,
           values.hire_date[1].value,
           values.hire_date[0].value,
-        ]),
+        ]) : null,
         npwp: values.npwp,
       }
 
