@@ -28,7 +28,8 @@
 }
 
 .navbar-img {
-  width: 160px;
+  width: 180px;
+  height: 40px;
   display: inline-block;
   margin-top: -7px;
 }
