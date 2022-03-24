@@ -8,18 +8,23 @@ import _ from "lodash"
 import "./employee-form.css"
 import { useWindowSize } from "rooks"
 import { useSnackbar } from "react-simple-snackbar"
+import useQuery from "lib/query"
 
 import Api from "config/api"
 import env from "config/environment"
 import Select from "components/form/select"
-import { default as SelectAsync } from "components/form/select-async"
+import SelectAsync from "components/form/select-async"
 import { auto } from "@popperjs/core"
+import { useHistory } from "react-router"
 
 const options = {
   position: "bottom-right",
 }
 
 const GeneralInformation = (props) => {
+  const isView = useQuery().get("action") === "view"
+  const history = useHistory()
+
   const [selectCurrentProvince, setSelectCurrentProvince] = useState([])
   const [selectCurrentCity, setSelectCurrentCity] = useState([])
   const [selectPermanentCountry, setSelectPermanentCountry] = useState([])
@@ -30,6 +35,7 @@ const GeneralInformation = (props) => {
   const [photoData, setPhotoData] = useState()
   const maxNumber = 1
   const { innerWidth, innerHeight, outerHeight, outerWidth } = useWindowSize();
+  const [loading, setLoading]= useState(true)
 
   const [showCloseBtn, setShowCloseBtn] = useState(false)
   const [openSnackbar] = useSnackbar(options)
@@ -45,11 +51,11 @@ const GeneralInformation = (props) => {
     middleName: "",
     lastName: "",
     // dateOfBirth: "",
-    gender: "male",
+    gender: "db24d53c-7d36-4770-8598-dc36174750af",
     idCardNumber: "",
-    dobDay: { value: 1, label: 1 },
-    dobMonth: { value: 1, label: "January" },
-    dobYear: { value: 1921, label: 1921 },
+    dobDay: "",
+    dobMonth: "",
+    dobYear: "",
 
     // Contacts
     homePhone: "",
@@ -342,27 +348,10 @@ const GeneralInformation = (props) => {
     } catch (e) {}
   }
 
-  const doUpload = async (imageList) => {
-    try {
-      let payload = new FormData()
-      payload.append("files", imageList[0].file)
-
-      let res = await api.post("/multimedia/files", payload)
-      setPhotoData(res.data.id)
-    } catch(e) {
-
-    }
-  }
-
   // Upload profile
-  const onChangePhotoProfile = (imageList, addUpdateIndex) => {
-    // data for submit
-    console.log(imageList, addUpdateIndex)
+  const onChangePhotoProfile = (imageList) => {
     setPhotoProfile(imageList)
-    doUpload(imageList)
   }
-
-
 
   useEffect(async () => {
     try {
@@ -396,104 +385,194 @@ const GeneralInformation = (props) => {
 
   useEffect(async () => {
     try {
-      let res = await api.get("/user/profile")
-      let data = res.data;
-      console.log("DATA", data)
-      setInitialForm({
-        ...initialForm,
-        title: _.isEmpty(data.name_prefix) ? "" : {
-          ...initialForm.title,
-          value: data.name_prefix.id,
-          label: data.name_prefix.name_prefix_name
-        },
-        firstName: data.given_name ? data.given_name : "",
-        middleName: data.middle_name ? data.middle_name : "",
-        lastName: data.surname ? data.surname : "",
-        gender: _.isEmpty(data.gender) ? "" : data.gender.id,
-        idCardNumber: data.ktp ? data.ktp : "",
-        dobDay: data.birth_date ? {
-          value: parseInt(data.birth_date.split("-")[2]),
-          label: parseInt(data.birth_date.split("-")[2]), 
-        } : {
-          value: 1,
-          label: 1,
-        },
-        dobMonth: data.birth_date ? {
-          value: parseInt(data.birth_date.split("-")[1]),
-          label: new Date(null, parseInt(data.birth_date.split("-")[1]), null).toLocaleDateString("en", {
-            month: "long",
-          }), 
-        }: {
-          value: 1,
-          label: 1,
-        },
-        dobYear: data.birth_date ? {
-          value: parseInt(data.birth_date.split("-")[0]),
-          label: parseInt(data.birth_date.split("-")[0]),  
-        } : {
-          value: 1921,
-          label: 1921,
-        },
-        
-        // Contacts
-        homePhone: _.isEmpty(data.contact) ? "" : data.contact.phone_number ? data.contact.phone_number : "",
-        mobilePhone: _.isEmpty(data.contact) ? "" : data.contact.mobile_phone_number ? data.contact.mobile_phone_number : "",
-        email: _.isEmpty(data.contact) ? "" : data.contact.email ? data.contact.email : "",
-        otherEmail: _.isEmpty(data.contact) ? "" : data.contact.other_email ? data.contact.other_email : "",
-
-        // Current Address
-        currentAddress: _.isEmpty(data.address) ? "" : data.address.address_line ? data.address.address_line : "",
-        currentCountry: _.isEmpty(data.address) ? "" : data.address.country ? {
-          value: data.address.country_id,
-          label: data.address.country.country_name
-        } : "",
-        currentProvince: _.isEmpty(data.address) ? "" : data.address.state_province ? {
-          value: data.address.state_province_id,
-          label: data.address.state_province.state_province_name
-        } : "",
-        currentCity: _.isEmpty(data.address) ? "" : data.address.city ? {
-          value: data.address.city.id,
-          label: data.address.city.city_name
-        } : "",
-        currentZipCode: _.isEmpty(data.address) ? "" : data.address.postal_code ? data.address.postal_code : "",
-
-        // Permanent Address
-        sameAddress: (
-          data.permanent_address.address_line == data.address.address_line && 
-          data.permanent_address.country_id == data.address.country_id &&
-          data.permanent_address.city_id == data.address.city_id &&
-          data.permanent_address.state_province_id == data.address.state_province_id &&
-          data.permanent_address.postal_code == data.address.postal_code
-        ) ? true : false,
-        permanentAddress: _.isEmpty(data.permanent_address) ? "" : data.permanent_address.address_line ? data.permanent_address.address_line : "",
-        permanentCountry: _.isEmpty(data.permanent_address) ? "" : data.permanent_address.country ? {
-          value: data.permanent_address.country_id,
-          label: data.permanent_address.country.country_name,
-        } : "",
-        permanentProvince: _.isEmpty(data.permanent_address) ? "" : data.permanent_address.state_province ? {
-          value: data.permanent_address.state_province_id,
-          label: data.permanent_address.state_province.state_province_name,
-        } : "",
-        permanentCity: _.isEmpty(data.permanent_address) ? "" : data.permanent_address.city ? {
-          value: data.permanent_address.city_id,
-          label: data.permanent_address.city.city_name
-        } : "",
-        permanentZipCode: _.isEmpty(data.permanent_address) ? "" : data.permanent_address.postal_code ? data.permanent_address.postal_code : ""
-      });
-      setPhotoProfile([{
-        data_url: data.employee_asset.multimedia_description.url
-      }])
-    } catch(e) {}
-  }, [])
+      if(props.employeeData) {
+        let data = props.employeeData
+        let formData = props.formData
+        if(formData.given_name) {
+          setInitialForm({
+            ...initialForm,
+            title: _.isEmpty(formData.name_prefix) ? "" : {
+              ...initialForm.title,
+              value: formData.name_prefix.id,
+              label: formData.name_prefix.name_prefix_name
+            },
+            firstName: formData.given_name ? formData.given_name : "",
+            middleName: formData.middle_name ? formData.middle_name : "",
+            lastName: formData.surname ? formData.surname : "",
+            gender: _.isEmpty(formData.gender) ? formData.gender_id : formData.gender.id,
+            idCardNumber: formData.ktp ? formData.ktp : "",
+            dobDay: formData.birth_date ? {
+              value: parseInt(formData.birth_date.split("-")[2]),
+              label: parseInt(formData.birth_date.split("-")[2]), 
+            } : {
+              value: 1,
+              label: 1,
+            },
+            dobMonth: formData.birth_date ? {
+              value: parseInt(formData.birth_date.split("-")[1]),
+              label: new Date(null, parseInt(formData.birth_date.split("-")[1]), null).toLocaleDateString("en", {
+                month: "long",
+              }), 
+            }: {
+              value: 1,
+              label: 1,
+            },
+            dobYear: formData.birth_date ? {
+              value: parseInt(formData.birth_date.split("-")[0]),
+              label: parseInt(formData.birth_date.split("-")[0]),  
+            } : {
+              value: 1921,
+              label: 1921,
+            },
+            
+            // Contacts
+            homePhone: _.isEmpty(formData.contact) ? "" : formData.contact.phone_number ? formData.contact.phone_number : "",
+            mobilePhone: _.isEmpty(formData.contact) ? "" : formData.contact.mobile_phone_number ? formData.contact.mobile_phone_number : "",
+            email: _.isEmpty(formData.contact) ? "" : formData.contact.email ? formData.contact.email : "",
+            otherEmail: _.isEmpty(formData.contact) ? "" : formData.contact.other_email ? formData.contact.other_email : "",
+    
+            // Current Address
+            currentAddress: _.isEmpty(formData.address) ? "" : formData.address.address_line ? formData.address.address_line : "",
+            currentCountry: _.isEmpty(formData.address) ? "" : formData.address.country ? {
+              value: formData.address.country_id,
+              label: formData.address.country.country_name
+            } : "",
+            currentProvince: _.isEmpty(formData.address) ? "" : formData.address.state_province ? {
+              value: formData.address.state_province_id,
+              label: formData.address.state_province.state_province_name
+            } : "",
+            currentCity: _.isEmpty(formData.address) ? "" : formData.address.city ? {
+              value: formData.address.city.id,
+              label: formData.address.city.city_name
+            } : "",
+            currentZipCode: _.isEmpty(formData.address) ? "" : formData.address.postal_code ? formData.address.postal_code : "",
+    
+            // Permanent Address
+            sameAddress: (
+              formData.permanent_address.address_line == formData.address.address_line && 
+              formData.permanent_address.country_id == formData.address.country_id &&
+              formData.permanent_address.city_id == formData.address.city_id &&
+              formData.permanent_address.state_province_id == formData.address.state_province_id &&
+              formData.permanent_address.postal_code == formData.address.postal_code
+            ) ? true : false,
+            permanentAddress: _.isEmpty(formData.permanent_address) ? "" : formData.permanent_address.address_line ? formData.permanent_address.address_line : "",
+            permanentCountry: _.isEmpty(formData.permanent_address) ? "" : formData.permanent_address.country ? {
+              value: formData.permanent_address.country_id,
+              label: formData.permanent_address.country.country_name,
+            } : "",
+            permanentProvince: _.isEmpty(formData.permanent_address) ? "" : formData.permanent_address.state_province ? {
+              value: formData.permanent_address.state_province_id,
+              label: formData.permanent_address.state_province.state_province_name,
+            } : "",
+            permanentCity: _.isEmpty(formData.permanent_address) ? "" : formData.permanent_address.city ? {
+              value: formData.permanent_address.city_id,
+              label: formData.permanent_address.city.city_name
+            } : "",
+            permanentZipCode: _.isEmpty(formData.permanent_address) ? "" : formData.permanent_address.postal_code ? formData.permanent_address.postal_code : "",
+            photoProfile: _.isEmpty(formData.employee_asset.multimedia_description) ? null : [{
+              data_url: formData.employee_asset.multimedia_description.url
+            }],
+          });
+        }else{
+          setInitialForm({
+            ...initialForm,
+            title: _.isEmpty(data.name_prefix) ? "" : {
+              ...initialForm.title,
+              value: data.name_prefix.id,
+              label: data.name_prefix.name_prefix_name
+            },
+            firstName: data.given_name ? data.given_name : "",
+            middleName: data.middle_name ? data.middle_name : "",
+            lastName: data.surname ? data.surname : "",
+            gender: _.isEmpty(data.gender) ? data.gender_id : data.gender.id,
+            idCardNumber: data.ktp ? data.ktp : "",
+            dobDay: data.birth_date ? {
+              value: parseInt(data.birth_date.split("-")[2]),
+              label: parseInt(data.birth_date.split("-")[2]), 
+            } : {
+              value: 1,
+              label: 1,
+            },
+            dobMonth: data.birth_date ? {
+              value: parseInt(data.birth_date.split("-")[1]),
+              label: new Date(null, parseInt(data.birth_date.split("-")[1]), null).toLocaleDateString("en", {
+                month: "long",
+              }), 
+            }: {
+              value: 1,
+              label: 1,
+            },
+            dobYear: data.birth_date ? {
+              value: parseInt(data.birth_date.split("-")[0]),
+              label: parseInt(data.birth_date.split("-")[0]),  
+            } : {
+              value: 1921,
+              label: 1921,
+            },
+            
+            // Contacts
+            homePhone: _.isEmpty(data.contact) ? "" : data.contact.phone_number ? data.contact.phone_number : "",
+            mobilePhone: _.isEmpty(data.contact) ? "" : data.contact.mobile_phone_number ? data.contact.mobile_phone_number : "",
+            email: _.isEmpty(data.contact) ? "" : data.contact.email ? data.contact.email : "",
+            otherEmail: _.isEmpty(data.contact) ? "" : data.contact.other_email ? data.contact.other_email : "",
+    
+            // Current Address
+            currentAddress: _.isEmpty(data.address) ? "" : data.address.address_line ? data.address.address_line : "",
+            currentCountry: _.isEmpty(data.address) ? "" : data.address.country ? {
+              value: data.address.country_id,
+              label: data.address.country.country_name
+            } : "",
+            currentProvince: _.isEmpty(data.address) ? "" : data.address.state_province ? {
+              value: data.address.state_province_id,
+              label: data.address.state_province.state_province_name
+            } : "",
+            currentCity: _.isEmpty(data.address) ? "" : data.address.city ? {
+              value: data.address.city.id,
+              label: data.address.city.city_name
+            } : "",
+            currentZipCode: _.isEmpty(data.address) ? "" : data.address.postal_code ? data.address.postal_code : "",
+    
+            // Permanent Address
+            sameAddress: (
+              data.permanent_address.address_line == data.address.address_line && 
+              data.permanent_address.country_id == data.address.country_id &&
+              data.permanent_address.city_id == data.address.city_id &&
+              data.permanent_address.state_province_id == data.address.state_province_id &&
+              data.permanent_address.postal_code == data.address.postal_code
+            ) ? true : false,
+            permanentAddress: _.isEmpty(data.permanent_address) ? "" : data.permanent_address.address_line ? data.permanent_address.address_line : "",
+            permanentCountry: _.isEmpty(data.permanent_address) ? "" : data.permanent_address.country ? {
+              value: data.permanent_address.country_id,
+              label: data.permanent_address.country.country_name,
+            } : "",
+            permanentProvince: _.isEmpty(data.permanent_address) ? "" : data.permanent_address.state_province ? {
+              value: data.permanent_address.state_province_id,
+              label: data.permanent_address.state_province.state_province_name,
+            } : "",
+            permanentCity: _.isEmpty(data.permanent_address) ? "" : data.permanent_address.city ? {
+              value: data.permanent_address.city_id,
+              label: data.permanent_address.city.city_name
+            } : "",
+            permanentZipCode: _.isEmpty(data.permanent_address) ? "" : data.permanent_address.postal_code ? data.permanent_address.postal_code : "",
+            photoProfile: _.isEmpty(data.employee_asset.multimedia_description) ? null : [{
+              data_url: data.employee_asset.multimedia_description.url
+            }],
+          });
+        }
+      }
+    } catch(e) {
+      console.log(e)
+    }
+  }, [props.employeeData, props.formData])
 
   return (
     <>
       <Formik
-        enableReinitialize
         initialValues={initialForm}
         validationSchema={validationSchema}
         validator={() => ({})}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
+          setSubmitting(true)
           let day = values.dobDay.value < 10 ? ("0"+values.dobDay.value) : values.dobDay.value;
           let month = values.dobMonth.value < 10 ? ("0"+values.dobMonth.value) : values.dobMonth.value;
           let year = values.dobYear.value;
@@ -538,12 +617,11 @@ const GeneralInformation = (props) => {
           }
           console.log(formatted);
 
-          let res = await api.put("user/profile", formatted)
-          openSnackbar(
-            `Your profile has been successfully updated.`
-          )
-          // return props.handleSelectTab("emergency-contacts")
+          await props.onSubmit(formatted)
+          setSubmitting(false)
         }}
+
+        enableReinitialize
       >
         {({
           values,
@@ -609,12 +687,15 @@ const GeneralInformation = (props) => {
                                         roundedCircle
                                         className="img-profile"
                                       />
-                                      <CloseButton
+                                      {!isView && (
+                                      <CloseButton                    
                                         style={{position: "absolute", top: 0, right: 0, display: showCloseBtn ? "block" : "none"}}
                                         onClick={() => onImageRemove(0)} 
                                       />
+                                      )}
                                     </div>
                                   ))}
+                                  {!isView && (
                                   <Button
                                     variant="secondary"
                                     style={{margin: "auto 20px"}}
@@ -624,11 +705,9 @@ const GeneralInformation = (props) => {
                                         : onImageUpdate(0)
                                     }
                                   >
-                                    {/* {photoProfile.length !== 0
-                                      ? "CHANGE"
-                                      : "UPLOAD"}                                */}
                                     UPLOAD PHOTO
                                   </Button>
+                                  )}
                                   {errors && (
                                     <>
                                       {errors.acceptType && (
@@ -691,12 +770,15 @@ const GeneralInformation = (props) => {
                                         roundedCircle
                                         className="img-profile"
                                       />
-                                      <CloseButton
-                                        style={{position: "absolute", top: 0, right: 0, display: showCloseBtn ? "block" : "none"}}
-                                        onClick={() => onImageRemove(0)} 
-                                      />
+                                      {!isView && (
+                                        <CloseButton                    
+                                          style={{position: "absolute", top: 0, right: 0, display: showCloseBtn ? "block" : "none"}}
+                                          onClick={() => onImageRemove(0)} 
+                                        />
+                                      )}
                                     </div>
                                   ))}
+                                  {!isView && (
                                   <Button
                                     variant="secondary"
                                     onClick={() => 
@@ -705,11 +787,9 @@ const GeneralInformation = (props) => {
                                         : onImageUpdate(0)
                                     }
                                   >
-                                    {/* {photoProfile.length !== 0
-                                      ? "CHANGE"
-                                      : "UPLOAD"}                                */}
                                     UPLOAD PHOTO
                                   </Button>
+                                  )}
                                   {errors && (
                                     <>
                                       {errors.acceptType && (
@@ -735,14 +815,13 @@ const GeneralInformation = (props) => {
                         </Form.Label>
                         <Col sm={8}>
                           <FastField name="title">
-                            
                             {({ field, form }) => (
                               <>
                                 <div style={{ width: 90 }}>
                                   <Select
                                     {...field}
                                     options={selectNamePrefix}
-                                    isDisabled={true}
+                                    isDisabled={isView}
                                     defaultValue={values.title}
                                     className={`react-select ${
                                       form.touched.title && form.errors.title
@@ -777,7 +856,7 @@ const GeneralInformation = (props) => {
                               <>
                                 <Form.Control
                                   type="text"
-                                  disabled
+                                  disabled={isView}
                                   isInvalid={
                                     form.touched.firstName &&
                                     form.errors.firstName
@@ -809,7 +888,7 @@ const GeneralInformation = (props) => {
                               <Form.Control
                                 {...field}
                                 type="text"
-                                disabled
+                                disabled={isView}
                                 minLength={1}
                                 maxLength={128}
                               />
@@ -828,7 +907,7 @@ const GeneralInformation = (props) => {
                               <>
                                 <Form.Control
                                   {...field}
-                                  disabled
+                                  disabled={isView}
                                   type="text"
                                   isInvalid={
                                     form.touched.lastName &&
@@ -861,6 +940,8 @@ const GeneralInformation = (props) => {
                               <Select
                                 options={selectDay()}
                                 value={values.dobDay}
+                                isDisabled={isView}
+                                placeholder="Day"
                                 className={`react-select ${
                                   touched.title && Boolean(errors.title)
                                     ? "is-invalid"
@@ -879,6 +960,9 @@ const GeneralInformation = (props) => {
                               <Select
                                 options={selectMonth()}
                                 value={values.dobMonth}
+                                placeholder="Month"
+                                isDisabled={isView}
+                                disabled={true}
                                 className={`react-select ${
                                   touched.title && Boolean(errors.title)
                                     ? "is-invalid"
@@ -901,6 +985,8 @@ const GeneralInformation = (props) => {
                               <Select
                                 options={selectYear()}
                                 value={values.dobYear}
+                                placeholder="Year"
+                                isDisabled={isView}
                                 className={`react-select ${
                                   touched.title && Boolean(errors.title)
                                     ? "is-invalid"
@@ -943,6 +1029,7 @@ const GeneralInformation = (props) => {
                               {({ field, form }) => (
                                 <Form.Check
                                   {...field}
+                                  disabled={isView}
                                   checked={values.gender === "db24d53c-7d36-4770-8598-dc36174750af"}
                                   type="radio"
                                   label="Male"
@@ -951,7 +1038,7 @@ const GeneralInformation = (props) => {
                                   }
                                   style={{ marginRight: 30 }}
                                   inline
-                                  onChange={() =>
+                                  onChange={(e) =>
                                     setFieldValue("gender", "db24d53c-7d36-4770-8598-dc36174750af")
                                   }
                                 />
@@ -961,6 +1048,7 @@ const GeneralInformation = (props) => {
                               {({ field, form }) => (
                                 <Form.Check
                                   {...field}
+                                  disabled={isView}
                                   checked={values.gender === "db24d53c-7d36-4770-8598-dc36174750ad"}
                                   type="radio"
                                   label="Female"
@@ -994,6 +1082,7 @@ const GeneralInformation = (props) => {
                                 type="text"
                                 minLength={1}
                                 maxLength={36}
+                                disabled={isView}
                               />
                             )}
                           </FastField>
@@ -1045,12 +1134,15 @@ const GeneralInformation = (props) => {
                                           roundedCircle
                                           className="img-profile"
                                         />
-                                        <CloseButton
-                                          style={{position: "absolute", top: 0, right: 0, display: showCloseBtn ? "block" : "none"}}
-                                          onClick={() => onImageRemove(0)} 
-                                        />
+                                        {!isView && (
+                                          <CloseButton                    
+                                            style={{position: "absolute", top: 0, right: 0, display: showCloseBtn ? "block" : "none"}}
+                                            onClick={() => onImageRemove(0)} 
+                                          />
+                                        )}
                                       </div>
                                     ))}
+                                    {!isView && (
                                     <Button
                                       variant="secondary"
                                       onClick={() => 
@@ -1059,11 +1151,9 @@ const GeneralInformation = (props) => {
                                           : onImageUpdate(0)
                                       }
                                     >
-                                      {/* {photoProfile.length !== 0
-                                        ? "CHANGE"
-                                        : "UPLOAD"}                                */}
                                       UPLOAD PHOTO
                                     </Button>
+                                    )}
                                     {errors && (
                                       <>
                                         {errors.acceptType && (
@@ -1097,6 +1187,7 @@ const GeneralInformation = (props) => {
                             <Form.Control
                               {...field}
                               type="text"
+                              disabled={isView}
                               isInvalid={
                                 form.touched.homePhone && form.errors.homePhone
                               }
@@ -1128,6 +1219,7 @@ const GeneralInformation = (props) => {
                             <Form.Control
                               {...field}
                               type="text"
+                              disabled={isView}
                               isInvalid={
                                 form.touched.mobilePhone &&
                                 form.errors.mobilePhone
@@ -1164,6 +1256,7 @@ const GeneralInformation = (props) => {
                               }
                               minLength={1}
                               maxLength={256}
+                              disabled={isView}
                             />
                             {form.touched.email && form.errors.email && (
                               <Form.Control.Feedback type="invalid">
@@ -1194,6 +1287,7 @@ const GeneralInformation = (props) => {
                               }
                               minLength={1}
                               maxLength={256}
+                              disabled={isView}
                             />
                             {form.touched.otherEmail &&
                               form.errors.otherEmail && (
@@ -1224,6 +1318,7 @@ const GeneralInformation = (props) => {
                             rows={3}
                             minLength={1}
                             maxLength={512}
+                            disabled={isView}
                           />
                         )}
                       </FastField>
@@ -1231,8 +1326,7 @@ const GeneralInformation = (props) => {
                   </Form.Group>
                   <Form.Group as={Row} className="form-group">
                     <Form.Label column sm={3}>
-                      Country
-                      <span className="form-label-required">*</span>
+                      Country <span className="form-label-required">*</span>
                     </Form.Label>
                     <Col sm={9}>
                       <FastField name="currentCountry">
@@ -1240,6 +1334,7 @@ const GeneralInformation = (props) => {
                           <div style={{ width: 300 }}>
                             <SelectAsync
                               {...field}
+                              isDisabled={isView}
                               url={`master/countries`}
                               fieldName="country_name"
                               onChange={(v) => {
@@ -1278,17 +1373,6 @@ const GeneralInformation = (props) => {
                         {({ field, form }) => (
                           <>
                             <div style={{ width: 200 }}>
-                              {/* <SelectAsync
-                                {...field}
-                                isDisabled={values.currentCountry == null}
-                                url={`master/state-provinces`}
-                                urlFilter={`["country_id","=","${values.currentCountry?.value}"]`}
-                                fieldName="state_province_name"
-                                onChange={(v) =>
-                                  setFieldValue("currentProvince", v)
-                                }
-                                placeholder="Please choose"
-                              /> */}
                               <Select
                                 {...field}
                                 placeholder="Please choose"
@@ -1297,7 +1381,7 @@ const GeneralInformation = (props) => {
                                   setFieldValue("currentProvince", v)
                                   handleChangeCurrentProvince(v.value)
                                 }}
-                                isDisabled={values.currentCountry == null}
+                                isDisabled={isView}
                               />
                             </div>
                           </>
@@ -1314,17 +1398,6 @@ const GeneralInformation = (props) => {
                         {({ field }) => (
                           <>
                             <div style={{ width: 200 }}>
-                              {/* <SelectAsync
-                                {...field}
-                                isDisabled={values.currentProvince == null}
-                                url={`master/cities`}
-                                urlFilter={`["state_province_id","=","${values.currentProvince?.value}"]`}
-                                fieldName="city_name"
-                                onChange={(v) =>
-                                  setFieldValue("currentCity", v)
-                                }
-                                placeholder="Please choose"
-                              /> */}
                               <Select
                                 {...field}
                                 placeholder="Please choose"
@@ -1332,7 +1405,7 @@ const GeneralInformation = (props) => {
                                 onChange={(v) => {
                                   setFieldValue("currentCity", v)
                                 }}
-                                isDisabled={values.currentCountry == null}
+                                isDisabled={isView}
                               />
                             </div>
                           </>
@@ -1352,6 +1425,7 @@ const GeneralInformation = (props) => {
                             type="text"
                             minLength={1}
                             maxLength={16}
+                            disabled={isView}
                           />
                         )}
                       </FastField>
@@ -1369,6 +1443,7 @@ const GeneralInformation = (props) => {
                         checked={values.sameAddress}
                         onChange={handleChange}
                         onBlur={handleBlur}
+                        disabled={isView}
                       />
                     </Col>
                   </Form.Group>
@@ -1390,7 +1465,7 @@ const GeneralInformation = (props) => {
                         }
                         onChange={handleChange}
                         onBlur={handleBlur}
-                        disabled={values.sameAddress}
+                        disabled={values.sameAddress || isView}
                       />
                     </Col>
                   </Form.Group>
@@ -1426,7 +1501,7 @@ const GeneralInformation = (props) => {
                               handleChangePermanentCountry(v.value)
                             }}
                             onBlur={setFieldTouched}
-                            isDisabled={values.sameAddress}
+                            isDisabled={values.sameAddress || isView}
                           />
                           {!values.sameAddress && (
                             <>
@@ -1464,9 +1539,7 @@ const GeneralInformation = (props) => {
                             handleChangePermanentProvince(v.value)
                           }}
                           onBlur={setFieldTouched}
-                          isDisabled={
-                            values.permanentCountry == "" || values.sameAddress
-                          }
+                          isDisabled={values.sameAddress || isView}
                         />
                       </div>
                     </Col>
@@ -1490,9 +1563,7 @@ const GeneralInformation = (props) => {
                             setFieldValue("permanentCity", v)
                           }}
                           onBlur={setFieldTouched}
-                          isDisabled={
-                            values.permanentCountry == "" || values.sameAddress
-                          }
+                          isDisabled={ values.sameAddress || isView}
                         />
                       </div>
                     </Col>
@@ -1514,25 +1585,34 @@ const GeneralInformation = (props) => {
                         }
                         onChange={handleChange}
                         onBlur={handleBlur}
-                        disabled={values.sameAddress}
+                        disabled={values.sameAddress || isView}
                       />
                     </Col>
                   </Form.Group>
                 </div>
                 {
-                  props.isMobile ? (
+                  isView ? (
+                    <>
+                      <Button
+                        variant="secondary"
+                        onClick={() => props.history.goBack()}
+                      >
+                        BACK
+                      </Button>
+                    </>
+                  ) : props.isMobile ? (
                     <div className="mb-5 ml-1 row justify-content-md-start justify-content-center">
                       <Button
                         variant="primary"
                         type="submit"
-                        disabled={isSubmitting || !dirty || !isValid}
+                        disabled={props.finishStep > 0 || props.employeeData?.id ? (!isValid || isSubmitting) : (!dirty || isSubmitting)}
                         style={{ marginRight: 15 }}
                       >
-                        SAVE
+                        {props.employeeData?.id ? "SAVE" : "SAVE & NEXT"}
                       </Button>
                       <Button
                         variant="secondary"
-                        onClick={() => props.history.push("/")}
+                        onClick={() => props.history.goBack()}
                       >
                         CANCEL
                       </Button>
@@ -1542,19 +1622,29 @@ const GeneralInformation = (props) => {
               </Card.Body>
             </Card>
             {
-              props.isMobile ? "" : (
+              isView ? (
+                <>
+                  <Button
+                    variant="secondary"
+                    onClick={() => props.history.goBack()}
+                  >
+                    BACK
+                  </Button>
+                </>
+              ) 
+              : props.isMobile ? "" : (
                 <div className="mt-4 mb-5 ml-1 row justify-content-md-start justify-content-center">
                   <Button
                     variant="primary"
                     type="submit"
-                    disabled={isSubmitting || !dirty || !isValid}
+                    disabled={props.finishStep > 0 || props.employeeData?.id ? (!isValid || isSubmitting) : (!dirty || isSubmitting)}
                     style={{ marginRight: 15 }}
                   >
-                    SAVE
+                    {props.employeeData?.id ? "SAVE" : "SAVE & NEXT"}
                   </Button>
                   <Button
                     variant="secondary"
-                    onClick={() => props.history.push("/")}
+                    onClick={() => props.history.goBack()}
                   >
                     CANCEL
                   </Button>

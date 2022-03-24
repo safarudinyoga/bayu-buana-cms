@@ -10,8 +10,7 @@ import useQuery from "lib/query"
 
 import GeneralInformation from "./general-information"
 import EmergencyContacts from "./emergency-contacts"
-import SecuritySettings from "./security-settings"
-import Employee from "./employee"
+import Employment from "./employee"
 import "./employee-form.css"
 
 import { useWindowSize } from "rooks"
@@ -25,6 +24,7 @@ const options = {
 
 const UserProfile = (props) => {
   const [openSnackbar] = useSnackbar(options)
+  const history = useHistory()
   const dispatch = useDispatch()
   const api = new Api()
   const isView = useQuery().get("action") === "view"
@@ -32,7 +32,7 @@ const UserProfile = (props) => {
   const [tabKey, setTabKey] = useState("general-information")
   const { innerWidth, innerHeight, outerHeight, outerWidth } = useWindowSize();
   const [loading, setLoading] = useState(true)
-  const [form, setForm] = useState(null)
+  const [form, setForm] = useState({})
   const [Data, setData] = useState(null)
   const [finishStep, setStep] = useState(0)
   const [photoData, setPhotoData] = useState(null)
@@ -64,7 +64,7 @@ const UserProfile = (props) => {
     try {
       if(formId) {
         let {data} = await api.get(endpoint + "/" + formId)
-        setForm(data)
+        setData(data)
         setPhotoData(data.employee_asset?.multimedia_description ? {
           id: data.employee_asset.multimedia_description_id,
           data_url: data.employee_asset.multimedia_description.url
@@ -78,12 +78,25 @@ const UserProfile = (props) => {
     }
   }, [])
 
+  const fetchEmployee = async() => {
+    let formId = props.match.params.id
+    console.log(formId) 
+    try {
+      if(formId) {
+        let {data} = await api.get(endpoint + "/" + formId)
+        return data
+      }
+    } catch (e) {
+      openSnackbar(`error => ${e}`)
+    }
+  }
+
   const handleSelectTab = async (key) => {
     setTabKey(key)
   }
 
   const handleSelectAccordion = async (key) => {
-    setTabKey(key)
+    setTabKey(key === tabKey ? "" : key)
   }
 
   const doUpload = async (imageList) => {
@@ -129,13 +142,59 @@ const UserProfile = (props) => {
           await onSave(values)
         }
       }
-    } catch (e) {
+    } catch(e) {
       console.log(e)
     }
   }
 
   const onSave = async() => {
+    try {
+      let formId = props.match.params.id
 
+      let photo_id = null
+      if(form.photoProfile.length > 0) {
+        if( !photoData || photoData?.data_url !== form.photoProfile[0].data_url) {
+          photo_id = await doUpload(form.photoProfile)
+        } else {
+          photo_id = form.photoProfile[0].data_url
+        }
+      }
+      if(photoData && form.photoProfile.length === 0) photo_id = await removeImage(photoData?.id)
+
+      if (!formId) {
+        //ProsesCreateData
+          let res = await api.post("master/employees", form)
+          openSnackbar(
+            `Record 'Employee Number: ${
+              form.employee_number
+            } Employee Name: ${
+              form.given_name +
+              " " +
+              form?.middle_name +
+              " " +
+              form.surname
+            }' has been successfully saved.`,
+          )
+          history.goBack()
+      } else {
+        //ProsesUpdateData
+          let res = await api.put(`master/employees/${formId}`, form)
+          openSnackbar(
+            `Record 'Employee Number: ${
+              form.employee_number
+            } Employee Name: ${
+              form.given_name +
+              " " +
+              form?.middle_name +
+              " " +
+              form.surname
+            }' has been successfully update.`,
+          )
+          if(tabKey === "employment") history.goBack()
+      }
+    } catch(e) {
+      openSnackbar(`error: ${e}`)
+    }
   }
 
   return (
@@ -155,7 +214,7 @@ const UserProfile = (props) => {
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
-                    <Nav.Link eventKey="emergency-contacts">
+                    <Nav.Link eventKey="emergency-contacts" disabled={finishStep < 1 && !Data?.id} >
                       <div>
                         <ReactSVG src="/img/icons/emergency-contacts.svg" />
                         <span>Emergency Contacts</span>
@@ -163,7 +222,7 @@ const UserProfile = (props) => {
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
-                    <Nav.Link eventKey="employment">
+                    <Nav.Link eventKey="employment" disabled={finishStep < 2 && !Data?.id}>
                       <div>
                         <ReactSVG src="/img/icons/employment.svg" />
                         <span>Employment</span>
@@ -180,6 +239,10 @@ const UserProfile = (props) => {
                       backUrl={backUrl}
                       handleSelectTab={(v) => handleSelectTab(v)}
                       isMobile={false}
+                      employeeData={Data}
+                      onSubmit={onSubmit}
+                      finishStep={finishStep}
+                      formData={form}
                     />
                   </Tab.Pane>
                   <Tab.Pane eventKey="emergency-contacts">
@@ -188,22 +251,22 @@ const UserProfile = (props) => {
                       backUrl={backUrl}
                       handleSelectTab={(v) => handleSelectTab(v)}
                       isMobile={false}
+                      employeeData={Data}
+                      onSubmit={onSubmit}
+                      finishStep={finishStep}
+                      formData={form}
                     />
                   </Tab.Pane>
-                  <Tab.Pane eventKey="security-settings">
-                    <SecuritySettings
+                  <Tab.Pane eventKey="employment">
+                    <Employment
                       history={props.history}
                       backUrl={backUrl}
                       handleSelectTab={(v) => handleSelectTab(v)}
                       isMobile={false}
-                    />
-                  </Tab.Pane>
-                  <Tab.Pane eventKey="subscriptions">
-                    <Employee
-                      history={props.history}
-                      backUrl={backUrl}
-                      handleSelectTab={(v) => handleSelectTab(v)}
-                      isMobile={false}
+                      employeeData={Data}
+                      onSubmit={onSubmit}
+                      finishStep={finishStep}
+                      formData={form}
                     />
                   </Tab.Pane>
                 </Tab.Content>
@@ -212,11 +275,28 @@ const UserProfile = (props) => {
           </Tab.Container>
         ) : 
         (
-          <Accordion defaultActiveKey="general-information">
+          <Accordion activeKey={tabKey}>
             <Card>
-              <Accordion.Toggle as={Card.Header} eventKey="general-information">
+              <Accordion.Toggle 
+                as={Card.Header} 
+                eventKey="general-information"
+                style={
+                  tabKey === "general-information"
+                    ? { backgroundColor: "#dddddd", color: "#038072" }
+                    : null
+                }
+                onClick={() => {
+                  handleSelectAccordion("general-information")
+                }}
+              >
                 <div className="accordion-header">
-                  <ReactSVG src="/img/icons/general-information.svg" />
+                  <ReactSVG src="/img/icons/general-information.svg" 
+                    className={
+                      tabKey === "general-information"
+                        ? "icon-active"
+                        : "icon-grey"
+                    }
+                  />
                   <span>General Information</span>
                 </div>
               </Accordion.Toggle>
@@ -225,14 +305,35 @@ const UserProfile = (props) => {
                   history={props.history}
                   backUrl={backUrl}
                   isMobile={true}
-                  handleSelectAccordion={(v) => handleSelectAccordion(v)}
+                  employeeData={Data}
+                  onSubmit={onSubmit}
+                  finishStep={finishStep}
+                  formData={form}
                 />
               </Accordion.Collapse>
             </Card>
             <Card>
-              <Accordion.Toggle as={Card.Header} eventKey="emergency-contacts">
+              <Accordion.Toggle 
+                as={Card.Header} 
+                eventKey="emergency-contacts"
+                style={
+                  tabKey === "emergency-contacts"
+                    ? { backgroundColor: "#dddddd", color: "#038072" }
+                    : null
+                }
+                onClick={() => {
+                  console.log(Data)
+                  !(finishStep < 2 && !Data?.id) && handleSelectAccordion("emergency-contacts")
+                }}
+              >
                 <div className="accordion-header">
-                  <ReactSVG src="/img/icons/emergency-contacts.svg" />
+                  <ReactSVG src="/img/icons/emergency-contacts.svg" 
+                    className={
+                      tabKey === "emergency-contacts"
+                        ? "icon-active"
+                        : "icon-grey"
+                    }
+                  />
                   <span>Emergency Contacts</span>
                 </div>
               </Accordion.Toggle>
@@ -242,22 +343,47 @@ const UserProfile = (props) => {
                   backUrl={backUrl}
                   isMobile={true}
                   handleSelectAccordion={(v) => handleSelectAccordion(v)}
+                  employeeData={Data}
+                  onSubmit={onSubmit}
+                  finishStep={finishStep}
+                  formData={form}
                 />
               </Accordion.Collapse> 
             </Card>
             <Card>
-              <Accordion.Toggle as={Card.Header} eventKey="employment">
+              <Accordion.Toggle 
+                as={Card.Header} 
+                eventKey="employment"
+                style={
+                  tabKey === "employment"
+                    ? { backgroundColor: "#dddddd", color: "#038072" }
+                    : null
+                }
+                onClick={() => {
+                  !(finishStep < 2 && !Data?.id) && handleSelectAccordion("employment")
+                }}
+              >
                 <div className="accordion-header">
-                  <ReactSVG src="/img/icons/employment.svg" />
+                  <ReactSVG src="/img/icons/employment.svg" 
+                      className={
+                        tabKey === "employment"
+                          ? "icon-active"
+                          : "icon-grey"
+                      }
+                  />
                   <span>Employment</span>
                 </div>
               </Accordion.Toggle>
               <Accordion.Collapse eventKey="employment">
-                <SecuritySettings
+                <Employment
                   history={props.history}
                   backUrl={backUrl}
                   isMobile={true}
                   handleSelectAccordion={(v) => handleSelectAccordion(v)}
+                  employeeData={Data}
+                  onSubmit={onSubmit}
+                  finishStep={finishStep}
+                  formData={form}
                 />
               </Accordion.Collapse> 
             </Card>

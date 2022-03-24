@@ -5,6 +5,7 @@ import * as Yup from "yup"
 import Api from "config/api"
 import "./employee-form.css"
 import { useSnackbar } from "react-simple-snackbar"
+import _ from "lodash"
 
 const options = {
   position: "bottom-right",
@@ -43,24 +44,25 @@ const EmergencyContacts = (props) => {
 
   useEffect(async () => {
     try {
-      let res = await api.get("/user/profile")
-      let data = res.data;
-      setIntialForm({
-        ...initialForm,
-        
-        // Emergency Contact 1
-        fullNameEmergency1: data.emergency_contact.contact_name ? data.emergency_contact.contact_name : "",
-        phoneNumberEmergency1: data.emergency_contact.contact_phone_number ? data.emergency_contact.contact_phone_number : "",
-        relationshipEmergency1: data.emergency_contact.relationship ? data.emergency_contact.relationship : "",
-
-        // Emergency Contact 2
-        fullNameEmergency2: data.emergency_contact2.contact_name ? data.emergency_contact2.contact_name : "",
-        phoneNumberEmergency2: data.emergency_contact2.contact_phone_number ? data.emergency_contact2.contact_phone_number : "",
-        relationshipEmergency2: data.emergency_contact2.relationship ? data.emergency_contact2.relationship : "",
-
-      })
+      if(props.employeeData) {
+        let data = props.employeeData;
+        setIntialForm({
+          ...initialForm,
+          
+          // Emergency Contact 1
+          fullNameEmergency1: data.emergency_contact.contact_name ? data.emergency_contact.contact_name : "",
+          phoneNumberEmergency1: data.emergency_contact.contact_phone_number ? data.emergency_contact.contact_phone_number : "",
+          relationshipEmergency1: data.emergency_contact.relationship ? data.emergency_contact.relationship : "",
+  
+          // Emergency Contact 2
+          fullNameEmergency2: data.emergency_contact2.contact_name ? data.emergency_contact2.contact_name : "",
+          phoneNumberEmergency2: data.emergency_contact2.contact_phone_number ? data.emergency_contact2.contact_phone_number : "",
+          relationshipEmergency2: data.emergency_contact2.relationship ? data.emergency_contact2.relationship : "",
+  
+        })
+      }
     } catch(e) {}
-  }, [])
+  }, [props.employeeData])
 
   return (
     <Formik
@@ -84,7 +86,7 @@ const EmergencyContacts = (props) => {
         }
 
         try {
-          let res = await api.put("user/profile", formatted)
+          await props.onSubmit(formatted)
           openSnackbar(
             `Your profile has been successfully updated.`
           )
