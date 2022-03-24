@@ -173,7 +173,12 @@ table.dataTable > tbody > tr.child span.dtr-data {
   background-color: rgb(245, 245, 245);
 }
 
-.cstm-col-width {
+.cstm-col-width{
+  min-width: 66px !important;
+  word-break: break-all;
+}
+
+.cstm-col-width-2{
   min-width: 66px !important;
   word-break: break-all;
 }
@@ -207,35 +212,54 @@ table.dataTable > tbody > tr.child span.dtr-data {
     min-width: 88px !important;
     width: 40% !important;
   }
+
+  .cstm-col-width-2 {
+    min-width: 88px !important;
+  }
 }
 @media (min-width: 391px) and (max-width: 410px) {
-  .cstm-col-width {
+  .cstm-col-width{
+    min-width: 105px !important;
+    max-width: 200px !important;
+  }
+
+  .cstm-col-width-2{
     min-width: 105px !important;
     max-width: 200px !important;
   }
 }
 @media (min-width: 411px) and (max-width: 420px) {
-  .cstm-col-width {
+  .cstm-col-width{
+    min-width: 116px !important;
+    max-width: 200px !important;
+  }
+
+  .cstm-col-width-2{
     min-width: 116px !important;
     max-width: 200px !important;
   }
 }
 
 @media (min-width: 421px) and (max-width: 450px) {
-  .cstm-col-width {
+  .cstm-col-width .cstm-col-width-2{
+    min-width: 118px !important;
+    max-width: 200px !important;
+  }
+
+  .cstm-col-width .cstm-col-width-2{
     min-width: 118px !important;
     max-width: 200px !important;
   }
 }
 
 @media (min-width: 451px) and (max-width: 460px) {
-  .cstm-col-width {
+  .cstm-col-width .cstm-col-width-2{
     min-width: 135px !important;
     max-width: 200px !important;
   }
 }
 @media (min-width: 461px) and (max-width: 480px) {
-  .cstm-col-width {
+  .cstm-col-width .cstm-col-width-2{
     min-width: 146px !important;
     max-width: 200px !important;
   }
@@ -286,6 +310,11 @@ table.dataTable > tbody > tr.child span.dtr-data {
     padding: 2px;
   }
   .cstm-col-width {
+    min-width: 100px;
+    max-width: 280px !important;
+  }
+
+  .cstm-col-width-2{
     min-width: 100px;
     max-width: 280px !important;
   }

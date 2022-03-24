@@ -109,17 +109,18 @@ function CorporateRatingForm(props) {
             "checkName",
             function (value, element) {
               var req = false
-              let filters = JSON.stringify(["corporate_rating_type_level_name","=",element.value])
+              let filters = JSON.stringify(["corporate_rating_type_level_name","like",element.value])
               $.ajax({
                 type: "GET",
                 async: false,
                 url: `${env.API_URL}/master/corporate-rating-type-levels?filters=${encodeURIComponent(filters)}`,
                 success: function (res) {
                   if (res.items.length !== 0) {
-                    if(currentName == element.value){
+                    if(currentName.toUpperCase() === element.value.toUpperCase()){
                       req = true
                     } else {
-                      req = false
+                      let duplicateVal = res.items.find( e => e.corporate_rating_type_level_name.toUpperCase() === element.value.toUpperCase())
+                      req = !duplicateVal
                     }
                   } else {
                     req = true
@@ -172,14 +173,15 @@ function CorporateRatingForm(props) {
         "checkName",
         function (value, element) {
           var req = false
-          let filters = JSON.stringify(["corporate_rating_type_level_name","=",element.value])
+          let filters = JSON.stringify(["corporate_rating_type_level_name","like",element.value])
           $.ajax({
             type: "GET",
             async: false,
             url: `${env.API_URL}/master/corporate-rating-type-levels?filters=${encodeURIComponent(filters)}`,
             success: function (res) {
               if (res.items.length !== 0) {
-                req = false
+                let duplicateVal = res.items.find( e => e.corporate_rating_type_level_name.toUpperCase() === element.value.toUpperCase())
+                req = !duplicateVal
               } else {
                 req = true
               }
