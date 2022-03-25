@@ -12,6 +12,7 @@ function FormInputDatePeriod(props) {
         <div className="col-sm-5">
           <DatePicker 
             className="form-control"
+            dateFormat="dd MMMM yyyy"
             selected={props.dateStart}
             onChange={props.dateStartOnChange} 
           />
@@ -20,6 +21,7 @@ function FormInputDatePeriod(props) {
         <div className="col-sm-5">
           <DatePicker 
             className="form-control"
+            dateFormat="dd MMMM yyyy"
             selected={props.dateEnd}
             onChange={props.dateEndOnChange} 
           />
