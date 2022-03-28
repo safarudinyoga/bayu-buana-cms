@@ -1450,14 +1450,14 @@ const EmployeeForm = (props) => {
             >
               {isView ? (
                 <>
-                  <Button variant="secondary" onClick={() => history.goBack()}>
+                  <button className="text-button-cancel button-cancel" onClick={() => history.goBack()}>
                     BACK
-                  </Button>
+                  </button>
                 </>
               ) : (
                 <>
-                  <Button
-                    variant="primary"
+                  <button
+                    className="text-button-save button-save mr-2"
                     type="submit"
                     disabled={
                       finishStep > 0 || props.match.params.id
@@ -1467,10 +1467,10 @@ const EmployeeForm = (props) => {
                     style={{ marginRight: 15 }}
                   >
                     {props.match.params.id ? "SAVE" : "SAVE & NEXT"}
-                  </Button>
-                  <Button variant="secondary" onClick={() => history.goBack()}>
+                  </button>
+                  <button className="text-button-cancel button-cancel" onClick={() => history.goBack()}>
                     CANCEL
-                  </Button>
+                  </button>
                 </>
               )}
             </div>
@@ -1576,23 +1576,23 @@ const EmployeeForm = (props) => {
             >
               {isView ? (
                 <>
-                  <Button variant="secondary" onClick={() => history.goBack()}>
+                  <button className="text-button-cancel button-cancel" onClick={() => history.goBack()}>
                     BACK
-                  </Button>
+                  </button>
                 </>
               ) : (
                 <>
-                  <Button
-                    variant="primary"
+                  <button
+                    className="text-button-save button-save mr-2"
                     type="submit"
                     disabled={formik.isSubmitting || !formik.isValid}
                     style={{ marginRight: 15 }}
                   >
                     {props.match.params.id ? "SAVE" : "SAVE & NEXT"}
-                  </Button>
-                  <Button variant="secondary" onClick={() => history.goBack()}>
+                  </button>
+                  <button className="text-button-cancel button-cancel" onClick={() => history.goBack()}>
                     CANCEL
-                  </Button>
+                  </button>
                 </>
               )}
             </div>
@@ -1866,23 +1866,23 @@ const EmployeeForm = (props) => {
             >
               {isView ? (
                 <>
-                  <Button variant="secondary" onClick={() => history.goBack()}>
+                  <button className="text-button-cancel button-cancel" onClick={() => history.goBack()}>
                     BACK
-                  </Button>
+                  </button>
                 </>
               ) : (
                 <>
-                  <Button
-                    variant="primary"
+                  <button
+                    className="text-button-save button-save mr-2"
                     type="submit"
                     disabled={!formik.isValid}
                     style={{ marginRight: 15 }}
                   >
                     SAVE
-                  </Button>
-                  <Button variant="secondary" onClick={() => history.goBack()}>
+                  </button>
+                  <button className="text-button-cancel button-cancel" onClick={() => history.goBack()}>
                     CANCEL
-                  </Button>
+                  </button>
                 </>
               )}
             </div>

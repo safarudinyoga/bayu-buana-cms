@@ -740,29 +740,29 @@ const EmployeeFormMobile = (props) => {
               >
                 {isView ? (
                   <>
-                    <Button
-                      variant="secondary"
+                    <button
+                      className="text-button-cancel button-cancel"
                       onClick={() => history.goBack()}
                     >
                       BACK
-                    </Button>
+                    </button>
                   </>
                 ) : (
                   <>
-                    <Button
-                      variant="primary"
+                    <button
+                      className="text-button-save button-save"
                       type="submit"
                       disabled={props.finishStep > 0 || props.match.params.id ? (!formik.isValid || formik.isSubmitting) : (!formik.dirty || formik.isSubmitting)}
                       style={{ marginRight: 15 }}
                     >
                       {props.match.params.id ? "SAVE" : "SAVE & NEXT"}
-                    </Button>
-                    <Button
-                      variant="secondary"
+                    </button>
+                    <button
+                      className="text-button-cancel button-cancel"
                       onClick={() => history.goBack()}
                     >
                       CANCEL
-                    </Button>
+                    </button>
                   </>
                 )}
               </div>
@@ -866,29 +866,29 @@ const EmployeeFormMobile = (props) => {
                 >
                   {isView ? (
                     <>
-                      <Button
-                        variant="secondary"
+                      <button
+                        className="text-button-cancel button-cancel"
                         onClick={() => history.goBack()}
                       >
                         BACK
-                      </Button>
+                      </button>
                     </>
                   ) : (
                     <>
-                      <Button
-                        variant="primary"
+                      <button
+                        className="text-button-save button-save mr-2"
                         type="submit"
                         disabled={formik.isSubmitting || !formik.isValid}
                         style={{ marginRight: 15 }}
                       >
                         {props.match.params.id ? "SAVE" : "SAVE & NEXT"}
-                      </Button>
-                      <Button
-                        variant="secondary"
+                      </button>
+                      <button
+                        className="text-button-cancel button-cancel"
                         onClick={() => history.goBack()}
                       >
                         CANCEL
-                      </Button>
+                      </button>
                     </>
                   )}
                 </div>
@@ -1186,29 +1186,29 @@ const EmployeeFormMobile = (props) => {
                 >
                   {isView ? (
                     <>
-                      <Button
-                        variant="secondary"
+                      <button
+                        className="text-button-cancel button-cancel"
                         onClick={() => history.goBack()}
                       >
                         BACK
-                      </Button>
+                      </button>
                     </>
                   ) : (
                     <>
-                      <Button
-                        variant="primary"
+                      <button
+                        className="text-button-save button-save mr-2"
                         type="submit"
                         disabled={!formik.isValid}
                         style={{ marginRight: 15 }}
                       >
                         SAVE
-                      </Button>
-                      <Button
-                        variant="secondary"
+                      </button>
+                      <button
+                        className="text-button-cancel button-cancel"
                         onClick={() => history.goBack()}
                       >
                         CANCEL
-                      </Button>
+                      </button>
                     </>
                   )}
                 </div>
