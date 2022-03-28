@@ -37,8 +37,8 @@ const EmployeeForm = (props) => {
   const [formValues, setFormValues] = useState(null)
   const [optionGender, setOptionGender] = useState([])
   const [additionalRole, setAdditionalRole] = useState(false)
-  const [months, setMonths] = useState({ value: 1, label: "" })
-  const [years, setYears] = useState({ value: 1921, label: "" })  
+  const [defmonths, setMonths] = useState({ value: 1, label: "" })
+  const [defyears, setYears] = useState({ value: 1921, label: "" })  
   const [finishStep, setStep] = useState(0)
 
   useEffect(() => {
@@ -544,7 +544,7 @@ const EmployeeForm = (props) => {
 
   // Birthday
   //Day
-  const selectDay = () => {
+  const selectDay = (months=defmonths, years=defyears) => {
     const options = []
     const today = new Date()
     let currentYear = today.getFullYear()
@@ -597,7 +597,7 @@ const EmployeeForm = (props) => {
   }
 
   //Month
-  const selectMonth = () => {
+  const selectMonth = (years=defyears) => {
     const options = []
     const today = new Date()
     let currentYear = today.getFullYear()
@@ -881,7 +881,7 @@ const EmployeeForm = (props) => {
                                 control="selectOnly"
                                 name="birth_date[0]"
                                 placeholder={"Day"}
-                                options={selectDay()}
+                                options={selectDay(formik.values.birth_date[1], formik.values.birth_date[2])}
                                 onChange={(v) => {
                                   formik.setFieldValue("birth_date[0]", v)
                                 }}
@@ -905,7 +905,7 @@ const EmployeeForm = (props) => {
                                 control="selectOnly"
                                 name="birth_date[1]"
                                 placeholder={"Month"}
-                                options={selectMonth()}
+                                options={selectMonth(formik.values.birth_date[2])}
                                 onChange={(v) => {
                                   formik.setFieldValue("birth_date[1]", v)
                                   formik.setFieldValue("birth_date[0]", {
@@ -1717,7 +1717,7 @@ const EmployeeForm = (props) => {
                                 onChange={(v) => {
                                   formik.setFieldValue("hire_date[0]", v)
                                 }}
-                                options={selectDay()}
+                                options={selectDay(formik.values.hire_date[1], formik.values.hire_date[2])}
                                 placeholder={"Day"}
                                 style={{ maxWidth: 240 }}
                                 components={
@@ -1736,7 +1736,7 @@ const EmployeeForm = (props) => {
                                 control="selectOnly"
                                 name="hire_date[1]"
                                 placeholder={"Month"}
-                                options={selectMonth()}
+                                options={selectMonth(formik.values.hire_date[2])}
                                 onChange={(v) => {
                                   formik.setFieldValue("hire_date[1]", v)
                                   formik.setFieldValue("hire_date[0]", {
