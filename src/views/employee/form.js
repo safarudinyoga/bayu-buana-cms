@@ -459,6 +459,7 @@ const EmployeeForm = (props) => {
         is: false,
         then: Yup.object().required("Country is required."),
       }),
+      country_id: Yup.object().required("Country is required."),
       state_province_id: Yup.object().shape({
         value: Yup.string().nullable(),
         label: Yup.string().nullable(),
@@ -1068,8 +1069,7 @@ const EmployeeForm = (props) => {
                         name={"address.country_id"}
                         url={`master/countries`}
                         fieldName={"country_name"}
-                        onChange={(v) => {
-                          formik.setFieldValue("address.country_id", v)
+                        onChange={(v) => {                          
                           formik.setFieldValue("address.state_province_id", {
                             value: "00000000-0000-0000-0000-000000000000",
                             label: "Please choose",
@@ -1078,6 +1078,7 @@ const EmployeeForm = (props) => {
                             value: "00000000-0000-0000-0000-000000000000",
                             label: "Please choose",
                           })
+                          formik.setFieldValue("address.country_id", v)
                         }}
                         placeholder={"Please choose"}
                         style={{ maxWidth: 300 }}
@@ -1200,8 +1201,7 @@ const EmployeeForm = (props) => {
                             name={"address.country_id"}
                             url={`master/countries`}
                             fieldName={"country_name"}
-                            onChange={(v) => {
-                              formik.setFieldValue("address.country_id", v)
+                            onChange={(v) => {                              
                               formik.setFieldValue(
                                 "address.state_province_id",
                                 {
@@ -1213,6 +1213,7 @@ const EmployeeForm = (props) => {
                                 value: "00000000-0000-0000-0000-000000000000",
                                 label: "Please choose",
                               })
+                              formik.setFieldValue("address.country_id", v)
                             }}
                             placeholder={"Please choose"}
                             style={{ maxWidth: 300 }}
@@ -1319,11 +1320,7 @@ const EmployeeForm = (props) => {
                             name={"permanent_address.country_id"}
                             url={`master/countries`}
                             fieldName={"country_name"}
-                            onChange={(v) => {
-                              formik.setFieldValue(
-                                "permanent_address.country_id",
-                                v,
-                              )
+                            onChange={(v) => {                              
                               formik.setFieldValue(
                                 "permanent_address.state_province_id",
                                 {
@@ -1337,6 +1334,10 @@ const EmployeeForm = (props) => {
                                   value: "00000000-0000-0000-0000-000000000000",
                                   label: "Please choose",
                                 },
+                              )
+                              formik.setFieldValue(
+                                "permanent_address.country_id",
+                                v,
                               )
                             }}
                             placeholder={"Please choose"}
@@ -1449,14 +1450,14 @@ const EmployeeForm = (props) => {
             >
               {isView ? (
                 <>
-                  <Button variant="secondary" onClick={() => history.goBack()}>
+                  <button className="text-button-cancel button-cancel" onClick={() => history.goBack()}>
                     BACK
-                  </Button>
+                  </button>
                 </>
               ) : (
                 <>
-                  <Button
-                    variant="primary"
+                  <button
+                    className="text-button-save button-save mr-2"
                     type="submit"
                     disabled={
                       finishStep > 0 || props.match.params.id
@@ -1466,10 +1467,10 @@ const EmployeeForm = (props) => {
                     style={{ marginRight: 15 }}
                   >
                     {props.match.params.id ? "SAVE" : "SAVE & NEXT"}
-                  </Button>
-                  <Button variant="secondary" onClick={() => history.goBack()}>
+                  </button>
+                  <button className="text-button-cancel button-cancel" onClick={() => history.goBack()}>
                     CANCEL
-                  </Button>
+                  </button>
                 </>
               )}
             </div>
@@ -1575,23 +1576,23 @@ const EmployeeForm = (props) => {
             >
               {isView ? (
                 <>
-                  <Button variant="secondary" onClick={() => history.goBack()}>
+                  <button className="text-button-cancel button-cancel" onClick={() => history.goBack()}>
                     BACK
-                  </Button>
+                  </button>
                 </>
               ) : (
                 <>
-                  <Button
-                    variant="primary"
+                  <button
+                    className="text-button-save button-save mr-2"
                     type="submit"
                     disabled={formik.isSubmitting || !formik.isValid}
                     style={{ marginRight: 15 }}
                   >
                     {props.match.params.id ? "SAVE" : "SAVE & NEXT"}
-                  </Button>
-                  <Button variant="secondary" onClick={() => history.goBack()}>
+                  </button>
+                  <button className="text-button-cancel button-cancel" onClick={() => history.goBack()}>
                     CANCEL
-                  </Button>
+                  </button>
                 </>
               )}
             </div>
@@ -1865,23 +1866,23 @@ const EmployeeForm = (props) => {
             >
               {isView ? (
                 <>
-                  <Button variant="secondary" onClick={() => history.goBack()}>
+                  <button className="text-button-cancel button-cancel" onClick={() => history.goBack()}>
                     BACK
-                  </Button>
+                  </button>
                 </>
               ) : (
                 <>
-                  <Button
-                    variant="primary"
+                  <button
+                    className="text-button-save button-save mr-2"
                     type="submit"
                     disabled={!formik.isValid}
                     style={{ marginRight: 15 }}
                   >
                     SAVE
-                  </Button>
-                  <Button variant="secondary" onClick={() => history.goBack()}>
+                  </button>
+                  <button className="text-button-cancel button-cancel" onClick={() => history.goBack()}>
                     CANCEL
-                  </Button>
+                  </button>
                 </>
               )}
             </div>
