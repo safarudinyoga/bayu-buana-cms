@@ -44,7 +44,8 @@ const ParentMenu = ({menu}) => {
 class Sidebar extends Component {
 
   state = {
-    menu : []
+    menu : [],
+    sideNav: ''
   }
 
   async componentDidMount () {
@@ -60,11 +61,20 @@ class Sidebar extends Component {
     }
   }
 
+  handleHoverOn(){
+      console.log('on')
+  }
+
+  handleHoverOff(){
+    console.log('off')
+  }
   render() {
     const { menu } = this.state
     return (
       <aside className="main-sidebar sidebar-dark-primary elevation-4">
-        <div className="sidebar">
+        <div className="sidebar"
+        onMouseEnter={this.handleHoverOn}
+        onMouseLeave={this.handleHoverOff}>
           <nav className="mt-2">
             <ul
               className="nav nav-sidebar flex-column"
