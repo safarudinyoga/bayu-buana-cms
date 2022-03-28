@@ -26,7 +26,6 @@ export default function CorporateRatingTable() {
     isCheckbox: false,
     showAdvancedOptions: false,
     hideDetail: true,
-    createOnModal: true,
     modalDelete: true,
     title: "Corporate Rating",
     titleModal: "Corporate Rating",

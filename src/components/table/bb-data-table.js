@@ -612,7 +612,7 @@ class BBDataTable extends Component {
           wrapper.prepend(
             '<span class="d-md-none float-left mt-2 mr-2 text-label-page">Page: </span>',
           )
-          $(".pagination", wrapper).addClass("float-right float-left-sm")
+          $(".pagination", wrapper).addClass("float-right float-left-sm mobile-margin")
 
           // Hide pagination if empty data
           // if (t.fnRecordsDisplay() === 1) {

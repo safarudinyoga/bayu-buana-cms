@@ -13,7 +13,9 @@ import TextError from "components/formik/textError"
 import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
 
-import DatePicker from "react-datepicker"
+import DatePicker, { registerLocale } from "react-datepicker"
+import engb from "date-fns/locale/en-GB"
+
 import "react-datepicker/dist/react-datepicker.css";
 import Select from "components/form/select"
 import { default as SelectAsync } from "components/form/select-async"
@@ -22,6 +24,7 @@ const endpoint = "/master/commission-claims"
 const backUrl = "/master/setup-flight-commission"
 
 const FlightCommisionForm = (props) => {
+  registerLocale("engb", engb)
   const history = useHistory()
   let dispatch = useDispatch()
   let api = new Api()
@@ -67,11 +70,11 @@ const FlightCommisionForm = (props) => {
         title: docTitle,
         breadcrumbs: [
           {
-            text: "Employment Management",
+            text: "Master Data Management",
           },
           {
             link: backUrl,
-            text: "Master Employee",
+            text: "Flight Commissions",
           },
           {
             text: docTitle,
@@ -96,14 +99,20 @@ const FlightCommisionForm = (props) => {
   useEffect(async () => {
     const options = []
     try {
-      let resAirport = await api.get("/master/airports")
+      let resAirport = await api.get("/master/airports?size=999")
       resAirport.data.items.forEach((data) => {
-        options.push({
-          label: `${data.city.city_name} (${data.airport_name})`,
-          value: data.airport_code
-        })
+        if(data.city){
+          options.push({
+            label: `${data.city.city_name} (${data.airport_name})`,
+            value: `${data.airport_code} - ${data.city.city_code}`
+          })
+        }
       })
-    } catch(e) {}
+      console.log("Options",options)
+    } catch(e) {
+      console.log("Error",e)
+
+    }
     setOptionRoute(options)
   }, [])
   
@@ -119,6 +128,7 @@ const FlightCommisionForm = (props) => {
       end_date: [],
 
     },
+    
     commission_claim_original_destination: {
       arrival_airport_location_code: "",
       arrival_city_code: "",
@@ -136,6 +146,10 @@ const FlightCommisionForm = (props) => {
     arrival_city_code: Yup.string(),
     departure_airport_location_code: Yup.string(),
     departure_city_code: Yup.string(),
+
+    departureFrom: Yup.object().notOneOf([Yup.ref('arrivalAt'), null], "Origin and Destination must be different."),
+    arrivalAt: Yup.object().notOneOf([Yup.ref('departureFrom'), null], "Origin and Destination must be different."),
+
     percent: Yup.string().matches(percentNumber, "Commision Percentage can only between 0.00 - 100.00").required("Commission Percentage is required.")
   })
 
@@ -147,16 +161,18 @@ const FlightCommisionForm = (props) => {
         let formatted = {
           airline_id: values.airline_id.value,
           commission_claim_original_destination: {
-            departure_airport_location_code: values.departFrom.value,
-            arrival_airport_location_code: values.arrivalAt.value,
+            departure_airport_location_code: values.departFrom.value.split("-")[0],
+            departure_city_code: values.departFrom.value.split("-")[1],
+            arrival_airport_location_code: values.arrivalAt.value.split("-")[0],
+            arrival_city_code: values.arrivalAt.value.split("-")[1],
           },
           commission_claim_departure_date: {
-            start_date: values.departureStart ? values.departureStart : "",
-            end_date: values.departureEnd ? values.departureEnd : "",
+            start_date: specifyPeriodDeparture ? periodDepartureStart : "",
+            end_date: specifyPeriodDeparture ? periodDepartureEnd : "",
           },
           commission_claim_issue_date: {
-            start_date: values.issueStart ? values.issueStart : "",
-            end_date: values.issueEnd ? values.issueEnd : "",
+            start_date: specifyPeriodIssue ? periodIssueStart : "",
+            end_date: specifyPeriodIssue ? periodIssueEnd : "",
           },
           percent: parseFloat(values.percent)
         }
@@ -209,6 +225,7 @@ const FlightCommisionForm = (props) => {
                                 {({ field, form, meta}) => (
                                   <div>
                                     <Select
+                                      {...field}
                                       options={optionRoute}
                                       placeholder="Select Depart From"
                                       // url={`master/airports`}
@@ -218,6 +235,13 @@ const FlightCommisionForm = (props) => {
                                         setOptDeparture(v)
                                       }}
                                     />
+                                    {form.touched.departureFrom && form.errors.departureFrom && (
+                                      <Form.Control.Feedback type="invalid">
+                                        {form.touched.departureFrom
+                                          ? form.errors.departureFrom
+                                          : null}
+                                      </Form.Control.Feedback>
+                                    )}
                                   </div>
                                 )}
                               </Field>
@@ -227,6 +251,7 @@ const FlightCommisionForm = (props) => {
                                 {({ field, form, meta}) => (
                                   <div>
                                     <Select
+                                      {...field}
                                       options={optionRoute}
                                       placeholder="Select Arrival At"
                                       // url={`master/airports`}
@@ -236,6 +261,13 @@ const FlightCommisionForm = (props) => {
                                         setOptArrival(v)
                                       }}
                                     />
+                                    {form.touched.arrivalAt && form.errors.arrivalAt && (
+                                      <Form.Control.Feedback type="invalid">
+                                        {form.touched.arrivalAt
+                                          ? form.errors.arrivalAt
+                                          : null}
+                                      </Form.Control.Feedback>
+                                    )}
                                   </div>
                                 )}
                               </Field>
@@ -280,9 +312,12 @@ const FlightCommisionForm = (props) => {
                                   className="form-control"
                                   dateFormat="dd MMMM yyyy"
                                   selected={periodIssueStart}
+                                  locale="engb"
+                                  value={new Date()}
                                   onChange={(date) => {
                                     setPeriodIssueStart(date)
                                     formik.setFieldValue("issueStart", date)
+                                    formik.setFieldValue("commission_claim_issue_date.start_date", date)
                                   }}
                                 />
                               </Col>
@@ -292,6 +327,7 @@ const FlightCommisionForm = (props) => {
                                   className="form-control"
                                   dateFormat="dd MMMM yyyy"
                                   selected={periodIssueEnd}
+                                  locale="engb"
                                   onChange={(date) => {
                                     setPeriodIssueEnd(date)
                                     formik.setFieldValue("issueEnd", date)
@@ -344,6 +380,7 @@ const FlightCommisionForm = (props) => {
                                   className="form-control"
                                   dateFormat="dd MMMM yyyy"
                                   selected={periodDepartureStart}
+                                  locale="engb"
                                   onChange={(date) => {
                                     console.log(date)
                                     setPeriodDepartureStart(date)
@@ -357,6 +394,7 @@ const FlightCommisionForm = (props) => {
                                   className="form-control"
                                   dateFormat="dd MMMM yyyy"
                                   selected={periodDepartureEnd}
+                                  locale="engb"
                                   onChange={(date) => {
                                     setPeriodDepartureEnd(date)
                                     formik.setFieldValue("departureEnd", date)
