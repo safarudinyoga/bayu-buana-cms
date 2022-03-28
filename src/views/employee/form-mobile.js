@@ -280,14 +280,12 @@ const EmployeeFormMobile = (props) => {
                         id="employee_icon"
                         type="imageProfile"
                         name="employee_asset"
-                        onChange={props.onChangePhotoProfile}
+                        onChange={(imageList) => {
+                          formik.setFieldValue("employee_asset", imageList)
+                        }}
                         disabled={isView}
-                        photoProfile={props.photoProfile}
-                        url={
-                          props.photoProfile.employee_asset
-                            ?.multimedia_description?.url ||
-                          formik.values.employee_asset
-                            ?.multimedia_description?.url
+                        photoProfile={formik.values.employee_asset}
+                        url={formik.values.employee_asset?.data_url
                         }
                       />
                       </div>
