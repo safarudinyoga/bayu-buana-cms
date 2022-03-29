@@ -151,7 +151,7 @@ const EmployeeFormMobile = (props) => {
                               control="selectOnly"
                               name="birth_date[0]"
                               placeholder={"Day"}
-                              options={props.selectDay()}
+                              options={props.selectDay(formik.values.birth_date[1], formik.values.birth_date[2])}
                               onChange={(v) => {
                                 formik.setFieldValue("birth_date[0]", v)
                               }}
@@ -175,7 +175,7 @@ const EmployeeFormMobile = (props) => {
                               control="selectOnly"
                               name="birth_date[1]"
                               placeholder={"Month"}
-                              options={props.selectMonth()}
+                              options={props.selectMonth(formik.values.birth_date[2])}
                               onChange={(v) => {
                                 formik.setFieldValue(
                                   "birth_date[1]",
@@ -280,14 +280,12 @@ const EmployeeFormMobile = (props) => {
                         id="employee_icon"
                         type="imageProfile"
                         name="employee_asset"
-                        onChange={props.onChangePhotoProfile}
+                        onChange={(imageList) => {
+                          formik.setFieldValue("employee_asset", imageList)
+                        }}
                         disabled={isView}
-                        photoProfile={props.photoProfile}
-                        url={
-                          props.photoProfile.employee_asset
-                            ?.multimedia_description?.url ||
-                          formik.values.employee_asset
-                            ?.multimedia_description?.url
+                        photoProfile={formik.values.employee_asset}
+                        url={formik.values.employee_asset?.data_url
                         }
                       />
                       </div>
@@ -1016,7 +1014,7 @@ const EmployeeFormMobile = (props) => {
                                 onChange={(v) => {
                                   formik.setFieldValue("hire_date[0]", v)
                                 }}
-                                options={props.selectDay()}
+                                options={props.selectDay(formik.values.hire_date[1], formik.values.hire_date[2])}
                                 placeholder={"Day"}
                                 style={{
                                   minWidth: 75,
@@ -1038,7 +1036,7 @@ const EmployeeFormMobile = (props) => {
                                 control="selectOnly"
                                 name="hire_date[1]"
                                 placeholder={"Month"}
-                                options={props.selectMonth()}
+                                options={props.selectMonth(formik.values.hire_date[2])}
                                 onChange={(v) => {
                                   formik.setFieldValue(
                                     "hire_date[1]",
