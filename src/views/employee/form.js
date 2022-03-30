@@ -194,7 +194,8 @@ const EmployeeForm = (props) => {
               ]
             : [],
           employee_asset: data?.employee_asset?.multimedia_description ? [{
-            data_url: data.employee_asset.multimedia_description.url
+            data_url: data.employee_asset.multimedia_description.url,
+            id:  data.employee_asset.multimedia_description.id,
           }] : [],
   
         })          
@@ -683,7 +684,7 @@ const EmployeeForm = (props) => {
         if (!photoData || photoData?.data_url !== values.employee_asset[0].data_url) {
           photo_id = await doUpload(values.employee_asset)
         } else {
-          photo_id = values.employee_asset[0].data_url
+          photo_id = values.employee_asset[0].id
         }
       }
       if (photoData && values.employee_asset.length === 0)
