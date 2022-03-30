@@ -7,6 +7,7 @@ export default class Api {
   constructor() {
     this.axios = axios.create({
       baseURL: env.API_URL,
+      withCredentials: true,
     })
     this.initialize()
     this.env = env
