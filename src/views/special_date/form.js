@@ -27,49 +27,32 @@ function SpecialDateForm(props) {
   const [cityData, setCityData] = useState([])
   const [form, setForm] = useState({
     special_date_name: "",
-    start_date: "",
-    end_date: "",
+    start_date: new Date(),
+    end_date: new Date(),
   })
   const translationFields = [
     {
-      label: "Airport Name",
-      name: "airport_name",
+      label: "Special Date Name",
+      name: "special_date_name",
       type: "text",
     },
   ]
 
   const validationRules = {
-    airport_code: {
+    special_date_name: {
       required: true,
-      minlength: 3,
-      maxlength: 3,
-      checkCode: true,
-    },
-    icao_code: {
-      required: false,
-      minlength: 4,
-      maxlength: 4,
-      checkIcao: true,
-    },
-    airport_name: {
-      required: true,
-      minlength: 1,
-      maxlength: 256,
-      checkName: true,
-    },
-    city_id: {},
+      minLength: 1,
+      maxLength: 256,
+      checkName: true
+
+    }
   }
 
   const validationMessages = {
-    airport_code: {
-      required: "Airport Code is required",
-      minlength: "Airport Code must be at least 3 characters",
-      maxlength: "Airport Code cannot be more than 3 characters",
-    },
-    airport_name: {
-      required: "Airport Name is required",
-      minlength: "Airport Name must be at least 1 characters",
-      maxlength: "Airport Name cannot be more than 256 characters",
+    special_date_name: {
+      required: "Special Date Name is required",
+      minlength: "Special Date Name must be at least 1 characters",
+      maxlength: "Special Date Name cannot be more than 256 characters",
     },
   }
 
@@ -105,69 +88,12 @@ function SpecialDateForm(props) {
       }),
     )
     if (formId) {
+
       try {
         let res = await api.get(endpoint + "/" + formId)
-        setForm(res.data)
-        if (res.data.city) {
-          setCityData([{...res.data.city, text: res.data.city.city_name}])
-        }
-
+        // console.log(res);
         if(res.data) {
-          let currentCode = res.data.airport_code
-          let currentIcao = res.data.icao_code
-          let currentName = res.data.airport_name
-
-          $.validator.addMethod(
-            "checkCode",
-            function (value, element) {
-              var req = false
-              $.ajax({
-                type: "GET",
-                async: false,
-                url: `${env.API_URL}/master/airports?filters=["airport_code","like","${element.value}"]`,
-                success: function (res) {
-                  if (res.items.length !== 0) {
-                    if(currentCode === element.value){
-                      req = true
-                    } else {
-                      req = false
-                    }
-                  } else {
-                    req = true
-                  }
-                },
-              })
-    
-              return req
-            },
-            "Code already exists",
-          )
-
-          $.validator.addMethod(
-            "checkIcao",
-            function (value, element) {
-              var req = false
-              $.ajax({
-                type: "GET",
-                async: false,
-                url: `${env.API_URL}/master/airports?filters=["icao_code","=","${element.value}"]`,
-                success: function (res) {
-                  if (res.items.length !== 0) {
-                    if(currentIcao === element.value || !element.value){
-                      req = true
-                    } else {
-                      req = false
-                    }
-                  } else {
-                    req = true
-                  }
-                },
-              })
-    
-              return req
-            },
-            "ICAO Code already exists",
-          )
+          let currentName = res.data.special_date_name
 
           $.validator.addMethod(
             "checkName",
@@ -176,7 +102,7 @@ function SpecialDateForm(props) {
               $.ajax({
                 type: "GET",
                 async: false,
-                url: `${env.API_URL}/master/airports?filters=["airport_name","=","${element.value}"]`,
+                url: `${env.API_URL}/master/agent-special-dates?filters=["special_date_name","=","${element.value}"]`,
                 success: function (res) {
                   if (res.items.length !== 0) {
                     if(currentName.toUpperCase() === element.value.toUpperCase()){
@@ -189,10 +115,11 @@ function SpecialDateForm(props) {
                   }
                 },
               })
-    
+
               return req
             },
-            "Airport Name already exists",
+
+            "Special Date Name already exists"
           )
         }
       } catch (e) { }
@@ -206,60 +133,13 @@ function SpecialDateForm(props) {
       setLoading(false)
     } else {
       $.validator.addMethod(
-        "checkCode",
-        function (value, element) {
-          var req = false
-          $.ajax({
-            type: "GET",
-            async: false,
-            url: `${env.API_URL}/master/airports?filters=["airport_code","like","${element.value}"]`,
-            success: function (res) {
-              if (res.items.length !== 0) {
-                req = false
-              } else {
-                req = true
-              }
-            },
-          })
-
-          return req
-        },
-        "Code already exists",
-      )
-      $.validator.addMethod(
-        "checkIcao",
-        function (value, element) {
-          var req = false
-          $.ajax({
-            type: "GET",
-            async: false,
-            url: `${env.API_URL}/master/airports?filters=["icao_code","=","${element.value}"]`,
-            success: function (res) {
-              if (res.items.length !== 0) {
-                if(!element.value){
-                  req = true
-                } else {
-                  req = false
-                }
-                
-              } else {
-                req = true
-              }
-            },
-          })
-
-          return req
-        },
-        "ICAO Code already exists",
-      )
-      $.validator.addMethod(
         "checkName",
         function (value, element) {
           var req = false
           $.ajax({
             type: "GET",
             async: false,
-            url: `${env.API_URL}/master/airports?filters=["airport_name","=","${element.value}"]`,
+            url: `${env.API_URL}/master/agent-special-dates?filters=["special_date_name","like","${element.value}"]`,
             success: function (res) {
               if (res.items.length !== 0) {
                 req = false
@@ -271,7 +151,7 @@ function SpecialDateForm(props) {
 
           return req
         },
-        "Airport Name already exists",
+        "Special Date Name already exists",
       )
     }
   }, [])
@@ -287,14 +167,8 @@ function SpecialDateForm(props) {
     let translated = formBuilder.getTranslations()
     setLoading(true)
     let api = new Api()
+    console.log(form);
     try {
-      // if (!form.city_id) {
-      //   form.city_id = null
-      // }
-
-      // if(!form.icao_code) {
-      //   form.icao_code = null
-      // }
       
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
@@ -315,9 +189,7 @@ function SpecialDateForm(props) {
       props.history.goBack()
       dispatch(
         setAlert({
-          message: `Record ${form.airport_code} - ${
-            form.airport_name
-          } has been successfully ${formId ? "updated" : "saved"}.`,
+          message: `Record ${form.special_date_name} - has been successfully ${formId ? "updated" : "saved"}.`,
         }),
       )
     }

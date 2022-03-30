@@ -152,6 +152,15 @@ select.bg-dark-grey > option {
   margin-bottom: 120px;
 }
 
+@media only screen and (max-width: 394px) {
+  .text-label-page {
+    margin-bottom: 0px;
+  }
+  .mobile-margin {
+    padding-bottom: 120px;
+  }
+}
+
 @media only screen and (max-width: 768px) {
   .text-label-input {
     font-size: 14px;

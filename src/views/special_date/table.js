@@ -4,6 +4,7 @@ import rowStatus from "lib/row-status"
 import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
 import { renderColumn } from "lib/translation"
+import { format } from "date-fns"
 
 export default function SpecialDateTable() {
   let dispatch = useDispatch()
@@ -38,11 +39,21 @@ export default function SpecialDateTable() {
       },
       {
         title: "Start Date",
-        data: "special_date_start",
+        data: "start_date",
+        render: (val) => {
+          if(val){
+            return format(new Date(val), "d MMM yyyy")
+          }
+        }
       },
       {
         title: "End Date",
-        data: "special_date_end",
+        data: "end_date",
+        render: (val) => {
+          if(val){
+            return format(new Date(val), "d MMM yyyy")
+          }
+        }
       },
       {
         title: "Translated Region Name",

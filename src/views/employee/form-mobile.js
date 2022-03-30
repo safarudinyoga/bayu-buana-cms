@@ -151,7 +151,7 @@ const EmployeeFormMobile = (props) => {
                               control="selectOnly"
                               name="birth_date[0]"
                               placeholder={"Day"}
-                              options={props.selectDay()}
+                              options={props.selectDay(formik.values.birth_date[1], formik.values.birth_date[2])}
                               onChange={(v) => {
                                 formik.setFieldValue("birth_date[0]", v)
                               }}
@@ -175,7 +175,7 @@ const EmployeeFormMobile = (props) => {
                               control="selectOnly"
                               name="birth_date[1]"
                               placeholder={"Month"}
-                              options={props.selectMonth()}
+                              options={props.selectMonth(formik.values.birth_date[2])}
                               onChange={(v) => {
                                 formik.setFieldValue(
                                   "birth_date[1]",
@@ -280,14 +280,12 @@ const EmployeeFormMobile = (props) => {
                         id="employee_icon"
                         type="imageProfile"
                         name="employee_asset"
-                        onChange={props.onChangePhotoProfile}
+                        onChange={(imageList) => {
+                          formik.setFieldValue("employee_asset", imageList)
+                        }}
                         disabled={isView}
-                        photoProfile={props.photoProfile}
-                        url={
-                          props.photoProfile.employee_asset
-                            ?.multimedia_description?.url ||
-                          formik.values.employee_asset
-                            ?.multimedia_description?.url
+                        photoProfile={formik.values.employee_asset}
+                        url={formik.values.employee_asset?.data_url
                         }
                       />
                       </div>
@@ -341,315 +339,36 @@ const EmployeeFormMobile = (props) => {
                 <Col lg={1}></Col>
               </Row>
               <h3 className="card-heading">Current Address</h3>
-              <Row>
-                <Col lg={11}>
-                  <div style={{ padding: "0 15px 15px" }}>
-                    <FormikControl
-                      control="textarea"
-                      label="Address"
-                      name="address.address_line"
-                      rows={3}
-                      style={{ maxWidth: 416 }}
-                      disabled={isView}
-                      minLength="1"
-                      maxLength="512"
-                    />
-                    <FormikControl
-                      control="selectAsync"
-                      required={isView ? "" : "label-required"}
-                      label="Country"
-                      name="address.country_id"
-                      url={`master/countries`}
-                      fieldName={"country_name"}
-                      
-                      onChange={(v) => {
-                        formik.setFieldValue(
-                          "address.country_id",
-                          v,
-                        )
-                        formik.setFieldValue(
-                          "address.state_province_id",
-                          {
-                            value: null,
-                            label: "Please choose",
-                          },
-                        )
-                        formik.setFieldValue("address.city_id", {
-                          value: null,
-                          label: "Please choose",
-                        })
-                      }}
-                      placeholder={"Please choose"}
-                      style={{ maxWidth: 300 }}
-                      components={
-                        isView
-                          ? {
-                              DropdownIndicator: () => null,
-                              IndicatorSeparator: () => null,
-                            }
-                          : null
-                      }
-                      isDisabled={isView}
-                    />
-                    <FormikControl
-                      control="selectAsync"
-                      label="State/ Province"
-                      name="address.state_province_id"
-                      url={`master/state-provinces`}
-                      fieldName={"state_province_name"}
-                      urlFilter={`["country_id","=","${formik.values.address.country_id.value}"]`}
-                      isLoading={false}
-                      key={JSON.stringify(
-                        formik.values.address.country_id.value,
-                      )}
-                      onChange={(v) => {
-                        formik.setFieldValue(
-                          "address.state_province_id",
-                          v,
-                        )
-                        formik.setFieldValue("address.city_id", null)
-                      }}
-                      placeholder={"Please choose"}
-                      style={{ maxWidth: 200 }}
-                      components={
-                        isView
-                          ? {
-                              DropdownIndicator: () => null,
-                              IndicatorSeparator: () => null,
-                            }
-                          : null
-                      }
-                      isDisabled={isView}
-                    />
-                    <FormikControl
-                      control="selectAsync"
-                      label="City"
-                      name="address.city_id"
-                      url={`master/cities`}
-                      fieldName={"city_name"}
-                      urlFilter={ formik.values.address.state_province_id.value === "00000000-0000-0000-0000-000000000000" ? `["country_id","=","${formik.values.address.country_id.value}"]` : `["country_id","=","${formik.values.address.country_id.value}"],["AND"],["state_province_id","=","${formik.values.address.state_province_id.value}"]`}
-                      key={JSON.stringify(
-                        formik.values.address.state_province_id.value,
-                      )}
-                      onChange={(v) => {
-                        formik.setFieldValue("address.city_id", v)
-                      }}
-                      placeholder={"Please choose"}
-                      style={{ maxWidth: 200 }}
-                      components={
-                        isView
-                          ? {
-                              DropdownIndicator: () => null,
-                              IndicatorSeparator: () => null,
-                            }
-                          : null
-                      }
-                      isDisabled={isView}
-                    />
-                    <FormikControl
-                      control="input"
-                      label="Zip Code"
-                      name="address.postal_code"
-                      style={{ maxWidth: 100 }}
-                      isDisabled={isView}
-                      minLength="1"
-                      maxLength="16"
-                    />
-                  </div>
-                </Col>
-                <Col lg={1}></Col>
-              </Row>
-              <h3 className="card-heading">Permanent Address</h3>
-              <Row>
-                <Col lg={11}>
-                  <div style={{ padding: "0 15px 15px" }}>
-                    <input
-                      type="checkbox"
-                      name="sameAddress"
-                      checked={formik.values.same_address}
-                      onChange={() => {
-                        formik.setFieldValue(
-                          "same_address",
-                          !formik.values.same_address,
-                        )
-                        formik.setFieldValue(
-                          "permanent_address.address_line",
-                          formik.values.same_address
-                            ? ""
-                            : formik.values.address.address_line,
-                        )
-                        formik.setFieldValue(
-                          "permanent_address.country_id",
-                          formik.values.same_address
-                            ? ""
-                            : formik.values.address.country_id,
-                        )
-                        formik.setFieldValue(
-                          "permanent_address.state_province_id",
-                          formik.values.same_address
-                            ? ""
-                            : formik.values.address
-                                .state_province_id,
-                        )
-                        formik.setFieldValue(
-                          "permanent_address.city_id",
-                          formik.values.same_address
-                            ? ""
-                            : formik.values.address.city_id,
-                        )
-                        formik.setFieldValue(
-                          "permanent_address.postal_code",
-                          formik.values.same_address
-                            ? ""
-                            : formik.values.address.postal_code,
-                        )
-                      }}
-                      style={{ maxWidth: 416, margin: 5, accentColor: "#06846b" }}
-                      disabled={isView}
-                    /> Same As Current Address
-                    {formik.values.same_address ? (<>
-                    <FormikControl
-                      control="textarea"
-                      label="Address"
-                      name="address.address_line"
-                      rows={3}
-                      style={{ maxWidth: 416 }}
-                      disabled={isView || formik.values.same_address}
-                      minLength="1"
-                      maxLength="512"
-                    />
-                    <FormikControl
-                      control="selectAsync"
-                      required={isView ? "" : "label-required"}
-                      label="Country"
-                      name="address.country_id"
-                      url={`master/countries`}
-                      fieldName={"country_name"}                                    
-                      onChange={(v) => {
-                        formik.setFieldValue(
-                          "address.country_id",
-                          v,
-                        )
-                        formik.setFieldValue(
-                          "address.state_province_id",
-                          {
-                            value: null,
-                            label: "Please choose",
-                          },
-                        )
-                        formik.setFieldValue("address.city_id", {
-                          value: null,
-                          label: "Please choose",
-                        })
-                      }}
-                      placeholder={"Please choose"}
-                      style={{ maxWidth: 300 }}
-                      components={
-                        isView
-                          ? {
-                              DropdownIndicator: () => null,
-                              IndicatorSeparator: () => null,
-                            }
-                          : null
-                      }
-                      isDisabled={isView || formik.values.same_address}
-                    />
-                    <FormikControl
-                      control="selectAsync"
-                      label="State/ Province"
-                      name="address.state_province_id"
-                      url={`master/state-provinces`}
-                      fieldName={"state_province_name"}
-                      urlFilter={`["country_id","=","${formik.values.address.country_id.value}"]`}
-                      isLoading={false}
-                      key={JSON.stringify(
-                        formik.values.address.country_id.value,
-                      )}
-                      onChange={(v) => {
-                        formik.setFieldValue(
-                          "address.state_province_id",
-                          v,
-                        )
-                        formik.setFieldValue("address.city_id", null)
-                      }}
-                      placeholder={"Please choose"}
-                      style={{ maxWidth: 200 }}
-                      components={
-                        isView
-                          ? {
-                              DropdownIndicator: () => null,
-                              IndicatorSeparator: () => null,
-                            }
-                          : null
-                      }
-                      isDisabled={isView || formik.values.same_address}
-                    />
-                    <FormikControl
-                      control="selectAsync"
-                      label="City"
-                      name="address.city_id"
-                      url={`master/cities`}
-                      fieldName={"city_name"}
-                      urlFilter={ formik.values.address.state_province_id.value === "00000000-0000-0000-0000-000000000000" ? `["country_id","=","${formik.values.address.country_id.value}"]` : `["country_id","=","${formik.values.address.country_id.value}"],["AND"],["state_province_id","=","${formik.values.address.state_province_id.value}"]`}
-                      key={JSON.stringify(
-                        formik.values.address.state_province_id.value,
-                      )}
-                      onChange={(v) => {
-                        formik.setFieldValue("address.city_id", v)
-                      }}
-                      placeholder={"Please choose"}
-                      style={{ maxWidth: 200 }}
-                      components={
-                        isView
-                          ? {
-                              DropdownIndicator: () => null,
-                              IndicatorSeparator: () => null,
-                            }
-                          : null
-                      }
-                      isDisabled={isView || formik.values.same_address}
-                    />
-                    <FormikControl
-                      control="input"
-                      label="Zip Code"
-                      name="address.postal_code"
-                      style={{ maxWidth: 100 }}
-                      disabled={isView || formik.values.same_address}
-                      minLength="1"
-                      maxLength="16"
-                    />
-                  </>):(
-                  <>
-                  <FormikControl
-                      control="textarea"
-                      label="Address"
-                      name="permanent_address.address_line"
-                      rows={3}
-                      style={{ maxWidth: 416 }}
-                      disabled={isView || formik.values.same_address}
-                      minLength="1"
-                      maxLength="512"
-                    />
-                    <FormikControl
-                      control="selectAsync"
+                <Row>
+                  <Col lg={11}>
+                    <div style={{ padding: "0 15px 15px" }}>
+                      <FormikControl
+                        control="textarea"
+                        label="Address"
+                        name="address.address_line"
+                        rows={3}
+                        style={{ maxWidth: 416 }}
+                        disabled={isView}
+                        minLength="1"
+                        maxLength="512"
+                      />
+                      <FormikControl
+                        control="selectAsync"
                         required={isView ? "" : "label-required"}
                         label="Country"
-                        name="permanent_address.country_id"
+                        name={"address.country_id"}
                         url={`master/countries`}
                         fieldName={"country_name"}
-                        onChange={(v) => {
-                          formik.setFieldValue(
-                            "permanent_address.country_id",
-                            v,
-                          )
-                          formik.setFieldValue(
-                            "permanent_address.state_province_id",
-                            { value: null, label: "Please choose" },
-                          )
-                          formik.setFieldValue(
-                            "permanent_address.city_id",
-                            { value: null, label: "Please choose" },
-                          )
+                        onChange={(v) => {                          
+                          formik.setFieldValue("address.state_province_id", {
+                            value: "00000000-0000-0000-0000-000000000000",
+                            label: "Please choose",
+                          })
+                          formik.setFieldValue("address.city_id", {
+                            value: "00000000-0000-0000-0000-000000000000",
+                            label: "Please choose",
+                          })
+                          formik.setFieldValue("address.country_id", v)
                         }}
                         placeholder={"Please choose"}
                         style={{ maxWidth: 300 }}
@@ -661,87 +380,354 @@ const EmployeeFormMobile = (props) => {
                               }
                             : null
                         }
-                        isDisabled={isView || formik.values.same_address}
-                    />
-                    <FormikControl
-                      control="selectAsync"
-                      label="State/ Province"
-                      name="permanent_address.state_province_id"
-                      url={`master/state-provinces`}
-                      fieldName={"state_province_name"}  
-                      urlFilter={`["country_id","=","${formik.values.permanent_address.country_id.value}"]`}
-                      key={JSON.stringify(
-                        formik.values.permanent_address.country_id.value,
-                      )}                                  
-                      onChange={(v) => {
-                        formik.setFieldValue(
-                          "permanent_address.state_province_id",
-                          v,
-                        )
-                        formik.setFieldValue(
-                          "permanent_address.city_id",
-                          {
-                            value: null,
+                        isDisabled={isView}
+                      />
+                      <FormikControl
+                        control="selectAsync"
+                        label="State/ Province"
+                        name="address.state_province_id"
+                        url={`master/state-provinces`}
+                        fieldName={"state_province_name"}
+                        urlFilter={`["country_id","=","${formik.values.address.country_id.value}"]`}
+                        isLoading={false}
+                        key={JSON.stringify(formik.values.address.country_id)}
+                        onChange={(v) => {
+                          formik.setFieldValue("address.state_province_id", v)
+                          formik.setFieldValue("address.city_id", {
+                            value: "00000000-0000-0000-0000-000000000000",
                             label: "Please choose",
-                          },
-                        )
-                      }}
-                      placeholder={"Please choose"}
-                      style={{ maxWidth: 200 }}
-                      components={
-                        
-                        isView
-                          ? {
-                              DropdownIndicator: () => null,
-                              IndicatorSeparator: () => null,                                            
-                            }
-                          : null
-                      }
-                      isDisabled={isView || formik.values.same_address}
-                    />
-                    <FormikControl
-                      control="selectAsync"
-                      label="City"
-                      name="permanent_address.city_id"
-                      url={`master/cities`}
-                      fieldName={"city_name"}
-                      urlFilter={formik.values.permanent_address.state_province_id.value === "00000000-0000-0000-0000-000000000000" ? `["country_id","=","${formik.values.permanent_address.country_id.value}"]` : `["country_id","=","${formik.values.permanent_address.country_id.value}"],["AND"],["state_province_id","=","${formik.values.permanent_address.state_province_id.value}"]`}
+                          })
+                        }}
+                        placeholder={"Please choose"}
+                        style={{ maxWidth: 200 }}
+                        components={
+                          isView
+                            ? {
+                                DropdownIndicator: () => null,
+                                IndicatorSeparator: () => null,
+                              }
+                            : null
+                        }
+                        isDisabled={isView}
+                      />
+                      <FormikControl
+                        control="selectAsync"
+                        label="City"
+                        name="address.city_id"
+                        url={`master/cities`}
+                        fieldName={"city_name"}
+                        urlFilter={
+                          formik.values.address.state_province_id.value ===
+                          "00000000-0000-0000-0000-000000000000"
+                            ? `["country_id","=","${formik.values.address.country_id.value}"]`
+                            : `["country_id","=","${formik.values.address.country_id.value}"],["AND"],["state_province_id","=","${formik.values.address.state_province_id.value}"]`
+                        }
                         key={JSON.stringify(
-                          formik.values.permanent_address.state_province_id.value,
+                          formik.values.address.state_province_id.value,
                         )}
                         onChange={(v) => {
+                          formik.setFieldValue("address.city_id", v)
+                        }}
+                        placeholder={"Please choose"}
+                        style={{ maxWidth: 200 }}
+                        components={
+                          isView
+                            ? {
+                                DropdownIndicator: () => null,
+                                IndicatorSeparator: () => null,
+                              }
+                            : null
+                        }
+                        isDisabled={isView}
+                      />
+                      <FormikControl
+                        control="input"
+                        label="Zip Code"
+                        name="address.postal_code"
+                        style={{ maxWidth: 100 }}
+                        disabled={isView}
+                        minLength="1"
+                        maxLength="16"
+                      />
+                    </div>
+                  </Col>
+                  <Col lg={1}></Col>
+                </Row>
+                <h3 className="card-heading">Permanent Address</h3>
+                <Row>
+                  <Col lg={11}>
+                    <div style={{ padding: "0 15px 15px" }}>
+                      <FormikControl
+                        control="checkboxOnly"
+                        type="checkbox"
+                        label="Same As Current Address"
+                        name="same_address"
+                        checked={formik.values.same_address}
+                        onChange={() => {                          
                           formik.setFieldValue(
-                            "permanent_address.city_id",
-                            v,
+                            "same_address",
+                            !formik.values.same_address,
                           )
                         }}
-                      placeholder={"Please choose"}
-                      style={{ maxWidth: 200 }}
-                      components={
-                        isView
-                          ? {
-                              DropdownIndicator: () => null,
-                              IndicatorSeparator: () => null,
+                        style={{ maxWidth: 416 }}
+                        disabled={isView}
+                      />
+                      {formik.values.same_address ? (
+                        <div>
+                          <FormikControl
+                            control="textarea"
+                            label="Address"
+                            name="address.address_line"
+                            rows={3}
+                            style={{ maxWidth: 416 }}
+                            disabled={isView || formik.values.same_address}
+                            minLength="1"
+                            maxLength="512"
+                          />
+                          <FormikControl
+                            control="selectAsync"
+                            required={isView ? "" : "label-required"}
+                            label="Country"
+                            name={"address.country_id"}
+                            url={`master/countries`}
+                            fieldName={"country_name"}
+                            onChange={(v) => {                              
+                              formik.setFieldValue(
+                                "address.state_province_id",
+                                {
+                                  value: "00000000-0000-0000-0000-000000000000",
+                                  label: "Please choose",
+                                },
+                              )
+                              formik.setFieldValue("address.city_id", {
+                                value: "00000000-0000-0000-0000-000000000000",
+                                label: "Please choose",
+                              })
+                              formik.setFieldValue("address.country_id", v)
+                            }}
+                            placeholder={"Please choose"}
+                            style={{ maxWidth: 300 }}
+                            components={
+                              isView
+                                ? {
+                                    DropdownIndicator: () => null,
+                                    IndicatorSeparator: () => null,
+                                  }
+                                : null
                             }
-                          : null
-                      }
-                      isDisabled={isView || formik.values.same_address}
-                    />
-                    <FormikControl
-                      control="input"
-                      label="Zip Code"
-                      name="permanent_address.postal_code"
-                      style={{ maxWidth: 100 }}
-                      disabled={isView || formik.values.same_address}
-                      minLength="1"
-                      maxLength="16"
-                    />
-                    </>)}
-                    
-                  </div>
-                </Col>
-                <Col lg={1}></Col>
-              </Row>
+                            isDisabled={isView || formik.values.same_address}
+                          />
+                          <FormikControl
+                            control="selectAsync"
+                            label="State/ Province"
+                            name="address.state_province_id"
+                            url={`master/state-provinces`}
+                            fieldName={"state_province_name"}
+                            urlFilter={`["country_id","=","${formik.values.address.country_id.value}"]`}
+                            isLoading={false}
+                            key={JSON.stringify(
+                              formik.values.address.country_id,
+                            )}
+                            onChange={(v) => {
+                              formik.setFieldValue(
+                                "address.state_province_id",
+                                v,
+                              )
+                              formik.setFieldValue("address.city_id", {
+                                value: "00000000-0000-0000-0000-000000000000",
+                                label: "Please choose",
+                              })
+                            }}
+                            placeholder={"Please choose"}
+                            style={{ maxWidth: 200 }}
+                            components={
+                              isView
+                                ? {
+                                    DropdownIndicator: () => null,
+                                    IndicatorSeparator: () => null,
+                                  }
+                                : null
+                            }
+                            isDisabled={isView || formik.values.same_address}
+                          />
+                          <FormikControl
+                            control="selectAsync"
+                            label="City"
+                            name="address.city_id"
+                            url={`master/cities`}
+                            fieldName={"city_name"}
+                            urlFilter={
+                              formik.values.address.state_province_id.value ===
+                              "00000000-0000-0000-0000-000000000000"
+                                ? `["country_id","=","${formik.values.address.country_id.value}"]`
+                                : `["country_id","=","${formik.values.address.country_id.value}"],["AND"],["state_province_id","=","${formik.values.address.state_province_id.value}"]`
+                            }
+                            key={JSON.stringify(
+                              formik.values.address.state_province_id.value,
+                            )}
+                            onChange={(v) => {
+                              formik.setFieldValue("address.city_id", v)
+                            }}
+                            placeholder={"Please choose"}
+                            style={{ maxWidth: 200 }}
+                            components={
+                              isView
+                                ? {
+                                    DropdownIndicator: () => null,
+                                    IndicatorSeparator: () => null,
+                                  }
+                                : null
+                            }
+                            isDisabled={isView || formik.values.same_address}
+                          />
+                          <FormikControl
+                            control="input"
+                            label="Zip Code"
+                            name="address.postal_code"
+                            style={{ maxWidth: 100 }}
+                            disabled={isView || formik.values.same_address}
+                            minLength="1"
+                            maxLength="16"
+                          />
+                        </div>
+                      ) : (
+                        <>
+                          <FormikControl
+                            control="textarea"
+                            label="Address"
+                            name="permanent_address.address_line"
+                            rows={3}
+                            style={{ maxWidth: 416 }}
+                            disabled={isView || formik.values.same_address}
+                            minLength="1"
+                            maxLength="512"
+                          />
+
+                          <FormikControl
+                            control="selectAsync"
+                            required={isView ? "" : "label-required"}
+                            label="Country"
+                            name={"permanent_address.country_id"}
+                            url={`master/countries`}
+                            fieldName={"country_name"}
+                            onChange={(v) => {                              
+                              formik.setFieldValue(
+                                "permanent_address.state_province_id",
+                                {
+                                  value: "00000000-0000-0000-0000-000000000000",
+                                  label: "Please choose",
+                                },
+                              )
+                              formik.setFieldValue(
+                                "permanent_address.city_id",
+                                {
+                                  value: "00000000-0000-0000-0000-000000000000",
+                                  label: "Please choose",
+                                },
+                              )
+                              formik.setFieldValue(
+                                "permanent_address.country_id",
+                                v,
+                              )
+                            }}
+                            placeholder={"Please choose"}
+                            style={{ maxWidth: 300 }}
+                            components={
+                              isView
+                                ? {
+                                    DropdownIndicator: () => null,
+                                    IndicatorSeparator: () => null,
+                                  }
+                                : null
+                            }
+                            isDisabled={isView || formik.values.same_address}
+                          />
+
+                          <FormikControl
+                            control="selectAsync"
+                            label="State/ Province"
+                            name="permanent_address.state_province_id"
+                            url={`master/state-provinces`}
+                            fieldName={"state_province_name"}
+                            urlFilter={`["country_id","=","${formik.values.permanent_address.country_id.value}"]`}
+                            key={JSON.stringify(
+                              formik.values.permanent_address.country_id,
+                            )}
+                            onChange={(v) => {
+                              formik.setFieldValue(
+                                "permanent_address.state_province_id",
+                                v,
+                              )
+                              formik.setFieldValue(
+                                "permanent_address.city_id",
+                                {
+                                  value: "00000000-0000-0000-0000-000000000000",
+                                  label: "Please choose",
+                                },
+                              )
+                            }}
+                            placeholder={"Please choose"}
+                            style={{ maxWidth: 200 }}
+                            components={
+                              isView
+                                ? {
+                                    DropdownIndicator: () => null,
+                                    IndicatorSeparator: () => null,
+                                  }
+                                : null
+                            }
+                            isDisabled={isView || formik.values.same_address}
+                          />
+                          <FormikControl
+                            control="selectAsync"
+                            label="City"
+                            name="permanent_address.city_id"
+                            url={`master/cities`}
+                            fieldName={"city_name"}
+                            urlFilter={
+                              formik.values.permanent_address.state_province_id
+                                .value ===
+                              "00000000-0000-0000-0000-000000000000"
+                                ? `["country_id","=","${formik.values.permanent_address.country_id.value}"]`
+                                : `["country_id","=","${formik.values.permanent_address.country_id.value}"],["AND"],["state_province_id","=","${formik.values.permanent_address.state_province_id.value}"]`
+                            }
+                            key={JSON.stringify(
+                              formik.values.permanent_address.state_province_id
+                                .value,
+                            )}
+                            onChange={(v) => {
+                              formik.setFieldValue(
+                                "permanent_address.city_id",
+                                v,
+                              )
+                            }}
+                            placeholder={"Please choose"}
+                            style={{ maxWidth: 200 }}
+                            components={
+                              isView
+                                ? {
+                                    DropdownIndicator: () => null,
+                                    IndicatorSeparator: () => null,
+                                  }
+                                : null
+                            }
+                            isDisabled={isView || formik.values.same_address}
+                          />
+                          <FormikControl
+                            control="input"
+                            label="Zip Code"
+                            name="permanent_address.postal_code"
+                            style={{ maxWidth: 100 }}
+                            disabled={isView || formik.values.same_address}
+                            minLength="1"
+                            maxLength="16"
+                          />
+                        </>
+                      )}
+                    </div>
+                  </Col>
+                  <Col lg={1}></Col>
+                </Row>
               <div
                 className="mb-5 ml-1 row justify-content-md-start justify-content-center"
                 style={{
@@ -752,29 +738,29 @@ const EmployeeFormMobile = (props) => {
               >
                 {isView ? (
                   <>
-                    <Button
-                      variant="secondary"
+                    <button
+                      className="text-button-cancel button-cancel"
                       onClick={() => history.goBack()}
                     >
                       BACK
-                    </Button>
+                    </button>
                   </>
                 ) : (
                   <>
-                    <Button
-                      variant="primary"
+                    <button
+                      className="text-button-save button-save"
                       type="submit"
                       disabled={props.finishStep > 0 || props.match.params.id ? (!formik.isValid || formik.isSubmitting) : (!formik.dirty || formik.isSubmitting)}
                       style={{ marginRight: 15 }}
                     >
                       {props.match.params.id ? "SAVE" : "SAVE & NEXT"}
-                    </Button>
-                    <Button
-                      variant="secondary"
+                    </button>
+                    <button
+                      className="text-button-cancel button-cancel"
                       onClick={() => history.goBack()}
                     >
                       CANCEL
-                    </Button>
+                    </button>
                   </>
                 )}
               </div>
@@ -878,29 +864,29 @@ const EmployeeFormMobile = (props) => {
                 >
                   {isView ? (
                     <>
-                      <Button
-                        variant="secondary"
+                      <button
+                        className="text-button-cancel button-cancel"
                         onClick={() => history.goBack()}
                       >
                         BACK
-                      </Button>
+                      </button>
                     </>
                   ) : (
                     <>
-                      <Button
-                        variant="primary"
+                      <button
+                        className="text-button-save button-save mr-2"
                         type="submit"
                         disabled={formik.isSubmitting || !formik.isValid}
                         style={{ marginRight: 15 }}
                       >
                         {props.match.params.id ? "SAVE" : "SAVE & NEXT"}
-                      </Button>
-                      <Button
-                        variant="secondary"
+                      </button>
+                      <button
+                        className="text-button-cancel button-cancel"
                         onClick={() => history.goBack()}
                       >
                         CANCEL
-                      </Button>
+                      </button>
                     </>
                   )}
                 </div>
@@ -1028,7 +1014,7 @@ const EmployeeFormMobile = (props) => {
                                 onChange={(v) => {
                                   formik.setFieldValue("hire_date[0]", v)
                                 }}
-                                options={props.selectDay()}
+                                options={props.selectDay(formik.values.hire_date[1], formik.values.hire_date[2])}
                                 placeholder={"Day"}
                                 style={{
                                   minWidth: 75,
@@ -1050,7 +1036,7 @@ const EmployeeFormMobile = (props) => {
                                 control="selectOnly"
                                 name="hire_date[1]"
                                 placeholder={"Month"}
-                                options={props.selectMonth()}
+                                options={props.selectMonth(formik.values.hire_date[2])}
                                 onChange={(v) => {
                                   formik.setFieldValue(
                                     "hire_date[1]",
@@ -1198,29 +1184,29 @@ const EmployeeFormMobile = (props) => {
                 >
                   {isView ? (
                     <>
-                      <Button
-                        variant="secondary"
+                      <button
+                        className="text-button-cancel button-cancel"
                         onClick={() => history.goBack()}
                       >
                         BACK
-                      </Button>
+                      </button>
                     </>
                   ) : (
                     <>
-                      <Button
-                        variant="primary"
+                      <button
+                        className="text-button-save button-save mr-2"
                         type="submit"
                         disabled={!formik.isValid}
                         style={{ marginRight: 15 }}
                       >
                         SAVE
-                      </Button>
-                      <Button
-                        variant="secondary"
+                      </button>
+                      <button
+                        className="text-button-cancel button-cancel"
                         onClick={() => history.goBack()}
                       >
                         CANCEL
-                      </Button>
+                      </button>
                     </>
                   )}
                 </div>
