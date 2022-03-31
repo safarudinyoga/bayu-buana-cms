@@ -1486,7 +1486,7 @@ const EmployeeForm = (props) => {
                     type="submit"
                     disabled={
                       finishStep > 0 || props.match.params.id
-                        ? !formik.dirty || formik.isSubmitting
+                        ? !formik.dirty || !formik.isValid
                         : !formik.isValid || formik.isSubmitting
                     }                    
                     style={{ marginRight: 15 }}

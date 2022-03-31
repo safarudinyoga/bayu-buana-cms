@@ -777,7 +777,7 @@ const EmployeeFormMobile = (props) => {
                       type="submit"
                       disabled={
                       props.finishStep > 0 || props.match.params.id
-                        ? !formik.dirty || formik.isSubmitting
+                      ? !formik.dirty || !formik.isValid
                         : !formik.isValid || formik.isSubmitting
                     }
                       style={{ marginRight: 15 }}
