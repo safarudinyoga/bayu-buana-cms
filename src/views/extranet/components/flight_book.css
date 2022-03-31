@@ -1,0 +1,54 @@
+.card {
+  background: #eff0f2;
+}
+
+.flight-book-tabs {
+  background: #eff0f2;
+}
+
+.flight-book-tabs .nav-link {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  box-shadow: 2px 6px 6px #00000029 !important;
+  background-color: #e5e5ea !important;
+  color: #333;
+}
+
+.flight-book-tabs .nav-link.active {
+  background-color: #8e95b0 !important;
+  color: #fff !important;
+  border-top: none !important;
+  font-weight: 600;
+  box-shadow: 2px 4px 6px #00000029 !important;
+}
+
+.flight-book-tabs a {
+  height: 30px;
+  padding-top: 0.1rem;
+}
+
+.flight-book-tabs a:first-child {
+  border-top-left-radius: 0.5rem;
+  border-bottom-left-radius: 0.5rem;
+} 
+
+.flight-book-tabs a:last-child {
+  border-top-right-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+}
+
+.form-with-label {
+  position: relative;
+  padding-top: 2.5rem;
+  padding-bottom: 1rem;
+}
+
+.form-with-label__title {
+  position: absolute;
+  color: #000;
+  z-index: 1;
+  font-size: 12px;
+  padding: 10px;
+}
