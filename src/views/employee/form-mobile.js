@@ -352,6 +352,7 @@ const EmployeeFormMobile = (props) => {
                         minLength="1"
                         maxLength="512"
                       />
+                      
                       <FormikControl
                         control="selectAsync"
                         required={isView ? "" : "label-required"}
@@ -385,12 +386,12 @@ const EmployeeFormMobile = (props) => {
                       <FormikControl
                         control="selectAsync"
                         label="State/ Province"
-                        name="address.state_province_id"
+                        name="address.state_province_id"                        
                         url={`master/state-provinces`}
                         fieldName={"state_province_name"}
                         urlFilter={`["country_id","=","${formik.values.address.country_id.value}"]`}
-                        isLoading={false}
                         key={JSON.stringify(formik.values.address.country_id)}
+                        isLoading={false}                        
                         onChange={(v) => {
                           formik.setFieldValue("address.state_province_id", v)
                           formik.setFieldValue("address.city_id", {
@@ -409,7 +410,7 @@ const EmployeeFormMobile = (props) => {
                             : null
                         }
                         isDisabled={isView}
-                      />
+                      />                      
                       <FormikControl
                         control="selectAsync"
                         label="City"
@@ -423,7 +424,7 @@ const EmployeeFormMobile = (props) => {
                             : `["country_id","=","${formik.values.address.country_id.value}"],["AND"],["state_province_id","=","${formik.values.address.state_province_id.value}"]`
                         }
                         key={JSON.stringify(
-                          formik.values.address.state_province_id.value,
+                          formik.values.address.state_province_id.value && formik.values.address.city_id.value,
                         )}
                         onChange={(v) => {
                           formik.setFieldValue("address.city_id", v)
@@ -468,7 +469,36 @@ const EmployeeFormMobile = (props) => {
                             "same_address",
                             !formik.values.same_address,
                           )
-                        }}
+                          formik.setFieldValue(
+                            "permanent_address.country_id", !formik.values.same_address ? {
+                              value: "00000000-0000-0000-0000-000000000000",
+                              label: "Please choose",
+                            } : {
+                              value: "00000000-0000-0000-0000-000000000000",
+                              label: "Please choose",
+                            },                            
+                          ) 
+                          formik.setFieldValue(
+                            "permanent_address.state_province_id", !formik.values.same_address ? {
+                              value: "00000000-0000-0000-0000-000000000000",
+                              label: "Please choose",
+                            } : {
+                              value: "00000000-0000-0000-0000-000000000000",
+                              label: "Please choose",
+                            },                            
+                          )
+                          formik.setFieldValue(
+                            "permanent_address.city_id", !formik.values.same_address ? {
+                              value: "00000000-0000-0000-0000-000000000000",
+                              label: "Please choose",
+                            } : {
+                              value: "00000000-0000-0000-0000-000000000000",
+                              label: "Please choose",
+                            },                            
+                          )
+                                 
+                           
+                        }}                       
                         style={{ maxWidth: 416 }}
                         disabled={isView}
                       />
@@ -496,12 +526,12 @@ const EmployeeFormMobile = (props) => {
                                 "address.state_province_id",
                                 {
                                   value: "00000000-0000-0000-0000-000000000000",
-                                  label: "Please choose",
+                                  label: "Please choosess",
                                 },
                               )
                               formik.setFieldValue("address.city_id", {
                                 value: "00000000-0000-0000-0000-000000000000",
-                                label: "Please choose",
+                                label: "Please choosess",
                               })
                               formik.setFieldValue("address.country_id", v)
                             }}
@@ -524,10 +554,7 @@ const EmployeeFormMobile = (props) => {
                             url={`master/state-provinces`}
                             fieldName={"state_province_name"}
                             urlFilter={`["country_id","=","${formik.values.address.country_id.value}"]`}
-                            isLoading={false}
-                            key={JSON.stringify(
-                              formik.values.address.country_id,
-                            )}
+                            isLoading={false}                            
                             onChange={(v) => {
                               formik.setFieldValue(
                                 "address.state_province_id",
@@ -557,14 +584,14 @@ const EmployeeFormMobile = (props) => {
                             url={`master/cities`}
                             fieldName={"city_name"}
                             urlFilter={
-                              formik.values.address.state_province_id.value ===
+                              formik.values.address.state_province_id ===
                               "00000000-0000-0000-0000-000000000000"
                                 ? `["country_id","=","${formik.values.address.country_id.value}"]`
                                 : `["country_id","=","${formik.values.address.country_id.value}"],["AND"],["state_province_id","=","${formik.values.address.state_province_id.value}"]`
                             }
                             key={JSON.stringify(
-                              formik.values.address.state_province_id.value,
-                            )}
+                              formik.values.address.state_province_id.value && formik.values.address.city_id.value,
+                            )}                           
                             onChange={(v) => {
                               formik.setFieldValue("address.city_id", v)
                             }}
@@ -626,7 +653,7 @@ const EmployeeFormMobile = (props) => {
                                 },
                               )
                               formik.setFieldValue(
-                                "permanent_address.country_id",
+                                "permanent_address.country_id", 
                                 v,
                               )
                             }}
@@ -685,15 +712,13 @@ const EmployeeFormMobile = (props) => {
                             url={`master/cities`}
                             fieldName={"city_name"}
                             urlFilter={
-                              formik.values.permanent_address.state_province_id
-                                .value ===
+                              formik.values.permanent_address.state_province_id.value ===
                               "00000000-0000-0000-0000-000000000000"
                                 ? `["country_id","=","${formik.values.permanent_address.country_id.value}"]`
                                 : `["country_id","=","${formik.values.permanent_address.country_id.value}"],["AND"],["state_province_id","=","${formik.values.permanent_address.state_province_id.value}"]`
                             }
                             key={JSON.stringify(
-                              formik.values.permanent_address.state_province_id
-                                .value,
+                              formik.values.permanent_address.state_province_id.value && formik.values.permanent_address.city_id.value,
                             )}
                             onChange={(v) => {
                               formik.setFieldValue(
@@ -750,7 +775,11 @@ const EmployeeFormMobile = (props) => {
                     <button
                       className="text-button-save button-save"
                       type="submit"
-                      disabled={props.finishStep > 0 || props.match.params.id ? (!formik.isValid || formik.isSubmitting) : (!formik.dirty || formik.isSubmitting)}
+                      disabled={
+                      props.finishStep > 0 || props.match.params.id
+                        ? !formik.dirty || formik.isSubmitting
+                        : !formik.isValid || formik.isSubmitting
+                    }
                       style={{ marginRight: 15 }}
                     >
                       {props.match.params.id ? "SAVE" : "SAVE & NEXT"}
