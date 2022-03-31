@@ -41,8 +41,8 @@ function SpecialDateForm(props) {
   const validationRules = {
     special_date_name: {
       required: true,
-      minLength: 1,
-      maxLength: 256,
+      minlength: 1,
+      maxlength: 256,
       checkName: true
 
     }
@@ -58,7 +58,6 @@ function SpecialDateForm(props) {
 
   useEffect(async () => {
     let api = new Api()
-    let formId = props.match.params.id
 
     let bcTitle = "Edit Special Date"
     let docTitle = bcTitle
@@ -88,10 +87,9 @@ function SpecialDateForm(props) {
       }),
     )
     if (formId) {
-
       try {
         let res = await api.get(endpoint + "/" + formId)
-        // console.log(res);
+        setForm(res.data)
         if(res.data) {
           let currentName = res.data.special_date_name
 
@@ -167,9 +165,7 @@ function SpecialDateForm(props) {
     let translated = formBuilder.getTranslations()
     setLoading(true)
     let api = new Api()
-    console.log(form);
     try {
-      
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
       console.log(res);
