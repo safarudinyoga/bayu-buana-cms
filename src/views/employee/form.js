@@ -37,8 +37,8 @@ const EmployeeForm = (props) => {
   const [formValues, setFormValues] = useState(null)
   const [optionGender, setOptionGender] = useState([])
   const [additionalRole, setAdditionalRole] = useState(false)
-  const [months, setMonths] = useState({ value: 1, label: "" })
-  const [years, setYears] = useState({ value: 1921, label: "" })  
+  const [defmonths, setMonths] = useState({ value: 1, label: "" })
+  const [defyears, setYears] = useState({ value: 1921, label: "" })  
   const [finishStep, setStep] = useState(0)
 
   useEffect(() => {
@@ -193,6 +193,10 @@ const EmployeeForm = (props) => {
                 },
               ]
             : [],
+          employee_asset: data?.employee_asset?.multimedia_description ? [{
+            data_url: data.employee_asset.multimedia_description.url
+          }] : [],
+  
         })          
         setPhotoProfile([
           {
@@ -355,6 +359,7 @@ const EmployeeForm = (props) => {
     hire_date: [],
     npwp: "",
     same_address: false,
+    employee_asset: [],
   }
 
   // Validasi number
@@ -539,7 +544,7 @@ const EmployeeForm = (props) => {
 
   // Birthday
   //Day
-  const selectDay = () => {
+  const selectDay = (months=defmonths, years=defyears) => {
     const options = []
     const today = new Date()
     let currentYear = today.getFullYear()
@@ -592,7 +597,7 @@ const EmployeeForm = (props) => {
   }
 
   //Month
-  const selectMonth = () => {
+  const selectMonth = (years=defyears) => {
     const options = []
     const today = new Date()
     let currentYear = today.getFullYear()
@@ -674,16 +679,16 @@ const EmployeeForm = (props) => {
       let formId = props.match.params.id
 
       let photo_id = null
-      if (photoProfile.length > 0) {
-        if (!photoData || photoData?.data_url !== photoProfile[0].data_url) {
-          photo_id = await doUpload(photoProfile)
+      if (values.employee_asset.length > 0) {
+        if (!photoData || photoData?.data_url !== values.employee_asset[0].data_url) {
+          photo_id = await doUpload(values.employee_asset)
         } else {
-          photo_id = photoProfile[0].data_url
+          photo_id = values.employee_asset[0].data_url
         }
       }
-      if (photoData && photoProfile.length === 0)
+      if (photoData && values.employee_asset.length === 0)
         photo_id = await removeImage(photoData?.id)
-      console.log(values.hire_date)
+
       const Data = {
         name_prefix_id: values.name_prefix_id.value,
         given_name: values.given_name,
@@ -876,7 +881,7 @@ const EmployeeForm = (props) => {
                                 control="selectOnly"
                                 name="birth_date[0]"
                                 placeholder={"Day"}
-                                options={selectDay()}
+                                options={selectDay(formik.values.birth_date[1], formik.values.birth_date[2])}
                                 onChange={(v) => {
                                   formik.setFieldValue("birth_date[0]", v)
                                 }}
@@ -900,7 +905,7 @@ const EmployeeForm = (props) => {
                                 control="selectOnly"
                                 name="birth_date[1]"
                                 placeholder={"Month"}
-                                options={selectMonth()}
+                                options={selectMonth(formik.values.birth_date[2])}
                                 onChange={(v) => {
                                   formik.setFieldValue("birth_date[1]", v)
                                   formik.setFieldValue("birth_date[0]", {
@@ -988,14 +993,12 @@ const EmployeeForm = (props) => {
                             id="employee_icon"
                             type="imageProfile"
                             name="employee_asset"
-                            onChange={onChangePhotoProfile}
+                            onChange={(imageList) => {
+                              formik.setFieldValue("employee_asset", imageList)
+                            }}
                             disabled={isView}
-                            photoProfile={photoProfile}
-                            url={
-                              photoProfile.employee_asset
-                                ?.multimedia_description?.url ||
-                              formik.values.employee_asset
-                                ?.multimedia_description?.url
+                            photoProfile={formik.values.employee_asset}
+                            url={formik.values.employee_asset?.data_url
                             }
                           />
                         </div>
@@ -1714,7 +1717,7 @@ const EmployeeForm = (props) => {
                                 onChange={(v) => {
                                   formik.setFieldValue("hire_date[0]", v)
                                 }}
-                                options={selectDay()}
+                                options={selectDay(formik.values.hire_date[1], formik.values.hire_date[2])}
                                 placeholder={"Day"}
                                 style={{ maxWidth: 240 }}
                                 components={
@@ -1733,7 +1736,7 @@ const EmployeeForm = (props) => {
                                 control="selectOnly"
                                 name="hire_date[1]"
                                 placeholder={"Month"}
-                                options={selectMonth()}
+                                options={selectMonth(formik.values.hire_date[2])}
                                 onChange={(v) => {
                                   formik.setFieldValue("hire_date[1]", v)
                                   formik.setFieldValue("hire_date[0]", {
