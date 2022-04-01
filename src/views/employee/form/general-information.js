@@ -864,6 +864,7 @@ const GeneralInformation = (props) => {
                                   minLength={1}
                                   maxLength={128}
                                   {...field}
+                                  style={{ maxWidth: 300 }}
                                 />
                                 {form.touched.firstName &&
                                   form.errors.firstName && (
@@ -891,6 +892,7 @@ const GeneralInformation = (props) => {
                                 disabled={isView}
                                 minLength={1}
                                 maxLength={128}
+                                style={{ maxWidth: 300 }}
                               />
                             )}
                           </FastField>
@@ -915,6 +917,7 @@ const GeneralInformation = (props) => {
                                   }
                                   minLength={1}
                                   maxLength={128}
+                                  style={{ maxWidth: 300 }}
                                 />
                                 {form.touched.lastName &&
                                   form.errors.lastName && (
@@ -1083,6 +1086,7 @@ const GeneralInformation = (props) => {
                                 minLength={1}
                                 maxLength={36}
                                 disabled={isView}
+                                style={{ maxWidth: 300 }}
                               />
                             )}
                           </FastField>
@@ -1188,6 +1192,7 @@ const GeneralInformation = (props) => {
                               {...field}
                               type="text"
                               disabled={isView}
+                              style={{ maxWidth: 200 }}
                               isInvalid={
                                 form.touched.homePhone && form.errors.homePhone
                               }
@@ -1220,6 +1225,7 @@ const GeneralInformation = (props) => {
                               {...field}
                               type="text"
                               disabled={isView}
+                              style={{ maxWidth: 200 }}
                               isInvalid={
                                 form.touched.mobilePhone &&
                                 form.errors.mobilePhone
@@ -1257,6 +1263,7 @@ const GeneralInformation = (props) => {
                               minLength={1}
                               maxLength={256}
                               disabled={isView}
+                              style={{ maxWidth: 300 }}
                             />
                             {form.touched.email && form.errors.email && (
                               <Form.Control.Feedback type="invalid">
@@ -1288,6 +1295,7 @@ const GeneralInformation = (props) => {
                               minLength={1}
                               maxLength={256}
                               disabled={isView}
+                              style={{ maxWidth: 300 }}
                             />
                             {form.touched.otherEmail &&
                               form.errors.otherEmail && (
@@ -1319,6 +1327,7 @@ const GeneralInformation = (props) => {
                             minLength={1}
                             maxLength={512}
                             disabled={isView}
+                            style={{ maxWidth: 416 }}
                           />
                         )}
                       </FastField>
@@ -1425,6 +1434,7 @@ const GeneralInformation = (props) => {
                             type="text"
                             minLength={1}
                             maxLength={16}
+                            style={{ maxWidth: 100 }}
                             disabled={isView}
                           />
                         )}
@@ -1466,6 +1476,7 @@ const GeneralInformation = (props) => {
                         onChange={handleChange}
                         onBlur={handleBlur}
                         disabled={values.sameAddress || isView}
+                        style={{ maxWidth: 416 }}
                       />
                     </Col>
                   </Form.Group>
@@ -1524,7 +1535,7 @@ const GeneralInformation = (props) => {
                       State/ Province
                     </Form.Label>
                     <Col sm={9}>
-                      <div style={{ width: 300 }}>
+                      <div style={{ width: 200 }}>
                         <Select
                           name="permanentProvince"
                           value={
@@ -1549,7 +1560,7 @@ const GeneralInformation = (props) => {
                       City
                     </Form.Label>
                     <Col sm={9}>
-                      <div style={{ width: 300 }}>
+                      <div style={{ width: 200 }}>
                         <Select
                           name="permanentCity"
                           value={
@@ -1578,6 +1589,7 @@ const GeneralInformation = (props) => {
                         type="text"
                         minLength={1}
                         maxLength={16}
+                        style={{ maxWidth: 100 }}
                         value={
                           values.sameAddress
                             ? values.currentZipCode
@@ -1591,17 +1603,17 @@ const GeneralInformation = (props) => {
                   </Form.Group>
                 </div>
                 {
-                  isView ? (
-                    <>
+                  props.isMobile 
+                  ? isView 
+                  ? (<>
                       <Button
                         variant="secondary"
                         onClick={() => props.history.goBack()}
                       >
                         BACK
                       </Button>
-                    </>
-                  ) : props.isMobile ? (
-                    <div className="mb-5 ml-1 row justify-content-md-start justify-content-center">
+                    </>) 
+                  : (<div className="mb-5 ml-1 row justify-content-md-start justify-content-center">
                       <Button
                         variant="primary"
                         type="submit"
@@ -1616,24 +1628,24 @@ const GeneralInformation = (props) => {
                       >
                         CANCEL
                       </Button>
-                    </div>
-                  ) : ""
+                    </div>)
+                  : ""
                 }
               </Card.Body>
             </Card>
             {
-              isView ? (
-                <>
+              !props.isMobile 
+              ? isView 
+              ? (<>
                   <Button
                     variant="secondary"
                     onClick={() => props.history.goBack()}
+                    className="mt-3"
                   >
                     BACK
                   </Button>
-                </>
-              ) 
-              : props.isMobile ? "" : (
-                <div className="mt-4 mb-5 ml-1 row justify-content-md-start justify-content-center">
+                </>) 
+              : (<div className="mb-5 ml-1 mt-3 row justify-content-md-start justify-content-center">
                   <Button
                     variant="primary"
                     type="submit"
@@ -1648,8 +1660,8 @@ const GeneralInformation = (props) => {
                   >
                     CANCEL
                   </Button>
-                </div>
-              )
+                </div>)
+              : ""
             }
           </Form>
         )}
