@@ -762,12 +762,12 @@ const EmployeeFormMobile = (props) => {
               >
                 {isView ? (
                   <>
-                    <button
-                      className="text-button-cancel button-cancel"
+                    <Button
+                      variant="secondary"
                       onClick={() => history.goBack()}
                     >
                       BACK
-                    </button>
+                    </Button>
                   </>
                 ) : (
                   <>
@@ -783,12 +783,12 @@ const EmployeeFormMobile = (props) => {
                     >
                       {props.match.params.id ? "SAVE" : "SAVE & NEXT"}
                     </button>
-                    <button
-                      className="text-button-cancel button-cancel"
+                    <Button
+                      variant="secondary" 
                       onClick={() => history.goBack()}
                     >
                       CANCEL
-                    </button>
+                    </Button>
                   </>
                 )}
               </div>
@@ -892,12 +892,12 @@ const EmployeeFormMobile = (props) => {
                 >
                   {isView ? (
                     <>
-                      <button
-                        className="text-button-cancel button-cancel"
+                      <Button
+                        variant="secondary" 
                         onClick={() => history.goBack()}
                       >
                         BACK
-                      </button>
+                      </Button>
                     </>
                   ) : (
                     <>
@@ -909,12 +909,12 @@ const EmployeeFormMobile = (props) => {
                       >
                         {props.match.params.id ? "SAVE" : "SAVE & NEXT"}
                       </button>
-                      <button
-                        className="text-button-cancel button-cancel"
+                      <Button
+                        variant="secondary" 
                         onClick={() => history.goBack()}
                       >
                         CANCEL
-                      </button>
+                      </Button>
                     </>
                   )}
                 </div>
@@ -1212,12 +1212,12 @@ const EmployeeFormMobile = (props) => {
                 >
                   {isView ? (
                     <>
-                      <button
-                        className="text-button-cancel button-cancel"
+                      <Button
+                        variant="secondary" 
                         onClick={() => history.goBack()}
                       >
                         BACK
-                      </button>
+                      </Button>
                     </>
                   ) : (
                     <>
@@ -1229,12 +1229,12 @@ const EmployeeFormMobile = (props) => {
                       >
                         SAVE
                       </button>
-                      <button
-                        className="text-button-cancel button-cancel"
+                      <Button
+                        variant="secondary" 
                         onClick={() => history.goBack()}
                       >
                         CANCEL
-                      </button>
+                      </Button>
                     </>
                   )}
                 </div>

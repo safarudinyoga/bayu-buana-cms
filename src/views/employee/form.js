@@ -1471,9 +1471,9 @@ const EmployeeForm = (props) => {
             >
               {isView ? (
                 <>
-                  <button className="text-button-cancel button-cancel" onClick={() => history.goBack()}>
+                  <Button variant="secondary" onClick={() => history.goBack()}>
                     BACK
-                  </button>
+                  </Button>
                 </>
               ) : (
                 <>
@@ -1489,9 +1489,9 @@ const EmployeeForm = (props) => {
                   >
                     {props.match.params.id ? "SAVE" : "SAVE & NEXT"}
                   </button>
-                  <button className="text-button-cancel button-cancel" onClick={() => history.goBack()}>
+                  <Button variant="secondary" onClick={() => history.goBack()}>
                     CANCEL
-                  </button>
+                  </Button>
                 </>
               )}
             </div>
@@ -1597,9 +1597,9 @@ const EmployeeForm = (props) => {
             >
               {isView ? (
                 <>
-                  <button className="text-button-cancel button-cancel" onClick={() => history.goBack()}>
+                  <Button className="text-button-cancel button-cancel" onClick={() => history.goBack()}>
                     BACK
-                  </button>
+                  </Button>
                 </>
               ) : (
                 <>
@@ -1611,9 +1611,9 @@ const EmployeeForm = (props) => {
                   >
                     {props.match.params.id ? "SAVE" : "SAVE & NEXT"}
                   </button>
-                  <button className="text-button-cancel button-cancel" onClick={() => history.goBack()}>
+                  <Button className="text-button-cancel button-cancel" onClick={() => history.goBack()}>
                     CANCEL
-                  </button>
+                  </Button>
                 </>
               )}
             </div>
@@ -1887,9 +1887,9 @@ const EmployeeForm = (props) => {
             >
               {isView ? (
                 <>
-                  <button className="text-button-cancel button-cancel" onClick={() => history.goBack()}>
+                  <Button className="text-button-cancel button-cancel" onClick={() => history.goBack()}>
                     BACK
-                  </button>
+                  </Button>
                 </>
               ) : (
                 <>
@@ -1901,9 +1901,9 @@ const EmployeeForm = (props) => {
                   >
                     SAVE
                   </button>
-                  <button className="text-button-cancel button-cancel" onClick={() => history.goBack()}>
+                  <Button variant="secondary" onClick={() => history.goBack()}>
                     CANCEL
-                  </button>
+                  </Button>
                 </>
               )}
             </div>
