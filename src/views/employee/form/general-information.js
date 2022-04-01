@@ -386,94 +386,8 @@ const GeneralInformation = (props) => {
   useEffect(async () => {
     try {
       if(props.employeeData) {
-        let data = props.employeeData
-        let formData = props.formData
-        if(formData.given_name) {
-          setInitialForm({
-            ...initialForm,
-            title: _.isEmpty(formData.name_prefix) ? "" : {
-              ...initialForm.title,
-              value: formData.name_prefix.id,
-              label: formData.name_prefix.name_prefix_name
-            },
-            firstName: formData.given_name ? formData.given_name : "",
-            middleName: formData.middle_name ? formData.middle_name : "",
-            lastName: formData.surname ? formData.surname : "",
-            gender: _.isEmpty(formData.gender) ? formData.gender_id : formData.gender.id,
-            idCardNumber: formData.ktp ? formData.ktp : "",
-            dobDay: formData.birth_date ? {
-              value: parseInt(formData.birth_date.split("-")[2]),
-              label: parseInt(formData.birth_date.split("-")[2]), 
-            } : {
-              value: 1,
-              label: 1,
-            },
-            dobMonth: formData.birth_date ? {
-              value: parseInt(formData.birth_date.split("-")[1]),
-              label: new Date(null, parseInt(formData.birth_date.split("-")[1]), null).toLocaleDateString("en", {
-                month: "long",
-              }), 
-            }: {
-              value: 1,
-              label: 1,
-            },
-            dobYear: formData.birth_date ? {
-              value: parseInt(formData.birth_date.split("-")[0]),
-              label: parseInt(formData.birth_date.split("-")[0]),  
-            } : {
-              value: 1921,
-              label: 1921,
-            },
-            
-            // Contacts
-            homePhone: _.isEmpty(formData.contact) ? "" : formData.contact.phone_number ? formData.contact.phone_number : "",
-            mobilePhone: _.isEmpty(formData.contact) ? "" : formData.contact.mobile_phone_number ? formData.contact.mobile_phone_number : "",
-            email: _.isEmpty(formData.contact) ? "" : formData.contact.email ? formData.contact.email : "",
-            otherEmail: _.isEmpty(formData.contact) ? "" : formData.contact.other_email ? formData.contact.other_email : "",
-    
-            // Current Address
-            currentAddress: _.isEmpty(formData.address) ? "" : formData.address.address_line ? formData.address.address_line : "",
-            currentCountry: _.isEmpty(formData.address) ? "" : formData.address.country ? {
-              value: formData.address.country_id,
-              label: formData.address.country.country_name
-            } : "",
-            currentProvince: _.isEmpty(formData.address) ? "" : formData.address.state_province ? {
-              value: formData.address.state_province_id,
-              label: formData.address.state_province.state_province_name
-            } : "",
-            currentCity: _.isEmpty(formData.address) ? "" : formData.address.city ? {
-              value: formData.address.city.id,
-              label: formData.address.city.city_name
-            } : "",
-            currentZipCode: _.isEmpty(formData.address) ? "" : formData.address.postal_code ? formData.address.postal_code : "",
-    
-            // Permanent Address
-            sameAddress: (
-              formData.permanent_address.address_line == formData.address.address_line && 
-              formData.permanent_address.country_id == formData.address.country_id &&
-              formData.permanent_address.city_id == formData.address.city_id &&
-              formData.permanent_address.state_province_id == formData.address.state_province_id &&
-              formData.permanent_address.postal_code == formData.address.postal_code
-            ) ? true : false,
-            permanentAddress: _.isEmpty(formData.permanent_address) ? "" : formData.permanent_address.address_line ? formData.permanent_address.address_line : "",
-            permanentCountry: _.isEmpty(formData.permanent_address) ? "" : formData.permanent_address.country ? {
-              value: formData.permanent_address.country_id,
-              label: formData.permanent_address.country.country_name,
-            } : "",
-            permanentProvince: _.isEmpty(formData.permanent_address) ? "" : formData.permanent_address.state_province ? {
-              value: formData.permanent_address.state_province_id,
-              label: formData.permanent_address.state_province.state_province_name,
-            } : "",
-            permanentCity: _.isEmpty(formData.permanent_address) ? "" : formData.permanent_address.city ? {
-              value: formData.permanent_address.city_id,
-              label: formData.permanent_address.city.city_name
-            } : "",
-            permanentZipCode: _.isEmpty(formData.permanent_address) ? "" : formData.permanent_address.postal_code ? formData.permanent_address.postal_code : "",
-            photoProfile: _.isEmpty(formData.employee_asset.multimedia_description) ? null : [{
-              data_url: formData.employee_asset.multimedia_description.url
-            }],
-          });
-        }else{
+        let data = props.formData.given_name ? props.formData : props.employeeData
+        if(data) {
           setInitialForm({
             ...initialForm,
             title: _.isEmpty(data.name_prefix) ? "" : {
@@ -500,7 +414,7 @@ const GeneralInformation = (props) => {
               }), 
             }: {
               value: 1,
-              label: 1,
+              label: "January",
             },
             dobYear: data.birth_date ? {
               value: parseInt(data.birth_date.split("-")[0]),
@@ -554,10 +468,30 @@ const GeneralInformation = (props) => {
               label: data.permanent_address.city.city_name
             } : "",
             permanentZipCode: _.isEmpty(data.permanent_address) ? "" : data.permanent_address.postal_code ? data.permanent_address.postal_code : "",
-            photoProfile: _.isEmpty(data.employee_asset.multimedia_description) ? null : [{
-              data_url: data.employee_asset.multimedia_description.url
-            }],
           });
+
+          setPhotoProfile(
+            _.isEmpty(data.photo_profile) 
+            ? _.isEmpty(data.employee_asset.multimedia_description) 
+            ? [] 
+            : [{
+                data_url: data.employee_asset.multimedia_description.url,
+                id: data.employee_asset.multimedia_description.id,
+              }]
+            : data.photo_profile
+          )
+
+          if(data.permanent_address.state_province) {
+            handleChangePermanentProvince(data.permanent_address.state_province.id)
+          } else { 
+            handleChangePermanentCountry(data.permanent_address.country_id)
+          }
+
+          if(data.address.state_province) {
+            handleChangeCurrentProvince(data.address.state_province.id)
+          } else { 
+            handleChangeCurrentCountry(data.address.country_id)
+          }
         }
       }
     } catch(e) {
@@ -572,7 +506,6 @@ const GeneralInformation = (props) => {
         validationSchema={validationSchema}
         validator={() => ({})}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
-          setSubmitting(true)
           let day = values.dobDay.value < 10 ? ("0"+values.dobDay.value) : values.dobDay.value;
           let month = values.dobMonth.value < 10 ? ("0"+values.dobMonth.value) : values.dobMonth.value;
           let year = values.dobYear.value;
@@ -590,9 +523,6 @@ const GeneralInformation = (props) => {
               mobile_phone_number: values.mobilePhone,
               other_email: values.otherEmail,
               phone_number: values.homePhone
-            },
-            employee_asset: {
-              multimedia_description_id: photoData,
             },
             ktp: values.idCardNumber,
             given_name: values.firstName,
@@ -613,12 +543,11 @@ const GeneralInformation = (props) => {
               state_province_id: values.permanentProvince ? values.permanentProvince.value : "00000000-0000-0000-0000-000000000000",
               city_id: values.permanentCity ? values.permanentCity.value : "00000000-0000-0000-0000-000000000000",
               postal_code: values.permanentZipCode ? values.permanentZipCode : "" 
-            }
+            },
+            photo_profile: photoProfile
           }
-          console.log(formatted);
 
           await props.onSubmit(formatted)
-          setSubmitting(false)
         }}
 
         enableReinitialize
@@ -638,7 +567,7 @@ const GeneralInformation = (props) => {
         }) => (
           <Form onSubmit={handleSubmit}>
             <Card style={{marginBottom: 0}}>
-              <Card.Body>
+              <Card.Body className="px-1 px-md-4">
                 {props.isMobile ? "" : <h3 className="card-heading">General Information</h3>}
                 <div style={{ padding: "0 15px 15px" }}>
                   <Row>
@@ -938,7 +867,7 @@ const GeneralInformation = (props) => {
                           <span className="form-label-required">*</span>
                         </Form.Label>
                         <Col sm={8}>
-                          <div style={{ width: 320, display: "flex" }}>
+                          <div style={{ maxWidth: 320, display: "flex" }}>
                             <div style={{ marginRight: 12, flex: 1 }}>
                               <Select
                                 options={selectDay()}
@@ -959,7 +888,7 @@ const GeneralInformation = (props) => {
                                 }}
                               />
                             </div>
-                            <div style={{ marginRight: 12, flex: 2 }}>
+                            <div style={{ marginRight: 12, flex: 1.5 }}>
                               <Select
                                 options={selectMonth()}
                                 value={values.dobMonth}
@@ -1340,7 +1269,7 @@ const GeneralInformation = (props) => {
                     <Col sm={9}>
                       <FastField name="currentCountry">
                         {({ field, form }) => (
-                          <div style={{ width: 300 }}>
+                          <div style={{ maxWidth: 300 }}>
                             <SelectAsync
                               {...field}
                               isDisabled={isView}
@@ -1375,19 +1304,20 @@ const GeneralInformation = (props) => {
                   </Form.Group>
                   <Form.Group as={Row} className="form-group">
                     <Form.Label column sm={3}>
-                      State/Province
+                      State/ Province
                     </Form.Label>
                     <Col sm={9}>
                       <Field name="currentProvince">
                         {({ field, form }) => (
                           <>
-                            <div style={{ width: 200 }}>
+                            <div style={{ maxWidth: 200 }}>
                               <Select
                                 {...field}
                                 placeholder="Please choose"
                                 options={selectCurrentProvince}
                                 onChange={(v) => {
                                   setFieldValue("currentProvince", v)
+                                  setFieldValue("currentCity", "")
                                   handleChangeCurrentProvince(v.value)
                                 }}
                                 isDisabled={isView}
@@ -1486,7 +1416,7 @@ const GeneralInformation = (props) => {
                     </Form.Label>
                     <Col sm={9}>
                       {selectPermanentCountry.length !== 0 && (
-                        <div style={{ width: 300 }}>
+                        <div style={{ maxWidth: 300 }}>
                           <SelectAsync
                             name="permanentCountry"
                             url={`master/countries`}
@@ -1535,7 +1465,7 @@ const GeneralInformation = (props) => {
                       State/ Province
                     </Form.Label>
                     <Col sm={9}>
-                      <div style={{ width: 200 }}>
+                      <div style={{ maxWidth: 200 }}>
                         <Select
                           name="permanentProvince"
                           value={
@@ -1547,6 +1477,7 @@ const GeneralInformation = (props) => {
                           options={selectPermanentProvince}
                           onChange={(v) => {
                             setFieldValue("permanentProvince", v)
+                            setFieldValue("permanentCity", "")
                             handleChangePermanentProvince(v.value)
                           }}
                           onBlur={setFieldTouched}
@@ -1560,7 +1491,7 @@ const GeneralInformation = (props) => {
                       City
                     </Form.Label>
                     <Col sm={9}>
-                      <div style={{ width: 200 }}>
+                      <div style={{ maxWidth: 200 }}>
                         <Select
                           name="permanentCity"
                           value={
