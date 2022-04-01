@@ -243,8 +243,6 @@ const EmployeeForm = (props) => {
       return false
     }
   }
-    
- 
 
   // Select
   useEffect(async () => {
@@ -1167,7 +1165,7 @@ const EmployeeForm = (props) => {
                 <Row>
                   <Col lg={11}>
                     <div style={{ padding: "0 15px 15px" }}>
-                      <FormikControl
+                      <input
                         control="checkboxOnly"
                         type="checkbox"
                         label="Same As Current Address"
@@ -1193,25 +1191,23 @@ const EmployeeForm = (props) => {
                               value: "00000000-0000-0000-0000-000000000000",
                               label: "Please choose",
                             } : {
-                              value: "00000000-0000-0000-0000-000000000000",
-                              label: "Please choose",
-                            },                            
+                              value: formik.values.address.state_province_id.value,
+                              label: formik.values.address.state_province_id.label,
+                            },                           
                           )
                           formik.setFieldValue(
                             "permanent_address.city_id", !formik.values.same_address ? {
                               value: "00000000-0000-0000-0000-000000000000",
                               label: "Please choose",
                             } : {
-                              value: "00000000-0000-0000-0000-000000000000",
-                              label: "Please choose",
+                              value: formik.values.address.city_id.value,
+                              label: formik.values.address.city_id.label,
                             },                            
                           )
-                                 
-                           
                         }}                       
-                        style={{ maxWidth: 416 }}
+                        style={{ maxWidth: 416, marginRight: 7 }}
                         disabled={isView}
-                      />
+                      /> Same As Current Address
                       {formik.values.same_address ? (
                         <div>
                           <FormikControl
@@ -1475,9 +1471,9 @@ const EmployeeForm = (props) => {
             >
               {isView ? (
                 <>
-                  <button className="text-button-cancel button-cancel" onClick={() => history.goBack()}>
+                  <Button variant="secondary" onClick={() => history.goBack()}>
                     BACK
-                  </button>
+                  </Button>
                 </>
               ) : (
                 <>
@@ -1486,16 +1482,16 @@ const EmployeeForm = (props) => {
                     type="submit"
                     disabled={
                       finishStep > 0 || props.match.params.id
-                        ? !formik.dirty || !formik.isValid
-                        : !formik.isValid || formik.isSubmitting
+                        ? !formik.isValid || formik.isSubmitting
+                        : !formik.dirty || formik.isSubmitting
                     }                    
                     style={{ marginRight: 15 }}
                   >
                     {props.match.params.id ? "SAVE" : "SAVE & NEXT"}
                   </button>
-                  <button className="text-button-cancel button-cancel" onClick={() => history.goBack()}>
+                  <Button variant="secondary" onClick={() => history.goBack()}>
                     CANCEL
-                  </button>
+                  </Button>
                 </>
               )}
             </div>
@@ -1601,9 +1597,9 @@ const EmployeeForm = (props) => {
             >
               {isView ? (
                 <>
-                  <button className="text-button-cancel button-cancel" onClick={() => history.goBack()}>
+                  <Button className="text-button-cancel button-cancel" onClick={() => history.goBack()}>
                     BACK
-                  </button>
+                  </Button>
                 </>
               ) : (
                 <>
@@ -1615,9 +1611,9 @@ const EmployeeForm = (props) => {
                   >
                     {props.match.params.id ? "SAVE" : "SAVE & NEXT"}
                   </button>
-                  <button className="text-button-cancel button-cancel" onClick={() => history.goBack()}>
+                  <Button className="text-button-cancel button-cancel" onClick={() => history.goBack()}>
                     CANCEL
-                  </button>
+                  </Button>
                 </>
               )}
             </div>
@@ -1891,9 +1887,9 @@ const EmployeeForm = (props) => {
             >
               {isView ? (
                 <>
-                  <button className="text-button-cancel button-cancel" onClick={() => history.goBack()}>
+                  <Button className="text-button-cancel button-cancel" onClick={() => history.goBack()}>
                     BACK
-                  </button>
+                  </Button>
                 </>
               ) : (
                 <>
@@ -1905,9 +1901,9 @@ const EmployeeForm = (props) => {
                   >
                     SAVE
                   </button>
-                  <button className="text-button-cancel button-cancel" onClick={() => history.goBack()}>
+                  <Button variant="secondary" onClick={() => history.goBack()}>
                     CANCEL
-                  </button>
+                  </Button>
                 </>
               )}
             </div>
