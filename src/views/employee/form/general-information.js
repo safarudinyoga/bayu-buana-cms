@@ -516,6 +516,9 @@ const GeneralInformation = (props) => {
               country_id: values.currentCountry ? values.currentCountry.value : "",
               state_province_id: values.currentProvince ? values.currentProvince.value : "00000000-0000-0000-0000-000000000000",
               city_id: values.currentCity ? values.currentCity.value : "00000000-0000-0000-0000-000000000000",
+              city: values.currentCity,
+              state_province: values.currentProvince,
+              country: values.currentCountry,
               postal_code: values.currentZipCode ? values.currentZipCode : ""
             },
             contact: {
@@ -536,13 +539,19 @@ const GeneralInformation = (props) => {
               country_id: values.currentCountry ? values.currentCountry.value : "",
               state_province_id: values.currentProvince ? values.currentProvince.value : "00000000-0000-0000-0000-000000000000",
               city_id: values.currentCity ? values.currentCity.value : "00000000-0000-0000-0000-000000000000",
-              postal_code: values.currentZipCode ? values.currentZipCode : ""
+              postal_code: values.currentZipCode ? values.currentZipCode : "",
+              city: values.currentCity,
+              state_province: values.currentProvince,
+              country: values.currentCountry,
             } : {
               address_line: values.permanentAddress ? values.permanentAddress : "",
               country_id: values.permanentCountry ? values.permanentCountry.value : "",
               state_province_id: values.permanentProvince ? values.permanentProvince.value : "00000000-0000-0000-0000-000000000000",
               city_id: values.permanentCity ? values.permanentCity.value : "00000000-0000-0000-0000-000000000000",
-              postal_code: values.permanentZipCode ? values.permanentZipCode : "" 
+              postal_code: values.permanentZipCode ? values.permanentZipCode : "" ,
+              city: values.permanentCity,
+              state_province: values.permanentProvince,
+              country: values.permanentCountry,
             },
             photo_profile: photoProfile
           }
