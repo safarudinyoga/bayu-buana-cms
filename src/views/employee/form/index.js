@@ -78,19 +78,6 @@ const UserProfile = (props) => {
     }
   }, [])
 
-  const fetchEmployee = async() => {
-    let formId = props.match.params.id
-    console.log(formId) 
-    try {
-      if(formId) {
-        let {data} = await api.get(endpoint + "/" + formId)
-        return data
-      }
-    } catch (e) {
-      openSnackbar(`error => ${e}`)
-    }
-  }
-
   const handleSelectTab = async (key) => {
     setTabKey(key)
   }
@@ -109,7 +96,7 @@ const UserProfile = (props) => {
       let res = await api.post("/multimedia/files", payload)
       return res.data.id
     } catch(e) {
-
+      openSnackbar(`Failed upload photo profile => ${e}`)
     }
   }
   const removeImage = async (id) => {
@@ -117,7 +104,7 @@ const UserProfile = (props) => {
       let res = await api.delete("/multimedia/files/"+id)
       return null
     } catch(e) {
-
+      console.log(e)
     }
   }
 
@@ -126,20 +113,19 @@ const UserProfile = (props) => {
       let formId = props.match.params.id
 
       if(formId) {
-        setForm({...form, ...values})
-        await onSave(values)
+        await onSave({...Data, ...form, ...values})
       } else {
         if(tabKey === "general-information") {
           setTabKey("emergency-contacts")
-          setForm({...form, ...values})
+          setForm({...Data, ...form, ...values})
           if(finishStep < 1) setStep(1)
         } else if(tabKey === "emergency-contacts") {
           setTabKey("employment")
-          setForm({...form, ...values})
+          setForm({...Data, ...form, ...values})
           if(finishStep < 2) setStep(2)
         } else {
-          setForm({...form, ...values})
-          await onSave(values)
+          setForm({...Data, ...form, ...values})
+          await onSave({...Data, ...form, ...values})
         }
       }
     } catch(e) {
@@ -147,49 +133,57 @@ const UserProfile = (props) => {
     }
   }
 
-  const onSave = async() => {
+  const onSave = async(values) => {
     try {
       let formId = props.match.params.id
 
       let photo_id = null
-      if(form.photoProfile.length > 0) {
-        if( !photoData || photoData?.data_url !== form.photoProfile[0].data_url) {
-          photo_id = await doUpload(form.photoProfile)
+      if(values.photo_profile.length > 0) {
+        if( !photoData || photoData?.data_url !== values.photo_profile[0].data_url) {
+          photo_id = await doUpload(values.photo_profile)
         } else {
-          photo_id = form.photoProfile[0].data_url
+          photo_id = values.photo_profile[0].id
         }
       }
-      if(photoData && form.photoProfile.length === 0) photo_id = await removeImage(photoData?.id)
+      if(photoData && values.photo_profile.length === 0) photo_id = await removeImage(photoData?.id)
+
+      values ={
+        ...values,
+        employee_asset: {
+          multimedia_description_id: photo_id,
+        },
+      }
 
       if (!formId) {
         //ProsesCreateData
-          let res = await api.post("master/employees", form)
+          let res = await api.post("master/employees", values)
           openSnackbar(
             `Record 'Employee Number: ${
-              form.employee_number
+              values.employee_number
             } Employee Name: ${
-              form.given_name +
+              values.given_name +
               " " +
-              form?.middle_name +
+              values?.middle_name +
               " " +
-              form.surname
+              values.surname
             }' has been successfully saved.`,
           )
           history.goBack()
       } else {
         //ProsesUpdateData
-          let res = await api.put(`master/employees/${formId}`, form)
+          let res = await api.put(`master/employees/${formId}`, values)
           openSnackbar(
             `Record 'Employee Number: ${
-              form.employee_number
+              values.employee_number
             } Employee Name: ${
-              form.given_name +
+              values.given_name +
               " " +
-              form?.middle_name +
+              values?.middle_name +
               " " +
-              form.surname
+              values.surname
             }' has been successfully update.`,
           )
+          setForm({...res.data})
           if(tabKey === "employment") history.goBack()
       }
     } catch(e) {
@@ -322,7 +316,6 @@ const UserProfile = (props) => {
                     : null
                 }
                 onClick={() => {
-                  console.log(Data)
                   !(finishStep < 2 && !Data?.id) && handleSelectAccordion("emergency-contacts")
                 }}
               >
