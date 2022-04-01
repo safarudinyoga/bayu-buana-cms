@@ -13,7 +13,7 @@ const ControlledTabs = (props) => {
   const [key, setKey] = useState("flight")
 
   return (
-    <div className="card">
+    <div className="card book-card">
 
       <Tabs
         id={props.id}
