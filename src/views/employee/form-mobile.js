@@ -339,7 +339,7 @@ const EmployeeFormMobile = (props) => {
                 <Col lg={1}></Col>
               </Row>
               <h3 className="card-heading">Current Address</h3>
-                <Row>
+              <Row>
                   <Col lg={11}>
                     <div style={{ padding: "0 15px 15px" }}>
                       <FormikControl
@@ -458,7 +458,7 @@ const EmployeeFormMobile = (props) => {
                 <Row>
                   <Col lg={11}>
                     <div style={{ padding: "0 15px 15px" }}>
-                      <FormikControl
+                      <input
                         control="checkboxOnly"
                         type="checkbox"
                         label="Same As Current Address"
@@ -474,8 +474,9 @@ const EmployeeFormMobile = (props) => {
                               value: "00000000-0000-0000-0000-000000000000",
                               label: "Please choose",
                             } : {
-                              value: "00000000-0000-0000-0000-000000000000",
-                              label: "Please choose",
+                              value: formik.values.address.country_id.value,
+                              label: formik.values.address.country_id.label,
+                              
                             },                            
                           ) 
                           formik.setFieldValue(
@@ -483,25 +484,23 @@ const EmployeeFormMobile = (props) => {
                               value: "00000000-0000-0000-0000-000000000000",
                               label: "Please choose",
                             } : {
-                              value: "00000000-0000-0000-0000-000000000000",
-                              label: "Please choose",
-                            },                            
+                              value: formik.values.address.state_province_id.value,
+                              label: formik.values.address.state_province_id.label,
+                            },                           
                           )
                           formik.setFieldValue(
                             "permanent_address.city_id", !formik.values.same_address ? {
                               value: "00000000-0000-0000-0000-000000000000",
                               label: "Please choose",
                             } : {
-                              value: "00000000-0000-0000-0000-000000000000",
-                              label: "Please choose",
+                              value: formik.values.address.city_id.value,
+                              label: formik.values.address.city_id.label,
                             },                            
                           )
-                                 
-                           
                         }}                       
                         style={{ maxWidth: 416 }}
                         disabled={isView}
-                      />
+                      />Same As Current Address
                       {formik.values.same_address ? (
                         <div>
                           <FormikControl
@@ -776,9 +775,9 @@ const EmployeeFormMobile = (props) => {
                       className="text-button-save button-save"
                       type="submit"
                       disabled={
-                      props.finishStep > 0 || props.match.params.id
-                      ? !formik.dirty || !formik.isValid
-                        : !formik.isValid || formik.isSubmitting
+                        props.finishStep > 0 || props.match.params.id
+                        ? !formik.isValid || formik.isSubmitting
+                        : !formik.dirty || formik.isSubmitting
                     }
                       style={{ marginRight: 15 }}
                     >
