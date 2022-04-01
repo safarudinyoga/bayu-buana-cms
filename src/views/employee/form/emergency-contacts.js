@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react"
 import { Card, Form, Row, Col, Button } from "react-bootstrap"
-import { Formik } from "formik"
+import { FastField, Formik } from "formik"
 import * as Yup from "yup"
-import Api from "config/api"
 import "./employee-form.css"
 import { useSnackbar } from "react-simple-snackbar"
 import _ from "lodash"
+import useQuery from "lib/query"
 
 const options = {
   position: "bottom-right",
 }
 
 const EmergencyContacts = (props) => {
-  let api = new Api()
+  const isView = useQuery().get("action") === "view"
 
   const [openSnackbar] = useSnackbar(options)
 
@@ -29,23 +29,30 @@ const EmergencyContacts = (props) => {
     relationshipEmergency2: "",
   })
 
+  const phoneNumberPlus = /^[0-9 ()+]+$/
   // Schema for yup
   const validationSchema = Yup.object().shape({
     // Emergency Contact 1
     fullNameEmergency1: Yup.string(),
-    phoneNumberEmergency1: Yup.string(),
+    phoneNumberEmergency1: Yup.string().matches(
+      phoneNumberPlus,
+      "Phone Number is not valid",
+    ),
     relationshipEmergency1: Yup.string(),
 
     // Emergency Contact 2
     fullNameEmergency2: Yup.string(),
-    phoneNumberEmergency2: Yup.string(),
+    phoneNumberEmergency2: Yup.string().matches(
+      phoneNumberPlus,
+      "Phone Number is not valid",
+    ),
     relationshipEmergency2: Yup.string(),
   })
 
   useEffect(async () => {
     try {
       if(props.employeeData) {
-        let data = props.employeeData;
+        let data = props.formData ? props.formData : props.employeeData
         setIntialForm({
           ...initialForm,
           
@@ -58,11 +65,10 @@ const EmergencyContacts = (props) => {
           fullNameEmergency2: data.emergency_contact2.contact_name ? data.emergency_contact2.contact_name : "",
           phoneNumberEmergency2: data.emergency_contact2.contact_phone_number ? data.emergency_contact2.contact_phone_number : "",
           relationshipEmergency2: data.emergency_contact2.relationship ? data.emergency_contact2.relationship : "",
-  
         })
       }
     } catch(e) {}
-  }, [props.employeeData])
+  }, [props.employeeData, props.formData])
 
   return (
     <Formik
@@ -70,8 +76,6 @@ const EmergencyContacts = (props) => {
       initialValues={initialForm}
       validationSchema={validationSchema}
       onSubmit={async (values, { setSubmitting, resetForm }) => {
-        console.log(values)
-
         let formatted = {
           emergency_contact: {
             contact_name: values.fullNameEmergency1,
@@ -85,31 +89,13 @@ const EmergencyContacts = (props) => {
           }
         }
 
+        console.log(formatted)
+
         try {
           await props.onSubmit(formatted)
-          openSnackbar(
-            `Your profile has been successfully updated.`
-          )
-        } catch(e) {}
-        
-        // setSubmitting(true)
-
-        // try {
-        //   let res = await api.post("master/employees", {
-        //     division_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-        //     employee_number: "string",
-        //     hire_date: "2021-11-14T01:32:53.237Z",
-        //     job_title_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-        //     office_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-        //     person_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-        //     user_account_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-        //   })
-        //   console.log(res)
-        //   resetForm()
-        //   setSubmitting(false)
-        // } catch (e) {}
-
-        // return props.handleSelectTab("security-settings")
+        } catch(e) {
+          console.log(e)
+        }
       }}
     >
       {({
@@ -144,6 +130,8 @@ const EmergencyContacts = (props) => {
                         maxLength={128}
                         onChange={handleChange}
                         onBlur={handleBlur}
+                        style={{ maxWidth: 250 }}
+                        disabled={isView}
                       />
                     </Col>
                   </Form.Group>
@@ -152,16 +140,36 @@ const EmergencyContacts = (props) => {
                       Phone Number
                     </Form.Label>
                     <Col sm={9}>
-                      <Form.Control
-                        name="phoneNumberEmergency1"
-                        type="tel"
-                        pattern="^[+]?[0-9]{9,12}$"
-                        value={values.phoneNumberEmergency1}
-                        minLength={1}
-                        maxLength={32}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                      />
+                      <FastField name="phoneNumberEmergency1" disabled>
+                        {({ field, form }) => (
+                          <>
+                            <Form.Control
+                              {...field}
+                              type="text"
+                              value={values.phoneNumberEmergency1}
+                              minLength={1}
+                              maxLength={32}
+                              onChange={handleChange}
+                              onBlur={handleBlur}
+                              disabled={isView}
+                              style={{ maxWidth: 200 }}
+                              isInvalid={
+                                form.touched.phoneNumberEmergency1 &&
+                                form.errors.phoneNumberEmergency1
+                              }
+                            />
+
+                            {form.touched.phoneNumberEmergency1 &&
+                              form.errors.phoneNumberEmergency1 && (
+                                <Form.Control.Feedback type="invalid">
+                                  {form.touched.phoneNumberEmergency1
+                                    ? form.errors.phoneNumberEmergency1
+                                    : null}
+                                </Form.Control.Feedback>
+                            )}
+                          </>
+                        )}
+                      </FastField>
                     </Col>
                   </Form.Group>
                   <Form.Group as={Row} className="form-group">
@@ -177,6 +185,8 @@ const EmergencyContacts = (props) => {
                         maxLength={36}
                         onChange={handleChange}
                         onBlur={handleBlur}
+                        style={{ maxWidth: 200 }}
+                        disabled={isView}
                       />
                     </Col>
                   </Form.Group>
@@ -196,6 +206,8 @@ const EmergencyContacts = (props) => {
                         maxLength={128}
                         onChange={handleChange}
                         onBlur={handleBlur}
+                        style={{ maxWidth: 250 }}
+                        disabled={isView}
                       />
                     </Col>
                   </Form.Group>
@@ -204,16 +216,36 @@ const EmergencyContacts = (props) => {
                       Phone Number
                     </Form.Label>
                     <Col sm={9}>
-                      <Form.Control
-                        name="phoneNumberEmergency2"
-                        type="tel"
-                        pattern="^[+]?[0-9]{9,12}$"
-                        value={values.phoneNumberEmergency2}
-                        minLength={1}
-                        maxLength={32}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                      />
+                    <FastField name="phoneNumberEmergency2" disabled>
+                        {({ field, form }) => (
+                          <>
+                            <Form.Control
+                              {...field}
+                              type="text"
+                              value={values.phoneNumberEmergency2}
+                              minLength={1}
+                              maxLength={32}
+                              onChange={handleChange}
+                              onBlur={handleBlur}
+                              disabled={isView}
+                              style={{ maxWidth: 200 }}
+                              isInvalid={
+                                form.touched.phoneNumberEmergency2 &&
+                                form.errors.phoneNumberEmergency2
+                              }
+                            />
+
+                            {form.touched.phoneNumberEmergency2 &&
+                              form.errors.phoneNumberEmergency2 && (
+                                <Form.Control.Feedback type="invalid">
+                                  {form.touched.phoneNumberEmergency2
+                                    ? form.errors.phoneNumberEmergency2
+                                    : null}
+                                </Form.Control.Feedback>
+                            )}
+                          </>
+                        )}
+                      </FastField>
                     </Col>
                   </Form.Group>
                   <Form.Group as={Row} className="form-group">
@@ -229,12 +261,25 @@ const EmergencyContacts = (props) => {
                         maxLength={36}
                         onChange={handleChange}
                         onBlur={handleBlur}
+                        style={{ maxWidth: 200 }}
+                        disabled={isView}
                       />
                     </Col>
                   </Form.Group>
                 </div>
                 {
-                  props.isMobile ? (
+                  props.isMobile 
+                  ? isView 
+                  ? (<>
+                      <Button
+                        variant="secondary"
+                        onClick={() => props.history.goBack()}
+                        className="mt-3"
+                      >
+                        BACK
+                      </Button>
+                    </>) 
+                  : (
                     <div className="mb-5 ml-1 row justify-content-md-start justify-content-center">
                       <Button
                         variant="primary"
@@ -251,20 +296,33 @@ const EmergencyContacts = (props) => {
                         CANCEL
                       </Button>
                     </div>
-                  ) : ""
+                  ) 
+                  : ""
                 }
               </Card.Body>
             </Card>
             {
-              props.isMobile ? "" : (
+              props.isMobile 
+              ? "" 
+              : isView 
+              ? (<>
+                  <Button
+                    variant="secondary"
+                    onClick={() => props.history.goBack()}
+                    className="mt-3"
+                  >
+                    BACK
+                  </Button>
+                </>) 
+              : (
                 <div className="mt-4 mb-5 ml-1 row justify-content-md-start justify-content-center">
                   <Button
                     variant="primary"
                     type="submit"
-                    disabled={!dirty || !isValid}
+                    disabled={isSubmitting || !isValid}
                     style={{ marginRight: 15 }}
                   >
-                    SAVE
+                    {props.employeeData?.id ? "SAVE" : "SAVE & NEXT"}
                   </Button>
                   <Button
                     variant="secondary"

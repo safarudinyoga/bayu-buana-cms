@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { Card, Form, Row, Col, Button, Image, CloseButton } from "react-bootstrap"
-import { Formik, FastField, Field } from "formik"
+import { Formik, FastField, Field, ErrorMessage } from "formik"
+import TextError from "components/formik/textError"
 import * as Yup from "yup"
 import ImageUploading from "react-images-uploading"
 import axios from "axios"
@@ -36,6 +37,8 @@ const GeneralInformation = (props) => {
   const maxNumber = 1
   const { innerWidth, innerHeight, outerHeight, outerWidth } = useWindowSize();
   const [loading, setLoading]= useState(true)
+  const [defmonths, setMonths] = useState({ value: 1, label: "" })
+  const [defyears, setYears] = useState({ value: 1921, label: "" }) 
 
   const [showCloseBtn, setShowCloseBtn] = useState(false)
   const [openSnackbar] = useSnackbar(options)
@@ -50,12 +53,9 @@ const GeneralInformation = (props) => {
     firstName: "",
     middleName: "",
     lastName: "",
-    // dateOfBirth: "",
+    birth_date: [],
     gender: "db24d53c-7d36-4770-8598-dc36174750af",
     idCardNumber: "",
-    dobDay: "",
-    dobMonth: "",
-    dobYear: "",
 
     // Contacts
     homePhone: "",
@@ -79,7 +79,9 @@ const GeneralInformation = (props) => {
     permanentZipCode: "",
   })
 
-  const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
+  // const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
+
+  const phoneRegExp = /^\d+$/
 
   // Schema for yup
   const validationSchema = Yup.object().shape({
@@ -88,7 +90,7 @@ const GeneralInformation = (props) => {
     firstName: Yup.string().required("First Name is required."),
     middleName: Yup.string(),
     lastName: Yup.string().required("Last Name is required."),
-    // dateOfBirth: Yup.string().required("Date of Birth is required."),
+    birth_date: Yup.array().min(3, "Date of Birth is required."),
     gender: Yup.string().required("Gender is required."),
     idCardNumber: Yup.string(),
 
@@ -107,18 +109,54 @@ const GeneralInformation = (props) => {
         "Unique Email Contacts",
         "Email already exists", // <- key, message
         (value) => {
-          return new Promise((resolve, reject) => {
-            axios
-              .get(
-                `${env.API_URL}/master/employees?filters=["email","=","${value}"]`,
-              )
-              .then((res) => {
-                resolve(res.data.items.length == 0)
+          let formId = props?.employeeData?.id
+            if (formId === undefined) {
+              return new Promise((resolve, reject) => {
+                axios
+                  .get(
+                    `${env.API_URL}/master/employees?filters=["contact.email","like","${value}"]`,
+                  )
+                  .then((res) => {
+                    resolve(
+                      !res.data.items.find(
+                        (e) =>
+                          e.contact.email.toUpperCase() === value.toUpperCase(),
+                      ),
+                    )
+                  })
+                  .catch((res, error) => {
+                    resolve(
+                      res.data.items.find(
+                        (e) =>
+                          e.contact.email.toUpperCase() === value.toUpperCase(),
+                      ),
+                    )
+                  })
               })
-              .catch((error) => {
-                resolve(false)
+            } else {
+              return new Promise((resolve, reject) => {
+                axios
+                  .get(
+                    `${env.API_URL}/master/employees?filters=["contact.email","like","${value}"]`,
+                  )
+                  .then((res) => {
+                    resolve(
+                      !res.data.items.find(
+                        (e) =>
+                          e.contact.email.toUpperCase() === value.toUpperCase(),
+                      ) || value === initialForm.email,
+                    )
+                  })
+                  .catch((res, error) => {
+                    resolve(
+                      res.data.items.find(
+                        (e) =>
+                          e.contact.email.toUpperCase() === value.toUpperCase(),
+                      ),
+                    )
+                  })
               })
-          })
+            }
         },
       ),
     otherEmail: Yup.string().email("Email is not valid."),
@@ -143,13 +181,13 @@ const GeneralInformation = (props) => {
   })
 
   // Birthday
-  const selectDay = () => {
+  const selectDay = (months=defmonths, years=defyears) => {
     const options = []
-    const today = new Date();
-    let currentYear = today.getFullYear();
-    let currentMonth = today.getMonth()+1;
+    const today = new Date()
+    let currentYear = today.getFullYear()
+    let currentMonth = today.getMonth() + 1
     let currentDate = today.getDate()
-    if(initialForm.dobYear.value === currentYear && initialForm.dobMonth.value === currentMonth){
+    if (years.value === currentYear && months.value === currentMonth) {
       for (let i = 1; i <= currentDate; i++) {
         options.push({
           label: i,
@@ -157,21 +195,26 @@ const GeneralInformation = (props) => {
         })
       }
     } else {
-      if(initialForm.dobMonth.value === 2 && initialForm.dobYear.value % 4 == 0){
+      if (months.value === 2 && years.value % 4 == 0) {
         for (let i = 1; i <= 29; i++) {
           options.push({
             label: i,
             value: i,
           })
         }
-      } else if(initialForm.dobMonth.value === 2 && initialForm.dobYear.value % 4 != 0){
+      } else if (months.value === 2 && years.value % 4 != 0) {
         for (let i = 1; i <= 28; i++) {
           options.push({
             label: i,
             value: i,
           })
         }
-      } else if(initialForm.dobMonth.value === 4 || initialForm.dobMonth.value === 6 || initialForm.dobMonth.value === 9 || initialForm.dobMonth.value === 11) {
+      } else if (
+        months.value === 4 ||
+        months.value === 6 ||
+        months.value === 9 ||
+        months.value === 11
+      ) {
         for (let i = 1; i <= 30; i++) {
           options.push({
             label: i,
@@ -186,17 +229,15 @@ const GeneralInformation = (props) => {
           })
         }
       }
-      
     }
-    
     return options
   }
-  const selectMonth = () => {
+  const selectMonth = (years=defyears) => {
     const options = []
     const today = new Date();
     let currentYear = today.getFullYear();
     let currentMonth = today.getMonth()+1;
-    const month = Array.from({ length: initialForm.dobYear.value === currentYear ? currentMonth : 12 }, (e, i) => {
+    const month = Array.from({ length: years.value === currentYear ? currentMonth : 12 }, (e, i) => {
       return new Date(null, i + 1, null).toLocaleDateString("en", {
         month: "long",
       })
@@ -386,7 +427,7 @@ const GeneralInformation = (props) => {
   useEffect(async () => {
     try {
       if(props.employeeData) {
-        let data = props.formData.given_name ? props.formData : props.employeeData
+        let data = props.formData && props.formData.given_name ? props.formData : props.employeeData
         if(data) {
           setInitialForm({
             ...initialForm,
@@ -400,29 +441,22 @@ const GeneralInformation = (props) => {
             lastName: data.surname ? data.surname : "",
             gender: _.isEmpty(data.gender) ? data.gender_id : data.gender.id,
             idCardNumber: data.ktp ? data.ktp : "",
-            dobDay: data.birth_date ? {
-              value: parseInt(data.birth_date.split("-")[2]),
-              label: parseInt(data.birth_date.split("-")[2]), 
-            } : {
-              value: 1,
-              label: 1,
-            },
-            dobMonth: data.birth_date ? {
-              value: parseInt(data.birth_date.split("-")[1]),
-              label: new Date(null, parseInt(data.birth_date.split("-")[1]), null).toLocaleDateString("en", {
-                month: "long",
-              }), 
-            }: {
-              value: 1,
-              label: "January",
-            },
-            dobYear: data.birth_date ? {
-              value: parseInt(data.birth_date.split("-")[0]),
-              label: parseInt(data.birth_date.split("-")[0]),  
-            } : {
-              value: 1921,
-              label: 1921,
-            },
+            birth_date: [
+              {
+                value: parseInt(data.birth_date.split("-")[2]),
+                label: parseInt(data.birth_date.split("-")[2]),
+              },
+              {
+                value: parseInt(data.birth_date.split("-")[1]),
+                  label: new Date(null, parseInt(data.birth_date.split("-")[1]), null).toLocaleDateString("en", {
+                  month: "long",
+                })
+              },
+              {
+                value: parseInt(data.birth_date.split("-")[0]),
+                label: parseInt(data.birth_date.split("-")[0]),  
+              },
+            ],
             
             // Contacts
             homePhone: _.isEmpty(data.contact) ? "" : data.contact.phone_number ? data.contact.phone_number : "",
@@ -499,6 +533,14 @@ const GeneralInformation = (props) => {
     }
   }, [props.employeeData, props.formData])
 
+  const dateFormat = (d,m,y) => {
+    let day = d < 10 ? ("0"+d) : d;
+    let month = m < 10 ? ("0"+m) : m;
+    let year = y;
+
+    return year+"-"+month+"-"+day
+  }
+
   return (
     <>
       <Formik
@@ -506,9 +548,6 @@ const GeneralInformation = (props) => {
         validationSchema={validationSchema}
         validator={() => ({})}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
-          let day = values.dobDay.value < 10 ? ("0"+values.dobDay.value) : values.dobDay.value;
-          let month = values.dobMonth.value < 10 ? ("0"+values.dobMonth.value) : values.dobMonth.value;
-          let year = values.dobYear.value;
 
           let formatted = {
             address: {
@@ -531,7 +570,7 @@ const GeneralInformation = (props) => {
             given_name: values.firstName,
             middle_name: values.middleName,
             surname: values.lastName,
-            birth_date: year+"-"+month+"-"+day,
+            birth_date: dateFormat(values.birth_date[0].value, values.birth_date[1].value, values.birth_date[2].value),
             name_prefix_id: values.title.value,
             gender_id: values.gender,
             permanent_address: values.sameAddress ? {
@@ -748,10 +787,10 @@ const GeneralInformation = (props) => {
                   }
                     <Col sm={9}>
                       <Form.Group as={Row} className="form-group">
-                        <Form.Label column sm={4}>
+                        <Form.Label column md={3} lg={4}>
                           Title <span className="form-label-required">*</span>
                         </Form.Label>
-                        <Col sm={8}>
+                        <Col md={9} lg={8}>
                           <FastField name="title">
                             {({ field, form }) => (
                               <>
@@ -784,11 +823,11 @@ const GeneralInformation = (props) => {
                         </Col>
                       </Form.Group>
                       <Form.Group as={Row} className="form-group">
-                        <Form.Label column sm={4}>
+                        <Form.Label column md={3} lg={4}>
                           First Name{" "}
                           <span className="form-label-required">*</span>
                         </Form.Label>
-                        <Col sm={8}>
+                        <Col md={9} lg={8}>
                           <FastField name="firstName" disabled>
                             {({ field, form }) => (
                               <>
@@ -818,10 +857,10 @@ const GeneralInformation = (props) => {
                         </Col>
                       </Form.Group>
                       <Form.Group as={Row} className="form-group">
-                        <Form.Label column sm={4}>
+                        <Form.Label column md={3} lg={4}>
                           Middle Name
                         </Form.Label>
-                        <Col sm={8}>
+                        <Col md={9} lg={8}>
                           <FastField name="middleName">
                             {({ field }) => (
                               <Form.Control
@@ -837,11 +876,11 @@ const GeneralInformation = (props) => {
                         </Col>
                       </Form.Group>
                       <Form.Group as={Row} className="form-group">
-                        <Form.Label column sm={4}>
+                        <Form.Label column md={3} lg={4}>
                           Last Name{" "}
                           <span className="form-label-required">*</span>
                         </Form.Label>
-                        <Col sm={8}>
+                        <Col md={9} lg={8}>
                           <FastField name="lastName">
                             {({ field, form }) => (
                               <>
@@ -871,16 +910,16 @@ const GeneralInformation = (props) => {
                         </Col>
                       </Form.Group>
                       <Form.Group as={Row} className="form-group">
-                        <Form.Label column sm={4}>
+                        <Form.Label column md={3} lg={4}>
                           Date Of Birth{" "}
                           <span className="form-label-required">*</span>
                         </Form.Label>
-                        <Col sm={8}>
-                          <div style={{ maxWidth: 320, display: "flex" }}>
+                        <Col  md={9} lg={8}>
+                          <div style={{ minWidth: 280, maxWidth: 400, display: "flex" }}>
                             <div style={{ marginRight: 12, flex: 1 }}>
                               <Select
-                                options={selectDay()}
-                                value={values.dobDay}
+                                options={selectDay(values.birth_date[1], values.birth_date[2])}
+                                value={values.birth_date[0]}
                                 isDisabled={isView}
                                 placeholder="Day"
                                 className={`react-select ${
@@ -891,16 +930,19 @@ const GeneralInformation = (props) => {
                                 components={{
                                   IndicatorSeparator: () => null,
                                 }}
-                                style={{ marginRight: 12 }}
+                                style={{
+                                  minWidth: 77,
+                                  maxWidth: 240,
+                                }}
                                 onChange={(v) => {
-                                  setFieldValue("dobDay", v)
+                                  setFieldValue("birth_date[0]", v)
                                 }}
                               />
                             </div>
-                            <div style={{ marginRight: 12, flex: 1.5 }}>
+                            <div style={{ marginRight: 12, flex: 1 }}>
                               <Select
-                                options={selectMonth()}
-                                value={values.dobMonth}
+                                options={selectMonth(values.birth_date[2])}
+                                value={values.birth_date[1]}
                                 placeholder="Month"
                                 isDisabled={isView}
                                 disabled={true}
@@ -912,20 +954,28 @@ const GeneralInformation = (props) => {
                                 components={{
                                   IndicatorSeparator: () => null,
                                 }}
-                                style={{ marginRight: 12 }}
+                                style={{
+                                  minWidth: 110,
+                                  maxWidth: 240,
+                                }}
                                 onChange={(v) => {
-                                  setFieldValue("dobMonth", v)
-                                  setInitialForm({
-                                    ...initialForm,
-                                    dobMonth: v
-                                  })
+                                  setFieldValue("birth_date[1]", v)
+                                  setFieldValue("birth_date[0]", {value: 1, label: "1"})
+                                  // setInitialForm({
+                                  //   ...initialForm,
+                                  //   birth_date: [
+                                  //     {value: 1, label: "1"},
+                                  //     v,
+                                  //     values.birth_date[2],
+                                  //   ],
+                                  // })
                                 }}
                               />
                             </div>
                             <div style={{ flex: 1 }}>
                               <Select
                                 options={selectYear()}
-                                value={values.dobYear}
+                                value={values.birth_date[2]}
                                 placeholder="Year"
                                 isDisabled={isView}
                                 className={`react-select ${
@@ -936,17 +986,30 @@ const GeneralInformation = (props) => {
                                 components={{
                                   IndicatorSeparator: () => null,
                                 }}
-                                style={{ marginRight: 12 }}
+                                style={{
+                                  minWidth: 82,
+                                  maxWidth: 240,
+                                }}
                                 onChange={(v) => {
-                                  setFieldValue("dobYear", v)
-                                  setInitialForm({
-                                    ...initialForm,
-                                    dobYear: v
-                                  })
+                                  setFieldValue("birth_date[2]", v)
+                                  setFieldValue("birth_date[1]", {value: 1, label: "January"})
+                                  setFieldValue("birth_date[0]", {value: 1, label: "1"})
+                                  // setInitialForm({
+                                  //   ...initialForm,
+                                  //   birth_date: [
+                                  //     {value: 1, label: "1"},
+                                  //     {value: 1, label: "January"},
+                                  //     v,
+                                  //   ]
+                                  // })
                                 }}
                               />
                             </div>
                           </div>
+                          <ErrorMessage
+                            component={TextError}
+                            name="birth_date"
+                          />
                           {touched.title && Boolean(errors.title) && (
                             <div className="invalid-feedback">
                               {touched.title ? errors.title : ""}
@@ -955,10 +1018,10 @@ const GeneralInformation = (props) => {
                         </Col>
                       </Form.Group>
                       <Form.Group as={Row} className="form-group">
-                        <Form.Label column sm={4}>
+                        <Form.Label column md={3} lg={4}>
                           Gender <span className="form-label-required">*</span>
                         </Form.Label>
-                        <Col sm={8}>
+                        <Col md={9} lg={8}>
                           <div
                             style={{
                               height: 38,
@@ -1012,10 +1075,10 @@ const GeneralInformation = (props) => {
                         </Col>
                       </Form.Group>
                       <Form.Group as={Row} className="form-group">
-                        <Form.Label column sm={4}>
+                        <Form.Label column md={3} lg={4}>
                           ID Card Number (KTP)
                         </Form.Label>
-                        <Col sm={8}>
+                        <Col md={9} lg={8}>
                           <FastField name="idCardNumber">
                             {({ field }) => (
                               <Form.Control

@@ -32,7 +32,7 @@ const UserProfile = (props) => {
   const [tabKey, setTabKey] = useState("general-information")
   const { innerWidth, innerHeight, outerHeight, outerWidth } = useWindowSize();
   const [loading, setLoading] = useState(true)
-  const [form, setForm] = useState({})
+  const [form, setForm] = useState(null)
   const [Data, setData] = useState(null)
   const [finishStep, setStep] = useState(0)
   const [photoData, setPhotoData] = useState(null)
@@ -42,18 +42,24 @@ const UserProfile = (props) => {
     let formId = props.match.params.id
 
     let docTitle = "Edit Employee"
+    let breadcrumbTitle = "Edit Employee"
     if (!formId) {
       docTitle = "Create Employee"
+      breadcrumbTitle = "Create Employee"
     } else if (isView) {
       docTitle = "Employee Details"
+      breadcrumbTitle = "View Employee"
     }
-
     dispatch(
       setUIParams({
         title: docTitle,
         breadcrumbs: [
           {
-            text: "Management",
+            text: "Employment Management",
+          },
+          {
+            link: backUrl,
+            text: "Master Employee",
           },
           {
             text: docTitle,
@@ -138,21 +144,25 @@ const UserProfile = (props) => {
       let formId = props.match.params.id
 
       let photo_id = null
-      if(values.photo_profile.length > 0) {
+      if(values.photo_profile && values.photo_profile.length > 0) {
         if( !photoData || photoData?.data_url !== values.photo_profile[0].data_url) {
           photo_id = await doUpload(values.photo_profile)
         } else {
           photo_id = values.photo_profile[0].id
         }
       }
-      if(photoData && values.photo_profile.length === 0) photo_id = await removeImage(photoData?.id)
+      if((photoData && values.photo_profile) && values.photo_profile.length === 0) photo_id = await removeImage(photoData?.id)
 
       values ={
         ...values,
         employee_asset: {
           multimedia_description_id: photo_id,
         },
+        job_title_id: values.job_title_id ? values.job_title_id : values.job_title.id,
+        office_id: values.office_id ? values.office_id : values.office?.id ? values.office.id : "00000000-0000-0000-0000-000000000000",
+        division_id: values.division_id ? values.division_id : values.division?.id ? values.division.id : "00000000-0000-0000-0000-000000000000",
       }
+      console.log(values)
 
       if (!formId) {
         //ProsesCreateData
