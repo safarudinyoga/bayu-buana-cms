@@ -1205,9 +1205,9 @@ const EmployeeForm = (props) => {
                             },                            
                           )
                         }}                       
-                        style={{ maxWidth: 416 }}
+                        style={{ maxWidth: 416, marginRight: 7 }}
                         disabled={isView}
-                      />Same As Current Address
+                      /> Same As Current Address
                       {formik.values.same_address ? (
                         <div>
                           <FormikControl
