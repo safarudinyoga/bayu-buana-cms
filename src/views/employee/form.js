@@ -1167,10 +1167,9 @@ const EmployeeForm = (props) => {
                 <Row>
                   <Col lg={11}>
                     <div style={{ padding: "0 15px 15px" }}>
-                      <FormikControl
+                      <input
                         control="checkboxOnly"
                         type="checkbox"
-                        label="Same As Current Address"
                         name="same_address"
                         checked={formik.values.same_address}
                         onChange={() => {                          
@@ -1206,12 +1205,11 @@ const EmployeeForm = (props) => {
                               label: "Please choose",
                             },                            
                           )
-                                 
-                           
+
                         }}                       
                         style={{ maxWidth: 416 }}
                         disabled={isView}
-                      />
+                      /> Same As Current Address
                       {formik.values.same_address ? (
                         <div>
                           <FormikControl
