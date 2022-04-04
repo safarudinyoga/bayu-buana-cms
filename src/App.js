@@ -101,7 +101,7 @@ import HotelRoomTypeForm from "views/hotel_profile_management/form/room_type/for
 // Master Employee
 import EmployeeTable from "views/employee/table"
 import EmployeeForm from "views/employee/form"
-import EmployeeFormRef from "views/employee/form2"
+import EmployeeForm1 from "views/employee/form/index"
 import RatingTypeLevelTable from "./views/rating_type_level/table"
 import RatingTypeLevelForm from "./views/rating_type_level/form"
 
@@ -157,6 +157,10 @@ import StandardAncillaryFeeOtherForm from "views/standard_ancillary_fee/form/oth
 // Special Date
 import SpecialDateTable from "views/special_date/table"
 import SpecialDateForm from "views/special_date/form"
+
+
+// Extranet BookTrip
+import BookTrip from "views/extranet/book_trip/book_trip"
 
 
 import Api from "config/api"
@@ -489,6 +493,9 @@ const DashboardRoutes = () => {
         <Route path="/master/employee/form/:id?">
           <EmployeeForm />
         </Route>
+        <Route path="/master/employee/form1/:id?">
+          <EmployeeForm1 />
+        </Route>
         {/* Division */}
         <Route exact path="/master/divisions">
           <DivisionTable />
@@ -573,6 +580,11 @@ const DashboardRoutes = () => {
         </Route>
         <Route path="/master/special-date/form/:id?">
           <SpecialDateForm />
+        </Route>
+
+        {/* Extranet Book Trip */}
+        <Route exact path="/extranet/book-trip">
+          <BookTrip />
         </Route>
 
       </Switch>

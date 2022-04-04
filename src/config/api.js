@@ -6,8 +6,7 @@ var queryString = require('qs');
 export default class Api {
   constructor() {
     this.axios = axios.create({
-      baseURL: env.API_URL,
-      withCredentials: true,
+      baseURL: env.API_URL
     })
     this.initialize()
     this.env = env
