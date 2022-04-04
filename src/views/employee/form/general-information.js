@@ -87,9 +87,9 @@ const GeneralInformation = (props) => {
   const validationSchema = Yup.object().shape({
     // General Information
     title: Yup.object().required("Title is required."),
-    firstName: Yup.string().required("First Name is required."),
+    firstName: Yup.string().required("Employee First Name is required."),
     middleName: Yup.string(),
-    lastName: Yup.string().required("Last Name is required."),
+    lastName: Yup.string().required("Employee Last Name is required."),
     birth_date: Yup.array().min(3, "Date of Birth is required."),
     gender: Yup.string().required("Gender is required."),
     idCardNumber: Yup.string(),
@@ -347,10 +347,10 @@ const GeneralInformation = (props) => {
     } catch (e) {}
   }
   // Current Province state
-  const handleChangeCurrentProvince = async (v) => {
+  const handleChangeCurrentProvince = async (province_id, country_id) => {
     try {
       let res = await api.get(
-        `/master/cities?filters=[["state_province_id","=","${v}"],["AND"],["status","=",1]]&sort=city_name`,
+        `/master/cities?filters=[["state_province_id","=","${province_id}"],["AND"],["country_id","=","${country_id}"],["AND"],["status","=",1]]&sort=city_name`,
       )
       const options = []
       if(res.data.items.length > 0){
@@ -368,10 +368,10 @@ const GeneralInformation = (props) => {
     } catch (e) {}
   }
   // // Permanent Province state
-  const handleChangePermanentProvince = async (v) => {
+  const handleChangePermanentProvince = async (province_id, country_id) => {
     try {
       let res = await api.get(
-        `/master/cities?filters=[["state_province_id","=","${v}"],["AND"],["status","=",1]]&sort=city_name`,
+        `/master/cities?filters=[["state_province_id","=","${province_id}"],["AND"],["country_id","=","${country_id}"],["AND"],["status","=",1]]&sort=city_name`,
       )
       const options = []
       if(res.data.items.length > 0){
@@ -391,6 +391,12 @@ const GeneralInformation = (props) => {
 
   // Upload profile
   const onChangePhotoProfile = (imageList) => {
+    var files = imageList[0].file;
+    var filesize = ((files.size/1024)/1024).toFixed(4);
+      if(filesize > 4){
+        openSnackbar("Logo size is more than 4MB.")
+        return;
+      }
     setPhotoProfile(imageList)
   }
 
@@ -516,13 +522,13 @@ const GeneralInformation = (props) => {
           )
 
           if(data.permanent_address.state_province) {
-            handleChangePermanentProvince(data.permanent_address.state_province.id)
+            handleChangePermanentProvince(data.permanent_address.state_province.id, data.permanent_address.country_id)
           } else { 
             handleChangePermanentCountry(data.permanent_address.country_id)
           }
 
           if(data.address.state_province) {
-            handleChangeCurrentProvince(data.address.state_province.id)
+            handleChangeCurrentProvince(data.address.state_province.id, data.address.country_id)
           } else { 
             handleChangeCurrentCountry(data.address.country_id)
           }
@@ -1390,7 +1396,7 @@ const GeneralInformation = (props) => {
                                 onChange={(v) => {
                                   setFieldValue("currentProvince", v)
                                   setFieldValue("currentCity", "")
-                                  handleChangeCurrentProvince(v.value)
+                                  handleChangeCurrentProvince(v.value, values.currentCountry.value)
                                 }}
                                 isDisabled={isView}
                               />
@@ -1550,7 +1556,7 @@ const GeneralInformation = (props) => {
                           onChange={(v) => {
                             setFieldValue("permanentProvince", v)
                             setFieldValue("permanentCity", "")
-                            handleChangePermanentProvince(v.value)
+                            handleChangePermanentProvince(v.value, values.permanentCountry.value)
                           }}
                           onBlur={setFieldTouched}
                           isDisabled={values.sameAddress || isView}
