@@ -271,7 +271,7 @@ const GeneralInformation = (props) => {
   const handleChangeCurrentCountry = async (v) => {
     try {
       let res = await api.get(
-        `/master/state-provinces?filters=[["country_id","=","${v}"],["AND"],["status","=",1]]&sort=state_province_name`,
+        `/master/state-provinces?size=-1&filters=[["country_id","=","${v}"],["AND"],["status","=",1]]&sort=state_province_name`,
       )
       const options = []
       if(res.data.items.length > 0){
@@ -288,7 +288,7 @@ const GeneralInformation = (props) => {
       }
 
       let res2 = await api.get(
-        `/master/cities?filters=[["country_id","=","${v}"],["AND"],["status","=",1]]&sort=city_name`,
+        `/master/cities?size=-1&filters=[["country_id","=","${v}"],["AND"],["status","=",1]]&sort=city_name`,
       )
       const optionsCity = []
       if(res2.data.items.length > 0){
@@ -312,7 +312,7 @@ const GeneralInformation = (props) => {
   const handleChangePermanentCountry = async (v) => {
     try {
       let res = await api.get(
-        `/master/state-provinces?filters=[["country_id","=","${v}"],["AND"],["status","=",1]]&sort=state_province_name`,
+        `/master/state-provinces?size=-1&filters=[["country_id","=","${v}"],["AND"],["status","=",1]]&sort=state_province_name`,
       )
       const options = []
       if(res.data.items.length > 0){
@@ -328,7 +328,7 @@ const GeneralInformation = (props) => {
         setSelectPermanentProvince([])
       }
       let res2 = await api.get(
-        `/master/cities?filters=[["country_id","=","${v}"],["AND"],["status","=",1]]&sort=city_name`,
+        `/master/cities?size=-1&filters=[["country_id","=","${v}"],["AND"],["status","=",1]]&sort=city_name`,
       )
       const optionsCity = []
       if(res2.data.items.length > 0){
@@ -470,14 +470,31 @@ const GeneralInformation = (props) => {
               value: data.address.country_id,
               label: data.address.country.country_name
             } : "",
-            currentProvince: _.isEmpty(data.address) ? "" : data.address.state_province ? {
-              value: data.address.state_province_id,
-              label: data.address.state_province.state_province_name
-            } : "",
-            currentCity: _.isEmpty(data.address) ? "" : data.address.city ? {
-              value: data.address.city.id,
-              label: data.address.city.city_name
-            } : "",
+            // currentProvince: _.isEmpty(data.address) ? "" : data.address.state_province ? {
+            //   value: data.address.state_province_id,
+            //   label: data.address.state_province.state_province_name
+            // } : "",
+            currentProvince:{
+              label: data?.address?.state_province
+                ? data?.address?.state_province?.state_province_name
+                : !isView
+                ? "Please choose"
+                : "",
+              value: data?.address?.state_province_id,
+            },
+            // currentCity: _.isEmpty(data.address) ? "" : data.address.city ? {
+            //   value: data.address.city.id,
+            //   label: data.address.city.city_name
+            // } : "",
+            currentCity:{
+              label: data?.address?.city
+                ? data?.address?.city?.city_name
+                : !isView
+                ? "Please choose"
+                : "",
+              value: data?.address?.city_id,
+            },
+
             currentZipCode: _.isEmpty(data.address) ? "" : data.address.postal_code ? data.address.postal_code : "",
     
             // Permanent Address
@@ -493,14 +510,31 @@ const GeneralInformation = (props) => {
               value: data.permanent_address.country_id,
               label: data.permanent_address.country.country_name,
             } : "",
-            permanentProvince: _.isEmpty(data.permanent_address) ? "" : data.permanent_address.state_province ? {
-              value: data.permanent_address.state_province_id,
-              label: data.permanent_address.state_province.state_province_name,
-            } : "",
-            permanentCity: _.isEmpty(data.permanent_address) ? "" : data.permanent_address.city ? {
-              value: data.permanent_address.city_id,
-              label: data.permanent_address.city.city_name
-            } : "",
+            // permanentProvince: _.isEmpty(data.permanent_address) ? "" : data.permanent_address.state_province ? {
+            //   value: data.permanent_address.state_province_id,
+            //   label: data.permanent_address.state_province.state_province_name,
+            // } : "",
+
+            permanentProvince:{
+              label: data?.permanent_address?.state_province
+                ? data?.permanent_address?.state_province?.state_province_name
+                : !isView
+                ? "Please choose"
+                : "",
+              value: data?.permanent_address?.state_province_id,
+            },
+            // permanentCity: _.isEmpty(data.permanent_address) ? "" : data.permanent_address.city ? {
+            //   value: data.permanent_address.city_id,
+            //   label: data.permanent_address.city.city_name
+            // } : "",
+            permanentCity:{
+              label: data?.permanent_address?.city
+                ? data?.permanent_address?.city?.city_name
+                : !isView
+                ? "Please choose"
+                : "",
+              value: data?.permanent_address?.city_id,
+            },
             permanentZipCode: _.isEmpty(data.permanent_address) ? "" : data.permanent_address.postal_code ? data.permanent_address.postal_code : "",
           });
 
@@ -808,6 +842,14 @@ const GeneralInformation = (props) => {
                                     onChange={(v) => {
                                       setFieldValue("title", v)
                                     }}
+                                    components={
+                                      isView
+                                        ? {
+                                            DropdownIndicator: () => null,
+                                            IndicatorSeparator: () => null,
+                                          }
+                                        : null
+                                    }
                                   />
                                   {form.touched.title && form.errors.title && (
                                     <Form.Control.Feedback type="invalid">
@@ -927,9 +969,14 @@ const GeneralInformation = (props) => {
                                     ? "is-invalid"
                                     : ""
                                 }`}
-                                components={{
-                                  IndicatorSeparator: () => null,
-                                }}
+                                components={
+                                  isView
+                                    ? {
+                                        DropdownIndicator: () => null,
+                                        IndicatorSeparator: () => null,
+                                      }
+                                    : null
+                                }
                                 style={{
                                   minWidth: 77,
                                   maxWidth: 240,
@@ -951,9 +998,14 @@ const GeneralInformation = (props) => {
                                     ? "is-invalid"
                                     : ""
                                 }`}
-                                components={{
-                                  IndicatorSeparator: () => null,
-                                }}
+                                components={
+                                  isView
+                                    ? {
+                                        DropdownIndicator: () => null,
+                                        IndicatorSeparator: () => null,
+                                      }
+                                    : null
+                                }
                                 style={{
                                   minWidth: 110,
                                   maxWidth: 240,
@@ -983,9 +1035,14 @@ const GeneralInformation = (props) => {
                                     ? "is-invalid"
                                     : ""
                                 }`}
-                                components={{
-                                  IndicatorSeparator: () => null,
-                                }}
+                                components={
+                                  isView
+                                    ? {
+                                        DropdownIndicator: () => null,
+                                        IndicatorSeparator: () => null,
+                                      }
+                                    : null
+                                }
                                 style={{
                                   minWidth: 82,
                                   maxWidth: 240,
@@ -1347,10 +1404,10 @@ const GeneralInformation = (props) => {
                               isDisabled={isView}
                               url={`master/countries`}
                               fieldName="country_name"
-                              onChange={(v) => {
-                                setFieldValue("currentCountry", v)
+                              onChange={(v) => {                               
                                 setFieldValue("currentProvince", null)
                                 setFieldValue("currentCity", null)
+                                setFieldValue("currentCountry", v)
                                 handleChangeCurrentCountry(v.value)
                               }}
                               placeholder="Please choose"
@@ -1360,6 +1417,14 @@ const GeneralInformation = (props) => {
                                   ? "is-invalid"
                                   : null
                               }`}
+                              components={
+                                isView
+                                  ? {
+                                      DropdownIndicator: () => null,
+                                      IndicatorSeparator: () => null,
+                                    }
+                                  : null
+                              }
                             />
                             {form.touched.currentCountry &&
                               form.errors.currentCountry && (
@@ -1392,6 +1457,14 @@ const GeneralInformation = (props) => {
                                   setFieldValue("currentCity", "")
                                   handleChangeCurrentProvince(v.value)
                                 }}
+                                components={
+                                  isView
+                                    ? {
+                                        DropdownIndicator: () => null,
+                                        IndicatorSeparator: () => null,
+                                      }
+                                    : null
+                                }
                                 isDisabled={isView}
                               />
                             </div>
@@ -1416,6 +1489,14 @@ const GeneralInformation = (props) => {
                                 onChange={(v) => {
                                   setFieldValue("currentCity", v)
                                 }}
+                                components={
+                                  isView
+                                    ? {
+                                        DropdownIndicator: () => null,
+                                        IndicatorSeparator: () => null,
+                                      }
+                                    : null
+                                }
                                 isDisabled={isView}
                               />
                             </div>
@@ -1507,13 +1588,21 @@ const GeneralInformation = (props) => {
                                 ? "is-invalid"
                                 : null)
                             }`}
-                            onChange={(v) => {
-                              setFieldValue("permanentCountry", v)
+                            onChange={(v) => {                              
                               setFieldValue("permanentProvince", null)
                               setFieldValue("permanentCity", null)
+                              setFieldValue("permanentCountry", v)
                               handleChangePermanentCountry(v.value)
                             }}
                             onBlur={setFieldTouched}
+                            components={
+                              isView
+                                ? {
+                                    DropdownIndicator: () => null,
+                                    IndicatorSeparator: () => null,
+                                  }
+                                : null
+                            }
                             isDisabled={values.sameAddress || isView}
                           />
                           {!values.sameAddress && (
@@ -1553,6 +1642,14 @@ const GeneralInformation = (props) => {
                             handleChangePermanentProvince(v.value)
                           }}
                           onBlur={setFieldTouched}
+                          components={
+                            isView
+                              ? {
+                                  DropdownIndicator: () => null,
+                                  IndicatorSeparator: () => null,
+                                }
+                              : null
+                          }
                           isDisabled={values.sameAddress || isView}
                         />
                       </div>
@@ -1577,6 +1674,14 @@ const GeneralInformation = (props) => {
                             setFieldValue("permanentCity", v)
                           }}
                           onBlur={setFieldTouched}
+                          components={
+                            isView
+                              ? {
+                                  DropdownIndicator: () => null,
+                                  IndicatorSeparator: () => null,
+                                }
+                              : null
+                          }
                           isDisabled={ values.sameAddress || isView}
                         />
                       </div>
