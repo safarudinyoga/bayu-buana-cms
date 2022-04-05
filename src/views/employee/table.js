@@ -225,7 +225,6 @@ export default function EmployeeTable() {
         title: "",
         data: "employee_asset.multimedia_description.url",
         render: (data, type) => {
-          console.log(type)
           if (type === "myExport") {
             return data
           }
