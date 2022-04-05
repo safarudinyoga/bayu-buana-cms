@@ -307,7 +307,7 @@ const Subscriptions = (props) => {
                     <Col sm={9}>
                       <FastField name="job_title">
                         {({ field, form }) => (
-                          <div style={{ maxWidth: 300 }}>
+                          <div style={{ maxWidth: 200 }}>
                             <SelectAsync
                               {...field}
                               isDisabled={isView}
@@ -323,6 +323,14 @@ const Subscriptions = (props) => {
                                   ? "is-invalid"
                                   : null
                               }`}
+                              components={
+                                isView
+                                  ? {
+                                      DropdownIndicator: () => null,
+                                      IndicatorSeparator: () => null,
+                                    }
+                                  : null
+                              }
                             />
                             {form.touched.job_title &&
                               form.errors.job_title && (
@@ -345,7 +353,7 @@ const Subscriptions = (props) => {
                     <Col sm={9}>
                       <FastField name="division">
                         {({ field, form }) => (
-                          <div style={{ maxWidth: 300 }}>
+                          <div style={{ maxWidth: 200 }}>
                             <SelectAsync
                               {...field}
                               isDisabled={isView}
@@ -361,6 +369,14 @@ const Subscriptions = (props) => {
                                   ? "is-invalid"
                                   : null
                               }`}
+                              components={
+                                isView
+                                  ? {
+                                      DropdownIndicator: () => null,
+                                      IndicatorSeparator: () => null,
+                                    }
+                                  : null
+                              }
                             />
                             {form.touched.division &&
                               form.errors.division && (
@@ -383,7 +399,7 @@ const Subscriptions = (props) => {
                     <Col sm={9}>
                       <FastField name="office">
                         {({ field, form }) => (
-                          <div style={{ maxWidth: 300 }}>
+                          <div style={{ maxWidth: 250 }}>
                             <SelectAsync
                               {...field}
                               isDisabled={isView}
@@ -399,6 +415,14 @@ const Subscriptions = (props) => {
                                   ? "is-invalid"
                                   : null
                               }`}
+                              components={
+                                isView
+                                  ? {
+                                      DropdownIndicator: () => null,
+                                      IndicatorSeparator: () => null,
+                                    }
+                                  : null
+                              }
                             />
                             {form.touched.office &&
                               form.errors.office && (
@@ -431,9 +455,14 @@ const Subscriptions = (props) => {
                                 ? "is-invalid"
                                 : ""
                             }`}
-                            components={{
-                              IndicatorSeparator: () => null,
-                            }}
+                            components={
+                              isView
+                                ? {
+                                    DropdownIndicator: () => null,
+                                    IndicatorSeparator: () => null,
+                                  }
+                                : null
+                            }
                             style={{ marginRight: 12 }}
                             onChange={(v) => {
                               setFieldValue("hire_date[0]", v)
@@ -452,9 +481,14 @@ const Subscriptions = (props) => {
                                 ? "is-invalid"
                                 : ""
                             }`}
-                            components={{
-                              IndicatorSeparator: () => null,
-                            }}
+                            components={
+                              isView
+                                ? {
+                                    DropdownIndicator: () => null,
+                                    IndicatorSeparator: () => null,
+                                  }
+                                : null
+                            }
                             style={{ marginRight: 12 }}
                             onChange={(v) => {
                               setFieldValue("hire_date[1]", v)
@@ -478,9 +512,14 @@ const Subscriptions = (props) => {
                                 ? "is-invalid"
                                 : ""
                             }`}
-                            components={{
-                              IndicatorSeparator: () => null,
-                            }}
+                            components={
+                              isView
+                                ? {
+                                    DropdownIndicator: () => null,
+                                    IndicatorSeparator: () => null,
+                                  }
+                                : null
+                            }
                             style={{ marginRight: 12 }}
                             onChange={(v) => {
                               setFieldValue("hire_date[2]", v)
