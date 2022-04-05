@@ -88,7 +88,7 @@ function DeleteForm(props) {
 					}) => (
 						<Form onSubmit={handleSubmit}>
               <div style={{textAlign:'center'}}>
-                <span style={{color: '#333333', fontSize: '14px'}}>Are you sure you want to delete this ?</span>
+                <span style={{color: '#333333', fontSize: '14px'}}>Are you sure you want to delete this?</span>
                   <div className="row">
                     <div className="col-sm">
                       <span style={{color: '#333333', fontSize: '14px'}}>Corporate Rating Code : {values.corporate_rating_type_level_code}</span>
