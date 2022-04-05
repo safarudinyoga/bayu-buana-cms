@@ -45,7 +45,7 @@ const FlightBook = (props) => {
 
   const Control = ({ children, ...props }) => (
     <components.Control {...props}>
-      <h4 className='form-with-label__title'>HELLO</h4>
+      {/* <h4 className='form-with-label__title'>HELLO</h4> */}
       {children}
     </components.Control>
   );
@@ -136,6 +136,16 @@ const FlightBook = (props) => {
 
             <div className="col-md-3">
               <h4 className='form-with-label__title'> TRAVELERS</h4>
+              <Select
+                options={options}
+                formatOptionLabel={formatOptionLabel}
+                components={{Control}}
+                label="TRAVELERS"
+                theme={(theme) => ({
+                  ...theme,
+                  borderRadius: 0,
+                })}
+              />
             </div>
           </div>
           <div className="row">
@@ -204,7 +214,9 @@ const FlightBook = (props) => {
             <div className="col-md-4">
               <Button>Search</Button>
             </div>
-            
+          </div>
+          <div className="row">
+
           </div>
         </Tab>
         <Tab
