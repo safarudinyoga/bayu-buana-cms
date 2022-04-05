@@ -399,6 +399,8 @@ const GeneralInformation = (props) => {
       let res = await api.get("/user/profile")
       let data = res.data;
       console.log("DATA", data)
+      handleChangeCurrentCountry(_.isEmpty(data.address) ? "" : data.address.country ? data.address.country_id : "")
+      handleChangePermanentCountry(_.isEmpty(data.permanent_address) ? "" : data.permanent_address.country ? data.permanent_address.country_id : "")
       setInitialForm({
         ...initialForm,
         title: _.isEmpty(data.name_prefix) ? "" : {
