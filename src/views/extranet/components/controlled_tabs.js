@@ -33,7 +33,7 @@ const ControlledTabs = (props) => {
             </div>
           }
         >
-          <FlightBookSelect />
+          <FlightBookSuggest />
         </TabPane>
         <TabPane
           className="m-3"
