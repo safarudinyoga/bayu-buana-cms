@@ -224,7 +224,11 @@ export default function EmployeeTable() {
       {
         title: "",
         data: "employee_asset.multimedia_description.url",
-        render: (data) => {
+        render: (data, type) => {
+          console.log(type)
+          if (type === "myExport") {
+            return data
+          }
           if (data === undefined) {
             return (
               `<img class="image-profile-tabel mr-2" src="https://bbdev.monstercode.net/files/b3986414-5c5f-45a3-be6f-4fedcce2d022.png"/>` +

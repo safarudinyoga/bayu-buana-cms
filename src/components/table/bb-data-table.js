@@ -486,6 +486,7 @@ class BBDataTable extends Component {
             exportOptions: {
               stripHtml: false,
               columns: visibleColumns,
+              orthogonal: "myExport",
             },
           },
         ],
