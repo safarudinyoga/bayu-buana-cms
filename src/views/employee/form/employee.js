@@ -618,6 +618,7 @@ const Subscriptions = (props) => {
                   {/* End Aditional Role section */}
                 </div>
 
+              
                 {
                   props.isMobile 
                   ? isView 
@@ -629,14 +630,14 @@ const Subscriptions = (props) => {
                         BACK
                       </Button>
                     </>) 
-                  : (<div className="mb-5 ml-1 row justify-content-md-start justify-content-center">
-                      <Button
+                  : (<div className="ml-1 row justify-content-md-start justify-content-center">
+                      <Button                        
                         variant="primary"
                         type="submit"
-                        disabled={!isValid}
+                        disabled={props.finishStep > 0 || props.employeeData?.id ? (!isValid || isSubmitting) : (!dirty || isSubmitting)}
                         style={{ marginRight: 15 }}
                       >
-                        SAVE
+                        {props.employeeData?.id ? "SAVE" : "SAVE & NEXT"}
                       </Button>
                       <Button
                         variant="secondary"
@@ -647,47 +648,37 @@ const Subscriptions = (props) => {
                     </div>)
                   : ""
                 }
-              
               </Card.Body>
-              {
-                props.isMobile ? (
-                  <div className="mb-5 ml-1 row justify-content-md-start justify-content-center">
-                    <Button
-                      variant="primary"
-                      type="submit"
-                      style={{ marginRight: 15 }}
-                    >
-                      SAVE
-                    </Button>
-                    <Button
-                      variant="secondary"
-                      onClick={() => props.history.push("/")}
-                    >
-                      CANCEL
-                    </Button>
-                  </div>
-                ) : ""
-              }
             </Card>
             {
-              props.isMobile ? "" : (
-                <div className="mt-4 mb-5 ml-1 row justify-content-md-start justify-content-center">
+              !props.isMobile 
+              ? isView 
+              ? (<>
                   <Button
+                    variant="secondary"
+                    onClick={() => props.history.goBack()}
+                    className="mt-3"
+                  >
+                    BACK
+                  </Button>
+                </>) 
+              : (<div className="ml-1 mt-3 row justify-content-md-start justify-content-center">
+                  <Button                    
                     variant="primary"
                     type="submit"
-                    style={{ marginRight: 15 }}
-                    disabled={!isValid}
+                    disabled={props.finishStep > 0 || props.employeeData?.id ? (!isValid || isSubmitting) : (!dirty || isSubmitting)}
+                    style={{ marginRight: 15, marginBottom: 135 }}
                   >
-                    SAVE
+                    {props.employeeData?.id ? "SAVE" : "SAVE & NEXT"}
                   </Button>
                   <Button
                     variant="secondary"
-                    onClick={() => props.history.push("/")}
+                    onClick={() => props.history.goBack()}
                   >
                     CANCEL
                   </Button>
-                </div>
-              )
+                </div>)
+              : ""
             }
           </Form>
         )

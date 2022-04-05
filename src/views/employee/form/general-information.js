@@ -1532,7 +1532,7 @@ const GeneralInformation = (props) => {
                   </Form.Group>
                 </div>
                 <h3 className="card-heading">Permanent Address</h3>
-                <div style={{ padding: "0 15px 15px 15px" }}>
+                <div style={{ padding: "0 15px 30px 15px" }}>
                   <Form.Group as={Row} className="form-group">
                     <Col sm={9}>
                       <Form.Check
@@ -1727,7 +1727,7 @@ const GeneralInformation = (props) => {
                         BACK
                       </Button>
                     </>) 
-                  : (<div className="mb-5 ml-1 row justify-content-md-start justify-content-center">
+                  : (<div className="mb-8 ml-1 row justify-content-md-start justify-content-center">
                       <Button
                         variant="primary"
                         type="submit"
@@ -1759,12 +1759,12 @@ const GeneralInformation = (props) => {
                     BACK
                   </Button>
                 </>) 
-              : (<div className="mb-5 ml-1 mt-3 row justify-content-md-start justify-content-center">
-                  <Button
+              : (<div className="ml-1 mt-3 row justify-content-md-start justify-content-center">
+                  <Button                    
                     variant="primary"
                     type="submit"
                     disabled={props.finishStep > 0 || props.employeeData?.id ? (!isValid || isSubmitting) : (!dirty || isSubmitting)}
-                    style={{ marginRight: 15 }}
+                    style={{ marginRight: 15, marginBottom: 135 }}
                   >
                     {props.employeeData?.id ? "SAVE" : "SAVE & NEXT"}
                   </Button>

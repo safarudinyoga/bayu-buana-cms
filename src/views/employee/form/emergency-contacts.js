@@ -315,12 +315,12 @@ const EmergencyContacts = (props) => {
                   </Button>
                 </>) 
               : (
-                <div className="mt-4 mb-5 ml-1 row justify-content-md-start justify-content-center">
+                <div className="mt-3 ml-1 row justify-content-md-start justify-content-center">
                   <Button
                     variant="primary"
                     type="submit"
                     disabled={isSubmitting || !isValid}
-                    style={{ marginRight: 15 }}
+                    style={{ marginRight: 15, marginBottom: 135 }}
                   >
                     {props.employeeData?.id ? "SAVE" : "SAVE & NEXT"}
                   </Button>
