@@ -91,12 +91,12 @@ function DeleteForm(props) {
                 <span style={{color: '#333333', fontSize: '14px'}}>Are you sure you want to delete this?</span>
                   <div className="row">
                     <div className="col-sm">
-                      <span style={{color: '#333333', fontSize: '14px'}}>Corporate Rating Code : {values.corporate_rating_type_level_code}</span>
+                      <span style={{color: '#333333', fontSize: '14px'}}>Corporate Rating Code: {values.corporate_rating_type_level_code}</span>
                     </div>
                   </div>
                   <div className="row">
                     <div className="col-sm">
-                      <span style={{color: '#333333', fontSize: '14px'}}>Corporate Rating Name : {values.corporate_rating_type_level_name}</span>
+                      <span style={{color: '#333333', fontSize: '14px'}}>Corporate Rating Name: {values.corporate_rating_type_level_name}</span>
                     </div>
                   </div>
               </div>
