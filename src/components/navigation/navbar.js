@@ -1,4 +1,4 @@
-import React, { Component } from "react"
+import React, { Component, useState } from "react"
 import "./navbar.css"
 import avatar2 from "admin-lte/dist/img/user8-128x128.jpg"
 import infoIcon from "assets/icons/information.svg"
@@ -6,7 +6,30 @@ import notifIcon from "assets/icons/notification.svg"
 import menuIcon from "assets/icons/navigation/menu.svg"
 import Cookies from "js-cookie"
 
+import Api from "config/api"
+
 export default class Navbar extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      profile: {},
+      loading: true,
+    }
+    
+
+    this.api = new Api()
+  }
+
+  async componentDidMount() {
+    await this.api
+      .get("/user/profile")
+      .then((res) => {
+        this.setState({ profile: res.data} )
+      })
+      .finally(() => {
+        this.setState({ loading: false })
+      })
+  }
 
   render() {
     return (
@@ -58,7 +81,7 @@ export default class Navbar extends Component {
           <li className="nav-item dropdown">
             <a className="nav-link pl-0 pl-sm-3" data-toggle="dropdown" href="/">
               <img
-                src={avatar2}
+                src={this.state.profile.employee_asset ? this.state.profile.employee_asset.multimedia_description.url : ""}
                 alt="User Avatar"
                 className="img-avatar img-circle"
               />
@@ -67,12 +90,12 @@ export default class Navbar extends Component {
               <a href="/" className="dropdown-item">
                 <div className="media">
                   <img
-                    src={avatar2}
+                    src={this.state.profile.employee_asset ? this.state.profile.employee_asset.multimedia_description.url : ""}
                     alt="User Avatar"
                     className="img-size-50 img-circle mr-3"
                   />
                   <div className="media-body mt-2">
-                    <h3 className="dropdown-item-title">Patrick Jane</h3>
+                    <h3 className="dropdown-item-title">{`${this.state.profile.given_name} ${this.state.profile.middle_name} ${this.state.profile.surname}`}</h3>
                     <p className="text-sm text-muted">Administrator</p>
                   </div>
                 </div>
@@ -80,7 +103,7 @@ export default class Navbar extends Component {
               <a href="/profile" className="dropdown-item">
                 <i className="fas fa-user mr-2"></i> My Profile
               </a>
-              <a href="/" className="dropdown-item">
+              <a href="/profile/security-settings" className="dropdown-item">
                 <i className="fas fa-unlock mr-2"></i> Change Password
               </a>
               <a className="dropdown-item cursor-pointer" onClick={() => this.props.signout()}>
