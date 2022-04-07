@@ -56,7 +56,7 @@ export default function CountryTable() {
         value={selectedRegionIds}
         data={selectedRegions}
         placeholder="Region"
-        filter={`[["region_id", "is not", null],["AND"],["status", "=", 1]]`}
+        filter={`["region_id", "is not", null]`}
         type="selectmultiple"
         isFilter={true}
         allowClear={false}

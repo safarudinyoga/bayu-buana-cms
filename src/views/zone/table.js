@@ -54,7 +54,7 @@ export default function ZoneTable() {
         fieldGroup="destination_id"
         value={selectedDestinationIds}
         data={selectedDestinations}
-        filter={`[["destination_id", "is not", null],["AND"],["status", "=", 1]]`}
+        filter={`["destination_id", "is not", null]`}
         placeholder="Destination"
         type="selectmultiple"
         isFilter={true}

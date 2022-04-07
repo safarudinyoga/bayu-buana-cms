@@ -55,7 +55,7 @@ export default function CityTable() {
         fieldGroup="country_id"
         value={selectedCountryIds}
         data={selectedCountries}
-        filter={`[["country_id", "is not", null],["AND"],["status", "=", 1]]`}
+        filter={`["country_id", "is not", null]`}
         placeholder="Country"
         type="selectmultiple"
         isFilter={true}

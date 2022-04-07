@@ -101,7 +101,7 @@ export default function AirportTable() {
             fieldGroup="city_id"
             value={selectedCityIds}       
             data={selectedCities}
-            filter={`[["city_id", "is not", null],["AND"],["status", "=", 1]]`}
+            filter={`["city_id", "is not", null]`}
             type="selectmultiple"
             isFilter={true}
             placeholder="City"
