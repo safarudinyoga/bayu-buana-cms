@@ -263,10 +263,10 @@ const Subscriptions = (props) => {
                 {/* {console.log("values ===> ", values)} */}
                 <div style={props.isMobile ? {padding: "0 0 30px 0"} : { padding: "0 15px 30px 15px" }}>
                   <Form.Group as={Row} className="form-group">
-                    <Form.Label column sm={3}>
+                    <Form.Label column xs={5} sm={5} md={3} lg={3}>
                       Employee ID <span className="form-label-required">*</span>
                     </Form.Label>
-                    <Col sm={9}>
+                    <Col xs={7} sm={7} md={9} lg={9} >
                       <FastField name="employee_number" disabled>
                         {({ field, form }) => (
                           <>
