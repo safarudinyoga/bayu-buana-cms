@@ -6,7 +6,7 @@ import Api from "config/api"
 import { useDispatch, useSelector } from "react-redux"
 import { setAlert, setCreateModal, setModalTitle } from "redux/ui-store"
 import CancelButton from "components/button/cancel"
-
+import helpIcon from "assets/icons/help.svg"
 const endpoint = "/master/corporate-rating-type-levels"
 function DeleteForm(props) {
 	const dispatch = useDispatch()
@@ -88,7 +88,7 @@ function DeleteForm(props) {
 					}) => (
 						<Form onSubmit={handleSubmit}>
               <div style={{textAlign:'center'}}>
-                <span style={{color: '#333333', fontSize: '14px'}}>Are you sure you want to delete this?</span>
+              <img src={helpIcon} className="mr-2" alt="new" /><span style={{color: '#333333', fontSize: '14px'}}>Are you sure you want to delete this?</span>
                   <div className="row">
                     <div className="col-sm">
                       <span style={{color: '#333333', fontSize: '14px'}}>Corporate Rating Code: {values.corporate_rating_type_level_code}</span>

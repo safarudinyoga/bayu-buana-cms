@@ -29,25 +29,25 @@ const DropdownIndicator = props => {
 const customStyles = {
   option: (provided, state) => ({
     ...provided,
-    color: "black",
+    color: "#333333",
     backgroundColor: state.isSelected ? "white" : "white",
     padding: 10,
     fontFamily: "Segoe UI, Tahoma, Geneva, Verdana, sans-serif",
-    fontSize: 13,
+    fontSize: 15,
     "&:hover": {
       // Overwrittes the different states of border
       backgroundColor: state.isFocused ? "#027F71" : "",
-      color: state.isFocused ? "white" : "black",
+      color: state.isFocused ? "white" : "#333333",
     },
   }),
   control: (base, state) => ({
     ...base,
     height: 10,
-    width: 135,
+    width: 150,
     marginTop: -1,
     marginLeft: 8,
     border: "1px solid #DADEDF",
-    fontSize: 13,
+    fontSize: 15,
     fontFamily: "Segoe UI, Tahoma, Geneva, Verdana, sans-serif",
     backgroundColor: "white",
     boxShadow: state.isFocused ? 0 : 0,
@@ -301,7 +301,7 @@ class TableHeader extends Component {
               <div className="col-xs-12 col-sm-12 col-md-6 col-lg-4">
                 <div className="row">
                   <div className="col-xs-4">
-                  <label className="text-label-filter ml-2 font-weight-bold">{this.props.statusLabel || "Status :"}</label>
+                  <label className="text-label-filter ml-2 font-weight-bold">{this.props.statusLabel || "Status "}</label>
                     <StatusSelect
                       value={customFilterStatus ? customFilterStatus.value : this.state.statusValue}
                       onChange={this.handleStatus.bind(this)}

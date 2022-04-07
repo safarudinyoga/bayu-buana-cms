@@ -116,7 +116,7 @@ const EmergencyContacts = (props) => {
             <Card style={{marginBottom: 0}}>
               <Card.Body>
                 <h3 className="card-heading">Emergency Contact 1</h3>
-                <div style={{ padding: "0 15px 15px" }}>
+                <div style={props.isMobile ? {padding: "0 15px 15px 0"} : { padding: "0 15px 15px 15px" }}>
                   <Form.Group as={Row} className="form-group">
                     <Form.Label column sm={3}>
                       Full Name
@@ -192,7 +192,7 @@ const EmergencyContacts = (props) => {
                   </Form.Group>
                 </div>
                 <h3 className="card-heading">Emergency Contact 2</h3>
-                <div style={{ padding: "0 15px 15px" }}>
+                <div style={props.isMobile ? {padding: "0 15px 30px 0"} : { padding: "0 15px 30px 15px" }}>
                   <Form.Group as={Row} className="form-group">
                     <Form.Label column sm={3}>
                       Full Name
@@ -284,27 +284,25 @@ const EmergencyContacts = (props) => {
                       <Button
                         variant="primary"
                         type="submit"
-                        disabled={!dirty || !isValid}
+                        disabled={props.finishStep > 0 || props.employeeData?.id ? (!isValid || isSubmitting) : (!dirty || isSubmitting)}
                         style={{ marginRight: 15 }}
                       >
-                        SAVE
+                        {props.employeeData?.id ? "SAVE" : "SAVE & NEXT"}
                       </Button>
                       <Button
                         variant="secondary"
-                        onClick={() => props.history.push("/")}
+                        onClick={() => props.history.goBack()}
                       >
                         CANCEL
                       </Button>
-                    </div>
-                  ) 
+                    </div>)
                   : ""
                 }
               </Card.Body>
             </Card>
             {
-              props.isMobile 
-              ? "" 
-              : isView 
+              !props.isMobile 
+              ? isView 
               ? (<>
                   <Button
                     variant="secondary"
@@ -314,24 +312,23 @@ const EmergencyContacts = (props) => {
                     BACK
                   </Button>
                 </>) 
-              : (
-                <div className="mt-3 ml-1 row justify-content-md-start justify-content-center">
-                  <Button
+              : (<div className="ml-1 mt-3 row justify-content-md-start justify-content-center">
+                  <Button                    
                     variant="primary"
                     type="submit"
-                    disabled={isSubmitting || !isValid}
+                    disabled={props.finishStep > 0 || props.employeeData?.id ? (!isValid || isSubmitting) : (!dirty || isSubmitting)}
                     style={{ marginRight: 15, marginBottom: 135 }}
                   >
                     {props.employeeData?.id ? "SAVE" : "SAVE & NEXT"}
                   </Button>
                   <Button
                     variant="secondary"
-                    onClick={() => props.history.push("/")}
+                    onClick={() => props.history.goBack()}
                   >
                     CANCEL
                   </Button>
-                </div>
-              )
+                </div>)
+              : ""
             }
           </Form>
         )

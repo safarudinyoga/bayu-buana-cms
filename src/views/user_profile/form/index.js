@@ -20,11 +20,13 @@ const endpoint = "/user/profile"
 const backUrl = "/profile"
 
 const UserProfile = (props) => {
+  const selectedTab = props.match.params.tab
+
   let dispatch = useDispatch()
 
   let api = new Api()
 
-  const [tabKey, setTabKey] = useState("general-information")
+  const [tabKey, setTabKey] = useState(selectedTab ? selectedTab : "general-information")
   const [accordionKey, setAccordionKey] = useState("gi")
   const { innerWidth, innerHeight, outerHeight, outerWidth } = useWindowSize();
 
@@ -51,9 +53,6 @@ const UserProfile = (props) => {
         title: docTitle,
         breadcrumbs: [
           {
-            text: "Management",
-          },
-          {
             text: docTitle,
           },
         ],
@@ -68,6 +67,7 @@ const UserProfile = (props) => {
 
   const handleSelectTab = async (key) => {
     setTabKey(key)
+    props.history.push("/profile/"+key)
   }
 
   const handleSelectAccordion = async (key) => {
@@ -101,7 +101,7 @@ const UserProfile = (props) => {
                   <Nav.Item>
                     <Nav.Link eventKey="security-settings">
                       <div>
-                        <ReactSVG src="/img/icons/employment.svg" />
+                        <ReactSVG src="/img/icons/security-settings.svg" />
                         <span>Security Settings</span>
                       </div>
                     </Nav.Link>
@@ -109,7 +109,7 @@ const UserProfile = (props) => {
                   <Nav.Item>
                     <Nav.Link eventKey="subscriptions">
                       <div>
-                        <ReactSVG src="/img/icons/employment.svg" />
+                        <ReactSVG src="/img/icons/subscription.svg" />
                         <span>Subscriptions</span>
                       </div>
                     </Nav.Link>

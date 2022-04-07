@@ -655,9 +655,9 @@ const GeneralInformation = (props) => {
         }) => (
           <Form onSubmit={handleSubmit}>
             <Card style={{marginBottom: 0}}>
-              <Card.Body className="px-1 px-md-4">
+              <Card.Body>
                 {props.isMobile ? "" : <h3 className="card-heading">General Information</h3>}
-                <div style={{ padding: "0 15px 15px" }}>
+                <div style={props.isMobile ? {padding: "0"} : { padding: "0 15px 15px 15px" }}>
                   <Row>
                   {
                     // Tablet
@@ -825,7 +825,7 @@ const GeneralInformation = (props) => {
                     )
 
                   }
-                    <Col sm={9}>
+                    <Col sm={9} md={12} lg={9}>
                       <Form.Group as={Row} className="form-group">
                         <Form.Label column md={3} lg={4}>
                           Title <span className="form-label-required">*</span>
@@ -963,8 +963,8 @@ const GeneralInformation = (props) => {
                           <span className="form-label-required">*</span>
                         </Form.Label>
                         <Col  md={9} lg={8}>
-                          <div style={{ minWidth: 280, maxWidth: 400, display: "flex"}}>
-                            <div style={{ marginRight: 12, flex: 1, maxWidth: 60 }}>
+                          <div style={{ maxWidth: 300, display: "flex" }}>
+                            <div style={{ marginRight: 12, maxWidth: 60, flex: 1 }}>
                               <Select
                                 options={selectDay(values.birth_date[1], values.birth_date[2])}
                                 value={values.birth_date[0]}
@@ -982,17 +982,13 @@ const GeneralInformation = (props) => {
                                         IndicatorSeparator: () => null,
                                       }
                                     : null
-                                }
-                                style={{
-                                  minWidth: 60,
-                                  maxWidth: 350,
-                                }}
+                                }                                
                                 onChange={(v) => {
                                   setFieldValue("birth_date[0]", v)
                                 }}
                               />
                             </div>
-                            <div style={{ marginRight: 12, flex: 1, maxWidth: 120 }}>
+                            <div style={{ marginRight: 12, maxWidth: 140, flex: 1 }}>
                               <Select
                                 options={selectMonth(values.birth_date[2])}
                                 value={values.birth_date[1]}
@@ -1011,11 +1007,7 @@ const GeneralInformation = (props) => {
                                         IndicatorSeparator: () => null,
                                       }
                                     : null
-                                }
-                                style={{
-                                  minWidth: 150,
-                                  maxWidth: 240,
-                                }}
+                                }                                
                                 onChange={(v) => {
                                   setFieldValue("birth_date[1]", v)
                                   setFieldValue("birth_date[0]", {value: 1, label: "1"})
@@ -1030,7 +1022,7 @@ const GeneralInformation = (props) => {
                                 }}
                               />
                             </div>
-                            <div style={{ flex: 1, maxWidth: 80 }}>
+                            <div style={{  maxWidth: 80, flex: 1 }}>
                               <Select
                                 options={selectYear()}
                                 value={values.birth_date[2]}
@@ -1048,11 +1040,7 @@ const GeneralInformation = (props) => {
                                         IndicatorSeparator: () => null,
                                       }
                                     : null
-                                }
-                                style={{
-                                  minWidth: 82,
-                                  maxWidth: 240,
-                                }}
+                                }                               
                                 onChange={(v) => {
                                   setFieldValue("birth_date[2]", v)
                                   setFieldValue("birth_date[1]", {value: 1, label: "January"})
@@ -1160,7 +1148,7 @@ const GeneralInformation = (props) => {
                     
                     {
                       innerWidth <= 768 ? "" : (
-                        <Col sm={3} style={{ height: 170 }}>
+                        <Col sm={3} lg={3}  style={{ height: 170 }}>
                           <div
                             className="img-profile-wrapper"
                             style={{ textAlign: "center" }}
@@ -1243,7 +1231,7 @@ const GeneralInformation = (props) => {
                   </Row>
                 </div>
                 <h3 className="card-heading">Contacts</h3>
-                <div style={{ padding: "0 15px 15px 15px" }}>
+                <div style={props.isMobile ? {padding: "0 15px 15px 0"} : { padding: "0 15px 15px 15px" }}>
                   <Form.Group as={Row} className="form-group">
                     <Form.Label column sm={3}>
                       Home Phone <span className="form-label-required">*</span>
@@ -1376,7 +1364,7 @@ const GeneralInformation = (props) => {
                   </Form.Group>
                 </div>
                 <h3 className="card-heading">Current Address</h3>
-                <div style={{ padding: "0 15px 15px 15px" }}>
+                <div style={props.isMobile ? {padding: "0 15px 15px 0"} : { padding: "0 15px 15px 15px" }}>
                   <Form.Group as={Row} className="form-group">
                     <Form.Label column sm={3}>
                       Address
@@ -1430,7 +1418,7 @@ const GeneralInformation = (props) => {
                                       IndicatorSeparator: () => null,
                                     }
                                   : null
-                              }
+                              }                              
                             />
                             {form.touched.currentCountry &&
                               form.errors.currentCountry && (
@@ -1472,6 +1460,7 @@ const GeneralInformation = (props) => {
                                     : null
                                 }
                                 isDisabled={isView}
+                                isClearable={isView ? false : true}
                               />
                             </div>
                           </>
@@ -1532,7 +1521,7 @@ const GeneralInformation = (props) => {
                   </Form.Group>
                 </div>
                 <h3 className="card-heading">Permanent Address</h3>
-                <div style={{ padding: "0 15px 30px 15px" }}>
+                <div style={props.isMobile ? {padding: "0 0 30px 0"} : { padding: "0 15px 30px 15px" }}>
                   <Form.Group as={Row} className="form-group">
                     <Col sm={9}>
                       <Form.Check
@@ -1719,14 +1708,13 @@ const GeneralInformation = (props) => {
                 {
                   props.isMobile 
                   ? isView 
-                  ? (<div className="mb-2 ml-1 row justify-content-md-start justify-content-center">
-                        <Button
-                          variant="secondary"
-                          onClick={() => props.history.goBack()}
-                          
-                        >
-                          BACK
-                        </Button>
+                  ? (<div className="ml-1 mt-3 row justify-content-md-start justify-content-center">
+                      <Button
+                        variant="secondary"
+                        onClick={() => props.history.goBack()}
+                      >
+                        BACK
+                      </Button>
                     </div>) 
                   : (<div className="mb-8 ml-1 row justify-content-md-start justify-content-center">
                       <Button

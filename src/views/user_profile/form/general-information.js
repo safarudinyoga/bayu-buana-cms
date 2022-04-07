@@ -1242,6 +1242,7 @@ const GeneralInformation = (props) => {
                           <div style={{ width: 300 }}>
                             <SelectAsync
                               {...field}
+                              isClearable
                               url={`master/countries`}
                               fieldName="country_name"
                               onChange={(v) => {
@@ -1293,10 +1294,12 @@ const GeneralInformation = (props) => {
                               /> */}
                               <Select
                                 {...field}
+                                isClearable
                                 placeholder="Please choose"
                                 options={selectCurrentProvince}
                                 onChange={(v) => {
                                   setFieldValue("currentProvince", v)
+                                  setFieldValue("currentCity", null)
                                   handleChangeCurrentProvince(v.value)
                                 }}
                                 isDisabled={values.currentCountry == null}
@@ -1329,6 +1332,7 @@ const GeneralInformation = (props) => {
                               /> */}
                               <Select
                                 {...field}
+                                isClearable
                                 placeholder="Please choose"
                                 options={selectCurrentCity}
                                 onChange={(v) => {
@@ -1404,6 +1408,7 @@ const GeneralInformation = (props) => {
                       {selectPermanentCountry.length !== 0 && (
                         <div style={{ width: 300 }}>
                           <SelectAsync
+                            isClearable
                             name="permanentCountry"
                             url={`master/countries`}
                             value={
@@ -1453,6 +1458,7 @@ const GeneralInformation = (props) => {
                     <Col sm={9}>
                       <div style={{ width: 300 }}>
                         <Select
+                          isClearable
                           name="permanentProvince"
                           value={
                             values.sameAddress
@@ -1463,6 +1469,7 @@ const GeneralInformation = (props) => {
                           options={selectPermanentProvince}
                           onChange={(v) => {
                             setFieldValue("permanentProvince", v)
+                            setFieldValue("permanentCity", null)
                             handleChangePermanentProvince(v.value)
                           }}
                           onBlur={setFieldTouched}
@@ -1480,6 +1487,7 @@ const GeneralInformation = (props) => {
                     <Col sm={9}>
                       <div style={{ width: 300 }}>
                         <Select
+                          isClearable
                           name="permanentCity"
                           value={
                             values.sameAddress
