@@ -44,6 +44,7 @@ const DashboardWrapper = (props) => {
     setTimeout(() => {
       Cookies.remove("ut");
       Cookies.remove("rt");
+      Cookies.remove("persist_code");
       history.push("/auth/login");
     }, 700);
   };

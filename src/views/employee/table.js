@@ -226,7 +226,7 @@ export default function EmployeeTable() {
         data: "employee_asset.multimedia_description.url",
         render: (data, type) => {
           if (type === "myExport") {
-            return data
+            return data || ""
           }
           if (data === undefined) {
             return (
@@ -245,7 +245,13 @@ export default function EmployeeTable() {
       },
       {
         title: "Employee ID",
-        data: "employee_number"
+        data: "employee_number",
+        render: (data, type) => {
+          if (type === "myExport") {
+            return `'${data}`
+          }
+          return data
+        }
       },
       {
         title: "Full Name",
@@ -264,6 +270,12 @@ export default function EmployeeTable() {
       {
         title: "Email",
         data: "contact.email",
+        render: (data, type) => {
+          if (type === "myExport") {
+            return data || ""
+          }
+          return data
+        }
       },
       {
         title: "Job Title",

@@ -546,7 +546,8 @@ class BBDataTable extends Component {
                     division = row.division.division_name
                   }
 
-                  datas = data +'<br/>'+ division;
+                  datas = data +'<br/>'+ division     
+                  if (type === "myExport") datas =`${data} / ${division}`
                 }
                   return datas
               },
