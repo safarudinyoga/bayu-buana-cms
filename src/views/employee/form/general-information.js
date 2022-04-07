@@ -347,10 +347,15 @@ const GeneralInformation = (props) => {
     } catch (e) {}
   }
   // Current Province state
-  const handleChangeCurrentProvince = async (province_id, country_id) => {
+  const handleChangeProvince = async (type, province_id, country_id) => {
     try {
+      let filters = `[["country_id","=","${country_id}"],["AND"],["status","=",1]]`
+
+      if(province_id && province_id !== "00000000-0000-0000-0000-000000000000") {
+        filters = `[["state_province_id","=","${province_id}"],["AND"],["country_id","=","${country_id}"],["AND"],["status","=",1]]`
+      }
       let res = await api.get(
-        `/master/cities?filters=[["state_province_id","=","${province_id}"],["AND"],["country_id","=","${country_id}"],["AND"],["status","=",1]]&sort=city_name`,
+        `/master/cities?filters=${filters}&sort=city_name`,
       )
       const options = []
       if(res.data.items.length > 0){
@@ -359,34 +364,51 @@ const GeneralInformation = (props) => {
             label: data.city_name,
             value: data.id,
           })
-          setSelectCurrentCity(options)
+          if(type === "current") {
+            setSelectCurrentCity(options)
+          } else {
+            setSelectPermanentCity(options)
+          }
         })
       } else {
-        setSelectCurrentCity([])
+        if(type=== "current") {
+          setSelectCurrentCity([])
+        } else {
+          setSelectPermanentCity([])
+        }
       }
       
     } catch (e) {}
   }
-  // // Permanent Province state
-  const handleChangePermanentProvince = async (province_id, country_id) => {
+
+  const getProvince = async (type, v) => {
     try {
       let res = await api.get(
-        `/master/cities?filters=[["state_province_id","=","${province_id}"],["AND"],["country_id","=","${country_id}"],["AND"],["status","=",1]]&sort=city_name`,
+        `/master/state-provinces?size=-1&filters=[["country_id","=","${v}"],["AND"],["status","=",1]]&sort=state_province_name`,
       )
       const options = []
       if(res.data.items.length > 0){
         res.data.items.forEach((data) => {
           options.push({
-            label: data.city_name,
+            label: data.state_province_name,
             value: data.id,
           })
-          setSelectPermanentCity(options)
+          if(type === "current") {
+            setSelectCurrentProvince(options)
+          } else {
+            setSelectPermanentProvince(options)
+          }
         })
       } else {
-        setSelectPermanentCity([])
+        if(type === "current") {
+          setSelectCurrentProvince([])
+        } else {
+          setSelectPermanentProvince([])
+        }
       }
-      
-    } catch (e) {}
+    }catch(e){
+      console.log(e)
+    }
   }
 
   // Upload profile
@@ -476,29 +498,26 @@ const GeneralInformation = (props) => {
               value: data.address.country_id,
               label: data.address.country.country_name
             } : "",
-            // currentProvince: _.isEmpty(data.address) ? "" : data.address.state_province ? {
-            //   value: data.address.state_province_id,
-            //   label: data.address.state_province.state_province_name
-            // } : "",
-            currentProvince:{
-              label: data?.address?.state_province
-                ? data?.address?.state_province?.state_province_name
-                : !isView
-                ? "Please choose"
-                : "",
-              value: data?.address?.state_province_id,
+            currentProvince: (!data.address?.state_province_id || data.address?.state_province_id === "00000000-0000-0000-0000-000000000000")
+            ? isView ? {
+              value: "",
+              label: ""
+            }
+            : "" 
+            : {
+              value: data.address.state_province_id,
+              label: data.address.state_province.state_province_name
             },
-            // currentCity: _.isEmpty(data.address) ? "" : data.address.city ? {
-            //   value: data.address.city.id,
-            //   label: data.address.city.city_name
-            // } : "",
-            currentCity:{
-              label: data?.address?.city
-                ? data?.address?.city?.city_name
-                : !isView
-                ? "Please choose"
-                : "",
-              value: data?.address?.city_id,
+
+            currentCity: (_.isEmpty(data.address?.city) || data.address?.city_id ===  "00000000-0000-0000-0000-000000000000")
+            ? isView ? {
+              value: "",
+              label: ""
+            }
+            : "" 
+            : {
+              value: data.address.city.id,
+              label: data.address.city.city_name
             },
 
             currentZipCode: _.isEmpty(data.address) ? "" : data.address.postal_code ? data.address.postal_code : "",
@@ -516,30 +535,25 @@ const GeneralInformation = (props) => {
               value: data.permanent_address.country_id,
               label: data.permanent_address.country.country_name,
             } : "",
-            // permanentProvince: _.isEmpty(data.permanent_address) ? "" : data.permanent_address.state_province ? {
-            //   value: data.permanent_address.state_province_id,
-            //   label: data.permanent_address.state_province.state_province_name,
-            // } : "",
 
-            permanentProvince:{
-              label: data?.permanent_address?.state_province
-                ? data?.permanent_address?.state_province?.state_province_name
-                : !isView
-                ? "Please choose"
-                : "",
-              value: data?.permanent_address?.state_province_id,
+            permanentProvince: (_.isEmpty(data.permanent_address?.state_province) || data.permanent_address?.state_province_id ===  "00000000-0000-0000-0000-000000000000")
+            ? isView ? {
+              value: "",
+              label: ""
+            } 
+            : "" 
+            :{
+              value: data.permanent_address.state_province_id,
+              label: data.permanent_address.state_province.state_province_name
             },
-            // permanentCity: _.isEmpty(data.permanent_address) ? "" : data.permanent_address.city ? {
-            //   value: data.permanent_address.city_id,
-            //   label: data.permanent_address.city.city_name
-            // } : "",
-            permanentCity:{
-              label: data?.permanent_address?.city
-                ? data?.permanent_address?.city?.city_name
-                : !isView
-                ? "Please choose"
-                : "",
-              value: data?.permanent_address?.city_id,
+            permanentCity: (_.isEmpty(data.permanent_address?.city) || data.permanent_address?.city_id ===  "00000000-0000-0000-0000-000000000000")
+            ? isView ? {
+              value: "",
+              label: ""
+            } : "" 
+            : {
+              value: data.permanent_address.city.id,
+              label: data.permanent_address.city.city_name
             },
             permanentZipCode: _.isEmpty(data.permanent_address) ? "" : data.permanent_address.postal_code ? data.permanent_address.postal_code : "",
           });
@@ -555,14 +569,17 @@ const GeneralInformation = (props) => {
             : data.photo_profile
           )
 
+          getProvince("current", data?.address?.country_id)
+          getProvince("permanent", data?.permanent_address?.country_id)
+
           if(data.permanent_address.state_province) {
-            handleChangePermanentProvince(data.permanent_address.state_province.id, data.permanent_address.country_id)
+            handleChangeProvince("permanent", data.permanent_address.state_province.id, data.permanent_address.country_id)
           } else { 
             handleChangePermanentCountry(data.permanent_address.country_id)
           }
 
           if(data.address.state_province) {
-            handleChangeCurrentProvince(data.address.state_province.id, data.address.country_id)
+            handleChangeProvince("current", data.address.state_province.id, data.address.country_id)
           } else { 
             handleChangeCurrentCountry(data.address.country_id)
           }
@@ -1456,12 +1473,15 @@ const GeneralInformation = (props) => {
                             <div style={{ maxWidth: 200 }}>
                               <Select
                                 {...field}
+                                isClearable
                                 placeholder="Please choose"
                                 options={selectCurrentProvince}
                                 onChange={(v) => {
                                   setFieldValue("currentProvince", v)
-                                  setFieldValue("currentCity", "")
-                                  handleChangeCurrentProvince(v.value, values.currentCountry.value)
+                                  if(v) {
+                                    setFieldValue("currentCity", "")
+                                  }
+                                  handleChangeProvince("current", v?.value || null, values.currentCountry.value)
                                 }}
                                 components={
                                   isView
@@ -1490,6 +1510,7 @@ const GeneralInformation = (props) => {
                             <div style={{ width: 200 }}>
                               <Select
                                 {...field}
+                                isClearable
                                 placeholder="Please choose"
                                 options={selectCurrentCity}
                                 onChange={(v) => {
@@ -1634,6 +1655,7 @@ const GeneralInformation = (props) => {
                     <Col sm={9}>
                       <div style={{ maxWidth: 200 }}>
                         <Select
+                          isClearable
                           name="permanentProvince"
                           value={
                             values.sameAddress
@@ -1644,8 +1666,11 @@ const GeneralInformation = (props) => {
                           options={selectPermanentProvince}
                           onChange={(v) => {
                             setFieldValue("permanentProvince", v)
-                            setFieldValue("permanentCity", "")
-                            handleChangePermanentProvince(v.value, values.permanentCountry.value)
+
+                            if(v) {
+                              setFieldValue("permanentCity", "")
+                            }
+                            handleChangeProvince("permanent", v?.value || null, values.permanentCountry.value)
                           }}
                           onBlur={setFieldTouched}
                           components={
@@ -1669,6 +1694,7 @@ const GeneralInformation = (props) => {
                       <div style={{ maxWidth: 200 }}>
                         <Select
                           name="permanentCity"
+                          isClearable
                           value={
                             values.sameAddress
                               ? values.currentCity
