@@ -101,7 +101,7 @@ const UserProfile = (props) => {
                   <Nav.Item>
                     <Nav.Link eventKey="security-settings">
                       <div>
-                        <ReactSVG src="/img/icons/employment.svg" />
+                        <ReactSVG src="/img/icons/security-settings.svg" />
                         <span>Security Settings</span>
                       </div>
                     </Nav.Link>
@@ -109,7 +109,7 @@ const UserProfile = (props) => {
                   <Nav.Item>
                     <Nav.Link eventKey="subscriptions">
                       <div>
-                        <ReactSVG src="/img/icons/employment.svg" />
+                        <ReactSVG src="/img/icons/subscription.svg" />
                         <span>Subscriptions</span>
                       </div>
                     </Nav.Link>

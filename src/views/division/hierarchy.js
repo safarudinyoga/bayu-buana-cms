@@ -42,9 +42,9 @@ function DivisionHierarchy(props) {
         sort: "sort"
       })
       let items = res.data.items;
-
+      
       var parent = items.filter((item, index) => {
-        return item["parent_division_id"] == null
+        return item["parent_division_id"] == null || item["parent_division_id"] == "00000000-0000-0000-0000-000000000000"
       })
 
       var child = items.filter((item, index) => {

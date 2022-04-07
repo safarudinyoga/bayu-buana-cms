@@ -1,10 +1,9 @@
 import React, { Component, useState } from "react"
 import "./navbar.css"
-import avatar2 from "admin-lte/dist/img/user8-128x128.jpg"
 import infoIcon from "assets/icons/information.svg"
 import notifIcon from "assets/icons/notification.svg"
 import menuIcon from "assets/icons/navigation/menu.svg"
-import Cookies from "js-cookie"
+import imageNull from "assets/imageNull.png"
 
 import Api from "config/api"
 
@@ -81,7 +80,7 @@ export default class Navbar extends Component {
           <li className="nav-item dropdown">
             <a className="nav-link pl-0 pl-sm-3" data-toggle="dropdown" href="/">
               <img
-                src={this.state.profile.employee_asset ? this.state.profile.employee_asset.multimedia_description.url : ""}
+                src={this.state.profile.employee_asset ? this.state.profile.employee_asset.multimedia_description ? this.state.profile.employee_asset.multimedia_description.url : imageNull : imageNull}
                 alt="User Avatar"
                 className="img-avatar img-circle"
               />
@@ -90,13 +89,12 @@ export default class Navbar extends Component {
               <a href="/" className="dropdown-item">
                 <div className="media">
                   <img
-                    src={this.state.profile.employee_asset ? this.state.profile.employee_asset.multimedia_description.url : ""}
+                    src={this.state.profile.employee_asset ? this.state.profile.employee_asset.multimedia_description ? this.state.profile.employee_asset.multimedia_description.url : imageNull : imageNull}
                     alt="User Avatar"
                     className="img-size-50 img-circle mr-3"
                   />
                   <div className="media-body mt-2">
                     <h3 className="dropdown-item-title">{`${this.state.profile.given_name} ${this.state.profile.middle_name} ${this.state.profile.surname}`}</h3>
-                    <p className="text-sm text-muted">Administrator</p>
                   </div>
                 </div>
               </a>
