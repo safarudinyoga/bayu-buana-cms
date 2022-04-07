@@ -29,7 +29,10 @@ export default class Api {
   }
 
   get(path, params) {
-    return this.axios.get(path, {params}).catch((error) => {
+    var headers = {
+      "Cookie": "",
+    }
+    return this.axios.get(path, {params}, headers).catch((error) => {
       throw error
     })
   }
