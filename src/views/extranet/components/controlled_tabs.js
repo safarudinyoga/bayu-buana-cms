@@ -28,7 +28,7 @@ const ControlledTabs = (props) => {
           eventKey="flight"
           title={
             <div className="d-md-flex flex-row bd-highlight">
-              <ReactSVG className="tabs-icon" src="/img/icons/tabs/plane.svg" />
+              <ReactSVG className="tabs-icon" src="/img/icons/flight.svg" />
               <span className="ml-md-2 tabs-text">FLIGHT</span>
             </div>
           }
@@ -40,7 +40,7 @@ const ControlledTabs = (props) => {
           eventKey="hotel"
           title={
             <div className="d-md-flex flex-row">
-              <ReactSVG className="tabs-icon" src="/img/icons/tabs/hotel.svg" />
+              <ReactSVG className="tabs-icon" src="/img/icons/hotel.svg" />
               <span className="ml-md-2 tabs-text">HOTEL</span>
             </div>
           }
@@ -52,8 +52,7 @@ const ControlledTabs = (props) => {
           eventKey="other"
           title={
             <div className="d-md-flex flex-row">
-              <ReactSVG className="tabs-icon" src="/img/icons/tabs/plane.svg" />
-              <ReactSVG className="ml-md-1 tabs-icon" src="/img/icons/tabs/hotel.svg" />
+              <ReactSVG className="tabs-icon" src="/img/icons/flighthotel.svg" />
               <span className="ml-md-2 tabs-text">FLIGHT + HOTEL</span>
             </div>
           }

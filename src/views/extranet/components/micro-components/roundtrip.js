@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import AutoSuggest from "react-autosuggest";
 import DatePicker from 'react-datepicker'
 import { Form } from 'react-bootstrap'
+import { ReactSVG } from "react-svg"
 
 const Roundtrip = (props) => {
   const { airports } = props
@@ -27,8 +28,11 @@ const Roundtrip = (props) => {
     return (
       <div className={`d-flex ${suggestion.all ? "" : "ml-2"}`}>
         <div className="mr-auto">
-          <div>{suggestion.name}</div>
-          <div style={{fontSize: 12, color: "#aaa"}}>
+          <div className='d-md-flex flex-row'>
+            <ReactSVG className="tabs-icon" src="/img/icons/flight.svg" />
+            <span className="ml-md-2">{suggestion.name}</span>
+          </div>
+          <div className="airport-suggestion-subtext" style={{fontSize: 12, color: "#aaa"}}>
             {suggestion.all ? suggestion.all :`${suggestion.city}, ${suggestion.country}`}
           </div>
         </div>
