@@ -4,7 +4,7 @@ import DatePicker from 'react-datepicker'
 import { Form } from 'react-bootstrap'
 
 const Oneway = (props) => {
-  const { airports } = props
+  const { airports, multitrip } = props
 
   const [departureValue, setDepartureValue] = useState("");
   const [arrivalValue, setArrivalValue] = useState("");
@@ -109,10 +109,19 @@ const Oneway = (props) => {
             </div>
           </div>
         </div>
-        <div style={{width: 171}}>
-          <h4 className='form-with-label__title'> TRAVELLERS</h4>
-          <input type="text" className='form-control rounded-0 form-with-label' />
-        </div>
+        {
+          multitrip ? (
+            <div>
+              Remove
+            </div>
+          ) : (
+            <div style={{width: 171}}>
+              <h4 className='form-with-label__title'> TRAVELLERS</h4>
+              <input type="text" className='form-control rounded-0 form-with-label' />
+            </div>
+          )
+        }
+        
       </div>
       {/* end of first row */}
       <div className='my-3'>

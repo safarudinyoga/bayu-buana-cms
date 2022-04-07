@@ -552,7 +552,7 @@ const DashboardRoutes = () => {
           <CorporateForm />
         </Route>
 
-        <Route exact path="/profile">
+        <Route exact path="/profile/:tab?">
           <UserProfile />
         </Route>
 
