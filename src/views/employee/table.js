@@ -226,7 +226,7 @@ export default function EmployeeTable() {
         data: "employee_asset.multimedia_description.url",
         render: (data, type) => {
           if (type === "myExport") {
-            return data
+            return data || ""
           }
           if (data === undefined) {
             return (
@@ -268,6 +268,11 @@ export default function EmployeeTable() {
       {
         title: "Job Title",
         data: "job_title.job_title_name",
+        render: (data, type) => {
+          if (type === "myExport") {
+            return data || ""
+          }
+        }
       },
       {
         title: "",
