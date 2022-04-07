@@ -245,7 +245,13 @@ export default function EmployeeTable() {
       },
       {
         title: "Employee ID",
-        data: "employee_number"
+        data: "employee_number",
+        render: (data, type) => {
+          if (type === "myExport") {
+            return `'${data}`
+          }
+          return data
+        }
       },
       {
         title: "Full Name",
@@ -264,15 +270,16 @@ export default function EmployeeTable() {
       {
         title: "Email",
         data: "contact.email",
-      },
-      {
-        title: "Job Title",
-        data: "job_title.job_title_name",
         render: (data, type) => {
           if (type === "myExport") {
             return data || ""
           }
+          return data
         }
+      },
+      {
+        title: "Job Title",
+        data: "job_title.job_title_name",
       },
       {
         title: "",
