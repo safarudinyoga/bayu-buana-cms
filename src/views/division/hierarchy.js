@@ -69,8 +69,6 @@ function DivisionHierarchy(props) {
         }
         dataTree.push(data)
       }
-
-      console.log(dataTree)
       setTree(dataTree)
       setLoading(false)
   }, [])
