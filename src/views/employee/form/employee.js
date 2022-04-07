@@ -257,11 +257,11 @@ const Subscriptions = (props) => {
       }) => {
         return (
           <Form onSubmit={handleSubmit}>
-            <Card>
+            <Card style={{marginBottom: 0}}>
               <Card.Body>
                 <h3 className="card-heading">Employment</h3>
                 {/* {console.log("values ===> ", values)} */}
-                <div style={props.isMobile ? {padding: "0 15px 30px 0"} : { padding: "0 15px 30px 15px" }}>
+                <div style={props.isMobile ? {padding: "0 0 30px 0"} : { padding: "0 15px 30px 15px" }}>
                   <Form.Group as={Row} className="form-group">
                     <Form.Label column sm={3}>
                       Employee ID <span className="form-label-required">*</span>
@@ -619,7 +619,7 @@ const Subscriptions = (props) => {
                 {
                   props.isMobile 
                   ? isView 
-                  ? (<div className="ml-1 row justify-content-md-start justify-content-center">
+                  ? (<div className="mb-2 ml-1 row justify-content-md-start justify-content-center">
                       <Button
                         variant="secondary"
                         onClick={() => props.history.goBack()}

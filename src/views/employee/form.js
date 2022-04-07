@@ -813,6 +813,7 @@ const EmployeeForm = (props) => {
                         label="Title"
                         name="name_prefix_id"
                         placeholder={formik.values.name_prefixName || "Mr."}
+                        options={name_prefix_name}
                         url={`master/name-prefixes`}
                         fieldName={"name_prefix_name"}
                         onChange={(v) => {
@@ -856,7 +857,7 @@ const EmployeeForm = (props) => {
                         maxLength="128"
                       />
 
-                      <Row className="form-group required">
+                      <Row className="form-group required" style={{ background: "red" }}>
                         <Col md={3} lg={4}>
                           <label className="text-label-input">
                             Date Of Birth
@@ -866,7 +867,7 @@ const EmployeeForm = (props) => {
                         <Col className="mb-2" md={9} lg={8}>
                           <div
                             style={{
-                              maxWidth: 400,
+                              maxWidth: 450,
                               display: "flex",
                             }}
                           >
@@ -888,13 +889,13 @@ const EmployeeForm = (props) => {
                                     : null
                                 }
                                 style={{
-                                  minWidth: 77,
+                                  minWidth: 72,
                                   maxWidth: 240,
                                 }}
                                 isDisabled={isView}
                               />
                             </div>
-                            <div style={{ marginRight: 12, flex: 1 }}>
+                            <div style={{ marginRight: 12, flex: 1, minWidth: 110 }}>
                               <FormikControl
                                 control="selectOnly"
                                 name="birth_date[1]"

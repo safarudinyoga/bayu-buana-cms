@@ -657,7 +657,7 @@ const GeneralInformation = (props) => {
             <Card style={{marginBottom: 0}}>
               <Card.Body>
                 {props.isMobile ? "" : <h3 className="card-heading">General Information</h3>}
-                <div style={props.isMobile ? {padding: "0 15px 15px 0"} : { padding: "0 15px 15px 15px" }}>
+                <div style={props.isMobile ? {padding: "0"} : { padding: "0 15px 15px 15px" }}>
                   <Row>
                   {
                     // Tablet
@@ -1521,7 +1521,7 @@ const GeneralInformation = (props) => {
                   </Form.Group>
                 </div>
                 <h3 className="card-heading">Permanent Address</h3>
-                <div style={props.isMobile ? {padding: "0 15px 30px 0"} : { padding: "0 15px 30px 15px" }}>
+                <div style={props.isMobile ? {padding: "0 0 30px 0"} : { padding: "0 15px 30px 15px" }}>
                   <Form.Group as={Row} className="form-group">
                     <Col sm={9}>
                       <Form.Check
