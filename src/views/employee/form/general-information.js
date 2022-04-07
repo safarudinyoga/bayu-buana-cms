@@ -413,12 +413,14 @@ const GeneralInformation = (props) => {
 
   // Upload profile
   const onChangePhotoProfile = (imageList) => {
-    var files = imageList[0].file;
-    var filesize = ((files.size/1024)/1024).toFixed(4);
-      if(filesize > 4){
-        openSnackbar("Logo size is more than 4MB.")
-        return;
-      }
+    if(imageList.length > 0) {
+      var files = imageList[0].file;
+      var filesize = ((files.size/1024)/1024).toFixed(4);
+        if(filesize > 4){
+          openSnackbar("Logo size is more than 4MB.")
+          return;
+        }
+    }
     setPhotoProfile(imageList)
   }
 
