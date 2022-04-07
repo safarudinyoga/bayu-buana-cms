@@ -55,7 +55,7 @@ export default function HotelSupplierTable() {
         fieldGroup="supplier_type_id"
         value={SelectedSupplierTypeIds}
         data={SelectedSupplierTypes}
-        filter={`[["supplier_type_id", "is not", null],["AND"],["status", "=", 1]]`}
+        filter={`["supplier_type_id", "is not", null]`}
         placeholder="Supplier Type"
         type="selectmultiple"
         isFilter={true}

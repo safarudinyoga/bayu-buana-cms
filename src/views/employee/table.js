@@ -115,7 +115,7 @@ export default function EmployeeTable() {
           fieldGroup="job_title.id"
           value={selectedJobTitleIds}
           data={selectedJobTitle}
-          filter={`[["job_title.id", "is not", null],["AND"],["status", "=", 1]]`}
+          filter={`["job_title.id", "is not", null]`}
           type="selectmultiple"
           isFilter={true}
           allowClear={false}
@@ -136,7 +136,7 @@ export default function EmployeeTable() {
               fieldGroup="office.id"
               value={selectedOfficeIds}
               data={selectedOffice}
-              filter={`[["office.id", "is not", null],["AND"],["status", "=", 1]]`}
+              filter={`["office.id", "is not", null]`}
               type="selectmultiple"
               isFilter={true}
               allowClear={false}
@@ -152,7 +152,7 @@ export default function EmployeeTable() {
               fieldGroup="division.id"
               value={selectedDivisionIds}
               data={selectedDivision}
-              filter={`[["division.id", "is not", null],["AND"],["status", "=", 1]]`}
+              filter={`["division.id", "is not", null]`}
               type="selectmultiple"
               isFilter={true}
               allowClear={false}
@@ -172,7 +172,7 @@ export default function EmployeeTable() {
                 fieldGroup="division.id"
                 value={selectedDivisionIds}
                 data={selectedDivision}
-                filter={`[["division.id", "is not", null],["AND"],["status", "=", 1]]`}
+                filter={`["division.id", "is not", null]`}
                 type="selectmultiple"
                 isFilter={true}
                 allowClear={false}
@@ -188,7 +188,7 @@ export default function EmployeeTable() {
                 fieldGroup="office.id"
                 value={selectedOfficeIds}
                 data={selectedOffice}
-                filter={`[["office.id", "is not", null],["AND"],["status", "=", 1]]`}
+                filter={`["office.id", "is not", null]`}
                 type="selectmultiple"
                 isFilter={true}
                 allowClear={false}

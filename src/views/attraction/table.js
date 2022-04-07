@@ -148,7 +148,7 @@ export default function AttractionTable() {
           fieldGroup="country_id"
           value={selectedCountryIds}
           data={selectedCountries}
-          filter={`[["country_id", "is not", null],["AND"],["status", "=", 1]]`}
+          filter={`["country_id", "is not", null]`}
           placeholder="Country"
           type="selectmultiple"
           isFilter={true}
@@ -164,7 +164,7 @@ export default function AttractionTable() {
           fieldGroup="city_id"
           value={selectedCityIds}       
           data={selectedCities}
-          filter={`[["city_id", "is not", null],["AND"],["status", "=", 1]]`}
+          filter={`["city_id", "is not", null]`}
           type="selectmultiple"
           isFilter={true}
           allowClear={false}
@@ -182,7 +182,7 @@ export default function AttractionTable() {
           fieldArray="attraction_category_attraction"
           value={selectedAttractionCategoryIds}
           data={selectedAttractionCategories}
-          filter={`[["attraction_category_names", "is not", null],["AND"],["status", "=", 1]]`}
+          filter={`["attraction_category_names", "is not", null]`}
           placeholder="Attraction Category"
           type="selectmultiple"
           isFilter={true}
