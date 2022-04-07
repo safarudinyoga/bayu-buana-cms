@@ -261,7 +261,7 @@ const Subscriptions = (props) => {
               <Card.Body>
                 <h3 className="card-heading">Employment</h3>
                 {/* {console.log("values ===> ", values)} */}
-                <div style={{ padding: "0 15px 15px" }}>
+                <div style={props.isMobile ? {padding: "0 15px 30px 0"} : { padding: "0 15px 30px 15px" }}>
                   <Form.Group as={Row} className="form-group">
                     <Form.Label column sm={3}>
                       Employee ID <span className="form-label-required">*</span>
@@ -443,8 +443,8 @@ const Subscriptions = (props) => {
                       Hiring Date
                     </Form.Label>
                     <Col sm={9}>
-                      <div style={{ maxWidth: 320, display: "flex" }}>
-                        <div style={{ marginRight: 12, flex: 1 }}>
+                      <div style={{ maxWidth: 300, display: "flex" }}>
+                        <div style={{ marginRight: 12, maxWidth: 60, flex: 1 }}>
                           <Select
                             options={selectDay(values.hire_date[1], values.hire_date[2])}
                             value={values.hire_date[0]}
@@ -454,7 +454,7 @@ const Subscriptions = (props) => {
                               touched.title && Boolean(errors.title)
                                 ? "is-invalid"
                                 : ""
-                            }`}
+                            }`}                           
                             components={
                               isView
                                 ? {
@@ -462,14 +462,13 @@ const Subscriptions = (props) => {
                                     IndicatorSeparator: () => null,
                                   }
                                 : null
-                            }
-                            style={{ marginRight: 12 }}
+                            }                            
                             onChange={(v) => {
                               setFieldValue("hire_date[0]", v)
                             }}
                           />
                         </div>
-                        <div style={{ marginRight: 12, flex: 1.5 }}>
+                        <div style={{ marginRight: 12, maxWidth: 140, flex: 1 }}>
                           <Select
                             options={selectMonth(values.hire_date[2])}
                             value={values.hire_date[1]}
@@ -488,8 +487,7 @@ const Subscriptions = (props) => {
                                     IndicatorSeparator: () => null,
                                   }
                                 : null
-                            }
-                            style={{ marginRight: 12 }}
+                            }                            
                             onChange={(v) => {
                               setFieldValue("hire_date[1]", v)
                               setFieldValue("hire_date[0]", {value: 1, label: "1"})
@@ -501,7 +499,7 @@ const Subscriptions = (props) => {
                             }}
                           />
                         </div>
-                        <div style={{ flex: 1 }}>
+                        <div style={{ maxWidth: 80, flex: 1 }}>
                           <Select
                             options={selectYear()}
                             value={values.hire_date[2]}
@@ -519,8 +517,7 @@ const Subscriptions = (props) => {
                                     IndicatorSeparator: () => null,
                                   }
                                 : null
-                            }
-                            style={{ marginRight: 12 }}
+                            }                            
                             onChange={(v) => {
                               setFieldValue("hire_date[2]", v)
                               setFieldValue("hire_date[1]", {value: 1, label: "January"})
@@ -622,14 +619,14 @@ const Subscriptions = (props) => {
                 {
                   props.isMobile 
                   ? isView 
-                  ? (<>
+                  ? (<div className="ml-1 row justify-content-md-start justify-content-center">
                       <Button
                         variant="secondary"
                         onClick={() => props.history.goBack()}
                       >
                         BACK
                       </Button>
-                    </>) 
+                    </div>) 
                   : (<div className="ml-1 row justify-content-md-start justify-content-center">
                       <Button                        
                         variant="primary"
