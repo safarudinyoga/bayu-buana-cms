@@ -257,7 +257,7 @@ const Subscriptions = (props) => {
       }) => {
         return (
           <Form onSubmit={handleSubmit}>
-            <Card>
+            <Card style={{marginBottom: 0}}>
               <Card.Body>
                 <h3 className="card-heading">Employment</h3>
                 {/* {console.log("values ===> ", values)} */}
@@ -622,14 +622,14 @@ const Subscriptions = (props) => {
                 {
                   props.isMobile 
                   ? isView 
-                  ? (<>
+                  ? (<div className="mb-2 ml-1 row justify-content-md-start justify-content-center">
                       <Button
                         variant="secondary"
                         onClick={() => props.history.goBack()}
                       >
                         BACK
                       </Button>
-                    </>) 
+                    </div>) 
                   : (<div className="ml-1 row justify-content-md-start justify-content-center">
                       <Button                        
                         variant="primary"

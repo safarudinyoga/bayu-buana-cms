@@ -377,7 +377,7 @@ const UserProfile = (props) => {
                   <span>Employment</span>
                 </div>
               </Accordion.Toggle>
-              <Accordion.Collapse eventKey="employment">
+              <Accordion.Collapse eventKey="employment" style={{marginBottom: 0}}>
                 <Employment
                   history={props.history}
                   backUrl={backUrl}

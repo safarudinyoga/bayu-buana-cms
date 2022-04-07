@@ -963,8 +963,8 @@ const GeneralInformation = (props) => {
                           <span className="form-label-required">*</span>
                         </Form.Label>
                         <Col  md={9} lg={8}>
-                          <div style={{ minWidth: 280, maxWidth: 400, display: "flex" }}>
-                            <div style={{ marginRight: 12, flex: 1 }}>
+                          <div style={{ minWidth: 280, maxWidth: 400, display: "flex"}}>
+                            <div style={{ marginRight: 12, flex: 1, maxWidth: 60 }}>
                               <Select
                                 options={selectDay(values.birth_date[1], values.birth_date[2])}
                                 value={values.birth_date[0]}
@@ -984,15 +984,15 @@ const GeneralInformation = (props) => {
                                     : null
                                 }
                                 style={{
-                                  minWidth: 77,
-                                  maxWidth: 240,
+                                  minWidth: 60,
+                                  maxWidth: 350,
                                 }}
                                 onChange={(v) => {
                                   setFieldValue("birth_date[0]", v)
                                 }}
                               />
                             </div>
-                            <div style={{ marginRight: 12, flex: 1 }}>
+                            <div style={{ marginRight: 12, flex: 1, maxWidth: 120 }}>
                               <Select
                                 options={selectMonth(values.birth_date[2])}
                                 value={values.birth_date[1]}
@@ -1013,7 +1013,7 @@ const GeneralInformation = (props) => {
                                     : null
                                 }
                                 style={{
-                                  minWidth: 110,
+                                  minWidth: 150,
                                   maxWidth: 240,
                                 }}
                                 onChange={(v) => {
@@ -1030,7 +1030,7 @@ const GeneralInformation = (props) => {
                                 }}
                               />
                             </div>
-                            <div style={{ flex: 1 }}>
+                            <div style={{ flex: 1, maxWidth: 80 }}>
                               <Select
                                 options={selectYear()}
                                 value={values.birth_date[2]}
@@ -1719,14 +1719,15 @@ const GeneralInformation = (props) => {
                 {
                   props.isMobile 
                   ? isView 
-                  ? (<>
-                      <Button
-                        variant="secondary"
-                        onClick={() => props.history.goBack()}
-                      >
-                        BACK
-                      </Button>
-                    </>) 
+                  ? (<div className="mb-2 ml-1 row justify-content-md-start justify-content-center">
+                        <Button
+                          variant="secondary"
+                          onClick={() => props.history.goBack()}
+                          
+                        >
+                          BACK
+                        </Button>
+                    </div>) 
                   : (<div className="mb-8 ml-1 row justify-content-md-start justify-content-center">
                       <Button
                         variant="primary"
