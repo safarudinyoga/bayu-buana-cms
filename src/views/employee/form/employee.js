@@ -261,7 +261,7 @@ const Subscriptions = (props) => {
               <Card.Body>
                 <h3 className="card-heading">Employment</h3>
                 {/* {console.log("values ===> ", values)} */}
-                <div style={props.isMobile ? {padding: "0 15px 30px 0"} : { padding: "0 15px 30px 15px" }}>
+                <div style={props.isMobile ? {padding: "0 0 30px 0"} : { padding: "0 15px 30px 15px" }}>
                   <Form.Group as={Row} className="form-group">
                     <Form.Label column sm={3}>
                       Employee ID <span className="form-label-required">*</span>
