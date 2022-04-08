@@ -263,10 +263,10 @@ const Subscriptions = (props) => {
                 {/* {console.log("values ===> ", values)} */}
                 <div style={props.isMobile ? {padding: "0 0 30px 0"} : { padding: "0 15px 30px 15px" }}>
                   <Form.Group as={Row} className="form-group">
-                    <Form.Label column sm={3}>
+                    <Form.Label column xs={5} sm={5} md={3} lg={3}>
                       Employee ID <span className="form-label-required">*</span>
                     </Form.Label>
-                    <Col sm={9}>
+                    <Col xs={7} sm={7} md={9} lg={9}>
                       <FastField name="employee_number" disabled>
                         {({ field, form }) => (
                           <>
@@ -619,7 +619,7 @@ const Subscriptions = (props) => {
                 {
                   props.isMobile 
                   ? isView 
-                  ? (<div className="mb-2 ml-1 row justify-content-md-start justify-content-center">
+                  ? (<div className="mb-2 row justify-content-md-start justify-content-center">
                       <Button
                         variant="secondary"
                         onClick={() => props.history.goBack()}
@@ -632,13 +632,14 @@ const Subscriptions = (props) => {
                         variant="primary"
                         type="submit"
                         disabled={props.finishStep > 0 || props.employeeData?.id ? (!isValid || isSubmitting) : (!dirty || isSubmitting)}
-                        style={{ marginRight: 15 }}
+                        style={{ marginRight: 15, marginBottom: 20, marginTop: 85 }}
                       >
-                        {props.employeeData?.id ? "SAVE" : "SAVE & NEXT"}
+                       SAVE
                       </Button>
                       <Button
                         variant="secondary"
-                        onClick={() => props.history.goBack()}
+                        onClick={() => props.history.goBack()} 
+                        style={{ marginBottom: 20, marginTop: 85 }}                       
                       >
                         CANCEL
                       </Button>
@@ -666,7 +667,7 @@ const Subscriptions = (props) => {
                     disabled={props.finishStep > 0 || props.employeeData?.id ? (!isValid || isSubmitting) : (!dirty || isSubmitting)}
                     style={{ marginRight: 15, marginBottom: 135 }}
                   >
-                    {props.employeeData?.id ? "SAVE" : "SAVE & NEXT"}
+                    SAVE
                   </Button>
                   <Button
                     variant="secondary"

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react"
 import { Card, Form, Row, Col, Button, Image, CloseButton } from "react-bootstrap"
 import { Formik, FastField, Field, ErrorMessage } from "formik"
 import TextError from "components/formik/textError"
+import FormikControl from "../../../components/formik/formikControl"
 import * as Yup from "yup"
 import ImageUploading from "react-images-uploading"
 import axios from "axios"
@@ -31,7 +32,7 @@ const GeneralInformation = (props) => {
   const [selectPermanentCountry, setSelectPermanentCountry] = useState([])
   const [selectPermanentProvince, setSelectPermanentProvince] = useState([])
   const [selectPermanentCity, setSelectPermanentCity] = useState([])
-  const [selectNamePrefix, setSelectNamePrefix] = useState([])
+  //const [selectNamePrefix, setSelectNamePrefix] = useState([])
   const [photoProfile, setPhotoProfile] = useState([])
   const [photoData, setPhotoData] = useState()
   const maxNumber = 1
@@ -436,21 +437,21 @@ const GeneralInformation = (props) => {
     } catch (e) {}
   }, [])
 
-  useEffect(async() => {
-    try {
-      let res = await api.get("/master/name-prefixes")
-      const options = []
-      res.data.items.forEach((data) => {
-        options.push({
-          label: data.name_prefix_name,
-          value: data.id,
-        })
-        setSelectNamePrefix(options)
-      })
-    } catch(e) {
+  // useEffect(async() => {
+  //   try {
+  //     let res = await api.get("/master/name-prefixes")
+  //     const options = []
+  //     res.data.items.forEach((data) => {
+  //       options.push({
+  //         label: data.name_prefix_name,
+  //         value: data.id,
+  //       })
+  //       setSelectNamePrefix(options)
+  //     })
+  //   } catch(e) {
 
-    }
-  }, [])
+  //   }
+  // }, [])
 
   useEffect(async () => {
     try {
@@ -843,7 +844,29 @@ const GeneralInformation = (props) => {
 
                   }
                     <Col sm={9} md={12} lg={9}>
-                      <Form.Group as={Row} className="form-group">
+                    <FormikControl
+                        control="selectAsync"
+                        required={isView ? "" : "label-required"}
+                        label="Title"
+                        name="title"
+                        placeholder={values.name_prefixName || "Mr."}
+                        url={`master/name-prefixes`}
+                        fieldName={"name_prefix_name"}
+                        onChange={(v) => {
+                          setFieldValue("title", v)
+                        }}
+                        style={{ maxWidth: 120 }}
+                        components={
+                          isView
+                            ? {
+                                DropdownIndicator: () => null,
+                                IndicatorSeparator: () => null,
+                              }
+                            : null
+                        }
+                        isDisabled={isView}
+                      />    
+                      {/* <Form.Group as={Row} className="form-group">
                         <Form.Label column md={3} lg={4}>
                           Title <span className="form-label-required">*</span>
                         </Form.Label>
@@ -886,7 +909,7 @@ const GeneralInformation = (props) => {
                             )}
                           </FastField>
                         </Col>
-                      </Form.Group>
+                      </Form.Group> */}
                       <Form.Group as={Row} className="form-group">
                         <Form.Label column md={3} lg={4}>
                           First Name{" "}
@@ -1733,7 +1756,7 @@ const GeneralInformation = (props) => {
                 {
                   props.isMobile 
                   ? isView 
-                  ? (<div className="ml-1 mt-3 row justify-content-md-start justify-content-center">
+                  ? (<div className="mb-2 mt-1 row justify-content-md-start justify-content-center">
                       <Button
                         variant="secondary"
                         onClick={() => props.history.goBack()}
@@ -1741,18 +1764,19 @@ const GeneralInformation = (props) => {
                         BACK
                       </Button>
                     </div>) 
-                  : (<div className="mb-8 ml-1 row justify-content-md-start justify-content-center">
+                  : (<div className="ml-3 row justify-content-md-start justify-content-center">
                       <Button
                         variant="primary"
                         type="submit"
                         disabled={props.finishStep > 0 || props.employeeData?.id ? (!isValid || isSubmitting) : (!dirty || isSubmitting)}
-                        style={{ marginRight: 15 }}
+                        style={{ marginRight: 15, marginBottom: 40, marginTop: 95 }}
                       >
                         {props.employeeData?.id ? "SAVE" : "SAVE & NEXT"}
                       </Button>
                       <Button
                         variant="secondary"
                         onClick={() => props.history.goBack()}
+                        style={{ marginRight: 15, marginBottom: 40, marginTop: 95 }}
                       >
                         CANCEL
                       </Button>
