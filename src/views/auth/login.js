@@ -6,7 +6,6 @@ import * as Yup from "yup"
 import { BlockButton } from '../../components/button/block'
 import { Link, useHistory } from 'react-router-dom'
 import Api from "config/api"
-import Cookies from 'js-cookie'
 import { useDispatch } from "react-redux"
 import { setAlert } from "redux/ui-store"
 import {encrypt, decrypt} from "lib/bb-crypt"
@@ -19,7 +18,7 @@ function Login() {
 	const [ rememberMe, setRememberMe] = useState(false)
 
 	const api = new Api()
-	let cookie_rm = Cookies.get("persist_code");
+	let cookie_rm = localStorage.getItem("persist_code");
 	let form = {
 		username: "",
 		password: "",
@@ -47,8 +46,8 @@ function Login() {
 	})
 
 	useEffect(() => {
-		const token = Cookies.get("ut")
-		let refresh_token = Cookies.get('rt')
+		const token = localStorage.getItem("ut")
+		let refresh_token = localStorage.getItem('rt')
 
 		const checkAuth = async () => {
 			await api.refreshToken(refresh_token)
@@ -73,16 +72,16 @@ function Login() {
 			
 			let date = new Date();
 			date.setTime(date.getTime() + (res.data.expires_in));
-			Cookies.set('ut', res.data.access_token, {expires: date})
+			localStorage.setItem('ut', res.data.access_token, {expires: date})
 
 			if (rememberMe) {
 				let acc = JSON.stringify(values)
 				acc = encrypt(acc)
-				Cookies.set('persist_code', acc)
-				Cookies.set('rt', res.data.refresh_token)
+				localStorage.setItem('persist_code', acc)
+				localStorage.setItem('rt', res.data.refresh_token)
 			} else {
-				let rememberCookie = Cookies.get('persist_code')
-				if(rememberCookie) Cookies.remove('persist_code')
+				let rememberCookie = localStorage.getItem('persist_code')
+				if(rememberCookie) localStorage.removeItem('persist_code')
 			}
 			window.location.reload()
 		} catch(e) {
