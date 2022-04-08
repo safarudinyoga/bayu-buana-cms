@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { Card, Form, Row, Col, Button, Image, CloseButton } from "react-bootstrap"
 import { Formik, FastField, Field, ErrorMessage } from "formik"
+import FormikControl from "../../../components/formik/formikControl"
 import TextError from "components/formik/textError"
 import * as Yup from "yup"
 import ImageUploading from "react-images-uploading"
@@ -30,8 +31,7 @@ const GeneralInformation = (props) => {
   const [selectCurrentCity, setSelectCurrentCity] = useState([])
   const [selectPermanentCountry, setSelectPermanentCountry] = useState([])
   const [selectPermanentProvince, setSelectPermanentProvince] = useState([])
-  const [selectPermanentCity, setSelectPermanentCity] = useState([])
-  const [selectNamePrefix, setSelectNamePrefix] = useState([])
+  const [selectPermanentCity, setSelectPermanentCity] = useState([])  
   const [photoProfile, setPhotoProfile] = useState([])
   const [photoData, setPhotoData] = useState()
   const maxNumber = 1
@@ -42,8 +42,7 @@ const GeneralInformation = (props) => {
 
   const [showCloseBtn, setShowCloseBtn] = useState(false)
   const [openSnackbar] = useSnackbar(options)
-  let api = new Api()
-
+  let api = new Api()  
   
 
   // Initialize form
@@ -267,6 +266,8 @@ const GeneralInformation = (props) => {
     return options
   }
 
+  
+
   // Current Country state
   const handleChangeCurrentCountry = async (v) => {
     try {
@@ -420,8 +421,7 @@ const GeneralInformation = (props) => {
         return;
       }
     setPhotoProfile(imageList)
-  }
-
+  }  
   useEffect(async () => {
     try {
       let res = await api.get("/master/countries")
@@ -436,21 +436,7 @@ const GeneralInformation = (props) => {
     } catch (e) {}
   }, [])
 
-  useEffect(async() => {
-    try {
-      let res = await api.get("/master/name-prefixes")
-      const options = []
-      res.data.items.forEach((data) => {
-        options.push({
-          label: data.name_prefix_name,
-          value: data.id,
-        })
-        setSelectNamePrefix(options)
-      })
-    } catch(e) {
-
-    }
-  }, [])
+  
 
   useEffect(async () => {
     try {
@@ -843,50 +829,28 @@ const GeneralInformation = (props) => {
 
                   }
                     <Col sm={9} md={12} lg={9}>
-                      <Form.Group as={Row} className="form-group">
-                        <Form.Label column md={3} lg={4}>
-                          Title <span className="form-label-required">*</span>
-                        </Form.Label>
-                        <Col md={9} lg={8}>
-                          <FastField name="title">
-                            {({ field, form }) => (
-                              <>
-                                <div style={{ width: 90 }}>
-                                  <Select
-                                    {...field}
-                                    options={selectNamePrefix}
-                                    isDisabled={isView}
-                                    defaultValue={values.title}
-                                    className={`react-select ${
-                                      form.touched.title && form.errors.title
-                                        ? "is-invalid"
-                                        : null
-                                    }`}
-                                    onChange={(v) => {
-                                      setFieldValue("title", v)
-                                    }}
-                                    components={
-                                      isView
-                                        ? {
-                                            DropdownIndicator: () => null,
-                                            IndicatorSeparator: () => null,
-                                          }
-                                        : null
-                                    }
-                                  />
-                                  {form.touched.title && form.errors.title && (
-                                    <Form.Control.Feedback type="invalid">
-                                      {form.touched.title
-                                        ? form.errors.title
-                                        : null}
-                                    </Form.Control.Feedback>
-                                  )}
-                                </div>
-                              </>
-                            )}
-                          </FastField>
-                        </Col>
-                      </Form.Group>
+                     <FormikControl
+                        control="selectAsync"
+                        required={isView ? "" : "label-required"}
+                        label="Title"
+                        name="title"
+                        placeholder={values.name_prefixName || "Mr."}
+                        url={`master/name-prefixes`}
+                        fieldName={"name_prefix_name"}
+                        onChange={(v) => {
+                          setFieldValue("title", v)
+                        }}
+                        style={{ maxWidth: 120 }}
+                        components={
+                          isView
+                            ? {
+                                DropdownIndicator: () => null,
+                                IndicatorSeparator: () => null,
+                              }
+                            : null
+                        }
+                        isDisabled={isView}
+                      />                      
                       <Form.Group as={Row} className="form-group">
                         <Form.Label column md={3} lg={4}>
                           First Name{" "}
