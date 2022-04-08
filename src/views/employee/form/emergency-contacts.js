@@ -270,17 +270,16 @@ const EmergencyContacts = (props) => {
                 {
                   props.isMobile 
                   ? isView 
-                  ? (<div className="mb-2 ml-1 row justify-content-md-start justify-content-center">
+                  ? (<div className="mb-2 mt-1 row justify-content-md-start justify-content-center">
                       <Button
                         variant="secondary"
-                        onClick={() => props.history.goBack()}
-                        className="mt-3 justify-content-md-start justify-content-center"
+                        onClick={() => props.history.goBack()}                        
                       >
                         BACK
                       </Button>
                     </div>) 
                   : (
-                    <div className="mb-5 ml-1 row justify-content-md-start justify-content-center">
+                    <div className="m-2 row justify-content-md-start justify-content-center">
                       <Button
                         variant="primary"
                         type="submit"
@@ -291,7 +290,7 @@ const EmergencyContacts = (props) => {
                       </Button>
                       <Button
                         variant="secondary"
-                        onClick={() => props.history.goBack()}
+                        onClick={() => props.history.goBack()}                       
                       >
                         CANCEL
                       </Button>
