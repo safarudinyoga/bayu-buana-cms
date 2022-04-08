@@ -12,7 +12,6 @@ import {
   Switch,
   Redirect,
 } from "react-router-dom"
-import Cookies from 'js-cookie'
 import AgeQualifyingTypeForm from "views/age_qualifying_type/form"
 import AgeQualifyingTypeTable from "views/age_qualifying_type/table"
 import AircraftForm from "views/aircraft/form"
@@ -608,8 +607,8 @@ const AuthRoutes = () => {
 
 const getAuth = async() => {
   try {
-    let auth = Cookies.get('ut')
-    let refresh_token = Cookies.get('rt')
+    let auth = localStorage.getItem('ut')
+    let refresh_token = localStorage.getItem('rt')
     if(!auth && refresh_token) {
       let API = new Api()
       let res = await API.refreshToken(refresh_token)
