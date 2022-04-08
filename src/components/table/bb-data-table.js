@@ -24,7 +24,6 @@ import "./bb-data-table.css"
 import editIcon from "assets/icons/edit.svg"
 import removeIcon from "assets/icons/remove.svg"
 import showIcon from "assets/icons/show.svg"
-import Cookies from "js-cookie"
 import ModalCreate from "components/Modal/bb-modal"
 import customPrint from '../../lib/customPrint'
 
@@ -179,7 +178,7 @@ class BBDataTable extends Component {
 
     const initialize = () => {
       let headers = {}
-      let auth = Cookies.get('ut')
+      let auth = localStorage.getItem('ut')
       if (auth) {
         headers = { Authorization : `Bearer ${auth}` }
       }
@@ -546,7 +545,8 @@ class BBDataTable extends Component {
                     division = row.division.division_name
                   }
 
-                  datas = data +'<br/>'+ division;
+                  datas = data +'<br/>'+ division     
+                  if (type === "myExport") datas =`${data} / ${division}`
                 }
                   return datas
               },

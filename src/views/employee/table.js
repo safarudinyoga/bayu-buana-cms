@@ -115,7 +115,7 @@ export default function EmployeeTable() {
           fieldGroup="job_title.id"
           value={selectedJobTitleIds}
           data={selectedJobTitle}
-          filter={`[["job_title.id", "is not", null],["AND"],["status", "=", 1]]`}
+          filter={`["job_title.id", "is not", null]`}
           type="selectmultiple"
           isFilter={true}
           allowClear={false}
@@ -136,7 +136,7 @@ export default function EmployeeTable() {
               fieldGroup="office.id"
               value={selectedOfficeIds}
               data={selectedOffice}
-              filter={`[["office.id", "is not", null],["AND"],["status", "=", 1]]`}
+              filter={`["office.id", "is not", null]`}
               type="selectmultiple"
               isFilter={true}
               allowClear={false}
@@ -152,7 +152,7 @@ export default function EmployeeTable() {
               fieldGroup="division.id"
               value={selectedDivisionIds}
               data={selectedDivision}
-              filter={`[["division.id", "is not", null],["AND"],["status", "=", 1]]`}
+              filter={`["division.id", "is not", null]`}
               type="selectmultiple"
               isFilter={true}
               allowClear={false}
@@ -172,7 +172,7 @@ export default function EmployeeTable() {
                 fieldGroup="division.id"
                 value={selectedDivisionIds}
                 data={selectedDivision}
-                filter={`[["division.id", "is not", null],["AND"],["status", "=", 1]]`}
+                filter={`["division.id", "is not", null]`}
                 type="selectmultiple"
                 isFilter={true}
                 allowClear={false}
@@ -188,7 +188,7 @@ export default function EmployeeTable() {
                 fieldGroup="office.id"
                 value={selectedOfficeIds}
                 data={selectedOffice}
-                filter={`[["office.id", "is not", null],["AND"],["status", "=", 1]]`}
+                filter={`["office.id", "is not", null]`}
                 type="selectmultiple"
                 isFilter={true}
                 allowClear={false}
@@ -226,7 +226,7 @@ export default function EmployeeTable() {
         data: "employee_asset.multimedia_description.url",
         render: (data, type) => {
           if (type === "myExport") {
-            return data
+            return data || ""
           }
           if (data === undefined) {
             return (
@@ -245,7 +245,13 @@ export default function EmployeeTable() {
       },
       {
         title: "Employee ID",
-        data: "employee_number"
+        data: "employee_number",
+        render: (data, type) => {
+          if (type === "myExport") {
+            return `'${data}`
+          }
+          return data
+        }
       },
       {
         title: "Full Name",
@@ -264,6 +270,12 @@ export default function EmployeeTable() {
       {
         title: "Email",
         data: "contact.email",
+        render: (data, type) => {
+          if (type === "myExport") {
+            return data || ""
+          }
+          return data
+        }
       },
       {
         title: "Job Title",

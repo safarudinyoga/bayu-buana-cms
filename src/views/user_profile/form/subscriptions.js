@@ -4,6 +4,8 @@ import { Card, Col, Form, Row, Button } from 'react-bootstrap';
 import Api from "config/api"
 import { useSnackbar } from "react-simple-snackbar"
 
+import "./subscriptions.css"
+
 const options = {
   position: "bottom-right",
 }
@@ -81,6 +83,7 @@ const Subscriptions = (props) => {
                     id="deals-subscription"
                     name="deals-subscription"
                     checked={values.dealSubscription}
+                    className="subscription-switch"
                     onChange={(e) => 
                       setFieldValue("dealSubscription", !values.dealSubscription)
                     }
@@ -97,6 +100,7 @@ const Subscriptions = (props) => {
                     id="newsletter-subscription"
                     name="newsletter-subscription"
                     checked={values.newsletterSubscription}
+                    className="subscription-switch"
                     onChange={(e) => 
                       setFieldValue("newsletterSubscription", !values.newsletterSubscription)
                     }

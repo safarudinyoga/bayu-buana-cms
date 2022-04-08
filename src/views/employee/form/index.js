@@ -162,7 +162,6 @@ const UserProfile = (props) => {
         office_id: values.office_id ? values.office_id : values.office?.id ? values.office.id : "00000000-0000-0000-0000-000000000000",
         division_id: values.division_id ? values.division_id : values.division?.id ? values.division.id : "00000000-0000-0000-0000-000000000000",
       }
-      console.log(values)
 
       if (!formId) {
         //ProsesCreateData
@@ -377,7 +376,7 @@ const UserProfile = (props) => {
                   <span>Employment</span>
                 </div>
               </Accordion.Toggle>
-              <Accordion.Collapse eventKey="employment">
+              <Accordion.Collapse eventKey="employment" style={{marginBottom: 0}}>
                 <Employment
                   history={props.history}
                   backUrl={backUrl}

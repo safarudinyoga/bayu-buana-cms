@@ -109,7 +109,6 @@ export default function HotelBrandTable() {
           column="city_name"
           value={selectedCityIds}
           data={selectedCities}
-          filter={`["status", "=", 1]`}
           type="selectmultiple"
           isFilter={true}
           allowClear={false}
@@ -122,7 +121,6 @@ export default function HotelBrandTable() {
           column="country_name"
           value={selectedCountryIds}
           data={selectedCountries}
-          filter={`["status", "=", 1]`}
           placeholder="Please choose"
           type="selectmultiple"
           isFilter={true}

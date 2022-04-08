@@ -1,9 +1,9 @@
 .book-card {
-  background: #eff0f2;
+  background: #fff;
 }
 
 .flight-book-tabs {
-  background: #eff0f2;
+  background-color: #fff !important;
 }
 
 .flight-book-tabs .nav-link {
@@ -53,6 +53,26 @@
   padding: 10px 20px;
 }
 
+.flight-pref {
+  border: 1px solid #707070;
+  border-radius: 2px;
+  padding: 7px;
+  font-size: 12px;
+}
+
+.flight-pref__route {
+  font-weight: 600;
+  margin-right: 5px;
+}
+
+.flight-pref__date {
+  margin-right: 5px;
+}
+
+.airport-suggestion-subtext {
+  margin-left: 1.65rem !important;
+}
+
 /* react auto suggest */
 .react-autosuggest__container {
   position: relative;
@@ -89,7 +109,7 @@
   display: block;
   position: absolute;
   top: 51px;
-  width: 280px;
+  width: 320px;
   border: 1px solid #aaa;
   background-color: #fff;
   font-family: Helvetica, sans-serif;
