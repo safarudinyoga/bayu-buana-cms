@@ -181,6 +181,41 @@ const GeneralInformation = (props) => {
     permanentZipCode: Yup.string(),
   })
 
+  const resetDate = (date, months=defmonths, years=defyears) => {
+    const today = new Date()
+    let currentYear = today.getFullYear()
+    let currentMonth = today.getMonth() + 1
+    let currentDate = today.getDate()
+
+    if (years.value === currentYear) {
+      if (months.value > currentMonth) {
+        return true
+      } else {
+        if(date.value > currentDate) {
+          return true
+        } else {
+          return false
+        }
+      }
+    }
+
+    if (months.value === 2 && years.value % 4 == 0) {
+      return date.value > 29
+    }
+    if (months.value === 2 && years.value % 4 != 0) {
+      return date.value > 28
+    }
+    if (
+      months.value === 4 ||
+      months.value === 6 ||
+      months.value === 9 ||
+      months.value === 11
+    ) {
+      return date.value > 30
+    }
+    return false
+  }
+
   // Birthday
   const selectDay = (months=defmonths, years=defyears) => {
     const options = []
@@ -414,12 +449,14 @@ const GeneralInformation = (props) => {
 
   // Upload profile
   const onChangePhotoProfile = (imageList) => {
-    var files = imageList[0].file;
-    var filesize = ((files.size/1024)/1024).toFixed(4);
-      if(filesize > 4){
-        openSnackbar("Logo size is more than 4MB.")
-        return;
-      }
+    if(imageList.length > 0) {
+      var files = imageList[0].file;
+      var filesize = ((files.size/1024)/1024).toFixed(4);
+        if(filesize > 4){
+          openSnackbar("Logo size is more than 4MB.")
+          return;
+        }
+    }
     setPhotoProfile(imageList)
   }
 
@@ -470,7 +507,7 @@ const GeneralInformation = (props) => {
             lastName: data.surname ? data.surname : "",
             gender: _.isEmpty(data.gender) ? data.gender_id : data.gender.id,
             idCardNumber: data.ktp ? data.ktp : "",
-            birth_date: [
+            birth_date: data.birth_date ? [
               {
                 value: parseInt(data.birth_date.split("-")[2]),
                 label: parseInt(data.birth_date.split("-")[2]),
@@ -485,7 +522,7 @@ const GeneralInformation = (props) => {
                 value: parseInt(data.birth_date.split("-")[0]),
                 label: parseInt(data.birth_date.split("-")[0]),  
               },
-            ],
+            ] : [],
             
             // Contacts
             homePhone: _.isEmpty(data.contact) ? "" : data.contact.phone_number ? data.contact.phone_number : "",
@@ -1050,15 +1087,9 @@ const GeneralInformation = (props) => {
                                 }                                
                                 onChange={(v) => {
                                   setFieldValue("birth_date[1]", v)
-                                  setFieldValue("birth_date[0]", {value: 1, label: "1"})
-                                  // setInitialForm({
-                                  //   ...initialForm,
-                                  //   birth_date: [
-                                  //     {value: 1, label: "1"},
-                                  //     v,
-                                  //     values.birth_date[2],
-                                  //   ],
-                                  // })
+                                  if (resetDate(values.birth_date[0], v, values.birth_date[2])) {
+                                    setFieldValue("birth_date[0]", {value: 1, label: "1"})
+                                  }
                                 }}
                               />
                             </div>
@@ -1083,16 +1114,11 @@ const GeneralInformation = (props) => {
                                 }                               
                                 onChange={(v) => {
                                   setFieldValue("birth_date[2]", v)
-                                  setFieldValue("birth_date[1]", {value: 1, label: "January"})
-                                  setFieldValue("birth_date[0]", {value: 1, label: "1"})
-                                  // setInitialForm({
-                                  //   ...initialForm,
-                                  //   birth_date: [
-                                  //     {value: 1, label: "1"},
-                                  //     {value: 1, label: "January"},
-                                  //     v,
-                                  //   ]
-                                  // })
+                                  
+                                  if (resetDate(values.birth_date[0], values.birth_date[1], v)) {
+                                    setFieldValue("birth_date[0]", {value: 1, label: "1"})
+                                    setFieldValue("birth_date[1]", {value: 1, label: "January"})
+                                  }
                                 }}
                               />
                             </div>
@@ -1435,6 +1461,7 @@ const GeneralInformation = (props) => {
                           <div style={{ maxWidth: 300 }}>
                             <SelectAsync
                               {...field}
+                              isClearable
                               isDisabled={isView}
                               url={`master/countries`}
                               fieldName="country_name"
@@ -1442,7 +1469,7 @@ const GeneralInformation = (props) => {
                                 setFieldValue("currentProvince", null)
                                 setFieldValue("currentCity", null)
                                 setFieldValue("currentCountry", v)
-                                handleChangeCurrentCountry(v.value)
+                                if(v) handleChangeCurrentCountry(v.value)
                               }}
                               placeholder="Please choose"
                               className={`react-select ${
