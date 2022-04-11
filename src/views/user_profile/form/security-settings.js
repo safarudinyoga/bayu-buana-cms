@@ -4,6 +4,8 @@ import { Card, Form, Row, Col, Button, InputGroup, FormGroup } from "react-boots
 import * as Yup from "yup"
 import Api from "config/api"
 import { useSnackbar } from "react-simple-snackbar"
+import { useHistory } from "react-router-dom"
+import Cookies from "js-cookie"
 
 const options = {
   position: "bottom-right",
@@ -16,6 +18,7 @@ const SecuritySettings = (props) => {
   const [ confirmPassType, setConfirmPassType] = useState("password")
   const [ email, setEmail] = useState("")
   const [openSnackbar] = useSnackbar(options)
+  const history = useHistory()
 
   // Initialize form
   const initialForm = {
@@ -69,6 +72,17 @@ const SecuritySettings = (props) => {
                       .max(256)
                       .oneOf([Yup.ref('newPassword'), null], 'New Password must match'),
   })
+
+  const signout = async () => {
+    openSnackbar(
+      `You have been successfully logged out!`
+    )
+    setTimeout(() => {
+      Cookies.remove("ut");
+      Cookies.remove("rt");
+      history.push("/auth/login");
+    }, 700);
+  };
 
   const FormValidate = ({
     label,
@@ -135,6 +149,7 @@ const SecuritySettings = (props) => {
           openSnackbar(
             `Password has been successfully changed.`
           )
+          signout()
         } catch(e) {
 
         }
