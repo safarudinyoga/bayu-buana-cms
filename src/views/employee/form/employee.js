@@ -310,6 +310,7 @@ const Subscriptions = (props) => {
                           <div style={{ maxWidth: 200 }}>
                             <SelectAsync
                               {...field}
+                              isClearable
                               isDisabled={isView}
                               url={`master/job-titles`}
                               fieldName="job_title_name"
@@ -356,6 +357,7 @@ const Subscriptions = (props) => {
                           <div style={{ maxWidth: 200 }}>
                             <SelectAsync
                               {...field}
+                              isClearable
                               isDisabled={isView}
                               url={`master/divisions`}
                               fieldName="division_name"
@@ -402,6 +404,7 @@ const Subscriptions = (props) => {
                           <div style={{ maxWidth: 250 }}>
                             <SelectAsync
                               {...field}
+                              isClearable
                               isDisabled={isView}
                               url={`master/offices`}
                               fieldName="office_name"
@@ -443,9 +446,10 @@ const Subscriptions = (props) => {
                       Hiring Date
                     </Form.Label>
                     <Col sm={9}>
-                      <div style={{ maxWidth: 300, display: "flex" }}>
-                        <div style={{ marginRight: 12, maxWidth: 60, flex: 1 }}>
+                      <div style={{ maxWidth: 450, display: "flex" }}>
+                        <div style={{ marginRight: 3, minWidth: 85, flex: 1 }}>
                           <Select
+                            isClearable
                             options={selectDay(values.hire_date[1], values.hire_date[2])}
                             value={values.hire_date[0]}
                             isDisabled={isView}
@@ -462,14 +466,18 @@ const Subscriptions = (props) => {
                                     IndicatorSeparator: () => null,
                                   }
                                 : null
-                            }                            
+                            }              
+                            style={{
+                              margin: 0
+                            }}                
                             onChange={(v) => {
                               setFieldValue("hire_date[0]", v)
                             }}
                           />
                         </div>
-                        <div style={{ marginRight: 12, maxWidth: 140, flex: 1 }}>
+                        <div style={{ marginRight: 3, minWidth: 130, flex: 1 }}>
                           <Select
+                            isClearable
                             options={selectMonth(values.hire_date[2])}
                             value={values.hire_date[1]}
                             placeholder="Month"
@@ -479,7 +487,7 @@ const Subscriptions = (props) => {
                               touched.title && Boolean(errors.title)
                                 ? "is-invalid"
                                 : ""
-                            }`}
+                            }`} 
                             components={
                               isView
                                 ? {
@@ -487,9 +495,9 @@ const Subscriptions = (props) => {
                                     IndicatorSeparator: () => null,
                                   }
                                 : null
-                            }                            
+                            }           
                             onChange={(v) => {
-                              setFieldValue("hire_date[1]", v)
+                              setFieldValue("hire_date[1]", v ? v : "")
                               setFieldValue("hire_date[0]", {value: 1, label: "1"})
                               // setInitialForm({
                               //   ...initialForm,
@@ -499,8 +507,9 @@ const Subscriptions = (props) => {
                             }}
                           />
                         </div>
-                        <div style={{ maxWidth: 80, flex: 1 }}>
+                        <div style={{ marginRight: 3, minWidth: 100, flex: 1 }}>
                           <Select
+                            isClearable
                             options={selectYear()}
                             value={values.hire_date[2]}
                             placeholder="Year"
@@ -517,9 +526,12 @@ const Subscriptions = (props) => {
                                     IndicatorSeparator: () => null,
                                   }
                                 : null
-                            }                            
+                            }       
+                            style={{
+                              margin: 0
+                            }}                       
                             onChange={(v) => {
-                              setFieldValue("hire_date[2]", v)
+                              setFieldValue("hire_date[2]", v ? v : "")
                               setFieldValue("hire_date[1]", {value: 1, label: "January"})
                               setFieldValue("hire_date[0]", {value: 1, label: "1"})
                               // setInitialForm({
