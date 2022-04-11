@@ -96,11 +96,11 @@ function ExchangeRateCreate(props) {
       }
     })
   })
-  Yup.addMethod(Yup.string, 'validateNumber', function(message) {
-    return this.test('unique', message, function(field) {
-        return !(parseFloat(field) === 0)
-    })
-  })
+  // Yup.addMethod(Yup.string, 'validateNumber', function(message) {
+  //   return this.test('unique', message, function(field) {
+  //       return !(parseFloat(field) === 0)
+  //   })
+  // })
 
 	const validationSchema =  Yup.object().shape({
     from_currency_id: Yup.object()
@@ -113,10 +113,10 @@ function ExchangeRateCreate(props) {
       .pairCurrency('from_currency_id', 'From Currency and To Currency must be different.')
       .uniqueExchangeRate('Exchange rate already exists.')
       ,
-    multiply_rate: Yup.string()
-      .matches(/^\d{0,15}(\.\d{0,8})?$/, "maximum value: 15 digits with 8 decimal digits")
-      .required("Multiply Rate is required.")
-      .validateNumber('multiply rate must be greater than 0'),
+    multiply_rate: Yup.number()
+      // .matches(/^\d{0,15}(\.\d{0,8})?$/, "maximum value: 15 digits with 8 decimal digits")
+      .required("Multiply Rate is required."),
+      // .validateNumber('multiply rate must be greater than 0'),
   })
 
   const isValidateNumber = (num) => {
