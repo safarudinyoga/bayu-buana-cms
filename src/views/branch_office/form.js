@@ -242,7 +242,7 @@ function OfficeForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         if (res.data) {
-          setForm({...res.data, country_id: res.data.country.id, longitude: res.data.longitude != 0 ? res.data.longitude : "", latitude: res.data.latitude != 0 ? res.data.latitude : ""})
+          setForm({...res.data, country_id: res.data.country_id, longitude: res.data.longitude != 0 ? res.data.longitude : "", latitude: res.data.latitude != 0 ? res.data.latitude : ""})
           let currentName = res.data.office_name
 
           $.validator.addMethod(
@@ -507,7 +507,7 @@ function OfficeForm(props) {
             column="country_name"
             filter={`["status", "=", 1]`}
             onChange={(e) => {
-              setForm({...form, country_id: e.target.value || null})
+              setForm({...form, country_id: e.target.value || null, state_province_id: null, city_id: null})
               $('#attr_state').empty();
               $('#attr_city').empty();
             }}
@@ -528,7 +528,7 @@ function OfficeForm(props) {
             filter={`[["country.id", "=", "${form.country_id}"],["AND"],["status", "=", 1]]`}
             column="state_province_name"
             onChange={(e) => {
-              setForm({...form, state_province_id: e.target.value || null})
+              setForm({...form, state_province_id: e.target.value || null, city_id: null})
               $('#attr_city').empty();
             }}
             disabled={isView || loading}
