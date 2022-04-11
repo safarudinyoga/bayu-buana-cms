@@ -419,13 +419,12 @@ function OfficeForm(props) {
       if (!form.operation_hours) {
         form.operation_hours = ""
       }
-      console.log(form)
+      
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
       
       for (let i in translated) {
         let tl = translated[i]
-        console.log(tl)
         let path = endpoint + "/" + res.data.id + "/translations"
         await api.putOrPost(path, tl.id, tl)
       }
@@ -461,7 +460,6 @@ function OfficeForm(props) {
     >
       <div className="col-lg-12">
 
-      {console.log(form)}
         <FormHorizontal>
           <FormInputControl
             label="Company/ Branch Name"
