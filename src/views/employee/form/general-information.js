@@ -181,28 +181,37 @@ const GeneralInformation = (props) => {
     permanentZipCode: Yup.string(),
   })
 
-  const resetDay = (date, months=defmonths, years=defyears) => {
+  const resetDate = (date, months=defmonths, years=defyears) => {
     const today = new Date()
     let currentYear = today.getFullYear()
     let currentMonth = today.getMonth() + 1
     let currentDate = today.getDate()
-    if (years.value === currentYear && months.value === currentMonth) {
-      return date > currentDate
-    } else {
-      if (months.value === 2 && years.value % 4 == 0) {
-        return date > 29
+
+    if (years.value === currentYear) {
+      if (months.value > currentMonth) {
+        return true
+      } else {
+        if(date.value > currentDate) {
+          return true
+        } else {
+          return false
+        }
       }
-      if (months.value === 2 && years.value % 4 != 0) {
-        return date > 28
-      }
-      if (
-        months.value === 4 ||
-        months.value === 6 ||
-        months.value === 9 ||
-        months.value === 11
-      ) {
-        return date > 30
-      }
+    }
+
+    if (months.value === 2 && years.value % 4 == 0) {
+      return date.value > 29
+    }
+    if (months.value === 2 && years.value % 4 != 0) {
+      return date.value > 28
+    }
+    if (
+      months.value === 4 ||
+      months.value === 6 ||
+      months.value === 9 ||
+      months.value === 11
+    ) {
+      return date.value > 30
     }
     return false
   }
@@ -498,7 +507,7 @@ const GeneralInformation = (props) => {
             lastName: data.surname ? data.surname : "",
             gender: _.isEmpty(data.gender) ? data.gender_id : data.gender.id,
             idCardNumber: data.ktp ? data.ktp : "",
-            birth_date: [
+            birth_date: data.birth_date ? [
               {
                 value: parseInt(data.birth_date.split("-")[2]),
                 label: parseInt(data.birth_date.split("-")[2]),
@@ -513,7 +522,7 @@ const GeneralInformation = (props) => {
                 value: parseInt(data.birth_date.split("-")[0]),
                 label: parseInt(data.birth_date.split("-")[0]),  
               },
-            ],
+            ] : [],
             
             // Contacts
             homePhone: _.isEmpty(data.contact) ? "" : data.contact.phone_number ? data.contact.phone_number : "",
@@ -1078,7 +1087,9 @@ const GeneralInformation = (props) => {
                                 }                                
                                 onChange={(v) => {
                                   setFieldValue("birth_date[1]", v)
-                                  setFieldValue("birth_date[0]", {value: 1, label: "1"})
+                                  if (resetDate(values.birth_date[0], v, values.birth_date[2])) {
+                                    setFieldValue("birth_date[0]", {value: 1, label: "1"})
+                                  }
                                 }}
                               />
                             </div>
@@ -1103,10 +1114,10 @@ const GeneralInformation = (props) => {
                                 }                               
                                 onChange={(v) => {
                                   setFieldValue("birth_date[2]", v)
-                                  setFieldValue("birth_date[1]", {value: 1, label: "January"})
                                   
-                                  if (resetDay(v.value, values.birth_date[1], values.birth_date[2])) {
+                                  if (resetDate(values.birth_date[0], values.birth_date[1], v)) {
                                     setFieldValue("birth_date[0]", {value: 1, label: "1"})
+                                    setFieldValue("birth_date[1]", {value: 1, label: "January"})
                                   }
                                 }}
                               />
