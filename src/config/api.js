@@ -1,5 +1,4 @@
 import axios from "axios"
-import Cookies from "js-cookie"
 import env from "./environment"
 var queryString = require('qs');
 
@@ -14,7 +13,7 @@ export default class Api {
   }
 
   initialize() {
-    const auth = Cookies.get('ut')
+    const auth = localStorage.getItem('ut')
     this.axios.defaults.headers.common["Accept"] = "application/json"
     this.axios.defaults.headers.common["Accept-Language"] = "en"
     // this.axios.defaults.headers.common["X-User-ID"] =
@@ -95,14 +94,15 @@ export default class Api {
 
       let date = new Date();
 			date.setTime(date.getTime() + (res.data.expires_in));
-      Cookies.set('ut', res.data.access_token, {expires: date})
-      Cookies.set('rt', res.data.refresh_token)
+      localStorage.setItem('ut', res.data.access_token, {expires: date})
+      localStorage.setItem('rt', res.data.refresh_token)
 
       return res.data.access_token
     } catch (err) {
       console.log(err)
-      Cookies.remove("ut");
-      Cookies.remove("rt");
+      localStorage.removeItem("ut");
+      localStorage.removeItem("rt");
+      localStorage.removeItem("menu");
       this.props.history.push("/auth/login");
     }
   }
