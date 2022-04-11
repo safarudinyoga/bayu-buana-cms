@@ -12,7 +12,6 @@ import {
   Switch,
   Redirect,
 } from "react-router-dom"
-import Cookies from 'js-cookie'
 import AgeQualifyingTypeForm from "views/age_qualifying_type/form"
 import AgeQualifyingTypeTable from "views/age_qualifying_type/table"
 import AircraftForm from "views/aircraft/form"
@@ -100,7 +99,7 @@ import HotelRoomTypeForm from "views/hotel_profile_management/form/room_type/for
 
 // Master Employee
 import EmployeeTable from "views/employee/table"
-import EmployeeForm from "views/employee/form"
+import EmployeeForm from "views/employee/form/index"
 import RatingTypeLevelTable from "./views/rating_type_level/table"
 import RatingTypeLevelForm from "./views/rating_type_level/form"
 
@@ -491,7 +490,7 @@ const DashboardRoutes = () => {
         </Route>
         <Route path="/master/employee/form/:id?">
           <EmployeeForm />
-        </Route>
+        </Route>        
         {/* Division */}
         <Route exact path="/master/divisions">
           <DivisionTable />
@@ -608,8 +607,8 @@ const AuthRoutes = () => {
 
 const getAuth = async() => {
   try {
-    let auth = Cookies.get('ut')
-    let refresh_token = Cookies.get('rt')
+    let auth = localStorage.getItem('ut')
+    let refresh_token = localStorage.getItem('rt')
     if(!auth && refresh_token) {
       let API = new Api()
       let res = await API.refreshToken(refresh_token)

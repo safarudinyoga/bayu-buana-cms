@@ -76,7 +76,7 @@ export default function DestinationTable() {
           fieldGroup="destination_city_id"
           value={selectedCityIds}
           data={selectedCities}
-          filter={`[["destination_city_id", "is not", null],["AND"],["status", "=", 1]]`}
+          filter={`["destination_city_id", "is not", null]`}
           type="selectmultiple"
           isFilter={true}
           allowClear={false}
@@ -92,7 +92,7 @@ export default function DestinationTable() {
           fieldGroup="country_id"
           value={selectedCountryIds}
           data={selectedCountries}
-          filter={`[["country_id", "is not", null],["AND"],["status", "=", 1]]`}
+          filter={`["country_id", "is not", null]`}
           placeholder="Country"
           type="selectmultiple"
           isFilter={true}

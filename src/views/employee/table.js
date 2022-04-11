@@ -5,8 +5,10 @@ import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
 import { renderColumn } from "lib/translation"
 import moment from "moment"
+import { useWindowSize } from "rooks"
 
 import FormInputSelectAjax from "components/form/input-select-ajax"
+import { findLastIndex } from "lodash"
 
 export default function EmployeeTable() {
   let dispatch = useDispatch()
@@ -32,6 +34,7 @@ export default function EmployeeTable() {
   let [selectedDivisionIds, setSelectedDivisionIds] = useState([])
   let [selectedOffice, setSelectedOffice] = useState([])
   let [selectedOfficeIds, setSelectedOfficeIds] = useState([])
+  const { innerWidth, innerHeight, outerHeight, outerWidth } = useWindowSize();
 
   const onFilterChangeJobTitle = (e, values) => {
     let ids = []
@@ -112,45 +115,90 @@ export default function EmployeeTable() {
           fieldGroup="job_title.id"
           value={selectedJobTitleIds}
           data={selectedJobTitle}
-          filter={`[["job_title.id", "is not", null],["AND"],["status", "=", 1]]`}
+          filter={`["job_title.id", "is not", null]`}
           type="selectmultiple"
           isFilter={true}
           allowClear={false}
           placeholder="Please choose"
         />
-        <FormInputSelectAjax
-          label="Division"
-          onChange={onFilterChangeDivision}
-          endpoint="/master/employees"
-          column="division.division_name"
-          sort="division.division_name"
-          isGrouping={true}
-          fieldGroup="division.id"
-          value={selectedDivisionIds}
-          data={selectedDivision}
-          filter={`[["division.id", "is not", null],["AND"],["status", "=", 1]]`}
-          type="selectmultiple"
-          isFilter={true}
-          allowClear={false}
-          placeholder="Please choose"
-        />
-        <FormInputSelectAjax
-          label="Branch Office"
-          onChange={onFilterChangeOffice}
-          endpoint="/master/employees"
-          column="office.office_name"
-          sort="office.office_name"
-          isGrouping={true}
-          fieldGroup="office.id"
-          value={selectedOfficeIds}
-          data={selectedOffice}
-          filter={`[["office.id", "is not", null],["AND"],["status", "=", 1]]`}
-          type="selectmultiple"
-          isFilter={true}
-          allowClear={false}
-          placeholder="Please choose"
-        />
-      </>
+        
+        {
+          // Tablet
+          innerWidth > 480 && innerWidth <= 768 ? (
+            <>
+            <FormInputSelectAjax
+              label="Branch Office"
+              onChange={onFilterChangeOffice}
+              endpoint="/master/employees"
+              column="office.office_name"
+              sort="office.office_name"
+              isGrouping={true}
+              fieldGroup="office.id"
+              value={selectedOfficeIds}
+              data={selectedOffice}
+              filter={`["office.id", "is not", null]`}
+              type="selectmultiple"
+              isFilter={true}
+              allowClear={false}
+              placeholder="Please choose"
+            />
+            <FormInputSelectAjax
+              label="Division"
+              onChange={onFilterChangeDivision}
+              endpoint="/master/employees"
+              column="division.division_name"
+              sort="division.division_name"
+              isGrouping={true}
+              fieldGroup="division.id"
+              value={selectedDivisionIds}
+              data={selectedDivision}
+              filter={`["division.id", "is not", null]`}
+              type="selectmultiple"
+              isFilter={true}
+              allowClear={false}
+              placeholder="Please choose"
+            />
+            </>
+                ) : 
+                <>
+               
+              <FormInputSelectAjax
+                label="Division"
+                onChange={onFilterChangeDivision}
+                endpoint="/master/employees"
+                column="division.division_name"
+                sort="division.division_name"
+                isGrouping={true}
+                fieldGroup="division.id"
+                value={selectedDivisionIds}
+                data={selectedDivision}
+                filter={`["division.id", "is not", null]`}
+                type="selectmultiple"
+                isFilter={true}
+                allowClear={false}
+                placeholder="Please choose"
+              />
+               <FormInputSelectAjax
+                label="Branch Office"
+                onChange={onFilterChangeOffice}
+                endpoint="/master/employees"
+                column="office.office_name"
+                sort="office.office_name"
+                isGrouping={true}
+                fieldGroup="office.id"
+                value={selectedOfficeIds}
+                data={selectedOffice}
+                filter={`["office.id", "is not", null]`}
+                type="selectmultiple"
+                isFilter={true}
+                allowClear={false}
+                placeholder="Please choose"
+              />
+              
+              </>
+
+        }
+        </>
     )
   }
 
@@ -176,7 +224,10 @@ export default function EmployeeTable() {
       {
         title: "",
         data: "employee_asset.multimedia_description.url",
-        render: (data) => {
+        render: (data, type) => {
+          if (type === "myExport") {
+            return data || ""
+          }
           if (data === undefined) {
             return (
               `<img class="image-profile-tabel mr-2" src="https://bbdev.monstercode.net/files/b3986414-5c5f-45a3-be6f-4fedcce2d022.png"/>` +
@@ -194,7 +245,13 @@ export default function EmployeeTable() {
       },
       {
         title: "Employee ID",
-        data: "employee_number"
+        data: "employee_number",
+        render: (data, type) => {
+          if (type === "myExport") {
+            return `'${data}`
+          }
+          return data
+        }
       },
       {
         title: "Full Name",
@@ -213,6 +270,9 @@ export default function EmployeeTable() {
       {
         title: "Email",
         data: "contact.email",
+        render: (data, type) => {
+          return data || ""
+        }
       },
       {
         title: "Job Title",
@@ -245,10 +305,15 @@ export default function EmployeeTable() {
         title: "Hire Date",
         data: "hire_date",
         render: function (data, type, row) {
-          if (type === "sort" || type === "type") {
-            return data
+          if (data === undefined) {
+            return "";
+          }else{
+            if (type === "sort" || type === "type") {
+              return data
+            }
+            return moment(data).format("D MMM YYYY")
           }
-          return moment(data).format("D MMM YYYY")
+          
         },
       },
       {
@@ -278,7 +343,6 @@ export default function EmployeeTable() {
     statusLabel: "Status",
     isOpenNewTab: false
   })
-  console.log("dataDelete,", params)
 
   return <BBDataTable {...params} extraFilter={extraFilter} onReset={onReset} />
 }

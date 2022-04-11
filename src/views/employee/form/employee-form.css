@@ -1,0 +1,47 @@
+@media (max-width:480px) {
+    .user-profile-form {
+        display: none;
+    }
+    .mobile-form {
+        display: block;
+    }
+    .user-profile-button {
+        display: none !important;
+    }
+    .mobile-button {
+        display: flex block !important;
+    }
+    .css-1d8n9bt {
+        padding-right: 2px !important;
+    }
+    
+    .css-tlfecz-indicatorContainer, .css-1gtu0rj-indicatorContainer{
+        padding: 4px !important;
+    }
+    
+    
+}
+
+@media (min-width:481px) {
+    .user-profile-form {
+        display: block;
+    }
+    .mobile-form {
+        display: none;
+    }
+    .user-profile-button {
+        display: block !important;
+    }
+    .mobile-button {
+        display: none !important;
+    }
+}
+
+.icon-active path {
+    fill: #038072;
+}
+
+.icon-grey path {
+    fill: #b7b7b7
+}
+

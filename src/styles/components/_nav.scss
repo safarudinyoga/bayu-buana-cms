@@ -12,11 +12,14 @@
     &:last-child {
       .nav-link {
         border-bottom: none;
+        border-bottom-left-radius: 8px;
+        border-bottom-right-radius: 8px;
       }
     }
   }
   .nav-link {
     color: #b7b7b7;
+    background-color: #fbfbfb;
     font-size: 16px;
     height: 54px;
     cursor: pointer;

@@ -67,14 +67,14 @@ function ExchangeRateCreate(props) {
   const initialValues = {
 		from_currency_id: "",
 		to_currency_id: "",
-		multiply_rate: null,
+		multiply_rate: "",
 		is_automatic: false,
 	}
 
-  const checkExchangeRate = async () => {
-    let res = await API.get("/master/currency-conversion", {
-      size: 50,
-    })
+  const checkExchangeRate = async (to_currency_id, from_currency_id) => {
+    let filter = encodeURIComponent(JSON.stringify([["to_currency_id","=",to_currency_id], ["AND"], ["from_currency_id", "=", from_currency_id]]))
+    let res = await API.get(`/master/currency-conversions?filters=${filter}`)
+    return res.data.items.length === 0
   }
 
   Yup.addMethod(Yup.object, 'pairCurrency', function(propertyPath, message) {
@@ -87,29 +87,42 @@ function ExchangeRateCreate(props) {
     })
   })
   Yup.addMethod(Yup.object, 'uniqueExchangeRate', function(message) {
-    return this.test('unique', message, function(field) {
-      if(this.parent.to_currency_id && this.parent.from_currency_id) {
-        return checkExchangeRate(this.parent.to_currency_id && this.parent.from_currency_id)
+    return this.test('unique', message, function(field, ctx) {
+      let parent = ctx.parent
+      if(parent.to_currency_id?.value && parent.from_currency_id?.value) {
+        return checkExchangeRate(parent.to_currency_id.value, parent.from_currency_id.value)
       } else {
         return true
       }
     })
   })
+  // Yup.addMethod(Yup.string, 'validateNumber', function(message) {
+  //   return this.test('unique', message, function(field) {
+  //       return !(parseFloat(field) === 0)
+  //   })
+  // })
+
 	const validationSchema =  Yup.object().shape({
     from_currency_id: Yup.object()
       .required("From Currency is required.")
       .pairCurrency('to_currency_id', 'From Currency and To Currency must be different.')
-      // .uniqueExchangeRate('Exchange rate already exists')
+      .uniqueExchangeRate('Exchange rate already exists')
       ,
     to_currency_id: Yup.object()
       .required("To Currency is required.")
       .pairCurrency('from_currency_id', 'From Currency and To Currency must be different.')
-      // .uniqueExchangeRate('Exchange rate already exists.')
+      .uniqueExchangeRate('Exchange rate already exists.')
       ,
-    multiply_rate: Yup.string()
-      .matches(/^\d{0,15}(\.\d{0,8})?$/, "maximum value: 15 digits with 8 decimal digits")
+    multiply_rate: Yup.number()
+      // .matches(/^\d{0,15}(\.\d{0,8})?$/, "maximum value: 15 digits with 8 decimal digits")
       .required("Multiply Rate is required."),
+      // .validateNumber('multiply rate must be greater than 0'),
   })
+
+  const isValidateNumber = (num) => {
+    let checkNumber = /^\d{0,15}(\.\d{0,8})?$/.test(num)
+    return checkNumber
+  }
 
 	const onSubmit = async (values, a) => {
 		try {
@@ -205,6 +218,11 @@ function ExchangeRateCreate(props) {
                 style={{ maxWidth: 250 }}
                 size={formSize}
                 disabled={isView || loading}
+                onChange={e => {
+                  if (isValidateNumber(e.target.value)) {
+                    setFieldValue("multiply_rate", e.target.value)
+                  }
+                }}
               />
 
               <FormikControl
@@ -224,15 +242,15 @@ function ExchangeRateCreate(props) {
                   display: "flex",
                 }}
               >
-                <Button
+                {!isView && <Button
                   variant="primary"
                   type="submit"
                   disabled={isSubmitting}
                   style={{ marginRight: 15 }}
                 >
                   SAVE
-                </Button>
-                <CancelButton onClick={() => dispatch(setCreateModal(false))}/>
+                </Button>}
+                <CancelButton onClick={() => dispatch(setCreateModal({show: false, id: null, disabled_form: false}))}/>
               </div>}
 						</Form>
 					)

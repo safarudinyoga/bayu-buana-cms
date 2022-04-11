@@ -117,11 +117,18 @@ function ForgotPassword() {
 								type="submit"
 							/>
 
-							<BlockButton 
+							<div className="mt-2">
+								<Link to="/auth/login" className="back-signin">
+								<i className="fa fa-arrow-left mr-1"></i>
+								Back to Sign In
+								</Link>
+							</div>
+
+							{/* <BlockButton 
 								text={"Cancel"} 
 								onClick={() => history.goBack()}
 								buttonType="button-cancel"
-							/>
+							/> */}
 						</Form>
 					)
 				}

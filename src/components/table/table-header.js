@@ -29,25 +29,25 @@ const DropdownIndicator = props => {
 const customStyles = {
   option: (provided, state) => ({
     ...provided,
-    color: "black",
+    color: "#333333",
     backgroundColor: state.isSelected ? "white" : "white",
     padding: 10,
     fontFamily: "Segoe UI, Tahoma, Geneva, Verdana, sans-serif",
-    fontSize: 13,
+    fontSize: 15,
     "&:hover": {
       // Overwrittes the different states of border
       backgroundColor: state.isFocused ? "#027F71" : "",
-      color: state.isFocused ? "white" : "black",
+      color: state.isFocused ? "white" : "#333333",
     },
   }),
   control: (base, state) => ({
     ...base,
     height: 10,
-    width: 135,
+    width: 150,
     marginTop: -1,
     marginLeft: 8,
     border: "1px solid #DADEDF",
-    fontSize: 13,
+    fontSize: 15,
     fontFamily: "Segoe UI, Tahoma, Geneva, Verdana, sans-serif",
     backgroundColor: "white",
     boxShadow: state.isFocused ? 0 : 0,
@@ -72,7 +72,7 @@ const StatusSelect = (props) => {
     <>
         <Select
           components={{IndicatorSeparator: () => null, DropdownIndicator}}
-          value={props.options[props.value]}
+          value={props.value != null ? props.options[props.value] : props.value}
           onChange={props.onChange}
           styles={customStyles}
           options={props.options}
@@ -91,6 +91,7 @@ class TableHeader extends Component {
       searchValue: "",
       statusValue: "0",
     }
+
     this.toggleFilter = this.toggleFilter.bind(this)
   }
 
@@ -111,7 +112,7 @@ class TableHeader extends Component {
     }
   }
 
-  handleSearchDebounce = debounce((text) => this.props.onSearch(text), 500)
+  handleSearchDebounce = debounce((text) => this.props.onSearch(text), 800)
 
   handleSearch(e) {
     this.setState({
@@ -123,6 +124,10 @@ class TableHeader extends Component {
   }
 
   handleStatus(statusValue) {
+    if(this.props.customFilterStatus){
+      this.props.customFilterStatus.value=""
+    }
+
     if (this.props.onStatus) {
       this.props.onStatus(statusValue.value)
     }
@@ -138,6 +143,11 @@ class TableHeader extends Component {
       searchValue: "",
       statusValue: "0",
     })
+
+    if(this.props.customFilterStatus){
+      this.props.customFilterStatus.value=null
+    }
+
   }
 
   handlePrint() {
@@ -291,7 +301,7 @@ class TableHeader extends Component {
               <div className="col-xs-12 col-sm-12 col-md-6 col-lg-4">
                 <div className="row">
                   <div className="col-xs-4">
-                  <label className="text-label-filter ml-2 font-weight-bold">{this.props.statusLabel || "Status :"}</label>
+                  <label className="text-label-filter ml-2 font-weight-bold">{this.props.statusLabel || "Status "}</label>
                     <StatusSelect
                       value={customFilterStatus ? customFilterStatus.value : this.state.statusValue}
                       onChange={this.handleStatus.bind(this)}

@@ -122,7 +122,6 @@ export default function RoomAmenityTypeTable() {
           column="room_amenity_category_name"
           value={selectedCategoryIds}
           data={selectedCategories}
-          filter={`["status", "=", 1]`}
           placeholder="Room Amenity Category"
           type="selectmultiple"
           isFilter={true}

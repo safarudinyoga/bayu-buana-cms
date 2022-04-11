@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from "react-redux"
 import Breadcrumb from "components/navigation/breadcrumb"
 import { useSnackbar } from "react-simple-snackbar"
 import { useHistory } from "react-router-dom"
-import Cookies from "js-cookie"
 import { setAlert } from "redux/ui-store"
 
 const DashboardWrapper = (props) => {
@@ -18,7 +17,7 @@ const DashboardWrapper = (props) => {
 
   useEffect(() => {
     history.listen((location, action) => {
-      if(!Cookies.get('ut')) window.location.reload()
+      if(!localStorage.getItem('ut')) window.location.reload()
     });
 
     document.body.className = [
@@ -42,8 +41,10 @@ const DashboardWrapper = (props) => {
       message: `You have been successfully logged out!`,
     }))
     setTimeout(() => {
-      Cookies.remove("ut");
-      Cookies.remove("rt");
+      localStorage.removeItem("ut");
+      localStorage.removeItem("rt");
+      localStorage.removeItem("persist_code");
+      localStorage.removeItem("menu");
       history.push("/auth/login");
     }, 700);
   };

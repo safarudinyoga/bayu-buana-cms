@@ -121,7 +121,7 @@ function DivisionForm(props) {
             "checkCode",
             function (value, element) {
               var req = false
-              let encodeFilters = encodeURIComponent(JSON.stringify(["division_code","like",element.value]))
+              let encodeFilters = encodeURIComponent(JSON.stringify(["division_code","=",element.value]))
               $.ajax({
                 type: "GET",
                 async: false,
@@ -186,7 +186,7 @@ function DivisionForm(props) {
         "checkCode",
         function (value, element) {
           var req = false
-          let encodeFilters = encodeURIComponent(JSON.stringify(["division_code","like",element.value]))
+          let encodeFilters = encodeURIComponent(JSON.stringify(["division_code","=",element.value]))
           $.ajax({
             type: "GET",
             async: false,
@@ -244,12 +244,13 @@ function DivisionForm(props) {
     let api = new Api()
     try {
       if (!form.parent_division_id) {
-        form.parent_division_id = null
+        form.parent_division_id = formId ? "00000000-0000-0000-0000-000000000000" : null
+        delete form.parent_division
       } else {
         form.depth = parseInt(form.depth) + 1
       }
       if (!form.manager_id) {
-        form.manager_id = null
+        form.manager_id = formId ? "00000000-0000-0000-0000-000000000000" : null
       }
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
@@ -310,7 +311,7 @@ function DivisionForm(props) {
           name="parent_division_id"
           endpoint="/master/divisions"
           column="division_name"
-          filter={`[["parent_division_id","is",null],["and"],["status", "=", 1]]`}
+          filter={formId ? `[["id","!=","${formId}"],["and"],[["parent_division_id","!=","${formId}"],["or"],["parent_division_id","is",null]]]` : ``}
           onChange={(e) =>
             setForm({...form, parent_division_id: e.target.value || null})
           }
@@ -327,7 +328,7 @@ function DivisionForm(props) {
           name="manager_id"
           endpoint="/master/employees"
           renderColumn= {(item) => {
-            return `${item.given_name} ${item.middle_name} ${item.surname} (${item.job_title.job_title_name})`
+            return `${item.given_name || ''} ${item.middle_name || ''} ${item.surname || ''} (${item.job_title.job_title_name || ''})`
           }}
           sort="employee_number"
           filter={`["status", "=", 1]`}

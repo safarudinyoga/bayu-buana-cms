@@ -152,6 +152,15 @@ select.bg-dark-grey > option {
   margin-bottom: 120px;
 }
 
+@media only screen and (max-width: 394px) {
+  .text-label-page {
+    margin-bottom: 0px;
+  }
+  .mobile-margin {
+    padding-bottom: 120px;
+  }
+}
+
 @media only screen and (max-width: 768px) {
   .text-label-input {
     font-size: 14px;
@@ -330,13 +339,6 @@ select.bg-dark-grey > option {
   width: 125px;
   height: 125px;
   border-radius: 50%;
-}
-@media (max-width: 425px) {
-  .image-profile-form{
-    width: 103px;
-    height: 103px;
-    border-radius: 50%;
-  }
 }
 @media only screen and (width: 768px) {
   .image-profile-form{

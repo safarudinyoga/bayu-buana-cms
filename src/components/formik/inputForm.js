@@ -19,13 +19,13 @@ function inputForm(props) {
   if (objectName.length > 1) {
     return (
       <Row className="form-group required">
-        <Col md={3} lg={4}>
+        <Col xs={size?.label?.xs || 12} md={size?.label?.md || 3} lg={size?.label?.lg || 4}>
           <label className="text-label-input" htmlFor={name}>
             {label}
             <span className={required || ""} />
           </label>
         </Col>
-        <Col md={9} lg={8}>
+        <Col xs={size?.value?.xs || 12} md={size?.value?.md || 9} lg={size?.value?.lg || 8}>
           <Field id={name} name={name} {...rest}>
             {({ field, form, meta }) => (
               <div>
@@ -59,13 +59,13 @@ function inputForm(props) {
   }
   return (
     <Row className="form-group required">
-      <Col md={size?.label?.md || 3} lg={size?.label?.lg || 4}>
+      <Col xs={size?.label?.xs || 12} md={size?.label?.md || 3} lg={size?.label?.lg || 4}>
         <label className="text-label-input" htmlFor={name}>
           {label}
           <span className={required || ""} />
         </label>
       </Col>
-      <Col  md={size?.value?.md || 9} lg={size?.value?.lg || 8}>
+      <Col xs={size?.value?.xs || 12} md={size?.value?.md || 9} lg={size?.value?.lg || 8}>
         <Field id={name} name={name}  {...rest}>
           {({ field, form, meta }) => (
             <div>

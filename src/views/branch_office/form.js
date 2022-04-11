@@ -242,7 +242,7 @@ function OfficeForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         if (res.data) {
-          setForm({...res.data, country_id: res.data.country.id, longitude: res.data.longitude != 0 ? res.data.longitude : "", latitude: res.data.latitude != 0 ? res.data.latitude : ""})
+          setForm({...res.data, country_id: res.data.country_id, longitude: res.data.longitude != 0 ? res.data.longitude : "", latitude: res.data.latitude != 0 ? res.data.latitude : ""})
           let currentName = res.data.office_name
 
           $.validator.addMethod(
@@ -419,13 +419,12 @@ function OfficeForm(props) {
       if (!form.operation_hours) {
         form.operation_hours = ""
       }
-      console.log(form)
+      
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
       
       for (let i in translated) {
         let tl = translated[i]
-        console.log(tl)
         let path = endpoint + "/" + res.data.id + "/translations"
         await api.putOrPost(path, tl.id, tl)
       }
@@ -460,6 +459,7 @@ function OfficeForm(props) {
       validationMessages={validationMessages}
     >
       <div className="col-lg-12">
+
         <FormHorizontal>
           <FormInputControl
             label="Company/ Branch Name"
@@ -507,7 +507,7 @@ function OfficeForm(props) {
             column="country_name"
             filter={`["status", "=", 1]`}
             onChange={(e) => {
-              setForm({...form, country_id: e.target.value || null})
+              setForm({...form, country_id: e.target.value || null, state_province_id: null, city_id: null})
               $('#attr_state').empty();
               $('#attr_city').empty();
             }}
@@ -527,9 +527,10 @@ function OfficeForm(props) {
             endpoint="/master/state-provinces"
             filter={`[["country.id", "=", "${form.country_id}"],["AND"],["status", "=", 1]]`}
             column="state_province_name"
-            onChange={(e) =>
-              setForm({...form, state_province_id: e.target.value || null})
-            }
+            onChange={(e) => {
+              setForm({...form, state_province_id: e.target.value || null, city_id: null})
+              $('#attr_city').empty();
+            }}
             disabled={isView || loading}
             type="select"
             cr={{md: 4}}
@@ -544,7 +545,10 @@ function OfficeForm(props) {
             id="attr_city"
             data={cityData}
             endpoint="/master/cities"
-            filter={`[["country.id", "=", "${form.country_id}"],["AND"],["status", "=", 1]]`}
+            filter={form.state_province_id || form.state_province_id !== "" 
+              ? `[["country.id", "=", "${form.country_id}"],["AND"],["state_province_id", "=", "${form.state_province_id}"],["AND"],["status", "=", 1]]` 
+              : `[["country.id", "=", "${form.country_id}"],["AND"],["status", "=", 1]]`
+            }
             column="city_name"
             onChange={(e) =>
               setForm({...form, city_id: e.target.value || null})

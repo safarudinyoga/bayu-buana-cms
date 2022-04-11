@@ -11,6 +11,7 @@ import "datatables.net-colreorder-bs4"
 import "datatables.net-responsive-bs4"
 import "datatables.net-rowreorder-bs4"
 import "datatables.net-rowreorder-bs4/css/rowReorder.bootstrap4.css"
+import "../../lib/paginationNoEllipses";
 import $ from "jquery"
 import JSZip from "jszip"
 import React, { Component } from "react"
@@ -23,7 +24,6 @@ import "./bb-data-table.css"
 import editIcon from "assets/icons/edit.svg"
 import removeIcon from "assets/icons/remove.svg"
 import showIcon from "assets/icons/show.svg"
-import Cookies from "js-cookie"
 import ModalCreate from "components/Modal/bb-modal"
 import customPrint from '../../lib/customPrint'
 
@@ -170,7 +170,7 @@ class BBDataTable extends Component {
             ? `<a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item mr-2" data-action="history" data-id="${row.id}" title="Click to view history"><img src="/img/icons/history.svg"/></a>`
             : ""
           }
-          <a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item" data-action="delete" data-id="${row.id}" data-name="${cvtRecordName}" ${infoDelete ? `data-info="${info}"` : ""}  title="Click to delete"><img src="${removeIcon}" /></a>
+          <a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item" data-action="delete" data-id="${row.id}" data-name="${cvtRecordName}" ${infoDelete ? `data-info="${info}"` : ""}  title="${module === "exchange-rate" ? "Delete" : "Click to delete"}"><img src="${removeIcon}" /></a>
           `
         )
       },
@@ -178,7 +178,7 @@ class BBDataTable extends Component {
 
     const initialize = () => {
       let headers = {}
-      let auth = Cookies.get('ut')
+      let auth = localStorage.getItem('ut')
       if (auth) {
         headers = { Authorization : `Bearer ${auth}` }
       }
@@ -189,14 +189,14 @@ class BBDataTable extends Component {
       }
 
       let dt = $(this.table.current).DataTable({
-        pagingType: "simple_numbers",
+        pagingType: "simple_numbers_no_ellipses",
         colReorder: {
           enable: true,
           iFixedColumnsLeft: 5,
           //   iFixedColumnsRight: 4,
         },
         stateSave: false,
-        fixedColumn: true,
+        fixedColumns: true,
         serverSide: true,
         processing: true,
         displayLength: 10,
@@ -405,7 +405,11 @@ class BBDataTable extends Component {
                   }
                 }
               } else {
-                overrideParams.sort = this.queryParams.has('sort') ? this.queryParams.get('sort') : 'sort'
+                overrideParams.sort = this.queryParams.has('sort') 
+                ? this.queryParams.get('sort') 
+                : this.props.customSort
+                ? this.props.customSort.join(",")
+                : 'sort'
               }
               if (params.search.value) {
                 let searchValue = params.search.value.replace(/^\s+|\s+$/g, "")
@@ -481,6 +485,7 @@ class BBDataTable extends Component {
             exportOptions: {
               stripHtml: false,
               columns: visibleColumns,
+              orthogonal: "myExport",
             },
           },
         ],
@@ -509,7 +514,12 @@ class BBDataTable extends Component {
             targets: [1, 2],
             className: !this.state.isCheckbox ? module == "employee" ? "" : "custom-col-width": "cstm-col-width",
           },
-          { responsivePriority: 1, targets: [1,2] },
+          {
+            targets: [3],
+            className: !module == "loyalty-programs" ? "" : "cstm-col-width-2",
+          },
+          { responsivePriority: 1, targets: 1 },
+          { responsivePriority: 2, targets: 2 },
           {
               // The `data` parameter refers to the data for the cell (defined by the
               // `data` option, which defaults to the column being worked with, in
@@ -535,7 +545,8 @@ class BBDataTable extends Component {
                     division = row.division.division_name
                   }
 
-                  datas = data +'<br/>'+ division;
+                  datas = data +'<br/>'+ division     
+                  if (type === "myExport") datas =`${data} / ${division}`
                 }
                   return datas
               },
@@ -549,6 +560,10 @@ class BBDataTable extends Component {
           {
             targets: [columns.length - 3, columns.length - 1],
             className: module === "branch-office" ? "desktop" : ""
+          },
+          {
+            targets: [columns.length - 4, columns.length - 3, columns.length - 2, columns.length - 1],
+            className: module === "employee" ? "desktop" : ""
           }
           // {
           //   orderable: false,
@@ -598,7 +613,7 @@ class BBDataTable extends Component {
           wrapper.prepend(
             '<span class="d-md-none float-left mt-2 mr-2 text-label-page">Page: </span>',
           )
-          $(".pagination", wrapper).addClass("float-right float-left-sm")
+          $(".pagination", wrapper).addClass("float-right float-left-sm mobile-margin")
 
           // Hide pagination if empty data
           // if (t.fnRecordsDisplay() === 1) {
@@ -969,7 +984,11 @@ class BBDataTable extends Component {
             me.updateStatus.bind(me)(id, this)
             break
           default:
-            me.deleteAction.bind(me)(id, name, info)
+            if(me.props.modalDelete) {
+              me.props.setCreateModal({show: true, id, disabled_form: false})
+            }else{
+              me.deleteAction.bind(me)(id, name, info)
+            }
             break
         }
       })

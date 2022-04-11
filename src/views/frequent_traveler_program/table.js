@@ -55,7 +55,6 @@ export default function FrequentTravelerProgramTable() {
         fieldGroup="product_type.id"
         value={selectedProductTypeIds}
         data={selectedProductTypes}
-        filter={`["status", "=", 1]`}
         placeholder="Please choose"
         type="selectmultiple"
         isFilter={true}

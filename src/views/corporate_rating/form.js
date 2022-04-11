@@ -23,6 +23,7 @@ function CorporateRatingForm(props) {
   const [loading, setLoading] = useState(true)
   const [translations, setTranslations] = useState([])
   const [id, setId] = useState(null)
+  const [corporateRatingId, setCorporateRatingId] = useState(null)
   const [form, setForm] = useState({
     corporate_rating_type_level_code: "",
     corporate_rating_type_level_name: "",
@@ -109,17 +110,18 @@ function CorporateRatingForm(props) {
             "checkName",
             function (value, element) {
               var req = false
-              let filters = JSON.stringify(["corporate_rating_type_level_name","=",element.value])
+              let filters = JSON.stringify(["corporate_rating_type_level_name","like",element.value])
               $.ajax({
                 type: "GET",
                 async: false,
                 url: `${env.API_URL}/master/corporate-rating-type-levels?filters=${encodeURIComponent(filters)}`,
                 success: function (res) {
                   if (res.items.length !== 0) {
-                    if(currentName == element.value){
+                    if(currentName.toUpperCase() === element.value.toUpperCase()){
                       req = true
                     } else {
-                      req = false
+                      let duplicateVal = res.items.find( e => e.corporate_rating_type_level_name.toUpperCase() === element.value.toUpperCase())
+                      req = !duplicateVal
                     }
                   } else {
                     req = true
@@ -172,14 +174,15 @@ function CorporateRatingForm(props) {
         "checkName",
         function (value, element) {
           var req = false
-          let filters = JSON.stringify(["corporate_rating_type_level_name","=",element.value])
+          let filters = JSON.stringify(["corporate_rating_type_level_name","like",element.value])
           $.ajax({
             type: "GET",
             async: false,
             url: `${env.API_URL}/master/corporate-rating-type-levels?filters=${encodeURIComponent(filters)}`,
             success: function (res) {
               if (res.items.length !== 0) {
-                req = false
+                let duplicateVal = res.items.find( e => e.corporate_rating_type_level_name.toUpperCase() === element.value.toUpperCase())
+                req = !duplicateVal
               } else {
                 req = true
               }
@@ -225,7 +228,7 @@ function CorporateRatingForm(props) {
     let urlRating = '/master/corporate-rating-types?filters=[["corporate_rating_type_code","=","6"],["AND"],["status","=",1]]';
     let res = await api.get(urlRating)
     res.data.items.forEach((data) => {
-      setForm({...form, corporate_rating_type_id: data.id})
+      setCorporateRatingId(data.id)
     })
   }
 
@@ -237,6 +240,7 @@ function CorporateRatingForm(props) {
       if (!form.rating) {
         form.rating = null
       }
+      form.corporate_rating_type_id = corporateRatingId
 
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
