@@ -527,9 +527,10 @@ function OfficeForm(props) {
             endpoint="/master/state-provinces"
             filter={`[["country.id", "=", "${form.country_id}"],["AND"],["status", "=", 1]]`}
             column="state_province_name"
-            onChange={(e) =>
+            onChange={(e) => {
               setForm({...form, state_province_id: e.target.value || null})
-            }
+              $('#attr_city').empty();
+            }}
             disabled={isView || loading}
             type="select"
             cr={{md: 4}}
