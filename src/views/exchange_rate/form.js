@@ -96,6 +96,12 @@ function ExchangeRateCreate(props) {
       }
     })
   })
+  Yup.addMethod(Yup.string, 'validateNumber', function(message) {
+    return this.test('unique', message, function(field) {
+        return !(parseFloat(field) === 0)
+    })
+  })
+
 	const validationSchema =  Yup.object().shape({
     from_currency_id: Yup.object()
       .required("From Currency is required.")
@@ -109,8 +115,14 @@ function ExchangeRateCreate(props) {
       ,
     multiply_rate: Yup.string()
       .matches(/^\d{0,15}(\.\d{0,8})?$/, "maximum value: 15 digits with 8 decimal digits")
-      .required("Multiply Rate is required."),
+      .required("Multiply Rate is required.")
+      .validateNumber('multiply rate must be greater than 0'),
   })
+
+  const isValidateNumber = (num) => {
+    let checkNumber = /^\d{0,15}(\.\d{0,8})?$/.test(num)
+    return checkNumber
+  }
 
 	const onSubmit = async (values, a) => {
 		try {
@@ -206,6 +218,11 @@ function ExchangeRateCreate(props) {
                 style={{ maxWidth: 250 }}
                 size={formSize}
                 disabled={isView || loading}
+                onChange={e => {
+                  if (isValidateNumber(e.target.value)) {
+                    setFieldValue("multiply_rate", e.target.value)
+                  }
+                }}
               />
 
               <FormikControl
