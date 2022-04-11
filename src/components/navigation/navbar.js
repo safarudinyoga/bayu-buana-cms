@@ -81,7 +81,10 @@ export default class Navbar extends Component {
           <li className="nav-item dropdown">
             <a className="nav-link pl-0 pl-sm-3" data-toggle="dropdown" href="/">
               <img
-                src={this.state.profile.employee_asset ? this.state.profile.employee_asset.multimedia_description.url : ""}
+                src={this.state.profile.employee_asset ? 
+                  this.state.profile.employee_asset.multimedia_description ? 
+                    this.state.profile.employee_asset.multimedia_description.url : "/img/media/profile.svg" 
+                  : ""}
                 alt="User Avatar"
                 className="img-avatar img-circle"
               />
@@ -90,7 +93,10 @@ export default class Navbar extends Component {
               <a href="/" className="dropdown-item">
                 <div className="media">
                   <img
-                    src={this.state.profile.employee_asset ? this.state.profile.employee_asset.multimedia_description.url : ""}
+                    src={this.state.profile.employee_asset ? 
+                      this.state.profile.employee_asset.multimedia_description ? 
+                        this.state.profile.employee_asset.multimedia_description.url : "/img/media/profile.svg" 
+                      : ""}
                     alt="User Avatar"
                     className="img-size-50 img-circle mr-3"
                   />
