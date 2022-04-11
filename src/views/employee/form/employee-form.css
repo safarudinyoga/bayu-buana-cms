@@ -11,6 +11,14 @@
     .mobile-button {
         display: flex block !important;
     }
+    .css-1d8n9bt {
+        padding-right: 2px !important;
+    }
+    
+    .css-tlfecz-indicatorContainer, .css-1gtu0rj-indicatorContainer{
+        padding: 4px !important;
+    }
+    
     
 }
 
@@ -36,3 +44,4 @@
 .icon-grey path {
     fill: #b7b7b7
 }
+
