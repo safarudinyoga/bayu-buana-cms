@@ -180,6 +180,32 @@ const GeneralInformation = (props) => {
     permanentZipCode: Yup.string(),
   })
 
+  const resetDay = (date, months=defmonths, years=defyears) => {
+    const today = new Date()
+    let currentYear = today.getFullYear()
+    let currentMonth = today.getMonth() + 1
+    let currentDate = today.getDate()
+    if (years.value === currentYear && months.value === currentMonth) {
+      return date > currentDate
+    } else {
+      if (months.value === 2 && years.value % 4 == 0) {
+        return date > 29
+      }
+      if (months.value === 2 && years.value % 4 != 0) {
+        return date > 28
+      }
+      if (
+        months.value === 4 ||
+        months.value === 6 ||
+        months.value === 9 ||
+        months.value === 11
+      ) {
+        return date > 30
+      }
+    }
+    return false
+  }
+
   // Birthday
   const selectDay = (months=defmonths, years=defyears) => {
     const options = []
@@ -1030,14 +1056,6 @@ const GeneralInformation = (props) => {
                                 onChange={(v) => {
                                   setFieldValue("birth_date[1]", v)
                                   setFieldValue("birth_date[0]", {value: 1, label: "1"})
-                                  // setInitialForm({
-                                  //   ...initialForm,
-                                  //   birth_date: [
-                                  //     {value: 1, label: "1"},
-                                  //     v,
-                                  //     values.birth_date[2],
-                                  //   ],
-                                  // })
                                 }}
                               />
                             </div>
@@ -1063,15 +1081,10 @@ const GeneralInformation = (props) => {
                                 onChange={(v) => {
                                   setFieldValue("birth_date[2]", v)
                                   setFieldValue("birth_date[1]", {value: 1, label: "January"})
-                                  setFieldValue("birth_date[0]", {value: 1, label: "1"})
-                                  // setInitialForm({
-                                  //   ...initialForm,
-                                  //   birth_date: [
-                                  //     {value: 1, label: "1"},
-                                  //     {value: 1, label: "January"},
-                                  //     v,
-                                  //   ]
-                                  // })
+                                  
+                                  if (resetDay(v.value, values.birth_date[1], values.birth_date[2])) {
+                                    setFieldValue("birth_date[0]", {value: 1, label: "1"})
+                                  }
                                 }}
                               />
                             </div>
