@@ -1450,6 +1450,7 @@ const GeneralInformation = (props) => {
                           <div style={{ maxWidth: 300 }}>
                             <SelectAsync
                               {...field}
+                              isClearable
                               isDisabled={isView}
                               url={`master/countries`}
                               fieldName="country_name"
@@ -1457,7 +1458,7 @@ const GeneralInformation = (props) => {
                                 setFieldValue("currentProvince", null)
                                 setFieldValue("currentCity", null)
                                 setFieldValue("currentCountry", v)
-                                handleChangeCurrentCountry(v.value)
+                                if(v) handleChangeCurrentCountry(v.value)
                               }}
                               placeholder="Please choose"
                               className={`react-select ${
