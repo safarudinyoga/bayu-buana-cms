@@ -10,12 +10,15 @@ import { useDispatch } from "react-redux"
 import { setAlert } from "redux/ui-store"
 import {encrypt, decrypt} from "lib/bb-crypt"
 import getMenu from '../../config/menu';
+import ReCAPTCHA from "react-google-recaptcha";
 
 function Login() {
 	const dispatch = useDispatch()
 	const history = useHistory()
 	const [ passType, setPassType] = useState("password")
 	const [ rememberMe, setRememberMe] = useState(false)
+	const [loginChance, setLoginChance] = useState(2)
+	const [validCaptcha, setValidCaptcha] = useState(false)
 
 	const api = new Api()
 	let cookie_rm = localStorage.getItem("persist_code");
@@ -85,6 +88,7 @@ function Login() {
 			}
 			window.location.reload()
 		} catch(e) {
+			setLoginChance(loginChance > 0 ? loginChance - 1 : 0)
 			dispatch(
 				setAlert({
 				  message: e.response.data.message,
@@ -92,6 +96,25 @@ function Login() {
 			)
 		}
 	}
+
+	const onChange = async (value) => {
+		try {
+			// console.log(value)
+			// let res = await api.post("https://www.google.com/recaptcha/api/siteverify", {
+			// 	value
+			// })
+			// console.log(res)
+			if(value) {
+				setValidCaptcha(true)
+			}
+		} catch(e) {
+			dispatch(
+				setAlert({
+				  message: e.response.data.message,
+				}),
+			)
+		}
+	  }
 
 	const FormValidate = ({
 		label, 
@@ -174,6 +197,14 @@ function Login() {
 									className={`fa ${passType === "password" ? "fa-eye-slash" : "fa-eye" }`}></i>
 								)}
 							/>
+							{
+								loginChance === 0 && (
+									<ReCAPTCHA
+										sitekey="6Lc8fmQfAAAAAJpj_9OxlmzcEYrrCG-Q6fcmaNcI"
+										onChange={onChange}
+									/>
+								)
+							}
 							<div className="row mt-3">
 								<div className="col"> 
 									<Form.Check
@@ -191,9 +222,10 @@ function Login() {
 									</Link>
 								</div>
 							</div>
+							{console.log(loginChance, validCaptcha)}
 							<BlockButton 
 								text={"SIGN IN"} 
-								disabled={isSubmitting}
+								disabled={loginChance > 0 ? isSubmitting : isSubmitting || !validCaptcha}
 								type="submit"
 							/>
 						</Form>
