@@ -59,6 +59,41 @@ const Subscriptions = (props) => {
     npwp: Yup.string().matches(numberSimbol, "NPWP must be a number"),
   })
 
+  const resetDate = (date, months=defmonths, years=defyears) => {
+    const today = new Date()
+    let currentYear = today.getFullYear()
+    let currentMonth = today.getMonth() + 1
+    let currentDate = today.getDate()
+
+    if (years.value === currentYear) {
+      if (months.value > currentMonth) {
+        return true
+      } else {
+        if(date.value > currentDate) {
+          return true
+        } else {
+          return false
+        }
+      }
+    }
+
+    if (months.value === 2 && years.value % 4 == 0) {
+      return date.value > 29
+    }
+    if (months.value === 2 && years.value % 4 != 0) {
+      return date.value > 28
+    }
+    if (
+      months.value === 4 ||
+      months.value === 6 ||
+      months.value === 9 ||
+      months.value === 11
+    ) {
+      return date.value > 30
+    }
+    return false
+  }
+
    // Hire Date
    const selectDay = (months=defmonths, years=defyears) => {
     const options = []
@@ -497,13 +532,10 @@ const Subscriptions = (props) => {
                                 : null
                             }           
                             onChange={(v) => {
-                              setFieldValue("hire_date[1]", v ? v : "")
-                              setFieldValue("hire_date[0]", {value: 1, label: "1"})
-                              // setInitialForm({
-                              //   ...initialForm,
-                              //   hdMonth: v,
-                              //   hdDay: {value: 1, label: "1"}
-                              // })
+                              setFieldValue("hire_date[1]", v)
+                              if (resetDate(values.hire_date[0], v, values.hire_date[2])) {
+                                setFieldValue("hire_date[0]", {value: 1, label: "1"})
+                              }
                             }}
                           />
                         </div>
@@ -531,15 +563,11 @@ const Subscriptions = (props) => {
                               margin: 0
                             }}                       
                             onChange={(v) => {
-                              setFieldValue("hire_date[2]", v ? v : "")
-                              setFieldValue("hire_date[1]", {value: 1, label: "January"})
-                              setFieldValue("hire_date[0]", {value: 1, label: "1"})
-                              // setInitialForm({
-                              //   ...initialForm,
-                              //   hdYear: v,
-                              //   hdMonth: {value: 1, label: "January"},
-                              //   hdDay: {value: 1, label: "1"},
-                              // })
+                              setFieldValue("hire_date[2]", v)
+                              if (resetDate(values.hire_date[0], values.hire_date[1], v)) {
+                                setFieldValue("hire_date[1]", {value: 1, label: "January"})
+                                setFieldValue("hire_date[0]", {value: 1, label: "1"})
+                              }
                             }}
                           />
                         </div>

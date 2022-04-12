@@ -91,7 +91,7 @@ function ForgotPassword() {
 
 	return (
 		<>
-			<p className="mid-title p-0 mb-3">Forgotten Password?</p>
+			<p className="mid-title p-0 mb-3">Forgot Password?</p>
 			<Formik
 				initialValues={initialForm}
 				validationSchema={validationSchema}
@@ -109,10 +109,9 @@ function ForgotPassword() {
 								name="email"
 								type="email"
 								maxLength={256}
-								placeholder="Email"
 							/>
 							<BlockButton 
-								text={"Request"} 
+								text={"Reset Password"} 
 								disabled={isSubmitting || !dirty}
 								type="submit"
 							/>
