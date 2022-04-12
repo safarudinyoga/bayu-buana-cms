@@ -1636,6 +1636,7 @@ const GeneralInformation = (props) => {
                       {selectPermanentCountry.length !== 0 && (
                         <div style={{ maxWidth: 300 }}>
                           <SelectAsync
+                            isClearable
                             name="permanentCountry"
                             url={`master/countries`}
                             value={
@@ -1657,7 +1658,7 @@ const GeneralInformation = (props) => {
                               setFieldValue("permanentProvince", null)
                               setFieldValue("permanentCity", null)
                               setFieldValue("permanentCountry", v)
-                              handleChangePermanentCountry(v.value)
+                              if(v) handleChangePermanentCountry(v.value)
                             }}
                             onBlur={setFieldTouched}
                             components={
