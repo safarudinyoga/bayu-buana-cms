@@ -10,6 +10,7 @@ import Select from "components/form/select"
 import SelectAsync from "components/form/select-async"
 import * as Yup from "yup"
 import env from "config/environment"
+import removeIcon from "assets/icons/remove.svg"
 
 const options = {
   position: "bottom-right",
@@ -482,9 +483,8 @@ const Subscriptions = (props) => {
                     </Form.Label>
                     <Col sm={9}>
                       <div style={{ maxWidth: 450, display: "flex" }}>
-                        <div style={{ marginRight: 3, minWidth: 85, flex: 1 }}>
+                        <div style={{ marginRight: 3, minWidth: 65, flex: 1 }}>
                           <Select
-                            isClearable
                             options={selectDay(values.hire_date[1], values.hire_date[2])}
                             value={values.hire_date[0]}
                             isDisabled={isView}
@@ -510,9 +510,8 @@ const Subscriptions = (props) => {
                             }}
                           />
                         </div>
-                        <div style={{ marginRight: 3, minWidth: 130, flex: 1 }}>
+                        <div style={{ marginRight: 3, minWidth: 105, flex: 1 }}>
                           <Select
-                            isClearable
                             options={selectMonth(values.hire_date[2])}
                             value={values.hire_date[1]}
                             placeholder="Month"
@@ -539,9 +538,8 @@ const Subscriptions = (props) => {
                             }}
                           />
                         </div>
-                        <div style={{ marginRight: 3, minWidth: 100, flex: 1 }}>
+                        <div style={{ marginRight: 3, minWidth: 75, flex: 1 }}>
                           <Select
-                            isClearable
                             options={selectYear()}
                             value={values.hire_date[2]}
                             placeholder="Year"
@@ -570,6 +568,18 @@ const Subscriptions = (props) => {
                               }
                             }}
                           />
+                        </div>
+                        <div style={{marginRight: 3, paddingTop: 2}}>
+                          <Button 
+                            variant="secondary"
+                            onClick={(v) => {
+                              setFieldValue("hire_date[2]", "Year")
+                              setFieldValue("hire_date[1]", "Month")
+                              setFieldValue("hire_date[0]", "Day")
+                            }}
+                          >
+                            <img src={removeIcon} />
+                          </Button>
                         </div>
                       </div>
                       {touched.title && Boolean(errors.title) && (
