@@ -191,7 +191,7 @@ const SecuritySettings = (props) => {
                     label="Old Password"
                     name="oldPassword"
                     type={oldPassType}
-                    placeholder="Enter your password"
+                    placeholder="Enter your old password"
                     endIcon={() => (
                       <i 
                       onClick={() => setOldPassType(oldPassType === "text" ? "password" : "text")}
@@ -210,7 +210,7 @@ const SecuritySettings = (props) => {
                     )}
                   />
                   <FormValidate
-                    label="Confirm New Password"
+                    label="Confirm Your Password"
                     name="confirmPassword"
                     type={confirmPassType}
                     placeholder="Enter your password"
