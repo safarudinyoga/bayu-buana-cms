@@ -21,7 +21,7 @@ const SubMenu = ({menu}) => {
 const ParentMenu = ({menu}) => {
   let {submenu, menu_link_asset} = menu
   return (
-    <li className="nav-item">
+    <li className="nav-item parent-menu">
       <Link to={menu.url} className="nav-link">
         <img src={menu_link_asset.multimedia_description.url} alt={menu_link_asset.multimedia_description.file_name} />
         <p>
@@ -62,14 +62,23 @@ class Sidebar extends Component {
   }
 
   handleHoverOn(){
-      console.log('on')
+      $('li.nav-item.parent-menu.menu-is-opening.menu-open').find('ul.nav.nav-treeview').css("display","block")
   }
 
   handleHoverOff(){
-    console.log('off')
+    $('li.nav-item.parent-menu.menu-is-opening.menu-open').find('ul.nav.nav-treeview').css("display","none")
   }
+
   render() {
     const { menu } = this.state
+
+    $(document).ready(function () {
+      $('.nav-item').click(function () {
+        $('.sidebar-mini').removeClass('sidebar-open');
+        $('.sidebar-mini').addClass('sidebar-closed sidebar-collapse');
+      });
+    });
+
     return (
       <aside className="main-sidebar sidebar-dark-primary elevation-4">
         <div className="sidebar"
@@ -85,7 +94,7 @@ class Sidebar extends Component {
               {
                 menu.map((m, k) => <ParentMenu key={k} menu={m} />)
               }
-              <li className="nav-item">
+              <li className="nav-item parent-menu">
                 <Link to="#" className="nav-link">
                   <img src="/img/icons/exchange-rate.svg" alt="icon users" />
                   <p>

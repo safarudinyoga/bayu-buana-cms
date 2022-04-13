@@ -271,10 +271,7 @@ export default function EmployeeTable() {
         title: "Email",
         data: "contact.email",
         render: (data, type) => {
-          if (type === "myExport") {
-            return data || ""
-          }
-          return data
+          return data || ""
         }
       },
       {

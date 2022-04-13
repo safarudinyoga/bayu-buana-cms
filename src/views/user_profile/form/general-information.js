@@ -28,6 +28,7 @@ const GeneralInformation = (props) => {
   const [selectNamePrefix, setSelectNamePrefix] = useState([])
   const [photoProfile, setPhotoProfile] = useState([])
   const [photoData, setPhotoData] = useState()
+  const [imageChanged, setImageChanged] = useState(false)
   const maxNumber = 1
   const { innerWidth, innerHeight, outerHeight, outerWidth } = useWindowSize();
 
@@ -358,14 +359,24 @@ const GeneralInformation = (props) => {
   const onChangePhotoProfile = (imageList, addUpdateIndex) => {
     // data for submit
     console.log(imageList, addUpdateIndex)
-    setPhotoProfile(imageList)
-    doUpload(imageList)
+    setImageChanged(true)
+    console.log(imageChanged)
+
+    if(imageList.length > 0){
+      doUpload(imageList)
+      setPhotoProfile(imageList)
+    } else {
+      setPhotoData(null)
+      setPhotoProfile([])
+    }
+    
   }
 
 
 
   useEffect(async () => {
     try {
+      console.log("PhotoProfile", photoProfile)
       let res = await api.get("/master/countries")
       const options = []
       res.data.items.forEach((data) => {
@@ -401,6 +412,12 @@ const GeneralInformation = (props) => {
       console.log("DATA", data)
       handleChangeCurrentCountry(_.isEmpty(data.address) ? "" : data.address.country ? data.address.country_id : "")
       handleChangePermanentCountry(_.isEmpty(data.permanent_address) ? "" : data.permanent_address.country ? data.permanent_address.country_id : "")
+      
+      setPhotoProfile([{
+        data_url: data.employee_asset.multimedia_description ?  data.employee_asset.multimedia_description.url : "/img/media/profile.svg"
+      }])
+      
+      
       setInitialForm({
         ...initialForm,
         title: _.isEmpty(data.name_prefix) ? "" : {
@@ -480,12 +497,12 @@ const GeneralInformation = (props) => {
           value: data.permanent_address.city_id,
           label: data.permanent_address.city.city_name
         } : "",
-        permanentZipCode: _.isEmpty(data.permanent_address) ? "" : data.permanent_address.postal_code ? data.permanent_address.postal_code : ""
+        permanentZipCode: _.isEmpty(data.permanent_address) ? "" : data.permanent_address.postal_code ? data.permanent_address.postal_code : "",
       });
-      setPhotoProfile([{
-        data_url: data.employee_asset.multimedia_description.url
-      }])
-    } catch(e) {}
+      
+    } catch(e) {
+      console.log("Error", e)
+    }
   }, [])
 
   return (
@@ -515,7 +532,7 @@ const GeneralInformation = (props) => {
               phone_number: values.homePhone
             },
             employee_asset: {
-              multimedia_description_id: photoData,
+              multimedia_description_id: photoData ? photoData : "00000000-0000-0000-0000-000000000000",
             },
             ktp: values.idCardNumber,
             given_name: values.firstName,
@@ -612,7 +629,7 @@ const GeneralInformation = (props) => {
                                         className="img-profile"
                                       />
                                       <CloseButton
-                                        style={{position: "absolute", top: 0, right: 0, display: showCloseBtn ? "block" : "none"}}
+                                        style={{position: "absolute", top: 0, right: 0, display: showCloseBtn && photoProfile[0].data_url != "/img/media/profile.svg" ? "block" : "none"}}
                                         onClick={() => onImageRemove(0)} 
                                       />
                                     </div>
@@ -694,7 +711,7 @@ const GeneralInformation = (props) => {
                                         className="img-profile"
                                       />
                                       <CloseButton
-                                        style={{position: "absolute", top: 0, right: 0, display: showCloseBtn ? "block" : "none"}}
+                                        style={{position: "absolute", top: 0, right: 0, display: showCloseBtn && photoProfile[0].data_url != "/img/media/profile.svg" ? "block" : "none"}}
                                         onClick={() => onImageRemove(0)} 
                                       />
                                     </div>
@@ -891,11 +908,11 @@ const GeneralInformation = (props) => {
                                 }}
                                 style={{ marginRight: 12 }}
                                 onChange={(v) => {
+                                  // setInitialForm({
+                                  //   ...initialForm,
+                                  //   dobMonth: v
+                                  // })
                                   setFieldValue("dobMonth", v)
-                                  setInitialForm({
-                                    ...initialForm,
-                                    dobMonth: v
-                                  })
                                 }}
                               />
                             </div>
@@ -914,10 +931,10 @@ const GeneralInformation = (props) => {
                                 style={{ marginRight: 12 }}
                                 onChange={(v) => {
                                   setFieldValue("dobYear", v)
-                                  setInitialForm({
-                                    ...initialForm,
-                                    dobYear: v
-                                  })
+                                  // setInitialForm({
+                                  //   ...initialForm,
+                                  //   dobYear: v
+                                  // })
                                 }}
                               />
                             </div>
@@ -1003,6 +1020,7 @@ const GeneralInformation = (props) => {
                       </Form.Group>
                     </Col>
                     
+                    {/* PC */}
                     {
                       innerWidth <= 768 ? "" : (
                         <Col sm={3} style={{ height: 170 }}>
@@ -1048,7 +1066,7 @@ const GeneralInformation = (props) => {
                                           className="img-profile"
                                         />
                                         <CloseButton
-                                          style={{position: "absolute", top: 0, right: 0, display: showCloseBtn ? "block" : "none"}}
+                                          style={{position: "absolute", top: 0, right: 0, display: showCloseBtn && photoProfile[0].data_url != "/img/media/profile.svg" ? "block" : "none"}}
                                           onClick={() => onImageRemove(0)} 
                                         />
                                       </div>
@@ -1535,7 +1553,7 @@ const GeneralInformation = (props) => {
                       <Button
                         variant="primary"
                         type="submit"
-                        disabled={isSubmitting || !dirty || !isValid}
+                        disabled={(isSubmitting || !isValid || !imageChanged) && !dirty}
                         style={{ marginRight: 15 }}
                       >
                         SAVE
@@ -1557,7 +1575,7 @@ const GeneralInformation = (props) => {
                   <Button
                     variant="primary"
                     type="submit"
-                    disabled={isSubmitting || !dirty || !isValid}
+                    disabled={(isSubmitting || !isValid || !imageChanged) && !dirty}
                     style={{ marginRight: 15 }}
                   >
                     SAVE

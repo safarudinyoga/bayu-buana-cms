@@ -15,4 +15,8 @@
 .subscription-switch .custom-control-label::after {
   background-color: #ffffff;
   border: 1px solid #C3C3C3;
+  top: calc(0rem + 1px);
+  left: calc(-2.3rem + 1px);
+  width: calc(1.25rem - 2px);
+  height: calc(1.25rem - 2px);
 }
