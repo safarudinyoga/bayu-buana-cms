@@ -15,6 +15,8 @@ import ReCAPTCHA from "react-google-recaptcha";
 function Login() {
 	const dispatch = useDispatch()
 	const history = useHistory()
+	const recaptchaRef = React.createRef();
+
 	const [ passType, setPassType] = useState("password")
 	const [ rememberMe, setRememberMe] = useState(false)
 	const [loginChance, setLoginChance] = useState(2)
@@ -89,6 +91,10 @@ function Login() {
 			window.location.reload()
 		} catch(e) {
 			setLoginChance(loginChance > 0 ? loginChance - 1 : 0)
+			if (loginChance === 0) {
+				recaptchaRef.current.props.grecaptcha.reset()
+				setValidCaptcha(false)
+			}
 			dispatch(
 				setAlert({
 				  message: e.response.data.message,
@@ -101,7 +107,7 @@ function Login() {
 		try {
 			// console.log(value)
 			// let res = await api.post("https://www.google.com/recaptcha/api/siteverify", {
-			// 	value
+			// 	secret: value
 			// })
 			// console.log(res)
 			if(value) {
@@ -200,8 +206,10 @@ function Login() {
 							{
 								loginChance === 0 && (
 									<ReCAPTCHA
+										ref={recaptchaRef}
 										sitekey="6Lc8fmQfAAAAAJpj_9OxlmzcEYrrCG-Q6fcmaNcI"
 										onChange={onChange}
+										onExpired={() => setValidCaptcha(false)}
 									/>
 								)
 							}
@@ -222,7 +230,7 @@ function Login() {
 									</Link>
 								</div>
 							</div>
-							{console.log(loginChance, validCaptcha)}
+							
 							<BlockButton 
 								text={"SIGN IN"} 
 								disabled={loginChance > 0 ? isSubmitting : isSubmitting || !validCaptcha}
