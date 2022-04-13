@@ -756,7 +756,7 @@ class BBDataTable extends Component {
       setTimeout(() => {
         this.dt.buttons(".buttons-print").trigger()
         this.dt.page.len(prevLen).draw()
-      }, 500)
+      }, 1500)
     } catch (e) {}
   }
 
@@ -771,7 +771,7 @@ class BBDataTable extends Component {
           )
           .trigger()
         this.dt.page.len(prevLen).draw()
-      }, 500)
+      }, 1500)
     } catch (e) {
     }
   }
