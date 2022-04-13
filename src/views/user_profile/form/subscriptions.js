@@ -1,6 +1,6 @@
 import { Formik } from 'formik';
 import React, { useState, useEffect } from 'react';
-import { Card, Col, Form, Row, Button } from 'react-bootstrap';
+import { Card, Col, Form, Row, Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import Api from "config/api"
 import { useSnackbar } from "react-simple-snackbar"
 
@@ -78,16 +78,46 @@ const Subscriptions = (props) => {
                     Receive Travel Deals and Special Offers
                   </Form.Label>
                   <Col sm={6}>
-                  <Form.Check 
-                    type="switch"
-                    id="deals-subscription"
-                    name="deals-subscription"
-                    checked={values.dealSubscription}
-                    className="subscription-switch"
-                    onChange={(e) => 
-                      setFieldValue("dealSubscription", !values.dealSubscription)
-                    }
-                  />
+                  <a 
+                    href="javascript:void(0);" 
+                    class={`custom-switch subscription-switch`} 
+                    data-toggle="tooltip" 
+                    data-placement="top"
+                    data-status={values.dealSubscription} 
+                    title={values.dealSubscription ? "Deactivate" : "Activate"}>
+                    <input 
+                      type="checkbox" 
+                      class="custom-control-input deals-subscription" 
+                      id="deals-subscription"
+                      data-action="update_status"
+                      onChange={(e) => setFieldValue("dealSubscription", !values.dealSubscription)}
+                      checked={values.dealSubscription ? true : false} 
+                    />
+                    <label class="custom-control-label" for="deals-subscription" data-action="update_status"></label>
+                  </a>
+                    {/* <OverlayTrigger
+                      key={"offers"}
+                      placement={"top"}
+                      overlay={
+                        <Tooltip id={`offers-top`}>
+                          {
+                            values.dealSubscription ? "Deactivate" : "Activate"
+                          }
+                        </Tooltip>
+                      }
+                    >
+                      <Form.Switch
+                        id="deals-subscription"
+                        name="deals-subscription"
+                        checked={values.dealSubscription}
+                        className="subscription-switch"
+                        onChange={(e) => 
+                          setFieldValue("dealSubscription", !values.dealSubscription)
+                        }
+                        
+                      />
+                    </OverlayTrigger> */}
+                  
                   </Col>
                 </Form.Group>
                 <Form.Group as={Row} className="form-group">
