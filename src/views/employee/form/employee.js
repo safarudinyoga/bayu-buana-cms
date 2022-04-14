@@ -573,9 +573,7 @@ const Subscriptions = (props) => {
                           <Button 
                             variant="secondary"
                             onClick={(v) => {
-                              setFieldValue("hire_date[2]", "Year")
-                              setFieldValue("hire_date[1]", "Month")
-                              setFieldValue("hire_date[0]", "Day")
+                              setFieldValue("hire_date", [])
                             }}
                           >
                             <img src={removeIcon} />
