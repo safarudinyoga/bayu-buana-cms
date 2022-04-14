@@ -298,18 +298,20 @@ class TableHeader extends Component {
               {this.state.showFilter ? ExtraFilter ? <ExtraFilter /> : "" : ""}
 
               {this.props.children}
-              <div className="col-xs-12 col-sm-12 col-md-6 col-lg-4">
-                <div className="row">
-                  <div className="col-xs-4">
-                  <label className="text-label-filter ml-2 font-weight-bold">{this.props.statusLabel || "Status "}</label>
-                    <StatusSelect
-                      value={customFilterStatus ? customFilterStatus.value : this.state.statusValue}
-                      onChange={this.handleStatus.bind(this)}
-                      options={customFilterStatus ? customFilterStatus.options : options}
-                    />
+              {this.props.isShowStatus ?? 
+                <div className="col-xs-12 col-sm-12 col-md-6 col-lg-4">
+                  <div className="row">
+                    <div className="col-xs-4">
+                    <label className="text-label-filter ml-2 font-weight-bold">{this.props.statusLabel || "Status "}</label>
+                      <StatusSelect
+                        value={customFilterStatus ? customFilterStatus.value : this.state.statusValue}
+                        onChange={this.handleStatus.bind(this)}
+                        options={customFilterStatus ? customFilterStatus.options : options}
+                      />
+                    </div>
                   </div>
                 </div>
-              </div>
+              }
             </div>
             <OverlayTrigger placement="top" overlay={<Tooltip>Reset</Tooltip>}>
               <Link

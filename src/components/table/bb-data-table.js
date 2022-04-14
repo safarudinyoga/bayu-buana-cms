@@ -43,6 +43,7 @@ class BBDataTable extends Component {
       status: "0",
       extraFilters: this.props.filters || [],
       isCheckbox: this.props.isCheckbox ?? true,
+      isShowStatus: this.props.isShowStatus ?? true,
       isOpen: false,
       itemInfo: "",
     }

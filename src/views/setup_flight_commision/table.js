@@ -173,6 +173,8 @@ export default function SetupFlightCommisionTable() {
     ],
     emptyTable: "No setup flight commisions found",
     btnDownload: ".buttons-csv",
+    isCheckbox: false,
+    isShowStatus: false
   }
 
 
