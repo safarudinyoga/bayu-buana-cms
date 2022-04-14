@@ -125,26 +125,50 @@ export default function SetupFlightCommisionTable() {
     columns: [
       {
         title: "Airline",
-        data: "airline_id"
+        data: "airline.airline_name",
+        render: (val) => {
+          if (val === undefined) {
+            return " "
+          } else {
+            return val;
+          }
+        }
       },
       {
         title: "Route(s)",
         data: "commission_claim_original_destination",
-        render: (val, type) => {
-
+        render: (val) => {
+          return val.departure_city_code + " - " + val.arrival_city_code
         }
       },
       {
         title: "Period of Issue",
-        data: "commission_claim_departure_date.start_date"
+        data: "commission_claim_issue_date",
+        render: (val) => {
+          if(val.start_date === undefined && val.end_date === undefined){
+            return "Not Specified"
+          }else{
+            return val.start_date + " - " + val.end_date
+          }
+        }
       },
       {
         title: "Period of Departure",
-        data: "period_departure"
+        data: "commission_claim_departure_date",
+        render: (val) => {
+          if(val.start_date === undefined && val.end_date === undefined){
+            return "Not Specified"
+          }else{
+            return val.start_date + " - " + val.end_date
+          }
+        }
       },
       {
         title: "Commission",
-        data: "percent"
+        data: "percent",
+        render: (val) => {
+          return val + '%'
+        }
       }
     ],
     emptyTable: "No setup flight commisions found",
