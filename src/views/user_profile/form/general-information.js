@@ -360,7 +360,6 @@ const GeneralInformation = (props) => {
     // data for submit
     console.log(imageList, addUpdateIndex)
     setImageChanged(true)
-    console.log(imageChanged)
 
     if(imageList.length > 0){
       doUpload(imageList)
@@ -413,9 +412,13 @@ const GeneralInformation = (props) => {
       handleChangeCurrentCountry(_.isEmpty(data.address) ? "" : data.address.country ? data.address.country_id : "")
       handleChangePermanentCountry(_.isEmpty(data.permanent_address) ? "" : data.permanent_address.country ? data.permanent_address.country_id : "")
       
+
+
       setPhotoProfile([{
         data_url: data.employee_asset.multimedia_description ?  data.employee_asset.multimedia_description.url : "/img/media/profile.svg"
       }])
+
+      setPhotoData(data.employee_asset.multimedia_description ? data.employee_asset.multimedia_description.id : "")
       
       
       setInitialForm({
