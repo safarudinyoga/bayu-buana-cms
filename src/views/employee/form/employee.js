@@ -569,16 +569,21 @@ const Subscriptions = (props) => {
                             }}
                           />
                         </div>
-                        <div style={{marginRight: 3, paddingTop: 2}}>
-                          <Button 
-                            variant="secondary"
-                            onClick={(v) => {
-                              setFieldValue("hire_date", [])
-                            }}
-                          >
-                            <img src={removeIcon} />
-                          </Button>
-                        </div>
+                        {
+                          isView ? 
+                            <></> : 
+                            <div style={{marginRight: 3, paddingTop: 2}}>
+                              <Button 
+                                variant="secondary"
+                                onClick={(v) => {
+                                  setFieldValue("hire_date", [])
+                                }}
+                              >
+                                <img src={removeIcon} />
+                              </Button>
+                          </div>
+                        }
+                        
                       </div>
                       {touched.title && Boolean(errors.title) && (
                         <div className="invalid-feedback">
