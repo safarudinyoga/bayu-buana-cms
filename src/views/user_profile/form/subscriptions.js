@@ -1,6 +1,6 @@
 import { Formik } from 'formik';
 import React, { useState, useEffect } from 'react';
-import { Card, Col, Form, Row, Button } from 'react-bootstrap';
+import { Card, Col, Form, Row, Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import Api from "config/api"
 import { useSnackbar } from "react-simple-snackbar"
 
@@ -78,16 +78,34 @@ const Subscriptions = (props) => {
                     Receive Travel Deals and Special Offers
                   </Form.Label>
                   <Col sm={6}>
-                  <Form.Check 
-                    type="switch"
-                    id="deals-subscription"
-                    name="deals-subscription"
-                    checked={values.dealSubscription}
-                    className="subscription-switch"
-                    onChange={(e) => 
-                      setFieldValue("dealSubscription", !values.dealSubscription)
-                    }
-                  />
+                    <OverlayTrigger
+                      key={"offers"}
+                      placement="top"
+                      overlay={
+                        <Tooltip id="offers-top">
+                          {
+                            values.dealSubscription ? "Deactivate" : "Activate"
+                          }
+                        </Tooltip>
+                      }
+                    > 
+                      {({ ref, ...triggerHandler }) => (
+                        <Form.Switch
+                          {...triggerHandler}
+                          ref={ref}
+                          id="deals-subscription"
+                          name="deals-subscription"
+                          checked={values.dealSubscription}
+                          className="subscription-switch"
+                          onChange={(e) => 
+                            setFieldValue("dealSubscription", !values.dealSubscription)
+                          }
+                          
+                        />
+                      )}
+                      
+                    </OverlayTrigger>
+                  
                   </Col>
                 </Form.Group>
                 <Form.Group as={Row} className="form-group">
@@ -95,16 +113,32 @@ const Subscriptions = (props) => {
                     Receive Newsletters
                   </Form.Label>
                   <Col sm={6}>
-                  <Form.Check 
-                    type="switch"
-                    id="newsletter-subscription"
-                    name="newsletter-subscription"
-                    checked={values.newsletterSubscription}
-                    className="subscription-switch"
-                    onChange={(e) => 
-                      setFieldValue("newsletterSubscription", !values.newsletterSubscription)
-                    }
-                  />
+                    <OverlayTrigger
+                      key={"newsletter"}
+                      placement="top"
+                      overlay={
+                        <Tooltip id="newsletter-top">
+                          {
+                            values.newsletterSubscription ? "Deactivate" : "Activate"
+                          }
+                        </Tooltip>
+                      }
+                    >
+                      {({ ref, ...triggerHandler }) => (
+                        <Form.Switch 
+                          {...triggerHandler}
+                          ref={ref}
+                          id="newsletter-subscription"
+                          name="newsletter-subscription"
+                          checked={values.newsletterSubscription}
+                          className="subscription-switch"
+                          onChange={(e) => 
+                            setFieldValue("newsletterSubscription", !values.newsletterSubscription)
+                          }
+                        />
+                      )}
+                    </OverlayTrigger>
+                  
                   </Col>
                 </Form.Group>
               </div>

@@ -71,7 +71,11 @@ function Login() {
 
 	const onSubmit = async (values, a) => {
 		try {
-			let res = await api.post("/user/login", values)
+			let payload ={
+				username: values.username.toLowerCase(),
+				password: values.password,
+			} 
+			let res = await api.post("/user/login", payload)
 			console.log(res);
 			await getMenu()
 			
