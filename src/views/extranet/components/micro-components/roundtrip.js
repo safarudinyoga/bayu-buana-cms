@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import AutoSuggest from "react-autosuggest";
 import DatePicker from 'react-datepicker'
-import { Form } from 'react-bootstrap'
+import { Form, Popover, OverlayTrigger, Button } from 'react-bootstrap'
 import { ReactSVG } from "react-svg"
 
 const Roundtrip = (props) => {
@@ -13,6 +13,10 @@ const Roundtrip = (props) => {
 
   const [departTime, setDepartTime] = useState(new Date())
   const [returnTime, setReturnTime] = useState(new Date())
+
+  const [adultCount, setAdultCount] = useState(0)
+  const [childrenCount, setChildrenCount] = useState(0)
+  const [infantCount, setInfantCount] = useState(0)
 
   function getSuggestions(data, value) {
     const inputValue = value.trim().toLowerCase();
@@ -42,6 +46,81 @@ const Roundtrip = (props) => {
       </div>
     )
   }
+
+  const regex = /^[0-9\b]+$/;
+  const onChangeAdult = (e) => {
+    if(e.target.value === '' || regex.test(e.target.value)){
+      setAdultCount(e.target.value)
+    }
+  }
+  const onChangeChildren = (e) => {
+    if(e.target.value === '' || regex.test(e.target.value)){
+      setChildrenCount(e.target.value)
+    }
+  }
+  const onChangeInfant = (e) => {
+    if(e.target.value === '' || regex.test(e.target.value)){
+      setInfantCount(e.target.value)
+    }
+  }
+
+  const popover = (
+    <Popover id="passenger-popover" className='passenger-popover'>
+      <Popover.Content>
+        <div className="d-flex row">
+          <div className='col-md-4'>Adult</div>
+          <div className='d-flex col-md-8'>
+            <Button 
+              className='mr-2' 
+              onClick={() => {
+                if(adultCount === 0){
+                  return;
+                }
+                setAdultCount(adultCount - 1)
+              }}
+              >-
+              </Button>
+            <input className='text-right' value={adultCount} style={{width: 40}} onChange={onChangeAdult}></input>
+            <Button className='ml-2' onClick={() => setAdultCount(adultCount + 1)} >+</Button>
+          </div>
+        </div>
+        <div className="d-flex row">
+          <div className='col-md-4'>Children</div>
+          <div className='d-flex col-md-8'>
+            <Button
+             className='mr-2' 
+             onClick={() => {
+                if(childrenCount === 0){
+                  return;
+                }
+                setChildrenCount(childrenCount - 1)
+              }}
+             >-</Button>
+            <input className='text-right' value={childrenCount} style={{width: 40}} onChange={onChangeChildren}></input>
+            <Button className='ml-2' onClick={() => setChildrenCount(childrenCount + 1)} >+</Button>
+          </div>
+        </div>
+        <div className="d-flex row">
+          <div className='col-md-4'>Infants</div>
+          <div className='d-flex col-md-8'>
+            <Button 
+              className='mr-2'
+              onClick={() => {
+                if(infantCount === 0){
+                  return;
+                }
+                setInfantCount(infantCount - 1)
+              }}
+              >-</Button>
+            <input className='text-right' value={infantCount} style={{width: 40}} onChange={onChangeInfant}></input>
+            <Button className='ml-2' onClick={() => setInfantCount(infantCount + 1)} >+</Button>
+          </div>
+        </div>
+        <Form.Check label="SELECT TRAVELERS" />
+        <Button className='mt-3 w-100'>DONE</Button>
+      </Popover.Content>
+    </Popover>
+  )
 
   return (
     <>
@@ -127,7 +206,9 @@ const Roundtrip = (props) => {
         </div>
         <div style={{width: 171}}>
           <h4 className='form-with-label__title'> TRAVELLERS</h4>
-          <input type="text" className='form-control rounded-0 form-with-label' />
+          <OverlayTrigger trigger="click" placement='bottom' overlay={popover}>
+            <input type="text" className='form-control rounded-0 form-with-label' />
+          </OverlayTrigger>
         </div>
       </div>
       {/* end of first row */}
