@@ -127,8 +127,7 @@ const FlightCommisionForm = (props) => {
       start_date: [],
       end_date: [],
 
-    },
-    
+    }, 
     commission_claim_original_destination: {
       arrival_airport_location_code: "",
       arrival_city_code: "",
@@ -161,18 +160,18 @@ const FlightCommisionForm = (props) => {
         let formatted = {
           airline_id: values.airline_id.value,
           commission_claim_original_destination: {
-            departure_airport_location_code: values.departFrom.value.split("-")[0],
-            departure_city_code: values.departFrom.value.split("-")[1],
-            arrival_airport_location_code: values.arrivalAt.value.split("-")[0],
-            arrival_city_code: values.arrivalAt.value.split("-")[1],
+            departure_airport_location_code: values.departFrom.value.split("-")[0].trim(),
+            departure_city_code: values.departFrom.value.split("-")[1].trim(),
+            arrival_airport_location_code: values.arrivalAt.value.split("-")[0].trim(),
+            arrival_city_code: values.arrivalAt.value.split("-")[1].trim(),
           },
           commission_claim_departure_date: {
-            start_date: specifyPeriodDeparture ? periodDepartureStart : "",
-            end_date: specifyPeriodDeparture ? periodDepartureEnd : "",
+            start_date: specifyPeriodDeparture ? periodDepartureStart : null,
+            end_date: specifyPeriodDeparture ? periodDepartureEnd : null,
           },
           commission_claim_issue_date: {
-            start_date: specifyPeriodIssue ? periodIssueStart : "",
-            end_date: specifyPeriodIssue ? periodIssueEnd : "",
+            start_date: specifyPeriodIssue ? periodIssueStart : null,
+            end_date: specifyPeriodIssue ? periodIssueEnd : null,
           },
           percent: parseFloat(values.percent)
         }
