@@ -12,7 +12,7 @@ export default function IntegrationPartnerTable() {
         title: "Integration Partner",
         breadcrumbs: [
           {
-            text: "Master Data Management",
+            text: "Setup and Configuration",
           },
           {
             text: "Intergration Partner",
@@ -28,20 +28,21 @@ export default function IntegrationPartnerTable() {
 
   let [params, setParams] = useState({
     title: "Integration Partner",
+    isCheckbox: false,
     titleModal: "Integration Partner",
     baseRoute: "/master/integration-partner/form",
-    endpoint: "/master/hotels",
+    endpoint: "/master/integration-partners",
     deleteEndpoint: "/master/batch-actions/delete/hotels",
     activationEndpoint: "/master/batch-actions/activate/hotels",
     deactivationEndpoint: "/master/batch-actions/deactivate/hotels",
     columns: [
       {
         title: "Partner Code",
-        data: "integration-partner-code"
+        data: "integration_partner_code"
       },
       {
         title: "Partner Name",
-        data: "integration-partner-name"
+        data: "integration_partner_name"
       },
       {
         searchable: false,
@@ -52,6 +53,7 @@ export default function IntegrationPartnerTable() {
     ],
     emptyTable: "No Integration Partner found",
     recordName: ["integration-partner-code", "integration-partner-name"],
+    module:"integration-partner"
   })
 
   return <BBDataTable {...params} onReset={onReset} />
