@@ -7,7 +7,8 @@ import { Row, Col, Tab, Nav, Accordion } from "react-bootstrap"
 import { setUIParams } from "redux/ui-store"
 import { useSnackbar } from "react-simple-snackbar"
 import useQuery from "lib/query"
-
+import { Link } from "react-router-dom"
+import PartnerCabin from "./partner-cabin"
 import PartnerInformation from "./partner-information"
 import { useWindowSize } from "rooks"
 import { Card } from "react-bootstrap";
@@ -25,7 +26,7 @@ const UserProfile = (props) => {
   const api = new Api()
   const isView = useQuery().get("action") === "view"
 
-  const [tabKey, setTabKey] = useState("general-information")
+  const [tabKey, setTabKey] = useState("partner-information")
   const { innerWidth, innerHeight, outerHeight, outerWidth } = useWindowSize();
   const [loading, setLoading] = useState(true)
   const [form, setForm] = useState(null)
@@ -96,7 +97,7 @@ const UserProfile = (props) => {
               <Col sm={3}>
                 <Nav variant="pills" className="flex-column nav-side">
                   <Nav.Item>
-                    <Nav.Link eventKey="general-information">
+                    <Nav.Link eventKey="partner-information">
                       <div>
                         <ReactSVG src="/img/icons/users.svg" />
                         <span>Partner Information</span>
@@ -104,18 +105,50 @@ const UserProfile = (props) => {
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
-                    <Nav.Link eventKey="emergency-contacts" disabled={finishStep < 1 && !Data?.id} >
+                    <Nav.Link eventKey="partner-credential" disabled={finishStep < 1 && !Data?.id} >
                       <div>
                         <ReactSVG src="/img/icons/emergency-contacts.svg" />
-                        <span>Emergency Contacts</span>
+                        <span>Partner Credential</span>
                       </div>
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
-                    <Nav.Link eventKey="employment" disabled={finishStep < 2 && !Data?.id}>
+                    <Nav.Link eventKey="partner-corporates" disabled={finishStep < 2 && !Data?.id}>
                       <div>
                         <ReactSVG src="/img/icons/employment.svg" />
-                        <span>Employment</span>
+                        <span>Partner Corporates</span>
+                      </div>
+                    </Nav.Link>
+                  </Nav.Item>
+                  <Nav.Item>
+                    <Nav.Link eventKey="partner-cabins" disabled={finishStep < 3 && !Data?.id}>
+                      <div>
+                        <ReactSVG src="/img/icons/employment.svg" />
+                        <span>Partner Cabins</span>
+                      </div>
+                    </Nav.Link>
+                  </Nav.Item>
+                  <Nav.Item>
+                    <Nav.Link eventKey="parrtner-meal-plans" disabled={finishStep < 4 && !Data?.id}>
+                      <div>
+                        <ReactSVG src="/img/icons/employment.svg" />
+                        <span>Partner Meals plans</span>
+                      </div>
+                    </Nav.Link>
+                  </Nav.Item>
+                  <Nav.Item>
+                    <Nav.Link eventKey="partner-free-tax" disabled={finishStep < 5 && !Data?.id}>
+                      <div>
+                        <ReactSVG src="/img/icons/employment.svg" />
+                        <span>Partner Free Taxes</span>
+                      </div>
+                    </Nav.Link>
+                  </Nav.Item>
+                  <Nav.Item>
+                    <Nav.Link eventKey="partner-messages" disabled={finishStep < 6 && !Data?.id}>
+                      <div>
+                        <ReactSVG src="/img/icons/employment.svg" />
+                        <span>Partner Messages</span>
                       </div>
                     </Nav.Link>
                   </Nav.Item>
@@ -123,12 +156,11 @@ const UserProfile = (props) => {
               </Col>
               <Col sm={9}>
                 <Tab.Content>
-                  <Tab.Pane eventKey="general-information">
-                    <PartnerInformation 
-/>
+                  <Tab.Pane eventKey="partner-information">
+                    <PartnerInformation />
                   </Tab.Pane>
-                  <Tab.Pane eventKey="emergency-contacts">
-                    tes
+                  <Tab.Pane eventKey="partner-cabins">
+                    <PartnerCabin />
                   </Tab.Pane>
                   <Tab.Pane eventKey="employment">
                     tes

@@ -124,6 +124,7 @@ import ExchangeRateHistory from "views/exchange_rate/history"
 import IntegrationPartnerTable from "views/integration_partner/table"
 import IntegrationPartnerForm from "views/integration_partner/form/index"
 
+
 // Master Manage Corporate
 import CorporateTable from "views/manage_corporate/table"
 import CorporateForm from "views/manage_corporate/form"
@@ -267,6 +268,7 @@ const DashboardRoutes = () => {
         <Route path="/master/integration-partner/form/:id?">
           <IntegrationPartnerForm />
         </Route>
+        
         <Route exact path="/master/flight-types">
           <FlightTypeTable />
         </Route>
