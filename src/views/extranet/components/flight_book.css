@@ -73,6 +73,10 @@
   margin-left: 1.65rem !important;
 }
 
+.passenger-popover {
+  transform: translate(-50%, -50%);
+}
+
 /* react auto suggest */
 .react-autosuggest__container {
   position: relative;
