@@ -78,45 +78,33 @@ const Subscriptions = (props) => {
                     Receive Travel Deals and Special Offers
                   </Form.Label>
                   <Col sm={6}>
-                  <a 
-                    href="javascript:void(0);" 
-                    class={`custom-switch subscription-switch`} 
-                    data-toggle="tooltip" 
-                    data-placement="top"
-                    data-status={values.dealSubscription} 
-                    title={values.dealSubscription ? "Deactivate" : "Activate"}>
-                    <input 
-                      type="checkbox" 
-                      class="custom-control-input deals-subscription" 
-                      id="deals-subscription"
-                      data-action="update_status"
-                      onChange={(e) => setFieldValue("dealSubscription", !values.dealSubscription)}
-                      checked={values.dealSubscription ? true : false} 
-                    />
-                    <label class="custom-control-label" for="deals-subscription" data-action="update_status"></label>
-                  </a>
-                    {/* <OverlayTrigger
+                    <OverlayTrigger
                       key={"offers"}
-                      placement={"top"}
+                      placement="top"
                       overlay={
-                        <Tooltip id={`offers-top`}>
+                        <Tooltip id="offers-top">
                           {
                             values.dealSubscription ? "Deactivate" : "Activate"
                           }
                         </Tooltip>
                       }
-                    >
-                      <Form.Switch
-                        id="deals-subscription"
-                        name="deals-subscription"
-                        checked={values.dealSubscription}
-                        className="subscription-switch"
-                        onChange={(e) => 
-                          setFieldValue("dealSubscription", !values.dealSubscription)
-                        }
-                        
-                      />
-                    </OverlayTrigger> */}
+                    > 
+                      {({ ref, ...triggerHandler }) => (
+                        <Form.Switch
+                          {...triggerHandler}
+                          ref={ref}
+                          id="deals-subscription"
+                          name="deals-subscription"
+                          checked={values.dealSubscription}
+                          className="subscription-switch"
+                          onChange={(e) => 
+                            setFieldValue("dealSubscription", !values.dealSubscription)
+                          }
+                          
+                        />
+                      )}
+                      
+                    </OverlayTrigger>
                   
                   </Col>
                 </Form.Group>
@@ -125,16 +113,32 @@ const Subscriptions = (props) => {
                     Receive Newsletters
                   </Form.Label>
                   <Col sm={6}>
-                  <Form.Check 
-                    type="switch"
-                    id="newsletter-subscription"
-                    name="newsletter-subscription"
-                    checked={values.newsletterSubscription}
-                    className="subscription-switch"
-                    onChange={(e) => 
-                      setFieldValue("newsletterSubscription", !values.newsletterSubscription)
-                    }
-                  />
+                    <OverlayTrigger
+                      key={"newsletter"}
+                      placement="top"
+                      overlay={
+                        <Tooltip id="newsletter-top">
+                          {
+                            values.newsletterSubscription ? "Deactivate" : "Activate"
+                          }
+                        </Tooltip>
+                      }
+                    >
+                      {({ ref, ...triggerHandler }) => (
+                        <Form.Switch 
+                          {...triggerHandler}
+                          ref={ref}
+                          id="newsletter-subscription"
+                          name="newsletter-subscription"
+                          checked={values.newsletterSubscription}
+                          className="subscription-switch"
+                          onChange={(e) => 
+                            setFieldValue("newsletterSubscription", !values.newsletterSubscription)
+                          }
+                        />
+                      )}
+                    </OverlayTrigger>
+                  
                   </Col>
                 </Form.Group>
               </div>
