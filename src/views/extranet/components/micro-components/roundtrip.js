@@ -18,6 +18,8 @@ const Roundtrip = (props) => {
   const [childrenCount, setChildrenCount] = useState(0)
   const [infantCount, setInfantCount] = useState(0)
 
+  const [travelerValue, setTravelerValue] = useState("")
+
   function getSuggestions(data, value) {
     const inputValue = value.trim().toLowerCase();
     const inputLength = inputValue.length;
@@ -62,6 +64,13 @@ const Roundtrip = (props) => {
     if(e.target.value === '' || regex.test(e.target.value)){
       setInfantCount(e.target.value)
     }
+  }
+
+  const onTravelerClick = (e) => {
+    let valueText = `${adultCount > 0 ? adultCount+" Adults " : ""} ${childrenCount > 0 ? childrenCount+" Children ":""} ${infantCount > 0 ? infantCount+" Infants" : ""}`
+
+    setTravelerValue(valueText)
+    document.body.click()
   }
 
   const popover = (
@@ -117,7 +126,7 @@ const Roundtrip = (props) => {
           </div>
         </div>
         <Form.Check label="SELECT TRAVELERS" />
-        <Button className='mt-3 w-100'>DONE</Button>
+        <Button onClick={onTravelerClick} className='mt-3 w-100'>DONE</Button>
       </Popover.Content>
     </Popover>
   )
@@ -206,8 +215,8 @@ const Roundtrip = (props) => {
         </div>
         <div style={{width: 171}}>
           <h4 className='form-with-label__title'> TRAVELLERS</h4>
-          <OverlayTrigger trigger="click" placement='bottom' overlay={popover}>
-            <input type="text" className='form-control rounded-0 form-with-label' />
+          <OverlayTrigger trigger="click" placement='bottom' overlay={popover} rootClose={true}>
+            <input type="text" className='form-control rounded-0 form-with-label' value={travelerValue} />
           </OverlayTrigger>
         </div>
       </div>
