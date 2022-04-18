@@ -249,12 +249,13 @@ const Subscriptions = (props) => {
             division_id: values.division ? values.division.value : "00000000-0000-0000-0000-000000000000",
             office_id: values.office ? values.office.value : "00000000-0000-0000-0000-000000000000",
             hire_date: values.hire_date.length > 0
+            ? values.hire_date[0].value !== '' 
             ? dateFormat([
                 values.hire_date[2].value,
                 values.hire_date[1].value,
                 values.hire_date[0].value,
               ])
-            : null,
+            : null : null,
             npwp: values.npwp,
             job_title: values.job_title ? {
               id: values.job_title.value,
@@ -575,8 +576,10 @@ const Subscriptions = (props) => {
                             <div style={{marginRight: 3, paddingTop: 2}}>
                               <Button 
                                 variant="secondary"
-                                onClick={(v) => {
-                                  setFieldValue("hire_date", [])
+                                onClick={() => {
+                                  setFieldValue("hire_date[2]", {value: "", label: "Year"})
+                                  setFieldValue("hire_date[1]", {value: "", label: "Month"})
+                                  setFieldValue("hire_date[0]", {value: "", label: "Day"})
                                 }}
                               >
                                 <img src={removeIcon} />
