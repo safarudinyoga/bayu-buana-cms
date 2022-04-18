@@ -213,7 +213,7 @@ const SecuritySettings = (props) => {
                     label="Confirm Your Password"
                     name="confirmPassword"
                     type={confirmPassType}
-                    placeholder="Enter your password"
+                    placeholder="Confirm your password"
                     endIcon={() => (
                       <i 
                       onClick={() => setConfirmPassType(confirmPassType === "text" ? "password" : "text")}
