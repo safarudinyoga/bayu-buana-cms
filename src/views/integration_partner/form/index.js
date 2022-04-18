@@ -8,7 +8,7 @@ import { setUIParams } from "redux/ui-store"
 import { useSnackbar } from "react-simple-snackbar"
 import useQuery from "lib/query"
 import { Link } from "react-router-dom"
-import PartnerCabin from "./partner-cabin"
+import PartnerCabin from "../../integration_partner_cabin/tabel"
 import PartnerInformation from "./partner-information"
 import { useWindowSize } from "rooks"
 import { Card } from "react-bootstrap";
