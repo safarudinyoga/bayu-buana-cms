@@ -5,7 +5,7 @@ import TimeSlider from '../time_slider'
 const FlightPref = () => {
   return (
     <div>
-      <Accordion defaultActiveKey='0'>
+      <Accordion>
         <Card>
           <Accordion.Toggle as={Card.Header} eventKey="0">
             Flight Preferences
