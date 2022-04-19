@@ -1,0 +1,11 @@
+.notice-alert {
+    background-color: #FFF2D8;
+    color: #4d4d4d;
+    border: 1px solid #A3A3A394;
+    font-size: 13px;
+}
+.book-trip-tabs {
+    background-color: #ECECEC;
+    border-top-right-radius: 0 !important;
+    border-top-left-radius: 0 !important;
+}

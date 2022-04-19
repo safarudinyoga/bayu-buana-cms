@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Tab, Tabs, Form, Accordion, Card, Button } from 'react-bootstrap'
 import { ReactSVG } from "react-svg"
+import { useHistory } from 'react-router';
 
 import Roundtrip from './micro-components/roundtrip';
 import Oneway from './micro-components/oneway';
@@ -9,6 +10,7 @@ import FlightPref from './micro-components/flight_pref';
 
 
 const FlightBook = (props) => {
+  const history = useHistory()
   const [flightType, setFlightType] = useState("roundtrip")
 
   const airports = [
@@ -52,7 +54,7 @@ const FlightBook = (props) => {
           <FlightPref />
 
           <div className='my-3'>
-            <Button>Search</Button>
+            <Button type="button" onClick={() => history.push("/extranet/book-trip/book-flight")}>Search</Button>
           </div>
           <div className="recent-search">
             <span className='text-uppercase'>Recent Flight Searches</span>
@@ -78,7 +80,7 @@ const FlightBook = (props) => {
           <FlightPref />
 
           <div className='my-3'>
-            <Button>Search</Button>
+            <Button type="button" onClick={() => history.push("/extranet/book-trip/book-flight")}>Search</Button>
           </div>
           <div className="recent-search">
             <span className='text-uppercase'>Recent Flight Searches</span>
@@ -104,7 +106,7 @@ const FlightBook = (props) => {
           <FlightPref />
 
           <div className='my-3'>
-            <Button>Search</Button>
+            <Button type="button" onClick={() => history.push("/extranet/book-trip/book-flight")}>Search</Button>
           </div>
           <div className="recent-search">
             <span className='text-uppercase'>Recent Flight Searches</span>
