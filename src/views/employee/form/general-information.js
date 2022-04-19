@@ -536,7 +536,7 @@ const GeneralInformation = (props) => {
               value: data.address.country_id,
               label: data.address.country.country_name
             } : "",
-            currentProvince: (!data.address?.state_province_id || data.address?.state_province_id === "00000000-0000-0000-0000-000000000000")
+            currentProvince: (_.isEmpty(data.address?.state_province) || data.address?.state_province_id === "00000000-0000-0000-0000-000000000000")
             ? isView ? {
               value: "",
               label: ""
