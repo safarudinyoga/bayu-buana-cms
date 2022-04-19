@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react"
+import React, { useEffect, useState } from "react"
 import "@fortawesome/fontawesome-free/css/all.css"
 import "admin-lte"
 import "admin-lte/dist/css/adminlte.css"
@@ -122,6 +122,9 @@ import ExchangeRateForm from "views/exchange_rate/form"
 import ExchangeRateHistory from "views/exchange_rate/history"
 // Master Integration PartnerG
 import IntegrationPartnerTable from "views/integration_partner/table"
+import IntegrationPaymentGateway from "views/integration_partner/form/partner_payment_gateway/tables"
+import IntegrationPartnerForm from "views/integration_partner/form/index"
+import IntegrationPartnerMealPlansTable from "views/integration_partner/form/partner_meal_plans/table"
 
 // Master Manage Corporate
 import CorporateTable from "views/manage_corporate/table"
@@ -133,13 +136,13 @@ import UserProfile from "views/user_profile/form"
 import Login from "./views/auth/login"
 import ForgotPassword from "views/auth/forgot_password"
 import OTP from "views/auth/otp"
-import OfficeTable from './views/branch_office/table';
-import OfficeForm from './views/branch_office/form';
-import DivisionForm from './views/division/form';
-import DivisionTable from './views/division/table';
-import DivisionHierarchy from './views/division/hierarchy';
-import JobTitleTable from './views/job-title/table';
-import JobTitleForm from './views/job-title/form';
+import OfficeTable from "./views/branch_office/table"
+import OfficeForm from "./views/branch_office/form"
+import DivisionForm from "./views/division/form"
+import DivisionTable from "./views/division/table"
+import DivisionHierarchy from "./views/division/hierarchy"
+import JobTitleTable from "./views/job-title/table"
+import JobTitleForm from "./views/job-title/form"
 
 // User Access Type
 import UserAccessTypeTable from "views/user_access_type/table"
@@ -147,7 +150,7 @@ import UserAccessTypeForm from "views/user_access_type/form"
 import ResetPassword from "views/reset_password/reset_password"
 
 // Master Standard Ancillary Fee
-import StandardAncillaryFee from './views/standard_ancillary_fee/standard_ancillary_fee';
+import StandardAncillaryFee from "./views/standard_ancillary_fee/standard_ancillary_fee"
 import StandardAncillaryFeeFlightForm from "views/standard_ancillary_fee/form/flight_form"
 import StandardAncillaryFeeHotelForm from "views/standard_ancillary_fee/form/hotel_form"
 import StandardAncillaryFeeOtherForm from "views/standard_ancillary_fee/form/other_form"
@@ -156,10 +159,8 @@ import StandardAncillaryFeeOtherForm from "views/standard_ancillary_fee/form/oth
 import SpecialDateTable from "views/special_date/table"
 import SpecialDateForm from "views/special_date/form"
 
-
 // Extranet BookTrip
 import BookTrip from "views/extranet/book_trip/book_trip"
-
 
 import Api from "config/api"
 
@@ -264,7 +265,13 @@ const DashboardRoutes = () => {
           <IntegrationPartnerTable />
         </Route>
         <Route path="/master/integration-partner/form/:id?">
-          <FeeTypeForm />
+          <IntegrationPartnerForm />
+        </Route>
+        <Route exact path="/master/integration-partner-meal-plans">
+          <IntegrationPartnerMealPlansTable />
+        </Route>
+        <Route exact path="/master/integration-payment-gateway">
+          <IntegrationPaymentGateway />
         </Route>
         <Route exact path="/master/flight-types">
           <FlightTypeTable />
@@ -490,7 +497,7 @@ const DashboardRoutes = () => {
         </Route>
         <Route path="/master/employee/form/:id?">
           <EmployeeForm />
-        </Route>        
+        </Route>
         {/* Division */}
         <Route exact path="/master/divisions">
           <DivisionTable />
@@ -513,7 +520,7 @@ const DashboardRoutes = () => {
           <OfficeTable />
         </Route>
         <Route path="/master/branch-offices/form/:id?">
-          <OfficeForm/>
+          <OfficeForm />
         </Route>
 
         {/* Master Invoice Email Setup */}
@@ -531,7 +538,7 @@ const DashboardRoutes = () => {
         <Route exact path="/master/setup-flight-commission/form/:id?">
           <FlightCommisionForm />
         </Route>
-        
+
         {/* Master Exhange Rate */}
         <Route exact path="/master/exchange-rate">
           <ExchageRateTable />
@@ -560,7 +567,6 @@ const DashboardRoutes = () => {
           <GeneralSetup />
         </Route>
 
-
         {/* User Access Type */}
         <Route exact path="/master/user-access-type">
           <UserAccessTypeTable />
@@ -581,7 +587,6 @@ const DashboardRoutes = () => {
         <Route exact path="/extranet/book-trip">
           <BookTrip />
         </Route>
-
       </Switch>
     </DashboardWrapper>
   )
@@ -605,15 +610,15 @@ const AuthRoutes = () => {
   )
 }
 
-const getAuth = async() => {
+const getAuth = async () => {
   try {
-    let auth = localStorage.getItem('ut')
-    let refresh_token = localStorage.getItem('rt')
-    if(!auth && refresh_token) {
+    let auth = localStorage.getItem("ut")
+    let refresh_token = localStorage.getItem("rt")
+    if (!auth && refresh_token) {
       let API = new Api()
       let res = await API.refreshToken(refresh_token)
     }
-  
+
     return auth
   } catch (err) {
     throw err
@@ -623,7 +628,7 @@ const getAuth = async() => {
 const App = () => {
   document.title = "Bayu Buana"
 
-  const[auth, setAuth] = useState(true)
+  const [auth, setAuth] = useState(true)
 
   useEffect(() => {
     const checkAuth = async () => {

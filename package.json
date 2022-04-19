@@ -83,7 +83,7 @@
     "preinstall": "npx only-allow yarn",
     "prebuild": "npx only-allow yarn",
     "prestart": "npx only-allow yarn && yarn install",
-    "start": "BROWSER=none react-scripts start",
+    "start": "react-scripts start",
     "build": "CI=false && GENERATE_SOURCEMAP=false react-scripts build",
     "start-build": "serve -s build",
     "test": "react-scripts test",
