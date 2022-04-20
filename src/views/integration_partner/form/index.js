@@ -5,15 +5,15 @@ import { Row, Col, Tab, Nav } from "react-bootstrap"
 import useQuery from "lib/query"
 import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
-import PartnerPaymentGateway from "./partner_payment_gateway/tables"
-import PartnerMealPlans from "./partner_meal_plans/table"
-import PartnertMessages from "./partner_messages/table"
+import PartnerPaymentGateway from "./partner_payment_gateway/table"
+// import PartnerMealPlans from "./partner_meal_plans/table"
+// import PartnertMessages from "./partner_messages/table"
 
 const backUrl = "/master/integration-partner"
 
 const IntegrationPartnerForm = (props) => {
   let dispatch = useDispatch()
-  const [tabKey, setTabKey] = useState("partner-meal-plans")
+  const [tabKey, setTabKey] = useState("partner-payment-gateway")
   const isView = useQuery().get("action") === "view"
 
   useEffect(async () => {
@@ -89,10 +89,10 @@ const IntegrationPartnerForm = (props) => {
               <PartnerPaymentGateway />
             </Tab.Pane>
             <Tab.Pane eventKey="partner-meal-plans">
-              <PartnerMealPlans />
+              {/* <PartnerMealPlans /> */}test
             </Tab.Pane>
             <Tab.Pane eventKey="partner-messages">
-              <PartnertMessages />
+              {/* <PartnertMessages /> */}test
             </Tab.Pane>
           </Tab.Content>
         </Col>

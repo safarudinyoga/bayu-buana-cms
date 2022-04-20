@@ -55,9 +55,9 @@ export default function IntegrationPartnerMessagesTable() {
     ],
     emptyTable: "No Meal Plans found",
     recordName: [
-      "meal_plan_type.meal_plan_type_name",
-      "meal_plan_type_code",
-      "meal_plan_type_name",
+      "message_type_name",
+      "message_type_code",
+      "message_type_name",
     ],
   })
 

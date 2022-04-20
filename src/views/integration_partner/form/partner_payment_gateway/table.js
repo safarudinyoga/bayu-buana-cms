@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react"
+import { useParams } from "react-router-dom"
 import BBDataTable from "components/table/bb-data-table"
 import { Card } from "react-bootstrap"
 import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
+import Form from "./form"
 
 export default function IntegrationPartnerPaymentGatewayTable() {
   let dispatch = useDispatch()
+  const param = useParams()
 
   useEffect(() => {
     dispatch(
@@ -29,32 +32,24 @@ export default function IntegrationPartnerPaymentGatewayTable() {
 
   let [params, setParams] = useState({
     isCheckbox: false,
+    createOnModal: true,
     title: "Integration Partner",
     titleModal: "Integration Partner",
-    baseRoute: "/master/integration-partner-meal-plans",
-    endpoint: "/master/payment-types",
-    deleteEndpoint:
-      "/master/batch-actions/delete/master/payment-types",
-    activationEndpoint:
-      "/master/batch-actions/activate/payment-types",
-    deactivationEndpoint:
-      "/master/batch-actions/deactivate/payment-types",
+    baseRoute: "/master/integration-payment-gateway/form",
+    endpoint: `/master/integration-partners/${param.id}/payment-gateways`,
+    deleteEndpoint: `/master//integration-partners/${param.id}/payment-gateways`,
     columns: [
       {
         title: "Payment Gateway Code",
-        data: "payment_type_code",
+        data: "channel_code",
       },
       {
         title: "Payment Gateway Name",
-        data: "payment_type_name",
+        data: "channel_code",
       },
     ],
     emptyTable: "No Payment Gateways found",
-    recordName: [
-      "meal_plan_type.meal_plan_type_name",
-      "meal_plan_type_code",
-      "meal_plan_type_name",
-    ],
+    recordName: ["channel_code", "channel_code"],
   })
 
   return (
@@ -62,7 +57,7 @@ export default function IntegrationPartnerPaymentGatewayTable() {
       <Card>
         <Card.Body>
           <h3 className="card-heading">Partner Payment Gateways</h3>
-          <BBDataTable {...params} onReset={onReset} />
+          <BBDataTable {...params} onReset={onReset} modalContent={Form} />
         </Card.Body>
       </Card>
     </>

@@ -121,10 +121,11 @@ import ExchageRateTable from "views/exchange_rate/table"
 import ExchangeRateForm from "views/exchange_rate/form"
 import ExchangeRateHistory from "views/exchange_rate/history"
 // Master Integration PartnerG
-import IntegrationPartnerTable from "views/integration_partner/table"
-import IntegrationPaymentGateway from "views/integration_partner/form/partner_payment_gateway/tables"
 import IntegrationPartnerForm from "views/integration_partner/form/index"
-import IntegrationPartnerMealPlansTable from "views/integration_partner/form/partner_meal_plans/table"
+import IntegrationPartnerTable from "views/integration_partner/table"
+import IntegrationPaymentGatewayTable from "views/integration_partner/form/partner_payment_gateway/table"
+import IntegrationPaymentGatewayForm from "views/integration_partner/form/partner_payment_gateway/form"
+// import IntegrationPartnerMealPlansTable from "views/integration_partner/form/partner_meal_plans/table"
 
 // Master Manage Corporate
 import CorporateTable from "views/manage_corporate/table"
@@ -267,12 +268,15 @@ const DashboardRoutes = () => {
         <Route path="/master/integration-partner/form/:id?">
           <IntegrationPartnerForm />
         </Route>
-        <Route exact path="/master/integration-partner-meal-plans">
-          <IntegrationPartnerMealPlansTable />
-        </Route>
         <Route exact path="/master/integration-payment-gateway">
-          <IntegrationPaymentGateway />
+          <IntegrationPaymentGatewayTable />
         </Route>
+        <Route exact path="/master/integration-payment-gateway/form/:id?">
+          <IntegrationPaymentGatewayForm />
+        </Route>
+        {/* <Route path="/master/integration-partner-meal-plans">
+          <IntegrationPartnerMealPlansTable />
+        </Route> */}
         <Route exact path="/master/flight-types">
           <FlightTypeTable />
         </Route>

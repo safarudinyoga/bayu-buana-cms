@@ -55,7 +55,7 @@ export default function IntegrationPartnerMealPlansTable() {
     ],
     emptyTable: "No Meal Plans found",
     recordName: [
-      "meal_plan_type.meal_plan_type_name",
+      "meal_plan_type.cabin_type_name",
       "meal_plan_type_code",
       "meal_plan_type_name",
     ],
