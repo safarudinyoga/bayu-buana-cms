@@ -98,13 +98,24 @@ function BookFlight() {
 							Important Notice: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
 						</Alert>
 				}
-        <Tabs defaultActiveKey="home" id="uncontrolled-tab-example" className="book-trip-tabs">
-					<Tab eventKey="home" title="Home" tabClassName="book-trip-tab-link">
+        <Tabs defaultActiveKey="select-flight" id="uncontrolled-tab-example" className="book-trip-tabs">
+					<Tab eventKey="select-flight" title="Select Flight" tabClassName="book-trip-tab-link">
 						haii
 					</Tab>
-					<Tab eventKey="profile" title="Profile">
+					<Tab eventKey="passengers" title="Passengers" tabClassName="book-trip-tab-link">
+						haii
 					</Tab>
-					<Tab eventKey="contact" title="Contact" disabled>
+					<Tab eventKey="select-seats" title="Select Seats" tabClassName="book-trip-tab-link">
+						haii
+					</Tab>
+					<Tab eventKey="add-ons" title="Add Ons" tabClassName="book-trip-tab-link">
+						haii
+					</Tab>
+					<Tab eventKey="review" title="Review" tabClassName="book-trip-tab-link">
+						haii
+					</Tab>
+					<Tab eventKey="confirmation" title="Confirmation" tabClassName="book-trip-tab-link">
+						haii
 					</Tab>
         </Tabs>
     </div>

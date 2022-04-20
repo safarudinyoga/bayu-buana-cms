@@ -5,9 +5,18 @@
     font-size: 13px;
 }
 .book-trip-tabs {
+    display: flex;
+    justify-content: space-between;
     background-color: #ECECEC;
     border-top-right-radius: 0 !important;
     border-top-left-radius: 0 !important;
+}
+.nav-tabs .book-trip-tab-link {
+    padding-left: 50px !important;
+    padding-right: 25px !important;
+    text-transform: uppercase;
+    font-weight: bold;
+    color: #4D4D4D;
 }
 .nav-tabs .book-trip-tab-link.active {
     border: 0 !important;
@@ -18,13 +27,33 @@
     border-top-right-radius: 0;
 }
 
-.nav-tabs .book-trip-tab-link.active::after {
-    display: inline;
-    content: '';
+/* .nav-tabs .book-trip-tab-link.active:before {
     width: 0;
     height: 0;
-    margin-left: 0;
-    border-top: 10px solid transparent;
-    border-bottom: 10px solid transparent; 
-    border-left:10px solid blue; 
+    border-top: 21px inset transparent;
+    border-bottom: 21px inset transparent;
+    border-left: 30px solid #fff;
+    position: absolute;
+    content: '';
+    margin-left: 111px;
+    top: 375px;
+    z-index: 3;
+} */
+
+.nav-tabs .book-trip-tab-link.active:after {
+    width: 0;
+    height: 0;
+    border-top: 21px inset transparent;
+    border-bottom: 21px inset transparent;
+    border-left: 30px solid #31394D;
+    position: absolute;
+    content: '';
+    margin-left: 25px;
+    top: 375px;
+    z-index: 4;
 }
+
+.nav-tabs .book-trip-tab-link.active:last-child:before,
+.nav-tabs .book-trip-tab-link.active:last-child:after {
+        border: none;
+    }
