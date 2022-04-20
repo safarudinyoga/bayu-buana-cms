@@ -87,7 +87,10 @@ function BookFlight() {
 						</Row>
 
 					</Col>
-					<Col sm={{span: 2, offset: 5}}></Col>
+					{/* Select currency and language */}
+					<Col sm={{span: 2, offset: 5}}>
+						<p>Select currency and language</p>
+					</Col>
 				</Row>
 				{
 					showInfo &&
