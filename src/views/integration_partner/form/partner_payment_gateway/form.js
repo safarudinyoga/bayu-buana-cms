@@ -24,11 +24,9 @@ function PaymentGatewayCreate(props) {
   useEffect(async () => {
     let formId = showCreateModal.id || props.id
 
-    let docTitle = "Edit Payment Gateway"
+    let docTitle = "Edit Partner Payment Gateways"
     if (!formId) {
-      docTitle = "Add Payment Gateway"
-    } else if (isView) {
-      docTitle = "Payment Gateway Details"
+      docTitle = "Create Partner Payment Gateways"
     }
 
     dispatch(setModalTitle(docTitle))

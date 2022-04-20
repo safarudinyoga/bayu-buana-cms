@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react"
+import { useParams } from "react-router-dom"
 import BBDataTable from "components/table/bb-data-table"
 import { Card } from "react-bootstrap"
 import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
+import Form from "./form"
 
 export default function IntegrationPartnerMealPlansTable() {
-  let dispatch = useDispatch()
+  const dispatch = useDispatch()
+  const param = useParams()
 
   useEffect(() => {
     dispatch(
@@ -29,36 +32,29 @@ export default function IntegrationPartnerMealPlansTable() {
 
   let [params, setParams] = useState({
     isCheckbox: false,
-    title: "Integration Partner",
-    titleModal: "Integration Partner",
-    baseRoute: "/master/integration-partner-meal-plans",
-    endpoint: "/master/integration-partner-meal-plan-types",
-    deleteEndpoint:
-      "/master/batch-actions/delete/master/integration-partner-meal-plan-types",
-    activationEndpoint:
-      "/master/batch-actions/activate/integration-partner-meal-plan-types",
-    deactivationEndpoint:
-      "/master/batch-actions/deactivate/integration-partner-meal-plan-types",
+    showAdvancedOptions: false,
+    createOnModal: true,
+    title: "Partner Meal Plans",
+    titleModal: "Partner Meal Plans",
+    baseRoute: "/master/integration-partner-meal-plans/form",
+    endpoint: `/master/integration-partners/${param.id}/meal-plans`,
+    deleteEndpoint: `/master/integration-partners/${param.id}/meal-plans/`,
     columns: [
       {
-        title: "Meal Plan",
-        data: "meal_plan_type.cabin_type_name",
+        title: "Meal Plans",
+        data: "id",
       },
       {
-        title: "Partner Meal Plan Code",
-        data: "meal_plan_type_code",
+        title: "Partner Meal Plans Code",
+        data: "agent_id",
       },
       {
-        title: "Partner Meal Plan Name",
-        data: "meal_plan_type_name",
+        title: "Partner Meal Plans Name",
+        data: "agent",
       },
     ],
     emptyTable: "No Meal Plans found",
-    recordName: [
-      "meal_plan_type.cabin_type_name",
-      "meal_plan_type_code",
-      "meal_plan_type_name",
-    ],
+    recordName: ["id", "agent_id", "agent"],
   })
 
   return (
@@ -66,7 +62,8 @@ export default function IntegrationPartnerMealPlansTable() {
       <Card>
         <Card.Body>
           <h3 className="card-heading">Partner Meal Plans</h3>
-          <BBDataTable {...params} onReset={onReset} />
+          <BBDataTable {...params} onReset={onReset} modalContent={Form} />
+          {/* test */}
         </Card.Body>
       </Card>
     </>

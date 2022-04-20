@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react"
+import { useParams } from "react-router-dom"
 import BBDataTable from "components/table/bb-data-table"
 import { Card } from "react-bootstrap"
 import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
+import Form from "./form"
 
-export default function IntegrationPartnerMessagesTable() {
-  let dispatch = useDispatch()
+export default function IntegrationMessageTable() {
+  const dispatch = useDispatch()
+  const param = useParams()
 
   useEffect(() => {
     dispatch(
@@ -29,44 +32,38 @@ export default function IntegrationPartnerMessagesTable() {
 
   let [params, setParams] = useState({
     isCheckbox: false,
-    title: "Integration Partner",
-    titleModal: "Integration Partner",
-    baseRoute: "/master/integration-partner-meal-plans",
-    endpoint: "/master/message-types",
-    deleteEndpoint:
-      "/master/batch-actions/delete/master/message-types",
-    activationEndpoint:
-      "/master/batch-actions/activate/message-types",
-    deactivationEndpoint:
-      "/master/batch-actions/deactivate/message-types",
+    showAdvancedOptions: false,
+    createOnModal: true,
+    title: "Partner Message",
+    titleModal: "Partner Message",
+    baseRoute: "/master/integration-partner-messages/form",
+    endpoint: `/master/integration-partners/${param.id}/messages`,
+    deleteEndpoint: `/master/integration-partners/${param.id}/messages/`,
     columns: [
       {
         title: "Messages",
-        data: "message_type_name",
+        data: "message_name",
       },
       {
         title: "Partner Messages Code",
-        data: "message_type_code",
+        data: "message_id",
       },
       {
         title: "Partner Messages Name",
-        data: "message_type_name",
+        data: "message_name",
       },
     ],
     emptyTable: "No Meal Plans found",
-    recordName: [
-      "message_type_name",
-      "message_type_code",
-      "message_type_name",
-    ],
+    recordName: ["message_name", "message_id", "message_name"],
   })
 
   return (
     <>
       <Card>
         <Card.Body>
-          <h3 className="card-heading">Partner Messages</h3>
-          <BBDataTable {...params} onReset={onReset} />
+          <h3 className="card-heading">Partner Meal Plans</h3>
+          <BBDataTable {...params} onReset={onReset} modalContent={Form} />
+          {/* test */}
         </Card.Body>
       </Card>
     </>

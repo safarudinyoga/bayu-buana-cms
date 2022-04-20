@@ -6,8 +6,8 @@ import useQuery from "lib/query"
 import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
 import PartnerPaymentGateway from "./partner_payment_gateway/table"
-// import PartnerMealPlans from "./partner_meal_plans/table"
-// import PartnertMessages from "./partner_messages/table"
+import PartnerMealPlans from "./partner_meal_plans/table"
+import PartnertMessages from "./partner_messages/table"
 
 const backUrl = "/master/integration-partner"
 
@@ -31,11 +31,11 @@ const IntegrationPartnerForm = (props) => {
         title: docTitle,
         breadcrumbs: [
           {
-            text: "User & Access Management",
+            text: "Setup and Configuration",
           },
           {
             link: backUrl,
-            text: "User Access Type",
+            text: "Integration Partner",
           },
           {
             text: docTitle,
@@ -89,10 +89,10 @@ const IntegrationPartnerForm = (props) => {
               <PartnerPaymentGateway />
             </Tab.Pane>
             <Tab.Pane eventKey="partner-meal-plans">
-              {/* <PartnerMealPlans /> */}test
+              {/* <PartnerMealPlans /> */}
             </Tab.Pane>
             <Tab.Pane eventKey="partner-messages">
-              {/* <PartnertMessages /> */}test
+              {/* <PartnertMessages /> */}
             </Tab.Pane>
           </Tab.Content>
         </Col>
