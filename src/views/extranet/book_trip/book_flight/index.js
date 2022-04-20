@@ -78,7 +78,7 @@ function BookFlight() {
 						<p>{data.origin.city.toUpperCase()} ({data.origin.code}) TO {data.destination.city.toUpperCase()} ({data.destination.code}) - {data.trip}</p>
 						<Row>
 							<Col sm={6}>
-								<p>{data.departure_date} - {data.return_date}</p>
+								<p>{data.departure_date.toUpperCase()} - {data.return_date.toUpperCase()}</p>
 							</Col>
 							<Col sm={2}> 2 Adults</Col>
 							<Col sm={4}>
@@ -95,7 +95,7 @@ function BookFlight() {
 							Important Notice: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
 						</Alert>
 				}
-        <Tabs defaultActiveKey="profile" id="uncontrolled-tab-example" className="book-trip-tabs">
+        <Tabs defaultActiveKey="home" id="uncontrolled-tab-example" className="book-trip-tabs">
 					<Tab eventKey="home" title="Home">
 						haii
 					</Tab>
