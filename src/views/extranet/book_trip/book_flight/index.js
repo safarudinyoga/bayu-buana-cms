@@ -99,7 +99,7 @@ function BookFlight() {
 						</Alert>
 				}
         <Tabs defaultActiveKey="home" id="uncontrolled-tab-example" className="book-trip-tabs">
-					<Tab eventKey="home" title="Home">
+					<Tab eventKey="home" title="Home" tabClassName="book-trip-tab-link">
 						haii
 					</Tab>
 					<Tab eventKey="profile" title="Profile">

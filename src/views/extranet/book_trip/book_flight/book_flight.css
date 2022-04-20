@@ -9,3 +9,22 @@
     border-top-right-radius: 0 !important;
     border-top-left-radius: 0 !important;
 }
+.nav-tabs .book-trip-tab-link.active {
+    border: 0 !important;
+    background-color: #31394D !important;
+    color: #FDC300 !important;
+    box-shadow: none !important;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+.nav-tabs .book-trip-tab-link.active::after {
+    display: inline;
+    content: '';
+    width: 0;
+    height: 0;
+    margin-left: 0;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent; 
+    border-left:10px solid blue; 
+}
