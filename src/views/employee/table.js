@@ -277,6 +277,13 @@ export default function EmployeeTable() {
       {
         title: "Job Title",
         data: "job_title.job_title_name",
+        render: (data) => {
+          if (data === undefined) {
+            return ""
+          } else {
+            return data
+          }
+        },
       },
       {
         title: "",
