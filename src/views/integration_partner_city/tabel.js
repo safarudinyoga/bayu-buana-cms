@@ -16,6 +16,8 @@ export default function IntegrationPartnerCitiesTable() {
   let [params, setParams] = useState({
     isCheckbox: false,
     createOnModal: true,
+    showAdvancedOptions: false,
+    hideDetail: true,
     title: "Integration Partner",
     titleModal: "Integration Partner Cities",
     baseRoute: "/master/integration-partner-cities/form",

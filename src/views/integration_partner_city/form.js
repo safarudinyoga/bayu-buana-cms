@@ -23,9 +23,9 @@ function ExchangeRateCreate(props) {
   useEffect(async () => {
     let formId = showCreateModal.id || props.id
 
-    let docTitle = "Edit Exchange Rate"
+    let docTitle = "EDIT PARTNER CITIES"
     if (!formId) {
-      docTitle = "New Partner Cities"
+      docTitle = "CREATE PARTNER CITIES"
     } else if (isView) {
       docTitle = "Exchange Rate Details"
     }
@@ -37,9 +37,9 @@ function ExchangeRateCreate(props) {
         let {data} = await API.get(endpoint + "/" + formId)
         setFormValues({
           ...data,
-          from_currency_id: {
-            value: data.from_currency.id,
-            label: data.from_currency.currency_name,
+          city_name: {
+            value: data.city_name,
+            label: data.city_name,
           },
           to_currency_id: {
             value: data.to_currency.id,
@@ -65,10 +65,9 @@ function ExchangeRateCreate(props) {
   }, [showCreateModal.id, formValues])
 
   const initialValues = {
-		from_currency_id: "",
-		to_currency_id: "",
-		multiply_rate: "",
-		is_automatic: false,
+		city: "",
+		city_code:"",
+    city_name:""
 	}
 
   const checkExchangeRate = async (to_currency_id, from_currency_id) => {
@@ -97,26 +96,22 @@ function ExchangeRateCreate(props) {
     })
   })
 	const validationSchema =  Yup.object().shape({
-    from_currency_id: Yup.object()
-      .required("From Currency is required.")
+    city: Yup.object()
+      .required("City is required..")
       .pairCurrency('to_currency_id', 'From Currency and To Currency must be different.')
-      .uniqueExchangeRate('Exchange rate already exists')
+      .uniqueExchangeRate('City  already exists')
       ,
-    to_currency_id: Yup.object()
-      .required("To Currency is required.")
-      .pairCurrency('from_currency_id', 'From Currency and To Currency must be different.')
-      .uniqueExchangeRate('Exchange rate already exists.')
-      ,
-    multiply_rate: Yup.string()
-      .matches(/^\d{0,15}(\.\d{0,8})?$/, "maximum value: 15 digits with 8 decimal digits")
-      .required("Multiply Rate is required."),
+    city_code: Yup.string()
+      .required("Partner City Code is required"),
+    city_name: Yup.string()
+      .required("Partner City Name is required"),
   })
 
 	const onSubmit = async (values, a) => {
 		try {
       let form = {
         conversion_rate_type: "C",
-        from_currency_id: values.from_currency_id.value,
+        city_name: values.city_name.value,
         is_automatic: values.is_automatic,
         multiply_rate: parseFloat(values.multiply_rate),
         to_currency_id: values.to_currency_id.value,
@@ -170,12 +165,12 @@ function ExchangeRateCreate(props) {
                 control="selectAsync"
                 required="label-required"
                 label="City"
-                name="from_currency_id"
+                name="city"
                 placeholder={"Please choose"}
                 url={`master/cities`}
                 fieldName={"city_name"}
                 onChange={(v) => {
-                  setFieldValue("from_currency_id", v)
+                  setFieldValue("city_name", v)
                 }}
                 style={{ maxWidth: 250 }}
                 size={formSize}
@@ -186,7 +181,7 @@ function ExchangeRateCreate(props) {
                 control="input"
                 required="label-required"
                 label="Partner City Code"
-                name="multiply_rate"
+                name="city_code"
                 style={{ maxWidth: 250 }}
                 size={formSize}
                 disabled={isView || loading}
@@ -195,12 +190,12 @@ function ExchangeRateCreate(props) {
                 control="input"
                 required="label-required"
                 label="Partner City Name"
-                name="multiply_rate"
+                name="city_name"
                 style={{ maxWidth: 250 }}
                 size={formSize}
                 disabled={isView || loading}
               />
-
+             
               
               {!props.hideButton && <div
                 style={{
