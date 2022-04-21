@@ -6,7 +6,7 @@ import { withRouter, useHistory } from "react-router"
 import FormInputControl from "components/form/input-control"
 import { ReactSVG } from "react-svg"
 import FormikControl from "../../../components/formik/formikControl"
-import { Row, Col, Tab, Nav, Card, Button,  } from "react-bootstrap"
+import { Row, Col, Tab, Nav, Card, Button, } from "react-bootstrap"
 import { setUIParams } from "redux/ui-store"
 import useQuery from "lib/query"
 import { Form, Formik } from "formik"
@@ -37,7 +37,7 @@ function FormIntegrationPartner(props) {
     try {
       let res = await api.get(endpoint + "/" + formId)
       setForm(res.data)
-    } catch (e) {}
+    } catch (e) { }
     setLoading(false)
   }, [])
   useEffect(() => {
@@ -47,7 +47,7 @@ function FormIntegrationPartner(props) {
     setId(props.match.params.id)
   }, [props.match.params.id])
 
-  
+
   const handleSelectTab = async (key) => {
     setTabKey(key)
   }
@@ -65,13 +65,13 @@ function FormIntegrationPartner(props) {
   return (
     <Tab.Container activeKey={tabKey} onSelect={handleSelectTab}>
       <Row>
-        
+
         <Col sm={9}>
           <Tab.Content>
             <Tab.Pane eventKey="partner-information">
               <Formik
->
-                {(formik) => (
+              >
+                {({ setFieldValue }) => (
                   <Form >
                     <Card>
                       <Card.Body>
@@ -114,45 +114,45 @@ function FormIntegrationPartner(props) {
                           name="status"
                           size={formSize}
                           value={form.status}
-                          
+
                           disabled={isView || loading}
                         />
                       </Card.Body>
                     </Card>
                     <div
-            className="mb-5 ml-1 row justify-content-md-start justify-content-center"
-            style={{
-              marginBottom: 30,
-              marginTop: 30,
-              display: "flex",
-            }}
-            >
-                    {isView ? (
-                <>
-                  <Button variant="secondary" onClick={() => history.goBack()}>
-                    BACK
-                  </Button>
-                </>
-              ) : (
-                <>
-                  <Button
-                    variant="primary"
-                    type="submit"
-                    style={{ marginRight: 15 }}
-                  >
-                    {props.match.params.id ? "SAVE" : "SAVE & NEXT"}
-                  </Button>
-                  <Button variant="secondary" onClick={() => history.goBack()}>
-                    CANCEL
-                  </Button>
-                </>
-              )}
-              </div>
+                      className="mb-5 ml-1 row justify-content-md-start justify-content-center"
+                      style={{
+                        marginBottom: 30,
+                        marginTop: 30,
+                        display: "flex",
+                      }}
+                    >
+                      {isView ? (
+                        <>
+                          <Button variant="secondary" onClick={() => history.goBack()}>
+                            BACK
+                          </Button>
+                        </>
+                      ) : (
+                        <>
+                          <Button
+                            variant="primary"
+                            type="submit"
+                            style={{ marginRight: 15 }}
+                          >
+                            {props.match.params.id ? "SAVE" : "SAVE & NEXT"}
+                          </Button>
+                          <Button variant="secondary" onClick={() => history.goBack()}>
+                            CANCEL
+                          </Button>
+                        </>
+                      )}
+                    </div>
                   </Form>
                 )}
               </Formik>
 
-              
+
             </Tab.Pane>
             <Tab.Pane eventKey="partner-cities">
               {/* <IdentityRule

@@ -1,7 +1,7 @@
 import BBDataTable from "components/table/bb-data-table"
 import { Card} from "react-bootstrap"
 import React, { useState } from 'react'
-import DeleteModal from "./form/form-delete"
+import DeleteModal from "./form-delete"
 
 
 
@@ -22,6 +22,7 @@ export default function IntegrationPartnerCabinTypesTable() {
     deleteEndpoint: "/master/batch-actions/delete/master/integration-partner-cabin-types",
     activationEndpoint: "/master/batch-actions/activate/integration-partner-cabin-types",
     deactivationEndpoint: "/master/batch-actions/deactivate/integration-partner-cabin-types",
+    
     columns: [
       {
         title: "Cabin",
@@ -48,12 +49,11 @@ export default function IntegrationPartnerCabinTypesTable() {
 
   return <>
    
-              <Card>
-                <Card.Body>
-                  <h3 className="card-heading">Partner Cabins</h3>
+              
+                  
                   <BBDataTable {...params} onReset={onReset} modalContent={DeleteModal} />
-                </Card.Body>
-              </Card>
+               
+             
            
   </>
 
