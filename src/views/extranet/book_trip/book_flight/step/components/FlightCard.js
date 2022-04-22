@@ -73,7 +73,24 @@ function FlightCard() {
 						<a>Show Details</a>
 					</Col>
 				</Row>
+				
 				<Row>
+					<Col sm={7} className={"d-flex justify-content-between align-items-center"}>
+						<div>
+							<p>02:10</p>
+							<p>CGK</p>
+							<p>12 Dec</p>
+						</div>
+						<div>
+							
+						</div>
+						<div>
+							<p>10:15</p>
+							<p>HKG</p>
+							<p>12 Dec</p>
+						</div>
+					</Col>
+					<Col sm={5}></Col>
 				</Row>
 				</Col>
 				<Col sm={2} onClick={() => setShowDetail(!showDetail)} className="flight-card-right d-flex flex-column align-content-center align-items-center">
