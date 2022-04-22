@@ -1,30 +1,30 @@
 .notice-alert {
-    background-color: #FFF2D8;
-    color: #4d4d4d;
-    border: 1px solid #A3A3A394;
-    font-size: 13px;
+	background-color: #FFF2D8;
+	color: #4d4d4d;
+	border: 1px solid #A3A3A394;
+	font-size: 13px;
 }
 .book-trip-tabs {
-    display: flex;
-    justify-content: space-between;
-    background-color: #ECECEC;
-    border-top-right-radius: 0 !important;
-    border-top-left-radius: 0 !important;
+	display: flex;
+	justify-content: space-between;
+	background-color: #ECECEC;
+	border-top-right-radius: 0 !important;
+	border-top-left-radius: 0 !important;
 }
 .nav-tabs .book-trip-tab-link {
-    padding-left: 50px !important;
-    padding-right: 25px !important;
-    text-transform: uppercase;
-    font-weight: bold;
-    color: #4D4D4D;
+	padding-left: 50px !important;
+	padding-right: 25px !important;
+	text-transform: uppercase;
+	font-weight: bold;
+	color: #4D4D4D;
 }
 .nav-tabs .book-trip-tab-link.active {
-    border: 0 !important;
-    background-color: #31394D !important;
-    color: #FDC300 !important;
-    box-shadow: none !important;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
+	border: 0 !important;
+	background-color: #31394D !important;
+	color: #FDC300 !important;
+	box-shadow: none !important;
+	border-top-left-radius: 0;
+	border-top-right-radius: 0;
 }
 
 /* .nav-tabs .book-trip-tab-link.active:before {
@@ -41,19 +41,19 @@
 } */
 
 .nav-tabs .book-trip-tab-link.active:after {
-    width: 0;
-    height: 0;
-    border-top: 21px inset transparent;
-    border-bottom: 21px inset transparent;
-    border-left: 30px solid #31394D;
-    position: absolute;
-    content: '';
-    margin-left: 25px;
-    top: 375px;
-    z-index: 4;
+	width: 0;
+	height: 0;
+	border-top: 21px inset transparent;
+	border-bottom: 21px inset transparent;
+	border-left: 30px solid #31394D;
+	position: absolute;
+	content: '';
+	margin-left: 25px;
+	top: 375px;
+	z-index: 4;
 }
 
 .nav-tabs .book-trip-tab-link.active:last-child:before,
 .nav-tabs .book-trip-tab-link.active:last-child:after {
-        border: none;
-    }
+	border: none;
+}
