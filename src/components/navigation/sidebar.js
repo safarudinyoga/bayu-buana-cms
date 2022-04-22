@@ -85,7 +85,9 @@ class Sidebar extends Component {
     })
 
     return (
-      <aside className="main-sidebar sidebar-dark-primary elevation-4">
+      <aside className="main-sidebar sidebar-dark-primary elevation-4"
+        // {extranet ? "extranet-sidebar" : ""}
+      >
         <div className="sidebar"
         onMouseEnter={this.handleHoverOn}
         onMouseLeave={this.handleHoverOff}>
@@ -115,6 +117,51 @@ class Sidebar extends Component {
                   </li>
                 </ul>
               </li>
+              {/* <li className="nav-item parent-menu">
+                <Link to="#" className="nav-link">
+                  <img src="/img/icons/home.svg" alt="icon users" />
+                  <p>
+                    Dashboard
+                  </p>
+                </Link>
+              </li>
+              <li className="nav-item parent-menu">
+                <Link to="#" className="nav-link">
+                  <img src="/img/icons/exchange-rate.svg" alt="icon users" />
+                  <p>
+                    Travel Management
+                    <i className="right fas fa-angle-right"></i>
+                  </p>
+                </Link>
+                <ul className="nav nav-treeview">
+                  <li className="nav-item">
+                    <Link to="/extranet/book-trip" className="nav-link">
+                      <p>Book Trip</p>
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link to="#" className="nav-link">
+                      <p>Manage Bookings</p>
+                    </Link>
+                  </li>
+                </ul>
+              </li>
+              <li className="nav-item parent-menu">
+                <Link to="#" className="nav-link">
+                  <img src="/img/icons/exchange-rate.svg" alt="icon users" />
+                  <p>
+                    Reports
+                    <i className="right fas fa-angle-right"></i>
+                  </p>
+                </Link>
+                <ul className="nav nav-treeview">
+                  <li className="nav-item">
+                    <Link to="#" className="nav-link">
+                      <p>Invoice Reports</p>
+                    </Link>
+                  </li>
+                </ul>
+              </li> */}
             </ul>
           </nav>
         </div>
