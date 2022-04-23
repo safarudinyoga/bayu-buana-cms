@@ -1,8 +1,10 @@
-import { Alert, Col, Tab, Tabs, Row, Button } from 'react-bootstrap'
+import { Alert, Col, Tab, Tabs, Row, Button, Form } from 'react-bootstrap'
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { setUIParams } from 'redux/ui-store'
+import Api from "config/api"
 import './book_flight.css'
+import Select, {components, StylesConfig} from "react-select"
 
 function BookFlight() {
   const dispatch = useDispatch()
@@ -26,26 +28,77 @@ function BookFlight() {
 		
 	})
 	const [showInfo, setShowInfo] = useState(true)
+	let api = new Api()
+	const [selectLanguage, setSelectLanguage] = useState([])
+	const [selectCurrencies, setSelectCurrencies] = useState([])
 
-  useEffect(() => {
-    dispatch(
-      setUIParams({
-        title: "Book Flight",
-        breadcrumbs: [
-          {
-            text: "Travel Management",
-          },
-          {
-            text: "Book Trip",
-            link: "/extranet/book-trip"
-          },
-          {
-            text: "Book Flight",
-          },
-        ],
-      }),
-    )
-  }, [])
+	// const image = (backgroundImage = "") => ({
+	// 	alignItems: 'center',
+	// 	display: 'flex',
+	  
+	// 	':before': {
+	// 	  backgroundImage: url(backgroundImage),
+	// 	  borderRadius: 10,
+	// 	  content: '" "',
+	// 	  display: 'block',
+	// 	  marginRight: 8,
+	// 	  height: 10,
+	// 	  width: 10,
+	// 	},
+	//   });
+
+	useEffect(async () => {
+		try {
+		  let res = await api.get("/master/languages?size=10")
+		  console.log(res, "hahahah")
+		  const options = []
+		  res.data.items.forEach((data) => {
+			options.push({
+			  image: data.language_asset.multimedia_description.url,
+			  label: data.language_code,
+			  value: data.language_name,
+			})
+			setSelectLanguage(options)
+		  })
+		  console.log(selectLanguage, "cobaaak")
+		} catch (e) {}
+	}, [])
+
+	useEffect(async () => {
+		try {
+		  let res = await api.get("/master/currencies?size=10")
+		  console.log(res, "ehheheh")
+		  const options = []
+		  res.data.items.forEach((data) => {
+			options.push({
+			  label: data.currency_code,
+			  value: data.currency_name,
+			})
+			setSelectCurrencies(options)
+		  })
+		} catch (e) {}
+	}, [])
+
+	
+	useEffect(() => {
+		dispatch(
+		setUIParams({
+			title: "Book Flight",
+			breadcrumbs: [
+			{
+				text: "Travel Management",
+			},
+			{
+				text: "Book Trip",
+				link: "/extranet/book-trip"
+			},
+			{
+				text: "Book Flight",
+			},
+			],
+		}),
+		)
+	}, [])
 
 	useEffect(async() => {
 		try {
@@ -89,7 +142,30 @@ function BookFlight() {
 					</Col>
 					{/* Select currency and language */}
 					<Col sm={{span: 2, offset: 5}}>
-						<p>Select currency and language</p>
+						<Row>
+							<Col>
+							<Select
+								options={selectLanguage}
+								label="Language"
+								className="selectLanguage"
+								theme={(theme) => ({
+								...theme,
+								borderRadius: 0,
+								})}
+							/> 
+							</Col>
+							<Col>
+							<Select
+								options={selectCurrencies}
+								label="Currency"
+								className="selectCurrencies"
+								theme={(theme) => ({
+								...theme,
+								borderRadius: 0,
+								})}
+							/>
+							</Col>
+						</Row>
 					</Col>
 				</Row>
 				{
