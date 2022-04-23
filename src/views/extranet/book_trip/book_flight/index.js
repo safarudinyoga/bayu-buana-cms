@@ -5,10 +5,11 @@ import { setUIParams } from 'redux/ui-store'
 import Api from "config/api"
 import './book_flight.css'
 import Select, {components, StylesConfig} from "react-select"
+import FlightList from './step/select-flight'
 
 function BookFlight() {
   const dispatch = useDispatch()
-	const [data, setData] = useState({
+	const [flight, setFLight] = useState({
 		origin: {
 			city: "Jakarta",
 			code: "JKT"
@@ -102,7 +103,7 @@ function BookFlight() {
 
 	useEffect(async() => {
 		try {
-			setData({
+			setFLight({
 				origin: {
 					city: "Jakarta",
 					code: "JKT"
@@ -128,10 +129,10 @@ function BookFlight() {
     <div className='mt-2'>
 				<Row>
 					<Col sm={5}>
-						<p>{data.origin.city.toUpperCase()} ({data.origin.code}) TO {data.destination.city.toUpperCase()} ({data.destination.code}) - {data.trip}</p>
+						<p>{flight.origin.city.toUpperCase()} ({flight.origin.code}) TO {flight.destination.city.toUpperCase()} ({flight.destination.code}) - {flight.trip}</p>
 						<Row>
 							<Col sm={6}>
-								<p>{data.departure_date.toUpperCase()} - {data.return_date.toUpperCase()}</p>
+								<p>{flight.departure_date.toUpperCase()} - {flight.return_date.toUpperCase()}</p>
 							</Col>
 							<Col sm={2}> 2 Adults</Col>
 							<Col sm={4}>
@@ -176,7 +177,7 @@ function BookFlight() {
 				}
         <Tabs defaultActiveKey="select-flight" id="uncontrolled-tab-example" className="book-trip-tabs">
 					<Tab eventKey="select-flight" title="Select Flight" tabClassName="book-trip-tab-link">
-						haii
+						<FlightList/>
 					</Tab>
 					<Tab eventKey="passengers" title="Passengers" tabClassName="book-trip-tab-link">
 						haii
