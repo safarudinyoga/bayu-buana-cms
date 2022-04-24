@@ -55,6 +55,15 @@
 
 .nav-tabs .book-trip-tab-link.active:last-child:before,
 .nav-tabs .book-trip-tab-link.active:last-child:after {
+        border: none;
+    }
+
+.css-x19aeh-control {
+    border-width: 0 !important;
+}
+
+.css-1okebmr-indicatorSeparator {
+    width: 0 !important;
 	border: none;
 }
 
