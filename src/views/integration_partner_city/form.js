@@ -34,18 +34,8 @@ function ExchangeRateCreate(props) {
 
     if(formId) {
       try {
-        let {data} = await API.get(endpoint + "/" + formId)
-        setFormValues({
-          ...data,
-          city_name: {
-            value: data.city_name,
-            label: data.city_name,
-          },
-          to_currency_id: {
-            value: data.to_currency.id,
-            label: data.to_currency.currency_name,
-          }
-        })
+        let res = await API.get(endpoint + "/" + formId)
+        setFormValues(res.data)
       } catch(e) {
         console.log(e)
       }
@@ -112,11 +102,8 @@ function ExchangeRateCreate(props) {
       let form = {
         conversion_rate_type: "C",
         city_name: values.city_name.value,
-        is_automatic: values.is_automatic,
-        multiply_rate: parseFloat(values.multiply_rate),
-        to_currency_id: values.to_currency_id.value,
-        valid_from: new Date(),
-        valid_to: new Date(),
+        city_code: values.city_code.value,
+       
       }
       let res = await API.putOrPost("/master/currency-conversions", id, form)
       
@@ -182,6 +169,12 @@ function ExchangeRateCreate(props) {
                 required="label-required"
                 label="Partner City Code"
                 name="city_code"
+                // onChange={(e) =>
+                //   setFieldValue({
+                //     ...formValues,
+                //     city_code: e.target.value,
+                //   })
+                // }
                 style={{ maxWidth: 250 }}
                 size={formSize}
                 disabled={isView || loading}

@@ -28,20 +28,20 @@ export default function IntegrationPartnerCitiesTable() {
     columns: [
       {
         title: "City",
-        data: "city.city_name"
+        data: "city_name"
       },
       {
         title: "Partner City Code",
-        data: "integration_partner_city.city_code"
+        data: "city_code"
       },
       {
         title: "Partner City Name",
-        data: "integration_partner_city.city_name"
+        data: "city_name"
       },
        
     ],
     emptyTable: "No partner cities found",
-    recordName: ["city.city_name", "integration_partner_city.city_code", "integration_partner_city.city_name"],
+    recordName: ["city.city_name", "integration_partner_city.city_code", "integration-partner-city.city_name"],
   })
 
   return <><Card>
