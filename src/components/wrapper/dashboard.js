@@ -55,7 +55,7 @@ const DashboardWrapper = (props) => {
       <Sidebar />
       <div className="content-wrapper">
         <div className="container-fluid pb-5 pl-3">
-          <Breadcrumb />
+          <Breadcrumb location={history.location.pathname} />
           <section className="content">{props.children}</section>
         </div>
         <div className="footer text-center text-md-left">

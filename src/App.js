@@ -159,6 +159,7 @@ import SpecialDateForm from "views/special_date/form"
 
 // Extranet BookTrip
 import BookTrip from "views/extranet/book_trip/book_trip"
+import BookFlight from "views/extranet/book_trip/book_flight"
 
 
 import Api from "config/api"
@@ -580,6 +581,9 @@ const DashboardRoutes = () => {
         {/* Extranet Book Trip */}
         <Route exact path="/extranet/book-trip">
           <BookTrip />
+        </Route>
+        <Route path="/extranet/book-trip/book-flight">
+          <BookFlight />
         </Route>
 
       </Switch>
