@@ -13,7 +13,8 @@
   border-top-right-radius: 0;
   box-shadow: 2px 6px 6px #00000029 !important;
   background-color: #e5e5ea !important;
-  color: #333;
+  color: #333333 !important;
+  font-weight: bold;
 }
 
 .flight-book-tabs .nav-link.active {
