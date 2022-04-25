@@ -60,37 +60,10 @@ function ExchangeRateCreate(props) {
     city_name:""
 	}
 
-  const checkExchangeRate = async (to_currency_id, from_currency_id) => {
-    let filter = encodeURIComponent(JSON.stringify([["to_currency_id","=",to_currency_id], ["AND"], ["from_currency_id", "=", from_currency_id]]))
-    let res = await API.get(`/master/currency-conversions?filters=${filter}`)
-    return res.data.items.length === 0
-  }
-
-  Yup.addMethod(Yup.object, 'pairCurrency', function(propertyPath, message) {
-    return this.test('unique', message, function(field) {
-      if (field && this.parent[propertyPath]) {
-        return field.value !== this.parent[propertyPath]?.value
-      } else {
-        return true
-      }
-    })
-  })
-  Yup.addMethod(Yup.object, 'uniqueExchangeRate', function(message) {
-    return this.test('unique', message, function(field, ctx) {
-      let parent = ctx.parent
-      if(parent.to_currency_id?.value && parent.from_currency_id?.value) {
-        return checkExchangeRate(parent.to_currency_id.value, parent.from_currency_id.value)
-      } else {
-        return true
-      }
-    })
-  })
+  
 	const validationSchema =  Yup.object().shape({
     city: Yup.object()
-      .required("City is required..")
-      .pairCurrency('to_currency_id', 'From Currency and To Currency must be different.')
-      .uniqueExchangeRate('City  already exists')
-      ,
+      .required("City is required.."),
     city_code: Yup.string()
       .required("Partner City Code is required"),
     city_name: Yup.string()
@@ -100,17 +73,17 @@ function ExchangeRateCreate(props) {
 	const onSubmit = async (values, a) => {
 		try {
       let form = {
-        conversion_rate_type: "C",
+       
         city_name: values.city_name.value,
         city_code: values.city_code.value,
        
       }
-      let res = await API.putOrPost("/master/currency-conversions", id, form)
+      let res = await API.putOrPost("/master/integration-partner-cities", id, form)
       
       dispatch(setCreateModal({show: false, id: null, disabled_form: false}))
       dispatch(
 				setAlert({
-				  message: `Record 'From Currency: ${form.from_currency_id} and To Currency: ${form.to_currency_id}' has been successfully saved.`,
+				  message: `Record 'From Currency: ${form.city_code} and To Currency: ${form.city_name}' has been successfully saved.`,
 				}),
       )
 		} catch(e) {
@@ -148,7 +121,7 @@ function ExchangeRateCreate(props) {
             values,
 					}) => (
 						<Form onSubmit={handleSubmit} className="ml-2">
-              <FormikControl
+              {/* <FormikControl
                 control="selectAsync"
                 required="label-required"
                 label="City"
@@ -162,7 +135,7 @@ function ExchangeRateCreate(props) {
                 style={{ maxWidth: 250 }}
                 size={formSize}
                 isDisabled={isView || loading}
-              />
+              /> */}
 
               <FormikControl
                 control="input"

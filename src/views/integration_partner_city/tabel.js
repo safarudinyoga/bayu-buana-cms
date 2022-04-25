@@ -28,7 +28,7 @@ export default function IntegrationPartnerCitiesTable() {
     columns: [
       {
         title: "City",
-        data: "city_name"
+        data: "city.city_name"
       },
       {
         title: "Partner City Code",
