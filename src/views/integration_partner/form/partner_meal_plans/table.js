@@ -34,6 +34,7 @@ export default function IntegrationPartnerMealPlansTable() {
     isCheckbox: false,
     showAdvancedOptions: false,
     createOnModal: true,
+    hideDetail: true,
     title: "Partner Meal Plans",
     titleModal: "Partner Meal Plans",
     baseRoute: "/master/integration-partner-meal-plans/form",

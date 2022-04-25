@@ -34,6 +34,7 @@ export default function IntegrationMessageTable() {
     isCheckbox: false,
     showAdvancedOptions: false,
     createOnModal: true,
+    hideDetail: true,
     title: "Partner Message",
     titleModal: "Partner Message",
     baseRoute: "/master/integration-partner-messages/form",

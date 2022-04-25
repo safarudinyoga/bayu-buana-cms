@@ -61,6 +61,7 @@ function MessageCreate(props) {
   }
 
   const validationSchema = Yup.object().shape({
+    message: Yup.object().required("Messages is required."),
     message_code: Yup.string().required("Message Code is required."),
     message_name: Yup.string().required("Message Name is required."),
   })
@@ -96,10 +97,10 @@ function MessageCreate(props) {
             label="Message"
             name="message"
             placeholder={"Please choose"}
-            url={`master/currencies`}
-            fieldName={"message"}
+            url={`master/event-types`}
+            fieldName={"event_type_name"}
             onChange={(v) => {
-              setFieldValue("currency_id", v)
+              setFieldValue("id", v)
             }}
             style={{ maxWidth: 250 }}
             size={formSize}

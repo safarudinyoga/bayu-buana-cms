@@ -86,13 +86,21 @@ const IntegrationPartnerForm = (props) => {
         <Col sm={9}>
           <Tab.Content>
             <Tab.Pane eventKey="partner-payment-gateway">
-              <PartnerPaymentGateway />
+              {tabKey === "partner-payment-gateway" ? (
+                <PartnerPaymentGateway
+                  handleSelectTab={(v) => handleSelectTab(v)}
+                />
+              ) : null}
             </Tab.Pane>
             <Tab.Pane eventKey="partner-meal-plans">
-              {/* <PartnerMealPlans /> */}
+              {tabKey === "partner-meal-plans" ? (
+                <PartnerMealPlans handleSelectTab={(v) => handleSelectTab(v)} />
+              ) : null}
             </Tab.Pane>
             <Tab.Pane eventKey="partner-messages">
-              {/* <PartnertMessages /> */}
+              {tabKey === "partner-messages" ? (
+                <PartnertMessages handleSelectTab={(v) => handleSelectTab(v)} />
+              ) : null}
             </Tab.Pane>
           </Tab.Content>
         </Col>

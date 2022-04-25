@@ -61,6 +61,7 @@ function MealPlansCreate(props) {
   }
 
   const validationSchema = Yup.object().shape({
+    meal_plan: Yup.object().required("Meal Plan is required."),
     meal_plan_code: Yup.string().required("Meal Plan Code is required."),
     meal_plan_name: Yup.string().required("Meal Plan Name is required."),
   })
@@ -96,10 +97,10 @@ function MealPlansCreate(props) {
             label="Meal Plan"
             name="meal_plan"
             placeholder={"Please choose"}
-            url={`master/currencies`}
-            fieldName={"currency_name"}
+            url={`master/meal-plan-types`}
+            fieldName={"meal_plan_type_name"}
             onChange={(v) => {
-              setFieldValue("currency_id", v)
+              setFieldValue("id", v)
             }}
             style={{ maxWidth: 250 }}
             size={formSize}

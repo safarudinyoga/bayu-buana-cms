@@ -32,12 +32,14 @@ export default function IntegrationPartnerPaymentGatewayTable() {
 
   let [params, setParams] = useState({
     isCheckbox: false,
+    showAdvancedOptions: false,
     createOnModal: true,
-    title: "Integration Partner",
-    titleModal: "Integration Partner",
+    hideDetail: true,
+    title: "Partner Payment Gateway",
+    titleModal: "Partner Payment Gateway",
     baseRoute: "/master/integration-payment-gateway/form",
     endpoint: `/master/integration-partners/${param.id}/payment-gateways`,
-    deleteEndpoint: `/master//integration-partners/${param.id}/payment-gateways`,
+    deleteEndpoint: `/master/integration-partners/${param.id}/payment-gateways`,
     columns: [
       {
         title: "Payment Gateway Code",
