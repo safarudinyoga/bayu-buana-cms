@@ -74,7 +74,10 @@ function ExchangeRateCreate(props) {
   const checkExchangeRate = async (to_currency_id, from_currency_id) => {
     let filter = encodeURIComponent(JSON.stringify([["to_currency_id","=",to_currency_id], ["AND"], ["from_currency_id", "=", from_currency_id]]))
     let res = await API.get(`/master/currency-conversions?filters=${filter}`)
-    return res.data.items.length === 0
+    let sameId = res.data.items.find((v) => v.id === id)
+    if(!sameId) return res.data.items.length === 0 
+
+    return true
   }
 
   Yup.addMethod(Yup.object, 'pairCurrency', function(propertyPath, message) {

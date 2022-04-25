@@ -14,12 +14,9 @@
     .css-1d8n9bt {
         padding-right: 2px !important;
     }
-    
     .css-tlfecz-indicatorContainer, .css-1gtu0rj-indicatorContainer{
         padding: 4px !important;
     }
-    
-    
 }
 
 @media (min-width:481px) {
@@ -35,6 +32,12 @@
     .mobile-button {
         display: none !important;
     }
+    .css-1d8n9bt {
+        padding-right: 4px !important;
+    }
+    .css-tlfecz-indicatorContainer, .css-1gtu0rj-indicatorContainer{
+        padding: 6px !important;
+    }
 }
 
 .icon-active path {
@@ -44,4 +47,3 @@
 .icon-grey path {
     fill: #b7b7b7
 }
-

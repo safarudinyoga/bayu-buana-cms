@@ -122,6 +122,11 @@ import ExchangeRateForm from "views/exchange_rate/form"
 import ExchangeRateHistory from "views/exchange_rate/history"
 // Master Integration PartnerG
 import IntegrationPartnerTable from "views/integration_partner/table"
+import IntegrationPartnerForm from "views/integration_partner/form/index"
+import IntegrationPartnerCitiesTable from "views/integration_partner_city/tabel"
+import IntegrationPartnerCabinTypesTable from "views/integration_partner_cabin/index"
+import IntegrationPartnerCabinsForm from "views/integration_partner_cabin/form/index"
+
 
 // Master Manage Corporate
 import CorporateTable from "views/manage_corporate/table"
@@ -159,6 +164,7 @@ import SpecialDateForm from "views/special_date/form"
 
 // Extranet BookTrip
 import BookTrip from "views/extranet/book_trip/book_trip"
+import BookFlight from "views/extranet/book_trip/book_flight"
 
 
 import Api from "config/api"
@@ -264,7 +270,16 @@ const DashboardRoutes = () => {
           <IntegrationPartnerTable />
         </Route>
         <Route path="/master/integration-partner/form/:id?">
-          <FeeTypeForm />
+          <IntegrationPartnerForm />
+        </Route>
+        <Route exact path="/master/integration-partner-cabin-types">
+          <IntegrationPartnerCabinTypesTable/>
+        </Route>
+        <Route path="/master/integration-partner-cabin-types/form/:id?">
+          <IntegrationPartnerCabinsForm/>
+        </Route>
+        <Route exact path="/master/integration-partner-cities">
+          <IntegrationPartnerCitiesTable />
         </Route>
         <Route exact path="/master/flight-types">
           <FlightTypeTable />
@@ -580,6 +595,9 @@ const DashboardRoutes = () => {
         {/* Extranet Book Trip */}
         <Route exact path="/extranet/book-trip">
           <BookTrip />
+        </Route>
+        <Route path="/extranet/book-trip/book-flight">
+          <BookFlight />
         </Route>
 
       </Switch>

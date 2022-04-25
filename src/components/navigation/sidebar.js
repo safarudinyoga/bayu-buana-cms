@@ -4,6 +4,7 @@ import { connect } from "react-redux"
 import "./sidebar.scss"
 import getMenu from '../../config/menu';
 import $ from "jquery"
+import * as AdminLte from  "admin-lte"
 
 const SubMenu = ({menu}) => {
   return (
@@ -19,9 +20,9 @@ const SubMenu = ({menu}) => {
 }
 
 const ParentMenu = ({menu}) => {
-  let {submenu, menu_link_asset} = menu
+  let {submenu, menu_link_asset, id} = menu
   return (
-    <li className="nav-item">
+    <li className="nav-item parent-menu" id={id}>
       <Link to={menu.url} className="nav-link">
         <img src={menu_link_asset.multimedia_description.url} alt={menu_link_asset.multimedia_description.file_name} />
         <p>
@@ -42,11 +43,17 @@ const ParentMenu = ({menu}) => {
   )
 }
 class Sidebar extends Component {
-
-  state = {
-    menu : [],
-    sideNav: ''
+  constructor (props) {
+    super(props);
+    this.state = {
+      menu : [],
+      sideNav: ''
+    }
+    $('[data-widget="treeview"]').each(function() {
+        AdminLte.Treeview._jQueryInterface.call($(this), 'init');
+    });
   }
+
 
   async componentDidMount () {
     // $('[data-widget="treeview"]').Treeview('init')
@@ -62,16 +69,25 @@ class Sidebar extends Component {
   }
 
   handleHoverOn(){
-      console.log('on')
+    $('li.nav-item.parent-menu.menu-is-opening.menu-open').find('ul.nav.nav-treeview').css("display","block")
   }
 
   handleHoverOff(){
-    console.log('off')
+    $('li.nav-item.parent-menu.menu-is-opening.menu-open').find('ul.nav.nav-treeview').css("display","none")
   }
+
   render() {
     const { menu } = this.state
+
+    $('ul').on('expanded.lte.treeview', (a, b) => {
+      // $('ul').find('li.nav-item.parent-menu.menu-is-opening.menu-open').removeClass(".menu-is-opening menu-open")
+      console.log($('ul').find('li.nav-item.parent-menu.menu-is-opening.menu-open').find('ul.nav.nav-treeview'))
+    })
+
     return (
-      <aside className="main-sidebar sidebar-dark-primary elevation-4">
+      <aside className="main-sidebar sidebar-dark-primary elevation-4"
+        // {extranet ? "extranet-sidebar" : ""}
+      >
         <div className="sidebar"
         onMouseEnter={this.handleHoverOn}
         onMouseLeave={this.handleHoverOff}>
@@ -85,7 +101,7 @@ class Sidebar extends Component {
               {
                 menu.map((m, k) => <ParentMenu key={k} menu={m} />)
               }
-              <li className="nav-item">
+              <li className="nav-item parent-menu" id="dsa3dd3">
                 <Link to="#" className="nav-link">
                   <img src="/img/icons/exchange-rate.svg" alt="icon users" />
                   <p>
@@ -101,6 +117,51 @@ class Sidebar extends Component {
                   </li>
                 </ul>
               </li>
+              {/* <li className="nav-item parent-menu">
+                <Link to="#" className="nav-link">
+                  <img src="/img/icons/home.svg" alt="icon users" />
+                  <p>
+                    Dashboard
+                  </p>
+                </Link>
+              </li>
+              <li className="nav-item parent-menu">
+                <Link to="#" className="nav-link">
+                  <img src="/img/icons/exchange-rate.svg" alt="icon users" />
+                  <p>
+                    Travel Management
+                    <i className="right fas fa-angle-right"></i>
+                  </p>
+                </Link>
+                <ul className="nav nav-treeview">
+                  <li className="nav-item">
+                    <Link to="/extranet/book-trip" className="nav-link">
+                      <p>Book Trip</p>
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link to="#" className="nav-link">
+                      <p>Manage Bookings</p>
+                    </Link>
+                  </li>
+                </ul>
+              </li>
+              <li className="nav-item parent-menu">
+                <Link to="#" className="nav-link">
+                  <img src="/img/icons/exchange-rate.svg" alt="icon users" />
+                  <p>
+                    Reports
+                    <i className="right fas fa-angle-right"></i>
+                  </p>
+                </Link>
+                <ul className="nav nav-treeview">
+                  <li className="nav-item">
+                    <Link to="#" className="nav-link">
+                      <p>Invoice Reports</p>
+                    </Link>
+                  </li>
+                </ul>
+              </li> */}
             </ul>
           </nav>
         </div>

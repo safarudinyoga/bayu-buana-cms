@@ -43,6 +43,7 @@ class BBDataTable extends Component {
       status: "0",
       extraFilters: this.props.filters || [],
       isCheckbox: this.props.isCheckbox ?? true,
+      isShowStatus: this.props.isShowStatus ?? true,
       isOpen: false,
       itemInfo: "",
     }
@@ -170,7 +171,10 @@ class BBDataTable extends Component {
             ? `<a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item mr-2" data-action="history" data-id="${row.id}" title="Click to view history"><img src="/img/icons/history.svg"/></a>`
             : ""
           }
-          <a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item" data-action="delete" data-id="${row.id}" data-name="${cvtRecordName}" ${infoDelete ? `data-info="${info}"` : ""}  title="${module === "exchange-rate" ? "Delete" : "Click to delete"}"><img src="${removeIcon}" /></a>
+          ${
+            module !== "integration-partner" ? `<a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item" data-action="delete" data-id="${row.id}" data-name="${cvtRecordName}" ${infoDelete ? `data-info="${info}"` : ""}  title="${module === "exchange-rate" ? "Delete" : "Click to delete"}"><img src="${removeIcon}" /></a>`
+            : ""
+          }
           `
         )
       },
@@ -756,7 +760,7 @@ class BBDataTable extends Component {
       setTimeout(() => {
         this.dt.buttons(".buttons-print").trigger()
         this.dt.page.len(prevLen).draw()
-      }, 500)
+      }, 1500)
     } catch (e) {}
   }
 
@@ -771,7 +775,7 @@ class BBDataTable extends Component {
           )
           .trigger()
         this.dt.page.len(prevLen).draw()
-      }, 500)
+      }, 1500)
     } catch (e) {
     }
   }

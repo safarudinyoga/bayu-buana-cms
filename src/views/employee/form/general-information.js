@@ -536,7 +536,7 @@ const GeneralInformation = (props) => {
               value: data.address.country_id,
               label: data.address.country.country_name
             } : "",
-            currentProvince: (!data.address?.state_province_id || data.address?.state_province_id === "00000000-0000-0000-0000-000000000000")
+            currentProvince: (_.isEmpty(data.address?.state_province) || data.address?.state_province_id === "00000000-0000-0000-0000-000000000000")
             ? isView ? {
               value: "",
               label: ""
@@ -1513,7 +1513,7 @@ const GeneralInformation = (props) => {
                                 {...field}
                                 isClearable
                                 placeholder="Please choose"
-                                options={selectCurrentProvince}
+                                options={values.currentCountry === null ? [] : selectCurrentProvince}
                                 onChange={(v) => {
                                   setFieldValue("currentProvince", v)
                                   if(v) {
@@ -1550,7 +1550,7 @@ const GeneralInformation = (props) => {
                                 {...field}
                                 isClearable
                                 placeholder="Please choose"
-                                options={selectCurrentCity}
+                                options={values.currentCountry === null ? [] : selectCurrentCity}
                                 onChange={(v) => {
                                   setFieldValue("currentCity", v)
                                 }}
@@ -1702,7 +1702,7 @@ const GeneralInformation = (props) => {
                               : values.permanentProvince
                           }
                           placeholder="Please choose"
-                          options={selectPermanentProvince}
+                          options={values.permanentCountry === null ? [] : selectPermanentProvince}
                           onChange={(v) => {
                             setFieldValue("permanentProvince", v)
 
@@ -1740,7 +1740,7 @@ const GeneralInformation = (props) => {
                               : values.permanentCity
                           }
                           placeholder="Please choose"
-                          options={selectPermanentCity}
+                          options={values.permanentCountry === null ? [] : selectPermanentCity}
                           onChange={(v) => {
                             setFieldValue("permanentCity", v)
                           }}

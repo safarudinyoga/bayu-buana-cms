@@ -212,7 +212,7 @@ export default function EmployeeTable() {
     setSelectedOfficeIds([])
   }
   let [params, setParams] = useState({
-    isCheckbox: false,
+    isCheckbox: false,    
     title: "Employee",
     titleModal: "Employee",
     baseRoute: "/master/employee/form",
@@ -277,6 +277,13 @@ export default function EmployeeTable() {
       {
         title: "Job Title",
         data: "job_title.job_title_name",
+        render: (data) => {
+          if (data === undefined) {
+            return ""
+          } else {
+            return data
+          }
+        },
       },
       {
         title: "",
@@ -322,11 +329,11 @@ export default function EmployeeTable() {
         data: "status",
         render: rowStatus,
       },
-    ],
-    module: "employee",
-    btnDownload: ".buttons-csv",
-    emptyTable: "No employees found",
+    ],   
+    emptyTable: "No employees found",    
     recordName: ["employee_number", "given_name",],
+    btnDownload: ".buttons-csv",
+    module: "employee",    
     showInfoDelete: true,
     switchStatus: true,
     infoDelete: [
@@ -340,8 +347,9 @@ export default function EmployeeTable() {
         { value: "3", label: "Inactive" },
       ],
     },
-    statusLabel: "Status",
-    isOpenNewTab: false
+    statusLabel: "Status",   
+    isOpenNewTab: false,    
+    
   })
 
   return <BBDataTable {...params} extraFilter={extraFilter} onReset={onReset} />

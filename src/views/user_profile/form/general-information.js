@@ -28,6 +28,7 @@ const GeneralInformation = (props) => {
   const [selectNamePrefix, setSelectNamePrefix] = useState([])
   const [photoProfile, setPhotoProfile] = useState([])
   const [photoData, setPhotoData] = useState()
+  const [imageChanged, setImageChanged] = useState(false)
   const maxNumber = 1
   const { innerWidth, innerHeight, outerHeight, outerWidth } = useWindowSize();
 
@@ -358,7 +359,8 @@ const GeneralInformation = (props) => {
   const onChangePhotoProfile = (imageList, addUpdateIndex) => {
     // data for submit
     console.log(imageList, addUpdateIndex)
-    
+    setImageChanged(true)
+
     if(imageList.length > 0){
       doUpload(imageList)
       setPhotoProfile(imageList)
@@ -410,9 +412,13 @@ const GeneralInformation = (props) => {
       handleChangeCurrentCountry(_.isEmpty(data.address) ? "" : data.address.country ? data.address.country_id : "")
       handleChangePermanentCountry(_.isEmpty(data.permanent_address) ? "" : data.permanent_address.country ? data.permanent_address.country_id : "")
       
+
+
       setPhotoProfile([{
         data_url: data.employee_asset.multimedia_description ?  data.employee_asset.multimedia_description.url : "/img/media/profile.svg"
       }])
+
+      setPhotoData(data.employee_asset.multimedia_description ? data.employee_asset.multimedia_description.id : "")
       
       
       setInitialForm({
@@ -1550,7 +1556,7 @@ const GeneralInformation = (props) => {
                       <Button
                         variant="primary"
                         type="submit"
-                        disabled={isSubmitting || !dirty || !isValid}
+                        disabled={(isSubmitting || !isValid || !imageChanged) && !dirty}
                         style={{ marginRight: 15 }}
                       >
                         SAVE
@@ -1572,7 +1578,7 @@ const GeneralInformation = (props) => {
                   <Button
                     variant="primary"
                     type="submit"
-                    disabled={isSubmitting || !dirty || !isValid}
+                    disabled={(isSubmitting || !isValid || !imageChanged) && !dirty}
                     style={{ marginRight: 15 }}
                   >
                     SAVE
