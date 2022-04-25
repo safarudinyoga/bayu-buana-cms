@@ -227,7 +227,7 @@ function SpecialDateForm(props) {
           maxLength="256"
         />
         
-        <FormInputDatePeriod 
+        {/* <FormInputDatePeriod 
           label="Periode"
           required={true}
           dateStart={form.start_date}
@@ -235,7 +235,7 @@ function SpecialDateForm(props) {
           dateStartOnChange={(date) => setForm({...form, start_date: date})}
           dateEndOnChange={(date) => setForm({...form, end_date: date})}
           recurring={true}
-        />
+        /> */}
       
       <div className="row d-flex align-items-center">
       <div className="col-sm-4">
