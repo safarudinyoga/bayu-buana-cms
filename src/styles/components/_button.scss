@@ -28,4 +28,15 @@
       border-color: #707070 !important;
     }
   }
+  &.btn-extranet {
+    color: #ffffff;
+    background-color: #31394d;
+    border-color: #31394d;
+    &:active,
+    &:visited,
+    &:hover {
+      background-color: #31394d !important;
+      border-color: #31394d !important;
+    }
+  }
 }
