@@ -192,3 +192,14 @@ div[class~=”show”] + div[class=”card-header”] .accordion-arrow {
 .react-autosuggest__suggestion--highlighted {
   background-color: #ddd;
 }
+
+/* React MultiDatePicker */
+.book-trip-datepicker .rmdp-week-day {
+  color: #333333;
+  font-weight: 600;
+}
+
+.book-trip-datepicker .rmdp-arrow {
+  border: solid #333333;
+  border-width: 0 2px 2px 0;
+}
