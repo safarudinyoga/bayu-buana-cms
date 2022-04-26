@@ -10933,6 +10933,11 @@ react-compound-slider@^3.3.1:
     d3-array "^2.8.0"
     warning "^4.0.3"
 
+react-date-object@^2.1.5:
+  version "2.1.5"
+  resolved "https://registry.yarnpkg.com/react-date-object/-/react-date-object-2.1.5.tgz#9f139cf0fbd9b8033cc18699be2ea14a772dbd73"
+  integrity sha512-iAtF2nz+jZjy3w36qKx2MsxXqbiL7UgGljz9jPjLWxWCl4rDTZUMS/i7hKKiVbL1lJlmubz1Xu6W3i6CW06kTg==
+
 react-datepicker@4.6.0:
   version "4.6.0"
   resolved "https://registry.yarnpkg.com/react-datepicker/-/react-datepicker-4.6.0.tgz#10fc7c5b9c72df5c3e29712d559cb3fe73fd9f62"
@@ -11034,6 +11039,11 @@ react-dropzone-uploader@^2.11.0:
   dependencies:
     "@babel/runtime" "^7.1.2"
 
+react-element-popper@^2.1.6:
+  version "2.1.6"
+  resolved "https://registry.yarnpkg.com/react-element-popper/-/react-element-popper-2.1.6.tgz#4afb912287d57de5d442fb85e76f4d7b94fde879"
+  integrity sha512-8va7mUmrKIkUnaM2t5Dyctd8cjgVgVcrv5vVD0FRay0sN6EPBCKa0bDi1/KmVDAjfgSIn7zQnjtc4VojcGrkgQ==
+
 react-error-overlay@6.0.9:
   version "6.0.9"
   resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-6.0.9.tgz#3c743010c9359608c375ecd6bc76f35d93995b0a"
@@ -11086,6 +11096,14 @@ react-lifecycles-compat@^3.0.4:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
   integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
+
+react-multi-date-picker@^3.3.0:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/react-multi-date-picker/-/react-multi-date-picker-3.3.0.tgz#89036a1bf013fc65bc12dda640d5a979a640b453"
+  integrity sha512-xAounECAkPUSnwmGCXlLevRLS9lt6IrGzD1VUJKZPbuzauwxaJLZ0mW6vnGUjui60qBY/uQeEmJftq+pEq5HgQ==
+  dependencies:
+    react-date-object "^2.1.5"
+    react-element-popper "^2.1.6"
 
 react-onclickoutside@^6.12.0:
   version "6.12.1"
