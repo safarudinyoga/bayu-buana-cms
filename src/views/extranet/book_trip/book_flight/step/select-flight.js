@@ -5,29 +5,39 @@ import { setUIParams } from 'redux/ui-store'
 import FlightCard from './components/FlightCard'
 import Select, {components} from "react-select"
 import arrowdownIcon from "assets/icons/arrow-down.svg"
+import moment from 'moment'
+import flights from './flights.json'
+import AdsImage from 'assets/ads.png'
 
-function FlightList() {
+function FlightList({handleSelectTab}) {
   const dispatch = useDispatch()
 	const [viewBy, setViewBy] = useState('fares')
-	const [data, setData] = useState({
+	const [flightInfo, setFlightInfo] = useState({
+		plane: "Singapore Airlines",
+		time_estimation: "7h 3m",
+		class: "Economy",
 		origin: {
 			city: "Jakarta",
-			code: "JKT"
+			code: "JKT",
+			airport: "Soekarno-Hatta Intl.",
+			terminal: 3,
 		},
 		destination: {
 			city: "Hong Kong",
-			code: "HKG"
+			code: "HKG",
+			airport: "Hong Kong Intl.",
+			terminal: 3,
 		},
-		trip: "roundtrip",
-		departure_date: "Thu, 12 Dec 20",
-		return_date: "Thu, 17 Dec 20",
+		trip: "Roundtrip",
+		departure_date: "2022-12-12 14:00:00",
+		return_date: "2022-12-17 12:25:00",
 		passengers: {
 			adult: 2,
 			child: 0,
 			infant: 0,
-		}
-		
+		},
 	})
+	const [data, setData] = useState([])
 
   useEffect(() => {
     dispatch(
@@ -51,25 +61,7 @@ function FlightList() {
 
 	useEffect(async() => {
 		try {
-			setData({
-				origin: {
-					city: "Jakarta",
-					code: "JKT"
-				},
-				destination: {
-					city: "Hong Kong",
-					code: "HKG"
-				},
-				trip: "Roundtrip",
-				departure_date: "Thu, 12 Dec 20",
-				return_date: "Thu, 17 Dec 20",
-				passengers: {
-					adult: 2,
-					child: 0,
-					infant: 0,
-				}
-				
-			})
+			setData(flights.data)
 		} catch(e) {}
 	}, [])
 	const customStyles = {
@@ -149,7 +141,7 @@ function FlightList() {
 							/>
 
 							<Card className='mt-3 filter-card-flight'>
-								<p>12 Dec 2020 (CGK - HKG)</p>
+								<p>{moment(flightInfo.departure_date).format("DD MMM YYYY")} ({flightInfo.origin.code} - {flightInfo.destination.code})</p>
 								<div className='mt-2'>
 									<p>DEPARTURE TIME:</p>
 									<div className='d-flex align-items-center alignt-content-center justify-content-between'>
@@ -181,7 +173,7 @@ function FlightList() {
 							</Card>
 
 							<Card className='mt-3 filter-card-flight'>
-								<p>12 Dec 2020 (CGK - HKG)</p>
+								<p>{moment(flightInfo.departure_date).format("DD MMM YYYY")} ({flightInfo.destination.code} - {flightInfo.origin.code})</p>
 								<div className='mt-2'>
 									<p>DEPARTURE TIME:</p>
 									<div className='d-flex align-items-center alignt-content-center justify-content-between'>
@@ -245,7 +237,11 @@ function FlightList() {
 				<Col sm={10}>
 					<Row>
 						<Col sm={8}>
-							<p className='trip-detail'>JAKARTA - HONGKONG - JAKARTA</p>
+							<p className='trip-detail'>{
+								viewBy === 'fares'
+								? `${flightInfo.origin.city} - ${flightInfo.destination.city} - ${flightInfo.origin.city}`
+								:`${flightInfo.origin.city} - ${flightInfo.destination.city}`
+							}</p>
 							<div className='trip-info'>
 								<p>Prices are per adult, include tax and fees</p>
 								<p>See calendar fares</p>
@@ -274,9 +270,14 @@ function FlightList() {
 					</Row>
 					<div className='mt-3'>
 						{
-							Array.apply(null, {length: 5}).map((i) => {
+							data.map((d,i) => {
 								return (
-									<FlightCard key={i}/>
+									<>
+										<FlightCard key={i} data={d} viewBy={viewBy} handleSelectTab={handleSelectTab}/>
+										{
+											i === 1 && <img src={AdsImage} width="100%" style={{marginBottom: "1rem"}}/>
+										}
+									</>
 								)
 							})
 						}
