@@ -4,7 +4,8 @@ import { useDispatch } from 'react-redux'
 import { setUIParams } from 'redux/ui-store'
 import Api from "config/api"
 import './book_flight.css'
-import Select, {components, StylesConfig} from "react-select"
+import Select, {components} from "react-select"
+import {OverlayTrigger, Tooltip} from "react-bootstrap"
 import FlightList from './step/select-flight'
 import Passenger from './step/passengers'
 
@@ -34,6 +35,26 @@ function BookFlight() {
 	const [selectLanguage, setSelectLanguage] = useState([])
 	const [selectCurrencies, setSelectCurrencies] = useState([])
 	const [tabKey, setTabKey] = useState("select-flight")
+
+	const customControlStyles = base => ({
+		width: 180,
+		zIndex: 99999
+	});
+
+	// const image = (backgroundImage = "") => ({
+	// 	alignItems: 'center',
+	// 	display: 'flex',
+	  
+	// 	':before': {
+	// 	  backgroundImage: url(backgroundImage),
+	// 	  borderRadius: 10,
+	// 	  content: '" "',
+	// 	  display: 'block',
+	// 	  marginRight: 8,
+	// 	  height: 10,
+	// 	  width: 10,
+	// 	},
+	//   });
 
 	useEffect(async () => {
 		try {
@@ -134,31 +155,54 @@ function BookFlight() {
 			</Col>
 			{/* Select currency and language */}
 			<Col sm={{span: 2, offset: 5}}>
-				<Row>
-					<Col>
-					<Select
-						options={selectLanguage}
-						label="Language"
-						className="selectLanguage"
-						theme={(theme) => ({
-						...theme,
-						borderRadius: 0,
-						})}
-					/> 
+						<Row>
+							<Col>
+							<OverlayTrigger
+								placement="bottom"
+								overlay={<Tooltip>Choose your language</Tooltip>}
+							>
+							<Select
+								defaultValue={selectLanguage[0]}
+								options={selectLanguage}
+								formatOptionLabel={language => (
+									<div className="selectLanguage">
+									  <img 
+									  	src={language.image} 
+										alt="language-image"
+										className="language-image"
+									  />
+									  <span className='language-value'>{language.value}</span>
+									</div>
+								  )}
+								label="Language"
+								styles={{control: customControlStyles}}
+							/> 
+							</OverlayTrigger>
+							
+							</Col>
+							<Col>
+							<OverlayTrigger
+								placement="bottom"
+								overlay={<Tooltip>Choose your currency</Tooltip>}
+							>
+							<Select
+								defaultValue={selectCurrencies[0]}
+								options={selectCurrencies}
+								label="Currency"
+								className="selectCurrencies"
+								formatOptionLabel={currency => (
+									<div className="selectCurrencies">
+									  <span className='currencies-label'>{currency.label}</span>
+									  <span className='currencies-value'>{currency.value}</span>
+									</div>
+								)}
+								styles={{control: customControlStyles}}
+							/>
+							</OverlayTrigger>
+							</Col>
+						</Row>
 					</Col>
-					<Col>
-					<Select
-						options={selectCurrencies}
-						label="Currency"
-						className="selectCurrencies"
-						theme={(theme) => ({
-						...theme,
-						borderRadius: 0,
-						})}
-					/>
-					</Col>
-				</Row>
-			</Col>
+
 		</Row>
 		{
 			showInfo &&

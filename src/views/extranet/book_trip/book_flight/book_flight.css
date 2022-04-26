@@ -260,3 +260,47 @@
   font-size: 13px;
   color: #333;
 }
+
+.language-image {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid #31394d;
+  margin-right: 15px;
+}
+
+.currencies-label {
+  margin-right: 15px;
+  letter-spacing: 0px;
+  color: #333333;
+  opacity: 1;
+}
+
+.currencies-value {
+  color: #818181;
+}
+
+.css-1hb7zxy-IndicatorsContainer {
+  display: none !important;
+}
+
+/* .tooltip [class$="inner"] {
+  background-color: #e5e6ea;
+  border: 1px solid #e5e6ea;
+}
+
+.tooltip [class$="arrow"] {
+  border-top: 5px solid #e5e6ea !important;
+} */
+
+#tooltip-bottom > .tooltip-inner {
+  background-color: #e5e6ea;
+  color: #4f4f4f;
+  border: 1px solid #e5e6ea;
+}
+
+#tooltip-bottom > .tooltip-arrow {
+  border-bottom: 7px solid #e5e6ea !important;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+}
