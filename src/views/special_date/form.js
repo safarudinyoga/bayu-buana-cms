@@ -10,6 +10,8 @@ import $ from "jquery"
 import { useDispatch } from "react-redux"
 import { setAlert, setUIParams} from "redux/ui-store"
 import env from "../../config/environment"
+import DatePicker from "react-datepicker"
+import FormInputWrapper from "components/form/input-date-period";
 import FormInputDatePeriod from "components/form/input-date-period";
 
 const endpoint = "/master/agent-special-dates"
@@ -30,6 +32,8 @@ function SpecialDateForm(props) {
     start_date: new Date(),
     end_date: new Date(),
   })
+
+  
   const translationFields = [
     {
       label: "Special Date Name",
@@ -123,9 +127,7 @@ function SpecialDateForm(props) {
       } catch (e) { }
 
       try {
-        let res = await api.get(endpoint + "/" + formId + "/translations", {
-          size: 50,
-        })
+        let res = await api.get(endpoint + "/" + formId)
         setTranslations(res.data.items)
       } catch (e) { }
       setLoading(false)
@@ -169,11 +171,7 @@ function SpecialDateForm(props) {
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
       console.log(res);
-      for (let i in translated) {
-        let tl = translated[i]
-        let path = endpoint + "/" + res.data.id + "/translations"
-        await api.putOrPost(path, tl.id, tl)
-      }
+     
     } catch (e) {
       dispatch(
         setAlert({
@@ -190,6 +188,18 @@ function SpecialDateForm(props) {
       )
     }
   }
+
+  const [checkInDate, setCheckInDate] = useState(null);
+  const [checkOutDate, setCheckOutDate] = useState(null);
+
+  const handleCheckInDate = (date) => {
+    setCheckInDate(date);
+    setCheckOutDate(null);
+  };
+
+  const handleCheckOutDate = (date) => {
+    setCheckOutDate(date);
+  };
 
   return (
     <FormBuilder
@@ -217,7 +227,7 @@ function SpecialDateForm(props) {
           maxLength="256"
         />
         
-        <FormInputDatePeriod 
+        {/* <FormInputDatePeriod 
           label="Periode"
           required={true}
           dateStart={form.start_date}
@@ -225,7 +235,43 @@ function SpecialDateForm(props) {
           dateStartOnChange={(date) => setForm({...form, start_date: date})}
           dateEndOnChange={(date) => setForm({...form, end_date: date})}
           recurring={true}
-        />
+        /> */}
+      
+      <div className="row d-flex align-items-center">
+      <div className="col-sm-4">
+      <span className="text-label-input">
+          Periode
+          </span> 
+          </div>
+        <div className="col-sm-3">
+        <DatePicker 
+            className="form-control" selected={form.start_date_}
+            value={form.start_date_}
+            onChange={(date) => setForm({...form, start_date_: date})} 
+          />
+          </div>
+          
+          <span className="text-center">to</span>
+          <div className="col-sm-3">
+          <DatePicker 
+            className="form-control" selected={form.end_date_}
+            value={form.end_date_}
+            onChange={(date) => setForm({...form, end_date_: date})} 
+          />
+          </div>
+          </div>
+       
+          
+          
+   
+    <div className="form-check" style={{marginLeft:"400px"}}>
+            <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
+            <label className="form-check-label" for="flexCheckDefault">
+              Occurs on the same date every year?
+            </label>
+          </div>
+          
+
       </FormHorizontal>
     </FormBuilder>
   )

@@ -54,20 +54,21 @@ const FlightBook = (props) => {
           <FlightPref />
 
           <div className='my-3'>
-            <Button type="button" onClick={() => history.push("/extranet/book-trip/book-flight")}>Search</Button>
+            <Button className='text-uppercase btn-extranet' type="button" onClick={() => history.push("/extranet/book-trip/book-flight")}>Search</Button>
           </div>
           <div className="recent-search">
-            <span className='text-uppercase'>Recent Flight Searches</span>
+            <span className='text-uppercase recent-flight-title ml-2'>Recent Flight Searches</span>
+            <span className='ml-4 recent-flight-title'>Clear all</span>
             <div className='flight-pref-container d-flex'>
               <div className="flight-pref mr-2">
                 <span className='flight-pref__route'>CGK - ICN</span>
                 <span className='flight-pref__date'>16 OCT - 22 OCT 2020</span>
-                <span className='ml-1 mr-2'>X</span>
+                <ReactSVG className='ml-1 mr-2 d-inline-block' src='/img/icons/close-circle.svg' />
               </div>
               <div className="flight-pref mr-2">
                 <span className='flight-pref__route'>CGK - ICN</span>
                 <span className='flight-pref__date'>16 OCT - 22 OCT 2020</span>
-                <span className='ml-1 mr-2'>X</span>
+                <ReactSVG className='ml-1 mr-2 d-inline-block' src='/img/icons/close-circle.svg' />
               </div>
             </div>
           </div>
@@ -80,10 +81,10 @@ const FlightBook = (props) => {
           <FlightPref />
 
           <div className='my-3'>
-            <Button type="button" onClick={() => history.push("/extranet/book-trip/book-flight")}>Search</Button>
+            <Button className='text-uppercase btn-extranet' type="button" onClick={() => history.push("/extranet/book-trip/book-flight")}>Search</Button>
           </div>
           <div className="recent-search">
-            <span className='text-uppercase'>Recent Flight Searches</span>
+            <span className='text-uppercase recent-flight-title ml-2'>Recent Flight Searches</span>
             <div className='flight-pref-container d-flex'>
               <div className="flight-pref mr-2">
                 <span className='flight-pref__route'>CGK - ICN</span>
@@ -106,10 +107,10 @@ const FlightBook = (props) => {
           <FlightPref />
 
           <div className='my-3'>
-            <Button type="button" onClick={() => history.push("/extranet/book-trip/book-flight")}>Search</Button>
+            <Button className='text-uppercase btn-extranet' type="button" onClick={() => history.push("/extranet/book-trip/book-flight")}>Search</Button>
           </div>
           <div className="recent-search">
-            <span className='text-uppercase'>Recent Flight Searches</span>
+            <span className='text-uppercase recent-flight-title ml-2'>Recent Flight Searches</span>
             <div className='flight-pref-container d-flex'>
               <div className="flight-pref mr-2">
                 <span className='flight-pref__route'>CGK - ICN</span>
