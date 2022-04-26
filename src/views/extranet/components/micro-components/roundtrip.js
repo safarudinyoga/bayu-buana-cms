@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import AutoSuggest from "react-autosuggest";
-import DatePicker from 'react-datepicker'
+// import DatePicker from 'react-datepicker'
+import DatePicker from 'react-multi-date-picker'
 import { Form, Popover, OverlayTrigger, Button } from 'react-bootstrap'
 import { ReactSVG } from "react-svg"
 import Select from 'components/form/select';
@@ -48,6 +49,21 @@ const Roundtrip = (props) => {
         <div>
           {suggestion.code}
         </div>
+      </div>
+    )
+  }
+
+  function RenderDatepicker({ openCalendar, value, handleValueChange, title }){
+    return (
+      <div style={{width: 171}} className='position-relative'>
+        <h4 className='form-with-label__title'> {title} <span className='label-required'></span></h4>
+        <ReactSVG src='/img/icons/date-range.svg' className='form-with-label__suggest-icon'/>
+        <input type="text" 
+          className='form-control rounded-0 form-with-label' 
+          onFocus={openCalendar} 
+          value={value} 
+          onChange={handleValueChange}
+          />
       </div>
     )
   }
@@ -212,8 +228,18 @@ const Roundtrip = (props) => {
         
         <div className='mr-4'>
           <div className='d-flex'>
-            <div style={{width: 150}} className="position-relative">
-              <h4 className='form-with-label__title'> DEPART <span className='label-required'></span></h4>
+            <div style={{width: 150}} className="position-relative flex-grow-1 mr-3">
+              <DatePicker 
+                render={<RenderDatepicker title={"DEPART"} />}
+                numberOfMonths={2}
+                fixMainPosition={true}
+                format="DD MMMM YYYY"
+                value={departTime}
+                onChange={(date) => {
+                  setDepartTime(date)
+                }}
+              />
+              {/* <h4 className='form-with-label__title'> DEPART <span className='label-required'></span></h4>
               <ReactSVG src='/img/icons/date-range.svg' className='form-with-label__suggest-icon'/>
               <DatePicker
                 className='form-control rounded-0 form-with-label'
@@ -223,10 +249,20 @@ const Roundtrip = (props) => {
                 onChange={(date) => {
                   setDepartTime(date)
                 }}
-              />
+              /> */}
             </div>
-            <div style={{width: 150}} className="position-relative">
-              <h4 className='form-with-label__title'> RETURN <span className='label-required'></span></h4>
+            <div style={{width: 150}} className="position-relative flex-grow-1 mr-3">
+              <DatePicker 
+                render={<RenderDatepicker title={"RETURN"} />}
+                numberOfMonths={2}
+                fixMainPosition={true}
+                format="DD MMMM YYYY"
+                value={returnTime}
+                onChange={(date) => {
+                  setReturnTime(date)
+                }}
+              />
+              {/* <h4 className='form-with-label__title'> RETURN <span className='label-required'></span></h4>
               <ReactSVG src='/img/icons/date-range.svg' className='form-with-label__suggest-icon'/>
               <DatePicker
                 className='form-control rounded-0 form-with-label'
@@ -237,7 +273,7 @@ const Roundtrip = (props) => {
                 onChange={(date) => {
                   setReturnTime(date)
                 }}
-              />
+              /> */}
             </div>
           </div>
         </div>
