@@ -16,22 +16,22 @@ build:
     - sed -i 's/REACT_APP_API_BASE_URL=.*/REACT_APP_API_BASE_URL=/g' .env
     - yarn install
     - yarn build
-    - |
-      if [ -z "`which git-quick-stats`" ]; then \
-      curl -ksSL -o "/bin/git-quick-stats" "https://github.com/arzzen/git-quick-stats/raw/master/git-quick-stats" && \
-      chmod +x "/bin/git-quick-stats"; \
-      fi && \
-      if [ -z "`which column`" ]; then \
-      apt update && apt install -y bsdmainutils python3; \
-      fi && \
-      if [ ! -z "$GIT_CONTRIBUTOR_COUNTER" ] && [ -f "$GIT_CONTRIBUTOR_COUNTER" ]; then \
-      git clone $CI_REPOSITORY_URL /tmp/clone; \
-      cd /tmp/clone ; \
-      python3 "$GIT_CONTRIBUTOR_COUNTER"; \
-      mv *.svg $CI_PROJECT_DIR/ ; \
-      cd $CI_PROJECT_DIR ; \
-      rm -rf /tmp/clone ; \
-      fi
+#    - |
+#      if [ -z "`which git-quick-stats`" ]; then \
+#      curl  -o "/bin/git-quick-stats" "https://github.com/arzzen/git-quick-stats/raw/master/git-quick-stats" && \
+#      chmod +x "/bin/git-quick-stats"; \
+#      fi && \
+#      if [ -z "`which column`" ]; then \
+#      apt update && apt install -y bsdmainutils python3; \
+#      fi && \
+#      if [ ! -z "$GIT_CONTRIBUTOR_COUNTER" ] && [ -f "$GIT_CONTRIBUTOR_COUNTER" ]; then \
+#      git clone $CI_REPOSITORY_URL /tmp/clone; \
+#      cd /tmp/clone ; \
+#      python3 "$GIT_CONTRIBUTOR_COUNTER"; \
+#      mv *.svg $CI_PROJECT_DIR/ ; \
+#      cd $CI_PROJECT_DIR ; \
+#      rm -rf /tmp/clone ; \
+#      fi
   artifacts:
     expire_in: 15 minutes
     paths:
