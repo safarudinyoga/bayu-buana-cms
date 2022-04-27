@@ -46,6 +46,7 @@ class BBDataTable extends Component {
       isShowStatus: this.props.isShowStatus ?? true,
       isOpen: false,
       itemInfo: "",
+      year: new Date().getFullYear(),
     }
     this.inProgress = false
     this.queryParams = new URLSearchParams(this.props.location.search)
@@ -739,6 +740,25 @@ class BBDataTable extends Component {
     }, 100)
   }
 
+  onYear(value) {
+    this.inProgress = true
+    if (value + "" !== "0") {
+      this.setState({
+        year: value,
+      })
+    } else {
+      this.setState({
+        year: new Date().getFullYear(),
+      })
+    }
+    setTimeout(() => {
+      this.inProgress = false
+      try {
+        this.dt.ajax.reload()
+      } catch (e) {}
+    }, 100)
+  }
+
   onReset() {
     if (this.props.onReset) {
       this.props.onReset()
@@ -1084,6 +1104,7 @@ class BBDataTable extends Component {
           extraFilter={this.props.extraFilter}
           onSearch={this.onSearch.bind(this)}
           onStatus={this.onStatus.bind(this)}
+          onYear={this.onYear.bind(this)}
           onReset={this.onReset.bind(this)}
           onPrint={this.onPrint.bind(this)}
           onDownload={this.onDownload.bind(this)}
