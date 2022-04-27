@@ -1,11 +1,59 @@
 import { withRouter } from "react-router"
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Row, Col, Tab, Nav } from "react-bootstrap"
 import { useDispatch } from 'react-redux'
 import { ReactSVG } from "react-svg"
+import { setUIParams } from "redux/ui-store"
+import useQuery from "lib/query"
 
-const ManageCorporateForm = (props) => {
+const staticWarding = {
+  main: 'Corporate Management',
+  mainSub: 'Manage Corporate',
+  create: 'Create Corporate',
+  edit: 'Edit Corporate',
+  detail: 'Corporate Details',
+  linkSub: '/master/manage-corporate'
+}
+
+const ManageCorporateForm = ({ match }) => {
   let dispatch = useDispatch()
+  const isView = useQuery().get("action") === "view"
+
+  const wardingGenerator = (formId) => {
+    if (!formId) {
+      return staticWarding.create
+    }
+
+    if (formId && isView) {
+      return staticWarding.detail
+    }
+
+    return staticWarding.edit
+  }
+
+  useEffect(() => {
+    const { main, mainSub, linkSub } = staticWarding
+
+    const formId = match?.props?.id
+    dispatch(
+      setUIParams({
+        title: wardingGenerator(formId),
+        breadcrumbs: [
+          {
+            text: main,
+          },
+          {
+            link: linkSub,
+            text: mainSub,
+          },
+          {
+            text: wardingGenerator(formId),
+          },
+        ],
+      }),
+    )
+  }, [])
+
   return (
     <Tab.Container>
       <Row>

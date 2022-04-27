@@ -505,7 +505,8 @@ const DashboardRoutes = () => {
         </Route>
         <Route path="/master/employee/form/:id?">
           <EmployeeForm />
-        </Route>        
+        </Route>
+
         {/* Division */}
         <Route exact path="/master/divisions">
           <DivisionTable />
@@ -516,6 +517,7 @@ const DashboardRoutes = () => {
         <Route path="/master/divisions/hierarchy/:id?">
           <DivisionHierarchy />
         </Route>
+
         {/* Job Title */}
         <Route exact path="/master/job-title">
           <JobTitleTable />
@@ -523,6 +525,7 @@ const DashboardRoutes = () => {
         <Route path="/master/job-title/form/:id?">
           <JobTitleForm />
         </Route>
+
         {/* Branch Office */}
         <Route exact path="/master/branch-offices">
           <OfficeTable />
@@ -546,7 +549,7 @@ const DashboardRoutes = () => {
         <Route exact path="/master/setup-flight-commission/form/:id?">
           <FlightCommisionForm />
         </Route>
-        
+
         {/* Master Exhange Rate */}
         <Route exact path="/master/exchange-rate">
           <ExchageRateTable />
@@ -559,10 +562,10 @@ const DashboardRoutes = () => {
         </Route>
 
         {/* Master Manage Corporate */}
-        <Route exact path="/master/corporate">
+        <Route exact path="/master/manage-corporate">
           <CorporateTable />
         </Route>
-        <Route exact path="/master/corporate/form/:id?">
+        <Route exact path="/master/manage-corporate/form/:id?">
           <CorporateForm />
         </Route>
 
@@ -604,6 +607,7 @@ const DashboardRoutes = () => {
     </DashboardWrapper>
   )
 }
+
 const AuthRoutes = () => {
   return (
     <AuthWrapper>
@@ -631,7 +635,7 @@ const getAuth = async() => {
       let API = new Api()
       let res = await API.refreshToken(refresh_token)
     }
-  
+
     return auth
   } catch (err) {
     throw err
@@ -650,6 +654,7 @@ const App = () => {
     }
     checkAuth()
   }, [auth])
+
   return (
     <Router>
       <Switch>
