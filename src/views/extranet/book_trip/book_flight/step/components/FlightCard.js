@@ -5,84 +5,44 @@ import { setUIParams } from 'redux/ui-store'
 
 const ex_logo = 'https://ik.imagekit.io/tvlk/image/imageResource/2021/07/12/1626063527483-f24d3eae611b51022ab0d1fc1457c820.png?tr=q-75,w-28'
 
-function FlightCard() {
+function FlightCard({data, handleSelectTab}) {
   const dispatch = useDispatch()
-	const [viewBy, setViewBy] = useState('fares')
-	const [data, setData] = useState({
-		origin: {
-			city: "Jakarta",
-			code: "JKT"
-		},
-		destination: {
-			city: "Hong Kong",
-			code: "HKG"
-		},
-		trip: "roundtrip",
-		departure_date: "Thu, 12 Dec 20",
-		return_date: "Thu, 17 Dec 20",
-		passengers: {
-			adult: 2,
-			child: 0,
-			infant: 0,
-		}
-		
-	})
-	const [showDetail, setShowDetail] = useState(false)
+	const [Flight, setFlight] = useState({})
+	const [fullCondition, setFullCondition] = useState(false)
 
 
 	useEffect(async() => {
 		try {
-			setData({
-				origin: {
-					city: "Jakarta",
-					code: "JKT"
-				},
-				destination: {
-					city: "Hong Kong",
-					code: "HKG"
-				},
-				trip: "Roundtrip",
-				departure_date: "Thu, 12 Dec 20",
-				return_date: "Thu, 17 Dec 20",
-				passengers: {
-					adult: 2,
-					child: 0,
-					infant: 0,
-				}
-				
-			})
+			setFlight(data)
 		} catch(e) {}
 	}, [])
 
-
-  
-  return (
-    <Card className='flight-card'>
-			<Row>
-				<Col sm={10} className="flight-card-left">
-				<Row>
+	const FlightInfo = ({showDetailTxt=true}) => {
+		return (
+			<>
+			<Row className='flight-details-header'>
 					<Col sm={6} className="d-flex justify-content-between card-flight-h">
 						<div className="d-flex align-items-start">
 							<img src={ex_logo} width={20}/>
-							<p className='m-0 pl-1'>Singapore Airlines</p>
+							<p className='m-0 pl-1'>{Flight.plane}</p>
 						</div>
-						<p><i class="fas fa-clock"></i> 7h 5m (1stop)</p>
-						<p>Economy (N)</p>
+						<p><i class="fas fa-clock"></i> {Flight.time_estimation} (1stop)</p>
+						<p>{Flight.class} (N)</p>
 					</Col>
-					<Col sm={{span: 3, offset: 3}} className="flight-details text-right">
+					<Col sm={{span: 3, offset: 3}} className={`${showDetailTxt?"d-inline":"d-none"} btn-flight-details text-right`}>
 						<a>Show Details</a>
 					</Col>
 				</Row>
-				
-				<Row>
-					<Col sm={7} className={"d-flex justify-content-between align-items-center"}>
+				<Row className='flight-details-content'>
+					<Col sm={6} className={"d-flex justify-content-between align-items-center"}>
 						<div>
 							<p>02:10</p>
 							<p>CGK</p>
 							<p>12 Dec</p>
 						</div>
 						<div>
-							
+						<i class="fas fa-circle"></i>
+						{/* <i class="fas fa-plane"></i> */}
 						</div>
 						<div>
 							<p>10:15</p>
@@ -90,28 +50,53 @@ function FlightCard() {
 							<p>12 Dec</p>
 						</div>
 					</Col>
-					<Col sm={5}></Col>
+					<Col sm={5} className={"d-flex justify-content-between align-items-start"}>
+						<div>
+							SQ 955
+							SQ 765
+						</div>
+						<div>
+							<p>+2 more</p>
+						</div>
+					</Col>
 				</Row>
+			</>
+		)
+	}
+
+
+  
+  return (
+    <Card className='flight-card'>
+			<Row>
+				<Col sm={10} className="flight-card-left">
+					<FlightInfo/>
+					<div className='middle-border'></div>
+					<FlightInfo showDetailTxt={false} />
 				</Col>
-				<Col sm={2} onClick={() => setShowDetail(!showDetail)} className="flight-card-right d-flex flex-column align-content-center align-items-center">
+
+				<Col sm={2} onClick={() => setFullCondition(!fullCondition)} className="flight-card-right d-flex flex-column align-content-center align-items-center justify-content-center">
 					<p>IDR <b>10,999,999</b></p>
 					<p className='flight-type'>roundtrip</p>
 					{
-						!showDetail &&
+						!fullCondition &&
 							<Button 
-							onClick={() => console.log("yee")}
+							onClick={(e) => { 
+								e.stopPropagation();
+								handleSelectTab("passengers")
+							}}
 							className="btn-flight-select"
 							>Select</Button>
 					}
 					<p className='lowest-fare'><i class="fas fa-circle"></i> Lowest Fare</p>
 					<p className='travel-policy'><i className="fas fa-exclamation-triangle"></i> Travel Policy</p>
 					<p className='rest-seat'>Only 2 seat left</p>
-					<i className={`fas fa-angle-${showDetail ? "up" : "down"}`}></i>
+					<i className={`fas fa-angle-${fullCondition ? "up" : "down"}`}></i>
 				</Col>
 			</Row>
 			{/* FULL FARE CONDITIONS */}
 			{
-				showDetail 
+				fullCondition 
 				?(
 					<div className='full-conditions'>
 						<div className='full-conditions-header'>

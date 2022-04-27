@@ -1,0 +1,15 @@
+.datepicker-special-date .special-date-icon {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+}
+
+.datepicker-special-date-container .rmdp-week-day {
+  color: #333333;
+  font-weight: 600;
+}
+
+.datepicker-special-date.container .rmdp-arrow {
+  border: solid #333333;
+  border-width: 0 2px 2px 0;
+}
