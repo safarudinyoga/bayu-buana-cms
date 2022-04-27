@@ -10,10 +10,10 @@ export default function IntegrationPartnerCurrenciesTable() {
   useEffect(() => {
     dispatch(
       setUIParams({
-        title: "Partner Corporate",
+        title: "Partner Currencies",
         breadcrumbs: [
           {
-            text: "Partner Corporate",
+            text: "Partner Currencies",
           },
         ],
       }),
