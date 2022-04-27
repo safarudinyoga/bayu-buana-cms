@@ -54,7 +54,7 @@ export default function IntegrationMessageTable() {
         data: "message_name",
       },
     ],
-    emptyTable: "No Meal Plans found",
+    emptyTable: "No Messages found",
     recordName: ["message_name", "message_id", "message_name"],
   })
 

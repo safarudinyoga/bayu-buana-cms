@@ -159,7 +159,7 @@ export function Track({ source, target, getTrackProps, disabled }) {
         transform: "translate(0%, -50%)",
         height: 14,
         zIndex: 1,
-        backgroundColor: disabled ? "#999" : "#b28900",
+        backgroundColor: disabled ? "#999" : "#31394D",
         borderRadius: 7,
         cursor: "pointer",
         left: `${source.percent}%`,
@@ -195,7 +195,7 @@ Track.defaultProps = {
 export function Tick({ tick, count, format }) {
   return (
     <div>
-      <div
+      {/* <div
         style={{
           position: "absolute",
           marginTop: 14,
@@ -204,7 +204,7 @@ export function Tick({ tick, count, format }) {
           backgroundColor: "rgb(200,200,200)",
           left: `${tick.percent}%`
         }}
-      />
+      /> */}
       <div
         style={{
           position: "absolute",

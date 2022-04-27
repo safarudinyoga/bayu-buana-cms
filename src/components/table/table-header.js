@@ -240,6 +240,7 @@ class TableHeader extends Component {
           </div>
 
           <div className="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-2 mb-md-0 order-first order-md-last">
+          { pathname !== "/master/integration-partner" &&
             <OverlayTrigger
               placement="top"
               overlay={<Tooltip>Click to create</Tooltip>}
@@ -253,7 +254,7 @@ class TableHeader extends Component {
                 Create New
               </button>
             </OverlayTrigger>
-
+  }
             <OverlayTrigger
               placement="top"
               overlay={<Tooltip>Click to print</Tooltip>}

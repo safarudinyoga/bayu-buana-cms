@@ -13,7 +13,8 @@
   border-top-right-radius: 0;
   box-shadow: 2px 6px 6px #00000029 !important;
   background-color: #e5e5ea !important;
-  color: #333;
+  color: #333333 !important;
+  font-weight: bold;
 }
 
 .flight-book-tabs .nav-link.active {
@@ -45,12 +46,26 @@
   padding-bottom: 1rem;
 }
 
+.form-with-label__suggest-icon {
+  position: absolute;
+  bottom: 10px;
+  right: 20px;
+  z-index: 10;
+}
+
 .form-with-label__title {
   position: absolute;
   color: #000;
   z-index: 1;
   font-size: 12px;
   padding: 10px 20px;
+}
+
+.form-with-label__title .label-required:after {
+  color: #d91c1c;
+  content: "*";
+  position: relative;
+  margin-left: 2px;
 }
 
 .flight-pref {
@@ -75,6 +90,45 @@
 
 .passenger-popover {
   transform: translate(-50%, -50%);
+  width: 13rem;
+}
+
+.recent-flight-title {
+  font-size: 12px;
+  color: #31394D;
+}
+
+.book-card .nav-tabs .nav-link {
+  border-right: 0.5px solid #E5E6EA;
+  border-left: 0.5px solid #E5E6EA;
+}
+
+.book-card .nav-tabs .nav-link:last-child {
+  border-right: 1px solid #E5E6EA;
+}
+
+.accordion .card {
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+/*card-header == <Accordion.Toggle/>*/
+div[class=”card-header”] .accordion-arrow {
+  transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -webkit-transition: all 0.3s ease;
+  transform: rotate(0deg);
+  -o-transform: rotate(0deg);
+  -ms-transform: rotate(0deg);
+  -webkit-transform: rotate(0deg);
+}
+/* When Accordion.Toggle is clicked, the class “show” is added to Accordion.Collapse when it opens */
+div[class~=”show”] + div[class=”card-header”] .accordion-arrow {
+  transform: rotate(180deg);
+  -o-transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+  -webkit-transform: rotate(180deg);
 }
 
 /* react auto suggest */
@@ -137,4 +191,15 @@
 
 .react-autosuggest__suggestion--highlighted {
   background-color: #ddd;
+}
+
+/* React MultiDatePicker */
+.book-trip-datepicker .rmdp-week-day {
+  color: #333333;
+  font-weight: 600;
+}
+
+.book-trip-datepicker .rmdp-arrow {
+  border: solid #333333;
+  border-width: 0 2px 2px 0;
 }
