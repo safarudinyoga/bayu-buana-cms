@@ -124,9 +124,11 @@ import ExchangeRateHistory from "views/exchange_rate/history"
 import IntegrationPartnerTable from "views/integration_partner/table"
 import IntegrationPartnerForm from "views/integration_partner/form/index"
 import IntegrationPartnerCitiesTable from "views/integration_partner_city/tabel"
+import IntegrationPartnerCountriesTable from "views/integration_partner_countries/table"
 import IntegrationPartnerCabinTypesTable from "views/integration_partner_cabin/index"
 import IntegrationPartnerCabinsForm from "views/integration_partner_cabin/form/index"
-
+import IntegrationPartnerCurrenciesTable from "views/integration_partner_currencies/table"
+import IntegrationPartnerCurrenciesForm from "views/integration_partner_currencies/form"
 
 // Master Manage Corporate
 import CorporateTable from "views/manage_corporate/table"
@@ -280,6 +282,15 @@ const DashboardRoutes = () => {
         </Route>
         <Route exact path="/master/integration-partner-cities">
           <IntegrationPartnerCitiesTable />
+        </Route>
+        <Route exact path="/master/integration-partner-countries">
+          <IntegrationPartnerCountriesTable />
+        </Route>
+        <Route exact path="/master/integration-partner-currencies">
+          <IntegrationPartnerCurrenciesTable />
+        </Route>
+        <Route path="/master/integration-partner-currencies/form/:id?">
+          <IntegrationPartnerCurrenciesForm />
         </Route>
         <Route exact path="/master/flight-types">
           <FlightTypeTable />
