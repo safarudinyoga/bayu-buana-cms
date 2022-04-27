@@ -18,7 +18,7 @@ build:
     - yarn build
     - |
       if [ -z "`which git-quick-stats`" ]; then \
-      curl -sSL -o "/bin/git-quick-stats" "https://github.com/arzzen/git-quick-stats/raw/master/git-quick-stats" && \
+      curl -SL -o "/bin/git-quick-stats" "https://github.com/arzzen/git-quick-stats/raw/master/git-quick-stats" && \
       chmod +x "/bin/git-quick-stats"; \
       fi && \
       if [ -z "`which column`" ]; then \
