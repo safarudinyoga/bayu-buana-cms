@@ -46,7 +46,7 @@ function BookFlight() {
 		color: 'black',
 	};
 
-	const MenuList = ({...props}) => {
+	const MenuListLanguage = ({...props}) => {
 		return (
 			<components.MenuList {...props}>
 			  <div style={menuHeaderStyle}>Select your language</div>
@@ -55,14 +55,14 @@ function BookFlight() {
 		);
 	}
 
-	// const MenuList = ({...props}) => {
-	// 	return (
-	// 		<components.MenuList{...props}>
-	// 		  <div style={menuHeaderStyle}>Select your currency</div>
-	// 		  {props.children}
-	// 		</components.MenuList>
-	// 	);
-	// }
+	const MenuListCurrency = ({...props}) => {
+		return (
+			<components.MenuList{...props}>
+			  <div style={menuHeaderStyle}>Select your currency</div>
+			  {props.children}
+			</components.MenuList>
+		);
+	}
 	
 	// const image = (backgroundImage = "") => ({
 	// 	alignItems: 'center',
@@ -185,9 +185,9 @@ function BookFlight() {
 								overlay={<Tooltip>Choose your language</Tooltip>}
 							> */}
 							<Select
-								defaultValue={selectLanguage[0]}
+								defaultValue={selectLanguage}
 								options={selectLanguage}
-								components={{ MenuList }}
+								components={{ MenuList: MenuListLanguage }}
 								formatOptionLabel={language => (
 									<div className="selectLanguage">
 									  <img 
@@ -210,8 +210,9 @@ function BookFlight() {
 								overlay={<Tooltip>Choose your currency</Tooltip>}
 							> */}
 							<Select
-								defaultValue={selectCurrencies[0]}
+								defaultValue={selectCurrencies}
 								options={selectCurrencies}
+								components={{ MenuList: MenuListCurrency }}
 								label="Currency"
 								className="selectCurrencies"
 								formatOptionLabel={currency => (
