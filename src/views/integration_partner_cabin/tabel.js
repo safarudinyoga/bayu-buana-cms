@@ -40,9 +40,9 @@ export default function IntegrationPartnerCabinTypesTable() {
     ],
     emptyTable: "No Partner Cabins found",
     showInfoDelete: true,
-    infoDelete: [
-      {title: "Rating Name", recordName: "corporate_rating_type_level_name"}, 
-    ],
+    isOpenNewTab: false,
+    btnDownload: ".buttons-csv",
+    module:"integration-partner-cabins",
     recordName: ["cabin_type.cabin_type_name", "cabin_type_code", "cabin_type_name"],
   })
 
