@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux'
 import { setUIParams } from "redux/ui-store"
 import { renderColumn } from "lib/translation"
 import DatePicker from 'react-datepicker'
+import moment from 'moment'
 
 export default function SetupFlightCommisionTable() {
   let dispatch = useDispatch()
@@ -115,6 +116,8 @@ export default function SetupFlightCommisionTable() {
   //   setSelectedCountryIds([])
   // }
 
+  const dateFormat = (v) => moment(v).format('D MMM YYYY')
+
   let params = {
     title: "Setup Flight Commision",
     baseRoute: "/master/setup-flight-commission/form",
@@ -148,7 +151,7 @@ export default function SetupFlightCommisionTable() {
           if(val.start_date === undefined && val.end_date === undefined){
             return "Not Specified"
           }else{
-            return val.start_date + " - " + val.end_date
+            return dateFormat(val.start_date) + " - " + dateFormat(val.end_date)
           }
         }
       },
@@ -159,7 +162,7 @@ export default function SetupFlightCommisionTable() {
           if(val.start_date === undefined && val.end_date === undefined){
             return "Not Specified"
           }else{
-            return val.start_date + " - " + val.end_date
+            return dateFormat(val.start_date) + " - " + dateFormat(val.end_date)
           }
         }
       },
