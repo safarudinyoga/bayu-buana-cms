@@ -11,13 +11,19 @@ import { setUIParams } from "redux/ui-store"
 import useQuery from "lib/query"
 import { Form, Formik } from "formik"
 import { setAlert } from "redux/ui-store"
+import { useSnackbar } from "react-simple-snackbar"
 
 const endpoint = "/master/integration-partners"
 const backUrl = "/master/integration-partner"
 
+const options = {
+  position: "bottom-right",
+}
+
 function FormIntegrationPartner(props) {
   let dispatch = useDispatch()
   let formId = props.match.params.id
+  const [openSnackbar] = useSnackbar(options)
   const history = useHistory()
   let api = new Api()
   let [status, setStatus] = useState({ switchStatus: true })
@@ -29,6 +35,8 @@ function FormIntegrationPartner(props) {
   const [form, setForm] = useState({
     integration_partner_code: "",
     integration_partner_name: "",
+    status:"",
+    partner_url:"",
   })
 
   useEffect(async () => {
@@ -36,7 +44,15 @@ function FormIntegrationPartner(props) {
     let formId = props.match.params.id
     try {
       let res = await api.get(endpoint + "/" + formId)
-      setForm(res.data)
+      let data = res.data;
+      setForm({
+        ...form,
+        integration_partner_code: data.integration_partner_code,
+        integration_partner_name: data.integration_partner_name,
+        status: data.status,
+        business_entity_id:data.business_entity_id.value,
+        partner_url: data.partner_url
+      })
     } catch (e) { }
     setLoading(false)
   }, [])
@@ -70,15 +86,57 @@ function FormIntegrationPartner(props) {
           <Tab.Content>
             <Tab.Pane eventKey="partner-information">
               <Formik
+               enableReinitialize
+               initialValues={form}
+               onSubmit={async (values, { setSubmitting, resetForm }) => {
+                console.log(values)
+        
+                let formatted = {
+                  integration_partner_code: values.integration_partner_code,
+                  integration_partner_name: values.integration_partner_name,
+                  status: values.status,
+                  business_entity_id:values.business_entity_id,
+                  partner_url: values.partner_url,
+                  partner_username: values.partner_username ? {
+                    id: values.partner_username.value,
+                    name: values.partner_username.label
+                  } : null,
+                }
+        
+                try {
+                  let res = await api.put(`/master/integration-partners`, formatted)
+                  dispatch(
+                    setAlert({
+                      message: `Record '${formatted.integration_partner_name}' has been successfully saved.`,
+                    }),
+                  )
+                } catch(e) {
+                  dispatch(
+                    setAlert({
+                      message: "Failed to save this record.",
+                    }),
+                  )
+                }
+              }}
               >
-                {({ setFieldValue }) => (
-                  <Form >
+                {({ values,
+        errors,
+        touched,
+        dirty,
+        handleChange,
+        handleBlur,
+        handleSubmit,
+        isValid,
+        isSubmitting,
+        setFieldValue,
+        setFieldTouched,}) => (
+                  <Form onSubmit={handleSubmit} >
                     <Card>
                       <Card.Body>
                         <h3 className="card-heading">Partner Information</h3>
                         <FormInputControl
                           label="Partner Code"
-                          value={form.integration_partner_code}
+                          value={values.integration_partner_code}
                           name="integration_partner_code"
                           onChange={(e) =>
                             setForm({
@@ -94,7 +152,7 @@ function FormIntegrationPartner(props) {
                         />
                         <FormInputControl
                           label="Partner Name"
-                          value={form.integration_partner_name}
+                          value={values.integration_partner_name}
                           name="integration_partner_name"
                           onChange={(e) =>
                             setForm({
@@ -108,14 +166,36 @@ function FormIntegrationPartner(props) {
                           minLength="1"
                           maxLength="64"
                         />
+                       
                         <FormikControl
                           control="switch"
                           label="Status"
                           name="status"
                           size={formSize}
                           value={form.status}
-
+                          onChange={(e) =>
+                            setForm({
+                              ...form,
+                              status: e.target.value,
+                            })
+                          }
                           disabled={isView || loading}
+                        />
+                        <FormInputControl
+                          label="Partner Name"
+                          value={form.partner_url}
+                          name="integration_partner_name"
+                          onChange={(e) =>
+                            setForm({
+                              ...form,
+                              partner_url: e.target.value,
+                            })
+                          }
+                          disabled={isView || loading}
+                          type="text"
+                          style={{ maxWidth: 300 }}
+                          minLength="1"
+                          maxLength="64"
                         />
                       </Card.Body>
                     </Card>
