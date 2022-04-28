@@ -5,7 +5,7 @@ import { setUIParams } from 'redux/ui-store'
 import Api from "config/api"
 import './book_flight.css'
 import Select, {components} from "react-select"
-import {OverlayTrigger, Tooltip} from "react-bootstrap"
+// import {OverlayTrigger, Tooltip} from "react-bootstrap"
 import FlightList from './step/select-flight'
 import Passenger from './step/passengers'
 
@@ -41,6 +41,29 @@ function BookFlight() {
 		zIndex: 99999
 	});
 
+	const menuHeaderStyle = {
+		padding: '8px 12px',
+		color: 'black',
+	};
+
+	const MenuList = ({...props}) => {
+		return (
+			<components.MenuList {...props}>
+			  <div style={menuHeaderStyle}>Select your language</div>
+			  {props.children}
+			</components.MenuList>
+		);
+	}
+
+	// const MenuList = ({...props}) => {
+	// 	return (
+	// 		<components.MenuList{...props}>
+	// 		  <div style={menuHeaderStyle}>Select your currency</div>
+	// 		  {props.children}
+	// 		</components.MenuList>
+	// 	);
+	// }
+	
 	// const image = (backgroundImage = "") => ({
 	// 	alignItems: 'center',
 	// 	display: 'flex',
@@ -157,13 +180,14 @@ function BookFlight() {
 			<Col sm={{span: 2, offset: 5}}>
 						<Row>
 							<Col>
-							<OverlayTrigger
+							{/* <OverlayTrigger
 								placement="bottom"
 								overlay={<Tooltip>Choose your language</Tooltip>}
-							>
+							> */}
 							<Select
 								defaultValue={selectLanguage[0]}
 								options={selectLanguage}
+								components={{ MenuList }}
 								formatOptionLabel={language => (
 									<div className="selectLanguage">
 									  <img 
@@ -173,18 +197,18 @@ function BookFlight() {
 									  />
 									  <span className='language-value'>{language.value}</span>
 									</div>
-								  )}
+								)}
 								label="Language"
 								styles={{control: customControlStyles}}
 							/> 
-							</OverlayTrigger>
+							{/* </OverlayTrigger> */}
 							
 							</Col>
 							<Col>
-							<OverlayTrigger
+							{/* <OverlayTrigger
 								placement="bottom"
 								overlay={<Tooltip>Choose your currency</Tooltip>}
-							>
+							> */}
 							<Select
 								defaultValue={selectCurrencies[0]}
 								options={selectCurrencies}
@@ -198,7 +222,7 @@ function BookFlight() {
 								)}
 								styles={{control: customControlStyles}}
 							/>
-							</OverlayTrigger>
+							{/* </OverlayTrigger> */}
 							</Col>
 						</Row>
 					</Col>

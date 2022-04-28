@@ -335,7 +335,11 @@
   border-left: 7px solid transparent;
   border-right: 7px solid transparent;
 }
+
 .passenger-accordion .card {
   display: flex;
   flex-direction: column !important;
+}
+.alert-dismissible .close, .alert-dismissible .mailbox-attachment-close {
+  z-index: 0;
 }
