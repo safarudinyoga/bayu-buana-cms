@@ -116,7 +116,15 @@ const FlightCommisionForm = (props) => {
     setOptionRoute(options)
   }, [])
   
-  
+  const subYears = (event, num) => {
+    event.setFullYear(event.getFullYear() - num)
+    return event
+  }
+  const addYears = (event, num) => {
+    event.setFullYear(event.getFullYear() + num)
+    return event
+  }
+
   const initialValues = {
     airline_id: "",
     commission_claim_departure_date: {
@@ -312,6 +320,8 @@ const FlightCommisionForm = (props) => {
                                     className="form-control"
                                     dateFormat="dd MMMM yyyy"
                                     selected={periodIssueStart}
+                                    minDate={subYears(new Date(), 10)}
+                                    maxDate={addYears(new Date(), 10)} 
                                     locale="engb"
                                     value={new Date()}
                                     onChange={(date) => {
@@ -327,6 +337,8 @@ const FlightCommisionForm = (props) => {
                                     className="form-control"
                                     dateFormat="dd MMMM yyyy"
                                     selected={periodIssueEnd}
+                                    minDate={subYears(new Date(), 10)}
+                                    maxDate={addYears(new Date(), 10)} 
                                     locale="engb"
                                     onChange={(date) => {
                                       setPeriodIssueEnd(date)
@@ -380,6 +392,8 @@ const FlightCommisionForm = (props) => {
                                     className="form-control"
                                     dateFormat="dd MMMM yyyy"
                                     selected={periodDepartureStart}
+                                    minDate={subYears(new Date(), 10)}
+                                    maxDate={addYears(new Date(), 10)} 
                                     locale="engb"
                                     onChange={(date) => {
                                       console.log(date)
@@ -394,6 +408,8 @@ const FlightCommisionForm = (props) => {
                                     className="form-control"
                                     dateFormat="dd MMMM yyyy"
                                     selected={periodDepartureEnd}
+                                    minDate={subYears(new Date(), 10)}
+                                    maxDate={addYears(new Date(), 10)} 
                                     locale="engb"
                                     onChange={(date) => {
                                       setPeriodDepartureEnd(date)
