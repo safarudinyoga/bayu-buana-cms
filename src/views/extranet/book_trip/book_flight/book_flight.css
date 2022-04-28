@@ -304,3 +304,9 @@
   border-left: 7px solid transparent;
   border-right: 7px solid transparent;
 }
+
+
+
+.alert-dismissible .close, .alert-dismissible .mailbox-attachment-close {
+  z-index: 0;
+}
