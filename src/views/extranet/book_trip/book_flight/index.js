@@ -238,6 +238,7 @@ function BookFlight() {
         <Tabs activeKey={tabKey} id="uncontrolled-tab-example" className="book-trip-tabs" onSelect={() => {}}>
 			<Tab eventKey="select-flight" title="Select Flight" tabClassName="book-trip-tab-link">
 				<FlightList
+					key={"select-flight"}
 					handleSelectTab={(v) => onChangeTab(v)}
 				/>
 			</Tab>
