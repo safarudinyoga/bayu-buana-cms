@@ -163,6 +163,7 @@ import StandardAncillaryFeeOtherForm from "views/standard_ancillary_fee/form/oth
 // Special Date
 import SpecialDateTable from "views/special_date/table"
 import SpecialDateForm from "views/special_date/form"
+import SpecialDateCalendar from "views/special_date/calendar"
 
 // Extranet BookTrip
 import BookTrip from "views/extranet/book_trip/book_trip"
@@ -602,6 +603,9 @@ const DashboardRoutes = () => {
         </Route>
         <Route path="/master/special-date/form/:id?">
           <SpecialDateForm />
+        </Route>
+        <Route path="/master/special-date/calendar">
+          <SpecialDateCalendar />
         </Route>
 
         {/* Extranet Book Trip */}

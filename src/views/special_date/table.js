@@ -69,6 +69,7 @@ export default function SpecialDateTable() {
     isShowYear: true,
     isCheckbox: false,
     hideDetail: true,
+    showCalendar: true,
   }
   return <BBDataTable {...params} />
 }

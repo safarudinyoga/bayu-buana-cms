@@ -107,6 +107,7 @@ class TableHeader extends Component {
     this.state = {
       showFilter: false,
       showAdvancedOptions: props.showAdvancedOptions ?? true,
+      showCalendar: props.showCalendar ?? false,
       searchValue: "",
       statusValue: "0",
       yearValue: new Date().getFullYear(),
@@ -256,6 +257,11 @@ class TableHeader extends Component {
                 )}
               </button>
             )}
+            {
+              this.state.showCalendar ? (
+                <a style={{fontSize: 14, verticalAlign: "middle"}} className="ml-2" href="/master/special-date/calendar">View Calendar</a>
+              ) : ""
+            }
 
             { pathname === "/master/divisions" &&
               <OverlayTrigger
