@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react"
 import Api from "config/api"
 import { useDispatch } from 'react-redux';
-import { withRouter, useHistory } from 'react-router';
+import { withRouter, useHistory} from 'react-router';
+import { Link } from 'react-router-dom'
 import { ReactSVG } from "react-svg"
 import { Row, Col, Tab, Nav} from "react-bootstrap"
 import { setUIParams } from "redux/ui-store"
@@ -30,6 +31,7 @@ const UserProfile = (props) => {
   const [form, setForm] = useState(null)
   const [Data, setData] = useState(null)
   const [finishStep, setStep] = useState(0)
+  let formId = props.match.params.id
 
 
   useEffect(async () => {
@@ -138,6 +140,24 @@ const UserProfile = (props) => {
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
+                    <Nav.Link eventKey="partner-messages" disabled={finishStep < 6 && !Data?.id}>
+                      <div>
+                        <ReactSVG src="/img/icons/employment.svg" />
+                        <span>Partner Messages</span>
+                      </div>
+                    </Nav.Link>
+                  </Nav.Item>
+                  <Nav.Item>
+                 
+                  <Nav.Link href={`/master/integration-partner-cities/${formId}/cities`}>
+                    
+                    <div>
+                        <ReactSVG src="/img/icons/employment.svg" />
+                        <span>Partner Messages</span>
+                      </div>
+                    
+                    </Nav.Link>
+                  
                     <Nav.Link eventKey="partner-messages" disabled={finishStep < 6 && !Data?.id}>
                       <div>
                         <ReactSVG src="/img/icons/employment.svg" />

@@ -274,12 +274,16 @@ const DashboardRoutes = () => {
         <Route exact path="/master/integration-partner-cabin-types">
           <IntegrationPartnerCabinTypesTable/>
         </Route>
-        <Route path="/master/integration-partner-cabin-types/form/:id?">
+        {/* <Route path="/master/integration-partner-cabin-types/form/:id?">
           <IntegrationPartnerCabinsForm/>
-        </Route>
-        <Route exact path="/master/integration-partner-cities">
+        </Route> */}
+        {/* <Route exact path="/master/integration-partner-cities">
+          <IntegrationPartnerCitiesTable />
+        </Route> */}
+        <Route exact path="/master/integration-partner-cities/:id/cities">
           <IntegrationPartnerCitiesTable />
         </Route>
+       
         <Route exact path="/master/flight-types">
           <FlightTypeTable />
         </Route>
