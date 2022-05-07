@@ -8,10 +8,10 @@ import FormPartner from "./form/partner_credentials"
 let params = {
   isCheckbox: false,
   showAdvancedOptions: false,
-  createOnModal: true,
+  createOnModal: false,
   hideDetail: true,
-  title: "Partner Credentials",
-  titleModal: "Partner Credentials",
+  title: "Partner hehe",
+  titleModal: "Partner hehe",
   baseRoute: "/master/integration-partner/form",
   // routeHistory: "/master/exchange-rate/history",
   endpoint: "/master/currency-conversions",

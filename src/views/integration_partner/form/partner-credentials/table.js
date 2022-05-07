@@ -2,18 +2,18 @@ import React, { useEffect } from "react"
 import BBDataTable from "components/table/bb-data-table"
 import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
-import Form from "./form"
+import Form from "./form/partner_credentials"
 import { Card } from "react-bootstrap"
 
-export default function IntegrationPartnerCurrenciesTable() {
+export default function IntegrationPartnerCredentialsTable() {
   let dispatch = useDispatch()
   useEffect(() => {
     dispatch(
       setUIParams({
-        title: "Partner Currencies",
+        title: "Partner Credentials",
         breadcrumbs: [
           {
-            text: "Partner Currencies",
+            text: "Partner Credentials",
           },
         ],
       }),
@@ -46,7 +46,7 @@ export default function IntegrationPartnerCurrenciesTable() {
       },
     ],
     emptyTable: "No Partner Currency found",
-    recordName: ["currency_symbol", "currency_code", "currency_name"],
+    recordName: ["currency.currency_name", "currency_code", "currency_name"],
     btnDownload: ".buttons-csv",
     module: "integration-partner-currencies"
   }

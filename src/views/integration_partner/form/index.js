@@ -10,6 +10,7 @@ import useQuery from "lib/query"
 import PartnerCabin from "../../integration_partner_cabin/tabel"
 import PartnerInformation from "./partner-information"
 import { useWindowSize } from "rooks"
+import PartnerCorporates from "./partner-corporates";
 
 
 const endpoint = "/master/integration-partners"
@@ -151,6 +152,9 @@ const UserProfile = (props) => {
                 <Tab.Content>
                   <Tab.Pane eventKey="partner-information">
                     <PartnerInformation />
+                  </Tab.Pane>
+                  <Tab.Pane eventKey="partner-corporates">
+                    <PartnerCorporates  />
                   </Tab.Pane>
                   <Tab.Pane eventKey="partner-cabins">
                     <PartnerCabin />
