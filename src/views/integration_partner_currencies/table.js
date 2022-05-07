@@ -34,19 +34,19 @@ export default function IntegrationPartnerCurrenciesTable() {
     columns: [
       {
         title: "Currency",
-        data: "currency_symbol",
+        data: "currency_name",
       },
       {
-        title: "Partner Currency Code",
+        title: "Payment Currency Code",
         data: "currency_code",
       },
       {
-        title: "Partner Currency Name",
+        title: "Payment Currency Name",
         data: "currency_name",
       },
     ],
     emptyTable: "No Partner Currency found",
-    recordName: ["currency_symbol", "currency_code", "currency_name"],
+    recordName: ["currency_code", "currency_name"],
     btnDownload: ".buttons-csv",
     module: "integration-partner-currencies"
   }
