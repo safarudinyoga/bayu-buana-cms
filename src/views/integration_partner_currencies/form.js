@@ -54,23 +54,32 @@ function IntegrationPartnerCurrenciesCreate(props) {
 
     const initialValues = {
         currency_id: "",
+        currency_code: "",
+        currency_symbol: "",
+        currency_name: "",
+        integration_partner_id: "00000000-0000-0000-0000-000000000000"
     };
 
     const validationSchema = Yup.object().shape({
-        currency_id: Yup.object().required("Partner Currency Code is required."),
+        currency_code: Yup.string().required("Partner Currency Code is required."),
+        currency_name: Yup.string().required("Partner Currency Name is required."),
     });
 
     const onSubmit = async (values, a) => {
         try {
             let form = {
                 currency_id: values.currency_id.value,
+                currency_symbol: values.currency_symbol,
+                currency_code: values.currency_code,
+                currency_name: values.currency_name,
+                integration_partner_id: values.integration_partner_id
             };
             let res = await API.putOrPost("/master/integration-partner-currencies", id, form);
 
             dispatch(setCreateModal({ show: false, id: null, disabled_form: false }));
             dispatch(
                 setAlert({
-                    message: `Record 'From Integration Partner Currency: ${form.currency_id} and To Currency: ${form.currency_name}' has been successfully saved.`,
+                    message: `Record 'From Integration Partner Currency: ${form.currency_code} and To Currency: ${form.currency_name}' has been successfully saved.`,
                 })
             );
         } catch (e) {
@@ -99,12 +108,12 @@ function IntegrationPartnerCurrenciesCreate(props) {
                         control="selectAsync"
                         required={isView ? "" : "label-required"}
                         label="Currencies"
-                        name="currencies"
+                        name="currencies_id"
                         placeholder={values.currency_name || "Please Choose."}
-                        url={`master/integration-partner-currencies`}
-                        fieldName={"currency_symbol"}
+                        url={`master/currencies`}
+                        fieldName={"currency_name"}
                         onChange={(v) => {
-                            setFieldValue("currencies", v);
+                            setFieldValue("currency_id", v);
                         }}
                         style={{ maxWidth: 250 }}
                         size={formSize}
