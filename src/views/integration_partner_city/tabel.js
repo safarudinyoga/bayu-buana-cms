@@ -8,7 +8,7 @@ import { Row, Col, Tab, Card } from "react-bootstrap"
 
 const backUrl = "/master/integration-partner"
 
-export default function PartnerCityTable() {
+export default function PartnerCityTable(props) {
  
   let dispatch = useDispatch()
   useEffect(() => {

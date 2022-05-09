@@ -58,7 +58,7 @@ function DeleteForm(props) {
       dispatch(setCreateModal({show: false, id: null, disabled_form: false}))
       dispatch(
 				setAlert({
-				  message: `Record Corporate Rating Name : ${values.cabin_type_name} was successfully deleted.`,
+				  message: `Record Partner Cabin Name : ${values.cabin_type_name} was successfully deleted.`,
 				}),
       )
 		} catch(e) {

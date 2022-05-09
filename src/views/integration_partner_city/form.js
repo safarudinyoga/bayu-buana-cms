@@ -6,6 +6,8 @@ import { v4 as uuidv4 } from 'uuid';
 import * as Yup from "yup"
 import SelectAsync from "components/form/select-async"
 import Api from "config/api"
+import axios from "axios"
+import env from "config/environment"
 import { useDispatch, useSelector } from "react-redux"
 import { setAlert, setCreateModal, setModalTitle } from "redux/ui-store"
 import CancelButton from "components/button/cancel"
@@ -65,35 +67,53 @@ function PartnerCityForm(props) {
     city_name: "",
   }
 
-  const checkCity = async (city_code, city_name) => {
-    let filter = encodeURIComponent(JSON.stringify([["city_code", "=", city_code], ["AND"], ["city_name", "=", city_name]]))
-    let res = await API.get(`/master/integration-partner-cities?filters=${filter}`)
-    let sameId = res.data.items.find((v) => v.id === id)
-    if (!sameId) return res.data.items.length === 0
-    console.log(sameId)
-    return true
-  }
-
-
-  Yup.addMethod(Yup.object, 'uniqueCity', function (message) {
-    return this.test('unique', message, function (field, ctx) {
-      let parent = ctx.parent
-      if (parent.city_code?.value && parent.city_name?.value) {
-        return checkCity(parent.city_code.value, parent.city_name.value)
-      } else {
-        return true
-      }
-    })
-  })
 
 
   const validationSchema = Yup.object().shape({
     city: Yup.object()
       .required("City is required.."),
+    city_code:Yup.string()
+      .required("Partner City Code is required")
+      .test(
+        "Unique Partner City Code",
+        "Partner City Code already exists", // <- key, message
+        async (value, ctx) => {
+          let formId = props.match.params.id
+          try {
+            let res = await axios.get(`${env.API_URL}/master/integration-partner-cities?filters=["city_code","=","${value}"]`)
+  
+            if (formId) {
+              return res.data.items.length === 0 ||
+                value === formValues.city_code
+            } else {
+              return res.data.items.length === 0
+            }
+          } catch (e) {
+            return false
+          }
+        }
+      ),
     city_name: Yup.string()
-      .min(0, "Minimum number: 0")
-      .max(36, "Maximum number: 36")
-      .required("Partner City Code is required"),
+      .required("Partner City Name is required")
+      .test(
+        "Unique Partner City Name",
+        "Partner City Name already exists", // <- key, message
+        async (value, ctx) => {
+          let formId = props.match.params.id
+          try {
+            let res = await axios.get(`${env.API_URL}/master/integration-partner-cities?filters=["city_name","=","${value}"]`)
+  
+            if (formId) {
+              return res.data.items.length === 0 ||
+                value === formValues.city_name
+            } else {
+              return res.data.items.length === 0
+            }
+          } catch (e) {
+            return false
+          }
+        }
+      ),
 
   })
 

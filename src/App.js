@@ -124,8 +124,9 @@ import ExchangeRateHistory from "views/exchange_rate/history"
 import IntegrationPartnerTable from "views/integration_partner/table"
 import IntegrationPartnerForm from "views/integration_partner/form/index"
 import IntegrationPartnerCitiesTable from "views/integration_partner_city/tabel"
-import IntegrationPartnerCabinTypesTable from "views/integration_partner_cabin/index"
-import IntegrationPartnerCabinsForm from "views/integration_partner_cabin/form/index"
+import IntegrationPartnerCabinTypesTable from "views/integration_partner_cabin/tabel"
+import IntegrationPartnerCabinsForm from "views/integration_partner_cabin/form/form"
+import FareFamiyTabel from "views/integration_partner_cabin/tabel-fare-family"
 
 
 // Master Manage Corporate
@@ -150,6 +151,9 @@ import JobTitleForm from './views/job-title/form';
 import UserAccessTypeTable from "views/user_access_type/table"
 import UserAccessTypeForm from "views/user_access_type/form"
 import ResetPassword from "views/reset_password/reset_password"
+
+//User Management 
+import UserManagementTable from "views/user_management/table"
 
 // Master Standard Ancillary Fee
 import StandardAncillaryFee from './views/standard_ancillary_fee/standard_ancillary_fee';
@@ -274,14 +278,18 @@ const DashboardRoutes = () => {
         <Route exact path="/master/integration-partner-cabin-types">
           <IntegrationPartnerCabinTypesTable/>
         </Route>
-        {/* <Route path="/master/integration-partner-cabin-types/form/:id?">
+        <Route path="/master/integration-partner-cabin-types/form/:id?">
           <IntegrationPartnerCabinsForm/>
-        </Route> */}
-        {/* <Route exact path="/master/integration-partner-cities">
+        </Route>
+        <Route exact path="/master/integration-partner-cities">
+          <IntegrationPartnerCitiesTable />
+        </Route>
+        {/* <Route exact path="/master/integration-partner-cities/:id/cities">
           <IntegrationPartnerCitiesTable />
         </Route> */}
-        <Route exact path="/master/integration-partner-cities/:id/cities">
-          <IntegrationPartnerCitiesTable />
+        <Route exact path="/master/fare-types">
+
+        <FareFamiyTabel />
         </Route>
        
         <Route exact path="/master/flight-types">
@@ -582,6 +590,14 @@ const DashboardRoutes = () => {
         {/* User Access Type */}
         <Route exact path="/master/user-access-type">
           <UserAccessTypeTable />
+        </Route>
+        <Route path="/master/user-access-type/form/:id?">
+          <UserAccessTypeForm />
+        </Route>
+
+        {/* User management */}
+        <Route exact path="/master/user-management">
+          <UserManagementTable />
         </Route>
         <Route path="/master/user-access-type/form/:id?">
           <UserAccessTypeForm />
