@@ -14,7 +14,7 @@ export default function SpecialDateTable() {
         title: "Special Dates",
         breadcrumbs: [
           {
-            text: "Master Data Management",
+            text: "Setup & Configurations",
           },
           {
             text: "Special Dates",
@@ -43,7 +43,7 @@ export default function SpecialDateTable() {
         data: "start_date",
         render: (val) => {
           if(val){
-            return format(new Date(val), "d MMM yyyy")
+            return format(new Date(val), "d MMMM yyyy")
           }
         }
       },
@@ -52,7 +52,7 @@ export default function SpecialDateTable() {
         data: "end_date",
         render: (val) => {
           if(val){
-            return format(new Date(val), "d MMM yyyy")
+            return format(new Date(val), "d MMMM yyyy")
           }
         }
       },
