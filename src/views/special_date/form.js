@@ -32,12 +32,11 @@ function SpecialDateForm(props) {
   const [translations, setTranslations] = useState([])
   const [id, setId] = useState(null)
   const [cityData, setCityData] = useState([])
-  const [repeat, setRepeat] = useState(false)
   const [form, setForm] = useState({
     special_date_name: "",
     start_date: new Date(),
     end_date: new Date(),
-    fixed: repeat,
+    fixed: false,
   })
 
   
@@ -102,8 +101,6 @@ function SpecialDateForm(props) {
         setForm(res.data)
         if(res.data) {
           let currentName = res.data.special_date_name
-          setRepeat(res.data.fixed)
-
           $.validator.addMethod(
             "checkName",
             function (value, element) {
@@ -173,9 +170,9 @@ function SpecialDateForm(props) {
   const onSave = async () => {
     let translated = formBuilder.getTranslations()
     setLoading(true)
-    setForm({...form, fixed: repeat})
     let api = new Api()
     try {
+      console.log('form', form)
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
       console.log(res);
@@ -303,8 +300,8 @@ function SpecialDateForm(props) {
         className="form-check-input" 
         type="checkbox"
         id="flexCheckDefault" 
-        onChange={() => setRepeat(!repeat)}  
-        checked={repeat}
+        onChange={(repeat) => setForm({...form, fixed: repeat.target.checked})}  
+        checked={form.fixed}
       />
       <label className="form-check-label" for="flexCheckDefault">
         Occurs on the same date every year?
