@@ -10,6 +10,7 @@ export default class FormContainer extends Component {
     super(props)
     this.form = React.createRef()
     this.validator = null
+    this.state = {isValid: false}
   }
 
   componentDidMount() {
@@ -62,6 +63,7 @@ export default class FormContainer extends Component {
       submitHandler: (e) => {
         var $element = $(e);
         $element.valid();
+
         if($element.valid()) {
           this.onSubmit(e)
         }
