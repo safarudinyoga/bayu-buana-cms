@@ -4,7 +4,7 @@ import Oneway from './oneway'
 function MultiTrip() {
   return (
     <div>
-      <Oneway />
+      <Oneway multitrip={true} />
     </div>
   )
 }
