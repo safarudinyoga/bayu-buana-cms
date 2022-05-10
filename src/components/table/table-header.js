@@ -219,6 +219,7 @@ class TableHeader extends Component {
     const ExtraFilter = this.props.extraFilter
     const { customFilterStatus } = this.props
     const {pathname} = this.props.location;
+   
 
     return (
       <div className="container-fluid pl-0">
@@ -295,6 +296,7 @@ class TableHeader extends Component {
               </button>
             </OverlayTrigger>
   }
+  
             <OverlayTrigger
               placement="top"
               overlay={<Tooltip>Click to print</Tooltip>}
@@ -307,7 +309,7 @@ class TableHeader extends Component {
                 <img src={printIcon} className="img-circle" alt="print" />
               </Link>
             </OverlayTrigger>
-
+  
             <OverlayTrigger
               placement="top"
               overlay={<Tooltip>Click to download</Tooltip>}
@@ -326,6 +328,7 @@ class TableHeader extends Component {
               </Link>
             </OverlayTrigger>
           </div>
+          
         </div>
         <div
           className={

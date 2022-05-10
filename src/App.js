@@ -128,8 +128,9 @@ import IntegrationPaymentGatewayForm from "views/integration_partner/form/partne
 import IntegrationPartnerMealPlansTable from "views/integration_partner/form/partner_meal_plans/table"
 import IntegrationPartnerMealPlansForm from "views/integration_partner/form/partner_meal_plans/form"
 import IntegrationPartnerCitiesTable from "views/integration_partner_city/tabel"
-import IntegrationPartnerCabinTypesTable from "views/integration_partner_cabin/index"
-import IntegrationPartnerCabinsForm from "views/integration_partner_cabin/form/index"
+import IntegrationPartnerCabinTypesTable from "views/integration_partner_cabin/tabel"
+import IntegrationPartnerCabinsForm from "views/integration_partner_cabin/form/form"
+import FareFamiyTabel from "views/integration_partner_cabin/tabel-fare-family"
 
 // Master Manage Corporate
 import CorporateTable from "views/manage_corporate/table"
@@ -153,6 +154,9 @@ import JobTitleForm from "./views/job-title/form"
 import UserAccessTypeTable from "views/user_access_type/table"
 import UserAccessTypeForm from "views/user_access_type/form"
 import ResetPassword from "views/reset_password/reset_password"
+
+//User Management 
+import UserManagementTable from "views/user_management/table"
 
 // Master Standard Ancillary Fee
 import StandardAncillaryFee from "./views/standard_ancillary_fee/standard_ancillary_fee"
@@ -295,6 +299,14 @@ const DashboardRoutes = () => {
         <Route exact path="/master/integration-partner-cities">
           <IntegrationPartnerCitiesTable />
         </Route>
+        {/* <Route exact path="/master/integration-partner-cities/:id/cities">
+          <IntegrationPartnerCitiesTable />
+        </Route> */}
+        <Route exact path="/master/fare-types">
+
+        <FareFamiyTabel />
+        </Route>
+       
         <Route exact path="/master/flight-types">
           <FlightTypeTable />
         </Route>
@@ -592,6 +604,14 @@ const DashboardRoutes = () => {
         {/* User Access Type */}
         <Route exact path="/master/user-access-type">
           <UserAccessTypeTable />
+        </Route>
+        <Route path="/master/user-access-type/form/:id?">
+          <UserAccessTypeForm />
+        </Route>
+
+        {/* User management */}
+        <Route exact path="/master/user-management">
+          <UserManagementTable />
         </Route>
         <Route path="/master/user-access-type/form/:id?">
           <UserAccessTypeForm />

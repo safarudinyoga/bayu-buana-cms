@@ -1096,7 +1096,7 @@ class BBDataTable extends Component {
           onClick={() => this.props.setCreateModal({show: false, id: null, disabled_form: false})}
           modalContent={this.props.modalContent}
         />
-        <TableHeader
+        {this.props.module !== "fare-types" ? <TableHeader
           {...this.props}
           createOnModal={this.props.createOnModal}
           selected={this.state.selected.length > 0 && !this.props.switchStatus}
@@ -1114,6 +1114,7 @@ class BBDataTable extends Component {
         >
           {this.props.children}
         </TableHeader>
+        :""}
         <div>
           <table
             ref={this.table}
