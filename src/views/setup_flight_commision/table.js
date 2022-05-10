@@ -174,7 +174,7 @@ export default function SetupFlightCommisionTable() {
         }
       }
     ],
-    emptyTable: "No setup flight commisions found",
+    emptyTable: "No Commisions found",
     btnDownload: ".buttons-csv",
     isCheckbox: false,
     isShowStatus: false,
