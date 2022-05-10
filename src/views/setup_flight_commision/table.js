@@ -68,9 +68,9 @@ export default function SetupFlightCommisionTable() {
                 <DatePicker 
                   className="form-control"
                   dateFormat="dd MMMM yyyy"
-                  selected={selectedIssueStart}
+                  selected={selectedIssueEnd}
                   onChange={(date) => {
-                    setSelectedIssueStart(date)
+                    setSelectedIssueEnd(date)
                   }}
                 />
               </div>
@@ -85,9 +85,9 @@ export default function SetupFlightCommisionTable() {
                 <DatePicker 
                   className="form-control"
                   dateFormat="dd MMMM yyyy"
-                  selected={selectedIssueStart}
+                  selected={selectedDepartureStart}
                   onChange={(date) => {
-                    setSelectedIssueStart(date)
+                    setSelectedDepartureStart(date)
                   }}
                 />
               </div>
@@ -153,30 +153,30 @@ export default function SetupFlightCommisionTable() {
       },
       {
         title: "Route(s)",
-        data: "commission_claim_original_destination",
+        data: "departure_city.city_name",
         render: (val, type, row) => {
           return routesFormat(row)
         }
       },
       {
         title: "Period of Issue",
-        data: "commission_claim_issue_date",
-        render: (val) => {
-          if(val.start_date === undefined && val.end_date === undefined){
+        data: "commission_claim_issue_date.start_date",
+        render: (val, d, row) => {
+          if(row.commission_claim_issue_date.start_date === undefined && row.commission_claim_issue_date.end_date === undefined){
             return "Not Specified"
           }else{
-            return dateFormat(val.start_date) + " - " + dateFormat(val.end_date)
+            return dateFormat(row.commission_claim_issue_date.start_date) + " - " + dateFormat(row.commission_claim_issue_date.end_date)
           }
         }
       },
       {
         title: "Period of Departure",
-        data: "commission_claim_departure_date",
-        render: (val) => {
-          if(val.start_date === undefined && val.end_date === undefined){
+        data: "commission_claim_departure_date.start_date",
+        render: (val, d, row) => {
+          if(row.commission_claim_departure_date.start_date === undefined && row.commission_claim_departure_date.end_date === undefined){
             return "Not Specified"
           }else{
-            return dateFormat(val.start_date) + " - " + dateFormat(val.end_date)
+            return dateFormat(row.commission_claim_departure_date.start_date) + " - " + dateFormat(row.commission_claim_departure_date.end_date)
           }
         }
       },
