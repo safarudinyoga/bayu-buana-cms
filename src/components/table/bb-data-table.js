@@ -745,10 +745,12 @@ class BBDataTable extends Component {
     if (value + "" !== "0") {
       this.setState({
         year: value,
+        extraFilters:[["start_date", "like", value],["or"],["end_date", "like", value]]
       })
     } else {
       this.setState({
         year: new Date().getFullYear(),
+        extraFilters:[["start_date", "like", new Date().getFullYear()],["or"],["end_date", "like", new Date().getFullYear()]]
       })
     }
     setTimeout(() => {
@@ -838,6 +840,17 @@ class BBDataTable extends Component {
         })
     }
   }
+
+  // onYearUpdate(year) {
+  //   this.api
+  //     .get(`${this.props.endpoint}?filters=[["start_date","like","${year}"],["or"],["end_date","like","${year}"]]`)
+  //     .then(() => {
+  //       this.dt.ajax.reload()
+  //     })
+  //     .finally(() => {
+  //       this.deselectAll()
+  //     })
+  // }
 
   onRemoveSelected() {
     this.setState({
