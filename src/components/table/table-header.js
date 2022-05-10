@@ -310,6 +310,7 @@ class TableHeader extends Component {
 
             <OverlayTrigger
               placement="top"
+              trigger={"hover"}
               overlay={<Tooltip>Click to download</Tooltip>}
             >
               <Link

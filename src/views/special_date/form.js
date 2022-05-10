@@ -91,7 +91,7 @@ function SpecialDateForm(props) {
           },
           {
             link: backUrl,
-            text: "Special Dates",
+            text: "Special Date",
           },
           {
             text: bcTitle
@@ -193,7 +193,7 @@ function SpecialDateForm(props) {
       props.history.goBack()
       dispatch(
         setAlert({
-          message: `Record '${form.special_date_name}' has been successfully ${formId ? "updated" : "saved"}.`,
+          message: `Record '${form.special_date_name}' has been successfully saved.`,
         }),
       )
     }
@@ -265,13 +265,13 @@ function SpecialDateForm(props) {
         /> */}
       
         <div className="row d-flex align-items-center">
-          <div className="col-sm-6 col-md-3 col-lg-4 form-group required">
+          <div className="col-12 col-md-3 col-lg-4 form-group required">
             <span className="text-label-input">
               Periode
             </span>
             <span className='label-required'></span> 
           </div>
-          <div className="col-sm-2 col-md-4 col-lg-3 datepicker-special-date-container">
+          <div className="col-8 col-md-4 col-lg-3 mb-2 datepicker-special-date-container">
             <DatePicker
               render={<RenderDatepicker />}
               numberOfMonths={2}
@@ -285,7 +285,7 @@ function SpecialDateForm(props) {
             </div>
             
           <span className="text-center">to</span>
-          <div className="col-sm-2 col-md-4 col-lg-3 datepicker-special-date-container">
+          <div className="col-8 col-md-4 col-lg-3 datepicker-special-date-container">
             <DatePicker
               render={<RenderDatepicker />} 
               numberOfMonths={2}
@@ -302,7 +302,7 @@ function SpecialDateForm(props) {
             
             
     
-        <div className="form-check col-sm-6 col-md-5 col-lg-5 offset-sm-4 offset-md-5 offset-lg-4 mt-2">
+        <div className="form-check col-sm-6 col-md-6 col-lg-5 offset-sm-4 offset-md-3 offset-lg-4 mt-2">
           <input 
             className="form-check-input" 
             type="checkbox"
