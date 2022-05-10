@@ -118,6 +118,20 @@ export default function SetupFlightCommisionTable() {
 
   const dateFormat = (v) => moment(v).format('D MMM YYYY')
 
+  const routesFormat = (row) => {
+    if(!row.departure_city.city_name) {
+      return `From any origin to ${row.arrival_city.city_name}`
+    }
+    if(!row.arrival_city.city_name) {
+      return `From ${row.departure_city.city_name} to any destinations`
+    }
+    if(!row.arrival_city.city_name && !row.departure_city.city_name) {
+      return "Any routes"
+    }
+
+   return `${row.departure_city.city_name} - ${row.arrival_city.city_name}`
+  }
+
   let params = {
     title: "Setup Flight Commision",
     baseRoute: "/master/setup-flight-commission/form",
@@ -140,8 +154,8 @@ export default function SetupFlightCommisionTable() {
       {
         title: "Route(s)",
         data: "commission_claim_original_destination",
-        render: (val) => {
-          return val.departure_city_code + " - " + val.arrival_city_code
+        render: (val, type, row) => {
+          return routesFormat(row)
         }
       },
       {
