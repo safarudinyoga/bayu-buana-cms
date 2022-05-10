@@ -1,6 +1,6 @@
 import { withRouter } from "react-router";
 import React, { useState, useEffect } from "react";
-import { Form, FormGroup, InputGroup, Button } from "react-bootstrap";
+import { Form, FormGroup, InputGroup, Button, Row, Col } from "react-bootstrap";
 import { Formik, FastField } from "formik";
 import useQuery from "lib/query";
 import * as Yup from "yup";
@@ -144,6 +144,48 @@ function IntegrationPartnerCorporateCreate(props) {
                             setFieldValue("corporate_code", e.target.value);
                         }}
                     />
+
+                    <FormikControl
+                      control="switch"
+                      label="Enable"
+                      name="is_enabled"
+                      value={values.is_enabled}
+                      onChange={(v) => setFieldValue("is_enabled", v)}
+                      size={formSize}
+                      disabled={isView || loading}
+                    />
+
+                  <Form.Group as={Row} className="form-group">
+                    <Col sm={5}>
+                      <p>Data Transfer Options</p>
+                    </Col>
+                    <Col sm={7}>
+                      <Form.Check
+                        type="checkbox"
+                        label="Corporate Information"
+                        name="corporate_information_enabled"
+                        checked={values.corporate_information_enabled}
+                        onChange={(v) => setFieldValue("corporate_information_enabled", v)}
+                        disabled={isView}
+                      />
+                      <Form.Check
+                        type="checkbox"
+                        label="Corporate Performance"
+                        name="corporate_performance_enabled"
+                        checked={values.corporate_performance_enabled}
+                        onChange={(v) => setFieldValue("corporate_performance_enabled", v)}
+                        disabled={isView}
+                      />
+                      <Form.Check
+                        type="checkbox"
+                        label="Credit Limit"
+                        name="credit_limit_enabled"
+                        checked={values.credit_limit_enabled}
+                        onChange={(v) => setFieldValue("credit_limit_enabled", v)}
+                        disabled={isView}
+                      />
+                    </Col>
+                  </Form.Group>
                     
                     {!props.hideButton && (
                         <div
