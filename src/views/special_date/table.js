@@ -14,7 +14,7 @@ export default function SpecialDateTable() {
         title: "Special Dates",
         breadcrumbs: [
           {
-            text: "Setup & Configurations",
+            text: "Setup and Configurations",
           },
           {
             text: "Special Date",

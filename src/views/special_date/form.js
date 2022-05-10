@@ -87,7 +87,7 @@ function SpecialDateForm(props) {
         title: docTitle,
         breadcrumbs: [
           {
-            text: "Setup & Configurations",
+            text: "Setup and Configurations",
           },
           {
             link: backUrl,
