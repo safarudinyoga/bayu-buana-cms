@@ -33,6 +33,16 @@
   color: #333333;
   margin-bottom: 28px;
 }
+
+.ad-image {
+  display: block;
+  width: 100%;
+  max-width: 601px;
+  margin-left: auto;
+  padding-right: 7.5px;
+  max-height: 100px;
+}
+
 @media (max-width: 768px) {
   .main-header-title {    
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;

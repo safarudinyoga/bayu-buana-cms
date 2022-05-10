@@ -1,15 +1,20 @@
+import { withRouter, useHistory } from "react-router"
 import React, { useEffect, useState } from "react"
 import Api from "config/api"
 import { useDispatch } from 'react-redux';
 import { withRouter} from 'react-router';
 import { ReactSVG } from "react-svg"
-import { Row, Col, Tab, Nav} from "react-bootstrap"
-import { setUIParams } from "redux/ui-store"
-import { useSnackbar } from "react-simple-snackbar"
+import { Row, Col, Tab, Nav } from "react-bootstrap"
 import useQuery from "lib/query"
+import { useDispatch } from "react-redux"
+import { setUIParams } from "redux/ui-store"
+import PartnerPaymentGateway from "./partner_payment_gateway/table"
+import PartnerMealPlans from "./partner_meal_plans/table"
+import PartnertMessages from "./partner_messages/table"
+import Api from "config/api"
+import { useSnackbar } from "react-simple-snackbar"
 import PartnerCabin from "../../integration_partner_cabin/tabel"
 import PartnerInformation from "./partner-information"
-
 
 
 const endpoint = "/master/integration-partners"
@@ -18,7 +23,18 @@ const options = {
   position: "bottom-right",
 }
 
-const UserProfile = (props) => {
+const IntegrationPartnerForm = (props) => {
+  useEffect(async () => {
+    let formId = props.match.params.id
+
+    let docTitle = "Edit Integrarion Partner"
+    if (!formId) {
+      docTitle = "Create User Access Type"
+    } else if (isView) {
+      docTitle = "User Access Type Details"
+    }
+  }, [])
+
   const [openSnackbar] = useSnackbar(options)
   const dispatch = useDispatch()
   const isView = useQuery().get("action") === "view"
@@ -27,19 +43,16 @@ const UserProfile = (props) => {
   const [Data, setData] = useState(null)
   
 
-
   useEffect(async () => {
     let api = new Api()
     let formId = props.match.params.id
 
     let docTitle = "Sabre"
-   
+
     if (!formId) {
       docTitle = "Sabre"
-    
     } else if (isView) {
       docTitle = "Sabre"
-      
     }
     dispatch(
       setUIParams({
@@ -59,15 +72,13 @@ const UserProfile = (props) => {
       }),
     )
     try {
-      if(formId) {
-        let {data} = await api.get(endpoint + "/" + formId)
+      if (formId) {
+        let { data } = await api.get(endpoint + "/" + formId)
         setData(data)
-        
       }
     } catch (e) {
       openSnackbar(`error => ${e}`)
-    }
-    finally{
+    } finally {
       setLoading(false)
     }
   }, [])
@@ -76,7 +87,7 @@ const UserProfile = (props) => {
     setTabKey(key)
   }
 
- 
+  useEffect(() => {}, [props.match.params.id])
 
   return (
     <>
@@ -186,4 +197,4 @@ const UserProfile = (props) => {
   );
 }
 
-export default withRouter(UserProfile);
+export default withRouter(IntegrationPartnerForm)

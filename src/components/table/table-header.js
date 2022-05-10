@@ -67,6 +67,23 @@ const options = [
   {value: "3", label: "Inactive"},
 ]
 
+const selectYear = () => {
+  const options = []
+
+  const startYear = new Date().getFullYear() - 10
+  const endYear = new Date().getFullYear() + 10
+
+  for (let i = startYear; i <= endYear; i++) {
+    options.push({
+      label: i,
+      value: i,
+    })
+  }
+
+  return options
+}
+
+
 const StatusSelect = (props) => {
   return (
     <>
@@ -82,14 +99,18 @@ const StatusSelect = (props) => {
     </>
   )
 }
+
+
 class TableHeader extends Component {
   constructor(props) {
     super(props)
     this.state = {
       showFilter: false,
       showAdvancedOptions: props.showAdvancedOptions ?? true,
+      showCalendar: props.showCalendar ?? false,
       searchValue: "",
       statusValue: "0",
+      yearValue: new Date().getFullYear(),
     }
 
     this.toggleFilter = this.toggleFilter.bind(this)
@@ -134,6 +155,13 @@ class TableHeader extends Component {
     this.setState({statusValue})
   }
 
+  handleYear(yearValue) {
+    if (this.props.onYear) {
+      this.props.onYear(yearValue.value)
+    }
+    this.setState({yearValue})
+  }
+
   handleReset() {
     if (this.props.onReset) {
       this.props.onReset()
@@ -142,6 +170,7 @@ class TableHeader extends Component {
       showFilter: false,
       searchValue: "",
       statusValue: "0",
+      yearValue: new Date().getFullYear(),
     })
 
     if(this.props.customFilterStatus){
@@ -171,6 +200,12 @@ class TableHeader extends Component {
   handleStatusUpdate(status) {
     if (this.props.onStatusUpdate) {
       this.props.onStatusUpdate(status)
+    }
+  }
+
+  handleYearUpdate(year) {
+    if (this.props.onYearUpdate) {
+      this.props.onYearUpdate(year)
     }
   }
 
@@ -223,6 +258,11 @@ class TableHeader extends Component {
                 )}
               </button>
             )}
+            {
+              this.state.showCalendar ? (
+                <a style={{fontSize: 14, verticalAlign: "middle"}} className="ml-2" href="/master/special-date/calendar">View Calendar</a>
+              ) : ""
+            }
 
             { pathname === "/master/divisions" &&
               <OverlayTrigger
@@ -316,6 +356,23 @@ class TableHeader extends Component {
                   </div>
                 </div>
               }
+              {this.props.isShowYear ? (
+                <div className="col-xs-12 col-sm-12 col-md-6 col-lg-4">
+                  <div className="row">
+                    <div className="col-xs-4">
+                    <label className="text-label-filter ml-2 font-weight-bold">{this.props.statusLabel || "Year "}</label>
+                      <StatusSelect
+                        value={this.state.yearValue}
+                        onChange={this.handleYear.bind(this)}
+                        options={selectYear()}
+                      />
+                    </div>
+                  </div>
+                </div>
+              ) : ""
+                
+              }
+
             </div>
             <OverlayTrigger placement="top" overlay={<Tooltip>Reset</Tooltip>}>
               <Link
