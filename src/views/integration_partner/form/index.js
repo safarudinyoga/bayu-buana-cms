@@ -12,6 +12,7 @@ import PartnertMessages from "./partner_messages/table"
 import { useSnackbar } from "react-simple-snackbar"
 import PartnerCabin from "../../integration_partner_cabin/tabel"
 import PartnerInformation from "./partner-information"
+import PartnerCorporate from "../../integration_partner_corporate/table"
 
 const endpoint = "/master/integration-partners"
 const backUrl = "/master/integration-partner"
@@ -167,7 +168,7 @@ const IntegrationPartnerForm = (props) => {
                 Partner Credential
               </Tab.Pane>
               <Tab.Pane eventKey="partner-corporates">
-                Partner Corporates
+                <PartnerCorporate />
               </Tab.Pane>
               <Tab.Pane eventKey="partner-meal-plans">
                 Partner Meal Plans
