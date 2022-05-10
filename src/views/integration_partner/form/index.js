@@ -16,6 +16,7 @@ import PartnerFeeTaxes from '../../partner_fee_taxes/table'
 import { useWindowSize } from "rooks"
 import PartnerCorporates from "./partner-corporates";
 
+import PartnerCorporate from "../../integration_partner_corporate/table"
 
 const endpoint = "/master/integration-partners"
 const backUrl = "/master/integration-partner"
@@ -177,7 +178,7 @@ const IntegrationPartnerForm = (props) => {
                 Partner Credential
               </Tab.Pane>
               <Tab.Pane eventKey="partner-corporates">
-                Partner Corporates
+                <PartnerCorporate />
               </Tab.Pane>
               <Tab.Pane eventKey="partner-cabins">
                 <PartnerCabin />
