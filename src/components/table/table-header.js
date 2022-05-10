@@ -359,17 +359,17 @@ class TableHeader extends Component {
                   <div className="row">
                     <div className="col-xs-4">
                     <label className="text-label-filter ml-2 font-weight-bold">{this.props.statusLabel || "Year "}</label>
-                      <StatusSelect
-                        defaultValue={{
-                          value: this.state.yearValue, 
-                          label: this.state.yearValue
-                        }}
+                      <Select
+                        components={{IndicatorSeparator: () => null, DropdownIndicator}}
                         value={{
                           value: this.state.yearValue, 
                           label: this.state.yearValue
                         }}
                         onChange={this.handleYear.bind(this)}
+                        styles={customStyles}
                         options={selectYear()}
+                        statusLabel={"Year"}
+                        placeholder="Please choose"
                       />
                     </div>
                   </div>
