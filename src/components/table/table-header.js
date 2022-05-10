@@ -75,8 +75,8 @@ const selectYear = () => {
 
   for (let i = startYear; i <= endYear; i++) {
     options.push({
-      label: i,
       value: i,
+      label: i,
     })
   }
 
@@ -359,7 +359,14 @@ class TableHeader extends Component {
                     <div className="col-xs-4">
                     <label className="text-label-filter ml-2 font-weight-bold">{this.props.statusLabel || "Year "}</label>
                       <StatusSelect
-                        value={this.state.yearValue}
+                        defaultValue={{
+                          value: this.state.yearValue, 
+                          label: this.state.yearValue
+                        }}
+                        value={{
+                          value: this.state.yearValue, 
+                          label: this.state.yearValue
+                        }}
                         onChange={this.handleYear.bind(this)}
                         options={selectYear()}
                       />

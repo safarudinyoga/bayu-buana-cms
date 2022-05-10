@@ -13,7 +13,7 @@ import env from "../../config/environment"
 // import DatePicker from "react-datepicker"
 import DatePicker from 'react-multi-date-picker'
 import { DateObject } from 'react-multi-date-picker'
-import InputIcon from "react-multi-date-picker/components/input_icon"
+import Icon from "react-multi-date-picker/components/icon"
 import FormInputWrapper from "components/form/input-date-period";
 import FormInputDatePeriod from "components/form/input-date-period";
 import { ReactSVG } from "react-svg"
@@ -216,7 +216,8 @@ function SpecialDateForm(props) {
   function RenderDatepicker({ openCalendar, value, handleValueChange }) {
     return (
       <div className="position-relative datepicker-special-date">
-        <ReactSVG src='/img/icons/date-range.svg' className="special-date-icon" onClick={openCalendar} />
+        <Icon className="special-date-icon" onClick={openCalendar} />
+        {/* <ReactSVG src='/img/icons/date-range.svg' className="special-date-icon" onClick={openCalendar} /> */}
         <input type="text"
           className="form-control" 
           onFocus={openCalendar} 
