@@ -79,7 +79,7 @@ function IntegrationPartnerCurrenciesCreate(props) {
             dispatch(setCreateModal({ show: false, id: null, disabled_form: false }));
             dispatch(
                 setAlert({
-                    message: `Record 'From Integration Partner Currency: ${form.currency_code} and To Currency: ${form.currency_name}' has been successfully saved.`,
+                    message: `Record 'From Integration Partner Currencies: ${form.currency_code} - ${form.currency_name}' has been successfully saved.`,
                 })
             );
         } catch (e) {
