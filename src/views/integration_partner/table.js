@@ -51,6 +51,8 @@ export default function IntegrationPartnerTable() {
         render: rowStatus,
       }, 
     ],
+    btnDownload: ".buttons-csv",
+    isOpenNewTab: false,
     emptyTable: "No Integration Partner found",
     recordName: ["integration-partner-code", "integration-partner-name"],
     module:"integration-partner"

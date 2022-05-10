@@ -1,26 +1,48 @@
+import React, { useEffect} from "react"
 import BBDataTable from "components/table/bb-data-table"
-import rowStatus from "lib/row-status"
-import { Card,  Row, Col, Button, Image } from "react-bootstrap"
-import React, { useEffect, useState } from 'react'
-import Form from "./form"
-import { useDispatch } from 'react-redux'
+import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
+import Form from "./form"
+import { Row, Col, Tab, Card } from "react-bootstrap"
 
-export default function IntegrationPartnerCitiesTable() {
-  
 
-  const onReset = () => {
-    setParams({ ...params, filters: [] })
-  }
+const backUrl = "/master/integration-partner"
 
-  let [params, setParams] = useState({
+export default function PartnerCityTable(props) {
+ 
+  let dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(
+      setUIParams({
+        title: "iTank",
+        breadcrumbs: [
+          {
+            text: "Setup And Configuration",
+          },
+          {
+            link: backUrl,
+            text: "Integration Partner",
+          },
+          {
+            text: "iTank",
+          },
+
+
+        ],
+      }),
+    )
+  }, [])
+
+
+  let params = {
     isCheckbox: false,
-    createOnModal: true,
     showAdvancedOptions: false,
+    createOnModal: true,
     hideDetail: true,
-    title: "Integration Partner",
-    titleModal: "Integration Partner Cities",
+    title: "Partner Cities",
+    titleModal: "Partner Cities",
     baseRoute: "/master/integration-partner-cities/form",
+    routeHistory: "/master/integration-partner-cities/history",
     endpoint: "/master/integration-partner-cities",
     deleteEndpoint: "/master/batch-actions/delete/integration-partner-cities",
     activationEndpoint: "/master/batch-actions/activate/integration-partner-cities",
@@ -28,28 +50,40 @@ export default function IntegrationPartnerCitiesTable() {
     columns: [
       {
         title: "City",
-        data: "city.city_name"
+        data: "city.city_name",
       },
       {
         title: "Partner City Code",
-        data: "city_code"
+        data: "city_code",
       },
       {
-        title: "Partner City Name",
-        data: "city_name"
+        title: "Partner City name",
+        data: "city_name",
+
       },
-       
     ],
     emptyTable: "No partner cities found",
-    recordName: ["city.city_name", "integration_partner_city.city_code", "integration-partner-city.city_name"],
-  })
+    recordName: ["city_city_name"],
+    btnDownload: ".buttons-csv",
+    module: "integration-partner-cities"
+  }
+  return <>
+    <Tab.Container>
+      <Row>
+        <Col sm={3}>
+        </Col>
+        <Col sm={9}>
+          <Card>
+            <Card.Body>
+              <h3 className="card-heading">Partner Cities</h3>
+              <BBDataTable {...params} modalContent={Form} />
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
 
-  return <><Card>
-      <Card.Body>
-      <h3 className="card-heading">Partner Cities</h3>
-      <BBDataTable {...params} onReset={onReset} modalContent={Form} />
-      </Card.Body>
-      </Card></>
-  
-  
+    </Tab.Container>
+  </>
+
+
 }

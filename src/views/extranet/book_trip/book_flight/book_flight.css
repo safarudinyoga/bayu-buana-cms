@@ -90,7 +90,7 @@
 .filter-flight-body .form-check-label {
 	line-height: 24px;
 }
-.filter-card-flight {
+.filter-card-flight, .passengers-flight-detail {
 	background-color: #F5F5F5;
 	box-shadow: none;
 	border-radius: 6px;
@@ -110,6 +110,7 @@
 	margin-top: 12px;
 	font-weight: bold;
 	font-size: 16px;
+  text-transform: uppercase;
 }
 .trip-info, .trip-sort-by {
 	display: flex;
@@ -183,8 +184,11 @@
   font-size: 13px;
   border: 0;
   line-height: 0;
-  height: 30px;
+  /* height: 30px; */
   text-transform: uppercase;
+}
+.pointer{
+  cursor: pointer;
 }
 .lowest-fare {
   font-size: 14px;
@@ -226,11 +230,116 @@
 .conditions-content-left i {
   color: #B4B4B4;
 }
-.flight-details {
+.btn-flight-details {
   font-size: 11px;
   color: #1743BE;
   cursor: pointer;
 }
 .card-flight-h {
   font-size: 12px;
+}
+.middle-border{
+  width: 100%;
+  margin-bottom: 15px;
+  height: 0;
+  border-top: 1px solid #70707062;
+}
+.border-dotted{
+  width: 100%;
+  margin-bottom: 15px;
+  height: 0;
+  border-top: 2px dashed #707070;
+}
+.passengers-flight-detail {
+  box-shadow: 0px 0px 6px #00000029; 
+  padding: 27px 32px;
+}
+.transit-info {
+  background-color: #FFFF;
+  border-radius: 50px;
+  text-align: center;
+  width: 400px;
+  padding: 10px 25px;
+  font-size: 13px;
+  color: #333;
+  /* float: left; */
+  position: relative;
+  top: -18px;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 1px solid #D3D3D3;
+  font-weight: bold;
+}
+.plane-ic {
+  color: #E84D0E;
+  position: relative;
+  top: -8px;
+  /* left: 50%; */
+  transform: translateX(-50%);
+}
+.flight-line{
+  width: 40%;
+}
+.transit-wrapper {
+  width: 100%;
+  text-align: center;
+  margin: 10px;
+}
+.links {
+  padding: 0 10px;
+  border-top: 1px solid #D3D3D3;
+  line-height: 0.1em;
+}
+.language-image {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid #31394d;
+  margin-right: 15px;
+}
+.flight-detail-footer {
+  border-top: 1px solid #D3D3D3;
+}
+.currencies-label {
+  margin-right: 15px;
+  letter-spacing: 0px;
+  color: #333333;
+  opacity: 1;
+}
+
+.currencies-value {
+  color: #818181;
+}
+
+.css-1hb7zxy-IndicatorsContainer {
+  display: none !important;
+}
+
+/* .tooltip [class$="inner"] {
+  background-color: #e5e6ea;
+  border: 1px solid #e5e6ea;
+}
+
+.tooltip [class$="arrow"] {
+  border-top: 5px solid #e5e6ea !important;
+} */
+
+#tooltip-bottom > .tooltip-inner {
+  background-color: #e5e6ea;
+  color: #4f4f4f;
+  border: 1px solid #e5e6ea;
+}
+
+#tooltip-bottom > .tooltip-arrow {
+  border-bottom: 7px solid #e5e6ea !important;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+}
+
+.passenger-accordion .card {
+  display: flex;
+  flex-direction: column !important;
+}
+.alert-dismissible .close, .alert-dismissible .mailbox-attachment-close {
+  z-index: 0;
 }

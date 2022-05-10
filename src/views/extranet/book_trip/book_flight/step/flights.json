@@ -1,0 +1,219 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "plane": "Singapore Airlines",
+      "time_estimation": "7h 3m",
+      "class": "Economy",
+      "origin": {
+        "city": "Jakarta",
+        "code": "JKT",
+        "airport": "Soekarno-Hatta Intl.",
+        "terminal": 3
+      },
+      "destination": {
+        "city": "Hong Kong",
+        "code": "HKG",
+        "airport": "Hong Kong Intl.",
+        "terminal": 3
+      },
+      "trip": "Roundtrip",
+      "departure_date": "2022-12-12 14:00:00",
+      "return_date": "2022-12-17 12:25:00",
+      "passengers": {
+        "adult": 2,
+        "child": 0,
+        "infant": 0
+      },
+      "departure_detail": {
+        "departure_time": "2022-12-12 14:00:00",
+        "arrival_time": "2022-12-12 22:30:00",
+        "transit": {
+          "arrival_time": "2022-12-12 16:00:00",
+          "departure_time": "2022-12-12 17:50:00",
+          "country": "Singapore",
+          "city": "Singapore",
+          "city_Code": "SIN",
+          "airport": "Changi",
+          "terminal": 1
+        }
+      },
+      "return_detail": {
+        "departure_time": "2022-12-12 14:00:00",
+        "arrival_time": "2022-12-12 22:30:00"
+      }
+    },
+    {
+      "id": 2,
+      "plane": "Singapore Airlines",
+      "time_estimation": "7h 3m",
+      "class": "Economy",
+      "origin": {
+        "city": "Jakarta",
+        "code": "JKT",
+        "airport": "Soekarno-Hatta Intl.",
+        "terminal": 3
+      },
+      "destination": {
+        "city": "Hong Kong",
+        "code": "HKG",
+        "airport": "Hong Kong Intl.",
+        "terminal": 3
+      },
+      "trip": "Roundtrip",
+      "departure_date": "2022-12-12 14:00:00",
+      "return_date": "2022-12-17 12:25:00",
+      "passengers": {
+        "adult": 2,
+        "child": 0,
+        "infant": 0
+      },
+      "departure_detail": {
+        "departure_time": "2022-12-12 14:00:00",
+        "arrival_time": "2022-12-12 22:30:00",
+        "transit": {
+          "arrival_time": "2022-12-12 16:00:00",
+          "departure_time": "2022-12-12 17:50:00",
+          "country": "Singapore",
+          "city": "Singapore",
+          "city_Code": "SIN",
+          "airport": "Changi",
+          "terminal": 1
+        }
+      },
+      "return_detail": {
+        "departure_time": "2022-12-12 14:00:00",
+        "arrival_time": "2022-12-12 22:30:00"
+      }
+    },
+    {
+      "id": 3,
+      "plane": "Singapore Airlines",
+      "time_estimation": "7h 3m",
+      "class": "Economy",
+      "origin": {
+        "city": "Jakarta",
+        "code": "JKT",
+        "airport": "Soekarno-Hatta Intl.",
+        "terminal": 3
+      },
+      "destination": {
+        "city": "Hong Kong",
+        "code": "HKG",
+        "airport": "Hong Kong Intl.",
+        "terminal": 3
+      },
+      "trip": "Roundtrip",
+      "departure_date": "2022-12-12 14:00:00",
+      "return_date": "2022-12-17 12:25:00",
+      "passengers": {
+        "adult": 2,
+        "child": 0,
+        "infant": 0
+      },
+      "departure_detail": {
+        "departure_time": "2022-12-12 14:00:00",
+        "arrival_time": "2022-12-12 22:30:00",
+        "transit": {
+          "arrival_time": "2022-12-12 16:00:00",
+          "departure_time": "2022-12-12 17:50:00",
+          "country": "Singapore",
+          "city": "Singapore",
+          "city_Code": "SIN",
+          "airport": "Changi",
+          "terminal": 1
+        }
+      },
+      "return_detail": {
+        "departure_time": "2022-12-12 14:00:00",
+        "arrival_time": "2022-12-12 22:30:00"
+      }
+    },
+    {
+      "id": 4,
+      "plane": "Singapore Airlines",
+      "time_estimation": "7h 3m",
+      "class": "Economy",
+      "origin": {
+        "city": "Jakarta",
+        "code": "JKT",
+        "airport": "Soekarno-Hatta Intl.",
+        "terminal": 3
+      },
+      "destination": {
+        "city": "Hong Kong",
+        "code": "HKG",
+        "airport": "Hong Kong Intl.",
+        "terminal": 3
+      },
+      "trip": "Roundtrip",
+      "departure_date": "2022-12-12 14:00:00",
+      "return_date": "2022-12-17 12:25:00",
+      "passengers": {
+        "adult": 2,
+        "child": 0,
+        "infant": 0
+      },
+      "departure_detail": {
+        "departure_time": "2022-12-12 14:00:00",
+        "arrival_time": "2022-12-12 22:30:00",
+        "transit": {
+          "arrival_time": "2022-12-12 16:00:00",
+          "departure_time": "2022-12-12 17:50:00",
+          "country": "Singapore",
+          "city": "Singapore",
+          "city_Code": "SIN",
+          "airport": "Changi",
+          "terminal": 1
+        }
+      },
+      "return_detail": {
+        "departure_time": "2022-12-12 14:00:00",
+        "arrival_time": "2022-12-12 22:30:00"
+      }
+    },
+    {
+      "id": 5,
+      "plane": "Singapore Airlines",
+      "time_estimation": "7h 3m",
+      "class": "Economy",
+      "origin": {
+        "city": "Jakarta",
+        "code": "JKT",
+        "airport": "Soekarno-Hatta Intl.",
+        "terminal": 3
+      },
+      "destination": {
+        "city": "Hong Kong",
+        "code": "HKG",
+        "airport": "Hong Kong Intl.",
+        "terminal": 3
+      },
+      "trip": "Roundtrip",
+      "departure_date": "2022-12-12 14:00:00",
+      "return_date": "2022-12-17 12:25:00",
+      "passengers": {
+        "adult": 2,
+        "child": 0,
+        "infant": 0
+      },
+      "departure_detail": {
+        "departure_time": "2022-12-12 14:00:00",
+        "arrival_time": "2022-12-12 22:30:00",
+        "transit": {
+          "arrival_time": "2022-12-12 16:00:00",
+          "departure_time": "2022-12-12 17:50:00",
+          "country": "Singapore",
+          "city": "Singapore",
+          "city_Code": "SIN",
+          "airport": "Changi",
+          "terminal": 1
+        }
+      },
+      "return_detail": {
+        "departure_time": "2022-12-12 14:00:00",
+        "arrival_time": "2022-12-12 22:30:00"
+      }
+    }
+  ]
+}
