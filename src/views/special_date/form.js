@@ -32,12 +32,11 @@ function SpecialDateForm(props) {
   const [translations, setTranslations] = useState([])
   const [id, setId] = useState(null)
   const [cityData, setCityData] = useState([])
-  const [repeat, setRepeat] = useState(false)
   const [form, setForm] = useState({
     special_date_name: "",
     start_date: new Date(),
     end_date: new Date(),
-    fixed: repeat,
+    fixed: false,
   })
 
   
@@ -56,6 +55,10 @@ function SpecialDateForm(props) {
       maxlength: 256,
       checkName: true
     },
+    start_date: {
+      required: true,
+      checkDate: true,
+    }
   }
 
   const validationMessages = {
@@ -84,7 +87,7 @@ function SpecialDateForm(props) {
         title: docTitle,
         breadcrumbs: [
           {
-            text: "Master Data Management",
+            text: "Setup & Configurations",
           },
           {
             link: backUrl,
@@ -99,11 +102,10 @@ function SpecialDateForm(props) {
     if (formId) {
       try {
         let res = await api.get(endpoint + "/" + formId)
+        console.log(res);
         setForm(res.data)
         if(res.data) {
           let currentName = res.data.special_date_name
-          setRepeat(res.data.fixed)
-
           $.validator.addMethod(
             "checkName",
             function (value, element) {
@@ -173,9 +175,9 @@ function SpecialDateForm(props) {
   const onSave = async () => {
     let translated = formBuilder.getTranslations()
     setLoading(true)
-    setForm({...form, fixed: repeat})
     let api = new Api()
     try {
+      console.log('form', form)
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
       console.log(res);
@@ -191,7 +193,7 @@ function SpecialDateForm(props) {
       props.history.goBack()
       dispatch(
         setAlert({
-          message: `Record ${form.special_date_name} - has been successfully ${formId ? "updated" : "saved"}.`,
+          message: `Record '${form.special_date_name}' has been successfully ${formId ? "updated" : "saved"}.`,
         }),
       )
     }
@@ -212,13 +214,12 @@ function SpecialDateForm(props) {
   function RenderDatepicker({ openCalendar, value, handleValueChange }) {
     return (
       <div className="position-relative datepicker-special-date">
-        <ReactSVG src='/img/icons/date-range.svg' className="special-date-icon" />
+        <ReactSVG src='/img/icons/date-range.svg' className="special-date-icon" onClick={openCalendar} />
         <input type="text"
           className="form-control" 
           onFocus={openCalendar} 
           value={value} 
           onChange={handleValueChange}
-          readOnly
         />
       </div>
     )
@@ -248,6 +249,8 @@ function SpecialDateForm(props) {
           type="text"
           minLength="1"
           maxLength="256"
+          cl={{md: 3}}
+          cr={{md: 7}}
         />
         
         {/* <FormInputDatePeriod 
@@ -260,58 +263,57 @@ function SpecialDateForm(props) {
           recurring={true}
         /> */}
       
-      <div className="row d-flex align-items-center">
-        <div className="col-sm-6 col-md-5 col-lg-4 form-group required">
-          <span className="text-label-input">
-            Periode
-          </span>
-          <span className='label-required'></span> 
-        </div>
-        <div className="col-sm-2 col-md-3 col-lg-3 datepicker-special-date-container">
-          <DatePicker
-            render={<RenderDatepicker />}
-            numberOfMonths={2}
-            fixMainPosition={true}
-            format="DD MMMM YYYY"
-            minDate={new DateObject().subtract(10, "years")}
-            maxDate={new DateObject().add(10, "years")}
-            value={form.start_date}
-            onChange={(date) => setForm({...form, start_date: new Date(date)})} 
-          />
+        <div className="row d-flex align-items-center">
+          <div className="col-sm-6 col-md-3 col-lg-4 form-group required">
+            <span className="text-label-input">
+              Periode
+            </span>
+            <span className='label-required'></span> 
           </div>
-          
-        <span className="text-center">to</span>
-        <div className="col-sm-2 col-md-3 col-lg-3 datepicker-special-date-container">
-          <DatePicker
-            render={<RenderDatepicker />} 
-            numberOfMonths={2}
-            fixMainPosition={true}
-            format="DD MMMM YYYY"
-            minDate={new DateObject().subtract(10, "years") && form.start_date}
-            maxDate={new DateObject().add(10, "years")}
-            value={form.end_date}
-            onChange={(date) => setForm({...form, end_date: new Date(date)})} 
-          />
+          <div className="col-sm-2 col-md-4 col-lg-3 datepicker-special-date-container">
+            <DatePicker
+              render={<RenderDatepicker />}
+              numberOfMonths={2}
+              fixMainPosition={true}
+              format="DD MMMM YYYY"
+              minDate={new DateObject().subtract(10, "years")}
+              maxDate={new DateObject().add(10, "years") && form.end_date}
+              value={form.start_date}
+              onChange={(date) => setForm({...form, start_date: new Date(date)})} 
+            />
+            </div>
+            
+          <span className="text-center">to</span>
+          <div className="col-sm-2 col-md-4 col-lg-3 datepicker-special-date-container">
+            <DatePicker
+              render={<RenderDatepicker />} 
+              numberOfMonths={2}
+              fixMainPosition={true}
+              format="DD MMMM YYYY"
+              minDate={new DateObject().subtract(10, "years") && form.start_date}
+              maxDate={new DateObject().add(10, "years")}
+              value={form.end_date}
+              onChange={(date) => setForm({...form, end_date: new Date(date)})} 
+            />
+          </div>
         </div>
-      </div>
-       
-          
-          
-   
-    <div className="form-check col-sm-6 col-md-5 col-lg-5 offset-sm-4 offset-md-5 offset-lg-4 mt-2">
-      <input 
-        className="form-check-input" 
-        type="checkbox"
-        id="flexCheckDefault" 
-        onChange={() => setRepeat(!repeat)}  
-        checked={repeat}
-      />
-      <label className="form-check-label" for="flexCheckDefault">
-        Occurs on the same date every year?
-      </label>
-    </div>
-          
-
+        
+            
+            
+    
+        <div className="form-check col-sm-6 col-md-5 col-lg-5 offset-sm-4 offset-md-5 offset-lg-4 mt-2">
+          <input 
+            className="form-check-input" 
+            type="checkbox"
+            id="flexCheckDefault" 
+            onChange={(repeat) => setForm({...form, fixed: repeat.target.checked})}  
+            checked={form.fixed}
+          />
+          <label className="form-check-label" for="flexCheckDefault">
+            Occurs on the same date every year?
+          </label>
+        </div>
+      
       </FormHorizontal>
     </FormBuilder>
   )
