@@ -32,12 +32,11 @@ function SpecialDateForm(props) {
   const [translations, setTranslations] = useState([])
   const [id, setId] = useState(null)
   const [cityData, setCityData] = useState([])
-  const [repeat, setRepeat] = useState(false)
   const [form, setForm] = useState({
     special_date_name: "",
     start_date: new Date(),
     end_date: new Date(),
-    fixed: repeat,
+    fixed: false,
   })
 
   
@@ -107,8 +106,6 @@ function SpecialDateForm(props) {
         setForm(res.data)
         if(res.data) {
           let currentName = res.data.special_date_name
-          setRepeat(res.data.fixed)
-
           $.validator.addMethod(
             "checkName",
             function (value, element) {
@@ -180,6 +177,7 @@ function SpecialDateForm(props) {
     setLoading(true)
     let api = new Api()
     try {
+      console.log('form', form)
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
       console.log(res);
@@ -304,18 +302,19 @@ function SpecialDateForm(props) {
             
             
     
-        <div className="form-check col-sm-6 col-md-6 col-lg-5 offset-sm-4 offset-md-3 offset-lg-4 mt-2">
+        <div className="form-check col-sm-6 col-md-5 col-lg-5 offset-sm-4 offset-md-5 offset-lg-4 mt-2">
           <input 
             className="form-check-input" 
             type="checkbox"
             id="flexCheckDefault" 
-            onChange={() => setRepeat(!repeat)}  
-            checked={repeat}
+            onChange={(repeat) => setForm({...form, fixed: repeat.target.checked})}  
+            checked={form.fixed}
           />
           <label className="form-check-label" for="flexCheckDefault">
             Occurs on the same date every year?
           </label>
         </div>
+      
       </FormHorizontal>
     </FormBuilder>
   )
