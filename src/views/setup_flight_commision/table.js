@@ -135,7 +135,7 @@ export default function SetupFlightCommisionTable() {
   let params = {
     title: "Setup Flight Commision",
     baseRoute: "/master/setup-flight-commission/form",
-    endpoint: "/master/commission-claims",
+    endpoint: "/master/setup-flight-commission",
     deleteEndpoint: "/master/batch-actions/delete/setup-flight-commisions",
     activationEndpoint: "/master/batch-actions/activate/setup-flight-commisions",
     deactivationEndpoint: "/master/batch-actions/deactivate/setup-flight-commisions",

@@ -16,7 +16,7 @@ const ModalCreate = ({show, onClick, modalContent, modalTitle}) => {
 		</Modal.Header>
 		<ModalBody className="bb-modal-body">
 			<p className="bb-modal-title">{modalTitle}</p>
-			{modalContent ? <Content/> : null}
+			{modalContent ? <Content onHide={onClick}/> : null}
 		</ModalBody>
 		</Modal>
 	)

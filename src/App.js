@@ -128,9 +128,14 @@ import IntegrationPaymentGatewayForm from "views/integration_partner/form/partne
 import IntegrationPartnerMealPlansTable from "views/integration_partner/form/partner_meal_plans/table"
 import IntegrationPartnerMealPlansForm from "views/integration_partner/form/partner_meal_plans/form"
 import IntegrationPartnerCitiesTable from "views/integration_partner_city/tabel"
+import IntegrationPartnerCabinTypesTable from "views/integration_partner_cabin/tabel"
+import IntegrationPartnerCabinsForm from "views/integration_partner_cabin/form/form"
+import FareFamiyTabel from "views/integration_partner_cabin/tabel-fare-family"
+import IntegrationFeeTaxes from "views/partner_fee_taxes/table"
+import FeeTaxForm from "views/partner_fee_taxes/form"
+import CreateHotel from 'views/partner_hotels/form'
+import FormPartnerHotel from 'views/partner_hotels/form'
 import IntegrationPartnerCountriesTable from "views/integration_partner_countries/table"
-import IntegrationPartnerCabinTypesTable from "views/integration_partner_cabin/index"
-import IntegrationPartnerCabinsForm from "views/integration_partner_cabin/form/index"
 import IntegrationPartnerCurrenciesTable from "views/integration_partner_currencies/table"
 import IntegrationPartnerCurrenciesForm from "views/integration_partner_currencies/form"
 
@@ -176,6 +181,9 @@ import BookTrip from "views/extranet/book_trip/book_trip"
 import BookFlight from "views/extranet/book_trip/book_flight"
 
 import Api from "config/api"
+import IntegrationPartnerHotels from "views/partner_hotels/table"
+import IntegrationPartnerHotelSupplier from 'views/partner_hotel_supplier/table';
+import BookingSetting from "views/booking_setting/table"
 
 const RouteWithProps = ({
   path,
@@ -277,6 +285,24 @@ const DashboardRoutes = () => {
         <Route exact path="/master/integration-partner">
           <IntegrationPartnerTable />
         </Route>
+        <Route exact path="/master/integration-partner/partner-fee-tax">
+          <IntegrationFeeTaxes />
+        </Route>
+        <Route exact path="/master/integration-partner/partner-fee-tax/form/:id?">
+          <FeeTaxForm />
+        </Route>
+        <Route exact path="/master/integration-partner/partner-hotels">
+          <IntegrationPartnerHotels />
+        </Route>
+        <Route exact path="/master/integration-partner-hotels/form/:id?">
+          <FormPartnerHotel />
+        </Route>
+        <Route exact path="/master/integration-partner-hotel-supplier">
+          <IntegrationPartnerHotelSupplier />
+        </Route>
+        {/* <Route exact path="/master/integration-partner-hotels/form/:id?">
+          <FormPartnerHotel />
+        </Route> */}
         <Route path="/master/integration-partner/form/:id?">
           <IntegrationPartnerForm />
         </Route>
@@ -301,6 +327,16 @@ const DashboardRoutes = () => {
         <Route exact path="/master/integration-partner-cities">
           <IntegrationPartnerCitiesTable />
         </Route>
+        <Route exact path="/master/integration-partner-countries">
+          <IntegrationPartnerCountriesTable />
+        </Route>
+        <Route exact path="/master/integration-partner-currencies">
+          <IntegrationPartnerCurrenciesTable />
+        </Route>
+        <Route path="/master/integration-partner-currencies/form/:id?">
+          <IntegrationPartnerCurrenciesForm />
+        </Route>
+       
         <Route exact path="/master/integration-partner-countries">
           <IntegrationPartnerCountriesTable />
         </Route>
@@ -576,6 +612,10 @@ const DashboardRoutes = () => {
           <FlightCommisionForm />
         </Route>
 
+        <Route exact path="/master/setup-booking-setting">
+          <BookingSetting />
+        </Route>
+        
         {/* Master Exhange Rate */}
         <Route exact path="/master/exchange-rate">
           <ExchageRateTable />
