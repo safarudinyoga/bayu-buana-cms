@@ -55,7 +55,7 @@ const Roundtrip = (props) => {
 
   function RenderDatepicker({ openCalendar, value, handleValueChange, title }){
     return (
-      <div style={{width: 171}} className='position-relative'>
+      <div style={{width: 190}} className='position-relative'>
         <h4 className='form-with-label__title'> {title} <span className='label-required'></span></h4>
         <ReactSVG src='/img/icons/date-range.svg' className='form-with-label__suggest-icon'/>
         <input type="text" 
@@ -97,8 +97,8 @@ const Roundtrip = (props) => {
     <Popover id="passenger-popover" className='passenger-popover'>
       <Popover.Content>
         <div className="d-flex row mb-2">
-          <div className='col-md-4'>Adult</div>
-          <div className='d-flex col-md-8'>
+          <div className='col-md-6'>ADULTS</div>
+          <div className='d-flex col-md-6'>
             <ReactSVG className='mr-2' src="/img/icons/minus-circle.svg" onClick={() => {
                 if(adultCount === 0){
                   return;
@@ -110,8 +110,8 @@ const Roundtrip = (props) => {
           </div>
         </div>
         <div className="d-flex row mb-2">
-          <div className='col-md-4'>Children</div>
-          <div className='d-flex col-md-8'>
+          <div className='col-md-6'>CHILDREN</div>
+          <div className='d-flex col-md-6'>
             <ReactSVG
              className='mr-2'
              src="/img/icons/minus-circle.svg" 
@@ -135,8 +135,8 @@ const Roundtrip = (props) => {
           
         </div>
         <div className="d-flex row mb-2">
-          <div className='col-md-4'>Infants</div>
-          <div className='d-flex col-md-8'>
+          <div className='col-md-6'>INFANTS</div>
+          <div className='d-flex col-md-6'>
             <ReactSVG 
               className='mr-2'
               src="/img/icons/minus-circle.svg"
@@ -228,16 +228,17 @@ const Roundtrip = (props) => {
         
         <div className='mr-4'>
           <div className='d-flex'>
-            <div style={{width: 150}} className="position-relative flex-grow-1 mr-3">
+            <div style={{width: 173}} className="position-relative flex-grow-1 mr-3">
               <DatePicker 
                 render={<RenderDatepicker title={"DEPART"} />}
                 numberOfMonths={2}
                 fixMainPosition={true}
-                format="DD MMMM YYYY"
+                format="ddd, DD MMMM YYYY"
                 value={departTime}
                 onChange={(date) => {
                   setDepartTime(date)
                 }}
+                portal
               />
               {/* <h4 className='form-with-label__title'> DEPART <span className='label-required'></span></h4>
               <ReactSVG src='/img/icons/date-range.svg' className='form-with-label__suggest-icon'/>
@@ -251,16 +252,17 @@ const Roundtrip = (props) => {
                 }}
               /> */}
             </div>
-            <div style={{width: 150}} className="position-relative flex-grow-1 mr-3">
+            <div style={{width: 173}} className="position-relative flex-grow-1 mr-3">
               <DatePicker 
                 render={<RenderDatepicker title={"RETURN"} />}
                 numberOfMonths={2}
                 fixMainPosition={true}
-                format="DD MMMM YYYY"
+                format="ddd, DD MMMM YYYY"
                 value={returnTime}
                 onChange={(date) => {
                   setReturnTime(date)
                 }}
+                portal
               />
               {/* <h4 className='form-with-label__title'> RETURN <span className='label-required'></span></h4>
               <ReactSVG src='/img/icons/date-range.svg' className='form-with-label__suggest-icon'/>

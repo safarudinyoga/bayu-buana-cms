@@ -12,9 +12,13 @@ import PartnertMessages from "./partner_messages/table"
 import { useSnackbar } from "react-simple-snackbar"
 import PartnerCabin from "../../integration_partner_cabin/tabel"
 import PartnerInformation from "./partner-information"
+import PartnerFeeTaxes from '../../partner_fee_taxes/table'
+import { useWindowSize } from "rooks"
+
+import PartnerCorporate from "../../integration_partner_corporate/table"
 
 const endpoint = "/master/integration-partners"
-const backUrl = "/master/integration-partner"
+const backUrl = "/master/integration-partner";
 const options = {
   position: "bottom-right",
 }
@@ -131,13 +135,22 @@ const IntegrationPartnerForm = (props) => {
                 </Nav.Link>
               </Nav.Item>
               <Nav.Item>
-                <Nav.Link eventKey="partner-fee-taxes">
+                <Nav.Link eventKey="partner-fee-taxes" >
                   <div>
                     <ReactSVG src="/img/icons/users.svg" />
                     <span>Partner Fee Taxes</span>
                   </div>
                 </Nav.Link>
               </Nav.Item>
+              <Nav.Item>
+                <Nav.Link eventKey="partner-payment-gateway">
+                  <div>
+                    <ReactSVG src="/img/icons/employment.svg" />
+                    <span>Partner Payment Gateways</span>
+                  </div>
+                </Nav.Link>
+              </Nav.Item>
+
               <Nav.Item>
                 <Nav.Link eventKey="partner-messages">
                   <div>
@@ -160,22 +173,46 @@ const IntegrationPartnerForm = (props) => {
               <Tab.Pane eventKey="partner-information">
                 <PartnerInformation />
               </Tab.Pane>
-              <Tab.Pane eventKey="partner-cabins">
-                <PartnerCabin />
-              </Tab.Pane>
               <Tab.Pane eventKey="partner-credential">
                 Partner Credential
               </Tab.Pane>
               <Tab.Pane eventKey="partner-corporates">
-                Partner Corporates
+                <PartnerCorporate />
+              </Tab.Pane>
+              <Tab.Pane eventKey="partner-cabins">
+                <PartnerCabin />
               </Tab.Pane>
               <Tab.Pane eventKey="partner-meal-plans">
-                Partner Meal Plans
+                {tabKey === "partner-meal-plans" ? (
+                  <PartnerMealPlans
+                    handleSelectTab={(v) => handleSelectTab(v)}
+                  />
+                ) : null}
               </Tab.Pane>
               <Tab.Pane eventKey="partner-fee-taxes">
-                Partner Fee Taxes
+                <PartnerFeeTaxes />
               </Tab.Pane>
-              <Tab.Pane eventKey="partner-messages">Partner Messages</Tab.Pane>
+
+              <Tab.Pane eventKey="partner-payment-gateway">
+                {tabKey === "partner-payment-gateway" ? (
+                  <PartnerPaymentGateway
+                    handleSelectTab={(v) => handleSelectTab(v)}
+                  />
+                ) : null}
+              </Tab.Pane>
+              {/* <Tab.Pane eventKey="partner-credential">
+                Partner Credential
+              </Tab.Pane>
+              <Tab.Pane eventKey="partner-corporates">
+                Partner Corporates
+              </Tab.Pane> */}
+              <Tab.Pane eventKey="partner-messages">
+                {tabKey === "partner-messages" ? (
+                  <PartnertMessages
+                    handleSelectTab={(v) => handleSelectTab(v)}
+                  />
+                ) : null}
+              </Tab.Pane>
             </Tab.Content>
           </Col>
         </Row>

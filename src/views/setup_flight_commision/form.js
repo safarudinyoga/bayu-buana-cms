@@ -22,18 +22,40 @@ import { default as SelectAsync } from "components/form/select-async"
 
 const endpoint = "/master/commission-claims"
 const backUrl = "/master/setup-flight-commission"
+const options = {
+  position: "bottom-right",
+}
 
 const FlightCommisionForm = (props) => {
   registerLocale("engb", engb)
+  const [openSnackbar] = useSnackbar(options)
   const history = useHistory()
   let dispatch = useDispatch()
   let api = new Api()
+  const formId = props.match.params.id
   const isView = useQuery().get("action") === "view"
 
   const [loading, setLoading] = useState(true)
   const [id, setId] = useState(null)
 
-  const [formValues, setFormValues] = useState(null)
+  const [formValues, setFormValues] = useState({
+    airline_id: "",
+    commission_claim_departure_date: {
+      start_date: [],
+      end_date: [],
+    },
+    commission_claim_issue_date: {
+      start_date: [],
+      end_date: [],
+    }, 
+    commission_claim_original_destination: {
+      arrival_airport_location_code: "",
+      arrival_city_code: "",
+      departure_airport_location_code: "",
+      departure_city_code: ""
+    },
+    percent: "",
+  })
   const [optAirline, setOptAirline] = useState([])
   const [optArrival, setOptArrival] = useState([])
   const [optDeparture, setOptDeparture] = useState([])
@@ -55,7 +77,6 @@ const FlightCommisionForm = (props) => {
 
   useEffect(async () => {
     let api = new Api()
-    let formId = props.match.params.id
     let docTitle = "Edit Flight Commissions"
     let breadcrumbTitle = "Edit Flight Commissions"
     if (!formId) {
@@ -82,9 +103,38 @@ const FlightCommisionForm = (props) => {
         ],
       }),
     )
+  }, [])
 
-    if(formId){
-
+  useEffect(async() => {
+    try {
+      if(formId){
+        let {data} = await api.get(endpoint + "/" + formId)
+        setFormValues({
+          ...data,
+          airline_id: {
+            value: data.airline.id,
+            label: data.airline.airline_name
+          },
+          commission_claim_departure_date: {
+            start_date: [],
+            end_date: [],
+          },
+          commission_claim_issue_date: {
+            start_date: [],
+            end_date: [],
+      
+          }, 
+          commission_claim_original_destination: {
+            arrival_airport_location_code: "",
+            arrival_city_code: "",
+            departure_airport_location_code: "",
+            departure_city_code: ""
+          },
+        })
+        console.log("form id",  data)
+      }
+    } catch (e) {
+      console.log(e)
     }
   }, [])
 
@@ -108,7 +158,7 @@ const FlightCommisionForm = (props) => {
           })
         }
       })
-      console.log("Options",options)
+      // console.log("Options",options)
     } catch(e) {
       console.log("Error",e)
 
@@ -123,26 +173,6 @@ const FlightCommisionForm = (props) => {
   const addYears = (event, num) => {
     event.setFullYear(event.getFullYear() + num)
     return event
-  }
-
-  const initialValues = {
-    airline_id: "",
-    commission_claim_departure_date: {
-      start_date: [],
-      end_date: [],
-    },
-    commission_claim_issue_date: {
-      start_date: [],
-      end_date: [],
-
-    }, 
-    commission_claim_original_destination: {
-      arrival_airport_location_code: "",
-      arrival_city_code: "",
-      departure_airport_location_code: "",
-      departure_city_code: ""
-    },
-    percent: "0.00",
   }
 
   const percentNumber = /^100(\.0{0,2})? *%?$|^\d{1,2}(\.\d{1,2})? *%?$/
@@ -163,35 +193,42 @@ const FlightCommisionForm = (props) => {
   return (
     <div style={{ paddingBottom: 80}}>
       <Formik
-        initialValues={formValues || initialValues}
+        initialValues={formValues}
         validationSchema={validationSchema}
+        enableReinitialize
         onSubmit={async (values, { setSubmitting }) => {
-          let formatted = {
-            airline_id: values.airline_id.value,
-            commission_claim_original_destination: {
-              departure_airport_location_code: values.departFrom.value.split("-")[0].trim(),
-              departure_city_code: values.departFrom.value.split("-")[1].trim(),
-              arrival_airport_location_code: values.arrivalAt.value.split("-")[0].trim(),
-              arrival_city_code: values.arrivalAt.value.split("-")[1].trim(),
-            },
-            commission_claim_departure_date: {
-              start_date: specifyPeriodDeparture ? periodDepartureStart : null,
-              end_date: specifyPeriodDeparture ? periodDepartureEnd : null,
-            },
-            commission_claim_issue_date: {
-              start_date: specifyPeriodIssue ? periodIssueStart : null,
-              end_date: specifyPeriodIssue ? periodIssueEnd : null,
-            },
-            percent: parseFloat(values.percent)
+          try {
+            // console.log(values)
+            let formatted = {
+              airline_id: values.airline_id.value,
+              commission_claim_original_destination: {
+                departure_airport_location_code: values.departFrom.value.split("-")[0].trim(),
+                departure_city_code: values.departFrom.value.split("-")[1].trim(),
+                arrival_airport_location_code: values.arrivalAt.value.split("-")[0].trim(),
+                arrival_city_code: values.arrivalAt.value.split("-")[1].trim(),
+              },
+              commission_claim_departure_date: {
+                start_date: specifyPeriodDeparture ? periodDepartureStart : null,
+                end_date: specifyPeriodDeparture ? periodDepartureEnd : null,
+              },
+              commission_claim_issue_date: {
+                start_date: specifyPeriodIssue ? periodIssueStart : null,
+                end_date: specifyPeriodIssue ? periodIssueEnd : null,
+              },
+              percent: parseFloat(values.percent)
+            }
+            // console.log(formatted)
+  
+            let res = await api.post("master/commission-claims", formatted)
+            openSnackbar(`Record '${values.airline_id.label}' has been successfully saved.`)
+            props.history.goBack()
+          } catch (e) {
+            console.log(e)
           }
-          console.log(formatted)
-
-          let res = await api.post("master/commission-claims", formatted)
-          return props.history.goBack()
         }}
       >
         {(formik) => {
-          console.log("Formik", formik)
+          console.log("Formik", formik.initialValues, formValues)
           return (
             <Form>
               <div className="commission-form">
@@ -216,7 +253,7 @@ const FlightCommisionForm = (props) => {
                               IndicatorSeparator: () => null,
                             } : null
                           }
-                          // isDisabled={isView}
+                          // isDisabled={loading}
                         />
                         {/* Routes */}
                         <Row className="form-group required">

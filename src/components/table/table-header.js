@@ -75,8 +75,8 @@ const selectYear = () => {
 
   for (let i = startYear; i <= endYear; i++) {
     options.push({
-      label: i,
       value: i,
+      label: i,
     })
   }
 
@@ -103,6 +103,7 @@ const StatusSelect = (props) => {
 
 class TableHeader extends Component {
   constructor(props) {
+    console.log(props);
     super(props)
     this.state = {
       showFilter: false,
@@ -159,7 +160,7 @@ class TableHeader extends Component {
     if (this.props.onYear) {
       this.props.onYear(yearValue.value)
     }
-    this.setState({yearValue})
+    this.setState({yearValue: yearValue.value})
   }
 
   handleReset() {
@@ -295,7 +296,7 @@ class TableHeader extends Component {
                 Create New
               </button>
             </OverlayTrigger>
-  }
+          }
   
             <OverlayTrigger
               placement="top"
@@ -312,6 +313,7 @@ class TableHeader extends Component {
   
             <OverlayTrigger
               placement="top"
+              trigger={"hover"}
               overlay={<Tooltip>Click to download</Tooltip>}
             >
               <Link
@@ -361,10 +363,17 @@ class TableHeader extends Component {
                   <div className="row">
                     <div className="col-xs-4">
                     <label className="text-label-filter ml-2 font-weight-bold">{this.props.statusLabel || "Year "}</label>
-                      <StatusSelect
-                        value={this.state.yearValue}
+                      <Select
+                        components={{DropdownIndicator}}
+                        value={{
+                          value: this.state.yearValue, 
+                          label: this.state.yearValue
+                        }}
                         onChange={this.handleYear.bind(this)}
+                        styles={customStyles}
                         options={selectYear()}
+                        statusLabel={"Year"}
+                        placeholder="Please choose"
                       />
                     </div>
                   </div>

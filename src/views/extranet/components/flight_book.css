@@ -90,12 +90,17 @@
 
 .passenger-popover {
   transform: translate(-50%, -50%);
-  width: 13rem;
+  width: 14rem;
 }
 
 .recent-flight-title {
   font-size: 12px;
   color: #31394D;
+}
+
+.recent-flight-clear-all {
+  text-decoration: underline;
+  font-weight: 600;
 }
 
 .book-card .nav-tabs .nav-link {
