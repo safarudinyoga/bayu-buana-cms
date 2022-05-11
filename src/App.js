@@ -135,6 +135,11 @@ import IntegrationFeeTaxes from "views/partner_fee_taxes/table"
 import FeeTaxForm from "views/partner_fee_taxes/form"
 import CreateHotel from 'views/partner_hotels/form'
 import FormPartnerHotel from 'views/partner_hotels/form'
+import IntegrationPartnerCountriesTable from "views/integration_partner_countries/table"
+import IntegrationPartnerCabinTypesTable from "views/integration_partner_cabin/index"
+import IntegrationPartnerCabinsForm from "views/integration_partner_cabin/form/index"
+import IntegrationPartnerCurrenciesTable from "views/integration_partner_currencies/table"
+import IntegrationPartnerCurrenciesForm from "views/integration_partner_currencies/form"
 
 // Master Manage Corporate
 import CorporateTable from "views/manage_corporate/table"
@@ -332,6 +337,15 @@ const DashboardRoutes = () => {
         <FareFamiyTabel />
         </Route>
        
+        <Route exact path="/master/integration-partner-countries">
+          <IntegrationPartnerCountriesTable />
+        </Route>
+        <Route exact path="/master/integration-partner-currencies">
+          <IntegrationPartnerCurrenciesTable />
+        </Route>
+        <Route path="/master/integration-partner-currencies/form/:id?">
+          <IntegrationPartnerCurrenciesForm />
+        </Route>
         <Route exact path="/master/flight-types">
           <FlightTypeTable />
         </Route>
