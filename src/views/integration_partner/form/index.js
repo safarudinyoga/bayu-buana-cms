@@ -139,6 +139,15 @@ const IntegrationPartnerForm = (props) => {
                 </Nav.Link>
               </Nav.Item>
               <Nav.Item>
+                <Nav.Link eventKey="partner-payment-gateway">
+                  <div>
+                    <ReactSVG src="/img/icons/employment.svg" />
+                    <span>Partner Payment Gateways</span>
+                  </div>
+                </Nav.Link>
+              </Nav.Item>
+
+              <Nav.Item>
                 <Nav.Link eventKey="partner-messages">
                   <div>
                     <ReactSVG src="/img/icons/users.svg" />
@@ -160,22 +169,46 @@ const IntegrationPartnerForm = (props) => {
               <Tab.Pane eventKey="partner-information">
                 <PartnerInformation />
               </Tab.Pane>
-              <Tab.Pane eventKey="partner-cabins">
-                <PartnerCabin />
-              </Tab.Pane>
               <Tab.Pane eventKey="partner-credential">
                 Partner Credential
               </Tab.Pane>
               <Tab.Pane eventKey="partner-corporates">
                 Partner Corporates
               </Tab.Pane>
+              <Tab.Pane eventKey="partner-cabins">
+                <PartnerCabin />
+              </Tab.Pane>
               <Tab.Pane eventKey="partner-meal-plans">
-                Partner Meal Plans
+                {tabKey === "partner-meal-plans" ? (
+                  <PartnerMealPlans
+                    handleSelectTab={(v) => handleSelectTab(v)}
+                  />
+                ) : null}
               </Tab.Pane>
               <Tab.Pane eventKey="partner-fee-taxes">
                 Partner Fee Taxes
               </Tab.Pane>
-              <Tab.Pane eventKey="partner-messages">Partner Messages</Tab.Pane>
+
+              <Tab.Pane eventKey="partner-payment-gateway">
+                {tabKey === "partner-payment-gateway" ? (
+                  <PartnerPaymentGateway
+                    handleSelectTab={(v) => handleSelectTab(v)}
+                  />
+                ) : null}
+              </Tab.Pane>
+              {/* <Tab.Pane eventKey="partner-credential">
+                Partner Credential
+              </Tab.Pane>
+              <Tab.Pane eventKey="partner-corporates">
+                Partner Corporates
+              </Tab.Pane> */}
+              <Tab.Pane eventKey="partner-messages">
+                {tabKey === "partner-messages" ? (
+                  <PartnertMessages
+                    handleSelectTab={(v) => handleSelectTab(v)}
+                  />
+                ) : null}
+              </Tab.Pane>
             </Tab.Content>
           </Col>
         </Row>
