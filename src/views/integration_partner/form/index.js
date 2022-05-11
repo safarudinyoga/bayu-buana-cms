@@ -13,6 +13,9 @@ import { useSnackbar } from "react-simple-snackbar"
 import PartnerCabin from "../../integration_partner_cabin/tabel"
 import PartnerInformation from "./partner-information"
 import PartnerFeeTaxes from '../../partner_fee_taxes/table'
+import { useWindowSize } from "rooks"
+import PartnerCorporates from "./partner-corporates";
+
 
 const endpoint = "/master/integration-partners"
 const backUrl = "/master/integration-partner"

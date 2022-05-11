@@ -136,8 +136,6 @@ import FeeTaxForm from "views/partner_fee_taxes/form"
 import CreateHotel from 'views/partner_hotels/form'
 import FormPartnerHotel from 'views/partner_hotels/form'
 import IntegrationPartnerCountriesTable from "views/integration_partner_countries/table"
-import IntegrationPartnerCabinTypesTable from "views/integration_partner_cabin/index"
-import IntegrationPartnerCabinsForm from "views/integration_partner_cabin/form/index"
 import IntegrationPartnerCurrenciesTable from "views/integration_partner_currencies/table"
 import IntegrationPartnerCurrenciesForm from "views/integration_partner_currencies/form"
 

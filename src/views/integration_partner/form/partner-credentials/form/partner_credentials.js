@@ -10,8 +10,9 @@ import { setAlert, setCreateModal, setModalTitle } from "redux/ui-store";
 import CancelButton from "components/button/cancel";
 import FormikControl from "components/formik/formikControl";
 
-const endpoint = "/master/currency-conversions";
-function PartnerCredentialsCreate(props) {
+const endpoint = "/master/integration-partner-currencies";
+
+function IntegrationPartnerCurrenciesCreate(props) {
     const dispatch = useDispatch();
     const showCreateModal = useSelector((state) => state.ui.showCreateModal);
     const API = new Api();
@@ -23,33 +24,20 @@ function PartnerCredentialsCreate(props) {
     useEffect(async () => {
         let formId = showCreateModal.id || props.id;
 
-        let docTitle = "Edit Partner Credentials";
+        let docTitle = "Edit Partner Currencies";
         if (!formId) {
-            docTitle = "Create Partner Credentials";
+            docTitle = "Create Partner Currencies";
         } else if (isView) {
-            docTitle = "Exchange Rate Details";
+            docTitle = "Partner Currencies Details";
         }
 
         dispatch(setModalTitle(docTitle));
 
-        if (formId) {
-            try {
-                let { data } = await API.get(endpoint + "/" + formId);
-                setFormValues({
-                    ...data,
-                    from_currency_id: {
-                        value: data.from_currency.id,
-                        label: data.from_currency.currency_name,
-                    },
-                    to_currency_id: {
-                        value: data.to_currency.id,
-                        label: data.to_currency.currency_name,
-                    },
-                });
-            } catch (e) {
-                console.log(e);
-            }
-        }
+        try {
+            let res = await API.get(endpoint + "/" + formId);
+            setFormValues(res.data);
+        } catch (e) {}
+        setLoading(false);
     }, []);
 
     useEffect(() => {
@@ -65,62 +53,24 @@ function PartnerCredentialsCreate(props) {
     }, [showCreateModal.id, formValues]);
 
     const initialValues = {
-        from_currency_id: "",
-        to_currency_id: "",
-        multiply_rate: "",
-        is_automatic: false,
+        currency_id: "",
     };
 
-    const checkExchangeRate = async (to_currency_id, from_currency_id) => {
-        let filter = encodeURIComponent(JSON.stringify([["to_currency_id", "=", to_currency_id], ["AND"], ["from_currency_id", "=", from_currency_id]]));
-        let res = await API.get(`/master/currency-conversions?filters=${filter}`);
-        return res.data.items.length === 0;
-    };
-
-    Yup.addMethod(Yup.object, "pairCurrency", function (propertyPath, message) {
-        return this.test("unique", message, function (field) {
-            if (field && this.parent[propertyPath]) {
-                return field.value !== this.parent[propertyPath]?.value;
-            } else {
-                return true;
-            }
-        });
-    });
-    Yup.addMethod(Yup.object, "uniqueExchangeRate", function (message) {
-        return this.test("unique", message, function (field, ctx) {
-            let parent = ctx.parent;
-            if (parent.to_currency_id?.value && parent.from_currency_id?.value) {
-                return checkExchangeRate(parent.to_currency_id.value, parent.from_currency_id.value);
-            } else {
-                return true;
-            }
-        });
-    });
     const validationSchema = Yup.object().shape({
-        from_currency_id: Yup.object().required("From Currency is required.").pairCurrency("to_currency_id", "From Currency and To Currency must be different.").uniqueExchangeRate("Exchange rate already exists"),
-        to_currency_id: Yup.object().required("To Currency is required.").pairCurrency("from_currency_id", "From Currency and To Currency must be different.").uniqueExchangeRate("Exchange rate already exists."),
-        multiply_rate: Yup.string()
-            .matches(/^\d{0,15}(\.\d{0,8})?$/, "maximum value: 15 digits with 8 decimal digits")
-            .required("Multiply Rate is required."),
+        currency_id: Yup.object().required("Partner Currency Code is required."),
     });
 
     const onSubmit = async (values, a) => {
         try {
             let form = {
-                conversion_rate_type: "C",
-                from_currency_id: values.from_currency_id.value,
-                is_automatic: values.is_automatic,
-                multiply_rate: parseFloat(values.multiply_rate),
-                to_currency_id: values.to_currency_id.value,
-                valid_from: new Date(),
-                valid_to: new Date(),
+                currency_id: values.currency_id.value,
             };
-            let res = await API.putOrPost("/master/currency-conversions", id, form);
+            let res = await API.putOrPost("/master/integration-partner-currencies", id, form);
 
             dispatch(setCreateModal({ show: false, id: null, disabled_form: false }));
             dispatch(
                 setAlert({
-                    message: `Record 'From Currency: ${form.from_currency_id} and To Currency: ${form.to_currency_id}' has been successfully saved.`,
+                    message: `Record 'From Integration Partner Currency: ${form.currency_id} and To Currency: ${form.currency_name}' has been successfully saved.`,
                 })
             );
         } catch (e) {
@@ -147,23 +97,53 @@ function PartnerCredentialsCreate(props) {
                 <Form onSubmit={handleSubmit} className="ml-2">
                     <FormikControl
                         control="selectAsync"
-                        required="label-required"
-                        label="Corporate"
-                        name="from_currency_id"
-                        placeholder={"Please choose"}
-                        url={`master/currencies`}
-                        fieldName={"currency_name"}
+                        required={isView ? "" : "label-required"}
+                        label="Currencies"
+                        name="currencies"
+                        placeholder={values.currency_name || "Please Choose."}
+                        url={`master/integration-partner-currencies`}
+                        fieldName={"currency_symbol"}
                         onChange={(v) => {
-                            setFieldValue("from_currency_id", v);
+                            setFieldValue("currencies", v);
                         }}
                         style={{ maxWidth: 250 }}
                         size={formSize}
-                        isDisabled={isView || loading}
+                        components={
+                            isView
+                                ? {
+                                      DropdownIndicator: () => null,
+                                      IndicatorSeparator: () => null,
+                                  }
+                                : null
+                        }
+                        isDisabled={isView}
                     />
 
-                    <FormikControl control="input" required="label-required" label="Partner Corporate Code" name="multiply_rate" style={{ maxWidth: 250 }} size={formSize} disabled={isView || loading} />
+                    <FormikControl
+                        control="input"
+                        required="label-required"
+                        label="Partner Currency Code"
+                        name="currency_code"
+                        style={{ maxWidth: 250 }}
+                        size={formSize}
+                        disabled={isView || loading}
+                        onChange={(e) => {
+                            setFieldValue("currency_code", e.target.value);
+                        }}
+                    />
 
-                    <FormikControl control="switch" label="Enabled" name="is_automatic" value={values.is_automatic} onChange={(v) => setFieldValue("is_automatic", v)} size={formSize} disabled={isView || loading} />
+                    <FormikControl
+                        control="input"
+                        required="label-required"
+                        label="Partner Currency Name"
+                        name="currency_name"
+                        style={{ maxWidth: 250 }}
+                        size={formSize}
+                        disabled={isView || loading}
+                        onChange={(e) => {
+                            setFieldValue("currency_name", e.target.value);
+                        }}
+                    />
 
                     {!props.hideButton && (
                         <div
@@ -187,4 +167,4 @@ function PartnerCredentialsCreate(props) {
     );
 }
 
-export default withRouter(PartnerCredentialsCreate);
+export default withRouter(IntegrationPartnerCurrenciesCreate);
