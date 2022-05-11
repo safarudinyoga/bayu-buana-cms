@@ -46,7 +46,7 @@ const FlightPref = () => {
                   Specify Carrier 
                   <ReactSVG src='/img/icons/info.svg' className='d-inline-block position-absolute ml-2' style={{bottom: 20}} />
                 </div>
-                <div className="col-md-2">
+                <div className="col-md-4">
                   <Select 
                     options={[
                       { value: "SQ", label: "Singapore Airlines"},
@@ -56,7 +56,7 @@ const FlightPref = () => {
                     isMulti={true}
                   />
                 </div>
-                <div className="col-md-1 offset-md-3">Flight Class</div>
+                <div className="col-md-1 offset-md-1">Flight Class</div>
                 <div className="col-md-2">
                   <Select
                     options={[

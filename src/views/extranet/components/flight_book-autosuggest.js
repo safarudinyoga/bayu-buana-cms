@@ -58,7 +58,7 @@ const FlightBook = (props) => {
           </div>
           <div className="recent-search">
             <span className='text-uppercase recent-flight-title ml-2'>Recent Flight Searches</span>
-            <span className='ml-4 recent-flight-title'>Clear all</span>
+            <span className='ml-4 recent-flight-title recent-flight-clear-all'>Clear all</span>
             <div className='flight-pref-container d-flex'>
               <div className="flight-pref mr-2">
                 <span className='flight-pref__route'>CGK - ICN</span>
@@ -85,16 +85,17 @@ const FlightBook = (props) => {
           </div>
           <div className="recent-search">
             <span className='text-uppercase recent-flight-title ml-2'>Recent Flight Searches</span>
+            <span className='ml-4 recent-flight-title recent-flight-clear-all'>Clear all</span>
             <div className='flight-pref-container d-flex'>
               <div className="flight-pref mr-2">
                 <span className='flight-pref__route'>CGK - ICN</span>
                 <span className='flight-pref__date'>16 OCT - 22 OCT 2020</span>
-                <span className='ml-1 mr-2'>X</span>
+                <ReactSVG className='ml-1 mr-2 d-inline-block' src='/img/icons/close-circle.svg' />
               </div>
               <div className="flight-pref mr-2">
                 <span className='flight-pref__route'>CGK - ICN</span>
                 <span className='flight-pref__date'>16 OCT - 22 OCT 2020</span>
-                <span className='ml-1 mr-2'>X</span>
+                <ReactSVG className='ml-1 mr-2 d-inline-block' src='/img/icons/close-circle.svg' />
               </div>
             </div>
           </div>
@@ -111,16 +112,17 @@ const FlightBook = (props) => {
           </div>
           <div className="recent-search">
             <span className='text-uppercase recent-flight-title ml-2'>Recent Flight Searches</span>
+            <span className='ml-4 recent-flight-title recent-flight-clear-all'>Clear all</span>
             <div className='flight-pref-container d-flex'>
               <div className="flight-pref mr-2">
                 <span className='flight-pref__route'>CGK - ICN</span>
                 <span className='flight-pref__date'>16 OCT - 22 OCT 2020</span>
-                <span className='ml-1 mr-2'>X</span>
+                <ReactSVG className='ml-1 mr-2 d-inline-block' src='/img/icons/close-circle.svg' />
               </div>
               <div className="flight-pref mr-2">
                 <span className='flight-pref__route'>CGK - ICN</span>
                 <span className='flight-pref__date'>16 OCT - 22 OCT 2020</span>
-                <span className='ml-1 mr-2'>X</span>
+                <ReactSVG className='ml-1 mr-2 d-inline-block' src='/img/icons/close-circle.svg' />
               </div>
             </div>
           </div>
