@@ -131,6 +131,10 @@ import IntegrationPartnerCitiesTable from "views/integration_partner_city/tabel"
 import IntegrationPartnerCabinTypesTable from "views/integration_partner_cabin/tabel"
 import IntegrationPartnerCabinsForm from "views/integration_partner_cabin/form/form"
 import FareFamiyTabel from "views/integration_partner_cabin/tabel-fare-family"
+import IntegrationFeeTaxes from "views/partner_fee_taxes/table"
+import FeeTaxForm from "views/partner_fee_taxes/form"
+import CreateHotel from 'views/partner_hotels/form'
+import FormPartnerHotel from 'views/partner_hotels/form'
 
 // Master Manage Corporate
 import CorporateTable from "views/manage_corporate/table"
@@ -174,6 +178,8 @@ import BookTrip from "views/extranet/book_trip/book_trip"
 import BookFlight from "views/extranet/book_trip/book_flight"
 
 import Api from "config/api"
+import IntegrationPartnerHotels from "views/partner_hotels/table"
+import IntegrationPartnerHotelSupplier from 'views/partner_hotel_supplier/table';
 
 const RouteWithProps = ({
   path,
@@ -275,6 +281,24 @@ const DashboardRoutes = () => {
         <Route exact path="/master/integration-partner">
           <IntegrationPartnerTable />
         </Route>
+        <Route exact path="/master/integration-partner/partner-fee-tax">
+          <IntegrationFeeTaxes />
+        </Route>
+        <Route exact path="/master/integration-partner/partner-fee-tax/form/:id?">
+          <FeeTaxForm />
+        </Route>
+        <Route exact path="/master/integration-partner/partner-hotels">
+          <IntegrationPartnerHotels />
+        </Route>
+        <Route exact path="/master/integration-partner-hotels/form/:id?">
+          <FormPartnerHotel />
+        </Route>
+        <Route exact path="/master/integration-partner-hotel-supplier">
+          <IntegrationPartnerHotelSupplier />
+        </Route>
+        {/* <Route exact path="/master/integration-partner-hotels/form/:id?">
+          <FormPartnerHotel />
+        </Route> */}
         <Route path="/master/integration-partner/form/:id?">
           <IntegrationPartnerForm />
         </Route>

@@ -12,6 +12,7 @@ import FormikControl from "../../components/formik/formikControl"
 
 const endpoint = "/master/currency-conversions"
 function ExchangeRateCreate(props) {
+  console.log(props);
 	const dispatch = useDispatch()
   const showCreateModal = useSelector((state) => state.ui.showCreateModal)
   const API = new Api()

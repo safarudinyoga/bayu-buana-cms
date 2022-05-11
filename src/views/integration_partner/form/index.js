@@ -12,6 +12,7 @@ import PartnertMessages from "./partner_messages/table"
 import { useSnackbar } from "react-simple-snackbar"
 import PartnerCabin from "../../integration_partner_cabin/tabel"
 import PartnerInformation from "./partner-information"
+import PartnerFeeTaxes from '../../partner_fee_taxes/table'
 
 const endpoint = "/master/integration-partners"
 const backUrl = "/master/integration-partner"
@@ -131,7 +132,7 @@ const IntegrationPartnerForm = (props) => {
                 </Nav.Link>
               </Nav.Item>
               <Nav.Item>
-                <Nav.Link eventKey="partner-fee-taxes">
+                <Nav.Link eventKey="partner-fee-taxes" >
                   <div>
                     <ReactSVG src="/img/icons/users.svg" />
                     <span>Partner Fee Taxes</span>
@@ -186,7 +187,7 @@ const IntegrationPartnerForm = (props) => {
                 ) : null}
               </Tab.Pane>
               <Tab.Pane eventKey="partner-fee-taxes">
-                Partner Fee Taxes
+                <PartnerFeeTaxes />
               </Tab.Pane>
 
               <Tab.Pane eventKey="partner-payment-gateway">
