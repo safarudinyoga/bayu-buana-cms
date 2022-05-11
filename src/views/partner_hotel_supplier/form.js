@@ -15,9 +15,11 @@ import * as Yup from "yup"
 import { Editor } from "react-draft-wysiwyg"
 import { ReactSVG } from "react-svg"
 import Dropzone from "react-dropzone-uploader"
+import FormInputControl from "components/form/input-control";
+import FormAlert from "components/form/alert";
 import axios from "axios"
 import useQuery from "lib/query"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { setAlert, setUIParams } from "redux/ui-store"
 
 import Api from "config/api"
@@ -27,14 +29,19 @@ import Select from "components/form/select-async"
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css"
 import "react-dropzone-uploader/dist/styles.css"
 
-const endpoint = "/master/hotels"
+const endpoint = "/master/integration-partners/3f61b5e0-d7cb-4f80-94e7-83114ff23903/hotel-suppliers"
 
 const HotelSuppliers = (props) => {
   const isView = useQuery().get("action") === "view"
   let dispatch = useDispatch()
+  const showCreateModal = useSelector((state) => state.ui.showCreateModal)
 
   const [selectCountry, setSelectCountry] = useState([])
   const [selectHotelBrand, setSelectHotelBrand] = useState([])
+  const [title, setTitle] = useState(null)
+  const [hotelSupplierName, setHotelSupplierName] = useState(null)
+  const [hotelSupplierCode, setHotelSupplierCode] = useState(null)
+  const [partnerHotelName, setPartnerHotelName] = useState(null)
   const [modalShow, setModalShow] = useState(false)
   const [translations, setTranslations] = useState([])
   const [loading, setLoading] = useState(true)
@@ -47,7 +54,7 @@ const HotelSuppliers = (props) => {
     hotelCode: "",
     hotelName: "",
     hotelBrand: "",
-    starRating: "",
+    hotelSupplierName: hotelSupplierName || "",
     numberOfRooms: "",
 
     // Contacts
@@ -97,13 +104,11 @@ const HotelSuppliers = (props) => {
         "Hotel Code already exists", // <- key, message
         (value) => {
           return new Promise((resolve, reject) => {
-              console.log('1<<<<<<<<<<');
             axios
               .get(
                 `${env.API_URL}/fee-tax-types/`,
               )
               .then((res) => {
-                  console.log(res, '<<<<<<');
                 resolve(res.data.items.length == 0)
               })
               .catch((error) => {
@@ -114,7 +119,7 @@ const HotelSuppliers = (props) => {
       ),
     hotelName: Yup.string().required("Hotel Name is required."),
     hotelBrand: Yup.object(),
-    starRating: Yup.object().required("Star Rating is required."),
+    hotel_supplier_name: Yup.object().required("Star Rating is required."),
     numberOfRooms: Yup.number(),
 
     // Contacts
@@ -192,135 +197,16 @@ const HotelSuppliers = (props) => {
     )
   }
 
-  const formTranslation = () => {
-    return (
-      <>
-        <Form.Group as={Row} className="form-group">
-          <Form.Label column sm={3}>
-            Hotel Name
-          </Form.Label>
-          <Col sm={9}>
-            <FastField name="a">
-              {({ field }) => (
-                <>
-                  <Form.Control
-                    type="text"
-                    minLength={1}
-                    maxLength={128}
-                    style={{ width: 300 }}
-                    {...field}
-                  />
-                </>
-              )}
-            </FastField>
-          </Col>
-        </Form.Group>
-        <Form.Group as={Row} className="form-group">
-          <Form.Label column sm={3}>
-            Standard Check-in Time
-          </Form.Label>
-          <Col sm={9}>
-            <FastField name="b">
-              {({ field }) => (
-                <>
-                  <Form.Control
-                    type="text"
-                    minLength={1}
-                    maxLength={16}
-                    style={{ width: 100 }}
-                    {...field}
-                  />
-                </>
-              )}
-            </FastField>
-          </Col>
-        </Form.Group>
-        <Form.Group as={Row} className="form-group">
-          <Form.Label column sm={3}>
-            Standard Check-out Time
-          </Form.Label>
-          <Col sm={9}>
-            <FastField name="c">
-              {({ field }) => (
-                <>
-                  <Form.Control
-                    type="text"
-                    minLength={1}
-                    maxLength={16}
-                    style={{ width: 100 }}
-                    {...field}
-                  />
-                </>
-              )}
-            </FastField>
-          </Col>
-        </Form.Group>
-        <Form.Group as={Row} className="form-group">
-          <Form.Label column sm={3}>
-            Descriptions
-          </Form.Label>
-          <Col sm={9}>
-            <FastField name="d">
-              {({ field }) => (
-                <Form.Control
-                  {...field}
-                  as="textarea"
-                  rows={3}
-                  minLength={1}
-                  maxLength={512}
-                  style={{ width: 362 }}
-                />
-              )}
-            </FastField>
-          </Col>
-        </Form.Group>
-        <Form.Group as={Row} className="form-group">
-          <Form.Label column sm={3}>
-            Internal Remark
-          </Form.Label>
-          <Col sm={9}>
-            <FastField name="e">
-              {({ field }) => (
-                <Form.Control
-                  {...field}
-                  as="textarea"
-                  rows={3}
-                  minLength={1}
-                  maxLength={512}
-                  style={{ width: 362 }}
-                />
-              )}
-            </FastField>
-          </Col>
-        </Form.Group>
-        <Form.Group as={Row} className="form-group">
-          <Form.Label column sm={3}>
-            Terms & Conditions
-          </Form.Label>
-          <Col sm={9}>
-            <Editor
-              // editorState={editorState}
-              toolbarClassName="toolbarClassName"
-              wrapperClassName="wrapperClassName"
-              editorClassName="editorClassName"
-              // onEditorStateChange={this.onEditorStateChange}
-            />
-          </Col>
-        </Form.Group>
-      </>
-    )
-  }
-
   useEffect(async () => {
     let api = new Api()
-    let formId = ""
+    let formId = showCreateModal.id
+    console.log(formId, 'id endpoint');
 
-    let docTitle = "Edit Aircraft"
+    let docTitle = "Edit Partner Hotel Suppliers"
     if (!formId) {
-      docTitle = "Create Aircraft"
-    } else if (isView) {
-      docTitle = "View Aircraft"
+      docTitle = "Create Partner Hotel Suppliers"
     }
+    setTitle(docTitle)
 
     dispatch(
       setUIParams({
@@ -340,20 +226,65 @@ const HotelSuppliers = (props) => {
       }),
     )
     if (formId) {
+      let res = await api.get(endpoint + "/" + formId)
+      console.log(res, 'ini hasil');
+      setHotelSupplierName(res.data.hotel_supplier_name)
+      setHotelSupplierCode(res.data.hotel_supplier_code)
+      setPartnerHotelName(res.data.hotel_supplier_name)
+      console.log(hotelSupplierCode, 'changed');
       try {
-        let res = await api.get(endpoint + "/" + formId)
       } catch (e) {}
-
-      try {
-        let res = await api.get(endpoint + "/" + formId + "/translations", {
-          size: 50,
-        })
-        setTranslations(res.data.items)
-      } catch (e) {}
+      // try {
+      //   let res = await api.get(endpoint + "/" + formId + "/translations", {
+      //     size: 50,
+      //   })
+      //   setTranslations(res.data.items)
+      // } catch (e) {}
       setLoading(false)
     } else {
     }
   }, [])
+
+  const handleonSubmit = async(e) => {
+    e.preventDefault()
+    console.log('sini', hotelSupplierName);
+    const payload = {
+      "created_at": "1943-09-24T23:01:04.987Z",
+      "creator_id": "urn:uuid:619774fd-7ea6-4a38-4705-48f2c9e15964",
+      "hotel_supplier": {
+        "value": hotelSupplierName.label
+      },
+      "hotel_supplier_code": hotelSupplierCode,
+      "hotel_supplier_id": hotelSupplierName.value,
+      "hotel_supplier_name": partnerHotelName,
+      "id": "",
+      "integration_partner_id": "3f61b5e0-d7cb-4f80-94e7-83114ff23903",
+      "modifier_id": "",
+      "sort": 1,
+      "status": 1,
+      "updated_at": ""
+    }
+    return new Promise((resolve, rejecet) => {
+      axios.post(api.env.endpoint("/master/integration-partners/3f61b5e0-d7cb-4f80-94e7-83114ff23903/hotel-suppliers"), payload)
+          .then((res) => {
+              // props.history.goBack()
+              console.log(res, 'succes');
+              if (res.status === 200) {
+                props.onHide(false)
+                return (
+                  <FormAlert
+                    isValid={true}
+                    message={"succes"}
+                  />
+                )
+              }
+          })
+          .catch((error) => {
+            console.log(error, 'error');
+              resolve(false)
+          })
+    })
+  };
 
   return (
     <div>
@@ -378,86 +309,79 @@ const HotelSuppliers = (props) => {
           setFieldValue,
           setFieldTouched,
         }) => (
-          <Form onSubmit={handleSubmit} style={{background: 'transparent'}} style={{}} >
-                <h3 className="" style={{textAlign: 'center', fontSize: 18, marginBottom: 20, marginTop: -20}}>EDIT HOTEL PARTNER SUPPLIERS</h3>
+          <Form onSubmit={handleonSubmit} style={{background: 'transparent'}} style={{}} >
+                <h3 className="" style={{textAlign: 'center', fontSize: 18, marginBottom: 20, marginTop: -20}}>{title}</h3>
                 <div style={{ padding: "0 10px 10px" }}>
                   <Row>
                     <Col sm={12}>
                       <Form.Group as={Row} className="form-group" style={{display: 'flex',}}>
-                        <Form.Label column sm={7}>
+                        <Form.Label column sm={6}>
                           Hotel Supplier     
                           <span className="form-label-required">*</span>
                         </Form.Label>
-                        <Col sm={4}>
-                          <FastField name="starRating">
-                            {({ field, form }) => (
+                        <Col sm={6}>
+                          <FastField name="hotel_supplier">
+                            {({ field, form }) => {
+                              return(
                               <div style={{ width: 200}}>
                                 <Select
                                   {...field}
-                                  url={`master/rating-types`}
-                                  fieldName="rating_type_name"
-                                  onChange={(v) =>
-                                    setFieldValue("starRating", v)
-                                  }
-                                  placeholder="Please choose Star Rating"
+                                  url={`master/hotel-suppliers`}
+                                  fieldName="hotel_supplier_name"
+                                  onChange={(v) => {
+                                    setFieldValue("hotel_supplier_name", v)
+                                    setHotelSupplierName(v)
+                                  }}
                                   className={`react-select ${
-                                    form.touched.starRating &&
-                                    form.errors.starRating
+                                    form.touched.hotel_supplier_name &&
+                                    form.errors.hotel_supplier_name
                                       ? "is-invalid"
                                       : null
                                   }`}
                                 />
-                                {form.touched.starRating &&
-                                  form.errors.starRating && (
+                                {form.touched.hotel_supplier_name &&
+                                  form.errors.hotel_supplier_name && (
                                     <Form.Control.Feedback type="invalid">
-                                      {form.touched.starRating
-                                        ? form.errors.starRating
+                                      {form.touched.hotel_supplier_name
+                                        ? form.errors.hotel_supplier_name
                                         : null}
                                     </Form.Control.Feedback>
                                   )}
                               </div>
-                            )}
+                            )}}
                           </FastField>
                         </Col>
                       </Form.Group>
                       <Form.Group as={Row} className="form-group" style={{display: 'flex',}}>
-                        <Form.Label column sm={7}>
+                        <Form.Label column sm={6} style={{marginTop: 10}}>
                             Partner Hotel Supplier Code
                           <span className="form-label-required">*</span>
                         </Form.Label>
-                        <Col sm={4}>
-                          <FastField name="numberOfRooms">
-                            {({ field }) => (
-                              <>
-                                <Form.Control
-                                  type="number"
-                                  maxLength={9999}
-                                  style={{ width: 100 }}
-                                  {...field}
-                                />
-                              </>
-                            )}
-                          </FastField>
+                        <Col sm={1}>
+                            <FormInputControl
+                                value={hotelSupplierCode}          
+                                onChange={(e) => setHotelSupplierCode(e.target.value)}
+                                type="text"
+                                minLength="1"
+                                maxLength="256"
+                                style={{width: 100 }}
+                            />
                         </Col>
                       </Form.Group>
                       <Form.Group as={Row} className="form-group" style={{display: 'flex'}}>
-                        <Form.Label column sm={7} style={{}}>
+                        <Form.Label column sm={6} style={{}}>
                             Partner Hotel Supplier Name
                           <span className="form-label-required">*</span>
                         </Form.Label>
-                        <Col sm={4}>
-                          <FastField name="numberOfRooms">
-                            {({ field }) => (
-                              <>
-                                <Form.Control
-                                  type="number"
-                                  maxLength={9999}
-                                  style={{ width: 200 }}
-                                  {...field}
-                                />
-                              </>
-                            )}
-                          </FastField>
+                        <Col sm={1}>
+                          <FormInputControl
+                                value={partnerHotelName}          
+                                onChange={(e) => setPartnerHotelName(e.target.value)}
+                                type="text"
+                                minLength="1"
+                                maxLength="256"
+                                style={{width: 200, marginTop: -10 }}
+                            />
                         </Col>
                       </Form.Group>
                     </Col>

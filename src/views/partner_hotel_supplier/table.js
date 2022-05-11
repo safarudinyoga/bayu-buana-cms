@@ -27,9 +27,9 @@ export default function IntegrasiPartnerHotelSupplier() {
     isCheckbox: false,
     title: "Division",
     titleModal: "Division",
-    baseRoute: "/master/integration-partner-hotels/form",
-    endpoint: "/master/integration-partner-hotels",
-    deleteEndpoint: "/master/batch-actions/delete/integration-partner-hotels",
+    baseRoute: "/master/integration-partners/3f61b5e0-d7cb-4f80-94e7-83114ff23903/hotel-suppliers/form",
+    endpoint: "/master/integration-partners/3f61b5e0-d7cb-4f80-94e7-83114ff23903/hotel-suppliers",
+    deleteEndpoint: "/master/integration-partners/3f61b5e0-d7cb-4f80-94e7-83114ff23903/hotel-suppliers",
     activationEndpoint: "/master/batch-actions/activate/integration-partner-hotels",
     deactivationEndpoint: "/master/batch-actions/deactivate/integration-partner-hotels",
     showAdvancedOptions: false,
@@ -37,20 +37,16 @@ export default function IntegrasiPartnerHotelSupplier() {
     createOnModal: true,
     columns: [
       {
-        title: "Hotel",
-        data: "hotel_name",
+        title: "Hotel Suppliers",
+        data: "hotel_supplier_name",
       },
       {
-        title: "Address",
-        // data: "division_name",
+        title: "Partner Hotel Suppliers Code",
+        data: "hotel_supplier_code",
       },
       {
-        title: "Partner Hotel Code",
-        data: "hotel_code",
-      },
-      {
-        title: "Partner Hotel Name",
-        data: "hotel_name",
+        title: "Partner Hotel Suppliers Name",
+        data: "hotel_supplier_name",
       },
     //   {
     //     title: "Manager",
@@ -79,7 +75,7 @@ export default function IntegrasiPartnerHotelSupplier() {
     recordName: ["division_code", "division_name"],
     showInfoDelete: true,
     infoDelete: [
-      {title: "Partner Hotel Name", recordName: "hotel_name"}, 
+      {title: "Partner Hotel Supplier", recordName: "hotel_supplier_name"}, 
     ],
     customFilterStatus: {
       value: "",

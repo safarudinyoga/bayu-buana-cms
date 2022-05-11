@@ -180,6 +180,7 @@ import BookFlight from "views/extranet/book_trip/book_flight"
 import Api from "config/api"
 import IntegrationPartnerHotels from "views/partner_hotels/table"
 import IntegrationPartnerHotelSupplier from 'views/partner_hotel_supplier/table';
+import BookingSetting from "views/booking_setting/table"
 
 const RouteWithProps = ({
   path,
@@ -597,6 +598,10 @@ const DashboardRoutes = () => {
           <FlightCommisionForm />
         </Route>
 
+        <Route exact path="/master/setup-booking-setting">
+          <BookingSetting />
+        </Route>
+        
         {/* Master Exhange Rate */}
         <Route exact path="/master/exchange-rate">
           <ExchageRateTable />

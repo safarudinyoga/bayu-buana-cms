@@ -429,7 +429,6 @@ console.log(formValues);
                                     minLength="1"
                                     maxLength="256"
                                     style={{width: "10vw", height: 34, marginLeft: -20, marginTop: 10}}
-                                    
                                 />
                             </Col>
                       </Form.Group>

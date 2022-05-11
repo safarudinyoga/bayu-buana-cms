@@ -49,23 +49,6 @@ export default function IntegrasiPartnerHotels() {
         title: "Partner Hotel Name",
         data: "hotel_name",
       },
-    //   {
-    //     title: "Manager",
-    //     data: "manager.given_name",
-    //     render: (data, d, row) => {
-    //       if(row.manager) {
-    //         return `${row.manager.given_name || ""} ${row.manager.middle_name || ""} ${row.manager.surname || ""}`
-    //       } else {
-    //         return ""
-    //       }
-    //     }
-    //   },
-    //   {
-    //     searchable: false,
-    //     title: "Status",
-    //     data: "status",
-    //     render: rowStatus,
-    //   },
       {
         title: "Translated Division Name",
         data: "division_translation.division_name",
