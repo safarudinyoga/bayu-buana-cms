@@ -519,7 +519,7 @@ class BBDataTable extends Component {
           },
           {
             targets: [1, 2],
-            className: !this.state.isCheckbox ? module == "employee" ? "" : "custom-col-width": "cstm-col-width",
+            className: !this.state.isCheckbox ? module == "employee" || module == "ancillary" ? "" : "custom-col-width": "cstm-col-width",
           },
           {
             targets: [3],
