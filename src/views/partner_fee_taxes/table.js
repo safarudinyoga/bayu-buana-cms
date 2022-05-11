@@ -8,7 +8,6 @@ import { ReactSVG } from "react-svg"
 import Form from "./form";
 
 export default function IntegrationFeeTaxes() {
-    console.log("here");
   let dispatch = useDispatch()
   useEffect(() => {
     dispatch(
