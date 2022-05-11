@@ -128,9 +128,11 @@ import IntegrationPaymentGatewayForm from "views/integration_partner/form/partne
 import IntegrationPartnerMealPlansTable from "views/integration_partner/form/partner_meal_plans/table"
 import IntegrationPartnerMealPlansForm from "views/integration_partner/form/partner_meal_plans/form"
 import IntegrationPartnerCitiesTable from "views/integration_partner_city/tabel"
-import IntegrationPartnerCabinTypesTable from "views/integration_partner_cabin/tabel"
-import IntegrationPartnerCabinsForm from "views/integration_partner_cabin/form/form"
-import FareFamiyTabel from "views/integration_partner_cabin/tabel-fare-family"
+import IntegrationPartnerCountriesTable from "views/integration_partner_countries/table"
+import IntegrationPartnerCabinTypesTable from "views/integration_partner_cabin/index"
+import IntegrationPartnerCabinsForm from "views/integration_partner_cabin/form/index"
+import IntegrationPartnerCurrenciesTable from "views/integration_partner_currencies/table"
+import IntegrationPartnerCurrenciesForm from "views/integration_partner_currencies/form"
 
 // Master Manage Corporate
 import CorporateTable from "views/manage_corporate/table"
@@ -299,14 +301,15 @@ const DashboardRoutes = () => {
         <Route exact path="/master/integration-partner-cities">
           <IntegrationPartnerCitiesTable />
         </Route>
-        {/* <Route exact path="/master/integration-partner-cities/:id/cities">
-          <IntegrationPartnerCitiesTable />
-        </Route> */}
-        <Route exact path="/master/fare-types">
-
-        <FareFamiyTabel />
+        <Route exact path="/master/integration-partner-countries">
+          <IntegrationPartnerCountriesTable />
         </Route>
-       
+        <Route exact path="/master/integration-partner-currencies">
+          <IntegrationPartnerCurrenciesTable />
+        </Route>
+        <Route path="/master/integration-partner-currencies/form/:id?">
+          <IntegrationPartnerCurrenciesForm />
+        </Route>
         <Route exact path="/master/flight-types">
           <FlightTypeTable />
         </Route>
