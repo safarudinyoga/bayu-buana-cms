@@ -18,7 +18,7 @@ import { useWindowSize } from "rooks"
 import PartnerCorporate from "../../integration_partner_corporate/table"
 
 const endpoint = "/master/integration-partners"
-const backUrl = "/master/integration-partner"
+const backUrl = "/master/integration-partner";
 const options = {
   position: "bottom-right",
 }
