@@ -327,12 +327,14 @@ const DashboardRoutes = () => {
         <Route exact path="/master/integration-partner-cities">
           <IntegrationPartnerCitiesTable />
         </Route>
-        {/* <Route exact path="/master/integration-partner-cities/:id/cities">
-          <IntegrationPartnerCitiesTable />
-        </Route> */}
-        <Route exact path="/master/fare-types">
-
-        <FareFamiyTabel />
+        <Route exact path="/master/integration-partner-countries">
+          <IntegrationPartnerCountriesTable />
+        </Route>
+        <Route exact path="/master/integration-partner-currencies">
+          <IntegrationPartnerCurrenciesTable />
+        </Route>
+        <Route path="/master/integration-partner-currencies/form/:id?">
+          <IntegrationPartnerCurrenciesForm />
         </Route>
        
         <Route exact path="/master/integration-partner-countries">
