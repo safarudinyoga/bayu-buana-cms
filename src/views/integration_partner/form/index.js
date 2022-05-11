@@ -17,6 +17,7 @@ import { useWindowSize } from "rooks"
 import PartnerCorporates from "./partner-corporates";
 
 import PartnerCorporate from "../../integration_partner_corporate/table"
+import PartnerCorporate from "./partner-corporate/table"
 
 const endpoint = "/master/integration-partners"
 const backUrl = "/master/integration-partner"
