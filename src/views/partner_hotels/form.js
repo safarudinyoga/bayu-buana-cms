@@ -20,7 +20,7 @@ import rowStatus from "lib/row-status"
 import { renderColumn } from "lib/translation"
 import moment from "moment"
 import { withRouter } from "react-router"
-import ModalCreate from 'components/Modal/bb-modal';
+// import ModalCreate from 'components/Modal/bb-modal';
 import ModalForm from './modalCreate'
 import Api from "config/api"
 import env from "config/environment"
