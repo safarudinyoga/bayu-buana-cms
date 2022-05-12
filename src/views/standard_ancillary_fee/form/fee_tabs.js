@@ -38,7 +38,6 @@ const FeeSection = (props) => {
                     IDR
                   </Form.Label>
                   <Col xs={10} md={9} lg={7}>
-                      {props.fieldRadio === "domestic_reissue" ? console.log(disabledAmount) : ""}
                       {
                         disabledAmount 
                         ? <Form.Control style={{ maxWidth: "220px" }} disabled={true} />
