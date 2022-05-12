@@ -189,8 +189,8 @@ const FlightForm = (props) => {
   useEffect(async() => {
     try {
       if(formId) {
-        let res = await api.get(`/master/processing-fee-categories/${formId}`)
-        // let agent_res = await api.get(`/master/agent-processing-fee-categories/1/${res.data.id}`)
+        let res = await api.get(endpoint + "/" + formId)
+        // let agent_res = await api.get(`endpointFee+ "/1/" + res.data.id)
         setInitialForm({
           ...initialForm, 
           ...res.data,
