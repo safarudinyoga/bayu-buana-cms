@@ -24,11 +24,28 @@ export default function SetupFlightCommisionTable() {
     )
   }, [])
 
+  const NextDay = (date = new Date()) => {
+    date.setDate(date.getDate() + 1)
+    return date
+  }
+
+  const MinDate = (date = new Date()) => { 
+    date.setFullYear(date.getFullYear() - 1)
+
+    return date
+  }
+
+  const MaxDate = (date = new Date()) => {
+    date.setFullYear(date.getFullYear() + 1)
+
+    return date
+  }
+
   const [selectedIssueStart, setSelectedIssueStart] = useState(new Date())
-  const [selectedIssueEnd, setSelectedIssueEnd] = useState(new Date())
+  const [selectedIssueEnd, setSelectedIssueEnd] = useState(NextDay)
 
   const [selectedDepartureStart, setSelectedDepartureStart] = useState(new Date())
-  const [selectedDepartureEnd, setSelectedDepartureEnd] = useState(new Date())
+  const [selectedDepartureEnd, setSelectedDepartureEnd] = useState(NextDay)
 
   // const onFilterChange = (e, values) => {
   //   let ids = []
@@ -61,6 +78,7 @@ export default function SetupFlightCommisionTable() {
                   onChange={(date) => {
                     setSelectedIssueStart(date)
                   }}
+                  minDate={MinDate}
                 />
               </div>
               <span className="col-md-1"> to </span>
@@ -72,6 +90,7 @@ export default function SetupFlightCommisionTable() {
                   onChange={(date) => {
                     setSelectedIssueEnd(date)
                   }}
+                  maxDate={MaxDate}
                 />
               </div>
             </div>
@@ -89,6 +108,7 @@ export default function SetupFlightCommisionTable() {
                   onChange={(date) => {
                     setSelectedDepartureStart(date)
                   }}
+                  minDate={MinDate}
                 />
               </div>
               <span className="col-md-1"> to </span>
@@ -96,10 +116,11 @@ export default function SetupFlightCommisionTable() {
                 <DatePicker 
                   className="form-control"
                   dateFormat="dd MMMM yyyy"
-                  selected={selectedIssueStart}
+                  selected={selectedDepartureEnd}
                   onChange={(date) => {
-                    setSelectedIssueStart(date)
+                    setSelectedDepartureEnd(date)
                   }}
+                  maxDate={MaxDate}
                 />
               </div>
             </div>
