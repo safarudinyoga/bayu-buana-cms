@@ -582,6 +582,7 @@ const FlightForm = (props) => {
                     values={values}
                     fHandleChange={handleChange}
                     fHandleBlur={handleBlur}
+                    setFieldValue={setFieldValue}
                   />
                 </div>
               </Card.Body>
