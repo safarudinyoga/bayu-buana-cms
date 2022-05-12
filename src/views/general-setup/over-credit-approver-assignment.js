@@ -17,7 +17,7 @@ const dummy1 = [
   },
   {
     name: "Dhani Doel",
-    category: "BCD  ",
+    category: "BCD",
   },
   {
     name: "Jhon Bill",
@@ -57,14 +57,29 @@ const OverCreditApproverAssignment = (props) => {
   const [data1, setData1] = useState(dummy1)
   const [data2, setData2] = useState(dummy2)
 
-  const handleAdd = () => {
+  const handleButtonAdd = () => {
     setData1((data1) => [...data1, ...data2])
     setData2((data2) => [])
   }
 
-  const handleRemove = () => {
+  const handleButtonRemove = () => {
     setData1((data1) => [])
     setData2((data2) => [...data2, ...data1])
+  }
+
+  const handleRemoveIndexArray = (e) => {
+    console.log(e)
+    const index = data1.indexOf(e)
+    if (index > -1) {
+      data1.splice(index, 1)
+    }
+    return data1
+  }
+
+  const HandleButtonX = (e) => {
+    const newData = handleRemoveIndexArray(e)
+    setData1((data1) => newData)
+    setData2((data2) => [...data2, e])
   }
 
   return (
@@ -116,7 +131,10 @@ const OverCreditApproverAssignment = (props) => {
                           <li>
                             <div className="w-100 d-flex justify-content-between">
                               {item.name} ({item.category})
-                              <span className="btn-x-circle">
+                              <span
+                                className="btn-x-circle"
+                                onClick={() => HandleButtonX(item)}
+                              >
                                 <img src={xCircle} alt="right" />
                               </span>
                             </div>
@@ -133,7 +151,7 @@ const OverCreditApproverAssignment = (props) => {
                   <button
                     type="button"
                     className="btn-add text-uppercase"
-                    onClick={() => handleAdd()}
+                    onClick={() => handleButtonAdd()}
                   >
                     <div className="d-flex justify-content-around">
                       <img src={arrowLeft} alt="left" />
@@ -143,7 +161,7 @@ const OverCreditApproverAssignment = (props) => {
                   <button
                     type="button"
                     className="btn-remove text-uppercase"
-                    onClick={() => handleRemove()}
+                    onClick={() => handleButtonRemove()}
                   >
                     <div className="d-flex justify-content-around">
                       REMOVE <img src={arrowRight} alt="right" />
