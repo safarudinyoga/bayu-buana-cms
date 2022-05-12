@@ -12,6 +12,7 @@ import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css"
 import "react-dropzone-uploader/dist/styles.css"
 import { FeeTabs } from "./fee_tabs"
 import { useSnackbar } from "react-simple-snackbar"
+import useQuery from "lib/query"
 
 const endpoint = "/master/processing-fee-categories"
 const endpointFee = "/master/agent-processing-fee-categories"
@@ -24,6 +25,8 @@ const FlightForm = (props) => {
   const [openSnackbar] = useSnackbar(options)
   let dispatch = useDispatch()
   let api = new Api()
+  const formId = props.match.params.id
+  const isView = useQuery().get("action") === "view"
 
   const [taxTypeDomesticReissue, setTaxTypeDomesticReissue] = useState([])
   const [taxTypeDomesticRevalidate, setTaxTypeDomesticRevalidate] = useState([])
@@ -54,7 +57,6 @@ const FlightForm = (props) => {
   const [taxIdOtherEmergency, setTaxIdOtherEmergency] = useState("")
   useEffect(async () => {
     let api = new Api()
-    let formId = props.match.params.id
     let docTitle = "Edit Flight Standard Ancillary Fee"
     if (!formId) {
       docTitle = "Create Flight Standard Ancillary Fee"
@@ -184,10 +186,22 @@ const FlightForm = (props) => {
     processing_fee_category_name: Yup.string().required("Present Name is required."),
   })
 
+  useEffect(async() => {
+    try {
+      if(formId) {
+        let res = await api.get(`/master/processing-fee-categories/${formId}`)
+        // let agent_res = await api.get(`/master/agent-processing-fee-categories/1/${res.data.id}`)
+        setInitialForm({
+          ...initialForm, 
+          ...res.data,
+          // ...agent_res.data
+        })
+      }
+    } catch (e) { console.log(e) }
+  }, [])
+
   const onSubmit = async(payload, values) => {
     try {
-      let formId = props.match.params.id
-
       if(formId) {
         
       } else {
@@ -403,6 +417,7 @@ const FlightForm = (props) => {
                           <>
                             <Form.Control
                               type="text"
+                              disabled={isView}
                               isInvalid={
                                 form.touched.processing_fee_category_name && form.errors.processing_fee_category_name
                               }
@@ -433,7 +448,9 @@ const FlightForm = (props) => {
                       <FastField name="description">
                         {({ field }) => (
                         <Form.Control
+                          {...field}
                           as="textarea"
+                          disabled={isView}
                           style={{ height: "88px", maxWidth: "416px" }}
                         />)}
                       </FastField>
@@ -583,6 +600,7 @@ const FlightForm = (props) => {
                     fHandleChange={handleChange}
                     fHandleBlur={handleBlur}
                     setFieldValue={setFieldValue}
+                    isView={isView}
                   />
                 </div>
               </Card.Body>

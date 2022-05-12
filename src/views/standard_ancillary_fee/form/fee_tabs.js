@@ -5,8 +5,16 @@ import { FastField } from "formik"
 const FeeSection = (props) => {
   let id = props.taxType ? props.taxType.id : "";
   let title = props.taxType ? props.taxType.fee_tax_type_name : props.title;
-  let disabledAmount = props.values[props.fieldRadio] === "" ? true : props.values[props.fieldRadio] !== "amount"
-  let disabledPercent = props.values[props.fieldRadio] === "" ? true : props.values[props.fieldRadio] !== "percent"
+  let disabledAmount = props.isView 
+    ? false
+    : props.values[props.fieldRadio] === "" 
+    ? true 
+    : props.values[props.fieldRadio] !== "amount"
+  let disabledPercent = props.isView 
+  ? false
+  : props.values[props.fieldRadio] === "" 
+  ? true 
+  : props.values[props.fieldRadio] !== "percent"
   return (
     <>
       <Form.Group>
@@ -26,6 +34,7 @@ const FeeSection = (props) => {
                     value="amount" 
                     type="radio" 
                     label="Fixed Amount" 
+                    disabled={props.isView}
                     checked={props.values[props.fieldRadio] === "amount"} 
                     onClick={() => {
                       props.setFieldValue(props.values[props.fieldRadio+"_percent"], null)
@@ -53,7 +62,7 @@ const FeeSection = (props) => {
                         ? <Form.Control style={{ maxWidth: "220px" }} disabled={true} />
                         : <FastField name={props.fieldAmount}>
                         {({ field }) => (
-                          <Form.Control type="number" {...field} style={{ maxWidth: "220px" }} />
+                          <Form.Control type="number" {...field} style={{ maxWidth: "220px" }} disabled={props.isView} />
                         )}
                       </FastField>
                       }
@@ -74,17 +83,17 @@ const FeeSection = (props) => {
                       <>
                         <FastField name={props.fieldAmountType}>
                           {({ field, form }) => (
-                          <Form.Check {...field} value="de62950d-fbab-4e39-bd90-c2b6687c6b36" checked={props.values[props.fieldAmountType] === "de62950d-fbab-4e39-bd90-c2b6687c6b36"} type="radio" label="/Ticket" disabled={disabledAmount} />
+                          <Form.Check {...field} value="de62950d-fbab-4e39-bd90-c2b6687c6b36" checked={props.values[props.fieldAmountType] === "de62950d-fbab-4e39-bd90-c2b6687c6b36"} type="radio" label="/Ticket"  disabled={props.isView}/>
                           )}
                         </FastField>
                         <FastField name={props.fieldAmountType}>
                           {({ field, form }) => (
-                          <Form.Check {...field} value="de03bf84-4bd8-4cdf-9348-00246f04bcad" checked={props.values[props.fieldAmountType] === "de03bf84-4bd8-4cdf-9348-00246f04bcad"} type="radio" label="/Person" disabled={disabledAmount} />
+                          <Form.Check {...field} value="de03bf84-4bd8-4cdf-9348-00246f04bcad" checked={props.values[props.fieldAmountType] === "de03bf84-4bd8-4cdf-9348-00246f04bcad"} type="radio" label="/Person" disabled={props.isView} />
                           )}
                         </FastField>
                         <FastField name={props.fieldAmountType}>
                           {({ field, form }) => (
-                          <Form.Check {...field} value="5123b121-4f6a-4871-bef1-65408d663e19" checked={props.values[props.fieldAmountType] === "5123b121-4f6a-4871-bef1-65408d663e19"} type="radio" label="/Transaction" disabled={disabledAmount} />
+                          <Form.Check {...field} value="5123b121-4f6a-4871-bef1-65408d663e19" checked={props.values[props.fieldAmountType] === "5123b121-4f6a-4871-bef1-65408d663e19"} type="radio" label="/Transaction" disabled={props.isView} />
                           )}
                         </FastField>
                       </>
@@ -103,7 +112,8 @@ const FeeSection = (props) => {
                   {...field} 
                   value="percent" 
                   type="radio" 
-                  label="Percentage" 
+                  label="Percentage"
+                  disabled={props.isView}
                   checked={props.values[props.fieldRadio] === "percent"}
                   onClick={() => {
                     props.setFieldValue(props.values[props.fieldRadio+"_amount"], null)
@@ -122,7 +132,7 @@ const FeeSection = (props) => {
                     :
                     <FastField name={props.fieldPercent}>
                       {({ field }) => (
-                          <Form.Control {...field} type="number" style={{ maxWidth: "80px" }} className="mx-3" />
+                          <Form.Control {...field} type="number" style={{ maxWidth: "80px" }} className="mx-3" disabled={props.isView} />
                       )}
                     </FastField>
                   }
@@ -134,7 +144,7 @@ const FeeSection = (props) => {
                 ? <Form.Check type="checkbox" className="mt-2" label="Include Taxed" disabled={true} />
                 : <FastField name={props.fieldIncludeTax}>
                     {({ field, }) => (
-                    <Form.Check {...field} type="checkbox" className="mt-2" label="Include Taxed" disabled={disabledPercent} />
+                    <Form.Check {...field} type="checkbox" className="mt-2" label="Include Taxed" disabled={props.isView} />
                     )}
                   </FastField>
               }
@@ -153,6 +163,7 @@ const Fees = (props) => {
       <Col md={8}>
         {
           props.sections.map((val, i) => <FeeSection title={val.title} 
+          key={i}
           fieldRadio={val.fieldRadio}
           fieldAmount={val.fieldAmount}
           fieldAmountType={val.fieldAmountType}
