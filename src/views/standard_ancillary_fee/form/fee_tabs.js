@@ -3,8 +3,8 @@ import { Tabs, TabPane, Row, Col, Form } from "react-bootstrap"
 import { FastField } from "formik"
 
 const FeeSection = (props) => {
-  // console.log(props.fieldRadio, props.values)
-  // console.log(props.values[props.fieldRadio])
+  let id = props.taxType ? props.taxType.id : "";
+  let title = props.taxType ? props.taxType.fee_tax_type_name : props.title;
   let disabledAmount = props.values[props.fieldRadio] === "" ? true : props.values[props.fieldRadio] !== "amount"
   let disabledPercent = props.values[props.fieldRadio] === "" ? true : props.values[props.fieldRadio] !== "percent"
   return (
@@ -12,7 +12,7 @@ const FeeSection = (props) => {
       <Form.Group>
         <Row>
           <Form.Label>
-            {props.taxType ? props.taxType.fee_tax_type_name : props.title}
+            {title}
             <span className="form-label-required">*</span>
           </Form.Label>
         </Row>
@@ -44,7 +44,7 @@ const FeeSection = (props) => {
                         ? <Form.Control style={{ maxWidth: "220px" }} disabled={true} />
                         : <FastField name={props.fieldAmount}>
                         {({ field }) => (
-                          <Form.Control {...field} style={{ maxWidth: "220px" }} />
+                          <Form.Control type="number" {...field} style={{ maxWidth: "220px" }} />
                         )}
                       </FastField>
                       }
@@ -86,7 +86,7 @@ const FeeSection = (props) => {
                 <Form.Group as={Row} className="mb-3">
                   <FastField name={props.fieldPercent}>
                     {({ field }) => (
-                        <Form.Control {...field} style={{ maxWidth: "80px" }} className="mx-3" disabled={disabledPercent} />
+                        <Form.Control {...field} type="number" style={{ maxWidth: "80px" }} className="mx-3" disabled={disabledPercent} />
                     )}
                   </FastField>
                   <span className="text-lg mt-1">%</span>
@@ -118,6 +118,7 @@ const Fees = (props) => {
           fieldAmountType={val.fieldAmountType}
           fieldPercent={val.fieldPercent}
           fieldIncludeTax={val.fieldIncludeTax}
+          fieldFeeTaxId={val.fieldFeeTaxId}
           taxType={val.taxType}
           borderBottom={i < props.sections.length-1}
           values={props.values}
