@@ -2,12 +2,14 @@ import React, { useState } from "react"
 import { Tabs, TabPane, Row, Col, Form } from "react-bootstrap"
 import { FastField } from "formik"
 const FeeSection = (props) => {
+  let id = props.taxType ? props.taxType.id : "";
+  let title = props.taxType ? props.taxType.fee_tax_type_name : props.title;
   return (
     <>
       <Form.Group>
         <Row>
           <Form.Label>
-            {props.taxType ? props.taxType.fee_tax_type_name : props.title}
+            {title}
             <span className="form-label-required">*</span>
           </Form.Label>
         </Row>
@@ -35,7 +37,7 @@ const FeeSection = (props) => {
                   <Col xs={10} md={9} lg={7}>
                     <FastField name={props.fieldAmount}>
                       {({ field }) => (
-                        <Form.Control {...field} style={{ maxWidth: "220px" }} />
+                        <Form.Control {...field} type="number" style={{ maxWidth: "220px" }} />
                       )}
                     </FastField>
                   </Col>
@@ -76,7 +78,7 @@ const FeeSection = (props) => {
                 <Form.Group as={Row} className="mb-3">
                   <FastField name={props.fieldPercent}>
                     {({ field }) => (
-                        <Form.Control {...field} style={{ maxWidth: "80px" }} className="mx-3" />
+                        <Form.Control {...field} type="number" style={{ maxWidth: "80px" }} className="mx-3" />
                     )}
                   </FastField>
                   <span className="text-lg mt-1">%</span>
@@ -108,6 +110,7 @@ const Fees = (props) => {
           fieldAmountType={val.fieldAmountType}
           fieldPercent={val.fieldPercent}
           fieldIncludeTax={val.fieldIncludeTax}
+          fieldFeeTaxId={val.fieldFeeTaxId}
           taxType={val.taxType}
           borderBottom={i < props.sections.length-1}
           /> )
