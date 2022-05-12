@@ -15,7 +15,9 @@ const FormInputFile = ({
   name,
   mediaType = "desktop",
   style,
-  mediaSpec
+  mediaSpec,
+  children,
+  styleContainer
 }) => {
 
   let dispatch = useDispatch()
@@ -41,7 +43,7 @@ const FormInputFile = ({
   }
 
   return (
-    <div className={`image-wrapper ${name}`}>
+    <div className={`image-wrapper ${name}`} style={styleContainer}>
       {title && (
         <>
           <p className="media-title media-title-required">{title}</p>
@@ -67,8 +69,9 @@ const FormInputFile = ({
           data-msg-accept="Only .png, .jpg, .jpeg file supported"
         />
         <img src={url || NoImage} className="img-fluid img-up" alt="up-img" />
-        
+
       </label>
+      {children}
       <progress className="upload-progress" id={"progress-"+id} value="0" max="100" style={{width: '100%', display: 'none'}}></progress>
     </div>
   )

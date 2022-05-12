@@ -39,13 +39,13 @@ const GeneralInformation = (props) => {
   const { innerWidth, innerHeight, outerHeight, outerWidth } = useWindowSize();
   const [loading, setLoading]= useState(true)
   const [defmonths, setMonths] = useState({ value: 1, label: "" })
-  const [defyears, setYears] = useState({ value: 1921, label: "" }) 
+  const [defyears, setYears] = useState({ value: 1921, label: "" })
 
   const [showCloseBtn, setShowCloseBtn] = useState(false)
   const [openSnackbar] = useSnackbar(options)
   let api = new Api()
 
-  
+
 
   // Initialize form
   const [initialForm, setInitialForm] = useState({
@@ -96,7 +96,7 @@ const GeneralInformation = (props) => {
     idCardNumber: Yup.string(),
 
     // Contacts
-    
+
     homePhone: Yup.string()
           .required("Home Phone is required.")
           .matches(phoneRegExp, 'Home Phone is not valid'),
@@ -278,7 +278,7 @@ const GeneralInformation = (props) => {
         month: "long",
       })
     })
-    
+
     month.forEach((data, i) => {
       options.push({
         label: data,
@@ -316,7 +316,7 @@ const GeneralInformation = (props) => {
             label: data.state_province_name,
             value: data.id,
           })
-          
+
           setSelectCurrentProvince(options)
         })
       } else {
@@ -333,14 +333,14 @@ const GeneralInformation = (props) => {
             label: data.city_name,
             value: data.id,
           })
-          
+
           setSelectCurrentCity(optionsCity)
         })
       } else {
         setSelectCurrentCity([])
       }
-      
-      
+
+
     } catch (e) {}
   }
 
@@ -357,7 +357,7 @@ const GeneralInformation = (props) => {
             label: data.state_province_name,
             value: data.id,
           })
-          
+
           setSelectPermanentProvince(options)
         })
       } else {
@@ -373,13 +373,13 @@ const GeneralInformation = (props) => {
             label: data.city_name,
             value: data.id,
           })
-          
+
           setSelectPermanentCity(optionsCity)
         })
       } else {
         setSelectPermanentCity([])
       }
-      
+
     } catch (e) {}
   }
   // Current Province state
@@ -413,7 +413,7 @@ const GeneralInformation = (props) => {
           setSelectPermanentCity([])
         }
       }
-      
+
     } catch (e) {}
   }
 
@@ -520,16 +520,16 @@ const GeneralInformation = (props) => {
               },
               {
                 value: parseInt(data.birth_date.split("-")[0]),
-                label: parseInt(data.birth_date.split("-")[0]),  
+                label: parseInt(data.birth_date.split("-")[0]),
               },
             ] : [],
-            
+
             // Contacts
             homePhone: _.isEmpty(data.contact) ? "" : data.contact.phone_number ? data.contact.phone_number : "",
             mobilePhone: _.isEmpty(data.contact) ? "" : data.contact.mobile_phone_number ? data.contact.mobile_phone_number : "",
             email: _.isEmpty(data.contact) ? "" : data.contact.email ? data.contact.email : "",
             otherEmail: _.isEmpty(data.contact) ? "" : data.contact.other_email ? data.contact.other_email : "",
-    
+
             // Current Address
             currentAddress: _.isEmpty(data.address) ? "" : data.address.address_line ? data.address.address_line : "",
             currentCountry: _.isEmpty(data.address) ? "" : data.address.country ? {
@@ -541,7 +541,7 @@ const GeneralInformation = (props) => {
               value: "",
               label: ""
             }
-            : "" 
+            : ""
             : {
               value: data.address.state_province_id,
               label: data.address.state_province.state_province_name
@@ -552,17 +552,17 @@ const GeneralInformation = (props) => {
               value: "",
               label: ""
             }
-            : "" 
+            : ""
             : {
               value: data.address.city.id,
               label: data.address.city.city_name
             },
 
             currentZipCode: _.isEmpty(data.address) ? "" : data.address.postal_code ? data.address.postal_code : "",
-    
+
             // Permanent Address
             sameAddress: (
-              data.permanent_address.address_line == data.address.address_line && 
+              data.permanent_address.address_line == data.address.address_line &&
               data.permanent_address.country_id == data.address.country_id &&
               data.permanent_address.city_id == data.address.city_id &&
               data.permanent_address.state_province_id == data.address.state_province_id &&
@@ -578,8 +578,8 @@ const GeneralInformation = (props) => {
             ? isView ? {
               value: "",
               label: ""
-            } 
-            : "" 
+            }
+            : ""
             :{
               value: data.permanent_address.state_province_id,
               label: data.permanent_address.state_province.state_province_name
@@ -588,7 +588,7 @@ const GeneralInformation = (props) => {
             ? isView ? {
               value: "",
               label: ""
-            } : "" 
+            } : ""
             : {
               value: data.permanent_address.city.id,
               label: data.permanent_address.city.city_name
@@ -597,9 +597,9 @@ const GeneralInformation = (props) => {
           });
 
           setPhotoProfile(
-            _.isEmpty(data.photo_profile) 
-            ? _.isEmpty(data.employee_asset.multimedia_description) 
-            ? [] 
+            _.isEmpty(data.photo_profile)
+            ? _.isEmpty(data.employee_asset.multimedia_description)
+            ? []
             : [{
                 data_url: data.employee_asset.multimedia_description.url,
                 id: data.employee_asset.multimedia_description.id,
@@ -612,13 +612,13 @@ const GeneralInformation = (props) => {
 
           if(data.permanent_address.state_province) {
             handleChangeProvince("permanent", data.permanent_address.state_province.id, data.permanent_address.country_id)
-          } else { 
+          } else {
             handleChangePermanentCountry(data.permanent_address.country_id)
           }
 
           if(data.address.state_province) {
             handleChangeProvince("current", data.address.state_province.id, data.address.country_id)
-          } else { 
+          } else {
             handleChangeCurrentCountry(data.address.country_id)
           }
         }
@@ -760,9 +760,9 @@ const GeneralInformation = (props) => {
                                         className="img-profile"
                                       />
                                       {!isView && (
-                                      <CloseButton                    
+                                      <CloseButton
                                         style={{position: "absolute", top: 0, right: 0, display: showCloseBtn ? "block" : "none"}}
-                                        onClick={() => onImageRemove(0)} 
+                                        onClick={() => onImageRemove(0)}
                                       />
                                       )}
                                     </div>
@@ -771,7 +771,7 @@ const GeneralInformation = (props) => {
                                   <Button
                                     variant="secondary"
                                     style={{margin: "auto 20px"}}
-                                    onClick={() => 
+                                    onClick={() =>
                                       photoProfile.length !== 0
                                         ? onImageUpload()
                                         : onImageUpdate(0)
@@ -843,9 +843,9 @@ const GeneralInformation = (props) => {
                                         className="img-profile"
                                       />
                                       {!isView && (
-                                        <CloseButton                    
+                                        <CloseButton
                                           style={{position: "absolute", top: 0, right: 0, display: showCloseBtn ? "block" : "none"}}
-                                          onClick={() => onImageRemove(0)} 
+                                          onClick={() => onImageRemove(0)}
                                         />
                                       )}
                                     </div>
@@ -853,7 +853,7 @@ const GeneralInformation = (props) => {
                                   {!isView && (
                                   <Button
                                     variant="secondary"
-                                    onClick={() => 
+                                    onClick={() =>
                                       photoProfile.length !== 0
                                         ? onImageUpload()
                                         : onImageUpdate(0)
@@ -902,7 +902,7 @@ const GeneralInformation = (props) => {
                             : null
                         }
                         isDisabled={isView}
-                      />    
+                      />
                       {/* <Form.Group as={Row} className="form-group">
                         <Form.Label column md={3} lg={4}>
                           Title <span className="form-label-required">*</span>
@@ -1059,7 +1059,7 @@ const GeneralInformation = (props) => {
                                         IndicatorSeparator: () => null,
                                       }
                                     : null
-                                }                                
+                                }
                                 onChange={(v) => {
                                   setFieldValue("birth_date[0]", v)
                                 }}
@@ -1084,7 +1084,7 @@ const GeneralInformation = (props) => {
                                         IndicatorSeparator: () => null,
                                       }
                                     : null
-                                }                                
+                                }
                                 onChange={(v) => {
                                   setFieldValue("birth_date[1]", v)
                                   if (resetDate(values.birth_date[0], v, values.birth_date[2])) {
@@ -1111,10 +1111,10 @@ const GeneralInformation = (props) => {
                                         IndicatorSeparator: () => null,
                                       }
                                     : null
-                                }                               
+                                }
                                 onChange={(v) => {
                                   setFieldValue("birth_date[2]", v)
-                                  
+
                                   if (resetDate(values.birth_date[0], values.birth_date[1], v)) {
                                     setFieldValue("birth_date[0]", {value: 1, label: "1"})
                                     setFieldValue("birth_date[1]", {value: 1, label: "January"})
@@ -1211,7 +1211,7 @@ const GeneralInformation = (props) => {
                         </Col>
                       </Form.Group>
                     </Col>
-                    
+
                     {
                       innerWidth <= 768 ? "" : (
                         <Col sm={3} lg={3}  style={{ height: 170 }}>
@@ -1257,9 +1257,9 @@ const GeneralInformation = (props) => {
                                           className="img-profile"
                                         />
                                         {!isView && (
-                                          <CloseButton                    
+                                          <CloseButton
                                             style={{position: "absolute", top: 0, right: 0, display: showCloseBtn ? "block" : "none"}}
-                                            onClick={() => onImageRemove(0)} 
+                                            onClick={() => onImageRemove(0)}
                                           />
                                         )}
                                       </div>
@@ -1267,7 +1267,7 @@ const GeneralInformation = (props) => {
                                     {!isView && (
                                     <Button
                                       variant="secondary"
-                                      onClick={() => 
+                                      onClick={() =>
                                         photoProfile.length !== 0
                                           ? onImageUpload()
                                           : onImageUpdate(0)
@@ -1293,7 +1293,7 @@ const GeneralInformation = (props) => {
                         </Col>
                       )
                     }
-                    
+
                   </Row>
                 </div>
                 <h3 className="card-heading">Contacts</h3>
@@ -1465,7 +1465,7 @@ const GeneralInformation = (props) => {
                               isDisabled={isView}
                               url={`master/countries`}
                               fieldName="country_name"
-                              onChange={(v) => {                               
+                              onChange={(v) => {
                                 setFieldValue("currentProvince", null)
                                 setFieldValue("currentCity", null)
                                 setFieldValue("currentCountry", v)
@@ -1485,7 +1485,7 @@ const GeneralInformation = (props) => {
                                       IndicatorSeparator: () => null,
                                     }
                                   : null
-                              }                              
+                              }
                             />
                             {form.touched.currentCountry &&
                               form.errors.currentCountry && (
@@ -1508,6 +1508,7 @@ const GeneralInformation = (props) => {
                       <Field name="currentProvince">
                         {({ field, form }) => (
                           <>
+                            {console.log(field, 'fi')}
                             <div style={{ maxWidth: 200 }}>
                               <Select
                                 {...field}
@@ -1654,7 +1655,7 @@ const GeneralInformation = (props) => {
                                 ? "is-invalid"
                                 : null)
                             }`}
-                            onChange={(v) => {                              
+                            onChange={(v) => {
                               setFieldValue("permanentProvince", null)
                               setFieldValue("permanentCity", null)
                               setFieldValue("permanentCountry", v)
@@ -1782,8 +1783,8 @@ const GeneralInformation = (props) => {
                   </Form.Group>
                 </div>
                 {
-                  props.isMobile 
-                  ? isView 
+                  props.isMobile
+                  ? isView
                   ? (<div className="mb-2 mt-1 row justify-content-md-start justify-content-center">
                       <Button
                         variant="secondary"
@@ -1791,7 +1792,7 @@ const GeneralInformation = (props) => {
                       >
                         BACK
                       </Button>
-                    </div>) 
+                    </div>)
                   : (<div className="ml-3 row justify-content-md-start justify-content-center">
                       <Button
                         variant="primary"
@@ -1814,8 +1815,8 @@ const GeneralInformation = (props) => {
               </Card.Body>
             </Card>
             {
-              !props.isMobile 
-              ? isView 
+              !props.isMobile
+              ? isView
               ? (<>
                   <Button
                     variant="secondary"
@@ -1824,9 +1825,9 @@ const GeneralInformation = (props) => {
                   >
                     BACK
                   </Button>
-                </>) 
+                </>)
               : (<div className="ml-1 mt-3 row justify-content-md-start justify-content-center">
-                  <Button                    
+                  <Button
                     variant="primary"
                     type="submit"
                     disabled={props.finishStep > 0 || props.employeeData?.id ? (!isValid || isSubmitting) : (!dirty || isSubmitting)}

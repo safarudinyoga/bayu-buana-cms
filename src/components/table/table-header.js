@@ -189,23 +189,24 @@ class TableHeader extends Component {
       <div className="container-fluid pl-0">
         <div className="row">
           <div className="col-xs-12 col-sm-12 col-md-4 col-lg-3 col-xl-3">
-            <div className="input-group input-group-with-text">
-              <input
-                value={this.state.searchValue}
-                className="form-control"
-                placeholder="Search..."
-                onChange={this.handleSearch.bind(this)}
-                maxLength={256}
-                minLength={1}
-              />
-              <div className="input-group-append">
-                <span className="input-group-text">
-                  <i className="fas fa-search"></i>
-                </span>
+            {!this.props.isHideSearch &&
+              <div className="input-group input-group-with-text">
+                <input
+                  value={this.state.searchValue}
+                  className="form-control"
+                  placeholder="Search..."
+                  onChange={this.handleSearch.bind(this)}
+                  maxLength={256}
+                  minLength={1}
+                />
+                <div className="input-group-append">
+                  <span className="input-group-text">
+                    <i className="fas fa-search"></i>
+                  </span>
+                </div>
               </div>
-            </div>
+            }
           </div>
-
 
           <div className="col-xs-12 col-sm-12 col-md-4 col-lg-5 col-xl-5 padding-0 align-middle">
             {this.state.showAdvancedOptions && (
@@ -240,7 +241,7 @@ class TableHeader extends Component {
           </div>
 
           <div className="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-2 mb-md-0 order-first order-md-last">
-          { pathname !== "/master/integration-partner" &&
+          { !this.props.isHideCreateButton && pathname !== "/master/integration-partner" &&
             <OverlayTrigger
               placement="top"
               overlay={<Tooltip>Click to create</Tooltip>}
@@ -254,7 +255,8 @@ class TableHeader extends Component {
                 Create New
               </button>
             </OverlayTrigger>
-  }
+          }
+          { !this.props.isHidePrintLogo &&
             <OverlayTrigger
               placement="top"
               overlay={<Tooltip>Click to print</Tooltip>}
@@ -267,7 +269,8 @@ class TableHeader extends Component {
                 <img src={printIcon} className="img-circle" alt="print" />
               </Link>
             </OverlayTrigger>
-
+          }
+          { !this.props.isHideDownloadLogo &&
             <OverlayTrigger
               placement="top"
               overlay={<Tooltip>Click to download</Tooltip>}
@@ -285,6 +288,7 @@ class TableHeader extends Component {
                 />
               </Link>
             </OverlayTrigger>
+          }
           </div>
         </div>
         <div
@@ -299,7 +303,7 @@ class TableHeader extends Component {
               {this.state.showFilter ? ExtraFilter ? <ExtraFilter /> : "" : ""}
 
               {this.props.children}
-              {this.props.isShowStatus ?? 
+              {this.props.isShowStatus ??
                 <div className="col-xs-12 col-sm-12 col-md-6 col-lg-4">
                   <div className="row">
                     <div className="col-xs-4">

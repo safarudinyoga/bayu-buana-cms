@@ -6,6 +6,11 @@ import { ReactSVG } from "react-svg"
 import { setUIParams } from "redux/ui-store"
 import useQuery from "lib/query"
 
+// components & styles
+import GeneralInformation from './general-information'
+import CorporateFare from './corporate-fare'
+import AncillaryFee from './ancillary-fee'
+
 const staticWarding = {
   main: 'Corporate Management',
   mainSub: 'Manage Corporate',
@@ -18,6 +23,8 @@ const staticWarding = {
 const ManageCorporateForm = ({ match }) => {
   let dispatch = useDispatch()
   const isView = useQuery().get("action") === "view"
+
+  const [tabKey, setTabKey] = useState("general-information")
 
   const wardingGenerator = (formId) => {
     if (!formId) {
@@ -55,7 +62,7 @@ const ManageCorporateForm = ({ match }) => {
   }, [])
 
   return (
-    <Tab.Container>
+    <Tab.Container activeKey={tabKey} onSelect={(key) => setTabKey(key)}>
       <Row>
         <Col sm={3}>
           <Nav variant="pills" className="flex-column nav-side">
@@ -68,22 +75,35 @@ const ManageCorporateForm = ({ match }) => {
               </Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link eventKey="emergency-contacts">
+              <Nav.Link eventKey="corporate-fare">
                 <div>
                   <ReactSVG src="/img/icons/emergency-contacts.svg" />
-                  <span>Emergency Contacts</span>
+                  <span>Corporate Fare</span>
                 </div>
               </Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link eventKey="employment">
+              <Nav.Link eventKey="ancillary-fee">
                 <div>
-                  <ReactSVG src="/img/icons/employment.svg" />
-                  <span>Employment</span>
+                  <ReactSVG src="/img/icons/emergency-contacts.svg" />
+                  <span>Ancillary Fee</span>
                 </div>
               </Nav.Link>
             </Nav.Item>
           </Nav>
+        </Col>
+        <Col sm={9}>
+          <Tab.Content>
+            <Tab.Pane eventKey="general-information">
+              <GeneralInformation isMobile={false} />
+            </Tab.Pane>
+            <Tab.Pane eventKey="corporate-fare">
+              <CorporateFare isMobile={false} />
+            </Tab.Pane>
+            <Tab.Pane eventKey="ancillary-fee">
+              <AncillaryFee isMobile={false} />
+            </Tab.Pane>
+          </Tab.Content>
         </Col>
       </Row>
     </Tab.Container>

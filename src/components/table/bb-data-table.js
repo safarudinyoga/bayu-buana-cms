@@ -167,7 +167,7 @@ class BBDataTable extends Component {
             <label class="custom-control-label" for="customSwitch${row.id}" data-action="update_status"></label>
           </a>
           ${
-            self.props.showHistory 
+            self.props.showHistory
             ? `<a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item mr-2" data-action="history" data-id="${row.id}" title="Click to view history"><img src="/img/icons/history.svg"/></a>`
             : ""
           }
@@ -409,8 +409,8 @@ class BBDataTable extends Component {
                   }
                 }
               } else {
-                overrideParams.sort = this.queryParams.has('sort') 
-                ? this.queryParams.get('sort') 
+                overrideParams.sort = this.queryParams.has('sort')
+                ? this.queryParams.get('sort')
                 : this.props.customSort
                 ? this.props.customSort.join(",")
                 : 'sort'
@@ -549,7 +549,7 @@ class BBDataTable extends Component {
                     division = row.division.division_name
                   }
 
-                  datas = data +'<br/>'+ division     
+                  datas = data +'<br/>'+ division
                   if (type === "myExport") datas =`${data} / ${division}`
                 }
                   return datas
@@ -575,7 +575,7 @@ class BBDataTable extends Component {
           //   targets: [columns.length - 1],
           //   width: "20%",
           // },
-          
+
         ],
         // select: {
         //   style: "multi",
@@ -608,7 +608,7 @@ class BBDataTable extends Component {
         },
         fnDrawCallback: (t) => {
 
-      
+
           const { selected } = this.state
           let wrapper = $(".dataTables_paginate", t.nTableWrapper)
           wrapper.append(
