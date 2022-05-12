@@ -194,10 +194,10 @@ const FlightForm = (props) => {
         let res = await api.post(endpoint, payload)
         let idFee = res.data.id;
         onSubmitFee(values, idFee)
-          // openSnackbar(
-          //   `Ancillary Fee has been successfully saved.`,
-          // )
-          // history.goBack()
+        openSnackbar(
+          `Ancillary Fee has been successfully saved.`,
+        )
+        history.goBack()
       }
     } catch(e) {
       console.log(e)
