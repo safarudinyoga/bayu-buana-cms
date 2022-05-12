@@ -1,9 +1,12 @@
 import React, { useState } from "react"
 import { Tabs, TabPane, Row, Col, Form } from "react-bootstrap"
 import { FastField } from "formik"
+
 const FeeSection = (props) => {
   let id = props.taxType ? props.taxType.id : "";
   let title = props.taxType ? props.taxType.fee_tax_type_name : props.title;
+  let disabledAmount = props.values[props.fieldRadio] === "" ? true : props.values[props.fieldRadio] !== "amount"
+  let disabledPercent = props.values[props.fieldRadio] === "" ? true : props.values[props.fieldRadio] !== "percent"
   return (
     <>
       <Form.Group>
@@ -18,7 +21,7 @@ const FeeSection = (props) => {
             <Form.Group>
               <FastField name={props.fieldRadio}>
                 {({ field, form }) => (
-                  <Form.Check {...field} value="amount" type="radio" label="Fixed Amount" />
+                  <Form.Check {...field} value="amount" type="radio" label="Fixed Amount" checked={props.values[props.fieldRadio] === "amount"} />
                 )}
               </FastField>
             </Form.Group>
@@ -35,11 +38,16 @@ const FeeSection = (props) => {
                     IDR
                   </Form.Label>
                   <Col xs={10} md={9} lg={7}>
-                    <FastField name={props.fieldAmount}>
-                      {({ field }) => (
-                        <Form.Control {...field} type="number" style={{ maxWidth: "220px" }} />
-                      )}
-                    </FastField>
+                      {props.fieldRadio === "domestic_reissue" ? console.log(disabledAmount) : ""}
+                      {
+                        disabledAmount 
+                        ? <Form.Control style={{ maxWidth: "220px" }} disabled={true} />
+                        : <FastField name={props.fieldAmount}>
+                        {({ field }) => (
+                          <Form.Control type="number" {...field} style={{ maxWidth: "220px" }} />
+                        )}
+                      </FastField>
+                      }
                   </Col>
                 </Form.Group>
               </Col>
@@ -47,17 +55,17 @@ const FeeSection = (props) => {
                 <Form.Group className="mb-3">
                   <FastField name={props.fieldAmountType}>
                     {({ field, form }) => (
-                    <Form.Check {...field} value="de62950d-fbab-4e39-bd90-c2b6687c6b36" type="radio" label="/Ticket" />
+                    <Form.Check {...field} value="de62950d-fbab-4e39-bd90-c2b6687c6b36" type="radio" label="/Ticket" disabled={disabledAmount} />
                     )}
                   </FastField>
                   <FastField name={props.fieldAmountType}>
                     {({ field, form }) => (
-                    <Form.Check {...field} value="de03bf84-4bd8-4cdf-9348-00246f04bcad" type="radio" label="/Person" />
+                    <Form.Check {...field} value="de03bf84-4bd8-4cdf-9348-00246f04bcad" type="radio" label="/Person" disabled={disabledAmount} />
                     )}
                   </FastField>
                   <FastField name={props.fieldAmountType}>
                     {({ field, form }) => (
-                    <Form.Check {...field} value="5123b121-4f6a-4871-bef1-65408d663e19" type="radio" label="/Transaction" />
+                    <Form.Check {...field} value="5123b121-4f6a-4871-bef1-65408d663e19" type="radio" label="/Transaction" disabled={disabledAmount} />
                     )}
                   </FastField>
                 </Form.Group>
@@ -69,7 +77,7 @@ const FeeSection = (props) => {
             <Form.Group>
               <FastField name={props.fieldRadio}>
                 {({ field, form }) => (
-                <Form.Check {...field} value="percent" type="radio" label="Percentage" />
+                <Form.Check {...field} value="percent" type="radio" label="Percentage" checked={props.values[props.fieldRadio] === "percent"} />
                 )}
               </FastField>
             </Form.Group>
@@ -78,7 +86,7 @@ const FeeSection = (props) => {
                 <Form.Group as={Row} className="mb-3">
                   <FastField name={props.fieldPercent}>
                     {({ field }) => (
-                        <Form.Control {...field} type="number" style={{ maxWidth: "80px" }} className="mx-3" />
+                        <Form.Control {...field} type="number" style={{ maxWidth: "80px" }} className="mx-3" disabled={disabledPercent} />
                     )}
                   </FastField>
                   <span className="text-lg mt-1">%</span>
@@ -87,7 +95,7 @@ const FeeSection = (props) => {
               <Col sm={12} md={6}>
               <FastField name={props.fieldIncludeTax}>
                 {({ field, }) => (
-                <Form.Check {...field} type="checkbox" className="mt-2" label="Include Taxed" />
+                <Form.Check {...field} type="checkbox" className="mt-2" label="Include Taxed" disabled={disabledPercent} />
                 )}
               </FastField>
               </Col>
@@ -113,6 +121,7 @@ const Fees = (props) => {
           fieldFeeTaxId={val.fieldFeeTaxId}
           taxType={val.taxType}
           borderBottom={i < props.sections.length-1}
+          values={props.values}
           /> )
         }
       </Col>
@@ -132,7 +141,6 @@ export const FeeTabs = (props) => {
           className="mb-4"
           mountOnEnter={true}
           unmountOnExit={true}
-          className=""
         >
         {
             props.menu.map((menu, i) => (

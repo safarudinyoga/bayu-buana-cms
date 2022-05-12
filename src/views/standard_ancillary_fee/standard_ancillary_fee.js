@@ -22,7 +22,6 @@ const ControlledTabs = () => {
         className="mb-4"
         mountOnEnter={true}
         unmountOnExit={true}
-        className=""
       >
         <TabPane
           className="m-3"
