@@ -10,9 +10,62 @@ import xCircle from "assets/icons/x-circle.svg"
 import CancelButton from "components/button/cancel"
 import "./style.css"
 
+const dummy1 = [
+  {
+    name: "Tiffany Young",
+    category: "BCD",
+  },
+  {
+    name: "Dhani Doel",
+    category: "BCD  ",
+  },
+  {
+    name: "Jhon Bill",
+    category: "NCD",
+  },
+]
+const dummy2 = [
+  {
+    name: "Tamara Ling",
+    category: "NCD",
+  },
+  {
+    name: "Margot Roe",
+    category: "NCD",
+  },
+  {
+    name: "Betty Jhon",
+    category: "NCD",
+  },
+  {
+    name: "Miando Nael",
+    category: "BCD",
+  },
+  {
+    name: "Bel Nuts",
+    category: "BCD",
+  },
+  {
+    name: "Tamara Ling",
+    category: "NCD",
+  },
+]
+
 const OverCreditApproverAssignment = (props) => {
   let api = new Api()
   const [showFilter, setShowFilter] = useState(false)
+  const [data1, setData1] = useState(dummy1)
+  const [data2, setData2] = useState(dummy2)
+
+  const handleAdd = () => {
+    setData1((data1) => [...data1, ...data2])
+    setData2((data2) => [])
+  }
+
+  const handleRemove = () => {
+    setData1((data1) => [])
+    setData2((data2) => [...data2, ...data1])
+  }
 
   return (
     <>
@@ -59,30 +112,16 @@ const OverCreditApproverAssignment = (props) => {
                     </Card.Header>
                     <Card.Body style={{ padding: "8px 10px 10px 9px" }}>
                       <ol class="list list-general-setup">
-                        <li>
-                          <div className="w-100 d-flex justify-content-between">
-                            Tiffany Young (BCD)
-                            <span className="btn-x-circle">
-                              <img src={xCircle} alt="right" />
-                            </span>
-                          </div>
-                        </li>
-                        <li>
-                          <div className="w-100 d-flex justify-content-between">
-                            Dhani Doel (BCD)
-                            <span className="btn-x-circle">
-                              <img src={xCircle} alt="right" />
-                            </span>
-                          </div>
-                        </li>
-                        <li>
-                          <div className="w-100 d-flex justify-content-between">
-                            Jhon Bill (NCD)
-                            <span className="btn-x-circle">
-                              <img src={xCircle} alt="right" />
-                            </span>
-                          </div>
-                        </li>
+                        {data1.map((item) => (
+                          <li>
+                            <div className="w-100 d-flex justify-content-between">
+                              {item.name} ({item.category})
+                              <span className="btn-x-circle">
+                                <img src={xCircle} alt="right" />
+                              </span>
+                            </div>
+                          </li>
+                        ))}
                       </ol>
                     </Card.Body>
                   </Card>
@@ -91,13 +130,21 @@ const OverCreditApproverAssignment = (props) => {
                   lg={2}
                   className="d-flex flex-column align-items-center justify-content-center"
                 >
-                  <button type="button" className="btn-add text-uppercase">
+                  <button
+                    type="button"
+                    className="btn-add text-uppercase"
+                    onClick={() => handleAdd()}
+                  >
                     <div className="d-flex justify-content-around">
                       <img src={arrowLeft} alt="left" />
                       ADD
                     </div>
                   </button>
-                  <button type="button" className="btn-remove text-uppercase">
+                  <button
+                    type="button"
+                    className="btn-remove text-uppercase"
+                    onClick={() => handleRemove()}
+                  >
                     <div className="d-flex justify-content-around">
                       REMOVE <img src={arrowRight} alt="right" />
                     </div>
@@ -132,222 +179,44 @@ const OverCreditApproverAssignment = (props) => {
                     </div>
                     <Card.Body style={{ padding: "8px 10px 10px 9px" }}>
                       <ol class="list list-general-setup">
-                        <li>
-                          <div className="d-flex align-items-center">
-                            <svg
-                              class="float-left row-handle nopadding"
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="16"
-                              height="16"
-                              fill="none"
-                            >
-                              <rect
-                                id="backgroundrect"
-                                width="100%"
-                                height="100%"
-                                x="0"
-                                y="0"
+                        {data2.map((item) => (
+                          <li>
+                            <div className="d-flex align-items-center">
+                              <svg
+                                class="float-left row-handle nopadding"
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="16"
+                                height="16"
                                 fill="none"
-                                stroke="none"
-                              />
-                              <path
-                                d="M7.098360577225684,13 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 z"
-                                fill="#707070"
-                                id="svg_1"
-                                class=""
-                              />
-                              <path
-                                d="M11.901639938354492,13 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 z"
-                                fill="#707070"
-                                id="svg_2"
-                                class=""
-                              />
-                            </svg>
-                            <div className="w-100 d-flex justify-content-between">
-                              Tamara Ling <span>(NDC)</span>
+                              >
+                                <rect
+                                  id="backgroundrect"
+                                  width="100%"
+                                  height="100%"
+                                  x="0"
+                                  y="0"
+                                  fill="none"
+                                  stroke="none"
+                                />
+                                <path
+                                  d="M7.098360577225684,13 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 z"
+                                  fill="#707070"
+                                  id="svg_1"
+                                  class=""
+                                />
+                                <path
+                                  d="M11.901639938354492,13 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 z"
+                                  fill="#707070"
+                                  id="svg_2"
+                                  class=""
+                                />
+                              </svg>
+                              <div className="w-100 d-flex justify-content-between">
+                                {item.name} <span>({item.category})</span>
+                              </div>
                             </div>
-                          </div>
-                        </li>
-                        <li>
-                          <div className="d-flex align-items-center">
-                            <svg
-                              class="float-left row-handle nopadding"
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="16"
-                              height="16"
-                              fill="none"
-                            >
-                              <rect
-                                id="backgroundrect"
-                                width="100%"
-                                height="100%"
-                                x="0"
-                                y="0"
-                                fill="none"
-                                stroke="none"
-                              />
-                              <path
-                                d="M7.098360577225684,13 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 z"
-                                fill="#707070"
-                                id="svg_1"
-                                class=""
-                              />
-                              <path
-                                d="M11.901639938354492,13 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 z"
-                                fill="#707070"
-                                id="svg_2"
-                                class=""
-                              />
-                            </svg>
-                            <div className="w-100 d-flex justify-content-between">
-                              Tamara Ling <span>(NDC)</span>
-                            </div>
-                          </div>
-                        </li>
-                        <li>
-                          <div className="d-flex align-items-center">
-                            <svg
-                              class="float-left row-handle nopadding"
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="16"
-                              height="16"
-                              fill="none"
-                            >
-                              <rect
-                                id="backgroundrect"
-                                width="100%"
-                                height="100%"
-                                x="0"
-                                y="0"
-                                fill="none"
-                                stroke="none"
-                              />
-                              <path
-                                d="M7.098360577225684,13 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 z"
-                                fill="#707070"
-                                id="svg_1"
-                                class=""
-                              />
-                              <path
-                                d="M11.901639938354492,13 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 z"
-                                fill="#707070"
-                                id="svg_2"
-                                class=""
-                              />
-                            </svg>
-                            <div className="w-100 d-flex justify-content-between">
-                              Tamara Ling <span>(NDC)</span>
-                            </div>
-                          </div>
-                        </li>
-                        <li>
-                          <div className="d-flex align-items-center">
-                            <svg
-                              class="float-left row-handle nopadding"
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="16"
-                              height="16"
-                              fill="none"
-                            >
-                              <rect
-                                id="backgroundrect"
-                                width="100%"
-                                height="100%"
-                                x="0"
-                                y="0"
-                                fill="none"
-                                stroke="none"
-                              />
-                              <path
-                                d="M7.098360577225684,13 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 z"
-                                fill="#707070"
-                                id="svg_1"
-                                class=""
-                              />
-                              <path
-                                d="M11.901639938354492,13 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 z"
-                                fill="#707070"
-                                id="svg_2"
-                                class=""
-                              />
-                            </svg>
-                            <div className="w-100 d-flex justify-content-between">
-                              Tamara Ling <span>(NDC)</span>
-                            </div>
-                          </div>
-                        </li>
-                        <li>
-                          <div className="d-flex align-items-center">
-                            <svg
-                              class="float-left row-handle nopadding"
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="16"
-                              height="16"
-                              fill="none"
-                            >
-                              <rect
-                                id="backgroundrect"
-                                width="100%"
-                                height="100%"
-                                x="0"
-                                y="0"
-                                fill="none"
-                                stroke="none"
-                              />
-                              <path
-                                d="M7.098360577225684,13 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 z"
-                                fill="#707070"
-                                id="svg_1"
-                                class=""
-                              />
-                              <path
-                                d="M11.901639938354492,13 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 z"
-                                fill="#707070"
-                                id="svg_2"
-                                class=""
-                              />
-                            </svg>
-                            <div className="w-100 d-flex justify-content-between">
-                              Tamara Ling <span>(NDC)</span>
-                            </div>
-                          </div>
-                        </li>
-                        <li>
-                          <div className="d-flex align-items-center">
-                            <svg
-                              class="float-left row-handle nopadding"
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="16"
-                              height="16"
-                              fill="none"
-                            >
-                              <rect
-                                id="backgroundrect"
-                                width="100%"
-                                height="100%"
-                                x="0"
-                                y="0"
-                                fill="none"
-                                stroke="none"
-                              />
-                              <path
-                                d="M7.098360577225684,13 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 z"
-                                fill="#707070"
-                                id="svg_1"
-                                class=""
-                              />
-                              <path
-                                d="M11.901639938354492,13 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 z"
-                                fill="#707070"
-                                id="svg_2"
-                                class=""
-                              />
-                            </svg>
-                            <div className="w-100 d-flex justify-content-between">
-                              Tamara Ling <span>(NDC)</span>
-                            </div>
-                          </div>
-                        </li>
+                          </li>
+                        ))}
                       </ol>
                     </Card.Body>
                   </Card>
