@@ -185,6 +185,7 @@ import Api from "config/api"
 import IntegrationPartnerHotels from "views/partner_hotels/table"
 import IntegrationPartnerHotelSupplier from 'views/partner_hotel_supplier/table';
 import BookingSetting from "views/booking_setting/table"
+import IdentityRuleTable from "views/identity_rule/table"
 
 const RouteWithProps = ({
   path,
@@ -679,6 +680,12 @@ const DashboardRoutes = () => {
         <Route path="/extranet/book-trip/book-flight">
           <BookFlight />
         </Route>
+
+        {/* Identity Rule */}
+        <Route exact path="/master/identity-rules">
+          <IdentityRuleTable />
+        </Route>
+
       </Switch>
     </DashboardWrapper>
   )
