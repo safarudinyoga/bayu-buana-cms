@@ -1,37 +1,8 @@
 import BBDataTable from "components/table/bb-data-table"
-import rowStatus from "lib/row-status"
-import React, { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
-import { setUIParams } from "redux/ui-store"
-import { Row, Col, Tab, Nav } from "react-bootstrap"
-import { ReactSVG } from "react-svg"
+import React, { useState } from 'react'
 import Form from "./form";
 
 export default function IntegrationFeeTaxes() {
-  let dispatch = useDispatch()
-  useEffect(() => {
-    dispatch(
-      setUIParams({
-        title: "Sabre",
-        breadcrumbs: [
-          {
-            text: "Setup and Configurations",
-          },
-          {
-            text: "Intergration Partner",
-          },
-          {
-            text: "Sabre",
-          },
-        ],
-      }),
-    )
-  }, [])
-
-  const onReset = () => {
-    setParams({ ...params, filters: [] })
-  }
-
   let [params, setParams] = useState({
     createOnModal: true,
     showAdvancedOptions: false,
@@ -82,7 +53,7 @@ export default function IntegrationFeeTaxes() {
             <h1 style={titleText}>Partner Fee Taxes</h1>
             <hr />
             <div style={tableTax}>
-                <BBDataTable {...params} onReset={onReset} modalContent={Form} />
+                <BBDataTable {...params}  modalContent={Form} />
             </div>
         </div>
       </div>

@@ -1,34 +1,11 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import { useParams } from "react-router-dom"
 import BBDataTable from "components/table/bb-data-table"
 import { Card } from "react-bootstrap"
-import { useDispatch } from "react-redux"
-import { setUIParams } from "redux/ui-store"
 import Form from "./form"
 
 export default function IntegrationPartnerPaymentGatewayTable() {
-  let dispatch = useDispatch()
   const param = useParams()
-
-  useEffect(() => {
-    dispatch(
-      setUIParams({
-        title: "Integration Partner",
-        breadcrumbs: [
-          {
-            text: "Master Data Management",
-          },
-          {
-            text: "Intergration Partner",
-          },
-        ],
-      }),
-    )
-  }, [])
-
-  const onReset = () => {
-    setParams({ ...params, filters: [] })
-  }
 
   let [params, setParams] = useState({
     isCheckbox: false,
@@ -59,7 +36,7 @@ export default function IntegrationPartnerPaymentGatewayTable() {
       <Card>
         <Card.Body>
           <h3 className="card-heading">Partner Payment Gateways</h3>
-          <BBDataTable {...params} onReset={onReset} modalContent={Form} />
+          <BBDataTable {...params} modalContent={Form} />
         </Card.Body>
       </Card>
     </>

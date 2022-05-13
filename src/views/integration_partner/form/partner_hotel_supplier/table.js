@@ -1,28 +1,8 @@
 import BBDataTable from "components/table/bb-data-table"
-import rowStatus from "lib/row-status"
-import React, {useEffect, useState} from "react"
-import {useDispatch} from "react-redux"
-import {setUIParams} from "redux/ui-store"
+import React, {useState} from "react"
 import HotelSuppliers from "./form"
 
 export default function IntegrasiPartnerHotelSupplier() {
-  let dispatch = useDispatch()
-  useEffect(() => {
-    dispatch(
-      setUIParams({
-        title: "iTank",
-        breadcrumbs: [
-          {
-            text: "Setup and Configurations",
-          },
-          {
-            text: "Intergration Partner",
-          },
-        ],
-      }),
-    )
-  }, [])
-
   let [params, setParams] = useState({
     isCheckbox: false,
     title: "Division",
