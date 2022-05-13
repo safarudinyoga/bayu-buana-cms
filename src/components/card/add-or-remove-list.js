@@ -5,9 +5,15 @@ import upIcon from "assets/icons/double-up.svg"
 import arrowLeft from "assets/icons/arrow-left.svg"
 import arrowRight from "assets/icons/arrow-right.svg"
 import xCircle from "assets/icons/x-circle.svg"
+import flightTicket from "assets/icons/flight-ticket.svg"
 import "./add-or-remove-list.css"
 
-const AddOrRemoveList = ({ firstData, secondData, canRemoveIndex }) => {
+const AddOrRemoveList = ({
+  firstData,
+  secondData,
+  canRemoveIndex,
+  onModal,
+}) => {
   const [showFilter, setShowFilter] = useState(false)
   const [leftdata, setLeftData] = useState(firstData)
   const [rightdata, setRightData] = useState(secondData)
@@ -82,23 +88,34 @@ const AddOrRemoveList = ({ firstData, secondData, canRemoveIndex }) => {
                         <label className="label-flight-ticket">
                           <input
                             type="checkbox"
-                            name="check-ticket"
+                            name="check-leader"
                             checked={selected[item.name]}
                             onChange={() => toggleSelected(item.name)}
                           />
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="16"
-                            height="16"
-                            fill={selected[item.name] ? "#FFFFFF" : "#FFFFFF"}
-                            class="bi bi-images"
-                            viewBox="0 0 16 16"
-                          >
-                            <path d="M4.502 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z" />
-                            <path d="M14.002 13a2 2 0 0 1-2 2h-10a2 2 0 0 1-2-2V5A2 2 0 0 1 2 3a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v8a2 2 0 0 1-1.998 2zM14 2H4a1 1 0 0 0-1 1h9.002a2 2 0 0 1 2 2v7A1 1 0 0 0 15 11V3a1 1 0 0 0-1-1zM2.002 4a1 1 0 0 0-1 1v8l2.646-2.354a.5.5 0 0 1 .63-.062l2.66 1.773 3.71-3.71a.5.5 0 0 1 .577-.094l1.777 1.947V5a1 1 0 0 0-1-1h-10z" />
-                          </svg>
+                          <img src={flightTicket} alt="flight-ticket" />
                         </label>
                       </div>
+                      {onModal && (
+                        <div
+                          style={{
+                            backgroundColor: selected[item.name]
+                              ? "#027F71"
+                              : "#D3D3D3",
+                            padding: "2px 10px 2px",
+                            marginLeft: "2px"
+                          }}
+                        >
+                          <label className="label-flight-ticket">
+                            <input
+                              type="checkbox"
+                              name="check-ticket"
+                              checked={selected[item.name]}
+                              onChange={() => toggleSelected(item.name)}
+                            />
+                            <img src={flightTicket} alt="flight-ticket" />
+                          </label>
+                        </div>
+                      )}
                       <div
                         className="w-100 d-flex justify-content-between"
                         style={{ paddingLeft: 13, paddingRight: 15 }}
@@ -112,6 +129,35 @@ const AddOrRemoveList = ({ firstData, secondData, canRemoveIndex }) => {
             </ol>
           </Card.Body>
         </Card>
+        {!canRemoveIndex && (
+          <>
+            <div className="d-flex align-items-center">
+              <div
+                className="label-flight-ticket"
+                style={{ backgroundColor: "#027F71", padding: "1px 8px 3px" }}
+              >
+                <img src={flightTicket} alt="flight-ticket" />
+              </div>
+              <span style={{ fontSize: "12px", paddingLeft: "8px" }}>
+                Click to assign/remove assignment as leader.
+              </span>
+            </div>
+            {onModal && (
+              <div className="d-flex align-items-center pt-2">
+                <div
+                  className="label-flight-ticket"
+                  style={{ backgroundColor: "#027F71", padding: "1px 8px 3px" }}
+                >
+                  <img src={flightTicket} alt="flight-ticket" />
+                </div>
+                <span style={{ fontSize: "12px", paddingLeft: "8px" }}>
+                  Click to assign/forbid ttravel consultant to issue flight
+                  ticket.
+                </span>
+              </div>
+            )}
+          </>
+        )}
       </Col>
       <Col
         lg={2}

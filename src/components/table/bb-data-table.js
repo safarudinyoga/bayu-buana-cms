@@ -1110,6 +1110,7 @@ class BBDataTable extends Component {
           show={showCreateModal.show}
           onClick={() => this.props.setCreateModal({show: false, id: null, disabled_form: false})}
           modalContent={this.props.modalContent}
+          modalSize={this.props.modalSize}
         />
         {this.props.module !== "fare-types" ? <TableHeader
           {...this.props}

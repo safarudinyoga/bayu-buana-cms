@@ -54,6 +54,7 @@ import HotelBrandTable from "views/hotel_brand/table"
 import HotelSupplierForm from "views/hotel_supplier/form"
 import HotelSupplierTable from "views/hotel_supplier/table"
 import GeneralSetup from "views/general-setup"
+import GeneralSetupTeamAssignment from "views/general-setup/form/team-assignment-form"
 import LanguageForm from "views/language/form"
 import LanguageTable from "views/language/table"
 import LocationCategoryForm from "views/location_category/form"
@@ -643,6 +644,9 @@ const DashboardRoutes = () => {
         {/* Master General Setup*/}
         <Route exact path="/master/general-setup">
           <GeneralSetup />
+        </Route>
+        <Route exact path="/master/general-team-assignment/form/:id?">
+          <GeneralSetupTeamAssignment />
         </Route>
 
         {/* User Access Type */}
