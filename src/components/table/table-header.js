@@ -103,6 +103,7 @@ const StatusSelect = (props) => {
 
 class TableHeader extends Component {
   constructor(props) {
+    console.log(props);
     super(props)
     this.state = {
       showFilter: false,
@@ -295,7 +296,7 @@ class TableHeader extends Component {
                 Create New
               </button>
             </OverlayTrigger>
-  }
+          }
   
             <OverlayTrigger
               placement="top"

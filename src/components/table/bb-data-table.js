@@ -31,6 +31,7 @@ window.JSZip = JSZip
 
 class BBDataTable extends Component {
   constructor(props) {
+    console.log(props);
     super(props)
     this.table = React.createRef()
     this.wrapper = React.createRef()
@@ -217,6 +218,7 @@ class BBDataTable extends Component {
           headers: headers,
           cache: true,
           dataSrc: (json) => {
+            console.log(json, 'ini data <<');
             this.inProgress = false
             var recordTotal = 0
             var recordFiltered = 0
@@ -517,7 +519,7 @@ class BBDataTable extends Component {
           },
           {
             targets: [1, 2],
-            className: !this.state.isCheckbox ? module == "employee" ? "" : "custom-col-width": "cstm-col-width",
+            className: !this.state.isCheckbox ? module == "employee" || module == "ancillary" ? "" : "custom-col-width": "cstm-col-width",
           },
           {
             targets: [3],
@@ -1128,6 +1130,26 @@ class BBDataTable extends Component {
           {this.props.children}
         </TableHeader>
         :""}
+        {/* {
+          this.props.module === "room" ? null :
+          <TableHeader
+            {...this.props}
+            createOnModal={this.props.createOnModal}
+            selected={this.state.selected.length > 0 && !this.props.switchStatus}
+            hideFilter={this.state.hideFilter}
+            extraFilter={this.props.extraFilter}
+            onSearch={this.onSearch.bind(this)}
+            onStatus={this.onStatus.bind(this)}
+            onReset={this.onReset.bind(this)}
+            onPrint={this.onPrint.bind(this)}
+            onDownload={this.onDownload.bind(this)}
+            onToggleFilter={this.onToggleFilter.bind(this)}
+            onStatusUpdate={this.onStatusUpdate.bind(this)}
+            onRemove={this.onRemoveSelected.bind(this)}
+          >
+            {this.props.children}
+          </TableHeader>
+        } */}
         <div>
           <table
             ref={this.table}
