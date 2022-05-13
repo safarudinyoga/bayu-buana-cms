@@ -26,6 +26,7 @@ import removeIcon from "assets/icons/remove.svg"
 import showIcon from "assets/icons/show.svg"
 import ModalCreate from "components/Modal/bb-modal"
 import customPrint from '../../lib/customPrint'
+import { end } from "@popperjs/core"
 
 window.JSZip = JSZip
 
@@ -193,7 +194,10 @@ class BBDataTable extends Component {
       if(this.queryParams.get("page")) {
         displayStart = 10 * (this.queryParams.get("page")-1)
       }
-
+      let endpoint = this.props.endpoint;
+      if(this.props.filterData){
+        endpoint = endpoint + "?filters=" + this.props.filterData
+      }
       let dt = $(this.table.current).DataTable({
         pagingType: "simple_numbers_no_ellipses",
         colReorder: {
@@ -214,7 +218,7 @@ class BBDataTable extends Component {
         keys: true,
         destroy: true,
         ajax: {
-          url: this.api.env.endpoint(this.props.endpoint),
+          url: this.api.env.endpoint(endpoint),
           headers: headers,
           cache: true,
           dataSrc: (json) => {
