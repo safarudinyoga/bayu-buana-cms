@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { setAlert, setCreateModal, setModalTitle } from "redux/ui-store"
 import CancelButton from "components/button/cancel"
 import CardAddOrRemove from "components/card/add-or-remove-list"
+import FormikControl from "components/formik/formikControl"
 
 const dummy1 = [
   {
@@ -137,7 +138,25 @@ function TeamAssignmentForm(props) {
     >
       {({ dirty, handleSubmit, isSubmitting, setFieldValue, values }) => (
         <Form onSubmit={handleSubmit} className="m-2 px-3">
-          <CardAddOrRemove firstData={dummy1} secondData={dummy2} onModal />
+          <div className="d-flex justify-content-center my-4">
+            <FormikControl
+              control="input"
+              required="label-required"
+              label="Team Name"
+              name="team_name"
+              style={{ maxWidth: 250 }}
+              size={formSize}
+              disabled={isView || loading}
+              maxLength={36}
+            />
+          </div>
+          <CardAddOrRemove
+            firstData={dummy1}
+            secondData={dummy2}
+            firstCardTitle="team members"
+            secondCardTitle="travel consultant name"
+            onModal
+          />
           <div className="d-flex justify-content-center">
             {!props.hideButton && (
               <div

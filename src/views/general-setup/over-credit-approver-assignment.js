@@ -79,7 +79,13 @@ const OverCreditApproverAssignment = (props) => {
           <Card.Body>
             <h3 className="card-heading">Over Credit Approver Assignment</h3>
             <div style={{ padding: "0 15px 40px 0" }}>
-              <CardAddOrRemove firstData={dummy1} secondData={dummy2} canRemoveIndex />
+              <CardAddOrRemove
+                firstData={dummy1}
+                secondData={dummy2}
+                firstCardTitle="list of over credit approvers"
+                secondCardTitle="employee name"
+                canRemoveIndex
+              />
             </div>
           </Card.Body>
         </Card>

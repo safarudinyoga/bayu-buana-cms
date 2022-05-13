@@ -11,6 +11,8 @@ import "./add-or-remove-list.css"
 const AddOrRemoveList = ({
   firstData,
   secondData,
+  firstCardTitle,
+  secondCardTitle,
   canRemoveIndex,
   onModal,
 }) => {
@@ -56,7 +58,7 @@ const AddOrRemoveList = ({
               fontSize: "15px",
             }}
           >
-            LIST OF OVER CREDIT APPROVERS
+            {firstCardTitle}
           </Card.Header>
           <Card.Body style={{ padding: "8px 10px 10px 9px" }}>
             <ol class="list list-general-setup">
@@ -102,7 +104,7 @@ const AddOrRemoveList = ({
                               ? "#027F71"
                               : "#D3D3D3",
                             padding: "2px 10px 2px",
-                            marginLeft: "2px"
+                            marginLeft: "2px",
                           }}
                         >
                           <label className="label-flight-ticket">
@@ -194,7 +196,7 @@ const AddOrRemoveList = ({
               fontSize: "15px",
             }}
           >
-            EMPLOYEE NAME
+            {secondCardTitle}
           </Card.Header>
           <div className="col-xs-12 col-sm-12 col-md-4 col-lg-5 col-xl-5 padding-0 align-middle">
             <button

@@ -79,7 +79,12 @@ const TravelConsultantAssignment = (props) => {
           <Card.Body>
             <h3 className="card-heading">Travel Consultant Assignment</h3>
             <div style={{ padding: "0 15px 40px 0" }}>
-              <CardAddOrRemove firstData={dummy1} secondData={dummy2}/>
+              <CardAddOrRemove
+                firstData={dummy1}
+                secondData={dummy2}
+                firstCardTitle="list of travel consultant"
+                secondCardTitle="employee name"
+              />
             </div>
           </Card.Body>
         </Card>
