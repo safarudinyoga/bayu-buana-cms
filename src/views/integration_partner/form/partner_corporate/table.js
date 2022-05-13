@@ -1,28 +1,9 @@
 import BBDataTable from "components/table/bb-data-table"
-import React, { useEffect } from 'react'
-import { useDispatch } from 'react-redux'
-import { setUIParams } from "redux/ui-store"
+import React from 'react'
 import Form from "./form"
 import { Card } from "react-bootstrap"
 
 export default function IntegrationPartnerCorporateTable() {
-  let dispatch = useDispatch()
-  useEffect(() => {
-    dispatch(
-      setUIParams({
-        title: "Integration Partner",
-        breadcrumbs: [
-          {
-            text: "Setup and Configuration",
-          },
-          {
-            text: "Intergration Partner",
-          },
-        ],
-      }),
-    )
-  }, [])
-
   let params = {
     isCheckbox: false,
     showAdvancedOptions: false,

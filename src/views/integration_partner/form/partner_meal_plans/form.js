@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react"
 import { withRouter } from "react-router"
-import { Form, FormGroup, InputGroup, Button } from "react-bootstrap"
-import { Formik, FastField } from "formik"
+import { Form, Button } from "react-bootstrap"
+import { Formik } from "formik"
 import * as Yup from "yup"
-import useQuery from "lib/query"
+import { useParams } from "react-router-dom"
 import Api from "config/api"
 import { useDispatch, useSelector } from "react-redux"
 import { setAlert, setCreateModal, setModalTitle } from "redux/ui-store"
@@ -11,7 +11,7 @@ import CancelButton from "components/button/cancel"
 import FormikControl from "../../../../components/formik/formikControl"
 
 const endpoint =
-  "/master/integration-partners/3f61b5e0-d7cb-4f80-94e7-83114ff23903/meal-plans"
+  "/master/integration-partner-meal-plan-types"
 function MealPlansCreate(props) {
   const dispatch = useDispatch()
   const showCreateModal = useSelector((state) => state.ui.showCreateModal)
@@ -20,7 +20,7 @@ function MealPlansCreate(props) {
   const [id, setId] = useState(null)
   const [loading, setLoading] = useState(true)
   const [formValues, setFormValues] = useState(null)
-
+  const param = useParams()
   useEffect(async () => {
     let formId = showCreateModal.id || props.id
 
@@ -35,7 +35,14 @@ function MealPlansCreate(props) {
       try {
         let { data } = await API.get(endpoint + "/" + formId)
         setFormValues({
-          ...data,
+          ...formValues,
+          meal_plan_type_id: data.meal_plan_type_id,
+          meal_plan_type: {
+            value: data.meal_plan_type.id,
+            label: data.meal_plan_type.meal_plan_type_name,
+          },
+          meal_plan_type_name: data.meal_plan_type_name,
+          meal_plan_type_code: data.meal_plan_type_code,
         })
       } catch (e) {
         console.log(e)
@@ -56,18 +63,43 @@ function MealPlansCreate(props) {
   }, [showCreateModal.id, formValues])
 
   const initialValues = {
-    meal_plan_code: "",
-    meal_plan_name: "",
+    meal_plan_type: "",
+    meal_plan_type_id: "",
+    meal_plan_type_code: "",
+    meal_plan_type_name: "",
+    integration_partner_id: param.id,
   }
 
   const validationSchema = Yup.object().shape({
-    meal_plan: Yup.object().required("Meal Plan is required."),
-    meal_plan_code: Yup.string().required("Meal Plan Code is required."),
-    meal_plan_name: Yup.string().required("Meal Plan Name is required."),
+    meal_plan_type: Yup.object().required("Meal Plan is required."),
+    meal_plan_type_code: Yup.string().required("Meal Plan Code is required."),
+    meal_plan_type_name: Yup.string().required("Meal Plan Name is required."),
   })
 
   const onSubmit = async (values, a) => {
-    console.log(values)
+    console.log('values',values)
+    try {
+        let form = {
+            meal_plan_type_id: values.meal_plan_type.value,
+            meal_plan_type_code: values.meal_plan_type_code,
+            meal_plan_type_name: values.meal_plan_type_name,
+            integration_partner_id: values.integration_partner_id
+        };
+        let res = await API.putOrPost(endpoint, id, form);
+
+        dispatch(setCreateModal({ show: false, id: null, disabled_form: false }));
+        dispatch(
+            setAlert({
+                message: `Record 'From Integration Partner Meal Plan: ${values.meal_plan_type_code} - ${values.meal_plan_type_name}' has been successfully saved.`,
+            })
+        );
+    } catch (e) {
+        dispatch(
+            setAlert({
+                message: "Failed to save this record.",
+            })
+        );
+    }
   }
 
   const formSize = {
@@ -86,45 +118,58 @@ function MealPlansCreate(props) {
       initialValues={formValues || initialValues}
       validationSchema={validationSchema}
       onSubmit={onSubmit}
-      validateOnMount
       enableReinitialize
     >
       {({ dirty, handleSubmit, isSubmitting, setFieldValue, values }) => (
         <Form onSubmit={handleSubmit} className="ml-2">
           <FormikControl
             control="selectAsync"
-            required="label-required"
+            required={isView ? "" : "label-required"}
             label="Meal Plan"
-            name="meal_plan"
-            placeholder={"Please choose"}
+            name="meal_plan_type"
+            placeholder={"Please Choose."}
             url={`master/meal-plan-types`}
             fieldName={"meal_plan_type_name"}
             onChange={(v) => {
-              setFieldValue("id", v)
+                setFieldValue("meal_plan_type", v);
             }}
             style={{ maxWidth: 250 }}
             size={formSize}
-            isDisabled={isView || loading}
-          />
+            components={
+                isView
+                    ? {
+                          DropdownIndicator: () => null,
+                          IndicatorSeparator: () => null,
+                      }
+                    : null
+            }
+            isDisabled={isView}
+        />
           <FormikControl
             control="input"
             required="label-required"
             label="Partner Meal Plan Code"
-            name="meal_plan_code"
+            name="meal_plan_type_code"
             style={{ maxWidth: 250 / 2 }}
             size={formSize}
             disabled={isView || loading}
             maxLength={36}
+            onChange={(e) => {
+                setFieldValue("meal_plan_type_code", e.target.value);
+            }}
           />
           <FormikControl
             control="input"
             required="label-required"
             label="Partner Meal Plan Name"
-            name="meal_plan_name"
+            name="meal_plan_type_name"
             style={{ maxWidth: 250 }}
             size={formSize}
             disabled={isView || loading}
             maxLength={36}
+            onChange={(e) => {
+              setFieldValue("meal_plan_type_name", e.target.value);
+            }}
           />
 
           {!props.hideButton && (
