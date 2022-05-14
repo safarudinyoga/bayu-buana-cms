@@ -10,6 +10,7 @@ import useQuery from "lib/query"
 import GeneralInformation from './general-information'
 import CorporateFare from './corporate-fare'
 import AncillaryFee from './ancillary-fee'
+import CreditLimit from './credit-limit'
 
 const staticWarding = {
   main: 'Corporate Management',
@@ -90,18 +91,29 @@ const ManageCorporateForm = ({ match }) => {
                 </div>
               </Nav.Link>
             </Nav.Item>
+            <Nav.Item>
+              <Nav.Link eventKey="credit-limit">
+                <div>
+                  <ReactSVG src="/img/icons/emergency-contacts.svg" />
+                  <span>Credit Limit</span>
+                </div>
+              </Nav.Link>
+            </Nav.Item>
           </Nav>
         </Col>
         <Col sm={9}>
           <Tab.Content>
             <Tab.Pane eventKey="general-information">
-              <GeneralInformation isMobile={false} />
+              <GeneralInformation />
             </Tab.Pane>
             <Tab.Pane eventKey="corporate-fare">
-              <CorporateFare isMobile={false} />
+              <CorporateFare />
             </Tab.Pane>
             <Tab.Pane eventKey="ancillary-fee">
-              <AncillaryFee isMobile={false} />
+              <AncillaryFee />
+            </Tab.Pane>
+            <Tab.Pane eventKey="credit-limit">
+              <CreditLimit />
             </Tab.Pane>
           </Tab.Content>
         </Col>

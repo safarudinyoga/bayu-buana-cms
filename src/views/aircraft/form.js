@@ -14,6 +14,7 @@ const endpoint = "/master/aircraft"
 const backUrl = "/master/aircrafts"
 
 function AircraftForm(props) {
+  console.log(props);
   let dispatch = useDispatch()
   let formId = props.match.params.id
 

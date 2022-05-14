@@ -1,50 +1,192 @@
 import React, { useEffect, useState } from "react"
 import Api from "config/api"
+import { v4 as uuidv4 } from 'uuid';
 import { Link } from "react-router-dom"
+import axios from "axios"
+import env from "config/environment"
 import { useDispatch } from "react-redux"
+import SelectAsync from "components/form/select-async"
 import { withRouter, useHistory } from "react-router"
 import FormInputControl from "components/form/input-control"
 import { ReactSVG } from "react-svg"
 import FormikControl from "../../../components/formik/formikControl"
 import Select from "../../../components/form/select"
-import { Row, Col, Tab, Nav, Card, Button, } from "react-bootstrap"
+import { Row, Col, Tab, Nav, Card, Button, Form, Modal } from "react-bootstrap"
 import { setUIParams } from "redux/ui-store"
 import useQuery from "lib/query"
-import Tabel from './tabel-fare-family'
+import TabelFareFamily from "../tabel-fare-family"
+
 import * as Yup from "yup"
+import _ from "lodash"
+
 import createIcon from "assets/icons/create.svg"
-import { Form, Formik, FastField, Field, ErrorMessage } from "formik"
+import { Formik, FastField, Field, ErrorMessage } from "formik"
 import { setAlert } from "redux/ui-store"
 
 const endpoint = "/master/integration-partner-cabin-types"
 
+const backUrl = "/master/integration-partner"
 
-function FormIntegrationPartner(props) {
+const FareFamilyModal = (props) => {
+  return (
+    <Modal
+      {...props}
+      size="md"
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+    >
+      <Modal.Body>
+        <div style={{ padding: "0 2px 2px" }}>
+          <div className="mb-5">
+            <div className="modal-button-close" onClick={props.onHide}>
+              <ReactSVG src="/img/icons/close.svg" />
+            </div>
+            <p className="modals-header mt-3">CREATE FARE FAMILY</p>
+          </div>
+
+          <Form>
+            <Form.Group as={Row} className="mb-3">
+              <Form.Label column sm={4}>
+                Fare Family
+                <span className="form-label-required">*</span>
+              </Form.Label>
+              <Col sm={7}>
+                <FastField name="hotelBrand">
+                  {({ field, form }) => (
+                    <div style={{ maxWidth: 600 }}>
+                      <Select {...field} placeholder="Please choose" />
+                    </div>
+                  )}
+                </FastField>
+              </Col>
+            </Form.Group>
+
+            <Form.Group as={Row} className="mb-3">
+              <Form.Label column md={4}>
+                Booking Class
+                <span className="form-label-required">*</span>
+              </Form.Label>
+              <Col md={8}>
+                <Row className="mt-md-2">
+                  <Col lg={12}>
+                    <Row>
+                      <Col xs={12} md={12} lg={12} className="ml-4 ml-md-0">
+                        <Form.Group as={Row} className="mb-3">
+                          <Col>
+                            <Form.Control style={{ maxWidth: "80px" }} />
+                          </Col>
+                          <Col>
+                            <Form.Control style={{ maxWidth: "80px" }} />
+                          </Col>
+                          <Col>
+                            <Form.Control style={{ maxWidth: "80px" }} />
+                          </Col>
+                          <Col>
+                            <Form.Control style={{ maxWidth: "80px" }} />
+                          </Col>
+                          <Col>
+                            <Form.Control style={{ maxWidth: "80px" }} />
+                          </Col>
+                          <Col>
+                            <Form.Control style={{ maxWidth: "80px" }} />
+                          </Col>
+                          <Col>
+                            <Form.Control style={{ maxWidth: "80px" }} />
+                          </Col>
+                          <Col>
+                            <Form.Control style={{ maxWidth: "80px" }} />
+                          </Col>
+                        </Form.Group>
+                      </Col>
+
+                    </Row>
+                  </Col>
+                </Row>
+              </Col>
+            </Form.Group>
+
+            <div style={{ marginBottom: 30, marginTop: 30, display: "flex" }}>
+              <Button
+                variant="primary"
+                type="submit"
+                style={{ marginRight: 15 }}
+              >
+                SAVE
+              </Button>
+              <Button variant="secondary" onClick={props.onHide}>
+                CANCEL
+              </Button>
+            </div>
+          </Form>
+        </div>
+      </Modal.Body>
+    </Modal>
+  )
+}
+
+function PartnerCabins(props) {
   let dispatch = useDispatch()
+  const [modalShow, setModalShow] = useState(false)
+  const [showTabel] = useState(false)
   const history = useHistory()
+  let api = new Api()
+  let formId = props.match.params.id
   let [status, setStatus] = useState({ switchStatus: true })
   const [tabKey, setTabKey] = useState("partner-cabin")
   const isView = useQuery().get("action") === "view"
   const [loading, setLoading] = useState(true)
+  const [selectCity, setSelectCity] = useState([])
   const [id, setId] = useState(null)
-  const [formValues, setFormValues] = useState(null)
+  const [form, setForm] = useState({
+    cabin_type: "",
+    cabin_type_name: "",
+    cabin_type_code: "",
+  })
 
 
   useEffect(async () => {
     let api = new Api()
     let formId = props.match.params.id
 
-    let docTitle = "Edit partner-cabin"
+    let docTitle = "Sabre"
     if (!formId) {
-      docTitle = "Add partner-cabin"
-    } else if (isView) {
-      docTitle = "partner-cabin Details"
-    }
+      docTitle = "Sabre"
 
+    } else if (isView) {
+      docTitle = "Partner Cabin Details"
+    }
+    dispatch(
+      setUIParams({
+        title: isView ? "Partner Cabin Details" : docTitle,
+        breadcrumbs: [
+          {
+            text: "Setup and Configuration",
+          },
+          {
+            link: backUrl,
+            text: "Integration Partner",
+          },
+          {
+            text: docTitle,
+          },
+        ],
+      }),
+    )
 
     try {
       let res = await api.get(endpoint + "/" + formId)
-      setFormValues(res.data)
+      let data = res.data;
+      console.log(formId)
+      setForm({
+        ...form,
+        cabin_type_id: data.cabin_type_id,
+        cabin_type: {
+          value: data.cabin_type.id,
+          label: data.cabin_type.cabin_type_name,
+        },
+        cabin_type_name: data.cabin_type_name,
+        cabin_type_code: data.cabin_type_code,
+      })
     } catch (e) { }
     setLoading(false)
   }, [])
@@ -57,34 +199,91 @@ function FormIntegrationPartner(props) {
     setId(props.match.params.id)
   }, [props.match.params.id])
 
-  const initialValues = {
-    cabin_type_id: "",
-  }
-
 
 
   const validationSchema = Yup.object().shape({
+    cabin_type: Yup.object()
+      .required("Cabin is required."),
+    cabin_type_name: Yup.string().required("Partner Cabin Name is required").test(
+      "Unique Partner Cabin Name",
+      "Partner Cabin Name already exists", // <- key, message
+      async (value, ctx) => {
+        let formId = props.match.params.id
+        try {
+          let res = await axios.get(`${env.API_URL}/master/integration-partner-cabin-types?filters=["cabin_type_name","=","${value}"]`)
 
-    cabin_type_id: Yup.object()
-      .required("To Currency is required.")
+          if (formId) {
+            return res.data.items.length === 0 ||
+              value === form.cabin_type_name
+          } else {
+            return res.data.items.length === 0
+          }
+        } catch (e) {
+          return false
+        }
+      }
+    ),
+    cabin_type_code: Yup.string().required("Partner Cabin Code is required").test(
+      "Unique Partner Cabin Code",
+      "Partner Cabin Code already exists", // <- key, message
+      async (value, ctx) => {
+        let formId = props.match.params.id
+        try {
+          let res = await axios.get(`${env.API_URL}/master/integration-partner-cabin-types?filters=["cabin_type_code","=","${value}"]`)
 
-    ,
-
+          if (formId) {
+            return res.data.items.length === 0 ||
+              value === form.cabin_type_code
+          } else {
+            return res.data.items.length === 0
+          }
+        } catch (e) {
+          return false
+        }
+      }
+    ),
   })
 
+  const initialValues = {
+    cabin_type: "",
+    cabin_type_name: "",
+    cabin_type_code: "",
+  }
   const onSubmit = async (values, a) => {
     try {
+      let formId = props.match.params.id
       let form = {
+        cabin_type_id: uuidv4(),
+        cabin_type: values.cabin_type ? {
+          id: values.cabin_type.value,
+          name: values.cabin_type.label
+        } : null,
+        integration_partner_id: "3f61b5e0-d7cb-4f80-94e7-83114ff23903",
 
-        cabin_type_id: values.cabin_type_id
+        cabin_type_name: values.cabin_type_name,
+        cabin_type_code: values.cabin_type_code,
 
       }
-      let res = await Api.putOrPost("/master/integration-partner-cabin-types", id, form)
-      dispatch(
-        setAlert({
-          message: `Record 'From Currency: ${form.cabin_type_id} and To Currency: ${form.cabin_type_id}' has been successfully saved.`,
-        }),
-      )
+
+      if (!formId) {
+        //Proses Create Data
+
+        let res = await api.post(`/master/integration-partner-cabin-types`, form)
+
+        dispatch(
+          setAlert({
+            message: `Record 'Partner Cabin Name: ${form.cabin_type_name}' has been successfully saved.`,
+          }),
+        )
+      } else {
+        let res = await api.put(`/master/integration-partner-cabin-types/${formId}`, form)
+        dispatch(
+          setAlert({
+            message: `Record 'Partner Cabin Name: ${form.cabin_type_name}' has been successfully saved.`,
+          }),
+        )
+      }
+      history.goBack()
     } catch (e) {
       dispatch(
         setAlert({
@@ -93,147 +292,350 @@ function FormIntegrationPartner(props) {
       )
     }
   }
-  const handleSelectTab = async (key) => {
-    setTabKey(key)
-  }
 
-  const formSize = {
-    label: {
-      md: 4,
-      lg: 4,
-    },
-    value: {
-      md: 7,
-      lg: 7,
-    },
-  }
   return (
 
     <>
       <Formik
-        initialValues={formValues || initialValues}
+        initialValues={form || initialValues}
         validationSchema={validationSchema}
+
+        isView={isView || loading}
+
         onSubmit={onSubmit}
-        validateOnMount
         enableReinitialize
       >
         {({
+          values,
+          errors,
+          touched,
           dirty,
+          handleChange,
+          handleBlur,
           handleSubmit,
+          isValid,
           isSubmitting,
           setFieldValue,
-          values,
+          setFieldTouched,
         }) => (
           <Form onSubmit={handleSubmit}>
-            <Card>
-              <Card.Body>
-                <h3 className="card-heading">Partner Cabin</h3>
-                <FormikControl
-                  control="selectAsync"
-                  required={isView ? "" : "label-required"}
-                  label="Cabin"
-                  name="cabin"
-                  placeholder={values.cabin_type_name || "Please Choose."}
-                  url={`master/integration-partner-cabin-types`}
-                  fieldName={"cabin_type_name"}
-                  onChange={(v) => {
-                    setFieldValue("cabin", v)
-                  }}
-                  style={{ maxWidth: 250 }}
-                  components={
-                    isView
-                      ? {
-                        DropdownIndicator: () => null,
-                        IndicatorSeparator: () => null,
+            <Tab.Container>
+              <Row>
+                <Col sm={3}>
+                  <Nav variant="pills" className="flex-column nav-side">
+                    <Nav.Item>
+                      <Nav.Link eventKey="partner-information">
+                        <div>
+                          <ReactSVG src="/img/icons/users.svg" />
+                          <span>Partner Information</span>
+                        </div>
+                      </Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item>
+                      <Nav.Link eventKey="partner-credential">
+                        <div>
+                          <ReactSVG src="/img/icons/users.svg" />
+                          <span>Partner Credential</span>
+                        </div>
+                      </Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item>
+                      <Nav.Link eventKey="partner-corporates">
+                        <div>
+                          <ReactSVG src="/img/icons/users.svg" />
+                          <span>Partner Corporates</span>
+                        </div>
+                      </Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item>
+                      <Nav.Link href={`/master/integration-partner-cabin-types`}>
+                        <div>
+                          <ReactSVG src="/img/icons/employment.svg" />
+                          <span>Partner Cabins</span>
+                        </div>
+                      </Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item>
+                      <Nav.Link eventKey="partner-meal-plans">
+                        <div>
+                          <ReactSVG src="/img/icons/users.svg" />
+                          <span>Partner Meal Plans</span>
+                        </div>
+                      </Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item>
+                      <Nav.Link eventKey="partner-fee-taxes">
+                        <div>
+                          <ReactSVG src="/img/icons/users.svg" />
+                          <span>Partner Fee Taxes</span>
+                        </div>
+                      </Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item>
+                      <Nav.Link eventKey="partner-messages">
+                        <div>
+                          <ReactSVG src="/img/icons/users.svg" />
+                          <span>Partner Messages</span>
+                        </div>
+                      </Nav.Link>
+                    </Nav.Item>
+
+                    {/* <Nav.Link href={`/master/integration-partner-cities/${formId}/cities`}>
+                    <div>
+                        <ReactSVG src="/img/icons/employment.svg" />
+                        <span>Partner City</span>
+                      </div>
+                    </Nav.Link> */}
+
+
+                  </Nav>
+                </Col>
+                <Col sm={9}>
+                  <Card>
+                    <Card.Body>
+                      {isView ? <h3 className="card-heading">Partner Cabins Detail</h3> : <h3 className="card-heading">Edit Partner Cabins</h3>}
+
+                      <Form.Group as={Row} className="form-group">
+                        <Form.Label column sm={4}>
+                          Cabin<span className="form-label-required">*</span>
+                        </Form.Label>
+                        <Col sm={8}>
+                          <FastField name="cabin_type">
+                            {({ field, form }) => (
+                              <div style={{ maxWidth: 200 }}>
+                                <SelectAsync
+                                  {...field}
+                                  isClearable
+                                  isDisabled={isView}
+                                  url={`master/cabin-types`}
+                                  fieldName="cabin_type_name"
+                                  onChange={(v) => {
+                                    setFieldValue("cabin_type", v)
+                                  }}
+                                  placeholder="Please choose"
+                                  className={`react-select ${form.touched.cabin_type &&
+                                      form.errors.cabin_type
+                                      ? "is-invalid"
+                                      : null
+                                    }`}
+                                  components={
+                                    isView
+                                      ? {
+                                        DropdownIndicator: () => null,
+                                        IndicatorSeparator: () => null,
+                                      }
+                                      : null
+                                  }
+                                />
+                                {form.touched.cabin_type &&
+                                  form.errors.cabin_type && (
+                                    <Form.Control.Feedback type="invalid">
+                                      {form.touched.cabin_type
+                                        ? form.errors.cabin_type
+                                        : null}
+                                    </Form.Control.Feedback>
+                                  )}
+                              </div>
+                            )}
+                          </FastField>
+                        </Col>
+                      </Form.Group>
+                      <Form.Group as={Row} className="form-group">
+                        {/* <Form.Label column sm={4}>
+                          Partner Cabin Code<span className="form-label-required">*</span>
+                        </Form.Label>
+                        <Col sm={8}>
+                          <Form.Control
+                            name="cabin_type_code"
+                            type="text"
+                            value={values.cabin_type_code}
+                            minLength={1}
+                            maxLength={36}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            style={{ maxWidth: 200 }}
+                            disabled={isView}
+                          />
+                        </Col> */}
+                        <Form.Label column md={3} lg={4}>
+                          Partner Cabin Code{" "}
+                          <span className="form-label-required">*</span>
+                        </Form.Label>
+                        <Col md={9} lg={8}>
+                          <FastField name="cabin_type_code" disabled>
+                            {({ field, form }) => (
+                              <>
+                                <Form.Control
+                                  type="text"
+                                  disabled={isView}
+                                  isInvalid={
+                                    form.touched.cabin_type_code &&
+                                    form.errors.cabin_type_code
+                                  }
+                                  minLength={1}
+                                  maxLength={128}
+                                  {...field}
+                                  style={{ maxWidth: 300 }}
+                                />
+                                {form.touched.cabin_type_code &&
+                                  form.errors.cabin_type_code && (
+                                    <Form.Control.Feedback type="invalid">
+                                      {form.touched.cabin_type_code
+                                        ? form.errors.cabin_type_code
+                                        : null}
+                                    </Form.Control.Feedback>
+                                  )}
+                              </>
+                            )}
+                          </FastField>
+                        </Col>
+                      </Form.Group>
+                      <Form.Group as={Row} className="form-group">
+                        {/* <Form.Label column sm={4}>
+                      Partner Cabin Name<span className="form-label-required">*</span>
+                    </Form.Label>
+                    <Col sm={8}>
+                      <Form.Control
+                        name="cabin_type_name"
+                        type="text"
+                        value={values.cabin_type_name}
+                        minLength={1}
+                        maxLength={36}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        style={{ maxWidth: 200 }}
+                        disabled={isView}
+                      />
+                    </Col> */}
+                        <Form.Label column md={3} lg={4}>
+                          Partner Cabin Name{" "}
+                          <span className="form-label-required">*</span>
+                        </Form.Label>
+                        <Col md={9} lg={8}>
+                          <FastField name="cabin_type_name" disabled>
+                            {({ field, form }) => (
+                              <>
+                                <Form.Control
+                                  type="text"
+                                  disabled={isView}
+                                  isInvalid={
+                                    form.touched.cabin_type_name &&
+                                    form.errors.cabin_type_name
+                                  }
+                                  minLength={1}
+                                  maxLength={128}
+                                  {...field}
+                                  style={{ maxWidth: 300 }}
+                                />
+                                {form.touched.cabin_type_name &&
+                                  form.errors.cabin_type_name && (
+                                    <Form.Control.Feedback type="invalid">
+                                      {form.touched.cabin_type_name
+                                        ? form.errors.cabin_type_name
+                                        : null}
+                                    </Form.Control.Feedback>
+                                  )}
+                              </>
+                            )}
+                          </FastField>
+                        </Col>
+                      </Form.Group>
+                      {isView ? <h3 className="card-heading"></h3> : <><h3 className="card-heading"></h3>
+                        <Col sm={12}>
+                          <div style={{ padding: "0 15px 15px 15px" }} >
+                            <button
+                              className="btn float-right button-override"
+                              onClick={() => setModalShow(true)}
+                            >
+                              <img src={createIcon} className="mr-1" alt="new" />
+                              Add New Fare Family
+                            </button>
+
+                          </div>
+                        </Col>
+                        <br />
+                        <Col sm={12}>
+                          <FareFamilyModal
+                            show={modalShow}
+                            onHide={() => setModalShow(false)}
+                          />
+                        </Col>
+
+
+
+                      </>}
+
+                      {formId && < TabelFareFamily />}
+
+                      {
+                        props.isMobile
+                          ? isView
+                            ? (<div className="mb-2 row justify-content-md-start justify-content-center">
+                              <Button
+                                variant="secondary"
+                                onClick={() => props.history.goBack()}
+                              >
+                                BACK
+                              </Button>
+                            </div>)
+                            : (<div className="ml-1 row justify-content-md-start justify-content-center">
+                              <Button
+                                variant="primary"
+                                type="submit"
+                                disabled={props.formId?.id ? (!isValid || isSubmitting) : (!dirty || isSubmitting)}
+                                style={{ marginRight: 15, marginBottom: 20, marginTop: 85 }}
+                              >
+                                SAVE
+                              </Button>
+                              <Button
+                                variant="secondary"
+                                onClick={() => props.history.goBack()}
+                                style={{ marginBottom: 20, marginTop: 85 }}
+                              >
+                                CANCEL
+                              </Button>
+                            </div>)
+                          : ""
                       }
-                      : null
-                  }
-                  isDisabled={isView}
-                />
-                <FormikControl
-                  control="input"
-                  required="label-required"
-                  label="Partner Cabin Code"
-                  name="cabin_type_code"
-                  style={{ maxWidth: 250 }}
-                  size={formSize}
-                  disabled={isView || loading}
-                  onChange={e => {
+                      {
+                        !props.isMobile
+                          ? isView
+                            ? (<>
+                              <Button
+                                variant="secondary"
+                                onClick={() => props.history.goBack()}
+                                className="mt-3"
+                              >
+                                BACK
+                              </Button>
+                            </>)
+                            : (<div className="ml-1 mt-3 row justify-content-md-start justify-content-center">
+                              <Button
+                                variant="primary"
+                                type="submit"
+                                disabled={props.finishStep > 0 || props.employeeData?.id ? (!isValid || isSubmitting) : (!dirty || isSubmitting)}
+                                style={{ marginRight: 15, marginBottom: 135 }}
+                              >
+                                SAVE
+                              </Button>
+                              <Button
+                                variant="secondary"
+                                onClick={() => props.history.goBack()}
+                              >
+                                CANCEL
+                              </Button>
+                            </div>)
+                          : ""
+                      }
+                    </Card.Body>
 
-                    setFieldValue("cabin_type_code", e.target.value)
+                  </Card>
 
-                  }}
-                />
-                <FormikControl
-                  control="input"
-                  required="label-required"
-                  label="Partner Cabin Name"
-                  name="cabin_type_name"
-                  style={{ maxWidth: 250 }}
-                  size={formSize}
-                  disabled={isView || loading}
-                  onChange={e => {
+                </Col>
+              </Row>
+            </Tab.Container>
 
-                    setFieldValue("cabin_type_name", e.target.value)
 
-                  }}
-                />
-               <h3 className="card-heading"></h3>
-               <div style={{ padding: "0 15px 15px 15px" }}>
-                 
-                  <button
-                    className="btn float-right button-override"
-                    
-                  >
-                    <img  src={createIcon} className="mr-1" alt="new" />
-                    Add New Fare Family
-                  </button>
-                  {/* <FlightModal
-                    show={modalShow}
-                    onHide={() => setModalShow(false)}
-                  /> */}
-                </div>
-                {/* < Tabel /> */}
-              </Card.Body>
-            </Card>
-            <div
-              className="mb-5 ml-1 row justify-content-md-start justify-content-center"
-              style={{
-                marginBottom: 30,
-                marginTop: 30,
-                display: "flex",
-              }}
-            >
-              {isView ? (
-                <>
-                  <Button variant="secondary" onClick={() => history.goBack()}>
-                    BACK
-                  </Button>
-                </>
-              ) : (
-                <>
-                  <Button
-                    variant="primary"
-                    type="submit"
-                    style={{ marginRight: 15 }}
-                  >
-                    Save
-                  </Button>
-                  <Button variant="secondary" onClick={() => history.goBack()}>
-                    CANCEL
-                  </Button>
-                </>
-              )}
-            </div>
-
-            {/* {!isView && <Button
-                  variant="primary"
-                  type="submit"
-                  disabled={isSubmitting}
-                  style={{ marginRight: 15 }}
-                >
-                  SAVE
-                </Button>} */}
           </Form>
         )}
       </Formik>
@@ -241,4 +643,4 @@ function FormIntegrationPartner(props) {
   )
 }
 
-export default withRouter(FormIntegrationPartner)
+export default withRouter(PartnerCabins)

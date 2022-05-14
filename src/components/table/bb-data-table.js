@@ -46,6 +46,7 @@ class BBDataTable extends Component {
       isShowStatus: this.props.isShowStatus ?? true,
       isOpen: false,
       itemInfo: "",
+      year: new Date().getFullYear(),
     }
     this.inProgress = false
     this.queryParams = new URLSearchParams(this.props.location.search)
@@ -216,6 +217,7 @@ class BBDataTable extends Component {
           headers: headers,
           cache: true,
           dataSrc: (json) => {
+            console.log(json, 'ini data <<');
             this.inProgress = false
             var recordTotal = 0
             var recordFiltered = 0
@@ -516,7 +518,7 @@ class BBDataTable extends Component {
           },
           {
             targets: [1, 2],
-            className: !this.state.isCheckbox ? module == "employee" ? "" : "custom-col-width": "cstm-col-width",
+            className: !this.state.isCheckbox ? module == "employee" || module == "ancillary" ? "" : "custom-col-width": "cstm-col-width",
           },
           {
             targets: [3],
@@ -739,6 +741,27 @@ class BBDataTable extends Component {
     }, 100)
   }
 
+  onYear(value) {
+    this.inProgress = true
+    if (value + "" !== "0") {
+      this.setState({
+        year: value,
+        extraFilters:[["start_date", "like", value],["or"],["end_date", "like", value]]
+      })
+    } else {
+      this.setState({
+        year: new Date().getFullYear(),
+        extraFilters:[["start_date", "like", new Date().getFullYear()],["or"],["end_date", "like", new Date().getFullYear()]]
+      })
+    }
+    setTimeout(() => {
+      this.inProgress = false
+      try {
+        this.dt.ajax.reload()
+      } catch (e) {}
+    }, 100)
+  }
+
   onReset() {
     if (this.props.onReset) {
       this.props.onReset()
@@ -818,6 +841,17 @@ class BBDataTable extends Component {
         })
     }
   }
+
+  // onYearUpdate(year) {
+  //   this.api
+  //     .get(`${this.props.endpoint}?filters=[["start_date","like","${year}"],["or"],["end_date","like","${year}"]]`)
+  //     .then(() => {
+  //       this.dt.ajax.reload()
+  //     })
+  //     .finally(() => {
+  //       this.deselectAll()
+  //     })
+  // }
 
   onRemoveSelected() {
     this.setState({
@@ -1076,7 +1110,7 @@ class BBDataTable extends Component {
           onClick={() => this.props.setCreateModal({show: false, id: null, disabled_form: false})}
           modalContent={this.props.modalContent}
         />
-        <TableHeader
+        {this.props.module !== "fare-types" ? <TableHeader
           {...this.props}
           createOnModal={this.props.createOnModal}
           selected={this.state.selected.length > 0 && !this.props.switchStatus}
@@ -1084,6 +1118,7 @@ class BBDataTable extends Component {
           extraFilter={this.props.extraFilter}
           onSearch={this.onSearch.bind(this)}
           onStatus={this.onStatus.bind(this)}
+          onYear={this.onYear.bind(this)}
           onReset={this.onReset.bind(this)}
           onPrint={this.onPrint.bind(this)}
           onDownload={this.onDownload.bind(this)}
@@ -1093,6 +1128,27 @@ class BBDataTable extends Component {
         >
           {this.props.children}
         </TableHeader>
+        :""}
+        {/* {
+          this.props.module === "room" ? null :
+          <TableHeader
+            {...this.props}
+            createOnModal={this.props.createOnModal}
+            selected={this.state.selected.length > 0 && !this.props.switchStatus}
+            hideFilter={this.state.hideFilter}
+            extraFilter={this.props.extraFilter}
+            onSearch={this.onSearch.bind(this)}
+            onStatus={this.onStatus.bind(this)}
+            onReset={this.onReset.bind(this)}
+            onPrint={this.onPrint.bind(this)}
+            onDownload={this.onDownload.bind(this)}
+            onToggleFilter={this.onToggleFilter.bind(this)}
+            onStatusUpdate={this.onStatusUpdate.bind(this)}
+            onRemove={this.onRemoveSelected.bind(this)}
+          >
+            {this.props.children}
+          </TableHeader>
+        } */}
         <div>
           <table
             ref={this.table}

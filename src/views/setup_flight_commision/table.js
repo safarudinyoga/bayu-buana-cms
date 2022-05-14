@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux'
 import { setUIParams } from "redux/ui-store"
 import { renderColumn } from "lib/translation"
 import DatePicker from 'react-datepicker'
+import moment from 'moment'
 
 export default function SetupFlightCommisionTable() {
   let dispatch = useDispatch()
@@ -23,11 +24,28 @@ export default function SetupFlightCommisionTable() {
     )
   }, [])
 
+  const NextDay = (date = new Date()) => {
+    date.setDate(date.getDate() + 1)
+    return date
+  }
+
+  const MinDate = (date = new Date()) => { 
+    date.setFullYear(date.getFullYear() - 1)
+
+    return date
+  }
+
+  const MaxDate = (date = new Date()) => {
+    date.setFullYear(date.getFullYear() + 1)
+
+    return date
+  }
+
   const [selectedIssueStart, setSelectedIssueStart] = useState(new Date())
-  const [selectedIssueEnd, setSelectedIssueEnd] = useState(new Date())
+  const [selectedIssueEnd, setSelectedIssueEnd] = useState(NextDay)
 
   const [selectedDepartureStart, setSelectedDepartureStart] = useState(new Date())
-  const [selectedDepartureEnd, setSelectedDepartureEnd] = useState(new Date())
+  const [selectedDepartureEnd, setSelectedDepartureEnd] = useState(NextDay)
 
   // const onFilterChange = (e, values) => {
   //   let ids = []
@@ -60,6 +78,7 @@ export default function SetupFlightCommisionTable() {
                   onChange={(date) => {
                     setSelectedIssueStart(date)
                   }}
+                  minDate={MinDate}
                 />
               </div>
               <span className="col-md-1"> to </span>
@@ -67,10 +86,11 @@ export default function SetupFlightCommisionTable() {
                 <DatePicker 
                   className="form-control"
                   dateFormat="dd MMMM yyyy"
-                  selected={selectedIssueStart}
+                  selected={selectedIssueEnd}
                   onChange={(date) => {
-                    setSelectedIssueStart(date)
+                    setSelectedIssueEnd(date)
                   }}
+                  maxDate={MaxDate}
                 />
               </div>
             </div>
@@ -84,10 +104,11 @@ export default function SetupFlightCommisionTable() {
                 <DatePicker 
                   className="form-control"
                   dateFormat="dd MMMM yyyy"
-                  selected={selectedIssueStart}
+                  selected={selectedDepartureStart}
                   onChange={(date) => {
-                    setSelectedIssueStart(date)
+                    setSelectedDepartureStart(date)
                   }}
+                  minDate={MinDate}
                 />
               </div>
               <span className="col-md-1"> to </span>
@@ -95,10 +116,11 @@ export default function SetupFlightCommisionTable() {
                 <DatePicker 
                   className="form-control"
                   dateFormat="dd MMMM yyyy"
-                  selected={selectedIssueStart}
+                  selected={selectedDepartureEnd}
                   onChange={(date) => {
-                    setSelectedIssueStart(date)
+                    setSelectedDepartureEnd(date)
                   }}
+                  maxDate={MaxDate}
                 />
               </div>
             </div>
@@ -115,10 +137,26 @@ export default function SetupFlightCommisionTable() {
   //   setSelectedCountryIds([])
   // }
 
+  const dateFormat = (v) => moment(v).format('D MMM YYYY')
+
+  const routesFormat = (row) => {
+    if(!row.departure_city.city_name) {
+      return `From any origin to ${row.arrival_city.city_name}`
+    }
+    if(!row.arrival_city.city_name) {
+      return `From ${row.departure_city.city_name} to any destinations`
+    }
+    if(!row.arrival_city.city_name && !row.departure_city.city_name) {
+      return "Any routes"
+    }
+
+   return `${row.departure_city.city_name} - ${row.arrival_city.city_name}`
+  }
+
   let params = {
     title: "Setup Flight Commision",
     baseRoute: "/master/setup-flight-commission/form",
-    endpoint: "/master/commission-claims",
+    endpoint: "/master/setup-flight-commission",
     deleteEndpoint: "/master/batch-actions/delete/setup-flight-commisions",
     activationEndpoint: "/master/batch-actions/activate/setup-flight-commisions",
     deactivationEndpoint: "/master/batch-actions/deactivate/setup-flight-commisions",
@@ -136,30 +174,30 @@ export default function SetupFlightCommisionTable() {
       },
       {
         title: "Route(s)",
-        data: "commission_claim_original_destination",
-        render: (val) => {
-          return val.departure_city_code + " - " + val.arrival_city_code
+        data: "departure_city.city_name",
+        render: (val, type, row) => {
+          return routesFormat(row)
         }
       },
       {
         title: "Period of Issue",
-        data: "commission_claim_issue_date",
-        render: (val) => {
-          if(val.start_date === undefined && val.end_date === undefined){
+        data: "commission_claim_issue_date.start_date",
+        render: (val, d, row) => {
+          if(row.commission_claim_issue_date.start_date === undefined && row.commission_claim_issue_date.end_date === undefined){
             return "Not Specified"
           }else{
-            return val.start_date + " - " + val.end_date
+            return dateFormat(row.commission_claim_issue_date.start_date) + " - " + dateFormat(row.commission_claim_issue_date.end_date)
           }
         }
       },
       {
         title: "Period of Departure",
-        data: "commission_claim_departure_date",
-        render: (val) => {
-          if(val.start_date === undefined && val.end_date === undefined){
+        data: "commission_claim_departure_date.start_date",
+        render: (val, d, row) => {
+          if(row.commission_claim_departure_date.start_date === undefined && row.commission_claim_departure_date.end_date === undefined){
             return "Not Specified"
           }else{
-            return val.start_date + " - " + val.end_date
+            return dateFormat(row.commission_claim_departure_date.start_date) + " - " + dateFormat(row.commission_claim_departure_date.end_date)
           }
         }
       },
@@ -171,7 +209,7 @@ export default function SetupFlightCommisionTable() {
         }
       }
     ],
-    emptyTable: "No setup flight commisions found",
+    emptyTable: "No Commisions found",
     btnDownload: ".buttons-csv",
     isCheckbox: false,
     isShowStatus: false,

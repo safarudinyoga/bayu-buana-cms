@@ -14,10 +14,10 @@ export default function SpecialDateTable() {
         title: "Special Dates",
         breadcrumbs: [
           {
-            text: "Master Data Management",
+            text: "Setup and Configurations",
           },
           {
-            text: "Special Dates",
+            text: "Special Date",
           },
         ],
       }),
@@ -27,6 +27,7 @@ export default function SpecialDateTable() {
   let params = {
     title: "Special Dates",
     titleModal: "Special Date",
+    responsiveTablet: true,
     baseRoute: "/master/special-date/form",
     endpoint: "/master/agent-special-dates",
     deleteEndpoint: "/master/batch-actions/delete/agent-special-dates",
@@ -42,7 +43,7 @@ export default function SpecialDateTable() {
         data: "start_date",
         render: (val) => {
           if(val){
-            return format(new Date(val), "d MMM yyyy")
+            return format(new Date(val), "d MMMM yyyy")
           }
         }
       },
@@ -51,18 +52,24 @@ export default function SpecialDateTable() {
         data: "end_date",
         render: (val) => {
           if(val){
-            return format(new Date(val), "d MMM yyyy")
+            return format(new Date(val), "d MMMM yyyy")
           }
         }
       },
-      {
-        title: "Translated Region Name",
-        data: "region_translation.region_name",
-        visible: false,
-      },
     ],
-    emptyTable: "No special dates found",
+    emptyTable: "No Special Date found",
     recordName: ["special_date_name"],
+    showInfoDelete: true,
+    infoDelete: [
+      {title: "Special Date Name", recordName: "special_date_name"},
+    ],
+    btnDownload: ".buttons-csv",
+    isOpenNewTab: false,
+    isShowStatus: false,
+    isShowYear: true,
+    isCheckbox: false,
+    hideDetail: true,
+    showCalendar: true,
   }
   return <BBDataTable {...params} />
 }

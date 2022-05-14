@@ -67,6 +67,23 @@ const options = [
   {value: "3", label: "Inactive"},
 ]
 
+const selectYear = () => {
+  const options = []
+
+  const startYear = new Date().getFullYear() - 10
+  const endYear = new Date().getFullYear() + 10
+
+  for (let i = startYear; i <= endYear; i++) {
+    options.push({
+      value: i,
+      label: i,
+    })
+  }
+
+  return options
+}
+
+
 const StatusSelect = (props) => {
   return (
     <>
@@ -82,14 +99,19 @@ const StatusSelect = (props) => {
     </>
   )
 }
+
+
 class TableHeader extends Component {
   constructor(props) {
+    console.log(props);
     super(props)
     this.state = {
       showFilter: false,
       showAdvancedOptions: props.showAdvancedOptions ?? true,
+      showCalendar: props.showCalendar ?? false,
       searchValue: "",
       statusValue: "0",
+      yearValue: new Date().getFullYear(),
     }
 
     this.toggleFilter = this.toggleFilter.bind(this)
@@ -134,6 +156,13 @@ class TableHeader extends Component {
     this.setState({statusValue})
   }
 
+  handleYear(yearValue) {
+    if (this.props.onYear) {
+      this.props.onYear(yearValue.value)
+    }
+    this.setState({yearValue: yearValue.value})
+  }
+
   handleReset() {
     if (this.props.onReset) {
       this.props.onReset()
@@ -142,6 +171,7 @@ class TableHeader extends Component {
       showFilter: false,
       searchValue: "",
       statusValue: "0",
+      yearValue: new Date().getFullYear(),
     })
 
     if(this.props.customFilterStatus){
@@ -174,6 +204,12 @@ class TableHeader extends Component {
     }
   }
 
+  handleYearUpdate(year) {
+    if (this.props.onYearUpdate) {
+      this.props.onYearUpdate(year)
+    }
+  }
+
   handleRemove() {
     if (this.props.onRemove) {
       this.props.onRemove()
@@ -184,6 +220,7 @@ class TableHeader extends Component {
     const ExtraFilter = this.props.extraFilter
     const { customFilterStatus } = this.props
     const {pathname} = this.props.location;
+
 
     return (
       <div className="container-fluid pl-0">
@@ -223,6 +260,11 @@ class TableHeader extends Component {
                 )}
               </button>
             )}
+            {
+              this.state.showCalendar ? (
+                <a style={{fontSize: 14, verticalAlign: "middle"}} className="ml-2" href="/master/special-date/calendar">View Calendar</a>
+              ) : ""
+            }
 
             { pathname === "/master/divisions" &&
               <OverlayTrigger
@@ -273,6 +315,7 @@ class TableHeader extends Component {
           { !this.props.isHideDownloadLogo &&
             <OverlayTrigger
               placement="top"
+              trigger={"hover"}
               overlay={<Tooltip>Click to download</Tooltip>}
             >
               <Link
@@ -290,6 +333,7 @@ class TableHeader extends Component {
             </OverlayTrigger>
           }
           </div>
+
         </div>
         <div
           className={
@@ -317,6 +361,30 @@ class TableHeader extends Component {
                   </div>
                 </div>
               }
+              {this.props.isShowYear ? (
+                <div className="col-xs-12 col-sm-12 col-md-6 col-lg-4">
+                  <div className="row">
+                    <div className="col-xs-4">
+                    <label className="text-label-filter ml-2 font-weight-bold">{this.props.statusLabel || "Year "}</label>
+                      <Select
+                        components={{DropdownIndicator}}
+                        value={{
+                          value: this.state.yearValue,
+                          label: this.state.yearValue
+                        }}
+                        onChange={this.handleYear.bind(this)}
+                        styles={customStyles}
+                        options={selectYear()}
+                        statusLabel={"Year"}
+                        placeholder="Please choose"
+                      />
+                    </div>
+                  </div>
+                </div>
+              ) : ""
+
+              }
+
             </div>
             <OverlayTrigger placement="top" overlay={<Tooltip>Reset</Tooltip>}>
               <Link

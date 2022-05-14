@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react"
+import React, { useEffect, useState } from "react"
 import "@fortawesome/fontawesome-free/css/all.css"
 import "admin-lte"
 import "admin-lte/dist/css/adminlte.css"
@@ -121,12 +121,23 @@ import ExchageRateTable from "views/exchange_rate/table"
 import ExchangeRateForm from "views/exchange_rate/form"
 import ExchangeRateHistory from "views/exchange_rate/history"
 // Master Integration PartnerG
-import IntegrationPartnerTable from "views/integration_partner/table"
 import IntegrationPartnerForm from "views/integration_partner/form/index"
+import IntegrationPartnerTable from "views/integration_partner/table"
+import IntegrationPaymentGatewayTable from "views/integration_partner/form/partner_payment_gateway/table"
+import IntegrationPaymentGatewayForm from "views/integration_partner/form/partner_payment_gateway/form"
+import IntegrationPartnerMealPlansTable from "views/integration_partner/form/partner_meal_plans/table"
+import IntegrationPartnerMealPlansForm from "views/integration_partner/form/partner_meal_plans/form"
 import IntegrationPartnerCitiesTable from "views/integration_partner_city/tabel"
-import IntegrationPartnerCabinTypesTable from "views/integration_partner_cabin/index"
-import IntegrationPartnerCabinsForm from "views/integration_partner_cabin/form/index"
-
+import IntegrationPartnerCabinTypesTable from "views/integration_partner_cabin/tabel"
+import IntegrationPartnerCabinsForm from "views/integration_partner_cabin/form/form"
+import FareFamiyTabel from "views/integration_partner_cabin/tabel-fare-family"
+import IntegrationFeeTaxes from "views/partner_fee_taxes/table"
+import FeeTaxForm from "views/partner_fee_taxes/form"
+import CreateHotel from 'views/partner_hotels/form'
+import FormPartnerHotel from 'views/partner_hotels/form'
+import IntegrationPartnerCountriesTable from "views/integration_partner_countries/table"
+import IntegrationPartnerCurrenciesTable from "views/integration_partner_currencies/table"
+import IntegrationPartnerCurrenciesForm from "views/integration_partner_currencies/form"
 
 // Master Manage Corporate
 import CorporateTable from "views/manage_corporate/table"
@@ -138,21 +149,25 @@ import UserProfile from "views/user_profile/form"
 import Login from "./views/auth/login"
 import ForgotPassword from "views/auth/forgot_password"
 import OTP from "views/auth/otp"
-import OfficeTable from './views/branch_office/table';
-import OfficeForm from './views/branch_office/form';
-import DivisionForm from './views/division/form';
-import DivisionTable from './views/division/table';
-import DivisionHierarchy from './views/division/hierarchy';
-import JobTitleTable from './views/job-title/table';
-import JobTitleForm from './views/job-title/form';
+import OfficeTable from "./views/branch_office/table"
+import OfficeForm from "./views/branch_office/form"
+import DivisionForm from "./views/division/form"
+import DivisionTable from "./views/division/table"
+import DivisionHierarchy from "./views/division/hierarchy"
+import JobTitleTable from "./views/job-title/table"
+import JobTitleForm from "./views/job-title/form"
 
 // User Access Type
 import UserAccessTypeTable from "views/user_access_type/table"
 import UserAccessTypeForm from "views/user_access_type/form"
 import ResetPassword from "views/reset_password/reset_password"
 
+//User Management
+import UserManagementTable from "views/user_management/table"
+// import UserManagementForm from "views/user_management/form"
+
 // Master Standard Ancillary Fee
-import StandardAncillaryFee from './views/standard_ancillary_fee/standard_ancillary_fee';
+import StandardAncillaryFee from "./views/standard_ancillary_fee/standard_ancillary_fee"
 import StandardAncillaryFeeFlightForm from "views/standard_ancillary_fee/form/flight_form"
 import StandardAncillaryFeeHotelForm from "views/standard_ancillary_fee/form/hotel_form"
 import StandardAncillaryFeeOtherForm from "views/standard_ancillary_fee/form/other_form"
@@ -160,14 +175,16 @@ import StandardAncillaryFeeOtherForm from "views/standard_ancillary_fee/form/oth
 // Special Date
 import SpecialDateTable from "views/special_date/table"
 import SpecialDateForm from "views/special_date/form"
-
+import SpecialDateCalendar from "views/special_date/calendar"
 
 // Extranet BookTrip
 import BookTrip from "views/extranet/book_trip/book_trip"
 import BookFlight from "views/extranet/book_trip/book_flight"
 
-
 import Api from "config/api"
+import IntegrationPartnerHotels from "views/partner_hotels/table"
+import IntegrationPartnerHotelSupplier from 'views/partner_hotel_supplier/table';
+import BookingSetting from "views/booking_setting/table"
 
 const RouteWithProps = ({
   path,
@@ -269,17 +286,66 @@ const DashboardRoutes = () => {
         <Route exact path="/master/integration-partner">
           <IntegrationPartnerTable />
         </Route>
+        <Route exact path="/master/integration-partner/partner-fee-tax">
+          <IntegrationFeeTaxes />
+        </Route>
+        <Route exact path="/master/integration-partner/partner-fee-tax/form/:id?">
+          <FeeTaxForm />
+        </Route>
+        <Route exact path="/master/integration-partner/partner-hotels">
+          <IntegrationPartnerHotels />
+        </Route>
+        <Route exact path="/master/integration-partner-hotels/form/:id?">
+          <FormPartnerHotel />
+        </Route>
+        <Route exact path="/master/integration-partner-hotel-supplier">
+          <IntegrationPartnerHotelSupplier />
+        </Route>
+        {/* <Route exact path="/master/integration-partner-hotels/form/:id?">
+          <FormPartnerHotel />
+        </Route> */}
         <Route path="/master/integration-partner/form/:id?">
           <IntegrationPartnerForm />
         </Route>
+        <Route exact path="/master/integration-payment-gateway">
+          <IntegrationPaymentGatewayTable />
+        </Route>
+        <Route exact path="/master/integration-payment-gateway/form/:id?">
+          <IntegrationPaymentGatewayForm />
+        </Route>
+        <Route exact path="/master/integration-partner-meal-plans">
+          <IntegrationPartnerMealPlansTable />
+        </Route>
+        <Route exact path="/master/integration-partner-meal-plans/form/:id?">
+          <IntegrationPartnerMealPlansForm />
+        </Route>
         <Route exact path="/master/integration-partner-cabin-types">
-          <IntegrationPartnerCabinTypesTable/>
+          <IntegrationPartnerCabinTypesTable />
         </Route>
         <Route path="/master/integration-partner-cabin-types/form/:id?">
-          <IntegrationPartnerCabinsForm/>
+          <IntegrationPartnerCabinsForm />
         </Route>
         <Route exact path="/master/integration-partner-cities">
           <IntegrationPartnerCitiesTable />
+        </Route>
+        <Route exact path="/master/integration-partner-countries">
+          <IntegrationPartnerCountriesTable />
+        </Route>
+        <Route exact path="/master/integration-partner-currencies">
+          <IntegrationPartnerCurrenciesTable />
+        </Route>
+        <Route path="/master/integration-partner-currencies/form/:id?">
+          <IntegrationPartnerCurrenciesForm />
+        </Route>
+
+        <Route exact path="/master/integration-partner-countries">
+          <IntegrationPartnerCountriesTable />
+        </Route>
+        <Route exact path="/master/integration-partner-currencies">
+          <IntegrationPartnerCurrenciesTable />
+        </Route>
+        <Route path="/master/integration-partner-currencies/form/:id?">
+          <IntegrationPartnerCurrenciesForm />
         </Route>
         <Route exact path="/master/flight-types">
           <FlightTypeTable />
@@ -531,7 +597,7 @@ const DashboardRoutes = () => {
           <OfficeTable />
         </Route>
         <Route path="/master/branch-offices/form/:id?">
-          <OfficeForm/>
+          <OfficeForm />
         </Route>
 
         {/* Master Invoice Email Setup */}
@@ -548,6 +614,10 @@ const DashboardRoutes = () => {
         </Route>
         <Route exact path="/master/setup-flight-commission/form/:id?">
           <FlightCommisionForm />
+        </Route>
+
+        <Route exact path="/master/setup-booking-setting">
+          <BookingSetting />
         </Route>
 
         {/* Master Exhange Rate */}
@@ -578,7 +648,6 @@ const DashboardRoutes = () => {
           <GeneralSetup />
         </Route>
 
-
         {/* User Access Type */}
         <Route exact path="/master/user-access-type">
           <UserAccessTypeTable />
@@ -587,12 +656,23 @@ const DashboardRoutes = () => {
           <UserAccessTypeForm />
         </Route>
 
+        {/* User management */}
+        <Route exact path="/master/user-management">
+          <UserManagementTable />
+        </Route>
+        {/* <Route path="/master/user-management/form/:id?">
+          <UserManagementForm />
+        </Route> */}
+
         {/* Master Special Date */}
         <Route exact path="/master/special-date">
           <SpecialDateTable />
         </Route>
         <Route path="/master/special-date/form/:id?">
           <SpecialDateForm />
+        </Route>
+        <Route path="/master/special-date/calendar">
+          <SpecialDateCalendar />
         </Route>
 
         {/* Extranet Book Trip */}
@@ -602,7 +682,6 @@ const DashboardRoutes = () => {
         <Route path="/extranet/book-trip/book-flight">
           <BookFlight />
         </Route>
-
       </Switch>
     </DashboardWrapper>
   )
@@ -627,11 +706,11 @@ const AuthRoutes = () => {
   )
 }
 
-const getAuth = async() => {
+const getAuth = async () => {
   try {
-    let auth = localStorage.getItem('ut')
-    let refresh_token = localStorage.getItem('rt')
-    if(!auth && refresh_token) {
+    let auth = localStorage.getItem("ut")
+    let refresh_token = localStorage.getItem("rt")
+    if (!auth && refresh_token) {
       let API = new Api()
       let res = await API.refreshToken(refresh_token)
     }
@@ -645,7 +724,7 @@ const getAuth = async() => {
 const App = () => {
   document.title = "Bayu Buana"
 
-  const[auth, setAuth] = useState(true)
+  const [auth, setAuth] = useState(true)
 
   useEffect(() => {
     const checkAuth = async () => {
