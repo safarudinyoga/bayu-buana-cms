@@ -187,8 +187,8 @@ function IdentityRuleCreate(props) {
                         control="select"
                         // options={options}
                         options={[
-                            { value: "economy", label: "Economy"},
-                            { value: "bc", label: "Business Class"}
+                            { value: "Monthly", label: "Monthly"},
+                            { value: "Yearly", label: "Yearly"}
                           ]}
                         required={isView ? "" : "label-required"}
                         label="How often do you want to reset numbering?"
