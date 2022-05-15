@@ -1,7 +1,7 @@
 import { withRouter } from "react-router";
 import React, { useState, useEffect } from "react";
-import { Form, FormGroup, InputGroup, Button } from "react-bootstrap";
-import { Formik, FastField } from "formik";
+import { Form, FormGroup, InputGroup, Button, Col } from "react-bootstrap";
+import { Formik, FastField, Field } from "formik";
 import useQuery from "lib/query";
 import * as Yup from "yup";
 import Api from "config/api";
@@ -9,6 +9,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { setAlert, setCreateModal, setModalTitle } from "redux/ui-store";
 import CancelButton from "components/button/cancel";
 import FormikControl from "../../components/formik/formikControl";
+import { ReactSVG } from "react-svg"
+import Select, {components} from "react-select"
 
 const endpoint = "/master/configurations/identity-rules";
 
@@ -96,33 +98,83 @@ function IdentityRuleCreate(props) {
     };
     const formSize = {
         label: {
-            md: 5,
-            lg: 5,
+            md: 8,
+            lg: 8,
         },
         value: {
-            md: 7,
-            lg: 7,
+            md: 4,
+            lg: 4,
         },
     };
+
+    const formTextSize = {
+        label: {
+            md: 10,
+            lg: 10,
+        },
+        value: {
+            md: 11,
+            lg: 11,
+        },
+    };
+
+    // const options = [
+    //     {
+    //       label: "Monthly",
+    //       selected: "Montly",
+          
+    //     },
+    //     {
+    //       label: "Yearly",
+    //       selected: "Yearly",
+    //     }
+    // ]
+
     return (
         <Formik initialValues={formValues || initialValues} validationSchema={validationSchema} onSubmit={onSubmit} validateOnMount enableReinitialize>
             {({ dirty, handleSubmit, isSubmitting, setFieldValue, values }) => (
                 <Form onSubmit={handleSubmit} className="ml-2">
-                    <FormikControl
-                        control="input"
-                        required="label-required"
-                        label="Partner Corporate Code"
-                        name="corporate_code"
-                        style={{ maxWidth: 250 }}
-                        size={formSize}
-                        disabled={isView || loading}
-                        onChange={(e) => {
+                    <div style={{display: "inline-flex", marginBottom: 15}}>
+                        <FormikControl
+                            control="input"
+                            size={formTextSize}
+                            label="Prefix"
+                            name="corporate_code"
+                            style={{ maxWidth: 250 }}
+                            disabled={isView || loading}
+                            onChange={(e) => {
                             setFieldValue("corporate_code", e.target.value);
-                        }}
-                    />
+                            }}
+                        />
+
+                        <FormikControl
+                            control="input"
+                            size={formTextSize}
+                            label="Dynamic Prefix"
+                            name="corporate_code"
+                            style={{ maxWidth: 250 }}
+                            disabled={isView || loading}
+                            onChange={(e) => {
+                            setFieldValue("corporate_code", e.target.value);
+                            }}
+                        />  
+
+                        <FormikControl
+                            control="input"
+                            size={formTextSize}
+                            label="Next Number"
+                            name="corporate_code"
+                            style={{ maxWidth: 250 }}
+                            disabled={isView || loading}
+                            onChange={(e) => {
+                            setFieldValue("corporate_code", e.target.value);
+                            }}
+                        />               
+                    </div>
 
                     <FormikControl
                       control="switch"
+                      required="label-required"
                       label="Reset numbers periodically?"
                       name="is_enabled"
                       value={values.is_enabled}
@@ -132,15 +184,20 @@ function IdentityRuleCreate(props) {
                     />
 
                     <FormikControl
-                        control="selectAsync"
+                        control="select"
+                        // options={options}
+                        options={[
+                            { value: "economy", label: "Economy"},
+                            { value: "bc", label: "Business Class"}
+                          ]}
                         required={isView ? "" : "label-required"}
                         label="How often do you want to reset numbering?"
                         name="corporate_id"
                         placeholder={values.currency_name || "Please Choose."}
-                        url={`master/companies`}
-                        fieldName={"company_name"}
+                        value={values.last_used_counter} 
                         onChange={(v) => {
-                            setFieldValue("corporate_id", v);
+                            setFieldValue("last_used_counter", v);
+                            console.log(v.value)
                         }}
                         style={{ maxWidth: 250 }}
                         size={formSize}
