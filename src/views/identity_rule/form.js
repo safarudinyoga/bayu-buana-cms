@@ -1,7 +1,7 @@
 import { withRouter } from "react-router";
 import React, { useState, useEffect } from "react";
-import { Form, FormGroup, InputGroup, Button, Col } from "react-bootstrap";
-import { Formik, FastField, Field } from "formik";
+import { Form, Button } from "react-bootstrap";
+import { Formik } from "formik";
 import useQuery from "lib/query";
 import * as Yup from "yup";
 import Api from "config/api";
@@ -9,8 +9,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { setAlert, setCreateModal, setModalTitle } from "redux/ui-store";
 import CancelButton from "components/button/cancel";
 import FormikControl from "../../components/formik/formikControl";
-import { ReactSVG } from "react-svg"
-import Select, {components} from "react-select"
 
 const endpoint = "/master/configurations/identity-rules";
 
@@ -55,30 +53,32 @@ function IdentityRuleCreate(props) {
     }, [showCreateModal.id, formValues]);
 
     const initialValues = {
-        corporate_code: "",
-        corporate_id: "",
-        corporate_information_enabled: false,
-        corporate_performance_enabled: false,
-        credit_limit_enabled: false,
-        integration_partner_id: "00000000-0000-0000-0000-000000000000",
-        is_enabled: false
+        prefix: "",
+        dynamic_prefix: "",
+        next_number: "",
+        is_reset: true,
+        reset_frequency: "",
+
+        identity_code: "",
+        identity_name: "",
     };
 
     const validationSchema = Yup.object().shape({
-        // corporate_code: Yup.string().required("Partner Corporates Code is required."),
-        // corporate_name: Yup.string().required("Partner Corporates Name is required."),
+        is_reset: Yup.boolean().required("Identity Rule is Reset is required."),
+        reset_frequency: Yup.string().required("Identity Rule Reset Frequency is required."),
     });
 
     const onSubmit = async (values, a) => {
         try {
             let form = {
-                corporate_code: values.corporate_code,
-                corporate_id: values.corporate_id.value,
-                corporate_information_enabled: values.corporate_information_enabled,
-                corporate_performance_enabled: values.corporate_performance_enabled,
-                credit_limit_enabled: values.credit_limit_enabled,
-                integration_partner_id: values.integration_partner_id,
-                is_enabled: values.is_enabled
+                prefix: values.prefix,
+                dynamic_prefix: values.dynamic_prefix,
+                next_number: values.next_number,
+                is_reset: values.is_reset,
+                reset_frequency: values.reset_frequency,
+
+                identity_code: values.identity_code,
+                identity_name: values.identity_name,
             };
             let res = await API.putOrPost("/master/configurations/identity-rules", id, form);
 
@@ -98,12 +98,12 @@ function IdentityRuleCreate(props) {
     };
     const formSize = {
         label: {
-            md: 8,
-            lg: 8,
+            md: 6,
+            lg: 6,
         },
         value: {
-            md: 4,
-            lg: 4,
+            md: 5,
+            lg: 5,
         },
     };
 
@@ -118,32 +118,20 @@ function IdentityRuleCreate(props) {
         },
     };
 
-    // const options = [
-    //     {
-    //       label: "Monthly",
-    //       selected: "Montly",
-          
-    //     },
-    //     {
-    //       label: "Yearly",
-    //       selected: "Yearly",
-    //     }
-    // ]
-
     return (
         <Formik initialValues={formValues || initialValues} validationSchema={validationSchema} onSubmit={onSubmit} validateOnMount enableReinitialize>
             {({ dirty, handleSubmit, isSubmitting, setFieldValue, values }) => (
                 <Form onSubmit={handleSubmit} className="ml-2">
-                    <div style={{display: "inline-flex", marginBottom: 15}}>
+                    <div style={{ display: "inline-flex", marginBottom: 15 }}>
                         <FormikControl
                             control="input"
                             size={formTextSize}
                             label="Prefix"
-                            name="corporate_code"
+                            name="prefix"
                             style={{ maxWidth: 250 }}
                             disabled={isView || loading}
                             onChange={(e) => {
-                            setFieldValue("corporate_code", e.target.value);
+                                setFieldValue("prefix", e.target.value);
                             }}
                         />
 
@@ -151,53 +139,52 @@ function IdentityRuleCreate(props) {
                             control="input"
                             size={formTextSize}
                             label="Dynamic Prefix"
-                            name="corporate_code"
+                            name="dynamic_prefix"
                             style={{ maxWidth: 250 }}
                             disabled={isView || loading}
                             onChange={(e) => {
-                            setFieldValue("corporate_code", e.target.value);
+                                setFieldValue("dynamic_prefix", e.target.value);
                             }}
-                        />  
+                        />
 
                         <FormikControl
                             control="input"
                             size={formTextSize}
                             label="Next Number"
-                            name="corporate_code"
+                            name="next_number"
                             style={{ maxWidth: 250 }}
                             disabled={isView || loading}
                             onChange={(e) => {
-                            setFieldValue("corporate_code", e.target.value);
+                                setFieldValue("next_number", e.target.value);
                             }}
-                        />               
+                        />
                     </div>
 
                     <FormikControl
-                      control="switch"
-                      required="label-required"
-                      label="Reset numbers periodically?"
-                      name="is_enabled"
-                      value={values.is_enabled}
-                      onChange={(v) => setFieldValue("is_enabled", v)}
-                      size={formSize}
-                      disabled={isView || loading}
+                        control="switch"
+                        required="label-required"
+                        label="Reset numbers periodically?"
+                        name="is_reset"
+                        value={values.is_reset}
+                        onChange={(v) => setFieldValue("is_reset", v)}
+                        size={formSize}
+                        disabled={isView || loading}
                     />
 
                     <FormikControl
                         control="select"
-                        // options={options}
                         options={[
-                            { value: "Monthly", label: "Monthly"},
-                            { value: "Yearly", label: "Yearly"}
-                          ]}
+                            { value: "Y", label: "Yearly" },
+                            { value: "M", label: "Monthly" },
+                        ]}
                         required={isView ? "" : "label-required"}
                         label="How often do you want to reset numbering?"
-                        name="corporate_id"
-                        placeholder={values.currency_name || "Please Choose."}
-                        value={values.last_used_counter} 
+                        name="reset_frequency"
+                        placeholder={values.reset_frequency === "Y" ? "Yearly" : "Monthly" || "Please Choose."}
+                        value={values.reset_frequency}
                         onChange={(v) => {
-                            setFieldValue("last_used_counter", v);
-                            console.log(v.value)
+                            setFieldValue("reset_frequency", v.value);
+                            console.log(v.value);
                         }}
                         style={{ maxWidth: 250 }}
                         size={formSize}
@@ -211,7 +198,7 @@ function IdentityRuleCreate(props) {
                         }
                         isDisabled={isView}
                     />
-                    
+
                     {!props.hideButton && (
                         <div
                             style={{

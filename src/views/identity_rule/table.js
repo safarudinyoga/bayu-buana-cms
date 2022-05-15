@@ -61,7 +61,7 @@ export default function IdentityRuleTable() {
     <Card style={{marginBottom: 0}}>
         <Card.Body className="px-1 px-md-4">
           <h3 className="card-heading">Identity Rule</h3>
-          <BBDataTable {...params} modalContent={Form} />
+          <BBDataTable {...params} modalContent={Form} modalSize="lg" />
         </Card.Body>
       </Card>
   )
