@@ -186,7 +186,12 @@ import Api from "config/api"
 import IntegrationPartnerHotels from "views/partner_hotels/table"
 import IntegrationPartnerHotelSupplier from 'views/partner_hotel_supplier/table';
 import BookingSetting from "views/booking_setting/table"
+
+// Identity Rule
 import IdentityRuleTable from "views/identity_rule/table"
+
+// Tax Fee
+import TaxFeeForm from "views/tax_fee/form"
 
 const RouteWithProps = ({
   path,
@@ -688,6 +693,11 @@ const DashboardRoutes = () => {
         {/* Identity Rule */}
         <Route exact path="/master/identity-rules">
           <IdentityRuleTable />
+        </Route>
+
+        {/* Tax Fee */}
+        <Route path="/master/tax-fee">
+          <TaxFeeForm />
         </Route>
 
       </Switch>
