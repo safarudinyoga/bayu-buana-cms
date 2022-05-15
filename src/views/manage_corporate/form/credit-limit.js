@@ -5,6 +5,7 @@ import { useFormik } from "formik"
 import * as Yup from "yup"
 
 // components & styles
+import ModalCreate from 'components/Modal/bb-modal'
 import Select from "components/form/select"
 import './_form.sass'
 
@@ -16,6 +17,7 @@ const CreditLimit = ({
   isMobile
 }) => {
   const [key, setKey] = useState('master-credit-limit')
+  const [isModalVisible, setisModalVisible] = useState(false)
 
   const { handleSubmit, handleChange, values, errors, touched } = useFormik({
     initialValues: {
@@ -259,10 +261,10 @@ const CreditLimit = ({
         <Card.Text className="uppercase card-heading mb-3" style={{ fontWeight: '500' }}>COST CENTER</Card.Text>
         <button
           type="button"
-          onClick={() => {}}
+          onClick={() => setisModalVisible(true)}
           className="btn btn-warning float-right button-new"
         >
-          <img src={createIcon} className="mr-1" alt="new" />
+          <img src={createIcon} className="mr-1" alt="new"  />
           Create New
         </button>
       </Form>
@@ -280,41 +282,89 @@ const CreditLimit = ({
     },
   ]
 
+  const ModalAdd = () => {
+    <Form style={{ backgroundColor: 'transparent', padding: '0 37px 45px' }}>
+      <Row>
+        <Col sm={12}>
+          <Form.Group as={Row} className='form-group'>
+            <Form.Label column sm={4}>
+              Name
+              <span className="form-label-required">*</span>
+            </Form.Label>
+            <Col lg={8}>
+              <Form.Control
+                type="text"
+                minLength={1}
+                maxLength={16}
+                placeholder=""
+                style={{ width: 300 }}
+              />
+            </Col>
+          </Form.Group>
+          <Form.Group as={Row} className='form-group'>
+            <Form.Label column sm={4}>
+              Limit (IDR)
+              <span className="form-label-required">*</span>
+            </Form.Label>
+            <Col lg={8}>
+              <Form.Control
+                type="text"
+                minLength={1}
+                maxLength={16}
+                placeholder=""
+                style={{ width: 150 }}
+              />
+            </Col>
+          </Form.Group>
+        </Col>
+      </Row>
+    </Form>
+  }
+
   return (
-    <div>
-      <Card style={{ marginBottom: 0 }}>
-        <Card.Body>
-          {isMobile ? "" : <h3 className="card-heading">Credit Limit</h3>}
-          <div className='credit_limit'>
-            <div className='card mt-2 pb-5'>
-              <Tabs
-                id='credit-limit'
-                activeKey={key}
-                onSelect={(key) => setKey(key)}
-                className='tabs mb-4'
-                mountOnEnter
-                unmountOnExit
-              >
-                {tabList.map((res, i) =>
-                  <TabPane
-                    key={i}
-                    className="m-3 pl-2 pr-2"
-                    eventKey={res.key}
-                    title={
-                      <div className="d-md-flex flex-row bd-highlight">
-                        <span className="tabs-text uppercase">{res.key}</span>
-                      </div>
-                  }
-                  >
-                    {res.children}
-                  </TabPane>
-                )}
-              </Tabs>
+    <>
+      <div>
+        <Card style={{ marginBottom: 0 }}>
+          <Card.Body>
+            {isMobile ? "" : <h3 className="card-heading">Credit Limit</h3>}
+            <div className='credit_limit'>
+              <div className='card mt-2 pb-5'>
+                <Tabs
+                  id='credit-limit'
+                  activeKey={key}
+                  onSelect={(key) => setKey(key)}
+                  className='tabs mb-4'
+                  mountOnEnter
+                  unmountOnExit
+                >
+                  {tabList.map((res, i) =>
+                    <TabPane
+                      key={i}
+                      className="m-3 pl-2 pr-2"
+                      eventKey={res.key}
+                      title={
+                        <div className="d-md-flex flex-row bd-highlight">
+                          <span className="tabs-text uppercase">{res.key}</span>
+                        </div>
+                    }
+                    >
+                      {res.children}
+                    </TabPane>
+                  )}
+                </Tabs>
+              </div>
             </div>
-          </div>
-        </Card.Body>
-      </Card>
-    </div>
+          </Card.Body>
+        </Card>
+      </div>
+
+      <ModalCreate
+        show={isModalVisible}
+        onClick={() => setisModalVisible(false)}
+        modalTitle='New Cost Center'
+        modalContent={ModalAdd}
+      />
+    </>
   )
 }
 
