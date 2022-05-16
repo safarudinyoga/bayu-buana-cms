@@ -73,7 +73,7 @@ const GeneralSetup= (props) => {
             <Nav.Item>
               <Nav.Link eventKey="general-information">
                 <div>
-                  <ReactSVG src="/img/icons/general-information.svg" />
+                  <ReactSVG src="/img/icons/setup-general-information.svg" />
                   <span>General Information</span>
                 </div>
               </Nav.Link>
@@ -82,7 +82,7 @@ const GeneralSetup= (props) => {
             <Nav.Item>
               <Nav.Link eventKey="handler-setup">
                 <div>
-                  <ReactSVG src="/img/icons/employment.svg" />
+                  <ReactSVG src="/img/icons/setup-handler-setup.svg" />
                   <span>Handler Setup</span>
                 </div>
               </Nav.Link>
@@ -91,7 +91,7 @@ const GeneralSetup= (props) => {
             <Nav.Item>
               <Nav.Link eventKey="identity-rule">
                 <div>
-                  <ReactSVG src="/img/icons/employment.svg" />
+                  <ReactSVG src="/img/icons/setup-identity-rule.svg" />
                   <span>Identity Rule</span>
                 </div>
               </Nav.Link>
@@ -100,7 +100,7 @@ const GeneralSetup= (props) => {
             <Nav.Item>
               <Nav.Link eventKey="standard-service">
                 <div>
-                  <ReactSVG src="/img/icons/employment.svg" />
+                  <ReactSVG src="/img/icons/setup-standard-service.svg" />
                   <span>Standard Service</span>
                 </div>
               </Nav.Link>
@@ -109,7 +109,7 @@ const GeneralSetup= (props) => {
             <Nav.Item>
               <Nav.Link eventKey="over-credit-approver-assignment">
                 <div>
-                  <ReactSVG src="/img/icons/employment.svg" />
+                  <ReactSVG src="/img/icons/setup-over-credit.svg" />
                   <span>Over Credit Approver Assignment</span>
                 </div>
               </Nav.Link>
@@ -118,7 +118,7 @@ const GeneralSetup= (props) => {
             <Nav.Item>
               <Nav.Link eventKey="travel-consultant-assignment">
                 <div>
-                  <ReactSVG src="/img/icons/employment.svg" />
+                  <ReactSVG src="/img/icons/setup-travel-consultant.svg" />
                   <span>Travel Consultant Assignment</span>
                 </div>
               </Nav.Link>
@@ -127,7 +127,7 @@ const GeneralSetup= (props) => {
             <Nav.Item>
               <Nav.Link eventKey="team-assignment">
                 <div>
-                  <ReactSVG src="/img/icons/employment.svg" />
+                  <ReactSVG src="/img/icons/setup-team-assignment.svg" />
                   <span>Team Assignment</span>
                 </div>
               </Nav.Link>
@@ -136,7 +136,7 @@ const GeneralSetup= (props) => {
             <Nav.Item>
               <Nav.Link eventKey="retail-ancillary-fee">
                 <div>
-                  <ReactSVG src="/img/icons/employment.svg" />
+                  <ReactSVG src="/img/icons/setup-retail-ancillary.svg" />
                   <span>Retail Ancillary Fee</span>
                 </div>
               </Nav.Link>
@@ -145,7 +145,7 @@ const GeneralSetup= (props) => {
             <Nav.Item>
               <Nav.Link eventKey="other-ancillary-fee">
                 <div>
-                  <ReactSVG src="/img/icons/employment.svg" />
+                  <ReactSVG src="/img/icons/setup-other-ancillary.svg" />
                   <span>Other Ancillary Fee</span>
                 </div>
               </Nav.Link>
@@ -154,7 +154,7 @@ const GeneralSetup= (props) => {
             <Nav.Item>
               <Nav.Link eventKey="tax-fee">
                 <div>
-                  <ReactSVG src="/img/icons/employment.svg" />
+                  <ReactSVG src="/img/icons/setup-tax-fee.svg" />
                   <span>Tax Fee</span>
                 </div>
               </Nav.Link>
@@ -163,7 +163,7 @@ const GeneralSetup= (props) => {
             <Nav.Item>
               <Nav.Link eventKey="booking-settings">
                 <div>
-                  <ReactSVG src="/img/icons/employment.svg" />
+                  <ReactSVG src="/img/icons/setup-booking-setting.svg" />
                   <span>Booking Settings</span>
                 </div>
               </Nav.Link>
@@ -172,7 +172,7 @@ const GeneralSetup= (props) => {
             <Nav.Item>
               <Nav.Link eventKey="invoice-settings">
                 <div>
-                  <ReactSVG src="/img/icons/employment.svg" />
+                  <ReactSVG src="/img/icons/setup-invoice-setting.svg" />
                   <span>Invoice Settings</span>
                 </div>
               </Nav.Link>
@@ -181,7 +181,7 @@ const GeneralSetup= (props) => {
             <Nav.Item>
               <Nav.Link eventKey="travel-advice">
                 <div>
-                  <ReactSVG src="/img/icons/employment.svg" />
+                  <ReactSVG src="/img/icons/setup-travel-advice.svg" />
                   <span>Travel Advice</span>
                 </div>
               </Nav.Link>
