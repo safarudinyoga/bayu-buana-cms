@@ -5,15 +5,15 @@
     display: flex;
 }
 
-li {
-    /* display: block;
-    position: relative; */
+/* li {
+    display: block;
+    position: relative; 
     border-radius: 3px;
     margin-bottom: 1px;
     transition: 0.3s;
     border: 1px solid #D3D3D3;
 
-}
+} */
 
 .list.list-general-setup {
     flex-direction: column;
