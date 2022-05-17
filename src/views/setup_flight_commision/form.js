@@ -369,7 +369,10 @@ const FlightCommisionForm = (props) => {
                                     
                                   />
                                   <div className="wrapper">
-                                      <i aria-hidden="true" className="fa fa-calendar"></i>
+                                    <img
+                                      src="/img/icons/date-range.svg"
+                                      className="calendar"
+                                    ></img>
                                   </div>
                                 </Col>
                                 <Col md={1} className="text-center">to</Col>
@@ -387,7 +390,10 @@ const FlightCommisionForm = (props) => {
                                     }}
                                   />
                                   <div className="wrapper">
-                                      <i aria-hidden="true" className="fa fa-calendar"></i>
+                                    <img
+                                      src="/img/icons/date-range.svg"
+                                      className="calendar"
+                                    ></img>
                                   </div>
                                 </Col>
                               </>
@@ -446,7 +452,10 @@ const FlightCommisionForm = (props) => {
                                     }}
                                   />
                                   <div className="wrapper">
-                                      <i aria-hidden="true" className="fa fa-calendar"></i>
+                                    <img
+                                      src="/img/icons/date-range.svg"
+                                      className="calendar"
+                                    ></img>
                                   </div>
                                 </Col>
                                 <Col md={1} className="text-center">to</Col>
@@ -464,7 +473,10 @@ const FlightCommisionForm = (props) => {
                                     }}
                                   />
                                   <div className="wrapper">
-                                      <i aria-hidden="true" className="fa fa-calendar"></i>
+                                    <img
+                                      src="/img/icons/date-range.svg"
+                                      className="calendar"
+                                    ></img>
                                   </div>
                                 </Col>
                               </>
@@ -472,23 +484,23 @@ const FlightCommisionForm = (props) => {
                             </Row>
                           </Col>
                         </Row>
-                        <Row className="form-group">
-                          <Col md={11}>
+                        {/* <Col xs={3} md={3} lg={3} className="ml-md-0"> */}
+                          <Row className="form-group mb-0">
+                            <Col className="ml-0">
                                 <FormikControl 
-                                control="input"
-                                label="Commission Percentage"
-                                name="percent"
-                                className
-                                style={{ maxWidth: 100 }}
-                                // isDisabled={isView}
-                              />
-                              <Col md={1}>
-                                %
-                              </Col>
-                          </Col>
-                        </Row>
+                                  control="input"
+                                  label="Commission Percentage"
+                                  name="percent"
+                                  className
+                                  style={{ maxWidth: 100 }}
+                                  // isDisabled={isView}
+                                />
+                            </Col>
+                            <span className="text-lg ml-0 percent">%</span>
+                          </Row>
+                        </Col>
                         
-                      </Col>
+                      {/* </Col> */}
                     </Row>
                   </Card.Body>
                 </Card>

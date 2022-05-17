@@ -1,8 +1,40 @@
+@media only screen and (max-width: 768px) {
+    .wrapper { 
+        position: relative; 
+        bottom: 27px; 
+    }
+    
+    img.calendar { 
+        position: absolute; 
+        right: -4px;
+        top: -5px;
+    }
+    
+    input.date-picker {
+        min-width: 120px;
+        padding-left: 2px;
+    }     
+    
+}
+
 .wrapper { 
     position: relative; 
     bottom: 27px; 
 }
-i.fa-calendar { 
+
+img.calendar { 
     position: absolute; 
     right: 0px;
+    top: -5px;
+}
+
+input.date-picker {
+    min-width: 120px;
+    padding-left: 10px;
+}
+
+span.percent {
+    left: 37vw;
+    top: 36vh;
+    position: absolute;
 }
