@@ -101,22 +101,6 @@ class Sidebar extends Component {
               {
                 menu.map((m, k) => <ParentMenu key={k} menu={m} />)
               }
-              <li className="nav-item parent-menu" id="dsa3dd3">
-                <Link to="#" className="nav-link">
-                  <img src="/img/icons/exchange-rate.svg" alt="icon users" />
-                  <p>
-                    Exchange Rate
-                    <i className="right fas fa-angle-right"></i>
-                  </p>
-                </Link>
-                <ul className="nav nav-treeview">
-                  <li className="nav-item">
-                    <Link to="/master/exchange-rate" className="nav-link">
-                      <p>Exchange Rate</p>
-                    </Link>
-                  </li>
-                </ul>
-              </li>
               {/* <li className="nav-item parent-menu">
                 <Link to="#" className="nav-link">
                   <img src="/img/icons/home.svg" alt="icon users" />
