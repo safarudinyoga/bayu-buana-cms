@@ -5,6 +5,7 @@ import { setUIParams } from "redux/ui-store"
 import { renderColumn } from "lib/translation"
 import DatePicker from 'react-datepicker'
 import moment from 'moment'
+import './style.css'
 
 export default function SetupFlightCommisionTable() {
   let dispatch = useDispatch()
@@ -30,6 +31,7 @@ export default function SetupFlightCommisionTable() {
   const [selectedDepartureStart, setSelectedDepartureStart] = useState(new Date())
   const [selectedDepartureEnd, setSelectedDepartureEnd] = useState(new Date())
 
+
   // const onFilterChange = (e, values) => {
   //   let ids = []
   //   if (values && values.length > 0) {
@@ -53,7 +55,7 @@ export default function SetupFlightCommisionTable() {
           <div className="col-xs-4">
             <label className="text-label-filter font-weight-bold">Period of Issue</label>
             <div className="row mb-3 mb-sm-0 align-items-center">
-              <div className="col-md-5">
+              <div className="col-md-5 col-5">
                 <DatePicker 
                   className="form-control"
                   dateFormat="dd MMMM yyyy"
@@ -61,10 +63,14 @@ export default function SetupFlightCommisionTable() {
                   onChange={(date) => {
                     setSelectedIssueStart(date)
                   }}
+
                 />
+                <div className="wrapper">
+                    <i aria-hidden="true" className="fa fa-calendar"></i>
+                </div>
               </div>
-              <span className="col-md-1"> to </span>
-              <div className="col-md-5">
+              <span className="col-md-1 col-2"> to </span>
+              <div className="col-md-5 col-5">
                 <DatePicker 
                   className="form-control"
                   dateFormat="dd MMMM yyyy"
@@ -72,7 +78,11 @@ export default function SetupFlightCommisionTable() {
                   onChange={(date) => {
                     setSelectedIssueEnd(date)
                   }}
+                  style={{ paddingLeft: 2 }}
                 />
+                 <div className="wrapper">
+                    <i aria-hidden="true" className="fa fa-calendar"></i>
+                </div>
               </div>
             </div>
           </div>
@@ -89,7 +99,11 @@ export default function SetupFlightCommisionTable() {
                   onChange={(date) => {
                     setSelectedDepartureStart(date)
                   }}
+                  style={{ maxWidth: 120 }}
                 />
+                <div className="wrapper">
+                    <i aria-hidden="true" className="fa fa-calendar"></i>
+                </div>
               </div>
               <span className="col-md-1"> to </span>
               <div className="col-md-5">
@@ -101,6 +115,9 @@ export default function SetupFlightCommisionTable() {
                     setSelectedIssueStart(date)
                   }}
                 />
+                <div className="wrapper">
+                    <i aria-hidden="true" className="fa fa-calendar"></i>
+                </div>
               </div>
             </div>
           </div>

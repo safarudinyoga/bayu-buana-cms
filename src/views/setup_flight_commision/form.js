@@ -366,7 +366,11 @@ const FlightCommisionForm = (props) => {
                                       formik.setFieldValue("issueStart", date)
                                       formik.setFieldValue("commission_claim_issue_date.start_date", date)
                                     }}
+                                    
                                   />
+                                  <div className="wrapper">
+                                      <i aria-hidden="true" className="fa fa-calendar"></i>
+                                  </div>
                                 </Col>
                                 <Col md={1} className="text-center">to</Col>
                                 <Col md={4}>
@@ -382,6 +386,9 @@ const FlightCommisionForm = (props) => {
                                       formik.setFieldValue("issueEnd", date)
                                     }}
                                   />
+                                  <div className="wrapper">
+                                      <i aria-hidden="true" className="fa fa-calendar"></i>
+                                  </div>
                                 </Col>
                               </>
                               
@@ -438,6 +445,9 @@ const FlightCommisionForm = (props) => {
                                       formik.setFieldValue("departureStart", date)
                                     }}
                                   />
+                                  <div className="wrapper">
+                                      <i aria-hidden="true" className="fa fa-calendar"></i>
+                                  </div>
                                 </Col>
                                 <Col md={1} className="text-center">to</Col>
                                 <Col md={4}>
@@ -453,19 +463,31 @@ const FlightCommisionForm = (props) => {
                                       formik.setFieldValue("departureEnd", date)
                                     }}
                                   />
+                                  <div className="wrapper">
+                                      <i aria-hidden="true" className="fa fa-calendar"></i>
+                                  </div>
                                 </Col>
                               </>
                             ) : ""}
                             </Row>
                           </Col>
                         </Row>
-                        <FormikControl 
-                          control="input"
-                          label="Commission Percentage"
-                          name="percent"
-                          style={{ maxWidth: 250 }}
-                          // isDisabled={isView}
-                        />
+                        <Row className="form-group">
+                          <Col md={11}>
+                                <FormikControl 
+                                control="input"
+                                label="Commission Percentage"
+                                name="percent"
+                                className
+                                style={{ maxWidth: 100 }}
+                                // isDisabled={isView}
+                              />
+                              <Col md={1}>
+                                %
+                              </Col>
+                          </Col>
+                        </Row>
+                        
                       </Col>
                     </Row>
                   </Card.Body>
