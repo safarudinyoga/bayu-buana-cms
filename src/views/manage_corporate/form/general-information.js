@@ -89,7 +89,7 @@ const GeneralInfomation = ({
                   </Col>
                 </Form.Group>
                 <Form.Group as={Row} className='form-group'>
-                  <Form.Label column sm={3}>
+                  <Form.Label column sm={3} className='mb-2'>
                     Parent Company
                   </Form.Label>
                   <Col md={3} lg={9}>
@@ -114,7 +114,7 @@ const GeneralInfomation = ({
                   </Col>
                 </Form.Group>
                 <Form.Group as={Row} className='form-group'>
-                  <Form.Label column sm={3}>
+                  <Form.Label column sm={3} className='mb-2'>
                     Type
                     <span className="form-label-required">*</span>
                   </Form.Label>
@@ -240,7 +240,7 @@ const GeneralInfomation = ({
                   </Col>
                 </Form.Group>
                 <Form.Group as={Row} className='form-group'>
-                  <Form.Label column sm={3}>
+                  <Form.Label column sm={3} className='mb-2'>
                     Country <span className="form-label-required">*</span>
                   </Form.Label>
                   <Col lg={9} md={3}>
@@ -294,7 +294,7 @@ const GeneralInfomation = ({
                   </Col>
                 </Form.Group>
                 <Form.Group as={Row} className='form-group'>
-                  <Form.Label column sm={3}>
+                  <Form.Label column sm={3} className='mb-2'>
                     State / Province
                   </Form.Label>
                   <Col md={3} lg={9}>
@@ -325,7 +325,7 @@ const GeneralInfomation = ({
                   </Col>
                 </Form.Group>
                 <Form.Group as={Row} className='form-group'>
-                  <Form.Label column sm={3}>
+                  <Form.Label column sm={3} className='mb-2'>
                     City
                   </Form.Label>
                   <Col md={3} lg={9}>
@@ -423,7 +423,7 @@ const GeneralInfomation = ({
                   </Col>
                 </Form.Group>
                 <Form.Group as={Row} className='form-group'>
-                  <Form.Label column sm={3}>
+                  <Form.Label column sm={3} className='mb-2'>
                     Country <span className="form-label-required">*</span>
                   </Form.Label>
                   <Col lg={9} md={3}>
@@ -477,7 +477,7 @@ const GeneralInfomation = ({
                   </Col>
                 </Form.Group>
                 <Form.Group as={Row} className='form-group'>
-                  <Form.Label column sm={3}>
+                  <Form.Label column sm={3} className='mb-2'>
                     State / Province
                   </Form.Label>
                   <Col md={3} lg={9}>
@@ -508,7 +508,7 @@ const GeneralInfomation = ({
                   </Col>
                 </Form.Group>
                 <Form.Group as={Row} className='form-group'>
-                  <Form.Label column sm={3}>
+                  <Form.Label column sm={3} className='mb-2'>
                     City
                   </Form.Label>
                   <Col md={3} lg={9}>
