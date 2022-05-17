@@ -4,7 +4,7 @@ import { renderColumn } from "lib/translation"
 import React, { useEffect, useState } from "react"
 import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
-import FormInputSelectAjax from 'components/form/input-select-ajax'
+import FormInputSelectAjax from "components/form/input-select-ajax"
 
 export default function FeeTypeTable() {
   let dispatch = useDispatch()
@@ -41,7 +41,7 @@ export default function FeeTypeTable() {
     }
     setSelectedCountries(values)
     setSelectedCountryIds(ids)
-  }  
+  }
 
   const onReset = () => {
     setParams({ ...params, filters: [] })
@@ -53,18 +53,18 @@ export default function FeeTypeTable() {
     title: "Fee Type",
     titleModal: "Fee Type",
     baseRoute: "/master/fee-type/form",
-    endpoint: "/master/hotels",
-    deleteEndpoint: "/master/batch-actions/delete/hotels",
-    activationEndpoint: "/master/batch-actions/activate/hotels",
-    deactivationEndpoint: "/master/batch-actions/deactivate/hotels",
+    endpoint: "/master/fee-tax-types",
+    deleteEndpoint: "/master/batch-actions/delete/fee-tax-types",
+    activationEndpoint: "/master/batch-actions/activate/fee-tax-types",
+    deactivationEndpoint: "/master/batch-actions/deactivate/fee-tax-types",
     columns: [
       {
         title: "Fee Type Code",
-        data: "fee-type-code",
+        data: "fee_tax_type_code",
       },
       {
         title: "Fee Type Name",
-        data: "fee-type-name",        
+        data: "fee_tax_type_name",
       },
       {
         title: "Description",
@@ -75,10 +75,14 @@ export default function FeeTypeTable() {
         title: "Status",
         data: "status",
         render: rowStatus,
-      },      
+      },
     ],
+    isOpenNewTab: false,
+    btnDownload: ".buttons-csv",
+    showInfoDelete: true,
+    infoDelete: [{ title: "Fee Type Name", recordName: "fee_tax_type_name" }],
     emptyTable: "No Fee Type found",
-    recordName: ["fee-type-code", "fee-type-name"],
+    recordName: ["fee_tax_type_code", "fee_tax_type_name"],
   })
 
   return <BBDataTable {...params} onReset={onReset} />

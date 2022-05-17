@@ -26,6 +26,7 @@ import removeIcon from "assets/icons/remove.svg"
 import showIcon from "assets/icons/show.svg"
 import ModalCreate from "components/Modal/bb-modal"
 import customPrint from '../../lib/customPrint'
+import { end } from "@popperjs/core"
 
 window.JSZip = JSZip
 
@@ -174,7 +175,7 @@ class BBDataTable extends Component {
             : ""
           }
           ${
-            module !== "integration-partner" ? `<a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item" data-action="delete" data-id="${row.id}" data-name="${cvtRecordName}" ${infoDelete ? `data-info="${info}"` : ""}  title="${module === "exchange-rate" ? "Delete" : "Click to delete"}"><img src="${removeIcon}" /></a>`
+            module !== "integration-partner" && module !== "identity-rules" ? `<a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item" data-action="delete" data-id="${row.id}" data-name="${cvtRecordName}" ${infoDelete ? `data-info="${info}"` : ""}  title="${module === "exchange-rate" ? "Delete" : "Click to delete"}"><img src="${removeIcon}" /></a>`
             : ""
           }
           `
@@ -193,7 +194,10 @@ class BBDataTable extends Component {
       if(this.queryParams.get("page")) {
         displayStart = 10 * (this.queryParams.get("page")-1)
       }
-
+      let endpoint = this.props.endpoint;
+      if(this.props.filterData){
+        endpoint = endpoint + "?filters=" + this.props.filterData
+      }
       let dt = $(this.table.current).DataTable({
         pagingType: "simple_numbers_no_ellipses",
         colReorder: {
@@ -214,7 +218,7 @@ class BBDataTable extends Component {
         keys: true,
         destroy: true,
         ajax: {
-          url: this.api.env.endpoint(this.props.endpoint),
+          url: this.api.env.endpoint(endpoint),
           headers: headers,
           cache: true,
           dataSrc: (json) => {
@@ -519,7 +523,7 @@ class BBDataTable extends Component {
           },
           {
             targets: [1, 2],
-            className: !this.state.isCheckbox ? module == "employee" ? "" : "custom-col-width": "cstm-col-width",
+            className: !this.state.isCheckbox ? module == "employee" || module == "ancillary" ? "" : "custom-col-width": "cstm-col-width",
           },
           {
             targets: [3],
@@ -1110,6 +1114,7 @@ class BBDataTable extends Component {
           show={showCreateModal.show}
           onClick={() => this.props.setCreateModal({show: false, id: null, disabled_form: false})}
           modalContent={this.props.modalContent}
+          modalSize={this.props.modalSize}
         />
         {this.props.module !== "fare-types" ? <TableHeader
           {...this.props}

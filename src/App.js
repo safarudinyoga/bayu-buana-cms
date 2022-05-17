@@ -54,6 +54,7 @@ import HotelBrandTable from "views/hotel_brand/table"
 import HotelSupplierForm from "views/hotel_supplier/form"
 import HotelSupplierTable from "views/hotel_supplier/table"
 import GeneralSetup from "views/general-setup"
+import GeneralSetupTeamAssignment from "views/general-setup/form/team-assignment-form"
 import LanguageForm from "views/language/form"
 import LanguageTable from "views/language/table"
 import LocationCategoryForm from "views/location_category/form"
@@ -162,8 +163,9 @@ import UserAccessTypeTable from "views/user_access_type/table"
 import UserAccessTypeForm from "views/user_access_type/form"
 import ResetPassword from "views/reset_password/reset_password"
 
-//User Management 
+//User Management
 import UserManagementTable from "views/user_management/table"
+// import UserManagementForm from "views/user_management/form"
 
 // Master Standard Ancillary Fee
 import StandardAncillaryFee from "./views/standard_ancillary_fee/standard_ancillary_fee"
@@ -184,6 +186,12 @@ import Api from "config/api"
 import IntegrationPartnerHotels from "views/partner_hotels/table"
 import IntegrationPartnerHotelSupplier from 'views/partner_hotel_supplier/table';
 import BookingSetting from "views/booking_setting/table"
+
+// Identity Rule
+import IdentityRuleTable from "views/identity_rule/table"
+
+// Tax Fee
+import TaxFeeForm from "views/tax_fee/form"
 
 const RouteWithProps = ({
   path,
@@ -643,6 +651,9 @@ const DashboardRoutes = () => {
         <Route exact path="/master/general-setup">
           <GeneralSetup />
         </Route>
+        <Route exact path="/master/general-team-assignment/form/:id?">
+          <GeneralSetupTeamAssignment />
+        </Route>
 
         {/* User Access Type */}
         <Route exact path="/master/user-access-type">
@@ -656,9 +667,9 @@ const DashboardRoutes = () => {
         <Route exact path="/master/user-management">
           <UserManagementTable />
         </Route>
-        <Route path="/master/user-access-type/form/:id?">
-          <UserAccessTypeForm />
-        </Route>
+        {/* <Route path="/master/user-management/form/:id?">
+          <UserManagementForm />
+        </Route> */}
 
         {/* Master Special Date */}
         <Route exact path="/master/special-date">
@@ -678,6 +689,17 @@ const DashboardRoutes = () => {
         <Route path="/extranet/book-trip/book-flight">
           <BookFlight />
         </Route>
+
+        {/* Identity Rule */}
+        <Route exact path="/master/identity-rules">
+          <IdentityRuleTable />
+        </Route>
+
+        {/* Tax Fee */}
+        <Route path="/master/tax-fee">
+          <TaxFeeForm />
+        </Route>
+
       </Switch>
     </DashboardWrapper>
   )

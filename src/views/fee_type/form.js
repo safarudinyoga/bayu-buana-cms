@@ -1,18 +1,17 @@
-import {withRouter} from "react-router"
-import React, {useEffect, useState} from "react"
+import { withRouter } from "react-router"
+import React, { useEffect, useState } from "react"
 import Api from "config/api"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
 import FormBuilder from "components/form/builder"
 import FormInputSelectAjax from "components/form/input-select-ajax"
 import useQuery from "lib/query"
-import {useDispatch} from "react-redux"
-import {setAlert, setUIParams} from "redux/ui-store"
+import { useDispatch } from "react-redux"
+import { setAlert, setUIParams } from "redux/ui-store"
 import $ from "jquery"
 import env from "../../config/environment"
 
-
-const endpoint = "/master/hotels"
+const endpoint = "/master/fee-tax-types"
 const backUrl = "/master/fee-type"
 
 function FeeTypeForm(props) {
@@ -42,7 +41,7 @@ function FeeTypeForm(props) {
       label: "Description",
       name: "description",
       type: "textarea",
-      maxLength: 4000
+      maxLength: 4000,
     },
   ]
 
@@ -58,7 +57,7 @@ function FeeTypeForm(props) {
       minlength: 1,
       maxlength: 256,
       checkName: true,
-    }
+    },
   }
 
   const validationMessages = {
@@ -102,16 +101,25 @@ function FeeTypeForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
+        console.log(res.data)
         if (res.data.state_province_category) {
-          setSubdivisionData([{...res.data.state_province_category, text: res.data.state_province_category.state_province_category_name}])
+          setSubdivisionData([
+            {
+              ...res.data.state_province_category,
+              text: res.data.state_province_category
+                .state_province_category_name,
+            },
+          ])
         }
         if (res.data.country) {
-          setCountryData([{...res.data.country, text: res.data.country.country_name}])
+          setCountryData([
+            { ...res.data.country, text: res.data.country.country_name },
+          ])
         }
 
         if (res.data) {
-          let currentCode = res.data.state_province_code
-          let currentName = res.data.state_province_name
+          let currentCode = res.data.fee_tax_type_code
+          let currentName = res.data.fee_tax_type_name
 
           $.validator.addMethod(
             "checkName",
@@ -120,10 +128,10 @@ function FeeTypeForm(props) {
               $.ajax({
                 type: "GET",
                 async: false,
-                url: `${env.API_URL}/master/hotels?filters=["state_province_name","=","${element.value}"]`,
+                url: `${env.API_URL}/master/fee-tax-types?filters=["fee_tax_type_name","=","${element.value}"]`,
                 success: function (res) {
                   if (res.items.length !== 0) {
-                    if(currentName === element.value){
+                    if (currentName === element.value) {
                       req = true
                     } else {
                       req = false
@@ -133,7 +141,7 @@ function FeeTypeForm(props) {
                   }
                 },
               })
-    
+
               return req
             },
             "Fee Type Name already exists",
@@ -145,10 +153,10 @@ function FeeTypeForm(props) {
               $.ajax({
                 type: "GET",
                 async: false,
-                url: `${env.API_URL}/master/hotels?filters=["state_province_code","=","${element.value}"]`,
+                url: `${env.API_URL}/master/fee-tax-types?filters=["fee_tax_type_code","=","${element.value}"]`,
                 success: function (res) {
                   if (res.items.length !== 0) {
-                    if(currentCode === element.value){
+                    if (currentCode === element.value) {
                       req = true
                     } else {
                       req = false
@@ -158,20 +166,20 @@ function FeeTypeForm(props) {
                   }
                 },
               })
-    
+
               return req
             },
             "Fee Type Code already exists",
           )
         }
-      } catch (e) { }
+      } catch (e) {}
 
       try {
         let res = await api.get(endpoint + "/" + formId + "/translations", {
           size: 50,
         })
         setTranslations(res.data.items)
-      } catch (e) { }
+      } catch (e) {}
       setLoading(false)
     } else {
       $.validator.addMethod(
@@ -181,7 +189,7 @@ function FeeTypeForm(props) {
           $.ajax({
             type: "GET",
             async: false,
-            url: `${env.API_URL}/master/hotels?filters=["state_province_name","=","${element.value}"]`,
+            url: `${env.API_URL}/master/fee-tax-types?filters=["fee_tax_type_name","=","${element.value}"]`,
             success: function (res) {
               if (res.items.length !== 0) {
                 req = false
@@ -202,7 +210,7 @@ function FeeTypeForm(props) {
           $.ajax({
             type: "GET",
             async: false,
-            url: `${env.API_URL}/master/hotels?filters=["state_province_code","=","${element.value}"]`,
+            url: `${env.API_URL}/master/fee-tax-types?filters=["fee_tax_type_code","=","${element.value}"]`,
             success: function (res) {
               if (res.items.length !== 0) {
                 req = false
@@ -256,13 +264,15 @@ function FeeTypeForm(props) {
       props.history.goBack()
       dispatch(
         setAlert({
-          message: `Record ${form.state_province_code} - ${form.state_province_name} has been successfully ${formId ? "updated" : "saved"}.`,
+          message: `Record ${form.fee_tax_type_code} - ${
+            form.fee_tax_type_name
+          } has been successfully ${formId ? "updated" : "saved"}.`,
         }),
       )
     }
   }
 
-  console.log('loading, ', loading)
+  console.log("loading, ", loading)
 
   return (
     <FormBuilder
@@ -281,40 +291,40 @@ function FeeTypeForm(props) {
         <FormInputControl
           label="Fee Type Name"
           required={true}
-          value={form.state_province_name}
+          value={form.fee_tax_type_name}
           name="fee_type_name"
-          cl="4"          
-          onChange={(e) => setForm({...form, state_province_name: e.target.value})}
+          cl="4"
+          onChange={(e) =>
+            setForm({ ...form, fee_tax_type_name: e.target.value })
+          }
           disabled={isView || loading}
           type="text"
           minLength="1"
           maxLength="256"
-        />       
-        {
-          loading ? null :
-          <FormInputControl
-          label="Description"
-          value={form.address_line}
-          name="address_line"
-          onChange={(e) => setForm({...form, address_line: e.target.value})}
-          disabled={isView || loading}
-          type="textarea"
-          minLength="1"
-          maxLength="512"
         />
-        }
-
+        {loading ? null : (
+          <FormInputControl
+            label="Description"
+            value={form.description}
+            name="address_line"
+            onChange={(e) => setForm({ ...form, description: e.target.value })}
+            disabled={isView || loading}
+            type="textarea"
+            minLength="1"
+            maxLength="512"
+          />
+        )}
       </FormHorizontal>
       <FormHorizontal>
         <FormInputControl
           label="Fee Type Code"
           required={true}
-          value={form.flight_type_code}
+          value={form.fee_tax_type_code}
           name="fee_type_code"
-          cl={{md:"12"}}
+          cl={{ md: "12" }}
           cr="12"
           onChange={(e) =>
-            setForm({...form, flight_type_code: e.target.value})
+            setForm({ ...form, fee_tax_type_code: e.target.value })
           }
           disabled={isView || loading}
           type="text"
@@ -323,8 +333,6 @@ function FeeTypeForm(props) {
           hint="Fee Type Code maximum 36 characters"
         />
       </FormHorizontal>
-
-      
     </FormBuilder>
   )
 }
