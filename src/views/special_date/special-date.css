@@ -13,3 +13,51 @@
   border: solid #333333;
   border-width: 0 2px 2px 0;
 }
+
+.form-check-input {
+  display: block !important;
+}
+
+@media only screen and (max-width: 320px) {
+  .periode {
+    font-size: 0.7rem;
+  }
+
+  .rmdp-day, .rmdp-week-day {
+    height: 18px;
+    width: 18px;
+  }
+
+  .rmdp-week-day {
+    font-size: 8px;
+  }
+
+  .rmdp-day span {
+    font-size: 9px;
+  }
+
+  .rmdp-arrow-container {
+    height: 15px;
+    width: 15px;
+  }
+}
+
+@media only screen and (max-width: 375px) and (min-width: 321px) {
+  .periode {
+    font-size: 0.9rem;
+  }
+
+  .rmdp-day, .rmdp-week-day {
+    height: 24px;
+    width: 24px;
+  }
+
+  .rmdp-week-day {
+    font-size: 11px;
+  }
+
+  .rmdp-arrow-container {
+    height: 17px;
+    width: 17px;
+  }
+}
