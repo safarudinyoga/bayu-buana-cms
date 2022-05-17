@@ -13,7 +13,7 @@ const ModalCreate = ({show, onClick, modalContent, modalTitle, modalSize}) => {
 			onHide={onClick}
 			aria-labelledby="contained-modal-title-vcenter"
 			centered
-			dialogClassName="bb-modal-dialog"
+			dialogClassName={!modalSize ? "bb-modal-dialog" : ""}
 		>
 		<Modal.Header closeButton className="bb-modal-header">
 		</Modal.Header>
