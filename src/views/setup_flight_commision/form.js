@@ -366,7 +366,14 @@ const FlightCommisionForm = (props) => {
                                       formik.setFieldValue("issueStart", date)
                                       formik.setFieldValue("commission_claim_issue_date.start_date", date)
                                     }}
+                                    
                                   />
+                                  <div className="wrapper">
+                                    <img
+                                      src="/img/icons/date-range.svg"
+                                      className="calendar"
+                                    ></img>
+                                  </div>
                                 </Col>
                                 <Col md={1} className="text-center">to</Col>
                                 <Col md={4}>
@@ -382,6 +389,12 @@ const FlightCommisionForm = (props) => {
                                       formik.setFieldValue("issueEnd", date)
                                     }}
                                   />
+                                  <div className="wrapper">
+                                    <img
+                                      src="/img/icons/date-range.svg"
+                                      className="calendar"
+                                    ></img>
+                                  </div>
                                 </Col>
                               </>
                               
@@ -438,6 +451,12 @@ const FlightCommisionForm = (props) => {
                                       formik.setFieldValue("departureStart", date)
                                     }}
                                   />
+                                  <div className="wrapper">
+                                    <img
+                                      src="/img/icons/date-range.svg"
+                                      className="calendar"
+                                    ></img>
+                                  </div>
                                 </Col>
                                 <Col md={1} className="text-center">to</Col>
                                 <Col md={4}>
@@ -453,20 +472,35 @@ const FlightCommisionForm = (props) => {
                                       formik.setFieldValue("departureEnd", date)
                                     }}
                                   />
+                                  <div className="wrapper">
+                                    <img
+                                      src="/img/icons/date-range.svg"
+                                      className="calendar"
+                                    ></img>
+                                  </div>
                                 </Col>
                               </>
                             ) : ""}
                             </Row>
                           </Col>
                         </Row>
-                        <FormikControl 
-                          control="input"
-                          label="Commission Percentage"
-                          name="percent"
-                          style={{ maxWidth: 250 }}
-                          // isDisabled={isView}
-                        />
-                      </Col>
+                        {/* <Col xs={3} md={3} lg={3} className="ml-md-0"> */}
+                          <Row className="form-group mb-0">
+                            <Col className="ml-0">
+                                <FormikControl 
+                                  control="input"
+                                  label="Commission Percentage"
+                                  name="percent"
+                                  className
+                                  style={{ maxWidth: 100 }}
+                                  // isDisabled={isView}
+                                />
+                            </Col>
+                            <span className="text-lg ml-0 percent">%</span>
+                          </Row>
+                        </Col>
+                        
+                      {/* </Col> */}
                     </Row>
                   </Card.Body>
                 </Card>
