@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useRef } from "react"
 import { withRouter, useHistory } from "react-router"
 import FormikControl from "../../components/formik/formikControl"
 import { Row, Col, Tab, Nav, Card, Button, Image, Form as BSForm } from "react-bootstrap"
@@ -73,6 +73,12 @@ const FlightCommisionForm = (props) => {
   const [periodDepartureEnd, setPeriodDepartureEnd] = useState(new Date())
 
   const [commission, setCommission] = useState("0.00")
+
+  const dateHighlight = useRef(null);
+  
+  const setInputFocus = () => {
+    dateHighlight.current.focus();
+  }
 
 
   useEffect(async () => {
@@ -355,6 +361,7 @@ const FlightCommisionForm = (props) => {
                                 <Col md={4} className="col-5">
                                   <DatePicker
                                     className="form-control date-picker"
+                                    ref={dateHighlight}
                                     dateFormat="dd MMMM yyyy"
                                     selected={periodIssueStart}
                                     minDate={subYears(new Date(), 10)}
@@ -379,6 +386,7 @@ const FlightCommisionForm = (props) => {
                                 <Col md={4} className="col-5">
                                   <DatePicker
                                     className="form-control date-picker"
+                                    onClick={setInputFocus}
                                     dateFormat="dd MMMM yyyy"
                                     selected={periodIssueEnd}
                                     minDate={subYears(new Date(), 10)}
