@@ -36,17 +36,18 @@
 }
 
 [class*="sidebar-dark-"] .nav-sidebar > .nav-item.menu-open > .nav-link {
-  background-color: #fbc301;
+  // background-color: #fbc301;
+  background-color: rgba(251, 195, 1, 1);
 }
 
 .main-sidebar{
-  background-color: rgb(2, 127, 113);
+  background-color: rgba(2, 127, 113, 1);
 }
 .extranet-sidebar{
   background-color: #31394D !important;
 }
 .main-sidebar:hover {
-  opacity: 0.9;
+  background-color: rgba(2, 127, 113, 0.9);
 }
 
 @media (min-width: 992px) {
