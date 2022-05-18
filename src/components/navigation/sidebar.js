@@ -23,12 +23,12 @@ const ParentMenu = ({menu}) => {
   let {submenu, menu_link_asset, id} = menu
   return (
     <li className="nav-item parent-menu" id={id}>
-      <Link to={menu.url} className="nav-link">
+      <Link to={menu.url} className="nav-link mb-0">
         <img src={menu_link_asset.multimedia_description.url} alt={menu_link_asset.multimedia_description.file_name} />
         <p>
           {menu.description}
         </p>
-          {menu.is_expanded && <i className="right fas fa-angle-right"></i>}
+          {menu.is_expanded && <i className="right fas fa-angle-right ic-right"></i>}
       </Link>
       {
         submenu.length > 0 && (
@@ -91,7 +91,7 @@ class Sidebar extends Component {
         <div className="sidebar"
         onMouseEnter={this.handleHoverOn}
         onMouseLeave={this.handleHoverOff}>
-          <nav className="mt-2">
+          <nav className="bb-sidebar-nav">
             <ul
               className="nav nav-sidebar flex-column"
               data-widget="treeview"
