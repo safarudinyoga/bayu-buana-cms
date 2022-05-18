@@ -16,6 +16,7 @@ const AddOrRemoveList = ({
   canRemoveIndex,
   onModal,
 }) => {
+
   const [showFilter, setShowFilter] = useState(false)
   const [leftdata, setLeftData] = useState(firstData)
   const [rightdata, setRightData] = useState(secondData)
