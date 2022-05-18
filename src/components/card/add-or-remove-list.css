@@ -49,6 +49,6 @@
     padding: 8px 0px 7px 12px;
 }
 
-input[type=checkbox] {
+.add-remove-cb {
     display: none;
 }
