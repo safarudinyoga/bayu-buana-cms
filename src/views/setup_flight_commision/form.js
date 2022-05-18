@@ -77,14 +77,14 @@ const FlightCommisionForm = (props) => {
 
   useEffect(async () => {
     let api = new Api()
-    let docTitle = "Edit Flight Commissions"
-    let breadcrumbTitle = "Edit Flight Commissions"
+    let docTitle = "Edit Flight Commission"
+    let breadcrumbTitle = "Edit Flight Commission"
     if (!formId) {
       docTitle = "Create Flight Commissions"
-      breadcrumbTitle = "Create Flight Commissions"
+      breadcrumbTitle = "Create Flight Commission"
     } else if (isView) {
       docTitle = "Flight Commissions Details"
-      breadcrumbTitle = "View Flight Commissions"
+      breadcrumbTitle = "View Flight Commission"
     }
     dispatch(
       setUIParams({
@@ -95,7 +95,7 @@ const FlightCommisionForm = (props) => {
           },
           {
             link: backUrl,
-            text: "Flight Commissions",
+            text: "Flight Commision",
           },
           {
             text: docTitle,
@@ -352,9 +352,9 @@ const FlightCommisionForm = (props) => {
                               </Col>
                               {specifyPeriodIssue ? (
                               <>
-                                <Col md={4}>
+                                <Col md={4} className="col-5">
                                   <DatePicker
-                                    className="form-control"
+                                    className="form-control date-picker"
                                     dateFormat="dd MMMM yyyy"
                                     selected={periodIssueStart}
                                     minDate={subYears(new Date(), 10)}
@@ -366,12 +366,19 @@ const FlightCommisionForm = (props) => {
                                       formik.setFieldValue("issueStart", date)
                                       formik.setFieldValue("commission_claim_issue_date.start_date", date)
                                     }}
+                                    
                                   />
+                                  <div className="icon-calender">
+                                    <img
+                                      src="/img/icons/date-range.svg"
+                                      className="calendar"
+                                    ></img>
+                                  </div>
                                 </Col>
-                                <Col md={1} className="text-center">to</Col>
-                                <Col md={4}>
+                                <Col md={1} className="text-center col-2">to</Col>
+                                <Col md={4} className="col-5">
                                   <DatePicker
-                                    className="form-control"
+                                    className="form-control date-picker"
                                     dateFormat="dd MMMM yyyy"
                                     selected={periodIssueEnd}
                                     minDate={subYears(new Date(), 10)}
@@ -382,6 +389,12 @@ const FlightCommisionForm = (props) => {
                                       formik.setFieldValue("issueEnd", date)
                                     }}
                                   />
+                                  <div className="icon-calender">
+                                    <img
+                                      src="/img/icons/date-range.svg"
+                                      className="calendar"
+                                    ></img>
+                                  </div>
                                 </Col>
                               </>
                               
@@ -424,9 +437,9 @@ const FlightCommisionForm = (props) => {
                               </Col>
                               {specifyPeriodDeparture ? (
                               <>
-                                <Col md={4}>
+                                <Col md={4} className="col-5">
                                   <DatePicker
-                                    className="form-control"
+                                    className="form-control date-picker"
                                     dateFormat="dd MMMM yyyy"
                                     selected={periodDepartureStart}
                                     minDate={subYears(new Date(), 10)}
@@ -438,11 +451,17 @@ const FlightCommisionForm = (props) => {
                                       formik.setFieldValue("departureStart", date)
                                     }}
                                   />
+                                  <div className="icon-calender">
+                                    <img
+                                      src="/img/icons/date-range.svg"
+                                      className="calendar"
+                                    ></img>
+                                  </div>
                                 </Col>
-                                <Col md={1} className="text-center">to</Col>
-                                <Col md={4}>
+                                <Col md={1} className="text-center col-2">to</Col>
+                                <Col md={4} className="col-5">
                                   <DatePicker
-                                    className="form-control"
+                                    className="form-control date-picker"
                                     dateFormat="dd MMMM yyyy"
                                     selected={periodDepartureEnd}
                                     minDate={subYears(new Date(), 10)}
@@ -453,20 +472,35 @@ const FlightCommisionForm = (props) => {
                                       formik.setFieldValue("departureEnd", date)
                                     }}
                                   />
+                                  <div className="icon-calender">
+                                    <img
+                                      src="/img/icons/date-range.svg"
+                                      className="calendar"
+                                    ></img>
+                                  </div>
                                 </Col>
                               </>
                             ) : ""}
                             </Row>
                           </Col>
                         </Row>
-                        <FormikControl 
-                          control="input"
-                          label="Commission Percentage"
-                          name="percent"
-                          style={{ maxWidth: 250 }}
-                          // isDisabled={isView}
-                        />
-                      </Col>
+                        {/* <Col xs={3} md={3} lg={3} className="ml-md-0"> */}
+                          <Row className="form-group mb-0">
+                            <Col className="ml-0">
+                                <FormikControl 
+                                  control="input"
+                                  label="Commission Percentage"
+                                  name="percent"
+                                  className
+                                  style={{ maxWidth: 100 }}
+                                  // isDisabled={isView}
+                                />
+                            </Col>
+                            <span className="text-lg ml-0 percent">%</span>
+                          </Row>
+                        </Col>
+                        
+                      {/* </Col> */}
                     </Row>
                   </Card.Body>
                 </Card>

@@ -1,12 +1,11 @@
+import BBDataTable from "components/table/bb-data-table"
 import React, { useEffect } from 'react'
-import { Card } from "react-bootstrap"
 import { useDispatch } from 'react-redux'
 import { setUIParams } from "redux/ui-store"
-import BBDataTable from "../../components/table/bb-data-table"
-import Form from "./form/identity-rule"
+import Form from "./form"
+import { Card } from "react-bootstrap"
 
-const IdentityRule = (props) => {
-
+export default function IdentityRuleTable() {
   let dispatch = useDispatch()
   useEffect(() => {
     dispatch(
@@ -55,19 +54,15 @@ const IdentityRule = (props) => {
     emptyTable: "No Identity Rule found",
     recordName: ["identity_code", "identity_name"],
     btnDownload: ".buttons-csv",
-    module: "identity-rules",
-    hideCreate: true
+    module: "identity-rules"
   }
 
   return (
     <Card style={{marginBottom: 0}}>
         <Card.Body className="px-1 px-md-4">
           <h3 className="card-heading">Identity Rule</h3>
-          <BBDataTable {...params} modalContent={Form} modalSize="lg"  />
+          <BBDataTable {...params} modalContent={Form} modalSize="lg" />
         </Card.Body>
       </Card>
   )
-
 }
-
-export default IdentityRule;

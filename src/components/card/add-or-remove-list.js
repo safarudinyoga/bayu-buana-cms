@@ -94,6 +94,7 @@ const AddOrRemoveList = ({
                             name="check-leader"
                             checked={selected[item.name]}
                             onChange={() => toggleSelected(item.name)}
+                            className="add-remove-cb"
                           />
                           <img src={flightTicket} alt="flight-ticket" />
                         </label>
@@ -114,6 +115,7 @@ const AddOrRemoveList = ({
                               name="check-ticket"
                               checked={selected[item.name]}
                               onChange={() => toggleSelected(item.name)}
+                              className="add-remove-cb"
                             />
                             <img src={flightTicket} alt="flight-ticket" />
                           </label>

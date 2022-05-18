@@ -10,7 +10,7 @@ import Api from "config/api"
 
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css"
 import "react-dropzone-uploader/dist/styles.css"
-import { FeeTabs } from "./form//fee_tabs"
+import { FeeTabs } from "./fee_tabs"
 import { useSnackbar } from "react-simple-snackbar"
 import useQuery from "lib/query"
 import { ReactSVG } from "react-svg"
@@ -21,7 +21,7 @@ const backUrl = "/master/standard-ancillary-fee"
 const options = {
   position: "bottom-right",
 }
-const TaxFee = (props) => {
+const TaxFeeForm = (props) => {
   const history = useHistory()
   const [openSnackbar] = useSnackbar(options)
   let dispatch = useDispatch()
@@ -630,4 +630,4 @@ const TaxFee = (props) => {
   )
 }
 
-export default withRouter(TaxFee)
+export default withRouter(TaxFeeForm)

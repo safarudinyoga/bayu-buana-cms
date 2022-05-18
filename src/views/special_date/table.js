@@ -17,7 +17,7 @@ export default function SpecialDateTable() {
             text: "Setup and Configurations",
           },
           {
-            text: "Special Date",
+            text: "Special Dates",
           },
         ],
       }),

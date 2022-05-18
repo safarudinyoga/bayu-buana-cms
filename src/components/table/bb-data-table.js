@@ -175,7 +175,7 @@ class BBDataTable extends Component {
             : ""
           }
           ${
-            module !== "integration-partner" ? `<a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item" data-action="delete" data-id="${row.id}" data-name="${cvtRecordName}" ${infoDelete ? `data-info="${info}"` : ""}  title="${module === "exchange-rate" ? "Delete" : "Click to delete"}"><img src="${removeIcon}" /></a>`
+            module !== "integration-partner" && module !== "identity-rules" ? `<a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item" data-action="delete" data-id="${row.id}" data-name="${cvtRecordName}" ${infoDelete ? `data-info="${info}"` : ""}  title="${module === "exchange-rate" ? "Delete" : "Click to delete"}"><img src="${removeIcon}" /></a>`
             : ""
           }
           `
@@ -1131,6 +1131,7 @@ class BBDataTable extends Component {
           onToggleFilter={this.onToggleFilter.bind(this)}
           onStatusUpdate={this.onStatusUpdate.bind(this)}
           onRemove={this.onRemoveSelected.bind(this)}
+          hideCreate={this.props.hideCreate}
         >
           {this.props.children}
         </TableHeader>

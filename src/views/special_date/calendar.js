@@ -33,7 +33,7 @@ function SpecialDateCalendar() {
 
   return (
     <>
-      <div className="row">
+      {/* <div className="row">
         <Select 
           className="col-2 offset-10 mb-4"
           value={mode}
@@ -45,7 +45,7 @@ function SpecialDateCalendar() {
             setMode(v)
           }}
         />  
-      </div>
+      </div> */}
       
       <div className='calendar-container'>
         <Calendar />

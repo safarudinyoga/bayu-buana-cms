@@ -11,13 +11,13 @@ import { useDispatch } from "react-redux"
 import { setAlert, setUIParams} from "redux/ui-store"
 import env from "../../config/environment"
 // import DatePicker from "react-datepicker"
-import DatePicker from 'react-multi-date-picker'
-import { DateObject } from 'react-multi-date-picker'
+import DatePicker, { DateObject }  from 'react-multi-date-picker'
 import Icon from "react-multi-date-picker/components/icon"
 import FormInputWrapper from "components/form/input-date-period";
 import FormInputDatePeriod from "components/form/input-date-period";
 import { ReactSVG } from "react-svg"
 import "./special-date.css"
+import Toolbar from "react-multi-date-picker/plugins/toolbar"
 
 const endpoint = "/master/agent-special-dates"
 const backUrl = "/master/special-date"
@@ -31,7 +31,10 @@ function SpecialDateForm(props) {
   const [loading, setLoading] = useState(true)
   const [translations, setTranslations] = useState([])
   const [id, setId] = useState(null)
-  const [cityData, setCityData] = useState([])
+
+  const [startDateClose, setStartDateClose] = useState(false)
+  const [endDateClose, setEndDateClose] = useState(false)
+
   const [form, setForm] = useState({
     special_date_name: "",
     start_date: new Date(),
@@ -91,7 +94,7 @@ function SpecialDateForm(props) {
           },
           {
             link: backUrl,
-            text: "Special Date",
+            text: "Special Dates",
           },
           {
             text: bcTitle
@@ -211,16 +214,32 @@ function SpecialDateForm(props) {
     setCheckOutDate(date);
   };
 
-  function RenderDatepicker({ openCalendar, value, handleValueChange }) {
+  function RenderDatepickerStart({ openCalendar, closeCalendar, value, handleValueChange }) {
     return (
       <div className="position-relative datepicker-special-date">
         <Icon className="special-date-icon" onClick={openCalendar} />
-        {/* <ReactSVG src='/img/icons/date-range.svg' className="special-date-icon" onClick={openCalendar} /> */}
         <input type="text"
-          className="form-control" 
-          onFocus={openCalendar} 
-          value={value} 
+          className="form-control periode" 
+          onFocus={openCalendar}
+          onBlur={closeCalendar} 
+          value={value}
           onChange={handleValueChange}
+          id="startDate"
+        />
+      </div>
+    )
+  }
+
+  function RenderDatepickerEnd({ openCalendar, value, handleValueChange }) {
+    return (
+      <div className="position-relative datepicker-special-date">
+        <Icon className="special-date-icon" onClick={openCalendar} />
+        <input type="text"
+          className="form-control periode" 
+          onFocus={openCalendar} 
+          value={value}
+          onChange={handleValueChange}
+          id="endDate"
         />
       </div>
     )
@@ -273,23 +292,48 @@ function SpecialDateForm(props) {
           </div>
           <div className="col-8 col-md-4 col-lg-3 mb-2 datepicker-special-date-container">
             <DatePicker
-              render={<RenderDatepicker />}
+              render={<RenderDatepickerStart />}
               numberOfMonths={2}
-              fixMainPosition={true}
               format="DD MMMM YYYY"
               minDate={new DateObject().subtract(10, "years")}
               maxDate={new DateObject().add(10, "years") && form.end_date}
               value={form.start_date}
-              onChange={(date) => setForm({...form, start_date: new Date(date)})} 
-            />
+              onChange={
+                (date) => {
+                  setForm({...form, start_date: new Date(date)})
+                }
+              }
+              // onClose={startDateClose}
+            >
+              <div className="d-flex justify-content-end p-4">
+                <div
+                  role={"button"}
+                  onClick={() => setForm({...form, start_date: new Date()})}
+                >
+                  Reset
+                </div>    
+                <div 
+                  className="btn btn-primary ml-2"
+                  role={"button"} 
+                  onClick={
+                    () => {
+                      // setStartDateClose(!startDateClose)
+                      let endDate = document.getElementById("endDate")
+                      endDate.focus();
+                    }
+                }>
+                  Apply
+                </div>
+              </div>
+              
+            </DatePicker>
             </div>
             
           <span className="text-center">to</span>
           <div className="col-8 col-md-4 col-lg-3 datepicker-special-date-container">
             <DatePicker
-              render={<RenderDatepicker />} 
+              render={<RenderDatepickerEnd />}
               numberOfMonths={2}
-              fixMainPosition={true}
               format="DD MMMM YYYY"
               minDate={new DateObject().subtract(10, "years") && form.start_date}
               maxDate={new DateObject().add(10, "years")}

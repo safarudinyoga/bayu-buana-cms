@@ -215,7 +215,7 @@ class TableHeader extends Component {
 
   render() {
     const ExtraFilter = this.props.extraFilter
-    const { customFilterStatus } = this.props
+    const { customFilterStatus, hideCreate } = this.props
     const { pathname } = this.props.location
 
     return (
@@ -258,7 +258,7 @@ class TableHeader extends Component {
             )}
             {this.state.showCalendar ? (
               <a
-                style={{ fontSize: 14, verticalAlign: "middle" }}
+                style={{ fontSize: 13, verticalAlign: "middle" }}
                 className="ml-2"
                 href="/master/special-date/calendar"
               >
@@ -289,7 +289,7 @@ class TableHeader extends Component {
           </div>
 
           <div className="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-2 mb-md-0 order-first order-md-last">
-            {pathname !== "/master/integration-partner" && (
+            {pathname !== "/master/integration-partner" && pathname !== "/master/identity-rules" && !hideCreate && (
               <OverlayTrigger
                 placement="top"
                 overlay={<Tooltip>Click to create</Tooltip>}
