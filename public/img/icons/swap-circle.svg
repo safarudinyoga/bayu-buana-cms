@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28">
+  <g id="swap-flights" transform="translate(-285 -12)">
+    <circle id="Ellipse_11" data-name="Ellipse 11" cx="14" cy="14" r="14" transform="translate(285 12)" fill="#f1f1f1"/>
+    <path id="ic_cached_24px" d="M18.182,8l-3.818,4h2.864A5.873,5.873,0,0,1,11.5,18a5.4,5.4,0,0,1-2.673-.7L7.434,18.76A7.322,7.322,0,0,0,11.5,20a7.822,7.822,0,0,0,7.636-8H22ZM5.773,12A5.873,5.873,0,0,1,11.5,6a5.4,5.4,0,0,1,2.673.7l1.394-1.46A7.322,7.322,0,0,0,11.5,4a7.822,7.822,0,0,0-7.636,8H1l3.818,4,3.818-4Z" transform="translate(288 14)" fill="#31394d"/>
+  </g>
+</svg>

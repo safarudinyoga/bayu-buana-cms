@@ -136,6 +136,9 @@ div[class~=”show”] + div[class=”card-header”] .accordion-arrow {
   -webkit-transform: rotate(180deg);
 }
 
+.traveler-title-detail {
+  font-size: 10px;
+}
 /* react auto suggest */
 .react-autosuggest__container {
   position: relative;
@@ -149,7 +152,7 @@ div[class~=”show”] + div[class=”card-header”] .accordion-arrow {
   font-weight: 300;
   font-size: 16px;
   border: 1px solid #aaa;
-  border-radius: 4px;
+  border-radius: 0;
   position: relative;
   padding-top: 2.5rem;
   padding-bottom: 1rem;

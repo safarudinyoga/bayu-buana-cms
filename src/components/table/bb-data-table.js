@@ -1131,6 +1131,7 @@ class BBDataTable extends Component {
           onToggleFilter={this.onToggleFilter.bind(this)}
           onStatusUpdate={this.onStatusUpdate.bind(this)}
           onRemove={this.onRemoveSelected.bind(this)}
+          hideCreate={this.props.hideCreate}
         >
           {this.props.children}
         </TableHeader>
