@@ -54,6 +54,10 @@
   .sidebar-mini.sidebar-collapse .main-sidebar:hover, .sidebar-mini.sidebar-collapse .main-sidebar.sidebar-focused {
       width: 250px;
   }
+
+  .ic-right {
+    display: none;
+  }
 }
 .nav-sidebar .menu-open > .nav-link i.right, .nav-sidebar .menu-is-opening > .nav-link i.right {
   transform: none;
@@ -83,10 +87,6 @@
 }
 .nav-sidebar .nav-link > .right {
   right: 0.3rem !important;
-}
-
-.ic-right {
-  display: none;
 }
 
 .sidebar-collapse.sidebar-mini .main-sidebar.sidebar-focused .nav-link .ic-right, 
