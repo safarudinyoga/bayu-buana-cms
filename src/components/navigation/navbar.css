@@ -1,6 +1,6 @@
 .main-header {
-  padding-top: 18px;
-  padding-bottom: 24px;
+  padding-top: 12px;
+  padding-bottom: 33px;
   box-shadow: 0 2px 4px 0 rgba(0,0,0,0.08);
 }
 
@@ -29,10 +29,16 @@
 }
 
 .navbar-img {
-  width: 180px;
-  height: 40px;
+  width: 204px;
+  height: 49px;
   display: inline-block;
   margin-top: -7px;
+}
+.navbar-nav {
+  align-items: baseline !important;
+}
+.navbar-nav-right {
+  margin-top: 0.4rem;
 }
 @media (max-width: 765px) {
   .navbar-img {
