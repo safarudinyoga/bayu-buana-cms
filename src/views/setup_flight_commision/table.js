@@ -18,7 +18,7 @@ export default function SetupFlightCommisionTable() {
             text: "Master Data Management",
           },
           {
-            text: "Setup Flight Commision",
+            text: "Setup Flight Commission",
           },
         ]
       })
@@ -82,7 +82,7 @@ export default function SetupFlightCommisionTable() {
                   }}
                   minDate={MinDate}
                 />
-                <div className="wrapper">
+                <div className="icon-calender">
                     <img
                       src="/img/icons/date-range.svg"
                       className="calendar"
@@ -100,7 +100,7 @@ export default function SetupFlightCommisionTable() {
                   }}
                   maxDate={MaxDate}
                 />
-                 <div className="wrapper">
+                 <div className="icon-calender">
                     <img
                       src="/img/icons/date-range.svg"
                       className="calendar"
@@ -124,7 +124,7 @@ export default function SetupFlightCommisionTable() {
                   }}
                   minDate={MinDate}
                 />
-                <div className="wrapper">
+                <div className="icon-calender">
                     <img
                       src="/img/icons/date-range.svg"
                       className="calendar"
@@ -142,7 +142,7 @@ export default function SetupFlightCommisionTable() {
                   }}
                   maxDate={MaxDate}
                 />
-                <div className="wrapper">
+                <div className="icon-calender">
                     <img
                       src="/img/icons/date-range.svg"
                       className="calendar"
