@@ -257,8 +257,7 @@ class TableHeader extends Component {
             )}
             {this.state.showCalendar ? (
               <a
-                style={{ fontSize: 13, verticalAlign: "middle" }}
-                className="ml-2"
+                className="view-calendar"
                 href="/master/special-date/calendar"
               >
                 View Calendar
@@ -457,6 +456,17 @@ class TableHeader extends Component {
             </div>
           </div>
         </div>
+        {this.state.showCalendar ? (
+          <a
+            className="view-calendar-mobile"
+            href="/master/special-date/calendar"
+          >
+            View Calendar
+          </a>
+          ) : (
+            ""
+          )
+        }
       </div>
     )
   }
