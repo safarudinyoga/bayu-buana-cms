@@ -6,7 +6,7 @@ import Travellers from './travellers';
 import Routes from './routes';
 
 const Oneway = (props) => {
-  const { airports, multitrip } = props
+  const { airports, multitrip, handleRemoveTrip } = props
 
   const [departTime, setDepartTime] = useState(new Date())
 
@@ -57,7 +57,7 @@ const Oneway = (props) => {
         </div>
         {
           multitrip ? (
-            <div>
+            <div onClick={handleRemoveTrip}>
               Remove
             </div>
           ) : (
@@ -67,9 +67,7 @@ const Oneway = (props) => {
         
       </div>
       {/* end of first row */}
-      <div className='my-3'>
-        <Form.Check label="Add a hotel" />
-      </div>
+      
     </>
   )
 }

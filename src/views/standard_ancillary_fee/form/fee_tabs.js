@@ -3,6 +3,7 @@ import { Tabs, TabPane, Row, Col, Form } from "react-bootstrap"
 import { FastField } from "formik"
 
 const FeeSection = (props) => {
+  
   let id = props.taxType ? props.taxType.id : "";
   let title = props.taxType ? props.taxType.fee_tax_type_name : props.title;
   let disabledAmount = props.isView 
@@ -59,10 +60,28 @@ const FeeSection = (props) => {
                   <Col xs={10} md={9} lg={7}>
                       {
                         disabledAmount 
-                        ? <Form.Control style={{ maxWidth: "220px" }} disabled={true} />
+                        ? <Form.Control 
+                            style={{ maxWidth: "220px" }} 
+                            disabled={true} 
+                          />
                         : <FastField name={props.fieldAmount}>
                         {({ field }) => (
-                          <Form.Control type="number" {...field} style={{ maxWidth: "220px" }} disabled={props.isView} />
+                          <Form.Control 
+                            type="text" 
+                            {...field} 
+                            style={{ maxWidth: "220px" }} 
+                            disabled={props.isView} 
+                            maxLength={15} 
+                            onChange={(value) => {
+                              // console.log(props.values, props.fieldAmount)
+                              let pattern=/^\d+$/
+                              // console.log(pattern.test(value.target.value))
+                              if(pattern.test(value.target.value)) {
+                                props.setFieldValue(props.fieldAmount, value.target.value)
+                              }
+                             
+                            }}
+                          />
                         )}
                       </FastField>
                       }
@@ -132,7 +151,28 @@ const FeeSection = (props) => {
                     :
                     <FastField name={props.fieldPercent}>
                       {({ field }) => (
-                          <Form.Control {...field} type="number" style={{ maxWidth: "80px" }} className="mx-3" disabled={props.isView} />
+                          <Form.Control 
+                            {...field} 
+                            type="text" 
+                            minLength={0}
+                            maxLength={3}
+                            style={{ maxWidth: "80px" }} 
+                            className="mx-3" 
+                            disabled={props.isView} 
+                            onChange={(value) => {
+                              // console.log(props.values, props.fieldAmount)
+                              let pattern=/^\d+$/
+                              // console.log(pattern.test(value.target.value))
+                              if(pattern.test(value.target.value)) {
+                                if(value.target.value <= 100) {
+                                  props.setFieldValue(props.fieldPercent, value.target.value)
+                                }
+                              }
+                              if(value.target.value === "") {
+                                props.setFieldValue(props.fieldPercent, value.target.value)
+                              }
+                            }}
+                          />
                       )}
                     </FastField>
                   }
