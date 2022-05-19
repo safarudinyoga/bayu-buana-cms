@@ -1,5 +1,6 @@
 import { withRouter } from "react-router"
 import React, { useEffect, useRef, useState } from "react"
+import { useStateWithCallbackLazy } from 'use-state-with-callback';
 import Api from "config/api"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
@@ -26,8 +27,8 @@ function SpecialDateForm(props) {
   const [translations, setTranslations] = useState([])
   const [id, setId] = useState(null)
 
-  const [startDateClose, setStartDateClose] = useState(false)
-  const [endDateClose, setEndDateClose] = useState(false)
+  const [startDateClose, setStartDateClose] = useStateWithCallbackLazy(false)
+  const [endDateClose, setEndDateClose] = useStateWithCallbackLazy(false)
 
   const startDatePickerRef = useRef()
   const endDatePickerRef = useRef()
@@ -91,7 +92,7 @@ function SpecialDateForm(props) {
           },
           {
             link: backUrl,
-            text: "Special Dates",
+            text: "Special Date",
           },
           {
             text: bcTitle
@@ -276,7 +277,7 @@ function SpecialDateForm(props) {
               onChange={
                 (date) => {
                   setForm({...form, start_date: new Date(date)})
-                  setStartDateClose(!startDateClose)
+                  setStartDateClose(false)
                 }
               }
               onOpen={() => setStartDateClose(false)}
@@ -296,9 +297,11 @@ function SpecialDateForm(props) {
                   role={"button"} 
                   onClick={
                     () => {
-                      startDatePickerRef.current.closeCalendar()
-                      let endDate = document.getElementById("endDate")
-                      endDate.focus();
+                      setStartDateClose(true, () => {
+                        startDatePickerRef.current.closeCalendar()
+                        let endDate = document.getElementById("endDate")
+                        endDate.focus();
+                      })
                     }
                 }>
                   APPLY
@@ -321,7 +324,7 @@ function SpecialDateForm(props) {
               onChange={
                 (date) => {
                   setForm({...form, end_date: new Date(date)})
-                  setEndDateClose(!endDateClose)
+                  setEndDateClose(false)
                 }}
               onOpen={() => setEndDateClose(false)}
               onClose={() => endDateClose} 
@@ -338,7 +341,9 @@ function SpecialDateForm(props) {
                   role={"button"} 
                   onClick={
                     () => {
-                      endDatePickerRef.current.closeCalendar()
+                      setEndDateClose(true, () => {
+                        endDatePickerRef.current.closeCalendar()
+                      })
                     }
                 }>
                   Apply
