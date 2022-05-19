@@ -31,7 +31,7 @@ function Travellers(props) {
   }
 
   const onTravelerClick = (e) => {
-    let valueText = `${adultCount > 0 ? adultCount+" Adults " : ""} ${childrenCount > 0 ? childrenCount+" Children ":""} ${infantCount > 0 ? infantCount+" Infants" : ""}`
+    let valueText = `${adultCount > 0 ? adultCount+" Adults" : ""} ${childrenCount > 0 ? childrenCount+" Children":""} ${infantCount > 0 ? infantCount+" Infants" : ""}`
 
     setTravelerValue(valueText)
     let count = adultCount+childrenCount+infantCount
@@ -67,7 +67,7 @@ function Travellers(props) {
   const selectChildAge = () => {
     const options = []
   
-    for (let i = 2; i <= 17; i++) {
+    for (let i = 2; i <= 11; i++) {
       options.push({
         value: i,
         label: i,
@@ -93,10 +93,27 @@ function Travellers(props) {
 
     for (let i = 0; i < childrenCount; i++) {
       divs.push(
-        <div className='col-4'>
+        <div className='col-6'>
           <span className='traveler-title-detail'>Child {i+1} age</span>
           <Select
             options={selectChildAge()}
+            styles={travelerAgeStyle}
+          />
+        </div>
+      )
+    }
+    return divs
+  }
+
+  function InfantDiv(){
+    let divs = []
+
+    for (let i = 0; i < infantCount; i++) {
+      divs.push(
+        <div className='col-6'>
+          <span className='traveler-title-detail'>Infant {i+1} age</span>
+          <Select
+            options={infantAgeOptions}
             styles={travelerAgeStyle}
           />
         </div>
@@ -114,16 +131,32 @@ function Travellers(props) {
             {
               adultCount === 1 ? 
                 <ReactSVG className='mr-2' src="/img/icons/minus-circle.svg" /> 
-                :  <ReactSVG className='mr-2' role="button" src="/img/icons/minus-circle-active.svg" onClick={() => {
+                :  <ReactSVG 
+                    className='mr-2' 
+                    role="button" 
+                    src="/img/icons/minus-circle-active.svg" 
+                    onClick={() => {
                       setAdultCount(adultCount - 1)
                     }} />
             }
             <input className='text-right' value={adultCount} style={{width: 40}} onChange={onChangeAdult}></input>
-            <ReactSVG className='ml-2' role="button" src="/img/icons/plus-circle.svg" onClick={() => setAdultCount(adultCount + 1)} />
+            {
+              adultCount === 9 ?
+                <ReactSVG className='ml-2' src="/img/icons/plus-circle-inactive.svg" />
+                : <ReactSVG 
+                    className='ml-2' 
+                    role="button" 
+                    src="/img/icons/plus-circle.svg" 
+                    onClick={() => setAdultCount(adultCount + 1)} />
+            }
+            
           </div>
         </div>
         <div className="d-flex row mb-2">
-          <div className='col-md-6'>CHILDREN</div>
+          <div className='col-md-6'>
+            <div>CHILDREN</div>
+            <div className='sublabel-traveller'>(Age 2 - 11)</div>
+          </div>
           <div className='d-flex col-md-6'>
             {
               childrenCount === 0 ?
@@ -140,7 +173,7 @@ function Travellers(props) {
             <input className='text-right' value={childrenCount} style={{width: 40}} onChange={onChangeChildren}></input>
             {
               childrenCount === 8 ?
-                <ReactSVG className='ml-2' src="/img/icons/plus-circle.svg" />
+                <ReactSVG className='ml-2' src="/img/icons/plus-circle-inactive.svg" />
                 : <ReactSVG 
                     className='ml-2' 
                     role="button" 
@@ -155,7 +188,10 @@ function Travellers(props) {
           
         </div>
         <div className="d-flex row mb-2">
-          <div className='col-md-6'>INFANTS</div>
+          <div className='col-md-6'>
+            <div>INFANTS</div>
+            <div className='sublabel-traveller'>(below age 2)</div>
+          </div>
           <div className='d-flex col-md-6'>
             {
               infantCount === 0 ? 
@@ -171,15 +207,21 @@ function Travellers(props) {
             }
             
             <input className='text-right' value={infantCount} style={{width: 40}} onChange={onChangeInfant}></input>
-            <ReactSVG className='ml-2' role="button" src="/img/icons/plus-circle.svg" onClick={() => setInfantCount(infantCount + 1)} />
+            {
+              infantCount === adultCount || infantCount === 8 ?
+                <ReactSVG className='ml-2' src="/img/icons/plus-circle-inactive.svg" />
+                : <ReactSVG 
+                    className='ml-2' 
+                    role="button" 
+                    src="/img/icons/plus-circle.svg" 
+                    onClick={() => setInfantCount(infantCount + 1)} 
+                  />
+            }
+            
           </div>
-          {
-            infantCount > 0 ? (
-              <div className="d-flex col-4">
-                <Select options={infantAgeOptions}/>
-              </div>
-            ): ""
-          }
+          <div className='row w-100'>
+            <InfantDiv />
+          </div>
         </div>
         <Form.Check 
           label="SELECT TRAVELERS"
@@ -193,7 +235,7 @@ function Travellers(props) {
 
   return (
     <>
-      <div style={{width: 190}} className="position-relative">
+      <div style={{width: 280}} className="position-relative">
           <h4 className='form-with-label__title'> TRAVELLERS <span className='label-required'></span></h4>
           <ReactSVG src='/img/icons/people.svg' className='form-with-label__suggest-icon' style={{bottom: 15}}/>
           <OverlayTrigger trigger="click" placement='bottom' overlay={popover} rootClose={true}>

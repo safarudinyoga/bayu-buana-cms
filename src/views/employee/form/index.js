@@ -40,6 +40,7 @@ const UserProfile = (props) => {
   useEffect(async () => {
     let api = new Api()
     let formId = props.match.params.id
+    console.log({formId, isView});
 
     let docTitle = "Edit Employee"
     let breadcrumbTitle = "Edit Employee"
@@ -276,12 +277,12 @@ const UserProfile = (props) => {
               </Col>
             </Row>
           </Tab.Container>
-        ) : 
+        ) :
         (
           <Accordion activeKey={tabKey}>
             <Card>
-              <Accordion.Toggle 
-                as={Card.Header} 
+              <Accordion.Toggle
+                as={Card.Header}
                 eventKey="general-information"
                 style={
                   tabKey === "general-information"
@@ -293,7 +294,7 @@ const UserProfile = (props) => {
                 }}
               >
                 <div className="accordion-header">
-                  <ReactSVG src="/img/icons/general-information.svg" 
+                  <ReactSVG src="/img/icons/general-information.svg"
                     className={
                       tabKey === "general-information"
                         ? "icon-active"
@@ -316,8 +317,8 @@ const UserProfile = (props) => {
               </Accordion.Collapse>
             </Card>
             <Card>
-              <Accordion.Toggle 
-                as={Card.Header} 
+              <Accordion.Toggle
+                as={Card.Header}
                 eventKey="emergency-contacts"
                 style={
                   tabKey === "emergency-contacts"
@@ -329,7 +330,7 @@ const UserProfile = (props) => {
                 }}
               >
                 <div className="accordion-header">
-                  <ReactSVG src="/img/icons/emergency-contacts.svg" 
+                  <ReactSVG src="/img/icons/emergency-contacts.svg"
                     className={
                       tabKey === "emergency-contacts"
                         ? "icon-active"
@@ -350,11 +351,11 @@ const UserProfile = (props) => {
                   finishStep={finishStep}
                   formData={form}
                 />
-              </Accordion.Collapse> 
+              </Accordion.Collapse>
             </Card>
             <Card>
-              <Accordion.Toggle 
-                as={Card.Header} 
+              <Accordion.Toggle
+                as={Card.Header}
                 eventKey="employment"
                 style={
                   tabKey === "employment"
@@ -366,7 +367,7 @@ const UserProfile = (props) => {
                 }}
               >
                 <div className="accordion-header">
-                  <ReactSVG src="/img/icons/employment.svg" 
+                  <ReactSVG src="/img/icons/employment.svg"
                       className={
                         tabKey === "employment"
                           ? "icon-active"
@@ -387,14 +388,14 @@ const UserProfile = (props) => {
                   finishStep={finishStep}
                   formData={form}
                 />
-              </Accordion.Collapse> 
+              </Accordion.Collapse>
             </Card>
           </Accordion>
         )
       }
-      
+
     </>
-    
+
   );
 }
 
