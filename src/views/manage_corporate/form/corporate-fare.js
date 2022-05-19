@@ -71,6 +71,22 @@ const CorporateFare = ({
           </div>
         </Card.Body>
       </Card>
+      <div className="ml-1 mt-3 row justify-content-md-start justify-content-center">
+        <Button
+          variant="primary"
+          type="submit"
+          style={{ marginRight: 15, marginBottom: 50, padding: '0 24px' }}
+        >
+          SAVE & NEXT
+        </Button>
+        <Button
+          variant="secondary"
+          // onClick={() => props.history.goBack()}
+          style={{ padding: '0 21px' }}
+        >
+          CANCEL
+        </Button>
+      </div>
     </Form>
   )
 }

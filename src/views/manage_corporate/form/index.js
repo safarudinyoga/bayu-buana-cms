@@ -11,6 +11,10 @@ import GeneralInformation from './general-information'
 import CorporateFare from './corporate-fare'
 import AncillaryFee from './ancillary-fee'
 import CreditLimit from './credit-limit'
+import ImportDatabaseEmployee from "views/manage_corporate/form/import-database-employee"
+import InvoiceSettings from "views/manage_corporate/form/invoice-settings"
+import MarkUp from "views/manage_corporate/form/mark-up"
+import ServiceFee from "views/manage_corporate/form/service-fee"
 
 const staticWarding = {
   main: 'Corporate Management',
@@ -26,7 +30,7 @@ const ManageCorporateForm = ({ match }) => {
   const isView = useQuery().get("action") === "view"
 
   // const [tabKey, setTabKey] = useState("general-information")
-  const [tabKey, setTabKey] = useState("credit-limit")
+  const [tabKey, setTabKey] = useState("service-fee")
 
   const wardingGenerator = (formId) => {
     if (!formId) {
@@ -77,10 +81,18 @@ const ManageCorporateForm = ({ match }) => {
               </Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link eventKey="corporate-fare">
+              <Nav.Link eventKey="mark-up">
                 <div>
                   <ReactSVG src="/img/icons/emergency-contacts.svg" />
-                  <span>Corporate Fare</span>
+                  <span>Mark Up</span>
+                </div>
+              </Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link eventKey="service-fee">
+                <div>
+                  <ReactSVG src="/img/icons/emergency-contacts.svg" />
+                  <span>Service Fee</span>
                 </div>
               </Nav.Link>
             </Nav.Item>
@@ -100,6 +112,30 @@ const ManageCorporateForm = ({ match }) => {
                 </div>
               </Nav.Link>
             </Nav.Item>
+            <Nav.Item>
+              <Nav.Link eventKey="invoice-settings">
+                <div>
+                  <ReactSVG src="/img/icons/emergency-contacts.svg" />
+                  <span>Invoice Settings</span>
+                </div>
+              </Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link eventKey="corporate-fare">
+                <div>
+                  <ReactSVG src="/img/icons/emergency-contacts.svg" />
+                  <span>Corporate Fare</span>
+                </div>
+              </Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link eventKey="import-database-employee">
+                <div>
+                  <ReactSVG src="/img/icons/emergency-contacts.svg" />
+                  <span>Import Database Employee</span>
+                </div>
+              </Nav.Link>
+            </Nav.Item>
           </Nav>
         </Col>
         <Col sm={9}>
@@ -107,14 +143,26 @@ const ManageCorporateForm = ({ match }) => {
             <Tab.Pane eventKey="general-information">
               <GeneralInformation />
             </Tab.Pane>
-            <Tab.Pane eventKey="corporate-fare">
-              <CorporateFare />
+            <Tab.Pane eventKey="mark-up">
+              <MarkUp />
+            </Tab.Pane>
+            <Tab.Pane eventKey="service-fee">
+              <ServiceFee />
             </Tab.Pane>
             <Tab.Pane eventKey="ancillary-fee">
               <AncillaryFee />
             </Tab.Pane>
             <Tab.Pane eventKey="credit-limit">
               <CreditLimit />
+            </Tab.Pane>
+            <Tab.Pane eventKey="invoice-settings">
+              <InvoiceSettings />
+            </Tab.Pane>
+            <Tab.Pane eventKey="corporate-fare">
+              <CorporateFare />
+            </Tab.Pane>
+            <Tab.Pane eventKey="import-database-employee">
+              <ImportDatabaseEmployee />
             </Tab.Pane>
           </Tab.Content>
         </Col>

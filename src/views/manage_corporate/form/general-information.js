@@ -661,15 +661,14 @@ const GeneralInfomation = ({
         <Button
           variant="primary"
           type="submit"
-          // disabled={props.finishStep > 0 || props.employeeData?.id ? (!isValid || isSubmitting) : (!dirty || isSubmitting)}
-          style={{ marginRight: 15, marginBottom: 135 }}
+          style={{ marginRight: 15, marginBottom: 50, padding: '0 24px' }}
         >
-          {/* {props.employeeData?.id ? "SAVE" : "SAVE & NEXT"}  */}
           SAVE & NEXT
         </Button>
         <Button
           variant="secondary"
           // onClick={() => props.history.goBack()}
+          style={{ padding: '0 21px' }}
         >
           CANCEL
         </Button>

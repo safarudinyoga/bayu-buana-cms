@@ -323,30 +323,30 @@ const CreditLimit = ({
                   </Col>
                 </Form.Group>
                 <Form.Group as={Row} className='form-group'>
-                    <Form.Label column sm={3}>
-                      Period based on
-                      <span className="form-label-required">*</span>
-                    </Form.Label>
-                    <Col className='d-flex align-items-center p-0' sm={5}>
-                      <Col lg={6}>
-                        <Form.Check
-                          name='approval'
-                          checked
-                          type='radio'
-                          label="Booking Date"
-                          onChange={(e) => {}}
-                        />
-                      </Col>
-                      <Col lg={6}>
-                        <Form.Check
-                          name='approval'
-                          checked
-                          type='radio'
-                          label="Traveling Date"
-                          onChange={(e) => {}}
-                        />
-                      </Col>
+                  <Form.Label column sm={3}>
+                    Period based on
+                    <span className="form-label-required">*</span>
+                  </Form.Label>
+                  <Col className='d-flex align-items-center p-0' sm={5}>
+                    <Col lg={6}>
+                      <Form.Check
+                        name='approval'
+                        checked
+                        type='radio'
+                        label="Booking Date"
+                        onChange={(e) => {}}
+                      />
                     </Col>
+                    <Col lg={6}>
+                      <Form.Check
+                        name='approval'
+                        checked
+                        type='radio'
+                        label="Traveling Date"
+                        onChange={(e) => {}}
+                      />
+                    </Col>
+                  </Col>
                 </Form.Group>
               </Col>
             </Row>
@@ -405,10 +405,12 @@ const CreditLimit = ({
   const tabList = [
     {
       key: 'master-credit-limit',
+      title: 'MASTER CREDIT LIMIT',
       children: (<MasterCreditLimit />)
     },
     {
       key: 'credit-limit-by-project',
+      title: 'CREDIT LIMIT BY PROJECT',
       children: (<CreditLimitByProject />)
     },
   ]
@@ -436,9 +438,9 @@ const CreditLimit = ({
                       eventKey={res.key}
                       title={
                         <div className="d-md-flex flex-row bd-highlight">
-                          <span className="tabs-text uppercase">{res.key}</span>
+                          <span className="tabs-text uppercase">{res.title}</span>
                         </div>
-                    }
+                      }
                     >
                       {res.children}
                     </TabPane>
@@ -452,15 +454,14 @@ const CreditLimit = ({
           <Button
             variant="primary"
             type="submit"
-            // disabled={props.finishStep > 0 || props.employeeData?.id ? (!isValid || isSubmitting) : (!dirty || isSubmitting)}
-            style={{ marginRight: 15, marginBottom: 135 }}
+            style={{ marginRight: 15, marginBottom: 50, padding: '0 24px' }}
           >
-            {/* {props.employeeData?.id ? "SAVE" : "SAVE & NEXT"}  */}
             SAVE & NEXT
           </Button>
           <Button
             variant="secondary"
             // onClick={() => props.history.goBack()}
+            style={{ padding: '0 21px' }}
           >
             CANCEL
           </Button>
