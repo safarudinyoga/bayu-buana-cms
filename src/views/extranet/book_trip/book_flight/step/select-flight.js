@@ -8,10 +8,14 @@ import arrowdownIcon from "assets/icons/arrow-down.svg"
 import moment from 'moment'
 import flights from './flights.json'
 import AdsImage from 'assets/ads.png'
+import BBModal from 'components/Modal/bb-modal';
+import useQuery from "lib/query"
 
 function FlightList({handleSelectTab}) {
   const dispatch = useDispatch()
-	const [viewBy, setViewBy] = useState('fares')
+	let flightType = useQuery().get("trip-type") || "without-ndc"
+	console.log(flightType)
+	const [viewBy, setViewBy] = useState('trip-type')
 	const [flightInfo, setFlightInfo] = useState({
 		plane: "Singapore Airlines",
 		time_estimation: "7h 3m",
@@ -38,6 +42,8 @@ function FlightList({handleSelectTab}) {
 		},
 	})
 	const [data, setData] = useState([])
+	const [showCalendarFares, setShowCalendarFares] = useState(false)
+	const [tripType, setTripType] = useState(flightType)  //without-ndc, ndc, multiple-fare
 
   useEffect(() => {
     dispatch(
@@ -117,6 +123,18 @@ function FlightList({handleSelectTab}) {
 				<option>15:30</option>
 				<option>23:59</option>
 			</Form.Control>
+		)
+	}
+
+	const Calendarfares = () => {
+		return (
+			<BBModal
+				show={showCalendarFares}
+				onClick={() => setShowCalendarFares(false)}
+				modalSize={"lg"}
+				scrollable={true}
+				modalTitle={"calendar fares"}
+			/>
 		)
 	}
   
@@ -239,12 +257,20 @@ function FlightList({handleSelectTab}) {
 						<Col sm={8}>
 							<p className='trip-detail'>{
 								viewBy === 'fares'
-								? `${flightInfo.origin.city} - ${flightInfo.destination.city} - ${flightInfo.origin.city}`
+								? (<>
+									{flightInfo.origin.city} 
+									<i className='fas fa-arrow-right mx-1'></i> 
+									{flightInfo.destination.city} 
+									<i className='fas fa-arrow-right mx-1'></i> 
+									{flightInfo.origin.city}
+								</>)
 								:`${flightInfo.origin.city} - ${flightInfo.destination.city}`
 							}</p>
 							<div className='trip-info'>
 								<p>Prices are per adult, include tax and fees</p>
-								<p>See calendar fares</p>
+								<a 
+									onClick={() => setShowCalendarFares(true)}
+								className='btn-flight-link'>See calendar fares</a>
 							</div>
 							<div className='trip-sort-by'>
 								<p>SORT BY :</p>
@@ -273,7 +299,7 @@ function FlightList({handleSelectTab}) {
 							data.map((d,i) => {
 								return (
 									<>
-										<FlightCard key={i} data={d} viewBy={viewBy} handleSelectTab={handleSelectTab}/>
+										<FlightCard key={i} data={d} viewBy={viewBy} handleSelectTab={handleSelectTab} tripType={tripType} />
 										{
 											i === 1 && <img src={AdsImage} width="100%" style={{marginBottom: "1rem"}}/>
 										}
@@ -284,6 +310,7 @@ function FlightList({handleSelectTab}) {
 					</div>
 				</Col>
 			</Row>
+			<Calendarfares/>
     </div>
   )
 }
