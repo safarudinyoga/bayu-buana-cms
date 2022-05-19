@@ -21,7 +21,7 @@ function SpecialDateCalendar() {
           },
           {
             link: backUrl,
-            text: "Special Dates",
+            text: "Special Date",
           },
           {
             text: "Calendar"
