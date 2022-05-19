@@ -344,7 +344,7 @@ const DashboardRoutes = () => {
         <Route path="/master/integration-partner-currencies/form/:id?">
           <IntegrationPartnerCurrenciesForm />
         </Route>
-       
+
         <Route exact path="/master/integration-partner-countries">
           <IntegrationPartnerCountriesTable />
         </Route>
@@ -579,6 +579,7 @@ const DashboardRoutes = () => {
         <Route path="/master/employee/form/:id?">
           <EmployeeForm />
         </Route>
+
         {/* Division */}
         <Route exact path="/master/divisions">
           <DivisionTable />
@@ -589,6 +590,7 @@ const DashboardRoutes = () => {
         <Route path="/master/divisions/hierarchy/:id?">
           <DivisionHierarchy />
         </Route>
+
         {/* Job Title */}
         <Route exact path="/master/job-title">
           <JobTitleTable />
@@ -596,6 +598,7 @@ const DashboardRoutes = () => {
         <Route path="/master/job-title/form/:id?">
           <JobTitleForm />
         </Route>
+
         {/* Branch Office */}
         <Route exact path="/master/branch-offices">
           <OfficeTable />
@@ -623,7 +626,7 @@ const DashboardRoutes = () => {
         <Route exact path="/master/setup-booking-setting">
           <BookingSetting />
         </Route>
-        
+
         {/* Master Exhange Rate */}
         <Route exact path="/master/exchange-rate">
           <ExchageRateTable />
@@ -636,10 +639,10 @@ const DashboardRoutes = () => {
         </Route>
 
         {/* Master Manage Corporate */}
-        <Route exact path="/master/corporate">
+        <Route exact path="/master/manage-corporate">
           <CorporateTable />
         </Route>
-        <Route exact path="/master/corporate/form/:id?">
+        <Route exact path="/master/manage-corporate/form/:id?">
           <CorporateForm />
         </Route>
 
@@ -704,6 +707,7 @@ const DashboardRoutes = () => {
     </DashboardWrapper>
   )
 }
+
 const AuthRoutes = () => {
   return (
     <AuthWrapper>
@@ -750,6 +754,7 @@ const App = () => {
     }
     checkAuth()
   }, [auth])
+
   return (
     <Router>
       <Switch>

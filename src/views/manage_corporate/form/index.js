@@ -1,13 +1,74 @@
 import { withRouter } from "react-router"
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Row, Col, Tab, Nav } from "react-bootstrap"
 import { useDispatch } from 'react-redux'
 import { ReactSVG } from "react-svg"
+import { setUIParams } from "redux/ui-store"
+import useQuery from "lib/query"
 
-const ManageCorporateForm = (props) => {
+// components & styles
+import GeneralInformation from './general-information'
+import CorporateFare from './corporate-fare'
+import AncillaryFee from './ancillary-fee'
+import CreditLimit from './credit-limit'
+import ImportDatabaseEmployee from "views/manage_corporate/form/import-database-employee"
+import InvoiceSettings from "views/manage_corporate/form/invoice-settings"
+import MarkUp from "views/manage_corporate/form/mark-up"
+import ServiceFee from "views/manage_corporate/form/service-fee"
+
+const staticWarding = {
+  main: 'Corporate Management',
+  mainSub: 'Manage Corporate',
+  create: 'Create Corporate',
+  edit: 'Edit Corporate',
+  detail: 'Corporate Details',
+  linkSub: '/master/manage-corporate'
+}
+
+const ManageCorporateForm = ({ match }) => {
   let dispatch = useDispatch()
+  const isView = useQuery().get("action") === "view"
+
+  // const [tabKey, setTabKey] = useState("general-information")
+  const [tabKey, setTabKey] = useState("service-fee")
+
+  const wardingGenerator = (formId) => {
+    if (!formId) {
+      return staticWarding.create
+    }
+
+    if (formId && isView) {
+      return staticWarding.detail
+    }
+
+    return staticWarding.edit
+  }
+
+  useEffect(() => {
+    const { main, mainSub, linkSub } = staticWarding
+
+    const formId = match?.props?.id
+    dispatch(
+      setUIParams({
+        title: wardingGenerator(formId),
+        breadcrumbs: [
+          {
+            text: main,
+          },
+          {
+            link: linkSub,
+            text: mainSub,
+          },
+          {
+            text: wardingGenerator(formId),
+          },
+        ],
+      }),
+    )
+  }, [])
+
   return (
-    <Tab.Container>
+    <Tab.Container activeKey={tabKey} onSelect={(key) => setTabKey(key)}>
       <Row>
         <Col sm={3}>
           <Nav variant="pills" className="flex-column nav-side">
@@ -20,22 +81,90 @@ const ManageCorporateForm = (props) => {
               </Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link eventKey="emergency-contacts">
+              <Nav.Link eventKey="mark-up">
                 <div>
                   <ReactSVG src="/img/icons/emergency-contacts.svg" />
-                  <span>Emergency Contacts</span>
+                  <span>Mark Up</span>
                 </div>
               </Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link eventKey="employment">
+              <Nav.Link eventKey="service-fee">
                 <div>
-                  <ReactSVG src="/img/icons/employment.svg" />
-                  <span>Employment</span>
+                  <ReactSVG src="/img/icons/emergency-contacts.svg" />
+                  <span>Service Fee</span>
+                </div>
+              </Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link eventKey="ancillary-fee">
+                <div>
+                  <ReactSVG src="/img/icons/emergency-contacts.svg" />
+                  <span>Ancillary Fee</span>
+                </div>
+              </Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link eventKey="credit-limit">
+                <div>
+                  <ReactSVG src="/img/icons/emergency-contacts.svg" />
+                  <span>Credit Limit</span>
+                </div>
+              </Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link eventKey="invoice-settings">
+                <div>
+                  <ReactSVG src="/img/icons/emergency-contacts.svg" />
+                  <span>Invoice Settings</span>
+                </div>
+              </Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link eventKey="corporate-fare">
+                <div>
+                  <ReactSVG src="/img/icons/emergency-contacts.svg" />
+                  <span>Corporate Fare</span>
+                </div>
+              </Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link eventKey="import-database-employee">
+                <div>
+                  <ReactSVG src="/img/icons/emergency-contacts.svg" />
+                  <span>Import Database Employee</span>
                 </div>
               </Nav.Link>
             </Nav.Item>
           </Nav>
+        </Col>
+        <Col sm={9}>
+          <Tab.Content>
+            <Tab.Pane eventKey="general-information">
+              <GeneralInformation />
+            </Tab.Pane>
+            <Tab.Pane eventKey="mark-up">
+              <MarkUp />
+            </Tab.Pane>
+            <Tab.Pane eventKey="service-fee">
+              <ServiceFee />
+            </Tab.Pane>
+            <Tab.Pane eventKey="ancillary-fee">
+              <AncillaryFee />
+            </Tab.Pane>
+            <Tab.Pane eventKey="credit-limit">
+              <CreditLimit />
+            </Tab.Pane>
+            <Tab.Pane eventKey="invoice-settings">
+              <InvoiceSettings />
+            </Tab.Pane>
+            <Tab.Pane eventKey="corporate-fare">
+              <CorporateFare />
+            </Tab.Pane>
+            <Tab.Pane eventKey="import-database-employee">
+              <ImportDatabaseEmployee />
+            </Tab.Pane>
+          </Tab.Content>
         </Col>
       </Row>
     </Tab.Container>

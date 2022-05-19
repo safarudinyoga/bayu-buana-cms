@@ -3,20 +3,24 @@ import { useDispatch } from 'react-redux'
 import { setUIParams } from "redux/ui-store"
 import rowStatus from "lib/row-status"
 import { renderColumn } from "lib/translation"
+import BbDataTable from 'components/table/bb-data-table'
 
 
 export default function ManageCorporateTable() {
   let dispatch = useDispatch()
+
   useEffect(() => {
     dispatch(
       setUIParams({
-        title: "Integration Partner",
+        title: "Manage Corporate",
         breadcrumbs: [
           {
-            text: "Master Data Management",
+            // text: "Master Data Management", !old
+            text: "Corporate Management",
           },
           {
-            text: "Intergration Partner",
+            // text: "Intergration Partner", !old
+            text: 'Manage Corporate'
           },
         ],
       }),
@@ -26,11 +30,13 @@ export default function ManageCorporateTable() {
   let [params, setParams] = useState({
     title: "Manage Corporate",
     titleModal: "Manage Corporate",
+    showAdvancedOptions: false,
+    responsiveTablet: true,
     baseRoute: "/master/manage-corporate/form",
     endpoint: "/master/hotels",
-    deleteEndpoint: "/master/batch-actions/delete/hotels",
-    activationEndpoint: "/master/batch-actions/activate/hotels",
-    deactivationEndpoint: "/master/batch-actions/deactivate/hotels",
+    // deleteEndpoint: "/master/batch-actions/delete/hotels",
+    // activationEndpoint: "/master/batch-actions/activate/hotels",
+    // deactivationEndpoint: "/master/batch-actions/deactivate/hotels",
     columns: [
       {
         title: "Corporate Code",
@@ -49,14 +55,15 @@ export default function ManageCorporateTable() {
         title: "Status",
         data: "status",
         render: rowStatus,
-      }, 
+      },
     ],
     emptyTable: "No Corporate found",
     recordName: ["manage-corporate-code", "manage-corporate-name"],
   })
-  return (
-    <div>
-      
-    </div>
-  )
+
+  const onReset = () => {
+    setParams({...params, filters: []})
+  }
+
+  return <BbDataTable {...params} onReset={onReset} />
 }
