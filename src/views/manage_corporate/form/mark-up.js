@@ -12,8 +12,8 @@ import BbDataTable from 'components/table/bb-data-table'
 const MarkUp = props => {
 
   const [isFieldSelected, setisFieldSelected] = useState({
-    flight: true,
-    hotel: true,
+    flight: false,
+    hotel: false,
     other: false
   })
 
@@ -24,7 +24,8 @@ const MarkUp = props => {
     isHidePrintLogo: true,
     isHideSearch: true,
     isHideDownloadLogo: true,
-    isHideCreateButton: true,
+    hideCreate: true,
+    isShowColumnAction: false,
     baseRoute: "/master/manage-corporate/form",
     endpoint: "/master/ancillary-fee",
     columns: [
@@ -55,7 +56,8 @@ const MarkUp = props => {
     isHidePrintLogo: true,
     isHideSearch: true,
     isHideDownloadLogo: true,
-    isHideCreateButton: true,
+    hideCreate: true,
+    isShowColumnAction: false,
     baseRoute: "/master/manage-corporate/form",
     endpoint: "/master/ancillary-fee",
     columns: [
@@ -102,14 +104,18 @@ const MarkUp = props => {
                     className='select'
                     options={[
                       {
-                        value: 'silver',
-                        label: 'label'
+                        value: 'selected',
+                        label: 'Flight Markup 1'
                       },
                       {
-                        value: 'silver',
-                        label: 'label'
+                        value: 'selected',
+                        label: 'Flight Markup 2'
                       },
                     ]}
+                    onChange={(selected) => setisFieldSelected({
+                      ...isFieldSelected,
+                      flight: true
+                    })}
                     width={'250px'}
                   />
                 </div>
@@ -149,14 +155,18 @@ const MarkUp = props => {
                     className='select'
                     options={[
                       {
-                        value: 'silver',
-                        label: 'label'
+                        value: 'selected',
+                        label: 'Hotel Markup 1'
                       },
                       {
-                        value: 'silver',
-                        label: 'label'
+                        value: 'selected',
+                        label: 'Hotel Markup 2'
                       },
                     ]}
+                    onChange={(selected) => setisFieldSelected({
+                      ...isFieldSelected,
+                      hotel: true
+                    })}
                     width={'250px'}
                   />
                 </div>

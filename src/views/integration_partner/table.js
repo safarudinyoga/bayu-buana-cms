@@ -15,7 +15,7 @@ export default function IntegrationPartnerTable() {
             text: "Setup and Configuration",
           },
           {
-            text: "Intergration Partner",
+            text: "Integration Partner",
           },
         ],
       }),

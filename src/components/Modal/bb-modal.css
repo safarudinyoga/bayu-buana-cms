@@ -1,3 +1,4 @@
+
 .bb-modal-header {
     border-bottom: none !important;
     padding-bottom: 0;
@@ -23,8 +24,13 @@
 
 
 
-@media (min-width: 576px){
-    .modal-dialog {
+@media (max-width: 575px){
+    .bb-modal-dialog {
         max-width: 515px !important;
+    }
+}
+@media (min-width: 576px){
+    .bb-modal-dialog {
+        max-width: 550px !important;
     }
 }

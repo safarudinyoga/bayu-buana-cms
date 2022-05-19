@@ -50,7 +50,8 @@ const TravelConsultantAssistant = () => {
     isHidePrintLogo: true,
     isHideSearch: true,
     isHideDownloadLogo: true,
-    isHideCreateButton: true,
+    isShowColumnAction: false,
+    hideCreate: true,
     baseRoute: "/master/manage-corporate/form",
     endpoint: "/master/ancillary-fee",
     columns: [
@@ -81,7 +82,8 @@ const TravelConsultantAssistant = () => {
     isHidePrintLogo: true,
     isHideSearch: true,
     isHideDownloadLogo: true,
-    isHideCreateButton: true,
+    isShowColumnAction: false,
+    hideCreate: true,
     baseRoute: "/master/manage-corporate/form",
     endpoint: "/master/ancillary-fee",
     columns: [

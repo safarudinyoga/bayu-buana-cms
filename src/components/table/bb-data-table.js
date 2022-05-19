@@ -26,6 +26,7 @@ import removeIcon from "assets/icons/remove.svg"
 import showIcon from "assets/icons/show.svg"
 import ModalCreate from "components/Modal/bb-modal"
 import customPrint from '../../lib/customPrint'
+import { end } from "@popperjs/core"
 
 window.JSZip = JSZip
 
@@ -44,6 +45,7 @@ class BBDataTable extends Component {
       extraFilters: this.props.filters || [],
       isCheckbox: this.props.isCheckbox ?? true,
       isShowStatus: this.props.isShowStatus ?? true,
+      isShowColumnAction: this.props.isShowColumnAction ?? true,
       isOpen: false,
       itemInfo: "",
       year: new Date().getFullYear(),
@@ -64,7 +66,10 @@ class BBDataTable extends Component {
     let self = this
     $.fn.dataTableExt.errMode = "none"
     let columns = []
-    columns.push(this.state.isCheckbox  ? {
+    const { recordName, msgType, module } = this.props
+    const { isCheckbox, isShowColumnAction } = this.state
+
+    columns.push(isCheckbox ? {
       searchable: false,
       orderable: false,
       title:
@@ -93,9 +98,8 @@ class BBDataTable extends Component {
     } catch (e) {}
 
     const allowed = [this.props.recordName]
-    const { recordName, msgType, module } = this.props
     const isOpenNewTab = this.props.isOpenNewTab ?? true
-    columns.push({
+    columns.push( isShowColumnAction ? {
       searchable: false,
       orderable: false,
       title: "Actions",
@@ -173,12 +177,15 @@ class BBDataTable extends Component {
             : ""
           }
           ${
-            module !== "integration-partner" ? `<a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item" data-action="delete" data-id="${row.id}" data-name="${cvtRecordName}" ${infoDelete ? `data-info="${info}"` : ""}  title="${module === "exchange-rate" ? "Delete" : "Click to delete"}"><img src="${removeIcon}" /></a>`
+            module !== "integration-partner" && module !== "identity-rules" ? `<a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item" data-action="delete" data-id="${row.id}" data-name="${cvtRecordName}" ${infoDelete ? `data-info="${info}"` : ""}  title="${module === "exchange-rate" ? "Delete" : "Click to delete"}"><img src="${removeIcon}" /></a>`
             : ""
           }
           `
         )
       },
+    } : {
+      searchable: false,
+      orderable: false,
     })
 
     const initialize = () => {
@@ -192,7 +199,10 @@ class BBDataTable extends Component {
       if(this.queryParams.get("page")) {
         displayStart = 10 * (this.queryParams.get("page")-1)
       }
-
+      let endpoint = this.props.endpoint;
+      if(this.props.filterData){
+        endpoint = endpoint + "?filters=" + this.props.filterData
+      }
       let dt = $(this.table.current).DataTable({
         pagingType: "simple_numbers_no_ellipses",
         colReorder: {
@@ -213,7 +223,7 @@ class BBDataTable extends Component {
         keys: true,
         destroy: true,
         ajax: {
-          url: this.api.env.endpoint(this.props.endpoint),
+          url: this.api.env.endpoint(endpoint),
           headers: headers,
           cache: true,
           dataSrc: (json) => {
@@ -1109,6 +1119,7 @@ class BBDataTable extends Component {
           show={showCreateModal.show}
           onClick={() => this.props.setCreateModal({show: false, id: null, disabled_form: false})}
           modalContent={this.props.modalContent}
+          modalSize={this.props.modalSize}
         />
         {this.props.module !== "fare-types" ? <TableHeader
           {...this.props}
@@ -1125,6 +1136,7 @@ class BBDataTable extends Component {
           onToggleFilter={this.onToggleFilter.bind(this)}
           onStatusUpdate={this.onStatusUpdate.bind(this)}
           onRemove={this.onRemoveSelected.bind(this)}
+          hideCreate={this.props.hideCreate}
         >
           {this.props.children}
         </TableHeader>

@@ -33,7 +33,8 @@ const CorporateFare = ({
     responsiveTablet: true,
     isHidePrintLogo: true,
     isHideDownloadLogo: true,
-    isHideCreateButton: true,
+    isShowColumnAction: false,
+    hideCreate: true,
     baseRoute: "/master/manage-corporate/form",
     endpoint: "/master/corporate-fare",
     columns: [

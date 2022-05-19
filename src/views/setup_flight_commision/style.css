@@ -1,0 +1,45 @@
+.icon-calender { 
+    position: relative; 
+    bottom: 27px; 
+}
+
+img.calendar { 
+    position: absolute; 
+    right: 0px;
+    top: -5px;
+}
+
+input.date-picker {
+    min-width: 120px;
+    padding-left: 10px;
+}
+
+span.percent {
+    left: 37vw;
+    top: 82%;
+    position: absolute;
+}
+
+@media only screen and (max-width: 768px) {
+    .icon-calender { 
+        position: relative; 
+        bottom: 27px; 
+    }
+    
+    img.calendar { 
+        position: absolute; 
+        right: -2px;
+        top: -5px;
+    }
+    
+    input.date-picker {
+        min-width: 120px;
+        padding-left: 2px;
+    }    
+    
+    span.percent {
+        left: 30vw;
+        top: 90%;
+    }
+    
+}
