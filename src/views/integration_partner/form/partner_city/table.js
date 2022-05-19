@@ -9,31 +9,6 @@ import { Row, Col, Tab, Card } from "react-bootstrap"
 const backUrl = "/master/integration-partner"
 
 export default function PartnerCityTable(props) {
- 
-  let dispatch = useDispatch()
-  useEffect(() => {
-    dispatch(
-      setUIParams({
-        title: "iTank",
-        breadcrumbs: [
-          {
-            text: "Setup And Configuration",
-          },
-          {
-            link: backUrl,
-            text: "Integration Partner",
-          },
-          {
-            text: "iTank",
-          },
-
-
-        ],
-      }),
-    )
-  }, [])
-
-
   let params = {
     isCheckbox: false,
     showAdvancedOptions: false,
@@ -68,21 +43,12 @@ export default function PartnerCityTable(props) {
     module: "integration-partner-cities"
   }
   return <>
-    <Tab.Container>
-      <Row>
-        <Col sm={3}>
-        </Col>
-        <Col sm={9}>
-          <Card>
-            <Card.Body>
-              <h3 className="card-heading">Partner Cities</h3>
-              <BBDataTable {...params} modalContent={Form} />
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
-
-    </Tab.Container>
+    <Card>
+      <Card.Body>
+        <h3 className="card-heading">Partner Cities</h3>
+        <BBDataTable {...params} modalContent={Form} />
+      </Card.Body>
+    </Card>
   </>
 
 

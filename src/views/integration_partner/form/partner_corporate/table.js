@@ -35,8 +35,8 @@ export default function IntegrationPartnerCorporateTable() {
   }
 
   return (
-    <Card style={{marginBottom: 0}}>
-        <Card.Body className="px-1 px-md-4">
+    <Card>
+        <Card.Body>
           <h3 className="card-heading">Partner Corporates</h3>
           <BBDataTable {...params} modalContent={Form} />
         </Card.Body>

@@ -1,7 +1,7 @@
 import BBDataTable from "components/table/bb-data-table"
 import React, { useState } from 'react'
 import Form from "./form";
-
+import { Card } from "react-bootstrap"
 export default function IntegrationFeeTaxes() {
   let [params, setParams] = useState({
     createOnModal: true,
@@ -35,27 +35,12 @@ export default function IntegrationFeeTaxes() {
     recordName: ["integration-partner-code", "integration-partner-name"],
   });
 
-  const borderFeeTax = {
-      borderRadius: 10,
-  };
-  const titleText = {
-      fontSize: 16,
-      color: '#333333',
-      paddingTop: 20
-  };
-  const tableTax = {
-      paddingLeft: 20
-  }
-
   return (
-      <div className="row">
-        <div className="col-xl border" style={borderFeeTax}>
-            <h1 style={titleText}>Partner Fee Taxes</h1>
-            <hr />
-            <div style={tableTax}>
-                <BBDataTable {...params}  modalContent={Form} />
-            </div>
-        </div>
-      </div>
+    <Card>
+      <Card.Body>
+        <h3 className="card-heading">Partner Fee Taxes</h3>
+        <BBDataTable {...params} modalContent={Form} />
+      </Card.Body>
+    </Card>
   )
 }
