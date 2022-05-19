@@ -32,7 +32,6 @@ window.JSZip = JSZip
 
 class BBDataTable extends Component {
   constructor(props) {
-    console.log(props);
     super(props)
     this.table = React.createRef()
     this.wrapper = React.createRef()
@@ -46,6 +45,7 @@ class BBDataTable extends Component {
       extraFilters: this.props.filters || [],
       isCheckbox: this.props.isCheckbox ?? true,
       isShowStatus: this.props.isShowStatus ?? true,
+      isShowColumnAction: this.props.isShowColumnAction ?? true,
       isOpen: false,
       itemInfo: "",
       year: new Date().getFullYear(),
@@ -66,7 +66,10 @@ class BBDataTable extends Component {
     let self = this
     $.fn.dataTableExt.errMode = "none"
     let columns = []
-    columns.push(this.state.isCheckbox  ? {
+    const { recordName, msgType, module } = this.props
+    const { isCheckbox, isShowColumnAction } = this.state
+
+    columns.push(isCheckbox ? {
       searchable: false,
       orderable: false,
       title:
@@ -95,9 +98,8 @@ class BBDataTable extends Component {
     } catch (e) {}
 
     const allowed = [this.props.recordName]
-    const { recordName, msgType, module } = this.props
     const isOpenNewTab = this.props.isOpenNewTab ?? true
-    columns.push({
+    columns.push( isShowColumnAction ? {
       searchable: false,
       orderable: false,
       title: "Actions",
@@ -170,7 +172,7 @@ class BBDataTable extends Component {
             <label class="custom-control-label" for="customSwitch${row.id}" data-action="update_status"></label>
           </a>
           ${
-            self.props.showHistory 
+            self.props.showHistory
             ? `<a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item mr-2" data-action="history" data-id="${row.id}" title="Click to view history"><img src="/img/icons/history.svg"/></a>`
             : ""
           }
@@ -181,6 +183,9 @@ class BBDataTable extends Component {
           `
         )
       },
+    } : {
+      searchable: false,
+      orderable: false,
     })
 
     const initialize = () => {
@@ -416,8 +421,8 @@ class BBDataTable extends Component {
                   }
                 }
               } else {
-                overrideParams.sort = this.queryParams.has('sort') 
-                ? this.queryParams.get('sort') 
+                overrideParams.sort = this.queryParams.has('sort')
+                ? this.queryParams.get('sort')
                 : this.props.customSort
                 ? this.props.customSort.join(",")
                 : 'sort'
@@ -556,7 +561,7 @@ class BBDataTable extends Component {
                     division = row.division.division_name
                   }
 
-                  datas = data +'<br/>'+ division     
+                  datas = data +'<br/>'+ division
                   if (type === "myExport") datas =`${data} / ${division}`
                 }
                   return datas
@@ -582,7 +587,7 @@ class BBDataTable extends Component {
           //   targets: [columns.length - 1],
           //   width: "20%",
           // },
-          
+
         ],
         // select: {
         //   style: "multi",
@@ -615,7 +620,7 @@ class BBDataTable extends Component {
         },
         fnDrawCallback: (t) => {
 
-      
+
           const { selected } = this.state
           let wrapper = $(".dataTables_paginate", t.nTableWrapper)
           wrapper.append(

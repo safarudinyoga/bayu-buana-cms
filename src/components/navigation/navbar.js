@@ -58,7 +58,7 @@ export default class Navbar extends Component {
           </li>
         </ul>
 
-        <ul className="navbar-nav ml-auto">
+        <ul className="navbar-nav ml-auto navbar-nav-right">
           <li className="nav-item">
             <a className="nav-link px-0 px-xl-2" href="/">
               <img

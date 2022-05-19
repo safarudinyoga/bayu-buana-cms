@@ -452,6 +452,7 @@ const FlightForm = (props) => {
                           as="textarea"
                           disabled={isView}
                           style={{ height: "88px", maxWidth: "416px" }}
+                          maxLength="4000"
                         />)}
                       </FastField>
                     </Col>

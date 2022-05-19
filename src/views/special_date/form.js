@@ -1,23 +1,18 @@
 import { withRouter } from "react-router"
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
+import { useStateWithCallbackLazy } from 'use-state-with-callback';
 import Api from "config/api"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
-import FormInputSelectAjax from "components/form/input-select-ajax"
 import FormBuilder from "components/form/builder"
 import useQuery from "lib/query"
 import $ from "jquery"
 import { useDispatch } from "react-redux"
 import { setAlert, setUIParams} from "redux/ui-store"
 import env from "../../config/environment"
-// import DatePicker from "react-datepicker"
 import DatePicker, { DateObject }  from 'react-multi-date-picker'
 import Icon from "react-multi-date-picker/components/icon"
-import FormInputWrapper from "components/form/input-date-period";
-import FormInputDatePeriod from "components/form/input-date-period";
-import { ReactSVG } from "react-svg"
 import "./special-date.css"
-import Toolbar from "react-multi-date-picker/plugins/toolbar"
 
 const endpoint = "/master/agent-special-dates"
 const backUrl = "/master/special-date"
@@ -32,8 +27,11 @@ function SpecialDateForm(props) {
   const [translations, setTranslations] = useState([])
   const [id, setId] = useState(null)
 
-  const [startDateClose, setStartDateClose] = useState(false)
-  const [endDateClose, setEndDateClose] = useState(false)
+  const [startDateClose, setStartDateClose] = useStateWithCallbackLazy(false)
+  const [endDateClose, setEndDateClose] = useStateWithCallbackLazy(false)
+
+  const startDatePickerRef = useRef()
+  const endDatePickerRef = useRef()
 
   const [form, setForm] = useState({
     special_date_name: "",
@@ -94,7 +92,7 @@ function SpecialDateForm(props) {
           },
           {
             link: backUrl,
-            text: "Special Dates",
+            text: "Special Date",
           },
           {
             text: bcTitle
@@ -202,26 +200,13 @@ function SpecialDateForm(props) {
     }
   }
 
-  const [checkInDate, setCheckInDate] = useState(null);
-  const [checkOutDate, setCheckOutDate] = useState(null);
-
-  const handleCheckInDate = (date) => {
-    setCheckInDate(date);
-    setCheckOutDate(null);
-  };
-
-  const handleCheckOutDate = (date) => {
-    setCheckOutDate(date);
-  };
-
-  function RenderDatepickerStart({ openCalendar, closeCalendar, value, handleValueChange }) {
+  function RenderDatepickerStart({ openCalendar, value, handleValueChange }) {
     return (
       <div className="position-relative datepicker-special-date">
         <Icon className="special-date-icon" onClick={openCalendar} />
         <input type="text"
           className="form-control periode" 
           onFocus={openCalendar}
-          onBlur={closeCalendar} 
           value={value}
           onChange={handleValueChange}
           id="startDate"
@@ -272,16 +257,6 @@ function SpecialDateForm(props) {
           cl={{md: 3}}
           cr={{md: 7}}
         />
-        
-        {/* <FormInputDatePeriod 
-          label="Periode"
-          required={true}
-          dateStart={form.start_date}
-          dateEnd={form.end_date}
-          dateStartOnChange={(date) => setForm({...form, start_date: date})}
-          dateEndOnChange={(date) => setForm({...form, end_date: date})}
-          recurring={true}
-        /> */}
       
         <div className="row d-flex align-items-center">
           <div className="col-12 col-md-3 col-lg-4 form-group required">
@@ -298,36 +273,43 @@ function SpecialDateForm(props) {
               minDate={new DateObject().subtract(10, "years")}
               maxDate={new DateObject().add(10, "years") && form.end_date}
               value={form.start_date}
+              ref={startDatePickerRef}
               onChange={
                 (date) => {
                   setForm({...form, start_date: new Date(date)})
+                  setStartDateClose(false)
                 }
               }
-              // onClose={startDateClose}
+              onOpen={() => setStartDateClose(false)}
+              onClose={() => startDateClose}
             >
               <div className="d-flex justify-content-end p-4">
                 <div
+                  className="pt-1"
+                  style={{color: "#1E83DC"}}
                   role={"button"}
                   onClick={() => setForm({...form, start_date: new Date()})}
                 >
                   Reset
                 </div>    
                 <div 
-                  className="btn btn-primary ml-2"
+                  className="btn btn-primary ml-4 px-4 py-2"
                   role={"button"} 
                   onClick={
                     () => {
-                      // setStartDateClose(!startDateClose)
-                      let endDate = document.getElementById("endDate")
-                      endDate.focus();
+                      setStartDateClose(true, () => {
+                        startDatePickerRef.current.closeCalendar()
+                        let endDate = document.getElementById("endDate")
+                        endDate.focus();
+                      })
                     }
                 }>
-                  Apply
+                  APPLY
                 </div>
               </div>
               
             </DatePicker>
-            </div>
+          </div>
             
           <span className="text-center">to</span>
           <div className="col-8 col-md-4 col-lg-3 datepicker-special-date-container">
@@ -338,14 +320,39 @@ function SpecialDateForm(props) {
               minDate={new DateObject().subtract(10, "years") && form.start_date}
               maxDate={new DateObject().add(10, "years")}
               value={form.end_date}
-              onChange={(date) => setForm({...form, end_date: new Date(date)})} 
-            />
+              ref={endDatePickerRef}
+              onChange={
+                (date) => {
+                  setForm({...form, end_date: new Date(date)})
+                  setEndDateClose(false)
+                }}
+              onOpen={() => setEndDateClose(false)}
+              onClose={() => endDateClose} 
+            >
+              <div className="d-flex justify-content-end p-4">
+                <div
+                  role={"button"}
+                  onClick={() => setForm({...form, start_date: new Date()})}
+                >
+                  Reset
+                </div>    
+                <div 
+                  className="btn btn-primary ml-4"
+                  role={"button"} 
+                  onClick={
+                    () => {
+                      setEndDateClose(true, () => {
+                        endDatePickerRef.current.closeCalendar()
+                      })
+                    }
+                }>
+                  Apply
+                </div>
+              </div>
+            </DatePicker>
           </div>
         </div>
         
-            
-            
-    
         <div className="form-check col-sm-6 col-md-6 col-lg-5 offset-sm-4 offset-md-3 offset-lg-4 mt-2">
           <input 
             className="form-check-input" 
