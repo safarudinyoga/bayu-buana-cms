@@ -18,6 +18,15 @@
   display: block !important;
 }
 
+.view-calendar {
+  font-size: 14px; 
+  vertical-align: middle; 
+  margin-left: 0.5rem !important;
+}
+
+.form-check-label {
+  font-size: 1rem;
+}
 
 
 @media only screen and (max-width: 320px) {
@@ -41,6 +50,10 @@
   .rmdp-arrow-container {
     height: 15px !important;
     width: 15px !important;
+  }
+
+  .form-check-label {
+    font-size: 0.7rem;
   }
 }
 
@@ -66,6 +79,10 @@
     height: 17px !important;
     width: 17px !important;
   }
+
+  .form-check-label {
+    font-size: 0.75rem;
+  }
 }
 
 @media only screen and (max-width: 425px) and (min-width: 376px) {
@@ -89,6 +106,29 @@
   .rmdp-arrow-container {
     height: 17px !important;
     width: 17px !important;
+  }
+
+  .form-check-label {
+    font-size: 0.9rem;
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .view-calendar {
+    display: none;
+  }
+
+  .view-calendar-mobile {
+    display: flex;
+    justify-content: center;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .view-calendar-mobile {
+    display: none;
   }
 }
 
@@ -119,5 +159,11 @@
 @media only screen and (max-width: 1280px) and (min-width: 992px) {
   .periode {
     font-size: 0.7rem;
+  }
+}
+
+@media only screen and (max-width: 803px) and (min-width: 768px){
+  .view-calendar {
+    font-size: 12px; 
   }
 }
