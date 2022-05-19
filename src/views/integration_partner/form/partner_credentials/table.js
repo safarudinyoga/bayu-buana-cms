@@ -6,21 +6,6 @@ import Form from "./form/partner_credentials"
 import { Card } from "react-bootstrap"
 
 export default function IntegrationPartnerCredentialsTable() {
-  let dispatch = useDispatch()
-  useEffect(() => {
-    dispatch(
-      setUIParams({
-        title: "Partner Credentials",
-        breadcrumbs: [
-          {
-            text: "Partner Credentials",
-          },
-        ],
-      }),
-    )
-  }, [])
-
-
   let params = {
     isCheckbox: false,
     showAdvancedOptions: false,
@@ -51,9 +36,9 @@ export default function IntegrationPartnerCredentialsTable() {
     module: "integration-partner-currencies"
   }
   return (
-    <Card style={{marginBottom: 0}}>
-        <Card.Body className="px-1 px-md-4">
-          <h3 className="card-heading">Partner Currencies</h3>
+    <Card>
+        <Card.Body>
+          <h3 className="card-heading">Partner Credentials</h3>
           <BBDataTable {...params} modalContent={Form} />
         </Card.Body>
       </Card>
