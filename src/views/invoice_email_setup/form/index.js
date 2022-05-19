@@ -18,6 +18,12 @@ import { Formik, FastField } from "formik"
 import { useDispatch } from "react-redux"
 import { withRouter } from "react-router"
 import { setUIParams } from "redux/ui-store"
+import { Editor } from "react-draft-wysiwyg"
+import { EditorState } from "draft-js"
+import htmlToDraft from "html-to-draftjs"
+import { convertToHTML } from "draft-convert"
+import DOMPurify from "dompurify"
+import { stateToHTML } from "draft-js-export-html"
 import FormikControl from "components/formik/formikControl"
 import CancelButton from "components/button/cancel"
 
@@ -46,6 +52,54 @@ const InvoiceEmailSetupForm = (props) => {
   const [id, setId] = useState(null)
   const [showModal, setShowModal] = useState(false)
   const [formValues, setFormValues] = useState(null)
+  // const [editorState, setEditorState] = useState(() =>
+  //   EditorState.createEmpty(),
+  // )
+
+  // const [convertedContent, setConvertedContent] = useState(null)
+  // const handleEditorChange = (state) => {
+  //   setEditorState(state)
+  // }
+
+  // const convertContentToHTML = () => {
+  //   let currentContentAsHTML = convertToHTML(editorState.getCurrentContent())
+  //   setConvertedContent(currentContentAsHTML)
+  // }
+
+  // const createMarkup = (html) => {
+  //   return {
+  //     __html: DOMPurify.sanitize(html),
+  //   }
+  // }
+
+  // console.log("convertedContent: ", createMarkup(convertedContent))
+
+  // const [initialState, setInitialState] = useState(
+  //   EditorState.createWithContent(
+  //     ContentState.createFromBlockArray(
+  //       convertFromHTML(
+  //         "<img src=" + "/img/logo.png" + "/><p>My initial content.</p>",
+  //       ),
+  //     ),
+  //   ),
+  // )
+
+  // let html = stateToHTML(editorState.getCurrentContent())
+  // const contentBlock = htmlToDraft(html)
+  // if (contentBlock) {
+  //   const contentState = ContentState.createFromBlockArray(
+  //     contentBlock.contentBlocks,
+  //   )
+  //   editorStateInitial = EditorState.createWithContent(contentState)
+  // }
+
+  const [bodyEmail, setBodyEmail] = useState(() => EditorState.createEmpty())
+
+  const handleEditorState = (editorState) => {
+    const html = stateToHTML(editorState.getCurrentContent())
+    // const contentBlock = htmlToDraft(html)
+    setBodyEmail(html)
+  }
 
   useEffect(async () => {
     let api = new Api()
@@ -152,7 +206,14 @@ const InvoiceEmailSetupForm = (props) => {
             padding: "21.01px 24.25px 37.99px",
           }}
         >
-          {bodyEmail}
+          <div
+            className="preview"
+            dangerouslySetInnerHTML={{ __html: bodyEmail }}
+          ></div>
+          {/* <div
+            className="preview"
+            dangerouslySetInnerHTML={createMarkup(convertedContent)}
+          ></div> */}
         </div>
         <Button
           variant="primary"
@@ -340,18 +401,40 @@ const InvoiceEmailSetupForm = (props) => {
                                       key={index}
                                     >
                                       <Row style={{ padding: "10px 33px" }}>
-                                        <Form.Control
-                                          as="textarea"
-                                          rows={3}
-                                        ></Form.Control>
+                                        <Editor
+                                          wrapperStyle={{ width: "100%" }}
+                                          editorStyle={{
+                                            border: "1px solid #D3D3D3",
+                                            // marginTop: "-5px",
+                                          }}
+                                          toolbarStyle={{
+                                            background:
+                                              "#ECECEC 0% 0% no-repeat padding-box",
+                                            border: "1px solid #D3D3D3",
+                                            borderBottom: "none",
+                                          }}
+                                          // editorState={editorState}
+                                          // onEditorStateChange={
+                                          //   handleEditorChange
+                                          // }
+                                          onEditorStateChange={
+                                            handleEditorState
+                                          }
+                                        />
                                       </Row>
                                       <Row
-                                        style={{ padding: "10px 33px 20px" }}
+                                        style={{
+                                          padding: "10px 33px 20px",
+                                          marginTop: 50,
+                                        }}
                                       >
                                         <Button
                                           className={"mr-3"}
                                           variant="secondary"
-                                          onClick={() => setShowModal(true)}
+                                          onClick={() => {
+                                            setShowModal(true)
+                                            // convertContentToHTML()
+                                          }}
                                         >
                                           PREVIEW
                                         </Button>
@@ -392,7 +475,7 @@ const InvoiceEmailSetupForm = (props) => {
                 <CancelButton />
               </div>
             </Col>
-            <PreviewModal bodyEmail={<div> Ini preview email</div>} />
+            <PreviewModal bodyEmail={bodyEmail} />
           </Row>
         </Form>
       )}
