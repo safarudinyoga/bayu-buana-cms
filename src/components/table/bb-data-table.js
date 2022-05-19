@@ -533,6 +533,7 @@ class BBDataTable extends Component {
           {
             targets: [3],
             className: !module == "loyalty-programs" ? "" : "cstm-col-width-2",
+            visible: module == "standard-ancillary-fee" 
           },
           { responsivePriority: 1, targets: 1 },
           { responsivePriority: 2, targets: 2 },
@@ -570,8 +571,8 @@ class BBDataTable extends Component {
           },
           { visible: false,  targets: module == 'employee' ? [ 4, 5, 8 ] : [] },
           {
-            className: this.props.actionWidthClass || "",
-            targets: [columns.length - 1],
+            className: module == "standard-ancillary-fee" ? this.props.actionWidthClass || "" : "width-ancillary",
+            targets: [2],
           },
           {
             targets: [columns.length - 3, columns.length - 1],
