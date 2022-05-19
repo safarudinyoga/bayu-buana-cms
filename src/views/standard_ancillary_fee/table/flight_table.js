@@ -11,6 +11,7 @@ export default function FlightTable() {
     deleteEndpoint: "/master/batch-actions/delete/hotels",
     activationEndpoint: "/master/batch-actions/activate/hotels",
     deactivationEndpoint: "/master/batch-actions/deactivate/hotels",
+    hideDetail: true,
     columns: [
       {
         title: "Preset Name",
