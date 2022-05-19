@@ -6,6 +6,7 @@ import { useHistory } from 'react-router';
 import Roundtrip from './micro-components/roundtrip';
 import Oneway from './micro-components/oneway';
 import FlightPref from './micro-components/flight_pref';
+import MultiTrip from './micro-components/multi_trip';
 
 
 
@@ -78,6 +79,9 @@ const FlightBook = (props) => {
           title="One Way"
         >
           <Oneway airports={airports} />
+          <div className='my-3'>
+            <Form.Check label="Add a hotel" />
+          </div>
           <FlightPref />
 
           <div className='my-3'>
@@ -104,7 +108,7 @@ const FlightBook = (props) => {
           eventKey="multi-city"
           title="Multi City"
         >
-          <Oneway airports={airports} />
+          <MultiTrip airports={airports} />
           <FlightPref />
 
           <div className='my-3'>
