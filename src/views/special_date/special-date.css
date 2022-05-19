@@ -18,46 +18,102 @@
   display: block !important;
 }
 
+.periode {
+  font-size: 0.9rem;
+}
+
 @media only screen and (max-width: 320px) {
   .periode {
-    font-size: 0.7rem;
+    font-size: 0.7rem !important;
   }
 
   .rmdp-day, .rmdp-week-day {
-    height: 18px;
-    width: 18px;
+    height: 18px !important;
+    width: 18px !important;
   }
 
   .rmdp-week-day {
-    font-size: 8px;
+    font-size: 8px !important;
   }
 
   .rmdp-day span {
-    font-size: 9px;
+    font-size: 9px !important;
   }
 
   .rmdp-arrow-container {
-    height: 15px;
-    width: 15px;
+    height: 15px !important;
+    width: 15px !important;
   }
 }
 
 @media only screen and (max-width: 375px) and (min-width: 321px) {
   .periode {
-    font-size: 0.9rem;
+    font-size: 0.9rem !important;
   }
 
   .rmdp-day, .rmdp-week-day {
-    height: 24px;
-    width: 24px;
+    height: 20px !important;
+    width: 20px !important;
   }
 
   .rmdp-week-day {
-    font-size: 11px;
+    font-size: 9px !important;
+  }
+
+  .rmdp-day span {
+    font-size: 9px !important;
   }
 
   .rmdp-arrow-container {
-    height: 17px;
-    width: 17px;
+    height: 17px !important;
+    width: 17px !important;
+  }
+}
+
+@media only screen and (max-width: 425px) and (min-width: 376px) {
+  .periode {
+    font-size: 0.9rem !important;
+  }
+
+  .rmdp-day, .rmdp-week-day {
+    height: 21px !important;
+    width: 21px !important;
+  }
+
+  .rmdp-week-day {
+    font-size: 10px !important;
+  }
+
+  .rmdp-day span {
+    font-size: 10px !important;
+  }
+
+  .rmdp-arrow-container {
+    height: 17px !important;
+    width: 17px !important;
+  }
+}
+
+@media only screen and (max-width: 570px) and (min-width: 426px) {
+  .periode {
+    font-size: 0.9rem !important;
+  }
+
+  .rmdp-day, .rmdp-week-day {
+    height: 25px !important;
+    width: 25px !important;
+  }
+
+  .rmdp-week-day {
+    font-size: 12px !important;
+  }
+
+  .rmdp-day span {
+    font-size: 12px !important;
+  }
+
+  .rmdp-arrow-container {
+    height: 17px !important;
+    width: 17px !important;
   }
 }
