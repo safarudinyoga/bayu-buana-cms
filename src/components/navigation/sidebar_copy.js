@@ -1,5 +1,5 @@
-import BriefCaseIcon from "assets/icons/briefcase.svg"
-import HomeIcon from "assets/icons/home.svg"
+// import BriefCaseIcon from "assets/icons/briefcase.svg"
+// import HomeIcon from "assets/icons/home.svg"
 import React, { Component } from "react"
 import { Link } from "react-router-dom"
 import { connect } from "react-redux"
@@ -21,13 +21,13 @@ class Sidebar extends Component {
             >
               <li className="nav-item">
                 <Link to="/" className="nav-link">
-                  <img src={HomeIcon} alt="home_icon" />
+                  {/* <img src={HomeIcon} alt="home_icon" /> */}
                   <p>Dashboard</p>
                 </Link>
               </li>
               <li className="nav-item">
                 <Link to="#" className="nav-link">
-                  <img src={BriefCaseIcon} alt="briefcase_icon" />
+                  {/* <img src={BriefCaseIcon} alt="briefcase_icon" /> */}
                   <p>
                     Master Data Management
                     <i className="right fas fa-angle-right"></i>
@@ -312,7 +312,12 @@ class Sidebar extends Component {
                     <Link to="/master/general-setup" className="nav-link">
                       <p>General Setup</p>
                     </Link>
-                  </li>                  
+                  </li>
+                  <li className="nav-item">
+                    <Link to="/master/job-title" className="nav-link">
+                      <p>Job Title</p>
+                    </Link>
+                  </li>                    
                   {/* <li className="nav-item">
                     <Link to="/master/invoice-email-setup" className="nav-link">
                       <p>Invoice Email Setup</p>
