@@ -1,6 +1,6 @@
 import BBDataTable from "components/table/bb-data-table"
 import React, {useState} from "react"
-
+import { Card } from "react-bootstrap"
 export default function IntegrasiPartnerHotels() {
   let [params, setParams] = useState({
     isCheckbox: false,
@@ -11,6 +11,7 @@ export default function IntegrasiPartnerHotels() {
     deleteEndpoint: "/master/batch-actions/delete/integration-partner-hotels",
     activationEndpoint: "/master/batch-actions/activate/integration-partner-hotels",
     deactivationEndpoint: "/master/batch-actions/deactivate/integration-partner-hotels",
+    btnDownload: ".buttons-csv",
     showAdvancedOptions: false,
     columns: [
       {
@@ -66,17 +67,11 @@ export default function IntegrasiPartnerHotels() {
 
 //   return <BBDataTable {...params}/>
   return(
-    <div className="row">
-    <div className="col-md-4">
-
-    </div>
-    <div className="col-lg-8 border" style={borderFeeTax}>
-        <h1 style={titleText}>Partner Hotels</h1>
-        <hr />
-        <div style={tableTax}>
-            <BBDataTable {...params} />
-        </div>
-    </div>
-  </div>
+    <Card>
+      <Card.Body>
+        <h3 className="card-heading">Partner Hotels</h3>
+        <BBDataTable {...params} />
+      </Card.Body>
+    </Card>
   )
 }

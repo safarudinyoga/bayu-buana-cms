@@ -177,7 +177,7 @@ const FlightForm = (props) => {
           },
           {
             link: backUrl,
-            text: "Standard Other Ancillary Fee",
+            text: "Standard Ancillary Fee",
           },
           {
             text: docTitle,
@@ -271,6 +271,7 @@ const FlightForm = (props) => {
                       <Form.Control
                         as="textarea"
                         style={{ height: "88px", maxWidth: "416px" }}
+                        maxLength="4000"
                       />
                     </Col>
                   </Form.Group>

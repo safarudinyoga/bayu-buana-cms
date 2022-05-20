@@ -1,6 +1,7 @@
 import BBDataTable from "components/table/bb-data-table"
 import React, {useState} from "react"
 import HotelSuppliers from "./form"
+import { Card } from "react-bootstrap"
 
 export default function IntegrasiPartnerHotelSupplier() {
   let [params, setParams] = useState({
@@ -12,6 +13,7 @@ export default function IntegrasiPartnerHotelSupplier() {
     deleteEndpoint: "/master/integration-partners/3f61b5e0-d7cb-4f80-94e7-83114ff23903/hotel-suppliers",
     activationEndpoint: "/master/batch-actions/activate/integration-partner-hotels",
     deactivationEndpoint: "/master/batch-actions/deactivate/integration-partner-hotels",
+    btnDownload: ".buttons-csv",
     showAdvancedOptions: false,
     hideDetail: true,
     createOnModal: true,
@@ -82,17 +84,12 @@ export default function IntegrasiPartnerHotelSupplier() {
 
 //   return <BBDataTable {...params}/>
   return(
-    <div className="row">
-    <div className="col-md-4">
+    <Card>
+    <Card.Body>
+      <h3 className="card-heading">Partner Hotel Suppliers</h3>
+      <BBDataTable {...params} modalContent={HotelSuppliers}/>
+    </Card.Body>
+  </Card>
 
-    </div>
-    <div className="col-lg-8 border" style={borderFeeTax}>
-        <h1 style={titleText}>Partner Hotel Suppliers</h1>
-        <hr />
-        <div style={tableTax}>
-            <BBDataTable {...params} modalContent={HotelSuppliers} />
-        </div>
-    </div>
-  </div>
   )
 }

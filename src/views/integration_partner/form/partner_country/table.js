@@ -7,11 +7,6 @@ import { useDispatch } from 'react-redux'
 import { setUIParams } from "redux/ui-store"
 
 export default function IntegrationPartnerCountriesTable() {
-  
-
-  const onReset = () => {
-    setParams({ ...params, filters: [] })
-  }
 
   let [params, setParams] = useState({
     isCheckbox: false,
@@ -25,6 +20,7 @@ export default function IntegrationPartnerCountriesTable() {
     deleteEndpoint: "/master/batch-actions/delete/integration-partner-countries",
     activationEndpoint: "/master/batch-actions/activate/integration-partner-countries",
     deactivationEndpoint: "/master/batch-actions/deactivate/integration-partner-countries",
+    btnDownload: ".buttons-csv",
     columns: [
       {
         title: "Country",
@@ -51,7 +47,7 @@ export default function IntegrationPartnerCountriesTable() {
   return <><Card>
       <Card.Body>
       <h3 className="card-heading">Partner Countries</h3>
-      <BBDataTable {...params} onReset={onReset} modalContent={Form} />
+      <BBDataTable {...params} modalContent={Form} />
       </Card.Body>
       </Card></>
   

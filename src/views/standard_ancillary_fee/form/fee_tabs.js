@@ -77,7 +77,10 @@ const FeeSection = (props) => {
                               let pattern=/^\d+$/
                               // console.log(pattern.test(value.target.value))
                               if(pattern.test(value.target.value)) {
-                                props.setFieldValue(props.fieldAmount, value.target.value)
+                                const changeToInteger = Number.parseInt(value.target.value)
+                                // console.log(changeToInteger, "haha")
+                                // const separator = changeToInteger.toLocaleString('en-US', { maximumFractionDigits: 0 })
+                                props.setFieldValue(props.fieldAmount, changeToInteger)
                               }
                              
                             }}
@@ -181,10 +184,10 @@ const FeeSection = (props) => {
               </Col>
               <Col sm={12} md={6}>
               {disabledPercent 
-                ? <Form.Check type="checkbox" className="mt-2" label="Include Taxed" disabled={true} />
+                ? <Form.Check type="checkbox" className="mt-2" label="Include Taxes" disabled={true} />
                 : <FastField name={props.fieldIncludeTax}>
                     {({ field, }) => (
-                    <Form.Check {...field} type="checkbox" className="mt-2" label="Include Taxed" disabled={props.isView} />
+                    <Form.Check {...field} type="checkbox" className="mt-2" label="Include Taxes" disabled={props.isView} />
                     )}
                   </FastField>
               }

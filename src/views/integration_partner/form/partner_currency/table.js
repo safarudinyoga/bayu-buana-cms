@@ -6,21 +6,6 @@ import Form from "./form"
 import { Card } from "react-bootstrap"
 
 export default function IntegrationPartnerCurrenciesTable() {
-  let dispatch = useDispatch()
-  useEffect(() => {
-    dispatch(
-      setUIParams({
-        title: "Partner Currencies",
-        breadcrumbs: [
-          {
-            text: "Partner Currencies",
-          },
-        ],
-      }),
-    )
-  }, [])
-
-
   let params = {
     isCheckbox: false,
     showAdvancedOptions: false,
@@ -31,6 +16,7 @@ export default function IntegrationPartnerCurrenciesTable() {
     baseRoute: "/master/integration-partner-currencies/form",
     endpoint: "/master/integration-partner-currencies",
     deleteEndpoint: "/master/batch-actions/delete/integration-partner-currencies",
+    btnDownload: ".buttons-csv",
     columns: [
       {
         title: "Currency",
@@ -51,8 +37,8 @@ export default function IntegrationPartnerCurrenciesTable() {
     module: "integration-partner-currencies"
   }
   return (
-    <Card style={{marginBottom: 0}}>
-        <Card.Body className="px-1 px-md-4">
+    <Card>
+        <Card.Body>
           <h3 className="card-heading">Partner Currencies</h3>
           <BBDataTable {...params} modalContent={Form} />
         </Card.Body>
