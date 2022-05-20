@@ -18,46 +18,152 @@
   display: block !important;
 }
 
+.view-calendar {
+  font-size: 14px; 
+  vertical-align: middle; 
+  margin-left: 0.5rem !important;
+}
+
+.form-check-label {
+  font-size: 1rem;
+}
+
+
 @media only screen and (max-width: 320px) {
   .periode {
-    font-size: 0.7rem;
+    font-size: 0.7rem !important;
   }
 
   .rmdp-day, .rmdp-week-day {
-    height: 18px;
-    width: 18px;
+    height: 18px !important;
+    width: 18px !important;
   }
 
   .rmdp-week-day {
-    font-size: 8px;
+    font-size: 8px !important;
   }
 
   .rmdp-day span {
-    font-size: 9px;
+    font-size: 9px !important;
   }
 
   .rmdp-arrow-container {
-    height: 15px;
-    width: 15px;
+    height: 15px !important;
+    width: 15px !important;
+  }
+
+  .form-check-label {
+    font-size: 0.7rem;
   }
 }
 
 @media only screen and (max-width: 375px) and (min-width: 321px) {
   .periode {
-    font-size: 0.9rem;
+    font-size: 0.9rem !important;
   }
 
   .rmdp-day, .rmdp-week-day {
-    height: 24px;
-    width: 24px;
+    height: 20px !important;
+    width: 20px !important;
   }
 
   .rmdp-week-day {
-    font-size: 11px;
+    font-size: 9px !important;
+  }
+
+  .rmdp-day span {
+    font-size: 9px !important;
   }
 
   .rmdp-arrow-container {
-    height: 17px;
-    width: 17px;
+    height: 17px !important;
+    width: 17px !important;
+  }
+
+  .form-check-label {
+    font-size: 0.75rem;
+  }
+}
+
+@media only screen and (max-width: 425px) and (min-width: 376px) {
+  .periode {
+    font-size: 0.9rem !important;
+  }
+
+  .rmdp-day, .rmdp-week-day {
+    height: 21px !important;
+    width: 21px !important;
+  }
+
+  .rmdp-week-day {
+    font-size: 10px !important;
+  }
+
+  .rmdp-day span {
+    font-size: 10px !important;
+  }
+
+  .rmdp-arrow-container {
+    height: 17px !important;
+    width: 17px !important;
+  }
+
+  .form-check-label {
+    font-size: 0.9rem;
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .view-calendar {
+    display: none;
+  }
+
+  .view-calendar-mobile {
+    display: flex;
+    justify-content: center;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .view-calendar-mobile {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 570px) and (min-width: 426px) {
+  .periode {
+    font-size: 0.9rem !important;
+  }
+
+  .rmdp-day, .rmdp-week-day {
+    height: 25px !important;
+    width: 25px !important;
+  }
+
+  .rmdp-week-day {
+    font-size: 12px !important;
+  }
+
+  .rmdp-day span {
+    font-size: 12px !important;
+  }
+
+  .rmdp-arrow-container {
+    height: 17px !important;
+    width: 17px !important;
+  }
+}
+
+@media only screen and (max-width: 1280px) and (min-width: 992px) {
+  .periode {
+    font-size: 0.7rem;
+  }
+}
+
+@media only screen and (max-width: 803px) and (min-width: 768px){
+  .view-calendar {
+    font-size: 12px; 
   }
 }

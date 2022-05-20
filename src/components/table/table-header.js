@@ -101,7 +101,6 @@ const StatusSelect = (props) => {
 
 class TableHeader extends Component {
   constructor(props) {
-    console.log(props)
     super(props)
     this.state = {
       showFilter: false,
@@ -215,14 +214,14 @@ class TableHeader extends Component {
 
   render() {
     const ExtraFilter = this.props.extraFilter
-    const { customFilterStatus, hideCreate } = this.props
+    const { customFilterStatus, hideCreate, isHidePrintLogo, isHideDownloadLogo } = this.props
     const { pathname } = this.props.location
 
     return (
       <div className="container-fluid pl-0">
         <div className="row">
           <div className="col-xs-12 col-sm-12 col-md-4 col-lg-3 col-xl-3">
-            {pathname !== "/master/general-setup" && (
+            {!this.props.isHideSearch && pathname !== "/master/general-setup" && (
               <div className="input-group input-group-with-text">
                 <input
                   value={this.state.searchValue}
@@ -258,8 +257,7 @@ class TableHeader extends Component {
             )}
             {this.state.showCalendar ? (
               <a
-                style={{ fontSize: 13, verticalAlign: "middle" }}
-                className="ml-2"
+                className="view-calendar"
                 href="/master/special-date/calendar"
               >
                 View Calendar
@@ -307,7 +305,7 @@ class TableHeader extends Component {
               </OverlayTrigger>
             )}
 
-            {pathname !== "/master/general-setup" && (
+            { !isHidePrintLogo && pathname !== "/master/general-setup" && (
               <OverlayTrigger
                 placement="top"
                 overlay={<Tooltip>Click to print</Tooltip>}
@@ -322,7 +320,7 @@ class TableHeader extends Component {
               </OverlayTrigger>
             )}
 
-            {pathname !== "/master/general-setup" && (
+            { !isHideDownloadLogo && pathname !== "/master/general-setup" && (
               <OverlayTrigger
                 placement="top"
                 trigger={"hover"}
@@ -458,6 +456,17 @@ class TableHeader extends Component {
             </div>
           </div>
         </div>
+        {this.state.showCalendar ? (
+          <a
+            className="view-calendar-mobile"
+            href="/master/special-date/calendar"
+          >
+            View Calendar
+          </a>
+          ) : (
+            ""
+          )
+        }
       </div>
     )
   }

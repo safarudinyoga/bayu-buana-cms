@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react"
-import Api from "config/api"
 import { useDispatch } from 'react-redux';
 import { withRouter } from 'react-router';
 import { ReactSVG } from "react-svg"
@@ -25,22 +24,9 @@ const backUrl = "/master/general-setup"
 
 const GeneralSetup= (props) => {
   let dispatch = useDispatch()
-
-  let api = new Api()
-
-  const [tabKey, setTabKey] = useState("general-setup")
-
-  const [loading, setLoading] = useState(true)
-
+  const [tabKey, setTabKey] = useState("general-information")
   useEffect(async () => {
-    let api = new Api()
-    let formId = props.match.params.id
-
     let docTitle = "General Setup"
-    if (!formId) {
-      docTitle = "General Setup"
-    }
-
     dispatch(
       setUIParams({
         title: docTitle,
@@ -54,11 +40,6 @@ const GeneralSetup= (props) => {
         ],
       }),
     )
-    // try {
-    //   let res = await api.get(endpoint)
-    //   setForm(res.data)
-    // } catch (e) {}
-    // setLoading(false)
   }, [])
 
   const handleSelectTab = async (key) => {
@@ -192,97 +173,122 @@ const GeneralSetup= (props) => {
         <Col sm={9}>
           <Tab.Content>
             <Tab.Pane eventKey="general-information">
-              <GeneralInformation
-                history={props.history}
-                backUrl={backUrl}
-                handleSelectTab={(v) => handleSelectTab(v)}
-              />
+              {tabKey === "general-information" ? (
+                <GeneralInformation
+                  history={props.history}
+                  backUrl={backUrl}
+                  handleSelectTab={(v) => handleSelectTab(v)}
+                />
+              ) : null}
             </Tab.Pane>
             <Tab.Pane eventKey="handler-setup">
-              <HandlerSetup
-                history={props.history}
-                backUrl={backUrl}
-                handleSelectTab={(v) => handleSelectTab(v)}
-              />
+              {tabKey === "handler-setup" ? (
+                <HandlerSetup
+                  history={props.history}
+                  backUrl={backUrl}
+                  handleSelectTab={(v) => handleSelectTab(v)}
+                />
+                ) : null}
             </Tab.Pane>
             <Tab.Pane eventKey="identity-rule">
-              <IdentityRule
-                history={props.history}
-                backUrl={backUrl}
-                handleSelectTab={(v) => handleSelectTab(v)}
-              />
+              {tabKey === "identity-rule" ? (
+                <IdentityRule
+                  history={props.history}
+                  backUrl={backUrl}
+                  handleSelectTab={(v) => handleSelectTab(v)}
+                />
+                ) : null}
             </Tab.Pane>
             <Tab.Pane eventKey="standard-service">
-              <StandardService
-                history={props.history}
-                backUrl={backUrl}
-                handleSelectTab={(v) => handleSelectTab(v)}
-              />
+              {tabKey === "standard-service" ? (
+                <StandardService
+                  history={props.history}
+                  backUrl={backUrl}
+                  handleSelectTab={(v) => handleSelectTab(v)}
+                />
+                ) : null}
             </Tab.Pane>
             <Tab.Pane eventKey="over-credit-approver-assignment">
-              <OverCreditApproverAssignment
-                history={props.history}
-                backUrl={backUrl}
-                handleSelectTab={(v) => handleSelectTab(v)}
-              />
+              {tabKey === "over-credit-approver-assignment" ? (
+                <OverCreditApproverAssignment
+                  history={props.history}
+                  backUrl={backUrl}
+                  handleSelectTab={(v) => handleSelectTab(v)}
+                />
+                ) : null}
             </Tab.Pane>
             <Tab.Pane eventKey="travel-consultant-assignment">
-              <TravelConsultantAssignment
-                history={props.history}
-                backUrl={backUrl}
-                handleSelectTab={(v) => handleSelectTab(v)}
-              />
+              {tabKey === "travel-consultant-assignment" ? (
+                <TravelConsultantAssignment
+                  history={props.history}
+                  backUrl={backUrl}
+                  handleSelectTab={(v) => handleSelectTab(v)}
+                />
+                ) : null}
             </Tab.Pane>
             <Tab.Pane eventKey="team-assignment">
-              <TeamAssignment
-                history={props.history}
-                backUrl={backUrl}
-                handleSelectTab={(v) => handleSelectTab(v)}
-              />
+              {tabKey === "team-assignment" ? (
+                <TeamAssignment
+                  history={props.history}
+                  backUrl={backUrl}
+                  handleSelectTab={(v) => handleSelectTab(v)}
+                />
+                ) : null}
             </Tab.Pane>
             <Tab.Pane eventKey="retail-ancillary-fee">
-              <RetailAncillaryFee
-                history={props.history}
-                backUrl={backUrl}
-                handleSelectTab={(v) => handleSelectTab(v)}
-              />
+              {tabKey === "retail-ancillary-fee" ? (
+                <RetailAncillaryFee
+                  history={props.history}
+                  backUrl={backUrl}
+                  handleSelectTab={(v) => handleSelectTab(v)}
+                />
+                ) : null}
             </Tab.Pane>
             <Tab.Pane eventKey="other-ancillary-fee">
-              <OtherAncillaryFee
-                history={props.history}
-                backUrl={backUrl}
-                handleSelectTab={(v) => handleSelectTab(v)}
-              />
+              {tabKey === "other-ancillary-fee" ? (
+                <OtherAncillaryFee
+                  history={props.history}
+                  backUrl={backUrl}
+                  handleSelectTab={(v) => handleSelectTab(v)}
+                />
+                ) : null}
             </Tab.Pane>
             <Tab.Pane eventKey="tax-fee">
-              <TaxFee
-                history={props.history}
-                backUrl={backUrl}
-                handleSelectTab={(v) => handleSelectTab(v)}
-              />
+              {tabKey === "tax-fee" ? (
+                <TaxFee
+                  history={props.history}
+                  backUrl={backUrl}
+                  handleSelectTab={(v) => handleSelectTab(v)}
+                />
+                ) : null}
             </Tab.Pane>
             <Tab.Pane eventKey="booking-settings">
-              <BookingSettings
-                history={props.history}
-                backUrl={backUrl}
-                handleSelectTab={(v) => handleSelectTab(v)}
-              />
+              {tabKey === "booking-settings" ? (
+                <BookingSettings
+                  history={props.history}
+                  backUrl={backUrl}
+                  handleSelectTab={(v) => handleSelectTab(v)}
+                />
+                ) : null}
             </Tab.Pane>
             <Tab.Pane eventKey="invoice-settings">
-              <InvoiceSettings
-                history={props.history}
-                backUrl={backUrl}
-                handleSelectTab={(v) => handleSelectTab(v)}
-              />
+              {tabKey === "invoice-settings" ? (
+                <InvoiceSettings
+                  history={props.history}
+                  backUrl={backUrl}
+                  handleSelectTab={(v) => handleSelectTab(v)}
+                />
+                ) : null}
             </Tab.Pane>
             <Tab.Pane eventKey="travel-advice">
-              <TravelAdvice
-                history={props.history}
-                backUrl={backUrl}
-                handleSelectTab={(v) => handleSelectTab(v)}
-              />
+              {tabKey === "travel-advice" ? (
+                <TravelAdvice
+                  history={props.history}
+                  backUrl={backUrl}
+                  handleSelectTab={(v) => handleSelectTab(v)}
+                />
+              ) : null}
             </Tab.Pane>
-            
           </Tab.Content>
         </Col>
       </Row>

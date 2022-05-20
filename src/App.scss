@@ -331,10 +331,10 @@ select.bg-dark-grey > option {
   border-color: #dee2e6;
 }
 //Employee Tabel/Form Image Profile
-.image-profile-tabel{  
+.image-profile-tabel{
   width: 28px;
   height: 28px;
-  border-radius: 50%;  
+  border-radius: 50%;
 }
 .image-profile-form{
   width: 125px;
@@ -349,6 +349,15 @@ select.bg-dark-grey > option {
   }
 }
 
-.tooltip { 
+.tooltip {
   pointer-events: none;
 }
+
+.uppercase {
+  text-transform: uppercase;
+}
+
+.margin-0 {
+  margin: 0;
+}
+

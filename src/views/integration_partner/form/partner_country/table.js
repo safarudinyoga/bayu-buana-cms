@@ -7,11 +7,6 @@ import { useDispatch } from 'react-redux'
 import { setUIParams } from "redux/ui-store"
 
 export default function IntegrationPartnerCountriesTable() {
-  
-
-  const onReset = () => {
-    setParams({ ...params, filters: [] })
-  }
 
   let [params, setParams] = useState({
     isCheckbox: false,
@@ -51,7 +46,7 @@ export default function IntegrationPartnerCountriesTable() {
   return <><Card>
       <Card.Body>
       <h3 className="card-heading">Partner Countries</h3>
-      <BBDataTable {...params} onReset={onReset} modalContent={Form} />
+      <BBDataTable {...params} modalContent={Form} />
       </Card.Body>
       </Card></>
   

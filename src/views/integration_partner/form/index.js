@@ -106,7 +106,8 @@ const IntegrationPartnerForm = (props) => {
                   </div>
                 </Nav.Link>
               </Nav.Item>
-              {data ? (data.integration_partner_code == 2 || data.integration_partner_code == 5 || data.integration_partner_code == 15) ?
+              {
+              data ? (data.integration_partner_code == 2 || data.integration_partner_code == 5 || data.integration_partner_code == 15) ?
               <Nav.Item>
                 <Nav.Link eventKey="partner-cities">
                   <div>
@@ -114,9 +115,11 @@ const IntegrationPartnerForm = (props) => {
                     <span>Partner Cities</span>
                   </div>
                 </Nav.Link>
-              </Nav.Item> : null : null 
+              </Nav.Item> 
+              : null : null 
               }
-              {data ? data.integration_partner_code == 2 ?
+              {
+              data ? data.integration_partner_code == 2 ?
               <Nav.Item>
                 <Nav.Link eventKey="partner-countries">
                   <div>
@@ -124,9 +127,11 @@ const IntegrationPartnerForm = (props) => {
                     <span>Partner Countries</span>
                   </div>
                 </Nav.Link>
-              </Nav.Item> : null : null 
+              </Nav.Item> 
+              : null : null 
               }
-              {data ? (data.integration_partner_code == 2 || data.integration_partner_code == 10) ?
+              {
+              data ? (data.integration_partner_code == 2 || data.integration_partner_code == 10) ?
               <Nav.Item>
                 <Nav.Link eventKey="partner-hotels">
                   <div>
@@ -134,9 +139,11 @@ const IntegrationPartnerForm = (props) => {
                     <span>Partner Hotels</span>
                   </div>
                 </Nav.Link>
-              </Nav.Item>: null : null 
+              </Nav.Item>
+              : null : null 
               }
-              {data ? (data.integration_partner_code == 2 || data.integration_partner_code == 10) ?
+              {
+              data ? (data.integration_partner_code == 2 || data.integration_partner_code == 10) ?
               <Nav.Item>
                 <Nav.Link eventKey="partner-hotel-suppliers">
                   <div>
@@ -144,9 +151,11 @@ const IntegrationPartnerForm = (props) => {
                     <span>Partner Hotel Suppliers</span>
                   </div>
                 </Nav.Link>
-              </Nav.Item>: null : null 
+              </Nav.Item>
+              : null : null 
               }
-              {data ? (data.integration_partner_code == 1 || data.integration_partner_code == 7 || data.integration_partner_code == 8 || data.integration_partner_code == 9 || data.integration_partner_code == 16) ?
+              {
+              data ? (data.integration_partner_code == 1 || data.integration_partner_code == 7 || data.integration_partner_code == 8 || data.integration_partner_code == 9 || data.integration_partner_code == 16) ?
               <Nav.Item>
                 <Nav.Link eventKey="partner-credentials">
                   <div>
@@ -154,9 +163,11 @@ const IntegrationPartnerForm = (props) => {
                     <span>Partner Credentials</span>
                   </div>
                 </Nav.Link>
-              </Nav.Item>: null : null 
+              </Nav.Item>
+              : null : null 
               }
-              {data ? (data.integration_partner_code == 1 || data.integration_partner_code == 2 || data.integration_partner_code == 3 || data.integration_partner_code == 4 || data.integration_partner_code == 7 || data.integration_partner_code == 8 || data.integration_partner_code == 9 || data.integration_partner_code == 10 || data.integration_partner_code == 16) ?
+              {
+              data ? (data.integration_partner_code == 1 || data.integration_partner_code == 2 || data.integration_partner_code == 3 || data.integration_partner_code == 4 || data.integration_partner_code == 7 || data.integration_partner_code == 8 || data.integration_partner_code == 9 || data.integration_partner_code == 10 || data.integration_partner_code == 16) ?
               <Nav.Item>
                 <Nav.Link eventKey="partner-corporates">
                   <div>
@@ -164,9 +175,11 @@ const IntegrationPartnerForm = (props) => {
                     <span>Partner Corporates</span>
                   </div>
                 </Nav.Link>
-              </Nav.Item>: null : null 
+              </Nav.Item>
+              : null : null 
               }
-              {data ? (data.integration_partner_code == 1 || data.integration_partner_code == 3 || data.integration_partner_code == 7 || data.integration_partner_code == 8 || data.integration_partner_code == 9 || data.integration_partner_code == 16) ?
+              {
+              data ? (data.integration_partner_code == 1 || data.integration_partner_code == 3 || data.integration_partner_code == 7 || data.integration_partner_code == 8 || data.integration_partner_code == 9 || data.integration_partner_code == 16) ?
               <Nav.Item>
                 <Nav.Link eventKey="partner-cabins">
                   <div>
@@ -174,9 +187,11 @@ const IntegrationPartnerForm = (props) => {
                     <span>Partner Cabins</span>
                   </div>
                 </Nav.Link>
-              </Nav.Item>: null : null 
+              </Nav.Item>
+              : null : null 
               }
-              {data ? (data.integration_partner_code == 1 || data.integration_partner_code == 2 || data.integration_partner_code == 3 || data.integration_partner_code == 7 || data.integration_partner_code == 8 || data.integration_partner_code == 9 || data.integration_partner_code == 10 || data.integration_partner_code == 16) ?
+              {
+              data ? (data.integration_partner_code == 1 || data.integration_partner_code == 2 || data.integration_partner_code == 3 || data.integration_partner_code == 7 || data.integration_partner_code == 8 || data.integration_partner_code == 9 || data.integration_partner_code == 10 || data.integration_partner_code == 16) ?
               <Nav.Item>
                 <Nav.Link eventKey="partner-meal-plans">
                   <div>
@@ -184,9 +199,11 @@ const IntegrationPartnerForm = (props) => {
                     <span>Partner Meal Plans</span>
                   </div>
                 </Nav.Link>
-              </Nav.Item>: null : null 
+              </Nav.Item>
+              : null : null 
               }
-              {data ? (data.integration_partner_code == 1 || data.integration_partner_code == 3 || data.integration_partner_code == 7 || data.integration_partner_code == 8 || data.integration_partner_code == 9 || data.integration_partner_code == 16) ?
+              {
+              data ? (data.integration_partner_code == 1 || data.integration_partner_code == 3 || data.integration_partner_code == 7 || data.integration_partner_code == 8 || data.integration_partner_code == 9 || data.integration_partner_code == 16) ?
                 <Nav.Item>
                 <Nav.Link eventKey="partner-fee-taxes">
                   <div>
@@ -194,9 +211,11 @@ const IntegrationPartnerForm = (props) => {
                     <span>Partner Fee Taxes</span>
                   </div>
                 </Nav.Link>
-              </Nav.Item>: null : null 
+              </Nav.Item>
+              : null : null 
               }
-              {data ? data.integration_partner_code == 11 ?
+              {
+              data ? data.integration_partner_code == 11 ?
                 <Nav.Item>
                 <Nav.Link eventKey="partner-payment-gateway">
                   <div>
@@ -204,9 +223,11 @@ const IntegrationPartnerForm = (props) => {
                     <span>Partner Payment Gateways</span>
                   </div>
                 </Nav.Link>
-              </Nav.Item>: null : null 
+              </Nav.Item>
+              : null : null 
               }
-              {data ? data.integration_partner_code == 11 ?
+              {
+              data ? data.integration_partner_code == 11 ?
                 <Nav.Item>
                 <Nav.Link eventKey="partner-currencies">
                   <div>
@@ -214,7 +235,8 @@ const IntegrationPartnerForm = (props) => {
                     <span>Partner Currencies</span>
                   </div>
                 </Nav.Link>
-              </Nav.Item>: null : null 
+              </Nav.Item>
+              : null : null 
               }
               <Nav.Item>
                 <Nav.Link eventKey="partner-messages">
