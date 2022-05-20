@@ -13,6 +13,7 @@ export default function IntegrasiPartnerHotelSupplier() {
     deleteEndpoint: "/master/integration-partners/3f61b5e0-d7cb-4f80-94e7-83114ff23903/hotel-suppliers",
     activationEndpoint: "/master/batch-actions/activate/integration-partner-hotels",
     deactivationEndpoint: "/master/batch-actions/deactivate/integration-partner-hotels",
+    btnDownload: ".buttons-csv",
     showAdvancedOptions: false,
     hideDetail: true,
     createOnModal: true,

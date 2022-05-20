@@ -16,6 +16,7 @@ export default function IntegrationPartnerCurrenciesTable() {
     baseRoute: "/master/integration-partner-currencies/form",
     endpoint: "/master/integration-partner-currencies",
     deleteEndpoint: "/master/batch-actions/delete/integration-partner-currencies",
+    btnDownload: ".buttons-csv",
     columns: [
       {
         title: "Currency",

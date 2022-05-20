@@ -20,6 +20,7 @@ export default function IntegrationPartnerCountriesTable() {
     deleteEndpoint: "/master/batch-actions/delete/integration-partner-countries",
     activationEndpoint: "/master/batch-actions/activate/integration-partner-countries",
     deactivationEndpoint: "/master/batch-actions/deactivate/integration-partner-countries",
+    btnDownload: ".buttons-csv",
     columns: [
       {
         title: "Country",
