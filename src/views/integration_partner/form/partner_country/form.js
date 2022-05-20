@@ -1,8 +1,7 @@
 import { withRouter } from "react-router";
 import React, { useState, useEffect } from "react";
-import { Form, FormGroup, InputGroup, Button } from "react-bootstrap";
-import { Formik, FastField } from "formik";
-import useQuery from "lib/query";
+import { Form, Button } from "react-bootstrap";
+import { Formik } from "formik";
 import * as Yup from "yup";
 import Api from "config/api";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,8 +9,9 @@ import { setAlert, setCreateModal, setModalTitle } from "redux/ui-store";
 import CancelButton from "components/button/cancel";
 import FormikControl from "../../../../components/formik/formikControl";
 
-const endpoint = "/master/integration-partner-countries";
 function ExchangeRateCreate(props) {
+    const partner_integration_id = props.match.params.id
+    const endpoint = `/master/integration-partners/${partner_integration_id}/countries`;
     const dispatch = useDispatch();
     const showCreateModal = useSelector((state) => state.ui.showCreateModal);
     const API = new Api();
@@ -25,7 +25,7 @@ function ExchangeRateCreate(props) {
 
         let docTitle = "EDIT PARTNER COUNTRIES";
         if (!formId) {
-            docTitle = "CREATE PARTNER COUNTRIES";
+            docTitle = "NEW PARTNER COUNTRIES";
         } else if (isView) {
             docTitle = "Exchange Rate Details";
         }
@@ -62,25 +62,26 @@ function ExchangeRateCreate(props) {
     };
 
     const validationSchema = Yup.object().shape({
-        country: Yup.object().required("Country is required.."),
+        country: Yup.object().required("Country is required."),
         country_code: Yup.string().required("Partner Country Code is required"),
         country_name: Yup.string().required("Partner Country Name is required"),
-        nationality: Yup.string().required("Nationality is required"),
     });
 
     const onSubmit = async (values, a) => {
         try {
             let form = {
-                country_name: values.country_name.value,
-                country_code: values.country_code.value,
-                nationality: values.nationality.value,
+                country_id:values.country.value,
+                country_name: values.country_name,
+                country_code: values.country_code,
+                nationality: values.nationality,
+                integration_partner_id: partner_integration_id,
             };
             let res = await API.putOrPost("/master/integration-partner-countries", id, form);
 
             dispatch(setCreateModal({ show: false, id: null, disabled_form: false }));
             dispatch(
                 setAlert({
-                    message: `Record 'From Currency: ${form.country_code} and To Currency: ${form.country_name}' has been successfully saved.`,
+                    message: `Record 'Partner Country Name: ${values.country.label}' has been successfully saved.`,
                 })
             );
         } catch (e) {
@@ -105,9 +106,59 @@ function ExchangeRateCreate(props) {
         <Formik initialValues={formValues || initialValues} validationSchema={validationSchema} onSubmit={onSubmit} validateOnMount enableReinitialize>
             {({ dirty, handleSubmit, isSubmitting, setFieldValue, values }) => (
                 <Form onSubmit={handleSubmit} className="ml-2">
-                    <FormikControl control="input" required="label-required" label="Partner Country Code" name="country_code" style={{ maxWidth: 250 }} size={formSize} disabled={isView || loading} />
-                    <FormikControl control="input" required="label-required" label="Partner Country Name" name="country_name" style={{ maxWidth: 250 }} size={formSize} disabled={isView || loading} />
-                    <FormikControl control="input" required="label-required" label="Nationality" name="nationality" style={{ maxWidth: 250 }} size={formSize} disabled={isView || loading} />
+                    <FormikControl
+                        control="selectAsync"
+                        required={isView ? "" : "label-required"}
+                        label="Country"
+                        name="country"
+                        placeholder={"Please choose"}
+                        url={`master/countries`}
+                        fieldName={"country_name"}
+                        onChange={(v) => {
+                          setFieldValue("country", v)
+                        }}
+                        style={{ maxWidth: 250 }}
+                        components={
+                          isView
+                            ? {
+                                DropdownIndicator: () => null,
+                                IndicatorSeparator: () => null,
+                              }
+                            : null
+                        }
+                        isDisabled={isView|| loading}
+                        size={formSize}
+                        status={`"!=", 0`}
+                      />
+                    <FormikControl 
+                        control="input" 
+                        required="label-required" 
+                        label="Partner Country Code" 
+                        name="country_code" 
+                        style={{ maxWidth: 250 }} 
+                        size={formSize} 
+                        disabled={isView || loading}
+                        maxLength={36}
+                    />
+                    <FormikControl 
+                        control="input" 
+                        required="label-required" 
+                        label="Partner Country Name" 
+                        name="country_name" 
+                        style={{ maxWidth: 250 }} 
+                        size={formSize} 
+                        disabled={isView || loading} 
+                        maxLength={64}
+                    />
+                    <FormikControl
+                        control="input"
+                        label="Nationality" 
+                        name="nationality"
+                        style={{ maxWidth: 250 }}
+                        size={formSize}
+                        disabled={isView || loading}
+                        maxLength={36}
+                    />
 
                     {!props.hideButton && (
                         <div
