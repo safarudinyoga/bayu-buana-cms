@@ -17,6 +17,7 @@ export default function IntegrationFeeTaxes() {
     hideDetail: true,
     activationEndpoint: "/master/batch-actions/activate/hotels",
     deactivationEndpoint: "/master/batch-actions/deactivate/hotels",
+    btnDownload: ".buttons-csv",
     columns: [
       {
         title: "Fee Tax",

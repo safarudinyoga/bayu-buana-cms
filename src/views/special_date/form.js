@@ -33,6 +33,9 @@ function SpecialDateForm(props) {
   const startDatePickerRef = useRef()
   const endDatePickerRef = useRef()
 
+  const [initStartDate, setInitStartDate] = useState(null)
+  const [initEndDate, setInitEndDate] = useState(null)
+
   const [form, setForm] = useState({
     special_date_name: "",
     start_date: new Date(),
@@ -105,6 +108,8 @@ function SpecialDateForm(props) {
         let res = await api.get(endpoint + "/" + formId)
         console.log(res);
         setForm(res.data)
+        setInitStartDate(res.data.start_date);
+        setInitEndDate(res.data.end_date);
         if(res.data) {
           let currentName = res.data.special_date_name
           $.validator.addMethod(
@@ -282,13 +287,27 @@ function SpecialDateForm(props) {
               }
               onOpen={() => setStartDateClose(false)}
               onClose={() => startDateClose}
+              fixMainPosition={true}
+              portal
             >
               <div className="d-flex justify-content-end p-4">
                 <div
                   className="pt-1"
                   style={{color: "#1E83DC"}}
                   role={"button"}
-                  onClick={() => setForm({...form, start_date: new Date()})}
+                  onClick={() => {
+                    if(formId) {
+                      if(form.end_date < new Date(initStartDate)){
+                        setForm({...form, end_date: new Date(initEndDate), start_date: new Date(initStartDate)})
+                      } else {
+                        setForm({...form, start_date: new Date(initStartDate)})
+                      }
+                      
+                    }
+                    else {
+                      setForm({...form, start_date: new Date()})
+                    }
+                  }}
                 >
                   Reset
                 </div>    
@@ -311,8 +330,8 @@ function SpecialDateForm(props) {
             </DatePicker>
           </div>
             
-          <span className="text-center">to</span>
-          <div className="col-8 col-md-4 col-lg-3 datepicker-special-date-container">
+          <span className="text-center mb-2">to</span>
+          <div className="col-8 col-md-4 col-lg-3 mb-2 datepicker-special-date-container">
             <DatePicker
               render={<RenderDatepickerEnd />}
               numberOfMonths={2}
@@ -327,17 +346,32 @@ function SpecialDateForm(props) {
                   setEndDateClose(false)
                 }}
               onOpen={() => setEndDateClose(false)}
-              onClose={() => endDateClose} 
+              onClose={() => endDateClose}
+              fixMainPosition={true}
+              portal 
             >
               <div className="d-flex justify-content-end p-4">
                 <div
+                  className="pt-1"
+                  style={{color: "#1E83DC"}}
                   role={"button"}
-                  onClick={() => setForm({...form, start_date: new Date()})}
+                  onClick={() => {
+                    if(formId) {
+                      if(form.start_date > new Date(initEndDate)){
+                        setForm({...form, start_date: new Date(initStartDate), end_date: new Date(initEndDate)})
+                      } else {
+                        setForm({...form, end_date: new Date(initEndDate)})
+                      }
+                    }
+                    else {
+                      setForm({...form, end_date: new Date()})
+                    }
+                  }}
                 >
                   Reset
                 </div>    
                 <div 
-                  className="btn btn-primary ml-4"
+                  className="btn btn-primary ml-4 px-4 py-2"
                   role={"button"} 
                   onClick={
                     () => {
@@ -346,7 +380,7 @@ function SpecialDateForm(props) {
                       })
                     }
                 }>
-                  Apply
+                  APPLY
                 </div>
               </div>
             </DatePicker>
