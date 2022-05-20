@@ -125,26 +125,26 @@ function PaymentGatewayCreate(props) {
 
   const onSubmit = async (values, a) => {
     console.log(values)
-    // try {
-    //   let form = {
-    //     ...values,
-    //     currency_id: values.currency_id.value,
-    //     bank_id: values.bank_id.value,
-    //   }
+    try {
+      let form = {
+        ...values,
+        currency_id: values.currency_id.value,
+        bank_id: values.bank_id.value,
+      }
 
-    //   dispatch(setCreateModal({ show: false, id: null, disabled_form: false }))
-    //   dispatch(
-    //     setAlert({
-    //       message: `Record 'Partner Payment Gateway Name: ${form.payment_gateway_name}' has been successfully saved.`,
-    //     }),
-    //   )
-    // } catch (e) {
-    //   dispatch(
-    //     setAlert({
-    //       message: "Failed to save this record.",
-    //     }),
-    //   )
-    // }
+      dispatch(setCreateModal({ show: false, id: null, disabled_form: false }))
+      dispatch(
+        setAlert({
+          message: `Record 'Partner Payment Gateway Name: ${form.payment_gateway_name}' has been successfully saved.`,
+        }),
+      )
+    } catch (e) {
+      dispatch(
+        setAlert({
+          message: "Failed to save this record.",
+        }),
+      )
+    }
   }
 
   const formSize = {
