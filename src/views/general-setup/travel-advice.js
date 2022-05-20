@@ -16,7 +16,6 @@ import {OverlayTrigger, Tooltip} from "react-bootstrap"
 // import Form from "./form";
 
 function TravelAdvice(props) {
-    console.log(props);
     const api = new Api()
   const [visibleAdd, setVisibleAdd] = React.useState(false)
   const [formBuilder, setFormBuilder] = useState(null)
@@ -120,7 +119,6 @@ function TravelAdvice(props) {
         let res = await api.get(endpoint  + "/translations", {
             size: 50,
           })
-          console.log(res, 'ini translate');
         //   setTranslations(res.data.items)
     }, [])
 

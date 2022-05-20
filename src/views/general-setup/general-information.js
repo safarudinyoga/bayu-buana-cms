@@ -13,7 +13,6 @@ import Data from "../general_information/data";
 
 const GeneralInformation = (props) => {
   const [key, setKey] = useState("CORPORATE CLIENT");
-  console.log(key, 'key');
 
     const titleText = {
         fontSize: 16,

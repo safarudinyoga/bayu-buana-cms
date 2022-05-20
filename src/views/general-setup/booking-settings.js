@@ -189,7 +189,6 @@ export default function BookingSetting() {
                     <div>
                         {
                             data.map((el, idx) => {
-                                console.log(el);
                                 return (
                                     <div key={idx} className="row" style={{borderBottom: '1px solid #D3D3D3', marginBottom: 10}} >
                                         {
@@ -212,7 +211,6 @@ export default function BookingSetting() {
                                         <div style={{display: 'flex', }}>
                                         {
                                             el.time.map((item, index) => {
-                                              console.log(index, '<<');
                                                 return (
                                                     <div key={index} style={{justifyContent: 'space-between', display: 'flex'}} >
                                                       {
