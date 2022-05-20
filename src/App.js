@@ -194,6 +194,7 @@ import IdentityRuleTable from "views/identity_rule/table"
 
 // Tax Fee
 import TaxFeeForm from "views/tax_fee/form"
+import ShoppingCache from "views/shopping_cache/table"
 
 const RouteWithProps = ({
   path,
@@ -658,6 +659,12 @@ const DashboardRoutes = () => {
         <Route exact path="/profile/:tab?">
           <UserProfile />
         </Route>
+
+        {/* start shopping cache */}
+        <Route exact path="/internal/shopping-cache">
+          <ShoppingCache />
+        </Route>
+        {/* end shopping cache */}
 
         {/* Master General Setup*/}
         <Route exact path="/master/general-setup">

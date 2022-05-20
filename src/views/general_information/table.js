@@ -71,11 +71,8 @@ const GeneralInformation = (props) => {
     
 
   return (
-    <div className="row">
-        <div className="col-md-4"> 
-
-        </div>
-        <div className="col-md-8 border">
+    <div>
+        <div className=" border">
             <h1 style={titleText}>General Information</h1>
             <hr />
             <div style={{width: '90%', margin: 'auto'}}>

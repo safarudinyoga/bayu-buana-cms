@@ -299,13 +299,15 @@ class TableHeader extends Component {
                 >
                   <img src={createIcon} className="mr-1" alt="new" />
                   {pathname === "/master/general-setup"
-                    ? "Add Team"
+                    ? "Add Team" :
+                    pathname === "/internal/shopping-cache" ?
+                    "Add Shopping Criteria" 
                     : "Create New"}
                 </button>
               </OverlayTrigger>
             )}
 
-            { !isHidePrintLogo && pathname !== "/master/general-setup" && (
+            {!isHidePrintLogo && pathname !== "/master/general-setup" && pathname !== "/internal/shopping-cache" && (
               <OverlayTrigger
                 placement="top"
                 overlay={<Tooltip>Click to print</Tooltip>}
@@ -320,7 +322,7 @@ class TableHeader extends Component {
               </OverlayTrigger>
             )}
 
-            { !isHideDownloadLogo && pathname !== "/master/general-setup" && (
+            {isHideDownloadLogo && pathname !== "/master/general-setup" && pathname !== "/internal/shopping-cache" && (
               <OverlayTrigger
                 placement="top"
                 trigger={"hover"}
