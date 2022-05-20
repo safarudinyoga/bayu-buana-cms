@@ -8,7 +8,7 @@ import Api from "config/api"
 import { useDispatch, useSelector } from "react-redux"
 import { setAlert, setCreateModal, setModalTitle } from "redux/ui-store"
 import CancelButton from "components/button/cancel"
-import FormikControl from "../../../../components/formik/formikControl"
+import FormikControl from "components/formik/formikControl"
 
 const endpoint =
   "/master/integration-partners/3f61b5e0-d7cb-4f80-94e7-83114ff23903/payment-gateways"
@@ -125,26 +125,26 @@ function PaymentGatewayCreate(props) {
 
   const onSubmit = async (values, a) => {
     console.log(values)
-    // try {
-    //   let form = {
-    //     ...values,
-    //     currency_id: values.currency_id.value,
-    //     bank_id: values.bank_id.value,
-    //   }
+    try {
+      let form = {
+        ...values,
+        currency_id: values.currency_id.value,
+        bank_id: values.bank_id.value,
+      }
 
-    //   dispatch(setCreateModal({ show: false, id: null, disabled_form: false }))
-    //   dispatch(
-    //     setAlert({
-    //       message: `Record 'Partner Payment Gateway Name: ${form.payment_gateway_name}' has been successfully saved.`,
-    //     }),
-    //   )
-    // } catch (e) {
-    //   dispatch(
-    //     setAlert({
-    //       message: "Failed to save this record.",
-    //     }),
-    //   )
-    // }
+      dispatch(setCreateModal({ show: false, id: null, disabled_form: false }))
+      dispatch(
+        setAlert({
+          message: `Record 'Partner Payment Gateway Name: ${form.payment_gateway_name}' has been successfully saved.`,
+        }),
+      )
+    } catch (e) {
+      dispatch(
+        setAlert({
+          message: "Failed to save this record.",
+        }),
+      )
+    }
   }
 
   const formSize = {
@@ -308,6 +308,7 @@ function PaymentGatewayCreate(props) {
             >
               {!isView && (
                 <Button
+                  className="px-4"
                   variant="primary"
                   type="submit"
                   disabled={isSubmitting}

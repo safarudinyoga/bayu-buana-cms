@@ -5,6 +5,7 @@ import { setUIParams } from "redux/ui-store"
 import { renderColumn } from "lib/translation"
 import DatePicker from 'react-datepicker'
 import moment from 'moment'
+import './style.css'
 
 export default function SetupFlightCommisionTable() {
   let dispatch = useDispatch()
@@ -17,18 +18,36 @@ export default function SetupFlightCommisionTable() {
             text: "Master Data Management",
           },
           {
-            text: "Setup Flight Commision",
+            text: "Setup Flight Commission",
           },
         ]
       })
     )
   }, [])
 
+  const NextDay = (date = new Date()) => {
+    date.setDate(date.getDate() + 1)
+    return date
+  }
+
+  const MinDate = (date = new Date()) => { 
+    date.setFullYear(date.getFullYear() - 1)
+
+    return date
+  }
+
+  const MaxDate = (date = new Date()) => {
+    date.setFullYear(date.getFullYear() + 1)
+
+    return date
+  }
+
   const [selectedIssueStart, setSelectedIssueStart] = useState(new Date())
-  const [selectedIssueEnd, setSelectedIssueEnd] = useState(new Date())
+  const [selectedIssueEnd, setSelectedIssueEnd] = useState(NextDay)
 
   const [selectedDepartureStart, setSelectedDepartureStart] = useState(new Date())
-  const [selectedDepartureEnd, setSelectedDepartureEnd] = useState(new Date())
+  const [selectedDepartureEnd, setSelectedDepartureEnd] = useState(NextDay)
+
 
   // const onFilterChange = (e, values) => {
   //   let ids = []
@@ -53,26 +72,40 @@ export default function SetupFlightCommisionTable() {
           <div className="col-xs-4">
             <label className="text-label-filter font-weight-bold">Period of Issue</label>
             <div className="row mb-3 mb-sm-0 align-items-center">
-              <div className="col-md-5">
+              <div className="col-md-5 col-5">
                 <DatePicker 
-                  className="form-control"
+                  className="form-control date-picker"
                   dateFormat="dd MMMM yyyy"
                   selected={selectedIssueStart}
                   onChange={(date) => {
                     setSelectedIssueStart(date)
                   }}
+                  minDate={MinDate}
                 />
+                <div className="icon-calender">
+                    <img
+                      src="/img/icons/date-range.svg"
+                      className="calendar"
+                    ></img>
+                </div>
               </div>
-              <span className="col-md-1"> to </span>
-              <div className="col-md-5">
+              <span className="col-md-1 col-2" align="center"> to </span>
+              <div className="col-md-5 col-5">
                 <DatePicker 
-                  className="form-control"
+                  className="form-control date-picker"
                   dateFormat="dd MMMM yyyy"
                   selected={selectedIssueEnd}
                   onChange={(date) => {
                     setSelectedIssueEnd(date)
                   }}
+                  maxDate={MaxDate}
                 />
+                 <div className="icon-calender">
+                    <img
+                      src="/img/icons/date-range.svg"
+                      className="calendar"
+                    ></img>
+                </div>
               </div>
             </div>
           </div>
@@ -81,26 +114,40 @@ export default function SetupFlightCommisionTable() {
           <div className="col-xs-4">
             <label className="text-label-filter font-weight-bold">Period of Departure</label>
             <div className="row mb-3 mb-sm-0 align-items-center">
-              <div className="col-md-5">
+              <div className="col-md-5 col-5">
                 <DatePicker 
-                  className="form-control"
+                  className="form-control date-picker"
                   dateFormat="dd MMMM yyyy"
                   selected={selectedDepartureStart}
                   onChange={(date) => {
                     setSelectedDepartureStart(date)
                   }}
+                  minDate={MinDate}
                 />
+                <div className="icon-calender">
+                    <img
+                      src="/img/icons/date-range.svg"
+                      className="calendar"
+                    ></img>
+                </div>
               </div>
-              <span className="col-md-1"> to </span>
-              <div className="col-md-5">
+              <span className="col-md-1 col-2" align="center"> to </span>
+              <div className="col-md-5 col-5">
                 <DatePicker 
-                  className="form-control"
+                  className="form-control date-picker"
                   dateFormat="dd MMMM yyyy"
-                  selected={selectedIssueStart}
+                  selected={selectedDepartureEnd}
                   onChange={(date) => {
-                    setSelectedIssueStart(date)
+                    setSelectedDepartureEnd(date)
                   }}
+                  maxDate={MaxDate}
                 />
+                <div className="icon-calender">
+                    <img
+                      src="/img/icons/date-range.svg"
+                      className="calendar"
+                    ></img>
+                </div>
               </div>
             </div>
           </div>
@@ -188,7 +235,7 @@ export default function SetupFlightCommisionTable() {
         }
       }
     ],
-    emptyTable: "No Commisions found",
+    emptyTable: "No Commission found",
     btnDownload: ".buttons-csv",
     isCheckbox: false,
     isShowStatus: false,

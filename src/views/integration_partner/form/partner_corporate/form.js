@@ -106,7 +106,7 @@ function IntegrationPartnerCorporateCreate(props) {
     };
     return (
         <Formik initialValues={formValues || initialValues} validationSchema={validationSchema} onSubmit={onSubmit} validateOnMount enableReinitialize>
-            {({ dirty, handleSubmit, isSubmitting, setFieldValue, values }) => (
+            {({ dirty, handleSubmit, isSubmitting, setFieldValue, handleChange, values }) => (
                 <Form onSubmit={handleSubmit} className="ml-2">
                     <FormikControl
                         control="selectAsync"
@@ -155,37 +155,38 @@ function IntegrationPartnerCorporateCreate(props) {
                       disabled={isView || loading}
                     />
 
-                  <Form.Group as={Row} className="form-group">
-                    <Col sm={5}>
-                      <p>Data Transfer Options</p>
-                    </Col>
-                    <Col sm={7}>
-                      <Form.Check
-                        type="checkbox"
-                        label="Corporate Information"
-                        name="corporate_information_enabled"
-                        checked={values.corporate_information_enabled}
-                        onChange={(v) => setFieldValue("corporate_information_enabled", v)}
-                        disabled={isView}
-                      />
-                      <Form.Check
-                        type="checkbox"
-                        label="Corporate Performance"
-                        name="corporate_performance_enabled"
-                        checked={values.corporate_performance_enabled}
-                        onChange={(v) => setFieldValue("corporate_performance_enabled", v)}
-                        disabled={isView}
-                      />
-                      <Form.Check
-                        type="checkbox"
-                        label="Credit Limit"
-                        name="credit_limit_enabled"
-                        checked={values.credit_limit_enabled}
-                        onChange={(v) => setFieldValue("credit_limit_enabled", v)}
-                        disabled={isView}
-                      />
-                    </Col>
-                  </Form.Group>
+                    <Form.Group as={Row} className="form-group">
+                      <Col sm={5}>
+                        <p>Data Transfer Options</p>
+                      </Col>
+                      <Col sm={7}>
+                        <Form.Check
+                          type="checkbox"
+                          label="Corporate Information"
+                          name="corporate_information_enabled"
+                          checked={values.corporate_information_enabled}
+                          // onChange={(v) => setFieldValue("corporate_information_enabled", v)}
+                          onChange={(handleChange, v) => setFieldValue("corporate_information_enabled", v)}                          
+                          disabled={isView}
+                        />
+                        <Form.Check
+                          type="checkbox"
+                          label="Corporate Performance"
+                          name="corporate_performance_enabled"
+                          checked={values.corporate_performance_enabled}
+                          onChange={(v) => setFieldValue("corporate_performance_enabled", v)}
+                          disabled={isView}
+                        />
+                        <Form.Check
+                          type="checkbox"
+                          label="Credit Limit"
+                          name="credit_limit_enabled"
+                          checked={values.credit_limit_enabled}
+                          onChange={(v) => setFieldValue("credit_limit_enabled", v)}
+                          disabled={isView}
+                        />
+                      </Col>
+                    </Form.Group>
                     
                     {!props.hideButton && (
                         <div

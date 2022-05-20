@@ -1,10 +1,78 @@
-import { Formik } from 'formik';
-import React from 'react';
+import { Formik } from "formik"
+import React, { useEffect, useState } from "react"
 import { Card, Form, Row, Col, Button, Image } from "react-bootstrap"
 import Api from "config/api"
+import CardAddOrRemove from "components/card/add-or-remove-list"
+import CancelButton from "components/button/cancel"
 
-const TravelConsultantAssignment= (props) => {
+const dummy1 = [
+  {
+    name: "Tiffany Young",
+    category: "BCD",
+  },
+  {
+    name: "Dhani Doel",
+    category: "BCD",
+  },
+  {
+    name: "Jhon Bill",
+    category: "NCD",
+  },
+]
+
+const dummy2 = [
+  {
+    name: "Tamara Ling",
+    category: "NCD",
+  },
+  {
+    name: "Margot Roe",
+    category: "NCD",
+  },
+  {
+    name: "Betty Jhon",
+    category: "NCD",
+  },
+  {
+    name: "Miando Nael",
+    category: "BCD",
+  },
+  {
+    name: "Bel Nuts",
+    category: "BCD",
+  },
+  {
+    name: "Tamara Ling",
+    category: "NCD",
+  },
+]
+
+const listEmployee = []
+const TravelConsultantAssignment = (props) => {
   let api = new Api()
+
+  const getEmployee = async () => {
+    try {
+      let res = await api.get(
+        `/master/employees?filters=[["status","=",1]]&sort=given_name`,
+      )
+      
+      if (res.data.items.length > 0) {
+        res.data.items.forEach((data) => {
+          listEmployee.push({
+            name: data.given_name + " " + data.middle_name,
+            category: data.job_title.job_title_code,
+          })
+        })
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  useEffect(async () => {
+    getEmployee()
+  }, [])
 
   return (
     <>
@@ -30,21 +98,38 @@ const TravelConsultantAssignment= (props) => {
         setFieldTouched,
       }) => {
         return ( */}
-          <Form onSubmit="">
-            <Card>
-              <Card.Body>
-                <h3 className="card-heading">Travel Consultant Assignment</h3>
-                <div style={{ padding: "0 15px 40px 0" }}>
-                
-                </div>
-              </Card.Body>
-            </Card>
-          </Form>
-        
+      <Form onSubmit="">
+        <Card>
+          <Card.Body>
+            <h3 className="card-heading">Travel Consultant Assignment</h3>
+            <div style={{ padding: "0 15px 40px 0" }}>
+              <CardAddOrRemove
+                firstData={dummy1}
+                secondData={listEmployee}
+                firstCardTitle="list of travel consultant"
+                secondCardTitle="employee name"
+              />
+            </div>
+          </Card.Body>
+        </Card>
+        <div
+          style={{
+            marginBottom: 30,
+            marginTop: 30,
+            display: "flex",
+          }}
+        >
+          <Button variant="primary" type="submit" style={{ marginRight: 15 }}>
+            SAVE & NEXT
+          </Button>
+          <CancelButton />
+        </div>
+      </Form>
+
       {/* }} */}
-    {/* </Formik> */}
+      {/* </Formik> */}
     </>
   )
 }
 
-export default TravelConsultantAssignment;
+export default TravelConsultantAssignment

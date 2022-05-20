@@ -2,25 +2,10 @@ import React, { useEffect } from "react"
 import BBDataTable from "components/table/bb-data-table"
 import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
-import Form from "./form/partner_credentials"
+import Form from "./form"
 import { Card } from "react-bootstrap"
 
-export default function IntegrationPartnerCredentialsTable() {
-  let dispatch = useDispatch()
-  useEffect(() => {
-    dispatch(
-      setUIParams({
-        title: "Partner Credentials",
-        breadcrumbs: [
-          {
-            text: "Partner Credentials",
-          },
-        ],
-      }),
-    )
-  }, [])
-
-
+export default function IntegrationPartnerCurrenciesTable() {
   let params = {
     isCheckbox: false,
     showAdvancedOptions: false,
@@ -31,28 +16,29 @@ export default function IntegrationPartnerCredentialsTable() {
     baseRoute: "/master/integration-partner-currencies/form",
     endpoint: "/master/integration-partner-currencies",
     deleteEndpoint: "/master/batch-actions/delete/integration-partner-currencies",
+    btnDownload: ".buttons-csv",
     columns: [
       {
         title: "Currency",
-        data: "currency_symbol",
+        data: "currency_name",
       },
       {
-        title: "Partner Currency Code",
+        title: "Payment Currency Code",
         data: "currency_code",
       },
       {
-        title: "Partner Currency Name",
+        title: "Payment Currency Name",
         data: "currency_name",
       },
     ],
     emptyTable: "No Partner Currency found",
-    recordName: ["currency.currency_name", "currency_code", "currency_name"],
+    recordName: ["currency_code", "currency_name"],
     btnDownload: ".buttons-csv",
     module: "integration-partner-currencies"
   }
   return (
-    <Card style={{marginBottom: 0}}>
-        <Card.Body className="px-1 px-md-4">
+    <Card>
+        <Card.Body>
           <h3 className="card-heading">Partner Currencies</h3>
           <BBDataTable {...params} modalContent={Form} />
         </Card.Body>

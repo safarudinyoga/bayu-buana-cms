@@ -6,12 +6,13 @@ import getMenu from '../../config/menu';
 import $ from "jquery"
 import * as AdminLte from  "admin-lte"
 
-const SubMenu = ({menu}) => {
+const SubMenu = ({menu, currentMenu, menuHandler}) => {
   return (
     <li className="nav-item">
       <Link
         to={menu.url}
-        className="nav-link"
+        className={`nav-link ${currentMenu === menu.url ? "active-link": ""}`}
+        onClick={() => menuHandler(menu.url)}
       >
         <p>{menu.description}</p>
       </Link>
@@ -19,22 +20,23 @@ const SubMenu = ({menu}) => {
   )
 }
 
-const ParentMenu = ({menu}) => {
+const ParentMenu = ({menu, currentMenu, menuHandler}) => {
   let {submenu, menu_link_asset, id} = menu
+  let findMenu = submenu.find(sm => sm.url === currentMenu)
   return (
     <li className="nav-item parent-menu" id={id}>
-      <Link to={menu.url} className="nav-link">
+      <Link to={menu.url} className={`nav-link mb-0 ${findMenu ? "menu-open active-menu": ""}`}>
         <img src={menu_link_asset.multimedia_description.url} alt={menu_link_asset.multimedia_description.file_name} />
         <p>
           {menu.description}
         </p>
-          {menu.is_expanded && <i className="right fas fa-angle-right"></i>}
+          {menu.is_expanded && <i className="right fas fa-angle-right ic-right"></i>}
       </Link>
       {
         submenu.length > 0 && (
           <ul className="nav nav-treeview">
             {
-              submenu.map((m, k) => <SubMenu key={k} menu={m} />)
+              submenu.map((m, k) => <SubMenu key={k} menu={m} currentMenu={currentMenu} menuHandler={menuHandler} />)
             }
           </ul>
         )
@@ -47,8 +49,10 @@ class Sidebar extends Component {
     super(props);
     this.state = {
       menu : [],
-      sideNav: ''
+      sideNav: '',
+      currentMenu: "",
     }
+    this.onClickMenu = this.onClickMenu.bind(this)
     $('[data-widget="treeview"]').each(function() {
         AdminLte.Treeview._jQueryInterface.call($(this), 'init');
     });
@@ -56,7 +60,11 @@ class Sidebar extends Component {
 
 
   async componentDidMount () {
-    // $('[data-widget="treeview"]').Treeview('init')
+    this.setState({currentMenu : window.location.pathname}, () => {
+      $('ul.nav-treeview a').filter(function() {
+        return this.href === window.location.origin + window.location.pathname;
+      }).parentsUntil(".bb-sidebar-nav > .nav-sidebar").addClass('menu-is-opening menu-open');
+    })
     let menu = JSON.parse(localStorage.getItem('menu'))
     if(menu && menu.length > 0) {
       this.setState({menu})
@@ -75,14 +83,23 @@ class Sidebar extends Component {
   handleHoverOff(){
     $('li.nav-item.parent-menu.menu-is-opening.menu-open').find('ul.nav.nav-treeview').css("display","none")
   }
+  onClickMenu(menu) {
+    let self = this.state
+    // $('li.parent-menu.menu-is-opening.menu-open').find('ul.nav-treeview.menu-is-opening.menu-open').css("display","none")
+    // $('li.parent-menu.menu-is-opening.menu-open').find('ul.nav-treeview.menu-is-opening.menu-open').removeClass('menu-is-opening menu-open')
+    // $('li.parent-menu.menu-is-opening.menu-open').removeClass('menu-is-opening menu-open')
+    $('ul.nav-treeview a').filter(function() {
+      return this.href === window.location.origin + self.currentMenu;
+    }).parentsUntil(".bb-sidebar-nav > .nav-sidebar").remove('menu-is-opening menu-open');
+    setTimeout(() => {
+      this.setState({currentMenu: menu})
+    }, 500);
+
+
+  }
 
   render() {
-    const { menu } = this.state
-
-    $('ul').on('expanded.lte.treeview', (a, b) => {
-      // $('ul').find('li.nav-item.parent-menu.menu-is-opening.menu-open').removeClass(".menu-is-opening menu-open")
-      console.log($('ul').find('li.nav-item.parent-menu.menu-is-opening.menu-open').find('ul.nav.nav-treeview'))
-    })
+    const { menu, currentMenu } = this.state
 
     return (
       <aside className="main-sidebar sidebar-dark-primary elevation-4"
@@ -91,7 +108,7 @@ class Sidebar extends Component {
         <div className="sidebar"
         onMouseEnter={this.handleHoverOn}
         onMouseLeave={this.handleHoverOff}>
-          <nav className="mt-2">
+          <nav className="bb-sidebar-nav">
             <ul
               className="nav nav-sidebar flex-column"
               data-widget="treeview"
@@ -99,24 +116,25 @@ class Sidebar extends Component {
               data-accordion="false"
             >
               {
-                menu.map((m, k) => <ParentMenu key={k} menu={m} />)
+                menu.map((m, k) => <ParentMenu key={k} menu={m} currentMenu={currentMenu} menuHandler={this.onClickMenu} />)
               }
               <li className="nav-item parent-menu" id="dsa3dd3">
                 <Link to="#" className="nav-link">
                   <img src="/img/icons/exchange-rate.svg" alt="icon users" />
                   <p>
-                    Exchange Rate
+                    Corporate Management
                     <i className="right fas fa-angle-right"></i>
                   </p>
                 </Link>
                 <ul className="nav nav-treeview">
                   <li className="nav-item">
-                    <Link to="/master/exchange-rate" className="nav-link">
-                      <p>Exchange Rate</p>
+                    <Link to="/master/manage-corporate" className="nav-link">
+                      <p>Manage Corporate</p>
                     </Link>
                   </li>
                 </ul>
               </li>
+              
               {/* <li className="nav-item parent-menu">
                 <Link to="#" className="nav-link">
                   <img src="/img/icons/home.svg" alt="icon users" />

@@ -54,6 +54,7 @@ import HotelBrandTable from "views/hotel_brand/table"
 import HotelSupplierForm from "views/hotel_supplier/form"
 import HotelSupplierTable from "views/hotel_supplier/table"
 import GeneralSetup from "views/general-setup"
+import GeneralSetupTeamAssignment from "views/general-setup/form/team-assignment-form"
 import LanguageForm from "views/language/form"
 import LanguageTable from "views/language/table"
 import LocationCategoryForm from "views/location_category/form"
@@ -164,7 +165,7 @@ import ResetPassword from "views/reset_password/reset_password"
 
 //User Management
 import UserManagementTable from "views/user_management/table"
-import UserManagementForm from "views/user_management/form"
+// import UserManagementForm from "views/user_management/form"
 
 // Master Standard Ancillary Fee
 import StandardAncillaryFee from "./views/standard_ancillary_fee/standard_ancillary_fee"
@@ -191,6 +192,12 @@ import Api from "config/api"
 import IntegrationPartnerHotels from "views/partner_hotels/table"
 import IntegrationPartnerHotelSupplier from "views/partner_hotel_supplier/table"
 import BookingSetting from "views/booking_setting/table"
+
+// Identity Rule
+import IdentityRuleTable from "views/identity_rule/table"
+
+// Tax Fee
+import TaxFeeForm from "views/tax_fee/form"
 
 const RouteWithProps = ({
   path,
@@ -595,6 +602,7 @@ const DashboardRoutes = () => {
         <Route path="/master/employee/form/:id?">
           <EmployeeForm />
         </Route>
+
         {/* Division */}
         <Route exact path="/master/divisions">
           <DivisionTable />
@@ -605,6 +613,7 @@ const DashboardRoutes = () => {
         <Route path="/master/divisions/hierarchy/:id?">
           <DivisionHierarchy />
         </Route>
+
         {/* Job Title */}
         <Route exact path="/master/job-title">
           <JobTitleTable />
@@ -612,6 +621,7 @@ const DashboardRoutes = () => {
         <Route path="/master/job-title/form/:id?">
           <JobTitleForm />
         </Route>
+
         {/* Branch Office */}
         <Route exact path="/master/branch-offices">
           <OfficeTable />
@@ -652,10 +662,10 @@ const DashboardRoutes = () => {
         </Route>
 
         {/* Master Manage Corporate */}
-        <Route exact path="/master/corporate">
+        <Route exact path="/master/manage-corporate">
           <CorporateTable />
         </Route>
-        <Route exact path="/master/corporate/form/:id?">
+        <Route exact path="/master/manage-corporate/form/:id?">
           <CorporateForm />
         </Route>
 
@@ -666,6 +676,9 @@ const DashboardRoutes = () => {
         {/* Master General Setup*/}
         <Route exact path="/master/general-setup">
           <GeneralSetup />
+        </Route>
+        <Route exact path="/master/general-team-assignment/form/:id?">
+          <GeneralSetupTeamAssignment />
         </Route>
 
         {/* User Access Type */}
@@ -680,9 +693,9 @@ const DashboardRoutes = () => {
         <Route exact path="/master/user-management">
           <UserManagementTable />
         </Route>
-        <Route path="/master/user-management/form/:id?">
+        {/* <Route path="/master/user-management/form/:id?">
           <UserManagementForm />
-        </Route>
+        </Route> */}
 
         {/* Master Special Date */}
         <Route exact path="/master/special-date">
@@ -702,10 +715,22 @@ const DashboardRoutes = () => {
         <Route path="/extranet/book-trip/book-flight">
           <BookFlight />
         </Route>
+
+        {/* Identity Rule */}
+        <Route exact path="/master/identity-rules">
+          <IdentityRuleTable />
+        </Route>
+
+        {/* Tax Fee */}
+        <Route path="/master/tax-fee">
+          <TaxFeeForm />
+        </Route>
+
       </Switch>
     </DashboardWrapper>
   )
 }
+
 const AuthRoutes = () => {
   return (
     <AuthWrapper>
@@ -752,6 +777,7 @@ const App = () => {
     }
     checkAuth()
   }, [auth])
+
   return (
     <Router>
       <Switch>

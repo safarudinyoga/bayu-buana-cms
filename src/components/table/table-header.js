@@ -101,7 +101,6 @@ const StatusSelect = (props) => {
 
 class TableHeader extends Component {
   constructor(props) {
-    console.log(props)
     super(props)
     this.state = {
       showFilter: false,
@@ -215,15 +214,14 @@ class TableHeader extends Component {
 
   render() {
     const ExtraFilter = this.props.extraFilter
-    const { customFilterStatus } = this.props
+    const { customFilterStatus, hideCreate, isHidePrintLogo, isHideDownloadLogo } = this.props
     const { pathname } = this.props.location
-    const { module } = this.props
 
     return (
       <div className="container-fluid pl-0">
         <div className="row">
           <div className="col-xs-12 col-sm-12 col-md-4 col-lg-3 col-xl-3">
-            {module !== "standard-service" && (
+            {!this.props.isHideSearch && pathname !== "/master/general-setup" && (
               <div className="input-group input-group-with-text">
                 <input
                   value={this.state.searchValue}
@@ -259,8 +257,7 @@ class TableHeader extends Component {
             )}
             {this.state.showCalendar ? (
               <a
-                style={{ fontSize: 14, verticalAlign: "middle" }}
-                className="ml-2"
+                className="view-calendar"
                 href="/master/special-date/calendar"
               >
                 View Calendar
@@ -288,68 +285,62 @@ class TableHeader extends Component {
               </OverlayTrigger>
             )}
           </div>
-          {module !== "flight-override-service-fee" && (
-            <div className="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-2 mb-md-0 order-first order-md-last">
-              {module !== "handler-setup" && (
-                <>
-                  {pathname !== "/master/integration-partner" && (
-                    <OverlayTrigger
-                      placement="top"
-                      overlay={<Tooltip>Click to create</Tooltip>}
-                    >
-                      <button
-                        type="button"
-                        onClick={this.handleClick.bind(this)}
-                        className="btn btn-warning float-right button-new"
-                      >
-                        <img src={createIcon} className="mr-1" alt="new" />
-                        Create New
-                      </button>
-                    </OverlayTrigger>
-                  )}
-                  {module !== "standard-service" && (
-                    <>
-                      <OverlayTrigger
-                        placement="top"
-                        overlay={<Tooltip>Click to print</Tooltip>}
-                      >
-                        <Link
-                          to="#"
-                          onClick={this.handlePrint.bind(this)}
-                          className="btn-table-action float-right"
-                        >
-                          <img
-                            src={printIcon}
-                            className="img-circle"
-                            alt="print"
-                          />
-                        </Link>
-                      </OverlayTrigger>
 
-                      <OverlayTrigger
-                        placement="top"
-                        trigger={"hover"}
-                        overlay={<Tooltip>Click to download</Tooltip>}
-                      >
-                        <Link
-                          to="#"
-                          onClick={this.handleDownload.bind(this)}
-                          className="btn-table-action float-right"
-                        >
-                          <img
-                            src={downloadIcon}
-                            className="img-circle"
-                            alt="download"
-                            id="datatable-download"
-                          />
-                        </Link>
-                      </OverlayTrigger>
-                    </>
-                  )}
-                </>
-              )}
-            </div>
-          )}
+          <div className="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-2 mb-md-0 order-first order-md-last">
+            {pathname !== "/master/integration-partner" && pathname !== "/master/identity-rules" && !hideCreate && (
+              <OverlayTrigger
+                placement="top"
+                overlay={<Tooltip>Click to create</Tooltip>}
+              >
+                <button
+                  type="button"
+                  onClick={this.handleClick.bind(this)}
+                  className="btn btn-warning float-right button-new"
+                >
+                  <img src={createIcon} className="mr-1" alt="new" />
+                  {pathname === "/master/general-setup"
+                    ? "Add Team"
+                    : "Create New"}
+                </button>
+              </OverlayTrigger>
+            )}
+
+            { !isHidePrintLogo && pathname !== "/master/general-setup" && (
+              <OverlayTrigger
+                placement="top"
+                overlay={<Tooltip>Click to print</Tooltip>}
+              >
+                <Link
+                  to="#"
+                  onClick={this.handlePrint.bind(this)}
+                  className="btn-table-action float-right"
+                >
+                  <img src={printIcon} className="img-circle" alt="print" />
+                </Link>
+              </OverlayTrigger>
+            )}
+
+            { !isHideDownloadLogo && pathname !== "/master/general-setup" && (
+              <OverlayTrigger
+                placement="top"
+                trigger={"hover"}
+                overlay={<Tooltip>Click to download</Tooltip>}
+              >
+                <Link
+                  to="#"
+                  onClick={this.handleDownload.bind(this)}
+                  className="btn-table-action float-right"
+                >
+                  <img
+                    src={downloadIcon}
+                    className="img-circle"
+                    alt="download"
+                    id="datatable-download"
+                  />
+                </Link>
+              </OverlayTrigger>
+            )}
+          </div>
         </div>
         <div
           className={
@@ -465,6 +456,17 @@ class TableHeader extends Component {
             </div>
           </div>
         </div>
+        {this.state.showCalendar ? (
+          <a
+            className="view-calendar-mobile"
+            href="/master/special-date/calendar"
+          >
+            View Calendar
+          </a>
+          ) : (
+            ""
+          )
+        }
       </div>
     )
   }

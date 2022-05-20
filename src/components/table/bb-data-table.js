@@ -26,12 +26,12 @@ import removeIcon from "assets/icons/remove.svg"
 import showIcon from "assets/icons/show.svg"
 import ModalCreate from "components/Modal/bb-modal"
 import customPrint from '../../lib/customPrint'
+import { end } from "@popperjs/core"
 
 window.JSZip = JSZip
 
 class BBDataTable extends Component {
   constructor(props) {
-    console.log(props);
     super(props)
     this.table = React.createRef()
     this.wrapper = React.createRef()
@@ -45,6 +45,7 @@ class BBDataTable extends Component {
       extraFilters: this.props.filters || [],
       isCheckbox: this.props.isCheckbox ?? true,
       isShowStatus: this.props.isShowStatus ?? true,
+      isShowColumnAction: this.props.isShowColumnAction ?? true,
       isOpen: false,
       itemInfo: "",
       year: new Date().getFullYear(),
@@ -65,7 +66,10 @@ class BBDataTable extends Component {
     let self = this
     $.fn.dataTableExt.errMode = "none"
     let columns = []
-    columns.push(this.state.isCheckbox  ? {
+    const { recordName, msgType, module } = this.props
+    const { isCheckbox, isShowColumnAction } = this.state
+
+    columns.push(isCheckbox ? {
       searchable: false,
       orderable: false,
       title:
@@ -94,9 +98,8 @@ class BBDataTable extends Component {
     } catch (e) {}
 
     const allowed = [this.props.recordName]
-    const { recordName, msgType, module } = this.props
     const isOpenNewTab = this.props.isOpenNewTab ?? true
-    columns.push({
+    columns.push( isShowColumnAction ? {
       searchable: false,
       orderable: false,
       title: "Actions",
@@ -169,17 +172,20 @@ class BBDataTable extends Component {
             <label class="custom-control-label" for="customSwitch${row.id}" data-action="update_status"></label>
           </a>
           ${
-            self.props.showHistory 
+            self.props.showHistory
             ? `<a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item mr-2" data-action="history" data-id="${row.id}" title="Click to view history"><img src="/img/icons/history.svg"/></a>`
             : ""
           }
           ${
-            module !== "integration-partner" ? `<a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item" data-action="delete" data-id="${row.id}" data-name="${cvtRecordName}" ${infoDelete ? `data-info="${info}"` : ""}  title="${module === "exchange-rate" ? "Delete" : "Click to delete"}"><img src="${removeIcon}" /></a>`
+            module !== "integration-partner" && module !== "identity-rules" ? `<a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item" data-action="delete" data-id="${row.id}" data-name="${cvtRecordName}" ${infoDelete ? `data-info="${info}"` : ""}  title="${module === "exchange-rate" ? "Delete" : "Click to delete"}"><img src="${removeIcon}" /></a>`
             : ""
           }
           `
         )
       },
+    } : {
+      searchable: false,
+      orderable: false,
     })
 
     const initialize = () => {
@@ -193,7 +199,10 @@ class BBDataTable extends Component {
       if(this.queryParams.get("page")) {
         displayStart = 10 * (this.queryParams.get("page")-1)
       }
-
+      let endpoint = this.props.endpoint;
+      if(this.props.filterData){
+        endpoint = endpoint + "?filters=" + this.props.filterData
+      }
       let dt = $(this.table.current).DataTable({
         pagingType: "simple_numbers_no_ellipses",
         colReorder: {
@@ -214,7 +223,7 @@ class BBDataTable extends Component {
         keys: true,
         destroy: true,
         ajax: {
-          url: this.api.env.endpoint(this.props.endpoint),
+          url: this.api.env.endpoint(endpoint),
           headers: headers,
           cache: true,
           dataSrc: (json) => {
@@ -412,8 +421,8 @@ class BBDataTable extends Component {
                   }
                 }
               } else {
-                overrideParams.sort = this.queryParams.has('sort') 
-                ? this.queryParams.get('sort') 
+                overrideParams.sort = this.queryParams.has('sort')
+                ? this.queryParams.get('sort')
                 : this.props.customSort
                 ? this.props.customSort.join(",")
                 : 'sort'
@@ -519,11 +528,12 @@ class BBDataTable extends Component {
           },
           {
             targets: [1, 2],
-            className: !this.state.isCheckbox ? module == "employee" ? "" : "custom-col-width": "cstm-col-width",
+            className: !this.state.isCheckbox ? module == "employee" || module == "ancillary" ? "" : "custom-col-width": "cstm-col-width",
           },
           {
             targets: [3],
             className: !module == "loyalty-programs" ? "" : "cstm-col-width-2",
+            visible: module == "standard-ancillary-fee" 
           },
           { responsivePriority: 1, targets: 1 },
           { responsivePriority: 2, targets: 2 },
@@ -552,7 +562,7 @@ class BBDataTable extends Component {
                     division = row.division.division_name
                   }
 
-                  datas = data +'<br/>'+ division     
+                  datas = data +'<br/>'+ division
                   if (type === "myExport") datas =`${data} / ${division}`
                 }
                   return datas
@@ -561,8 +571,8 @@ class BBDataTable extends Component {
           },
           { visible: false,  targets: module == 'employee' ? [ 4, 5, 8 ] : [] },
           {
-            className: this.props.actionWidthClass || "",
-            targets: [columns.length - 1],
+            className: module == "standard-ancillary-fee" ? this.props.actionWidthClass || "" : "width-ancillary",
+            targets: [2],
           },
           {
             targets: [columns.length - 3, columns.length - 1],
@@ -578,7 +588,7 @@ class BBDataTable extends Component {
           //   targets: [columns.length - 1],
           //   width: "20%",
           // },
-          
+
         ],
         // select: {
         //   style: "multi",
@@ -611,7 +621,7 @@ class BBDataTable extends Component {
         },
         fnDrawCallback: (t) => {
 
-      
+
           const { selected } = this.state
           let wrapper = $(".dataTables_paginate", t.nTableWrapper)
           wrapper.append(
@@ -1110,6 +1120,7 @@ class BBDataTable extends Component {
           show={showCreateModal.show}
           onClick={() => this.props.setCreateModal({show: false, id: null, disabled_form: false})}
           modalContent={this.props.modalContent}
+          modalSize={this.props.modalSize}
         />
         {this.props.module !== "fare-types" ? <TableHeader
           {...this.props}
@@ -1126,6 +1137,7 @@ class BBDataTable extends Component {
           onToggleFilter={this.onToggleFilter.bind(this)}
           onStatusUpdate={this.onStatusUpdate.bind(this)}
           onRemove={this.onRemoveSelected.bind(this)}
+          hideCreate={this.props.hideCreate}
         >
           {this.props.children}
         </TableHeader>

@@ -14,19 +14,20 @@ function selectForm(props) {
     value,
     onChange,
     isDisabled,
+    size,
     ...rest
   } = props
   const objectName = name.split(".")
   if (objectName.length > 1) {
     return (
       <Row className="form-group required">
-        <Col md={3} lg={4}>
+        <Col md={size?.label?.md || 3} lg={size?.label?.lg || 4}>
           <label className="text-label-input" htmlFor={name}>
             {label}
             <span className={required || ""} />
           </label>
         </Col>
-        <Col md={9} lg={8}>
+        <Col md={size?.value?.md || 9} lg={size?.value?.lg || 8}>
           <FastField id={name} name={name} {...rest}>
             {({ field, form, meta }) => (
               <div style={style}>
@@ -60,13 +61,13 @@ function selectForm(props) {
   }
   return (
     <Row className="form-group required">
-      <Col md={3} lg={4}>
+      <Col md={size?.label?.md || 3} lg={size?.label?.lg || 4}>
         <label className="text-label-input" htmlFor={name}>
           {label}
           <span className={required || ""} />
         </label>
       </Col>
-      <Col md={9} lg={8}>
+      <Col md={size?.value?.md || 9} lg={size?.value?.lg || 8}>
         <FastField id={name} name={name} {...rest}>
           {({ field, form, meta }) => (
             <div style={style}>

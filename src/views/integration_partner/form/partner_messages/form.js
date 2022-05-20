@@ -109,7 +109,7 @@ function MessageCreate(props) {
           <FormikControl
             control="input"
             required="label-required"
-            label="Message Plan Code"
+            label="Partner Message Code"
             name="message_code"
             style={{ maxWidth: 250 / 2 }}
             size={formSize}
@@ -119,7 +119,7 @@ function MessageCreate(props) {
           <FormikControl
             control="input"
             required="label-required"
-            label="Message Name"
+            label="Partner Message Name"
             name="message_name"
             style={{ maxWidth: 250 }}
             size={formSize}
