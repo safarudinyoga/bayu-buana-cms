@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from "react"
 import Api from "config/api"
-import { useDispatch } from 'react-redux';
-import { withRouter } from 'react-router';
+import { useDispatch } from "react-redux"
+import { withRouter } from "react-router"
 import { ReactSVG } from "react-svg"
 import { Row, Col, Tab, Nav } from "react-bootstrap"
 import { setUIParams } from "redux/ui-store"
-
 import GeneralInformation from "./general-information"
-import HandlerSetup from "./handler-setup"
+import HandlerSetup from "./handler_setup/handler-setup"
 import IdentityRule from "./identity-rule"
-import StandardService from "./standard-service"
+import StandardService from "./standart_service/standard-service"
 import OverCreditApproverAssignment from "./over-credit-approver-assignment"
 import TravelConsultantAssignment from "./travel-consultant-assignment"
 import TeamAssignment from "./team-assignment"
@@ -23,7 +22,7 @@ import TravelAdvice from "./travel-advice"
 // const endpoint = "/user/profile"
 const backUrl = "/master/general-setup"
 
-const GeneralSetup= (props) => {
+const GeneralSetup = (props) => {
   let dispatch = useDispatch()
 
   let api = new Api()
@@ -78,7 +77,7 @@ const GeneralSetup= (props) => {
                 </div>
               </Nav.Link>
             </Nav.Item>
-            
+
             <Nav.Item>
               <Nav.Link eventKey="handler-setup">
                 <div>
@@ -186,7 +185,6 @@ const GeneralSetup= (props) => {
                 </div>
               </Nav.Link>
             </Nav.Item>
-
           </Nav>
         </Col>
         <Col sm={9}>
@@ -282,12 +280,11 @@ const GeneralSetup= (props) => {
                 handleSelectTab={(v) => handleSelectTab(v)}
               />
             </Tab.Pane>
-            
           </Tab.Content>
         </Col>
       </Row>
     </Tab.Container>
-  );
+  )
 }
 
-export default withRouter(GeneralSetup);
+export default withRouter(GeneralSetup)

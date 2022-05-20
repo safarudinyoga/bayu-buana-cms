@@ -1,14 +1,9 @@
 import React, { useState } from "react"
 import { Card, Form, Row, Col, Button, Collapse } from "react-bootstrap"
 import { Formik, FastField } from "formik"
-import _ from "lodash"
 
 import useQuery from "lib/query"
 import Select from "react-select"
-
-const options = {
-  position: "bottom-right",
-}
 
 const InvoiceSetting = (props) => {
   const isView = useQuery().get("action") === "view"
@@ -173,8 +168,8 @@ const InvoiceSetting = (props) => {
                                     key={`inline-${type}`}
                                     className="mb-3 ml-2"
                                   >
+                                    <Form.Label>{type}</Form.Label>
                                     <Form.Check
-                                      label={type}
                                       name="group1"
                                       type="radio"
                                       id={`inline-${type}-1`}
