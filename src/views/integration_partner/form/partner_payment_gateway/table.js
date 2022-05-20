@@ -17,6 +17,7 @@ export default function IntegrationPartnerPaymentGatewayTable() {
     baseRoute: "/master/integration-payment-gateway/form",
     endpoint: `/master/integration-partners/${param.id}/payment-gateways`,
     deleteEndpoint: `/master/integration-partners/${param.id}/payment-gateways`,
+    btnDownload: ".buttons-csv",
     columns: [
       {
         title: "Payment Gateway Code",

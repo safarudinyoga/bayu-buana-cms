@@ -15,6 +15,7 @@ export default function IntegrationPartnerCabinTypesTable(props) {
     deleteEndpoint: "/master/batch-actions/delete/master/integration-partner-cabin-types",
     activationEndpoint: "/master/batch-actions/activate/integration-partner-cabin-types",
     deactivationEndpoint: "/master/batch-actions/deactivate/integration-partner-cabin-types",
+    btnDownload: ".buttons-csv",
     columns: [
       {
         title: "Cabin",
