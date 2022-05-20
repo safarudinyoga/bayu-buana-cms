@@ -1,28 +1,14 @@
 import React, { useEffect, useState } from "react"
 import { withRouter, useHistory } from "react-router"
-import {
-  Card,
-  Form,
-  Row,
-  Col,
-  Button,
-  Tabs,
-  TabPane,
-  Modal,
-} from "react-bootstrap"
-import useQuery from "lib/query"
+import { Card, Form, Row, Col, Button, Modal } from "react-bootstrap"
 import createIcon from "assets/icons/create.svg"
 import { ReactSVG } from "react-svg"
-import { Formik, FastField, Field } from "formik"
+import { Formik, FastField } from "formik"
 import * as Yup from "yup"
-import axios from "axios"
-// import TabelFlightOverride from "../table/flight_override_service_fee_table"
 import { useDispatch, useSelector } from "react-redux"
 import { setUIParams } from "redux/ui-store"
 import Api from "config/api"
-import env from "config/environment"
 import Select from "components/form/select-async"
-import HotelTabel from "../table/hotel_table"
 
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css"
 import "react-dropzone-uploader/dist/styles.css"
