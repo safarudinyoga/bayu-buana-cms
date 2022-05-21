@@ -265,6 +265,7 @@ function EmailSenderTable() {
     createOnModal: false,
     showHistory: false,
     hideDetail: true,
+    hideCreate: true,
     title: "Handler Setup",
     titleModal: "Handler Setup",
     baseRoute: "/master/email/form",
