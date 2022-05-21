@@ -28,6 +28,7 @@ const options = {
 }
 
 const IntegrationPartnerForm = (props) => {
+  console.log("IPForm",props)
   useEffect(async () => {
     let formId = props.match.params.id
 
