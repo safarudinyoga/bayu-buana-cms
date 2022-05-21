@@ -7,63 +7,58 @@ import CancelButton from "components/button/cancel"
 
 const dummy1 = [
   {
-    name: "Tiffany Young",
+    given_name: "Tiffany Young",
     category: "BCD",
   },
   {
-    name: "Dhani Doel",
+    given_name: "Dhani Doel",
     category: "BCD",
   },
   {
-    name: "Jhon Bill",
+    given_name: "Jhon Bill",
     category: "NCD",
   },
 ]
 
 const dummy2 = [
   {
-    name: "Tamara Ling",
+    given_name: "Tamara Ling",
     category: "NCD",
   },
   {
-    name: "Margot Roe",
+    given_name: "Margot Roe",
     category: "NCD",
   },
   {
-    name: "Betty Jhon",
+    given_name: "Betty Jhon",
     category: "NCD",
   },
   {
-    name: "Miando Nael",
+    given_name: "Miando Nael",
     category: "BCD",
   },
   {
-    name: "Bel Nuts",
+    given_name: "Bel Nuts",
     category: "BCD",
   },
   {
-    name: "Tamara Ling",
+    given_name: "Tamara Ling",
     category: "NCD",
   },
 ]
-const listEmployee = []
+
 const OverCreditApproverAssignment = (props) => {
+  const [listEmployee, SetListEmployee] = useState([])
   let api = new Api()
+
+  console.log('listEmp: ', listEmployee)
 
   const getEmployee = async () => {
     try {
       let res = await api.get(
         `/master/employees?filters=[["status","=",1]]&sort=given_name`,
       )
-      
-      if (res.data.items.length > 0) {
-        res.data.items.forEach((data) => {
-          listEmployee.push({
-            name: data.given_name + " " + data.middle_name,
-            category: data.job_title.job_title_code,
-          })
-        })
-      }
+      SetListEmployee(res.data.items)
     } catch (e) {
       console.log(e)
     }
