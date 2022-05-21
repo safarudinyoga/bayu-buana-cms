@@ -23,6 +23,7 @@ const options = {
 function FormIntegrationPartner(props) {
   let dispatch = useDispatch()
   let formId = props.match.params.id
+
   const [openSnackbar] = useSnackbar(options)
   const history = useHistory()
   let api = new Api()
@@ -361,7 +362,7 @@ function FormIntegrationPartner(props) {
                   type="submit"
                   style={{ marginRight: 15 }}
                 >
-                  {props.match.params.id ? "SAVE" : "SAVE & NEXT"}
+                  {"SAVE & NEXT"}
                 </Button>
                 <Button
                   variant="secondary"
