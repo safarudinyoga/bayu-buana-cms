@@ -34,7 +34,11 @@ export default function IntegrationPartnerCurrenciesTable() {
     emptyTable: "No Partner Currency found",
     recordName: ["currency_code", "currency_name"],
     btnDownload: ".buttons-csv",
-    module: "integration-partner-currencies"
+    module: "integration-partner-currencies",
+    showInfoDelete: true,
+    infoDelete: [
+      {title: "Partner Currency Name", recordName: "currency_name"}, 
+    ],
   }
   return (
     <Card>
