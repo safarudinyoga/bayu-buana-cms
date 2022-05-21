@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { withRouter } from "react-router"
 import { Form, FormGroup, InputGroup, Button } from "react-bootstrap"
-import { Formik, FastField } from "formik"
+import { Formik, FastField, validateYupSchema } from "formik"
 import * as Yup from "yup"
 import useQuery from "lib/query"
 import Api from "config/api"
@@ -10,8 +10,7 @@ import { setAlert, setCreateModal, setModalTitle } from "redux/ui-store"
 import CancelButton from "components/button/cancel"
 import FormikControl from "components/formik/formikControl"
 
-const endpoint =
-  "/master/integration-partners/3f61b5e0-d7cb-4f80-94e7-83114ff23903/payment-gateways"
+
 function PaymentGatewayCreate(props) {
   const dispatch = useDispatch()
   const showCreateModal = useSelector((state) => state.ui.showCreateModal)
@@ -20,6 +19,7 @@ function PaymentGatewayCreate(props) {
   const [id, setId] = useState(null)
   const [loading, setLoading] = useState(true)
   const [formValues, setFormValues] = useState(null)
+  const endpoint = `/master/integration-partners/${props.match.params.id}/payment-gateways`
 
   useEffect(async () => {
     let formId = showCreateModal.id || props.id
@@ -95,7 +95,7 @@ function PaymentGatewayCreate(props) {
   Yup.addMethod(Yup.string, "uniquePaymentGateway", function (message) {
     return this.test("unique", message, function (field, ctx) {
       let parent = ctx.parent
-      if (parent.payment_gateway_id?.value) {
+      if (parent.payment_gateway_code?.value) {
         return checkPaymentGatewayIsUnique(parent.payment_gateway_name?.value)
       } else {
         return true
@@ -104,7 +104,7 @@ function PaymentGatewayCreate(props) {
   })
 
   const validationSchema = Yup.object().shape({
-    payment_gateway_id: Yup.string().required(
+    payment_gateway_code: Yup.string().required(
       "Payment Gateway Code is required.",
     ),
     payment_gateway_name: Yup.string()
@@ -128,9 +128,22 @@ function PaymentGatewayCreate(props) {
     try {
       let form = {
         ...values,
+        payment_gateway_code: values.payment_gateway_code,
+        payment_gateway_name: values.payment_gateway_name,
+        merchant_id: values.merchant_id,
+        terminal_id: values.terminal_id,
+        channel_code: values.channel_code,
+        transaction_url: values.transaction_url,
+        notification_url: values.notification_url,
+        client_key: values.client_key,
+        server_key: values.server_key,
+        virtual_account_number: values.virtual_account_number,
+        convenience_store_code: values.convenience_store_code,
         currency_id: values.currency_id.value,
         bank_id: values.bank_id.value,
       }
+      let res = await API.putOrPost(endpoint, id, form);
+      console.log(res, "hahaha")
 
       dispatch(setCreateModal({ show: false, id: null, disabled_form: false }))
       dispatch(
@@ -172,7 +185,7 @@ function PaymentGatewayCreate(props) {
             control="input"
             required="label-required"
             label="Payment Gateway Code"
-            name="payment_gateway_id"
+            name="payment_gateway_code"
             style={{ maxWidth: 250 / 2 }}
             size={formSize}
             disabled={isView || loading}
