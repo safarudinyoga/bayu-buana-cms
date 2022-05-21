@@ -21,8 +21,7 @@ function MessageCreate(props) {
   const [loading, setLoading] = useState(true)
   const [formValues, setFormValues] = useState(null)
   const param = useParams()
-  const endpoint =
-  `/master/integration-partners/${props.match.params.id}/messages`
+  const endpoint = `/master/integration-partners/${props.match.params.id}/messages`
 
 
   useEffect(async () => {
