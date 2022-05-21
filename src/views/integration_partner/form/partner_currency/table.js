@@ -20,7 +20,7 @@ export default function IntegrationPartnerCurrenciesTable() {
     columns: [
       {
         title: "Currency",
-        data: "currency_name",
+        data: "currency.currency_name",
       },
       {
         title: "Payment Currency Code",
