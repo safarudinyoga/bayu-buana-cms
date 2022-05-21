@@ -1,5 +1,5 @@
-import { Formik } from 'formik';
-import React from 'react';
+import { Formik } from "formik"
+import React from "react"
 // import FormHorizontal from "components/form/horizontal"
 import { Card, Form, Row, Col, Button, Image, Container } from "react-bootstrap"
 import Api from "config/api"
@@ -31,147 +31,156 @@ const OtherAncillaryFee = (props) => {
         setFieldTouched,
       }) => {
         return ( */}
-          <Form onSubmit="">
-            <Card>
-              <Card.Body>
-                <h3 className="card-heading">Other Ancillary Fee</h3>
-                <div style={{ padding: "0 15px 15px" }}>
+      <Form onSubmit="">
+        <Card>
+          <Card.Body>
+            <h3 className="card-heading">Other Ancillary Fee</h3>
+            <div style={{ padding: "0 15px 15px" }}>
+              <Row>
+                <Form.Label>
+                  MDR Fee
+                  <span className="form-label-required">*</span>
+                </Form.Label>
+              </Row>
+              <Form.Group className="ml-5">
                 <Row>
-                    <Col sm={9}>
-                      <Form.Group as={Row} className="form-group">
-                      <div style={{ padding: "0 0 15px 15px" }}>
-                        <Form.Label column sm={8}>
-                          MDR Fee <span className="form-label-required">*</span>
-                        </Form.Label>
-                        {/* <div style={{ padding: "0 15px 15px" }}> */}
-                          <Container>
-                          <Row>
-                            <Col sm={3}>
-                              <Form.Check 
-                              type="radio"
-                              label="Fixed Amount"
-                              inline
-                            />
-                            <Col>
-                              {/* <Row> */}
-                              <Form.Label>
-                                IDR
-                              </Form.Label>
-                              <Form.Control
-                                name="fixed-amount"
-                                type="text"
-                              >
-                              </Form.Control>
-                                /Transaction
-                              {/* </Row> */}
-                             
-                            </Col>
-                              
-                            </Col>
-                            <Col style={{ paddingLeft: "400px" }}>
-                              <Form.Check 
-                              type="radio"
-                              label="Percentage"
-                              inline
-                           
-                              />
-                              <Form.Control
-                                name="percentage"
-                                type="text"
-                              >
-                              </Form.Control>
-                              %
-                              <Form.Check
-                                label="Includes Tax"
-                              >
+                  <Col md={6}>
+                    <Form.Group>
+                      <Form.Check type="radio" label="Fixed Amount" />
+                    </Form.Group>
+                    <Row className="ml-3">
+                      <Col sm={12} md={3}>
+                        <Form.Group as={Row} className="mb-xs-3">
+                          <Form.Label
+                            column
+                            xs={2}
+                            md={3}
+                            lg={5}
+                            className="ml-xs-4"
+                          >
+                            IDR
+                          </Form.Label>
+                          <Col xs={10} md={9} lg={7}>
+                            <Form.Control style={{ maxWidth: "220px" }} />
+                          </Col>
+                        </Form.Group>
+                      </Col>
+                      <Col sm={12} md={6}>
+                        <Form.Group className="mt-2">
+                          <Form.Label>/Transaction</Form.Label>
+                        </Form.Group>
+                      </Col>
+                    </Row>
+                  </Col>
 
-                              </Form.Check>
-                            </Col>
-                          
-                          </Row>
-                            
-                          </Container>
-
-                        <hr style={{ width: "130%" }}></hr>
-                        <Form.Label column sm={8}>
-                          Late Payment <span className="form-label-required">*</span>
-                        </Form.Label>
-                        <Container>
-                          <Row>
-                            <Col>
-                              <Form.Check 
-                              type="radio"
-                              label="Fixed Amount"
-                              inline
-                            />
-                            {/* <Col> */}
-                              <Col>
-                              <Form.Label>
-                                IDR
-                              </Form.Label>
-                              <Form.Control
-                                name="fixed-amount"
-                                type="text"
-                              >
-                              </Form.Control>
-                                /Transaction
-                            </Col>
-                              
-                            </Col>
-                            <Col style={{ paddingLeft: "400px" }}>
-                              <Form.Check 
-                              type="radio"
-                              label="Percentage"
-                              inline
-                           
-                              />
-                              <Form.Control
-                                name="percentage"
-                                type="text"
-                              >
-                              </Form.Control>
-                              %
-                              <Form.Check
-                                label="Includes Tax"
-                              >
-
-                              </Form.Check>
-                            </Col>
-                          
-                          </Row>
-                            
-                          </Container>
-                        
-                        </div>
-                       
-                        {/* </div> */}
-                      </Form.Group>
-                    </Col>
+                  <Col md={6}>
+                    <Form.Group>
+                      <Form.Check type="radio" label="Percentage" />
+                    </Form.Group>
+                    <Row className="ml-3">
+                      <Col sm={12} md={4}>
+                        <Form.Group as={Row} className="mb-3">
+                          <Form.Control
+                            style={{ maxWidth: "80px" }}
+                            className="mx-3"
+                          />
+                          <span className="text-lg mt-1">%</span>
+                        </Form.Group>
+                      </Col>
+                      <Col sm={12} md={8}>
+                        <Form.Check
+                          type="checkbox"
+                          label="Include Taxes"
+                          className="mt-2"
+                        />
+                      </Col>
+                    </Row>
+                  </Col>
                 </Row>
-                </div>
-              </Card.Body>
-            </Card>
-            <div style={{ marginBottom: 30, marginTop: 30, display: "flex" }}>
-              <Button
-                variant="primary"
-                type="submit"
-                style={{ marginRight: 15 }}
-              >
-                SAVE & NEXT
-              </Button>
-              <Button
-                variant="secondary"
-                onClick={() => props.history.push(props.backUrl)}
-              >
-                CANCEL
-              </Button>
+              </Form.Group>
+              <h3 className="card-heading"></h3>
+              <Row>
+                <Form.Label>
+                  Late Payment
+                  <span className="form-label-required">*</span>
+                </Form.Label>
+              </Row>
+              <Form.Group className="ml-5">
+                <Row>
+                  <Col md={6}>
+                    <Form.Group>
+                      <Form.Check type="radio" label="Fixed Amount" />
+                    </Form.Group>
+                    <Row className="ml-3">
+                      <Col sm={12} md={3}>
+                        <Form.Group as={Row} className="mb-xs-3">
+                          <Form.Label
+                            column
+                            xs={2}
+                            md={3}
+                            lg={5}
+                            className="ml-xs-4"
+                          >
+                            IDR
+                          </Form.Label>
+                          <Col xs={10} md={9} lg={7}>
+                            <Form.Control style={{ maxWidth: "220px" }} />
+                          </Col>
+                        </Form.Group>
+                      </Col>
+                      <Col sm={12} md={6}>
+                        <Form.Group className="mt-2">
+                          <Form.Label>/Transaction</Form.Label>
+                        </Form.Group>
+                      </Col>
+                    </Row>
+                  </Col>
+
+                  <Col md={6}>
+                    <Form.Group>
+                      <Form.Check type="radio" label="Percentage" />
+                    </Form.Group>
+                    <Row className="ml-3">
+                      <Col sm={12} md={4}>
+                        <Form.Group as={Row} className="mb-3">
+                          <Form.Control
+                            style={{ maxWidth: "80px" }}
+                            className="mx-3"
+                          />
+                          <span className="text-lg mt-1">%</span>
+                        </Form.Group>
+                      </Col>
+                      <Col sm={12} md={8}>
+                        <Form.Check
+                          type="checkbox"
+                          label="Include Taxes"
+                          className="mt-2"
+                        />
+                      </Col>
+                    </Row>
+                  </Col>
+                </Row>
+              </Form.Group>
             </div>
-          </Form>
-        
+          </Card.Body>
+        </Card>
+        <div style={{ marginBottom: 30, marginTop: 30, display: "flex" }}>
+          <Button variant="primary" type="submit" style={{ marginRight: 15 }}>
+            SAVE & NEXT
+          </Button>
+          <Button
+            variant="secondary"
+            onClick={() => props.history.push(props.backUrl)}
+          >
+            CANCEL
+          </Button>
+        </div>
+      </Form>
+
       {/* }} */}
-    {/* </Formik> */}
+      {/* </Formik> */}
     </>
   )
 }
 
-export default OtherAncillaryFee;
+export default OtherAncillaryFee
