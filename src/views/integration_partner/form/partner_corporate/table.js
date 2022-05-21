@@ -17,7 +17,7 @@ export default function IntegrationPartnerCorporateTable() {
     columns: [
       {
         title: "Corporate",
-        data: "corporate_id",
+        data: "corporate.corporate_name",
       },
       {
         title: "Partner Corporate Code",
@@ -25,11 +25,11 @@ export default function IntegrationPartnerCorporateTable() {
       },
       {
         title: "Partner Corporate Name",
-        data: "corporate_id",
+        data: "corporate_name",
       },
     ],
     emptyTable: "No Partner Corporate found",
-    recordName: ["corporate_code", "corporate_id"],
+    recordName: ["corporate_code", "corporate_name"],
     btnDownload: ".buttons-csv",
     module: "integration-partner-corporate"
   }

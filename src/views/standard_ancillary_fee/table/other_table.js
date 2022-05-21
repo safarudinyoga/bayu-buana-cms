@@ -26,6 +26,7 @@ export default function OtherTable() {
     ],
     emptyTable: "No other found",
     recordName: "preset_name",
+    module: "standard-ancillary-fee"
   })
 
   const onFilterChangeCountries = (e, values) => {
