@@ -24,6 +24,9 @@ function FeeTypeForm(props) {
   const [translations, setTranslations] = useState([])
   const [subdivisionData, setSubdivisionData] = useState([])
   const [countryData, setCountryData] = useState([])
+  const [validCode, SetValidCode] = useState(formId)
+  const [validName, SetValidName] = useState(formId)
+  const [disabledSave, setDisabledSave] = useState(true)
   const [id, setId] = useState(null)
   const [form, setForm] = useState({
     country_id: "",
@@ -77,15 +80,15 @@ function FeeTypeForm(props) {
     if (!formId) {
       docTitle = "Create Fee Type"
     } else if (isView) {
-      docTitle = "Fee Type Details"
+      docTitle = "Details Fee Type"
     }
 
     dispatch(
       setUIParams({
-        title: isView ? "Fee Type Details" : docTitle,
+        title: isView ? "Details Fee Type" : docTitle,
         breadcrumbs: [
           {
-            text: "Setup and Configurations",
+            text: "Master Data Management ",
           },
           {
             link: backUrl,
@@ -141,7 +144,7 @@ function FeeTypeForm(props) {
                   }
                 },
               })
-
+              SetValidName(req)
               return req
             },
             "Fee Type Name already exists",
@@ -166,7 +169,7 @@ function FeeTypeForm(props) {
                   }
                 },
               })
-
+              SetValidCode(req)
               return req
             },
             "Fee Type Code already exists",
@@ -198,7 +201,7 @@ function FeeTypeForm(props) {
               }
             },
           })
-
+          SetValidName(req)
           return req
         },
         "Fee Type Name already exists",
@@ -219,14 +222,31 @@ function FeeTypeForm(props) {
               }
             },
           })
-
+          SetValidCode(req)
           return req
         },
         "Fee Type Code already exists",
       )
     }
   }, [])
+  const checkValue = () => {
+    if (
+      validCode &&
+      validName
+      // form.fee_type_code !== "" &&
+      // form.fee_type_name !== "" &&
+      // form.fee_type_code === "" &&
+      // form.fee_type_name === ""
+    ) {
+      setDisabledSave(false)
+    } else {
+      setDisabledSave(true)
+    }
+  }
 
+  useEffect(() => {
+    checkValue()
+  }, [form, validCode, validName])
   useEffect(() => {
     if (!props.match.params.id) {
       setLoading(false)
@@ -264,9 +284,9 @@ function FeeTypeForm(props) {
       props.history.goBack()
       dispatch(
         setAlert({
-          message: `Record ${form.fee_tax_type_code} - ${
-            form.fee_tax_type_name
-          } has been successfully ${formId ? "updated" : "saved"}.`,
+          message: `Record  ${form.fee_tax_type_name} has been successfully ${
+            formId ? "updated" : "saved"
+          }.`,
         }),
       )
     }
@@ -280,6 +300,7 @@ function FeeTypeForm(props) {
       isView={isView || loading}
       onSave={onSave}
       back={backUrl}
+      disabledSave={disabledSave}
       translations={translations}
       translationFields={translationFields}
       alertMessage={"Incomplete data"}
@@ -311,7 +332,7 @@ function FeeTypeForm(props) {
             disabled={isView || loading}
             type="textarea"
             minLength="1"
-            maxLength="512"
+            maxLength="4000"
           />
         )}
       </FormHorizontal>
@@ -330,7 +351,7 @@ function FeeTypeForm(props) {
           type="text"
           minLength="1"
           maxLength="36"
-          hint="Fee Type Code maximum 36 characters"
+          // hint="Fee Type Code maximum 36 characters"
         />
       </FormHorizontal>
     </FormBuilder>
