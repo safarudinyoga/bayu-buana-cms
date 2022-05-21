@@ -6,20 +6,20 @@ import { Tabs, TabPane, Row } from "react-bootstrap"
 import { Editor } from "react-draft-wysiwyg"
 import infoIcon from "assets/icons/information.svg"
 import { ReactSVG } from "react-svg"
-import Data from "../general_information/data";
+import Data from "./data"
 // import FlightBookSelect from "./flight_book-react-select"
 // import FlightBookSuggest from "./flight_book-autosuggest"
 // import "./flight_book.css"
 
 const GeneralInformation = (props) => {
   const [key, setKey] = useState("CORPORATE CLIENT");
+  console.log(key, 'key');
 
     const titleText = {
         fontSize: 16,
         color: '#333333',
         paddingTop: 20,
-        fontWeight: 600,
-        paddingLeft: 10
+        fontWeight: 600
     };
     const wrapperStyle = {
         border: '1px solid #D3D3D3',
@@ -71,7 +71,7 @@ const GeneralInformation = (props) => {
     
 
   return (
-    <div className="row">
+    <div>
         <div className=" border">
             <h1 style={titleText}>General Information</h1>
             <hr />
