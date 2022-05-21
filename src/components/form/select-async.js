@@ -33,7 +33,7 @@ const customStyles = {
 }
 
 const Select = (props) => {
-  const { fieldName, urlFilter, status=1 } = props
+  const { fieldName, urlFilter, status=1, sort } = props
   const Icon = ({ innerRef, innerProps }) => (
     <img
       src="/img/icons/arrow-down.svg"
@@ -64,7 +64,7 @@ const Select = (props) => {
       .get(
         `${
           env.API_URL
-        }/${url}?sort=${fieldName}&filters=${encodeURIComponent(`[["status",${status}],["AND"],["${fieldName}","like","${search}"]${
+        }/${url}?sort=${sort? sort :fieldName}&filters=${encodeURIComponent(`[["status",${status}],["AND"],["${fieldName}","like","${search}"]${
           urlFilter !== undefined ? `,["AND"],${urlFilter}` : ""
         }]`)}&size=10&page=${page - 1}`,
       )

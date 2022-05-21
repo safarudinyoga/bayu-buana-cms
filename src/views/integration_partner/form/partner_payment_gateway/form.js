@@ -76,7 +76,7 @@ function PaymentGatewayCreate(props) {
     server_key: "",
     bank_id: "a",
     virtual_account_number: "",
-    onvenience_store_code: "",
+    convenience_store_code: "",
   }
 
   const checkPaymentGatewayIsUnique = async (payment_gateway_name) => {
@@ -120,7 +120,7 @@ function PaymentGatewayCreate(props) {
     server_key: Yup.string(),
     bank_id: Yup.object(),
     virtual_account_number: Yup.string(),
-    onvenience_store_code: Yup.string(),
+    convenience_store_code: Yup.string(),
   })
 
   const onSubmit = async (values, a) => {

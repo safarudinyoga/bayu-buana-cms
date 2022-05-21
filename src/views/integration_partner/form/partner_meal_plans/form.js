@@ -86,6 +86,7 @@ function MealPlansCreate(props) {
             integration_partner_id: values.integration_partner_id
         };
         let res = await API.putOrPost(endpoint, id, form);
+        console.log("hihi", res)
 
         dispatch(setCreateModal({ show: false, id: null, disabled_form: false }));
         dispatch(
