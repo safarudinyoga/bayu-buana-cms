@@ -20,7 +20,7 @@ import axios from "axios"
 import useQuery from "lib/query"
 import { useDispatch, useSelector } from "react-redux"
 import { withRouter } from "react-router"
-import { setAlert, setUIParams, setModalTitle } from "redux/ui-store"
+import { setAlert, setUIParams, setModalTitle, setCreateModal } from "redux/ui-store"
 
 import Api from "config/api"
 import env from "config/environment"
@@ -47,9 +47,9 @@ const GeneralInformation = (props) => {
   const [feeTaxCode, setFeeTaxCode] = useState(null)
   const [feeTaxName, setFeeTaxName] = useState(null)
 
-  const endpoint = "/master/fee-tax-types"
-
   let formId = props.match.params.id
+
+  const endpoint = `/master/integration-partners/${formId}/fee-taxes`
 
   React.useEffect(async () => {
     let formId = showCreateModal.id || props.id
@@ -71,146 +71,16 @@ const GeneralInformation = (props) => {
   // Initialize form
   const initialForm = {
     feeTax: "",
-    partnerFeeTaxCode: "",
-    partnerFeeTaxName: "",
+    partnerFeeTaxCode: feeTaxCode,
+    partnerFeeTaxName: feeTaxName,
   }
 
-  // const initialFormModalAddMap = {
-  //   modalCaption: "",
-  //   modalImage: "",
-  // }
   // Schema for yup
   const validationSchema = Yup.object().shape({
     feeTax: Yup.object().required("Fee Tax is required"),
     partnerFeeTaxCode: Yup.string().required("Partner Fee Tax Code is required"),
     partnerFeeTaxName: Yup.string().required("Partner Fee Tax Name is required"),
   })
-
-  // const validationSchemaModalAddMap = Yup.object().shape({
-  //   modalCaption: Yup.string().required("Caption is required."),
-  //   modalImage: Yup.string().required("Image is required."),
-  // })
-
-  
-
-  const formTranslation = () => {
-    return (
-      <>
-        <Form.Group as={Row} className="form-group">
-          <Form.Label column sm={3}>
-            Hotel Name
-          </Form.Label>
-          <Col sm={9}>
-            <FastField name="a">
-              {({ field }) => (
-                <>
-                  <Form.Control
-                    type="text"
-                    minLength={1}
-                    maxLength={128}
-                    style={{ width: 300 }}
-                    {...field}
-                  />
-                </>
-              )}
-            </FastField>
-          </Col>
-        </Form.Group>
-        <Form.Group as={Row} className="form-group">
-          <Form.Label column sm={3}>
-            Standard Check-in Time
-          </Form.Label>
-          <Col sm={9}>
-            <FastField name="b">
-              {({ field }) => (
-                <>
-                  <Form.Control
-                    type="text"
-                    minLength={1}
-                    maxLength={16}
-                    style={{ width: 100 }}
-                    {...field}
-                  />
-                </>
-              )}
-            </FastField>
-          </Col>
-        </Form.Group>
-        <Form.Group as={Row} className="form-group">
-          <Form.Label column sm={3}>
-            Standard Check-out Time
-          </Form.Label>
-          <Col sm={9}>
-            <FastField name="c">
-              {({ field }) => (
-                <>
-                  <Form.Control
-                    type="text"
-                    minLength={1}
-                    maxLength={16}
-                    style={{ width: 100 }}
-                    {...field}
-                  />
-                </>
-              )}
-            </FastField>
-          </Col>
-        </Form.Group>
-        <Form.Group as={Row} className="form-group">
-          <Form.Label column sm={3}>
-            Descriptions
-          </Form.Label>
-          <Col sm={9}>
-            <FastField name="d">
-              {({ field }) => (
-                <Form.Control
-                  {...field}
-                  as="textarea"
-                  rows={3}
-                  minLength={1}
-                  maxLength={512}
-                  style={{ width: 362 }}
-                />
-              )}
-            </FastField>
-          </Col>
-        </Form.Group>
-        <Form.Group as={Row} className="form-group">
-          <Form.Label column sm={3}>
-            Internal Remark
-          </Form.Label>
-          <Col sm={9}>
-            <FastField name="e">
-              {({ field }) => (
-                <Form.Control
-                  {...field}
-                  as="textarea"
-                  rows={3}
-                  minLength={1}
-                  maxLength={512}
-                  style={{ width: 362 }}
-                />
-              )}
-            </FastField>
-          </Col>
-        </Form.Group>
-        <Form.Group as={Row} className="form-group">
-          <Form.Label column sm={3}>
-            Terms & Conditions
-          </Form.Label>
-          <Col sm={9}>
-            <Editor
-              // editorState={editorState}
-              toolbarClassName="toolbarClassName"
-              wrapperClassName="wrapperClassName"
-              editorClassName="editorClassName"
-              // onEditorStateChange={this.onEditorStateChange}
-            />
-          </Col>
-        </Form.Group>
-      </>
-    )
-  }
 
   useEffect(async () => {
     let api = new Api()
@@ -264,6 +134,7 @@ const GeneralInformation = (props) => {
   return (
     <div>
       <Formik
+        enableReinitialize
         initialValues={initialForm}
         validationSchema={validationSchema}
         // validateOnChange={false}
@@ -272,16 +143,28 @@ const GeneralInformation = (props) => {
           console.log("VALUES",values)
           console.log(props)
 
-          let formatted = {
-            fee_tax_type_id: values.feeTax.value,
-            fee_tax_type_code: values.partnerFeeTaxCode,
-            fee_tax_type_name: values.partnerFeeTaxName,
-          }
+          try {  
+            let formatted = {
+              fee_tax_type_id: values.feeTax.value,
+              fee_tax_type_code: values.partnerFeeTaxCode,
+              fee_tax_type_name: values.partnerFeeTaxName,
+            }
 
-          try {
             let res = await api.post(`master/integration-partners/${formId}/fee-taxes`, formatted)
+
+            dispatch(setCreateModal({ show: false, id: null, disabled_form: false }));
+            dispatch(
+              setAlert({
+                  message: `Record 'Partner Fee Tax Name: ${values.partnerFeeTaxName}' has been successfully saved.`,
+              })
+            );
           } catch (e) {
             console.error(e)
+            dispatch(
+              setAlert({
+                  message: "Failed to save this record.",
+              })
+          );
           }
         }}
       >
@@ -314,6 +197,7 @@ const GeneralInformation = (props) => {
                                 <Select
                                   {...field}
                                   url={`master/fee-tax-types`}
+                                  urlFilter={`[["fee_category","=","AX"],["OR"],["fee_category","=","HX"]]`}
                                   fieldName="fee_tax_type_name"
                                   onChange={(v) =>
                                     setFieldValue("feeTax", v)
@@ -348,8 +232,6 @@ const GeneralInformation = (props) => {
                                 <FormInputControl
                                     name="partnerFeeTaxCode"
                                     value={values.partnerFeeTaxCode}
-                                    // value={feeTaxCode}          
-                                    // onChange={(e) => setFeeTaxCode(e.target.value)}
                                     onChange={handleChange}
                                     onBlur={handleBlur}
                                     type="text"
@@ -393,7 +275,15 @@ const GeneralInformation = (props) => {
               </Button>
               <Button
                 variant="secondary"
-                onClick={() => props.history.push(props.backUrl)}
+                onClick={() => {
+                  dispatch(
+                    setCreateModal({
+                      show: false,
+                      id: null,
+                      disabled_form: false,
+                    })
+                  )
+                }}
               >
                 CANCEL
               </Button>
