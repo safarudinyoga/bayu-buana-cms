@@ -26,7 +26,7 @@ function IntegrationPartnerCurrenciesCreate(props) {
 
         let docTitle = "Edit Partner Currencies";
         if (!formId) {
-            docTitle = "Create Partner Currencies";
+            docTitle = "New Partner Currencies";
         } else if (isView) {
             docTitle = "Partner Currencies Details";
         }
@@ -35,7 +35,13 @@ function IntegrationPartnerCurrenciesCreate(props) {
 
         try {
             let res = await API.get(endpoint + "/" + formId);
-            setFormValues(res.data);
+            setFormValues({
+                ...res.data,
+                currency: {
+                    value: res.data.currency?.id || "",
+                    label:res.data.currency?.currency_name || "",
+                }
+            });
         } catch (e) {}
         setLoading(false);
     }, []);
@@ -52,34 +58,59 @@ function IntegrationPartnerCurrenciesCreate(props) {
         setId(showCreateModal.id);
     }, [showCreateModal.id, formValues]);
 
+    const duplicateValue = async(fieldName, value) => {
+        let filters = encodeURIComponent(JSON.stringify([[fieldName,"=",value],["AND"],["status",1]]))
+        let res = await API.get(endpoint + "?" + `filters=${filters}`)
+        let sameId = res.data.items.find((v) => v.id === id)
+        if(!sameId) return res.data.items.length === 0 
+
+        return true
+    }
+    Yup.addMethod(Yup.object, 'uniqueValueObject', function (fieldName, message) {
+        return this.test('unique', message, function(field) {
+            if(field) return duplicateValue(fieldName, field.value)
+            return true
+        })
+    })
+    Yup.addMethod(Yup.string, 'uniqueValueString', function (fieldName, message) {
+        return this.test('unique', message, function(field) {
+            if(field) return duplicateValue(fieldName, field)
+            return true
+        })
+    })
+
     const initialValues = {
-        currency_id: "",
+        currency: "",
         currency_code: "",
         currency_symbol: "",
         currency_name: "",
-        integration_partner_id: "00000000-0000-0000-0000-000000000000"
+        integration_partner_id: props.match.params.id || "00000000-0000-0000-0000-000000000000"
     };
 
     const validationSchema = Yup.object().shape({
-        currency_code: Yup.string().required("Partner Currency Code is required."),
-        currency_name: Yup.string().required("Partner Currency Name is required."),
+        currency: Yup.object().required("Currency is required.")
+        .uniqueValueObject('currency_id', 'Currency already exists'),
+        currency_code: Yup.string().required("Partner Currency Code is required.")
+        .uniqueValueString('currency_code', 'Partner Currency Code already exists'),
+        currency_name: Yup.string().required("Partner Currency Name is required.")
+        .uniqueValueString('currency_name', 'Partner Currency Name already exists'),
     });
 
     const onSubmit = async (values, a) => {
         try {
             let form = {
-                currency_id: values.currency_id.value,
+                currency_id: values.currency.value || "00000000-0000-0000-0000-000000000000",
                 currency_symbol: values.currency_symbol,
                 currency_code: values.currency_code,
                 currency_name: values.currency_name,
                 integration_partner_id: values.integration_partner_id
             };
-            let res = await API.putOrPost("/master/integration-partner-currencies", id, form);
+            let res = await API.putOrPost(endpoint, id, form);
 
             dispatch(setCreateModal({ show: false, id: null, disabled_form: false }));
             dispatch(
                 setAlert({
-                    message: `Record 'From Integration Partner Currencies: ${form.currency_code} - ${form.currency_name}' has been successfully saved.`,
+                    message: `Record 'Partner Currency Name: ${values.currency_name}' has been successfully saved.`,
                 })
             );
         } catch (e) {
@@ -107,13 +138,13 @@ function IntegrationPartnerCurrenciesCreate(props) {
                     <FormikControl
                         control="selectAsync"
                         required={isView ? "" : "label-required"}
-                        label="Currencies"
-                        name="currencies_id"
-                        placeholder={values.currency_name || "Please Choose."}
+                        label="Currency"
+                        name="currency"
+                        placeholder={values.currency_name || "Please Choose"}
                         url={`master/currencies`}
                         fieldName={"currency_name"}
                         onChange={(v) => {
-                            setFieldValue("currency_id", v);
+                            setFieldValue("currency", v);
                         }}
                         style={{ maxWidth: 250 }}
                         size={formSize}
@@ -136,9 +167,7 @@ function IntegrationPartnerCurrenciesCreate(props) {
                         style={{ maxWidth: 250 }}
                         size={formSize}
                         disabled={isView || loading}
-                        onChange={(e) => {
-                            setFieldValue("currency_code", e.target.value);
-                        }}
+                        maxLength={3}
                     />
 
                     <FormikControl
@@ -149,27 +178,23 @@ function IntegrationPartnerCurrenciesCreate(props) {
                         style={{ maxWidth: 250 }}
                         size={formSize}
                         disabled={isView || loading}
-                        onChange={(e) => {
-                            setFieldValue("currency_name", e.target.value);
-                        }}
+                        maxLength={64}
                     />
 
-                    {!props.hideButton && (
-                        <div
-                            style={{
-                                marginBottom: 30,
-                                marginTop: 30,
-                                display: "flex",
-                            }}
-                        >
-                            {!isView && (
-                                <Button variant="primary" type="submit" disabled={isSubmitting} style={{ marginRight: 15 }}>
-                                    SAVE
-                                </Button>
-                            )}
-                            <CancelButton onClick={() => dispatch(setCreateModal({ show: false, id: null, disabled_form: false }))} />
-                        </div>
-                    )}
+                    <div
+                        style={{
+                            marginBottom: 30,
+                            marginTop: 30,
+                            display: "flex",
+                        }}
+                    >
+                        {!isView && (
+                            <Button variant="primary" type="submit" disabled={isSubmitting} style={{ marginRight: 15 }}>
+                                SAVE
+                            </Button>
+                        )}
+                        <CancelButton onClick={() => dispatch(setCreateModal({ show: false, id: null, disabled_form: false }))} />
+                    </div>
                 </Form>
             )}
         </Formik>
