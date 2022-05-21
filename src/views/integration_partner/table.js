@@ -12,7 +12,7 @@ export default function IntegrationPartnerTable() {
         title: "Integration Partner",
         breadcrumbs: [
           {
-            text: "Setup and Configuration",
+            text: "Setup And Configurations",
           },
           {
             text: "Integration Partner",

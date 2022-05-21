@@ -68,7 +68,7 @@ class BBDataTable extends Component {
     let columns = []
     const { recordName, msgType, module } = this.props
     const { isCheckbox, isShowColumnAction } = this.state
-
+    console.log('module', module)
     columns.push(isCheckbox ? {
       searchable: false,
       orderable: false,
@@ -533,7 +533,7 @@ class BBDataTable extends Component {
           {
             targets: [3],
             className: !module == "loyalty-programs" ? "" : "cstm-col-width-2",
-            visible: module == "standard-ancillary-fee" 
+            visible: module ? module == "standard-ancillary-fee" ? false : true : true
           },
           { responsivePriority: 1, targets: 1 },
           { responsivePriority: 2, targets: 2 },
@@ -571,7 +571,7 @@ class BBDataTable extends Component {
           },
           { visible: false,  targets: module == 'employee' ? [ 4, 5, 8 ] : [] },
           {
-            className: module == "standard-ancillary-fee" ? this.props.actionWidthClass || "" : "width-ancillary",
+            className: module ? module != "standard-ancillary-fee" ? this.props.actionWidthClass || "" : "width-ancillary" : "",
             targets: [2],
           },
           {

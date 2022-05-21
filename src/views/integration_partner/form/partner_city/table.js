@@ -35,18 +35,17 @@ export default function PartnerCityTable(props) {
       {
         title: "Partner City name",
         data: "city_name",
-
-      },
+      }
     ],
     emptyTable: "No partner cities found",
-    recordName: ["city_city_name"],
+    recordName: ["city_name"],
     btnDownload: ".buttons-csv",
     module: "integration-partner-cities"
   }
   return <>
     <Card>
       <Card.Body>
-        <h3 className="card-heading">Partner Cities</h3>
+        <h3 className="card-heading">Partner Citiedss</h3>
         <BBDataTable {...params} modalContent={Form} />
       </Card.Body>
     </Card>
