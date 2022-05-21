@@ -1,13 +1,16 @@
 import Api from "config/api"
 import $ from "jquery"
 import { Component } from "react"
+import { Card, Form, Row, Col, Button, Modal } from "react-bootstrap"
 import FormHorizontal from "./horizontal"
 import FormInputControl from "./input-control"
+import { Editor } from "react-draft-wysiwyg"
 import "./translation-form.css"
 import arrowdownIcon from 'assets/icons/arrow-down.svg';
 
 export default class TranslationForm extends Component {
   constructor(props) {
+    console.log(props, 'translation form');
     super(props)
     this.state = {
       pillStyle: {},
@@ -22,6 +25,7 @@ export default class TranslationForm extends Component {
     this.hasTranslated = false
     this.api = new Api()
   }
+  
 
   componentDidMount() {
     this.api
@@ -99,7 +103,6 @@ export default class TranslationForm extends Component {
     this.setState({
       translated: this.translated,
     })
-    console.log(this.translated)
   }
 
   getKeyByValue(object, value) {
@@ -179,6 +182,28 @@ export default class TranslationForm extends Component {
           >
             <FormHorizontal>
               {fields.map((field, index) => {
+                if (field.type === "richtext") {
+                  return (
+                    <div className="row">
+                      <Col sm={5} >
+                          <p>Description</p>
+                      </Col>
+                      <Col sm={7} >
+                        <div style={{width: '270%', display: 'flex', flexWrap: 'wrap'}} >
+                            <Editor
+                            // editorState={editorState}
+                            toolbarClassName="toolbarClassName"
+                            wrapperClassName="wrapperClassName"
+                            editorClassName="editorClassName"
+                            wrapperStyle={{border: '1px solid #D3D3D3'}}
+                            // onEditorStateChange={this.onEditorStateChange}
+                            toolbarStyle={{background: '#ECECEC 0% 0% no-repeat padding-box'}}
+                                          />
+                        </div>
+                        </Col>
+                    </div>
+                  )
+                }
                 return (
                   <FormInputControl
                     wrapperAlign="start"

@@ -17,6 +17,7 @@ export default function IntegrationPartnerMealPlansTable() {
     baseRoute: "/master/integration-partner-meal-plans/form",
     endpoint: `/master/integration-partner-meal-plan-types`,
     deleteEndpoint: "master/batch-actions/delete/master/integration-partner-meal-plan-types",
+    btnDownload: ".buttons-csv",
     columns: [
       {
         title: "Meal Plans",

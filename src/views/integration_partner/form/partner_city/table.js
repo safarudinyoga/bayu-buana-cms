@@ -22,6 +22,7 @@ export default function PartnerCityTable(props) {
     deleteEndpoint: "/master/batch-actions/delete/integration-partner-cities",
     activationEndpoint: "/master/batch-actions/activate/integration-partner-cities",
     deactivationEndpoint: "/master/batch-actions/deactivate/integration-partner-cities",
+    btnDownload: ".buttons-csv",
     columns: [
       {
         title: "City",

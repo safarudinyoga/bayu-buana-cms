@@ -16,6 +16,7 @@ import {OverlayTrigger, Tooltip} from "react-bootstrap"
 // import Form from "./form";
 
 function TravelAdvice(props) {
+    console.log(props);
     const api = new Api()
   const [visibleAdd, setVisibleAdd] = React.useState(false)
   const [formBuilder, setFormBuilder] = useState(null)
@@ -92,14 +93,12 @@ function TravelAdvice(props) {
 
   const borderFeeTax = {
       borderRadius: 10,
-      width: '100%'
   };
   const titleText = {
       fontSize: 16,
       color: '#333333',
       paddingTop: 20,
-      fontWeight: 600,
-      paddingLeft: 10
+      fontWeight: 600
   };
   const tableTax = {
       paddingLeft: 20
@@ -119,18 +118,22 @@ function TravelAdvice(props) {
         let res = await api.get(endpoint  + "/translations", {
             size: 50,
           })
+          console.log(res, 'ini translate');
         //   setTranslations(res.data.items)
     }, [])
 
 
   return (
       <div className="row">
-            <div className="border" style={borderFeeTax}>
+        <div className="col-md-3">
+
+        </div>
+            <div className="col-md-9 border" style={borderFeeTax}>
                 <h1 style={titleText}>{title}</h1>
                 <hr />
                 {
                     visibleAdd === false ?
-                        <div className="row" style={{justifyContent: 'space-between', width: '90%', margin: 'auto',}}>
+                        <div className="row" style={{justifyContent: 'space-between', width: '90%', margin: 'auto'}}>
                             <div className="mt-5" >
                                 <p style={{fontStyle: 'italic'}}>No Travel Advice found</p>
                             </div>

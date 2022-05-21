@@ -17,6 +17,7 @@ export default function IntegrasiPartnerHotelSupplier() {
     deleteEndpoint: `/master/batch-actions/delete/integration-partner-hotel-suppliers`,
     activationEndpoint: "/master/batch-actions/activate/integration-partner-hotels",
     deactivationEndpoint: "/master/batch-actions/deactivate/integration-partner-hotels",
+    btnDownload: ".buttons-csv",
     showAdvancedOptions: false,
     hideDetail: true,
     createOnModal: true,
