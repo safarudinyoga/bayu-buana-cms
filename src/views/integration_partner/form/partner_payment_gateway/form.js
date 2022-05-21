@@ -36,6 +36,8 @@ function PaymentGatewayCreate(props) {
         let { data } = await API.get(endpoint + "/" + formId)
         setFormValues({
           ...data,
+          payment_gateway_code: data.payment_gateway.payment_gateway_code,
+          payment_gateway_name: data.payment_gateway.payment_gateway_name,
           currency_id: {
             value: data.currency_id,
             label: data.currency_id,
