@@ -134,8 +134,8 @@ import IntegrationPartnerCabinsForm from "views/integration_partner_cabin/form/f
 import FareFamiyTabel from "views/integration_partner_cabin/tabel-fare-family"
 import IntegrationFeeTaxes from "views/partner_fee_taxes/table"
 import FeeTaxForm from "views/partner_fee_taxes/form"
-import CreateHotel from 'views/partner_hotels/form'
-import FormPartnerHotel from 'views/partner_hotels/form'
+import CreateHotel from "views/partner_hotels/form"
+import FormPartnerHotel from "views/partner_hotels/form"
 import IntegrationPartnerCountriesTable from "views/integration_partner_countries/table"
 import IntegrationPartnerCurrenciesTable from "views/integration_partner_currencies/table"
 import IntegrationPartnerCurrenciesForm from "views/integration_partner_currencies/form"
@@ -173,6 +173,12 @@ import StandardAncillaryFeeFlightForm from "views/standard_ancillary_fee/form/fl
 import StandardAncillaryFeeHotelForm from "views/standard_ancillary_fee/form/hotel_form"
 import StandardAncillaryFeeOtherForm from "views/standard_ancillary_fee/form/other_form"
 
+// Master Standard serviceFee
+import StandardServiceFee from "./views/standar_service_fee/standard_service_fee"
+import StandardServiceFeeFeeFlightForm from "views/standar_service_fee/form/flight_form"
+import StandardServiceFeeHotelForm from "views/standar_service_fee/form/hotel_form"
+import StandardServiceFeeOtherForm from "views/standar_service_fee/form/other_form"
+
 // Special Date
 import SpecialDateTable from "views/special_date/table"
 import SpecialDateForm from "views/special_date/form"
@@ -184,14 +190,17 @@ import BookFlight from "views/extranet/book_trip/book_flight"
 
 import Api from "config/api"
 import IntegrationPartnerHotels from "views/partner_hotels/table"
-import IntegrationPartnerHotelSupplier from 'views/partner_hotel_supplier/table';
+import IntegrationPartnerHotelSupplier from "views/partner_hotel_supplier/table"
 import BookingSetting from "views/booking_setting/table"
+import TravelAdvice from "views/travel_advice/table"
+import GeneralInformation from "views/general_information/table"
 
 // Identity Rule
 import IdentityRuleTable from "views/identity_rule/table"
 
 // Tax Fee
 import TaxFeeForm from "views/tax_fee/form"
+import ShoppingCache from "views/shopping_cache/table"
 
 const RouteWithProps = ({
   path,
@@ -296,7 +305,10 @@ const DashboardRoutes = () => {
         <Route exact path="/master/integration-partner/partner-fee-tax">
           <IntegrationFeeTaxes />
         </Route>
-        <Route exact path="/master/integration-partner/partner-fee-tax/form/:id?">
+        <Route
+          exact
+          path="/master/integration-partner/partner-fee-tax/form/:id?"
+        >
           <FeeTaxForm />
         </Route>
         <Route exact path="/master/integration-partner/partner-hotels">
@@ -378,6 +390,20 @@ const DashboardRoutes = () => {
         </Route>
         <Route path="/master/standard-ancillary-fee/form/other-form/:id?">
           <StandardAncillaryFeeOtherForm />
+        </Route>
+
+        {/* Standard Service Fee */}
+        <Route exact path="/master/standard-service-fee">
+          <StandardServiceFee />
+        </Route>
+        <Route path="/master/standard-service-fee/form/flight-form/:id?">
+          <StandardServiceFeeFeeFlightForm />
+        </Route>
+        <Route path="/master/standard-service-fee/form/hotel-form/:id?">
+          <StandardServiceFeeHotelForm />
+        </Route>
+        <Route path="/master/standard-service-fee/form/other-form/:id?">
+          <StandardServiceFeeOtherForm />
         </Route>
         <Route exact path="/master/destination-groups">
           <DestinationGroupTable />
@@ -627,6 +653,13 @@ const DashboardRoutes = () => {
           <BookingSetting />
         </Route>
 
+        <Route exact path="/master/setup-travel-advice">
+          <TravelAdvice />
+        </Route>
+        <Route exact path="/master/setup-general-information">
+          <GeneralInformation />
+        </Route>
+        
         {/* Master Exhange Rate */}
         <Route exact path="/master/exchange-rate">
           <ExchageRateTable />
@@ -649,6 +682,12 @@ const DashboardRoutes = () => {
         <Route exact path="/profile/:tab?">
           <UserProfile />
         </Route>
+
+        {/* start shopping cache */}
+        <Route exact path="/internal/shopping-cache">
+          <ShoppingCache />
+        </Route>
+        {/* end shopping cache */}
 
         {/* Master General Setup*/}
         <Route exact path="/master/general-setup">
