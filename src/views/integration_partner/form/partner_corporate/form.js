@@ -1,8 +1,7 @@
 import { withRouter } from "react-router";
 import React, { useState, useEffect } from "react";
-import { Form, FormGroup, InputGroup, Button, Row, Col } from "react-bootstrap";
-import { Formik, FastField } from "formik";
-import useQuery from "lib/query";
+import { Form, Button, Row, Col } from "react-bootstrap";
+import { Formik } from "formik";
 import * as Yup from "yup";
 import Api from "config/api";
 import { useDispatch, useSelector } from "react-redux";
@@ -165,8 +164,7 @@ function IntegrationPartnerCorporateCreate(props) {
                           label="Corporate Information"
                           name="corporate_information_enabled"
                           checked={values.corporate_information_enabled}
-                          // onChange={(v) => setFieldValue("corporate_information_enabled", v)}
-                          onChange={(handleChange, v) => setFieldValue("corporate_information_enabled", v)}                          
+                          onChange={(v) => setFieldValue("corporate_information_enabled", v.target.checked)}                          
                           disabled={isView}
                         />
                         <Form.Check
@@ -174,7 +172,7 @@ function IntegrationPartnerCorporateCreate(props) {
                           label="Corporate Performance"
                           name="corporate_performance_enabled"
                           checked={values.corporate_performance_enabled}
-                          onChange={(v) => setFieldValue("corporate_performance_enabled", v)}
+                          onChange={(v) => setFieldValue("corporate_performance_enabled", v.target.checked)}
                           disabled={isView}
                         />
                         <Form.Check
@@ -182,7 +180,7 @@ function IntegrationPartnerCorporateCreate(props) {
                           label="Credit Limit"
                           name="credit_limit_enabled"
                           checked={values.credit_limit_enabled}
-                          onChange={(v) => setFieldValue("credit_limit_enabled", v)}
+                          onChange={(v) => setFieldValue("credit_limit_enabled", v.target.checked)}
                           disabled={isView}
                         />
                       </Col>
