@@ -20,7 +20,7 @@ import FormAlert from "components/form/alert";
 import axios from "axios"
 import useQuery from "lib/query"
 import { useDispatch, useSelector } from "react-redux"
-import { setAlert, setUIParams } from "redux/ui-store"
+import { setAlert, setUIParams, setCreateModal } from "redux/ui-store"
 
 import Api from "config/api"
 import env from "config/environment"
@@ -50,8 +50,11 @@ const HotelSuppliers = (props) => {
   const [modalShow, setModalShow] = useState(false)
   const [translations, setTranslations] = useState([])
   const [loading, setLoading] = useState(true)
+  const [supplyId, setSupplyId] = useState(null)
+  const [formValues, setFormValues] = useState(null)
 
   let api = new Api()
+
 
   // Initialize form
   const [initialForm, setIntialForm] = useState({
@@ -69,29 +72,7 @@ const HotelSuppliers = (props) => {
   })
 
   useEffect(async () => {
-    let formId = showCreateModal.id
-    if(formId) {
-      try {
-        let res = await api.get(`master/integration-partners/${id}/hotel-suppliers/${formId}`)
-        let data = res.data;
-        console.log("DATA:",data)
-        setIntialForm({
-          ...initialForm,
-  
-          hotelSupplier: data.hotel_supplier_id ? data.hotel_supplier_id : "",
-          partnerHotelSupplierCode: data.hotel_supplier_code ? data.hotel_supplier_code : "",
-          partnerHotelSupplierName: data.hotel_supplier_name ? data.hotel_supplier_name : "",
-        })
-        
-      } catch(e) {
-        console.log(e)
-      }
-    }
-    
-  }, [])
-
-  useEffect(async () => {
-    let formId = showCreateModal.id
+    let formId = showCreateModal.id || props.id
     console.log(formId, 'id endpoint');
 
     let docTitle = "Edit Partner Hotel Suppliers"
@@ -109,7 +90,7 @@ const HotelSuppliers = (props) => {
           },
           {
             link: props.backUrl,
-            text: "Aircrafts",
+            text: "Integration Partner",
           },
           {
             text: docTitle,
@@ -118,14 +99,43 @@ const HotelSuppliers = (props) => {
       }),
     )
 
+    if(formId) {
+      try {
+        console.log("formId",formId)
+        console.log("url", endpoint + "/" + formId)
+        let { data } = await api.get(endpoint + "/" + formId)
+        console.log("DATA if edit",data)
+        setFormValues({ 
+          ...formValues,
+
+          hotelSupplier: data.hotel_supplier_id ? data.hotel_supplier_id : "",
+          partnerHotelSupplierCode: data.hotel_supplier_code ? data.hotel_supplier_code : "",
+          partnerHotelSupplierName: data.hotel_supplier_name ? data.hotel_supplier_name : "",
+        })
+      } catch (e) {
+        console.log(e)
+      }
+    }
     
   }, [])
+
+  useEffect(() => {
+    if (!showCreateModal.id) {
+      setLoading(false)
+    }
+
+    if (formValues) {
+      setLoading(false)
+    }
+
+    setSupplyId(showCreateModal.id)
+  }, [showCreateModal.id, formValues])
 
   return (
     <div>
       <Formik
         enableReinitialize
-        initialValues={initialForm}
+        initialValues={formValues || initialForm}
         validationSchema={validationSchema}
         validateOnChange={false}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
@@ -140,11 +150,13 @@ const HotelSuppliers = (props) => {
           }
 
           try {
-            if(showCreateModal.id){
-              let res = await api.put(`master/integration-partners/${id}/hotel-suppliers/${showCreateModal.id}`, formatted)
-            } else {
-              let res = await api.post(`master/integration-partners/${id}/hotel-suppliers`, formatted)
-            }
+            let res = await api.putOrPost(endpoint, supplyId, formatted)
+            dispatch(
+              setAlert({
+                  message: `Record 'Partner Hotel Supplier Name: ${values.partnerHotelSupplierName}' has been successfully saved.`,
+              })
+            );
+            dispatch(setCreateModal({ show: false, id: null, disabled_form: false }));
             
           } catch (e) {
             console.error(e)
@@ -256,7 +268,15 @@ const HotelSuppliers = (props) => {
               </Button>
               <Button
                 variant="secondary"
-                onClick={() => props.history.push(props.backUrl)}
+                onClick={() => {
+                  dispatch(
+                    setCreateModal({
+                      show: false,
+                      id: null,
+                      disabled_form: false,
+                    })
+                  )
+                }}
               >
                 CANCEL
               </Button>
