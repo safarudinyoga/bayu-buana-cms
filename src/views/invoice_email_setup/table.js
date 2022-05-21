@@ -22,6 +22,7 @@ export default function InvoiceEmailSetupTable() {
     }, [])
 
     let params = {
+        hideCreate: true,
         title: "Invoice Email Setup",
         titleModal: "Invoice Email Setup",
         baseRoute: "",

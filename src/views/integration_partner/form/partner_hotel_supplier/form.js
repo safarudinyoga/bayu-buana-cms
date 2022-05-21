@@ -20,7 +20,7 @@ import FormAlert from "components/form/alert";
 import axios from "axios"
 import useQuery from "lib/query"
 import { useDispatch, useSelector } from "react-redux"
-import { setAlert, setUIParams } from "redux/ui-store"
+import { setAlert, setUIParams, setCreateModal } from "redux/ui-store"
 
 import Api from "config/api"
 import env from "config/environment"
@@ -28,13 +28,18 @@ import Select from "components/form/select-async"
 
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css"
 import "react-dropzone-uploader/dist/styles.css"
+import { useParams } from "react-router-dom"
 
-const endpoint = "/master/integration-partners/3f61b5e0-d7cb-4f80-94e7-83114ff23903/hotel-suppliers"
+
+
 
 const HotelSuppliers = (props) => {
   const isView = useQuery().get("action") === "view"
   let dispatch = useDispatch()
   const showCreateModal = useSelector((state) => state.ui.showCreateModal)
+  const { id } = useParams()
+
+  const endpoint = `/master/integration-partners/${id}/hotel-suppliers`
 
   const [selectCountry, setSelectCountry] = useState([])
   const [selectHotelBrand, setSelectHotelBrand] = useState([])
@@ -45,161 +50,29 @@ const HotelSuppliers = (props) => {
   const [modalShow, setModalShow] = useState(false)
   const [translations, setTranslations] = useState([])
   const [loading, setLoading] = useState(true)
+  const [supplyId, setSupplyId] = useState(null)
+  const [formValues, setFormValues] = useState(null)
 
   let api = new Api()
 
+
   // Initialize form
-  const initialForm = {
-    // General Information
-    hotelCode: "",
-    hotelName: "",
-    hotelBrand: "",
-    hotelSupplierName: hotelSupplierName || "",
-    numberOfRooms: "",
+  const [initialForm, setIntialForm] = useState({
+    hotelSupplier: "",
+    partnerHotelSupplierCode: "",
+    partnerHotelSupplierName: "",
+    
+  })
 
-    // Contacts
-    email: "",
-    emailForBookingAcknowledgment: "",
-    phone: "",
-    fax: "",
-    website: "",
-
-    // Address
-    address: "",
-    country: "",
-    province: "",
-    city: "",
-    zipCode: "",
-    destination: "",
-    zone: "",
-    geoLocationLatitude: "",
-    geoLocationLongitude: "",
-    mapImage: "",
-
-    // Other Information
-    propertyType: "",
-    locationCategory: "",
-    constructionYear: "",
-    lastRenovation: "",
-    standardCheckinTime: "",
-    standardCheckoutTime: "",
-    descriptions: "",
-    internalRemark: "",
-    termConditions: "",
-
-    // Translations
-  }
-
-  const initialFormModalAddMap = {
-    modalCaption: "",
-    modalImage: "",
-  }
   // Schema for yup
   const validationSchema = Yup.object().shape({
-    // General Information
-    hotelCode: Yup.string()
-      .required("Hotel Code is required.")
-      .test(
-        "Unique Code",
-        "Hotel Code already exists", // <- key, message
-        (value) => {
-          return new Promise((resolve, reject) => {
-            axios
-              .get(
-                `${env.API_URL}/fee-tax-types/`,
-              )
-              .then((res) => {
-                resolve(res.data.items.length == 0)
-              })
-              .catch((error) => {
-                resolve(false)
-              })
-          })
-        },
-      ),
-    hotelName: Yup.string().required("Hotel Name is required."),
-    hotelBrand: Yup.object(),
-    hotel_supplier_name: Yup.object().required("Star Rating is required."),
-    numberOfRooms: Yup.number(),
-
-    // Contacts
-    email: Yup.string()
-      .email("Email is not valid.")
-      .required("Email is required."),
-    emailForBookingAcknowledgment: Yup.string()
-      .email("Email for Booking Acknowledgment is not valid.")
-      .required("Email for Booking Acknowledgment is required."),
-    phone: Yup.string().required("Phone is required."),
-    fax: Yup.string(),
-    website: Yup.string(),
-
-    // Address
-    address: Yup.string(),
-    country: Yup.object().required("Country is required."),
-    province: Yup.object(),
-    city: Yup.object(),
-    zipCode: Yup.string(),
-    destination: Yup.object(),
-    zone: Yup.object(),
-    geoLocationLatitude: Yup.string(),
-    mapImage: Yup.string(),
-
-    // Other Information
-    propertyType: Yup.object().required("Property Type is required."),
-    locationCategory: Yup.object().required("Location Category is required."),
-    constructionYear: Yup.string(),
-    lastRenovation: Yup.string(),
-    standardCheckinTime: Yup.string(),
-    standardCheckoutTime: Yup.string(),
-    descriptions: Yup.string(),
-    internalRemark: Yup.string(),
-    termConditions: Yup.string(),
+    hotelSupplier: Yup.object().required("Hotel Supplier is required"),
+    partnerHotelSupplierCode: Yup.string().required("Partner Hotel Supplier Code is required"),
+    partnerHotelSupplierName: Yup.string().required("Partner Hotel Supplier Name is required"),
   })
-
-  const validationSchemaModalAddMap = Yup.object().shape({
-    modalCaption: Yup.string().required("Caption is required."),
-    modalImage: Yup.string().required("Image is required."),
-  })
-
-  const ImageUploader = () => {
-    // specify upload params and url for your files
-    const getUploadParams = ({ meta }) => {
-      return { url: "https://httpbin.org/post" }
-    }
-
-    // called every time a file's `status` changes
-    const handleChangeStatus = ({ meta, file }, status) => {
-      console.log(status, meta, file)
-    }
-
-    // receives array of files that are done uploading when submit button is clicked
-    const handleSubmit = (files, allFiles) => {
-      console.log(files.map((f) => f.meta))
-      allFiles.forEach((f) => f.remove())
-    }
-
-    return (
-      <Dropzone
-        getUploadParams={(e) => console.log(e)}
-        onChangeStatus={(e) => console.log(e)}
-        onSubmit={(e) => console.log(e)}
-        accept="image/png, image/jpg, image/jpeg"
-        multiple={false}
-        maxSize={1000000}
-        inputContent={
-          <div className="form-uploader">
-            <ReactSVG src="/img/icons/upload.svg" />
-            <p className="title">Drag and drop files here to upload</p>
-            <p className="note">Maximum file size: 1 MB</p>
-          </div>
-        }
-      />
-    )
-  }
 
   useEffect(async () => {
-    let api = new Api()
-    let formId = showCreateModal.id
+    let formId = showCreateModal.id || props.id
     console.log(formId, 'id endpoint');
 
     let docTitle = "Edit Partner Hotel Suppliers"
@@ -217,7 +90,7 @@ const HotelSuppliers = (props) => {
           },
           {
             link: props.backUrl,
-            text: "Aircrafts",
+            text: "Integration Partner",
           },
           {
             text: docTitle,
@@ -225,76 +98,69 @@ const HotelSuppliers = (props) => {
         ],
       }),
     )
-    if (formId) {
-      let res = await api.get(endpoint + "/" + formId)
-      console.log(res, 'ini hasil');
-      setHotelSupplierName(res.data.hotel_supplier_name)
-      setHotelSupplierCode(res.data.hotel_supplier_code)
-      setPartnerHotelName(res.data.hotel_supplier_name)
-      console.log(hotelSupplierCode, 'changed');
+
+    if(formId) {
       try {
-      } catch (e) {}
-      // try {
-      //   let res = await api.get(endpoint + "/" + formId + "/translations", {
-      //     size: 50,
-      //   })
-      //   setTranslations(res.data.items)
-      // } catch (e) {}
-      setLoading(false)
-    } else {
+        console.log("formId",formId)
+        console.log("url", endpoint + "/" + formId)
+        let { data } = await api.get(endpoint + "/" + formId)
+        console.log("DATA if edit",data)
+        setFormValues({ 
+          ...formValues,
+
+          hotelSupplier: data.hotel_supplier_id ? data.hotel_supplier_id : "",
+          partnerHotelSupplierCode: data.hotel_supplier_code ? data.hotel_supplier_code : "",
+          partnerHotelSupplierName: data.hotel_supplier_name ? data.hotel_supplier_name : "",
+        })
+      } catch (e) {
+        console.log(e)
+      }
     }
+    
   }, [])
 
-  const handleonSubmit = async(e) => {
-    e.preventDefault()
-    console.log('sini', hotelSupplierName);
-    const payload = {
-      "created_at": "1943-09-24T23:01:04.987Z",
-      "creator_id": "urn:uuid:619774fd-7ea6-4a38-4705-48f2c9e15964",
-      "hotel_supplier": {
-        "value": hotelSupplierName.label
-      },
-      "hotel_supplier_code": hotelSupplierCode,
-      "hotel_supplier_id": hotelSupplierName.value,
-      "hotel_supplier_name": partnerHotelName,
-      "id": "",
-      "integration_partner_id": "3f61b5e0-d7cb-4f80-94e7-83114ff23903",
-      "modifier_id": "",
-      "sort": 1,
-      "status": 1,
-      "updated_at": ""
+  useEffect(() => {
+    if (!showCreateModal.id) {
+      setLoading(false)
     }
-    return new Promise((resolve, rejecet) => {
-      axios.post(api.env.endpoint("/master/integration-partners/3f61b5e0-d7cb-4f80-94e7-83114ff23903/hotel-suppliers"), payload)
-          .then((res) => {
-              // props.history.goBack()
-              console.log(res, 'succes');
-              if (res.status === 200) {
-                props.onHide(false)
-                return (
-                  <FormAlert
-                    isValid={true}
-                    message={"succes"}
-                  />
-                )
-              }
-          })
-          .catch((error) => {
-            console.log(error, 'error');
-              resolve(false)
-          })
-    })
-  };
+
+    if (formValues) {
+      setLoading(false)
+    }
+
+    setSupplyId(showCreateModal.id)
+  }, [showCreateModal.id, formValues])
 
   return (
     <div>
       <Formik
-        initialValues={initialForm}
+        enableReinitialize
+        initialValues={formValues || initialForm}
         validationSchema={validationSchema}
         validateOnChange={false}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
-          console.log(values)
-          console.log(props)
+          console.log("Values:", values)
+          console.log("Modal ID:", showCreateModal.id)
+
+          let formatted = {
+            hotel_supplier_code: values.partnerHotelSupplierCode,
+            hotel_supplier_name: values.partnerHotelSupplierName,
+            hotel_supplier_id: values.hotelSupplier.value,
+            integration_partner_id: id
+          }
+
+          try {
+            let res = await api.putOrPost(endpoint, supplyId, formatted)
+            dispatch(
+              setAlert({
+                  message: `Record 'Partner Hotel Supplier Name: ${values.partnerHotelSupplierName}' has been successfully saved.`,
+              })
+            );
+            dispatch(setCreateModal({ show: false, id: null, disabled_form: false }));
+            
+          } catch (e) {
+            console.error(e)
+          }
         }}
       >
         {({
@@ -309,7 +175,7 @@ const HotelSuppliers = (props) => {
           setFieldValue,
           setFieldTouched,
         }) => (
-          <Form onSubmit={handleonSubmit} style={{background: 'transparent'}} style={{}} >
+          <Form onSubmit={handleSubmit} style={{background: 'transparent'}} >
                 <h3 className="" style={{textAlign: 'center', fontSize: 18, marginBottom: 20, marginTop: -20}}>{title}</h3>
                 <div style={{ padding: "0 10px 10px" }}>
                   <Row>
@@ -329,21 +195,21 @@ const HotelSuppliers = (props) => {
                                   url={`master/hotel-suppliers`}
                                   fieldName="hotel_supplier_name"
                                   onChange={(v) => {
-                                    setFieldValue("hotel_supplier_name", v)
-                                    setHotelSupplierName(v)
+                                    setFieldValue("hotelSupplier", v)
                                   }}
+                                  name="hotelSupplier"
                                   className={`react-select ${
-                                    form.touched.hotel_supplier_name &&
-                                    form.errors.hotel_supplier_name
+                                    form.touched.hotelSupplier &&
+                                    form.errors.hotelSupplier
                                       ? "is-invalid"
                                       : null
                                   }`}
                                 />
-                                {form.touched.hotel_supplier_name &&
-                                  form.errors.hotel_supplier_name && (
+                                {form.touched.hotelSupplier &&
+                                  form.errors.hotelSupplier && (
                                     <Form.Control.Feedback type="invalid">
-                                      {form.touched.hotel_supplier_name
-                                        ? form.errors.hotel_supplier_name
+                                      {form.touched.hotelSupplier
+                                        ? form.errors.hotelSupplier
                                         : null}
                                     </Form.Control.Feedback>
                                   )}
@@ -359,12 +225,14 @@ const HotelSuppliers = (props) => {
                         </Form.Label>
                         <Col sm={1}>
                             <FormInputControl
-                                value={hotelSupplierCode}          
-                                onChange={(e) => setHotelSupplierCode(e.target.value)}
+                                name="partnerHotelSupplierCode"
+                                value={values.partnerHotelSupplierCode}          
+                                onChange={handleChange}
+                                onBlur={handleBlur}
                                 type="text"
                                 minLength="1"
                                 maxLength="256"
-                                style={{width: 100 }}
+                                style={{width: 200 }}
                             />
                         </Col>
                       </Form.Group>
@@ -375,8 +243,10 @@ const HotelSuppliers = (props) => {
                         </Form.Label>
                         <Col sm={1}>
                           <FormInputControl
-                                value={partnerHotelName}          
-                                onChange={(e) => setPartnerHotelName(e.target.value)}
+                                name="partnerHotelSupplierName"
+                                value={values.partnerHotelSupplierName}          
+                                onChange={handleChange}
+                                onBlur={handleBlur}
                                 type="text"
                                 minLength="1"
                                 maxLength="256"
@@ -398,7 +268,15 @@ const HotelSuppliers = (props) => {
               </Button>
               <Button
                 variant="secondary"
-                onClick={() => props.history.push(props.backUrl)}
+                onClick={() => {
+                  dispatch(
+                    setCreateModal({
+                      show: false,
+                      id: null,
+                      disabled_form: false,
+                    })
+                  )
+                }}
               >
                 CANCEL
               </Button>
@@ -406,7 +284,7 @@ const HotelSuppliers = (props) => {
           </Form>
         )}
       </Formik>
-      <Modal
+      {/* <Modal
         show={modalShow}
         // size="lg"
         aria-labelledby="contained-modal-title-vcenter"
@@ -512,7 +390,7 @@ const HotelSuppliers = (props) => {
             </Form>
           )}
         </Formik>
-      </Modal>
+      </Modal> */}
     </div>
   )
 }

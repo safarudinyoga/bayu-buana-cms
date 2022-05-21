@@ -1,4 +1,4 @@
-import { Alert, Col, Tab, Tabs, Row, Button, Form } from 'react-bootstrap'
+import { Alert, Col, Tab, Tabs, Row, Button, Modal } from 'react-bootstrap'
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { setUIParams } from 'redux/ui-store'
@@ -8,6 +8,8 @@ import Select, {components} from "react-select"
 // import {OverlayTrigger, Tooltip} from "react-bootstrap"
 import FlightList from './step/select-flight'
 import Passenger from './step/passengers'
+import FlightBookSuggest from '../../components/flight_book-autosuggest'
+import BBModal from 'components/Modal/bb-modal'
 
 function BookFlight() {
   const dispatch = useDispatch()
@@ -35,6 +37,7 @@ function BookFlight() {
 	const [selectLanguage, setSelectLanguage] = useState([])
 	const [selectCurrencies, setSelectCurrencies] = useState([])
 	const [tabKey, setTabKey] = useState("select-flight")
+	const [showFlightModal, setShowFlightModal] = useState(false)
 
 	const customControlStyles = base => ({
 		width: 180,
@@ -157,21 +160,34 @@ function BookFlight() {
 	}, [])
   
 	const onChangeTab = (key) => {
-		console.log(key)
 		setTabKey(key)
 	} 
+
+	const FLightModal = () => {
+		return (
+			<BBModal
+				show={showFlightModal}
+				onClick={() => setShowFlightModal(false)}
+				modalSize={"lg"}
+				scrollable={true}
+				modalContent={() => (
+					<FlightBookSuggest />
+				)}
+			/>
+		)
+	}
   return (
     <div className='mt-2'>
-		<Row>
+		<Row className='mb-3'>
 			<Col sm={5}>
 				<p>{flight.origin.city.toUpperCase()} ({flight.origin.code}) TO {flight.destination.city.toUpperCase()} ({flight.destination.code}) - {flight.trip}</p>
-				<Row>
+				<Row className='align-items-center'>
 					<Col sm={6}>
-						<p>{flight.departure_date.toUpperCase()} - {flight.return_date.toUpperCase()}</p>
+						<p className='mb-0'>{flight.departure_date.toUpperCase()} - {flight.return_date.toUpperCase()}</p>
 					</Col>
 					<Col sm={2}> 2 Adults</Col>
 					<Col sm={4}>
-						<Button variant="secondary" className='px-4'>Modify</Button>
+						<Button variant="secondary" className='px-4' onClick={() => setShowFlightModal(true)}>Modify</Button>
 					</Col>
 				</Row>
 
@@ -260,6 +276,8 @@ function BookFlight() {
 				haii
 			</Tab>
         </Tabs>
+
+		<FLightModal/>
     </div>
   )
 }

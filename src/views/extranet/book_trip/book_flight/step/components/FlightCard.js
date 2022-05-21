@@ -5,7 +5,7 @@ import { setUIParams } from 'redux/ui-store'
 
 const ex_logo = 'https://ik.imagekit.io/tvlk/image/imageResource/2021/07/12/1626063527483-f24d3eae611b51022ab0d1fc1457c820.png?tr=q-75,w-28'
 
-function FlightCard({data, handleSelectTab}) {
+function FlightCard({data, handleSelectTab, tripType}) {
   const dispatch = useDispatch()
 	const [Flight, setFlight] = useState({})
 	const [fullCondition, setFullCondition] = useState(false)
@@ -29,7 +29,7 @@ function FlightCard({data, handleSelectTab}) {
 						<p><i class="fas fa-clock"></i> {Flight.time_estimation} (1stop)</p>
 						<p>{Flight.class} (N)</p>
 					</Col>
-					<Col sm={{span: 3, offset: 3}} className={`${showDetailTxt?"d-inline":"d-none"} btn-flight-details text-right`}>
+					<Col sm={{span: 3, offset: 3}} className={`${showDetailTxt?"d-inline":"d-none"} btn-flight-link text-right`}>
 						<a>Show Details</a>
 					</Col>
 				</Row>
@@ -40,9 +40,12 @@ function FlightCard({data, handleSelectTab}) {
 							<p>CGK</p>
 							<p>12 Dec</p>
 						</div>
-						<div>
-						<i class="fas fa-circle"></i>
-						{/* <i class="fas fa-plane"></i> */}
+						<div className='flight-line align-center text-center'>
+							<p>788 miles</p>
+							<div className='links mb-3'>
+								<i class="fas fa-plane plane-ic"></i>
+							</div>
+							<p>1h 5m</p>
 						</div>
 						<div>
 							<p>10:15</p>
@@ -64,35 +67,56 @@ function FlightCard({data, handleSelectTab}) {
 		)
 	}
 
+	const SelectCard = ({title}) => {
+		return (
+			<Col sm={2} onClick={() => setFullCondition(!fullCondition)} className="flight-card-right d-flex flex-column align-content-center align-items-center justify-content-center">
+				{
+					title ?<div className='header-flight-card-right' style={{}}>
+						<p>{title}</p>
+					</div>
+					: null
+				}
+				
+				<p>IDR <b>10,999,999</b></p>
+				<p className='flight-type'>roundtrip</p>
+				{
+					!fullCondition &&
+						<Button 
+						onClick={(e) => { 
+							e.stopPropagation();
+							handleSelectTab("passengers")
+						}}
+						className="btn-flight-select"
+						>Select</Button>
+				}
+				<p className='lowest-fare'><i class="fas fa-circle"></i> Lowest Fare</p>
+				<p className='travel-policy'><i className="fas fa-exclamation-triangle"></i> Travel Policy</p>
+				<p className='rest-seat'>Only 2 seat left</p>
+				<i className={`fas fa-angle-${fullCondition ? "up" : "down"}`}></i>
+			</Col>
+		)
+	}
+
 
   
   return (
     <Card className='flight-card'>
-			<Row>
-				<Col sm={10} className="flight-card-left">
+			<Row style={{marginLeft: 0, marginRight:0}}>
+				<Col sm={tripType !== "without-ndc" ? 8 : 10} className="flight-card-left">
 					<FlightInfo/>
 					<div className='middle-border'></div>
 					<FlightInfo showDetailTxt={false} />
 				</Col>
-
-				<Col sm={2} onClick={() => setFullCondition(!fullCondition)} className="flight-card-right d-flex flex-column align-content-center align-items-center justify-content-center">
-					<p>IDR <b>10,999,999</b></p>
-					<p className='flight-type'>roundtrip</p>
-					{
-						!fullCondition &&
-							<Button 
-							onClick={(e) => { 
-								e.stopPropagation();
-								handleSelectTab("passengers")
-							}}
-							className="btn-flight-select"
-							>Select</Button>
-					}
-					<p className='lowest-fare'><i class="fas fa-circle"></i> Lowest Fare</p>
-					<p className='travel-policy'><i className="fas fa-exclamation-triangle"></i> Travel Policy</p>
-					<p className='rest-seat'>Only 2 seat left</p>
-					<i className={`fas fa-angle-${fullCondition ? "up" : "down"}`}></i>
-				</Col>
+				{
+					tripType !== "without-ndc"
+					? (
+						<>
+							<SelectCard title={"economy"}/>
+							<SelectCard title={"premium economy"}/>
+						</>
+					)
+					: <SelectCard/>
+				}
 			</Row>
 			{/* FULL FARE CONDITIONS */}
 			{

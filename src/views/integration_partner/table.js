@@ -12,7 +12,7 @@ export default function IntegrationPartnerTable() {
         title: "Integration Partner",
         breadcrumbs: [
           {
-            text: "Setup and Configuration",
+            text: "Setup And Configurations",
           },
           {
             text: "Integration Partner",
@@ -53,9 +53,17 @@ export default function IntegrationPartnerTable() {
     ],
     btnDownload: ".buttons-csv",
     isOpenNewTab: false,
-    emptyTable: "No Integration Partner found",
+    emptyTable: "No Integration partners found",
     recordName: ["integration-partner-code", "integration-partner-name"],
-    module:"integration-partner"
+    module:"integration-partner",
+    advancedOptionsText: "Advanced options",
+    customFilterStatus: {
+      value: "",
+      options: [
+        {value: "1", label: "Active"},
+        {value: "3", label: "Inactive"},
+      ]
+    }
   })
 
   return <BBDataTable {...params} onReset={onReset} />

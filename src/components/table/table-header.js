@@ -106,6 +106,8 @@ class TableHeader extends Component {
       showFilter: false,
       showAdvancedOptions: props.showAdvancedOptions ?? true,
       showCalendar: props.showCalendar ?? false,
+      advancedOptionsText : props.advancedOptionsText ?? "Advanced Options",
+      searchText : props.searchText ?? "Search...",
       searchValue: "",
       statusValue: "0",
       yearValue: new Date().getFullYear(),
@@ -226,7 +228,7 @@ class TableHeader extends Component {
                 <input
                   value={this.state.searchValue}
                   className="form-control"
-                  placeholder="Search..."
+                  placeholder={this.state.searchText}
                   onChange={this.handleSearch.bind(this)}
                   maxLength={256}
                   minLength={1}
@@ -247,7 +249,7 @@ class TableHeader extends Component {
                 type="button"
                 className="btn btn-link advanced-options-btn float-right float-md-left"
               >
-                <span className="mr-2">Advanced Options</span>{" "}
+                <span className="mr-2">{this.state.advancedOptionsText}</span>{" "}
                 {this.state.showFilter ? (
                   <img src={upIcon} alt="up" />
                 ) : (
@@ -299,13 +301,15 @@ class TableHeader extends Component {
                 >
                   <img src={createIcon} className="mr-1" alt="new" />
                   {pathname === "/master/general-setup"
-                    ? "Add Team"
+                    ? "Add Team" :
+                    pathname === "/internal/shopping-cache" ?
+                    "Add Shopping Criteria" 
                     : "Create New"}
                 </button>
               </OverlayTrigger>
             )}
 
-            { !isHidePrintLogo && pathname !== "/master/general-setup" && (
+            {!isHidePrintLogo && pathname !== "/master/general-setup" && pathname !== "/internal/shopping-cache" && (
               <OverlayTrigger
                 placement="top"
                 overlay={<Tooltip>Click to print</Tooltip>}
@@ -320,7 +324,7 @@ class TableHeader extends Component {
               </OverlayTrigger>
             )}
 
-            { !isHideDownloadLogo && pathname !== "/master/general-setup" && (
+            {isHideDownloadLogo && pathname !== "/master/general-setup" && pathname !== "/internal/shopping-cache" && (
               <OverlayTrigger
                 placement="top"
                 trigger={"hover"}

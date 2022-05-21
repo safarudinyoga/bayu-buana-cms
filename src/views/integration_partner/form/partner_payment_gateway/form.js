@@ -8,7 +8,7 @@ import Api from "config/api"
 import { useDispatch, useSelector } from "react-redux"
 import { setAlert, setCreateModal, setModalTitle } from "redux/ui-store"
 import CancelButton from "components/button/cancel"
-import FormikControl from "../../../../components/formik/formikControl"
+import FormikControl from "components/formik/formikControl"
 
 const endpoint =
   "/master/integration-partners/3f61b5e0-d7cb-4f80-94e7-83114ff23903/payment-gateways"
@@ -308,6 +308,7 @@ function PaymentGatewayCreate(props) {
             >
               {!isView && (
                 <Button
+                  className="px-4"
                   variant="primary"
                   type="submit"
                   disabled={isSubmitting}

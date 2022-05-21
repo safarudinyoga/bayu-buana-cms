@@ -235,7 +235,7 @@ function Travellers(props) {
 
   return (
     <>
-      <div style={{width: 280}} className="position-relative">
+      <div style={{width: 280, marginBottom: 10}} className="position-relative">
           <h4 className='form-with-label__title'> TRAVELLERS <span className='label-required'></span></h4>
           <ReactSVG src='/img/icons/people.svg' className='form-with-label__suggest-icon' style={{bottom: 15}}/>
           <OverlayTrigger trigger="click" placement='bottom' overlay={popover} rootClose={true}>

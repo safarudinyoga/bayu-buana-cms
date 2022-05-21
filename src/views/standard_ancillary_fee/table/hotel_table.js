@@ -21,6 +21,7 @@ export default function HotelTable() {
     ],
     emptyTable: "No hotel found",
     recordName: "hotel_name",
+    module: "standard-ancillary-fee"
   }) 
 
   return <BBDataTable {...params}  />

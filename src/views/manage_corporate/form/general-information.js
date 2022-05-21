@@ -14,15 +14,58 @@ import './_form.sass'
 // utils
 import { useWindowSize } from "rooks"
 import Api from "config/api"
+import useQuery from "lib/query"
 
-const GeneralInfomation = ({
-  isMobile
-}) => {
+
+const GeneralInfomation = (props) => {
   let api = new Api()
+  const isView = useQuery().get("action") === "view"
 
-  const { handleSubmit, handleChange, values, errors, touched } = useFormik({
+  const { handleSubmit, handleChange, values, errors, touched, setFieldTouched, setFieldValue } = useFormik({
     initialValues: {
-      corporateCode: ''
+      general_information: {
+        corporate_code: '',
+        corporate_name: '',
+        parent_company: '',
+        corporate_type: '',
+        corporate_npwp: '',
+        corporate_contract: {
+          date_start: '',
+          date_end: ''
+        }
+      },
+      contact_information: {
+        corporate_email: '',
+        corporate_phone: '',
+        corporate_fax: ''
+      },
+      correspondence_address: {
+        address: '',
+        country: '',
+        province: '',
+        city: '',
+        zipcode: '',
+        geo_location: {
+          lat: '',
+          lng: ''
+        }
+      },
+      billing_address: {
+        address: '',
+        country: '',
+        province: '',
+        city: '',
+        zipcode: '',
+        geo_location: {
+          lat: '',
+          lng: ''
+        }
+      },
+      other_information: {
+        website: '',
+        internal_remark: '',
+        logo: ''
+      }
     },
     validationSchema: Yup.object({
       corporateCode: Yup.string().required('')
@@ -50,14 +93,93 @@ const GeneralInfomation = ({
     } catch (e) {}
   }, [])
 
+  // Permanent Country state
+  const handleChangePermanentCountry = async (v) => {
+    try {
+      let res = await api.get(
+        `/master/state-provinces?size=-1&filters=[["country_id","=","${v}"],["AND"],["status","=",1]]&sort=state_province_name`,
+      )
+      const options = []
+      if(res.data.items.length > 0){
+        res.data.items.forEach((data) => {
+          options.push({
+            label: data.state_province_name,
+            value: data.id,
+          })
+
+          setSelectPermanentProvince(options)
+        })
+      } else {
+        setSelectPermanentProvince([])
+      }
+      let res2 = await api.get(
+        `/master/cities?size=-1&filters=[["country_id","=","${v}"],["AND"],["status","=",1]]&sort=city_name`,
+      )
+      const optionsCity = []
+      if(res2.data.items.length > 0){
+        res2.data.items.forEach((data) => {
+          optionsCity.push({
+            label: data.city_name,
+            value: data.id,
+          })
+
+          setSelectPermanentCity(optionsCity)
+        })
+      } else {
+        setSelectPermanentCity([])
+      }
+
+    } catch (e) {}
+  }
+
+  // Current Province state
+  // const handleChangeProvince = async (type, province_id, country_id) => {
+  //   try {
+  //     let filters = `[["country_id","=","${country_id}"],["AND"],["status","=",1]]`
+
+  //     if(province_id && province_id !== "00000000-0000-0000-0000-000000000000") {
+  //       filters = `[["state_province_id","=","${province_id}"],["AND"],["country_id","=","${country_id}"],["AND"],["status","=",1]]`
+  //     }
+  //     let res = await api.get(
+  //       `/master/cities?filters=${filters}&sort=city_name`,
+  //     )
+  //     const options = []
+  //     if(res.data.items.length > 0){
+  //       res.data.items.forEach((data) => {
+  //         options.push({
+  //           label: data.city_name,
+  //           value: data.id,
+  //         })
+  //         if(type === "current") {
+  //           setSelectCurrentCity(options)
+  //         } else {
+  //           setSelectPermanentCity(options)
+  //         }
+  //       })
+  //     } else {
+  //       if(type=== "current") {
+  //         setSelectCurrentCity([])
+  //       } else {
+  //         setSelectPermanentCity([])
+  //       }
+  //     }
+
+  //   } catch (e) {}
+  // }
+
+  useEffect(() => {
+    console.log(values);
+  }, [values])
+
+
   const uploadRef = useRef(null)
 
   return (
     <Form onSubmit={handleSubmit}>
       <Card style={{marginBotton: 0}}>
         <Card.Body>
-          {isMobile ? "" : <h3 className="card-heading">General Information</h3>}
-          <div style={isMobile ? {padding: "0"} : { padding: "0 15px 15px 15px" }}>
+          <h3 className="card-heading">General Information</h3>
+          <div style={{ padding: "0 15px 15px 15px" }}>
             <Row>
               <Col sm={9} md={12} lg={9}>
                 <Form.Group as={Row} className='form-group'>
@@ -65,12 +187,16 @@ const GeneralInfomation = ({
                     <FormInputControl
                       label="Corporate Code"
                       required={true}
-                      value={values.corporateCode}
-                      name="corporateCode"
+                      value={values.general_information.corporate_code}
+                      name="general_information.corporate_code"
+                      id="general_information.corporate_code"
                       onChange={handleChange}
                       // disabled={isView || loading}
+                      disabled={isView}
                       type="text"
                       style={{ maxWidth: 150 }}
+                      minLength={1}
+                      maxLength={128}
                     />
                   </Col>
                 </Form.Group>
@@ -79,12 +205,16 @@ const GeneralInfomation = ({
                     <FormInputControl
                       label="Corporate Name"
                       required={true}
-                      value={values.corporateName}
-                      name="corporateName"
+                      value={values.general_information.corporate_name}
+                      name="general_information.corporate_name"
+                      id="general_information.corporate_name"
                       onChange={handleChange}
                       // disabled={isView || loading}
+                      disabled={isView}
                       type="text"
                       style={{ maxWidth: 400 }}
+                      minLength={1}
+                      maxLength={256}
                     />
                   </Col>
                 </Form.Group>
@@ -96,20 +226,32 @@ const GeneralInfomation = ({
                     <Select
                       isClearable
                       placeholder="Please choose parent company"
-                      options={[1,2,3,4,5]}
-                      onChange={() => {}}
+                      options={[
+                        {
+                          value: 'selected 1',
+                          label: 'Hotel Markup 1'
+                        },
+                        {
+                          value: 'selected 1',
+                          label: 'Hotel Markup 2'
+                        },
+                      ]}
+                      onChange={(e) => {
+                        setFieldValue('general_information.parent_company', e)
+                      }}
                       width={'400px'}
-                      // name
-                      // value
-                      // components={
-                      //   isView
-                      //     ? {
-                      //         DropdownIndicator: () => null,
-                      //         IndicatorSeparator: () => null,
-                      //       }
-                      //     : null
-                      // }
-                      // isDisabled={isView}
+                      name='general_information.parent_company'
+                      id='general_information.parent_company'
+                      value={values.general_information.parent_company}
+                      components={
+                        isView
+                          ? {
+                              DropdownIndicator: () => null,
+                              IndicatorSeparator: () => null,
+                            }
+                          : null
+                      }
+                      isDisabled={isView}
                     />
                   </Col>
                 </Form.Group>
@@ -121,21 +263,33 @@ const GeneralInfomation = ({
                   <Col md={3} lg={9}>
                     <Select
                       isClearable
-                      placeholder="Please choose parent company"
-                      options={[1,2,3,4,5]}
-                      onChange={() => {}}
+                      placeholder="Please choose type company"
+                      options={[
+                        {
+                          value: 'selected 1',
+                          label: 'Hotel Markup 1'
+                        },
+                        {
+                          value: 'selected 1',
+                          label: 'Hotel Markup 2'
+                        },
+                      ]}
                       width={'400px'}
-                      // name
-                      // value
-                      // components={
-                      //   isView
-                      //     ? {
-                      //         DropdownIndicator: () => null,
-                      //         IndicatorSeparator: () => null,
-                      //       }
-                      //     : null
-                      // }
-                      // isDisabled={isView}
+                      name='general_information.corporate_type'
+                      id='general_information.corporate_type'
+                      value={values.general_information.corporate_type}
+                      onChange={(e) => {
+                        setFieldValue('general_information.corporate_type', e)
+                      }}
+                      components={
+                        isView
+                          ? {
+                              DropdownIndicator: () => null,
+                              IndicatorSeparator: () => null,
+                            }
+                          : null
+                      }
+                      isDisabled={isView}
                     />
                   </Col>
                 </Form.Group>
@@ -144,12 +298,16 @@ const GeneralInfomation = ({
                     <FormInputControl
                       label="NPWP"
                       required={true}
-                      value={values.corporateNPWP}
-                      name="corporateNPWP"
+                      value={values.general_information.corporate_npwp}
+                      name="general_information.corporate_npwp"
+                      id="general_information.corporate_npwp"
                       onChange={handleChange}
                       // disabled={isView || loading}
+                      disabled={isView}
                       type="text"
                       style={{ maxWidth: 320 }}
+                      minLength={1}
+                      maxLength={36}
                     />
                   </Col>
                 </Form.Group>
@@ -157,8 +315,8 @@ const GeneralInfomation = ({
                   <Col md={3} lg={9}>
                     <FormInputDatePeriod
                       label='Contract Period'
-                      dateStart=''
-                      dateEnd=''
+                      dateStart={values.general_information.corporate_contract.date_start}
+                      dateEnd={values.general_information.corporate_contract.date_end}
                       dateStartOnChange={() => {}}
                       dateEndOnChange={() => {}}
                     />
@@ -169,8 +327,8 @@ const GeneralInfomation = ({
           </div>
 
           {/* contact information */}
-          {isMobile ? "" : <h3 className="card-heading">Contacts Information</h3>}
-          <div style={isMobile ? {padding: "0"} : { padding: "0 15px 15px 15px" }}>
+          <h3 className="card-heading">Contacts Information</h3>
+          <div style={{ padding: "0 15px 15px 15px" }}>
             <Row>
               <Col sm={9} md={12} lg={9}>
                 <Form.Group as={Row} className='form-group'>
@@ -178,12 +336,16 @@ const GeneralInfomation = ({
                     <FormInputControl
                       label="Email"
                       required={true}
-                      value={values.corporateEmail}
-                      name="corporateEmail"
+                      value={values.contact_information.corporate_email}
+                      name="contact_information.corporateEmail"
+                      id="contact_information.corporateEmail"
                       onChange={handleChange}
+                      disabled={isView}
                       // disabled={isView || loading}
                       type="text"
                       style={{ maxWidth: 300 }}
+                      minLength={1}
+                      maxLength={256}
                     />
                   </Col>
                 </Form.Group>
@@ -192,12 +354,16 @@ const GeneralInfomation = ({
                     <FormInputControl
                       label="Phone"
                       required={true}
-                      value={values.corporatePhone}
-                      name="corporatePhone"
+                      value={values.contact_information.corporate_phone}
+                      name="contact_information.corporate_phone"
+                      id="contact_information.corporate_phone"
                       onChange={handleChange}
                       // disabled={isView || loading}
+                      disabled={isView}
                       type="text"
                       style={{ maxWidth: 200 }}
+                      minLength={1}
+                      maxLength={36}
                     />
                   </Col>
                 </Form.Group>
@@ -206,12 +372,16 @@ const GeneralInfomation = ({
                     <FormInputControl
                       label="Fax"
                       required={false}
-                      value={values.corporateFax}
-                      name="corporateFax"
+                      value={values.contact_information.corporate_fax}
+                      name="contact_information.corporate_fax"
+                      id="contact_information.corporate_fax"
                       onChange={handleChange}
                       // disabled={isView || loading}
+                      disabled={isView}
                       type="text"
                       style={{ maxWidth: 200 }}
+                      minLength={1}
+                      maxLength={36}
                     />
                   </Col>
                 </Form.Group>
@@ -220,21 +390,23 @@ const GeneralInfomation = ({
           </div>
 
           {/* Correspondence Address */}
-          {isMobile ? "" : <h3 className="card-heading">Correspondence Address</h3>}
-          <div style={isMobile ? {padding: "0"} : { padding: "0 15px 15px 15px" }}>
+          <h3 className="card-heading">Correspondence Address</h3>
+          <div style={{ padding: "0 15px 15px 15px" }}>
             <Row>
               <Col sm={9} md={12} lg={9}>
                 <Form.Group as={Row} className='form-group'>
                   <Col md={3} lg={9}>
                     <FormInputControl
                       label={"Address"}
-                      value={values.corporateAddress}
-                      name="corporateAddress"
+                      value={values.correspondence_address.address}
+                      name="correspondence_address.address"
+                      id="correspondence_address.address"
                       onChange={handleChange}
+                      disabled={isView}
                       // disabled={isView || loading}
                       type="textarea"
-                      minLength="1"
-                      maxLength="512"
+                      minLength={1}
+                      maxLength={512}
                       style={{ resize: 'none', maxWidth: 400 }}
                     />
                   </Col>
@@ -248,47 +420,31 @@ const GeneralInfomation = ({
                       <div style={{ maxWidth: 300 }}>
                         <SelectAsync
                           isClearable
-                          name="permanentCountry"
+                          name="correspondence_address.country"
                           url={`master/countries`}
-                          value={
-                            values.sameAddress
-                              ? values.currentCountry
-                              : values.permanentCountry
-                          }
+                          value={values.correspondence_address.country}
                           placeholder="Please choose"
                           fieldName="country_name"
-                          // options={selectCountry}
                           className={`react-select ${
-                            !values.sameAddress &&
-                            (touched.permanentCountry &&
-                            errors.permanentCountry
+                            touched?.correspondence_address?.country &&
+                            errors?.correspondence_address?.country
                               ? "is-invalid"
-                              : null)
+                              : null
                           }`}
-                          onChange={() => {}}
-                          // onBlur={setFieldTouched}
-                          // components={
-                          //   isView
-                          //     ? {
-                          //         DropdownIndicator: () => null,
-                          //         IndicatorSeparator: () => null,
-                          //       }
-                          //     : null
-                          // }
-                          // isDisabled={values.sameAddress || isView}
+                          onChange={(v) => {
+                            handleChangePermanentCountry(v.value)
+                          }}
+                          onBlur={setFieldTouched}
+                          components={
+                            isView
+                              ? {
+                                  DropdownIndicator: () => null,
+                                  IndicatorSeparator: () => null,
+                                }
+                              : null
+                          }
+                          isDisabled={isView}
                         />
-                        {/* {!values.sameAddress && (
-                          <>
-                            {touched.permanentCountry &&
-                              errors.permanentCountry && (
-                                <Form.Control.Feedback type="invalid">
-                                  {touched.permanentCountry
-                                    ? errors.permanentCountry
-                                    : null}
-                                </Form.Control.Feedback>
-                              )}
-                          </>
-                        )} */}
                       </div>
                     )}
                   </Col>
@@ -301,25 +457,23 @@ const GeneralInfomation = ({
                     <div style={{ maxWidth: 200 }}>
                       <Select
                         isClearable
-                        // name="permanentProvince"
-                        // value={
-                        //   values.sameAddress
-                        //     ? values.currentProvince
-                        //     : values.permanentProvince
-                        // }
+                        name="correspondence_address.province"
+                        value={values.correspondence_address.province}
                         placeholder="Please choose"
-                        options={values.permanentCountry === null ? [] : selectPermanentProvince}
-                        onChange={() => {}}
-                        // onBlur={setFieldTouched}
-                        // components={
-                        //   isView
-                        //     ? {
-                        //         DropdownIndicator: () => null,
-                        //         IndicatorSeparator: () => null,
-                        //       }
-                        //     : null
-                        // }
-                        // isDisabled={values.sameAddress || isView}
+                        options={!values.correspondence_address.country ? [] : selectPermanentProvince}
+                        onChange={(v) => {
+
+                        }}
+                        onBlur={setFieldTouched}
+                        components={
+                          isView
+                            ? {
+                                DropdownIndicator: () => null,
+                                IndicatorSeparator: () => null,
+                              }
+                            : null
+                        }
+                        isDisabled={isView}
                       />
                     </div>
                   </Col>
@@ -331,28 +485,24 @@ const GeneralInfomation = ({
                   <Col md={3} lg={9}>
                     <div style={{ maxWidth: 200 }}>
                       <Select
-                        name="permanentCity"
+                        name="correspondence_address.city"
                         isClearable
-                        // value={
-                        //   values.sameAddress
-                        //     ? values.currentCity
-                        //     : values.permanentCity
-                        // }
+                        value={values.correspondence_address.city}
                         placeholder="Please choose"
-                        // options={values.permanentCountry === null ? [] : selectPermanentCity}
-                        // onChange={(v) => {
-                        //   setFieldValue("permanentCity", v)
-                        // }}
-                        // onBlur={setFieldTouched}
-                        // components={
-                        //   isView
-                        //     ? {
-                        //         DropdownIndicator: () => null,
-                        //         IndicatorSeparator: () => null,
-                        //       }
-                        //     : null
-                        // }
-                        // isDisabled={ values.sameAddress || isView}
+                        options={!values.correspondence_address.country ? [] : selectPermanentCity}
+                        onChange={(v) => {
+                          // setFieldValue("permanentCity", v)
+                        }}
+                        onBlur={setFieldTouched}
+                        components={
+                          isView
+                            ? {
+                                DropdownIndicator: () => null,
+                                IndicatorSeparator: () => null,
+                              }
+                            : null
+                        }
+                        isDisabled={isView}
                       />
                     </div>
                   </Col>
@@ -362,12 +512,16 @@ const GeneralInfomation = ({
                     <FormInputControl
                       label="Zip Code"
                       required={false}
-                      value={values.corporateZipcode}
-                      name="corporateZipcode"
+                      value={values.correspondence_address.zipcode}
+                      name="correspondence_address.zipcode"
+                      id="correspondence_address.zipcode"
                       onChange={handleChange}
+                      disabled={isView}
                       // disabled={isView || loading}
                       type="text"
                       style={{ maxWidth: 100 }}
+                      minLength={1}
+                      maxLength={16}
                     />
                   </Col>
                 </Form.Group>
@@ -384,6 +538,11 @@ const GeneralInfomation = ({
                         maxLength={16}
                         placeholder="Latitude"
                         style={{ width: 150 }}
+                        onChange={handleChange}
+                        name='correspondence_address.geo_location.lat'
+                        id='correspondence_address.geo_location.lat'
+                        disabled={isView}
+                        value={values.correspondence_address.geo_location.lat}
                       />
                     </div>
                     <div>
@@ -393,6 +552,11 @@ const GeneralInfomation = ({
                         maxLength={16}
                         placeholder="Longitude"
                         style={{ width: 150 }}
+                        onChange={handleChange}
+                        name='correspondence_address.geo_location.lng'
+                        id='correspondence_address.geo_location.lng'
+                        disabled={isView}
+                        value={values.correspondence_address.geo_location.lng}
                       />
                     </div>
                   </div>
@@ -403,21 +567,23 @@ const GeneralInfomation = ({
           </div>
 
           {/* Billing Address  */}
-          {isMobile ? "" : <h3 className="card-heading">Billing Address</h3>}
-          <div style={isMobile ? {padding: "0"} : { padding: "0 15px 15px 15px" }}>
+          <h3 className="card-heading">Billing Address</h3>
+          <div style={{ padding: "0 15px 15px 15px" }}>
           <Row>
               <Col sm={9} md={12} lg={9}>
                 <Form.Group as={Row} className='form-group'>
                   <Col md={3} lg={9}>
                     <FormInputControl
                       label={"Address"}
-                      value={values.corporateAddress}
-                      name="corporateAddress"
+                      value={values.billing_address.address}
+                      name="billing_address.address"
+                      id="billing_address.address"
                       onChange={handleChange}
+                      disabled={isView}
                       // disabled={isView || loading}
                       type="textarea"
-                      minLength="1"
-                      maxLength="512"
+                      minLength={1}
+                      maxLength={512}
                       style={{ resize: 'none', maxWidth: 400 }}
                     />
                   </Col>
@@ -431,47 +597,30 @@ const GeneralInfomation = ({
                       <div style={{ maxWidth: 300 }}>
                         <SelectAsync
                           isClearable
-                          name="permanentCountry"
+                          name="billing_address.country"
                           url={`master/countries`}
-                          value={
-                            values.sameAddress
-                              ? values.currentCountry
-                              : values.permanentCountry
-                          }
+                          value={values.billing_address.country}
                           placeholder="Please choose"
                           fieldName="country_name"
                           // options={selectCountry}
                           className={`react-select ${
-                            !values.sameAddress &&
-                            (touched.permanentCountry &&
-                            errors.permanentCountry
+                            touched?.billing_address?.country &&
+                            errors?.billing_address?.country
                               ? "is-invalid"
-                              : null)
+                              : null
                           }`}
                           onChange={() => {}}
-                          // onBlur={setFieldTouched}
-                          // components={
-                          //   isView
-                          //     ? {
-                          //         DropdownIndicator: () => null,
-                          //         IndicatorSeparator: () => null,
-                          //       }
-                          //     : null
-                          // }
-                          // isDisabled={values.sameAddress || isView}
+                          onBlur={setFieldTouched}
+                          components={
+                            isView
+                              ? {
+                                  DropdownIndicator: () => null,
+                                  IndicatorSeparator: () => null,
+                                }
+                              : null
+                          }
+                          isDisabled={isView}
                         />
-                        {/* {!values.sameAddress && (
-                          <>
-                            {touched.permanentCountry &&
-                              errors.permanentCountry && (
-                                <Form.Control.Feedback type="invalid">
-                                  {touched.permanentCountry
-                                    ? errors.permanentCountry
-                                    : null}
-                                </Form.Control.Feedback>
-                              )}
-                          </>
-                        )} */}
                       </div>
                     )}
                   </Col>
@@ -484,25 +633,21 @@ const GeneralInfomation = ({
                     <div style={{ maxWidth: 200 }}>
                       <Select
                         isClearable
-                        // name="permanentProvince"
-                        // value={
-                        //   values.sameAddress
-                        //     ? values.currentProvince
-                        //     : values.permanentProvince
-                        // }
+                        name="billing_address.province"
+                        value={values.billing_address.province}
                         placeholder="Please choose"
-                        options={values.permanentCountry === null ? [] : selectPermanentProvince}
+                        options={!values.billing_address.country ? [] : selectPermanentProvince}
                         onChange={() => {}}
-                        // onBlur={setFieldTouched}
-                        // components={
-                        //   isView
-                        //     ? {
-                        //         DropdownIndicator: () => null,
-                        //         IndicatorSeparator: () => null,
-                        //       }
-                        //     : null
-                        // }
-                        // isDisabled={values.sameAddress || isView}
+                        onBlur={setFieldTouched}
+                        components={
+                          isView
+                            ? {
+                                DropdownIndicator: () => null,
+                                IndicatorSeparator: () => null,
+                              }
+                            : null
+                        }
+                        isDisabled={isView}
                       />
                     </div>
                   </Col>
@@ -514,28 +659,24 @@ const GeneralInfomation = ({
                   <Col md={3} lg={9}>
                     <div style={{ maxWidth: 200 }}>
                       <Select
-                        name="permanentCity"
+                        name="billing_address.city"
                         isClearable
-                        // value={
-                        //   values.sameAddress
-                        //     ? values.currentCity
-                        //     : values.permanentCity
-                        // }
+                        value={values.billing_address.city}
                         placeholder="Please choose"
-                        // options={values.permanentCountry === null ? [] : selectPermanentCity}
-                        // onChange={(v) => {
-                        //   setFieldValue("permanentCity", v)
-                        // }}
-                        // onBlur={setFieldTouched}
-                        // components={
-                        //   isView
-                        //     ? {
-                        //         DropdownIndicator: () => null,
-                        //         IndicatorSeparator: () => null,
-                        //       }
-                        //     : null
-                        // }
-                        // isDisabled={ values.sameAddress || isView}
+                        options={!values.billing_address.country ? [] : selectPermanentCity}
+                        onChange={(v) => {
+                          // setFieldValue("permanentCity", v)
+                        }}
+                        onBlur={setFieldTouched}
+                        components={
+                          isView
+                            ? {
+                                DropdownIndicator: () => null,
+                                IndicatorSeparator: () => null,
+                              }
+                            : null
+                        }
+                        isDisabled={isView}
                       />
                     </div>
                   </Col>
@@ -545,12 +686,16 @@ const GeneralInfomation = ({
                     <FormInputControl
                       label="Zip Code"
                       required={false}
-                      value={values.corporateZipcode}
-                      name="corporateZipcode"
+                      value={values.billing_address.zipcode}
+                      name="billing_address.zipcode"
+                      id="billing_address.zipcode"
                       onChange={handleChange}
+                      disabled={isView}
                       // disabled={isView || loading}
                       type="text"
                       style={{ maxWidth: 100 }}
+                      minLength={1}
+                      maxLength={16}
                     />
                   </Col>
                 </Form.Group>
@@ -567,6 +712,11 @@ const GeneralInfomation = ({
                         maxLength={16}
                         placeholder="Latitude"
                         style={{ width: 150 }}
+                        onChange={handleChange}
+                        name='billing_address.geo_location.lat'
+                        id='billing_address.geo_location.lat'
+                        disabled={isView}
+                        value={values.billing_address.geo_location.lat}
                       />
                     </div>
                     <div>
@@ -576,6 +726,11 @@ const GeneralInfomation = ({
                         maxLength={16}
                         placeholder="Longitude"
                         style={{ width: 150 }}
+                        onChange={handleChange}
+                        name='billing_address.geo_location.lng'
+                        id='billing_address.geo_location.lng'
+                        disabled={isView}
+                        value={values.billing_address.geo_location.lng}
                       />
                     </div>
                   </div>
@@ -586,20 +741,24 @@ const GeneralInfomation = ({
           </div>
 
           {/* Other Information */}
-          {isMobile ? "" : <h3 className="card-heading">Other Information</h3>}
-          <div style={isMobile ? {padding: "0"} : { padding: "0 15px 15px 15px" }}>
+          <h3 className="card-heading">Other Information</h3>
+          <div style={{ padding: "0 15px 15px 15px" }}>
             <Row>
               <Col sm={9} md={12} lg={9}>
                 <Form.Group as={Row} className='form-group'>
                   <Col md={3} lg={9}>
                     <FormInputControl
                       label="Website"
-                      // value={values.corporateEmail}
-                      // name="corporateEmail"
+                      value={values.other_information.website}
+                      name="other_information.website"
+                      id="other_information.website"
                       onChange={handleChange}
+                      disabled={isView}
                       // disabled={isView || loading}
                       type="text"
                       style={{ maxWidth: 300 }}
+                      minLength={1}
+                      maxLength={256}
                     />
                   </Col>
                 </Form.Group>
@@ -607,13 +766,15 @@ const GeneralInfomation = ({
                   <Col md={3} lg={9}>
                     <FormInputControl
                       label="Internal Remark"
-                      // value={values.corporatePhone}
-                      // name="corporatePhone"
+                      value={values.other_information.internal_remark}
+                      name="internal_remark"
+                      id="internal_remark"
                       onChange={handleChange}
+                      disabled={isView}
                       // disabled={isView || loading}
                       type="textarea"
-                      minLength="1"
-                      maxLength="512"
+                      minLength={1}
+                      maxLength={4000}
                       style={{ resize: 'none', maxWidth: 400 }}
                     />
                   </Col>
@@ -622,10 +783,10 @@ const GeneralInfomation = ({
                   <Col md={3} lg={9}>
                     <FormInputControl
                       label="Logo"
-                      // value={values.corporateFax}
-                      // name="corporateFax"
-                      onChange={handleChange}
-                      // disabled={isView || loading}
+                      value={values.other_information.logo}
+                      name="corporateFax"
+                      // onChange={handleChange}
+                      disabled={isView}
                       type="image"
                       styleContainer={{ display: 'flex', }}
                       style={{ maxWidth: 100, maxHeight: 100, }}

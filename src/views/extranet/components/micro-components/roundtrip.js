@@ -38,7 +38,7 @@ const Roundtrip = (props) => {
 
   return (
     <>
-      <div className='d-flex'>
+      <div className='d-flex flex-wrap'>
         <Routes airports={airports} />
         
         <div className='mr-4'>

@@ -1,4 +1,4 @@
-import { withRouter, useHistory } from "react-router"
+import { withRouter } from "react-router"
 import React, { useEffect, useState } from "react"
 import Api from "config/api"
 import { useDispatch } from "react-redux"
@@ -28,62 +28,40 @@ const options = {
 }
 
 const IntegrationPartnerForm = (props) => {
-  useEffect(async () => {
-    let formId = props.match.params.id
-
-    let docTitle = "Edit Integrarion Partner"
-    if (!formId) {
-      docTitle = "Create User Access Type"
-    } else if (isView) {
-      docTitle = "User Access Type Details"
-    }
-  }, [])
-
   const [openSnackbar] = useSnackbar(options)
   const dispatch = useDispatch()
   const isView = useQuery().get("action") === "view"
   const [tabKey, setTabKey] = useState("partner-information")
-  const [loading, setLoading] = useState(true)
   const [data, setData] = useState(null)
 
   useEffect(async () => {
     let api = new Api()
     let formId = props.match.params.id
-
-    let docTitle = "Sabre"
-
-    if (!formId) {
-      docTitle = "Sabre"
-    } else if (isView) {
-      docTitle = "Sabre"
-    }
-    dispatch(
-      setUIParams({
-        title: docTitle,
-        breadcrumbs: [
-          {
-            text: "Setup and Configuration",
-          },
-          {
-            link: backUrl,
-            text: "Integration Partner",
-          },
-          {
-            text: docTitle,
-          },
-        ],
-      }),
-    )
     try {
       if (formId) {
         let { data } = await api.get(endpoint + "/" +formId)
+        dispatch(
+          setUIParams({
+            title: data.integration_partner_name,
+            breadcrumbs: [
+              {
+                text: "Setup And Configurations",
+              },
+              {
+                link: backUrl,
+                text: "Integration Partner",
+              },
+              {
+                text: data.integration_partner_name,
+              },
+            ],
+          }),
+        )
         setData(data)
       }
     } catch (e) {
       openSnackbar(`error => ${e}`)
-    } finally {
-      setLoading(false)
-    }
+    } 
   }, [])
 
   const handleSelectTab = async (key) => {
