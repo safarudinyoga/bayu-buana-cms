@@ -38,7 +38,7 @@ const HotelSuppliers = (props) => {
   let dispatch = useDispatch()
   const showCreateModal = useSelector((state) => state.ui.showCreateModal)
   const { id } = useParams()
-
+  console.log('id', id)
   const endpoint = `/master/integration-partners/${id}/hotel-suppliers`
 
   const [selectCountry, setSelectCountry] = useState([])

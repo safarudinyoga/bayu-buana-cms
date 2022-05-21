@@ -62,7 +62,27 @@ function IntegrationPartnerCorporateCreate(props) {
     };
 
     const validationSchema = Yup.object().shape({
-        corporate_code: Yup.string().required("Partner Corporates Code is required."),
+        corporate_id: Yup.string().required("Corporate is required."),
+        corporate_code: Yup.string().required("Partner Corporates Code is required.").test(
+            "Unique Corporate Code",
+            "Corporate Code already exists", // <- key, message
+            async (value, ctx) => {
+            let formId = showCreateModal.id || props.id;
+              console.log('formValues', formValues)
+                // try {
+                //   let res = await axios.get(`${env.API_URL}/master/employees?filters=["employee_number","=","${value}"]`)
+    
+                //   if (formId) {
+                //     return res.data.items.length === 0 ||
+                //     value === initialForm.employee_number
+                //   } else {
+                //     return res.data.items.length === 0
+                //   }
+                // } catch(e) {
+                //   return false
+                // }
+            }
+          ),
         // corporate_name: Yup.string().required("Partner Corporates Name is required."),
     });
 
@@ -142,6 +162,7 @@ function IntegrationPartnerCorporateCreate(props) {
                         onChange={(e) => {
                             setFieldValue("corporate_code", e.target.value);
                         }}
+                        maxLength={36}
                     />
 
                     <FormikControl
