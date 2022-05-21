@@ -232,9 +232,11 @@ function FeeTypeForm(props) {
   const checkValue = () => {
     if (
       validCode &&
-      validName &&
-      form.fee_type_code === "" &&
-      form.fee_type_name === ""
+      validName
+      // form.fee_type_code !== "" &&
+      // form.fee_type_name !== "" &&
+      // form.fee_type_code === "" &&
+      // form.fee_type_name === ""
     ) {
       setDisabledSave(false)
     } else {
@@ -349,7 +351,7 @@ function FeeTypeForm(props) {
           type="text"
           minLength="1"
           maxLength="36"
-          hint="Fee Type Code maximum 36 characters"
+          // hint="Fee Type Code maximum 36 characters"
         />
       </FormHorizontal>
     </FormBuilder>
