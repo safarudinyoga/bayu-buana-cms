@@ -2,7 +2,11 @@ import BBDataTable from "components/table/bb-data-table"
 import React, { useState } from 'react'
 import Form from "./form";
 import { Card } from "react-bootstrap"
+import { useParams } from "react-router-dom";
 export default function IntegrationFeeTaxes() {
+
+  const { id } = useParams()
+
   let [params, setParams] = useState({
     createOnModal: true,
     showAdvancedOptions: false,
@@ -11,8 +15,8 @@ export default function IntegrationFeeTaxes() {
     titleModal: "Create Partner Fee Tax",
     title: "Integration Partner",
     titleModal: "Integration Partner",
-    baseRoute: "/master/integration-partners/3f61b5e0-d7cb-4f80-94e7-83114ff23903/fee-taxes",
-    endpoint: "/master/integration-partners/3f61b5e0-d7cb-4f80-94e7-83114ff23903/fee-taxes",
+    baseRoute: `/master/integration-partners/${id}/fee-taxes`,
+    endpoint: `/master/integration-partners/${id}/fee-taxes`,
     deleteEndpoint: "/master/batch-actions/delete/fee-tax-types",
     hideDetail: true,
     activationEndpoint: "/master/batch-actions/activate/hotels",

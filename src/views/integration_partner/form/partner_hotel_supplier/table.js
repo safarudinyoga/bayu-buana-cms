@@ -2,15 +2,19 @@ import BBDataTable from "components/table/bb-data-table"
 import React, {useState} from "react"
 import HotelSuppliers from "./form"
 import { Card } from "react-bootstrap"
+import { useParams } from "react-router-dom"
 
 export default function IntegrasiPartnerHotelSupplier() {
+  
+  const { id } = useParams()
+
   let [params, setParams] = useState({
     isCheckbox: false,
     title: "Division",
     titleModal: "Division",
-    baseRoute: "/master/integration-partners/3f61b5e0-d7cb-4f80-94e7-83114ff23903/hotel-suppliers/form",
-    endpoint: "/master/integration-partners/3f61b5e0-d7cb-4f80-94e7-83114ff23903/hotel-suppliers",
-    deleteEndpoint: "/master/integration-partners/3f61b5e0-d7cb-4f80-94e7-83114ff23903/hotel-suppliers",
+    baseRoute: `/master/integration-partners/${id}/hotel-suppliers/form`,
+    endpoint: `/master/integration-partners/${id}/hotel-suppliers`,
+    deleteEndpoint: `/master/batch-actions/delete/integration-partner-hotel-suppliers`,
     activationEndpoint: "/master/batch-actions/activate/integration-partner-hotels",
     deactivationEndpoint: "/master/batch-actions/deactivate/integration-partner-hotels",
     btnDownload: ".buttons-csv",
