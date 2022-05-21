@@ -45,7 +45,7 @@ const IntegrationPartnerForm = (props) => {
             title: data.integration_partner_name,
             breadcrumbs: [
               {
-                text: "Setup and Configurations",
+                text: "Setup And Configurations",
               },
               {
                 link: backUrl,

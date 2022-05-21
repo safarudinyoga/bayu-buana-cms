@@ -55,7 +55,7 @@ function FormIntegrationPartner(props) {
         business_entity_id: data.business_entity_id.value,
         partner_url: data.partner_url,
         partner_username: data.partner_username,
-        partner_password: data.partner_password,
+        partner_password: data.partner_password ? data.partner_password : "",
       })
     } catch (e) {}
     setLoading(false)
@@ -78,6 +78,7 @@ function FormIntegrationPartner(props) {
   const onSubmit = async (values, a) => {
     try {
       let formId = props.match.params.id
+      console.log('values', values)
       let form = {
         agent_performance_enabled: true,
         business_entity_id: "33867ec0-f378-cde5-f7ca-49c05af6a443",
