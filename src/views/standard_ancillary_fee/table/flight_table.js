@@ -20,7 +20,11 @@ export default function FlightTable() {
     ],
     emptyTable: "No Ancillary Fees found",
     recordName: "processing_fee_category_name",
-    module: "standard-ancillary-fee"
+    module: "standard-ancillary-fee",
+    showInfoDelete: true,
+    infoDelete: [
+      {title: "Standard Ancillary Fee", recordName: "processing_fee_category_name"}, 
+    ],
   })
   return <BBDataTable {...params}  />
 }
