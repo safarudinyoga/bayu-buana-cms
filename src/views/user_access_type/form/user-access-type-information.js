@@ -77,14 +77,16 @@ function UserAccessTypeInformation(props) {
               var req = false
               $.ajax({
                 type: "GET",
+                headers: {"Authorization": `Bearer ${localStorage.getItem('ut')}`},
                 async: false,
-                url: `${env.API_URL}/user/user-types?filters=["user_type_name","=","${element.value}"]`,
+                url: `${env.API_URL}/user/user-types?filters=["user_type_name","like","${element.value}"]`,
                 success: function (res) {
                   if (res.items.length !== 0) {
-                    if (currentName === element.value) {
+                    if(currentName.toUpperCase() === element.value.toUpperCase()){
                       req = true
                     } else {
-                      req = false
+                      let duplicateVal = res.items.find( e => e.user_type_name.toUpperCase() === element.value.toUpperCase())
+                      req = !duplicateVal
                     }
                   } else {
                     req = true
@@ -94,7 +96,7 @@ function UserAccessTypeInformation(props) {
 
               return req
             },
-            "Name already exists",
+            "User Type Name already exists",
           )
           $.validator.addMethod(
             "checkCode",
@@ -103,6 +105,7 @@ function UserAccessTypeInformation(props) {
               $.ajax({
                 type: "GET",
                 async: false,
+                headers: {"Authorization": `Bearer ${localStorage.getItem('ut')}`},
                 url: `${env.API_URL}/user/user-types?filters=["user_type_code","like","${element.value}"]`,
                 success: function (res) {
                   if (res.items.length !== 0) {
@@ -118,7 +121,7 @@ function UserAccessTypeInformation(props) {
               })
               return req
             },
-            "Code already exists",
+            "User Type Code already exists",
           )
         }
       } catch (e) {}
@@ -138,10 +141,12 @@ function UserAccessTypeInformation(props) {
           $.ajax({
             type: "GET",
             async: false,
-            url: `${env.API_URL}/user/user-types?filters=["user_type_name","=","${element.value}"]`,
+            headers: {"Authorization": `Bearer ${localStorage.getItem('ut')}`},
+            url: `${env.API_URL}/user/user-types?filters=["user_type_name","like","${element.value}"]`,
             success: function (res) {
               if (res.items.length !== 0) {
-                req = false
+                let duplicateVal = res.items.find( e => e.user_type_name.toUpperCase() === element.value.toUpperCase())
+                req = !duplicateVal
               } else {
                 req = true
               }
@@ -150,7 +155,7 @@ function UserAccessTypeInformation(props) {
 
           return req
         },
-        "Name already exists",
+        "User Type Name already exists",
       )
       $.validator.addMethod(
         "checkCode",
@@ -159,6 +164,7 @@ function UserAccessTypeInformation(props) {
           $.ajax({
             type: "GET",
             async: false,
+            headers: {"Authorization": `Bearer ${localStorage.getItem('ut')}`},
             url: `${env.API_URL}/user/user-types?filters=["user_type_code","like","${element.value}"]`,
             success: function (res) {
               if (res.items.length !== 0) {
@@ -171,7 +177,7 @@ function UserAccessTypeInformation(props) {
 
           return req
         },
-        "Code already exists",
+        "User Type Code already exists",
       )
     }
   }, [])

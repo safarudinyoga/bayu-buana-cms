@@ -54,7 +54,7 @@ export default function IntegrationPartnerTable() {
     ],
     btnDownload: ".buttons-csv",
     isOpenNewTab: false,
-    emptyTable: "No Integration partners found",
+    emptyTable: "No integration partners found",
     recordName: ["integration-partner-code", "integration-partner-name"],
     module:"integration-partner",
     advancedOptionsText: "Advanced options",
