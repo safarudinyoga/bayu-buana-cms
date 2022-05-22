@@ -131,11 +131,10 @@ function SelfServiceBooking(props) {
       try {
         let form = {
           ...values,
-          "office_id": values.office_id.value,
           agency_id: values.agency_id === "" ? "00000000-0000-0000-0000-000000000000" : values.agency_id,
           system_id: values.system_id === "" ? "00000000-0000-0000-0000-000000000000" : values.system_id,
         };
-        let res = await API.putOrPost(endpoint, id, form);
+        let res = await API.put(endpoint, form);
 
         dispatch(setCreateModal({ show: false, id: null, disabled_form: false }));
         dispatch(
@@ -144,7 +143,7 @@ function SelfServiceBooking(props) {
           })
         );
       } catch (e) {
-        console.LOG (e)
+        console.log(e)
         dispatch(
           setAlert({
             message: "Failed to save this record.",
