@@ -8,15 +8,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { setAlert, setCreateModal, setModalTitle } from "redux/ui-store";
 import CancelButton from "components/button/cancel";
 import FormikControl from "../../../../components/formik/formikControl"
-
-const endpoint = "/master/integration-partner-corporates";
+import { useParams } from "react-router-dom"
+const endpoint = "/master/integration-partners";
 
 function IntegrationPartnerCorporateCreate(props) {
     const dispatch = useDispatch();
+    const { id } = useParams()
     const showCreateModal = useSelector((state) => state.ui.showCreateModal);
     const API = new Api();
     const isView = showCreateModal.disabled_form || props.isView;
-    const [id, setId] = useState(null);
+    const [corporateId, setCorporateId] = useState(null);
     const [loading, setLoading] = useState(true);
     const [formValues, setFormValues] = useState(null);
 
@@ -31,11 +32,12 @@ function IntegrationPartnerCorporateCreate(props) {
         }
 
         dispatch(setModalTitle(docTitle));
-
-        try {
-            let res = await API.get(endpoint + "/" + formId);
-            setFormValues(res.data);
-        } catch (e) {}
+        if(formId){
+            try {
+                let res = await API.get(endpoint + "/" + id + "/corporates/" + formId);
+                setFormValues(res.data);
+            } catch (e) {}
+        }
         setLoading(false);
     }, []);
 
@@ -48,7 +50,7 @@ function IntegrationPartnerCorporateCreate(props) {
             setLoading(false);
         }
 
-        setId(showCreateModal.id);
+        setCorporateId(showCreateModal.id);
     }, [showCreateModal.id, formValues]);
 
     const initialValues = {
@@ -61,29 +63,36 @@ function IntegrationPartnerCorporateCreate(props) {
         is_enabled: false
     };
 
+    const duplicateValue = async(fieldName, value) => {
+        let filters = encodeURIComponent(JSON.stringify([[fieldName,"=",value],["AND"],["integration_partner_id",id],["AND"],["status",1]]))
+        let res = await API.get(endpoint + "/" + id + "/corporates?" + `filters=${filters}`)
+        let sameId = res.data.items.find((v) => v.id === corporateId)
+        if(!sameId) return res.data.items.length === 0 
+
+        return true
+    }
+
+    Yup.addMethod(Yup.object, 'uniqueValueObject', function (fieldName, message) {
+        return this.test('unique', message, function(field) {
+            if(field) return duplicateValue(fieldName, field.value)
+            return true
+        })
+    })
+
+    Yup.addMethod(Yup.string, 'uniqueValueString', function (fieldName, message) {
+        return this.test('unique', message, function(field) {
+            if(field) return duplicateValue(fieldName, field)
+            return true
+        })
+    })
+
     const validationSchema = Yup.object().shape({
-        corporate_id: Yup.string().required("Corporate is required."),
-        corporate_code: Yup.string().required("Partner Corporates Code is required.").test(
-            "Unique Corporate Code",
-            "Corporate Code already exists", // <- key, message
-            async (value, ctx) => {
-            let formId = showCreateModal.id || props.id;
-              console.log('formValues', formValues)
-                // try {
-                //   let res = await axios.get(`${env.API_URL}/master/employees?filters=["employee_number","=","${value}"]`)
-    
-                //   if (formId) {
-                //     return res.data.items.length === 0 ||
-                //     value === initialForm.employee_number
-                //   } else {
-                //     return res.data.items.length === 0
-                //   }
-                // } catch(e) {
-                //   return false
-                // }
-            }
-          ),
-        // corporate_name: Yup.string().required("Partner Corporates Name is required."),
+        corporate_id: Yup.object()
+        .required("Corporate is required.")
+        .uniqueValueObject("corporate_id","Corporate already exists"),
+        corporate_code: Yup.string()
+        .required("Partner Corporate Code is required")
+        .uniqueValueString('corporate_code', 'Partner Corporate Code already exists'),
     });
 
     const onSubmit = async (values, a) => {
@@ -94,10 +103,14 @@ function IntegrationPartnerCorporateCreate(props) {
                 corporate_information_enabled: values.corporate_information_enabled,
                 corporate_performance_enabled: values.corporate_performance_enabled,
                 credit_limit_enabled: values.credit_limit_enabled,
-                integration_partner_id: values.integration_partner_id,
+                integration_partner_id: id,
                 is_enabled: values.is_enabled
             };
-            let res = await API.putOrPost("/master/integration-partner-corporates", id, form);
+            if(corporateId){
+                let res = await API.put(endpoint + "/" + id + "/corporates/" + corporateId, form);
+            }else{
+                let res = await API.post(endpoint + "/" + id + "/corporates", form);
+            }
 
             dispatch(setCreateModal({ show: false, id: null, disabled_form: false }));
             dispatch(
