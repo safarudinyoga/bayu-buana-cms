@@ -39,12 +39,12 @@ function PaymentGatewayCreate(props) {
           payment_gateway_code: data.payment_gateway.payment_gateway_code,
           payment_gateway_name: data.payment_gateway.payment_gateway_name,
           currency_id: {
-            value: data.currency_id,
-            label: data.currency_id,
+            value: data.currency?.id || "",
+            label: data.currency?.currency_name || "",
           },
           bank_id: {
-            value: data.bank_id,
-            label: data.bank_id,
+            value: data.bank?.id || "",
+            label: data.bank?.bank_name || "",
           },
         })
       } catch (e) {
@@ -71,12 +71,12 @@ function PaymentGatewayCreate(props) {
     merchant_id: "",
     terminal_id: "",
     channel_code: "",
-    currency_id: "a",
+    currency_id: "",
     transaction_url: "",
     notification_url: "",
     client_key: "",
     server_key: "",
-    bank_id: "a",
+    bank_id: "",
     virtual_account_number: "",
     convenience_store_code: "",
   }
@@ -94,24 +94,40 @@ function PaymentGatewayCreate(props) {
     return true
   }
 
-  Yup.addMethod(Yup.string, "uniquePaymentGateway", function (message) {
-    return this.test("unique", message, function (field, ctx) {
-      let parent = ctx.parent
-      if (parent.payment_gateway_code?.value) {
-        return checkPaymentGatewayIsUnique(parent.payment_gateway_name?.value)
-      } else {
-        return true
-      }
-    })
+  // Yup.addMethod(Yup.string, "uniquePaymentGateway", function (message) {
+  //   return this.test("unique", message, function (field, ctx) {
+  //     let parent = ctx.parent
+  //     if (parent.payment_gateway_code?.value) {
+  //       return checkPaymentGatewayIsUnique(parent.payment_gateway_name?.value)
+  //     } else {
+  //       return true
+  //     }
+  //   })
+  // })
+
+  const duplicateValue = async(fieldName, value) => {
+    let filters = encodeURIComponent(JSON.stringify([[fieldName,"=",value],["AND"],["integration_partner_id",props.match.params.id],["AND"],["status",1]]))
+    let res = await API.get(endpoint + "?" + `filters=${filters}`)
+    let sameId = res.data.items.find((v) => v.id === id)
+    if(!sameId) return res.data.items.length === 0 
+
+    return true
+  }
+  
+  Yup.addMethod(Yup.string, 'uniqueValueString', function (fieldName, message) {
+      return this.test('unique', message, function(field) {
+          if(field) return duplicateValue(fieldName, field)
+          return true
+      })
   })
 
   const validationSchema = Yup.object().shape({
-    payment_gateway_code: Yup.string().required(
-      "Payment Gateway Code is required.",
-    ),
+    payment_gateway_code: Yup.string()
+      .required("Payment Gateway Code is required.")
+      .uniqueValueString('payment_gateway.payment_gateway_code', "Payment Gateway Code already exists"),
     payment_gateway_name: Yup.string()
       .required("Payment Gateway Name is required.")
-      .uniquePaymentGateway("Payment Gateway Name already exists"),
+      .uniqueValueString('payment_gateway.payment_gateway_name', "Payment Gateway Name already exists"),
     merchant_id: Yup.string(),
     terminal_id: Yup.string(),
     channel_code: Yup.string(),
@@ -242,7 +258,6 @@ function PaymentGatewayCreate(props) {
             }}
             style={{ maxWidth: 250 }}
             size={formSize}
-            isDisabled={isView || loading}
           />
           <FormikControl
             control="input"
@@ -292,7 +307,6 @@ function PaymentGatewayCreate(props) {
             }}
             style={{ maxWidth: 250 }}
             size={formSize}
-            isDisabled={isView || loading}
           />
           <FormikControl
             control="input"

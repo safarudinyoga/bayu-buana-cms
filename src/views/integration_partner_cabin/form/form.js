@@ -160,7 +160,7 @@ function PartnerCabins(props) {
         title: isView ? "Partner Cabins Details" : docTitle,
         breadcrumbs: [
           {
-            text: "Setup and Configuration",
+            text: "Setup and Configurations",
           },
           {
             link: backUrl,
@@ -473,7 +473,7 @@ function PartnerCabins(props) {
                                     form.errors.cabin_type_code
                                   }
                                   minLength={1}
-                                  maxLength={128}
+                                  maxLength={36}
                                   {...field}
                                   style={{ maxWidth: 300 }}
                                 />
@@ -523,7 +523,7 @@ function PartnerCabins(props) {
                                     form.errors.cabin_type_name
                                   }
                                   minLength={1}
-                                  maxLength={128}
+                                  maxLength={256}
                                   {...field}
                                   style={{ maxWidth: 300 }}
                                 />

@@ -1139,6 +1139,7 @@ class BBDataTable extends Component {
           onStatusUpdate={this.onStatusUpdate.bind(this)}
           onRemove={this.onRemoveSelected.bind(this)}
           hideCreate={this.props.hideCreate}
+          handleReplaceTable={this.props.handleReplaceTable}
         >
           {this.props.children}
         </TableHeader>

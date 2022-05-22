@@ -34,6 +34,7 @@ export default function IntegrationPartnerMealPlansTable() {
     ],
     emptyTable: "No Partner Meal Plans found",
     recordName: ["meal_plan_type_name"],
+    searchText: "Search"
   })
 
   return (
