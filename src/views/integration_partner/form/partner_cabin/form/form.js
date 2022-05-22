@@ -1,16 +1,13 @@
 import React, { useEffect, useState } from "react"
 import Api from "config/api"
 import { v4 as uuidv4 } from 'uuid';
-import { Link } from "react-router-dom"
 import axios from "axios"
 import env from "config/environment"
 import { useDispatch } from "react-redux"
 import SelectAsync from "components/form/select-async"
 import { withRouter, useHistory } from "react-router"
-import FormInputControl from "components/form/input-control"
 import { ReactSVG } from "react-svg"
-import FormikControl from "../../../components/formik/formikControl"
-import Select from "../../../components/form/select"
+import Select from "../../../../../components/form/select"
 import { Row, Col, Tab, Nav, Card, Button, Form, Modal } from "react-bootstrap"
 import { setUIParams } from "redux/ui-store"
 import useQuery from "lib/query"
@@ -147,32 +144,6 @@ function PartnerCabins(props) {
   useEffect(async () => {
     let api = new Api()
     let formId = props.match.params.id
-
-    let docTitle = "Sabre"
-    if (!formId) {
-      docTitle = "Sabre"
-
-    } else if (isView) {
-      docTitle = "Partner Cabin Details"
-    }
-    dispatch(
-      setUIParams({
-        title: isView ? "Partner Cabin Details" : docTitle,
-        breadcrumbs: [
-          {
-            text: "Setup and Configurations",
-          },
-          {
-            link: backUrl,
-            text: "Integration Partner",
-          },
-          {
-            text: docTitle,
-          },
-        ],
-      }),
-    )
-
     try {
       let res = await api.get(endpoint + "/" + formId)
       let data = res.data;
@@ -319,83 +290,7 @@ function PartnerCabins(props) {
           setFieldTouched,
         }) => (
           <Form onSubmit={handleSubmit}>
-            <Tab.Container>
-              <Row>
-                <Col sm={3}>
-                  <Nav variant="pills" className="flex-column nav-side">
-                    <Nav.Item>
-                      <Nav.Link eventKey="partner-information">
-                        <div>
-                          <ReactSVG src="/img/icons/users.svg" />
-                          <span>Partner Information</span>
-                        </div>
-                      </Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item>
-                      <Nav.Link eventKey="partner-credential">
-                        <div>
-                          <ReactSVG src="/img/icons/users.svg" />
-                          <span>Partner Credential</span>
-                        </div>
-                      </Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item>
-                      <Nav.Link eventKey="partner-corporates">
-                        <div>
-                          <ReactSVG src="/img/icons/users.svg" />
-                          <span>Partner Corporates</span>
-                        </div>
-                      </Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item>
-                      <Nav.Link href={`/master/integration-partner-cabin-types`}>
-                        <div>
-                          <ReactSVG src="/img/icons/employment.svg" />
-                          <span>Partner Cabins</span>
-                        </div>
-                      </Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item>
-                      <Nav.Link eventKey="partner-meal-plans">
-                        <div>
-                          <ReactSVG src="/img/icons/users.svg" />
-                          <span>Partner Meal Plans</span>
-                        </div>
-                      </Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item>
-                      <Nav.Link eventKey="partner-fee-taxes">
-                        <div>
-                          <ReactSVG src="/img/icons/users.svg" />
-                          <span>Partner Fee Taxes</span>
-                        </div>
-                      </Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item>
-                      <Nav.Link eventKey="partner-messages">
-                        <div>
-                          <ReactSVG src="/img/icons/users.svg" />
-                          <span>Partner Messages</span>
-                        </div>
-                      </Nav.Link>
-                    </Nav.Item>
-
-                    {/* <Nav.Link href={`/master/integration-partner-cities/${formId}/cities`}>
-                    <div>
-                        <ReactSVG src="/img/icons/employment.svg" />
-                        <span>Partner City</span>
-                      </div>
-                    </Nav.Link> */}
-
-
-                  </Nav>
-                </Col>
-                <Col sm={9}>
-                  <Card>
-                    <Card.Body>
-                      {isView ? <h3 className="card-heading">Partner Cabins Detail</h3> : <h3 className="card-heading">Edit Partner Cabins</h3>}
-
-                      <Form.Group as={Row} className="form-group">
+            <Form.Group as={Row} className="form-group">
                         <Form.Label column sm={4}>
                           Cabin<span className="form-label-required">*</span>
                         </Form.Label>
@@ -573,7 +468,7 @@ function PartnerCabins(props) {
                             ? (<div className="mb-2 row justify-content-md-start justify-content-center">
                               <Button
                                 variant="secondary"
-                                onClick={() => props.history.goBack()}
+                                onClick={() => props.handleReplaceTable(props.isReplaceTable)}
                               >
                                 BACK
                               </Button>
@@ -589,7 +484,7 @@ function PartnerCabins(props) {
                               </Button>
                               <Button
                                 variant="secondary"
-                                onClick={() => props.history.goBack()}
+                                onClick={() => props.handleReplaceTable(props.isReplaceTable)}
                                 style={{ marginBottom: 20, marginTop: 85 }}
                               >
                                 CANCEL
@@ -603,7 +498,7 @@ function PartnerCabins(props) {
                             ? (<>
                               <Button
                                 variant="secondary"
-                                onClick={() => props.history.goBack()}
+                                onClick={() => props.handleReplaceTable(props.isReplaceTable)}
                                 className="mt-3"
                               >
                                 BACK
@@ -620,20 +515,13 @@ function PartnerCabins(props) {
                               </Button>
                               <Button
                                 variant="secondary"
-                                onClick={() => props.history.goBack()}
+                                onClick={() => props.handleReplaceTable(props.isReplaceTable)}
                               >
                                 CANCEL
                               </Button>
                             </div>)
                           : ""
                       }
-                    </Card.Body>
-
-                  </Card>
-
-                </Col>
-              </Row>
-            </Tab.Container>
 
 
           </Form>

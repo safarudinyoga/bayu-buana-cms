@@ -9,7 +9,6 @@ export default function IntegrasiPartnerHotels() {
   const [isReplaceTable, setIsReplaceTable] = useState(false)
 
   const handleReplaceTable = async (key) => {
-    console.log('isReplaceTable', isReplaceTable)
     setIsReplaceTable(!key)
   }
   let [params, setParams] = useState({
