@@ -20,19 +20,19 @@ import { useParams } from "react-router-dom"
       columns: [
         {
           title: "Company/Branch Name",
-          data: "corporate_id",
+          data: "office.office_name",
         },
         {
           title: "Address",
-          data: "corporate_code",
+          data: "office.address_line",
         },
         {
           title: "PCC",
-          data: "corporate_id",
+          data: "pcc",
         },
         {
           title: "IPCC",
-          data: "corporate_id",
+          data: "ipcc",
         },
       ],
       emptyTable: "No Partner Corporate found",
