@@ -473,7 +473,7 @@ function PartnerCabins(props) {
                                     form.errors.cabin_type_code
                                   }
                                   minLength={1}
-                                  maxLength={128}
+                                  maxLength={36}
                                   {...field}
                                   style={{ maxWidth: 300 }}
                                 />
@@ -523,7 +523,7 @@ function PartnerCabins(props) {
                                     form.errors.cabin_type_name
                                   }
                                   minLength={1}
-                                  maxLength={128}
+                                  maxLength={256}
                                   {...field}
                                   style={{ maxWidth: 300 }}
                                 />

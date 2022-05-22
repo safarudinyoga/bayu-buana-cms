@@ -39,12 +39,12 @@ function PaymentGatewayCreate(props) {
           payment_gateway_code: data.payment_gateway.payment_gateway_code,
           payment_gateway_name: data.payment_gateway.payment_gateway_name,
           currency_id: {
-            value: data.currency_id,
-            label: data.currency_id,
+            value: data.currency?.id || "",
+            label: data.currency?.currency_name || "",
           },
           bank_id: {
-            value: data.bank_id,
-            label: data.bank_id,
+            value: data.bank?.id || "",
+            label: data.bank?.bank_name || "",
           },
         })
       } catch (e) {
