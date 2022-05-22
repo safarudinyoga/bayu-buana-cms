@@ -28,7 +28,7 @@ export default function IntegrationPartnerPaymentGatewayTable() {
         data: "payment_gateway.payment_gateway_name",
       },
     ],
-    emptyTable: "No Payment Gateways found",
+    emptyTable: "No Partner Payment Gateways Found",
     recordName: [
       "payment_gateway.payment_gateway_code",
       "payment_gateway.payment_gateway_name",

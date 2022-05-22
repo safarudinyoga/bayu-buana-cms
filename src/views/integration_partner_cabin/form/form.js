@@ -153,11 +153,11 @@ function PartnerCabins(props) {
       docTitle = "Sabre"
 
     } else if (isView) {
-      docTitle = "Partner Cabin Details"
+      docTitle = "Partner Cabins Details"
     }
     dispatch(
       setUIParams({
-        title: isView ? "Partner Cabin Details" : docTitle,
+        title: isView ? "Partner Cabins Details" : docTitle,
         breadcrumbs: [
           {
             text: "Setup and Configuration",
@@ -393,7 +393,7 @@ function PartnerCabins(props) {
                 <Col sm={9}>
                   <Card>
                     <Card.Body>
-                      {isView ? <h3 className="card-heading">Partner Cabins Detail</h3> : <h3 className="card-heading">Edit Partner Cabins</h3>}
+                      {isView ? <h3 className="card-heading">Partner Cabins Details</h3> : <h3 className="card-heading">Edit Partner Cabins</h3>}
 
                       <Form.Group as={Row} className="form-group">
                         <Form.Label column sm={4}>
