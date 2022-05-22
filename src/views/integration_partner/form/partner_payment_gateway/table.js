@@ -28,7 +28,7 @@ export default function IntegrationPartnerPaymentGatewayTable() {
         data: "channel_code",
       },
     ],
-    emptyTable: "No Payment Gateways found",
+    emptyTable: "No Partner Payment Gateways Found",
     recordName: ["channel_code", "channel_code"],
   })
 
