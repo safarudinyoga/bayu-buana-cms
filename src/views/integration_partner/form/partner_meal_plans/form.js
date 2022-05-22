@@ -62,18 +62,44 @@ function MealPlansCreate(props) {
     setId(showCreateModal.id)
   }, [showCreateModal.id, formValues])
 
+  const duplicateValue = async(fieldName, value) => {
+    let filters = encodeURIComponent(JSON.stringify([[fieldName,"=",value],["AND"],["integration_partner_id",props.match.params.id],["AND"],["status",1]]))
+    let res = await API.get(endpoint + "?" + `filters=${filters}`)
+    let sameId = res.data.items.find((v) => v.id === id)
+    if(!sameId) return res.data.items.length === 0 
+
+    return true
+  }
+  
+  Yup.addMethod(Yup.object, 'uniqueValueObject', function (fieldName, message) {
+      return this.test('unique', message, function(field) {
+          if(field) return duplicateValue(fieldName, field.value)
+          return true
+      })
+  })
+
+  Yup.addMethod(Yup.string, 'uniqueValueString', function (fieldName, message) {
+      return this.test('unique', message, function(field) {
+          if(field) return duplicateValue(fieldName, field)
+          return true
+      })
+  })
+
   const initialValues = {
     meal_plan_type: "",
     meal_plan_type_id: "",
     meal_plan_type_code: "",
     meal_plan_type_name: "",
-    integration_partner_id: param.id,
+    integration_partner_id: props.match.params.id || "00000000-0000-0000-0000-000000000000"
   }
 
   const validationSchema = Yup.object().shape({
-    meal_plan_type: Yup.object().required("Meal Plan is required."),
-    meal_plan_type_code: Yup.string().required("Meal Plan Code is required."),
-    meal_plan_type_name: Yup.string().required("Meal Plan Name is required."),
+    meal_plan_type: Yup.object().required("Meal Plan is required.")
+    .uniqueValueObject('meal_plan_type', 'Meal Plan already exists'),
+    meal_plan_type_code: Yup.string().required("Meal Plan Code is required.")
+    .uniqueValueString('meal_plan_type_code', 'Partner Meal Plan Code already exists'),
+    meal_plan_type_name: Yup.string().required("Meal Plan Name is required.")
+    .uniqueValueString('meal_plan_type_name', 'Partner Meal Plan Name already exists'),
   })
 
   const onSubmit = async (values, a) => {
