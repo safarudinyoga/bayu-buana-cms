@@ -13,6 +13,7 @@ export default function SharedTable() {
     showAdvancedOptions: false,
     createOnModal: true,
     showHistory: true,
+    isHideDownloadLogo: true,
     title: "Standard Service",
     titleModal: "Standard Service",
     baseRoute: "/master/standard-services/form",

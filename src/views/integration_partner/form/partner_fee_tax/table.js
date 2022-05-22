@@ -36,8 +36,8 @@ export default function IntegrationFeeTaxes() {
         data: "fee_tax_type_name"
       },
     ],
-    emptyTable: "No Integration Partner Fee Tax found",
-    recordName: ["integration-partner-code", "integration-partner-name"],
+    emptyTable: "No partner fee taxes found",
+    recordName: ["fee_tax_type_code", "fee_tax_type_name"],
   });
 
   return (

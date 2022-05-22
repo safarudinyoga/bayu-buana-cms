@@ -18,6 +18,7 @@ const TravelAdvice = (props) => {
     createOnModal: true,
     modalTitle: "test",
     hideDetail: true,
+    isHideDownloadLogo: true,
     title: "Team Assignment",
     titleModal: "Team Assignment",
     baseRoute: "/master/general-team-assignment/form",
