@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import Form from "./form"
 import { Tabs, TabPane, Row, Card } from "react-bootstrap"
 import { useParams } from "react-router-dom"
+import SelfServices from "./self-services"
 
   const ControlledTabs = (props) => {
     const param = useParams()
@@ -20,19 +21,19 @@ import { useParams } from "react-router-dom"
       columns: [
         {
           title: "Company/Branch Name",
-          data: "corporate_id",
+          data: "office.office_name",
         },
         {
           title: "Address",
-          data: "corporate_code",
+          data: "office.address_line",
         },
         {
           title: "PCC",
-          data: "corporate_id",
+          data: "pcc",
         },
         {
           title: "IPCC",
-          data: "corporate_id",
+          data: "ipcc",
         },
       ],
       emptyTable: "No Partner Corporate found",
@@ -75,7 +76,7 @@ import { useParams } from "react-router-dom"
                   </div>
                 }
               >
-                <BBDataTable {...params} modalContent={Form} />
+                <SelfServices integration_partner_code={props.integration_partner_code} />
               </TabPane>
             </Tabs>
           </Card.Body>
