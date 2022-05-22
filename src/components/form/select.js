@@ -16,7 +16,7 @@ const Select = (props) => {
     }),
     control: (base, state) => ({
       ...base,
-      border: "1px solid #DADEDF",
+      border: props.invalid ? "1px solid #dc3545" : "1px solid #DADEDF",
       fontSize: 13,
       backgroundColor: "white",
       boxShadow: state.isFocused ? 0 : 0,
