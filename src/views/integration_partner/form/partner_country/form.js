@@ -208,7 +208,7 @@ function ExchangeRateCreate(props) {
                             }}
                         >
                             {!isView && (
-                                <Button variant="primary" type="submit" disabled={isSubmitting || !isValid} style={{ marginRight: 15 }}>
+                                <Button variant="primary" type="submit" disabled={isSubmitting} style={{ marginRight: 15 }}>
                                     SAVE
                                 </Button>
                             )}
