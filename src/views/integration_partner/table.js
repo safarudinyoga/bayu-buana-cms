@@ -29,6 +29,7 @@ export default function IntegrationPartnerTable() {
   let [params, setParams] = useState({
     title: "Integration Partner",
     isCheckbox: false,
+    customSort:["integration_partner_code"],
     titleModal: "Integration Partner",
     baseRoute: "/master/integration-partner/form",
     endpoint: "/master/integration-partners",
@@ -53,7 +54,7 @@ export default function IntegrationPartnerTable() {
     ],
     btnDownload: ".buttons-csv",
     isOpenNewTab: false,
-    emptyTable: "No Integration partners found",
+    emptyTable: "No integration partners found",
     recordName: ["integration-partner-code", "integration-partner-name"],
     module:"integration-partner",
     advancedOptionsText: "Advanced options",
