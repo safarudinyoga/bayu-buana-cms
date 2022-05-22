@@ -6,13 +6,13 @@ import { withRouter, useHistory } from "react-router"
 import FormInputControl from "components/form/input-control"
 import { ReactSVG } from "react-svg"
 import FormikControl from "../../../components/formik/formikControl"
-import { Row, Col, Tab, Nav, Card, Button, Form } from "react-bootstrap"
+import { Row, Col, InputGroup, Nav, Card, Button, Form } from "react-bootstrap"
 import { setUIParams } from "redux/ui-store"
 import useQuery from "lib/query"
 import { Formik, FastField, Field, ErrorMessage } from "formik"
 import { setAlert } from "redux/ui-store"
 import { useSnackbar } from "react-simple-snackbar"
-
+import * as Yup from "yup"
 const endpoint = "/master/integration-partners"
 const backUrl = "/master/integration-partner"
 
@@ -40,6 +40,7 @@ function FormIntegrationPartner(props) {
     partner_username: "",
     partner_password: "",
   })
+	const [ passType, setPassType] = useState("password")
 
   useEffect(async () => {
     let api = new Api()
@@ -52,7 +53,7 @@ function FormIntegrationPartner(props) {
         ...form,
         integration_partner_code: data.integration_partner_code,
         integration_partner_name: data.integration_partner_name,
-        status: data.status,
+        status: data.status == 1,
         business_entity_id: data.business_entity_id.value,
         partner_url: data.partner_url,
         partner_username: data.partner_username,
@@ -75,6 +76,12 @@ function FormIntegrationPartner(props) {
     partner_username: "",
     partner_password: "",
   }
+
+  const regexURL = new RegExp('(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?'); 
+  const validationSchema = Yup.object().shape({
+    partner_url: Yup.string()
+          .matches(regexURL, 'Invalid URL Format')
+  })
 
   const onSubmit = async (values, a) => {
     try {
@@ -109,7 +116,7 @@ function FormIntegrationPartner(props) {
         let res = await api.put(`/master/integration-partners/${formId}`, form)
         dispatch(
           setAlert({
-            message: `Record 'Partner Name: ${form.integration_partner_name}' has been successfully saved.`,
+            message: `Record '${values.integration_partner_name}' has been successfully saved.`,
           }),
         )
       }
@@ -137,6 +144,7 @@ function FormIntegrationPartner(props) {
     <Formik
       enableReinitialize
       initialValues={form || initialValues}
+      validationSchema={validationSchema}
       onSubmit={onSubmit}
     >
       {({
@@ -227,8 +235,10 @@ function FormIntegrationPartner(props) {
                 label="Status"
                 name="status"
                 size={formSize}
-                value={values.status}
-                onChange={(v) => setFieldValue("status", v)}
+                value={values.status }
+                onChange={(v) => {
+                  setFieldValue("status", v)
+                }}
                 disabled={isView || loading}
               />
               <Form.Group as={Row} className="form-group">
@@ -265,7 +275,7 @@ function FormIntegrationPartner(props) {
                 </Col>
               </Form.Group>
               {
-                data ? (data.integration_partner_code == 2 || data.integration_partner_code == 4 || data.integration_partner_code == 18) ?
+                data ? (data.integration_partner_code == 2 || data.integration_partner_code == 4 || data.integration_partner_code == 10 || data.integration_partner_code == 18) ?
               <Form.Group as={Row} className="form-group">
                 <Form.Label column md={3} lg={4}>
                   Partner Username{" "}
@@ -282,7 +292,7 @@ function FormIntegrationPartner(props) {
                             form.errors.partner_username
                           }
                           minLength={1}
-                          maxLength={128}
+                          maxLength={256}
                           {...field}
                           style={{ maxWidth: 300 }}
                         />
@@ -307,11 +317,12 @@ function FormIntegrationPartner(props) {
                   {data.integration_partner_code == 3 ? "Access Token" : (data.integration_partner_code == 5 || data.integration_partner_code == 6 || data.integration_partner_code == 12 || data.integration_partner_code == 13 || data.integration_partner_code == 14 || data.integration_partner_code == 15 || data.integration_partner_code == 17) ? "API Key" : data.integration_partner_code == 18 ? "Partner Sub Username" : "Partner Password"}
                 </Form.Label>
                 <Col md={9} lg={8}>
+                <InputGroup>
                   <FastField name="partner_password" disabled>
                     {({ field, form }) => (
                       <>
                         <Form.Control
-                          type="text"
+                          type={passType}
                           disabled={isView}
                           isInvalid={
                             form.touched.partner_password &&
@@ -322,6 +333,15 @@ function FormIntegrationPartner(props) {
                           {...field}
                           style={{ maxWidth: 300 }}
                         />
+                        {
+                      <InputGroup.Append>
+                        <InputGroup.Text>
+                        <i 
+                            onClick={()=>setPassType(passType === "text" ? "password" : "text" )} 
+                            className={`fa ${passType === "password" ? "fa-eye-slash" : "fa-eye" }`}></i>
+                        </InputGroup.Text>
+                      </InputGroup.Append>
+                      }
                         {form.touched.partner_password &&
                           form.errors.partner_password && (
                             <Form.Control.Feedback type="invalid">
@@ -333,6 +353,7 @@ function FormIntegrationPartner(props) {
                       </>
                     )}
                   </FastField>
+                  </InputGroup>
                 </Col>
               </Form.Group>
               : null : null}
