@@ -34,31 +34,9 @@ export default function IntegrasiPartnerHotelSupplier() {
         title: "Partner Hotel Suppliers Name",
         data: "hotel_supplier_name",
       },
-    //   {
-    //     title: "Manager",
-    //     data: "manager.given_name",
-    //     render: (data, d, row) => {
-    //       if(row.manager) {
-    //         return `${row.manager.given_name || ""} ${row.manager.middle_name || ""} ${row.manager.surname || ""}`
-    //       } else {
-    //         return ""
-    //       }
-    //     }
-    //   },
-    //   {
-    //     searchable: false,
-    //     title: "Status",
-    //     data: "status",
-    //     render: rowStatus,
-    //   },
-      {
-        title: "Translated Division Name",
-        data: "division_translation.division_name",
-        visible: false,
-      },
     ],
-    emptyTable: "No division found",
-    recordName: ["division_code", "division_name"],
+    emptyTable: "No partner hotel supplier found",
+    recordName: ["hotel_supplier_code", "hotel_supplier_name"],
     showInfoDelete: true,
     infoDelete: [
       {title: "Partner Hotel Supplier", recordName: "hotel_supplier_name"}, 

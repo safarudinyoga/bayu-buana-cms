@@ -101,7 +101,7 @@ const FlightCommisionForm = (props) => {
           },
           {
             link: backUrl,
-            text: "Flight Commision",
+            text: "Flight Commissions",
           },
           {
             text: docTitle,
@@ -190,8 +190,8 @@ const FlightCommisionForm = (props) => {
     departure_airport_location_code: Yup.string(),
     departure_city_code: Yup.string(),
 
-    departureFrom: Yup.object().notOneOf([Yup.ref('arrivalAt'), null], "Origin and Destination must be different."),
-    arrivalAt: Yup.object().notOneOf([Yup.ref('departureFrom'), null], "Origin and Destination must be different."),
+    // departureFrom: Yup.object().notOneOf([Yup.ref('arrivalAt'), null], "Origin and Destination must be different."),
+    // arrivalAt: Yup.object().notOneOf([Yup.ref('departureFrom'), null], "Origin and Destination must be different."),
 
     percent: Yup.string().matches(percentNumber, "Commision Percentage can only between 0.00 - 100.00").required("Commission Percentage is required.")
   })
@@ -203,15 +203,16 @@ const FlightCommisionForm = (props) => {
         validationSchema={validationSchema}
         enableReinitialize
         onSubmit={async (values, { setSubmitting }) => {
+          console.log(values)
           try {
             // console.log(values)
             let formatted = {
               airline_id: values.airline_id.value,
               commission_claim_original_destination: {
-                departure_airport_location_code: values.departFrom.value.split("-")[0].trim(),
-                departure_city_code: values.departFrom.value.split("-")[1].trim(),
-                arrival_airport_location_code: values.arrivalAt.value.split("-")[0].trim(),
-                arrival_city_code: values.arrivalAt.value.split("-")[1].trim(),
+                departure_airport_location_code: values.departureFrom ? values.departureFrom.value.split("-")[0].trim() : "",
+                departure_city_code: values.departureFrom ? values.departureFrom.value.split("-")[1].trim() : "",
+                arrival_airport_location_code: values.arrivalAt ? values.arrivalAt.value.split("-")[0].trim() : "",
+                arrival_city_code: values.arrivalAt ? values.arrivalAt.value.split("-")[1].trim() : "",
               },
               commission_claim_departure_date: {
                 start_date: specifyPeriodDeparture ? periodDepartureStart : null,
@@ -266,7 +267,6 @@ const FlightCommisionForm = (props) => {
                           <Col md={3} lg={4}>
                             <label className="text-label-input" htmlFor={"routes"}>
                               Route(s)
-                              <span className={"label-required"} />
                             </label>
                           </Col>
                           <Col md={9} lg={8}>
@@ -282,17 +282,10 @@ const FlightCommisionForm = (props) => {
                                         // url={`master/airports`}
                                         fieldName="airport_name"
                                         onChange={(v) => {
-                                          formik.setFieldValue("departFrom", v)
+                                          formik.setFieldValue("departureFrom", v)
                                           setOptDeparture(v)
                                         }}
                                       />
-                                      {form.touched.departureFrom && form.errors.departureFrom && (
-                                        <Form.Control.Feedback type="invalid">
-                                          {form.touched.departureFrom
-                                            ? form.errors.departureFrom
-                                            : null}
-                                        </Form.Control.Feedback>
-                                      )}
                                     </div>
                                   )}
                                 </Field>
@@ -312,13 +305,6 @@ const FlightCommisionForm = (props) => {
                                           setOptArrival(v)
                                         }}
                                       />
-                                      {form.touched.arrivalAt && form.errors.arrivalAt && (
-                                        <Form.Control.Feedback type="invalid">
-                                          {form.touched.arrivalAt
-                                            ? form.errors.arrivalAt
-                                            : null}
-                                        </Form.Control.Feedback>
-                                      )}
                                     </div>
                                   )}
                                 </Field>
@@ -499,6 +485,7 @@ const FlightCommisionForm = (props) => {
                                   control="input"
                                   label="Commission Percentage"
                                   name="percent"
+                                  required="label-required"
                                   className
                                   style={{ maxWidth: 100 }}
                                   // isDisabled={isView}

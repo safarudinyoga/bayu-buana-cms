@@ -22,16 +22,13 @@ export default function IntegrationPartnerCorporateTable() {
       {
         title: "Partner Corporate Code",
         data: "corporate_code",
-      },
-      {
-        title: "Partner Corporate Name",
-        data: "corporate_name",
-      },
+      }
     ],
     emptyTable: "No Partner Corporate found",
-    recordName: ["corporate_code", "corporate_name"],
+    recordName: ["corporate_code", "corporate.corporate_name"],
     btnDownload: ".buttons-csv",
-    module: "integration-partner-corporate"
+    module: "integration-partner-corporate",
+    searchText: "Search"
   }
 
   return (
