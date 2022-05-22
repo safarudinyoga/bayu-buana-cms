@@ -1,18 +1,30 @@
+import PartnerHotelForm from "./form"
 import BBDataTable from "components/table/bb-data-table"
 import React, {useState} from "react"
 import { Card } from "react-bootstrap"
+import { useParams } from "react-router-dom"
+
 export default function IntegrasiPartnerHotels() {
+  const { id } = useParams()
+  const [isReplaceTable, setIsReplaceTable] = useState(false)
+
+  const handleReplaceTable = async (key) => {
+    console.log('isReplaceTable', isReplaceTable)
+    setIsReplaceTable(!key)
+  }
   let [params, setParams] = useState({
     isCheckbox: false,
-    title: "Division",
-    titleModal: "Division",
+    title: "Partner Hotels",
+    titleModal: "Partner Hotels",
     baseRoute: "/master/integration-partner-hotels/form",
-    endpoint: "/master/integration-partner-hotels",
+    endpoint: `/master/integration-partners/${id}/hotels`,
     deleteEndpoint: "/master/batch-actions/delete/integration-partner-hotels",
     activationEndpoint: "/master/batch-actions/activate/integration-partner-hotels",
     deactivationEndpoint: "/master/batch-actions/deactivate/integration-partner-hotels",
     btnDownload: ".buttons-csv",
     showAdvancedOptions: false,
+    searchText:"Search",
+    isOpenNewTab: false,
     columns: [
       {
         title: "Hotel",
@@ -20,7 +32,7 @@ export default function IntegrasiPartnerHotels() {
       },
       {
         title: "Address",
-        // data: "division_name",
+        data: "address",
       },
       {
         title: "Partner Hotel Code",
@@ -30,14 +42,10 @@ export default function IntegrasiPartnerHotels() {
         title: "Partner Hotel Name",
         data: "hotel_name",
       },
-      {
-        title: "Translated Division Name",
-        data: "division_translation.division_name",
-        visible: false,
-      },
     ],
-    emptyTable: "No division found",
-    recordName: ["division_code", "division_name"],
+    emptyTable: "No partner hotels found",
+    recordName: ["hotel_code", "hotel_name"],
+    isReplaceTable: true,
     showInfoDelete: true,
     infoDelete: [
       {title: "Partner Hotel Name", recordName: "hotel_name"}, 
@@ -70,7 +78,10 @@ export default function IntegrasiPartnerHotels() {
     <Card>
       <Card.Body>
         <h3 className="card-heading">Partner Hotels</h3>
-        <BBDataTable {...params} />
+        {
+          isReplaceTable ? <PartnerHotelForm isReplaceTable={isReplaceTable} handleReplaceTable={handleReplaceTable} /> :
+          <BBDataTable {...params} handleReplaceTable={handleReplaceTable}/>
+        }
       </Card.Body>
     </Card>
   )
