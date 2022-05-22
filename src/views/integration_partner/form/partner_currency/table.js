@@ -39,6 +39,8 @@ export default function IntegrationPartnerCurrenciesTable() {
     infoDelete: [
       {title: "Partner Currency Name", recordName: "currency_name"}, 
     ],
+    searchText: "Search",
+    isOpenNewTab: false,
   }
   return (
     <Card>
