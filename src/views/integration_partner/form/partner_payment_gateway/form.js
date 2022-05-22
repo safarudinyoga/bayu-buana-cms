@@ -124,10 +124,10 @@ function PaymentGatewayCreate(props) {
   const validationSchema = Yup.object().shape({
     payment_gateway_code: Yup.string()
       .required("Payment Gateway Code is required.")
-      .uniqueValueString('payment_gateway_code', "Payment Gateway Code already exists"),
+      .uniqueValueString('payment_gateway.payment_gateway_code', "Payment Gateway Code already exists"),
     payment_gateway_name: Yup.string()
       .required("Payment Gateway Name is required.")
-      .uniqueValueString('payment_gateway_name', "Payment Gateway Name already exists"),
+      .uniqueValueString('payment_gateway.payment_gateway_name', "Payment Gateway Name already exists"),
     merchant_id: Yup.string(),
     terminal_id: Yup.string(),
     channel_code: Yup.string(),
@@ -258,7 +258,6 @@ function PaymentGatewayCreate(props) {
             }}
             style={{ maxWidth: 250 }}
             size={formSize}
-            isDisabled={isView || loading}
           />
           <FormikControl
             control="input"
@@ -308,7 +307,6 @@ function PaymentGatewayCreate(props) {
             }}
             style={{ maxWidth: 250 }}
             size={formSize}
-            isDisabled={isView || loading}
           />
           <FormikControl
             control="input"
