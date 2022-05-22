@@ -40,7 +40,7 @@ export default function IntegrationPartnerCountriesTable() {
       },
        
     ],
-    emptyTable: "No partner country found",
+    emptyTable: "No partner countries found",
     recordName: ["country.country_name", "integration_partner_country.country_code", "integration-partner-country.country_name"],
     showInfoDelete: true,
     isOpenNewTab: false,
