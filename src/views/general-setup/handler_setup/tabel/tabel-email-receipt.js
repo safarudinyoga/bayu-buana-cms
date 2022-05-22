@@ -291,6 +291,7 @@ export default function EmailReceiptTable() {
     showHistory: false,
     hideDetail: true,
     hideCreate: true,
+    isHideDownloadLogo: true,
     title: "Handler Setup",
     titleModal: "Handler Setup",
     baseRoute: "/master/configurations/email-senders/form",

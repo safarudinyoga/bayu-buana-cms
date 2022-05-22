@@ -108,6 +108,7 @@ class TableHeader extends Component {
       showCalendar: props.showCalendar ?? false,
       advancedOptionsText : props.advancedOptionsText ?? "Advanced Options",
       searchText : props.searchText ?? "Search...",
+      isHideDownloadLogo : props.isHideDownloadLogo ?? false,
       searchValue: "",
       statusValue: "0",
       yearValue: new Date().getFullYear(),
@@ -128,6 +129,8 @@ class TableHeader extends Component {
   handleClick() {
     if (this.props.createOnModal) {
       this.props.setCreateModal({ show: true, disabled_form: false })
+    } else if (this.props.isReplaceTable) {
+      this.props.handleReplaceTable(!this.props.isReplaceTable)
     } else {
       this.props.history.push(this.props.baseRoute || "/master/aircraft/form")
     }
@@ -216,7 +219,7 @@ class TableHeader extends Component {
 
   render() {
     const ExtraFilter = this.props.extraFilter
-    const { customFilterStatus, hideCreate, isHidePrintLogo, isHideDownloadLogo } = this.props
+    const { customFilterStatus, hideCreate, isHidePrintLogo } = this.props
     const { pathname } = this.props.location
 
     return (
@@ -324,7 +327,7 @@ class TableHeader extends Component {
               </OverlayTrigger>
             )}
 
-            {isHideDownloadLogo && pathname !== "/master/general-setup" && pathname !== "/internal/shopping-cache" && (
+            {!this.state.isHideDownloadLogo && (
               <OverlayTrigger
                 placement="top"
                 trigger={"hover"}

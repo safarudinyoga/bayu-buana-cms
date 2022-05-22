@@ -29,6 +29,7 @@ const IdentityRule = (props) => {
     showAdvancedOptions: false,
     createOnModal: true,
     hideDetail: true,
+    isHideDownloadLogo: true,
     title: "Identity Rule",
     titleModal: "Identity Rule",
     baseRoute: "/master/identity-rules/form",
