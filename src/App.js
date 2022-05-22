@@ -165,7 +165,7 @@ import ResetPassword from "views/reset_password/reset_password"
 
 //User Management
 import UserManagementTable from "views/user_management/table"
-// import UserManagementForm from "views/user_management/form"
+import UserManagementForm from "views/user_management/form"
 
 // Master Standard Ancillary Fee
 import StandardAncillaryFee from "./views/standard_ancillary_fee/standard_ancillary_fee"
@@ -659,7 +659,7 @@ const DashboardRoutes = () => {
         <Route exact path="/master/setup-general-information">
           <GeneralInformation />
         </Route>
-        
+
         {/* Master Exhange Rate */}
         <Route exact path="/master/exchange-rate">
           <ExchageRateTable />
@@ -709,9 +709,9 @@ const DashboardRoutes = () => {
         <Route exact path="/master/user-management">
           <UserManagementTable />
         </Route>
-        {/* <Route path="/master/user-management/form/:id?">
+        <Route path="/master/user-management/form/:id?">
           <UserManagementForm />
-        </Route> */}
+        </Route>
 
         {/* Master Special Date */}
         <Route exact path="/master/special-date">
@@ -741,7 +741,6 @@ const DashboardRoutes = () => {
         <Route path="/master/tax-fee">
           <TaxFeeForm />
         </Route>
-
       </Switch>
     </DashboardWrapper>
   )
