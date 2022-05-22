@@ -314,7 +314,7 @@ class Sidebar extends Component {
                     </Link>
                   </li>
                   <li className="nav-item">
-                    <Link to="/master/job-title" className="nav-link">
+                    <Link to="/master/job-title-corporate" className="nav-link">
                       <p>Job Title</p>
                     </Link>
                   </li>                    
