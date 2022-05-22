@@ -21,15 +21,18 @@ export default function IntegrationPartnerPaymentGatewayTable() {
     columns: [
       {
         title: "Payment Gateway Code",
-        data: "channel_code",
+        data: "payment_gateway.payment_gateway_code",
       },
       {
         title: "Payment Gateway Name",
-        data: "channel_code",
+        data: "payment_gateway.payment_gateway_name",
       },
     ],
     emptyTable: "No Partner Payment Gateways Found",
-    recordName: ["channel_code", "channel_code"],
+    recordName: [
+      "payment_gateway.payment_gateway_code",
+      "payment_gateway.payment_gateway_name",
+    ],
   })
 
   return (
