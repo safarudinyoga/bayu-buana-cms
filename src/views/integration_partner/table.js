@@ -29,6 +29,7 @@ export default function IntegrationPartnerTable() {
   let [params, setParams] = useState({
     title: "Integration Partner",
     isCheckbox: false,
+    customSort:["integration_partner_code"],
     titleModal: "Integration Partner",
     baseRoute: "/master/integration-partner/form",
     endpoint: "/master/integration-partners",
