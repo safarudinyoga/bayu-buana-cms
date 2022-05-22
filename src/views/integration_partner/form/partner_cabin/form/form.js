@@ -160,7 +160,7 @@ function PartnerCabins(props) {
         title: isView ? "Partner Cabin Details" : docTitle,
         breadcrumbs: [
           {
-            text: "Setup and Configuration",
+            text: "Setup and Configurations",
           },
           {
             link: backUrl,
