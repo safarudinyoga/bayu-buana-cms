@@ -258,7 +258,6 @@ function PaymentGatewayCreate(props) {
             }}
             style={{ maxWidth: 250 }}
             size={formSize}
-            isDisabled={isView || loading}
           />
           <FormikControl
             control="input"
