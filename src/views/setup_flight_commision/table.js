@@ -12,13 +12,13 @@ export default function SetupFlightCommisionTable() {
   useEffect(() => {
     dispatch(
       setUIParams({
-        title: "Setup Flight Commission",
+        title: "Flight Commissions",
         breadcrumbs: [
           {
             text: "Master Data Management",
           },
           {
-            text: "Setup Flight Commission",
+            text: "Flight Commissions",
           },
         ]
       })
@@ -166,14 +166,14 @@ export default function SetupFlightCommisionTable() {
   const dateFormat = (v) => moment(v).format('D MMM YYYY')
 
   const routesFormat = (row) => {
+    if(!row.arrival_city.city_name && !row.departure_city.city_name) {
+      return "Any routes"
+    }
     if(!row.departure_city.city_name) {
       return `From any origin to ${row.arrival_city.city_name}`
     }
     if(!row.arrival_city.city_name) {
       return `From ${row.departure_city.city_name} to any destinations`
-    }
-    if(!row.arrival_city.city_name && !row.departure_city.city_name) {
-      return "Any routes"
     }
 
    return `${row.departure_city.city_name} - ${row.arrival_city.city_name}`
@@ -235,7 +235,7 @@ export default function SetupFlightCommisionTable() {
         }
       }
     ],
-    emptyTable: "No Commission found",
+    emptyTable: "No Commissions found",
     btnDownload: ".buttons-csv",
     isCheckbox: false,
     isShowStatus: false,
