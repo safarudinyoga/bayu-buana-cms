@@ -205,9 +205,9 @@ const FlightForm = (props) => {
       if(formId) {
         
       } else {
-        let res = await api.post(endpoint, payload)
-        let idFee = res.data.id;
-        onSubmitFee(values, idFee)
+        // let res = await api.post(endpoint, payload)
+        // let idFee = res.data.id;
+        onSubmitFee(values)
         openSnackbar(
           `Ancillary Fee has been successfully saved.`,
         )
@@ -229,138 +229,113 @@ const FlightForm = (props) => {
     }
   }
 
-  const onSubmitFee = (values, id) => {
+  const onSubmitFee = (values) => {
       let payloadDomestic = {
-        processing_fee_category_id: id,
+        description: values.description,
+        processing_fee_category_name: values.processing_fee_category_name,
         domestic_reissue: {
           fee_tax_type_id: taxIdDomesticReissue,
-          currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
-          amount: values.domestic_reissue == "amount" ? values.domestic_reissue_amount : null,
-          percent:values.domestic_reissue == "amount" ? null : values.domestic_reissue_percent,
+          amount: values.domestic_reissue == "amount" ? values.domestic_reissue_amount : 0,
+          percent:values.domestic_reissue == "amount" ? 0 : values.domestic_reissue_percent,
           charge_type_id:values.domestic_reissue == "amount" ? values.domestic_reissue_amount_type : null,
-          is_tax_inclusive:values.domestic_reissue == "amount" ? null : values.domestic_reissue_tax_include,
-          is_hidden: true,
-          is_included: false,
+          is_tax_inclusive:values.domestic_reissue == "amount" ? false : values.domestic_reissue_tax_include,
+          
         },
         domestic_revalidate: {
           fee_tax_type_id: taxIdDomesticRevalidate,
-          currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
-          amount: values.domestic_revalidate == "amount" ? values.domestic_revalidate_amount : null,
-          percent:values.domestic_revalidate == "amount" ? null : values.domestic_revalidate_percent,
+          amount: values.domestic_revalidate == "amount" ? values.domestic_revalidate_amount : 0,
+          percent:values.domestic_revalidate == "amount" ? 0 : values.domestic_revalidate_percent,
           charge_type_id:values.domestic_revalidate == "amount" ? values.domestic_revalidate_amount_type : null,
-          is_tax_inclusive:values.domestic_revalidate == "amount" ? null : values.domestic_revalidate_tax_include,
-          is_hidden: true,
-          is_included: false,
+          is_tax_inclusive:values.domestic_revalidate == "amount" ? false : values.domestic_revalidate_tax_include,
+          
         },
         domestic_refund: {
           fee_tax_type_id: taxIdDomesticRefund,
-          currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
-          amount: values.domestic_refund == "amount" ? values.domestic_refund_amount : null,
-          percent:values.domestic_refund == "amount" ? null : values.domestic_refund_percent,
+          amount: values.domestic_refund == "amount" ? values.domestic_refund_amount : 0,
+          percent:values.domestic_refund == "amount" ? 0 : values.domestic_refund_percent,
           charge_type_id:values.domestic_refund == "amount" ? values.domestic_refund_amount_type : null,
-          is_tax_inclusive:values.domestic_refund == "amount" ? null : values.domestic_refund_tax_include,
-          is_hidden: true,
-          is_included: false,
+          is_tax_inclusive:values.domestic_refund == "amount" ? false : values.domestic_refund_tax_include,
+          
         },
         domestic_void: {
           fee_tax_type_id: taxIdDomesticVoid,
-          currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
-          amount: values.domestic_void == "amount" ? values.domestic_void_amount : null,
-          percent:values.domestic_void == "amount" ? null : values.domestic_void_percent,
+          amount: values.domestic_void == "amount" ? values.domestic_void_amount : 0,
+          percent:values.domestic_void == "amount" ? 0 : values.domestic_void_percent,
           charge_type_id:values.domestic_void == "amount" ? values.domestic_void_amount_type : null,
-          is_tax_inclusive:values.domestic_void == "amount" ? null : values.domestic_void_tax_include,
-          is_hidden: true,
-          is_included: false,
+          is_tax_inclusive:values.domestic_void == "amount" ? false : values.domestic_void_tax_include,
+          
         },
         domestic_frp: {
           fee_tax_type_id: taxIdDomesticRfp,
-          currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
-          amount: values.domestic_rfp == "amount" ? values.domestic_rfp_amount : null,
-          percent:values.domestic_rfp == "amount" ? null : values.domestic_rfp_percent,
+          amount: values.domestic_rfp == "amount" ? values.domestic_rfp_amount : 0,
+          percent:values.domestic_rfp == "amount" ? 0 : values.domestic_rfp_percent,
           charge_type_id:values.domestic_rfp == "amount" ? values.domestic_rfp_amount_type : null,
-          is_tax_inclusive:values.domestic_rfp == "amount" ? null : values.domestic_rfp_tax_include,
-          is_hidden: true,
-          is_included: false,
+          is_tax_inclusive:values.domestic_rfp == "amount" ? false : values.domestic_rfp_tax_include,
+          
         },
         domestic_non_gds: {
           fee_tax_type_id: taxIdDomesticNonGds,
-          currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
-          amount: values.domestic_non_gds == "amount" ? values.domestic_non_gds_amount : null,
-          percent:values.domestic_non_gds == "amount" ? null : values.domestic_non_gds_percent,
+          amount: values.domestic_non_gds == "amount" ? values.domestic_non_gds_amount : 0,
+          percent:values.domestic_non_gds == "amount" ? 0 : values.domestic_non_gds_percent,
           charge_type_id:values.domestic_non_gds == "amount" ? values.domestic_non_gds_amount_type : null,
-          is_tax_inclusive:values.domestic_non_gds == "amount" ? null : values.domestic_non_gds_tax_include,
-          is_hidden: true,
-          is_included: false,
+          is_tax_inclusive:values.domestic_non_gds == "amount" ? false : values.domestic_non_gds_tax_include,
+          
         },
         international_reissue: {
           fee_tax_type_id: taxIdInternationalReissue,
-          currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
-          amount: values.international_reissue == "amount" ? values.international_reissue_amount : null,
-          percent:values.international_reissue == "amount" ? null : values.international_reissue_percent,
+          amount: values.international_reissue == "amount" ? values.international_reissue_amount : 0,
+          percent:values.international_reissue == "amount" ? 0 : values.international_reissue_percent,
           charge_type_id:values.international_reissue == "amount" ? values.international_reissue_amount_type : null,
-          is_tax_inclusive:values.international_reissue == "amount" ? null : values.international_reissue_tax_include,
-          is_hidden: true,
-          is_included: false,
+          is_tax_inclusive:values.international_reissue == "amount" ? false : values.international_reissue_tax_include,
+          
         },
         international_revalidate: {
           fee_tax_type_id: taxIdInternationalRevalidate,
-          currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
-          amount: values.international_revalidate == "amount" ? values.international_revalidate_amount : null,
-          percent:values.international_revalidate == "amount" ? null : values.international_revalidate_percent,
+          amount: values.international_revalidate == "amount" ? values.international_revalidate_amount : 0,
+          percent:values.international_revalidate == "amount" ? 0 : values.international_revalidate_percent,
           charge_type_id:values.international_revalidate == "amount" ? values.international_revalidate_amount_type : null,
-          is_tax_inclusive:values.international_revalidate == "amount" ? null : values.international_revalidate_tax_include,
-          is_hidden: true,
-          is_included: false,
+          is_tax_inclusive:values.international_revalidate == "amount" ? false : values.international_revalidate_tax_include,
+          
         },
         international_refund: {
           fee_tax_type_id: taxIdInternationalRefund,
-          currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
-          amount: values.international_refund == "amount" ? values.international_refund_amount : null,
-          percent:values.international_refund == "amount" ? null : values.international_refund_percent,
-          charge_type_id:values.international_refund == "amount" ? values.dinternational_refund_amount_type : null,
-          is_tax_inclusive:values.international_refund == "amount" ? null : values.international_refund_tax_include,
-          is_hidden: true,
-          is_included: false,
+          amount: values.international_refund == "amount" ? values.international_refund_amount : 0,
+          percent:values.international_refund == "amount" ? 0 : values.international_refund_percent,
+          charge_type_id:values.international_refund == "amount" ? values.international_refund_amount_type : null,
+          is_tax_inclusive:values.international_refund == "amount" ? false : values.international_refund_tax_include,
+          
         },
         international_void: {
           fee_tax_type_id: taxIdInternationalVoid,
-          currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
-          amount: values.international_void == "amount" ? values.international_void_amount : null,
-          percent:values.international_void == "amount" ? null : values.international_void_percent,
+          amount: values.international_void == "amount" ? values.international_void_amount : 0,
+          percent:values.international_void == "amount" ? 0 : values.international_void_percent,
           charge_type_id:values.international_void == "amount" ? values.international_void_amount_type : null,
-          is_tax_inclusive:values.international_void == "amount" ? null : values.international_void_tax_include,
-          is_hidden: true,
-          is_included: false,
+          is_tax_inclusive:values.international_void == "amount" ? false : values.international_void_tax_include,
+          
         },
         international_frp: {
           fee_tax_type_id: taxIdInternationalRfp,
-          currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
-          amount: values.international_rfp == "amount" ? values.international_rfp_amount : null,
-          percent:values.international_rfp == "amount" ? null : values.international_rfp_percent,
+          amount: values.international_rfp == "amount" ? values.international_rfp_amount : 0,
+          percent:values.international_rfp == "amount" ? 0 : values.international_rfp_percent,
           charge_type_id:values.international_rfp == "amount" ? values.international_rfp_amount_type : null,
-          is_tax_inclusive:values.international_rfp == "amount" ? null : values.international_rfp_tax_include,
-          is_hidden: true,
-          is_included: false,
+          is_tax_inclusive:values.international_rfp == "amount" ? false : values.international_rfp_tax_include,
+          
         },
         international_non_gds: {
           fee_tax_type_id: taxIdInternationalNonGds,
-          currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
-          amount: values.international_non_gds == "amount" ? values.international_non_gds_amount : null,
-          percent:values.international_non_gds == "amount" ? null : values.international_non_gds_percent,
+          amount: values.international_non_gds == "amount" ? values.international_non_gds_amount : 0,
+          percent:values.international_non_gds == "amount" ? 0 : values.international_non_gds_percent,
           charge_type_id:values.international_non_gds == "amount" ? values.international_non_gds_amount_type : null,
-          is_tax_inclusive:values.international_non_gds == "amount" ? null : values.international_non_gds_tax_include,
-          is_hidden: true,
-          is_included: false,
+          is_tax_inclusive:values.international_non_gds == "amount" ? false : values.international_non_gds_tax_include,
+          
         },
         other_emergency_service: {
           fee_tax_type_id: taxIdOtherEmergency,
-          currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
-          amount: values.other_emergency == "amount" ? values.other_emergency_amount : null,
-          percent:values.other_emergency == "amount" ? null : values.other_emergency_percent,
+          amount: values.other_emergency == "amount" ? values.other_emergency_amount : 0,
+          percent:values.other_emergency == "amount" ? 0 : values.other_emergency_percent,
           charge_type_id:values.other_emergency == "amount" ? values.other_emergency_amount_type : null,
-          is_tax_inclusive:values.other_emergency == "amount" ? null : values.other_emergency_tax_include,
-          is_hidden: true,
-          is_included: false,
+          is_tax_inclusive:values.other_emergency == "amount" ? false : values.other_emergency_tax_include,
+          
         },
       }
       onSaveFee(payloadDomestic, 1)

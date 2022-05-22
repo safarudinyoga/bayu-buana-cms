@@ -34,6 +34,7 @@ export default function IntegrationMessageTable() {
     ],
     emptyTable: "No Messages found",
     recordName: ["message_name", "message_id", "message_name"],
+    searchText: "Search"
   })
 
   return (

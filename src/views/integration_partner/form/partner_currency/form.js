@@ -59,7 +59,7 @@ function IntegrationPartnerCurrenciesCreate(props) {
     }, [showCreateModal.id, formValues]);
 
     const duplicateValue = async(fieldName, value) => {
-        let filters = encodeURIComponent(JSON.stringify([[fieldName,"=",value],["AND"],["status",1]]))
+        let filters = encodeURIComponent(JSON.stringify([[fieldName,"=",value],["AND"],["integration_partner_id",props.match.params.id],["AND"],["status",1]]))
         let res = await API.get(endpoint + "?" + `filters=${filters}`)
         let sameId = res.data.items.find((v) => v.id === id)
         if(!sameId) return res.data.items.length === 0 

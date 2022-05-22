@@ -70,7 +70,7 @@ function ExchangeRateCreate(props) {
     };
 
     const duplicateValue = async(fieldName, value) => {
-        let filters = encodeURIComponent(JSON.stringify([[fieldName,"=",value],["AND"],["status",1]]))
+        let filters = encodeURIComponent(JSON.stringify([[fieldName,"=",value],["AND"],["integration_partner_id",partner_integration_id],["AND"],["status",1]]))
         let res = await API.get(endpoint + "?" + `filters=${filters}`)
         let sameId = res.data.items.find((v) => v.id === id)
         if(!sameId) return res.data.items.length === 0 
@@ -208,7 +208,7 @@ function ExchangeRateCreate(props) {
                             }}
                         >
                             {!isView && (
-                                <Button variant="primary" type="submit" disabled={isSubmitting || !isValid} style={{ marginRight: 15 }}>
+                                <Button variant="primary" type="submit" disabled={isSubmitting} style={{ marginRight: 15 }}>
                                     SAVE
                                 </Button>
                             )}

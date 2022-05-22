@@ -1121,6 +1121,7 @@ class BBDataTable extends Component {
           onClick={() => this.props.setCreateModal({show: false, id: null, disabled_form: false})}
           modalContent={this.props.modalContent}
           modalSize={this.props.modalSize}
+          scrollable={true}
         />
         {this.props.module !== "fare-types" ? <TableHeader
           {...this.props}
@@ -1138,6 +1139,7 @@ class BBDataTable extends Component {
           onStatusUpdate={this.onStatusUpdate.bind(this)}
           onRemove={this.onRemoveSelected.bind(this)}
           hideCreate={this.props.hideCreate}
+          handleReplaceTable={this.props.handleReplaceTable}
         >
           {this.props.children}
         </TableHeader>
