@@ -37,6 +37,7 @@ export default function IntegrationPartnerCabinTypesTable(props) {
     isOpenNewTab: false,
     module:"integration-partner-cabins",
     recordName: ["cabin_type.cabin_type_name", "cabin_type_code", "cabin_type_name"],
+    searchText: "Search"
   })
 
   return (

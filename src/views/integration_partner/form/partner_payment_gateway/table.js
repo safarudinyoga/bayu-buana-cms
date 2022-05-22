@@ -33,6 +33,7 @@ export default function IntegrationPartnerPaymentGatewayTable() {
       "payment_gateway.payment_gateway_code",
       "payment_gateway.payment_gateway_name",
     ],
+    searchText: "Search"
   })
 
   return (
