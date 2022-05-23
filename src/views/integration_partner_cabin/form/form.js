@@ -153,11 +153,11 @@ function PartnerCabins(props) {
       docTitle = "Sabre"
 
     } else if (isView) {
-      docTitle = "Partner Cabins Details"
+      docTitle = "Sabre"
     }
     dispatch(
       setUIParams({
-        title: isView ? "Partner Cabins Details" : docTitle,
+        title: docTitle,
         breadcrumbs: [
           {
             text: "Setup and Configurations",
