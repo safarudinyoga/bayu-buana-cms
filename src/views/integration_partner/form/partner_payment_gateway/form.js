@@ -157,8 +157,8 @@ function PaymentGatewayCreate(props) {
         server_key: values.server_key,
         virtual_account_number: values.virtual_account_number,
         convenience_store_code: values.convenience_store_code,
-        currency_id: values.currency_id.value,
-        bank_id: values.bank_id.value,
+        currency_id: values.currency_id.value || "00000000-0000-0000-0000-000000000000",
+        bank_id: values.bank_id.value || "00000000-0000-0000-0000-000000000000",
       }
       let res = await API.putOrPost(endpoint, id, form);
       console.log(res, "hahaha")
