@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from "react"
 import { withRouter } from "react-router"
 import { Form, FormGroup, InputGroup, Button } from "react-bootstrap"
-import { Formik, FastField } from "formik"
+import { Formik, FastField, validateYupSchema } from "formik"
 import * as Yup from "yup"
 import useQuery from "lib/query"
 import Api from "config/api"
 import { useDispatch, useSelector } from "react-redux"
 import { setAlert, setCreateModal, setModalTitle } from "redux/ui-store"
 import CancelButton from "components/button/cancel"
-import FormikControl from "../../../../components/formik/formikControl"
+import FormikControl from "components/formik/formikControl"
 
-const endpoint =
-  "/master/integration-partners/3f61b5e0-d7cb-4f80-94e7-83114ff23903/payment-gateways"
+
 function PaymentGatewayCreate(props) {
   const dispatch = useDispatch()
   const showCreateModal = useSelector((state) => state.ui.showCreateModal)
@@ -20,6 +19,7 @@ function PaymentGatewayCreate(props) {
   const [id, setId] = useState(null)
   const [loading, setLoading] = useState(true)
   const [formValues, setFormValues] = useState(null)
+  const endpoint = `/master/integration-partners/${props.match.params.id}/payment-gateways`
 
   useEffect(async () => {
     let formId = showCreateModal.id || props.id
@@ -36,13 +36,15 @@ function PaymentGatewayCreate(props) {
         let { data } = await API.get(endpoint + "/" + formId)
         setFormValues({
           ...data,
+          payment_gateway_code: data.payment_gateway.payment_gateway_code,
+          payment_gateway_name: data.payment_gateway.payment_gateway_name,
           currency_id: {
-            value: data.currency_id,
-            label: data.currency_id,
+            value: data.currency?.id || "",
+            label: data.currency?.currency_name || "",
           },
           bank_id: {
-            value: data.bank_id,
-            label: data.bank_id,
+            value: data.bank?.id || "",
+            label: data.bank?.bank_name || "",
           },
         })
       } catch (e) {
@@ -69,14 +71,14 @@ function PaymentGatewayCreate(props) {
     merchant_id: "",
     terminal_id: "",
     channel_code: "",
-    currency_id: "a",
+    currency_id: "",
     transaction_url: "",
     notification_url: "",
     client_key: "",
     server_key: "",
-    bank_id: "a",
+    bank_id: "",
     virtual_account_number: "",
-    onvenience_store_code: "",
+    convenience_store_code: "",
   }
 
   const checkPaymentGatewayIsUnique = async (payment_gateway_name) => {
@@ -92,24 +94,40 @@ function PaymentGatewayCreate(props) {
     return true
   }
 
-  Yup.addMethod(Yup.string, "uniquePaymentGateway", function (message) {
-    return this.test("unique", message, function (field, ctx) {
-      let parent = ctx.parent
-      if (parent.payment_gateway_id?.value) {
-        return checkPaymentGatewayIsUnique(parent.payment_gateway_name?.value)
-      } else {
-        return true
-      }
-    })
+  // Yup.addMethod(Yup.string, "uniquePaymentGateway", function (message) {
+  //   return this.test("unique", message, function (field, ctx) {
+  //     let parent = ctx.parent
+  //     if (parent.payment_gateway_code?.value) {
+  //       return checkPaymentGatewayIsUnique(parent.payment_gateway_name?.value)
+  //     } else {
+  //       return true
+  //     }
+  //   })
+  // })
+
+  const duplicateValue = async(fieldName, value) => {
+    let filters = encodeURIComponent(JSON.stringify([[fieldName,"=",value],["AND"],["integration_partner_id",props.match.params.id],["AND"],["status",1]]))
+    let res = await API.get(endpoint + "?" + `filters=${filters}`)
+    let sameId = res.data.items.find((v) => v.id === id)
+    if(!sameId) return res.data.items.length === 0 
+
+    return true
+  }
+  
+  Yup.addMethod(Yup.string, 'uniqueValueString', function (fieldName, message) {
+      return this.test('unique', message, function(field) {
+          if(field) return duplicateValue(fieldName, field)
+          return true
+      })
   })
 
   const validationSchema = Yup.object().shape({
-    payment_gateway_id: Yup.string().required(
-      "Payment Gateway Code is required.",
-    ),
+    payment_gateway_code: Yup.string()
+      .required("Payment Gateway Code is required.")
+      .uniqueValueString('payment_gateway.payment_gateway_code', "Payment Gateway Code already exists"),
     payment_gateway_name: Yup.string()
       .required("Payment Gateway Name is required.")
-      .uniquePaymentGateway("Payment Gateway Name already exists"),
+      .uniqueValueString('payment_gateway.payment_gateway_name', "Payment Gateway Name already exists"),
     merchant_id: Yup.string(),
     terminal_id: Yup.string(),
     channel_code: Yup.string(),
@@ -120,31 +138,44 @@ function PaymentGatewayCreate(props) {
     server_key: Yup.string(),
     bank_id: Yup.object(),
     virtual_account_number: Yup.string(),
-    onvenience_store_code: Yup.string(),
+    convenience_store_code: Yup.string(),
   })
 
   const onSubmit = async (values, a) => {
     console.log(values)
-    // try {
-    //   let form = {
-    //     ...values,
-    //     currency_id: values.currency_id.value,
-    //     bank_id: values.bank_id.value,
-    //   }
+    try {
+      let form = {
+        ...values,
+        payment_gateway_code: values.payment_gateway_code,
+        payment_gateway_name: values.payment_gateway_name,
+        merchant_id: values.merchant_id,
+        terminal_id: values.terminal_id,
+        channel_code: values.channel_code,
+        transaction_url: values.transaction_url,
+        notification_url: values.notification_url,
+        client_key: values.client_key,
+        server_key: values.server_key,
+        virtual_account_number: values.virtual_account_number,
+        convenience_store_code: values.convenience_store_code,
+        currency_id: values.currency_id.value,
+        bank_id: values.bank_id.value,
+      }
+      let res = await API.putOrPost(endpoint, id, form);
+      console.log(res, "hahaha")
 
-    //   dispatch(setCreateModal({ show: false, id: null, disabled_form: false }))
-    //   dispatch(
-    //     setAlert({
-    //       message: `Record 'Partner Payment Gateway Name: ${form.payment_gateway_name}' has been successfully saved.`,
-    //     }),
-    //   )
-    // } catch (e) {
-    //   dispatch(
-    //     setAlert({
-    //       message: "Failed to save this record.",
-    //     }),
-    //   )
-    // }
+      dispatch(setCreateModal({ show: false, id: null, disabled_form: false }))
+      dispatch(
+        setAlert({
+          message: `Record 'Partner Payment Gateway Name: ${form.payment_gateway_name}' has been successfully saved.`,
+        }),
+      )
+    } catch (e) {
+      dispatch(
+        setAlert({
+          message: "Failed to save this record.",
+        }),
+      )
+    }
   }
 
   const formSize = {
@@ -172,7 +203,7 @@ function PaymentGatewayCreate(props) {
             control="input"
             required="label-required"
             label="Payment Gateway Code"
-            name="payment_gateway_id"
+            name="payment_gateway_code"
             style={{ maxWidth: 250 / 2 }}
             size={formSize}
             disabled={isView || loading}
@@ -227,7 +258,6 @@ function PaymentGatewayCreate(props) {
             }}
             style={{ maxWidth: 250 }}
             size={formSize}
-            isDisabled={isView || loading}
           />
           <FormikControl
             control="input"
@@ -277,7 +307,6 @@ function PaymentGatewayCreate(props) {
             }}
             style={{ maxWidth: 250 }}
             size={formSize}
-            isDisabled={isView || loading}
           />
           <FormikControl
             control="input"
@@ -308,6 +337,7 @@ function PaymentGatewayCreate(props) {
             >
               {!isView && (
                 <Button
+                  className="px-4"
                   variant="primary"
                   type="submit"
                   disabled={isSubmitting}

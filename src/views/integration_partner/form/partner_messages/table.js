@@ -17,6 +17,7 @@ export default function IntegrationMessageTable() {
     baseRoute: "/master/integration-partner-messages/form",
     endpoint: `/master/integration-partners/${param.id}/messages`,
     deleteEndpoint: `/master/integration-partners/${param.id}/messages/`,
+    btnDownload: ".buttons-csv",
     columns: [
       {
         title: "Messages",
@@ -33,6 +34,7 @@ export default function IntegrationMessageTable() {
     ],
     emptyTable: "No Messages found",
     recordName: ["message_name", "message_id", "message_name"],
+    searchText: "Search"
   })
 
   return (

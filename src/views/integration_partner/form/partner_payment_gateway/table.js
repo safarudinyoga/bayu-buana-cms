@@ -17,18 +17,23 @@ export default function IntegrationPartnerPaymentGatewayTable() {
     baseRoute: "/master/integration-payment-gateway/form",
     endpoint: `/master/integration-partners/${param.id}/payment-gateways`,
     deleteEndpoint: `/master/integration-partners/${param.id}/payment-gateways`,
+    btnDownload: ".buttons-csv",
     columns: [
       {
         title: "Payment Gateway Code",
-        data: "channel_code",
+        data: "payment_gateway.payment_gateway_code",
       },
       {
         title: "Payment Gateway Name",
-        data: "channel_code",
+        data: "payment_gateway.payment_gateway_name",
       },
     ],
-    emptyTable: "No Payment Gateways found",
-    recordName: ["channel_code", "channel_code"],
+    emptyTable: "No Partner Payment Gateways Found",
+    recordName: [
+      "payment_gateway.payment_gateway_code",
+      "payment_gateway.payment_gateway_name",
+    ],
+    searchText: "Search"
   })
 
   return (

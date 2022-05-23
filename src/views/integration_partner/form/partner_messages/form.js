@@ -3,6 +3,7 @@ import { withRouter } from "react-router"
 import { Form, FormGroup, InputGroup, Button } from "react-bootstrap"
 import { Formik, FastField } from "formik"
 import * as Yup from "yup"
+import { useParams } from "react-router-dom"
 import useQuery from "lib/query"
 import Api from "config/api"
 import { useDispatch, useSelector } from "react-redux"
@@ -10,8 +11,7 @@ import { setAlert, setCreateModal, setModalTitle } from "redux/ui-store"
 import CancelButton from "components/button/cancel"
 import FormikControl from "../../../../components/formik/formikControl"
 
-const endpoint =
-  "/master/integration-partners/3f61b5e0-d7cb-4f80-94e7-83114ff23903/messages"
+
 function MessageCreate(props) {
   const dispatch = useDispatch()
   const showCreateModal = useSelector((state) => state.ui.showCreateModal)
@@ -20,6 +20,9 @@ function MessageCreate(props) {
   const [id, setId] = useState(null)
   const [loading, setLoading] = useState(true)
   const [formValues, setFormValues] = useState(null)
+  const param = useParams()
+  const endpoint = `/master/integration-partners/${props.match.params.id}/messages`
+
 
   useEffect(async () => {
     let formId = showCreateModal.id || props.id
@@ -56,8 +59,12 @@ function MessageCreate(props) {
   }, [showCreateModal.id, formValues])
 
   const initialValues = {
-    meal_plan_code: "",
-    meal_plan_name: "",
+    message: "",
+    message_code: "",
+    message_name: "",
+    short_description: "",
+    description: "",
+    integration_partner_id: param.id,
   }
 
   const validationSchema = Yup.object().shape({
@@ -67,7 +74,34 @@ function MessageCreate(props) {
   })
 
   const onSubmit = async (values, a) => {
-    console.log(values)
+    console.log("hehe", values)
+
+      try {
+        let form = {
+          event_id: values.message.value,
+          event_code: values.message_code,
+          event_name: values.message_name,
+          short_description: values.short_description,
+          description: values.description,
+          integration_partner_id: param.id,
+        };
+        let res = await API.putOrPost(endpoint, id, form);
+        console.log(res)
+
+        dispatch(setCreateModal({ show: false, id: null, disabled_form: false }));
+        dispatch(
+            setAlert({
+                message: `Record 'Partner Messages Name: ${values.message_name}' has been successfully saved.`,
+            })
+        );
+    } catch (e) {
+      console.log(e)
+        dispatch(
+            setAlert({
+                message: "Failed to save this record.",
+            })
+        );
+    }
   }
 
   const formSize = {
@@ -97,19 +131,21 @@ function MessageCreate(props) {
             label="Message"
             name="message"
             placeholder={"Please choose"}
-            url={`master/event-types`}
-            fieldName={"event_type_name"}
+            url={`master/events`}
+            fieldName={"event_name"}
             onChange={(v) => {
-              setFieldValue("id", v)
+              setFieldValue("message", v)
             }}
+            urlFilter={`["event_code", "=", "1"],["OR"],["event_code", "=", "2"],["OR"],["event_code", "=", "3"],["OR"],["event_code", "=", "15"]`}
             style={{ maxWidth: 250 }}
+            sort={"event_code"}
             size={formSize}
             isDisabled={isView || loading}
           />
           <FormikControl
             control="input"
             required="label-required"
-            label="Message Plan Code"
+            label="Partner Message Code"
             name="message_code"
             style={{ maxWidth: 250 / 2 }}
             size={formSize}
@@ -119,7 +155,7 @@ function MessageCreate(props) {
           <FormikControl
             control="input"
             required="label-required"
-            label="Message Name"
+            label="Partner Message Name"
             name="message_name"
             style={{ maxWidth: 250 }}
             size={formSize}

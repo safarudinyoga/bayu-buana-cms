@@ -17,22 +17,24 @@ export default function IntegrationPartnerMealPlansTable() {
     baseRoute: "/master/integration-partner-meal-plans/form",
     endpoint: `/master/integration-partner-meal-plan-types`,
     deleteEndpoint: "master/batch-actions/delete/master/integration-partner-meal-plan-types",
+    btnDownload: ".buttons-csv",
     columns: [
       {
-        title: "Meal Plans",
+        title: "Meal Plan",
         data: "meal_plan_type.meal_plan_type_name",
       },
       {
-        title: "Partner Meal Plans Code",
+        title: "Partner Meal Plan Code",
         data: "meal_plan_type_code",
       },
       {
-        title: "Partner Meal Plans Name",
+        title: "Partner Meal Plan Name",
         data: "meal_plan_type_name",
       },
     ],
-    emptyTable: "No partner meal plans found",
+    emptyTable: "No Partner Meal Plans found",
     recordName: ["meal_plan_type_name"],
+    searchText: "Search"
   })
 
   return (

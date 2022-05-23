@@ -2,8 +2,10 @@ import BBDataTable from "components/table/bb-data-table"
 import React from 'react'
 import Form from "./form"
 import { Card } from "react-bootstrap"
+import { useParams } from "react-router-dom"
 
 export default function IntegrationPartnerCorporateTable() {
+  const { id } = useParams()
   let params = {
     isCheckbox: false,
     showAdvancedOptions: false,
@@ -12,26 +14,23 @@ export default function IntegrationPartnerCorporateTable() {
     title: "Partner Corporates",
     titleModal: "Partner Corporates",
     baseRoute: "/master/integration-partner-corporates/form",
-    endpoint: "/master/integration-partner-corporates",
+    endpoint: `/master/integration-partners/${id}/corporates`,
     deleteEndpoint: "/master/batch-actions/delete/integration-partner-corporates",
     columns: [
       {
         title: "Corporate",
-        data: "corporate_id",
+        data: "corporate.corporate_name",
       },
       {
         title: "Partner Corporate Code",
         data: "corporate_code",
-      },
-      {
-        title: "Partner Corporate Name",
-        data: "corporate_id",
-      },
+      }
     ],
     emptyTable: "No Partner Corporate found",
-    recordName: ["corporate_code", "corporate_id"],
+    recordName: ["corporate_code", "corporate.corporate_name"],
     btnDownload: ".buttons-csv",
-    module: "integration-partner-corporate"
+    module: "integration-partner-corporate",
+    searchText: "Search"
   }
 
   return (

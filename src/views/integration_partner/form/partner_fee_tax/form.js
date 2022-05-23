@@ -20,7 +20,7 @@ import axios from "axios"
 import useQuery from "lib/query"
 import { useDispatch, useSelector } from "react-redux"
 import { withRouter } from "react-router"
-import { setAlert, setUIParams, setModalTitle } from "redux/ui-store"
+import { setAlert, setUIParams, setModalTitle, setCreateModal } from "redux/ui-store"
 
 import Api from "config/api"
 import env from "config/environment"
@@ -32,7 +32,8 @@ import "react-dropzone-uploader/dist/styles.css"
 const endpoint = "/master/hotels"
 
 const GeneralInformation = (props) => {
-    console.log(props);
+    console.log("PROPS",props);
+  let api = new Api()
   const isView = useQuery().get("action") === "view"
   let dispatch = useDispatch()
   const showCreateModal = useSelector((state) => state.ui.showCreateModal)
@@ -46,15 +47,16 @@ const GeneralInformation = (props) => {
   const [feeTaxCode, setFeeTaxCode] = useState(null)
   const [feeTaxName, setFeeTaxName] = useState(null)
 
-  let API = new Api();
-  const endpoint = "/master/fee-tax-types"
+  let formId = props.match.params.id
+
+  const endpoint = `/master/integration-partners/${formId}/fee-taxes`
 
   React.useEffect(async () => {
     let formId = showCreateModal.id || props.id
     let docTitle = "EDIT PARTNER FEE TAXES"
     if(formId) {
         try {
-          let {data} = await API.get(endpoint + "/" + formId)
+          let {data} = await api.get(endpoint + "/" + formId)
           setFeeTaxCode(data.fee_tax_type_code)
           setFeeTaxName(data.fee_tax_type_name)
         } catch(e) {
@@ -65,264 +67,42 @@ const GeneralInformation = (props) => {
     }
     dispatch(setModalTitle(docTitle))
   }, [])
-console.log(formValues);
+
   // Initialize form
   const initialForm = {
-    // General Information
-    hotelCode: "",
-    hotelName: "",
-    hotelBrand: "",
-    starRating: "",
-    numberOfRooms: "",
-
-    // Contacts
-    email: "",
-    emailForBookingAcknowledgment: "",
-    phone: "",
-    fax: "",
-    website: "",
-
-    // Address
-    address: "",
-    country: "",
-    province: "",
-    city: "",
-    zipCode: "",
-    destination: "",
-    zone: "",
-    geoLocationLatitude: "",
-    geoLocationLongitude: "",
-    mapImage: "",
-
-    // Other Information
-    propertyType: "",
-    locationCategory: "",
-    constructionYear: "",
-    lastRenovation: "",
-    standardCheckinTime: "",
-    standardCheckoutTime: "",
-    descriptions: "",
-    internalRemark: "",
-    termConditions: "",
-
-    // Translations
+    feeTax: "",
+    partnerFeeTaxCode: feeTaxCode,
+    partnerFeeTaxName: feeTaxName,
   }
 
-  const initialFormModalAddMap = {
-    modalCaption: "",
-    modalImage: "",
-  }
   // Schema for yup
   const validationSchema = Yup.object().shape({
-    // General Information
-    hotelCode: Yup.string()
-      .required("Hotel Code is required.")
-      .test(
-        "Unique Code",
-        "Hotel Code already exists", // <- key, message
-        (value) => {
-          return new Promise((resolve, reject) => {
-              console.log('1<<<<<<<<<<');
-            axios
-              .get(
-                `${env.API_URL}/fee-tax-types/`,
-              )
-              .then((res) => {
-                  console.log(res, '<<<<<<');
-                resolve(res.data.items.length == 0)
-              })
-              .catch((error) => {
-                resolve(false)
-              })
-          })
-        },
-      ),
-    hotelName: Yup.string().required("Hotel Name is required."),
-    hotelBrand: Yup.object(),
-    starRating: Yup.object().required("Star Rating is required."),
-    numberOfRooms: Yup.number(),
-
-    // Contacts
-    email: Yup.string()
-      .email("Email is not valid.")
-      .required("Email is required."),
-    emailForBookingAcknowledgment: Yup.string()
-      .email("Email for Booking Acknowledgment is not valid.")
-      .required("Email for Booking Acknowledgment is required."),
-    phone: Yup.string().required("Phone is required."),
-    fax: Yup.string(),
-    website: Yup.string(),
-
-    // Address
-    address: Yup.string(),
-    country: Yup.object().required("Country is required."),
-    province: Yup.object(),
-    city: Yup.object(),
-    zipCode: Yup.string(),
-    destination: Yup.object(),
-    zone: Yup.object(),
-    geoLocationLatitude: Yup.string(),
-    mapImage: Yup.string(),
-
-    // Other Information
-    propertyType: Yup.object().required("Property Type is required."),
-    locationCategory: Yup.object().required("Location Category is required."),
-    constructionYear: Yup.string(),
-    lastRenovation: Yup.string(),
-    standardCheckinTime: Yup.string(),
-    standardCheckoutTime: Yup.string(),
-    descriptions: Yup.string(),
-    internalRemark: Yup.string(),
-    termConditions: Yup.string(),
+    feeTax: Yup.object().required("Fee Tax is required"),
+    partnerFeeTaxCode: Yup.string().required("Partner Fee Tax Code is required"),
+    partnerFeeTaxName: Yup.string().required("Partner Fee Tax Name is required"),
   })
-
-  const validationSchemaModalAddMap = Yup.object().shape({
-    modalCaption: Yup.string().required("Caption is required."),
-    modalImage: Yup.string().required("Image is required."),
-  })
-
-  
-
-  const formTranslation = () => {
-    return (
-      <>
-        <Form.Group as={Row} className="form-group">
-          <Form.Label column sm={3}>
-            Hotel Name
-          </Form.Label>
-          <Col sm={9}>
-            <FastField name="a">
-              {({ field }) => (
-                <>
-                  <Form.Control
-                    type="text"
-                    minLength={1}
-                    maxLength={128}
-                    style={{ width: 300 }}
-                    {...field}
-                  />
-                </>
-              )}
-            </FastField>
-          </Col>
-        </Form.Group>
-        <Form.Group as={Row} className="form-group">
-          <Form.Label column sm={3}>
-            Standard Check-in Time
-          </Form.Label>
-          <Col sm={9}>
-            <FastField name="b">
-              {({ field }) => (
-                <>
-                  <Form.Control
-                    type="text"
-                    minLength={1}
-                    maxLength={16}
-                    style={{ width: 100 }}
-                    {...field}
-                  />
-                </>
-              )}
-            </FastField>
-          </Col>
-        </Form.Group>
-        <Form.Group as={Row} className="form-group">
-          <Form.Label column sm={3}>
-            Standard Check-out Time
-          </Form.Label>
-          <Col sm={9}>
-            <FastField name="c">
-              {({ field }) => (
-                <>
-                  <Form.Control
-                    type="text"
-                    minLength={1}
-                    maxLength={16}
-                    style={{ width: 100 }}
-                    {...field}
-                  />
-                </>
-              )}
-            </FastField>
-          </Col>
-        </Form.Group>
-        <Form.Group as={Row} className="form-group">
-          <Form.Label column sm={3}>
-            Descriptions
-          </Form.Label>
-          <Col sm={9}>
-            <FastField name="d">
-              {({ field }) => (
-                <Form.Control
-                  {...field}
-                  as="textarea"
-                  rows={3}
-                  minLength={1}
-                  maxLength={512}
-                  style={{ width: 362 }}
-                />
-              )}
-            </FastField>
-          </Col>
-        </Form.Group>
-        <Form.Group as={Row} className="form-group">
-          <Form.Label column sm={3}>
-            Internal Remark
-          </Form.Label>
-          <Col sm={9}>
-            <FastField name="e">
-              {({ field }) => (
-                <Form.Control
-                  {...field}
-                  as="textarea"
-                  rows={3}
-                  minLength={1}
-                  maxLength={512}
-                  style={{ width: 362 }}
-                />
-              )}
-            </FastField>
-          </Col>
-        </Form.Group>
-        <Form.Group as={Row} className="form-group">
-          <Form.Label column sm={3}>
-            Terms & Conditions
-          </Form.Label>
-          <Col sm={9}>
-            <Editor
-              // editorState={editorState}
-              toolbarClassName="toolbarClassName"
-              wrapperClassName="wrapperClassName"
-              editorClassName="editorClassName"
-              // onEditorStateChange={this.onEditorStateChange}
-            />
-          </Col>
-        </Form.Group>
-      </>
-    )
-  }
 
   useEffect(async () => {
     let api = new Api()
     let formId = ""
 
-    let docTitle = "Edit Aircraft"
+    let docTitle = "Edit Partner Fee Tax"
     if (!formId) {
-      docTitle = "Create Aircraft"
+      docTitle = "Create Partner Fee Tax"
     } else if (isView) {
-      docTitle = "View Aircraft"
+      docTitle = "View Partner Fee Tax"
     }
 
     dispatch(
       setUIParams({
-        title: isView ? "Aircraft Details" : docTitle,
+        title: isView ? "Partner Fee Tax Details" : docTitle,
         breadcrumbs: [
           {
             text: "Setup and Configurations",
           },
           {
             link: props.backUrl,
-            text: "Aircrafts",
+            text: "Partner Fee Tax",
           },
           {
             text: docTitle,
@@ -354,12 +134,38 @@ console.log(formValues);
   return (
     <div>
       <Formik
+        enableReinitialize
         initialValues={initialForm}
         validationSchema={validationSchema}
-        validateOnChange={false}
+        // validateOnChange={false}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
-          console.log(values)
+          console.log("submit pressed")
+          console.log("VALUES",values)
           console.log(props)
+
+          try {  
+            let formatted = {
+              fee_tax_type_id: values.feeTax.value,
+              fee_tax_type_code: values.partnerFeeTaxCode,
+              fee_tax_type_name: values.partnerFeeTaxName,
+            }
+
+            let res = await api.post(`master/integration-partners/${formId}/fee-taxes`, formatted)
+
+            dispatch(setCreateModal({ show: false, id: null, disabled_form: false }));
+            dispatch(
+              setAlert({
+                  message: `Record 'Partner Fee Tax Name: ${values.partnerFeeTaxName}' has been successfully saved.`,
+              })
+            );
+          } catch (e) {
+            console.error(e)
+            dispatch(
+              setAlert({
+                  message: "Failed to save this record.",
+              })
+          );
+          }
         }}
       >
         {({
@@ -374,7 +180,7 @@ console.log(formValues);
           setFieldValue,
           setFieldTouched,
         }) => (
-          <Form onSubmit={handleOnSubmit} style={{background: 'transparent'}}>
+          <Form onSubmit={handleSubmit} style={{background: 'transparent'}}>
                 {/* <h3 className="" style={{textAlign: 'center', fontSize: 18, marginBottom: 20}}>CREATE PARTNER FEE TAXES</h3> */}
                 <div style={{ padding: "0 10px 10px" }}>
                   <Row>
@@ -385,29 +191,30 @@ console.log(formValues);
                           <span className="form-label-required">*</span>
                         </Form.Label>
                         <Col sm={8}>
-                          <FastField name="fee_tax_type_name">
+                          <FastField name="feeTax">
                             {({ field, form }) => (
                               <div style={{ marginLeft: '3%'}}>
                                 <Select
                                   {...field}
                                   url={`master/fee-tax-types`}
+                                  urlFilter={`[["fee_category","=","AX"],["OR"],["fee_category","=","HX"]]`}
                                   fieldName="fee_tax_type_name"
                                   onChange={(v) =>
-                                    setFieldValue("fee_tax_type_name", v)
+                                    setFieldValue("feeTax", v)
                                   }
                                   placeholder="Please choose"
                                   className={`react-select ${
-                                    form.touched.starRating &&
-                                    form.errors.starRating
+                                    form.touched.feeTax &&
+                                    form.errors.feeTax
                                       ? "is-invalid"
                                       : null
                                   }`}
                                 />
-                                {form.touched.starRating &&
-                                  form.errors.starRating && (
+                                {form.touched.feeTax &&
+                                  form.errors.feeTax && (
                                     <Form.Control.Feedback type="invalid">
-                                      {form.touched.starRating
-                                        ? form.errors.starRating
+                                      {form.touched.feeTax
+                                        ? form.errors.feeTax
                                         : null}
                                     </Form.Control.Feedback>
                                   )}
@@ -423,8 +230,10 @@ console.log(formValues);
                         </Form.Label>
                             <Col sm={2} style={{marginLeft: 4}}>
                                 <FormInputControl
-                                    value={feeTaxCode}          
-                                    onChange={(e) => setFeeTaxCode(e.target.value)}
+                                    name="partnerFeeTaxCode"
+                                    value={values.partnerFeeTaxCode}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
                                     type="text"
                                     minLength="1"
                                     maxLength="256"
@@ -439,8 +248,12 @@ console.log(formValues);
                         </Form.Label>
                             <Col sm={2} style={{marginLeft: 0}}>
                                 <FormInputControl
-                                    value={feeTaxName}          
-                                    onChange={(e) => setFeeTaxName(e.target.value)}
+                                    name="partnerFeeTaxName"
+                                    // value={feeTaxName}
+                                    value={values.partnerFeeTaxName}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}          
+                                    // onChange={(e) => setFeeTaxName(e.target.value)}
                                     type="text"
                                     minLength="1"
                                     maxLength="256"
@@ -462,7 +275,15 @@ console.log(formValues);
               </Button>
               <Button
                 variant="secondary"
-                onClick={() => props.history.push(props.backUrl)}
+                onClick={() => {
+                  dispatch(
+                    setCreateModal({
+                      show: false,
+                      id: null,
+                      disabled_form: false,
+                    })
+                  )
+                }}
               >
                 CANCEL
               </Button>
@@ -470,7 +291,7 @@ console.log(formValues);
           </Form>
         )}
       </Formik>
-      <Modal
+      {/* <Modal
         show={modalShow}
         // size="lg"
         aria-labelledby="contained-modal-title-vcenter"
@@ -576,7 +397,7 @@ console.log(formValues);
             </Form>
           )}
         </Formik>
-      </Modal>
+      </Modal> */}
     </div>
   )
 }

@@ -2,8 +2,14 @@ import BBDataTable from "components/table/bb-data-table"
 import React, { useState } from "react"
 import DeleteModal from "./form/form-delete"
 import { Card} from "react-bootstrap"
+import PartnerCabins from "./form/form"
 
 export default function IntegrationPartnerCabinTypesTable(props) {
+  const [isReplaceTable, setIsReplaceTable] = useState(false)
+
+  const handleReplaceTable = async (key) => {
+    setIsReplaceTable(!key)
+  }
   let [params, setParams] = useState({
     isCheckbox: false,
     title: "Integration Partner",
@@ -15,6 +21,8 @@ export default function IntegrationPartnerCabinTypesTable(props) {
     deleteEndpoint: "/master/batch-actions/delete/master/integration-partner-cabin-types",
     activationEndpoint: "/master/batch-actions/activate/integration-partner-cabin-types",
     deactivationEndpoint: "/master/batch-actions/deactivate/integration-partner-cabin-types",
+    btnDownload: ".buttons-csv",
+    isReplaceTable: true,
     columns: [
       {
         title: "Cabin",
@@ -34,9 +42,9 @@ export default function IntegrationPartnerCabinTypesTable(props) {
     emptyTable: "No Partner Cabins found",
     showInfoDelete: true,
     isOpenNewTab: false,
-    btnDownload: ".buttons-csv",
     module:"integration-partner-cabins",
     recordName: ["cabin_type.cabin_type_name", "cabin_type_code", "cabin_type_name"],
+    searchText: "Search"
   })
 
   return (
@@ -44,8 +52,11 @@ export default function IntegrationPartnerCabinTypesTable(props) {
       <Card>
         <Card.Body>
           <h3 className="card-heading">Partner Cabins</h3>
-          <BBDataTable {...params} modalContent={DeleteModal} />
-        </Card.Body>
+          {
+          isReplaceTable ? <PartnerCabins isReplaceTable={isReplaceTable} handleReplaceTable={handleReplaceTable} /> :
+          <BBDataTable {...params} modalContent={DeleteModal} handleReplaceTable={handleReplaceTable}/>
+          }
+          </Card.Body>
       </Card>
     </>
   )

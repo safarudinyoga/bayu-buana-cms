@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Card, Form, Row, Col, ListGroup, Button, Image } from "react-bootstrap"
 import downIcon from "assets/icons/double-down.svg"
 import upIcon from "assets/icons/double-up.svg"
@@ -17,22 +17,30 @@ const AddOrRemoveList = ({
   onModal,
 }) => {
   const [showFilter, setShowFilter] = useState(false)
-  const [leftdata, setLeftData] = useState(firstData)
-  const [rightdata, setRightData] = useState(secondData)
+  const [leftData, setLeftData] = useState(firstData)
+  const [rightData, setRightData] = useState(secondData)
   const [selected, setSelected] = useState({})
 
+  console.log("secondData: ", secondData)
+  console.log("leftData: ", leftData)
+
+  useEffect(async () => {
+    setLeftData(firstData)
+    setRightData(secondData)
+  }, [firstData, secondData])
+
   const handleButtonAdd = () => {
-    setLeftData((leftdata) => [...leftdata, ...rightdata])
+    setLeftData((leftdata) => [...leftdata, ...rightData])
     setRightData((rightdata) => [])
   }
 
   const handleButtonRemove = () => {
     setLeftData((leftdata) => [])
-    setRightData((rightdata) => [...rightdata, ...leftdata])
+    setRightData((rightdata) => [...rightdata, ...leftData])
   }
 
   const handleRemoveIndexArray = (e) => {
-    const newData = leftdata.filter((item) => item !== e)
+    const newData = leftData.filter((item) => item !== e)
     setLeftData((leftdata) => newData)
     setRightData((rightdata) => [...rightdata, e])
   }
@@ -62,14 +70,14 @@ const AddOrRemoveList = ({
           </Card.Header>
           <Card.Body style={{ padding: "8px 10px 10px 9px" }}>
             <ol class="list list-general-setup">
-              {leftdata.map((item, i) => (
+              {leftData.map((item, i) => (
                 <li
                   className={canRemoveIndex ? "item-general-setup" : ""}
                   key={i}
                 >
                   {canRemoveIndex ? (
                     <div className="w-100 d-flex justify-content-between">
-                      {item.name} ({item.category})
+                      {item.given_name} ({item.given_name})
                       <span
                         className="btn-x-circle"
                         onClick={() => handleRemoveIndexArray(item)}
@@ -124,7 +132,7 @@ const AddOrRemoveList = ({
                         className="w-100 d-flex justify-content-between"
                         style={{ paddingLeft: 13, paddingRight: 15 }}
                       >
-                        {item.name} <span>({item.category})</span>
+                        {item.given_name} <span>({item.given_name})</span>
                       </div>
                     </div>
                   )}
@@ -216,7 +224,7 @@ const AddOrRemoveList = ({
           </div>
           <Card.Body style={{ padding: "8px 10px 10px 9px" }}>
             <ol class="list list-general-setup">
-              {rightdata.map((item) => (
+              {rightData.map((item) => (
                 <li className="item-general-setup">
                   <div className="d-flex align-items-center">
                     <svg
@@ -249,7 +257,7 @@ const AddOrRemoveList = ({
                       />
                     </svg>
                     <div className="w-100 d-flex justify-content-between">
-                      {item.name} <span>({item.category})</span>
+                      {item.given_name} <span>({item.given_name})</span>
                     </div>
                   </div>
                 </li>

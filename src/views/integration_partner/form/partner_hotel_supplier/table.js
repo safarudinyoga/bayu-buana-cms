@@ -2,17 +2,22 @@ import BBDataTable from "components/table/bb-data-table"
 import React, {useState} from "react"
 import HotelSuppliers from "./form"
 import { Card } from "react-bootstrap"
+import { useParams } from "react-router-dom"
 
 export default function IntegrasiPartnerHotelSupplier() {
+  
+  const { id } = useParams()
+
   let [params, setParams] = useState({
     isCheckbox: false,
     title: "Division",
     titleModal: "Division",
-    baseRoute: "/master/integration-partners/3f61b5e0-d7cb-4f80-94e7-83114ff23903/hotel-suppliers/form",
-    endpoint: "/master/integration-partners/3f61b5e0-d7cb-4f80-94e7-83114ff23903/hotel-suppliers",
-    deleteEndpoint: "/master/integration-partners/3f61b5e0-d7cb-4f80-94e7-83114ff23903/hotel-suppliers",
+    baseRoute: `/master/integration-partners/${id}/hotel-suppliers/form`,
+    endpoint: `/master/integration-partners/${id}/hotel-suppliers`,
+    deleteEndpoint: `/master/batch-actions/delete/integration-partner-hotel-suppliers`,
     activationEndpoint: "/master/batch-actions/activate/integration-partner-hotels",
     deactivationEndpoint: "/master/batch-actions/deactivate/integration-partner-hotels",
+    btnDownload: ".buttons-csv",
     showAdvancedOptions: false,
     hideDetail: true,
     createOnModal: true,
@@ -29,31 +34,9 @@ export default function IntegrasiPartnerHotelSupplier() {
         title: "Partner Hotel Suppliers Name",
         data: "hotel_supplier_name",
       },
-    //   {
-    //     title: "Manager",
-    //     data: "manager.given_name",
-    //     render: (data, d, row) => {
-    //       if(row.manager) {
-    //         return `${row.manager.given_name || ""} ${row.manager.middle_name || ""} ${row.manager.surname || ""}`
-    //       } else {
-    //         return ""
-    //       }
-    //     }
-    //   },
-    //   {
-    //     searchable: false,
-    //     title: "Status",
-    //     data: "status",
-    //     render: rowStatus,
-    //   },
-      {
-        title: "Translated Division Name",
-        data: "division_translation.division_name",
-        visible: false,
-      },
     ],
-    emptyTable: "No division found",
-    recordName: ["division_code", "division_name"],
+    emptyTable: "No partner hotel supplier found",
+    recordName: ["hotel_supplier_code", "hotel_supplier_name"],
     showInfoDelete: true,
     infoDelete: [
       {title: "Partner Hotel Supplier", recordName: "hotel_supplier_name"}, 

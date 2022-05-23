@@ -20,6 +20,7 @@ export default function IntegrationPartnerCountriesTable() {
     deleteEndpoint: "/master/batch-actions/delete/integration-partner-countries",
     activationEndpoint: "/master/batch-actions/activate/integration-partner-countries",
     deactivationEndpoint: "/master/batch-actions/deactivate/integration-partner-countries",
+    btnDownload: ".buttons-csv",
     columns: [
       {
         title: "Country",
@@ -39,8 +40,14 @@ export default function IntegrationPartnerCountriesTable() {
       },
        
     ],
-    emptyTable: "No partner country found",
+    emptyTable: "No partner countries found",
     recordName: ["country.country_name", "integration_partner_country.country_code", "integration-partner-country.country_name"],
+    showInfoDelete: true,
+    isOpenNewTab: false,
+    searchText: "Search",
+    infoDelete: [
+      {title: "Partner Country Name", recordName: "country_name"}, 
+    ],
   })
 
   return <><Card>

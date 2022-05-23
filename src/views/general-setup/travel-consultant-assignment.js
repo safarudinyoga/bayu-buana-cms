@@ -1,5 +1,5 @@
 import { Formik } from "formik"
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { Card, Form, Row, Col, Button, Image } from "react-bootstrap"
 import Api from "config/api"
 import CardAddOrRemove from "components/card/add-or-remove-list"
@@ -7,48 +7,64 @@ import CancelButton from "components/button/cancel"
 
 const dummy1 = [
   {
-    name: "Tiffany Young",
+    given_name: "Tiffany Young",
     category: "BCD",
   },
   {
-    name: "Dhani Doel",
+    given_name: "Dhani Doel",
     category: "BCD",
   },
   {
-    name: "Jhon Bill",
+    given_name: "Jhon Bill",
     category: "NCD",
   },
 ]
 
 const dummy2 = [
   {
-    name: "Tamara Ling",
+    given_name: "Tamara Ling",
     category: "NCD",
   },
   {
-    name: "Margot Roe",
+    given_name: "Margot Roe",
     category: "NCD",
   },
   {
-    name: "Betty Jhon",
+    given_name: "Betty Jhon",
     category: "NCD",
   },
   {
-    name: "Miando Nael",
+    given_name: "Miando Nael",
     category: "BCD",
   },
   {
-    name: "Bel Nuts",
+    given_name: "Bel Nuts",
     category: "BCD",
   },
   {
-    name: "Tamara Ling",
+    given_name: "Tamara Ling",
     category: "NCD",
   },
 ]
 
 const TravelConsultantAssignment = (props) => {
+  const [listEmployee, SetListEmployee] = useState([])
   let api = new Api()
+
+  const getEmployee = async () => {
+    try {
+      let res = await api.get(
+        `/master/employees?filters=[["status","=",1]]&sort=given_name`,
+      )
+      SetListEmployee(res.data.items)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  useEffect(async () => {
+    getEmployee()
+  }, [])
 
   return (
     <>
@@ -81,7 +97,7 @@ const TravelConsultantAssignment = (props) => {
             <div style={{ padding: "0 15px 40px 0" }}>
               <CardAddOrRemove
                 firstData={dummy1}
-                secondData={dummy2}
+                secondData={listEmployee}
                 firstCardTitle="list of travel consultant"
                 secondCardTitle="employee name"
               />

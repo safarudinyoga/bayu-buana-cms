@@ -6,20 +6,19 @@ import { v4 as uuidv4 } from "uuid"
 import * as Yup from "yup"
 import SelectAsync from "components/form/select-async"
 import Api from "config/api"
-import axios from "axios"
-import env from "config/environment"
+import { useParams } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
 import { setAlert, setCreateModal, setModalTitle } from "redux/ui-store"
 import CancelButton from "components/button/cancel"
 
-const endpoint = "/master/integration-partner-cities"
+const endpoint = "/master/integration-partners"
 
 function PartnerCityForm(props) {
   const dispatch = useDispatch()
+  const { id } = useParams()
   const showCreateModal = useSelector((state) => state.ui.showCreateModal)
   const API = new Api()
   const isView = showCreateModal.disabled_form || props.isView
-  const [id, setId] = useState(null)
   const [loading, setLoading] = useState(true)
   const [formValues, setFormValues] = useState(null)
 
@@ -35,7 +34,7 @@ function PartnerCityForm(props) {
 
     if (formId) {
       try {
-        let res = await API.get(endpoint + "/" + formId)
+        let res = await API.get(endpoint + "/" + id + "/cities/" + formId)
         setFormValues(res.data)
       } catch (e) {
         console.log(e)
@@ -52,13 +51,14 @@ function PartnerCityForm(props) {
       setLoading(false)
     }
 
-    setId(showCreateModal.id)
   }, [showCreateModal.id, formValues])
 
   const initialValues = {
     city: "",
     city_code: "",
     city_name: "",
+    latitude: "",
+    longitude: ""
   }
 
   const validationSchema = Yup.object().shape({
@@ -112,6 +112,8 @@ function PartnerCityForm(props) {
         city_id: uuidv4(),
         city_code: values.city_code,
         city_name: values.city_name,
+        latitude: values.latitude,
+        longitude: values.longitude
       }
 
       if (!formId) {
@@ -269,6 +271,48 @@ function PartnerCityForm(props) {
                         {form.touched.city_name ? form.errors.city_name : null}
                       </Form.Control.Feedback>
                     )}
+                  </>
+                )}
+              </FastField>
+            </Col>
+          </Form.Group>
+          <Form.Group as={Row} className="form-group">
+            <Form.Label column md={3} lg={4}>
+              Latitude
+            </Form.Label>
+            <Col md={9} lg={8}>
+              <FastField name="latitude" disabled>
+                {({ field, form }) => (
+                  <>
+                    <Form.Control
+                      type="text"
+                      disabled={isView}
+                      minLength={1}
+                      maxLength={16}
+                      {...field}
+                      style={{ maxWidth: 300 }}
+                    />
+                  </>
+                )}
+              </FastField>
+            </Col>
+          </Form.Group>
+          <Form.Group as={Row} className="form-group">
+            <Form.Label column md={3} lg={4}>
+              Longitude
+            </Form.Label>
+            <Col md={9} lg={8}>
+              <FastField name="longitude" disabled>
+                {({ field, form }) => (
+                  <>
+                    <Form.Control
+                      type="text"
+                      disabled={isView}
+                      minLength={1}
+                      maxLength={16}
+                      {...field}
+                      style={{ maxWidth: 300 }}
+                    />
                   </>
                 )}
               </FastField>

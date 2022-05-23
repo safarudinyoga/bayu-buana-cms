@@ -16,10 +16,11 @@ export default function IntegrationPartnerCurrenciesTable() {
     baseRoute: "/master/integration-partner-currencies/form",
     endpoint: "/master/integration-partner-currencies",
     deleteEndpoint: "/master/batch-actions/delete/integration-partner-currencies",
+    btnDownload: ".buttons-csv",
     columns: [
       {
         title: "Currency",
-        data: "currency_name",
+        data: "currency.currency_name",
       },
       {
         title: "Payment Currency Code",
@@ -33,7 +34,13 @@ export default function IntegrationPartnerCurrenciesTable() {
     emptyTable: "No Partner Currency found",
     recordName: ["currency_code", "currency_name"],
     btnDownload: ".buttons-csv",
-    module: "integration-partner-currencies"
+    module: "integration-partner-currencies",
+    showInfoDelete: true,
+    infoDelete: [
+      {title: "Partner Currency Name", recordName: "currency_name"}, 
+    ],
+    searchText: "Search",
+    isOpenNewTab: false,
   }
   return (
     <Card>

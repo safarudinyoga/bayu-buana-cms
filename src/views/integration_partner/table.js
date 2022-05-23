@@ -12,7 +12,7 @@ export default function IntegrationPartnerTable() {
         title: "Integration Partner",
         breadcrumbs: [
           {
-            text: "Setup and Configuration",
+            text: "Setup And Configurations",
           },
           {
             text: "Integration Partner",
@@ -29,6 +29,7 @@ export default function IntegrationPartnerTable() {
   let [params, setParams] = useState({
     title: "Integration Partner",
     isCheckbox: false,
+    customSort:["integration_partner_code"],
     titleModal: "Integration Partner",
     baseRoute: "/master/integration-partner/form",
     endpoint: "/master/integration-partners",
@@ -53,9 +54,17 @@ export default function IntegrationPartnerTable() {
     ],
     btnDownload: ".buttons-csv",
     isOpenNewTab: false,
-    emptyTable: "No Integration Partner found",
+    emptyTable: "No integration partners found",
     recordName: ["integration-partner-code", "integration-partner-name"],
-    module:"integration-partner"
+    module:"integration-partner",
+    advancedOptionsText: "Advanced options",
+    customFilterStatus: {
+      value: "",
+      options: [
+        {value: "1", label: "Active"},
+        {value: "3", label: "Inactive"},
+      ]
+    }
   })
 
   return <BBDataTable {...params} onReset={onReset} />
