@@ -164,7 +164,7 @@ function IntegrationPartnerCurrenciesCreate(props) {
                         required="label-required"
                         label="Partner Currency Code"
                         name="currency_code"
-                        style={{ maxWidth: 250 }}
+                        style={{ maxWidth: 100 }}
                         size={formSize}
                         disabled={isView || loading}
                         maxLength={3}
