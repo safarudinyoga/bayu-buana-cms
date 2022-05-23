@@ -10,8 +10,8 @@ export default function IntegrasiPartnerHotelSupplier() {
 
   let [params, setParams] = useState({
     isCheckbox: false,
-    title: "Division",
-    titleModal: "Division",
+    title: "",
+    titleModal: "",
     baseRoute: `/master/integration-partners/${id}/hotel-suppliers/form`,
     endpoint: `/master/integration-partners/${id}/hotel-suppliers`,
     deleteEndpoint: `/master/batch-actions/delete/integration-partner-hotel-suppliers`,
@@ -24,7 +24,7 @@ export default function IntegrasiPartnerHotelSupplier() {
     columns: [
       {
         title: "Hotel Suppliers",
-        data: "hotel_supplier_name",
+        data: "hotel_supplier.hotel_supplier_name",
       },
       {
         title: "Partner Hotel Suppliers Code",
@@ -35,7 +35,7 @@ export default function IntegrasiPartnerHotelSupplier() {
         data: "hotel_supplier_name",
       },
     ],
-    emptyTable: "No partner hotel supplier found",
+    emptyTable: "No partner hotel suppliers found",
     recordName: ["hotel_supplier_code", "hotel_supplier_name"],
     showInfoDelete: true,
     infoDelete: [
@@ -49,7 +49,8 @@ export default function IntegrasiPartnerHotelSupplier() {
       ]
     },
     statusLabel: "Status",
-    isOpenNewTab: false
+    isOpenNewTab: false,
+    module: "partner-hotel-suppliers"
   })
   const borderFeeTax = {
     borderRadius: 10,
