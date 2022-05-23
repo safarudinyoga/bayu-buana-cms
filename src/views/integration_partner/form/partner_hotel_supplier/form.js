@@ -72,6 +72,7 @@ const HotelSuppliers = (props) => {
   })
 
   useEffect(async () => {
+    console.log(props, 'props');
     let formId = showCreateModal.id || props.id
     console.log(formId, 'id endpoint');
 
@@ -80,24 +81,6 @@ const HotelSuppliers = (props) => {
       docTitle = "Create Partner Hotel Suppliers"
     }
     setTitle(docTitle)
-
-    dispatch(
-      setUIParams({
-        title: isView ? "Aircraft Details" : docTitle,
-        breadcrumbs: [
-          {
-            text: "Setup and Configurations",
-          },
-          {
-            link: props.backUrl,
-            text: "Integration Partner",
-          },
-          {
-            text: docTitle,
-          },
-        ],
-      }),
-    )
 
     if(formId) {
       try {
