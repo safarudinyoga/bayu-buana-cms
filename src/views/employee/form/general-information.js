@@ -469,7 +469,7 @@ const GeneralInformation = (props) => {
           label: data.country_name,
           value: data.id,
         })
-        setSelectPermanentCountry(options)
+        // setSelectPermanentCountry(options)
       })
     } catch (e) {}
   }, [])
