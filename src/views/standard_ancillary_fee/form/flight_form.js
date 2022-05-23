@@ -14,7 +14,7 @@ import { FeeTabs } from "./fee_tabs"
 import { useSnackbar } from "react-simple-snackbar"
 import useQuery from "lib/query"
 
-const endpoint = "/master/processing-fee-categories"
+const endpoint = "/master/agent-processing-fee-categories/1"
 const endpointFee = "/master/agent-processing-fee-categories"
 const backUrl = "/master/standard-ancillary-fee"
 const options = {
@@ -125,12 +125,12 @@ const FlightForm = (props) => {
     domestic_void_amount_type: "",
     domestic_void_percent: null,
     domestic_void_tax_include: false,
-    domestic_rfp: "",
-    domestic_rfp_fee_tax_id: "",
-    domestic_rfp_amount: null,
-    domestic_rfp_amount_type: "",
-    domestic_rfp_percent: null,
-    domestic_rfp_tax_include: false,
+    domestic_frp: "",
+    domestic_frp_fee_tax_id: "",
+    domestic_frp_amount: null,
+    domestic_frp_amount_type: "",
+    domestic_frp_percent: null,
+    domestic_frp_tax_include: false,
     domestic_non_gds: "",
     domestic_non_gds_fee_tax_id: "",
     domestic_non_gds_amount: null,
@@ -161,12 +161,12 @@ const FlightForm = (props) => {
     international_void_amount_type: "",
     international_void_percent: null,
     international_void_tax_include: false,
-    international_rfp: "",
-    international_rfp_fee_tax_id: "",
-    international_rfp_amount: null,
-    international_rfp_amount_type: "",
-    international_rfp_percent: null,
-    international_rfp_tax_include: false,
+    international_frp: "",
+    international_frp_fee_tax_id: "",
+    international_frp_amount: null,
+    international_frp_amount_type: "",
+    international_frp_percent: null,
+    international_frp_tax_include: false,
     international_non_gds: "",
     international_non_gds_fee_tax_id: "",
     international_non_gds_amount: null,
@@ -183,36 +183,221 @@ const FlightForm = (props) => {
 
   // Schema for yup
   const validationSchema = Yup.object().shape({
-    processing_fee_category_name: Yup.string().required("Present Name is required."),
+    processing_fee_category_name: Yup.string().required("Please enter Preset Name."),
   })
+
+  const checkprocessingType = (value) => value !== "00000000-0000-0000-0000-000000000000" ? "amount" : "percent"
 
   useEffect(async() => {
     try {
       if(formId) {
-        let res = await api.get(endpoint + "/" + formId)
-        // let agent_res = await api.get(`endpointFee+ "/1/" + res.data.id)
+        let {data} = await api.get(endpointFee+ "/1/" + formId)
         setInitialForm({
           ...initialForm, 
-          ...res.data,
-          // ...agent_res.data
+          ...data,
+          domestic_reissue: checkprocessingType(data.domestic_reissue.charge_type_id),
+          domestic_reissue_fee_tax_id: data.domestic_reissue.fee_tax_type_id,
+          domestic_reissue_amount: data.domestic_reissue.amount,
+          domestic_reissue_amount_type: data.domestic_reissue.charge_type_id,
+          domestic_reissue_percent: data.domestic_reissue.percent,
+          domestic_reissue_tax_include: data.domestic_reissue.is_tax_inclusive,
+          domestic_revalidate: checkprocessingType(data.domestic_revalidate.charge_type_id),
+          domestic_revalidate_fee_tax_id: data.domestic_revalidate.fee_tax_type_id,
+          domestic_revalidate_amount: data.domestic_revalidate.amount,
+          domestic_revalidate_amount_type: data.domestic_revalidate.charge_type_id,
+          domestic_revalidate_percent: data.domestic_revalidate.percent,
+          domestic_revalidate_tax_include: data.domestic_revalidate.is_tax_inclusive,
+          domestic_refund: checkprocessingType(data.domestic_refund.charge_type_id),
+          domestic_refund_fee_tax_id: data.domestic_refund.fee_tax_type_id,
+          domestic_refund_amount: data.domestic_refund.amount,
+          domestic_refund_amount_type: data.domestic_refund.charge_type_id,
+          domestic_refund_percent: data.domestic_refund.percent,
+          domestic_refund_tax_include: data.domestic_refund.is_tax_inclusive,
+          domestic_void: checkprocessingType(data.domestic_void.charge_type_id),
+          domestic_void_fee_tax_id: data.domestic_void.fee_tax_type_id,
+          domestic_void_amount: data.domestic_void.amount,
+          domestic_void_amount_type: data.domestic_void.charge_type_id,
+          domestic_void_percent: data.domestic_void.percent,
+          domestic_void_tax_include: data.domestic_void.is_tax_inclusive,
+          domestic_frp: checkprocessingType(data.domestic_frp.charge_type_id),
+          domestic_frp_fee_tax_id: data.domestic_frp.fee_tax_type_id,
+          domestic_frp_amount: data.domestic_frp.amount,
+          domestic_frp_amount_type: data.domestic_frp.charge_type_id,
+          domestic_frp_percent: data.domestic_frp.percent,
+          domestic_frp_tax_include: data.domestic_frp.is_tax_inclusive,
+          domestic_non_gds: checkprocessingType(data.domestic_non_gds.charge_type_id),
+          domestic_non_gds_fee_tax_id: data.domestic_non_gds.fee_tax_type_id,
+          domestic_non_gds_amount: data.domestic_non_gds.amount,
+          domestic_non_gds_amount_type: data.domestic_non_gds.charge_type_id,
+          domestic_non_gds_percent: data.domestic_non_gds.percent,
+          domestic_non_gds_tax_include: data.domestic_non_gds.is_tax_inclusive,
+          international_reissue: checkprocessingType(data.international_reissue.charge_type_id),
+          international_reissue_fee_tax_id: data.international_reissue.fee_tax_type_id,
+          international_reissue_amount: data.international_reissue.amount,
+          international_reissue_amount_type: data.international_reissue.charge_type_id,
+          international_reissue_percent: data.international_reissue.percent,
+          international_reissue_tax_include: data.international_reissue.is_tax_inclusive,
+          international_revalidate: checkprocessingType(data.international_revalidate.charge_type_id),
+          international_revalidate_fee_tax_id: data.international_revalidate.fee_tax_type_id,
+          international_revalidate_amount: data.international_revalidate.amount,
+          international_revalidate_amount_type: data.international_revalidate.charge_type_id,
+          international_revalidate_percent: data.international_revalidate.percent,
+          international_revalidate_tax_include: data.international_revalidate.is_tax_inclusive,
+          international_refund: checkprocessingType(data.international_refund.charge_type_id),
+          international_refund_fee_tax_id: data.international_refund.fee_tax_type_id,
+          international_refund_amount: data.international_refund.amount,
+          international_refund_amount_type: data.international_refund.charge_type_id,
+          international_refund_percent: data.international_refund.percent,
+          international_refund_tax_include: data.international_refund.is_tax_inclusive,
+          international_void: checkprocessingType(data.international_void.charge_type_id),
+          international_void_fee_tax_id: data.international_void.fee_tax_type_id,
+          international_void_amount: data.international_void.amount,
+          international_void_amount_type: data.international_void.charge_type_id,
+          international_void_percent: data.international_void.percent,
+          international_void_tax_include: data.international_void.is_tax_inclusive,
+          international_frp: checkprocessingType(data.international_frp.charge_type_id),
+          international_frp_fee_tax_id: data.international_frp.fee_tax_type_id,
+          international_frp_amount: data.international_frp.amount,
+          international_frp_amount_type: data.international_frp.charge_type_id,
+          international_frp_percent: data.international_frp.percent,
+          international_frp_tax_include: data.international_frp.is_tax_inclusive,
+          international_non_gds: checkprocessingType(data.international_non_gds.charge_type_id),
+          international_non_gds_fee_tax_id: data.international_non_gds.fee_tax_type_id,
+          international_non_gds_amount: data.international_non_gds.amount,
+          international_non_gds_amount_type: data.international_non_gds.charge_type_id,
+          international_non_gds_percent: data.international_non_gds.percent,
+          international_non_gds_tax_include: data.international_non_gds.is_tax_inclusive,
+          other_emergency: checkprocessingType(data.other_emergency_service.charge_type_id),
+          other_emergency_fee_tax_id: data.other_emergency_service.fee_tax_type_id,
+          other_emergency_amount: data.other_emergency_service.amount,
+          other_emergency_amount_type: data.other_emergency_service.charge_type_id,
+          other_emergency_percent: data.other_emergency_service.percent,
+          other_emergency_tax_include: data.other_emergency_service.is_tax_inclusive
         })
       }
     } catch (e) { console.log(e) }
   }, [])
 
-  const onSubmit = async(payload, values) => {
-    try {
-      if(formId) {
+  const setPayload = (values) => {
+    let payloadDomestic = {
+      description: values.description,
+      processing_fee_category_name: values.processing_fee_category_name,
+      domestic_reissue: {
+        fee_tax_type_id: taxIdDomesticReissue,
+        amount: values.domestic_reissue == "amount" ? values.domestic_reissue_amount : 0,
+        percent:values.domestic_reissue == "amount" ? 0 : parseFloat(values.domestic_reissue_percent),
+        charge_type_id:values.domestic_reissue == "amount" ? values.domestic_reissue_amount_type : "00000000-0000-0000-0000-000000000000",
+        is_tax_inclusive:values.domestic_reissue == "amount" ? false : values.domestic_reissue_tax_include,
         
-      } else {
-        // let res = await api.post(endpoint, payload)
-        // let idFee = res.data.id;
-        onSubmitFee(values)
-        openSnackbar(
-          `Ancillary Fee has been successfully saved.`,
-        )
-        history.goBack()
-      }
+      },
+      domestic_revalidate: {
+        fee_tax_type_id: taxIdDomesticRevalidate,
+        amount: values.domestic_revalidate == "amount" ? values.domestic_revalidate_amount : 0,
+        percent:values.domestic_revalidate == "amount" ? 0 : parseFloat(values.domestic_revalidate_percent),
+        charge_type_id:values.domestic_revalidate == "amount" ? values.domestic_revalidate_amount_type : "00000000-0000-0000-0000-000000000000",
+        is_tax_inclusive:values.domestic_revalidate == "amount" ? false : values.domestic_revalidate_tax_include,
+        
+      },
+      domestic_refund: {
+        fee_tax_type_id: taxIdDomesticRefund,
+        amount: values.domestic_refund == "amount" ? values.domestic_refund_amount : 0,
+        percent:values.domestic_refund == "amount" ? 0 : parseFloat(values.domestic_refund_percent),
+        charge_type_id:values.domestic_refund == "amount" ? values.domestic_refund_amount_type : "00000000-0000-0000-0000-000000000000",
+        is_tax_inclusive:values.domestic_refund == "amount" ? false : values.domestic_refund_tax_include,
+        
+      },
+      domestic_void: {
+        fee_tax_type_id: taxIdDomesticVoid,
+        amount: values.domestic_void == "amount" ? values.domestic_void_amount : 0,
+        percent:values.domestic_void == "amount" ? 0 : parseFloat(values.domestic_void_percent),
+        charge_type_id:values.domestic_void == "amount" ? values.domestic_void_amount_type : "00000000-0000-0000-0000-000000000000",
+        is_tax_inclusive:values.domestic_void == "amount" ? false : values.domestic_void_tax_include,
+        
+      },
+      domestic_frp: {
+        fee_tax_type_id: taxIdDomesticRfp,
+        amount: values.domestic_frp == "amount" ? values.domestic_frp_amount : 0,
+        percent:values.domestic_frp == "amount" ? 0 : parseFloat(values.domestic_frp_percent),
+        charge_type_id:values.domestic_frp == "amount" ? values.domestic_frp_amount_type : "00000000-0000-0000-0000-000000000000",
+        is_tax_inclusive:values.domestic_frp == "amount" ? false : values.domestic_frp_tax_include,
+        
+      },
+      domestic_non_gds: {
+        fee_tax_type_id: taxIdDomesticNonGds,
+        amount: values.domestic_non_gds == "amount" ? values.domestic_non_gds_amount : 0,
+        percent:values.domestic_non_gds == "amount" ? 0 : parseFloat(values.domestic_non_gds_percent),
+        charge_type_id:values.domestic_non_gds == "amount" ? values.domestic_non_gds_amount_type : "00000000-0000-0000-0000-000000000000",
+        is_tax_inclusive:values.domestic_non_gds == "amount" ? false : values.domestic_non_gds_tax_include,
+        
+      },
+      international_reissue: {
+        fee_tax_type_id: taxIdInternationalReissue,
+        amount: values.international_reissue == "amount" ? values.international_reissue_amount : 0,
+        percent:values.international_reissue == "amount" ? 0 : parseFloat(values.international_reissue_percent),
+        charge_type_id:values.international_reissue == "amount" ? values.international_reissue_amount_type : "00000000-0000-0000-0000-000000000000",
+        is_tax_inclusive:values.international_reissue == "amount" ? false : values.international_reissue_tax_include,
+        
+      },
+      international_revalidate: {
+        fee_tax_type_id: taxIdInternationalRevalidate,
+        amount: values.international_revalidate == "amount" ? values.international_revalidate_amount : 0,
+        percent:values.international_revalidate == "amount" ? 0 : parseFloat(values.international_revalidate_percent),
+        charge_type_id:values.international_revalidate == "amount" ? values.international_revalidate_amount_type : "00000000-0000-0000-0000-000000000000",
+        is_tax_inclusive:values.international_revalidate == "amount" ? false : values.international_revalidate_tax_include,
+        
+      },
+      international_refund: {
+        fee_tax_type_id: taxIdInternationalRefund,
+        amount: values.international_refund == "amount" ? values.international_refund_amount : 0,
+        percent:values.international_refund == "amount" ? 0 : parseFloat(values.international_refund_percent),
+        charge_type_id:values.international_refund == "amount" ? values.international_refund_amount_type : "00000000-0000-0000-0000-000000000000",
+        is_tax_inclusive:values.international_refund == "amount" ? false : values.international_refund_tax_include,
+        
+      },
+      international_void: {
+        fee_tax_type_id: taxIdInternationalVoid,
+        amount: values.international_void == "amount" ? values.international_void_amount : 0,
+        percent:values.international_void == "amount" ? 0 : parseFloat(values.international_void_percent),
+        charge_type_id:values.international_void == "amount" ? values.international_void_amount_type : "00000000-0000-0000-0000-000000000000",
+        is_tax_inclusive:values.international_void == "amount" ? false : values.international_void_tax_include,
+        
+      },
+      international_frp: {
+        fee_tax_type_id: taxIdInternationalRfp,
+        amount: values.international_frp == "amount" ? values.international_frp_amount : 0,
+        percent:values.international_frp == "amount" ? 0 : parseFloat(values.international_frp_percent),
+        charge_type_id:values.international_frp == "amount" ? values.international_frp_amount_type : "00000000-0000-0000-0000-000000000000",
+        is_tax_inclusive:values.international_frp == "amount" ? false : values.international_frp_tax_include,
+        
+      },
+      international_non_gds: {
+        fee_tax_type_id: taxIdInternationalNonGds,
+        amount: values.international_non_gds == "amount" ? values.international_non_gds_amount : 0,
+        percent:values.international_non_gds == "amount" ? 0 : parseFloat(values.international_non_gds_percent),
+        charge_type_id:values.international_non_gds == "amount" ? values.international_non_gds_amount_type : "00000000-0000-0000-0000-000000000000",
+        is_tax_inclusive:values.international_non_gds == "amount" ? false : values.international_non_gds_tax_include,
+        
+      },
+      other_emergency_service: {
+        fee_tax_type_id: taxIdOtherEmergency,
+        amount: values.other_emergency == "amount" ? values.other_emergency_amount : 0,
+        percent:values.other_emergency == "amount" ? 0 : parseFloat(values.other_emergency_percent),
+        charge_type_id:values.other_emergency == "amount" ? values.other_emergency_amount_type : "00000000-0000-0000-0000-000000000000",
+        is_tax_inclusive:values.other_emergency == "amount" ? false : values.other_emergency_tax_include,
+        
+      },
+    }
+    return payloadDomestic
+  }
+
+  const onSubmit = async(values) => {
+    try {
+      let payload = setPayload(values)
+      let res = await api.putOrPost(endpoint, formId, payload)
+      openSnackbar(
+        `Ancillary Fee has been successfully ${formId ? 'updated' : 'saved'}.`,
+      )
+      history.goBack()
     } catch(e) {
       console.log(e)
     }
@@ -229,127 +414,6 @@ const FlightForm = (props) => {
     }
   }
 
-  const onSubmitFee = (values) => {
-      let payloadDomestic = {
-        description: values.description,
-        processing_fee_category_name: values.processing_fee_category_name,
-        domestic_reissue: {
-          fee_tax_type_id: taxIdDomesticReissue,
-          amount: values.domestic_reissue == "amount" ? values.domestic_reissue_amount : 0,
-          percent:values.domestic_reissue == "amount" ? 0 : values.domestic_reissue_percent,
-          charge_type_id:values.domestic_reissue == "amount" ? values.domestic_reissue_amount_type : null,
-          is_tax_inclusive:values.domestic_reissue == "amount" ? false : values.domestic_reissue_tax_include,
-          
-        },
-        domestic_revalidate: {
-          fee_tax_type_id: taxIdDomesticRevalidate,
-          amount: values.domestic_revalidate == "amount" ? values.domestic_revalidate_amount : 0,
-          percent:values.domestic_revalidate == "amount" ? 0 : values.domestic_revalidate_percent,
-          charge_type_id:values.domestic_revalidate == "amount" ? values.domestic_revalidate_amount_type : null,
-          is_tax_inclusive:values.domestic_revalidate == "amount" ? false : values.domestic_revalidate_tax_include,
-          
-        },
-        domestic_refund: {
-          fee_tax_type_id: taxIdDomesticRefund,
-          amount: values.domestic_refund == "amount" ? values.domestic_refund_amount : 0,
-          percent:values.domestic_refund == "amount" ? 0 : values.domestic_refund_percent,
-          charge_type_id:values.domestic_refund == "amount" ? values.domestic_refund_amount_type : null,
-          is_tax_inclusive:values.domestic_refund == "amount" ? false : values.domestic_refund_tax_include,
-          
-        },
-        domestic_void: {
-          fee_tax_type_id: taxIdDomesticVoid,
-          amount: values.domestic_void == "amount" ? values.domestic_void_amount : 0,
-          percent:values.domestic_void == "amount" ? 0 : values.domestic_void_percent,
-          charge_type_id:values.domestic_void == "amount" ? values.domestic_void_amount_type : null,
-          is_tax_inclusive:values.domestic_void == "amount" ? false : values.domestic_void_tax_include,
-          
-        },
-        domestic_frp: {
-          fee_tax_type_id: taxIdDomesticRfp,
-          amount: values.domestic_rfp == "amount" ? values.domestic_rfp_amount : 0,
-          percent:values.domestic_rfp == "amount" ? 0 : values.domestic_rfp_percent,
-          charge_type_id:values.domestic_rfp == "amount" ? values.domestic_rfp_amount_type : null,
-          is_tax_inclusive:values.domestic_rfp == "amount" ? false : values.domestic_rfp_tax_include,
-          
-        },
-        domestic_non_gds: {
-          fee_tax_type_id: taxIdDomesticNonGds,
-          amount: values.domestic_non_gds == "amount" ? values.domestic_non_gds_amount : 0,
-          percent:values.domestic_non_gds == "amount" ? 0 : values.domestic_non_gds_percent,
-          charge_type_id:values.domestic_non_gds == "amount" ? values.domestic_non_gds_amount_type : null,
-          is_tax_inclusive:values.domestic_non_gds == "amount" ? false : values.domestic_non_gds_tax_include,
-          
-        },
-        international_reissue: {
-          fee_tax_type_id: taxIdInternationalReissue,
-          amount: values.international_reissue == "amount" ? values.international_reissue_amount : 0,
-          percent:values.international_reissue == "amount" ? 0 : values.international_reissue_percent,
-          charge_type_id:values.international_reissue == "amount" ? values.international_reissue_amount_type : null,
-          is_tax_inclusive:values.international_reissue == "amount" ? false : values.international_reissue_tax_include,
-          
-        },
-        international_revalidate: {
-          fee_tax_type_id: taxIdInternationalRevalidate,
-          amount: values.international_revalidate == "amount" ? values.international_revalidate_amount : 0,
-          percent:values.international_revalidate == "amount" ? 0 : values.international_revalidate_percent,
-          charge_type_id:values.international_revalidate == "amount" ? values.international_revalidate_amount_type : null,
-          is_tax_inclusive:values.international_revalidate == "amount" ? false : values.international_revalidate_tax_include,
-          
-        },
-        international_refund: {
-          fee_tax_type_id: taxIdInternationalRefund,
-          amount: values.international_refund == "amount" ? values.international_refund_amount : 0,
-          percent:values.international_refund == "amount" ? 0 : values.international_refund_percent,
-          charge_type_id:values.international_refund == "amount" ? values.international_refund_amount_type : null,
-          is_tax_inclusive:values.international_refund == "amount" ? false : values.international_refund_tax_include,
-          
-        },
-        international_void: {
-          fee_tax_type_id: taxIdInternationalVoid,
-          amount: values.international_void == "amount" ? values.international_void_amount : 0,
-          percent:values.international_void == "amount" ? 0 : values.international_void_percent,
-          charge_type_id:values.international_void == "amount" ? values.international_void_amount_type : null,
-          is_tax_inclusive:values.international_void == "amount" ? false : values.international_void_tax_include,
-          
-        },
-        international_frp: {
-          fee_tax_type_id: taxIdInternationalRfp,
-          amount: values.international_rfp == "amount" ? values.international_rfp_amount : 0,
-          percent:values.international_rfp == "amount" ? 0 : values.international_rfp_percent,
-          charge_type_id:values.international_rfp == "amount" ? values.international_rfp_amount_type : null,
-          is_tax_inclusive:values.international_rfp == "amount" ? false : values.international_rfp_tax_include,
-          
-        },
-        international_non_gds: {
-          fee_tax_type_id: taxIdInternationalNonGds,
-          amount: values.international_non_gds == "amount" ? values.international_non_gds_amount : 0,
-          percent:values.international_non_gds == "amount" ? 0 : values.international_non_gds_percent,
-          charge_type_id:values.international_non_gds == "amount" ? values.international_non_gds_amount_type : null,
-          is_tax_inclusive:values.international_non_gds == "amount" ? false : values.international_non_gds_tax_include,
-          
-        },
-        other_emergency_service: {
-          fee_tax_type_id: taxIdOtherEmergency,
-          amount: values.other_emergency == "amount" ? values.other_emergency_amount : 0,
-          percent:values.other_emergency == "amount" ? 0 : values.other_emergency_percent,
-          charge_type_id:values.other_emergency == "amount" ? values.other_emergency_amount_type : null,
-          is_tax_inclusive:values.other_emergency == "amount" ? false : values.other_emergency_tax_include,
-          
-        },
-      }
-      onSaveFee(payloadDomestic, 1)
-  }
-
-  const onSaveFee = async(payload, productTypeCode) => {
-    try {
-    console.log('payload', payload)
-      let res = await api.post(endpointFee + "/"+ productTypeCode, payload)
-      console.log(res)
-    } catch(e) {
-      console.log(e)
-    }
-  }
 
   return (
     <>
@@ -357,11 +421,7 @@ const FlightForm = (props) => {
         initialValues={initialForm}
         validationSchema={validationSchema}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
-          let formatted = {
-            processing_fee_category_name: values.processing_fee_category_name,
-            description: values.description,
-          }
-          onSubmit(formatted, values)
+          onSubmit(values)
         }}
         enableReinitialize
       >
@@ -479,12 +539,12 @@ const FlightForm = (props) => {
                         {
                           title:"RFP Fee (Contact Fee)",
                           taxType:taxTypeDomesticRfp,
-                          fieldFeeTaxId:"domestic_rfp_fee_tax_id",
-                          fieldRadio:"domestic_rfp",
-                          fieldAmount:"domestic_rfp_amount",
-                          fieldAmountType:"domestic_rfp_amount_type",
-                          fieldPercent:"domestic_rfp_percent",
-                          fieldIncludeTax:"domestic_rfp_tax_include"
+                          fieldFeeTaxId:"domestic_frp_fee_tax_id",
+                          fieldRadio:"domestic_frp",
+                          fieldAmount:"domestic_frp_amount",
+                          fieldAmountType:"domestic_frp_amount_type",
+                          fieldPercent:"domestic_frp_percent",
+                          fieldIncludeTax:"domestic_frp_tax_include"
                         },
                         {
                           title:"Non-GDS Hotel Booking Process Fee",
@@ -541,12 +601,12 @@ const FlightForm = (props) => {
                         {
                           title:"RFP Fee (Contact Fee)",
                           taxType:taxTypeInternationalRfp,
-                          fieldFeeTaxId:"international_rfp_fee_tax_id",
-                          fieldRadio:"international_rfp",
-                          fieldAmount:"international_rfp_amount",
-                          fieldAmountType:"international_rfp_amount_type",
-                          fieldPercent:"international_rfp_percent",
-                          fieldIncludeTax:"international_rfp_tax_include"
+                          fieldFeeTaxId:"international_frp_fee_tax_id",
+                          fieldRadio:"international_frp",
+                          fieldAmount:"international_frp_amount",
+                          fieldAmountType:"international_frp_amount_type",
+                          fieldPercent:"international_frp_percent",
+                          fieldIncludeTax:"international_frp_tax_include"
                         },
                         {
                           title:"Non-GDS Hotel Booking Process Fee",
@@ -577,6 +637,11 @@ const FlightForm = (props) => {
                     fHandleBlur={handleBlur}
                     setFieldValue={setFieldValue}
                     isView={isView}
+                    amountSuffixSelections={[
+                      {label:"/Ticket", value:"de62950d-fbab-4e39-bd90-c2b6687c6b36"},
+                      {label:"/Person", value:"de03bf84-4bd8-4cdf-9348-00246f04bcad"},
+                      {label:"/Transaction", value:"5123b121-4f6a-4871-bef1-65408d663e19"},
+                    ]}
                   />
                 </div>
               </Card.Body>
