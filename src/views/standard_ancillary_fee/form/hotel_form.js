@@ -14,7 +14,7 @@ import { FeeTabs } from "./fee_tabs"
 import { useSnackbar } from "react-simple-snackbar"
 import useQuery from "lib/query"
 
-const endpoint = "/master/processing-fee-categories"
+const endpoint = "/master/agent-processing-fee-categories/2"
 const endpointFee = "/master/agent-processing-fee-categories"
 const backUrl = "/master/standard-ancillary-fee"
 const options = {
@@ -168,24 +168,6 @@ const HotelForm = (props) => {
     } catch (e) { console.log(e) }
   }, [])
 
-  const onSubmit = async(payload, values) => {
-    try {
-      if(formId) {
-        
-      } else {
-        let res = await api.post(endpoint, payload)
-        let idFee = res.data.id;
-        onSubmitFee(values, idFee)
-        openSnackbar(
-          `Ancillary Fee has been successfully saved.`,
-        )
-        history.replace(backUrl)
-      }
-    } catch(e) {
-      console.log(e)
-    }
-  }
-
   const getFeeTaxType = async(code, setData, setId) => {
     try {
       let res = await api.get(`/master/fee-tax-types?filters=[["status","!=","0"],["and"],["fee_tax_type_code","${code}"]]`)
@@ -197,84 +179,92 @@ const HotelForm = (props) => {
     }
   }
 
-  const onSubmitFee = (values, id) => {
+  const onSubmit = async(values) => {
+    try {
+      let payload = setPayload(values)
+      let res = await api.putOrPost(endpoint, formId, payload)
+      openSnackbar(
+        `Ancillary Fee has been successfully ${formId ? 'updated' : 'saved'}.`,
+      )
+        history.replace(backUrl)
+    } catch(e) {
+      openSnackbar(
+        `Failed save record`,
+      )
+      console.log(e)
+    }
+  }  
+
+  const setPayload = (values) => {
       let payloadDomestic = {
-        processing_fee_category_id: id,
+        processing_fee_category_name: values.processing_fee_category_name,
+        description: values.description,
         domestic_hotel: {
           fee_tax_type_id: taxIdDomesticHotel,
           amount: values.domestic_hotel == "amount" ? values.domestic_hotel_amount : 0,
-          percent:values.domestic_hotel == "amount" ? 0 : values.domestic_hotel_percent,
-          charge_type_id:values.domestic_hotel == "amount" ? values.domestic_hotel_amount_type : null,
+          percent:values.domestic_hotel == "amount" ? 0 : parseFloat(values.domestic_hotel_percent),
+          charge_type_id:values.domestic_hotel == "amount" ? values.domestic_hotel_amount_type : "00000000-0000-0000-0000-000000000000",
           is_tax_inclusive:values.domestic_hotel == "amount" ? false : values.domestic_hotel_tax_include,
         },
         domestic_refund: {
           fee_tax_type_id: taxIdDomesticRefund,
           amount: values.domestic_refund == "amount" ? values.domestic_refund_amount : 0,
-          percent:values.domestic_refund == "amount" ? 0 : values.domestic_refund_percent,
-          charge_type_id:values.domestic_refund == "amount" ? values.domestic_refund_amount_type : null,
+          percent:values.domestic_refund == "amount" ? 0 : parseFloat(values.domestic_refund_percent),
+          charge_type_id:values.domestic_refund == "amount" ? values.domestic_refund_amount_type : "00000000-0000-0000-0000-000000000000",
           is_tax_inclusive:values.domestic_refund == "amount" ? false : values.domestic_refund_tax_include,
         },
         domestic_rfp: {
           fee_tax_type_id: taxIdDomesticRfp,
           amount: values.domestic_rfp == "amount" ? values.domestic_rfp_amount : 0,
-          percent:values.domestic_rfp == "amount" ? 0 : values.domestic_rfp_percent,
-          charge_type_id:values.domestic_rfp == "amount" ? values.domestic_rfp_amount_type : null,
+          percent:values.domestic_rfp == "amount" ? 0 : parseFloat(values.domestic_rfp_percent),
+          charge_type_id:values.domestic_rfp == "amount" ? values.domestic_rfp_amount_type : "00000000-0000-0000-0000-000000000000",
           is_tax_inclusive:values.domestic_rfp == "amount" ? false : values.domestic_rfp_tax_include,
         },
         domestic_non_gds: {
           fee_tax_type_id: taxIdDomesticNonGds,
           amount: values.domestic_non_gds == "amount" ? values.domestic_non_gds_amount : 0,
-          percent:values.domestic_non_gds == "amount" ? 0 : values.domestic_non_gds_percent,
-          charge_type_id:values.domestic_non_gds == "amount" ? values.domestic_non_gds_amount_type : null,
+          percent:values.domestic_non_gds == "amount" ? 0 : parseFloat(values.domestic_non_gds_percent),
+          charge_type_id:values.domestic_non_gds == "amount" ? values.domestic_non_gds_amount_type : "00000000-0000-0000-0000-000000000000",
           is_tax_inclusive:values.domestic_non_gds == "amount" ? false : values.domestic_non_gds_tax_include,
         },
         international_hotel: {
           fee_tax_type_id: taxIdInternationalHotel,
           amount: values.international_hotel == "amount" ? values.international_hotel_amount : 0,
-          percent:values.international_hotel == "amount" ? 0 : values.international_hotel_percent,
-          charge_type_id:values.international_hotel == "amount" ? values.international_hotel_amount_type : null,
+          percent:values.international_hotel == "amount" ? 0 : parseFloat(values.international_hotel_percent),
+          charge_type_id:values.international_hotel == "amount" ? values.international_hotel_amount_type : "00000000-0000-0000-0000-000000000000",
           is_tax_inclusive:values.international_hotel == "amount" ? false : values.international_hotel_tax_include,
         },
         international_refund: {
           fee_tax_type_id: taxIdInternationalRefund,
           amount: values.international_refund == "amount" ? values.international_refund_amount : 0,
-          percent:values.international_refund == "amount" ? 0 : values.international_refund_percent,
-          charge_type_id:values.international_refund == "amount" ? values.international_refund_amount_type : null,
+          percent:values.international_refund == "amount" ? 0 : parseFloat(values.international_refund_percent),
+          charge_type_id:values.international_refund == "amount" ? values.international_refund_amount_type : "00000000-0000-0000-0000-000000000000",
           is_tax_inclusive:values.international_refund == "amount" ? false : values.international_refund_tax_include,
         },
         international_rfp: {
           fee_tax_type_id: taxIdInternationalRfp,
           amount: values.international_rfp == "amount" ? values.international_rfp_amount : 0,
-          percent:values.international_rfp == "amount" ? 0 : values.international_rfp_percent,
-          charge_type_id:values.international_rfp == "amount" ? values.international_rfp_amount_type : null,
+          percent:values.international_rfp == "amount" ? 0 : parseFloat(values.international_rfp_percent),
+          charge_type_id:values.international_rfp == "amount" ? values.international_rfp_amount_type : "00000000-0000-0000-0000-000000000000",
           is_tax_inclusive:values.international_rfp == "amount" ? false : values.international_rfp_tax_include,
         },
         international_non_gds: {
           fee_tax_type_id: taxIdInternationalNonGds,
           amount: values.international_non_gds == "amount" ? values.international_non_gds_amount : 0,
-          percent:values.international_non_gds == "amount" ? 0 : values.international_non_gds_percent,
-          charge_type_id:values.international_non_gds == "amount" ? values.international_non_gds_amount_type : null,
+          percent:values.international_non_gds == "amount" ? 0 : parseFloat(values.international_non_gds_percent),
+          charge_type_id:values.international_non_gds == "amount" ? values.international_non_gds_amount_type : "00000000-0000-0000-0000-000000000000",
           is_tax_inclusive:values.international_non_gds == "amount" ? false : values.international_non_gds_tax_include,
         },
         other_emergency_service: {
           fee_tax_type_id: taxIdOtherEmergency,
           amount: values.other_emergency == "amount" ? values.other_emergency_amount : 0,
-          percent:values.other_emergency == "amount" ? 0 : values.other_emergency_percent,
-          charge_type_id:values.other_emergency == "amount" ? values.other_emergency_amount_type : null,
+          percent:values.other_emergency == "amount" ? 0 : parseFloat(values.other_emergency_percent),
+          charge_type_id:values.other_emergency == "amount" ? values.other_emergency_amount_type : "00000000-0000-0000-0000-000000000000",
           is_tax_inclusive:values.other_emergency == "amount" ? false : values.other_emergency_tax_include,
         },
       }
-      onSaveFee(payloadDomestic, 2)
-  }
 
-  const onSaveFee = async(payload, productTypeCode) => {
-    try {
-    console.log('payload', payload)
-      let res = await api.post(endpointFee + "/"+ productTypeCode, payload)
-      console.log(res)
-    } catch(e) {
-      console.log(e)
-    }
+      return payloadDomestic
   }
 
   return (
@@ -284,11 +274,7 @@ const HotelForm = (props) => {
         validationSchema={validationSchema}
         validateOnChange={false}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
-          let formatted = {
-            processing_fee_category_name: values.processing_fee_category_name,
-            description: values.description,
-          }
-          onSubmit(formatted, values)
+          onSubmit(values)
         }}
         enableReinitialize
       >
@@ -463,6 +449,11 @@ const HotelForm = (props) => {
                     fHandleBlur={handleBlur}
                     setFieldValue={setFieldValue}
                     isView={isView}
+                    amountSuffixSelections={[
+                      {label:"/Room Night", value:"b95094b2-0883-4e03-8e67-ceb32314b332"},
+                      {label:"/Room", value:"02103ce7-ecfe-446e-baa1-cb3c6d982fe9"},
+                      {label:"/Transaction", value:"5123b121-4f6a-4871-bef1-65408d663e19"},
+                    ]}
                   />
 
                 </div>

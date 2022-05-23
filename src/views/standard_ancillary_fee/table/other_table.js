@@ -12,7 +12,7 @@ export default function OtherTable() {
     isCheckbox: false,
     showAdvancedOptions: false,
     baseRoute: "/master/standard-ancillary-fee/form/other-form",
-    endpoint: "/master/hotels",
+    endpoint: "/master/agent-processing-fee-categories/3",
     deleteEndpoint: "/master/batch-actions/delete/hotels",
     activationEndpoint: "/master/batch-actions/activate/hotels",
     deactivationEndpoint: "/master/batch-actions/deactivate/hotels",

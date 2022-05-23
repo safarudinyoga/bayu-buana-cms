@@ -4,8 +4,10 @@ import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
 import Form from "./form"
 import { Card } from "react-bootstrap"
+import { useParams } from "react-router-dom"
 
 export default function IntegrationPartnerCurrenciesTable() {
+  const param = useParams()
   let params = {
     isCheckbox: false,
     showAdvancedOptions: false,
@@ -14,8 +16,8 @@ export default function IntegrationPartnerCurrenciesTable() {
     title: "Partner Currencies",
     titleModal: "Partner Currencies",
     baseRoute: "/master/integration-partner-currencies/form",
-    endpoint: "/master/integration-partner-currencies",
-    deleteEndpoint: "/master/batch-actions/delete/integration-partner-currencies",
+    endpoint: `/master/integration-partners/${param.id}/currencies`,
+    deleteEndpoint: `/master/integration-partners/${param.id}/currencies`,
     btnDownload: ".buttons-csv",
     columns: [
       {
