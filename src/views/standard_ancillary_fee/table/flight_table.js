@@ -7,8 +7,8 @@ export default function FlightTable() {
     isCheckbox: false,
     showAdvancedOptions: false,
     baseRoute: "/master/standard-ancillary-fee/form/flight-form",
-    endpoint: "/master/processing-fee-categories",
-    deleteEndpoint: "/master/batch-actions/delete/hotels",
+    endpoint: "/master/agent-processing-fee-categories/1",
+    deleteEndpoint: "/master/agent-processing-fee-categories/1",
     activationEndpoint: "/master/batch-actions/activate/hotels",
     deactivationEndpoint: "/master/batch-actions/deactivate/hotels",
     hideDetail: true,
@@ -25,6 +25,7 @@ export default function FlightTable() {
     infoDelete: [
       {title: "Standard Ancillary Fee", recordName: "processing_fee_category_name"}, 
     ],
+    searchText: "Search",
   })
   return <BBDataTable {...params}  />
 }
