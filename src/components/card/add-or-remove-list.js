@@ -6,6 +6,7 @@ import arrowLeft from "assets/icons/arrow-left.svg"
 import arrowRight from "assets/icons/arrow-right.svg"
 import xCircle from "assets/icons/x-circle.svg"
 import flightTicket from "assets/icons/flight-ticket.svg"
+import FormInputSelectAjax from "components/form/input-select-ajax"
 import "./add-or-remove-list.css"
 
 const AddOrRemoveList = ({
@@ -19,7 +20,6 @@ const AddOrRemoveList = ({
   const [showFilter, setShowFilter] = useState(false)
   const [leftData, setLeftData] = useState(firstData)
   const [rightData, setRightData] = useState(secondData)
-  const [selected, setSelected] = useState({})
 
   console.log("secondData: ", secondData)
   console.log("leftData: ", leftData)
@@ -45,12 +45,14 @@ const AddOrRemoveList = ({
     setRightData((rightdata) => [...rightdata, e])
   }
 
-  const toggleSelected = (id) => {
-    setSelected((selected) => ({
-      ...selected,
-      [id]: !selected[id],
-    }))
-    // setColor(color === "#D3D3D3" ? "#027F71" : "#D3D3D3")
+  const handleSelectAssignmentLeader = (e) => {
+    console.log("e: ", e)
+    setLeftData((data) =>
+      data.map((item) => ({
+        ...item,
+        checked: item.given_name === e ? !item.checked : item.checked,
+      })),
+    )
   }
 
   return (
@@ -89,9 +91,7 @@ const AddOrRemoveList = ({
                     <div className="d-flex align-items-center">
                       <div
                         style={{
-                          backgroundColor: selected[item.name]
-                            ? "#027F71"
-                            : "#D3D3D3",
+                          backgroundColor: item.checked ? "#027F71" : "#D3D3D3",
                           padding: "2px 10px 2px",
                         }}
                       >
@@ -99,8 +99,9 @@ const AddOrRemoveList = ({
                           <input
                             type="checkbox"
                             name="check-leader"
-                            checked={selected[item.name]}
-                            onChange={() => toggleSelected(item.name)}
+                            onChange={() =>
+                              handleSelectAssignmentLeader(item.given_name)
+                            }
                             className="add-remove-cb"
                           />
                           <img src={flightTicket} alt="flight-ticket" />
@@ -109,7 +110,7 @@ const AddOrRemoveList = ({
                       {onModal && (
                         <div
                           style={{
-                            backgroundColor: selected[item.name]
+                            backgroundColor: item.checked
                               ? "#027F71"
                               : "#D3D3D3",
                             padding: "2px 10px 2px",
@@ -120,8 +121,9 @@ const AddOrRemoveList = ({
                             <input
                               type="checkbox"
                               name="check-ticket"
-                              checked={selected[item.name]}
-                              onChange={() => toggleSelected(item.name)}
+                              onChange={() =>
+                                handleSelectAssignmentLeader(item.given_name)
+                              }
                               className="add-remove-cb"
                             />
                             <img src={flightTicket} alt="flight-ticket" />
@@ -208,7 +210,7 @@ const AddOrRemoveList = ({
           >
             {secondCardTitle}
           </Card.Header>
-          <div className="col-xs-12 col-sm-12 col-md-4 col-lg-5 col-xl-5 padding-0 align-middle">
+          <div className="col-xs-12 col-sm-12 col-md-4 col-lg-5 col-xl-5 padding-0 align-middle d-flex flex-column w-100">
             <button
               onClick={() => setShowFilter(!showFilter)}
               type="button"
@@ -221,6 +223,64 @@ const AddOrRemoveList = ({
                 <img src={downIcon} alt="down" />
               )}
             </button>
+            {showFilter && (
+              <div>
+                <FormInputSelectAjax
+                  label="Branch Office"
+                  // onChange={}
+                  endpoint="/master/employees"
+                  column="given_name"
+                  sort="given_name"
+                  isGrouping={true}
+                  fieldGroup="employee_id"
+                  isArray={false}
+                  fieldArray=""
+                  // value={}
+                  data={secondData}
+                  // filter={}
+                  placeholder="Branch Office"
+                  type="selectmultiple"
+                  isFilter={false}
+                  allowClear={false}
+                />
+                <FormInputSelectAjax
+                  label="Job Title"
+                  // onChange={}
+                  endpoint="/master/employees"
+                  column="job_title.job_title_name"
+                  sort="job_title.id"
+                  isGrouping={true}
+                  fieldGroup="job_title.id"
+                  isArray={false}
+                  fieldArray=""
+                  // value={}
+                  data={secondData}
+                  // filter={}
+                  placeholder="Job Title"
+                  type="selectmultiple"
+                  isFilter={false}
+                  allowClear={false}
+                />
+                <FormInputSelectAjax
+                  label="Name"
+                  // onChange={}
+                  endpoint="/master/employees"
+                  column="given_name"
+                  sort="given_name"
+                  isGrouping={true}
+                  fieldGroup="employee_id"
+                  isArray={false}
+                  fieldArray=""
+                  // value={}
+                  data={secondData}
+                  // filter={}
+                  placeholder="name"
+                  type="selectmultiple"
+                  isFilter={false}
+                  allowClear={false}
+                />
+              </div>
+            )}
           </div>
           <Card.Body style={{ padding: "8px 10px 10px 9px" }}>
             <ol class="list list-general-setup">
@@ -257,7 +317,8 @@ const AddOrRemoveList = ({
                       />
                     </svg>
                     <div className="w-100 d-flex justify-content-between">
-                      {item.given_name} <span>({item.given_name})</span>
+                      {item.given_name} {item.middle_name} {item.surname}
+                      <span>({item?.office?.name})</span>
                     </div>
                   </div>
                 </li>
