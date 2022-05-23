@@ -1,4 +1,4 @@
-import { withRouter } from "react-router"
+import { withRouter, useHistory } from "react-router"
 import React, { useEffect, useState } from "react"
 import Api from "config/api"
 import FormHorizontal from "components/form/horizontal"
@@ -15,6 +15,7 @@ const backUrl = "/master/user-access-type"
 
 function UserAccessTypeInformation(props) {
   let dispatch = useDispatch()
+  let history = useHistory()
   let formId = props.match.params.id
 
   const isView = useQuery().get("action") === "view"
@@ -193,12 +194,15 @@ function UserAccessTypeInformation(props) {
     let translated = formBuilder.getTranslations()
     setLoading(true)
     let api = new Api()
+    let typeId = ""
     try {
       if (!form.model) {
         form.model = null
       }
       let res = await api.putOrPost(endpoint, id, form)
+      console.log("after post",res);
       setId(res.data.id)
+      typeId = res.data.id
       for (let i in translated) {
         let tl = translated[i]
         let path = endpoint + "/" + res.data.id + "/translations"
@@ -212,6 +216,7 @@ function UserAccessTypeInformation(props) {
       )
     } finally {
       setLoading(false)
+      history.replace("/master/user-access-type/form/"+typeId)
       props.handleSelectTab("module-access")
     }
   }

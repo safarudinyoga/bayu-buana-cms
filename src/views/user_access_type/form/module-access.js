@@ -11,7 +11,7 @@ import Api from "config/api"
 import { Formik } from "formik"
 import * as Yup from "yup"
 import "../user-access-type.css"
-import { useStateWithCallbackLazy } from "use-state-with-callback"
+import { useStateWithCallbackLazy, useStateWithCallback } from "use-state-with-callback"
 
 const backUrl = "/master/user-access-type"
 
@@ -25,13 +25,14 @@ function ModuleAccess(props) {
   const [capabilitiesHeader, setCapabilitiesHeader] = useState([])
   const [categories, setCategories] = useState([])
   const [allowModules, setAllowModules] = useState([])
-  const [capabilities, setCapabilities] = useStateWithCallbackLazy([])
+  const [capabilities, setCapabilities] = useState([])
 
   const api = new Api()
   useEffect(() => {
     if (!props.match.params.id) {
       setLoading(false)
     }
+    console.log("KELOAD ULANG")
     setId(props.match.params.id)
   }, [props.match.params.id])
 
@@ -84,7 +85,7 @@ function ModuleAccess(props) {
 
     try {
       if(userTypeId){
-        let resModule = await api.get(`/user/user-types/${userTypeId}/modules`)
+        let resModule = await api.get(`/user/user-types/${id}/modules`)
 
         const modules = []
         resModule.data.items.forEach((data) => {
@@ -99,6 +100,7 @@ function ModuleAccess(props) {
               category={data.module_package_name} 
               capabilities={data.capabilities}
               moduleId={data.id}
+              setAllowModules={setAllowModules}
               // onChange={() => {
               //   setAllowModules([...allowModules, {
               //     id: data.id,
@@ -118,7 +120,7 @@ function ModuleAccess(props) {
       console.log(e)
       throw e
     }
-  }, [])
+  }, [id])
   
 
   return (
@@ -129,6 +131,8 @@ function ModuleAccess(props) {
         validationSchema={validationSchema}
         validator={() => ({})}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
+          console.log("test modules", allowModules)
+
           let formatted = [{
             capabilities: {
               allow_activate: true,
