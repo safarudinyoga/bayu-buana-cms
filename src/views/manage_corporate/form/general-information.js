@@ -3,31 +3,47 @@ import PropTypes from 'prop-types'
 import { Form, Row, Col, Card, Button } from "react-bootstrap"
 import { useFormik } from "formik"
 import * as Yup from "yup"
+import DatePicker from 'react-datepicker'
 
 // components
-import FormInputControl from "components/form/input-control"
-import FormInputDatePeriod from 'components/form/input-date-period'
 import Select from "components/form/select"
 import SelectAsync from "components/form/select-async"
+import ImageDefault from 'assets/icons/image_default.svg'
 import './_form.sass'
 
 // utils
-import { useWindowSize } from "rooks"
 import Api from "config/api"
+import NoImage from "assets/no_image.png"
 import useQuery from "lib/query"
+import TextError from 'components/formik/textError'
 
+const slugDictionary = {
+  corporate_code: 'Corporate Code',
+  corporate_name: 'Corporate Name',
+  corporate_type: 'Corporate Type',
+  corporate_npwp: 'NPWP',
+  corporate_email: 'Email',
+  corporate_phone: 'Phone',
+  country: 'Country'
+}
 
 const GeneralInfomation = (props) => {
   let api = new Api()
   const isView = useQuery().get("action") === "view"
 
-  const { handleSubmit, handleChange, values, errors, touched, setFieldTouched, setFieldValue } = useFormik({
+  const errorMessage = (field) => {
+    return `${field} is required.`
+  }
+
+  const { handleSubmit, handleChange, values, errors, touched, setFieldTouched, setFieldValue, setValues } = useFormik({
     initialValues: {
       general_information: {
         corporate_code: '',
         corporate_name: '',
         parent_company: '',
-        corporate_type: '',
+        corporate_type: {
+          value: '',
+        },
         corporate_npwp: '',
         corporate_contract: {
           date_start: '',
@@ -41,7 +57,9 @@ const GeneralInfomation = (props) => {
       },
       correspondence_address: {
         address: '',
-        country: '',
+        country: {
+          value: ''
+        },
         province: '',
         city: '',
         zipcode: '',
@@ -52,7 +70,9 @@ const GeneralInfomation = (props) => {
       },
       billing_address: {
         address: '',
-        country: '',
+        country: {
+          value: ''
+        },
         province: '',
         city: '',
         zipcode: '',
@@ -64,42 +84,121 @@ const GeneralInfomation = (props) => {
       other_information: {
         website: '',
         internal_remark: '',
-        logo: ''
+        logo: {
+          img: '',
+          data: {}
+        }
       }
     },
     validationSchema: Yup.object({
-      corporateCode: Yup.string().required('')
+      general_information: Yup.object({
+        corporate_code: Yup.string().required(errorMessage(slugDictionary['corporate_code'])),
+        corporate_name: Yup.string().required(errorMessage(slugDictionary['corporate_name'])),
+        corporate_type: Yup.object({
+          value: Yup.string().required(errorMessage(slugDictionary['corporate_type']))
+        }),
+        corporate_npwp: Yup.string().required(errorMessage(slugDictionary['corporate_npwp'])),
+      }),
+      contact_information: Yup.object({
+        corporate_email: Yup.string().required(errorMessage(slugDictionary['corporate_email'])).email('Email is not valid.'),
+        corporate_phone: Yup.string().required(errorMessage(slugDictionary['corporate_phone'])),
+      }),
+      correspondence_address: Yup.object({
+        country: Yup.object({
+          value: Yup.string().required(errorMessage(slugDictionary['country']))
+        })
+      }),
+      billing_address: Yup.object({
+        country: Yup.object({
+          value: Yup.string().required(errorMessage(slugDictionary['country']))
+        })
+      }),
     }),
     onSubmit: (val) => {
-      console.log(val);
+      const payload = {
+        general_information: {
+          "corporate_general_information": {
+            "corporate_code": val.general_information.corporate_code,
+            "corporate_name": val.general_information.corporate_name,
+            "parent_corporate_id": val.general_information.parent_company.values
+          },
+          "contact_general_information": {
+              "email": val.contact_information.corporate_email,
+              "phone_number": val.contact_information.corporate_phone,
+              "fax": val.contact_information.corporate_fax,
+          },
+          "correspondence_address": {
+              "address_line": val.correspondence_address.address,
+              "country_id": val.correspondence_address.country.value,
+              "state_province_id": val.correspondence_address.province?.value || '',
+              "city_id": val.correspondence_address.city?.value || '',
+              "postal_code": val.correspondence_address.zipcode,
+              "latitude": Number(val.correspondence_address.geo_location.lat),
+              "longitude": Number(val.correspondence_address.geo_location.lng)
+          },
+          "billing_address": {
+              "address_line": val.billing_address.address,
+              "country_id": val.billing_address.country.value,
+              "state_province_id": val.billing_address.province?.value || '',
+              "city_id": val.billing_address.city?.value || '',
+              "postal_code": val.billing_address.zipcode,
+              "latitude": Number(val.billing_address.geo_location.lat),
+              "longitude": Number(val.billing_address.geo_location.lng)
+          },
+          "corporate_asset" : {
+              "multimedia_description" : val.other_information.logo.data?.id || ''
+          },
+          "industry_id": "8e298b53-7ccc-4a92-b3e9-3251fc86bb09",
+          "website": val.other_information.website,
+          "internal_remark": val.other_information.internal_remark,
+          "npwp": val.general_information.corporate_npwp,
+          "effective_date": val.general_information.corporate_contract.date_start,
+          "expire_date": val.general_information.corporate_contract.date_end
+        }
+      }
+
+      submit(payload)
     }
   })
 
-  const [selectPermanentCountry, setSelectPermanentCountry] = useState([])
-  const [selectPermanentProvince, setSelectPermanentProvince] = useState([])
-  const [selectPermanentCity, setSelectPermanentCity] = useState([])
+  const submit = async (payload) => {
+    console.log(payload);
 
-  useEffect(async () => {
     try {
-      let res = await api.get("/master/countries")
-      const options = []
-      res.data.items.forEach((data) => {
-        options.push({
-          label: data.country_name,
-          value: data.id,
-        })
-        setSelectPermanentCountry(options)
-      })
-    } catch (e) {}
-  }, [])
+      const res = await api.post('/master/agent-corporates', payload)
+      console.log(res);
+    } catch (error) {
+
+    }
+  }
+
+  const [optionProvince, setOptionProvince] = useState({
+    correspondence: [],
+    billing: []
+  })
+  const [optionCity, setOptionCity] = useState({
+    correspondence: [],
+    billing: []
+  })
+
+  const uploadRef = useRef(null)
 
   // Permanent Country state
-  const handleChangePermanentCountry = async (v) => {
+  const handleChangeCountry = async (type, v) => {
     try {
       let res = await api.get(
         `/master/state-provinces?size=-1&filters=[["country_id","=","${v}"],["AND"],["status","=",1]]&sort=state_province_name`,
       )
-      const options = []
+
+      let options = []
+
+      if (!res.data.items.length) {
+        setOptionProvince({
+          correspondence: [],
+          billing: []
+        })
+      }
+
       if(res.data.items.length > 0){
         res.data.items.forEach((data) => {
           options.push({
@@ -107,15 +206,33 @@ const GeneralInfomation = (props) => {
             value: data.id,
           })
 
-          setSelectPermanentProvince(options)
+          if (type === 'correspondence') {
+            setOptionProvince({
+              correspondence: options,
+              billing: []
+            })
+          } else {
+            setOptionProvince({
+              correspondence: [],
+              billing: options
+            })
+          }
         })
-      } else {
-        setSelectPermanentProvince([])
       }
+
       let res2 = await api.get(
         `/master/cities?size=-1&filters=[["country_id","=","${v}"],["AND"],["status","=",1]]&sort=city_name`,
       )
-      const optionsCity = []
+
+      let optionsCity = []
+
+      if (!res2.data.items.length) {
+        setOptionCity({
+          correspondence: [],
+          billing: []
+        })
+      }
+
       if(res2.data.items.length > 0){
         res2.data.items.forEach((data) => {
           optionsCity.push({
@@ -123,99 +240,172 @@ const GeneralInfomation = (props) => {
             value: data.id,
           })
 
-          setSelectPermanentCity(optionsCity)
+          if (type === 'correspondence') {
+            setOptionCity({
+              correspondence: optionsCity,
+              billing: []
+            })
+          } else {
+            setOptionCity({
+              correspondence: [],
+              billing: optionsCity
+            })
+          }
         })
-      } else {
-        setSelectPermanentCity([])
       }
 
     } catch (e) {}
   }
 
   // Current Province state
-  // const handleChangeProvince = async (type, province_id, country_id) => {
-  //   try {
-  //     let filters = `[["country_id","=","${country_id}"],["AND"],["status","=",1]]`
+  const handleChangeProvince = async (type, province_id, country_id) => {
+    try {
+      let filters = `[["country_id","=","${country_id}"],["AND"],["status","=",1]]`
 
-  //     if(province_id && province_id !== "00000000-0000-0000-0000-000000000000") {
-  //       filters = `[["state_province_id","=","${province_id}"],["AND"],["country_id","=","${country_id}"],["AND"],["status","=",1]]`
-  //     }
-  //     let res = await api.get(
-  //       `/master/cities?filters=${filters}&sort=city_name`,
-  //     )
-  //     const options = []
-  //     if(res.data.items.length > 0){
-  //       res.data.items.forEach((data) => {
-  //         options.push({
-  //           label: data.city_name,
-  //           value: data.id,
-  //         })
-  //         if(type === "current") {
-  //           setSelectCurrentCity(options)
-  //         } else {
-  //           setSelectPermanentCity(options)
-  //         }
-  //       })
-  //     } else {
-  //       if(type=== "current") {
-  //         setSelectCurrentCity([])
-  //       } else {
-  //         setSelectPermanentCity([])
-  //       }
-  //     }
+      if(province_id && province_id !== "00000000-0000-0000-0000-000000000000") {
+        filters = `[["state_province_id","=","${province_id}"],["AND"],["country_id","=","${country_id}"],["AND"],["status","=",1]]`
+      }
 
-  //   } catch (e) {}
-  // }
+      let res = await api.get(
+        `/master/cities?filters=${filters}&sort=city_name`,
+      )
+
+      let options = []
+
+      if (!res.data.items.length) {
+        if(type === "correspondence") {
+          setOptionCity({
+            ...optionCity,
+            correspondence: options
+          })
+        } else {
+          setOptionCity({
+            ...optionCity,
+            billing: options
+          })
+        }
+      }
+
+      if(res.data.items.length > 0){
+        res.data.items.forEach((data) => {
+          options.push({
+            label: data.city_name,
+            value: data.id,
+          })
+          if(type === "correspondence") {
+            setOptionCity({
+              ...optionCity,
+              correspondence: options
+            })
+          } else {
+            setOptionCity({
+              ...optionCity,
+              billing: options
+            })
+          }
+        })
+      }
+    } catch (e) {}
+  }
+
+  const handleUpload = async (e) => {
+    try {
+      var files = e.target.files[0];
+      if(files){
+        var filesize = ((files.size/1024)/1024).toFixed(4);
+        if(filesize > 4){
+          alert("Logo size is more than 4MB.");
+          return;
+        }
+        setFieldValue('other_information.logo', URL.createObjectURL(files))
+      }
+      let payload = new FormData()
+      payload.append("files", e.target.files[0])
+
+      let res = await api.post("/multimedia/files", payload)
+      if (res.data) {
+        setFieldValue('other_information.logo.img', URL.createObjectURL(files))
+        setFieldValue('other_information.logo.data', res.data)
+      }
+    } catch (error) {}
+  }
+
+  const handleYears = (numOfYears, date = new Date(), type) => {
+    const dateCopy = new Date(date.getTime());
+
+    if (type === 'add') {
+      dateCopy.setFullYear(dateCopy.getFullYear() + numOfYears);
+    } else {
+      dateCopy.setFullYear(dateCopy.getFullYear() - numOfYears);
+    }
+
+
+    return dateCopy;
+  }
 
   useEffect(() => {
-    console.log(values);
-  }, [values])
-
-
-  const uploadRef = useRef(null)
+    console.log({values, errors});
+  }, [values, errors])
 
   return (
     <Form onSubmit={handleSubmit}>
       <Card style={{marginBotton: 0}}>
         <Card.Body>
+          {/* general information */}
           <h3 className="card-heading">General Information</h3>
           <div style={{ padding: "0 15px 15px 15px" }}>
             <Row>
               <Col sm={9} md={12} lg={9}>
                 <Form.Group as={Row} className='form-group'>
+                  <Form.Label column sm={3} className='mb-2'>
+                    Corporate Code <span className="form-label-required">*</span>
+                  </Form.Label>
                   <Col md={3} lg={9}>
-                    <FormInputControl
-                      label="Corporate Code"
-                      required={true}
+                    <Form.Control
                       value={values.general_information.corporate_code}
                       name="general_information.corporate_code"
                       id="general_information.corporate_code"
                       onChange={handleChange}
-                      // disabled={isView || loading}
-                      disabled={isView}
                       type="text"
-                      style={{ maxWidth: 150 }}
                       minLength={1}
                       maxLength={128}
+                      placeholder=""
+                      disabled={isView}
+                      // disabled={isView || loading}
+                      style={{ maxWidth: 150 }}
+                      className={touched?.general_information?.corporate_code && errors?.general_information?.corporate_code && 'is-invalid'}
                     />
+                    {touched?.general_information?.corporate_code && errors?.general_information?.corporate_code && (
+                      <TextError>
+                        {errors.general_information.corporate_code}
+                      </TextError>
+                    )}
                   </Col>
                 </Form.Group>
                 <Form.Group as={Row} className='form-group'>
+                  <Form.Label column sm={3} className='mb-2'>
+                    Corporate Name <span className="form-label-required">*</span>
+                  </Form.Label>
                   <Col md={3} lg={9}>
-                    <FormInputControl
-                      label="Corporate Name"
-                      required={true}
+                    <Form.Control
                       value={values.general_information.corporate_name}
                       name="general_information.corporate_name"
                       id="general_information.corporate_name"
                       onChange={handleChange}
-                      // disabled={isView || loading}
-                      disabled={isView}
                       type="text"
-                      style={{ maxWidth: 400 }}
                       minLength={1}
                       maxLength={256}
+                      placeholder=""
+                      disabled={isView}
+                      // disabled={isView || loading}
+                      style={{ maxWidth: 400 }}
+                      className={touched?.general_information?.corporate_name && errors?.general_information?.corporate_name && 'is-invalid'}
                     />
+                    {touched?.general_information?.corporate_name && errors?.general_information?.corporate_name && (
+                      <TextError>
+                        {errors.general_information.corporate_name}
+                      </TextError>
+                    )}
                   </Col>
                 </Form.Group>
                 <Form.Group as={Row} className='form-group'>
@@ -253,12 +443,16 @@ const GeneralInfomation = (props) => {
                       }
                       isDisabled={isView}
                     />
+                    {touched?.general_information?.parent_company && errors?.general_information?.parent_company && (
+                      <TextError>
+                        {errors.general_information.parent_company}
+                      </TextError>
+                    )}
                   </Col>
                 </Form.Group>
                 <Form.Group as={Row} className='form-group'>
                   <Form.Label column sm={3} className='mb-2'>
-                    Type
-                    <span className="form-label-required">*</span>
+                    Type <span className="form-label-required">*</span>
                   </Form.Label>
                   <Col md={3} lg={9}>
                     <Select
@@ -277,7 +471,6 @@ const GeneralInfomation = (props) => {
                       width={'400px'}
                       name='general_information.corporate_type'
                       id='general_information.corporate_type'
-                      value={values.general_information.corporate_type}
                       onChange={(e) => {
                         setFieldValue('general_information.corporate_type', e)
                       }}
@@ -290,36 +483,84 @@ const GeneralInfomation = (props) => {
                           : null
                       }
                       isDisabled={isView}
+                      invalid={touched?.general_information?.corporate_type?.value && errors?.general_information?.corporate_type?.value}
                     />
+                    {touched?.general_information?.corporate_type?.value && errors?.general_information?.corporate_type?.value && (
+                      <TextError>
+                        {errors.general_information.corporate_type?.value}
+                      </TextError>
+                    )}
                   </Col>
                 </Form.Group>
                 <Form.Group as={Row} className='form-group'>
+                  <Form.Label column sm={3} className='mb-2'>
+                    NPWP <span className="form-label-required">*</span>
+                  </Form.Label>
                   <Col md={3} lg={9}>
-                    <FormInputControl
-                      label="NPWP"
-                      required={true}
+                    <Form.Control
                       value={values.general_information.corporate_npwp}
                       name="general_information.corporate_npwp"
                       id="general_information.corporate_npwp"
                       onChange={handleChange}
-                      // disabled={isView || loading}
-                      disabled={isView}
                       type="text"
-                      style={{ maxWidth: 320 }}
                       minLength={1}
                       maxLength={36}
+                      placeholder=""
+                      disabled={isView}
+                      // disabled={isView || loading}
+                      style={{ maxWidth: 320 }}
+                      className={touched?.general_information?.corporate_npwp && errors?.general_information?.corporate_npwp && 'is-invalid'}
                     />
+                    {touched?.general_information?.corporate_npwp && errors?.general_information?.corporate_npwp && (
+                      <TextError>
+                        {errors.general_information.corporate_npwp}
+                      </TextError>
+                    )}
                   </Col>
                 </Form.Group>
                 <Form.Group as={Row} className='form-group'>
-                  <Col md={3} lg={9}>
-                    <FormInputDatePeriod
-                      label='Contract Period'
-                      dateStart={values.general_information.corporate_contract.date_start}
-                      dateEnd={values.general_information.corporate_contract.date_end}
-                      dateStartOnChange={() => {}}
-                      dateEndOnChange={() => {}}
-                    />
+                  <Form.Label column sm={3} className='mb-2'>
+                    Contract Period
+                  </Form.Label>
+                  <Col md={3} lg={9} className='row d-flex align-items-center'>
+                    <Col lg={4}>
+                      <DatePicker
+                        className="form-control text-center"
+                        dateFormat="dd MMMM yyyy"
+                        onChange={(date) => {
+                          setFieldValue('general_information.corporate_contract.date_start', date)
+                        }}
+                        selected={values.general_information.corporate_contract.date_start}
+                        startDate={values.general_information.corporate_contract.date_start}
+                        endDate={values.general_information.corporate_contract.date_end}
+                        selectsStart
+                        minDate={handleYears(10, new Date(), 'subtract')}
+                        maxDate={handleYears(10, new Date(), 'add')}
+                      />
+                    </Col>
+                    <Col lg={1}>
+                      <span className="text-center">to</span>
+                    </Col>
+                    <Col lg={4}>
+                      <DatePicker
+                        className="form-control text-center"
+                        dateFormat="dd MMMM yyyy"
+                        onChange={(date) => {
+                          setFieldValue('general_information.corporate_contract.date_end', date)
+                        }}
+                        selected={values.general_information.corporate_contract.date_end}
+                        selectsEnd
+                        startDate={values.general_information.corporate_contract.date_start}
+                        endDate={values.general_information.corporate_contract.date_end}
+                        minDate={values.general_information.corporate_contract.date_start}
+                        maxDate={handleYears(10, new Date(), 'add')}
+                      />
+                    </Col>
+                    {/* {touched?.general_information?.corporate_npwp && errors?.general_information?.corporate_npwp && (
+                      <TextError>
+                        {errors.general_information.corporate_npwp}
+                      </TextError>
+                    )} */}
                   </Col>
                 </Form.Group>
               </Col>
@@ -330,59 +571,83 @@ const GeneralInfomation = (props) => {
           <h3 className="card-heading">Contacts Information</h3>
           <div style={{ padding: "0 15px 15px 15px" }}>
             <Row>
-              <Col sm={9} md={12} lg={9}>
+              <Col sm={9} md={9} lg={9}>
                 <Form.Group as={Row} className='form-group'>
+                  <Form.Label column sm={3} className='mb-2'>
+                    Email <span className="form-label-required">*</span>
+                  </Form.Label>
                   <Col md={3} lg={9}>
-                    <FormInputControl
-                      label="Email"
-                      required={true}
+                    <Form.Control
                       value={values.contact_information.corporate_email}
-                      name="contact_information.corporateEmail"
-                      id="contact_information.corporateEmail"
+                      name="contact_information.corporate_email"
+                      id="contact_information.corporate_email"
                       onChange={handleChange}
-                      disabled={isView}
-                      // disabled={isView || loading}
                       type="text"
-                      style={{ maxWidth: 300 }}
                       minLength={1}
                       maxLength={256}
+                      placeholder=""
+                      disabled={isView}
+                      // disabled={isView || loading}
+                      style={{ maxWidth: 300 }}
+                      className={touched?.contact_information?.corporate_email && errors?.contact_information?.corporate_email && 'is-invalid'}
                     />
+                    {touched?.contact_information?.corporate_email && errors?.contact_information?.corporate_email && (
+                      <TextError>
+                        {errors.contact_information.corporate_email}
+                      </TextError>
+                    )}
                   </Col>
                 </Form.Group>
                 <Form.Group as={Row} className='form-group'>
+                  <Form.Label column sm={3} className='mb-2'>
+                    Phone <span className="form-label-required">*</span>
+                  </Form.Label>
                   <Col md={3} lg={9}>
-                    <FormInputControl
-                      label="Phone"
-                      required={true}
+                    <Form.Control
                       value={values.contact_information.corporate_phone}
                       name="contact_information.corporate_phone"
                       id="contact_information.corporate_phone"
                       onChange={handleChange}
-                      // disabled={isView || loading}
-                      disabled={isView}
                       type="text"
-                      style={{ maxWidth: 200 }}
                       minLength={1}
                       maxLength={36}
+                      placeholder=""
+                      disabled={isView}
+                      // disabled={isView || loading}
+                      style={{ maxWidth: 200 }}
+                      className={touched?.contact_information?.corporate_phone && errors?.contact_information?.corporate_phone && 'is-invalid'}
                     />
+                    {touched?.contact_information?.corporate_phone && errors?.contact_information?.corporate_phone && (
+                      <TextError>
+                        {errors.contact_information.corporate_phone}
+                      </TextError>
+                    )}
                   </Col>
                 </Form.Group>
                 <Form.Group as={Row} className='form-group'>
+                  <Form.Label column sm={3} className='mb-2'>
+                    Fax
+                  </Form.Label>
                   <Col md={3} lg={9}>
-                    <FormInputControl
-                      label="Fax"
-                      required={false}
+                    <Form.Control
                       value={values.contact_information.corporate_fax}
                       name="contact_information.corporate_fax"
                       id="contact_information.corporate_fax"
                       onChange={handleChange}
-                      // disabled={isView || loading}
-                      disabled={isView}
                       type="text"
-                      style={{ maxWidth: 200 }}
                       minLength={1}
                       maxLength={36}
+                      placeholder=""
+                      disabled={isView}
+                      // disabled={isView || loading}
+                      style={{ maxWidth: 200 }}
+                      className={touched?.contact_information?.corporate_fax && errors?.contact_information?.corporate_fax && 'is-invalid'}
                     />
+                    {touched?.contact_information?.corporate_fax && errors?.contact_information?.corporate_fax && (
+                      <TextError>
+                        {errors.contact_information.corporate_fax}
+                      </TextError>
+                    )}
                   </Col>
                 </Form.Group>
               </Col>
@@ -395,20 +660,28 @@ const GeneralInfomation = (props) => {
             <Row>
               <Col sm={9} md={12} lg={9}>
                 <Form.Group as={Row} className='form-group'>
+                  <Form.Label column sm={3} className='mb-2'>
+                    Address
+                  </Form.Label>
                   <Col md={3} lg={9}>
-                    <FormInputControl
-                      label={"Address"}
+                    <textarea
                       value={values.correspondence_address.address}
                       name="correspondence_address.address"
                       id="correspondence_address.address"
                       onChange={handleChange}
-                      disabled={isView}
-                      // disabled={isView || loading}
-                      type="textarea"
                       minLength={1}
                       maxLength={512}
+                      placeholder=""
+                      disabled={isView}
+                      // disabled={isView || loading}
                       style={{ resize: 'none', maxWidth: 400 }}
+                      className={`form-control mb-2 ${touched?.correspondence_address?.address && errors?.correspondence_address?.address && 'is-invalid'}`}
                     />
+                    {touched?.correspondence_address?.address && errors?.correspondence_address?.address && (
+                      <TextError>
+                        {errors.correspondence_address.address}
+                      </TextError>
+                    )}
                   </Col>
                 </Form.Group>
                 <Form.Group as={Row} className='form-group'>
@@ -416,37 +689,53 @@ const GeneralInfomation = (props) => {
                     Country <span className="form-label-required">*</span>
                   </Form.Label>
                   <Col lg={9} md={3}>
-                    {selectPermanentCountry.length !== 0 && (
-                      <div style={{ maxWidth: 300 }}>
-                        <SelectAsync
-                          isClearable
-                          name="correspondence_address.country"
-                          url={`master/countries`}
-                          value={values.correspondence_address.country}
-                          placeholder="Please choose"
-                          fieldName="country_name"
-                          className={`react-select ${
-                            touched?.correspondence_address?.country &&
-                            errors?.correspondence_address?.country
-                              ? "is-invalid"
-                              : null
-                          }`}
-                          onChange={(v) => {
-                            handleChangePermanentCountry(v.value)
-                          }}
-                          onBlur={setFieldTouched}
-                          components={
-                            isView
-                              ? {
-                                  DropdownIndicator: () => null,
-                                  IndicatorSeparator: () => null,
-                                }
-                              : null
-                          }
-                          isDisabled={isView}
-                        />
-                      </div>
-                    )}
+                    <div style={{ maxWidth: 300 }}>
+                      <SelectAsync
+                        isClearable
+                        name="correspondence_address.country"
+                        url={`master/countries`}
+                        value={values.correspondence_address.country}
+                        placeholder="Please choose"
+                        fieldName="country_name"
+                        className={`react-select ${
+                          touched?.correspondence_address?.country &&
+                          errors?.correspondence_address?.country
+                            ? "is-invalid"
+                            : null
+                        }`}
+                        onChange={(v) => {
+                          if (v) handleChangeCountry('correspondence', v.value)
+                          setValues({
+                            ...values,
+                            correspondence_address: {
+                              ...values.correspondence_address,
+                              country: {
+                                value: v.value,
+                                label: v.label
+                              },
+                              province: null,
+                              city: null
+                            }
+                          })
+                        }}
+                        onBlur={setFieldTouched}
+                        components={
+                          isView
+                            ? {
+                                DropdownIndicator: () => null,
+                                IndicatorSeparator: () => null,
+                              }
+                            : null
+                        }
+                        isDisabled={isView}
+                        invalid={touched?.correspondence_address?.country?.value && errors?.correspondence_address?.country?.value}
+                      />
+                      {touched?.correspondence_address?.country?.value && errors?.correspondence_address?.country?.value && (
+                        <TextError>
+                          {errors.correspondence_address?.country?.value}
+                        </TextError>
+                      )}
+                    </div>
                   </Col>
                 </Form.Group>
                 <Form.Group as={Row} className='form-group'>
@@ -460,9 +749,11 @@ const GeneralInfomation = (props) => {
                         name="correspondence_address.province"
                         value={values.correspondence_address.province}
                         placeholder="Please choose"
-                        options={!values.correspondence_address.country ? [] : selectPermanentProvince}
+                        options={!values.correspondence_address.country ? [] : optionProvince.correspondence}
                         onChange={(v) => {
-
+                          setFieldValue('correspondence_address.province', v)
+                          setFieldValue('correspondence_address.city', null)
+                          handleChangeProvince("correspondence", v?.value, values.correspondence_address.country?.value)
                         }}
                         onBlur={setFieldTouched}
                         components={
@@ -489,9 +780,9 @@ const GeneralInfomation = (props) => {
                         isClearable
                         value={values.correspondence_address.city}
                         placeholder="Please choose"
-                        options={!values.correspondence_address.country ? [] : selectPermanentCity}
+                        options={!values.correspondence_address.country ? [] : optionCity.correspondence}
                         onChange={(v) => {
-                          // setFieldValue("permanentCity", v)
+                          setFieldValue("correspondence_address.city", v)
                         }}
                         onBlur={setFieldTouched}
                         components={
@@ -508,21 +799,29 @@ const GeneralInfomation = (props) => {
                   </Col>
                 </Form.Group>
                 <Form.Group as={Row} className='form-group'>
+                  <Form.Label column sm={3} className='mb-2'>
+                    Zip Code
+                  </Form.Label>
                   <Col md={3} lg={9}>
-                    <FormInputControl
-                      label="Zip Code"
-                      required={false}
+                    <Form.Control
                       value={values.correspondence_address.zipcode}
                       name="correspondence_address.zipcode"
                       id="correspondence_address.zipcode"
                       onChange={handleChange}
-                      disabled={isView}
-                      // disabled={isView || loading}
                       type="text"
-                      style={{ maxWidth: 100 }}
                       minLength={1}
                       maxLength={16}
+                      placeholder=""
+                      disabled={isView}
+                      // disabled={isView || loading}
+                      style={{ maxWidth: 100 }}
+                      className={touched?.correspondence_address?.zipcode && errors?.correspondence_address?.zipcode && 'is-invalid'}
                     />
+                    {touched?.correspondence_address?.zipcode && errors?.correspondence_address?.zipcode && (
+                      <TextError>
+                        {errors.correspondence_address.zipcode}
+                      </TextError>
+                    )}
                   </Col>
                 </Form.Group>
                 <Form.Group as={Row} className='form-group'>
@@ -569,23 +868,31 @@ const GeneralInfomation = (props) => {
           {/* Billing Address  */}
           <h3 className="card-heading">Billing Address</h3>
           <div style={{ padding: "0 15px 15px 15px" }}>
-          <Row>
+            <Row>
               <Col sm={9} md={12} lg={9}>
                 <Form.Group as={Row} className='form-group'>
+                  <Form.Label column sm={3} className='mb-2'>
+                    Address
+                  </Form.Label>
                   <Col md={3} lg={9}>
-                    <FormInputControl
-                      label={"Address"}
+                    <textarea
                       value={values.billing_address.address}
                       name="billing_address.address"
                       id="billing_address.address"
                       onChange={handleChange}
-                      disabled={isView}
-                      // disabled={isView || loading}
-                      type="textarea"
                       minLength={1}
                       maxLength={512}
+                      placeholder=""
+                      disabled={isView}
+                      // disabled={isView || loading}
                       style={{ resize: 'none', maxWidth: 400 }}
+                      className={`form-control mb-2 ${touched?.correspondence_address?.address && errors?.correspondence_address?.address && 'is-invalid'}`}
                     />
+                    {touched?.correspondence_address?.address && errors?.correspondence_address?.address && (
+                      <TextError>
+                        {errors.correspondence_address.address}
+                      </TextError>
+                    )}
                   </Col>
                 </Form.Group>
                 <Form.Group as={Row} className='form-group'>
@@ -593,36 +900,53 @@ const GeneralInfomation = (props) => {
                     Country <span className="form-label-required">*</span>
                   </Form.Label>
                   <Col lg={9} md={3}>
-                    {selectPermanentCountry.length !== 0 && (
-                      <div style={{ maxWidth: 300 }}>
-                        <SelectAsync
-                          isClearable
-                          name="billing_address.country"
-                          url={`master/countries`}
-                          value={values.billing_address.country}
-                          placeholder="Please choose"
-                          fieldName="country_name"
-                          // options={selectCountry}
-                          className={`react-select ${
-                            touched?.billing_address?.country &&
-                            errors?.billing_address?.country
-                              ? "is-invalid"
-                              : null
-                          }`}
-                          onChange={() => {}}
-                          onBlur={setFieldTouched}
-                          components={
-                            isView
-                              ? {
-                                  DropdownIndicator: () => null,
-                                  IndicatorSeparator: () => null,
-                                }
-                              : null
-                          }
-                          isDisabled={isView}
-                        />
-                      </div>
-                    )}
+                    <div style={{ maxWidth: 300 }}>
+                      <SelectAsync
+                        isClearable
+                        name="billing_address.country"
+                        url={`master/countries`}
+                        value={values.billing_address.country}
+                        placeholder="Please choose"
+                        fieldName="country_name"
+                        className={`react-select ${
+                          touched?.billing_address?.country &&
+                          errors?.billing_address?.country
+                            ? "is-invalid"
+                            : null
+                        }`}
+                        onChange={(v) => {
+                          if (v) handleChangeCountry('billing', v.value)
+                          setValues({
+                            ...values,
+                            billing_address: {
+                              ...values.billing_address,
+                              country: {
+                                value: v.value,
+                                label: v.label
+                              },
+                              province: null,
+                              city: null
+                            }
+                          })
+                        }}
+                        onBlur={setFieldTouched}
+                        components={
+                          isView
+                            ? {
+                                DropdownIndicator: () => null,
+                                IndicatorSeparator: () => null,
+                              }
+                            : null
+                        }
+                        isDisabled={isView}
+                        invalid={touched?.billing_address?.country?.value && errors?.billing_address?.country?.value}
+                      />
+                      {touched?.billing_address?.country?.value && errors?.billing_address?.country?.value && (
+                        <TextError>
+                          {errors.billing_address.country?.value}
+                        </TextError>
+                      )}
+                    </div>
                   </Col>
                 </Form.Group>
                 <Form.Group as={Row} className='form-group'>
@@ -636,8 +960,12 @@ const GeneralInfomation = (props) => {
                         name="billing_address.province"
                         value={values.billing_address.province}
                         placeholder="Please choose"
-                        options={!values.billing_address.country ? [] : selectPermanentProvince}
-                        onChange={() => {}}
+                        options={!values.billing_address.country ? [] : optionProvince.billing}
+                        onChange={(v) => {
+                          setFieldValue('billing_address.province', v)
+                          setFieldValue('billing_address.city', null)
+                          handleChangeProvince("billing", v?.value, values.billing_address.country?.value)
+                        }}
                         onBlur={setFieldTouched}
                         components={
                           isView
@@ -663,9 +991,9 @@ const GeneralInfomation = (props) => {
                         isClearable
                         value={values.billing_address.city}
                         placeholder="Please choose"
-                        options={!values.billing_address.country ? [] : selectPermanentCity}
+                        options={!values.billing_address.country ? [] : optionCity.billing}
                         onChange={(v) => {
-                          // setFieldValue("permanentCity", v)
+                          setFieldValue("billing_address.city", v)
                         }}
                         onBlur={setFieldTouched}
                         components={
@@ -682,21 +1010,29 @@ const GeneralInfomation = (props) => {
                   </Col>
                 </Form.Group>
                 <Form.Group as={Row} className='form-group'>
+                  <Form.Label column sm={3} className='mb-2'>
+                    Zip Code
+                  </Form.Label>
                   <Col md={3} lg={9}>
-                    <FormInputControl
-                      label="Zip Code"
-                      required={false}
+                    <Form.Control
                       value={values.billing_address.zipcode}
                       name="billing_address.zipcode"
                       id="billing_address.zipcode"
                       onChange={handleChange}
-                      disabled={isView}
-                      // disabled={isView || loading}
                       type="text"
-                      style={{ maxWidth: 100 }}
                       minLength={1}
                       maxLength={16}
+                      placeholder=""
+                      disabled={isView}
+                      // disabled={isView || loading}
+                      style={{ maxWidth: 100 }}
+                      className={touched?.billing_address?.zipcode && errors?.billing_address?.zipcode && 'is-invalid'}
                     />
+                    {touched?.billing_address?.zipcode && errors?.billing_address?.zipcode && (
+                      <TextError>
+                        {errors.billing_address.zipcode}
+                      </TextError>
+                    )}
                   </Col>
                 </Form.Group>
                 <Form.Group as={Row} className='form-group'>
@@ -742,80 +1078,103 @@ const GeneralInfomation = (props) => {
 
           {/* Other Information */}
           <h3 className="card-heading">Other Information</h3>
-          <div style={{ padding: "0 15px 15px 15px" }}>
+          <div style={{ padding: "0 15px 15px 15px" }} className='other_information'>
             <Row>
               <Col sm={9} md={12} lg={9}>
                 <Form.Group as={Row} className='form-group'>
+                  <Form.Label column sm={3} className='mb-2'>
+                    Website
+                  </Form.Label>
                   <Col md={3} lg={9}>
-                    <FormInputControl
-                      label="Website"
+                    <Form.Control
                       value={values.other_information.website}
                       name="other_information.website"
                       id="other_information.website"
                       onChange={handleChange}
-                      disabled={isView}
-                      // disabled={isView || loading}
                       type="text"
-                      style={{ maxWidth: 300 }}
                       minLength={1}
                       maxLength={256}
-                    />
-                  </Col>
-                </Form.Group>
-                <Form.Group as={Row} className='form-group'>
-                  <Col md={3} lg={9}>
-                    <FormInputControl
-                      label="Internal Remark"
-                      value={values.other_information.internal_remark}
-                      name="internal_remark"
-                      id="internal_remark"
-                      onChange={handleChange}
+                      placeholder=""
                       disabled={isView}
                       // disabled={isView || loading}
-                      type="textarea"
-                      minLength={1}
-                      maxLength={4000}
-                      style={{ resize: 'none', maxWidth: 400 }}
+                      style={{ maxWidth: 300 }}
+                      className={touched?.other_information?.website && errors?.other_information?.website && 'is-invalid'}
                     />
                   </Col>
                 </Form.Group>
                 <Form.Group as={Row} className='form-group'>
+                  <Form.Label column sm={3} className='mb-2'>
+                    Internal Remark
+                  </Form.Label>
                   <Col md={3} lg={9}>
-                    <FormInputControl
-                      label="Logo"
-                      value={values.other_information.logo}
-                      name="corporateFax"
-                      // onChange={handleChange}
+                    <textarea
+                      value={values.other_information.internal_remark}
+                      name="other_information.internal_remark"
+                      id="other_information.internal_remark"
+                      onChange={handleChange}
+                      minLength={1}
+                      maxLength={4000}
+                      placeholder=""
                       disabled={isView}
-                      type="image"
-                      styleContainer={{ display: 'flex', }}
-                      style={{ maxWidth: 100, maxHeight: 100, }}
-                      children={(
-                        <Button
-                          variant='light'
-                          style={{
-                            margin: '0 0 0 30px',
-                            backgroundColor: '#fff',
-                            border: '1px solid #707070',
-                            borderRadius: '8px',
-                            padding: '4px 13px',
-                            fontSize: '12px',
-                            fontWeight: '400',
-                            color: '#333333',
-                            textTransform: 'uppercase',
-                            cursor: 'pointer'
-                          }}
-                          className='button'
-                        >
-                          UPLOAD PHOTO
-                        </Button>
-                      )}
+                      // disabled={isView || loading}
+                      style={{ resize: 'none', maxWidth: 400 }}
+                      className={`form-control mb-2 ${touched?.other_information?.internal_remark && errors?.other_information?.internal_remark && 'is-invalid'}`}
                     />
+                    {touched?.other_information?.internal_remark && errors?.other_information?.internal_remark && (
+                      <TextError>
+                        {errors.other_information.internal_remark}
+                      </TextError>
+                    )}
+                  </Col>
+                </Form.Group>
+                <Form.Group as={Row} className='form-group d-flex align-items-start'>
+                  <Form.Label column sm={3} className='mb-2'>
+                    Logo
+                  </Form.Label>
+                  <Col lg={9} md={3} className='d-flex align-items-start'>
+                    <input
+                      name="other_information.logo"
+                      id='other_information.logo'
+                      type="file"
+                      onChange={(e) => handleUpload(e)}
+                      className="form-control input-image"
+                      accept="image/jpeg,image/jpg,image/png"
+                      data-rule-required="true"
+                      data-msg-accept="Only .png, .jpg, .jpeg file supported"
+                      ref={uploadRef}
+                    />
+                    {values.other_information.logo.img ? (
+                      <img src={values.other_information.logo.img || NoImage} className="image_wrapper" alt="up-img" />
+                    ) : (
+                      <div className='wrapper d-flex justify-content-center align-items-center cursor-pointer' onClick={() => uploadRef.current.click()}>
+                        <img src={ImageDefault} className='default' alt='noimage' />
+                      </div>
+                    )}
+                    <Button
+                      variant='light'
+                      style={{
+                        margin: '0 0 0 30px',
+                        backgroundColor: '#fff',
+                        border: '1px solid #707070',
+                        borderRadius: '8px',
+                        padding: '4px 13px',
+                        fontSize: '12px',
+                        fontWeight: '400',
+                        color: '#333333',
+                        textTransform: 'uppercase',
+                        cursor: 'pointer'
+                      }}
+                      className='button'
+                      onClick={() => uploadRef.current.click()}
+                    >
+                      UPLOAD PHOTO
+                    </Button>
                   </Col>
                 </Form.Group>
               </Col>
             </Row>
           </div>
+
         </Card.Body>
       </Card>
       <div className="ml-1 mt-3 row justify-content-md-start justify-content-center">

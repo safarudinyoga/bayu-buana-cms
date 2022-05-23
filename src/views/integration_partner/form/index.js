@@ -267,6 +267,7 @@ const IntegrationPartnerForm = (props) => {
               {tabKey === "partner-credentials" ? (
                   <PartnerCredentials
                     handleSelectTab={(v) => handleSelectTab(v)}
+                    integration_partner_code={data.integration_partner_code}
                   />
                 ) : null}
               </Tab.Pane>
