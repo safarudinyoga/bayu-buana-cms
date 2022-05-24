@@ -1,359 +1,274 @@
-import { withRouter } from "react-router"
-import React, { useState, useEffect } from "react"
-import { Col, Form, Row, Button } from "react-bootstrap"
-import { Formik, FastField } from "formik"
-import { v4 as uuidv4 } from "uuid"
+import React, { useEffect, useState } from "react"
+import {
+  Form,
+  Row,
+  Col,
+  Button,
+} from "react-bootstrap"
+import { Formik, FastField, Field } from "formik"
 import * as Yup from "yup"
-import SelectAsync from "components/form/select-async"
-import Api from "config/api"
-import { useParams } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
-import { setAlert, setCreateModal, setModalTitle } from "redux/ui-store"
-import CancelButton from "components/button/cancel"
+import { setAlert, setModalTitle, setCreateModal } from "redux/ui-store"
+import Api from "config/api"
+import _ from "lodash"
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css"
+import "react-dropzone-uploader/dist/styles.css"
+import { useParams } from "react-router-dom"
+import CancelButton from "components/button/cancel";
+import FormikControl from "../../../../components/formik/formikControl"
 
-const endpoint = "/master/integration-partners"
-
-function PartnerCityForm(props) {
-  const dispatch = useDispatch()
-  const { id } = useParams()
+const endpoint = "/master/integration-partners";
+const Cities = (props) => {
+  let dispatch = useDispatch()
   const showCreateModal = useSelector((state) => state.ui.showCreateModal)
-  const API = new Api()
-  const isView = showCreateModal.disabled_form || props.isView
-  const [loading, setLoading] = useState(true)
+  const { id } = useParams()
+  const [cityId, setCityId] = useState(null)
   const [formValues, setFormValues] = useState(null)
+  const isView = showCreateModal.disabled_form || props.isView;
+  const [loading, setLoading] = useState(true);
+  const [integrationPartnerCode, setIntegrationPartnerCode] = useState(2);
+  let api = new Api()
+
+  const duplicateValue = async(fieldName, value) => {
+    let filters = encodeURIComponent(JSON.stringify([[fieldName,"=",value],["AND"],["integration_partner_id",id],["AND"],["status",1]]))
+    let res = await api.get(endpoint + "/" + id + "/cities?" + `filters=${filters}`)
+    let sameId = res.data.items.find((v) => v.id === cityId)
+    if(!sameId) return res.data.items.length === 0 
+
+    return true
+}
+
+Yup.addMethod(Yup.object, 'uniqueValueObject', function (fieldName, message) {
+    return this.test('unique', message, function(field) {
+        if(field) return duplicateValue(fieldName, field.value)
+        return true
+    })
+})
+
+Yup.addMethod(Yup.string, 'uniqueValueString', function (fieldName, message) {
+    return this.test('unique', message, function(field) {
+        if(field) return duplicateValue(fieldName, field)
+        return true
+    })
+})
+  // Initialize form
+  const initialValues = {
+    city_id: "",
+    city_code: "",
+    city_name: "", 
+    latitude: "",
+    longitude: ""
+  }
+
+  // Schema for yup
+  const validationSchema = Yup.object().shape({
+    city_id: Yup.object()
+    .required("City is required.")
+    .uniqueValueObject("city_id","City already exists"),
+    city_code: Yup.string()
+    .required("Partner City Code is required")
+    .uniqueValueString('city_code', 'Partner City Code already exists'),
+    city_name: Yup.string()
+    .required("Partner City Name is required")
+    .uniqueValueString('city_name', 'Partner City Name already exists'),
+  })
 
   useEffect(async () => {
     let formId = showCreateModal.id || props.id
 
     let docTitle = "Edit Partner Cities"
     if (!formId) {
-      docTitle = "New Partner Cities"
+      docTitle = "Create Partner Cities"
     }
-
     dispatch(setModalTitle(docTitle))
 
-    if (formId) {
+    try {
+      let res = await api.get(endpoint + "/" + id);
+      setIntegrationPartnerCode(res.data.integration_partner_code)
+    } catch (e) {
+      console.log(e)
+    }
+    if(formId) {
       try {
-        let res = await API.get(endpoint + "/" + id + "/cities/" + formId)
-        setFormValues(res.data)
+        let res = await api.get(endpoint + "/" + id + "/cities/" + formId);
+        setFormValues({ 
+          ...formValues,
+          city_id: _.isEmpty(res.data.city) ? '' : {
+            value: res.data.city.id,
+            label: res.data.city.city_name,
+          },
+          city_code: res.data.city_code ? res.data.city_code : "",
+          city_name: res.data.city_name ? res.data.city_name : "",
+          latitude: res.data.latitude ? res.data.latitude : "",
+          longitude: res.data.longitude ? res.data.longitude : "",
+        })
       } catch (e) {
         console.log(e)
       }
     }
+    
   }, [])
-
-  useEffect(() => {
-    if (!showCreateModal.id) {
-      setLoading(false)
-    }
-
-    if (formValues) {
-      setLoading(false)
-    }
-
-  }, [showCreateModal.id, formValues])
-
-  const initialValues = {
-    city: "",
-    city_code: "",
-    city_name: "",
-    latitude: "",
-    longitude: ""
-  }
-
-  const validationSchema = Yup.object().shape({
-    city: Yup.object().required("City is required.."),
-    city_code: Yup.string().required("Partner City Code is required"),
-    // .test(
-    //   "Unique Partner City Code",
-    //   "Partner City Code already exists", // <- key, message
-    //   async (value, ctx) => {
-    //     let formId = props.match.params.id
-    //     try {
-    //       let res = await axios.get(`${env.API_URL}/master/integration-partner-cities?filters=["city_code","=","${value}"]`)
-
-    //       if (formId) {
-    //         return res.data.items.length === 0 ||
-    //           value === formValues.city_code
-    //       } else {
-    //         return res.data.items.length === 0
-    //       }
-    //     } catch (e) {
-    //       return false
-    //     }
-    //   }
-    // ),
-    city_name: Yup.string().required("Partner City Name is required"),
-    // .test(
-    //   "Unique Partner City Name",
-    //   "Partner City Name already exists", // <- key, message
-    //   async (value, ctx) => {
-    //     let formId = props.match.params.id
-    //     try {
-    //       let res = await axios.get(`${env.API_URL}/master/integration-partner-cities?filters=["city_name","=","${value}"]`)
-
-    //       if (formId) {
-    //         return res.data.items.length === 0 ||
-    //           value === formValues.city_name
-    //       } else {
-    //         return res.data.items.length === 0
-    //       }
-    //     } catch (e) {
-    //       return false
-    //     }
-    //   }
-    // ),
-  })
-
   const onSubmit = async (values, a) => {
-    try {
-      let formId = showCreateModal.id || props.id
-      let form = {
-        city_id: uuidv4(),
-        city_code: values.city_code,
-        city_name: values.city_name,
-        latitude: values.latitude,
-        longitude: values.longitude
-      }
+    let formatted = {
+      city_code: values.city_code,
+      city_name: values.city_name,
+      city_id: values.city_id.value,
+      integration_partner_id: id,
+      latitude: values.latitude == "" ? 0.0 : parseFloat(values.latitude),
+      longitude: values.longitude == "" ? 0.0 : parseFloat(values.longitude)
+    }
 
-      if (!formId) {
-        //Proses Create Data
-        let integration_parter_id = props.match.params.id
-        let res = await API.post(
-          `/master/integration-partners/${integration_parter_id}/cities`,
-          form,
-        )
-        dispatch(
-          setCreateModal({ show: false, id: null, disabled_form: false }),
-        )
-        dispatch(
-          setAlert({
-            message: `Record 'Partner City Name: ${form.city_name}' has been successfully saved.`,
-          }),
-        )
-      } else {
-        let res = await API.put(
-          `/master/integration-partner-cities/${formId}`,
-          form,
-        )
-        dispatch(
-          setCreateModal({ show: false, id: null, disabled_form: false }),
-        )
-        dispatch(
-          setAlert({
-            message: `Record 'Partner City Name: ${form.city_name}' has been successfully saved.`,
-          }),
-        )
+    try {
+      if(cityId){
+        let res = await api.put(endpoint + "/" + id + "/cities/" + cityId, formatted);
+      }else{
+          let res = await api.post(endpoint + "/" + id + "/cities", formatted);
       }
+      dispatch(
+        setAlert({
+            message: `Record 'Partner City Name: ${values.city_name}' has been successfully saved.`,
+        })
+      );
+      dispatch(setCreateModal({ show: false, id: null, disabled_form: false }));
+      
     } catch (e) {
       dispatch(
         setAlert({
-          message: "Failed to save this record.",
-        }),
-      )
+            message: "Failed to save this record.",
+        })
+    );
     }
+};
+  useEffect(() => {
+    if (!showCreateModal.id) {
+      setLoading(false);
   }
 
-  return (
-    <Formik
-      initialValues={formValues || initialValues}
-      validationSchema={validationSchema}
-      onSubmit={onSubmit}
-      validateOnMount
-      enableReinitialize
-    >
-      {({
-        values,
-        errors,
-        touched,
-        dirty,
-        handleChange,
-        handleBlur,
-        handleSubmit,
-        isSubmitting,
-        isValid,
-        setFieldValue,
-        setFieldTouched,
-      }) => (
-        <Form onSubmit={handleSubmit} className="ml-2">
-          <Form.Group as={Row} className="form-group">
-            <Form.Label column sm={4}>
-              City<span className="form-label-required">*</span>
-            </Form.Label>
-            <Col sm={8}>
-              <FastField name="city">
-                {({ field, form }) => (
-                  <div style={{ maxWidth: 200 }}>
-                    <SelectAsync
-                      {...field}
-                      isClearable
-                      isDisabled={isView}
-                      url={`master/cities`}
-                      fieldName="city_name"
-                      onChange={(v) => {
-                        setFieldValue("city", v)
-                      }}
-                      placeholder="Please choose"
-                      className={`react-select ${
-                        form.touched.city && form.errors.city
-                          ? "is-invalid"
-                          : null
-                      }`}
-                      components={
-                        isView
-                          ? {
-                              DropdownIndicator: () => null,
-                              IndicatorSeparator: () => null,
-                            }
-                          : null
-                      }
-                    />
-                    {form.touched.city && form.errors.city && (
-                      <Form.Control.Feedback type="invalid">
-                        {form.touched.city ? form.errors.city : null}
-                      </Form.Control.Feedback>
-                    )}
-                  </div>
-                )}
-              </FastField>
-            </Col>
-          </Form.Group>
-          <Form.Group as={Row} className="form-group">
-            <Form.Label column md={3} lg={4}>
-              Partner City Code <span className="form-label-required">*</span>
-            </Form.Label>
-            <Col md={9} lg={8}>
-              <FastField name="city_code" disabled>
-                {({ field, form }) => (
-                  <>
-                    <Form.Control
-                      type="text"
-                      disabled={isView}
-                      isInvalid={
-                        form.touched.city_code && form.errors.city_code
-                      }
-                      minLength={1}
-                      maxLength={128}
-                      {...field}
-                      style={{ maxWidth: 300 }}
-                    />
-                    {form.touched.city_code && form.errors.city_code && (
-                      <Form.Control.Feedback type="invalid">
-                        {form.touched.city_code ? form.errors.city_code : null}
-                      </Form.Control.Feedback>
-                    )}
-                  </>
-                )}
-              </FastField>
-            </Col>
-          </Form.Group>
-          <Form.Group as={Row} className="form-group">
-            <Form.Label column md={3} lg={4}>
-              Partner City Name <span className="form-label-required">*</span>
-            </Form.Label>
-            <Col md={9} lg={8}>
-              <FastField name="city_name" disabled>
-                {({ field, form }) => (
-                  <>
-                    <Form.Control
-                      type="text"
-                      disabled={isView}
-                      isInvalid={
-                        form.touched.city_name && form.errors.city_name
-                      }
-                      minLength={1}
-                      maxLength={128}
-                      {...field}
-                      style={{ maxWidth: 300 }}
-                    />
-                    {form.touched.city_name && form.errors.city_name && (
-                      <Form.Control.Feedback type="invalid">
-                        {form.touched.city_name ? form.errors.city_name : null}
-                      </Form.Control.Feedback>
-                    )}
-                  </>
-                )}
-              </FastField>
-            </Col>
-          </Form.Group>
-          <Form.Group as={Row} className="form-group">
-            <Form.Label column md={3} lg={4}>
-              Latitude
-            </Form.Label>
-            <Col md={9} lg={8}>
-              <FastField name="latitude" disabled>
-                {({ field, form }) => (
-                  <>
-                    <Form.Control
-                      type="text"
-                      disabled={isView}
-                      minLength={1}
-                      maxLength={16}
-                      {...field}
-                      style={{ maxWidth: 300 }}
-                    />
-                  </>
-                )}
-              </FastField>
-            </Col>
-          </Form.Group>
-          <Form.Group as={Row} className="form-group">
-            <Form.Label column md={3} lg={4}>
-              Longitude
-            </Form.Label>
-            <Col md={9} lg={8}>
-              <FastField name="longitude" disabled>
-                {({ field, form }) => (
-                  <>
-                    <Form.Control
-                      type="text"
-                      disabled={isView}
-                      minLength={1}
-                      maxLength={16}
-                      {...field}
-                      style={{ maxWidth: 300 }}
-                    />
-                  </>
-                )}
-              </FastField>
-            </Col>
-          </Form.Group>
+  if (formValues) {
+      setLoading(false);
+  }
+    setCityId(showCreateModal.id)
+  }, [showCreateModal.id, formValues])
 
-          {!props.hideButton && (
-            <div
-              style={{
-                marginBottom: 30,
-                marginTop: 30,
-                display: "flex",
-              }}
-            >
-              {!isView && (
-                <Button
-                  variant="primary"
-                  type="submit"
-                  disabled={isSubmitting}
-                  style={{ marginRight: 15 }}
-                >
-                  SAVE
-                </Button>
-              )}
-              <CancelButton
-                onClick={() =>
-                  dispatch(
-                    setCreateModal({
-                      show: false,
-                      id: null,
-                      disabled_form: false,
-                    }),
-                  )
-                }
-              />
-            </div>
-          )}
-        </Form>
-      )}
-    </Formik>
+  const formSize = {
+    label: {
+        md: 5,
+        lg: 5,
+    },
+    value: {
+        md: 7,
+        lg: 7,
+    },
+  };
+
+  console.log('formValues', formValues)
+  return (
+    <div>
+      <Formik initialValues={formValues || initialValues} validationSchema={validationSchema} onSubmit={onSubmit} validateOnMount enableReinitialize>
+            {({ dirty, handleSubmit, isSubmitting, setFieldValue, handleChange, values }) => (
+                <Form onSubmit={handleSubmit} className="ml-2">
+                    <FormikControl
+                        control="selectAsync"
+                        required={isView ? "" : "label-required"}
+                        label="City"
+                        name="city_id"
+                        placeholder={"Please Choose."}
+                        url={`master/cities`}
+                        fieldName={"city_name"}
+                        onChange={(v) => {
+                            setFieldValue("city_id", v);
+                        }}
+                        style={{ maxWidth: 250 }}
+                        size={formSize}
+                        components={
+                            isView
+                                ? {
+                                      DropdownIndicator: () => null,
+                                      IndicatorSeparator: () => null,
+                                  }
+                                : null
+                        }
+                        isDisabled={isView}
+                    />
+
+                    <FormikControl
+                        control="input"
+                        required="label-required"
+                        label="Partner City Code"
+                        name="city_code"
+                        style={{ maxWidth: 250 }}
+                        size={formSize}
+                        disabled={isView || loading}
+                        onChange={(e) => {
+                            setFieldValue("city_code", e.target.value);
+                        }}
+                        maxLength={36}
+                    />
+
+                    <FormikControl
+                        control="input"
+                        required="label-required"
+                        label="Partner City Name"
+                        name="city_name"
+                        style={{ maxWidth: 250 }}
+                        size={formSize}
+                        disabled={isView || loading}
+                        onChange={(e) => {
+                            setFieldValue("city_name", e.target.value);
+                        }}
+                        maxLength={256}
+                    />
+                    {
+                    integrationPartnerCode != 2 ? 
+                    <FormikControl
+                        control="input"
+                        label="Latitude"
+                        name="latitude"
+                        style={{ maxWidth: 250 }}
+                        size={formSize}
+                        disabled={isView || loading}
+                        onChange={(e) => {
+                            setFieldValue("latitude", e.target.value);
+                        }}
+                        maxLength={16}
+                    />
+                    : null }
+                  {
+                    integrationPartnerCode != 2 ? 
+                    <FormikControl
+                        control="input"
+                        label="Longitude"
+                        name="longitude"
+                        style={{ maxWidth: 250 }}
+                        size={formSize}
+                        disabled={isView || loading}
+                        onChange={(e) => {
+                            setFieldValue("longitude", e.target.value);
+                        }}
+                        maxLength={16}
+                    /> : null }
+
+                    {!props.hideButton && (
+                        <div
+                            style={{
+                                marginBottom: 30,
+                                marginTop: 30,
+                                display: "flex",
+                            }}
+                        >
+                            {!isView && (
+                                <Button variant="primary" type="submit" disabled={isSubmitting} style={{ marginRight: 15 }}>
+                                    SAVE
+                                </Button>
+                            )}
+                            <CancelButton onClick={() => dispatch(setCreateModal({ show: false, id: null, disabled_form: false }))} />
+                        </div>
+                    )}
+                </Form>
+            )}
+        </Formik>
+    </div>
   )
 }
 
-export default withRouter(PartnerCityForm)
+export default Cities
