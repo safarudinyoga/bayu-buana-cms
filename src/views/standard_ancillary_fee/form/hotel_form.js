@@ -35,7 +35,7 @@ const HotelForm = (props) => {
   const [taxTypeInternationalHotel, setTaxTypeInternationalHotel] = useState([])
   const [taxTypeInternationalNonGds, setTaxTypeInternationalNonGds] = useState([])
   const [taxTypeInternationalRefund, setTaxTypeInternationalRefund] = useState([])
-  const [taxTypeInternationalRfp, setTaxTypeInternationalRfp] = useState([])
+  const [taxTypeInternationalFrp, setTaxTypeInternationalFrp] = useState([])
   const [taxTypeOtherEmergency, setTaxTypeOtherEmergency] = useState([])
   
   const [taxIdDomesticHotel, setTaxIdDomesticHotel] = useState("")
@@ -45,7 +45,7 @@ const HotelForm = (props) => {
   const [taxIdInternationalHotel, setTaxIdInternationalHotel] = useState("")
   const [taxIdInternationalNonGds, setTaxIdInternationalNonGds] = useState("")
   const [taxIdInternationalRefund, setTaxIdInternationalRefund] = useState("")
-  const [taxIdInternationalRfp, setTaxIdInternationalRfp] = useState("")
+  const [taxIdInternationalFrp, setTaxIdInternationalFrp] = useState("")
   const [taxIdOtherEmergency, setTaxIdOtherEmergency] = useState("")
   useEffect(async () => {
     let api = new Api()
@@ -80,7 +80,7 @@ const HotelForm = (props) => {
     getFeeTaxType("47", setTaxTypeDomesticNonGds, setTaxIdDomesticNonGds)
     getFeeTaxType("44", setTaxTypeInternationalHotel, setTaxIdInternationalHotel)
     getFeeTaxType("46", setTaxTypeInternationalRefund, setTaxIdInternationalRefund)
-    getFeeTaxType("40", setTaxTypeInternationalRfp, setTaxIdInternationalRfp)
+    getFeeTaxType("40", setTaxTypeInternationalFrp, setTaxIdInternationalFrp)
     getFeeTaxType("48", setTaxTypeInternationalNonGds, setTaxIdInternationalNonGds)
     getFeeTaxType("6", setTaxTypeOtherEmergency, setTaxIdOtherEmergency)
   }, [props.match.params.id])
@@ -91,78 +91,129 @@ const HotelForm = (props) => {
     description: "",
     domestic_hotel: "",
     domestic_hotel_fee_tax_id: "",
-    domestic_hotel_amount: null,
+    domestic_hotel_amount: "",
     domestic_hotel_amount_type: "",
-    domestic_hotel_percent: null,
+    domestic_hotel_percent: "",
     domestic_hotel_tax_include: false,
     domestic_refund: "",
     domestic_refund_fee_tax_id: "",
-    domestic_refund_amount: null,
+    domestic_refund_amount: "",
     domestic_refund_amount_type: "",
-    domestic_refund_percent: null,
+    domestic_refund_percent: "",
     domestic_refund_tax_include: false,
-    domestic_rfp: "",
-    domestic_rfp_fee_tax_id: "",
-    domestic_rfp_amount: null,
-    domestic_rfp_amount_type: "",
-    domestic_rfp_percent: null,
-    domestic_rfp_tax_include: false,
+    domestic_frp: "",
+    domestic_frp_fee_tax_id: "",
+    domestic_frp_amount: "",
+    domestic_frp_amount_type: "",
+    domestic_frp_percent: "",
+    domestic_frp_tax_include: false,
     domestic_non_gds: "",
     domestic_non_gds_fee_tax_id: "",
-    domestic_non_gds_amount: null,
+    domestic_non_gds_amount: "",
     domestic_non_gds_amount_type: "",
-    domestic_non_gds_percent: null,
+    domestic_non_gds_percent: "",
     domestic_non_gds_tax_include: false,
     international_hotel: "",
     international_hotel_fee_tax_id: "",
-    international_hotel_amount: null,
+    international_hotel_amount: "",
     international_hotel_amount_type: "",
-    international_hotel_percent: null,
+    international_hotel_percent: "",
     international_hotel_tax_include: false,
     international_refund: "",
     international_refund_fee_tax_id: "",
-    international_refund_amount: null,
+    international_refund_amount: "",
     international_refund_amount_type: "",
-    international_refund_percent: null,
+    international_refund_percent: "",
     international_refund_tax_include: false,
-    international_rfp: "",
-    international_rfp_fee_tax_id: "",
-    international_rfp_amount: null,
-    international_rfp_amount_type: "",
-    international_rfp_percent: null,
-    international_rfp_tax_include: false,
+    international_frp: "",
+    international_frp_fee_tax_id: "",
+    international_frp_amount: "",
+    international_frp_amount_type: "",
+    international_frp_percent: "",
+    international_frp_tax_include: false,
     international_non_gds: "",
     international_non_gds_fee_tax_id: "",
-    international_non_gds_amount: null,
+    international_non_gds_amount: "",
     international_non_gds_amount_type: "",
-    international_non_gds_percent: null,
+    international_non_gds_percent: "",
     international_non_gds_tax_include: false,
     other_emergency: "",
     other_emergency_fee_tax_id: "",
-    other_emergency_amount: null,
+    other_emergency_amount: "",
     other_emergency_amount_type: "",
-    other_emergency_percent: null,
+    other_emergency_percent: "",
     other_emergency_tax_include: false
   })
 
-  const initialFormModalAddMap = {}
-
   // Schema for yup
   const validationSchema = Yup.object().shape({
-    processing_fee_category_name: Yup.string().required("Present Name is required."),
+    processing_fee_category_name: Yup.string().required("Please enter Preset Name."),
   })
 
-  const validationSchemaModalAddMap = Yup.object().shape({})
+  const checkprocessingType = (value) => value !== "00000000-0000-0000-0000-000000000000" ? "amount" : "percent"
 
   useEffect(async() => {
     try {
       if(formId) {
-        let res = await api.get(endpoint + "/" + formId)
-        // let agent_res = await api.get(`endpointFee+ "/2/" + res.data.id)
+        let {data} = await api.get(endpoint + "/" + formId)
         setInitialForm({
           ...initialForm, 
-          ...res.data,
-          // ...agent_res.data
+          ...data,
+          domestic_hotel: checkprocessingType(data.domestic_reissue.charge_type_id),
+          domestic_hotel_fee_tax_id: data.domestic_reissue.fee_tax_type_id,
+          domestic_hotel_amount: data.domestic_reissue.amount,
+          domestic_hotel_amount_type: data.domestic_reissue.charge_type_id,
+          domestic_hotel_percent: data.domestic_reissue.percent,
+          domestic_hotel_tax_include: data.domestic_reissue.is_tax_inclusive,
+          domestic_refund: checkprocessingType(data.domestic_refund.charge_type_id),
+          domestic_refund_fee_tax_id: data.domestic_refund.fee_tax_type_id,
+          domestic_refund_amount: data.domestic_refund.amount,
+          domestic_refund_amount_type: data.domestic_refund.charge_type_id,
+          domestic_refund_percent: data.domestic_refund.percent,
+          domestic_refund_tax_include: data.domestic_refund.is_tax_inclusive,
+          domestic_frp: checkprocessingType(data.domestic_frp.charge_type_id),
+          domestic_frp_fee_tax_id: data.domestic_frp.fee_tax_type_id,
+          domestic_frp_amount: data.domestic_frp.amount,
+          domestic_frp_amount_type: data.domestic_frp.charge_type_id,
+          domestic_frp_percent: data.domestic_frp.percent,
+          domestic_frp_tax_include: data.domestic_frp.is_tax_inclusive,
+          domestic_non_gds: checkprocessingType(data.domestic_non_gds.charge_type_id),
+          domestic_non_gds_fee_tax_id: data.domestic_non_gds.fee_tax_type_id,
+          domestic_non_gds_amount: data.domestic_non_gds.amount,
+          domestic_non_gds_amount_type: data.domestic_non_gds.charge_type_id,
+          domestic_non_gds_percent: data.domestic_non_gds.percent,
+          domestic_non_gds_tax_include: data.domestic_non_gds.is_tax_inclusive,
+          international_hotel: checkprocessingType(data.international_reissue.charge_type_id),
+          international_hotel_fee_tax_id: data.international_reissue.fee_tax_type_id,
+          international_hotel_amount: data.international_reissue.amount,
+          international_hotel_amount_type: data.international_reissue.charge_type_id,
+          international_hotel_percent: data.international_reissue.percent,
+          international_hotel_tax_include: data.international_reissue.is_tax_inclusive,
+          international_refund: checkprocessingType(data.international_refund.charge_type_id),
+          international_refund_fee_tax_id: data.international_refund.fee_tax_type_id,
+          international_refund_amount: data.international_refund.amount,
+          international_refund_amount_type: data.international_refund.charge_type_id,
+          international_refund_percent: data.international_refund.percent,
+          international_refund_tax_include: data.international_refund.is_tax_inclusive,
+          international_frp: checkprocessingType(data.international_frp.charge_type_id),
+          international_frp_fee_tax_id: data.international_frp.fee_tax_type_id,
+          international_frp_amount: data.international_frp.amount,
+          international_frp_amount_type: data.international_frp.charge_type_id,
+          international_frp_percent: data.international_frp.percent,
+          international_frp_tax_include: data.international_frp.is_tax_inclusive,
+          international_non_gds: checkprocessingType(data.international_non_gds.charge_type_id),
+          international_non_gds_fee_tax_id: data.international_non_gds.fee_tax_type_id,
+          international_non_gds_amount: data.international_non_gds.amount,
+          international_non_gds_amount_type: data.international_non_gds.charge_type_id,
+          international_non_gds_percent: data.international_non_gds.percent,
+          international_non_gds_tax_include: data.international_non_gds.is_tax_inclusive,
+          other_emergency: checkprocessingType(data.other_emergency_service.charge_type_id),
+          other_emergency_fee_tax_id: data.other_emergency_service.fee_tax_type_id,
+          other_emergency_amount: data.other_emergency_service.amount,
+          other_emergency_amount_type: data.other_emergency_service.charge_type_id,
+          other_emergency_percent: data.other_emergency_service.percent,
+          other_emergency_tax_include: data.other_emergency_service.is_tax_inclusive
+          
         })
       }
     } catch (e) { console.log(e) }
@@ -199,7 +250,7 @@ const HotelForm = (props) => {
       let payloadDomestic = {
         processing_fee_category_name: values.processing_fee_category_name,
         description: values.description,
-        domestic_hotel: {
+        domestic_reissue: {
           fee_tax_type_id: taxIdDomesticHotel,
           amount: values.domestic_hotel == "amount" ? values.domestic_hotel_amount : 0,
           percent:values.domestic_hotel == "amount" ? 0 : parseFloat(values.domestic_hotel_percent),
@@ -213,12 +264,12 @@ const HotelForm = (props) => {
           charge_type_id:values.domestic_refund == "amount" ? values.domestic_refund_amount_type : "00000000-0000-0000-0000-000000000000",
           is_tax_inclusive:values.domestic_refund == "amount" ? false : values.domestic_refund_tax_include,
         },
-        domestic_rfp: {
+        domestic_frp: {
           fee_tax_type_id: taxIdDomesticRfp,
-          amount: values.domestic_rfp == "amount" ? values.domestic_rfp_amount : 0,
-          percent:values.domestic_rfp == "amount" ? 0 : parseFloat(values.domestic_rfp_percent),
-          charge_type_id:values.domestic_rfp == "amount" ? values.domestic_rfp_amount_type : "00000000-0000-0000-0000-000000000000",
-          is_tax_inclusive:values.domestic_rfp == "amount" ? false : values.domestic_rfp_tax_include,
+          amount: values.domestic_frp == "amount" ? values.domestic_frp_amount : 0,
+          percent:values.domestic_frp == "amount" ? 0 : parseFloat(values.domestic_frp_percent),
+          charge_type_id:values.domestic_frp == "amount" ? values.domestic_frp_amount_type : "00000000-0000-0000-0000-000000000000",
+          is_tax_inclusive:values.domestic_frp == "amount" ? false : values.domestic_frp_tax_include,
         },
         domestic_non_gds: {
           fee_tax_type_id: taxIdDomesticNonGds,
@@ -227,7 +278,7 @@ const HotelForm = (props) => {
           charge_type_id:values.domestic_non_gds == "amount" ? values.domestic_non_gds_amount_type : "00000000-0000-0000-0000-000000000000",
           is_tax_inclusive:values.domestic_non_gds == "amount" ? false : values.domestic_non_gds_tax_include,
         },
-        international_hotel: {
+        international_reissue: {
           fee_tax_type_id: taxIdInternationalHotel,
           amount: values.international_hotel == "amount" ? values.international_hotel_amount : 0,
           percent:values.international_hotel == "amount" ? 0 : parseFloat(values.international_hotel_percent),
@@ -241,12 +292,12 @@ const HotelForm = (props) => {
           charge_type_id:values.international_refund == "amount" ? values.international_refund_amount_type : "00000000-0000-0000-0000-000000000000",
           is_tax_inclusive:values.international_refund == "amount" ? false : values.international_refund_tax_include,
         },
-        international_rfp: {
-          fee_tax_type_id: taxIdInternationalRfp,
-          amount: values.international_rfp == "amount" ? values.international_rfp_amount : 0,
-          percent:values.international_rfp == "amount" ? 0 : parseFloat(values.international_rfp_percent),
-          charge_type_id:values.international_rfp == "amount" ? values.international_rfp_amount_type : "00000000-0000-0000-0000-000000000000",
-          is_tax_inclusive:values.international_rfp == "amount" ? false : values.international_rfp_tax_include,
+        international_frp: {
+          fee_tax_type_id: taxIdInternationalFrp,
+          amount: values.international_frp == "amount" ? values.international_frp_amount : 0,
+          percent:values.international_frp == "amount" ? 0 : parseFloat(values.international_frp_percent),
+          charge_type_id:values.international_frp == "amount" ? values.international_frp_amount_type : "00000000-0000-0000-0000-000000000000",
+          is_tax_inclusive:values.international_frp == "amount" ? false : values.international_frp_tax_include,
         },
         international_non_gds: {
           fee_tax_type_id: taxIdInternationalNonGds,
@@ -371,12 +422,12 @@ const HotelForm = (props) => {
                         {
                           title:"Domestic RFP Fee (Contact Fee)",
                           taxType:taxTypeDomesticRfp,
-                          fieldFeeTaxId:"domestic_rfp_fee_tax_id",
-                          fieldRadio:"domestic_rfp",
-                          fieldAmount:"domestic_rfp_amount",
-                          fieldAmountType:"domestic_rfp_amount_type",
-                          fieldPercent:"domestic_rfp_percent",
-                          fieldIncludeTax:"domestic_rfp_tax_include"
+                          fieldFeeTaxId:"domestic_frp_fee_tax_id",
+                          fieldRadio:"domestic_frp",
+                          fieldAmount:"domestic_frp_amount",
+                          fieldAmountType:"domestic_frp_amount_type",
+                          fieldPercent:"domestic_frp_percent",
+                          fieldIncludeTax:"domestic_frp_tax_include"
                         },
                         {
                           title:"Domestic Non-GDS Hotel Booking Process Fee",
@@ -412,13 +463,13 @@ const HotelForm = (props) => {
                         },
                         {
                           title:"International RFP Fee (Contact Fee)",
-                          taxType:taxTypeInternationalRfp,
-                          fieldFeeTaxId:"international_rfp_fee_tax_id",
-                          fieldRadio:"international_rfp",
-                          fieldAmount:"international_rfp_amount",
-                          fieldAmountType:"international_rfp_amount_type",
-                          fieldPercent:"international_rfp_percent",
-                          fieldIncludeTax:"international_rfp_tax_include"
+                          taxType:taxTypeInternationalFrp,
+                          fieldFeeTaxId:"international_frp_fee_tax_id",
+                          fieldRadio:"international_frp",
+                          fieldAmount:"international_frp_amount",
+                          fieldAmountType:"international_frp_amount_type",
+                          fieldPercent:"international_frp_percent",
+                          fieldIncludeTax:"international_frp_tax_include"
                         },
                         {
                           title:"International Non-GDS Hotel Booking Process Fee",
@@ -450,9 +501,12 @@ const HotelForm = (props) => {
                     setFieldValue={setFieldValue}
                     isView={isView}
                     amountSuffixSelections={[
-                      {label:"/Room Night", value:"b95094b2-0883-4e03-8e67-ceb32314b332"},
-                      {label:"/Room", value:"02103ce7-ecfe-446e-baa1-cb3c6d982fe9"},
-                      {label:"/Transaction", value:"5123b121-4f6a-4871-bef1-65408d663e19"},
+                      {
+                        label:"/Room Night", value:"b95094b2-0883-4e03-8e67-ceb32314b332"},
+                      {
+                        label:"/Room", value:"02103ce7-ecfe-446e-baa1-cb3c6d982fe9"},
+                      {
+                        label:"/Transaction", value:"5123b121-4f6a-4871-bef1-65408d663e19"},
                     ]}
                   />
 

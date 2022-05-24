@@ -8,11 +8,17 @@ import Api from "config/api"
 import { useDispatch, useSelector } from "react-redux"
 import { setAlert, setCreateModal, setModalTitle } from "redux/ui-store"
 import CancelButton from "components/button/cancel"
-import Select from "components/form/select"
+import Select from "components/form/select-async"
 
 const endpoint = "/master/configurations/standard-services"
 
-function PartnerCityForm(props) {
+const generateNumber = (count) => {
+  const temp = []
+  for (let i = 0; i <= count; i++) temp.push(`${i}`)
+  return temp
+}
+
+function StandartService(props) {
   const dispatch = useDispatch()
   const showCreateModal = useSelector((state) => state.ui.showCreateModal)
   const API = new Api()
@@ -20,13 +26,39 @@ function PartnerCityForm(props) {
   const [id, setId] = useState(null)
   const [loading, setLoading] = useState(true)
   const [formValues, setFormValues] = useState(null)
-  const [defmonths, setMonths] = useState({ value: 1, label: "" })
-  const [defyears, setYears] = useState({ value: 1921, label: "" })
+
+  //get Time
+  const [days, setDays] = useState([])
+  const [hours, setHours] = useState([])
+  const [minutes, setMinutes] = useState([])
+
+  useEffect(() => {
+    setDays(generateNumber(700))
+    setHours(generateNumber(23))
+    setMinutes(generateNumber(59))
+  }, [])
+
+  const LongList = () => {
+    const [names, setNames] = useState([])
+
+    useEffect(() => {
+      setNames(generateNumber(1000))
+    }, [])
+
+    return (
+      <>
+        {" "}
+        {names.map((name) => (
+          <>{name}</>
+        ))}{" "}
+      </>
+    )
+  }
 
   useEffect(async () => {
     let formId = showCreateModal.id || props.id
 
-    let docTitle = "Edit Partner Cities"
+    let docTitle = "Edit Standard Service"
     if (!formId) {
       docTitle = "Create Standard Service"
     }
@@ -57,98 +89,13 @@ function PartnerCityForm(props) {
 
   const initialValues = {
     task_type: "",
-    respon_time: [],
+    respon_time: null,
   }
 
   const validationSchema = Yup.object().shape({
     task_type: Yup.object().required("Task Type is required."),
+    respon_time_days: Yup.object().required("Task Type is required."),
   })
-  const resetDate = (date, months = defmonths, years = defyears) => {
-    const today = new Date()
-    let currentYear = today.getFullYear()
-    let currentMonth = today.getMonth() + 1
-    let currentDate = today.getDate()
-
-    if (years.value === currentYear) {
-      if (months.value > currentMonth) {
-        return true
-      } else {
-        if (date.value > currentDate) {
-          return true
-        } else {
-          return false
-        }
-      }
-    }
-
-    if (months.value === 2 && years.value % 4 == 0) {
-      return date.value > 29
-    }
-    if (months.value === 2 && years.value % 4 != 0) {
-      return date.value > 28
-    }
-    if (
-      months.value === 4 ||
-      months.value === 6 ||
-      months.value === 9 ||
-      months.value === 11
-    ) {
-      return date.value > 30
-    }
-    return false
-  }
-
-  const selectDay = (months = defmonths, years = defyears) => {
-    const options = []
-    const today = new Date()
-    let currentYear = today.getFullYear()
-    let currentMonth = today.getMonth() + 1
-    let currentDate = today.getDate()
-    if (years.value === currentYear && months.value === currentMonth) {
-      for (let i = 1; i <= currentDate; i++) {
-        options.push({
-          label: i,
-          value: i,
-        })
-      }
-    } else {
-      if (months.value === 2 && years.value % 4 == 0) {
-        for (let i = 1; i <= 29; i++) {
-          options.push({
-            label: i,
-            value: i,
-          })
-        }
-      } else if (months.value === 2 && years.value % 4 != 0) {
-        for (let i = 1; i <= 28; i++) {
-          options.push({
-            label: i,
-            value: i,
-          })
-        }
-      } else if (
-        months.value === 4 ||
-        months.value === 6 ||
-        months.value === 9 ||
-        months.value === 11
-      ) {
-        for (let i = 1; i <= 30; i++) {
-          options.push({
-            label: i,
-            value: i,
-          })
-        }
-      } else {
-        for (let i = 1; i <= 31; i++) {
-          options.push({
-            label: i,
-            value: i,
-          })
-        }
-      }
-    }
-    return options
-  }
 
   const onSubmit = async (values, a) => {
     try {
@@ -164,6 +111,9 @@ function PartnerCityForm(props) {
         task_type_id: values.task_type_id
           ? values.task_type_id.value
           : "00000000-0000-0000-0000-000000000000",
+        respon_time: {
+          amount: values.amount === "amount" ? values.amount : 0,
+        },
       }
 
       if (!formId) {
@@ -186,6 +136,7 @@ function PartnerCityForm(props) {
           `/master/configurations/standard-services/${formId}`,
           form,
         )
+        console.log(res)
         dispatch(
           setCreateModal({ show: false, id: null, disabled_form: false }),
         )
@@ -227,6 +178,8 @@ function PartnerCityForm(props) {
       }) => (
         <Form onSubmit={handleSubmit} className="ml-2">
           <Form.Group as={Row} className="form-group">
+            <></>
+
             <Form.Label column sm={3}>
               Task Type<span className="form-label-required">*</span>
             </Form.Label>
@@ -274,46 +227,52 @@ function PartnerCityForm(props) {
             </Form.Label>
             <Col sm={9}>
               <div style={{ maxWidth: 450, display: "flex" }}>
-                <div style={{ marginRight: 3, minWidth: 65, flex: 1 }}>
-                  <Select
-                    options={selectDay(
-                      values.respon_time[1],
-                      values.respon_time[2],
-                    )}
-                    value={values.respon_time[0]}
-                    isDisabled={isView}
-                    placeholder="Day"
-                    className={`react-select ${
-                      touched.title && Boolean(errors.title) ? "is-invalid" : ""
-                    }`}
-                    components={
-                      isView
-                        ? {
-                            DropdownIndicator: () => null,
-                            IndicatorSeparator: () => null,
-                          }
-                        : null
-                    }
+                <div style={{ minWidth: 65, flex: 1 }}>
+                  <select
                     style={{
-                      margin: 0,
+                      backgroundColor: "#fff",
+                      borderRadius: "0.50em",
+                      marginTop: "5px",
                     }}
-                    onChange={(v) => {
-                      setFieldValue("respon_time[0]", v)
-                    }}
-                  />
+                  >
+                    {days.map((day, i) => (
+                      <option value="day" key={i}>
+                        {day}
+                      </option>
+                    ))}
+                  </select>
                 </div>
                 <Form.Label column sm={2}>
                   Day(s)
                 </Form.Label>
-
-                <div style={{ marginRight: 3, minWidth: 25, flex: 1 }}>
-                  <Form.Control type="number" placeholder="Hours" />
+                <div style={{ minWidth: 25, flex: 1 }}>
+                  <select
+                    style={{
+                      backgroundColor: "#fff",
+                      borderRadius: "0.50em",
+                      marginTop: "5px",
+                    }}
+                  >
+                    {hours.map((hour) => (
+                      <option value="hour">{hour}</option>
+                    ))}
+                  </select>
                 </div>
                 <Form.Label column sm={2}>
                   Hour(s)
                 </Form.Label>
-                <div style={{ marginRight: 3, minWidth: 35, flex: 1 }}>
-                  <Form.Control type="number" placeholder="Minutes" />
+                <div style={{ minWidth: 35, flex: 1 }}>
+                  <select
+                    style={{
+                      backgroundColor: "#fff",
+                      borderRadius: "0.50em",
+                      marginTop: "5px",
+                    }}
+                  >
+                    {minutes.map((minute) => (
+                      <option value="minute">{minute}</option>
+                    ))}
+                  </select>
                 </div>
                 <Form.Label column sm={2}>
                   Minute(s)
@@ -365,4 +324,4 @@ function PartnerCityForm(props) {
   )
 }
 
-export default withRouter(PartnerCityForm)
+export default withRouter(StandartService)

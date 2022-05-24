@@ -230,14 +230,7 @@ function FeeTypeForm(props) {
     }
   }, [])
   const checkValue = () => {
-    if (
-      validCode &&
-      validName
-      // form.fee_type_code !== "" &&
-      // form.fee_type_name !== "" &&
-      // form.fee_type_code === "" &&
-      // form.fee_type_name === ""
-    ) {
+    if (validCode && validName) {
       setDisabledSave(false)
     } else {
       setDisabledSave(true)

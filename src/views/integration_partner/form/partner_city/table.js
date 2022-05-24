@@ -11,8 +11,8 @@ export default function PartnerCityTable(props) {
     showAdvancedOptions: false,
     createOnModal: true,
     hideDetail: true,
-    title: "Partner Cities",
-    titleModal: "Partner Cities",
+    title: "",
+    titleModal: "",
     baseRoute: "/master/integration-partner-cities/form",
     endpoint: `/master/integration-partners/${id}/cities`,
     deleteEndpoint: "/master/batch-actions/delete/integration-partner-cities",
@@ -26,11 +26,11 @@ export default function PartnerCityTable(props) {
       },
       {
         title: "Partner City Code",
-        data: "integration_partner_city.city_code",
+        data: "city_code",
       },
       {
         title: "Partner City Name",
-        data: "integration_partner_city.city_name",
+        data: "city_name",
       }
     ],
     emptyTable: "No partner cities found",

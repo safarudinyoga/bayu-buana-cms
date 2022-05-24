@@ -11,10 +11,8 @@ export default function IntegrationFeeTaxes() {
     createOnModal: true,
     showAdvancedOptions: false,
     isCheckbox: false,
-    title: "Partner Fee Tax",
-    titleModal: "Create Partner Fee Tax",
-    title: "Integration Partner",
-    titleModal: "Integration Partner",
+    title: "",
+    titleModal: "",
     baseRoute: `/master/integration-partners/${id}/fee-taxes`,
     endpoint: `/master/integration-partners/${id}/fee-taxes`,
     deleteEndpoint: "/master/batch-actions/delete/fee-tax-types",
@@ -25,7 +23,7 @@ export default function IntegrationFeeTaxes() {
     columns: [
       {
         title: "Fee Tax",
-        data: "fee_tax_type_name"
+        data: "fee_tax_type.fee_tax_type_name"
       },
       {
         title: "Partner Fee Tax Code",
@@ -38,6 +36,8 @@ export default function IntegrationFeeTaxes() {
     ],
     emptyTable: "No partner fee taxes found",
     recordName: ["fee_tax_type_code", "fee_tax_type_name"],
+    searchText: "Search",
+    module: "partner-fee-taxes"
   });
 
   return (
