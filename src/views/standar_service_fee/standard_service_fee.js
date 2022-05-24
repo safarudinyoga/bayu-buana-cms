@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from "react"
-import { useLocation } from "react-router-dom"
 import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
-import { Tabs, TabPane, Row } from "react-bootstrap"
+import { Tabs, TabPane } from "react-bootstrap"
 import FlightTable from "./table/flight_table"
 import HotelTable from "./table/hotel_table"
 import OtherTable from "./table/other_table"
-
-import infoIcon from "assets/icons/information.svg"
 import { ReactSVG } from "react-svg"
 
 const ControlledTabs = () => {
@@ -16,7 +13,7 @@ const ControlledTabs = () => {
   return (
     <div className="card">
       <Tabs
-        id="standard-ancillary-fee"
+        id="standard-service-fee"
         activeKey={key}
         onSelect={(k) => setKey(k)}
         className="mb-4"
@@ -63,7 +60,7 @@ const ControlledTabs = () => {
     </div>
   )
 }
-export default function StandardAncillaryFee() {
+export default function StandardServiceFee() {
   let dispatch = useDispatch()
   useEffect(() => {
     dispatch(

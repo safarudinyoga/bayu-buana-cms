@@ -24,7 +24,7 @@ export default function OtherTable() {
       },
       
     ],
-    emptyTable: "No other found",
+    emptyTable: "No Ancillary Fees found",
     recordName: "preset_name",
     module: "standard-ancillary-fee"
   })
@@ -69,6 +69,6 @@ export default function OtherTable() {
     setSelectedCities(values)
     setSelectedCityIds(ids)
   }  
-
-  return <BBDataTable {...params}  />
+  return <p className="text-center">This feature is not yet available</p>
+  // return <BBDataTable {...params}  />
 }

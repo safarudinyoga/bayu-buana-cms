@@ -127,7 +127,7 @@ export default function EmployeeTable() {
           innerWidth > 480 && innerWidth <= 768 ? (
             <>
               <FormInputSelectAjax
-                label="Branch Office"
+                label="User Type"
                 onChange={onFilterChangeOffice}
                 endpoint="/master/employees"
                 column="office.office_name"
@@ -143,16 +143,16 @@ export default function EmployeeTable() {
                 placeholder="Please choose"
               />
               <FormInputSelectAjax
-                label="Division"
-                onChange={onFilterChangeDivision}
+                label="Last Login"
+                onChange={onFilterChangeOffice}
                 endpoint="/master/employees"
-                column="division.division_name"
-                sort="division.division_name"
+                column="office.office_name"
+                sort="office.office_name"
                 isGrouping={true}
-                fieldGroup="division.id"
-                value={selectedDivisionIds}
-                data={selectedDivision}
-                filter={`["division.id", "is not", null]`}
+                fieldGroup="office.id"
+                value={selectedOfficeIds}
+                data={selectedOffice}
+                filter={`["office.id", "is not", null]`}
                 type="selectmultiple"
                 isFilter={true}
                 allowClear={false}
@@ -162,7 +162,7 @@ export default function EmployeeTable() {
           ) : (
             <>
               <FormInputSelectAjax
-                label="Division"
+                label="User Type"
                 onChange={onFilterChangeDivision}
                 endpoint="/master/employees"
                 column="division.division_name"
@@ -178,7 +178,7 @@ export default function EmployeeTable() {
                 placeholder="Please choose"
               />
               <FormInputSelectAjax
-                label="Branch Office"
+                label="Last Login"
                 onChange={onFilterChangeOffice}
                 endpoint="/master/employees"
                 column="office.office_name"
@@ -214,7 +214,7 @@ export default function EmployeeTable() {
     title: "Employee",
     titleModal: "Employee",
     baseRoute: "/master/user-management/form",
-    endpoint: "/master/user-accounts",
+    endpoint: "/user/user-accounts",
     deleteEndpoint: "/master/batch-actions/delete/employees",
     activationEndpoint: "/master/batch-actions/activate/employee",
     deactivationEndpoint: "/master/batch-actions/deactivate/employee",
@@ -240,37 +240,12 @@ export default function EmployeeTable() {
       },
       {
         title: "Name",
-        data: "employee_number",
-        render: (data, type) => {
-          if (type === "myExport") {
-            return `'${data}`
-          }
-          return data
-        },
-      },
-      {
-        title: "Job title",
-        data: "given_name",
-      },
-      {
-        title: "",
-        data: "middle_name",
-        visible: false,
-      },
-      {
-        title: "",
-        data: "surname",
-        visible: false,
+        data: "person.middle_name",
       },
 
       {
-        title: "User Access Type",
-        data: "job_title.job_title_name",
-      },
-      {
-        title: "",
-        data: "division.division_name",
-        visible: false,
+        title: "Job title",
+        data: "person.given_name",
         render: (data) => {
           if (data === undefined) {
             return ""
@@ -279,6 +254,20 @@ export default function EmployeeTable() {
           }
         },
       },
+      {
+        title: "tes",
+        data: "person.middle_name",
+      },
+      {
+        title: "",
+        data: "person.surname",
+      },
+
+      {
+        title: "User Access Type",
+        data: "job_title.job_title_name",
+      },
+
       {
         title: "Branch Office",
         data: "office.office_name",
@@ -312,7 +301,7 @@ export default function EmployeeTable() {
       },
     ],
     emptyTable: "No employees found",
-    recordName: ["employee_number", "given_name"],
+    recordName: ["employee_number", "person.given_name", "middle_name"],
     btnDownload: ".buttons-csv",
     module: "employee",
     showInfoDelete: true,
