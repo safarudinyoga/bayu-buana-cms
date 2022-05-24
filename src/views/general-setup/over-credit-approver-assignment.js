@@ -1,4 +1,4 @@
-// import { Formik } from 'formik';
+import { Formik } from "formik"
 import React, { useEffect, useState } from "react"
 import { Card, Form, Row, Col, ListGroup, Button, Image } from "react-bootstrap"
 import Api from "config/api"
@@ -51,82 +51,91 @@ const dummy2 = [
 ]
 
 const OverCreditApproverAssignment = (props) => {
-  const [listEmployee, SetListEmployee] = useState([])
+  const [listEmployee, setListEmployee] = useState([])
+  const [listOverCredit, setListOverCredit] = useState([])
   let api = new Api()
 
-  console.log('listEmp: ', listEmployee)
+  console.log("listEmp: ", listEmployee)
 
-  const getEmployee = async () => {
+  const getListEmployee = async () => {
     try {
       let res = await api.get(
         `/master/employees?filters=[["status","=",1]]&sort=given_name`,
       )
-      SetListEmployee(res.data.items)
+      setListEmployee(res.data.items)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  const getListOverCredit = async () => {
+    try {
+      let res = await api.get(`/master/configurations/over-credit-approvers`)
+      setListOverCredit(res.data.items)
     } catch (e) {
       console.log(e)
     }
   }
 
   useEffect(async () => {
-    getEmployee()
+    getListOverCredit()
+    getListEmployee()
   }, [])
-  
+
+  const onSubmit = async (values, a) => {
+    console.log("submit: ", values)
+  }
+
+  const initialValues = {
+    agent_id: [""],
+    employee_id: [""],
+  }
 
   return (
     <>
-      {/* <Formik
-      onSubmit={async (values, { setSubmitting, resetForm }) => {
-        console.log(values)
-
-        let res = await api.put("user/profile", formatted)
-
-        return props.handleSelectTab("subscriptions")
-      }}
-    > */}
-      {/* {({
-        values,
-        errors,
-        touched,
-        dirty,
-        handleChange,
-        handleBlur,
-        handleSubmit,
-        isSubmitting,
-        setFieldValue,
-        setFieldTouched,
-      }) => {
-        return ( */}
-      <Form onSubmit="">
-        <Card>
-          <Card.Body>
-            <h3 className="card-heading">Over Credit Approver Assignment</h3>
-            <div style={{ padding: "0 15px 40px 0" }}>
-              <CardAddOrRemove
-                firstData={dummy1}
-                secondData={listEmployee}
-                firstCardTitle="list of over credit approvers"
-                secondCardTitle="employee name"
-                canRemoveIndex
-              />
+      <Formik
+        initialValues={initialValues}
+        onSubmit={onSubmit}
+        validateOnMount
+        enableReinitialize
+      >
+        {({ dirty, handleSubmit, isSubmitting, setFieldValue, values }) => (
+          <Form onSubmit={handleSubmit}>
+            <Card>
+              <Card.Body>
+                <h3 className="card-heading">
+                  Over Credit Approver Assignment
+                </h3>
+                <div style={{ padding: "0 15px 40px 0" }}>
+                  <CardAddOrRemove
+                    firstData={[]}
+                    secondData={listEmployee}
+                    firstCardTitle="list of over credit approvers"
+                    secondCardTitle="employee name"
+                    canRemoveIndex
+                  />
+                </div>
+              </Card.Body>
+            </Card>
+            <div
+              style={{
+                marginBottom: 30,
+                marginTop: 30,
+                display: "flex",
+              }}
+            >
+              <Button
+                variant="primary"
+                type="submit"
+                style={{ marginRight: 15 }}
+              >
+                SAVE & NEXT
+              </Button>
+              <CancelButton />
             </div>
-          </Card.Body>
-        </Card>
-        <div
-          style={{
-            marginBottom: 30,
-            marginTop: 30,
-            display: "flex",
-          }}
-        >
-          <Button variant="primary" type="submit" style={{ marginRight: 15 }}>
-            SAVE & NEXT
-          </Button>
-          <CancelButton />
-        </div>
-      </Form>
-
-      {/* }} */}
-      {/* </Formik> */}
+          </Form>
+        )}
+      </Formik>
     </>
   )
 }
