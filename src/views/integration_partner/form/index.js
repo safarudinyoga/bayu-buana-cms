@@ -85,7 +85,7 @@ const IntegrationPartnerForm = (props) => {
                 </Nav.Link>
               </Nav.Item>
               {
-              data ? (data.integration_partner_code == 2 || data.integration_partner_code == 5 || data.integration_partner_code == 15) ?
+              data ? (data.integration_partner_code == 2 || data.integration_partner_code == 5 || data.integration_partner_code == 14) ?
               <Nav.Item>
                 <Nav.Link eventKey="partner-cities">
                   <div>

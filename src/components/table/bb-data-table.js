@@ -167,6 +167,10 @@ class BBDataTable extends Component {
           ? row.currency_id
           : module == 'partner-hotel-suppliers'
           ? row.hotel_supplier_id
+          : module == 'partner-fee-taxes' 
+          ? row.fee_tax_type_id 
+          : module == 'partner-city' 
+          ? row.city_id 
           : row.id
 
         return (
@@ -183,7 +187,7 @@ class BBDataTable extends Component {
             : ""
           }
           ${
-            module !== "integration-partner" && module !== "identity-rules" ? `<a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item" data-action="delete" data-id="${module == 'partner-hotel-suppliers' ? row.id: row.id}" data-name="${cvtRecordName}" ${infoDelete ? `data-info="${info}"` : ""}  title="${module === "exchange-rate" ? "Delete" : "Click to delete"}"><img src="${removeIcon}" /></a>`
+            module !== "integration-partner" && module !== "identity-rules" ? `<a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item" data-action="delete" data-id="${targetDataId}" data-name="${cvtRecordName}" ${infoDelete ? `data-info="${info}"` : ""}  title="${module === "exchange-rate" || module === "partner-city" ? "Delete" : "Click to delete"}"><img src="${removeIcon}" /></a>`
             : ""
           }
           `

@@ -1,405 +1,228 @@
 import React, { useEffect, useState } from "react"
 import {
-  Card,
   Form,
   Row,
   Col,
   Button,
-  Image,
-  Tab,
-  Nav,
-  Modal,
 } from "react-bootstrap"
 import { Formik, FastField, Field } from "formik"
 import * as Yup from "yup"
-import { Editor } from "react-draft-wysiwyg"
-import { ReactSVG } from "react-svg"
-import Dropzone from "react-dropzone-uploader"
-import FormInputControl from "components/form/input-control";
-import axios from "axios"
-import useQuery from "lib/query"
 import { useDispatch, useSelector } from "react-redux"
-import { withRouter } from "react-router"
-import { setAlert, setUIParams, setModalTitle, setCreateModal } from "redux/ui-store"
-
+import { setAlert, setModalTitle, setCreateModal } from "redux/ui-store"
 import Api from "config/api"
-import env from "config/environment"
-import Select from "components/form/select-async"
-
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css"
 import "react-dropzone-uploader/dist/styles.css"
+import { useParams } from "react-router-dom"
+import CancelButton from "components/button/cancel";
+import FormikControl from "../../../../components/formik/formikControl"
 
-const endpoint = "/master/hotels"
-
-const GeneralInformation = (props) => {
-    console.log("PROPS",props);
-  let api = new Api()
-  const isView = useQuery().get("action") === "view"
+const endpoint = "/master/integration-partners";
+const FeeTaxes = (props) => {
   let dispatch = useDispatch()
   const showCreateModal = useSelector((state) => state.ui.showCreateModal)
-  console.log(showCreateModal, 'ini');
-  const [selectCountry, setSelectCountry] = useState([])
-  const [selectHotelBrand, setSelectHotelBrand] = useState([])
-  const [modalShow, setModalShow] = useState(false)
-  const [translations, setTranslations] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [formValues, setFormValues] = useState([])
-  const [feeTaxCode, setFeeTaxCode] = useState(null)
-  const [feeTaxName, setFeeTaxName] = useState(null)
+  const { id } = useParams()
+  const [feeTaxId, setFeeTaxId] = useState(null)
+  const [formValues, setFormValues] = useState(null)
+  const isView = showCreateModal.disabled_form || props.isView;
+  const [loading, setLoading] = useState(true);
+  let api = new Api()
 
-  let formId = props.match.params.id
+  const duplicateValue = async(fieldName, value) => {
+    let filters = encodeURIComponent(JSON.stringify([[fieldName,"=",value],["AND"],["integration_partner_id",id],["AND"],["status",1]]))
+    let res = await api.get(endpoint + "/" + id + "/fee-taxes?" + `filters=${filters}`)
+    let sameId = res.data.items.find((v) => v.id === feeTaxId)
+    if(!sameId) return res.data.items.length === 0 
 
-  const endpoint = `/master/integration-partners/${formId}/fee-taxes`
+    return true
+}
 
-  React.useEffect(async () => {
-    let formId = showCreateModal.id || props.id
-    let docTitle = "EDIT PARTNER FEE TAXES"
-    if(formId) {
-        try {
-          let {data} = await api.get(endpoint + "/" + formId)
-          setFeeTaxCode(data.fee_tax_type_code)
-          setFeeTaxName(data.fee_tax_type_name)
-        } catch(e) {
-          console.log(e)
-        }
-    } else if (!formId) {
-        docTitle = "CREATE PARTNER FEE TAXES"
-    }
-    dispatch(setModalTitle(docTitle))
-  }, [])
+Yup.addMethod(Yup.object, 'uniqueValueObject', function (fieldName, message) {
+    return this.test('unique', message, function(field) {
+        if(field) return duplicateValue(fieldName, field.value)
+        return true
+    })
+})
 
+Yup.addMethod(Yup.string, 'uniqueValueString', function (fieldName, message) {
+    return this.test('unique', message, function(field) {
+        if(field) return duplicateValue(fieldName, field)
+        return true
+    })
+})
   // Initialize form
-  const initialForm = {
-    feeTax: "",
-    partnerFeeTaxCode: feeTaxCode,
-    partnerFeeTaxName: feeTaxName,
+  const initialValues = {
+    fee_tax_type_id: "",
+    fee_tax_type_code: "",
+    fee_tax_type_name: "", 
   }
 
   // Schema for yup
   const validationSchema = Yup.object().shape({
-    feeTax: Yup.object().required("Fee Tax is required"),
-    partnerFeeTaxCode: Yup.string().required("Partner Fee Tax Code is required"),
-    partnerFeeTaxName: Yup.string().required("Partner Fee Tax Name is required"),
+    fee_tax_type_id: Yup.object()
+    .required("Fee Tax is required.")
+    .uniqueValueObject("fee_tax_type_id","Fee Tax already exists"),
+    fee_tax_type_code: Yup.string()
+    .required("Partner Fee Tax Code is required")
+    .uniqueValueString('fee_tax_type_code', 'Partner Fee Tax Code already exists'),
+    fee_tax_type_name: Yup.string()
+    .required("Partner Fee Tax Name is required")
+    .uniqueValueString('fee_tax_type_name', 'Partner Fee Tax Name already exists'),
   })
 
   useEffect(async () => {
-    let api = new Api()
-    let formId = ""
+    let formId = showCreateModal.id || props.id
 
-    let docTitle = "Edit Partner Fee Tax"
+    let docTitle = "Edit Partner Fee Taxes"
     if (!formId) {
-      docTitle = "Create Partner Fee Tax"
-    } else if (isView) {
-      docTitle = "View Partner Fee Tax"
+      docTitle = "Create Partner Fee Taxes"
     }
+    dispatch(setModalTitle(docTitle))
 
-    dispatch(
-      setUIParams({
-        title: isView ? "Partner Fee Tax Details" : docTitle,
-        breadcrumbs: [
-          {
-            text: "Setup and Configurations",
-          },
-          {
-            link: props.backUrl,
-            text: "Partner Fee Tax",
-          },
-          {
-            text: docTitle,
-          },
-        ],
-      }),
-    )
-    if (formId) {
+    if(formId) {
       try {
-        let res = await api.get(endpoint + "/" + formId)
-      } catch (e) {}
-
-      try {
-        let res = await api.get(endpoint + "/" + formId + "/translations", {
-          size: 50,
+        let res = await api.get(endpoint + "/" + id + "/fee-taxes/" + formId);
+        setFormValues({ 
+          ...formValues,
+          fee_tax_type_id: res.data.fee_tax_type_id ? res.data.fee_tax_type_id : "",
+          fee_tax_type_code: res.data.fee_tax_type_code ? res.data.fee_tax_type_code : "",
+          fee_tax_type_name: res.data.fee_tax_type_name ? res.data.fee_tax_type_name : "",
         })
-        setTranslations(res.data.items)
-      } catch (e) {}
-      setLoading(false)
-    } else {
+      } catch (e) {
+        console.log(e)
+      }
     }
+    
   }, [])
+  const onSubmit = async (values, a) => {
+    let formatted = {
+      fee_tax_type_code: values.fee_tax_type_code,
+      fee_tax_type_name: values.fee_tax_type_name,
+      fee_tax_type_id: values.fee_tax_type_id.value,
+      integration_partner_id: id
+    }
 
-  const handleOnSubmit = async (e) => {
-      e.preventDefault()
-      console.log('Ok');
+    try {
+      if(feeTaxId){
+        let res = await api.put(endpoint + "/" + id + "/fee-taxes/" + feeTaxId, formatted);
+      }else{
+          let res = await api.post(endpoint + "/" + id + "/fee-taxes", formatted);
+      }
+      dispatch(
+        setAlert({
+            message: `Record 'Partner Fee Tax Name: ${values.fee_tax_type_name}' has been successfully saved.`,
+        })
+      );
+      dispatch(setCreateModal({ show: false, id: null, disabled_form: false }));
+      
+    } catch (e) {
+      dispatch(
+        setAlert({
+            message: "Failed to save this record.",
+        })
+    );
+    }
+};
+  useEffect(() => {
+    if (!showCreateModal.id) {
+      setLoading(false);
   }
+
+  if (formValues) {
+      setLoading(false);
+  }
+    setFeeTaxId(showCreateModal.id)
+  }, [showCreateModal.id, formValues])
+
+  const formSize = {
+    label: {
+        md: 5,
+        lg: 5,
+    },
+    value: {
+        md: 7,
+        lg: 7,
+    },
+  };
 
   return (
     <div>
-      <Formik
-        enableReinitialize
-        initialValues={initialForm}
-        validationSchema={validationSchema}
-        // validateOnChange={false}
-        onSubmit={async (values, { setSubmitting, resetForm }) => {
-          console.log("submit pressed")
-          console.log("VALUES",values)
-          console.log(props)
-
-          try {  
-            let formatted = {
-              fee_tax_type_id: values.feeTax.value,
-              fee_tax_type_code: values.partnerFeeTaxCode,
-              fee_tax_type_name: values.partnerFeeTaxName,
-            }
-
-            let res = await api.post(`master/integration-partners/${formId}/fee-taxes`, formatted)
-
-            dispatch(setCreateModal({ show: false, id: null, disabled_form: false }));
-            dispatch(
-              setAlert({
-                  message: `Record 'Partner Fee Tax Name: ${values.partnerFeeTaxName}' has been successfully saved.`,
-              })
-            );
-          } catch (e) {
-            console.error(e)
-            dispatch(
-              setAlert({
-                  message: "Failed to save this record.",
-              })
-          );
-          }
-        }}
-      >
-        {({
-          values,
-          errors,
-          touched,
-          dirty,
-          handleChange,
-          handleBlur,
-          handleSubmit,
-          isSubmitting,
-          setFieldValue,
-          setFieldTouched,
-        }) => (
-          <Form onSubmit={handleSubmit} style={{background: 'transparent'}}>
-                {/* <h3 className="" style={{textAlign: 'center', fontSize: 18, marginBottom: 20}}>CREATE PARTNER FEE TAXES</h3> */}
-                <div style={{ padding: "0 10px 10px" }}>
-                  <Row>
-                    <Col sm={12}>
-                      <Form.Group as={Row} className="form-group" style={{display: 'flex', justifyContent: 'space-between'}}>
-                        <Form.Label column sm={4.5}>
-                          Fee Tax
-                          <span className="form-label-required">*</span>
-                        </Form.Label>
-                        <Col sm={8}>
-                          <FastField name="feeTax">
-                            {({ field, form }) => (
-                              <div style={{ marginLeft: '3%'}}>
-                                <Select
-                                  {...field}
-                                  url={`master/fee-tax-types`}
-                                  urlFilter={`[["fee_category","=","AX"],["OR"],["fee_category","=","HX"]]`}
-                                  fieldName="fee_tax_type_name"
-                                  onChange={(v) =>
-                                    setFieldValue("feeTax", v)
+      <Formik initialValues={formValues || initialValues} validationSchema={validationSchema} onSubmit={onSubmit} validateOnMount enableReinitialize>
+            {({ dirty, handleSubmit, isSubmitting, setFieldValue, handleChange, values }) => (
+                <Form onSubmit={handleSubmit} className="ml-2">
+                    <FormikControl
+                        control="selectAsync"
+                        required={isView ? "" : "label-required"}
+                        label="Fee Tax"
+                        name="fee_tax_type_id"
+                        placeholder={values.fee_tax_type_id || "Please Choose."}
+                        url={`master/fee-tax-types`}
+                        fieldName={"fee_tax_type_name"}
+                        urlFilter={`["fee_category","in",["AX","HX"]]`}
+                        onChange={(v) => {
+                            setFieldValue("fee_tax_type_id", v);
+                        }}
+                        style={{ maxWidth: 250 }}
+                        size={formSize}
+                        components={
+                            isView
+                                ? {
+                                      DropdownIndicator: () => null,
+                                      IndicatorSeparator: () => null,
                                   }
-                                  placeholder="Please choose"
-                                  className={`react-select ${
-                                    form.touched.feeTax &&
-                                    form.errors.feeTax
-                                      ? "is-invalid"
-                                      : null
-                                  }`}
-                                />
-                                {form.touched.feeTax &&
-                                  form.errors.feeTax && (
-                                    <Form.Control.Feedback type="invalid">
-                                      {form.touched.feeTax
-                                        ? form.errors.feeTax
-                                        : null}
-                                    </Form.Control.Feedback>
-                                  )}
-                              </div>
-                            )}
-                          </FastField>
-                        </Col>
-                      </Form.Group>
-                      <Form.Group as={Row} className="form-group" style={{display: 'flex'}}>
-                        <Form.Label column sm={4.5} style={{}}>
-                            Partner Fee Tax Code
-                          <span className="form-label-required">*</span>
-                        </Form.Label>
-                            <Col sm={2} style={{marginLeft: 4}}>
-                                <FormInputControl
-                                    name="partnerFeeTaxCode"
-                                    value={values.partnerFeeTaxCode}
-                                    onChange={handleChange}
-                                    onBlur={handleBlur}
-                                    type="text"
-                                    minLength="1"
-                                    maxLength="256"
-                                    style={{width: "10vw", height: 34, marginLeft: -20, marginTop: 10}}
-                                />
-                            </Col>
-                      </Form.Group>
-                      <Form.Group as={Row} className="form-group" style={{display: 'flex'}}>
-                        <Form.Label column sm={4.5} style={{}}>
-                            Partner Fee Tax Name
-                          <span className="form-label-required">*</span>
-                        </Form.Label>
-                            <Col sm={2} style={{marginLeft: 0}}>
-                                <FormInputControl
-                                    name="partnerFeeTaxName"
-                                    // value={feeTaxName}
-                                    value={values.partnerFeeTaxName}
-                                    onChange={handleChange}
-                                    onBlur={handleBlur}          
-                                    // onChange={(e) => setFeeTaxName(e.target.value)}
-                                    type="text"
-                                    minLength="1"
-                                    maxLength="256"
-                                    style={{height: 34, width: '18rem', marginLeft: -20, marginBottom: 10}}
-                            />
-                            </Col>
-                      </Form.Group>
-                    </Col>
-                  </Row>
-                </div>
-            <div style={{ marginBottom: 30, marginTop: 30, display: "flex" }}>
-              <Button
-                variant="primary"
-                type="submit"
-                disabled={isSubmitting || !dirty}
-                style={{ marginRight: 15 }}
-              >
-                SAVE
-              </Button>
-              <Button
-                variant="secondary"
-                onClick={() => {
-                  dispatch(
-                    setCreateModal({
-                      show: false,
-                      id: null,
-                      disabled_form: false,
-                    })
-                  )
-                }}
-              >
-                CANCEL
-              </Button>
-            </div>
-          </Form>
-        )}
-      </Formik>
-      {/* <Modal
-        show={modalShow}
-        // size="lg"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-        className="modal-form"
-        style={{width:'100vw'}}
-      >
-        <Formik
-          initialValues={initialFormModalAddMap}
-          validationSchema={validationSchemaModalAddMap}
-          onSubmit={async (values, { setSubmitting, resetForm }) => {
-            console.log(values)
-            console.log(props)
-            // setSubmitting(true)
+                                : null
+                        }
+                        isDisabled={isView}
+                    />
 
-            // try {
-            //   let res = await api.post("master/persons", {
-            //     birth_date: "2021-11-13T04:31:17.022Z",
-            //     business_entity_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-            //     citizen_country_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-            //     gender_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-            //     given_name: "string",
-            //     marital_status_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-            //     middle_name: "string",
-            //     name_prefix_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-            //     name_suffix: "string",
-            //     name_title: "string",
-            //     religion_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-            //     surname: "string",
-            //     surname_prefix: "string",
-            //   })
-            //   console.log(res)
-            //   resetForm()
-            //   setSubmitting(false)
-            // } catch (e) {}
-          }}
-        >
-          {({
-            values,
-            errors,
-            touched,
-            dirty,
-            handleChange,
-            handleBlur,
-            handleSubmit,
-            isSubmitting,
-            setFieldValue,
-            setFieldTouched,
-          }) => (
-            <Form onSubmit={handleOnSubmit}>
-              <Modal.Header>
-                <Modal.Title id="contained-modal-title-vcenter">
-                  ADD MAP IMAGE
-                </Modal.Title>
-                <div
-                  className="modal-close"
-                  onClick={() => setModalShow(false)}
-                >
-                  <ReactSVG src="/img/icons/close.svg" />
-                </div>
-              </Modal.Header>
-              <Modal.Body>
-                <Form.Group as={Row} className="form-group">
-                  <Form.Label column sm={3}>
-                    Caption
-                    <span className="form-label-required">*</span>
-                  </Form.Label>
-                  <Col sm={9}>
-                    <FastField name="modalCaption">
-                      {({ field, form }) => (
-                        <>
-                          <Form.Control
-                            type="text"
-                            isInvalid={
-                              form.touched.modalCaption &&
-                              form.errors.modalCaption
-                            }
-                            maxLength={128}
-                            {...field}
-                          />
-                          {form.touched.modalCaption &&
-                            form.errors.modalCaption && (
-                              <Form.Control.Feedback type="invalid">
-                                {form.touched.modalCaption
-                                  ? form.errors.modalCaption
-                                  : null}
-                              </Form.Control.Feedback>
+                    <FormikControl
+                        control="input"
+                        required="label-required"
+                        label="Partner Fee Tax Code"
+                        name="fee_tax_type_code"
+                        style={{ maxWidth: 250 }}
+                        size={formSize}
+                        disabled={isView || loading}
+                        onChange={(e) => {
+                            setFieldValue("fee_tax_type_code", e.target.value);
+                        }}
+                        maxLength={36}
+                    />
+
+                    <FormikControl
+                        control="input"
+                        required="label-required"
+                        label="Partner Fee Tax Name"
+                        name="fee_tax_type_name"
+                        style={{ maxWidth: 250 }}
+                        size={formSize}
+                        disabled={isView || loading}
+                        onChange={(e) => {
+                            setFieldValue("fee_tax_type_name", e.target.value);
+                        }}
+                        maxLength={256}
+                    />
+
+                    {!props.hideButton && (
+                        <div
+                            style={{
+                                marginBottom: 30,
+                                marginTop: 30,
+                                display: "flex",
+                            }}
+                        >
+                            {!isView && (
+                                <Button variant="primary" type="submit" disabled={isSubmitting} style={{ marginRight: 15 }}>
+                                    SAVE
+                                </Button>
                             )}
-                        </>
-                      )}
-                    </FastField>
-                  </Col>
-                </Form.Group>
-              </Modal.Body>
-              <Modal.Footer>
-                <Button variant="primary" type="submit">
-                  SAVE
-                </Button>
-                <Button variant="secondary" onClick={() => setModalShow(false)}>
-                  CANCEL
-                </Button>
-              </Modal.Footer>
-            </Form>
-          )}
+                            <CancelButton onClick={() => dispatch(setCreateModal({ show: false, id: null, disabled_form: false }))} />
+                        </div>
+                    )}
+                </Form>
+            )}
         </Formik>
-      </Modal> */}
     </div>
   )
 }
 
-export default withRouter(GeneralInformation)
+export default FeeTaxes
