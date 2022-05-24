@@ -171,6 +171,8 @@ class BBDataTable extends Component {
           ? row.fee_tax_type_id 
           : module == 'partner-city' 
           ? row.city_id 
+          : module == 'partner-meal-plan' 
+          ? row.meal_plan_type_id
           : row.id
 
         return (

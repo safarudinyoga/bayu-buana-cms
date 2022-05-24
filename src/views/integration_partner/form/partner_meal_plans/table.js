@@ -6,16 +6,16 @@ import Form from "./form"
 
 export default function IntegrationPartnerMealPlansTable() {
   const param = useParams()
-
+  const { id } = useParams()
   let [params, setParams] = useState({
     isCheckbox: false,
     showAdvancedOptions: false,
     createOnModal: true,
     hideDetail: true,
-    title: "Partner Meal Plans",
-    titleModal: "Partner Meal Plans",
+    title: "",
+    titleModal: "",
     baseRoute: "/master/integration-partner-meal-plans/form",
-    endpoint: `/master/integration-partner-meal-plan-types`,
+    endpoint: `/master/integration-partners/${id}/meal-plans`,
     deleteEndpoint: "master/batch-actions/delete/master/integration-partner-meal-plan-types",
     btnDownload: ".buttons-csv",
     columns: [
@@ -34,7 +34,8 @@ export default function IntegrationPartnerMealPlansTable() {
     ],
     emptyTable: "No Partner Meal Plans found",
     recordName: ["meal_plan_type_name"],
-    searchText: "Search"
+    searchText: "Search",
+    module: "partner-meal-plan",
   })
 
   return (
