@@ -1,12 +1,12 @@
 import { Collapse } from 'bootstrap'
 import React, { useEffect, useRef, useState } from 'react'
 import { Form } from "react-bootstrap"
-import { useStateWithCallback, useStateWithCallbackLazy } from 'use-state-with-callback'
-
+import useQuery from "lib/query"
 
 function AccessManagerRow(props) {
   const { moduleName, category, capabilities, moduleId, sendAllowedModuleData } = props
 
+  const isView = useQuery().get("action") === "view"
   const [capabilityCheckBoxes, setCapabilityCheckBoxes] = useState([])
   const [allowedModule, setAllowedModule] = useState([])
   const [checkedCapabilities, setCheckedCapabilities] = useState([])
@@ -56,11 +56,11 @@ function AccessManagerRow(props) {
             id={`${cap}-${moduleId}`}
             key={`${cap}-${moduleId}`}
             defaultChecked={allowedModule["capabilities"] ? allowedModule["capabilities"][cap] : capabilities[cap]}
-            // checked={true}
+            disabled={isView}
+            className="custom-switch-bb"
             onChange={() => {
               handleChange(cap, moduleId, capabilities[cap], capabilities)
             }}
-            // ref={checkedValue}
           />
         </td>
       )
