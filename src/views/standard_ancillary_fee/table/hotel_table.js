@@ -8,7 +8,7 @@ export default function HotelTable() {
     isCheckbox: false,
     showAdvancedOptions: false,
     baseRoute: "/master/standard-ancillary-fee/form/hotel-form",
-    endpoint: "/master/hotels",
+    endpoint: "/master/agent-processing-fee-categories/2",
     deleteEndpoint: "/master/batch-actions/delete/hotels",
     activationEndpoint: "/master/batch-actions/activate/hotels",
     deactivationEndpoint: "/master/batch-actions/deactivate/hotels",
@@ -16,7 +16,7 @@ export default function HotelTable() {
     columns: [
       {
         title: "Preset Name",
-        data: "preset_name",
+        data: "processing_fee_category_name",
       },
     ],
     emptyTable: "No hotel found",

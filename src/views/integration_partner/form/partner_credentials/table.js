@@ -17,7 +17,7 @@ import SelfServices from "./self-services"
       titleModal: "Partner Corporates",
       baseRoute: "/master/integration-partner-corporates/form",
       endpoint: `/master/integration-partners/${param.id}/credentials`,
-      deleteEndpoint: "/master/batch-actions/delete/integration-partner-corporates",
+      deleteEndpoint: `/master/integration-partners/${param.id}/credentials`,
       columns: [
         {
           title: "Company/Branch Name",

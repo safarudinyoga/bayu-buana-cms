@@ -10,10 +10,11 @@ import { setAlert, setCreateModal, setModalTitle } from "redux/ui-store";
 import CancelButton from "components/button/cancel";
 import FormikControl from "../../../../components/formik/formikControl";
 
-const endpoint = "/master/integration-partner-currencies";
-
 function IntegrationPartnerCurrenciesCreate(props) {
     const dispatch = useDispatch();
+    const partner_integration_id = props.match.params.id;
+    const endpoint = `master/integration-partners/${partner_integration_id}/currencies`;
+
     const showCreateModal = useSelector((state) => state.ui.showCreateModal);
     const API = new Api();
     const isView = showCreateModal.disabled_form || props.isView;
@@ -164,7 +165,7 @@ function IntegrationPartnerCurrenciesCreate(props) {
                         required="label-required"
                         label="Partner Currency Code"
                         name="currency_code"
-                        style={{ maxWidth: 250 }}
+                        style={{ maxWidth: 100 }}
                         size={formSize}
                         disabled={isView || loading}
                         maxLength={3}

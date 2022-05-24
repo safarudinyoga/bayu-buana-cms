@@ -9,14 +9,17 @@ const dummy1 = [
   {
     given_name: "Tiffany Young",
     category: "BCD",
+    checked: false,
   },
   {
     given_name: "Dhani Doel",
     category: "BCD",
+    checked: false,
   },
   {
     given_name: "Jhon Bill",
     category: "NCD",
+    checked: false,
   },
 ]
 
@@ -67,6 +70,7 @@ const OverCreditApproverAssignment = (props) => {
   useEffect(async () => {
     getEmployee()
   }, [])
+  
 
   return (
     <>
