@@ -24,7 +24,7 @@ export default function OtherTable() {
       },
       
     ],
-    emptyTable: "No other found",
+    emptyTable: "No Ancillary Fees found",
     recordName: "preset_name",
     module: "standard-ancillary-fee"
   })

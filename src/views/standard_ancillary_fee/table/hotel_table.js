@@ -19,7 +19,7 @@ export default function HotelTable() {
         data: "processing_fee_category_name",
       },
     ],
-    emptyTable: "No Hotel fees found",
+    emptyTable: "No Ancillary Fees found",
     recordName: "processing_fee_category_name",
     module: "standard-ancillary-fee",
     infoDelete: [
