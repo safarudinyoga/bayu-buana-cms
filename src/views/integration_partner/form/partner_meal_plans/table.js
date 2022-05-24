@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom"
 import BBDataTable from "components/table/bb-data-table"
 import { Card } from "react-bootstrap"
 import Form from "./form"
+import FormDelete from "./form-delete"
 
 export default function IntegrationPartnerMealPlansTable() {
   const param = useParams()
@@ -12,6 +13,7 @@ export default function IntegrationPartnerMealPlansTable() {
     showAdvancedOptions: false,
     createOnModal: true,
     hideDetail: true,
+    modalDelete: true,
     title: "Partner Meal Plans",
     titleModal: "Partner Meal Plans",
     baseRoute: "/master/integration-partner-meal-plans/form",
@@ -42,7 +44,7 @@ export default function IntegrationPartnerMealPlansTable() {
       <Card>
         <Card.Body>
           <h3 className="card-heading">Partner Meal Plans</h3>
-          <BBDataTable {...params} modalContent={Form} />
+          <BBDataTable {...params} modalContent={Form} modalDeleteContent={FormDelete} />
           {/* test */}
         </Card.Body>
       </Card>
