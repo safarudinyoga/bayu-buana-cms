@@ -31,7 +31,6 @@ function ModuleAccess(props) {
     if (!props.match.params.id) {
       setLoading(false)
     }
-    console.log("KELOAD ULANG")
     setId(props.match.params.id)
   }, [props.match.params.id])
 
@@ -174,23 +173,36 @@ function ModuleAccess(props) {
                   </div>
                 </Card.Body>
               </Card>
-              <div className="ml-1 mt-3 row justify-content-md-start justify-content-center">
-                <Button
-                  variant="primary"
-                  type="submit"
-                  // disabled={props.finishStep > 0 || props.employeeData?.id ? (!isValid || isSubmitting) : (!dirty || isSubmitting)}
-                  style={{ marginRight: 15, marginBottom: 135 }}
-                >
-                  {/* {props.employeeData?.id ? "SAVE" : "SAVE & NEXT"} */}
-                  SAVE
-                </Button>
-                <Button
-                  variant="secondary"
-                  onClick={() => props.history.goBack()}
-                >
-                  CANCEL
-                </Button>
-              </div>
+              {
+                isView ? (
+                  <div className="mb-2 mt-1 row justify-content-md-start justify-content-center">
+                    <Button
+                      variant="secondary"
+                      onClick={() => props.history.goBack()}                        
+                    >
+                      BACK
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="ml-1 mt-3 row justify-content-md-start justify-content-center">
+                    <Button
+                      variant="primary"
+                      type="submit"
+                      style={{ marginRight: 15, marginBottom: 135 }}
+                    >
+                      {/* {props.employeeData?.id ? "SAVE" : "SAVE & NEXT"} */}
+                      SAVE
+                    </Button>
+                    <Button
+                      variant="secondary"
+                      onClick={() => props.history.goBack()}
+                    >
+                      CANCEL
+                    </Button>
+                  </div>
+                )
+              }
+              
             </Form>
           )
         

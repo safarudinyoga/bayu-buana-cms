@@ -5,23 +5,20 @@ import {
   Form,
   Row,
   Col,
-  Container,
   Button,
-  Image,
-  Tab,
-  Nav,
+  OverlayTrigger,
   Modal,
+  Tooltip,
 } from "react-bootstrap"
 import createIcon from "assets/icons/create.svg"
-import { Formik, FastField, Field } from "formik"
+import { Formik, FastField } from "formik"
 import * as Yup from "yup"
 import { ReactSVG } from "react-svg"
-import axios from "axios"
+
 
 import { useDispatch } from "react-redux"
 import { setAlert, setUIParams } from "redux/ui-store"
 import Api from "config/api"
-import env from "config/environment"
 import Select from "components/form/select-async"
 
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css"
@@ -189,21 +186,15 @@ const FlightForm = (props) => {
   // Initialize form
   const initialForm = {
     // General Information
-    hotelCode: "",
-    hotelName: "",
-    hotelBrand: null,
+    processing_fee_category_name: "",
+    description: "",
 
-  }
-
-  const initialFormModalAddMap = {
-    caption: "",
-    image: "",
   }
 
   // Schema for yup
-  const validationSchema = Yup.object().shape({})
-
-  const validationSchemaModalAddMap = Yup.object().shape({})
+  const validationSchema = Yup.object().shape({
+    processing_fee_category_name: Yup.string().required("Please enter Preset Name."),
+  })
 
   return (
     <>
@@ -279,13 +270,19 @@ const FlightForm = (props) => {
                 <h3 className="card-heading"></h3>
                 <div style={{ padding: "0 15px 15px 15px" }}>
                   <span style={{fontSize: 13}}>No Ancillary Fees found</span>
-                  <button
-                    className="btn float-right button-override"
-                    onClick={() => setModalShow(true)}
-                  >
-                    <img src={createIcon} className="mr-1" alt="new" />
-                    Add Type of Service Other Ancillary Fee
-                  </button>
+                  <OverlayTrigger
+                      placement="top"
+                      overlay={<Tooltip>Click to create</Tooltip>}
+                      >
+                      <button
+                        className="btn float-right button-override"
+                        onClick={() => setModalShow(true)}
+                      >
+                        <img src={createIcon} className="mr-1" alt="new" />
+                        Add Type of Service Other Ancillary Fee
+                      </button>
+                  </OverlayTrigger>
+                  
                   <FlightModal
                     show={modalShow}
                     onHide={() => setModalShow(false)}
@@ -297,7 +294,7 @@ const FlightForm = (props) => {
               <Button
                 variant="primary"
                 type="submit"
-                disabled={isSubmitting || !dirty}
+                disabled={isSubmitting}
                 style={{ marginRight: 15 }}
               >
                 SAVE

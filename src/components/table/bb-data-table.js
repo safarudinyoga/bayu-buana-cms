@@ -19,12 +19,13 @@ import { Button, Modal, ModalBody, ModalFooter } from "react-bootstrap"
 import ModalHeader from "react-bootstrap/esm/ModalHeader"
 import { withRouter } from "react-router"
 import { connect } from "react-redux"
-import { setAlert, setCreateModal, setReloadTable } from "redux/ui-store"
+import { setAlert, setCreateModal, setReloadTable, setModalDelete } from "redux/ui-store"
 import "./bb-data-table.css"
 import editIcon from "assets/icons/edit.svg"
 import removeIcon from "assets/icons/remove.svg"
 import showIcon from "assets/icons/show.svg"
 import ModalCreate from "components/Modal/bb-modal"
+import ModalDelete from "components/Modal/bb-modal-delete"
 import customPrint from '../../lib/customPrint'
 import { end } from "@popperjs/core"
 
@@ -1046,7 +1047,7 @@ class BBDataTable extends Component {
             break
           default:
             if(me.props.modalDelete) {
-              me.props.setCreateModal({show: true, id, disabled_form: false})
+              me.props.setModalDelete({show: true, id, disabled_form: false})
             }else{
               me.deleteAction.bind(me)(id, name, info)
             }
@@ -1055,7 +1056,7 @@ class BBDataTable extends Component {
       })
     $.fn.DataTable.ext.pager.numbers_length = 5
 
-    const { showCreateModal, modalTitle } = this.props
+    const { showCreateModal, modalTitle, showModalDelete } = this.props
     return (
       <div ref={this.wrapper}>
         <Modal show={this.state.isOpen}>
@@ -1135,6 +1136,16 @@ class BBDataTable extends Component {
           modalSize={this.props.modalSize}
           scrollable={true}
         />
+
+        <ModalDelete
+          modalTitle={modalTitle}
+          show={showModalDelete.show}
+          onClick={() => this.props.setModalDelete({show: false, id: null, disabled_form: false})}
+          modalContent={this.props.modalDeleteContent}
+          modalSize={this.props.modalSize}
+          scrollable={true}
+        />
+
         {this.props.module !== "fare-types" ? <TableHeader
           {...this.props}
           createOnModal={this.props.createOnModal}
@@ -1191,6 +1202,7 @@ const mapStateToProps = ({ ui }) => {
   return {
     stateAlert: ui.alert,
     showCreateModal: ui.showCreateModal,
+    showModalDelete: ui.showModalDelete,
     reloadTable: ui.reloadTable,
     modalTitle: ui.modalTitle,
   }
@@ -1200,6 +1212,7 @@ const mapDispatchToProps = (dispatch) => ({
   setAlert: (payload) => dispatch(setAlert(payload)),
   setCreateModal: (payload) => dispatch(setCreateModal(payload)),
   setReloadTable: (payload) => dispatch(setReloadTable(payload)),
+  setModalDelete: (payload) => dispatch(setModalDelete(payload)),
 })
 
 export default connect(
