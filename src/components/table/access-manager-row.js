@@ -1,11 +1,11 @@
 import { Collapse } from 'bootstrap'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Form } from "react-bootstrap"
 import { useStateWithCallback, useStateWithCallbackLazy } from 'use-state-with-callback'
 
 
 function AccessManagerRow(props) {
-  const { moduleName, category, capabilities, moduleId, setAllowModules } = props
+  const { moduleName, category, capabilities, moduleId, sendAllowedModuleData } = props
 
   const [capabilityCheckBoxes, setCapabilityCheckBoxes] = useState([])
   const [allowedModule, setAllowedModule] = useState([])
@@ -15,13 +15,13 @@ function AccessManagerRow(props) {
     capabilities: {}
   })
   const [currentCapabilities, setCurrentCapabilities] = useState(capabilities)
-
+  const [capabilityChecked, setCapabilityChecked] = useState(new Array(Object.keys(capabilities).length).fill(false))
+  // const checkedValue = useRef(false)
 
 
   // When the switch is clicked, add the capability and id to the state and then pass the state to module-access component
-  const handleChange = (e, capability, id, capabilityValue, capabilitiesList) => {
+  const handleChange = (capability, id, capabilityValue, capabilitiesList) => {
     let capsList = capabilitiesList;
-    console.log("Initial Value", e.target.checked)
 
     let caps = {
       ...capsList,
@@ -39,25 +39,28 @@ function AccessManagerRow(props) {
   }
 
   useEffect(() => {
-    console.log("Current Module",currentModule)
+    // console.log("Current Module",currentModule)
   }, [currentModule])
   
 
   useEffect(() => {
     const caps = []
+    console.log("FROM API", capabilities)
     for(let cap in capabilities) {
+      console.log(allowedModule["capabilities"] ? allowedModule["capabilities"][cap] : capabilities[cap])
+      // console.log(moduleId+"_"+cap+":"+capabilities[cap])
       caps.push(
         <td>
           <Form.Check 
             type="switch"
             id={`${cap}-${moduleId}`}
-            // checked={allowedModule["capabilities"] ? allowedModule["capabilities"][cap] : capabilities[cap]}
-            onChange={(e) => {
-              handleChange(e, cap, moduleId, capabilities[cap], capabilities)
-              setAllowModules(allowedModule)
-            }
-              
-            }
+            key={`${cap}-${moduleId}`}
+            defaultChecked={allowedModule["capabilities"] ? allowedModule["capabilities"][cap] : capabilities[cap]}
+            // checked={true}
+            onChange={() => {
+              handleChange(cap, moduleId, capabilities[cap], capabilities)
+            }}
+            // ref={checkedValue}
           />
         </td>
       )
@@ -66,8 +69,8 @@ function AccessManagerRow(props) {
   }, [])
 
   useEffect(() => {
-    console.log("Allowed Module", allowedModule)
-
+    // console.log("Allowed Module", allowedModule)
+    sendAllowedModuleData(allowedModule)
   }, [allowedModule])
   
 

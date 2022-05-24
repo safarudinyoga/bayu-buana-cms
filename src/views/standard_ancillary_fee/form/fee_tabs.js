@@ -51,8 +51,9 @@ const FeeSection = (props) => {
                     disabled={props.isView}
                     checked={props.values[props.fieldRadio] === "amount"} 
                     onClick={() => {
-                      props.setFieldValue(props.values[props.fieldRadio+"_percent"], null)
-                      props.setFieldValue(props.values[props.fieldRadio+"_tax_include"], false)
+                      console.log(props.fieldRadio+"_percent")
+                      props.setFieldValue(props.fieldRadio+"_percent", null)
+                      props.setFieldValue(props.fieldRadio+"_tax_include", false)
                     }}
                   />
                 )}
@@ -131,8 +132,8 @@ const FeeSection = (props) => {
                   disabled={props.isView}
                   checked={props.values[props.fieldRadio] === "percent"}
                   onClick={() => {
-                    props.setFieldValue(props.values[props.fieldRadio+"_amount"], null)
-                    props.setFieldValue(props.values[props.fieldRadio+"_amount_type"], "")
+                    props.setFieldValue(props.fieldRadio+"_amount", "")
+                    props.setFieldValue(props.fieldRadio+"_amount_type", "")
                   }}
                 />
                 )}
