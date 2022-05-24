@@ -1,13 +1,9 @@
 import React, { useEffect } from "react"
 import BBDataTable from "components/table/bb-data-table"
 
-import FormTabel from "../form/shared-form"
+import FormTabel from "../form/standart-service-form.js"
 
 export default function SharedTable() {
-  // const Form = () => {
-  //   return <h1>Halo</h1>
-  // }
-
   let params = {
     isCheckbox: false,
     showAdvancedOptions: false,
