@@ -12,7 +12,7 @@ import FormInputSelectAjax from "../../components/form/input-select-ajax"
 import env from "../../config/environment"
 
 const endpoint = "/master/divisions"
-const backUrl = "/master/divisions"
+const backUrl = "/master/corporate-divisions"
 
 function DivisionForm(props) {
   let dispatch = useDispatch()
@@ -79,7 +79,7 @@ function DivisionForm(props) {
     let docTitle = "Edit Division"
     let bcTitle = docTitle
     if (!formId) {
-      docTitle = "Create New Division"
+      docTitle = "Create Division"
       bcTitle = "Create Division"
     } else if (isView) {
       docTitle = "Division"
@@ -91,7 +91,7 @@ function DivisionForm(props) {
         title: docTitle,
         breadcrumbs: [
           {
-            text: "Employment Management",
+            text: "Setup & Configuration",
           },
           {
             link: backUrl,
@@ -289,10 +289,11 @@ function DivisionForm(props) {
       isValid={false}
       rules={validationRules}
       validationMessages={validationMessages}
+      hideTranslation={false}
     >
       <FormHorizontal>
         <FormInputControl
-          label={isView ? "Division Name" : "Name"}
+          label={"Name"}
           required={true}
           value={form.division_name}
           name="division_name"

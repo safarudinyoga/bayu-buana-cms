@@ -205,6 +205,7 @@ import ShoppingCache from "views/shopping_cache/table"
 // Master Corporate Divisions
 import CorporateDivisionTable from "views/corporate_division/table"
 import CorporateDivisionForm from "views/corporate_division/form"
+import CorporateDivisionHierarchy from "views/corporate_division/hierarchy"
 
 const RouteWithProps = ({
   path,
@@ -752,6 +753,9 @@ const DashboardRoutes = () => {
         </Route>
         <Route path="/master/corporate-divisions/form/:id?">
           <CorporateDivisionForm />
+        </Route>
+        <Route path="/master/corporate-divisions/hierarchy/:id?">
+          <CorporateDivisionHierarchy />
         </Route>
 
       </Switch>
