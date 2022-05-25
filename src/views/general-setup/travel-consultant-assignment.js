@@ -50,8 +50,10 @@ const dummy2 = [
   },
 ]
 
-const TravelConsultantAssignment = (props) => {
-  const [listEmployee, SetListEmployee] = useState([])
+
+function TravelConsultantAssignment(props) {
+  const [listEmployee, setListEmployee] = useState([])
+  const [listTravelConsultant, setListTravelConsultant] = useState([])
   let api = new Api()
 
   const getEmployee = async () => {
@@ -59,72 +61,78 @@ const TravelConsultantAssignment = (props) => {
       let res = await api.get(
         `/master/employees?filters=[["status","=",1]]&sort=given_name`,
       )
-      SetListEmployee(res.data.items)
+      setListEmployee(res.data.items)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  const getLisTravelConsultant = async () => {
+    try {
+      let res = await api.get(`/master/configurations/travel-consultants`)
+      setListTravelConsultant(res.data.items)
     } catch (e) {
       console.log(e)
     }
   }
 
   useEffect(async () => {
+    getLisTravelConsultant()
     getEmployee()
   }, [])
 
+  const onSubmit = async (values, a) => {
+    console.log("submit: ", values)
+  }
+
+  const initialValues = {
+    agent_id: [""],
+    employee_id: [""]
+  }
+
   return (
     <>
-      {/* <Formik
-      onSubmit={async (values, { setSubmitting, resetForm }) => {
-        console.log(values)
-
-        let res = await api.put("user/profile", formatted)
-
-        return props.handleSelectTab("subscriptions")
-      }}
-    > */}
-      {/* {({
-        values,
-        errors,
-        touched,
-        dirty,
-        handleChange,
-        handleBlur,
-        handleSubmit,
-        isSubmitting,
-        setFieldValue,
-        setFieldTouched,
-      }) => {
-        return ( */}
-      <Form onSubmit="">
-        <Card>
-          <Card.Body>
-            <h3 className="card-heading">Travel Consultant Assignment</h3>
-            <div style={{ padding: "0 15px 40px 0" }}>
-              <CardAddOrRemove
-                firstData={dummy1}
-                secondData={listEmployee}
-                firstCardTitle="list of travel consultant"
-                secondCardTitle="employee name"
-              />
+      <Formik
+        initialValues={initialValues}
+        onSubmit={onSubmit}
+        validateOnMount
+        enableReinitialize
+      >
+        {({ dirty, handleSubmit, isSubmitting, setFieldValue, values }) => (
+          <Form onSubmit={handleSubmit}>
+            <Card>
+              <Card.Body>
+                <h3 className="card-heading">Travel Consultant Assignment</h3>
+                <div style={{ padding: "0 15px 40px 0" }}>
+                  <CardAddOrRemove
+                    firstData={[]}
+                    secondData={listEmployee}
+                    firstCardTitle="list of travel consultant"
+                    secondCardTitle="employee name"
+                  />
+                </div>
+              </Card.Body>
+            </Card>
+            <div
+              style={{
+                marginBottom: 30,
+                marginTop: 30,
+                display: "flex",
+              }}
+            >
+              <Button
+                variant="primary"
+                type="submit"
+                style={{ marginRight: 15 }}
+              >
+                SAVE & NEXT
+              </Button>
+              <CancelButton />
             </div>
-          </Card.Body>
-        </Card>
-        <div
-          style={{
-            marginBottom: 30,
-            marginTop: 30,
-            display: "flex",
-          }}
-        >
-          <Button variant="primary" type="submit" style={{ marginRight: 15 }}>
-            SAVE & NEXT
-          </Button>
-          <CancelButton />
-        </div>
-      </Form>
-
-      {/* }} */}
-      {/* </Formik> */}
+          </Form>
+        )}
+      </Formik>
     </>
   )
 }
-
 export default TravelConsultantAssignment
