@@ -53,6 +53,7 @@ const dummy2 = [
 const OverCreditApproverAssignment = (props) => {
   const [listEmployee, setListEmployee] = useState([])
   const [listOverCredit, setListOverCredit] = useState([])
+  const [formValues, setFormValues] = useState(null)
   let api = new Api()
 
   console.log("listEmp: ", listEmployee)
@@ -87,14 +88,15 @@ const OverCreditApproverAssignment = (props) => {
   }
 
   const initialValues = {
-    agent_id: [""],
-    employee_id: [""],
+    employee: [],
   }
+
+  console.log("formValues: ", formValues)
 
   return (
     <>
       <Formik
-        initialValues={initialValues}
+        initialValues={formValues || initialValues}
         onSubmit={onSubmit}
         validateOnMount
         enableReinitialize
@@ -108,11 +110,12 @@ const OverCreditApproverAssignment = (props) => {
                 </h3>
                 <div style={{ padding: "0 15px 40px 0" }}>
                   <CardAddOrRemove
-                    firstData={[]}
+                    firstData={listEmployee}
                     secondData={listEmployee}
                     firstCardTitle="list of over credit approvers"
                     secondCardTitle="employee name"
                     canRemoveIndex
+                    setFormValues={setFormValues}
                   />
                 </div>
               </Card.Body>

@@ -9,7 +9,7 @@ import flightTicket from "assets/icons/flight-ticket.svg"
 import FormInputSelectAjax from "components/form/input-select-ajax"
 import FormikControl from "components/formik/formikControl"
 import "./add-or-remove-list.css"
-import { FieldArray } from "formik"
+import { FieldArray, Field } from "formik"
 
 const AddOrRemoveList = ({
   firstData,
@@ -18,13 +18,14 @@ const AddOrRemoveList = ({
   secondCardTitle,
   canRemoveIndex,
   onModal,
+  setFormValues,
 }) => {
   const [showFilter, setShowFilter] = useState(false)
   const [leftData, setLeftData] = useState(firstData)
   const [rightData, setRightData] = useState(secondData)
 
-  console.log("secondData: ", secondData)
-  console.log("leftData: ", leftData)
+  // console.log("secondData: ", secondData)
+  // console.log("leftData: ", leftData)
 
   useEffect(async () => {
     setLeftData(firstData)
@@ -34,11 +35,22 @@ const AddOrRemoveList = ({
   const handleButtonAdd = () => {
     setLeftData((leftdata) => [...leftdata, ...rightData])
     setRightData((rightdata) => [])
+    setFormValues((formValues) => [
+      ...leftData.map((item) => ({
+        agent_id: item.agent_employee.agent_id,
+        employee_id: item.employee_id,
+      })),
+      ...rightData.map((item) => ({
+        agent_id: item.agent_employee.agent_id,
+        employee_id: item.employee_id,
+      })),
+    ])
   }
 
   const handleButtonRemove = () => {
     setLeftData((leftdata) => [])
     setRightData((rightdata) => [...rightdata, ...leftData])
+    setFormValues((formValues) => [])
   }
 
   const handleRemoveIndexArray = (e) => {
@@ -82,44 +94,25 @@ const AddOrRemoveList = ({
                   {canRemoveIndex ? (
                     <div className="w-100 d-flex justify-content-between align-items-center">
                       {item.given_name} ({item.given_name})
-                      <FieldArray name="agent_id">
-                        {(fieldArrayProps) => {
-                          const { form } = fieldArrayProps
-                          const { values } = form
-                          const { agent_id } = values
-                          return (
-                            <div key={i}>
-                              {agent_id.map((agent_id, i) => (
-                                <FormikControl
-                                  control="input"
-                                  name={`agent_id[${i}]`}
-                                  type="hidden"
-                                  value={item.agent_employee.agent_id}
-                                />
-                              ))}
-                            </div>
-                          )
-                        }}
-                      </FieldArray>
-                      <FieldArray name="employee_id">
-                        {(fieldArrayProps) => {
-                          const { form } = fieldArrayProps
-                          const { values } = form
-                          const { employee_id } = values
-                          return (
-                            <div key={i}>
-                              {employee_id.map((employee_id, i) => (
-                                <FormikControl
-                                  control="input"
-                                  name={`employee_id[${i}]`}
-                                  type="hidden"
-                                  value={item.employee_id}
-                                />
-                              ))}
-                            </div>
-                          )
-                        }}
-                      </FieldArray>
+                      <FieldArray
+                        name="employee"
+                        render={(arr) => (
+                          <div className="d-flex">
+                            <FormikControl
+                              control="input"
+                              name={`employee[${i}].agent_id`}
+                              type="hidden"
+                              value={item.agent_employee.agent_id}
+                            />
+                            <FormikControl
+                              control="input"
+                              name={`employee[${i}].employee_id`}
+                              type="hidden"
+                              value={item.employee_id}
+                            />
+                          </div>
+                        )}
+                      />
                       <span
                         className="btn-x-circle"
                         onClick={() => handleRemoveIndexArray(item)}
@@ -175,45 +168,25 @@ const AddOrRemoveList = ({
                         style={{ paddingLeft: 13, paddingRight: 15 }}
                       >
                         {item.given_name}
-                        <FieldArray name="agent_id">
-                          {(fieldArrayProps) => {
-                            const { form } = fieldArrayProps
-                            const { values } = form
-                            const { agent_id } = values
-                            return (
-                              <div key={i}>
-                                {agent_id.map((agent_id, i) => (
-                                  <FormikControl
-                                    control="input"
-                                    name={`agent_id[${i}]`}
-                                    type="hidden"
-                                    value={item.agent_employee.agent_id}
-                                  />
-                                ))}
-                              </div>
-                            )
-                          }}
-                        </FieldArray>
-                        <FieldArray name="employee_id">
-                          {(fieldArrayProps) => {
-                            const { form } = fieldArrayProps
-                            const { values } = form
-                            const { employee_id } = values
-                            return (
-                              <div key={i}>
-                                {employee_id.map((employee_id, i) => (
-                                  <FormikControl
-                                    control="input"
-                                    name={`employee_id[${i}]`}
-                                    type="hidden"
-                                    value={item.employee_id}
-                                  />
-                                ))}
-                              </div>
-                            )
-                          }}
-                        </FieldArray>
-                        <span>({item.given_name})</span>
+                        <FieldArray
+                          name="employee"
+                          render={(arr) => (
+                            <div className="d-flex">
+                              <FormikControl
+                                control="input"
+                                name={`employee[${i}].agent_id`}
+                                type="hidden"
+                                value={item.agent_employee.agent_id}
+                              />
+                              <FormikControl
+                                control="input"
+                                name={`employee[${i}].employee_id`}
+                                type="hidden"
+                                value={item.employee_id}
+                              />
+                            </div>
+                          )}
+                        />
                       </div>
                     </div>
                   )}
