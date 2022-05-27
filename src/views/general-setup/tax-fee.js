@@ -17,7 +17,6 @@ import { ReactSVG } from "react-svg"
 
 const endpoint = "/master/processing-fee-categories"
 const endpointFee = "/master/agent-processing-fee-categories"
-const backUrl = "/master/standard-ancillary-fee"
 const options = {
   position: "bottom-right",
 }
@@ -56,30 +55,9 @@ const TaxFee = (props) => {
   const [taxIdInternationalRfp, setTaxIdInternationalRfp] = useState("")
   const [taxIdInternationalNonGds, setTaxIdInternationalNonGds] = useState("")
   const [taxIdOtherEmergency, setTaxIdOtherEmergency] = useState("")
+
   useEffect(async () => {
     let api = new Api()
-    let docTitle = ""
-    if (!formId) {
-      docTitle = ""
-    }
-    dispatch(
-      setUIParams({
-        title: docTitle,
-        breadcrumbs: [
-          {
-            text: "Master Data Management",
-          },
-          {
-            link: backUrl,
-            text: "Standard Ancillary Fee",
-          },
-          {
-            text: docTitle,
-          },
-        ],
-      }),
-    )
-
   })
 
   useEffect(() => {
