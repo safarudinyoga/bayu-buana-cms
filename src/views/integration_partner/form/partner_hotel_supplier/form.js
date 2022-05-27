@@ -30,7 +30,8 @@ const HotelSuppliers = (props) => {
   const duplicateValue = async(fieldName, value) => {
     let filters = encodeURIComponent(JSON.stringify([[fieldName,"=",value],["AND"],["integration_partner_id",id],["AND"],["status",1]]))
     let res = await api.get(endpoint + "/" + id + "/hotel-suppliers?" + `filters=${filters}`)
-    let sameId = res.data.items.find((v) => v.id === hotelSupplierId)
+    console.log('hotelSupplierId', hotelSupplierId)
+    let sameId = res.data.items.find((v) => v.hotel_supplier_id === hotelSupplierId)
     if(!sameId) return res.data.items.length === 0 
 
     return true
@@ -83,7 +84,10 @@ Yup.addMethod(Yup.string, 'uniqueValueString', function (fieldName, message) {
         let res = await api.get(endpoint + "/" + id + "/hotel-suppliers/" + formId);
         setFormValues({ 
           ...formValues,
-          hotel_supplier_id: res.data.hotel_supplier_id ? res.data.hotel_supplier_id : "",
+          hotel_supplier_id: {
+            value: res.data.hotel_supplier.id,
+            label:res.data.hotel_supplier.hotel_supplier_name,
+          },
           hotel_supplier_code: res.data.hotel_supplier_code ? res.data.hotel_supplier_code : "",
           hotel_supplier_name: res.data.hotel_supplier_name ? res.data.hotel_supplier_name : "",
         })
