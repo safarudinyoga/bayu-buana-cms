@@ -525,7 +525,7 @@ const FlightForm = (props) => {
       processing_fee_category_name: values.processing_fee_category_name,
       domestic_reissue: {
         fee_tax_type_id: taxIdDomesticReissue,
-        amount: values.domestic_reissue == "amount" ? removeSeparator(values.domestic_reissue_amount : 0,
+        amount: values.domestic_reissue == "amount" ? removeSeparator(values.domestic_reissue_amount) : 0,
         percent:values.domestic_reissue == "amount" ? 0 : parseFloat(values.domestic_reissue_percent),
         charge_type_id:values.domestic_reissue == "amount" ? values.domestic_reissue_amount_type : "00000000-0000-0000-0000-000000000000",
         is_tax_inclusive:values.domestic_reissue == "amount" ? false : values.domestic_reissue_tax_include,
@@ -533,7 +533,7 @@ const FlightForm = (props) => {
       },
       domestic_revalidate: {
         fee_tax_type_id: taxIdDomesticRevalidate,
-        amount: values.domestic_revalidate == "amount" ? removeSeparator(values.domestic_revalidate_amount : 0,
+        amount: values.domestic_revalidate == "amount" ? removeSeparator(values.domestic_revalidate_amount) : 0,
         percent:values.domestic_revalidate == "amount" ? 0 : parseFloat(values.domestic_revalidate_percent),
         charge_type_id:values.domestic_revalidate == "amount" ? values.domestic_revalidate_amount_type : "00000000-0000-0000-0000-000000000000",
         is_tax_inclusive:values.domestic_revalidate == "amount" ? false : values.domestic_revalidate_tax_include,
