@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 35 35">
+  <g id="ic_cloud_upload" transform="translate(-1400 -388.836)">
+    <rect id="Base" width="35" height="35" transform="translate(1400 388.836)" fill="none"/>
+    <path id="Icon" d="M1025.469-135.986a8.7,8.7,0,0,0-8.535-7.014,8.7,8.7,0,0,0-7.722,4.691,6.96,6.96,0,0,0-6.212,6.921,6.973,6.973,0,0,0,6.967,6.967h15.1a5.808,5.808,0,0,0,5.806-5.806,5.778,5.778,0,0,0-5.4-5.76Zm-6.212,3.437v4.645h-4.645v-4.645h-3.484l5.806-5.806,5.806,5.806Z" transform="translate(400.484 540.128)" fill="#b7b7b7" fill-rule="evenodd"/>
+  </g>
+</svg>
