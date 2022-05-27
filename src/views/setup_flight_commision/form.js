@@ -246,7 +246,7 @@ const FlightCommisionForm = (props) => {
                         <FormikControl
                           control="selectAsync"
                           required={isView ? "" : "label-required"}
-                          label="Specified Airlines"
+                          label="Specified Airline"
                           name="airline_id"
                           placeholder="Please Choose"
                           url={`master/airlines`}
