@@ -77,6 +77,7 @@ const FeeSection = (props) => {
                         ? <Form.Control 
                             style={{ maxWidth: "220px" }} 
                             disabled={true} 
+                            className={"grey-background"}
                           />
                         : <FastField name={props.fieldAmount}>
                         {({ field }) => (
@@ -134,7 +135,12 @@ const FeeSection = (props) => {
                 <Form.Group as={Row} className="mb-3">
                   {
                     disabledPercent
-                    ? <Form.Control type="number" style={{ maxWidth: "80px" }} className="mx-3" disabled={true} />
+                    ? <Form.Control 
+                        type="number" 
+                        style={{ maxWidth: "80px" }} 
+                        className="mx-3 grey-background" 
+                        disabled={true} 
+                      />
                     :
                     <FastField name={props.fieldPercent}>
                       {({ field }) => (
@@ -168,7 +174,12 @@ const FeeSection = (props) => {
               </Col>
               <Col sm={12} md={6}>
               {disabledPercent 
-                ? <Form.Check type="checkbox" className="mt-2" label="Include Taxes" disabled={true} />
+                ? <Form.Check 
+                    type="checkbox" 
+                    className="mt-2" 
+                    label="Include Taxes" 
+                    disabled={true} 
+                  />
                 : <FastField name={props.fieldIncludeTax}>
                     {({ field }) => (
                     <Form.Check {...field} type="checkbox" className="mt-2" label="Include Taxes" checked={props.values[props.fieldRadio+"_tax_include"]} disabled={props.isView} />
