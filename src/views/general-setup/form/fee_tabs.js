@@ -160,7 +160,7 @@ const FeeSection = (props) => {
 const Fees = (props) => {
   return (
     <Form className="mb-3 pt-3 pl-3">
-      <Col md={8}>
+      <Col md={10}>
         {
           props.sections.map((val, i) => <FeeSection title={val.title} 
           key={i}
@@ -187,7 +187,7 @@ export const FeeTabs = (props) => {
       <div className="card">
   
         <Tabs
-          id="standard-ancillary-fee"
+          id="retail-ancillary-fee"
           activeKey={key}
           onSelect={(k) => setKey(k)}
           className="mb-4"
