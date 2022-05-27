@@ -183,7 +183,63 @@ const FlightForm = (props) => {
 
   // Schema for yup
   const validationSchema = Yup.object().shape({
-    processing_fee_category_name: Yup.string().required("Please enter Preset Name."),
+    processing_fee_category_name: Yup
+      .string()
+      .required("Please enter Preset Name."),
+    domestic_reissue: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeDomesticReissue.fee_tax_type_name}.`),
+    domestic_reissue_amount: Yup
+      .string().when('domestic_reissue', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeDomesticReissue.fee_tax_type_name}.`)
+      }),
+    domestic_reissue_amount_type: Yup
+      .string().when('domestic_reissue', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    domestic_reissue_percent: Yup
+      .string().when('domestic_reissue', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeDomesticReissue.fee_tax_type_name}.`)
+      }),
+    domestic_revalidate: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeDomesticRevalidate.fee_tax_type_name}.`),
+    domestic_refund: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeDomesticRefund.fee_tax_type_name}.`),
+    domestic_void: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeDomesticVoid.fee_tax_type_name}.`),
+    domestic_frp: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeDomesticRfp.fee_tax_type_name}.`),
+    domestic_non_gds: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeDomesticNonGds.fee_tax_type_name}.`),
+    international_reissue: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeInternationalReissue.fee_tax_type_name}.`),
+    international_revalidate: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeInternationalRevalidate.fee_tax_type_name}.`),
+    international_refund: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeInternationalRefund.fee_tax_type_name}.`),
+    international_void: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeInternationalVoid.fee_tax_type_name}.`),
+    international_frp: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeInternationalRfp.fee_tax_type_name}.`),
+    international_non_gds: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeInternationalNonGds.fee_tax_type_name}.`),
+    other_emergency: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeOtherEmergency.fee_tax_type_name}.`),
   })
 
   const checkprocessingType = (value) => value !== "00000000-0000-0000-0000-000000000000" ? "amount" : "percent"
@@ -414,7 +470,6 @@ const FlightForm = (props) => {
     }
   }
 
-
   return (
     <>
       <Formik
@@ -642,6 +697,7 @@ const FlightForm = (props) => {
                       {label:"/Person", value:"de03bf84-4bd8-4cdf-9348-00246f04bcad"},
                       {label:"/Transaction", value:"5123b121-4f6a-4871-bef1-65408d663e19"},
                     ]}
+                    errors={errors}
                   />
                 </div>
               </Card.Body>
