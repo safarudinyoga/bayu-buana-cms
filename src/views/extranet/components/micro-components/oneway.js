@@ -6,12 +6,16 @@ import Travellers from './travellers';
 import Routes from './routes';
 
 const Oneway = (props) => {
-  const { airports, multitrip, handleRemoveTrip } = props
+  const { airports, multitrip, handleRemoveTrip, id, counter } = props
 
   const [departTime, setDepartTime] = useState(new Date())
 
   const [travelerCheckboxConfirm, setTravelerCheckboxConfirm] = useState(false)
   const [travelerCount, setTravelerCount] = useState(0)
+
+  const removeTripCallback = index => () => {
+    handleRemoveTrip(index)
+  }
 
   function RenderDatepicker({ openCalendar, value, handleValueChange }){
     return (
@@ -35,7 +39,7 @@ const Oneway = (props) => {
 
   return (
     <>
-      <div className='d-flex flex-wrap'>
+      <div className='d-flex flex-wrap' id={id}>
         <Routes airports={airports} />
 
         <div className='mr-4'>
@@ -57,7 +61,7 @@ const Oneway = (props) => {
         </div>
         {
           multitrip ? (
-            <div onClick={handleRemoveTrip}>
+            <div onClick={removeTripCallback(counter)}>
               Remove
             </div>
           ) : (
