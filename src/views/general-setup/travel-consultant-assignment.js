@@ -54,6 +54,7 @@ const dummy2 = [
 function TravelConsultantAssignment(props) {
   const [listEmployee, setListEmployee] = useState([])
   const [listTravelConsultant, setListTravelConsultant] = useState([])
+  const [formValues, setFormValues] = useState(null)
   let api = new Api()
 
   const getEmployee = async () => {
@@ -86,14 +87,15 @@ function TravelConsultantAssignment(props) {
   }
 
   const initialValues = {
-    agent_id: [""],
-    employee_id: [""]
+    employee: [],
   }
+
+  console.log("formValues: ", formValues)
 
   return (
     <>
       <Formik
-        initialValues={initialValues}
+       initialValues={formValues || initialValues}
         onSubmit={onSubmit}
         validateOnMount
         enableReinitialize
@@ -105,10 +107,11 @@ function TravelConsultantAssignment(props) {
                 <h3 className="card-heading">Travel Consultant Assignment</h3>
                 <div style={{ padding: "0 15px 40px 0" }}>
                   <CardAddOrRemove
-                    firstData={[]}
+                    firstData={listEmployee}
                     secondData={listEmployee}
                     firstCardTitle="list of travel consultant"
                     secondCardTitle="employee name"
+                    setFormValues={setFormValues}
                   />
                 </div>
               </Card.Body>
