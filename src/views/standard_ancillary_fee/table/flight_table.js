@@ -1,11 +1,13 @@
 import React, { useState } from "react"
 import BBDataTable from "components/table/bb-data-table"
+import FlightFormDelete from "./flight-form-delete"
 
 export default function FlightTable() { 
   let [params, setParams] = useState({
     title: "Standard Ancillary Fee",
     isCheckbox: false,
     showAdvancedOptions: false,
+    modalDelete: true,
     baseRoute: "/master/standard-ancillary-fee/form/flight-form",
     endpoint: "/master/agent-processing-fee-categories/1",
     deleteEndpoint: "/master/agent-processing-fee-categories/1",
@@ -27,5 +29,5 @@ export default function FlightTable() {
     ],
     searchText: "Search",
   })
-  return <BBDataTable {...params}  />
+  return <BBDataTable {...params} modalDeleteContent={FlightFormDelete} />
 }

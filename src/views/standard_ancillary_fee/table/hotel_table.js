@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react"
 import BBDataTable from "components/table/bb-data-table"
+import HotelFormDelete from "./hotel-form-delete"
 
 export default function HotelTable() {   
 
@@ -7,6 +8,7 @@ export default function HotelTable() {
     title: "Standard Ancillary Fee",
     isCheckbox: false,
     showAdvancedOptions: false,
+    modalDelete: true,
     baseRoute: "/master/standard-ancillary-fee/form/hotel-form",
     endpoint: "/master/agent-processing-fee-categories/2",
     deleteEndpoint: "/master/agent-processing-fee-categories/2",
@@ -27,5 +29,5 @@ export default function HotelTable() {
     ],
   }) 
 
-  return <BBDataTable {...params}  />
+  return <BBDataTable {...params} modalDeleteContent={HotelFormDelete} />
 }
