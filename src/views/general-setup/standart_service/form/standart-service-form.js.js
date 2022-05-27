@@ -224,6 +224,7 @@ function StandartService(props) {
             <Form.Label column sm={3}>
               Respon Time<span className="form-label-required">*</span>
             </Form.Label>
+
             <Col sm={9}>
               <div style={{ maxWidth: 450, display: "flex" }}>
                 <div style={{ minWidth: 65, flex: 1 }}>
@@ -235,9 +236,7 @@ function StandartService(props) {
                     }}
                   >
                     {days.map((day, i) => (
-                      <option value="day" key={i}>
-                        {day}
-                      </option>
+                      <option key={i}>{day}</option>
                     ))}
                   </select>
                 </div>
