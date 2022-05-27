@@ -202,6 +202,11 @@ import IdentityRuleTable from "views/identity_rule/table"
 import TaxFeeForm from "views/tax_fee/form"
 import ShoppingCache from "views/shopping_cache/table"
 
+// Master Corporate Divisions
+import CorporateDivisionTable from "views/corporate_division/table"
+import CorporateDivisionForm from "views/corporate_division/form"
+import CorporateDivisionHierarchy from "views/corporate_division/hierarchy"
+
 const RouteWithProps = ({
   path,
   exact,
@@ -741,6 +746,18 @@ const DashboardRoutes = () => {
         <Route path="/master/tax-fee">
           <TaxFeeForm />
         </Route>
+
+        {/* Corporate Division */}
+        <Route exact path="/master/corporate-divisions">
+          <CorporateDivisionTable />
+        </Route>
+        <Route path="/master/corporate-divisions/form/:id?">
+          <CorporateDivisionForm />
+        </Route>
+        <Route path="/master/corporate-divisions/hierarchy/:id?">
+          <CorporateDivisionHierarchy />
+        </Route>
+
       </Switch>
     </DashboardWrapper>
   )
