@@ -410,7 +410,7 @@ const HotelForm = (props) => {
   }  
 
   const removeSeparator = (value) => {
-    value = value.split(",").join("")
+    value = value.toString().split(",").join("")
     return parseInt(value)
   }
 
