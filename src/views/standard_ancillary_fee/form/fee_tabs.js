@@ -89,7 +89,14 @@ const FeeSection = (props) => {
                             displayType="input"
                             type="text"
                             thousandSeparator={true}
-                            allowNegative={true} />
+                            allowNegative={true}
+                            onValueChange={(values) => {
+                              const { value } = values;
+                              props.setFieldValue(props.fieldAmount, value)
+
+                              console.log(props.fieldAmount, value)
+                            }}
+                          />
                         )}
                       </FastField>
                       }
