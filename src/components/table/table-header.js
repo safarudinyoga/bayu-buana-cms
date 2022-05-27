@@ -106,9 +106,9 @@ class TableHeader extends Component {
       showFilter: false,
       showAdvancedOptions: props.showAdvancedOptions ?? true,
       showCalendar: props.showCalendar ?? false,
-      advancedOptionsText : props.advancedOptionsText ?? "Advanced Options",
-      searchText : props.searchText ?? "Search...",
-      isHideDownloadLogo : props.isHideDownloadLogo ?? false,
+      advancedOptionsText: props.advancedOptionsText ?? "Advanced Options",
+      searchText: props.searchText ?? "Search...",
+      isHideDownloadLogo: props.isHideDownloadLogo ?? false,
       searchValue: "",
       statusValue: "0",
       yearValue: new Date().getFullYear(),
@@ -261,25 +261,20 @@ class TableHeader extends Component {
               </button>
             )}
             {this.state.showCalendar ? (
-              <a
-                className="view-calendar"
-                href="/master/special-date/calendar"
-              >
+              <a className="view-calendar" href="/master/special-date/calendar">
                 View Calendar
               </a>
             ) : (
               ""
             )}
 
-            {(pathname === "/master/divisions" || pathname === "/master/corporate-divisions") && (
+            {(pathname === "/master/divisions" ||
+              pathname === "/master/corporate-divisions") && (
               <OverlayTrigger
                 placement="top"
                 overlay={<Tooltip>Click to view division hierarchy</Tooltip>}
               >
-                <Link
-                  to={`${pathname}/hierarchy`}
-                  className="menu-link ml-5"
-                >
+                <Link to={`${pathname}/hierarchy`} className="menu-link ml-5">
                   <img
                     src="/img/icons/hierarchy.svg"
                     alt="icon users"
@@ -292,40 +287,44 @@ class TableHeader extends Component {
           </div>
 
           <div className="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-2 mb-md-0 order-first order-md-last">
-            {pathname !== "/master/integration-partner" && pathname !== "/master/identity-rules" && !hideCreate && (
-              <OverlayTrigger
-                placement="top"
-                overlay={<Tooltip>Click to create</Tooltip>}
-              >
-                <button
-                  type="button"
-                  onClick={this.handleClick.bind(this)}
-                  className="btn btn-warning float-right button-new"
+            {pathname !== "/master/integration-partner" &&
+              pathname !== "/master/identity-rules" &&
+              !hideCreate && (
+                <OverlayTrigger
+                  placement="top"
+                  overlay={<Tooltip>Click to create</Tooltip>}
                 >
-                  <img src={createIcon} className="mr-1" alt="new" />
-                  {pathname === "/master/general-setup"
-                    ? "Add Team" :
-                    pathname === "/internal/shopping-cache" ?
-                    "Add Shopping Criteria" 
-                    : "Create New"}
-                </button>
-              </OverlayTrigger>
-            )}
+                  <button
+                    type="button"
+                    onClick={this.handleClick.bind(this)}
+                    className="btn btn-warning float-right button-new"
+                  >
+                    <img src={createIcon} className="mr-1" alt="new" />
+                    {pathname === "/master/general-setup"
+                      ? "Create New"
+                      : pathname === "/internal/shopping-cache"
+                      ? "Add Shopping Criteria"
+                      : "Create New"}
+                  </button>
+                </OverlayTrigger>
+              )}
 
-            {!isHidePrintLogo && pathname !== "/master/general-setup" && pathname !== "/internal/shopping-cache" && (
-              <OverlayTrigger
-                placement="top"
-                overlay={<Tooltip>Click to print</Tooltip>}
-              >
-                <Link
-                  to="#"
-                  onClick={this.handlePrint.bind(this)}
-                  className="btn-table-action float-right"
+            {!isHidePrintLogo &&
+              pathname !== "/master/general-setup" &&
+              pathname !== "/internal/shopping-cache" && (
+                <OverlayTrigger
+                  placement="top"
+                  overlay={<Tooltip>Click to print</Tooltip>}
                 >
-                  <img src={printIcon} className="img-circle" alt="print" />
-                </Link>
-              </OverlayTrigger>
-            )}
+                  <Link
+                    to="#"
+                    onClick={this.handlePrint.bind(this)}
+                    className="btn-table-action float-right"
+                  >
+                    <img src={printIcon} className="img-circle" alt="print" />
+                  </Link>
+                </OverlayTrigger>
+              )}
 
             {!this.state.isHideDownloadLogo && (
               <OverlayTrigger
@@ -470,10 +469,9 @@ class TableHeader extends Component {
           >
             View Calendar
           </a>
-          ) : (
-            ""
-          )
-        }
+        ) : (
+          ""
+        )}
       </div>
     )
   }
