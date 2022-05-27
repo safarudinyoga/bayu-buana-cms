@@ -12,13 +12,13 @@ export default function SetupFlightCommisionTable() {
   useEffect(() => {
     dispatch(
       setUIParams({
-        title: "Flight Commissions",
+        title: "Setup Flight Commission",
         breadcrumbs: [
           {
             text: "Master Data Management",
           },
           {
-            text: "Flight Commissions",
+            text: "Setup Flight Commissions",
           },
         ]
       })
@@ -183,7 +183,7 @@ export default function SetupFlightCommisionTable() {
     title: "Setup Flight Commision",
     baseRoute: "/master/setup-flight-commission/form",
     endpoint: "/master/commission-claims",
-    deleteEndpoint: "/master/batch-actions/delete/setup-flight-commisions",
+    deleteEndpoint: "/master/batch-actions/delete/commission-claims",
     activationEndpoint: "/master/batch-actions/activate/setup-flight-commisions",
     deactivationEndpoint: "/master/batch-actions/deactivate/setup-flight-commisions",
     columns: [
@@ -239,7 +239,8 @@ export default function SetupFlightCommisionTable() {
     btnDownload: ".buttons-csv",
     isCheckbox: false,
     isShowStatus: false,
-    hideDetail: true
+    hideDetail: true,
+    searchText: "Search"
   }
 
 
