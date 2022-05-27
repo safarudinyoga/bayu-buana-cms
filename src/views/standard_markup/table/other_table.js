@@ -9,11 +9,11 @@ export default function OtherTable() {
 
   let [params, setParams] = useState({
     title: "Standard Markup",
-    baseRoute: "/master/standard-markup/form/other-form",
-    endpoint: "/master/hotels",
-    deleteEndpoint: "/master/batch-actions/delete/hotels",
-    activationEndpoint: "/master/batch-actions/activate/hotels",
-    deactivationEndpoint: "/master/batch-actions/deactivate/hotels",
+    baseRoute: "/master/markup-categories",
+    endpoint: "/master/",
+    deleteEndpoint: "/master/markup-categories",
+    activationEndpoint: "/master/markup-categories",
+    deactivationEndpoint: "/master/markup-categories",
     columns: [
       {
         title: "Hotel Name",

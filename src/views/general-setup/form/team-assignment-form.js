@@ -15,14 +15,17 @@ const dummy1 = [
   {
     given_name: "Tiffany Young",
     category: "BCD",
+    checked: false,
   },
   {
     given_name: "Dhani Doel",
     category: "BCD",
+    checked: false,
   },
   {
     given_name: "Jhon Bill",
     category: "NCD",
+    checked: false,
   },
 ]
 
@@ -114,7 +117,13 @@ function TeamAssignmentForm(props) {
   }, [showCreateModal.id, formValues])
 
   const onSubmit = async (values, a) => {
-    console.log(values)
+    console.log("submit: ", values)
+  }
+
+  const initialValues = {
+    team_name: "",
+    agent_id: [""],
+    employee_id: [""],
   }
 
   const formSize = {
@@ -130,8 +139,7 @@ function TeamAssignmentForm(props) {
 
   return (
     <Formik
-      //   initialValues={formValues || initialValues}
-      //   validationSchema={validationSchema}
+      initialValues={initialValues}
       onSubmit={onSubmit}
       validateOnMount
       enableReinitialize

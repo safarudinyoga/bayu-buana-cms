@@ -165,7 +165,7 @@ import ResetPassword from "views/reset_password/reset_password"
 
 //User Management
 import UserManagementTable from "views/user_management/table"
-// import UserManagementForm from "views/user_management/form"
+import UserManagementForm from "views/user_management/form"
 
 // Master Standard Ancillary Fee
 import StandardAncillaryFee from "./views/standard_ancillary_fee/standard_ancillary_fee"
@@ -205,6 +205,11 @@ import ShoppingCache from "views/shopping_cache/table"
 // Job Title Corporate
 import JobTitleCorporateForm from "./views/job_title_corporate/form"
 import JobTitleCorporateTable from "./views/job_title_corporate/table"
+
+// Master Corporate Divisions
+import CorporateDivisionTable from "views/corporate_division/table"
+import CorporateDivisionForm from "views/corporate_division/form"
+import CorporateDivisionHierarchy from "views/corporate_division/hierarchy"
 
 const RouteWithProps = ({
   path,
@@ -671,7 +676,7 @@ const DashboardRoutes = () => {
         <Route exact path="/master/setup-general-information">
           <GeneralInformation />
         </Route>
-        
+
         {/* Master Exhange Rate */}
         <Route exact path="/master/exchange-rate">
           <ExchageRateTable />
@@ -721,9 +726,9 @@ const DashboardRoutes = () => {
         <Route exact path="/master/user-management">
           <UserManagementTable />
         </Route>
-        {/* <Route path="/master/user-management/form/:id?">
+        <Route path="/master/user-management/form/:id?">
           <UserManagementForm />
-        </Route> */}
+        </Route>
 
         {/* Master Special Date */}
         <Route exact path="/master/special-date">
@@ -752,6 +757,17 @@ const DashboardRoutes = () => {
         {/* Tax Fee */}
         <Route path="/master/tax-fee">
           <TaxFeeForm />
+        </Route>
+
+        {/* Corporate Division */}
+        <Route exact path="/master/corporate-divisions">
+          <CorporateDivisionTable />
+        </Route>
+        <Route path="/master/corporate-divisions/form/:id?">
+          <CorporateDivisionForm />
+        </Route>
+        <Route path="/master/corporate-divisions/hierarchy/:id?">
+          <CorporateDivisionHierarchy />
         </Route>
 
       </Switch>

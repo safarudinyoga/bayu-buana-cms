@@ -13,9 +13,10 @@ import {
   Modal,
   Table,
 } from "react-bootstrap"
+import { useWindowSize } from "rooks"
 import AccessManagerRow from "components/table/access-manager-row"
 import FormHorizontal from "components/form/horizontal"
-
+import SelectAsync from "components/form/select-async"
 import createIcon from "assets/icons/create.svg"
 import { Formik, FastField, Field } from "formik"
 import * as Yup from "yup"
@@ -26,7 +27,7 @@ import { setAlert, setUIParams } from "redux/ui-store"
 import Api from "config/api"
 import env from "config/environment"
 import Select from "components/form/select-async"
-
+import FormInputSelectAjax from "components/form/input-select-ajax"
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css"
 import "react-dropzone-uploader/dist/styles.css"
 
@@ -109,9 +110,8 @@ const FlightForm = (props) => {
   // Initialize form
   const initialForm = {
     // General Information
-    hotelCode: "",
-    hotelName: "",
-    hotelBrand: null,
+    employee: "",
+    user_type: "",
   }
 
   const initialFormModalAddMap = {
@@ -120,15 +120,17 @@ const FlightForm = (props) => {
   }
 
   // Schema for yup
-  const validationSchema = Yup.object().shape({})
-
-  const validationSchemaModalAddMap = Yup.object().shape({})
-
-  const renderTooltip = (props) => (
-    <td data-toggle="tooltip" title="Your tooltip data">
-      Table Cell Content
-    </td>
-  )
+  const validationSchema = Yup.object().shape({
+    employee: Yup.object().required("Employee is required."),
+    user_type: Yup.object().required("Employee is required."),
+  })
+  let [selectedJobTitle, setSelectedJobTitle] = useState([])
+  let [selectedJobTitleIds, setSelectedJobTitleIds] = useState([])
+  let [selectedDivision, setSelectedDivision] = useState([])
+  let [selectedDivisionIds, setSelectedDivisionIds] = useState([])
+  let [selectedOffice, setSelectedOffice] = useState([])
+  let [selectedOfficeIds, setSelectedOfficeIds] = useState([])
+  const { innerWidth, innerHeight, outerHeight, outerWidth } = useWindowSize()
 
   return (
     <>
@@ -159,32 +161,42 @@ const FlightForm = (props) => {
                       Select Employee to Grant Access
                       <span className="form-label-required">*</span>
                     </Form.Label>
-                    <Col sm={2}>
-                      <FastField name="hotelCode">
-                        {({ field, form }) => (
-                          <>
-                            <Form.Control
-                              type="text"
-                              isInvalid={
-                                form.touched.hotelCode && form.errors.hotelCode
-                              }
-                              minLength={1}
-                              maxLength={128}
-                              style={{ maxWidth: 300 }}
-                              {...field}
-                            />
-                            {form.touched.hotelCode &&
-                              form.errors.hotelCode && (
-                                <Form.Control.Feedback type="invalid">
-                                  {form.touched.hotelCode
-                                    ? form.errors.hotelCode
-                                    : null}
-                                </Form.Control.Feedback>
-                              )}
-                          </>
-                        )}
-                      </FastField>
-                    </Col>
+                    <FastField name="employee">
+                      {({ field, form }) => (
+                        <div style={{ maxWidth: 200 }}>
+                          <SelectAsync
+                            {...field}
+                            isClearable
+                            url={`master/employees`}
+                            fieldName="given_name"
+                            onChange={(v) => {
+                              setFieldValue("employee", v)
+                            }}
+                            placeholder="Please choose"
+                            className={`react-select ${
+                              form.touched.employee && form.errors.employee
+                                ? "is-invalid"
+                                : null
+                            }`}
+                            // components={
+                            //   isView
+                            //     ? {
+                            //         DropdownIndicator: () => null,
+                            //         IndicatorSeparator: () => null,
+                            //       }
+                            //     : null
+                            // }
+                          />
+                          {form.touched.employee && form.errors.employee && (
+                            <Form.Control.Feedback type="invalid">
+                              {form.touched.employee
+                                ? form.errors.employee
+                                : null}
+                            </Form.Control.Feedback>
+                          )}
+                        </div>
+                      )}
+                    </FastField>
 
                     <Form.Label column md={3}>
                       <Nav.Link href={`/master/employee/form`}>
@@ -197,33 +209,42 @@ const FlightForm = (props) => {
                     <Form.Label column md={2}>
                       User Type
                     </Form.Label>
-                    <Col sm={2}>
-                      <FastField name="hotelCode">
-                        {({ field, form }) => (
-                          <>
-                            <Form.Control
-                              type="text"
-                              isInvalid={
-                                form.touched.hotelCode && form.errors.hotelCode
-                              }
-                              minLength={1}
-                              maxLength={128}
-                              style={{ maxWidth: 300 }}
-                              {...field}
-                            />
-                            {form.touched.hotelCode &&
-                              form.errors.hotelCode && (
-                                <Form.Control.Feedback type="invalid">
-                                  {form.touched.hotelCode
-                                    ? form.errors.hotelCode
-                                    : null}
-                                </Form.Control.Feedback>
-                              )}
-                          </>
-                        )}
-                      </FastField>
-                    </Col>
-
+                    <FastField name="user_type">
+                      {({ field, form }) => (
+                        <div style={{ maxWidth: 200 }}>
+                          <SelectAsync
+                            {...field}
+                            isClearable
+                            url={`user/user-types`}
+                            fieldName="user_type_name"
+                            onChange={(v) => {
+                              setFieldValue("user_type", v)
+                            }}
+                            placeholder="Please choose"
+                            className={`react-select ${
+                              form.touched.user_type && form.errors.user_type
+                                ? "is-invalid"
+                                : null
+                            }`}
+                            // components={
+                            //   isView
+                            //     ? {
+                            //         DropdownIndicator: () => null,
+                            //         IndicatorSeparator: () => null,
+                            //       }
+                            //     : null
+                            // }
+                          />
+                          {form.touched.user_type && form.errors.user_type && (
+                            <Form.Control.Feedback type="invalid">
+                              {form.touched.user_type
+                                ? form.errors.user_type
+                                : null}
+                            </Form.Control.Feedback>
+                          )}
+                        </div>
+                      )}
+                    </FastField>
                     <OverlayTrigger
                       placement="bottom"
                       overlay={

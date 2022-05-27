@@ -1,5 +1,5 @@
 import { withRouter, useHistory } from "react-router"
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import FormHorizontal from "components/form/horizontal"
 import FormBuilder from "components/form/builder"
 import useQuery from "lib/query"
@@ -23,16 +23,14 @@ function ModuleAccess(props) {
   const [id, setId] = useState(null)
   const [modules, setModules] = useState([])
   const [capabilitiesHeader, setCapabilitiesHeader] = useState([])
-  const [categories, setCategories] = useState([])
-  const [allowModules, setAllowModules] = useState([])
   const [capabilities, setCapabilities] = useState([])
+  const allowedModule = useRef([])
 
   const api = new Api()
   useEffect(() => {
     if (!props.match.params.id) {
       setLoading(false)
     }
-    console.log("KELOAD ULANG")
     setId(props.match.params.id)
   }, [props.match.params.id])
 
@@ -78,17 +76,31 @@ function ModuleAccess(props) {
     }
   }, [])
 
+  const sendAllowedModuleData = (index) => {
+    if(Object.keys(index).length > 0) {
+      if(allowedModule.current.some(e => e.id === index.id)){
+        allowedModule.current[allowedModule.current.findIndex(el => el.id === index.id)] = index
+      } else {
+        console.log("new row")
+        allowedModule.current.push(index)
+      }
+    }
+  }
+  
+
   useEffect(async () => {
     let userTypeId = props.match.params.id
-    console.log("PARAMS ID",userTypeId)
-    console.log("STATE ID", id)
 
     try {
-      if(userTypeId){
+      if(id){
         let resModule = await api.get(`/user/user-types/${id}/modules`)
 
         const modules = []
         resModule.data.items.forEach((data) => {
+          allowedModule.current.push({
+            id: data.id,
+            capabilities: data.capabilities
+          })
           setCapabilities([...capabilities, {
             id: data.id,
             capabilities: data.capabilities
@@ -100,15 +112,7 @@ function ModuleAccess(props) {
               category={data.module_package_name} 
               capabilities={data.capabilities}
               moduleId={data.id}
-              setAllowModules={setAllowModules}
-              // onChange={() => {
-              //   setAllowModules([...allowModules, {
-              //     id: data.id,
-              //     capabilities: {
-              //       ...capabilities,
-              //     }
-              //   }])
-              // }}
+              sendAllowedModuleData={sendAllowedModuleData}
             />
           )
           
@@ -122,7 +126,6 @@ function ModuleAccess(props) {
     }
   }, [id])
   
-
   return (
     <>
       <Formik
@@ -131,24 +134,8 @@ function ModuleAccess(props) {
         validationSchema={validationSchema}
         validator={() => ({})}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
-          console.log("test modules", allowModules)
-
-          let formatted = [{
-            capabilities: {
-              allow_activate: true,
-              allow_bulk_update: true,
-              allow_create: true,
-              allow_delete: true,
-              allow_edit: true,
-              allow_export: true,
-              allow_publish: true,
-              allow_view: true
-            },
-            id: "3c587426-d0fd-4436-95cd-1b748a03d04a",
-          }]
-
           try {
-            let res = await api.post(`user/user-types/${id}/modules`, formatted)
+            let res = await api.post(`user/user-types/${id}/modules`, allowedModule.current)
             history.goBack()
           } catch(e) {}
         }}
@@ -186,23 +173,36 @@ function ModuleAccess(props) {
                   </div>
                 </Card.Body>
               </Card>
-              <div className="ml-1 mt-3 row justify-content-md-start justify-content-center">
-                <Button
-                  variant="primary"
-                  type="submit"
-                  // disabled={props.finishStep > 0 || props.employeeData?.id ? (!isValid || isSubmitting) : (!dirty || isSubmitting)}
-                  style={{ marginRight: 15, marginBottom: 135 }}
-                >
-                  {/* {props.employeeData?.id ? "SAVE" : "SAVE & NEXT"} */}
-                  SAVE
-                </Button>
-                <Button
-                  variant="secondary"
-                  onClick={() => props.history.goBack()}
-                >
-                  CANCEL
-                </Button>
-              </div>
+              {
+                isView ? (
+                  <div className="mb-2 mt-1 row justify-content-md-start justify-content-center">
+                    <Button
+                      variant="secondary"
+                      onClick={() => props.history.goBack()}                        
+                    >
+                      BACK
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="ml-1 mt-3 row justify-content-md-start justify-content-center">
+                    <Button
+                      variant="primary"
+                      type="submit"
+                      style={{ marginRight: 15, marginBottom: 135 }}
+                    >
+                      {/* {props.employeeData?.id ? "SAVE" : "SAVE & NEXT"} */}
+                      SAVE
+                    </Button>
+                    <Button
+                      variant="secondary"
+                      onClick={() => props.history.goBack()}
+                    >
+                      CANCEL
+                    </Button>
+                  </div>
+                )
+              }
+              
             </Form>
           )
         

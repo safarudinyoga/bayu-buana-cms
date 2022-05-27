@@ -7,7 +7,9 @@ import arrowRight from "assets/icons/arrow-right.svg"
 import xCircle from "assets/icons/x-circle.svg"
 import flightTicket from "assets/icons/flight-ticket.svg"
 import FormInputSelectAjax from "components/form/input-select-ajax"
+import FormikControl from "components/formik/formikControl"
 import "./add-or-remove-list.css"
+import { FieldArray, Field } from "formik"
 
 const AddOrRemoveList = ({
   firstData,
@@ -16,13 +18,14 @@ const AddOrRemoveList = ({
   secondCardTitle,
   canRemoveIndex,
   onModal,
+  setFormValues,
 }) => {
   const [showFilter, setShowFilter] = useState(false)
   const [leftData, setLeftData] = useState(firstData)
   const [rightData, setRightData] = useState(secondData)
 
-  console.log("secondData: ", secondData)
-  console.log("leftData: ", leftData)
+  // console.log("secondData: ", secondData)
+  // console.log("leftData: ", leftData)
 
   useEffect(async () => {
     setLeftData(firstData)
@@ -32,11 +35,22 @@ const AddOrRemoveList = ({
   const handleButtonAdd = () => {
     setLeftData((leftdata) => [...leftdata, ...rightData])
     setRightData((rightdata) => [])
+    setFormValues((formValues) => [
+      ...leftData.map((item) => ({
+        agent_id: item.agent_employee.agent_id,
+        employee_id: item.employee_id,
+      })),
+      ...rightData.map((item) => ({
+        agent_id: item.agent_employee.agent_id,
+        employee_id: item.employee_id,
+      })),
+    ])
   }
 
   const handleButtonRemove = () => {
     setLeftData((leftdata) => [])
     setRightData((rightdata) => [...rightdata, ...leftData])
+    setFormValues((formValues) => [])
   }
 
   const handleRemoveIndexArray = (e) => {
@@ -78,8 +92,27 @@ const AddOrRemoveList = ({
                   key={i}
                 >
                   {canRemoveIndex ? (
-                    <div className="w-100 d-flex justify-content-between">
+                    <div className="w-100 d-flex justify-content-between align-items-center">
                       {item.given_name} ({item.given_name})
+                      <FieldArray
+                        name="employee"
+                        render={(arr) => (
+                          <div className="d-flex">
+                            <FormikControl
+                              control="input"
+                              name={`employee[${i}].agent_id`}
+                              type="hidden"
+                              value={item.agent_employee.agent_id}
+                            />
+                            <FormikControl
+                              control="input"
+                              name={`employee[${i}].employee_id`}
+                              type="hidden"
+                              value={item.employee_id}
+                            />
+                          </div>
+                        )}
+                      />
                       <span
                         className="btn-x-circle"
                         onClick={() => handleRemoveIndexArray(item)}
@@ -131,10 +164,29 @@ const AddOrRemoveList = ({
                         </div>
                       )}
                       <div
-                        className="w-100 d-flex justify-content-between"
+                        className="w-100 d-flex justify-content-between align-items-center"
                         style={{ paddingLeft: 13, paddingRight: 15 }}
                       >
-                        {item.given_name} <span>({item.given_name})</span>
+                        {item.given_name}
+                        <FieldArray
+                          name="employee"
+                          render={(arr) => (
+                            <div className="d-flex">
+                              <FormikControl
+                                control="input"
+                                name={`employee[${i}].agent_id`}
+                                type="hidden"
+                                value={item.agent_employee.agent_id}
+                              />
+                              <FormikControl
+                                control="input"
+                                name={`employee[${i}].employee_id`}
+                                type="hidden"
+                                value={item.employee_id}
+                              />
+                            </div>
+                          )}
+                        />
                       </div>
                     </div>
                   )}
@@ -226,7 +278,7 @@ const AddOrRemoveList = ({
             {showFilter && (
               <div>
                 <FormInputSelectAjax
-                  label="Branch Office"
+                  // label="Branch Office"
                   // onChange={}
                   endpoint="/master/employees"
                   column="given_name"
@@ -244,7 +296,7 @@ const AddOrRemoveList = ({
                   allowClear={false}
                 />
                 <FormInputSelectAjax
-                  label="Job Title"
+                  // label="Job Title"
                   // onChange={}
                   endpoint="/master/employees"
                   column="job_title.job_title_name"
@@ -262,7 +314,7 @@ const AddOrRemoveList = ({
                   allowClear={false}
                 />
                 <FormInputSelectAjax
-                  label="Name"
+                  // label="Name"
                   // onChange={}
                   endpoint="/master/employees"
                   column="given_name"
