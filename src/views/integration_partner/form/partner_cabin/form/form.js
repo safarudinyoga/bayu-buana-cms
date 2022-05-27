@@ -127,7 +127,7 @@ function PartnerCabins(props) {
   const [showTabel] = useState(false)
   const history = useHistory()
   let api = new Api()
-  let formId = props.match.params.id
+  let formId = props.partnerCabinId
   let [status, setStatus] = useState({ switchStatus: true })
   const [tabKey, setTabKey] = useState("partner-cabin")
   const isView = useQuery().get("action") === "view"
@@ -143,32 +143,34 @@ function PartnerCabins(props) {
 
   useEffect(async () => {
     let api = new Api()
-    let formId = props.match.params.id
+    let formId = props.partnerCabinId
     try {
-      let res = await api.get(endpoint + "/" + formId)
-      let data = res.data;
-      console.log(formId)
-      setForm({
-        ...form,
-        cabin_type_id: data.cabin_type_id,
-        cabin_type: {
-          value: data.cabin_type.id,
-          label: data.cabin_type.cabin_type_name,
-        },
-        cabin_type_name: data.cabin_type_name,
-        cabin_type_code: data.cabin_type_code,
-      })
+      if(formId){
+        let res = await api.get(endpoint + "/" + formId)
+        let data = res.data;
+        console.log(formId)
+        setForm({
+          ...form,
+          cabin_type_id: data.cabin_type_id,
+          cabin_type: {
+            value: data.cabin_type.id,
+            label: data.cabin_type.cabin_type_name,
+          },
+          cabin_type_name: data.cabin_type_name,
+          cabin_type_code: data.cabin_type_code,
+        })
+      }
     } catch (e) { }
     setLoading(false)
   }, [])
 
 
   useEffect(() => {
-    if (!props.match.params.id) {
+    if (!props.partnerCabinId) {
       setLoading(false)
     }
-    setId(props.match.params.id)
-  }, [props.match.params.id])
+    setId(props.partnerCabinId)
+  }, [props.partnerCabinId])
 
 
 
@@ -179,7 +181,7 @@ function PartnerCabins(props) {
       "Unique Partner Cabin Name",
       "Partner Cabin Name already exists", // <- key, message
       async (value, ctx) => {
-        let formId = props.match.params.id
+        let formId = props.partnerCabinId
         try {
           let res = await axios.get(`${env.API_URL}/master/integration-partner-cabin-types?filters=["cabin_type_name","=","${value}"]`)
 
@@ -198,7 +200,7 @@ function PartnerCabins(props) {
       "Unique Partner Cabin Code",
       "Partner Cabin Code already exists", // <- key, message
       async (value, ctx) => {
-        let formId = props.match.params.id
+        let formId = props.partnerCabinId
         try {
           let res = await axios.get(`${env.API_URL}/master/integration-partner-cabin-types?filters=["cabin_type_code","=","${value}"]`)
 
@@ -222,7 +224,7 @@ function PartnerCabins(props) {
   }
   const onSubmit = async (values, a) => {
     try {
-      let formId = props.match.params.id
+      let formId = props.partnerCabinId
       let form = {
         cabin_type_id: uuidv4(),
         cabin_type: values.cabin_type ? {

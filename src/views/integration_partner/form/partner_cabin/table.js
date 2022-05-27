@@ -6,9 +6,14 @@ import PartnerCabins from "./form/form"
 
 export default function IntegrationPartnerCabinTypesTable(props) {
   const [isReplaceTable, setIsReplaceTable] = useState(false)
+  const [partnerCabinId, setPartnerCabinId] = useState(null)
 
   const handleReplaceTable = async (key) => {
     setIsReplaceTable(!key)
+  }
+
+  const setId = async (id) => {
+    setPartnerCabinId(id)
   }
   let [params, setParams] = useState({
     isCheckbox: false,
@@ -53,8 +58,8 @@ export default function IntegrationPartnerCabinTypesTable(props) {
         <Card.Body>
           <h3 className="card-heading">Partner Cabins</h3>
           {
-          isReplaceTable ? <PartnerCabins isReplaceTable={isReplaceTable} handleReplaceTable={handleReplaceTable} /> :
-          <BBDataTable {...params} modalContent={DeleteModal} handleReplaceTable={handleReplaceTable}/>
+          isReplaceTable ? <PartnerCabins isReplaceTable={isReplaceTable} handleReplaceTable={handleReplaceTable} partnerCabinId={partnerCabinId}/> :
+          <BBDataTable {...params} modalContent={DeleteModal} handleReplaceTable={handleReplaceTable} setId={setId}/>
           }
           </Card.Body>
       </Card>

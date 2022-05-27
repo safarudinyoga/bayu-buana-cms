@@ -1028,6 +1028,9 @@ class BBDataTable extends Component {
           case "edit":
             if(me.props.createOnModal) {
               me.props.setCreateModal({show: true, id, disabled_form: false})
+            } else if(me.props.isReplaceTable) {
+              me.props.setId(id);
+              me.props.handleReplaceTable(!me.props.isReplaceTable)
             } else {
               me.props.history.push(base + "/" + id)
             }
