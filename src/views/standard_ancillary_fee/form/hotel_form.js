@@ -148,6 +148,168 @@ const HotelForm = (props) => {
   // Schema for yup
   const validationSchema = Yup.object().shape({
     processing_fee_category_name: Yup.string().required("Please enter Preset Name."),
+    domestic_hotel: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeDomesticHotel.fee_tax_type_name}.`),
+    domestic_hotel_amount: Yup
+      .string().when('domestic_hotel', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeDomesticHotel.fee_tax_type_name}.`)
+      }),
+    domestic_hotel_amount_type: Yup
+      .string().when('domestic_hotel', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    domestic_hotel_percent: Yup
+      .string().when('domestic_hotel', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeDomesticHotel.fee_tax_type_name}.`)
+      }),
+    domestic_refund: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeDomesticRefund.fee_tax_type_name}.`),
+    domestic_refund_amount: Yup
+      .string().when('domestic_refund', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeDomesticRefund.fee_tax_type_name}.`)
+      }),
+    domestic_refund_amount_type: Yup
+      .string().when('domestic_refund', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    domestic_refund_percent: Yup
+      .string().when('domestic_refund', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeDomesticRefund.fee_tax_type_name}.`)
+      }),
+    domestic_frp: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeDomesticRfp.fee_tax_type_name}.`),
+    domestic_frp_amount: Yup
+      .string().when('domestic_frp', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeDomesticRfp.fee_tax_type_name}.`)
+      }),
+    domestic_frp_amount_type: Yup
+      .string().when('domestic_frp', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    domestic_frp_percent: Yup
+      .string().when('domestic_frp', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeDomesticRfp.fee_tax_type_name}.`)
+      }),
+    domestic_non_gds: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeDomesticNonGds.fee_tax_type_name}.`),
+    domestic_non_gds_amount: Yup
+      .string().when('domestic_non_gds', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeDomesticNonGds.fee_tax_type_name}.`)
+      }),
+    domestic_non_gds_amount_type: Yup
+      .string().when('domestic_non_gds', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    domestic_non_gds_percent: Yup
+      .string().when('domestic_non_gds', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeDomesticNonGds.fee_tax_type_name}.`)
+      }),
+    international_hotel: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeInternationalHotel.fee_tax_type_name}.`),
+    international_hotel_amount: Yup
+      .string().when('international_hotel', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeInternationalHotel.fee_tax_type_name}.`)
+      }),
+    international_hotel_amount_type: Yup
+      .string().when('international_hotel', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    international_hotel_percent: Yup
+      .string().when('international_hotel', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeInternationalHotel.fee_tax_type_name}.`)
+      }),
+    international_refund: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeInternationalRefund.fee_tax_type_name}.`),
+    international_refund_amount: Yup
+      .string().when('international_refund', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeInternationalRefund.fee_tax_type_name}.`)
+      }),
+    international_refund_amount_type: Yup
+      .string().when('international_refund', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    international_refund_percent: Yup
+      .string().when('international_refund', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeInternationalRefund.fee_tax_type_name}.`)
+      }),
+    international_frp: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxIdInternationalFrp.fee_tax_type_name}.`),
+    international_frp_amount: Yup
+      .string().when('international_frp', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxIdInternationalFrp.fee_tax_type_name}.`)
+      }),
+    international_frp_amount_type: Yup
+      .string().when('international_frp', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    international_frp_percent: Yup
+      .string().when('international_frp', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxIdInternationalFrp.fee_tax_type_name}.`)
+      }),
+    international_non_gds: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeInternationalNonGds.fee_tax_type_name}.`),
+    international_non_gds_amount: Yup
+      .string().when('international_non_gds', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeInternationalNonGds.fee_tax_type_name}.`)
+      }),
+    international_non_gds_amount_type: Yup
+      .string().when('international_non_gds', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    international_non_gds_percent: Yup
+      .string().when('international_non_gds', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeInternationalNonGds.fee_tax_type_name}.`)
+      }),
+    other_emergency: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeOtherEmergency.fee_tax_type_name}.`),
+    other_emergency_amount: Yup
+      .string().when('other_emergency', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeOtherEmergency.fee_tax_type_name}.`)
+      }),
+    other_emergency_amount_type: Yup
+      .string().when('other_emergency', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    other_emergency_percent: Yup
+      .string().when('other_emergency', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeOtherEmergency.fee_tax_type_name}.`)
+      }),
   })
 
   const checkprocessingType = (value) => value !== "00000000-0000-0000-0000-000000000000" ? "amount" : "percent"
@@ -323,7 +485,6 @@ const HotelForm = (props) => {
       <Formik
         initialValues={initialForm}
         validationSchema={validationSchema}
-        validateOnChange={false}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
           onSubmit(values)
         }}
