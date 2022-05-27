@@ -104,7 +104,8 @@ const FeeSection = (props) => {
               <Col sm={12} md={6}>
                 <Form.Group className="mb-3">
                   {
-                    props.amountSuffixSelections.map(suffix => <AmountRadioSelections 
+                    props.amountSuffixSelections.map((suffix, i) => <AmountRadioSelections 
+                      key={i}
                       {...props}
                       disabledAmount={disabledAmount}
                       value={suffix.value}
