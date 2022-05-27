@@ -183,7 +183,243 @@ const FlightForm = (props) => {
 
   // Schema for yup
   const validationSchema = Yup.object().shape({
-    processing_fee_category_name: Yup.string().required("Please enter Preset Name."),
+    processing_fee_category_name: Yup
+      .string()
+      .required("Please enter Preset Name."),
+    domestic_reissue: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeDomesticReissue.fee_tax_type_name}.`),
+    domestic_reissue_amount: Yup
+      .string().when('domestic_reissue', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeDomesticReissue.fee_tax_type_name}.`)
+      }),
+    domestic_reissue_amount_type: Yup
+      .string().when('domestic_reissue', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    domestic_reissue_percent: Yup
+      .string().when('domestic_reissue', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeDomesticReissue.fee_tax_type_name}.`)
+      }),
+    domestic_revalidate: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeDomesticRevalidate.fee_tax_type_name}.`),
+    domestic_revalidate_amount: Yup
+      .string().when('domestic_revalidate', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeDomesticRevalidate.fee_tax_type_name}.`)
+      }),
+    domestic_revalidate_amount_type: Yup
+      .string().when('domestic_revalidate', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    domestic_revalidate_percent: Yup
+      .string().when('domestic_revalidate', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeDomesticRevalidate.fee_tax_type_name}.`)
+      }),
+    domestic_refund: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeDomesticRefund.fee_tax_type_name}.`),
+    domestic_refund_amount: Yup
+      .string().when('domestic_refund', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeDomesticRefund.fee_tax_type_name}.`)
+      }),
+    domestic_refund_amount_type: Yup
+      .string().when('domestic_refund', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    domestic_refund_percent: Yup
+      .string().when('domestic_refund', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeDomesticRefund.fee_tax_type_name}.`)
+      }),
+    domestic_void: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeDomesticVoid.fee_tax_type_name}.`),
+    domestic_void_amount: Yup
+      .string().when('domestic_void', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeDomesticVoid.fee_tax_type_name}.`)
+      }),
+    domestic_void_amount_type: Yup
+      .string().when('domestic_void', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    domestic_void_percent: Yup
+      .string().when('domestic_void', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeDomesticVoid.fee_tax_type_name}.`)
+      }),
+    domestic_frp: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeDomesticRfp.fee_tax_type_name}.`),
+    domestic_frp_amount: Yup
+      .string().when('domestic_frp', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeDomesticRfp.fee_tax_type_name}.`)
+      }),
+    domestic_frp_amount_type: Yup
+      .string().when('domestic_frp', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    domestic_frp_percent: Yup
+      .string().when('domestic_frp', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeDomesticRfp.fee_tax_type_name}.`)
+      }),
+    domestic_non_gds: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeDomesticNonGds.fee_tax_type_name}.`),
+    domestic_non_gds_amount: Yup
+      .string().when('domestic_non_gds', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeDomesticNonGds.fee_tax_type_name}.`)
+      }),
+    domestic_non_gds_amount_type: Yup
+      .string().when('domestic_non_gds', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    domestic_non_gds_percent: Yup
+      .string().when('domestic_non_gds', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeDomesticNonGds.fee_tax_type_name}.`)
+      }),
+    international_reissue: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeInternationalReissue.fee_tax_type_name}.`),
+    international_reissue_amount: Yup
+      .string().when('international_reissue', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeInternationalReissue.fee_tax_type_name}.`)
+      }),
+    international_reissue_amount_type: Yup
+      .string().when('international_reissue', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    international_reissue_percent: Yup
+      .string().when('international_reissue', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeInternationalReissue.fee_tax_type_name}.`)
+      }),
+    international_revalidate: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeInternationalRevalidate.fee_tax_type_name}.`),
+    international_revalidate_amount: Yup
+      .string().when('international_revalidate', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeInternationalRevalidate.fee_tax_type_name}.`)
+      }),
+    international_revalidate_amount_type: Yup
+      .string().when('international_revalidate', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    international_revalidate_percent: Yup
+      .string().when('international_revalidate', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeInternationalRevalidate.fee_tax_type_name}.`)
+      }),
+    international_refund: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeInternationalRefund.fee_tax_type_name}.`),
+    international_refund_amount: Yup
+      .string().when('international_refund', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeInternationalRefund.fee_tax_type_name}.`)
+      }),
+    international_refund_amount_type: Yup
+      .string().when('international_refund', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    international_refund_percent: Yup
+      .string().when('international_refund', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeInternationalRefund.fee_tax_type_name}.`)
+      }),
+    international_void: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeInternationalVoid.fee_tax_type_name}.`),
+    international_void_amount: Yup
+      .string().when('international_void', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeInternationalVoid.fee_tax_type_name}.`)
+      }),
+    international_void_amount_type: Yup
+      .string().when('international_void', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    international_void_percent: Yup
+      .string().when('international_void', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeInternationalVoid.fee_tax_type_name}.`)
+      }),
+    international_frp: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeInternationalRfp.fee_tax_type_name}.`),
+    international_frp_amount: Yup
+      .string().when('international_frp', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeInternationalRfp.fee_tax_type_name}.`)
+      }),
+    international_frp_amount_type: Yup
+      .string().when('international_frp', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    international_frp_percent: Yup
+      .string().when('international_frp', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeInternationalRfp.fee_tax_type_name}.`)
+      }),
+    international_non_gds: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeInternationalNonGds.fee_tax_type_name}.`),
+    international_non_gds_amount: Yup
+      .string().when('international_non_gds', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeInternationalNonGds.fee_tax_type_name}.`)
+      }),
+    international_non_gds_amount_type: Yup
+      .string().when('international_non_gds', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    international_non_gds_percent: Yup
+      .string().when('international_non_gds', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeInternationalNonGds.fee_tax_type_name}.`)
+      }),
+    other_emergency: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeOtherEmergency.fee_tax_type_name}.`),
+    other_emergency_amount: Yup
+      .string().when('other_emergency', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeOtherEmergency.fee_tax_type_name}.`)
+      }),
+    other_emergency_amount_type: Yup
+      .string().when('other_emergency', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    other_emergency_percent: Yup
+      .string().when('other_emergency', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeOtherEmergency.fee_tax_type_name}.`)
+      }),
   })
 
   const checkprocessingType = (value) => value !== "00000000-0000-0000-0000-000000000000" ? "amount" : "percent"
@@ -414,7 +650,6 @@ const FlightForm = (props) => {
     }
   }
 
-
   return (
     <>
       <Formik
@@ -642,6 +877,7 @@ const FlightForm = (props) => {
                       {label:"/Person", value:"de03bf84-4bd8-4cdf-9348-00246f04bcad"},
                       {label:"/Transaction", value:"5123b121-4f6a-4871-bef1-65408d663e19"},
                     ]}
+                    errors={errors}
                   />
                 </div>
               </Card.Body>

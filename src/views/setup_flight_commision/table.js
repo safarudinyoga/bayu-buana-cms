@@ -12,13 +12,13 @@ export default function SetupFlightCommisionTable() {
   useEffect(() => {
     dispatch(
       setUIParams({
-        title: "Flight Commissions",
+        title: "Setup Flight Commissions",
         breadcrumbs: [
           {
             text: "Master Data Management",
           },
           {
-            text: "Flight Commissions",
+            text: "Setup Flight Commissions",
           },
         ]
       })
@@ -239,7 +239,8 @@ export default function SetupFlightCommisionTable() {
     btnDownload: ".buttons-csv",
     isCheckbox: false,
     isShowStatus: false,
-    hideDetail: true
+    hideDetail: true,
+    searchText: "Search"
   }
 
 

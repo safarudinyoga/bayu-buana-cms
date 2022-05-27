@@ -59,6 +59,13 @@ select.bg-dark-grey > option {
   background: #027f71;
 }
 
+.fback-invalid {
+  width: 100%;
+  margin-top: 0.25rem;
+  font-size: 13px;
+  color: #dc3545;
+}
+
 @media (max-width: 577px) {
   .float-right-sm {
     float: right !important;
