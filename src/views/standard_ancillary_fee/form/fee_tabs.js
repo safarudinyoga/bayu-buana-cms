@@ -83,7 +83,7 @@ const FeeSection = (props) => {
                           <NumberFormat
                             {...field} 
                             className="form-control"
-                            maxLength={15}
+                            maxLength={19}
                             thousandsGroupStyle="thousand"
                             displayType="input"
                             type="text"
