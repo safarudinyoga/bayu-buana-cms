@@ -108,6 +108,7 @@ function StandartService(props) {
 
   const validationSchema = Yup.object().shape({
     task_type: Yup.object().required("Task Type is required."),
+    respon_time: Yup.object().required("Task Type is required."),
   })
 
   const onSubmit = async (values, a) => {
