@@ -16,7 +16,7 @@ const AmountRadioSelections = (props) => {
 }
 
 const FeeSection = (props) => {
-  
+
   let id = props.taxType ? props.taxType.id : "";
   let title = props.taxType ? props.taxType.fee_tax_type_name : props.title;
   let disabledAmount = props.isView 
@@ -51,8 +51,7 @@ const FeeSection = (props) => {
                     disabled={props.isView}
                     checked={props.values[props.fieldRadio] === "amount"} 
                     onClick={() => {
-                      console.log(props.fieldRadio+"_percent")
-                      props.setFieldValue(props.fieldRadio+"_percent", null)
+                      props.setFieldValue(props.fieldRadio+"_percent", "")
                       props.setFieldValue(props.fieldRadio+"_tax_include", false)
                     }}
                   />
@@ -90,12 +89,11 @@ const FeeSection = (props) => {
                             type="text"
                             thousandSeparator={true}
                             allowNegative={true}
-                            onValueChange={(values) => {
-                              const { value } = values;
-                              props.setFieldValue(props.fieldAmount, value)
-
-                              console.log(props.fieldAmount, value)
-                            }}
+                            // onChange={(values) => {
+                              // const { value } = values;
+                              // props.setFieldValue(props.fieldAmount, value)
+                              // console.log(props.fieldAmount, values.target.value)
+                            // }}
                           />
                         )}
                       </FastField>
@@ -198,6 +196,7 @@ const FeeSection = (props) => {
           </Col>
         </Row>
       </Form.Group>
+      <FeedbackMessage {...props} />
       {props.borderBottom && <h3 className="card-heading"></h3>}
     </>
   )
@@ -227,31 +226,47 @@ const Fees = (props) => {
 }
 
 export const FeeTabs = (props) => {
-    const [key, setKey] = useState(props.menu[0].title)
-    return (
-      <div className="card">
-  
-        <Tabs
-          id="standard-ancillary-fee"
-          activeKey={key}
-          onSelect={(k) => setKey(k)}
-          className="mb-4"
-          mountOnEnter={true}
-          unmountOnExit={true}
-        >
-        {
-            props.menu.map((menu, i) => (
-              <TabPane
-                key={i}
-                className="m-3"
-                eventKey={menu.title}
-                title={<span className="ml-md-2 tabs-text fee-tabs-title">{menu.title}</span>}
-              >
-                <Fees sections={menu.sections} values={props.values} {...props} />
-              </TabPane>
-            ))
-          }
-        </Tabs>
-      </div>
-    )
-  }
+  const [key, setKey] = useState(props.menu[0].title)
+  return (
+    <div className="card">
+
+      <Tabs
+        id="standard-ancillary-fee"
+        activeKey={key}
+        onSelect={(k) => setKey(k)}
+        className="mb-4"
+        mountOnEnter={true}
+        unmountOnExit={true}
+      >
+      {
+          props.menu.map((menu, i) => (
+            <TabPane
+              key={i}
+              className="m-3"
+              eventKey={menu.title}
+              title={<span className="ml-md-2 tabs-text fee-tabs-title">{menu.title}</span>}
+            >
+              <Fees sections={menu.sections} values={props.values} {...props} />
+            </TabPane>
+          ))
+        }
+      </Tabs>
+    </div>
+  )
+}
+
+const FeedbackMessage = (props) => {
+  return <FastField name="">
+    {({ field,form }) => {
+      let message = form.errors[props.fieldRadio] || form.errors[props.fieldAmount] || form.errors[props.fieldAmountType] || form.errors[props.fieldPercent]
+
+      return form.touched[props.fieldRadio] &&
+      message
+      ? (
+        <p className="fback-invalid">
+          {message}
+        </p>
+      ) : null
+    }}
+  </FastField>
+}

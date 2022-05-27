@@ -148,6 +148,168 @@ const HotelForm = (props) => {
   // Schema for yup
   const validationSchema = Yup.object().shape({
     processing_fee_category_name: Yup.string().required("Please enter Preset Name."),
+    domestic_hotel: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeDomesticHotel.fee_tax_type_name}.`),
+    domestic_hotel_amount: Yup
+      .string().when('domestic_hotel', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeDomesticHotel.fee_tax_type_name}.`)
+      }),
+    domestic_hotel_amount_type: Yup
+      .string().when('domestic_hotel', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    domestic_hotel_percent: Yup
+      .string().when('domestic_hotel', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeDomesticHotel.fee_tax_type_name}.`)
+      }),
+    domestic_refund: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeDomesticRefund.fee_tax_type_name}.`),
+    domestic_refund_amount: Yup
+      .string().when('domestic_refund', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeDomesticRefund.fee_tax_type_name}.`)
+      }),
+    domestic_refund_amount_type: Yup
+      .string().when('domestic_refund', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    domestic_refund_percent: Yup
+      .string().when('domestic_refund', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeDomesticRefund.fee_tax_type_name}.`)
+      }),
+    domestic_frp: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeDomesticRfp.fee_tax_type_name}.`),
+    domestic_frp_amount: Yup
+      .string().when('domestic_frp', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeDomesticRfp.fee_tax_type_name}.`)
+      }),
+    domestic_frp_amount_type: Yup
+      .string().when('domestic_frp', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    domestic_frp_percent: Yup
+      .string().when('domestic_frp', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeDomesticRfp.fee_tax_type_name}.`)
+      }),
+    domestic_non_gds: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeDomesticNonGds.fee_tax_type_name}.`),
+    domestic_non_gds_amount: Yup
+      .string().when('domestic_non_gds', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeDomesticNonGds.fee_tax_type_name}.`)
+      }),
+    domestic_non_gds_amount_type: Yup
+      .string().when('domestic_non_gds', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    domestic_non_gds_percent: Yup
+      .string().when('domestic_non_gds', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeDomesticNonGds.fee_tax_type_name}.`)
+      }),
+    international_hotel: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeInternationalHotel.fee_tax_type_name}.`),
+    international_hotel_amount: Yup
+      .string().when('international_hotel', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeInternationalHotel.fee_tax_type_name}.`)
+      }),
+    international_hotel_amount_type: Yup
+      .string().when('international_hotel', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    international_hotel_percent: Yup
+      .string().when('international_hotel', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeInternationalHotel.fee_tax_type_name}.`)
+      }),
+    international_refund: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeInternationalRefund.fee_tax_type_name}.`),
+    international_refund_amount: Yup
+      .string().when('international_refund', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeInternationalRefund.fee_tax_type_name}.`)
+      }),
+    international_refund_amount_type: Yup
+      .string().when('international_refund', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    international_refund_percent: Yup
+      .string().when('international_refund', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeInternationalRefund.fee_tax_type_name}.`)
+      }),
+    international_frp: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxIdInternationalFrp.fee_tax_type_name}.`),
+    international_frp_amount: Yup
+      .string().when('international_frp', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxIdInternationalFrp.fee_tax_type_name}.`)
+      }),
+    international_frp_amount_type: Yup
+      .string().when('international_frp', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    international_frp_percent: Yup
+      .string().when('international_frp', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxIdInternationalFrp.fee_tax_type_name}.`)
+      }),
+    international_non_gds: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeInternationalNonGds.fee_tax_type_name}.`),
+    international_non_gds_amount: Yup
+      .string().when('international_non_gds', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeInternationalNonGds.fee_tax_type_name}.`)
+      }),
+    international_non_gds_amount_type: Yup
+      .string().when('international_non_gds', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    international_non_gds_percent: Yup
+      .string().when('international_non_gds', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeInternationalNonGds.fee_tax_type_name}.`)
+      }),
+    other_emergency: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeOtherEmergency.fee_tax_type_name}.`),
+    other_emergency_amount: Yup
+      .string().when('other_emergency', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeOtherEmergency.fee_tax_type_name}.`)
+      }),
+    other_emergency_amount_type: Yup
+      .string().when('other_emergency', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    other_emergency_percent: Yup
+      .string().when('other_emergency', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeOtherEmergency.fee_tax_type_name}.`)
+      }),
   })
 
   const checkprocessingType = (value) => value !== "00000000-0000-0000-0000-000000000000" ? "amount" : "percent"
@@ -246,69 +408,74 @@ const HotelForm = (props) => {
     }
   }  
 
+  const removeSeparator = (value) => {
+    value = value.split(",").join("")
+    return parseInt(value)
+  }
+
   const setPayload = (values) => {
       let payloadDomestic = {
         processing_fee_category_name: values.processing_fee_category_name,
         description: values.description,
         domestic_reissue: {
           fee_tax_type_id: taxIdDomesticHotel,
-          amount: values.domestic_hotel == "amount" ? values.domestic_hotel_amount : 0,
+          amount: values.domestic_hotel == "amount" ? removeSeparator(values.domestic_hotel_amount) : 0,
           percent:values.domestic_hotel == "amount" ? 0 : parseFloat(values.domestic_hotel_percent),
           charge_type_id:values.domestic_hotel == "amount" ? values.domestic_hotel_amount_type : "00000000-0000-0000-0000-000000000000",
           is_tax_inclusive:values.domestic_hotel == "amount" ? false : values.domestic_hotel_tax_include,
         },
         domestic_refund: {
           fee_tax_type_id: taxIdDomesticRefund,
-          amount: values.domestic_refund == "amount" ? values.domestic_refund_amount : 0,
+          amount: values.domestic_refund == "amount" ? removeSeparator(values.domestic_refund_amount) : 0,
           percent:values.domestic_refund == "amount" ? 0 : parseFloat(values.domestic_refund_percent),
           charge_type_id:values.domestic_refund == "amount" ? values.domestic_refund_amount_type : "00000000-0000-0000-0000-000000000000",
           is_tax_inclusive:values.domestic_refund == "amount" ? false : values.domestic_refund_tax_include,
         },
         domestic_frp: {
           fee_tax_type_id: taxIdDomesticRfp,
-          amount: values.domestic_frp == "amount" ? values.domestic_frp_amount : 0,
+          amount: values.domestic_frp == "amount" ? removeSeparator(values.domestic_frp_amount) : 0,
           percent:values.domestic_frp == "amount" ? 0 : parseFloat(values.domestic_frp_percent),
           charge_type_id:values.domestic_frp == "amount" ? values.domestic_frp_amount_type : "00000000-0000-0000-0000-000000000000",
           is_tax_inclusive:values.domestic_frp == "amount" ? false : values.domestic_frp_tax_include,
         },
         domestic_non_gds: {
           fee_tax_type_id: taxIdDomesticNonGds,
-          amount: values.domestic_non_gds == "amount" ? values.domestic_non_gds_amount : 0,
+          amount: values.domestic_non_gds == "amount" ? removeSeparator(values.domestic_non_gds_amount) : 0,
           percent:values.domestic_non_gds == "amount" ? 0 : parseFloat(values.domestic_non_gds_percent),
           charge_type_id:values.domestic_non_gds == "amount" ? values.domestic_non_gds_amount_type : "00000000-0000-0000-0000-000000000000",
           is_tax_inclusive:values.domestic_non_gds == "amount" ? false : values.domestic_non_gds_tax_include,
         },
         international_reissue: {
           fee_tax_type_id: taxIdInternationalHotel,
-          amount: values.international_hotel == "amount" ? values.international_hotel_amount : 0,
+          amount: values.international_hotel == "amount" ? removeSeparator(values.international_hotel_amount) : 0,
           percent:values.international_hotel == "amount" ? 0 : parseFloat(values.international_hotel_percent),
           charge_type_id:values.international_hotel == "amount" ? values.international_hotel_amount_type : "00000000-0000-0000-0000-000000000000",
           is_tax_inclusive:values.international_hotel == "amount" ? false : values.international_hotel_tax_include,
         },
         international_refund: {
           fee_tax_type_id: taxIdInternationalRefund,
-          amount: values.international_refund == "amount" ? values.international_refund_amount : 0,
+          amount: values.international_refund == "amount" ? removeSeparator(values.international_refund_amount) : 0,
           percent:values.international_refund == "amount" ? 0 : parseFloat(values.international_refund_percent),
           charge_type_id:values.international_refund == "amount" ? values.international_refund_amount_type : "00000000-0000-0000-0000-000000000000",
           is_tax_inclusive:values.international_refund == "amount" ? false : values.international_refund_tax_include,
         },
         international_frp: {
           fee_tax_type_id: taxIdInternationalFrp,
-          amount: values.international_frp == "amount" ? values.international_frp_amount : 0,
+          amount: values.international_frp == "amount" ? removeSeparator(values.international_frp_amount) : 0,
           percent:values.international_frp == "amount" ? 0 : parseFloat(values.international_frp_percent),
           charge_type_id:values.international_frp == "amount" ? values.international_frp_amount_type : "00000000-0000-0000-0000-000000000000",
           is_tax_inclusive:values.international_frp == "amount" ? false : values.international_frp_tax_include,
         },
         international_non_gds: {
           fee_tax_type_id: taxIdInternationalNonGds,
-          amount: values.international_non_gds == "amount" ? values.international_non_gds_amount : 0,
+          amount: values.international_non_gds == "amount" ? removeSeparator(values.international_non_gds_amount) : 0,
           percent:values.international_non_gds == "amount" ? 0 : parseFloat(values.international_non_gds_percent),
           charge_type_id:values.international_non_gds == "amount" ? values.international_non_gds_amount_type : "00000000-0000-0000-0000-000000000000",
           is_tax_inclusive:values.international_non_gds == "amount" ? false : values.international_non_gds_tax_include,
         },
         other_emergency_service: {
           fee_tax_type_id: taxIdOtherEmergency,
-          amount: values.other_emergency == "amount" ? values.other_emergency_amount : 0,
+          amount: values.other_emergency == "amount" ? removeSeparator(values.other_emergency_amount) : 0,
           percent:values.other_emergency == "amount" ? 0 : parseFloat(values.other_emergency_percent),
           charge_type_id:values.other_emergency == "amount" ? values.other_emergency_amount_type : "00000000-0000-0000-0000-000000000000",
           is_tax_inclusive:values.other_emergency == "amount" ? false : values.other_emergency_tax_include,
@@ -323,9 +490,9 @@ const HotelForm = (props) => {
       <Formik
         initialValues={initialForm}
         validationSchema={validationSchema}
-        validateOnChange={false}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
           onSubmit(values)
+          console.log(values, "hahahaiihii")
         }}
         enableReinitialize
       >
