@@ -131,7 +131,7 @@ import IntegrationPartnerMealPlansForm from "views/integration_partner/form/part
 import IntegrationPartnerCitiesTable from "views/integration_partner_city/tabel"
 import IntegrationPartnerCabinTypesTable from "views/integration_partner_cabin/tabel"
 import IntegrationPartnerCabinsForm from "views/integration_partner_cabin/form/form"
-import FareFamiyTabel from "views/integration_partner_cabin/tabel-fare-family"
+// import FareFamiyTabel from "views/integration_partner_cabin/tabel-fare-family"
 import IntegrationFeeTaxes from "views/partner_fee_taxes/table"
 import FeeTaxForm from "views/partner_fee_taxes/form"
 import CreateHotel from "views/partner_hotels/form"
@@ -188,7 +188,7 @@ import SpecialDateCalendar from "views/special_date/calendar"
 import BookTrip from "views/extranet/book_trip/book_trip"
 import BookFlight from "views/extranet/book_trip/book_flight"
 
-import Api from "config/api"
+// import Api from "config/api"
 import IntegrationPartnerHotels from "views/partner_hotels/table"
 import IntegrationPartnerHotelSupplier from "views/partner_hotel_supplier/table"
 import BookingSetting from "views/booking_setting/table"
@@ -201,6 +201,10 @@ import IdentityRuleTable from "views/identity_rule/table"
 // Tax Fee
 import TaxFeeForm from "views/tax_fee/form"
 import ShoppingCache from "views/shopping_cache/table"
+
+// Job Title Corporate
+import JobTitleCorporateForm from "./views/job_title_corporate/form"
+import JobTitleCorporateTable from "./views/job_title_corporate/table"
 
 // Master Corporate Divisions
 import CorporateDivisionTable from "views/corporate_division/table"
@@ -630,6 +634,14 @@ const DashboardRoutes = () => {
           <JobTitleForm />
         </Route>
 
+        {/* Job Title Corporate */}
+        <Route exact path="/master/job-title-corporate">
+          <JobTitleCorporateTable />
+        </Route>
+        <Route exact path="/master/job-title-corporate/form/:id?">
+          <JobTitleCorporateForm />
+        </Route>
+
         {/* Branch Office */}
         <Route exact path="/master/branch-offices">
           <OfficeTable />
@@ -787,8 +799,8 @@ const getAuth = async () => {
     let auth = localStorage.getItem("ut")
     let refresh_token = localStorage.getItem("rt")
     if (!auth && refresh_token) {
-      let API = new Api()
-      let res = await API.refreshToken(refresh_token)
+      // let API = new Api()
+      // let res = await API.refreshToken(refresh_token)
     }
 
     return auth
