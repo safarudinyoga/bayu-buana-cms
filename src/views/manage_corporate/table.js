@@ -33,22 +33,22 @@ export default function ManageCorporateTable() {
     showAdvancedOptions: false,
     responsiveTablet: true,
     baseRoute: "/master/manage-corporate/form",
-    endpoint: "/master/hotels",
+    endpoint: "/master/agent-corporates",
     // deleteEndpoint: "/master/batch-actions/delete/hotels",
     // activationEndpoint: "/master/batch-actions/activate/hotels",
     // deactivationEndpoint: "/master/batch-actions/deactivate/hotels",
     columns: [
       {
         title: "Corporate Code",
-        data: "manage-corporate-code"
+        data: ""
       },
       {
         title: "Corporate Name",
-        data: "manage-corporate-name"
+        data: ""
       },
       {
         title: "Travel Consultant",
-        data: "manage-corporate-travel-consultant"
+        data: ""
       },
       {
         searchable: false,
@@ -58,7 +58,7 @@ export default function ManageCorporateTable() {
       },
     ],
     emptyTable: "No Corporate found",
-    recordName: ["manage-corporate-code", "manage-corporate-name"],
+    // recordName: ["manage-corporate-code", "manage-corporate-name"],
   })
 
   const onReset = () => {
