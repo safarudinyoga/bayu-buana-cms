@@ -4,6 +4,8 @@ import { Card, Form, Row, Col, Button, Image } from "react-bootstrap"
 import Api from "config/api"
 import CardAddOrRemove from "components/card/add-or-remove-list"
 import CancelButton from "components/button/cancel"
+import { useDispatch } from "react-redux"
+import { setAlert } from "redux/ui-store"
 
 const dummy1 = [
   {
@@ -52,10 +54,12 @@ const dummy2 = [
 
 
 function TravelConsultantAssignment(props) {
+  const dispatch = useDispatch()
   const [listEmployee, setListEmployee] = useState([])
   const [listTravelConsultant, setListTravelConsultant] = useState([])
   const [formValues, setFormValues] = useState(null)
   let api = new Api()
+  const endpoint = `/master/configurations/travel-consultants`
 
   const getEmployee = async () => {
     try {
@@ -84,6 +88,23 @@ function TravelConsultantAssignment(props) {
 
   const onSubmit = async (values, a) => {
     console.log("submit: ", values)
+    try {
+      for (let i in values) {
+        let tc = values[i]
+        await api.putOrPost(endpoint, false, tc)
+      }
+      dispatch(
+        setAlert({
+          message: `Travel Consultant has been successfully updated.`,
+        }),
+      )
+    } catch (e) {
+      dispatch(
+        setAlert({
+          message: "Failed to save this record.",
+        }),
+      )
+    }
   }
 
   const initialValues = {

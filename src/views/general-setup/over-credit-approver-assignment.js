@@ -4,6 +4,8 @@ import { Card, Form, Row, Col, ListGroup, Button, Image } from "react-bootstrap"
 import Api from "config/api"
 import CardAddOrRemove from "components/card/add-or-remove-list"
 import CancelButton from "components/button/cancel"
+import { useDispatch } from "react-redux"
+import { setAlert } from "redux/ui-store"
 
 const dummy1 = [
   {
@@ -51,9 +53,11 @@ const dummy2 = [
 ]
 
 const OverCreditApproverAssignment = (props) => {
+  const dispatch = useDispatch()
   const [listEmployee, setListEmployee] = useState([])
   const [listOverCredit, setListOverCredit] = useState([])
   const [formValues, setFormValues] = useState(null)
+  const endpoint = `/master/configurations/over-credit-approvers`
   let api = new Api()
 
   console.log("listEmp: ", listEmployee)
@@ -85,6 +89,23 @@ const OverCreditApproverAssignment = (props) => {
 
   const onSubmit = async (values, a) => {
     console.log("submit: ", values)
+    try {
+      for (let i in values) {
+        let oca = values[i]
+        await api.putOrPost(endpoint, false, oca)
+      }
+      dispatch(
+        setAlert({
+          message: `Over Credit Approver has been successfully updated.`,
+        }),
+      )
+    } catch (e) {
+      dispatch(
+        setAlert({
+          message: "Failed to save this record.",
+        }),
+      )
+    }
   }
 
   const initialValues = {
