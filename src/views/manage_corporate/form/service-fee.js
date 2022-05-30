@@ -665,8 +665,6 @@ const ServiceFee = props => {
   }
 
   const handleChangeModal = (type) => {
-    // if (type === 'flight') setisModalVisible({ ...isModalVisible, flight: true })
-    // if (type === 'hotel') setisModalVisible({ ...isModalVisible, hotel: true })
     setisModalVisible({ ...isModalVisible, [type]: true })
   }
 
