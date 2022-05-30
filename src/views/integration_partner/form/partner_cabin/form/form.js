@@ -1,35 +1,33 @@
 import React, { useEffect, useState } from "react"
-import Api from "config/api"
-import { v4 as uuidv4 } from 'uuid';
-import axios from "axios"
-import env from "config/environment"
-import { useDispatch } from "react-redux"
-import SelectAsync from "components/form/select-async"
-import { withRouter, useHistory } from "react-router"
-import { ReactSVG } from "react-svg"
-import Select from "../../../../../components/form/select"
-import { Row, Col, Tab, Nav, Card, Button, Form, Modal } from "react-bootstrap"
-import { setUIParams } from "redux/ui-store"
-import useQuery from "lib/query"
-import TabelFareFamily from "../tabel-fare-family"
-
+import {
+  Form,
+  Row,
+  Col,
+  Button,
+  Modal
+} from "react-bootstrap"
+import { Formik, FastField, Field } from "formik"
 import * as Yup from "yup"
+import { useDispatch, useSelector } from "react-redux"
+import { setAlert, setModalTitle, setCreateModal } from "redux/ui-store"
+import Api from "config/api"
 import _ from "lodash"
-
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css"
+import "react-dropzone-uploader/dist/styles.css"
+import { useParams } from "react-router-dom"
+import CancelButton from "components/button/cancel";
+import FormikControl from "../../../../../components/formik/formikControl"
+import Select from "../../../../../components/form/select"
+import { ReactSVG } from "react-svg"
 import createIcon from "assets/icons/create.svg"
-import { Formik, FastField, Field, ErrorMessage } from "formik"
-import { setAlert } from "redux/ui-store"
-
-const endpoint = "/master/integration-partner-cabin-types"
-
-const backUrl = "/master/integration-partner"
-
+const endpoint = "/master/integration-partners";
 const FareFamilyModal = (props) => {
   return (
     <Modal
       {...props}
       size="md"
-      aria-labelledby="contained-modal-title-vcenter"
+      dialogClassName="modal-50w"
+      aria-labelledby="example-custom-modal-styling-title"
       centered
     >
       <Modal.Body>
@@ -42,62 +40,61 @@ const FareFamilyModal = (props) => {
           </div>
 
           <Form>
-            <Form.Group as={Row} className="mb-3">
-              <Form.Label column sm={4}>
-                Fare Family
-                <span className="form-label-required">*</span>
-              </Form.Label>
-              <Col sm={7}>
-                <FastField name="hotelBrand">
-                  {({ field, form }) => (
-                    <div style={{ maxWidth: 600 }}>
-                      <Select {...field} placeholder="Please choose" />
-                    </div>
-                  )}
-                </FastField>
-              </Col>
-            </Form.Group>
+            <FormikControl
+                control="selectAsync"
+                required={props.isView ? "" : "label-required"}
+                label="Fare Family"
+                name="fare_type_id"
+                placeholder={"Please Choose."}
+                url={`master/fare-types`}
+                fieldName={"fare_type_name"}
+                onChange={(v) => {
+                    
+                }}
+                size={props.size}
+                components={
+                  props.isView
+                        ? {
+                              DropdownIndicator: () => null,
+                              IndicatorSeparator: () => null,
+                          }
+                        : null
+                }
+                isDisabled={props.isView}
+            />
 
-            <Form.Group as={Row} className="mb-3">
-              <Form.Label column md={4}>
+
+            <Form.Group as={Row} className="mb-4">
+              <Form.Label column md={3}>
                 Booking Class
                 <span className="form-label-required">*</span>
               </Form.Label>
-              <Col md={8}>
+              <Col md={9}>
                 <Row className="mt-md-2">
-                  <Col lg={12}>
-                    <Row>
-                      <Col xs={12} md={12} lg={12} className="ml-4 ml-md-0">
-                        <Form.Group as={Row} className="mb-3">
-                          <Col>
-                            <Form.Control style={{ maxWidth: "80px" }} />
+                <Col>
+                            <Form.Control style={{ maxWidth: "120px" }} />
                           </Col>
                           <Col>
-                            <Form.Control style={{ maxWidth: "80px" }} />
+                            <Form.Control style={{ maxWidth: "120px" }} />
                           </Col>
                           <Col>
-                            <Form.Control style={{ maxWidth: "80px" }} />
+                            <Form.Control style={{ maxWidth: "120px" }} />
                           </Col>
                           <Col>
-                            <Form.Control style={{ maxWidth: "80px" }} />
+                            <Form.Control style={{ maxWidth: "120px" }} />
                           </Col>
                           <Col>
-                            <Form.Control style={{ maxWidth: "80px" }} />
+                            <Form.Control style={{ maxWidth: "120px" }} />
                           </Col>
                           <Col>
-                            <Form.Control style={{ maxWidth: "80px" }} />
+                            <Form.Control style={{ maxWidth: "120px" }} />
                           </Col>
                           <Col>
-                            <Form.Control style={{ maxWidth: "80px" }} />
+                            <Form.Control style={{ maxWidth: "120px" }} />
                           </Col>
                           <Col>
-                            <Form.Control style={{ maxWidth: "80px" }} />
+                            <Form.Control style={{ maxWidth: "120px" }} />
                           </Col>
-                        </Form.Group>
-                      </Col>
-
-                    </Row>
-                  </Col>
                 </Row>
               </Col>
             </Form.Group>
@@ -105,7 +102,6 @@ const FareFamilyModal = (props) => {
             <div style={{ marginBottom: 30, marginTop: 30, display: "flex" }}>
               <Button
                 variant="primary"
-                type="submit"
                 style={{ marginRight: 15 }}
               >
                 SAVE
@@ -120,325 +116,204 @@ const FareFamilyModal = (props) => {
     </Modal>
   )
 }
-
-function PartnerCabins(props) {
+const Cabins = (props) => {
   let dispatch = useDispatch()
+  const { id } = useParams()
+  const [cabinId, setCabinId] = useState(null)
+  const [formValues, setFormValues] = useState(null)
   const [modalShow, setModalShow] = useState(false)
-  const [showTabel] = useState(false)
-  const history = useHistory()
+  const isView = props.isView;
+  const [loading, setLoading] = useState(true);
   let api = new Api()
-  let formId = props.match.params.id
-  let [status, setStatus] = useState({ switchStatus: true })
-  const [tabKey, setTabKey] = useState("partner-cabin")
-  const isView = useQuery().get("action") === "view"
-  const [loading, setLoading] = useState(true)
-  const [selectCity, setSelectCity] = useState([])
-  const [id, setId] = useState(null)
-  const [form, setForm] = useState({
-    cabin_type: "",
-    cabin_type_name: "",
-    cabin_type_code: "",
-  })
 
+  const duplicateValue = async(fieldName, value) => {
+    let filters = encodeURIComponent(JSON.stringify([[fieldName,"=",value],["AND"],["integration_partner_id",id],["AND"],["status",1]]))
+    let res = await api.get(endpoint + "/" + id + "/cabins?" + `filters=${filters}`)
+    let sameId = res.data.items.find((v) => v.id === cabinId)
+    if(!sameId) return res.data.items.length === 0 
+
+    return true
+}
+
+Yup.addMethod(Yup.object, 'uniqueValueObject', function (fieldName, message) {
+    return this.test('unique', message, function(field) {
+        if(field) return duplicateValue(fieldName, field.value)
+        return true
+    })
+})
+
+Yup.addMethod(Yup.string, 'uniqueValueString', function (fieldName, message) {
+    return this.test('unique', message, function(field) {
+        if(field) return duplicateValue(fieldName, field)
+        return true
+    })
+})
+  // Initialize form
+  const initialValues = {
+    cabin_type_id: "",
+    fare_type_id: "",
+    cabin_type_code: "",
+    cabin_type_name: "", 
+  }
+
+  // Schema for yup
+  const validationSchema = Yup.object().shape({
+    cabin_type_id: Yup.object()
+    .required("Cabin is required.")
+    .uniqueValueObject("cabin_type_id","Cabin already exists"),
+    cabin_type_code: Yup.string()
+    .required("Partner Cabin Code is required")
+    .uniqueValueString('cabin_type_code', 'Partner Cabin Code already exists'),
+    cabin_type_name: Yup.string()
+    .required("Partner Cabin Name is required")
+    .uniqueValueString('cabin_type_name', 'Partner Cabin Name already exists'),
+  })
 
   useEffect(async () => {
-    let api = new Api()
-    let formId = props.match.params.id
-    try {
-      let res = await api.get(endpoint + "/" + formId)
-      let data = res.data;
-      console.log(formId)
-      setForm({
-        ...form,
-        cabin_type_id: data.cabin_type_id,
-        cabin_type: {
-          value: data.cabin_type.id,
-          label: data.cabin_type.cabin_type_name,
-        },
-        cabin_type_name: data.cabin_type_name,
-        cabin_type_code: data.cabin_type_code,
-      })
-    } catch (e) { }
-    setLoading(false)
-  }, [])
-
-
-  useEffect(() => {
-    if (!props.match.params.id) {
-      setLoading(false)
+    let formId = props.partnerCabinId
+    if(formId) {
+      try {
+        let res = await api.get(endpoint + "/" + id + "/cabins/" + formId);
+        setFormValues({ 
+          ...formValues,
+          cabin_type_id: _.isEmpty(res.data.cabin_type) ? '' : {
+            value: res.data.cabin_type.id,
+            label: res.data.cabin_type.cabin_type_name,
+          },
+          cabin_type_code: res.data.cabin_type_code ? res.data.cabin_type_code : "",
+          cabin_type_name: res.data.cabin_type_name ? res.data.cabin_type_name : ""
+        })
+      } catch (e) {
+        console.log(e)
+      }
     }
-    setId(props.match.params.id)
-  }, [props.match.params.id])
-
-
-
-  const validationSchema = Yup.object().shape({
-    cabin_type: Yup.object()
-      .required("Cabin is required."),
-    cabin_type_name: Yup.string().required("Partner Cabin Name is required").test(
-      "Unique Partner Cabin Name",
-      "Partner Cabin Name already exists", // <- key, message
-      async (value, ctx) => {
-        let formId = props.match.params.id
-        try {
-          let res = await axios.get(`${env.API_URL}/master/integration-partner-cabin-types?filters=["cabin_type_name","=","${value}"]`)
-
-          if (formId) {
-            return res.data.items.length === 0 ||
-              value === form.cabin_type_name
-          } else {
-            return res.data.items.length === 0
-          }
-        } catch (e) {
-          return false
-        }
-      }
-    ),
-    cabin_type_code: Yup.string().required("Partner Cabin Code is required").test(
-      "Unique Partner Cabin Code",
-      "Partner Cabin Code already exists", // <- key, message
-      async (value, ctx) => {
-        let formId = props.match.params.id
-        try {
-          let res = await axios.get(`${env.API_URL}/master/integration-partner-cabin-types?filters=["cabin_type_code","=","${value}"]`)
-
-          if (formId) {
-            return res.data.items.length === 0 ||
-              value === form.cabin_type_code
-          } else {
-            return res.data.items.length === 0
-          }
-        } catch (e) {
-          return false
-        }
-      }
-    ),
-  })
-
-  const initialValues = {
-    cabin_type: "",
-    cabin_type_name: "",
-    cabin_type_code: "",
-  }
+    
+  }, [])
   const onSubmit = async (values, a) => {
+    let formatted = {
+      cabin_type_code: values.cabin_type_code,
+      cabin_type_name: values.cabin_type_name,
+      cabin_type_id: values.cabin_type_id.value,
+      integration_partner_id: id
+    }
+
     try {
-      let formId = props.match.params.id
-      let form = {
-        cabin_type_id: uuidv4(),
-        cabin_type: values.cabin_type ? {
-          id: values.cabin_type.value,
-          name: values.cabin_type.label
-        } : null,
-        integration_partner_id: "3f61b5e0-d7cb-4f80-94e7-83114ff23903",
-
-        cabin_type_name: values.cabin_type_name,
-        cabin_type_code: values.cabin_type_code,
-
+      if(cabinId){
+        let res = await api.put(endpoint + "/" + id + "/cabins/" + cabinId, formatted);
+      }else{
+          let res = await api.post(endpoint + "/" + id + "/cabins", formatted);
       }
-
-      if (!formId) {
-        //Proses Create Data
-
-        let res = await api.post(`/master/integration-partner-cabin-types`, form)
-
-        dispatch(
-          setAlert({
-            message: `Record 'Partner Cabin Name: ${form.cabin_type_name}' has been successfully saved.`,
-          }),
-        )
-      } else {
-        let res = await api.put(`/master/integration-partner-cabin-types/${formId}`, form)
-        dispatch(
-          setAlert({
-            message: `Record 'Partner Cabin Name: ${form.cabin_type_name}' has been successfully saved.`,
-          }),
-        )
-      }
-      history.goBack()
+      dispatch(
+        setAlert({
+            message: `Record 'Partner Cabin Name: ${values.cabin_type_name}' has been successfully saved.`,
+        })
+      );
+      dispatch(setCreateModal({ show: false, id: null, disabled_form: false }));
+      
     } catch (e) {
       dispatch(
         setAlert({
-          message: "Failed to save this record.",
-        }),
-      )
+            message: "Failed to save this record.",
+        })
+    );
     }
+};
+  useEffect(() => {
+    if (!props.partnerCabinId) {
+      setLoading(false);
   }
 
+  if (formValues) {
+      setLoading(false);
+  }
+  console.log(props.partnerCabinId)
+    setCabinId(props.partnerCabinId)
+  }, [props.partnerCabinId, formValues])
+
+  const formSize = {
+    label: {
+        md: 5,
+        lg: 5,
+    },
+    value: {
+        md: 7,
+        lg: 7,
+    },
+  };
+
+  const formSizeModal = {
+    label: {
+        md: 3,
+        lg: 3,
+    },
+    value: {
+        md: 6,
+        lg: 6,
+    },
+  };
+
+  console.log('formValues', formValues)
   return (
-
-    <>
-      <Formik
-        initialValues={form || initialValues}
-        validationSchema={validationSchema}
-
-        isView={isView || loading}
-
-        onSubmit={onSubmit}
-        enableReinitialize
-      >
-        {({
-          values,
-          errors,
-          touched,
-          dirty,
-          handleChange,
-          handleBlur,
-          handleSubmit,
-          isValid,
-          isSubmitting,
-          setFieldValue,
-          setFieldTouched,
-        }) => (
-          <Form onSubmit={handleSubmit}>
-            <Form.Group as={Row} className="form-group">
-                        <Form.Label column sm={4}>
-                          Cabin<span className="form-label-required">*</span>
-                        </Form.Label>
-                        <Col sm={8}>
-                          <FastField name="cabin_type">
-                            {({ field, form }) => (
-                              <div style={{ maxWidth: 200 }}>
-                                <SelectAsync
-                                  {...field}
-                                  isClearable
-                                  isDisabled={isView}
-                                  url={`master/cabin-types`}
-                                  fieldName="cabin_type_name"
-                                  onChange={(v) => {
-                                    setFieldValue("cabin_type", v)
-                                  }}
-                                  placeholder="Please choose"
-                                  className={`react-select ${form.touched.cabin_type &&
-                                      form.errors.cabin_type
-                                      ? "is-invalid"
-                                      : null
-                                    }`}
-                                  components={
-                                    isView
-                                      ? {
-                                        DropdownIndicator: () => null,
-                                        IndicatorSeparator: () => null,
-                                      }
-                                      : null
+    <div>
+      <Formik initialValues={formValues || initialValues} validationSchema={validationSchema} onSubmit={onSubmit} validateOnMount enableReinitialize>
+            {({ dirty, handleSubmit, isSubmitting, setFieldValue, handleChange, values }) => (
+                <Form onSubmit={handleSubmit} className="ml-2">
+                    <FormikControl
+                        control="selectAsync"
+                        required={isView ? "" : "label-required"}
+                        label="Cabin"
+                        name="cabin_type_id"
+                        placeholder={"Please Choose."}
+                        url={`master/cabin-types`}
+                        fieldName={"cabin_type_name"}
+                        onChange={(v) => {
+                            setFieldValue("cabin_type_id", v);
+                        }}
+                        style={{ maxWidth: 250 }}
+                        size={formSize}
+                        components={
+                            isView
+                                ? {
+                                      DropdownIndicator: () => null,
+                                      IndicatorSeparator: () => null,
                                   }
-                                />
-                                {form.touched.cabin_type &&
-                                  form.errors.cabin_type && (
-                                    <Form.Control.Feedback type="invalid">
-                                      {form.touched.cabin_type
-                                        ? form.errors.cabin_type
-                                        : null}
-                                    </Form.Control.Feedback>
-                                  )}
-                              </div>
-                            )}
-                          </FastField>
-                        </Col>
-                      </Form.Group>
-                      <Form.Group as={Row} className="form-group">
-                        {/* <Form.Label column sm={4}>
-                          Partner Cabin Code<span className="form-label-required">*</span>
-                        </Form.Label>
-                        <Col sm={8}>
-                          <Form.Control
-                            name="cabin_type_code"
-                            type="text"
-                            value={values.cabin_type_code}
-                            minLength={1}
-                            maxLength={36}
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            style={{ maxWidth: 200 }}
-                            disabled={isView}
-                          />
-                        </Col> */}
-                        <Form.Label column md={3} lg={4}>
-                          Partner Cabin Code{" "}
-                          <span className="form-label-required">*</span>
-                        </Form.Label>
-                        <Col md={9} lg={8}>
-                          <FastField name="cabin_type_code" disabled>
-                            {({ field, form }) => (
-                              <>
-                                <Form.Control
-                                  type="text"
-                                  disabled={isView}
-                                  isInvalid={
-                                    form.touched.cabin_type_code &&
-                                    form.errors.cabin_type_code
-                                  }
-                                  minLength={1}
-                                  maxLength={36}
-                                  {...field}
-                                  style={{ maxWidth: 300 }}
-                                />
-                                {form.touched.cabin_type_code &&
-                                  form.errors.cabin_type_code && (
-                                    <Form.Control.Feedback type="invalid">
-                                      {form.touched.cabin_type_code
-                                        ? form.errors.cabin_type_code
-                                        : null}
-                                    </Form.Control.Feedback>
-                                  )}
-                              </>
-                            )}
-                          </FastField>
-                        </Col>
-                      </Form.Group>
-                      <Form.Group as={Row} className="form-group">
-                        {/* <Form.Label column sm={4}>
-                      Partner Cabin Name<span className="form-label-required">*</span>
-                    </Form.Label>
-                    <Col sm={8}>
-                      <Form.Control
-                        name="cabin_type_name"
-                        type="text"
-                        value={values.cabin_type_name}
-                        minLength={1}
+                                : null
+                        }
+                        isDisabled={isView}
+                    />
+
+                    <FormikControl
+                        control="input"
+                        required="label-required"
+                        label="Partner Cabin Code"
+                        name="cabin_type_code"
+                        style={{ maxWidth: 250 }}
+                        size={formSize}
+                        disabled={isView || loading}
+                        onChange={(e) => {
+                            setFieldValue("cabin_type_code", e.target.value);
+                        }}
                         maxLength={36}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        style={{ maxWidth: 200 }}
-                        disabled={isView}
-                      />
-                    </Col> */}
-                        <Form.Label column md={3} lg={4}>
-                          Partner Cabin Name{" "}
-                          <span className="form-label-required">*</span>
-                        </Form.Label>
-                        <Col md={9} lg={8}>
-                          <FastField name="cabin_type_name" disabled>
-                            {({ field, form }) => (
-                              <>
-                                <Form.Control
-                                  type="text"
-                                  disabled={isView}
-                                  isInvalid={
-                                    form.touched.cabin_type_name &&
-                                    form.errors.cabin_type_name
-                                  }
-                                  minLength={1}
-                                  maxLength={256}
-                                  {...field}
-                                  style={{ maxWidth: 300 }}
-                                />
-                                {form.touched.cabin_type_name &&
-                                  form.errors.cabin_type_name && (
-                                    <Form.Control.Feedback type="invalid">
-                                      {form.touched.cabin_type_name
-                                        ? form.errors.cabin_type_name
-                                        : null}
-                                    </Form.Control.Feedback>
-                                  )}
-                              </>
-                            )}
-                          </FastField>
-                        </Col>
-                      </Form.Group>
-                      {isView ? <h3 className="card-heading"></h3> : <><h3 className="card-heading"></h3>
+                    />
+
+                    <FormikControl
+                        control="input"
+                        required="label-required"
+                        label="Partner Cabin Name"
+                        name="cabin_type_name"
+                        style={{ maxWidth: 250 }}
+                        size={formSize}
+                        disabled={isView || loading}
+                        onChange={(e) => {
+                            setFieldValue("cabin_type_name", e.target.value);
+                        }}
+                        maxLength={256}
+                    />
+                    {isView ? <h3 className="card-heading"></h3> : <><h3 className="card-heading"></h3>
                         <Col sm={12}>
                           <div style={{ padding: "0 15px 15px 15px" }} >
                             <button
+                              type="button"
                               className="btn float-right button-override"
                               onClick={() => setModalShow(true)}
                             >
@@ -452,83 +327,33 @@ function PartnerCabins(props) {
                         <Col sm={12}>
                           <FareFamilyModal
                             show={modalShow}
+                            isView={isView}
+                            size={formSizeModal}
                             onHide={() => setModalShow(false)}
                           />
-                        </Col>
+                        </Col>  </>}
 
-
-
-                      </>}
-
-                      {formId && < TabelFareFamily />}
-
-                      {
-                        props.isMobile
-                          ? isView
-                            ? (<div className="mb-2 row justify-content-md-start justify-content-center">
-                              <Button
-                                variant="secondary"
-                                onClick={() => props.handleReplaceTable(props.isReplaceTable)}
-                              >
-                                BACK
-                              </Button>
-                            </div>)
-                            : (<div className="ml-1 row justify-content-md-start justify-content-center">
-                              <Button
-                                variant="primary"
-                                type="submit"
-                                disabled={props.formId?.id ? (!isValid || isSubmitting) : (!dirty || isSubmitting)}
-                                style={{ marginRight: 15, marginBottom: 20, marginTop: 85 }}
-                              >
-                                SAVE
-                              </Button>
-                              <Button
-                                variant="secondary"
-                                onClick={() => props.handleReplaceTable(props.isReplaceTable)}
-                                style={{ marginBottom: 20, marginTop: 85 }}
-                              >
-                                CANCEL
-                              </Button>
-                            </div>)
-                          : ""
-                      }
-                      {
-                        !props.isMobile
-                          ? isView
-                            ? (<>
-                              <Button
-                                variant="secondary"
-                                onClick={() => props.handleReplaceTable(props.isReplaceTable)}
-                                className="mt-3"
-                              >
-                                BACK
-                              </Button>
-                            </>)
-                            : (<div className="ml-1 mt-3 row justify-content-md-start justify-content-center">
-                              <Button
-                                variant="primary"
-                                type="submit"
-                                disabled={props.finishStep > 0 || props.employeeData?.id ? (!isValid || isSubmitting) : (!dirty || isSubmitting)}
-                                style={{ marginRight: 15, marginBottom: 135 }}
-                              >
-                                SAVE
-                              </Button>
-                              <Button
-                                variant="secondary"
-                                onClick={() => props.handleReplaceTable(props.isReplaceTable)}
-                              >
-                                CANCEL
-                              </Button>
-                            </div>)
-                          : ""
-                      }
-
-
-          </Form>
-        )}
-      </Formik>
-    </>
+                    {!props.hideButton && (
+                        <div
+                            style={{
+                                marginBottom: 30,
+                                marginTop: 30,
+                                display: "flex",
+                            }}
+                        >
+                            {!isView && (
+                                <Button variant="primary" type="submit" disabled={isSubmitting} style={{ marginRight: 15 }}>
+                                    SAVE
+                                </Button>
+                            )}
+                            <CancelButton onClick={() => props.handleReplaceTable(props.isReplaceTable)} />
+                        </div>
+                    )}
+                </Form>
+            )}
+        </Formik>
+    </div>
   )
 }
 
-export default withRouter(PartnerCabins)
+export default Cabins
