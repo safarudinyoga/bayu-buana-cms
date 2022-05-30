@@ -9,7 +9,8 @@ export const uiStore = createSlice({
     showCreateModal: {show: false, id: null, disabled_form: false},
     showModalDelete: {show: false, id: null, disabled_form: false},
     reloadTable: false,
-    modalTitle: ""
+    modalTitle: "",
+    contentTitle: ""
   },
   reducers: {
     setUIParams(state, action) {
@@ -43,7 +44,10 @@ export const uiStore = createSlice({
     setModalDelete: (state, action) => {
       state.showModalDelete = { ...state.showModalDelete, ...action.payload}
       state.reloadTable = !action.payload.show
-    }
+    },
+    setContentTitle: (state, action) => {
+      state.contentTitle = action.payload
+    },
   },
 })
 
@@ -55,7 +59,8 @@ export const {
   setReloadTable, 
   setUIParams, 
   setModalTitle,
-  setModalDelete
+  setModalDelete,
+  setContentTitle
 } = uiStore.actions
 
 export default uiStore.reducer
