@@ -27,11 +27,11 @@ export default function IntegrationPartnerMealPlansTable() {
       },
       {
         title: "Partner Meal Plan Code",
-        data: "meal_plan_type_code",
+        data: "meal_plan_type.meal_plan_type_code",
       },
       {
         title: "Partner Meal Plan Name",
-        data: "meal_plan_type_name",
+        data: "meal_plan_type.meal_plan_type_name",
       },
     ],
     emptyTable: "No Partner Meal Plans found",
