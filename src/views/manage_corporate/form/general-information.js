@@ -120,7 +120,7 @@ const GeneralInfomation = (props) => {
           "corporate_general_information": {
             "corporate_code": val.general_information.corporate_code,
             "corporate_name": val.general_information.corporate_name,
-            "parent_corporate_id": val.general_information.parent_company.values
+            "parent_corporate_id": val.general_information.parent_company?.value || ''
           },
           "contact_general_information": {
               "email": val.contact_information.corporate_email,
@@ -148,7 +148,7 @@ const GeneralInfomation = (props) => {
           "corporate_asset" : {
               "multimedia_description" : val.other_information.logo.data?.id || ''
           },
-          "industry_id": "8e298b53-7ccc-4a92-b3e9-3251fc86bb09",
+          "industry_id": val.general_information.corporate_type.value || '',
           "website": val.other_information.website,
           "internal_remark": val.other_information.internal_remark,
           "npwp": val.general_information.corporate_npwp,

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { Form, Row, Col, Card, Button, Tabs, TabPane, } from "react-bootstrap"
+import { Form, Row, Col, Card, Button, Tabs, TabPane, Modal, ModalBody } from "react-bootstrap"
 
 // components & styles
 import Select from "components/form/select"
@@ -10,13 +10,9 @@ import createIcon from "assets/icons/create.svg"
 // utils
 
 
-const TravelConsultantAssistant = () => {
+const TravelConsultantAssistant = ({ handleChangeModal  }) => {
   const [isSelectedOne, setisSelectedOne] = useState(false)
   const [isSelectedTwo, setisSelectedTwo] = useState(false)
-  const [isModalVisible, setisModalVisible] = useState({
-    flight: false,
-    hotel: false
-  })
 
   // dropdown
   const [isFieldSelected, setisFieldSelected] = useState({
@@ -377,17 +373,17 @@ const TravelConsultantAssistant = () => {
                 </Col>
               </Row>
             </div>
-            {isFieldSelected.hotel.key === 'custom' && (
+            {isFieldSelected.flight.key === 'custom' && (
               <button
                 type="button"
-                onClick={() => setisModalVisible(true)}
+                onClick={() => handleChangeModal('flight')}
                 className="btn btn-warning button-new mt-3 mb-4 ml-auto mr-2 cursor-pointer"
               >
                 <img src={createIcon} className="mr-1" alt="new"  />
                 Add Override Service Fee
               </button>
             )}
-            {isFieldSelected.hotel.key === 'selected' && (
+            {isFieldSelected.flight.key === 'selected' && (
               <div className='mt-3' style={{ width: '98%', margin: '0 auto' }}>
                 <BbDataTable {...paramsFlight} onReset={onResetFlight} />
               </div>
@@ -596,14 +592,14 @@ const TravelConsultantAssistant = () => {
               </Row>
             </div>
             {isFieldSelected.hotel.key === 'custom' && (
-                <button
-                  type="button"
-                  onClick={() => setisModalVisible(true)}
-                  className="btn btn-warning button-new mt-3 mb-4 ml-auto mr-2 cursor-pointer"
-                >
-                  <img src={createIcon} className="mr-1" alt="new"  />
-                  Add Override Service Fee
-                </button>
+              <button
+                type="button"
+                onClick={() => handleChangeModal('hotel')}
+                className="btn btn-warning button-new mt-3 mb-4 ml-auto mr-2 cursor-pointer"
+              >
+                <img src={createIcon} className="mr-1" alt="new"  />
+                Add Override Service Fee
+              </button>
             )}
             {isFieldSelected.hotel.key === 'selected' && (
               <div className='mt-3' style={{ width: '98%', margin: '0 auto' }}>
@@ -650,6 +646,10 @@ const ServiceFee = props => {
   const [key, setKey] = useState('travel_consultant_assistant')
   const [selected, setselected] = useState(true)
   const [activeRadio, setactiveRadio] = useState('2')
+  const [isModalVisible, setisModalVisible] = useState({
+    flight: false,
+    hotel: false
+  })
 
   const handleChange = (e, type) => {
     const { name } = e.target
@@ -664,11 +664,17 @@ const ServiceFee = props => {
     }
   }
 
+  const handleChangeModal = (type) => {
+    // if (type === 'flight') setisModalVisible({ ...isModalVisible, flight: true })
+    // if (type === 'hotel') setisModalVisible({ ...isModalVisible, hotel: true })
+    setisModalVisible({ ...isModalVisible, [type]: true })
+  }
+
   const tabList = [
     {
       key: 'travel_consultant_assistant',
       title: 'TRAVEL CONSULTANT ASSISTANT',
-      children: (<TravelConsultantAssistant />)
+      children: (<TravelConsultantAssistant handleChangeModal={handleChangeModal} />)
     },
     {
       key: 'self_service_booking_tool',
@@ -683,78 +689,474 @@ const ServiceFee = props => {
   ]
 
   return (
-    <Form className='service_fee'>
-      <Card>
-        <Card.Body>
-          <h3 className="card-heading">Service Fee</h3>
-          <Form.Group as={Row} className='align-items-center form-group ml-2'>
-            <Form.Label column lg={4}>
-              Apply Bundling Service Fee? <div className='tooltips' />
-            </Form.Label>
-            <Col md={3} lg={3}>
-              <Form.Check
-                // name
-                id='1'
-                type="switch"
-                checked={selected}
-                onChange={() => setselected(!selected)}
-              />
-            </Col>
-          </Form.Group>
-          { selected && (
-            <Form.Group as={Row} className='align-items-center form-group ml-2 mt-2'>
+    <div className='service_fee'>
+      <Form>
+        <Card>
+          <Card.Body>
+            <h3 className="card-heading">Service Fee</h3>
+            <Form.Group as={Row} className='align-items-center form-group ml-2'>
               <Form.Label column lg={4}>
-                Get Service Fee From
+                Apply Bundling Service Fee? <div className='tooltips' />
               </Form.Label>
-              <Col md={3} lg={7} className='row d-flex align-items-center'>
+              <Col md={3} lg={3}>
                 <Form.Check
-                  name='1'
+                  // name
                   id='1'
-                  checked={activeRadio === '1'}
-                  onChange={(e) => handleChange(e, 'service_fee')}
-                  label='Per Transaction'
-                  type="radio"
-                  className='mr-3'
-                />
-                <Form.Check
-                  name='2'
-                  id='2'
-                  checked={activeRadio === '2'}
-                  onChange={(e) => handleChange(e, 'service_fee')}
-                  label='Batch'
-                  type="radio"
-                  className='mr-2'
+                  type="switch"
+                  checked={selected}
+                  onChange={() => setselected(!selected)}
                 />
               </Col>
             </Form.Group>
-          )}
-          <div className='card mt-4'>
-            <Tabs
-              id='service-fee'
-              activeKey={key}
-              onSelect={(key) => setKey(key)}
-              className='tabs mb-4'
-              mountOnEnter
-              unmountOnExit
-            >
-              {tabList.map((res,i) =>
-                <TabPane
-                  key={i}
-                  eventKey={res.key}
-                  title={
-                    <div className="d-md-flex flex-row bd-highlight">
-                      <span className="tabs-text uppercase">{res.title}</span>
-                    </div>
-                  }
-                >
-                  {res.children}
-                </TabPane>
-              )}
-            </Tabs>
-          </div>
-        </Card.Body>
-      </Card>
-    </Form>
+            { selected && (
+              <Form.Group as={Row} className='align-items-center form-group ml-2 mt-2'>
+                <Form.Label column lg={4}>
+                  Get Service Fee From
+                </Form.Label>
+                <Col md={3} lg={7} className='row d-flex align-items-center'>
+                  <Form.Check
+                    name='1'
+                    id='1'
+                    checked={activeRadio === '1'}
+                    onChange={(e) => handleChange(e, 'service_fee')}
+                    label='Per Transaction'
+                    type="radio"
+                    className='mr-3'
+                  />
+                  <Form.Check
+                    name='2'
+                    id='2'
+                    checked={activeRadio === '2'}
+                    onChange={(e) => handleChange(e, 'service_fee')}
+                    label='Batch'
+                    type="radio"
+                    className='mr-2'
+                  />
+                </Col>
+              </Form.Group>
+            )}
+            <div className='card mt-4'>
+              <Tabs
+                id='service-fee'
+                activeKey={key}
+                onSelect={(key) => setKey(key)}
+                className='tabs mb-4'
+                mountOnEnter
+                unmountOnExit
+              >
+                {tabList.map((res,i) =>
+                  <TabPane
+                    key={i}
+                    eventKey={res.key}
+                    title={
+                      <div className="d-md-flex flex-row bd-highlight">
+                        <span className="tabs-text uppercase">{res.title}</span>
+                      </div>
+                    }
+                  >
+                    {res.children}
+                  </TabPane>
+                )}
+              </Tabs>
+            </div>
+          </Card.Body>
+        </Card>
+      </Form>
+
+      {/* flight */}
+      <Modal
+        show={isModalVisible.flight}
+        onHide={() => setisModalVisible({ flight: false, hotel: false })}
+        aria-labelledby="contained-modal-title-vcenter"
+			  centered
+        className='modal_service_fee'
+      >
+        <Modal.Header closeButton className="bb-modal-header" />
+        <ModalBody className="bb-modal-body">
+          <p className="bb-modal-title" style={{ marginBottom: '50px' }}>ADD OVERRIDE FLIGHT SERVICE FEE</p>
+          <Form style={{ backgroundColor: 'transparent', padding: '0 30px 0px 20px' }}>
+            <Row>
+              <Col sm={12}>
+                <Form.Group as={Row} className='form-group'>
+                  <Form.Label column sm={4}>
+                    Destination <span className="form-label-required">*</span>
+                  </Form.Label>
+                  <Col lg={8}>
+                    <Select
+                      isClearable
+                      placeholder="Please Choose"
+                      className='select'
+                      options={[
+                        {
+                          value: 'custom',
+                          label: 'Custom Service Fee'
+                        },
+                        {
+                          value: 'selected',
+                          label: 'Flight Service Fee 1'
+                        },
+                      ]}
+                      onChange={() => {}}
+                      width={'70%'}
+                    />
+                  </Col>
+                </Form.Group>
+                <Form.Group as={Row} className='form-group'>
+                  <Form.Label column sm={4}>
+                    Airline Service Type
+                  </Form.Label>
+                  <Col lg={8}>
+                    <Select
+                      isClearable
+                      placeholder="Please Choose"
+                      className='select'
+                      options={[
+                        {
+                          value: 'custom',
+                          label: 'Custom Service Fee'
+                        },
+                        {
+                          value: 'selected',
+                          label: 'Flight Service Fee 1'
+                        },
+                      ]}
+                      onChange={() => {}}
+                      width={'70%'}
+                    />
+                  </Col>
+                </Form.Group>
+                <Form.Group as={Row} className='form-group'>
+                  <Form.Label column sm={4}>
+                    Specified Airline
+                  </Form.Label>
+                  <Col lg={8}>
+                    <Select
+                      isClearable
+                      placeholder="Please Choose"
+                      className='select'
+                      options={[
+                        {
+                          value: 'custom',
+                          label: 'Custom Service Fee'
+                        },
+                        {
+                          value: 'selected',
+                          label: 'Flight Service Fee 1'
+                        },
+                      ]}
+                      onChange={() => {}}
+                      width={'70%'}
+                    />
+                  </Col>
+                </Form.Group>
+                <Form.Group as={Row} className='form-group'>
+                  <Form.Label column sm={4}>
+                    Specified Source
+                  </Form.Label>
+                  <Col lg={8}>
+                    <Select
+                      isClearable
+                      placeholder="Please Choose"
+                      className='select'
+                      options={[
+                        {
+                          value: 'custom',
+                          label: 'Custom Service Fee'
+                        },
+                        {
+                          value: 'selected',
+                          label: 'Flight Service Fee 1'
+                        },
+                      ]}
+                      onChange={() => {}}
+                      width={'70%'}
+                    />
+                  </Col>
+                </Form.Group>
+                <Form.Group as={Row} className='form-group d-flex align-items-start'>
+                  <Form.Label column sm={4}>
+                    Service Fee <span className="form-label-required">*</span>
+                  </Form.Label>
+                  <Col lg={8} className='col-form-label'>
+                    <Form.Group className='form-group' style={{ minWidth: '60%', margin: '0 auto' }}>
+                      <div>
+                        <Form.Check
+                          name='hotel-international-1'
+                          id='hotel-international-1'
+                          // checked={activeRadioHotel.international === 'hotel-international-1'}
+                          onChange={(e) => handleChange(e, 'hotel_international')}
+                          label='Fixed Amount'
+                          type="radio"
+                          className='mr-2 mb-2'
+                        />
+                        <div style={{ paddingLeft: '26px' }} className='mt-2'>
+                          <Form.Group as={Row} className='row d-flex justify-content-start align-items-start  form-group mb-3'>
+                            <Form.Label column>
+                              IDR
+                            </Form.Label>
+                            <Form.Control
+                              type="text"
+                              minLength={1}
+                              maxLength={16}
+                              placeholder=""
+                              style={{ width: 150 }}
+                              className='mr-3 ml-2'
+                            />
+                            <div className='d-flex flex-column justify-content-start mt-1'>
+                              {['/Ticket', '/Person', '/Transaction'].map((res, i) =>
+                                <Form.Check
+                                  name={`fixedAmount-${i+1}`}
+                                  id={`fixedAmount-${i+1}`}
+                                  // checked={activeRadioHotel.international === '1'}
+                                  // onChange={(e) => handleChange(e, 'invoice')}
+                                  label={res}
+                                  type="radio"
+                                  className='mb-2'
+                                />
+                              )}
+                            </div>
+                          </Form.Group>
+                        </div>
+                      </div>
+                      <Form.Check
+                        name='hotel-international-2'
+                        id='hotel-international-2'
+                        // checked={activeRadioHotel.international === 'hotel-international-2'}
+                        onChange={(e) => handleChange(e, 'hotel_international')}
+                        label='Percentage'
+                        type="radio"
+                        className='mb-2'
+                      />
+                      <div style={{ paddingLeft: '35px' }}>
+                        <Form.Group as={Row} className='row d-flex align-items-center form-group'>
+                          <Form.Control
+                            type="text"
+                            minLength={1}
+                            maxLength={16}
+                            placeholder=""
+                            style={{ width: 50 }}
+                          />
+                          <Card.Text className='m-0 ml-3 mr-3'>%</Card.Text>
+                          <Form.Check
+                            type='checkbox'
+                            name='workingDays'
+                            id='workingDays'
+                            label='Include Taxes'
+                          />
+                        </Form.Group>
+                      </div>
+                    </Form.Group>
+                  </Col>
+                </Form.Group>
+              </Col>
+            </Row>
+            <div style={{ marginBottom: 30, marginTop: 30, display: "flex" }}>
+              <Button
+                variant="primary"
+                type="submit"
+                // disabled={isSubmitting || !dirty}
+                style={{ marginRight: 15, padding: '0 25px' }}
+              >
+                SAVE
+              </Button>
+              <Button
+                variant="secondary"
+                onClick={() => {
+                  setisModalVisible(false)
+                }}
+              >
+                CANCEL
+              </Button>
+            </div>
+          </Form>
+        </ModalBody>
+      </Modal>
+
+      {/* hotel */}
+      <Modal
+        show={isModalVisible.hotel}
+        onHide={() => setisModalVisible({ flight: false, hotel: false })}
+        aria-labelledby="contained-modal-title-vcenter"
+			  centered
+        className='modal_service_fee'
+      >
+        <Modal.Header closeButton className="bb-modal-header" />
+        <ModalBody className="bb-modal-body">
+          <p className="bb-modal-title" style={{ marginBottom: '50px' }}>ADD OVERRIDE HOTEL SERVICE FEE</p>
+          <Form style={{ backgroundColor: 'transparent', padding: '0 30px 0px 20px' }}>
+            <Row>
+              <Col sm={12}>
+                <Form.Group as={Row} className='form-group'>
+                  <Form.Label column sm={4}>
+                    Destination <span className="form-label-required">*</span>
+                  </Form.Label>
+                  <Col lg={8}>
+                    <Select
+                      isClearable
+                      placeholder="Please Choose"
+                      className='select'
+                      options={[
+                        {
+                          value: 'custom',
+                          label: 'Custom Service Fee'
+                        },
+                        {
+                          value: 'selected',
+                          label: 'Flight Service Fee 1'
+                        },
+                      ]}
+                      onChange={() => {}}
+                      width={'70%'}
+                    />
+                  </Col>
+                </Form.Group>
+                <Form.Group as={Row} className='form-group'>
+                  <Form.Label column sm={4}>
+                    Specified Source
+                  </Form.Label>
+                  <Col lg={8}>
+                    <Select
+                      isClearable
+                      placeholder="Please Choose"
+                      className='select'
+                      options={[
+                        {
+                          value: 'custom',
+                          label: 'Custom Service Fee'
+                        },
+                        {
+                          value: 'selected',
+                          label: 'Flight Service Fee 1'
+                        },
+                      ]}
+                      onChange={() => {}}
+                      width={'70%'}
+                    />
+                  </Col>
+                </Form.Group>
+                <Form.Group as={Row} className='form-group'>
+                  <Form.Label column sm={4}>
+                    Supplier
+                  </Form.Label>
+                  <Col lg={8}>
+                    <Select
+                      isClearable
+                      placeholder="Please Choose"
+                      className='select'
+                      options={[
+                        {
+                          value: 'custom',
+                          label: 'Custom Service Fee'
+                        },
+                        {
+                          value: 'selected',
+                          label: 'Flight Service Fee 1'
+                        },
+                      ]}
+                      onChange={() => {}}
+                      width={'70%'}
+                    />
+                  </Col>
+                </Form.Group>
+                <Form.Group as={Row} className='form-group d-flex align-items-start'>
+                  <Form.Label column sm={4}>
+                    Service Fee <span className="form-label-required">*</span>
+                  </Form.Label>
+                  <Col lg={8} className='col-form-label'>
+                    <Form.Group className='form-group' style={{ minWidth: '60%', margin: '0 auto' }}>
+                      <div>
+                        <Form.Check
+                          name='hotel-international-1'
+                          id='hotel-international-1'
+                          // checked={activeRadioHotel.international === 'hotel-international-1'}
+                          onChange={(e) => handleChange(e, 'hotel_international')}
+                          label='Fixed Amount'
+                          type="radio"
+                          className='mr-2 mb-2'
+                        />
+                        <div style={{ paddingLeft: '26px' }} className='mt-2'>
+                          <Form.Group as={Row} className='row d-flex justify-content-start align-items-start  form-group mb-3'>
+                            <Form.Label column>
+                              IDR
+                            </Form.Label>
+                            <Form.Control
+                              type="text"
+                              minLength={1}
+                              maxLength={16}
+                              placeholder=""
+                              style={{ width: 150 }}
+                              className='mr-3 ml-2'
+                            />
+                            <div className='d-flex flex-column justify-content-start mt-1'>
+                              {['/Ticket', '/Person', '/Transaction'].map((res, i) =>
+                                <Form.Check
+                                  name={`fixedAmount-${i+1}`}
+                                  id={`fixedAmount-${i+1}`}
+                                  // checked={activeRadioHotel.international === '1'}
+                                  // onChange={(e) => handleChange(e, 'invoice')}
+                                  label={res}
+                                  type="radio"
+                                  className='mb-2'
+                                />
+                              )}
+                            </div>
+                          </Form.Group>
+                        </div>
+                      </div>
+                      <Form.Check
+                        name='hotel-international-2'
+                        id='hotel-international-2'
+                        // checked={activeRadioHotel.international === 'hotel-international-2'}
+                        onChange={(e) => handleChange(e, 'hotel_international')}
+                        label='Percentage'
+                        type="radio"
+                        className='mb-2'
+                      />
+                      <div style={{ paddingLeft: '35px' }}>
+                        <Form.Group as={Row} className='row d-flex align-items-center form-group'>
+                          <Form.Control
+                            type="text"
+                            minLength={1}
+                            maxLength={16}
+                            placeholder=""
+                            style={{ width: 50 }}
+                          />
+                          <Card.Text className='m-0 ml-3 mr-3'>%</Card.Text>
+                          <Form.Check
+                            type='checkbox'
+                            name='workingDays'
+                            id='workingDays'
+                            label='Include Taxes'
+                          />
+                        </Form.Group>
+                      </div>
+                    </Form.Group>
+                  </Col>
+                </Form.Group>
+              </Col>
+            </Row>
+            <div style={{ marginBottom: 30, marginTop: 30, display: "flex" }}>
+              <Button
+                variant="primary"
+                type="submit"
+                // disabled={isSubmitting || !dirty}
+                style={{ marginRight: 15, padding: '0 25px' }}
+              >
+                SAVE
+              </Button>
+              <Button
+                variant="secondary"
+                onClick={() => {
+                  setisModalVisible(false)
+                }}
+              >
+                CANCEL
+              </Button>
+            </div>
+          </Form>
+        </ModalBody>
+      </Modal>
+    </div>
   )
 }
 
