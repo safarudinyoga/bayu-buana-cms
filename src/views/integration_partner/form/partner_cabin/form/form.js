@@ -17,7 +17,7 @@ import "react-dropzone-uploader/dist/styles.css"
 import { useParams } from "react-router-dom"
 import CancelButton from "components/button/cancel";
 import FormikControl from "../../../../../components/formik/formikControl"
-import Select from "../../../../../components/form/select"
+import { setContentTitle } from "redux/ui-store"
 import { ReactSVG } from "react-svg"
 import createIcon from "assets/icons/create.svg"
 const endpoint = "/master/integration-partners";
@@ -171,6 +171,14 @@ Yup.addMethod(Yup.string, 'uniqueValueString', function (fieldName, message) {
 
   useEffect(async () => {
     let formId = props.partnerCabinId
+    let docTitle = "Edit Partner Cabins";
+    if (!formId) {
+        docTitle = "Create Partner Cabins";
+    } else if (isView) {
+        docTitle = "Partner Cabins Details";
+    }
+
+    dispatch(setContentTitle(docTitle));
     if(formId) {
       try {
         let res = await api.get(endpoint + "/" + id + "/cabins/" + formId);
@@ -346,7 +354,10 @@ Yup.addMethod(Yup.string, 'uniqueValueString', function (fieldName, message) {
                                     SAVE
                                 </Button>
                             )}
-                            <CancelButton onClick={() => props.handleReplaceTable(props.isReplaceTable)} />
+                            <CancelButton onClick={() => {
+                              dispatch(setContentTitle("Partner Cabins"));
+                              props.handleReplaceTable(props.isReplaceTable);
+                            }} />
                         </div>
                     )}
                 </Form>
