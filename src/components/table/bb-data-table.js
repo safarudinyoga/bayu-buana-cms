@@ -69,7 +69,6 @@ class BBDataTable extends Component {
     let columns = []
     const { recordName, msgType, module } = this.props
     const { isCheckbox, isShowColumnAction } = this.state
-    console.log('module', module)
     columns.push(isCheckbox ? {
       searchable: false,
       orderable: false,
@@ -174,8 +173,9 @@ class BBDataTable extends Component {
           ? row.city_id 
           : module == 'partner-meal-plan' 
           ? row.meal_plan_type_id
+          : module == 'partner-cabin' 
+          ? row.cabin_type_id
           : row.id
-
         return (
           `
           <a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item ${hideDetail ? "mr-2" : ""}" data-action="edit" data-id="${targetDataId}" title="Click to edit"><img src="${editIcon}"/></a>
@@ -240,7 +240,6 @@ class BBDataTable extends Component {
           headers: headers,
           cache: true,
           dataSrc: (json) => {
-            console.log(json, 'ini data <<');
             this.inProgress = false
             var recordTotal = 0
             var recordFiltered = 0
@@ -1028,6 +1027,9 @@ class BBDataTable extends Component {
           case "edit":
             if(me.props.createOnModal) {
               me.props.setCreateModal({show: true, id, disabled_form: false})
+            } else if(me.props.isReplaceTable) {
+              me.props.setId(id);
+              me.props.handleReplaceTable(!me.props.isReplaceTable)
             } else {
               me.props.history.push(base + "/" + id)
             }

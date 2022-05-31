@@ -1,14 +1,15 @@
 import { FastField, Formik } from "formik"
 import React, { useState, useEffect } from "react"
-// import FormHorizontal from "components/form/horizontal"
-import { Card, Form, Row, Col, Button, Tabs, TabPane } from "react-bootstrap"
+import * as Yup from "yup"
+import { Card, Form, Row, Col, Button } from "react-bootstrap"
 import Api from "config/api"
 import { useSnackbar } from "react-simple-snackbar"
-import { withRouter, useHistory } from "react-router"
+import { withRouter } from "react-router"
 import useQuery from "lib/query"
+import NumberFormat from "react-number-format"
 
 const endpointFee = "/master/agent-processing-fee-categories"
-const endpoint = "/master/agent-processing-fee-categories/1"
+const endpoint = "/master/agent-processing-fee-categories/3"
 const options = {
   position: "bottom-right",
 }
@@ -73,12 +74,9 @@ const FeeSection = (props) => {
                     disabled={props.isView}
                     checked={props.values[props.fieldRadio] === "amount"}
                     onClick={() => {
+                      props.setFieldValue(props.fieldRadio + "_percent", "")
                       props.setFieldValue(
-                        props.values[props.fieldRadio + "_percent"],
-                        null,
-                      )
-                      props.setFieldValue(
-                        props.values[props.fieldRadio + "_tax_include"],
+                        props.fieldRadio + "_tax_include",
                         false,
                       )
                     }}
@@ -89,7 +87,13 @@ const FeeSection = (props) => {
             <Row className="ml-3">
               <Col sm={12} md={6}>
                 <Form.Group as={Row} className="mb-xs-3">
-                  <Form.Label column xs={2} md={3} lg={5} className="ml-xs-4">
+                  <Form.Label
+                    column
+                    xs={2}
+                    md={3}
+                    lg={5}
+                    className={`ml-xs-4 ${disabledAmount ? "grey-text" : ""} `}
+                  >
                     IDR
                   </Form.Label>
                   <Col xs={10} md={9} lg={7}>
@@ -97,32 +101,25 @@ const FeeSection = (props) => {
                       <Form.Control
                         style={{ maxWidth: "220px" }}
                         disabled={true}
+                        className={"grey-background"}
                       />
                     ) : (
                       <FastField name={props.fieldAmount}>
                         {({ field }) => (
-                          <Form.Control
-                            type="text"
+                          <NumberFormat
                             {...field}
-                            style={{ maxWidth: "220px" }}
-                            disabled={props.isView}
-                            maxLength={15}
-                            onChange={(value) => {
-                              // console.log(props.values, props.fieldAmount)
-                              let pattern = /^\d+$/
-                              // console.log(pattern.test(value.target.value))
-                              if (pattern.test(value.target.value)) {
-                                const changeToInteger = Number.parseInt(
-                                  value.target.value,
-                                )
-                                // console.log(changeToInteger, "haha")
-                                // const separator = changeToInteger.toLocaleString('en-US', { maximumFractionDigits: 0 })
-                                props.setFieldValue(
-                                  props.fieldAmount,
-                                  changeToInteger,
-                                )
-                              }
-                            }}
+                            className="form-control"
+                            maxLength={19}
+                            thousandsGroupStyle="thousand"
+                            displayType="input"
+                            type="text"
+                            thousandSeparator={true}
+                            allowNegative={true}
+                            // onChange={(values) => {
+                            // const { value } = values;
+                            // props.setFieldValue(props.fieldAmount, value)
+                            // console.log(props.fieldAmount, values.target.value)
+                            // }}
                           />
                         )}
                       </FastField>
@@ -132,8 +129,9 @@ const FeeSection = (props) => {
               </Col>
               <Col sm={12} md={6}>
                 <Form.Group className="mb-3">
-                  {props.amountSuffixSelections.map((suffix) => (
+                  {props.amountSuffixSelections.map((suffix, i) => (
                     <AmountRadioSelections
+                      key={i}
                       {...props}
                       disabledAmount={disabledAmount}
                       value={suffix.value}
@@ -157,14 +155,8 @@ const FeeSection = (props) => {
                     disabled={props.isView}
                     checked={props.values[props.fieldRadio] === "percent"}
                     onClick={() => {
-                      props.setFieldValue(
-                        props.values[props.fieldRadio + "_amount"],
-                        null,
-                      )
-                      props.setFieldValue(
-                        props.values[props.fieldRadio + "_amount_type"],
-                        "",
-                      )
+                      props.setFieldValue(props.fieldRadio + "_amount", "")
+                      props.setFieldValue(props.fieldRadio + "_amount_type", "")
                     }}
                   />
                 )}
@@ -177,7 +169,7 @@ const FeeSection = (props) => {
                     <Form.Control
                       type="number"
                       style={{ maxWidth: "80px" }}
-                      className="mx-3"
+                      className="mx-3 grey-background"
                       disabled={true}
                     />
                   ) : (
@@ -214,7 +206,13 @@ const FeeSection = (props) => {
                       )}
                     </FastField>
                   )}
-                  <span className="text-lg mt-1">%</span>
+                  <span
+                    className={`text-lg mt-1 ${
+                      disabledPercent ? "grey-text" : ""
+                    } `}
+                  >
+                    %
+                  </span>
                 </Form.Group>
               </Col>
               <Col sm={12} md={6}>
@@ -246,6 +244,7 @@ const FeeSection = (props) => {
           </Col>
         </Row>
       </Form.Group>
+      <FeedbackMessage {...props} />
       {props.borderBottom && <h3 className="card-heading">.</h3>}
     </>
   )
@@ -275,6 +274,24 @@ const Fees = (props) => {
   )
 }
 
+const FeedbackMessage = (props) => {
+  return (
+    <FastField name="">
+      {({ field, form }) => {
+        let message =
+          form.errors[props.fieldRadio] ||
+          form.errors[props.fieldAmount] ||
+          form.errors[props.fieldAmountType] ||
+          form.errors[props.fieldPercent]
+
+        return form.touched[props.fieldRadio] && message ? (
+          <p className="fback-invalid">{message}</p>
+        ) : null
+      }}
+    </FastField>
+  )
+}
+
 const Menu = (props) => {
   return (
     <div style={{ padding: "0 15px 15px" }}>
@@ -290,7 +307,6 @@ const Menu = (props) => {
 const OtherAncillaryFee = (props) => {
   let api = new Api()
   const isView = useQuery().get("action") === "view"
-  const history = useHistory()
   const [openSnackbar] = useSnackbar(options)
   const [taxTypeMDRFee, setTaxTypeMDRFee] = useState([])
   const [taxTypeLatePayment, setTaxTypeLatePayment] = useState([])
@@ -318,42 +334,96 @@ const OtherAncillaryFee = (props) => {
   }, [props.match.params.id])
 
   const [initialForm, setInitialForm] = useState({
-    mdr_fee: "",
-    mdr_fee_tax_id: "",
-    mdr_fee_amount: null,
-    mdr_fee_amount_type: "",
-    mdr_fee_percent: null,
-    mdr_fee_tax_include: false,
-    late_payment: "",
-    late_payment_tax_id: "",
-    late_payment_amount: null,
-    late_payment_amount_type: "",
-    late_payment_percent: null,
-    late_payment_tax_include: false,
+    domestic_reissue: "",
+    domestic_reissue_fee_tax_id: "",
+    domestic_reissue_amount: "",
+    domestic_reissue_amount_type: "",
+    domestic_reissue_percent: "",
+    domestic_reissue_tax_include: false,
+    domestic_revalidate: "",
+    domestic_revalidate_fee_tax_id: "",
+    domestic_revalidate_amount: "",
+    domestic_revalidate_amount_type: "",
+    domestic_revalidate_percent: "",
+    domestic_revalidate_tax_include: false,
+  })
+
+  // Schema for yup
+  const validationSchema = Yup.object().shape({
+    domestic_reissue: Yup.string().required(
+      `Please enter fixed amount or percentage for ${taxTypeMDRFee.fee_tax_type_name}.`,
+    ),
+    domestic_reissue_amount: Yup.string().when("domestic_reissue", {
+      is: (value) => value === "amount",
+      then: Yup.string().required(
+        `Please enter fixed amount for ${taxTypeMDRFee.fee_tax_type_name}.`,
+      ),
+    }),
+    domestic_reissue_amount_type: Yup.string().when("domestic_reissue", {
+      is: (value) => value === "amount",
+      then: Yup.string().required(`Please select charge type.`),
+    }),
+    domestic_reissue_percent: Yup.string().when("domestic_reissue", {
+      is: (value) => value === "percent",
+      then: Yup.string().required(
+        `Please enter percentage for ${taxTypeMDRFee.fee_tax_type_name}.`,
+      ),
+    }),
+    domestic_revalidate: Yup.string().required(
+      `Please enter fixed amount or percentage for ${taxTypeLatePayment.fee_tax_type_name}.`,
+    ),
+    domestic_revalidate_amount: Yup.string().when("domestic_revalidate", {
+      is: (value) => value === "amount",
+      then: Yup.string().required(
+        `Please enter fixed amount for ${taxTypeLatePayment.fee_tax_type_name}.`,
+      ),
+    }),
+    domestic_revalidate_amount_type: Yup.string().when("domestic_revalidate", {
+      is: (value) => value === "amount",
+      then: Yup.string().required(`Please select charge type.`),
+    }),
+    domestic_revalidate_percent: Yup.string().when("domestic_revalidate", {
+      is: (value) => value === "percent",
+      then: Yup.string().required(
+        `Please enter percentage for ${taxTypeLatePayment.fee_tax_type_name}.`,
+      ),
+    }),
   })
 
   const checkprocessingType = (value) =>
     value !== "00000000-0000-0000-0000-000000000000" ? "amount" : "percent"
+  const checkChargeType = (value) =>
+    value === "00000000-0000-0000-0000-000000000000" ? "" : value
 
   useEffect(async () => {
     try {
       if (formId) {
-        let { data } = await api.get(endpointFee + "/1/" + formId)
+        let { data } = await api.get(endpointFee + "/3/" + formId)
         setInitialForm({
           ...initialForm,
           ...data,
-          mdr_fee: checkprocessingType(data.mdr_fee.charge_type_id),
-          mdr_fee_tax_id: data.mdr_fee.fee_tax_type_id,
-          mdr_fee_amount: data.mdr_fee.amount,
-          mdr_fee_amount_type: data.mdr_fee.charge_type_id,
-          mdr_fee_percent: data.mdr_fee.percent,
-          mdr_fee_tax_include: data.mdr_fee.is_tax_inclusive,
-          late_payment: checkprocessingType(data.late_payment.charge_type_id),
-          late_payment_tax_id: data.late_payment.fee_tax_type_id,
-          late_payment_amount: data.late_payment.amount,
-          late_payment_amount_type: data.late_payment.charge_type_id,
-          late_payment_percent: data.late_payment.percent,
-          late_payment_tax_include: data.late_payment.is_tax_inclusive,
+          domestic_reissue: checkprocessingType(
+            data.domestic_reissue.charge_type_id,
+          ),
+          domestic_reissue_fee_tax_id: data.domestic_reissue.fee_tax_type_id,
+          domestic_reissue_amount: data.domestic_reissue.amount,
+          domestic_reissue_amount_type: checkChargeType(
+            data.domestic_reissue.charge_type_id,
+          ),
+          domestic_reissue_percent: data.domestic_reissue.percent,
+          domestic_reissue_tax_include: data.domestic_reissue.is_tax_inclusive,
+          domestic_revalidate: checkprocessingType(
+            data.domestic_revalidate.charge_type_id,
+          ),
+          domestic_revalidate_fee_tax_id:
+            data.domestic_revalidate.fee_tax_type_id,
+          domestic_revalidate_amount: data.domestic_revalidate.amount,
+          domestic_revalidate_amount_type: checkChargeType(
+            data.domestic_revalidate.charge_type_id,
+          ),
+          domestic_revalidate_percent: data.domestic_revalidate.percent,
+          domestic_revalidate_tax_include:
+            data.domestic_revalidate.is_tax_inclusive,
         })
       }
     } catch (e) {
@@ -361,37 +431,54 @@ const OtherAncillaryFee = (props) => {
     }
   }, [])
 
+  const removeSeparator = (value) => {
+    value = value.toString().split(",").join("")
+    return parseInt(value)
+  }
+
   const setPayload = (values) => {
     let payloadDomestic = {
-      mdr_fee: {
+      domestic_reissue: {
         fee_tax_type_id: taxIdMDRFee,
-        amount: values.mdr_fee === "amount" ? values.mdr_fee_amount : 0,
+        amount:
+          values.domestic_reissue === "amount"
+            ? removeSeparator(values.domestic_reissue_amount)
+            : 0,
         percent:
-          values.mdr_fee === "amount" ? 0 : parseFloat(values.mdr_fee_percent),
+          values.domestic_reissue === "amount"
+            ? 0
+            : parseFloat(values.domestic_reissue_percent),
         charge_type_id:
-          values.mdr_fee === "amount"
-            ? values.mdr_fee_amount_type
+          values.domestic_reissue === "amount"
+            ? values.domestic_reissue_amount_type
             : "00000000-0000-0000-0000-000000000000",
         is_tax_inclusive:
-          values.mdr_fee === "amount" ? false : values.mdr_fee_tax_include,
+          values.domestic_reissue === "amount"
+            ? false
+            : values.domestic_reissue_tax_include,
       },
-      late_payment: {
+      domestic_revalidate: {
         fee_tax_type_id: taxIdLatePayment,
         amount:
-          values.late_payment === "amount" ? values.late_payment_amount : 0,
+          values.domestic_revalidate === "amount"
+            ? removeSeparator(values.domestic_revalidate_amount)
+            : 0,
         percent:
-          values.late_payment === "amount"
+          values.domestic_revalidate === "amount"
             ? 0
-            : parseFloat(values.late_payment_percent),
+            : parseFloat(values.domestic_revalidate_percent),
         charge_type_id:
-          values.late_payment === "amount"
-            ? values.late_payment_amount_type
+          values.domestic_revalidate === "amount"
+            ? values.domestic_revalidate_amount_type
             : "00000000-0000-0000-0000-000000000000",
         is_tax_inclusive:
-          values.late_payment === "amount"
+          values.domestic_revalidate === "amount"
             ? false
-            : values.late_payment_tax_include,
+            : values.domestic_revalidate_tax_include,
       },
+      processing_fee_category_name: values.processing_fee_category_name
+        ? values.processing_fee_category_name.value
+        : "Other Ancillary Fee",
     }
     return payloadDomestic
   }
@@ -412,6 +499,7 @@ const OtherAncillaryFee = (props) => {
     <>
       <Formik
         initialValues={initialForm}
+        validationSchema={validationSchema}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
           onSubmit(values)
         }}
@@ -429,7 +517,7 @@ const OtherAncillaryFee = (props) => {
           setFieldValue,
           setFieldTouched,
         }) => (
-          <Form onSubmit="">
+          <Form onSubmit={handleSubmit}>
             <Card>
               <Card.Body>
                 <h3 className="card-heading">Other Ancillary Fee</h3>
@@ -442,22 +530,22 @@ const OtherAncillaryFee = (props) => {
                         {
                           title: "MDR FEE",
                           taxType: taxTypeMDRFee,
-                          fieldFeeTaxId: "mdr_fee_tax_id",
-                          fieldRadio: "mdr_fee",
-                          fieldAmount: "mdr_fee_amount",
-                          fieldAmountType: "mdr_fee_amount_type",
-                          fieldPercent: "mdr_fee_percent",
-                          fieldIncludeTax: "mdr_fee_tax_include",
+                          fieldFeeTaxId: "domestic_reissue_fee_tax_id",
+                          fieldRadio: "domestic_reissue",
+                          fieldAmount: "domestic_reissue_amount",
+                          fieldAmountType: "domestic_reissue_amount_type",
+                          fieldPercent: "domestic_reissue_percent",
+                          fieldIncludeTax: "domestic_reissue_tax_include",
                         },
                         {
                           title: "Late Payment",
                           taxType: taxTypeLatePayment,
-                          fieldFeeTaxId: "late_payment_tax_id",
-                          fieldRadio: "late_payment",
-                          fieldAmount: "late_payment_amount",
-                          fieldAmountType: "late_payment_amount_type",
-                          fieldPercent: "late_payment_percent",
-                          fieldIncludeTax: "late_payment_tax_include",
+                          fieldFeeTaxId: "domestic_revalidate_fee_tax_id",
+                          fieldRadio: "domestic_revalidate",
+                          fieldAmount: "domestic_revalidate_amount",
+                          fieldAmountType: "domestic_revalidate_amount_type",
+                          fieldPercent: "domestic_revalidate_percent",
+                          fieldIncludeTax: "domestic_revalidate_tax_include",
                         },
                       ],
                     },
@@ -469,18 +557,11 @@ const OtherAncillaryFee = (props) => {
                   isView={isView}
                   amountSuffixSelections={[
                     {
-                      label: "/Ticket",
-                      value: "de62950d-fbab-4e39-bd90-c2b6687c6b36",
-                    },
-                    {
-                      label: "/Person",
-                      value: "de03bf84-4bd8-4cdf-9348-00246f04bcad",
-                    },
-                    {
                       label: "/Transaction",
                       value: "5123b121-4f6a-4871-bef1-65408d663e19",
                     },
                   ]}
+                  errors={errors}
                 />
               </Card.Body>
             </Card>

@@ -38,6 +38,11 @@ function StandartService(props) {
     setMinutes(generateNumber(59))
   }, [])
 
+  const ListItem = ({ name }) => {
+    console.log(`rendered ${name}`)
+    return <div> Name is: {name} </div>
+  }
+
   const LongList = () => {
     const [names, setNames] = useState([])
 
@@ -47,10 +52,19 @@ function StandartService(props) {
 
     return (
       <>
-        {" "}
-        {names.map((name) => (
-          <>{name}</>
-        ))}{" "}
+        <div style={{ minWidth: 65, flex: 1 }}>
+          <select
+            style={{
+              backgroundColor: "#fff",
+              borderRadius: "0.50em",
+              marginTop: "5px",
+            }}
+          >
+            {days.map((day, i) => (
+              <option key={i}>{day}</option>
+            ))}
+          </select>
+        </div>
       </>
     )
   }
@@ -94,7 +108,6 @@ function StandartService(props) {
 
   const validationSchema = Yup.object().shape({
     task_type: Yup.object().required("Task Type is required."),
-    respon_time_days: Yup.object().required("Task Type is required."),
   })
 
   const onSubmit = async (values, a) => {
@@ -104,13 +117,11 @@ function StandartService(props) {
         task_type: values.task_type,
         metrics_id: values.metrics_id
           ? values.metrics_id.value
-          : "00000000-0000-0000-0000-000000000000",
+          : "37f49bdb-40cc-4fce-8630-d92a7549998d",
         service_level_id: values.service_level_id
           ? values.service_level_id.value
           : "00000000-0000-0000-0000-000000000000",
-        task_type_id: values.task_type_id
-          ? values.task_type_id.value
-          : "00000000-0000-0000-0000-000000000000",
+
         respon_time: {
           amount: values.amount === "amount" ? values.amount : 0,
         },
@@ -128,7 +139,7 @@ function StandartService(props) {
         )
         dispatch(
           setAlert({
-            message: `Record 'Standard Service for Task Type: ${form.task_type.task_type_name}' has been successfully saved.`,
+            message: `Record 'Standard Service for Task Type: ${form.task_type_name}' has been successfully saved.`,
           }),
         )
       } else {
@@ -225,9 +236,10 @@ function StandartService(props) {
             <Form.Label column sm={3}>
               Respon Time<span className="form-label-required">*</span>
             </Form.Label>
+
             <Col sm={9}>
               <div style={{ maxWidth: 450, display: "flex" }}>
-                <div style={{ minWidth: 65, flex: 1 }}>
+                {/* <div style={{ minWidth: 65, flex: 1 }}>
                   <select
                     style={{
                       backgroundColor: "#fff",
@@ -235,15 +247,49 @@ function StandartService(props) {
                       marginTop: "5px",
                     }}
                   >
+                    <option></option>
                     {days.map((day, i) => (
-                      <option value="day" key={i}>
-                        {day}
-                      </option>
+                      <option key={i}>{day}</option>
                     ))}
                   </select>
-                </div>
+                </div> */}
+                <FastField name="respon_time">
+                  {({ field, form }) => (
+                    <div style={{ maxWidth: 200 }}>
+                      <div style={{ minWidth: 65, flex: 1 }}>
+                        <select
+                          {...field}
+                          isClearable
+                          isDisabled={isView}
+                          style={{
+                            backgroundColor: "#fff",
+                            borderRadius: "0.50em",
+                            marginTop: "5px",
+                          }}
+                          className={`react-select ${
+                            form.touched.respon_time && form.errors.respon_time
+                              ? "is-invalid"
+                              : null
+                          }`}
+                        >
+                          <option></option>
+                          {days.map((day, i) => (
+                            <option key={i}>{day}</option>
+                          ))}
+                        </select>
+                      </div>
+                      {form.touched.respon_time && form.errors.respon_time && (
+                        <Form.Control.Feedback type="invalid">
+                          {form.touched.respon_time
+                            ? form.errors.respon_time
+                            : null}
+                        </Form.Control.Feedback>
+                      )}
+                    </div>
+                  )}
+                </FastField>
                 <Form.Label column sm={2}>
-                  Day(s)
+                  Days
                 </Form.Label>
                 <div style={{ minWidth: 25, flex: 1 }}>
                   <select
@@ -259,7 +305,7 @@ function StandartService(props) {
                   </select>
                 </div>
                 <Form.Label column sm={2}>
-                  Hour(s)
+                  Hours
                 </Form.Label>
                 <div style={{ minWidth: 35, flex: 1 }}>
                   <select
@@ -275,7 +321,7 @@ function StandartService(props) {
                   </select>
                 </div>
                 <Form.Label column sm={2}>
-                  Minute(s)
+                  Minutes
                 </Form.Label>
               </div>
               {touched.title && Boolean(errors.title) && (

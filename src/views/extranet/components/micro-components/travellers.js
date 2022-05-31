@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ReactSVG } from "react-svg"
 import { Form, Popover, OverlayTrigger, Button } from 'react-bootstrap'
 import Select from 'components/form/select';
@@ -10,7 +10,6 @@ function Travellers(props) {
 
   const [travelerValue, setTravelerValue] = useState("")
   const [travelerCheckbox, setTravelerCheckbox] = useState(false)
-  const [travelerCheckboxConfirm, setTravelerCheckboxConfirm] = useState(false)
 
 
   const regex = /^[0-9\b]+$/;
@@ -232,6 +231,19 @@ function Travellers(props) {
       </Popover.Content>
     </Popover>
   )
+
+  useEffect(() => {
+    props.handleRoundtrip("adult_count", adultCount)
+  }, [adultCount])
+
+  useEffect(() => {
+    props.handleRoundtrip("children_count", childrenCount)
+  }, [childrenCount])
+
+  useEffect(() => {
+    props.handleRoundtrip("infant_count", infantCount)
+  }, [infantCount])
+  
 
   return (
     <>
