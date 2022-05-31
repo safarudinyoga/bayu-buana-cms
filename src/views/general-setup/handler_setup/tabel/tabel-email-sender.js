@@ -36,8 +36,6 @@ const EmailSenderModal = (props) => {
         agent_id: values.agent_id
           ? values.agent_id.value
           : "00000000-0000-0000-0000-000000000000",
-        from_display: "aliquip nulla",
-        from_email: "non ea deserunt Duis dolor",
         from_employee_id: values.from_employee_id
           ? values.from_employee_id.value
           : "00000000-0000-0000-0000-000000000000",
@@ -47,12 +45,12 @@ const EmailSenderModal = (props) => {
         from_user_account_id: values.from_user_account_id
           ? values.from_user_account_id.value
           : "00000000-0000-0000-0000-000000000000",
-        message_type_id: values.message_type_id
-          ? values.message_type_id.value
+        message_type_id: values.message_type
+          ? values.message_type.value
           : "00000000-0000-0000-0000-000000000000",
         message_type: values.message_type,
-        sender_name: values.sender_name,
-        sender_email: values.sender_email,
+        from_display: values.sender_name,
+        from_email: values.sender_email,
       }
 
       if (!formId) {
@@ -61,10 +59,14 @@ const EmailSenderModal = (props) => {
         console.log(res)
 
         dispatch(
+          setCreateModal({ show: false, id: null, disabled_form: false }),
+        )
+        dispatch(
           setAlert({
-            message: `Record 'Email Sender for: ${form.sender_name}' has been successfully saved.`,
+            message: `Record 'Email Sender for: ${values.sender_name}' has been successfully saved.`,
           }),
         )
+        props.onHide()
       } else {
         //proses update data
         let res = await API.put(
@@ -77,16 +79,21 @@ const EmailSenderModal = (props) => {
         )
         dispatch(
           setAlert({
-            message: `Record 'Email Sender for: ${form.sender_name}' has been successfully saved.`,
+            message: `Record 'Email Sender for: ${values.sender_name}' has been successfully saved.`,
           }),
         )
+        props.onHide()
       }
     } catch (e) {
+      dispatch(
+        setCreateModal({ show: false, id: null, disabled_form: false }),
+      )
       dispatch(
         setAlert({
           message: "Failed to save this record.",
         }),
       )
+      props.onHide()
     }
   }
   return (
@@ -179,6 +186,7 @@ const EmailSenderModal = (props) => {
                           maxLength={128}
                           {...field}
                           style={{ maxWidth: 300 }}
+                          placeholder="Sender Name"
                         />
                         {form.touched.sender_name &&
                           form.errors.sender_name && (
@@ -212,6 +220,7 @@ const EmailSenderModal = (props) => {
                           maxLength={128}
                           {...field}
                           style={{ maxWidth: 300 }}
+                          placeholder="Sender Email"
                         />
                         {form.touched.sender_email &&
                           form.errors.sender_email && (
@@ -299,7 +308,7 @@ function EmailSenderTable() {
   return (
     <>
       <Card style={{ backgroundColor: "#F8F8F8", padding: "20px" }}>
-        <Form.Label className="text-uppercase">Default Sender</Form.Label>
+        <Form.Label className="text-uppercase">Default Email Sender</Form.Label>
 
         <Form.Group as={Row} className="form-group">
           <Form.Label column xs={5} sm={5} md={3} lg={3}>
