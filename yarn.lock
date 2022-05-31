@@ -8536,22 +8536,14 @@ killable@^1.0.1:
 kind-of@^3.0.2, kind-of@^3.0.3, kind-of@^3.2.0:
   version "3.2.2"
   resolved "https://registry.yarnpkg.com/kind-of/-/kind-of-3.2.2.tgz#31ea21a734bab9bbb0f32466d893aea51e4a3c64"
-<<<<<<< HEAD
-  integrity sha1-MeohpzS6ubuw8yRm2JOupR5KPGQ=
-=======
   integrity sha512-NOW9QQXMoZGg/oqnVNoNTTIFEIid1627WCffUBJEdMxYApq7mNE7CpzucIPc+ZQg25Phej7IJSmX3hO+oblOtQ==
->>>>>>> origin/master
   dependencies:
     is-buffer "^1.1.5"
 
 kind-of@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/kind-of/-/kind-of-4.0.0.tgz#20813df3d712928b207378691a45066fae72dd57"
-<<<<<<< HEAD
-  integrity sha1-IIE989cSkosgc3hpGkUGb65y3Vc=
-=======
   integrity sha512-24XsCxmEbRwEDbz/qz3stgin8TTzZ1ESR56OMCN0ujYg+vRutNSiOj9bHH9u85DKgXguraugV5sFuvbD4FW/hw==
->>>>>>> origin/master
   dependencies:
     is-buffer "^1.1.5"
 
@@ -8583,11 +8575,7 @@ language-subtag-registry@~0.3.2:
 language-tags@^1.0.5:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/language-tags/-/language-tags-1.0.5.tgz#d321dbc4da30ba8bf3024e040fa5c14661f9193a"
-<<<<<<< HEAD
-  integrity sha1-0yHbxNowuovzAk4ED6XBRmH5GTo=
-=======
   integrity sha512-qJhlO9cGXi6hBGKoxEG/sKZDAHD5Hnu9Hs4WbOY3pCWXDhw0N8x1NenNzm2EnNLkLkk7J2SdxAkDSbb6ftT+UQ==
->>>>>>> origin/master
   dependencies:
     language-subtag-registry "~0.3.2"
 
@@ -8615,11 +8603,7 @@ levn@^0.4.1:
 levn@~0.3.0:
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/levn/-/levn-0.3.0.tgz#3b09924edf9f083c0490fdd4c0bc4421e04764ee"
-<<<<<<< HEAD
-  integrity sha1-OwmSTt+fCDwEkP3UwLxEIeBHZO4=
-=======
   integrity sha512-0OO4y2iOHix2W6ujICbKIaEQXvFQHue65vUG3pb5EUomzPI90z9hsA1VsO/dbIIpC53J8gxM9Q4Oho0jrCM/yA==
->>>>>>> origin/master
   dependencies:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
@@ -8687,11 +8671,7 @@ loader-utils@^2.0.0:
 locate-path@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/locate-path/-/locate-path-2.0.0.tgz#2b568b265eec944c6d9c0de9c3dbbbca0354cd8e"
-<<<<<<< HEAD
-  integrity sha1-K1aLJl7slExtnA3pw9u7ygNUzY4=
-=======
   integrity sha512-NCI2kiDkyR7VeEKm27Kda/iQHyKJe1Bu0FlTbYp3CqJu+9IFe9bLyAjMxf5ZDDbEg+iMPzB5zYyUTSm8wVTKmA==
->>>>>>> origin/master
   dependencies:
     p-locate "^2.0.0"
     path-exists "^3.0.0"
@@ -8719,38 +8699,22 @@ lodash-es@^4.17.21:
 lodash._reinterpolate@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/lodash._reinterpolate/-/lodash._reinterpolate-3.0.0.tgz#0ccf2d89166af03b3663c796538b75ac6e114d9d"
-<<<<<<< HEAD
-  integrity sha1-DM8tiRZq8Ds2Y8eWU4t1rG4RTZ0=
-=======
   integrity sha512-xYHt68QRoYGjeeM/XOE1uJtvXQAgvszfBhjV4yvsQH0u2i9I6cI6c6/eG4Hh3UAOVn0y/xAXwmTzEay49Q//HA==
->>>>>>> origin/master
 
 lodash.debounce@^4.0.8:
   version "4.0.8"
   resolved "https://registry.yarnpkg.com/lodash.debounce/-/lodash.debounce-4.0.8.tgz#82d79bff30a67c4005ffd5e2515300ad9ca4d7af"
-<<<<<<< HEAD
-  integrity sha1-gteb/zCmfEAF/9XiUVMArZyk168=
-=======
   integrity sha512-FT1yDzDYEoYWhnSGnpE/4Kj1fLZkDFyqRb7fNt6FdYOSxlUWAtp42Eh6Wb0rGIv/m9Bgo7x4GhQbm5Ys4SG5ow==
->>>>>>> origin/master
 
 lodash.isequal@^4.5.0:
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/lodash.isequal/-/lodash.isequal-4.5.0.tgz#415c4478f2bcc30120c22ce10ed3226f7d3e18e0"
-<<<<<<< HEAD
-  integrity sha1-QVxEePK8wwEgwizhDtMib30+GOA=
-=======
   integrity sha512-pDo3lu8Jhfjqls6GkMgpahsF9kCyayhgykjyLMNFTKWrpVdAQtYyB4muAMWozBB4ig/dtWAmsMxLEI8wuz+DYQ==
->>>>>>> origin/master
 
 lodash.memoize@^4.1.2:
   version "4.1.2"
   resolved "https://registry.yarnpkg.com/lodash.memoize/-/lodash.memoize-4.1.2.tgz#bcc6c49a42a2840ed997f323eada5ecd182e0bfe"
-<<<<<<< HEAD
-  integrity sha1-vMbEmkKihA7Zl/Mj6tpezRguC/4=
-=======
   integrity sha512-t7j+NzmgnQzTAYXcsHYLgimltOV1MXHtlOWf6GjL9Kj8GK5FInw5JotxvbOs+IvV1/Dzo04/fCGfLVs7aXb4Ag==
->>>>>>> origin/master
 
 lodash.merge@^4.6.2:
   version "4.6.2"
@@ -8760,11 +8724,7 @@ lodash.merge@^4.6.2:
 lodash.sortby@^4.7.0:
   version "4.7.0"
   resolved "https://registry.yarnpkg.com/lodash.sortby/-/lodash.sortby-4.7.0.tgz#edd14c824e2cc9c1e0b0a1b42bb5210516a42438"
-<<<<<<< HEAD
-  integrity sha1-7dFMgk4sycHgsKG0K7UhBRakJDg=
-=======
   integrity sha512-HDWXG8isMntAyRF5vZ7xKuEvOhT4AhlRt/3czTSjvGUxjYCBVRQY48ViDHyfYz9VIoBkW4TMGQNapx+l3RUwdA==
->>>>>>> origin/master
 
 lodash.template@^4.5.0:
   version "4.5.0"
