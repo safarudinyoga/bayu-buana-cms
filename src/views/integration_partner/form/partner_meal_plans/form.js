@@ -92,8 +92,6 @@ Yup.addMethod(Yup.string, 'uniqueValueString', function (fieldName, message) {
           },
           meal_plan_type_code: res.data.meal_plan_type_code ? res.data.meal_plan_type_code : "",
           meal_plan_type_name: res.data.meal_plan_type_name ? res.data.meal_plan_type_name : "",
-          latitude: res.data.latitude ? res.data.latitude : "",
-          longitude: res.data.longitude ? res.data.longitude : "",
         })
       } catch (e) {
         console.log(e)
@@ -107,8 +105,6 @@ Yup.addMethod(Yup.string, 'uniqueValueString', function (fieldName, message) {
       meal_plan_type_name: values.meal_plan_type_name,
       meal_plan_type_id: values.meal_plan_type_id.value,
       integration_partner_id: id,
-      latitude: values.latitude == "" ? 0.0 : parseFloat(values.latitude),
-      longitude: values.longitude == "" ? 0.0 : parseFloat(values.longitude)
     }
 
     try {
