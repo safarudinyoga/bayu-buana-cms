@@ -14,29 +14,34 @@ const EmailReceiptModal = (props) => {
   const API = new Api()
   const dispatch = useDispatch()
   const [inputFields, setInputFields] = useState([{ name: "", email: "" }])
-  const handleFormChange = (index, event) => {
+
+  const [bankName] = useState([
+    { bankName: "", accountName: "", errorMessage: [] },
+  ])
+  const handleFormChange = (index, event, setFieldValue) => {
     let data = [...inputFields]
     data[index][event.target.name] = event.target.value
+    setFieldValue(data[index][event.target.name], event.target.value)
     setInputFields(data)
   }
   const initialValues = {
     message_type: "",
-    recipient_email: "",
     recipient_name: "",
+    recipient_email: "",
   }
   const addFields = () => {
     let newfield = { name: "", email: "" }
-
     setInputFields([...inputFields, newfield])
   }
   const validationSchema = Yup.object().shape({
-    message_type: Yup.object().required("Task Type is required."),
-    recipient_name: Yup.string().max(256).required("Sender Name is required"),
+    message_type: Yup.object().required("Message Type is required."),
+    recipient_name: Yup.string().max(256).required("Recipient Name is required"),
     recipient_email: Yup.string()
       .max(256)
-      .email("Sender Email is not valid")
-      .required("Sender Email is required."),
+      .email("Recipient Email is not valid")
+      .required("Recipient Email is required."),
   })
+
   const onSubmit = async (values, a) => {
     try {
       let formId = props.id
@@ -44,8 +49,6 @@ const EmailReceiptModal = (props) => {
         agent_id: values.agent_id
           ? values.agent_id.value
           : "00000000-0000-0000-0000-000000000000",
-        from_display: "aliquip nulla",
-        from_email: "non ea deserunt Duis dolor",
         from_employee_id: values.from_employee_id
           ? values.from_employee_id.value
           : "00000000-0000-0000-0000-000000000000",
@@ -55,28 +58,32 @@ const EmailReceiptModal = (props) => {
         from_user_account_id: values.from_user_account_id
           ? values.from_user_account_id.value
           : "00000000-0000-0000-0000-000000000000",
-        message_type_id: values.message_type_id
-          ? values.message_type_id.value
+        message_type_id: values.message_type
+          ? values.message_type.value
           : "00000000-0000-0000-0000-000000000000",
         message_type: values.message_type,
-        recipient_name: values.sender_name,
-        recipient_email: values.sender_email,
+        from_display: values.recipient_name,
+        from_email: values.recipient_email,
       }
 
       if (!formId) {
         //Proses Create Data
-        let res = await API.post(`/master/configurations/email-senders`, form)
+        let res = await API.post(`/master/configurations/email-recipients`, form)
         console.log(res)
 
         dispatch(
+          setCreateModal({ show: false, id: null, disabled_form: false }),
+        )
+        dispatch(
           setAlert({
-            message: `Record 'Email Sender for: ${form.sender_name}' has been successfully saved.`,
+            message: `Record 'Email Recipient for: ${values.recipient_name}' has been successfully saved.`,
           }),
         )
+        props.onHide()
       } else {
         //proses update data
         let res = await API.put(
-          `/master/configurations/email-senders/${formId}`,
+          `/master/configurations/email-recipients/${formId}`,
           form,
         )
         console.log(res)
@@ -85,16 +92,21 @@ const EmailReceiptModal = (props) => {
         )
         dispatch(
           setAlert({
-            message: `Record 'Email Sender for: ${form.sender_name}' has been successfully saved.`,
+            message: `Record 'Email Recipient for: ${values.recipient_name}' has been successfully saved.`,
           }),
         )
+        props.onHide()
       }
     } catch (e) {
+      dispatch(
+        setCreateModal({ show: false, id: null, disabled_form: false }),
+      )
       dispatch(
         setAlert({
           message: "Failed to save this record.",
         }),
       )
+      props.onHide()
     }
   }
   return (
@@ -130,6 +142,7 @@ const EmailReceiptModal = (props) => {
             isValid,
             setFieldValue,
             setFieldTouched,
+            register,
           }) => (
             <Form onSubmit={handleSubmit} className="ml-2">
               <Form.Group as={Row} className="form-group">
@@ -170,10 +183,7 @@ const EmailReceiptModal = (props) => {
                 </Col>
               </Form.Group>
 
-              {inputFields.map((input, index) => {
-                return (
-                  <div key={index}>
-                    <Form.Group as={Row} className="form-group">
+              <Form.Group as={Row} className="form-group">
                       <Form.Label column md={3} lg={4}>
                         Recipient
                         <span className="form-label-required">*</span>
@@ -192,11 +202,7 @@ const EmailReceiptModal = (props) => {
                                 maxLength={128}
                                 {...field}
                                 style={{ maxWidth: 300 }}
-                                onChange={(event) =>
-                                  handleFormChange(index, event)
-                                }
                                 placeholder="Recipient Name"
-                                value={input.name}
                               />
                               {form.touched.recipient_name &&
                                 form.errors.recipient_name && (
@@ -225,10 +231,6 @@ const EmailReceiptModal = (props) => {
                                 maxLength={128}
                                 {...field}
                                 style={{ maxWidth: 300 }}
-                                onChange={(event) =>
-                                  handleFormChange(index, event)
-                                }
-                                value={input.recipient_email}
                               />
                               {form.touched.recipient_email &&
                                 form.errors.recipient_email && (
@@ -243,16 +245,7 @@ const EmailReceiptModal = (props) => {
                         </FastField>
                       </Col>
                     </Form.Group>
-                  </div>
-                )
-              })}
-              <button
-                onClick={addFields}
-                className="float-right "
-                style={{ color: "#1103C4" }}
-              >
-                Add another recipient
-              </button>
+
               {!props.hideButton && (
                 <div
                   style={{
@@ -277,6 +270,13 @@ const EmailReceiptModal = (props) => {
             </Form>
           )}
         </Formik>
+        <button
+          onClick={addFields}
+          className="float-right "
+          style={{ color: "#1103C4" }}
+        >
+          Add another recipient
+        </button>
       </Modal.Body>
     </Modal>
   )
@@ -294,11 +294,11 @@ export default function EmailReceiptTable() {
     isHideDownloadLogo: true,
     title: "Handler Setup",
     titleModal: "Handler Setup",
-    baseRoute: "/master/configurations/email-senders/form",
-    endpoint: "/master/configurations/email-senders",
-    deleteEndpoint: "/master/batch-actions/delete/configurations/email-senders",
+    baseRoute: "/master/configurations/email-recipients/form",
+    endpoint: "/master/configurations/email-recipients",
+    deleteEndpoint: "/master/batch-actions/delete/configurations/email-recipients",
     activationEndpoint:
-      "/master/batch-actions/activate/configurations/email-senders",
+      "/master/batch-actions/activate/configurations/email-recipients",
     deactivationEndpoint:
       "/master/batch-actions/deactivate/currency-conversions",
     columns: [
@@ -312,18 +312,18 @@ export default function EmailReceiptTable() {
       },
     ],
     emptyTable: "No Email Recipient found",
-    recordName: ["from_currency.currency_code", "to_currency.currency_code"],
+    recordName: ["message_type_name"],
     btnDownload: ".buttons-csv",
     module: "handler-setup",
   }
   return (
     <>
       <Card style={{ backgroundColor: "#F8F8F8", padding: "20px" }}>
-        <Form.Label className="text-uppercase">Default Sender</Form.Label>
+        <Form.Label className="text-uppercase">Default Email Recipient</Form.Label>
 
         <Form.Group as={Row} className="form-group">
           <Form.Label column xs={5} sm={5} md={3} lg={3}>
-            Sender Name
+            Recipient Name
           </Form.Label>
           <Col xs={7} sm={7} md={9} lg={9}>
             <Form.Control
@@ -336,7 +336,7 @@ export default function EmailReceiptTable() {
         </Form.Group>
         <Form.Group as={Row} className="form-group">
           <Form.Label column xs={5} sm={5} md={3} lg={3}>
-            Sender Email
+            Recipient Email
           </Form.Label>
           <Col xs={7} sm={7} md={9} lg={9}>
             <Form.Control

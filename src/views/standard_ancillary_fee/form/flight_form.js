@@ -423,6 +423,7 @@ const FlightForm = (props) => {
   })
 
   const checkprocessingType = (value) => value !== "00000000-0000-0000-0000-000000000000" ? "amount" : "percent"
+  const checkChargeType = value => value === "00000000-0000-0000-0000-000000000000" ? "" : value
 
   useEffect(async() => {
     try {
@@ -434,79 +435,79 @@ const FlightForm = (props) => {
           domestic_reissue: checkprocessingType(data.domestic_reissue.charge_type_id),
           domestic_reissue_fee_tax_id: data.domestic_reissue.fee_tax_type_id,
           domestic_reissue_amount: data.domestic_reissue.amount,
-          domestic_reissue_amount_type: data.domestic_reissue.charge_type_id,
+          domestic_reissue_amount_type: checkChargeType(data.domestic_reissue.charge_type_id),
           domestic_reissue_percent: data.domestic_reissue.percent,
           domestic_reissue_tax_include: data.domestic_reissue.is_tax_inclusive,
           domestic_revalidate: checkprocessingType(data.domestic_revalidate.charge_type_id),
           domestic_revalidate_fee_tax_id: data.domestic_revalidate.fee_tax_type_id,
           domestic_revalidate_amount: data.domestic_revalidate.amount,
-          domestic_revalidate_amount_type: data.domestic_revalidate.charge_type_id,
+          domestic_revalidate_amount_type: checkChargeType(data.domestic_revalidate.charge_type_id),
           domestic_revalidate_percent: data.domestic_revalidate.percent,
           domestic_revalidate_tax_include: data.domestic_revalidate.is_tax_inclusive,
           domestic_refund: checkprocessingType(data.domestic_refund.charge_type_id),
           domestic_refund_fee_tax_id: data.domestic_refund.fee_tax_type_id,
           domestic_refund_amount: data.domestic_refund.amount,
-          domestic_refund_amount_type: data.domestic_refund.charge_type_id,
+          domestic_refund_amount_type: checkChargeType(data.domestic_refund.charge_type_id),
           domestic_refund_percent: data.domestic_refund.percent,
           domestic_refund_tax_include: data.domestic_refund.is_tax_inclusive,
           domestic_void: checkprocessingType(data.domestic_void.charge_type_id),
           domestic_void_fee_tax_id: data.domestic_void.fee_tax_type_id,
           domestic_void_amount: data.domestic_void.amount,
-          domestic_void_amount_type: data.domestic_void.charge_type_id,
+          domestic_void_amount_type: checkChargeType(data.domestic_void.charge_type_id),
           domestic_void_percent: data.domestic_void.percent,
           domestic_void_tax_include: data.domestic_void.is_tax_inclusive,
           domestic_frp: checkprocessingType(data.domestic_frp.charge_type_id),
           domestic_frp_fee_tax_id: data.domestic_frp.fee_tax_type_id,
           domestic_frp_amount: data.domestic_frp.amount,
-          domestic_frp_amount_type: data.domestic_frp.charge_type_id,
+          domestic_frp_amount_type: checkChargeType(data.domestic_frp.charge_type_id),
           domestic_frp_percent: data.domestic_frp.percent,
           domestic_frp_tax_include: data.domestic_frp.is_tax_inclusive,
           domestic_non_gds: checkprocessingType(data.domestic_non_gds.charge_type_id),
           domestic_non_gds_fee_tax_id: data.domestic_non_gds.fee_tax_type_id,
           domestic_non_gds_amount: data.domestic_non_gds.amount,
-          domestic_non_gds_amount_type: data.domestic_non_gds.charge_type_id,
+          domestic_non_gds_amount_type: checkChargeType(data.domestic_non_gds.charge_type_id),
           domestic_non_gds_percent: data.domestic_non_gds.percent,
           domestic_non_gds_tax_include: data.domestic_non_gds.is_tax_inclusive,
           international_reissue: checkprocessingType(data.international_reissue.charge_type_id),
           international_reissue_fee_tax_id: data.international_reissue.fee_tax_type_id,
           international_reissue_amount: data.international_reissue.amount,
-          international_reissue_amount_type: data.international_reissue.charge_type_id,
+          international_reissue_amount_type: checkChargeType(data.international_reissue.charge_type_id),
           international_reissue_percent: data.international_reissue.percent,
           international_reissue_tax_include: data.international_reissue.is_tax_inclusive,
           international_revalidate: checkprocessingType(data.international_revalidate.charge_type_id),
           international_revalidate_fee_tax_id: data.international_revalidate.fee_tax_type_id,
           international_revalidate_amount: data.international_revalidate.amount,
-          international_revalidate_amount_type: data.international_revalidate.charge_type_id,
+          international_revalidate_amount_type: checkChargeType(data.international_revalidate.charge_type_id),
           international_revalidate_percent: data.international_revalidate.percent,
           international_revalidate_tax_include: data.international_revalidate.is_tax_inclusive,
           international_refund: checkprocessingType(data.international_refund.charge_type_id),
           international_refund_fee_tax_id: data.international_refund.fee_tax_type_id,
           international_refund_amount: data.international_refund.amount,
-          international_refund_amount_type: data.international_refund.charge_type_id,
+          international_refund_amount_type: checkChargeType(data.international_refund.charge_type_id),
           international_refund_percent: data.international_refund.percent,
           international_refund_tax_include: data.international_refund.is_tax_inclusive,
           international_void: checkprocessingType(data.international_void.charge_type_id),
           international_void_fee_tax_id: data.international_void.fee_tax_type_id,
           international_void_amount: data.international_void.amount,
-          international_void_amount_type: data.international_void.charge_type_id,
+          international_void_amount_type: checkChargeType(data.international_void.charge_type_id),
           international_void_percent: data.international_void.percent,
           international_void_tax_include: data.international_void.is_tax_inclusive,
           international_frp: checkprocessingType(data.international_frp.charge_type_id),
           international_frp_fee_tax_id: data.international_frp.fee_tax_type_id,
           international_frp_amount: data.international_frp.amount,
-          international_frp_amount_type: data.international_frp.charge_type_id,
+          international_frp_amount_type: checkChargeType(data.international_frp.charge_type_id),
           international_frp_percent: data.international_frp.percent,
           international_frp_tax_include: data.international_frp.is_tax_inclusive,
           international_non_gds: checkprocessingType(data.international_non_gds.charge_type_id),
           international_non_gds_fee_tax_id: data.international_non_gds.fee_tax_type_id,
           international_non_gds_amount: data.international_non_gds.amount,
-          international_non_gds_amount_type: data.international_non_gds.charge_type_id,
+          international_non_gds_amount_type: checkChargeType(data.international_non_gds.charge_type_id),
           international_non_gds_percent: data.international_non_gds.percent,
           international_non_gds_tax_include: data.international_non_gds.is_tax_inclusive,
           other_emergency: checkprocessingType(data.other_emergency_service.charge_type_id),
           other_emergency_fee_tax_id: data.other_emergency_service.fee_tax_type_id,
           other_emergency_amount: data.other_emergency_service.amount,
-          other_emergency_amount_type: data.other_emergency_service.charge_type_id,
+          other_emergency_amount_type: checkChargeType(data.other_emergency_service.charge_type_id),
           other_emergency_percent: data.other_emergency_service.percent,
           other_emergency_tax_include: data.other_emergency_service.is_tax_inclusive
         })
@@ -514,13 +515,18 @@ const FlightForm = (props) => {
     } catch (e) { console.log(e) }
   }, [])
 
+  const removeSeparator = (value) => {
+    value = value.toString().split(",").join("")
+    return parseInt(value)
+  }
+
   const setPayload = (values) => {
     let payloadDomestic = {
       description: values.description,
       processing_fee_category_name: values.processing_fee_category_name,
       domestic_reissue: {
         fee_tax_type_id: taxIdDomesticReissue,
-        amount: values.domestic_reissue == "amount" ? values.domestic_reissue_amount : 0,
+        amount: values.domestic_reissue == "amount" ? removeSeparator(values.domestic_reissue_amount) : 0,
         percent:values.domestic_reissue == "amount" ? 0 : parseFloat(values.domestic_reissue_percent),
         charge_type_id:values.domestic_reissue == "amount" ? values.domestic_reissue_amount_type : "00000000-0000-0000-0000-000000000000",
         is_tax_inclusive:values.domestic_reissue == "amount" ? false : values.domestic_reissue_tax_include,
@@ -528,7 +534,7 @@ const FlightForm = (props) => {
       },
       domestic_revalidate: {
         fee_tax_type_id: taxIdDomesticRevalidate,
-        amount: values.domestic_revalidate == "amount" ? values.domestic_revalidate_amount : 0,
+        amount: values.domestic_revalidate == "amount" ? removeSeparator(values.domestic_revalidate_amount) : 0,
         percent:values.domestic_revalidate == "amount" ? 0 : parseFloat(values.domestic_revalidate_percent),
         charge_type_id:values.domestic_revalidate == "amount" ? values.domestic_revalidate_amount_type : "00000000-0000-0000-0000-000000000000",
         is_tax_inclusive:values.domestic_revalidate == "amount" ? false : values.domestic_revalidate_tax_include,
@@ -536,7 +542,7 @@ const FlightForm = (props) => {
       },
       domestic_refund: {
         fee_tax_type_id: taxIdDomesticRefund,
-        amount: values.domestic_refund == "amount" ? values.domestic_refund_amount : 0,
+        amount: values.domestic_refund == "amount" ? removeSeparator(values.domestic_refund_amount) : 0,
         percent:values.domestic_refund == "amount" ? 0 : parseFloat(values.domestic_refund_percent),
         charge_type_id:values.domestic_refund == "amount" ? values.domestic_refund_amount_type : "00000000-0000-0000-0000-000000000000",
         is_tax_inclusive:values.domestic_refund == "amount" ? false : values.domestic_refund_tax_include,
@@ -544,7 +550,7 @@ const FlightForm = (props) => {
       },
       domestic_void: {
         fee_tax_type_id: taxIdDomesticVoid,
-        amount: values.domestic_void == "amount" ? values.domestic_void_amount : 0,
+        amount: values.domestic_void == "amount" ? removeSeparator(values.domestic_void_amount) : 0,
         percent:values.domestic_void == "amount" ? 0 : parseFloat(values.domestic_void_percent),
         charge_type_id:values.domestic_void == "amount" ? values.domestic_void_amount_type : "00000000-0000-0000-0000-000000000000",
         is_tax_inclusive:values.domestic_void == "amount" ? false : values.domestic_void_tax_include,
@@ -552,7 +558,7 @@ const FlightForm = (props) => {
       },
       domestic_frp: {
         fee_tax_type_id: taxIdDomesticRfp,
-        amount: values.domestic_frp == "amount" ? values.domestic_frp_amount : 0,
+        amount: values.domestic_frp == "amount" ? removeSeparator(values.domestic_frp_amount) : 0,
         percent:values.domestic_frp == "amount" ? 0 : parseFloat(values.domestic_frp_percent),
         charge_type_id:values.domestic_frp == "amount" ? values.domestic_frp_amount_type : "00000000-0000-0000-0000-000000000000",
         is_tax_inclusive:values.domestic_frp == "amount" ? false : values.domestic_frp_tax_include,
@@ -560,7 +566,7 @@ const FlightForm = (props) => {
       },
       domestic_non_gds: {
         fee_tax_type_id: taxIdDomesticNonGds,
-        amount: values.domestic_non_gds == "amount" ? values.domestic_non_gds_amount : 0,
+        amount: values.domestic_non_gds == "amount" ? removeSeparator(values.domestic_non_gds_amount) : 0,
         percent:values.domestic_non_gds == "amount" ? 0 : parseFloat(values.domestic_non_gds_percent),
         charge_type_id:values.domestic_non_gds == "amount" ? values.domestic_non_gds_amount_type : "00000000-0000-0000-0000-000000000000",
         is_tax_inclusive:values.domestic_non_gds == "amount" ? false : values.domestic_non_gds_tax_include,
@@ -568,7 +574,7 @@ const FlightForm = (props) => {
       },
       international_reissue: {
         fee_tax_type_id: taxIdInternationalReissue,
-        amount: values.international_reissue == "amount" ? values.international_reissue_amount : 0,
+        amount: values.international_reissue == "amount" ? removeSeparator(values.international_reissue_amount) : 0,
         percent:values.international_reissue == "amount" ? 0 : parseFloat(values.international_reissue_percent),
         charge_type_id:values.international_reissue == "amount" ? values.international_reissue_amount_type : "00000000-0000-0000-0000-000000000000",
         is_tax_inclusive:values.international_reissue == "amount" ? false : values.international_reissue_tax_include,
@@ -576,7 +582,7 @@ const FlightForm = (props) => {
       },
       international_revalidate: {
         fee_tax_type_id: taxIdInternationalRevalidate,
-        amount: values.international_revalidate == "amount" ? values.international_revalidate_amount : 0,
+        amount: values.international_revalidate == "amount" ? removeSeparator(values.international_revalidate_amount) : 0,
         percent:values.international_revalidate == "amount" ? 0 : parseFloat(values.international_revalidate_percent),
         charge_type_id:values.international_revalidate == "amount" ? values.international_revalidate_amount_type : "00000000-0000-0000-0000-000000000000",
         is_tax_inclusive:values.international_revalidate == "amount" ? false : values.international_revalidate_tax_include,
@@ -584,7 +590,7 @@ const FlightForm = (props) => {
       },
       international_refund: {
         fee_tax_type_id: taxIdInternationalRefund,
-        amount: values.international_refund == "amount" ? values.international_refund_amount : 0,
+        amount: values.international_refund == "amount" ? removeSeparator(values.international_refund_amount) : 0,
         percent:values.international_refund == "amount" ? 0 : parseFloat(values.international_refund_percent),
         charge_type_id:values.international_refund == "amount" ? values.international_refund_amount_type : "00000000-0000-0000-0000-000000000000",
         is_tax_inclusive:values.international_refund == "amount" ? false : values.international_refund_tax_include,
@@ -592,7 +598,7 @@ const FlightForm = (props) => {
       },
       international_void: {
         fee_tax_type_id: taxIdInternationalVoid,
-        amount: values.international_void == "amount" ? values.international_void_amount : 0,
+        amount: values.international_void == "amount" ? removeSeparator(values.international_void_amount) : 0,
         percent:values.international_void == "amount" ? 0 : parseFloat(values.international_void_percent),
         charge_type_id:values.international_void == "amount" ? values.international_void_amount_type : "00000000-0000-0000-0000-000000000000",
         is_tax_inclusive:values.international_void == "amount" ? false : values.international_void_tax_include,
@@ -600,7 +606,7 @@ const FlightForm = (props) => {
       },
       international_frp: {
         fee_tax_type_id: taxIdInternationalRfp,
-        amount: values.international_frp == "amount" ? values.international_frp_amount : 0,
+        amount: values.international_frp == "amount" ? removeSeparator(values.international_frp_amount) : 0,
         percent:values.international_frp == "amount" ? 0 : parseFloat(values.international_frp_percent),
         charge_type_id:values.international_frp == "amount" ? values.international_frp_amount_type : "00000000-0000-0000-0000-000000000000",
         is_tax_inclusive:values.international_frp == "amount" ? false : values.international_frp_tax_include,
@@ -608,7 +614,7 @@ const FlightForm = (props) => {
       },
       international_non_gds: {
         fee_tax_type_id: taxIdInternationalNonGds,
-        amount: values.international_non_gds == "amount" ? values.international_non_gds_amount : 0,
+        amount: values.international_non_gds == "amount" ? removeSeparator(values.international_non_gds_amount) : 0,
         percent:values.international_non_gds == "amount" ? 0 : parseFloat(values.international_non_gds_percent),
         charge_type_id:values.international_non_gds == "amount" ? values.international_non_gds_amount_type : "00000000-0000-0000-0000-000000000000",
         is_tax_inclusive:values.international_non_gds == "amount" ? false : values.international_non_gds_tax_include,
@@ -616,7 +622,7 @@ const FlightForm = (props) => {
       },
       other_emergency_service: {
         fee_tax_type_id: taxIdOtherEmergency,
-        amount: values.other_emergency == "amount" ? values.other_emergency_amount : 0,
+        amount: values.other_emergency == "amount" ? removeSeparator(values.other_emergency_amount) : 0,
         percent:values.other_emergency == "amount" ? 0 : parseFloat(values.other_emergency_percent),
         charge_type_id:values.other_emergency == "amount" ? values.other_emergency_amount_type : "00000000-0000-0000-0000-000000000000",
         is_tax_inclusive:values.other_emergency == "amount" ? false : values.other_emergency_tax_include,

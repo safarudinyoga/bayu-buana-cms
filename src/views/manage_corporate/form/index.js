@@ -29,7 +29,8 @@ const ManageCorporateForm = ({ match }) => {
   let dispatch = useDispatch()
   const isView = useQuery().get("action") === "view"
 
-  const [tabKey, setTabKey] = useState("general-information")
+  // const [tabKey, setTabKey] = useState("general-information")
+  const [tabKey, setTabKey] = useState("service-fee")
 
   const wardingGenerator = (formId) => {
     if (!formId) {

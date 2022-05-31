@@ -3,6 +3,8 @@ import React, { useState } from 'react'
 import Form from "./form";
 import { Card } from "react-bootstrap"
 import { useParams } from "react-router-dom";
+import FormDelete from "./form-delete"
+
 export default function IntegrationFeeTaxes() {
 
   const { id } = useParams()
@@ -13,6 +15,7 @@ export default function IntegrationFeeTaxes() {
     isCheckbox: false,
     title: "",
     titleModal: "",
+    modalDelete: true,
     baseRoute: `/master/integration-partners/${id}/fee-taxes`,
     endpoint: `/master/integration-partners/${id}/fee-taxes`,
     deleteEndpoint: "/master/batch-actions/delete/fee-tax-types",
@@ -44,7 +47,7 @@ export default function IntegrationFeeTaxes() {
     <Card>
       <Card.Body>
         <h3 className="card-heading">Partner Fee Taxes</h3>
-        <BBDataTable {...params} modalContent={Form} />
+        <BBDataTable {...params} modalContent={Form} modalDeleteContent={FormDelete} />
       </Card.Body>
     </Card>
   )

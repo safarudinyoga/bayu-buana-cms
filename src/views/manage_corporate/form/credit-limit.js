@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { Form, Row, Col, Card, Button, Tabs, TabPane, Modal, ModalBody, } from "react-bootstrap"
+import { Form, Row, Col, Card, Button, Tabs, TabPane, Modal, ModalBody } from "react-bootstrap"
 import { useFormik } from "formik"
 import * as Yup from "yup"
 

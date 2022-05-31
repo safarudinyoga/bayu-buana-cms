@@ -83,12 +83,18 @@ const FeeSection = (props) => {
                           <NumberFormat
                             {...field} 
                             className="form-control"
-                            maxLength={15}
+                            maxLength={19}
                             thousandsGroupStyle="thousand"
                             displayType="input"
                             type="text"
                             thousandSeparator={true}
-                            allowNegative={true} />
+                            allowNegative={true}
+                            // onChange={(values) => {
+                              // const { value } = values;
+                              // props.setFieldValue(props.fieldAmount, value)
+                              // console.log(props.fieldAmount, values.target.value)
+                            // }}
+                          />
                         )}
                       </FastField>
                       }
@@ -98,7 +104,8 @@ const FeeSection = (props) => {
               <Col sm={12} md={6}>
                 <Form.Group className="mb-3">
                   {
-                    props.amountSuffixSelections.map(suffix => <AmountRadioSelections 
+                    props.amountSuffixSelections.map((suffix, i) => <AmountRadioSelections 
+                      key={i}
                       {...props}
                       disabledAmount={disabledAmount}
                       value={suffix.value}
