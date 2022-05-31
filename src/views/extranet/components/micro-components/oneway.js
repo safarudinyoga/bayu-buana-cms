@@ -6,7 +6,7 @@ import Travellers from './travellers';
 import Routes from './routes';
 
 const Oneway = (props) => {
-  const { airports, multitrip, handleRemoveTrip, id, counter } = props
+  const { airports, multitrip, handleRemoveTrip, id, counter, handleTrip } = props
 
   const [departTime, setDepartTime] = useState(new Date())
 
@@ -65,7 +65,7 @@ const Oneway = (props) => {
               Remove
             </div>
           ) : (
-            <Travellers onConfirm={handleTravellerCheckboxConfirm} />
+            <Travellers handleTrip={handleTrip} onConfirm={handleTravellerCheckboxConfirm} />
           )
         }
         
