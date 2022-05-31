@@ -1,18 +1,20 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect } from "react"
 import BBDataTable from "components/table/bb-data-table"
+import { Card } from "react-bootstrap"
 import rowStatus from "lib/row-status"
 import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
+import Form from "./form/identity-rule"
 
-export default function UserAccessTypeTable() {
+const UserAccessType = () => {
   let dispatch = useDispatch()
   useEffect(() => {
     dispatch(
       setUIParams({
-        title: "User Access Type 123",
+        title: "User Access Type",
         breadcrumbs: [
           {
-            text: "User & Access Management",
+            text: "User & Access Management123",
           },
           {
             text: "User Access Type",
@@ -22,7 +24,7 @@ export default function UserAccessTypeTable() {
     )
   }, [])
 
-  let [params, setParams] = useState({
+  let [params] = {
     isCheckbox: false,
     title: "User Access Type",
     titleModal: "User Access Type",
@@ -42,11 +44,11 @@ export default function UserAccessTypeTable() {
         data: "user_type_name",
       },
       {
-        title: "Number of assigned modules",
+        title: "Number of assigned modules345",
         data: "user_type_name",
       },
       {
-        title: "Number of assigned users123",
+        title: "Number of assigned users",
         data: "user_type_name",
       },
       {
@@ -56,9 +58,9 @@ export default function UserAccessTypeTable() {
         render: rowStatus,
       },
     ],
-    emptyTable: "No usexr access type found",
+    emptyTable: "No user access type found",
     recordName: ["user_type_code", "user_type_name"],
-    // switchStatus: false,
+    switchStatus: true,
     customFilterStatus: {
       value: "",
       options: [
@@ -66,8 +68,17 @@ export default function UserAccessTypeTable() {
         { value: "3", label: "Inactive" },
       ],
     },
-  })
+  }
 
 
-  return <BBDataTable {...params} />
+  return  (
+    <Card style={{marginBottom: 0}}>
+    <Card.Body className="px-1 px-md-4">
+      <h3 className="card-heading">Identity Rule</h3>
+      <BBDataTable {...params} modalContent={Form} modalSize="lg"  />
+    </Card.Body>
+  </Card>
+  )
 }
+
+export default UserAccessType
