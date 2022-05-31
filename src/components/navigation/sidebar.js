@@ -117,24 +117,7 @@ class Sidebar extends Component {
             >
               {
                 menu.map((m, k) => <ParentMenu key={k} menu={m} currentMenu={currentMenu} menuHandler={this.onClickMenu} />)
-              }
-              <li className="nav-item parent-menu" id="dsa3dd3">
-                <Link to="#" className="nav-link">
-                  <img src="/img/icons/exchange-rate.svg" alt="icon users" />
-                  <p>
-                    Corporate Management
-                    <i className="right fas fa-angle-right"></i>
-                  </p>
-                </Link>
-                <ul className="nav nav-treeview">
-                  <li className="nav-item">
-                    <Link to="/master/manage-corporate" className="nav-link">
-                      <p>Manage Corporate</p>
-                    </Link>
-                  </li>
-                </ul>
-              </li>
-              
+              }              
               {/* <li className="nav-item parent-menu">
                 <Link to="#" className="nav-link">
                   <img src="/img/icons/home.svg" alt="icon users" />
