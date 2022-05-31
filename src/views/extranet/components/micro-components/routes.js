@@ -59,7 +59,7 @@ function Routes(props) {
             }}
             onSuggestionSelected={(_, { suggestion, suggestionValue }) => {
               console.log("Selected",suggestion)
-              props.handleRoundtrip("departure_data", suggestion)
+              props.handleTrip("departure_data", suggestion)
             }
               
             }
@@ -88,7 +88,7 @@ function Routes(props) {
             }}
             onSuggestionSelected={(_, { suggestion, suggestionValue }) => {
               console.log("Return Selected: ",suggestion)
-              props.handleRoundtrip("arrival_data", suggestion)
+              props.handleTrip("arrival_data", suggestion)
             }
               
             }
