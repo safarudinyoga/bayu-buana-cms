@@ -7,13 +7,15 @@ import Roundtrip from './micro-components/roundtrip';
 import Oneway from './micro-components/oneway';
 import FlightPref from './micro-components/flight_pref';
 import MultiTrip from './micro-components/multi_trip';
-
+import Api from "config/api"
 
 
 const FlightBook = (props) => {
+  let api = new Api()
+
   const history = useHistory()
   const [flightType, setFlightType] = useState("roundtrip")
-  const [roundtripData, setRoundtripData] = useState({
+  const [tripData, setTripData] = useState({
     trip_type_code: "roundtrip"
   })
   const [onewayData, setOnewayData] = useState({
@@ -56,20 +58,56 @@ const FlightBook = (props) => {
     },
   ]
 
-  const handleSearch = () => {
+  const handleSearch = async () => {
+    let formatted = {
+      is_personal_trip: props.personalTrip,
+      trip_type_code: tripData.trip_type_code,
+      flights: [
+        {
+          departure_city_code: tripData.departure_data.city_code ? tripData.departure_data.city_code : tripData.departure_data.code,
+          departure_airport_code: tripData.departure_data.code,
+          arrival_city_code: tripData.arrival_data.city_code ? tripData.arrival_data.city_code : tripData.arrival_data.code,
+          arrival_airport_code: tripData.arrival_data.code,
+          departure_date: tripData.depart_time,
+          return_date: tripData.return_time
+        }
+      ],
+      adults: tripData.adult_count ? tripData.adult_count : 1, 
+      children:  tripData.children_count ? tripData.children_count : 0,
+      infant: tripData.infant_count ? tripData.infant_count : 0,
+    }
+
+    try {
+      // let res = await api.post("integration/flight/search", formatted)
+      // openSnackbar(
+      //   `Your profile has been successfully updated.`
+      // )
+    } catch(e) {}
 
     history.push("/extranet/book-trip/book-flight")
   }
 
-  const handleRoundtrip = (key, value) => {
-    let roundtrip = {...roundtripData}
-    roundtrip[key] = value
-    setRoundtripData(roundtrip)
+  const handleTrip = (key, value, append=false) => {
+    let trip = {...tripData}
+
+    if(append){
+      if(!trip[key]){
+        trip[key] = []
+      } else {
+        trip[key].push(value)
+        setTripData(trip)
+      }
+      
+    } else {
+      trip[key] = value
+      setTripData(trip)
+    }
+    
   }
 
   useEffect(() => {
-    console.log(roundtripData)
-  }, [roundtripData])
+    console.log(tripData)
+  }, [tripData])
   
 
   return (
@@ -77,7 +115,10 @@ const FlightBook = (props) => {
       <Tabs
         id='flight-book-tabs'
         activeKey={flightType}
-        onSelect={(k) => setFlightType(k)}
+        onSelect={(k) => {
+          setFlightType(k)
+          handleTrip("trip_type_code", k)
+        }}
         className={`mb-4 flight-book-tabs`}
         mountOnEnter={true}
         unmountOnExit={true}
@@ -86,7 +127,7 @@ const FlightBook = (props) => {
           eventKey="roundtrip"
           title="Roundtrip"
         >
-          <Roundtrip handleRoundtrip={handleRoundtrip} airports={airports} />
+          <Roundtrip handleTrip={handleTrip} airports={airports} />
           <FlightPref />
 
           <div className='my-3'>
@@ -110,10 +151,10 @@ const FlightBook = (props) => {
           </div>
         </Tab>
         <Tab
-          eventKey="one-way"
+          eventKey="oneway"
           title="One Way"
         >
-          <Oneway airports={airports} />
+          <Oneway airports={airports} handleTrip={handleTrip} />
           <div className='my-3'>
             <Form.Check label="Add a hotel" />
           </div>
@@ -140,10 +181,10 @@ const FlightBook = (props) => {
           </div>
         </Tab>
         <Tab
-          eventKey="multi-city"
+          eventKey="multi city"
           title="Multi City"
         >
-          <MultiTrip airports={airports} />
+          <MultiTrip airports={airports} handleTrip={handleTrip} />
           <FlightPref />
 
           <div className='my-3'>

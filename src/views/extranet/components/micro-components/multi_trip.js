@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import Oneway from './oneway'
 
-function MultiTrip() {
+function MultiTrip(props) {
+  const { handleTrip } = props
+
   const [trips, setTrips] = useState([])
   const [tripCounter, setTripCounter] = useState(0)
 
@@ -29,14 +31,14 @@ function MultiTrip() {
   ]
 
   useEffect(() => {
-    setTrips([...trips, <Oneway id="default-trip" key="default-trip" airports={airports} />, <Oneway counter={tripCounter} id={`trip-${tripCounter}`} key={`trip-${tripCounter}`} airports={airports} multitrip handleRemoveTrip={handleRemoveTrip} />])
+    setTrips([...trips, <Oneway handleTrip={handleTrip} id="default-trip" key="default-trip" airports={airports} />, <Oneway handleTrip={handleTrip} counter={tripCounter} id={`trip-${tripCounter}`} key={`trip-${tripCounter}`} airports={airports} multitrip handleRemoveTrip={handleRemoveTrip} />])
     setTripCounter(tripCounter+1)
   }, [])
   
 
   const handleAddTrip = () => {
     setTripCounter(tripCounter+1)
-    setTrips([...trips, <Oneway counter={tripCounter} id={`trip-${tripCounter}`} key={`trip-${tripCounter}`} airports={airports} multitrip={true} handleRemoveTrip={handleRemoveTrip} />])
+    setTrips([...trips, <Oneway handleTrip={handleTrip} counter={tripCounter} id={`trip-${tripCounter}`} key={`trip-${tripCounter}`} airports={airports} multitrip={true} handleRemoveTrip={handleRemoveTrip} />])
   }
 
   const handleRemoveTrip = (index) => {
