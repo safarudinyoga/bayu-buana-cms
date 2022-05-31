@@ -14,6 +14,10 @@ const EmailReceiptModal = (props) => {
   const API = new Api()
   const dispatch = useDispatch()
   const [inputFields, setInputFields] = useState([{ name: "", email: "" }])
+
+  const [bankName] = useState([
+    { bankName: "", accountName: "", errorMessage: [] },
+  ])
   const handleFormChange = (index, event) => {
     let data = [...inputFields]
     data[index][event.target.name] = event.target.value
@@ -21,12 +25,11 @@ const EmailReceiptModal = (props) => {
   }
   const initialValues = {
     message_type: "",
-    recipient_email: "",
     recipient_name: "",
+    recipient_email: "",
   }
   const addFields = () => {
     let newfield = { name: "", email: "" }
-
     setInputFields([...inputFields, newfield])
   }
   const validationSchema = Yup.object().shape({
@@ -37,6 +40,7 @@ const EmailReceiptModal = (props) => {
       .email("Sender Email is not valid")
       .required("Sender Email is required."),
   })
+
   const onSubmit = async (values, a) => {
     try {
       let formId = props.id
@@ -130,6 +134,7 @@ const EmailReceiptModal = (props) => {
             isValid,
             setFieldValue,
             setFieldTouched,
+            register,
           }) => (
             <Form onSubmit={handleSubmit} className="ml-2">
               <Form.Group as={Row} className="form-group">
@@ -184,10 +189,10 @@ const EmailReceiptModal = (props) => {
                             <>
                               <Form.Control
                                 type="text"
-                                isInvalid={
-                                  form.touched.recipient_name &&
-                                  form.errors.recipient_name
-                                }
+                                // isInvalid={
+                                //   form.touched.recipient_name &&
+                                //   form.errors.recipient_name
+                                // }
                                 minLength={1}
                                 maxLength={128}
                                 {...field}
@@ -195,9 +200,12 @@ const EmailReceiptModal = (props) => {
                                 onChange={(event) =>
                                   handleFormChange(index, event)
                                 }
+                                value={input.recipient_name}
                                 placeholder="Recipient Name"
-                                value={input.name}
                               />
+                              <div className="invalid-feedback">
+                                {errors.recipient_name?.[index]?.name?.message}
+                              </div>
                               {form.touched.recipient_name &&
                                 form.errors.recipient_name && (
                                   <Form.Control.Feedback type="invalid">
@@ -246,13 +254,7 @@ const EmailReceiptModal = (props) => {
                   </div>
                 )
               })}
-              <button
-                onClick={addFields}
-                className="float-right "
-                style={{ color: "#1103C4" }}
-              >
-                Add another recipient
-              </button>
+
               {!props.hideButton && (
                 <div
                   style={{
@@ -277,6 +279,13 @@ const EmailReceiptModal = (props) => {
             </Form>
           )}
         </Formik>
+        <button
+          onClick={addFields}
+          className="float-right "
+          style={{ color: "#1103C4" }}
+        >
+          Add another recipient
+        </button>
       </Modal.Body>
     </Modal>
   )

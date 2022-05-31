@@ -61,10 +61,10 @@ const AddOrRemoveList = ({
 
   const handleSelectAssignmentLeader = (e) => {
     console.log("e: ", e)
-    setLeftData((data) =>
+    setFormValues((data) =>
       data.map((item) => ({
         ...item,
-        checked: item.given_name === e ? !item.checked : item.checked,
+        can_issue_ticket: item.employee_id === e ? !item.can_issue_ticket : item.can_issue_ticket,
       })),
     )
   }
@@ -93,7 +93,7 @@ const AddOrRemoveList = ({
                 >
                   {canRemoveIndex ? (
                     <div className="w-100 d-flex justify-content-between align-items-center">
-                      {item.given_name} ({item.given_name})
+                      {item.given_name} {item.middle_name} {item.surname} ({item?.office?.office_name})
                       <FieldArray
                         name="employee"
                         render={(arr) => (
@@ -124,16 +124,16 @@ const AddOrRemoveList = ({
                     <div className="d-flex align-items-center">
                       <div
                         style={{
-                          backgroundColor: item.checked ? "#027F71" : "#D3D3D3",
+                          backgroundColor: item.can_issue_ticket ? "#027F71" : "#D3D3D3",
                           padding: "2px 10px 2px",
                         }}
                       >
                         <label className="label-flight-ticket">
-                          <input
+                          <Field
                             type="checkbox"
-                            name="check-leader"
+                            name="can_issue_ticket"
                             onChange={() =>
-                              handleSelectAssignmentLeader(item.given_name)
+                              handleSelectAssignmentLeader(item.employee_id)
                             }
                             className="add-remove-cb"
                           />
@@ -151,11 +151,11 @@ const AddOrRemoveList = ({
                           }}
                         >
                           <label className="label-flight-ticket">
-                            <input
+                            <Field
                               type="checkbox"
-                              name="check-ticket"
+                              name="check"
                               onChange={() =>
-                                handleSelectAssignmentLeader(item.given_name)
+                                handleSelectAssignmentLeader(item.employee_id)
                               }
                               className="add-remove-cb"
                             />
@@ -167,7 +167,7 @@ const AddOrRemoveList = ({
                         className="w-100 d-flex justify-content-between align-items-center"
                         style={{ paddingLeft: 13, paddingRight: 15 }}
                       >
-                        {item.given_name}
+                        {item.given_name} {item.middle_name} {item.surname}
                         <FieldArray
                           name="employee"
                           render={(arr) => (

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import AutoSuggest from "react-autosuggest";
 import { ReactSVG } from "react-svg"
 
@@ -38,6 +38,11 @@ function Routes(props) {
     )
   }
 
+  useEffect(() => {
+    console.log(departureValue)
+  }, [departureValue])
+  
+
   return (
     <>
       <div className='d-flex mr-4'>
@@ -52,8 +57,11 @@ function Routes(props) {
               setDepartureValue(value);
               setSuggestions(getSuggestions(airports,value));
             }}
-            onSuggestionSelected={(_, { suggestionValue }) =>
-              console.log("Selected: " + suggestionValue)
+            onSuggestionSelected={(_, { suggestion, suggestionValue }) => {
+              console.log("Selected",suggestion)
+              props.handleRoundtrip("departure_data", suggestion)
+            }
+              
             }
             getSuggestionValue={suggestion => suggestion.name}
             renderSuggestion={renderSuggestion}
@@ -78,11 +86,14 @@ function Routes(props) {
               setArrivalValue(value);
               setSuggestions(getSuggestions(airports,value));
             }}
-            onSuggestionSelected={(_, { suggestionValue }) =>
-              console.log("Selected: " + suggestionValue)
+            onSuggestionSelected={(_, { suggestion, suggestionValue }) => {
+              console.log("Return Selected: ",suggestion)
+              props.handleRoundtrip("arrival_data", suggestion)
+            }
+              
             }
             getSuggestionValue={suggestion => suggestion.name}
-            renderSuggestion={suggestion => <span>{suggestion.name}</span>}
+            renderSuggestion={renderSuggestion}
             inputProps={{
               placeholder: "Arrival city, airport",
               value: arrivalValue,
