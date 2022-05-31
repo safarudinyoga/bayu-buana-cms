@@ -1,6 +1,5 @@
 import React from "react"
-import { Button, Modal, ModalBody, ModalFooter } from "react-bootstrap"
-import CancelButton from 'components/button/cancel'
+import { Modal, ModalBody } from "react-bootstrap"
 import './bb-modal.css'
 
 const ModalDelete = ({show, onClick, modalContent, modalTitle, modalSize, scrollable=false}) => {

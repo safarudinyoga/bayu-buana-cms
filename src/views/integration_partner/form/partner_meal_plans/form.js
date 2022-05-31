@@ -54,9 +54,7 @@ Yup.addMethod(Yup.string, 'uniqueValueString', function (fieldName, message) {
   const initialValues = {
     meal_plan_type_id: "",
     meal_plan_type_code: "",
-    meal_plan_type_name: "", 
-    latitude: "",
-    longitude: ""
+    meal_plan_type_name: ""
   }
 
   // Schema for yup
@@ -75,9 +73,9 @@ Yup.addMethod(Yup.string, 'uniqueValueString', function (fieldName, message) {
   useEffect(async () => {
     let formId = showCreateModal.id || props.id
 
-    let docTitle = "Edit Partner Cities"
+    let docTitle = "Edit Partner Meal Plans"
     if (!formId) {
-      docTitle = "Create Partner Cities"
+      docTitle = "Create Partner Meal Plans"
     }
     dispatch(setModalTitle(docTitle))
 
@@ -91,9 +89,7 @@ Yup.addMethod(Yup.string, 'uniqueValueString', function (fieldName, message) {
             label: res.data.meal_plan_type.meal_plan_type_name,
           },
           meal_plan_type_code: res.data.meal_plan_type_code ? res.data.meal_plan_type_code : "",
-          meal_plan_type_name: res.data.meal_plan_type_name ? res.data.meal_plan_type_name : "",
-          latitude: res.data.latitude ? res.data.latitude : "",
-          longitude: res.data.longitude ? res.data.longitude : "",
+          meal_plan_type_name: res.data.meal_plan_type_name ? res.data.meal_plan_type_name : ""
         })
       } catch (e) {
         console.log(e)
@@ -106,9 +102,7 @@ Yup.addMethod(Yup.string, 'uniqueValueString', function (fieldName, message) {
       meal_plan_type_code: values.meal_plan_type_code,
       meal_plan_type_name: values.meal_plan_type_name,
       meal_plan_type_id: values.meal_plan_type_id.value,
-      integration_partner_id: id,
-      latitude: values.latitude == "" ? 0.0 : parseFloat(values.latitude),
-      longitude: values.longitude == "" ? 0.0 : parseFloat(values.longitude)
+      integration_partner_id: id
     }
 
     try {

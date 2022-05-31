@@ -1,19 +1,20 @@
 import { withRouter } from "react-router"
 import React, { useState, useEffect } from "react"
-import { Form, Button } from "react-bootstrap"
-import { Formik } from "formik"
+import { Button } from "react-bootstrap"
 import Api from "config/api"
 import { useDispatch, useSelector } from "react-redux"
-import { setAlert, setModalDelete, setModalTitle } from "redux/ui-store"
+import { setAlert, setModalDelete } from "redux/ui-store"
+import { useParams } from "react-router-dom"
 import CancelButton from "components/button/cancel"
 import errorIcon from "assets/icons/error.svg"
-const endpoint = "/master/corporate-rating-type-levels"
+const endpoint = "/master/integration-partners"
 function DeleteForm(props) {
 	const dispatch = useDispatch()
+  const { id } = useParams()
   const showModalDelete = useSelector((state) => state.ui.showModalDelete)
   const API = new Api()
   const isView = showModalDelete.disabled_form || props.isView
-  const [id, setId] = useState(null)
+  const [idMealPlan, setIdMealPlan] = useState(null)
   const [loading, setLoading] = useState(true)
   const [formValues, setFormValues] = useState({
     meal_plan_type_name: "",
@@ -21,10 +22,10 @@ function DeleteForm(props) {
 
   useEffect(async () => {
     let formId = showModalDelete.id || props.id
-
+    console.log('formId', formId)
     if(formId) {
       try {
-        let {data} = await API.get(`/master/integration-partner-meal-plan-types` + "/" + formId)
+        let {data} = await API.get(endpoint + "/" + id + "/meal-plans/" + formId)
         console.log(data)
         setFormValues({
           meal_plan_type_name: data.meal_plan_type_name,
@@ -44,14 +45,14 @@ function DeleteForm(props) {
       setLoading(false)
     }
 
-    setId(showModalDelete.id)
+    setIdMealPlan(showModalDelete.id)
   }, [showModalDelete.id])
 
  
 	
 	const onSubmit = async (values, a) => {
 		try {
-      let res = await API.delete(`/master/integration-partner-meal-plan-types/` + id)
+      let res = await API.delete(endpoint + "/" + id + "/meal-plans/" + idMealPlan)
       dispatch(setModalDelete({show: false, id: null, disabled_form: false}))
       dispatch(
 				setAlert({
