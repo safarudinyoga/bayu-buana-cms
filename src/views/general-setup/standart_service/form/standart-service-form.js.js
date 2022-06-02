@@ -56,6 +56,22 @@ function StandartService(props) {
     return options
   }
 
+  const duplicateValue = async(fieldName, value) => {
+    let filters = encodeURIComponent(JSON.stringify([[fieldName,"=",value],["AND"],["service_level.service_level_code",showCreateModal.service_level_code],["AND"],["status",1]]))
+    let res = await API.get(endpoint + `?filters=${filters}`)
+    let sameId = res.data.items.find((v) => v.id === id)
+    if(!sameId) return res.data.items.length === 0 
+
+    return true
+}
+
+Yup.addMethod(Yup.object, 'uniqueValueObject', function (fieldName, message) {
+    return this.test('unique', message, function(field) {
+        if(field) return duplicateValue(fieldName, field.value)
+        return true
+    })
+})
+
   useEffect(async () => {
     let formId = showCreateModal.id || props.id
 
@@ -114,20 +130,11 @@ function StandartService(props) {
 
   const initialValues = {
     task_type: "",
-    response_time: [{
-      value: 0,
-      label: 0,
-    },{
-      value: 0,
-      label: 0,
-    },{
-      value: 0,
-      label: 0,
-    }],
+    response_time: [],
   }
 
   const validationSchema = Yup.object().shape({
-    task_type: Yup.object().required("Task Type is required."),
+    task_type: Yup.object().required("Task Type is required.").uniqueValueObject("task_type_id","Task Type already exists"),
     response_time: Yup.array().min(3, "Response Time is required."),
   })
 
@@ -253,6 +260,7 @@ function StandartService(props) {
                     options={selectDays()}
                     value={values.response_time[0]}
                     isDisabled={isView}
+                    placeholder="Days"
                     className={`react-select ${
                       touched.title && Boolean(errors.title)
                         ? "is-invalid"
@@ -264,9 +272,9 @@ function StandartService(props) {
                   />
                 </div>
                 <Form.Label column sm={2}>
-                  Day(s)
+                  Days
                 </Form.Label>
-                <div style={{ maxWidth: 50, flex: 1 }}>
+                <div style={{ maxWidth: 55, flex: 1 }}>
                 <Select
                     options={selectHours()}
                     value={values.response_time[1]}
@@ -284,9 +292,9 @@ function StandartService(props) {
                   />
                 </div>
                 <Form.Label column sm={2}>
-                  Hour(s)
+                  Hours
                 </Form.Label>
-                <div style={{ maxWidth: 50, flex: 1 }}>
+                <div style={{ maxWidth: 65, flex: 1 }}>
                 <Select
                     options={selectMinutes()}
                     value={values.response_time[2]}
@@ -303,7 +311,7 @@ function StandartService(props) {
                   />
                 </div>
                 <Form.Label column sm={2}>
-                  Minute(s)
+                  Minutes
                 </Form.Label>
               </div>
               <ErrorMessage
