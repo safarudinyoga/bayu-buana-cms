@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ReactSVG } from "react-svg"
 import { Form, Popover, OverlayTrigger, Button } from 'react-bootstrap'
 import Select from 'components/form/select';
@@ -10,7 +10,6 @@ function Travellers(props) {
 
   const [travelerValue, setTravelerValue] = useState("")
   const [travelerCheckbox, setTravelerCheckbox] = useState(false)
-  const [travelerCheckboxConfirm, setTravelerCheckboxConfirm] = useState(false)
 
 
   const regex = /^[0-9\b]+$/;
@@ -35,7 +34,9 @@ function Travellers(props) {
 
     setTravelerValue(valueText)
     let count = adultCount+childrenCount+infantCount
-    props.onConfirm(travelerCheckbox, count)
+    if(props.onConfirm){
+      props.onConfirm(travelerCheckbox, count)
+    }  
     document.body.click()
   }
 
@@ -233,15 +234,37 @@ function Travellers(props) {
     </Popover>
   )
 
+  useEffect(() => {
+    if(props.handleTrip){
+      props.handleTrip("adult_count", adultCount)
+    }
+    
+  }, [adultCount])
+
+  useEffect(() => {
+    if(props.handleTrip){
+      props.handleTrip("children_count", childrenCount)
+    }
+    
+  }, [childrenCount])
+
+  useEffect(() => {
+    if(props.handleTrip){
+      props.handleTrip("infant_count", infantCount)
+    }
+    
+  }, [infantCount])
+  
+
   return (
     <>
-      <div style={{width: 280, marginBottom: 10}} className="position-relative">
-          <h4 className='form-with-label__title'> TRAVELLERS <span className='label-required'></span></h4>
-          <ReactSVG src='/img/icons/people.svg' className='form-with-label__suggest-icon' style={{bottom: 15}}/>
-          <OverlayTrigger trigger="click" placement='bottom' overlay={popover} rootClose={true}>
-            <input type="text" className='form-control rounded-0 form-with-label' value={travelerValue} />
-          </OverlayTrigger>
-        </div>
+      <div className={`position-relative traveller-container ${props.smallSize ? "traveller-sm mr-2" : ""}`}>
+        <h4 className='form-with-label__title'> TRAVELERS <span className='label-required'></span></h4>
+        <ReactSVG src='/img/icons/people.svg' className='form-with-label__suggest-icon' />
+        <OverlayTrigger trigger="click" placement='bottom' overlay={popover} rootClose={true}>
+          <input type="text" className='form-control rounded-0 form-with-label' value={travelerValue} />
+        </OverlayTrigger>
+      </div>
     </>
   )
 }

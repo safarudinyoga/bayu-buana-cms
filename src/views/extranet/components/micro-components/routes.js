@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import AutoSuggest from "react-autosuggest";
 import { ReactSVG } from "react-svg"
 
 function Routes(props) {
-  const { airports } = props
+  const { airports, smallSize } = props
 
   const [departureValue, setDepartureValue] = useState("");
   const [arrivalValue, setArrivalValue] = useState("");
@@ -38,10 +38,15 @@ function Routes(props) {
     )
   }
 
+  useEffect(() => {
+    console.log(departureValue)
+  }, [departureValue])
+  
+
   return (
     <>
-      <div className='d-flex mr-4'>
-        <div className='form-group required position-relative'>
+      <div className={`d-flex ${smallSize ? "mr-2" : "mr-4"}`}>
+        <div className={`form-group required position-relative ${smallSize ? "routes-sm" : ""}`} >
           <label htmlFor="departure" className='form-with-label__title'>FROM <span className='label-required'></span></label>
           <ReactSVG src='/img/icons/flight-takeoff.svg' className='form-with-label__suggest-icon'/>
           <AutoSuggest
@@ -52,8 +57,14 @@ function Routes(props) {
               setDepartureValue(value);
               setSuggestions(getSuggestions(airports,value));
             }}
-            onSuggestionSelected={(_, { suggestionValue }) =>
-              console.log("Selected: " + suggestionValue)
+            onSuggestionSelected={(_, { suggestion, suggestionValue }) => {
+              console.log("Selected",suggestion)
+              if(props.handleTrip) {
+                props.handleTrip("departure_data", suggestion)
+              }
+              
+            }
+              
             }
             getSuggestionValue={suggestion => suggestion.name}
             renderSuggestion={renderSuggestion}
@@ -67,7 +78,7 @@ function Routes(props) {
             highlightFirstSuggestion={true}
           />
         </div>
-        <div className='form-group required position-relative'> 
+        <div className={`form-group required position-relative ${smallSize ? "routes-sm" : ""}`} > 
           <label htmlFor="arrival" className='form-with-label__title'>TO <span className='label-required'></span></label>
           <ReactSVG src='/img/icons/flight-land.svg' className='form-with-label__suggest-icon'/>
           <AutoSuggest
@@ -78,11 +89,17 @@ function Routes(props) {
               setArrivalValue(value);
               setSuggestions(getSuggestions(airports,value));
             }}
-            onSuggestionSelected={(_, { suggestionValue }) =>
-              console.log("Selected: " + suggestionValue)
+            onSuggestionSelected={(_, { suggestion, suggestionValue }) => {
+              console.log("Return Selected: ",suggestion)
+              if(props.handleTrip) {
+                props.handleTrip("arrival_data", suggestion)
+              }
+              
+            }
+              
             }
             getSuggestionValue={suggestion => suggestion.name}
-            renderSuggestion={suggestion => <span>{suggestion.name}</span>}
+            renderSuggestion={renderSuggestion}
             inputProps={{
               placeholder: "Arrival city, airport",
               value: arrivalValue,

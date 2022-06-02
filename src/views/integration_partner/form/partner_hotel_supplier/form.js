@@ -111,14 +111,15 @@ Yup.addMethod(Yup.string, 'uniqueValueString', function (fieldName, message) {
       }else{
           let res = await api.post(endpoint + "/" + id + "/hotel-suppliers", formatted);
       }
+      dispatch(setCreateModal({ show: false, id: null, disabled_form: false }));
       dispatch(
         setAlert({
             message: `Record 'Partner Hotel Supplier Name: ${values.hotel_supplier_name}' has been successfully saved.`,
         })
       );
-      dispatch(setCreateModal({ show: false, id: null, disabled_form: false }));
       
     } catch (e) {
+      dispatch(setCreateModal({ show: false, id: null, disabled_form: false }));
       dispatch(
         setAlert({
             message: "Failed to save this record.",

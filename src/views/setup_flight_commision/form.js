@@ -121,22 +121,30 @@ const FlightCommisionForm = (props) => {
             value: data.airline.id,
             label: data.airline.airline_name
           },
-          commission_claim_departure_date: {
+          commission_claim_departure_date: data.commission_claim_departure_date.start_date 
+          ? {
+            start_date: new Date(data.commission_claim_departure_date.start_date).toDateString(),
+            end_date: new Date(data.commission_claim_departure_date.end_date).toDateString(),
+          }
+          : {
             start_date: [],
             end_date: [],
           },
           commission_claim_issue_date: {
             start_date: [],
             end_date: [],
-      
           }, 
-          commission_claim_original_destination: {
-            arrival_airport_location_code: "",
-            arrival_city_code: "",
-            departure_airport_location_code: "",
-            departure_city_code: ""
+          departureFrom : {
+            label: `${data.departure_city.city_name} (${data.departure_airport_location.airport_name})`,
+            value: `${data.commission_claim_original_destination.departure_airport_location_code} - ${data.commission_claim_original_destination.departure_city_code}`
           },
+          arrivalAt: {
+            label: `${data.arrival_city.city_name} (${data.arrival_airport_location.airport_name})`,
+            value: `${data.commission_claim_original_destination.arrival_airport_location_code} - ${data.commission_claim_original_destination.arrival_city_code}`
+          }
         })
+        setSpecifyPeriodDeparture(data.commission_claim_departure_date.start_date)
+        setSpecifyPeriodIssue(data.commission_claim_issue_date.start_date)
         console.log("form id",  data)
       }
     } catch (e) {
@@ -203,7 +211,6 @@ const FlightCommisionForm = (props) => {
         validationSchema={validationSchema}
         enableReinitialize
         onSubmit={async (values, { setSubmitting }) => {
-          console.log(values)
           try {
             // console.log(values)
             let formatted = {
@@ -224,7 +231,6 @@ const FlightCommisionForm = (props) => {
               },
               percent: parseFloat(values.percent)
             }
-            // console.log(formatted)
   
             let res = await api.post("master/commission-claims", formatted)
             openSnackbar(`Record '${values.airline_id.label}' has been successfully saved.`)
@@ -235,7 +241,6 @@ const FlightCommisionForm = (props) => {
         }}
       >
         {(formik) => {
-          console.log("Formik", formik.initialValues, formValues)
           return (
             <Form>
               <div className="commission-form">
@@ -355,6 +360,7 @@ const FlightCommisionForm = (props) => {
                                     locale="engb"
                                     value={new Date()}
                                     onChange={(date) => {
+                                      console.log(date)
                                       setPeriodIssueStart(date)
                                       formik.setFieldValue("issueStart", date)
                                       formik.setFieldValue("commission_claim_issue_date.start_date", date)

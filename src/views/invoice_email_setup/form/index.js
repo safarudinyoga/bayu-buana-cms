@@ -26,9 +26,9 @@ import DOMPurify from "dompurify"
 import { stateToHTML } from "draft-js-export-html"
 import FormikControl from "components/formik/formikControl"
 import CancelButton from "components/button/cancel"
+import { useParams } from "react-router-dom"
 
 const endpoint = "/master/employees"
-const backUrl = "/master/invoice-email-setup"
 
 const listLanguages = [
   {
@@ -44,14 +44,21 @@ const listLanguages = [
 
 const InvoiceEmailSetupForm = (props) => {
   let dispatch = useDispatch()
+  let routeParams = useParams()
+  const backToEmailSetup = "/master/invoice-email-setup"
+  const backToEmailTemplate = `/master/invoice-email-setup/${routeParams.template_id}`
+
   let api = new Api()
-  const [tabKey, setTabKey] = useState("general-information")
 
   const isView = useQuery().get("action") === "view"
   const [loading, setLoading] = useState(true)
   const [id, setId] = useState(null)
   const [showModal, setShowModal] = useState(false)
   const [formValues, setFormValues] = useState(null)
+  const [showSentModal, setShowSentModal] = useState(false)
+  const [sentModalMsg, setSentModalMsg] = useState("")
+  const [sentModalIc, setSentModalIc] = useState("fas fa-envelope")
+
   // const [editorState, setEditorState] = useState(() =>
   //   EditorState.createEmpty(),
   // )
@@ -120,11 +127,11 @@ const InvoiceEmailSetupForm = (props) => {
             text: "Setup and Configuration",
           },
           {
-            link: backUrl,
+            link: backToEmailSetup,
             text: "Invoice Email Setup",
           },
           {
-            link: backUrl,
+            link: backToEmailTemplate,
             text: "Email Template 1",
           },
           {
@@ -160,7 +167,8 @@ const InvoiceEmailSetupForm = (props) => {
     api
       .get("/master/agent-languages?size=-1&sort=sort,language_name")
       .then((res) => {
-        setLanguages(res.data.items)
+        // setLanguages(res.data.items)
+        setLanguages(listLanguages)
       })
   }, [])
 
@@ -236,6 +244,48 @@ const InvoiceEmailSetupForm = (props) => {
 
   const onSubmit = async (values, a) => {
     console.log(values)
+  }
+
+  const SentModal = () => {
+    return <Modal
+      show={showSentModal}
+      onHide={() => setShowSentModal(false)}
+      size="lg"
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+      className="modal-form"
+    >
+      <Modal.Header closeButton>
+      </Modal.Header>
+      <Modal.Body className="d-flex flex-column align-items-center">
+        <i className={`${sentModalIc}`} style={{fontSize: 40}}></i>
+        <p>{sentModalMsg}</p>
+        <div className="d-flex justify-content-center w-100" style={{borderTop:"1px solid #E4E4E4", marginTop:15}}>
+          <Button
+            variant="primary"
+            onClick={() => setShowSentModal(false)}
+            style={{ marginTop: 15, marginBottom: "10px" }}
+          >
+            OK
+          </Button>
+        </div>
+      </Modal.Body>
+    </Modal>
+  }
+
+  const onSendTest = async (type) => {
+    try {
+      console.log(type)
+      if(type === "Email Content") {
+        setSentModalIc("fas fa-envelope")
+        setSentModalMsg("Email has been sent to john.doe@petroxyz.com")
+      }
+      if(type === "Push Notification") {
+        setSentModalIc("fas fa-mobile-alt")
+        setSentModalMsg("Notification has been pushed to +628223701693")
+      }
+      setShowSentModal(true)
+    } catch (e) { console.log(e) }
   }
 
   const formSize = {
@@ -438,7 +488,12 @@ const InvoiceEmailSetupForm = (props) => {
                                         >
                                           PREVIEW
                                         </Button>
-                                        <Button variant="primary">
+                                        <Button 
+                                          variant="primary"
+                                          onClick={() => {
+                                            onSendTest(item)
+                                          }}
+                                        >
                                           SEND TEST
                                         </Button>
                                       </Row>
@@ -476,6 +531,7 @@ const InvoiceEmailSetupForm = (props) => {
               </div>
             </Col>
             <PreviewModal bodyEmail={bodyEmail} />
+            <SentModal/>
           </Row>
         </Form>
       )}

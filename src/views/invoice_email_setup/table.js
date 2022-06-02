@@ -3,6 +3,8 @@ import React, {useEffect} from "react"
 import {useDispatch} from "react-redux"
 import {setUIParams} from "redux/ui-store"
 
+import FormEmailCategory from "./form/email_category"
+
 export default function InvoiceEmailSetupTable() {
     let dispatch = useDispatch()
     useEffect(() => {
@@ -25,20 +27,28 @@ export default function InvoiceEmailSetupTable() {
         hideCreate: true,
         title: "Invoice Email Setup",
         titleModal: "Invoice Email Setup",
-        baseRoute: "",
-        endpoint: "/master/invoice_email_setup",
+        baseRoute: "/master/invoice-email-setup",
+        endpoint: "/master/configurations/agent-email-categories",
+        // endpoint: "/master/countries",
         deleteEndpoint: "",
         activationEndpoint: "",
         deactivationEndpoint: "",
         columns: [
             {
                 title: "Email Template",
-                data: "Email Template",
+                // data: "country_code",
+                render: (d, t, row) => {
+                    if (row?.is_default) return "DEFAULT"
+                    return row?.email_category_name
+                }
             },
         ],
         emptyTable: "No Invoice Email found",
-        recordName: ["hotel_brand_code", "hotel_brand_name"],
-        showAdvancedOptions: false
+        recordName: ["email_category_code", "email_category_name"],
+        showAdvancedOptions: false,
+        showCopyAct: true,
+        module: "email-setup",
+        isCheckbox: false
     }
-    return <BBDataTable {...params} />
+    return <BBDataTable {...params} modalContent={FormEmailCategory}/>
 }
