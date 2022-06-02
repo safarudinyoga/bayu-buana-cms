@@ -64,7 +64,10 @@ const AddOrRemoveList = ({
     setFormValues((data) =>
       data.map((item) => ({
         ...item,
-        can_issue_ticket: item.employee_id === e ? !item.can_issue_ticket : item.can_issue_ticket,
+        can_issue_ticket:
+          item.employee_id === e
+            ? !item.can_issue_ticket
+            : item.can_issue_ticket,
       })),
     )
   }
@@ -93,7 +96,8 @@ const AddOrRemoveList = ({
                 >
                   {canRemoveIndex ? (
                     <div className="w-100 d-flex justify-content-between align-items-center">
-                      {item.given_name} {item.middle_name} {item.surname} ({item?.office?.office_name})
+                      {item.given_name} {item.middle_name} {item.surname} (
+                      {item?.office?.office_name})
                       <FieldArray
                         name="employee"
                         render={(arr) => (
@@ -124,7 +128,9 @@ const AddOrRemoveList = ({
                     <div className="d-flex align-items-center">
                       <div
                         style={{
-                          backgroundColor: item.can_issue_ticket ? "#027F71" : "#D3D3D3",
+                          backgroundColor: item.can_issue_ticket
+                            ? "#027F71"
+                            : "#D3D3D3",
                           padding: "2px 10px 2px",
                         }}
                       >
@@ -262,7 +268,7 @@ const AddOrRemoveList = ({
           >
             {secondCardTitle}
           </Card.Header>
-          <div className="col-xs-12 col-sm-12 col-md-4 col-lg-5 col-xl-5 padding-0 align-middle d-flex flex-column w-100">
+          <div className="col-xs-12 col-sm-12 col-md-4 col-lg-5 col-xl-5 padding-0 align-middle">
             <button
               onClick={() => setShowFilter(!showFilter)}
               type="button"
@@ -275,65 +281,65 @@ const AddOrRemoveList = ({
                 <img src={downIcon} alt="down" />
               )}
             </button>
-            {showFilter && (
-              <div>
-                <FormInputSelectAjax
-                  // label="Branch Office"
-                  // onChange={}
-                  endpoint="/master/employees"
-                  column="given_name"
-                  sort="given_name"
-                  isGrouping={true}
-                  fieldGroup="employee_id"
-                  isArray={false}
-                  fieldArray=""
-                  // value={}
-                  data={secondData}
-                  // filter={}
-                  placeholder="Branch Office"
-                  type="selectmultiple"
-                  isFilter={false}
-                  allowClear={false}
-                />
-                <FormInputSelectAjax
-                  // label="Job Title"
-                  // onChange={}
-                  endpoint="/master/employees"
-                  column="job_title.job_title_name"
-                  sort="job_title.id"
-                  isGrouping={true}
-                  fieldGroup="job_title.id"
-                  isArray={false}
-                  fieldArray=""
-                  // value={}
-                  data={secondData}
-                  // filter={}
-                  placeholder="Job Title"
-                  type="selectmultiple"
-                  isFilter={false}
-                  allowClear={false}
-                />
-                <FormInputSelectAjax
-                  // label="Name"
-                  // onChange={}
-                  endpoint="/master/employees"
-                  column="given_name"
-                  sort="given_name"
-                  isGrouping={true}
-                  fieldGroup="employee_id"
-                  isArray={false}
-                  fieldArray=""
-                  // value={}
-                  data={secondData}
-                  // filter={}
-                  placeholder="name"
-                  type="selectmultiple"
-                  isFilter={false}
-                  allowClear={false}
-                />
-              </div>
-            )}
           </div>
+          {showFilter && (
+            <div style={{ padding: "0px 33px 0px 29px" }}>
+              <FormInputSelectAjax
+                label="Branch Office"
+                // onChange={}
+                endpoint="/master/employees"
+                column="given_name"
+                sort="given_name"
+                isGrouping={true}
+                fieldGroup="employee_id"
+                isArray={false}
+                fieldArray=""
+                // value={}
+                data={secondData}
+                // filter={}
+                placeholder="Branch Office"
+                type="selectmultiple"
+                isFilter={false}
+                allowClear={false}
+              />
+              <FormInputSelectAjax
+                label="Job Title"
+                // onChange={}
+                endpoint="/master/employees"
+                column="job_title.job_title_name"
+                sort="job_title.id"
+                isGrouping={true}
+                fieldGroup="job_title.id"
+                isArray={false}
+                fieldArray=""
+                // value={}
+                data={secondData}
+                // filter={}
+                placeholder="Job Title"
+                type="selectmultiple"
+                isFilter={false}
+                allowClear={false}
+              />
+              <FormInputSelectAjax
+                label="Name"
+                // onChange={}
+                endpoint="/master/employees"
+                column="given_name"
+                sort="given_name"
+                isGrouping={true}
+                fieldGroup="employee_id"
+                isArray={false}
+                fieldArray=""
+                // value={}
+                data={secondData}
+                // filter={}
+                placeholder="name"
+                type="selectmultiple"
+                isFilter={false}
+                allowClear={false}
+              />
+            </div>
+          )}
           <Card.Body style={{ padding: "8px 10px 10px 9px" }}>
             <ol class="list list-general-setup">
               {rightData.map((item) => (

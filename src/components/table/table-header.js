@@ -336,7 +336,7 @@ class TableHeader extends Component {
             {!this.state.isHideDownloadLogo && (
               <OverlayTrigger
                 placement="top"
-                trigger={"hover"}
+                // trigger={"hover"}
                 overlay={<Tooltip>Click to download</Tooltip>}
               >
                 <Link
