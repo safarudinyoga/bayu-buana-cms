@@ -10,14 +10,8 @@ import { useDispatch, useSelector } from "react-redux"
 import { setAlert, setCreateModal, setModalTitle } from "redux/ui-store"
 import CancelButton from "components/button/cancel"
 import Select from "components/form/select"
-
+import _ from "lodash"
 const endpoint = "/master/configurations/standard-services"
-
-const generateNumber = (count) => {
-  const temp = []
-  for (let i = 0; i <= count; i++) temp.push(`${i}`)
-  return temp
-}
 
 function StandartService(props) {
   const dispatch = useDispatch()
@@ -28,15 +22,6 @@ function StandartService(props) {
   const [loading, setLoading] = useState(true)
   const [formValues, setFormValues] = useState(null)
 
-  //get Time
-  const [days, setDays] = useState([])
-  const [hours, setHours] = useState([])
-  const [minutes, setMinutes] = useState([])
-
-  useEffect(() => {
-    setHours(generateNumber(23))
-    setMinutes(generateNumber(59))
-  }, [])
 
   const selectDays = () => {
     const options = []
@@ -83,8 +68,32 @@ function StandartService(props) {
 
     if (formId) {
       try {
-        let data = await API.get(endpoint + "/" + formId)
-        setFormValues(data)
+        let res = await API.get(endpoint + "/" + formId)
+        let data = res.data
+        let day = Math.round(data.amount/1440)
+          let hour = Math.round((data.amount % 1440)/60)
+          let minute = (data.amount % 1440) % 60
+        setFormValues({
+          ...formValues,
+          task_type: _.isEmpty(data.task_type) ? "" : {
+            value: data.task_type_id,
+            label: data.task_type.task_type_name
+          },
+          response_time: data.amount ? [
+            {
+              value: day,
+              label: day,
+            },
+            {
+              value: hour,
+              label: hour,
+            },
+            {
+              value: minute,
+              label: minute,
+            },
+          ] : [],
+        })
       } catch (e) {
         console.log(e)
       }
@@ -138,7 +147,6 @@ function StandartService(props) {
           `/master/configurations/standard-services`,
           form,
         )
-        console.log(res)
         dispatch(
           setCreateModal({ show: false, id: null, disabled_form: false }),
         )
@@ -152,7 +160,6 @@ function StandartService(props) {
           `/master/configurations/standard-services/${formId}`,
           form,
         )
-        console.log(res)
         dispatch(
           setCreateModal({ show: false, id: null, disabled_form: false }),
         )
@@ -170,7 +177,6 @@ function StandartService(props) {
       )
     }
   }
-
   return (
     <Formik
       initialValues={formValues || initialValues}
