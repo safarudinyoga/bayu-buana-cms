@@ -55,7 +55,7 @@ const FlightModal = (props) => {
               <Col sm={7}>
                 <FastField name="hotelBrand">
                   {({ field, form }) => (
-                   <div style={{ maxWidth: 600 }}>
+                    <div style={{ maxWidth: 600 }}>
                       <Select {...field} placeholder="Please choose" />
                     </div>
                   )}
@@ -122,12 +122,7 @@ const FlightModal = (props) => {
                       </Col>
                       <Col sm={12} md={5}>
                         <Form.Group as={Row} className="mb-xs-3">
-                          <Form.Label
-                            column
-                            xs={2}
-                            md={3}
-                            lg={3}                            
-                          >
+                          <Form.Label column xs={2} md={3} lg={3}>
                             IDR
                           </Form.Label>
                           <Col xs={10} md={9} lg={9}>
@@ -289,12 +284,12 @@ const FlightForm = (props) => {
         validationSchema={validationSchema}
         validateOnChange={false}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
-          console.log(values)
-          console.log(props)
+          console.log("submit: ", values)
+          // console.log(props)
           // setSubmitting(true)
 
           // try {
-          //   let res = await api.post("master/persons", {
+          //   let res = await api.post("master/markup-rates", {
           //     birth_date: "2021-11-13T04:31:17.022Z",
           //     business_entity_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
           //     citizen_country_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
