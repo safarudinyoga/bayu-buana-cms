@@ -651,6 +651,7 @@ class BBDataTable extends Component {
               : "",
             targets: [2],
           },
+          { visible: false, targets: module === "employee" ? [4, 5, 8] : [] },
           {
             className: module
               ? module === "email-setup-template"
@@ -672,7 +673,6 @@ class BBDataTable extends Component {
             ],
             className: module === "employee" ? "desktop" : "",
           },
-
           // {
           //   orderable: false,
           // className: "table-row-action",
