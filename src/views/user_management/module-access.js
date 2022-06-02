@@ -1,6 +1,5 @@
 import { withRouter, useHistory } from "react-router"
 import React, { useEffect, useRef, useState } from "react"
-import useQuery from "lib/query"
 import { Table, Form, Card } from "react-bootstrap"
 import AccessManagerRow from "components/table/access-manager-row"
 import Api from "config/api"
@@ -9,9 +8,8 @@ import * as Yup from "yup"
 import "./module-access.css"
 
 function ModuleAccess(props) {
-  const isView = useQuery().get("action") === "view"
   const history = useHistory()
-  const [formBuilder, setFormBuilder] = useState(null)
+
   const [loading, setLoading] = useState(true)
   const [id, setId] = useState(null)
   const [modules, setModules] = useState([])
@@ -80,8 +78,6 @@ function ModuleAccess(props) {
   }
 
   useEffect(async () => {
-    let userTypeId = props.match.params.id
-
     try {
       if (id) {
         let resModule = await api.get(`/user/user-types/${id}/modules`)
