@@ -128,7 +128,10 @@ class TableHeader extends Component {
 
   handleClick() {
     if (this.props.createOnModal) {
-      this.props.setCreateModal({ show: true, disabled_form: false })
+      this.props.setCreateModal({ show: true, disabled_form: false, })
+      if(this.props.module == 'standard-service'){
+        this.props.setCreateModal({ show: true, disabled_form: false, service_level_code: this.props.serviceLevelCode})
+      }
     } else if (this.props.isReplaceTable) {
       this.props.setId(null)
       this.props.handleReplaceTable(!this.props.isReplaceTable)
@@ -273,6 +276,7 @@ class TableHeader extends Component {
               pathname === "/master/corporate-divisions") && (
               <OverlayTrigger
                 placement="top"
+                trigger={"hover"}
                 overlay={<Tooltip>Click to view division hierarchy</Tooltip>}
               >
                 <Link to={`${pathname}/hierarchy`} className="menu-link ml-5">
@@ -293,6 +297,7 @@ class TableHeader extends Component {
               !hideCreate && (
                 <OverlayTrigger
                   placement="top"
+                  trigger={"hover"}
                   overlay={<Tooltip>Click to create</Tooltip>}
                 >
                   <button
@@ -315,6 +320,7 @@ class TableHeader extends Component {
               pathname !== "/internal/shopping-cache" && (
                 <OverlayTrigger
                   placement="top"
+                  trigger={"hover"}
                   overlay={<Tooltip>Click to print</Tooltip>}
                 >
                   <Link
