@@ -233,15 +233,15 @@ function Travellers(props) {
   )
 
   useEffect(() => {
-    props.handleRoundtrip("adult_count", adultCount)
+    props.handleTrip("adult_count", adultCount)
   }, [adultCount])
 
   useEffect(() => {
-    props.handleRoundtrip("children_count", childrenCount)
+    props.handleTrip("children_count", childrenCount)
   }, [childrenCount])
 
   useEffect(() => {
-    props.handleRoundtrip("infant_count", infantCount)
+    props.handleTrip("infant_count", infantCount)
   }, [infantCount])
   
 

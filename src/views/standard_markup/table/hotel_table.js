@@ -5,11 +5,11 @@ export default function HotelTable() {
 
   let [params, setParams] = useState({
     title: "Standard Markup",
-    baseRoute: "/master/markup-categories",
-    endpoint: "/master/",
-    deleteEndpoint: "/master/markup-categories",
-    activationEndpoint: "/master/markup-categories",
-    deactivationEndpoint: "/master/markup-categories",
+    baseRoute: "/master/standard-markup/form/hotel-form",
+    endpoint: "/master/standard-markup/",
+    deleteEndpoint: "/master/standard-markup/",
+    activationEndpoint: "/master/standard-markup/",
+    deactivationEndpoint: "/master/standard-markup/",
     columns: [
       {
         title: "Preset Name",

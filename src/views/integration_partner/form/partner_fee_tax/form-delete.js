@@ -1,34 +1,33 @@
 import { withRouter } from "react-router"
 import React, { useState, useEffect } from "react"
-import { Button } from "react-bootstrap"
+import { Form, Button } from "react-bootstrap"
+import { Formik } from "formik"
 import Api from "config/api"
 import { useDispatch, useSelector } from "react-redux"
-import { setAlert, setModalDelete } from "redux/ui-store"
-import { useParams } from "react-router-dom"
+import { setAlert, setModalDelete, setModalTitle } from "redux/ui-store"
 import CancelButton from "components/button/cancel"
 import errorIcon from "assets/icons/error.svg"
-const endpoint = "/master/integration-partners"
+const endpoint = "/master/corporate-rating-type-levels"
 function DeleteForm(props) {
 	const dispatch = useDispatch()
-  const { id } = useParams()
   const showModalDelete = useSelector((state) => state.ui.showModalDelete)
   const API = new Api()
   const isView = showModalDelete.disabled_form || props.isView
-  const [idMealPlan, setIdMealPlan] = useState(null)
+  const [id, setId] = useState(null)
   const [loading, setLoading] = useState(true)
   const [formValues, setFormValues] = useState({
-    meal_plan_type_name: "",
+    fee_tax_type_name: ""
   })
 
   useEffect(async () => {
     let formId = showModalDelete.id || props.id
-    console.log('formId', formId)
+
     if(formId) {
       try {
-        let {data} = await API.get(endpoint + "/" + id + "/meal-plans/" + formId)
+        let {data} = await API.get(`/master/integration-partners/${props.match.params.id}/fee-taxes` + "/" + formId)
         console.log(data)
         setFormValues({
-          meal_plan_type_name: data.meal_plan_type_name,
+          fee_tax_type_name: data.fee_tax_type_name,
         })
       } catch(e) {
         console.log(e)
@@ -45,18 +44,18 @@ function DeleteForm(props) {
       setLoading(false)
     }
 
-    setIdMealPlan(showModalDelete.id)
+    setId(showModalDelete.id)
   }, [showModalDelete.id])
 
  
 	
 	const onSubmit = async (values, a) => {
 		try {
-      let res = await API.delete(endpoint + "/" + id + "/meal-plans/" + idMealPlan)
+      let res = await API.delete(`/master/integration-partners/${props.match.params.id}/fee-taxes/` + id)
       dispatch(setModalDelete({show: false, id: null, disabled_form: false}))
       dispatch(
 				setAlert({
-				  message: `Record Partner Meal Plan Name : ${formValues.meal_plan_type_name} was successfully deleted.`,
+				  message: ` Record 'Partner Fee Tax Name : ${formValues.fee_tax_type_name} was successfully deleted.`,
 				}),
       )
 		} catch(e) {
@@ -73,7 +72,7 @@ function DeleteForm(props) {
       <div style={{textAlign:'center'}}>
       <img src={errorIcon} className="mr-2" alt="new" />
         <span style={{color: '#333333', fontSize: '14px'}}>
-          Are you sure you want to delete 'Partner Meal Plan Name: {formValues.meal_plan_type_name}'?
+        Are you sure you want to delete 'Partner Fee Tax Name: {formValues.fee_tax_type_name}'?
         </span>
       </div>
       

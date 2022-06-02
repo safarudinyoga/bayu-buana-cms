@@ -172,7 +172,7 @@ class BBDataTable extends Component {
           : module == 'partner-city' 
           ? row.city_id 
           : module == 'partner-meal-plan' 
-          ? row.meal_plan_type_id
+          ? row.integration_partner_meal_plan_type.meal_plan_type_id
           : module == 'partner-cabin' 
           ? row.cabin_type_id
           : row.id
