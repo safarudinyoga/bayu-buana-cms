@@ -7,6 +7,7 @@ import {setUIParams} from "redux/ui-store"
 import { Tabs, TabPane, Row } from "react-bootstrap"
 import { ReactSVG } from "react-svg"
 import FormInputSelectAjax from 'components/form/input-select-ajax'
+import FormCreate from "./form"
 
 export default function ShoppingCache() {
   const [key, setKey] = useState("CORPORATE CLIENT");
@@ -83,7 +84,7 @@ export default function ShoppingCache() {
     title: "Team Assignment",
     titleModal: "Team Assignment",
     baseRoute: "/master/general-team-assignment/form",
-    endpoint: "",
+    endpoint: "/master/cache-criterias",
     deleteEndpoint: "",
     columns: [
       {
@@ -126,7 +127,7 @@ export default function ShoppingCache() {
         visible: false,
       },
     ],
-    emptyTable: "No hotel suppliers found",
+    emptyTable: "No Shopping Cache found",
     recordName: ["hotel_supplier_code", "hotel_supplier_name"],
   })
   let [paramsHotels, setParamsHotels] = useState({
@@ -138,7 +139,7 @@ export default function ShoppingCache() {
     title: "Team Assignment",
     titleModal: "Team Assignment",
     baseRoute: "/master/general-team-assignment/form",
-    endpoint: "",
+    endpoint: "/master/cache-criterias",
     deleteEndpoint: "",
     columns: [
       {
@@ -173,7 +174,7 @@ export default function ShoppingCache() {
         visible: false,
       },
     ],
-    emptyTable: "No hotel suppliers found",
+    emptyTable: "No Shopping Cache found",
     recordName: ["hotel_supplier_code", "hotel_supplier_name"],
   })
 
@@ -197,7 +198,7 @@ export default function ShoppingCache() {
                 </div>
             }
             >
-                <BBDataTable {...params} extraFilter={extraFilter} onReset={onReset} {...params} />
+                <BBDataTable {...params} extraFilter={extraFilter} onReset={onReset} {...params} modalContent={FormCreate} modalSize={"xl"} />
             </TabPane>
             <TabPane
             className="m-3"
@@ -209,7 +210,7 @@ export default function ShoppingCache() {
                 </div>
             }
             >
-                <BBDataTable {...paramsHotels}  onReset={onReset} {...paramsHotels} />
+                <BBDataTable {...paramsHotels}  onReset={onReset} {...paramsHotels} modalContent={FormCreate} modalSize={"xl"} />
             </TabPane>
         </Tabs>
       </div>
