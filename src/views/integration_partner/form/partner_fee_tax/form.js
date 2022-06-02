@@ -15,6 +15,7 @@ import "react-dropzone-uploader/dist/styles.css"
 import { useParams } from "react-router-dom"
 import CancelButton from "components/button/cancel";
 import FormikControl from "../../../../components/formik/formikControl"
+import _ from "lodash"
 
 const endpoint = "/master/integration-partners";
 const FeeTaxes = (props) => {
@@ -83,7 +84,10 @@ Yup.addMethod(Yup.string, 'uniqueValueString', function (fieldName, message) {
         let res = await api.get(endpoint + "/" + id + "/fee-taxes/" + formId);
         setFormValues({ 
           ...formValues,
-          fee_tax_type_id: res.data.fee_tax_type_id ? res.data.fee_tax_type.fee_tax_type_name : "",
+          fee_tax_type_id: _.isEmpty(res.data.fee_tax_type) ? '' : {
+            value: res.data.fee_tax_type.id,
+            label: res.data.fee_tax_type.fee_tax_type_name,
+          },
           fee_tax_type_code: res.data.fee_tax_type_code ? res.data.fee_tax_type_code : "",
           fee_tax_type_name: res.data.fee_tax_type_name ? res.data.fee_tax_type_name : "",
         })
@@ -107,12 +111,13 @@ Yup.addMethod(Yup.string, 'uniqueValueString', function (fieldName, message) {
       }else{
           let res = await api.post(endpoint + "/" + id + "/fee-taxes", formatted);
       }
+      dispatch(setCreateModal({ show: false, id: null, disabled_form: false }));
       dispatch(
         setAlert({
             message: `Record 'Partner Fee Tax Name: ${values.fee_tax_type_name}' has been successfully saved.`,
         })
       );
-      dispatch(setCreateModal({ show: false, id: null, disabled_form: false }));
+
       
     } catch (e) {
       dispatch(
