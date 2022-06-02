@@ -61,6 +61,10 @@
   padding: 10px 20px;
 }
 
+.routes-sm .form-with-label__title {
+  font-size: 10px;
+}
+
 .form-with-label__title .label-required:after {
   color: #d91c1c;
   content: "*";
@@ -136,6 +140,39 @@
   padding: 10px;
 }
 
+.trip-date-sm-container {
+  width: 160px;
+}
+
+.trip-date-md-container {
+  width: 220px;
+}
+
+.traveller-sm .form-with-label, .trip-date-sm .form-with-label {
+  font-size: 0.8rem;
+}
+
+.traveller-sm .form-with-label__title, .trip-date-sm .form-with-label__title {
+  font-size: 10px;
+}
+
+.traveller-container {
+  width: 280px;
+  margin-bottom: 10px;
+}
+
+.traveller-container .form-with-label__suggest-icon {
+  bottom: 15px;
+}
+
+.traveller-container.traveller-sm {
+  width: 120px;
+}
+
+.traveller-container.traveller-sm .form-with-label__suggest-icon {
+  bottom: 7px;
+}
+
 /*card-header == <Accordion.Toggle/>*/
 div[class=”card-header”] .accordion-arrow {
   transition: all 0.3s ease;
@@ -177,6 +214,11 @@ div[class~=”show”] + div[class=”card-header”] .accordion-arrow {
   padding-bottom: 1rem;
 }
 
+.routes-sm .react-autosuggest__input {
+  width: 170px;
+  font-size: 10px;
+}
+
 .react-autosuggest__input--focused {
   outline: none;
 }
@@ -203,6 +245,7 @@ div[class~=”show”] + div[class=”card-header”] .accordion-arrow {
   border-bottom-left-radius: 4px;
   border-bottom-right-radius: 4px;
   z-index: 2;
+  overflow-y: unset;
 }
 
 .react-autosuggest__suggestions-list {
@@ -218,6 +261,11 @@ div[class~=”show”] + div[class=”card-header”] .accordion-arrow {
 
 .react-autosuggest__suggestion--highlighted {
   background-color: #ddd;
+}
+
+.routes-sm .react-autosuggest__suggestions-container--open {
+  position: fixed;
+  top: 352px;
 }
 
 /* React MultiDatePicker */

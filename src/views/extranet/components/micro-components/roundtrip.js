@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-// import DatePicker from 'react-datepicker'
 import DatePicker from 'react-multi-date-picker'
 import { Form, Popover, OverlayTrigger, Button } from 'react-bootstrap'
 import { ReactSVG } from "react-svg"
