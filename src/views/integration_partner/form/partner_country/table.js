@@ -1,10 +1,7 @@
 import BBDataTable from "components/table/bb-data-table"
-import rowStatus from "lib/row-status"
-import { Card,  Row, Col, Button, Image } from "react-bootstrap"
-import React, { useEffect, useState } from 'react'
+import { Card } from "react-bootstrap"
+import React, {  useState } from 'react'
 import Form from "./form"
-import { useDispatch } from 'react-redux'
-import { setUIParams } from "redux/ui-store"
 
 export default function IntegrationPartnerCountriesTable() {
 

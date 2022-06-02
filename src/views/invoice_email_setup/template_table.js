@@ -3,15 +3,19 @@ import React, {useEffect} from "react"
 import {useDispatch} from "react-redux"
 import { useParams } from "react-router-dom"
 import {setUIParams} from "redux/ui-store"
+import Api from "config/api"
 
 const backUrl = "/master/invoice-email-setup"
 export default function InvoiceEmailSetupTable() {
     let routeParams = useParams()
     let dispatch = useDispatch()
-    useEffect(() => {
+
+  const API = new Api()
+    useEffect(async() => {
+        let {data} = await API.get("/master/configurations/agent-email-categories/" + routeParams.template_id)
         dispatch(
             setUIParams({
-                title: "Email Template 1",
+                title: data?.email_category_name || "Email Template 1",
                 breadcrumbs: [
                     {
                         text: "Setup and Configurations",
@@ -21,7 +25,7 @@ export default function InvoiceEmailSetupTable() {
                         link: backUrl,
                     },
                     {
-                        text: "Email Template 1",
+                        text: data?.email_category_name || "Email Template 1",
                     },
                 ],
             }),
@@ -30,22 +34,27 @@ export default function InvoiceEmailSetupTable() {
 
     let params = {
         hideCreate: true,
+        isCheckbox: false,
         title: "Invoice Email Setup",
         titleModal: "Invoice Email Setup",
-        baseRoute: `/master/invoice-email-setup/${routeParams.template_id}/form`,
+        baseRoute: `/master/configurations/agent-email-categories/${routeParams.template_id}/form`,
         module: "email-setup-template",
-        endpoint: "/master/languages",
+        endpoint: `/master/configurations/agent-email-categories/${routeParams.template_id}`,
         deleteEndpoint: "",
         activationEndpoint: "",
         deactivationEndpoint: "",
         columns: [
             {
-                title: "Email Template",
-                data: "Email Template",
+                title: "Email Name",
+                data: "email_template_name",
+            },
+            {
+                title: "Type",
+                data: "message_category_name",
             },
         ],
-        emptyTable: "No Invoice Email found",
-        recordName: ["hotel_brand_code", "hotel_brand_name"],
+        emptyTable: "No Email Template found",
+        recordName: ["email_template_code", "email_template_name"],
         showAdvancedOptions: false
     }
     return <BBDataTable {...params} />

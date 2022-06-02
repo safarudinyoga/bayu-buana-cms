@@ -176,6 +176,9 @@ class BBDataTable extends Component {
           : module === 'partner-cabin' 
           ? row.cabin_type_id
           : row.id
+
+        const showDelete = module !== "integration-partner" && module !== "identity-rules" && module !== "email-setup-template"
+
         return (
           `
           <a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item ${hideDetail ? "mr-2" : ""}" data-action="edit" data-id="${targetDataId}" title="Click to edit"><img src="${editIcon}"/></a>
@@ -191,8 +194,7 @@ class BBDataTable extends Component {
             ? `<a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item mr-2" data-action="history" data-id="${row.id}" title="Click to view history"><img src="/img/icons/history.svg"/></a>`
             : ""
           }
-          ${
-            module !== "integration-partner" && module !== "identity-rules" ? `<a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item" data-action="delete" data-id="${targetDataId}" data-name="${cvtRecordName}" ${infoDelete ? `data-info="${info}"` : ""}  title="${module === "exchange-rate" || module === "partner-city" ? "Delete" : "Click to delete"}"><img src="${removeIcon}" /></a>`
+          ${showDelete? `<a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item" data-action="delete" data-id="${targetDataId}" data-name="${cvtRecordName}" ${infoDelete ? `data-info="${info}"` : ""}  title="${module === "exchange-rate" || module === "partner-city" ? "Delete" : "Click to delete"}"><img src="${removeIcon}" /></a>`
             : ""
           }
           `
@@ -547,7 +549,7 @@ class BBDataTable extends Component {
           {
             targets: [3],
             className: !module === "loyalty-programs" ? "" : "cstm-col-width-2",
-            visible: module ? module === "standard-ancillary-fee" ? false : true : true
+            visible: module ? module === "standard-ancillary-fee" || module === "email-setup" ? false : true : true
           },
           { responsivePriority: 1, targets: 1 },
           { responsivePriority: 2, targets: 2 },
@@ -587,6 +589,10 @@ class BBDataTable extends Component {
           {
             className: module ? module === "standard-ancillary-fee" || module === "email-setup" ? "width-ancillary" : this.props.actionWidthClass || "" : "",
             targets: [2],
+          },
+          {
+            className: module ? module === "email-setup-template" ? "width-ancillary" : this.props.actionWidthClass || "" : "",
+            targets: [ columns.length - 1],
           },
           {
             targets: [columns.length - 3, columns.length - 1],

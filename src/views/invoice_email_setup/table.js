@@ -28,19 +28,23 @@ export default function InvoiceEmailSetupTable() {
         title: "Invoice Email Setup",
         titleModal: "Invoice Email Setup",
         baseRoute: "/master/invoice-email-setup",
-        // endpoint: "/master/invoice_email_setup",
-        endpoint: "/master/languages",
+        endpoint: "/master/configurations/agent-email-categories",
+        // endpoint: "/master/countries",
         deleteEndpoint: "",
         activationEndpoint: "",
         deactivationEndpoint: "",
         columns: [
             {
                 title: "Email Template",
-                data: "Email Template",
+                // data: "country_code",
+                render: (d, t, row) => {
+                    if (row?.is_default) return "DEFAULT"
+                    return row?.email_category_name
+                }
             },
         ],
         emptyTable: "No Invoice Email found",
-        recordName: ["hotel_brand_code", "hotel_brand_name"],
+        recordName: ["email_category_code", "email_category_name"],
         showAdvancedOptions: false,
         showCopyAct: true,
         module: "email-setup",

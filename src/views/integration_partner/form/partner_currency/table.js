@@ -1,7 +1,5 @@
-import React, { useEffect } from "react"
+import React from "react"
 import BBDataTable from "components/table/bb-data-table"
-import { useDispatch } from "react-redux"
-import { setUIParams } from "redux/ui-store"
 import Form from "./form"
 import { Card } from "react-bootstrap"
 import { useParams } from "react-router-dom"
