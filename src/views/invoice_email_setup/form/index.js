@@ -26,9 +26,9 @@ import DOMPurify from "dompurify"
 import { stateToHTML } from "draft-js-export-html"
 import FormikControl from "components/formik/formikControl"
 import CancelButton from "components/button/cancel"
+import { useParams } from "react-router-dom"
 
 const endpoint = "/master/employees"
-const backUrl = "/master/invoice-email-setup"
 
 const listLanguages = [
   {
@@ -44,6 +44,10 @@ const listLanguages = [
 
 const InvoiceEmailSetupForm = (props) => {
   let dispatch = useDispatch()
+  let routeParams = useParams()
+  const backToEmailSetup = "/master/invoice-email-setup"
+  const backToEmailTemplate = `/master/invoice-email-setup/${routeParams.template_id}`
+
   let api = new Api()
   const [tabKey, setTabKey] = useState("general-information")
 
@@ -120,11 +124,11 @@ const InvoiceEmailSetupForm = (props) => {
             text: "Setup and Configuration",
           },
           {
-            link: backUrl,
+            link: backToEmailSetup,
             text: "Invoice Email Setup",
           },
           {
-            link: backUrl,
+            link: backToEmailTemplate,
             text: "Email Template 1",
           },
           {
@@ -160,7 +164,8 @@ const InvoiceEmailSetupForm = (props) => {
     api
       .get("/master/agent-languages?size=-1&sort=sort,language_name")
       .then((res) => {
-        setLanguages(res.data.items)
+        // setLanguages(res.data.items)
+        setLanguages(listLanguages)
       })
   }, [])
 

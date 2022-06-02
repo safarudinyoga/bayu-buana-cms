@@ -1,22 +1,27 @@
 import BBDataTable from "components/table/bb-data-table"
 import React, {useEffect} from "react"
 import {useDispatch} from "react-redux"
+import { useParams } from "react-router-dom"
 import {setUIParams} from "redux/ui-store"
 
-import FormEmailCategory from "./form/email_category"
-
+const backUrl = "/master/invoice-email-setup"
 export default function InvoiceEmailSetupTable() {
+    let routeParams = useParams()
     let dispatch = useDispatch()
     useEffect(() => {
         dispatch(
             setUIParams({
-                title: "Invoice Email Setup",
+                title: "Email Template 1",
                 breadcrumbs: [
                     {
                         text: "Setup and Configurations",
                     },
                     {
                         text: "Invoice Email Setup",
+                        link: backUrl,
+                    },
+                    {
+                        text: "Email Template 1",
                     },
                 ],
             }),
@@ -27,8 +32,8 @@ export default function InvoiceEmailSetupTable() {
         hideCreate: true,
         title: "Invoice Email Setup",
         titleModal: "Invoice Email Setup",
-        baseRoute: "/master/invoice-email-setup",
-        // endpoint: "/master/invoice_email_setup",
+        baseRoute: `/master/invoice-email-setup/${routeParams.template_id}/form`,
+        module: "email-setup-template",
         endpoint: "/master/languages",
         deleteEndpoint: "",
         activationEndpoint: "",
@@ -41,10 +46,7 @@ export default function InvoiceEmailSetupTable() {
         ],
         emptyTable: "No Invoice Email found",
         recordName: ["hotel_brand_code", "hotel_brand_name"],
-        showAdvancedOptions: false,
-        showCopyAct: true,
-        module: "email-setup",
-        isCheckbox: false
+        showAdvancedOptions: false
     }
-    return <BBDataTable {...params} modalContent={FormEmailCategory}/>
+    return <BBDataTable {...params} />
 }
