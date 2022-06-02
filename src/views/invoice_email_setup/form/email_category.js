@@ -102,20 +102,11 @@ function FormEmailCategory(props) {
   // })
 
 	const validationSchema =  Yup.object().shape({
-    from_currency_id: Yup.object()
-      .required("From Currency is required.")
-      .pairCurrency('to_currency_id', 'From Currency and To Currency must be different.')
-      .uniqueExchangeRate('Exchange rate already exists')
-      ,
-    to_currency_id: Yup.object()
-      .required("To Currency is required.")
-      .pairCurrency('from_currency_id', 'From Currency and To Currency must be different.')
-      .uniqueExchangeRate('Exchange rate already exists.')
-      ,
-    multiply_rate: Yup.number()
-      // .matches(/^\d{0,15}(\.\d{0,8})?$/, "maximum value: 15 digits with 8 decimal digits")
-      .required("Multiply Rate is required."),
-      // .validateNumber('multiply rate must be greater than 0'),
+    from_currency_id: Yup.string()
+      .required("Email Template Name is required."),
+    to_currency_id: Yup.string(),
+    multiply_rate: Yup.object()
+      .required("Copy Email Template From is required."),
   })
 
   const isValidateNumber = (num) => {
@@ -192,7 +183,7 @@ function FormEmailCategory(props) {
                 control="textarea"
                 required="label-required"
                 label="Description"
-                name="multiply_rate"
+                name="description"
                 style={{ maxWidth: 250 }}
                 size={formSize}
                 // disabled={isView || loading}
