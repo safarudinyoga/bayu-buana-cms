@@ -3,6 +3,8 @@ import React, {useEffect} from "react"
 import {useDispatch} from "react-redux"
 import {setUIParams} from "redux/ui-store"
 
+import FormEmailCategory from "./form/email_category"
+
 export default function InvoiceEmailSetupTable() {
     let dispatch = useDispatch()
     useEffect(() => {
@@ -44,5 +46,5 @@ export default function InvoiceEmailSetupTable() {
         module: "email-setup",
         isCheckbox: false
     }
-    return <BBDataTable {...params} />
+    return <BBDataTable {...params} modalContent={FormEmailCategory}/>
 }
