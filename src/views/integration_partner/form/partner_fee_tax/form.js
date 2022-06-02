@@ -83,7 +83,7 @@ Yup.addMethod(Yup.string, 'uniqueValueString', function (fieldName, message) {
         let res = await api.get(endpoint + "/" + id + "/fee-taxes/" + formId);
         setFormValues({ 
           ...formValues,
-          fee_tax_type_id: res.data.fee_tax_type_id ? res.data.fee_tax_type_id : "",
+          fee_tax_type_id: res.data.fee_tax_type_id ? res.data.fee_tax_type.fee_tax_type_name : "",
           fee_tax_type_code: res.data.fee_tax_type_code ? res.data.fee_tax_type_code : "",
           fee_tax_type_name: res.data.fee_tax_type_name ? res.data.fee_tax_type_name : "",
         })
