@@ -51,7 +51,7 @@ const StandardService = (props) => {
                     </div>
                   }
                 >
-                  <SharedTabel />
+                  <SharedTabel serviceLevelCode="1"/>
                 </TabPane>
                 <TabPane
                   className="m-3"
@@ -64,7 +64,7 @@ const StandardService = (props) => {
                     </div>
                   }
                 >
-                  <SharedTabel />
+                  <SharedTabel serviceLevelCode="2"/>
                 </TabPane>
                 <TabPane
                   className="m-3"
@@ -77,7 +77,7 @@ const StandardService = (props) => {
                     </div>
                   }
                 >
-                  <SharedTabel />
+                  <SharedTabel serviceLevelCode="3"/>
                 </TabPane>
               </Tabs>
             </div>

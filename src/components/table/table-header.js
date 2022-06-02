@@ -128,7 +128,10 @@ class TableHeader extends Component {
 
   handleClick() {
     if (this.props.createOnModal) {
-      this.props.setCreateModal({ show: true, disabled_form: false })
+      this.props.setCreateModal({ show: true, disabled_form: false, })
+      if(this.props.module == 'standard-service'){
+        this.props.setCreateModal({ show: true, disabled_form: false, service_level_code: this.props.serviceLevelCode})
+      }
     } else if (this.props.isReplaceTable) {
       this.props.setId(null)
       this.props.handleReplaceTable(!this.props.isReplaceTable)
