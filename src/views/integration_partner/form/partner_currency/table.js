@@ -5,7 +5,7 @@ import { Card } from "react-bootstrap"
 import { useParams } from "react-router-dom"
 
 export default function IntegrationPartnerCurrenciesTable() {
-  const param = useParams()
+  const { id } = useParams()
   let params = {
     isCheckbox: false,
     showAdvancedOptions: false,
@@ -14,8 +14,8 @@ export default function IntegrationPartnerCurrenciesTable() {
     title: "Partner Currencies",
     titleModal: "Partner Currencies",
     baseRoute: "/master/integration-partner-currencies/form",
-    endpoint: `/master/integration-partners/${param.id}/currencies`,
-    deleteEndpoint: `/master/integration-partners/${param.id}/currencies`,
+    endpoint: `/master/integration-partners/${id}/currencies`,
+    deleteEndpoint: `/master/integration-partners/${id}/currencies`,
     btnDownload: ".buttons-csv",
     columns: [
       {
@@ -34,7 +34,7 @@ export default function IntegrationPartnerCurrenciesTable() {
     emptyTable: "No Partner Currency found",
     recordName: ["currency_code", "currency_name"],
     btnDownload: ".buttons-csv",
-    module: "integration-partner-currencies",
+    module: "partner-currency",
     showInfoDelete: true,
     infoDelete: [
       {title: "Partner Currency Name", recordName: "currency_name"}, 
