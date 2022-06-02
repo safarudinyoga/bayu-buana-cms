@@ -163,7 +163,7 @@ class BBDataTable extends Component {
           }).join(" ")
         }
 
-        const targetDataId = module === 'integration-partner-currencies'
+        const targetDataId = module == 'partner-currency'
           ? row.currency_id
           : module === 'partner-hotel-suppliers'
           ? row.hotel_supplier_id
