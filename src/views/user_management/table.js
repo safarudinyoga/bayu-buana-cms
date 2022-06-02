@@ -3,12 +3,9 @@ import BBDataTable from "components/table/bb-data-table"
 import rowStatus from "lib/row-status"
 import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
-import { renderColumn } from "lib/translation"
-import moment from "moment"
 import { useWindowSize } from "rooks"
 
 import FormInputSelectAjax from "components/form/input-select-ajax"
-import { findLastIndex } from "lodash"
 
 export default function EmployeeTable() {
   let dispatch = useDispatch()
@@ -34,7 +31,7 @@ export default function EmployeeTable() {
   let [selectedDivisionIds, setSelectedDivisionIds] = useState([])
   let [selectedOffice, setSelectedOffice] = useState([])
   let [selectedOfficeIds, setSelectedOfficeIds] = useState([])
-  const { innerWidth, innerHeight, outerHeight, outerWidth } = useWindowSize()
+  const { innerWidth } = useWindowSize()
 
   const onFilterChangeJobTitle = (e, values) => {
     let ids = []
