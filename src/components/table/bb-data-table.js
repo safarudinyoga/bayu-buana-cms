@@ -32,7 +32,6 @@ import showIcon from "assets/icons/show.svg"
 import ModalCreate from "components/Modal/bb-modal"
 import ModalDelete from "components/Modal/bb-modal-delete"
 import customPrint from "../../lib/customPrint"
-import { end } from "@popperjs/core"
 
 window.JSZip = JSZip
 
@@ -72,7 +71,7 @@ class BBDataTable extends Component {
     let self = this
     $.fn.dataTableExt.errMode = "none"
     let columns = []
-    const { recordName, msgType, module } = this.props
+    const { recordName, module } = this.props
     const { isCheckbox, isShowColumnAction } = this.state
     columns.push(
       isCheckbox
@@ -143,12 +142,12 @@ class BBDataTable extends Component {
               var x = window.matchMedia("(max-width: 768px)")
               tooltipCust(x)
               x.addListener(tooltipCust)
-              const filteredRecordName = Object.keys(row)
-                .filter((key) => allowed.includes(key))
-                .reduce((obj, key) => {
-                  obj[key] = row[key]
-                  return obj
-                }, {})
+              // const filteredRecordName = Object.keys(row)
+              //   .filter((key) => allowed.includes(key))
+              //   .reduce((obj, key) => {
+              //     obj[key] = row[key]
+              //     return obj
+              //   }, {})
 
               let showSwitch = self.props.switchStatus
               let checked = ""
@@ -157,6 +156,7 @@ class BBDataTable extends Component {
               }
 
               let hideDetail = self.props.hideDetail
+              let showCopyAct = self.props.showCopyAct || false
 
               let infoDelete = self.props.infoDelete
               let info = ""
@@ -177,23 +177,27 @@ class BBDataTable extends Component {
               }
 
               const targetDataId =
-                module == "integration-partner-currencies"
+                module == "partner-currency"
                   ? row.currency_id
-                  : module == "partner-hotel-suppliers"
+                  : module === "partner-hotel-suppliers"
                   ? row.hotel_supplier_id
-                  : module == "partner-fee-taxes"
+                  : module === "partner-fee-taxes"
                   ? row.fee_tax_type_id
-                  : module == "partner-city"
+                  : module === "partner-city"
                   ? row.city_id
-                  : module == "partner-meal-plan"
-                  ? row.meal_plan_type_id
-                  : module == "partner-cabin"
+                  : module === "partner-meal-plan"
+                  ? row.integration_partner_meal_plan_type.meal_plan_type_id
+                  : module === "partner-cabin"
                   ? row.cabin_type_id
                   : row.id
               return `
           <a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item ${
                 hideDetail ? "mr-2" : ""
               }" data-action="edit" data-id="${targetDataId}" title="Click to edit"><img src="${editIcon}"/></a>
+          
+          <a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item ${
+                showCopyAct ? "d-inline" : "d-none"
+              }" data-action="copy" data-id="${targetDataId}" title="Click to copy"><i class="fas fa-copy"></i></a>
           <a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="${
                 hideDetail ? "d-none" : "d-inline"
               } table-row-action-item" data-action="view" data-id="${
@@ -202,11 +206,11 @@ class BBDataTable extends Component {
           <a href="javascript:void(0);" class="${
             showSwitch ? "d-inline" : "d-none"
           } custom-switch custom-switch-bb table-row-action-item" data-id="${
-                module == "employee" ? row.employee_id : row.id
+                module === "employee" ? row.employee_id : row.id
               }" data-action="update_status" data-status="${
                 row.status
               }" data-toggle="tooltip" data-placement="${placement}" title="${
-                row.status == 1 ? "Deactivate" : "Activate"
+                row.status === 1 ? "Deactivate" : "Activate"
               }">
             <input type="checkbox" class="custom-control-input check-status-${
               row.id
@@ -584,25 +588,16 @@ class BBDataTable extends Component {
           {
             targets: [1, 2],
             className: !this.state.isCheckbox
-              ? module == "employee" || module == "ancillary"
-                ? ""
-                : "custom-col-width"
-              : "cstm-col-width",
-          },
-          {
-            targets: [1],
-            width: "5%",
-            className: !this.state.isCheckbox
-              ? module == "user-management"
+              ? module === "employee" || module === "ancillary"
                 ? ""
                 : "custom-col-width"
               : "cstm-col-width",
           },
           {
             targets: [3],
-            className: !module == "loyalty-programs" ? "" : "cstm-col-width-2",
+            className: !module === "loyalty-programs" ? "" : "cstm-col-width-2",
             visible: module
-              ? module == "standard-ancillary-fee"
+              ? module === "standard-ancillary-fee"
                 ? false
                 : true
               : true,
@@ -615,12 +610,12 @@ class BBDataTable extends Component {
             // this case `data: 0`.
             render: function (data, type, row) {
               var datas = data
-              if (module == "employee") {
+              if (module === "employee") {
                 datas = data + " " + row.middle_name + " " + row.surname
               }
               return datas
             },
-            targets: module == "employee" ? 3 : "",
+            targets: module === "employee" ? 3 : "",
           },
           {
             // The `data` parameter refers to the data for the cell (defined by the
@@ -628,20 +623,7 @@ class BBDataTable extends Component {
             // this case `data: 0`.
             render: function (data, type, row) {
               var datas = data
-              if (module == "user-management") {
-                datas = data + " " + row.middle_name + " " + row.surname
-              }
-              return datas
-            },
-            targets: module == "user-management" ? 2 : "",
-          },
-          {
-            // The `data` parameter refers to the data for the cell (defined by the
-            // `data` option, which defaults to the column being worked with, in
-            // this case `data: 0`.
-            render: function (data, type, row) {
-              var datas = data
-              if (module == "employee") {
+              if (module === "employee") {
                 let division = ""
                 if (row.division.division_name) {
                   division = row.division.division_name
@@ -652,18 +634,14 @@ class BBDataTable extends Component {
               }
               return datas
             },
-            targets: module == "employee" ? 7 : "",
+            targets: module === "employee" ? 7 : "",
           },
-          { visible: false, targets: module == "employee" ? [4, 5, 8] : [] },
-          {
-            visible: false,
-            targets: module == "user-management" ? [3, 4] : [],
-          },
+          { visible: false, targets: module === "employee" ? [4, 5, 8] : [] },
           {
             className: module
-              ? module != "standard-ancillary-fee"
-                ? this.props.actionWidthClass || ""
-                : "width-ancillary"
+              ? module === "standard-ancillary-fee" || module === "email-setup"
+                ? "width-ancillary"
+                : this.props.actionWidthClass || ""
               : "",
             targets: [2],
           },
@@ -680,7 +658,6 @@ class BBDataTable extends Component {
             ],
             className: module === "employee" ? "desktop" : "",
           },
-
           // {
           //   orderable: false,
           // className: "table-row-action",
@@ -756,7 +733,7 @@ class BBDataTable extends Component {
           this.queryParams.sort()
           let query = ""
           for (let pair of this.queryParams.entries()) {
-            if (query == "") query += "?"
+            if (query === "") query += "?"
             if (query.length > 1) query += "&"
             query += pair[0] + "=" + pair[1]
           }
@@ -792,7 +769,7 @@ class BBDataTable extends Component {
               .join("_")
           }
 
-          if (module == "frequent_traveler_program") {
+          if (module === "frequent_traveler_program") {
             module = "loyalty_programs"
           }
 
@@ -1137,6 +1114,9 @@ class BBDataTable extends Component {
             } else {
               me.props.history.push(base + "/" + id)
             }
+            break
+          case "copy":
+            me.props.setCreateModal({ show: true, id, disabled_form: false })
             break
           case "view":
             if (me.props.createOnModal) {
