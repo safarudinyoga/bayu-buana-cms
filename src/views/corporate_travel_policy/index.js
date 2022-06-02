@@ -19,6 +19,8 @@ import InvoiceSettings from "./invoice-settings"
 import TravelAdvice from "./travel-advice"
 import EmailReceiptModal from "./tabel-email-sender"
 import UserAccessType from "./user-access-type"
+import DivisionCorporate from "./division_corporate"
+import MiscellaneousConfiguration from "./miscellaneous_configuration"
 
 // const endpoint = "/user/profile"
 const backUrl = "/master/general-setup"
@@ -140,7 +142,7 @@ const TravelPolicy = (props) => {
             </Nav.Item> 
 
             <Nav.Item>
-              <Nav.Link eventKey="general-information">
+              <Nav.Link eventKey="identity-rule">
                 <div>
                   <ReactSVG src="/img/icons/setup-general-information.svg" />
                   <span>Destination Restrictions</span>
@@ -158,7 +160,7 @@ const TravelPolicy = (props) => {
             </Nav.Item>
 
             <Nav.Item>
-              <Nav.Link eventKey="identity-rule">
+              <Nav.Link eventKey="miscellaneous-configuration">
                 <div>
                   <ReactSVG src="/img/icons/setup-identity-rule.svg" />
                   <span>Miscellaneous configurations</span>
@@ -314,15 +316,30 @@ const TravelPolicy = (props) => {
             </Tab.Pane>
             <Tab.Pane eventKey="email">
               {tabKey === "email" ? (
-                <EmailReceiptModal
+                // <EmailReceiptModal
+                //   history={props.history}
+                //   backUrl={backUrl}
+                //   // handleSelectTab={(v) => handleSelectTab(v)}
+                //   onClick={() => console.log("test")}
+                // />
+                <DivisionCorporate
                   history={props.history}
                   backUrl={backUrl}
-                  // handleSelectTab={(v) => handleSelectTab(v)}
-                  onClick={() => console.log("test")}
+                  handleSelectTab={(v) => handleSelectTab(v)}
                 />
                 ): null} 
             </Tab.Pane>
-            
+
+            <Tab.Pane eventKey="miscellaneous-configuration">
+              {tabKey === "miscellaneous-configuration" ? (
+                <MiscellaneousConfiguration
+                  history={props.history}
+                  backUrl={backUrl}
+                  handleSelectTab={(v) => handleSelectTab(v)}
+                />
+                ) : null}
+            </Tab.Pane>
+
           </Tab.Content>
         </Col>
       </Row>

@@ -10,7 +10,7 @@ export default function ExchageRateTable() {
   useEffect(() => {
     dispatch(
       setUIParams({
-        title: "Exchange Rate 123",
+        title: "Exchange Rate",
         breadcrumbs: [
           {
             text: "Exchange Rate",

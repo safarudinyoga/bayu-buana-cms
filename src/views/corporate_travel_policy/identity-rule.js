@@ -1,3 +1,4 @@
+import rowStatus from 'lib/row-status'
 import React, { useEffect } from 'react'
 import { Card } from "react-bootstrap"
 import { useDispatch } from 'react-redux'
@@ -17,7 +18,7 @@ const IdentityRule = (props) => {
             text: "Corporate Management",
           },
           {
-            text: "Identity Rule",
+            text: "Travel Policy",
           },
         ],
       }),
@@ -25,11 +26,7 @@ const IdentityRule = (props) => {
   }, [])
 
   let params = {
-    isCheckbox: false,
     showAdvancedOptions: false,
-    createOnModal: true,
-    showSwitch: true,
-    isShowStatus: true,
     title: "Identity Rule",
     titleModal: "Destinations Restrictions",
     baseRoute: "/master/identity-rules/form",
@@ -37,26 +34,33 @@ const IdentityRule = (props) => {
     deleteEndpoint: "/master/batch-actions/delete/configurations/identity-rules",
     columns: [
       {
-        title: "Type",
-        data: "identity_name",
+        title: "Restriction Base On",
+        data: "restriction_base_on",
       },
       {
-        title: "Prefix",
-        data: "prefix",
+        title: "Destination Name",
+        data: "destination_name",
       },
       {
-        title: "Dynamic Prefix",
-        data: "dynamic_prefix",
+        title: "Type of Restriction",
+        data: "type_of_restriction",
       },
       {
-        title: "Next Number",
-        data: "next_number",
+        title: "Document(s)",
+        data: "document_name",
       },
+      {
+        title: "Status",
+        data: "status",
+        render: rowStatus,
+      }
     ],
     emptyTable: "No Identity Rule found",
     recordName: ["identity_code", "identity_name"],
     btnDownload: ".buttons-csv",
     module: "identity-rules",
+    isCheckbox: false,
+    switchStatus: true,
   }
 
   return (

@@ -9,7 +9,7 @@ export default function UserAccessTypeTable() {
   useEffect(() => {
     dispatch(
       setUIParams({
-        title: "User Access Type 123",
+        title: "User Access Type",
         breadcrumbs: [
           {
             text: "User & Access Management",
@@ -46,7 +46,7 @@ export default function UserAccessTypeTable() {
         data: "user_type_name",
       },
       {
-        title: "Number of assigned users123",
+        title: "Number of assigned users",
         data: "user_type_name",
       },
       {
@@ -56,9 +56,9 @@ export default function UserAccessTypeTable() {
         render: rowStatus,
       },
     ],
-    emptyTable: "No usexr access type found",
+    emptyTable: "No user access type found",
     recordName: ["user_type_code", "user_type_name"],
-    // switchStatus: false,
+    switchStatus: true,
     customFilterStatus: {
       value: "",
       options: [
