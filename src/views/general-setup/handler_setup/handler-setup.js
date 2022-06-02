@@ -14,23 +14,21 @@ import Api from "config/api"
 import { ReactSVG } from "react-svg"
 import EmailSender from "./tabel/tabel-email-sender"
 import EmailReceipt from "./tabel/tabel-email-receipt"
+import CancelButton from "components/button/cancel"
 
 const HandlerSetup = (props) => {
   let api = new Api()
   const [key, setKey] = useState("email")
-
+  const initialValues = {  }
   return (
     <>
-      {/* <Formik
-      onSubmit={async (values, { setSubmitting, resetForm }) => {
-        console.log(values)
-
-        let res = await api.put("user/profile", formatted)
-
-        return props.handleSelectTab("subscriptions")
+      <Formik
+        initialValues={initialValues}
+        onSubmit={async (values, { setSubmitting, resetForm }) => {
+        return props.handleSelectTab("identity-rule")
       }}
-    > */}
-      {/* {({
+    >
+      {({
         values,
         errors,
         touched,
@@ -42,8 +40,8 @@ const HandlerSetup = (props) => {
         setFieldValue,
         setFieldTouched,
       }) => {
-        return ( */}
-      <Form onSubmit="">
+      return (
+      <Form onSubmit={handleSubmit}>
         <Card>
           <Card.Body>
             <h3 className="card-heading">Handler Setup</h3>
@@ -84,10 +82,26 @@ const HandlerSetup = (props) => {
             </div>
           </Card.Body>
         </Card>
+        <div
+              style={{
+                marginBottom: 30,
+                marginTop: 30,
+                display: "flex",
+              }}
+            >
+              <Button
+                variant="primary"
+                type="submit"
+                style={{ marginRight: 15 }}
+              >
+                SAVE & NEXT
+              </Button>
+              <CancelButton onClick={() =>{ props.handleSelectTab("general-information")}}/>
+            </div>
       </Form>
-
-      {/* }} */}
-      {/* </Formik> */}
+        )
+      }}
+      </Formik>
     </>
   )
 }
