@@ -7,7 +7,7 @@ import FormDelete from "./form-delete"
 
 export default function IntegrationFeeTaxes() {
 
-  const { id } = useParams()
+  const param = useParams()
 
   let [params, setParams] = useState({
     createOnModal: true,
@@ -16,9 +16,9 @@ export default function IntegrationFeeTaxes() {
     title: "",
     titleModal: "",
     modalDelete: true,
-    baseRoute: `/master/integration-partners/${id}/fee-taxes`,
-    endpoint: `/master/integration-partners/${id}/fee-taxes`,
-    deleteEndpoint: "/master/batch-actions/delete/fee-tax-types",
+    baseRoute: `/master/integration-partners/${param.id}/fee-taxes`,
+    endpoint: `/master/integration-partners/${param.id}/fee-taxes`,
+    deleteEndpoint: `/master/integration-partners/${param.id}/fee-taxes`,
     hideDetail: true,
     activationEndpoint: "/master/batch-actions/activate/hotels",
     deactivationEndpoint: "/master/batch-actions/deactivate/hotels",
@@ -40,7 +40,8 @@ export default function IntegrationFeeTaxes() {
     emptyTable: "No partner fee taxes found",
     recordName: ["fee_tax_type_code", "fee_tax_type_name"],
     searchText: "Search",
-    module: "partner-fee-taxes"
+    module: "partner-fee-taxes",
+    isOpenNewTab:false
   });
 
   return (

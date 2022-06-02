@@ -276,6 +276,7 @@ class TableHeader extends Component {
               pathname === "/master/corporate-divisions") && (
               <OverlayTrigger
                 placement="top"
+                trigger={"hover"}
                 overlay={<Tooltip>Click to view division hierarchy</Tooltip>}
               >
                 <Link to={`${pathname}/hierarchy`} className="menu-link ml-5">
@@ -296,6 +297,7 @@ class TableHeader extends Component {
               !hideCreate && (
                 <OverlayTrigger
                   placement="top"
+                  trigger={"hover"}
                   overlay={<Tooltip>Click to create</Tooltip>}
                 >
                   <button
@@ -318,6 +320,7 @@ class TableHeader extends Component {
               pathname !== "/internal/shopping-cache" && (
                 <OverlayTrigger
                   placement="top"
+                  trigger={"hover"}
                   overlay={<Tooltip>Click to print</Tooltip>}
                 >
                   <Link
