@@ -40,7 +40,8 @@ export default function IntegrationFeeTaxes() {
     emptyTable: "No partner fee taxes found",
     recordName: ["fee_tax_type_code", "fee_tax_type_name"],
     searchText: "Search",
-    module: "partner-fee-taxes"
+    module: "partner-fee-taxes",
+    isOpenNewTab:false
   });
 
   return (
