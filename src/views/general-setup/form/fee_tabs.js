@@ -53,7 +53,7 @@ const FeeSection = (props) => {
                     xs={2}
                     md={3}
                     lg={5}
-                    className="ml-xs-4"
+                    className={`ml-xs-4 ${disabledAmount? "grey-text": ""} `}
                   >
                     IDR
                   </Form.Label>
@@ -186,7 +186,7 @@ const FeeSection = (props) => {
                       )}
                     </FastField>
                   }
-                  <span className="text-lg mt-1">%</span>
+                  <span className={`text-lg mt-1 ${disabledPercent? "grey-text": ""} `}>%</span>
                 </Form.Group>
               </Col>
               <Col sm={12} md={6}>
