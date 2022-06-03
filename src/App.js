@@ -106,6 +106,7 @@ import RatingTypeLevelForm from "./views/rating_type_level/form"
 
 // Master Invoice Email
 import InvoiceEmailSetupTable from "views/invoice_email_setup/table"
+import InvoiceEmailTemplateTable from "views/invoice_email_setup/template_table"
 import InvoiceEmailSetupForm from "views/invoice_email_setup/form"
 
 // Master Standard Markup
@@ -658,7 +659,10 @@ const DashboardRoutes = () => {
         <Route exact path="/master/invoice-email-setup">
           <InvoiceEmailSetupTable />
         </Route>
-        <Route exact path="/master/invoice-email-setup/form/:id?">
+        <Route exact path="/master/invoice-email-setup/:template_id">
+          <InvoiceEmailTemplateTable />
+        </Route>
+        <Route exact path="/master/invoice-email-setup/:template_id/form/:id?">
           <InvoiceEmailSetupForm />
         </Route>
 

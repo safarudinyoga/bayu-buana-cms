@@ -46,7 +46,7 @@ export default class Breadcrumb extends Component {
     return (
       <div className="content-header">
         <div className="row mb-2">
-          <div className="col-12 col-sm-6">
+          <div className={`col-12 ${isExtranet ? "col-sm-6" : ""}`}>
             <div className="mb-2">
               <PageBreadcrumb />
             </div>
@@ -54,11 +54,15 @@ export default class Breadcrumb extends Component {
               <PageTitle />
             </p>
           </div>
-          <div className="col-12 col-sm-6">
+          {
+            isExtranet && (
+              <div className="col-12 col-sm-6">
           {
             isExtranet && <img src={AdImage} className="ad-image"/>
           }
           </div>
+          )
+          }
         </div>
       </div>
     )

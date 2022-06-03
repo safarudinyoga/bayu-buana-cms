@@ -34,7 +34,9 @@ function Travellers(props) {
 
     setTravelerValue(valueText)
     let count = adultCount+childrenCount+infantCount
-    props.onConfirm(travelerCheckbox, count)
+    if(props.onConfirm){
+      props.onConfirm(travelerCheckbox, count)
+    }  
     document.body.click()
   }
 
@@ -233,27 +235,36 @@ function Travellers(props) {
   )
 
   useEffect(() => {
-    props.handleRoundtrip("adult_count", adultCount)
+    if(props.handleTrip){
+      props.handleTrip("adult_count", adultCount)
+    }
+    
   }, [adultCount])
 
   useEffect(() => {
-    props.handleRoundtrip("children_count", childrenCount)
+    if(props.handleTrip){
+      props.handleTrip("children_count", childrenCount)
+    }
+    
   }, [childrenCount])
 
   useEffect(() => {
-    props.handleRoundtrip("infant_count", infantCount)
+    if(props.handleTrip){
+      props.handleTrip("infant_count", infantCount)
+    }
+    
   }, [infantCount])
   
 
   return (
     <>
-      <div style={{width: 280, marginBottom: 10}} className="position-relative">
-          <h4 className='form-with-label__title'> TRAVELLERS <span className='label-required'></span></h4>
-          <ReactSVG src='/img/icons/people.svg' className='form-with-label__suggest-icon' style={{bottom: 15}}/>
-          <OverlayTrigger trigger="click" placement='bottom' overlay={popover} rootClose={true}>
-            <input type="text" className='form-control rounded-0 form-with-label' value={travelerValue} />
-          </OverlayTrigger>
-        </div>
+      <div className={`position-relative traveller-container ${props.smallSize ? "traveller-sm mr-2" : ""}`}>
+        <h4 className='form-with-label__title'> TRAVELERS <span className='label-required'></span></h4>
+        <ReactSVG src='/img/icons/people.svg' className='form-with-label__suggest-icon' />
+        <OverlayTrigger trigger="click" placement='bottom' overlay={popover} rootClose={true}>
+          <input type="text" className='form-control rounded-0 form-with-label' value={travelerValue} />
+        </OverlayTrigger>
+      </div>
     </>
   )
 }
