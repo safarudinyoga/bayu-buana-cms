@@ -3,12 +3,9 @@ import BBDataTable from "components/table/bb-data-table"
 import rowStatus from "lib/row-status"
 import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
-import { renderColumn } from "lib/translation"
-import moment from "moment"
 import { useWindowSize } from "rooks"
 
 import FormInputSelectAjax from "components/form/input-select-ajax"
-import { findLastIndex } from "lodash"
 
 export default function EmployeeTable() {
   let dispatch = useDispatch()
@@ -34,7 +31,7 @@ export default function EmployeeTable() {
   let [selectedDivisionIds, setSelectedDivisionIds] = useState([])
   let [selectedOffice, setSelectedOffice] = useState([])
   let [selectedOfficeIds, setSelectedOfficeIds] = useState([])
-  const { innerWidth, innerHeight, outerHeight, outerWidth } = useWindowSize()
+  const { innerWidth } = useWindowSize()
 
   const onFilterChangeJobTitle = (e, values) => {
     let ids = []
@@ -108,14 +105,14 @@ export default function EmployeeTable() {
         <FormInputSelectAjax
           label="Job Title"
           onChange={onFilterChangeJobTitle}
-          endpoint="/master/employees"
-          column="job_title.job_title_name"
-          sort="job_title.job_title_name"
+          endpoint="/user/user-type-users"
+          column="job_title_name"
+          sort="job_title_name"
           isGrouping={true}
-          fieldGroup="job_title.id"
+          fieldGroup="id"
           value={selectedJobTitleIds}
           data={selectedJobTitle}
-          filter={`["job_title.id", "is not", null]`}
+          filter={`["user_account_id", "is not", null]`}
           type="selectmultiple"
           isFilter={true}
           allowClear={false}
@@ -211,13 +208,14 @@ export default function EmployeeTable() {
   }
   let [params, setParams] = useState({
     isCheckbox: false,
-    title: "Employee",
-    titleModal: "Employee",
+    title: "User Management",
+    titleModal: "User Management",
     baseRoute: "/master/user-management/form",
-    endpoint: "/user/user-accounts",
-    deleteEndpoint: "/master/batch-actions/delete/employees",
-    activationEndpoint: "/master/batch-actions/activate/employee",
-    deactivationEndpoint: "/master/batch-actions/deactivate/employee",
+    endpoint: "/user/user-type-users",
+    customSort: ["given_name"],
+    deleteEndpoint: "/master/batch-actions/delete/user-type-users",
+    activationEndpoint: "/master/batch-actions/activate/user-type-users",
+    deactivationEndpoint: "/master/batch-actions/deactivate/user-type-users",
     columns: [
       {
         title: "",
@@ -240,12 +238,22 @@ export default function EmployeeTable() {
       },
       {
         title: "Name",
-        data: "person.middle_name",
+        data: "given_name",
+      },
+      {
+        title: "",
+        data: "middle_name",
+        visible: false,
+      },
+      {
+        title: "",
+        data: "surname",
+        visible: false,
       },
 
       {
         title: "Job title",
-        data: "person.given_name",
+        data: "job_title_name",
         render: (data) => {
           if (data === undefined) {
             return ""
@@ -254,44 +262,13 @@ export default function EmployeeTable() {
           }
         },
       },
-      {
-        title: "tes",
-        data: "person.middle_name",
-      },
-      {
-        title: "",
-        data: "person.surname",
-      },
-
       {
         title: "User Access Type",
-        data: "job_title.job_title_name",
-      },
-
-      {
-        title: "Branch Office",
-        data: "office.office_name",
-        render: (data) => {
-          if (data === undefined) {
-            return ""
-          } else {
-            return data
-          }
-        },
+        data: "",
       },
       {
         title: "Last Login",
-        data: "hire_date",
-        render: function (data, type, row) {
-          if (data === undefined) {
-            return ""
-          } else {
-            if (type === "sort" || type === "type") {
-              return data
-            }
-            return moment(data).format("D MMM YYYY")
-          }
-        },
+        data: "",
       },
       {
         searchable: false,
@@ -301,9 +278,9 @@ export default function EmployeeTable() {
       },
     ],
     emptyTable: "No employees found",
-    recordName: ["employee_number", "person.given_name", "middle_name"],
+    recordName: ["given_name"],
     btnDownload: ".buttons-csv",
-    module: "employee",
+    module: "user-management",
     showInfoDelete: true,
     switchStatus: true,
     infoDelete: [
