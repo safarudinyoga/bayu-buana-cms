@@ -7,51 +7,6 @@ import CancelButton from "components/button/cancel"
 import { useDispatch } from "react-redux"
 import { setAlert } from "redux/ui-store"
 
-const dummy1 = [
-  {
-    given_name: "Tiffany Young",
-    category: "BCD",
-    checked: false,
-  },
-  {
-    given_name: "Dhani Doel",
-    category: "BCD",
-    checked: false,
-  },
-  {
-    given_name: "Jhon Bill",
-    category: "NCD",
-    checked: false,
-  },
-]
-
-const dummy2 = [
-  {
-    given_name: "Tamara Ling",
-    category: "NCD",
-  },
-  {
-    given_name: "Margot Roe",
-    category: "NCD",
-  },
-  {
-    given_name: "Betty Jhon",
-    category: "NCD",
-  },
-  {
-    given_name: "Miando Nael",
-    category: "BCD",
-  },
-  {
-    given_name: "Bel Nuts",
-    category: "BCD",
-  },
-  {
-    given_name: "Tamara Ling",
-    category: "NCD",
-  },
-]
-
 const OverCreditApproverAssignment = (props) => {
   const dispatch = useDispatch()
   const [listEmployee, setListEmployee] = useState([])
@@ -67,7 +22,16 @@ const OverCreditApproverAssignment = (props) => {
       let res = await api.get(
         `/master/employees?filters=[["status","=",1]]&sort=given_name`,
       )
-      setListEmployee(res.data.items)
+      setListEmployee([
+        ...res.data.items.map((item) => ({
+          agent_employee: item.agent_employee,
+          employee_id: item.employee_id,
+          given_name: item.given_name,
+          middle_name: item.middle_name,
+          surname: item.surname,
+          office: item.office,
+        })),
+      ])
     } catch (e) {
       console.log(e)
     }
@@ -131,7 +95,25 @@ const OverCreditApproverAssignment = (props) => {
                 </h3>
                 <div style={{ padding: "0 15px 40px 0" }}>
                   <CardAddOrRemove
-                    firstData={listEmployee}
+                    // firstData={[
+                    //   {
+                    //     agent_employee: "asd",
+                    //     employee_id: "asd",
+                    //     given_name: "asd",
+                    //     middle_name: "asd",
+                    //     surname: "asd",
+                    //     office: "asd",
+                    //   },
+                    //   {
+                    //     agent_employee: "qwe",
+                    //     employee_id: "qwe",
+                    //     given_name: "qwe",
+                    //     middle_name: "qwe",
+                    //     surname: "qwe",
+                    //     office: "qwe",
+                    //   },
+                    // ]}
+                    firstData={[]}
                     secondData={listEmployee}
                     firstCardTitle="list of over credit approvers"
                     secondCardTitle="employee name"

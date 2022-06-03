@@ -9,6 +9,8 @@ import Travellers from 'views/extranet/components/micro-components/travellers'
 import TripFlightClass from './components/trip_flight_class'
 import TripCorporate from './components/trip_corporate'
 import TripMultitripSingle from './components/trip_multitrip_single'
+import TripMultitrip from './components/trip_multitrip'
+import TripDateOneway from './components/trip_date_oneway'
 
 function ShoppingCacheCreate(props) {
   const dispatch = useDispatch()
@@ -110,14 +112,39 @@ function ShoppingCacheCreate(props) {
         <Tab
           eventKey="oneway"
           title="One Way"
-        ></Tab>
+        >
+          <div className='d-flex flex-wrap'>
+            <Routes smallSize={true} airports={airports}/>
+            <TripDateOneway smallSize={true} />
+            <Travellers smallSize={true} />
+            <TripFlightClass smallSize={true} />
+            <TripCorporate smallSize={true} />
+          </div>
+        </Tab>
         <Tab
           eventKey="multi city"
           title="Multi City"
         >
-          <TripMultitripSingle />
+          <TripMultitrip airports={airports} />
         </Tab>
       </Tabs>
+
+      <div className="mt-4 mb-5 ml-1 row justify-content-md-start justify-content-center">
+        <Button
+          variant="primary"
+          type="submit"
+          // disabled={!dirty || !isValid}
+          style={{ marginRight: 15 }}
+        >
+          SAVE
+        </Button>
+        <Button
+          variant="secondary"
+          onClick={() => props.history.push("/")}
+        >
+          CANCEL
+        </Button>
+      </div>
     </>
   )
 }

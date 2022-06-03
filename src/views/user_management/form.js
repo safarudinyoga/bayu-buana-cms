@@ -5,60 +5,88 @@ import { useSnackbar } from "react-simple-snackbar"
 import ModuleAccess from "./module-access"
 import { setUIParams } from "redux/ui-store"
 import SelectAsync from "components/form/select-async"
-import { Formik, FastField, Form as FormikForm } from "formik"
+import createIcon from "assets/icons/create.svg"
+import { Formik, FastField, Field } from "formik"
 import * as Yup from "yup"
-import useQuery from "lib/query"
+import { ReactSVG } from "react-svg"
+import axios from "axios"
 import { useDispatch } from "react-redux"
-import { setAlert } from "redux/ui-store"
+import { setAlert, setUIParams } from "redux/ui-store"
 import Api from "config/api"
+import env from "config/environment"
+import Select from "components/form/select-async"
+import FormInputSelectAjax from "components/form/input-select-ajax"
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css"
 import "react-dropzone-uploader/dist/styles.css"
-import env from "../../config/environment"
 
 const backUrl = "/master/user-management"
-const endpoint = "/user/user-type-users"
-const options = {
-  position: "bottom-right",
-}
 
-const UserManagementForm = (props) => {
+const FlightForm = (props) => {
   const history = useHistory()
-  const [openSnackbar] = useSnackbar(options)
   let dispatch = useDispatch()
+  const [selectCountry, setSelectCountry] = useState([])
+  const [selectHotelBrand, setSelectHotelBrand] = useState([])
+  const [modalShow, setModalShow] = useState(false)
   let api = new Api()
-  const [initialForm, setInitialForm] = useState({
-    employee: "",
-    user_type: "",
-  })
-  let formId = props.match.params.id
-  const [loading, setLoading] = useState(true)
-  const isView = useQuery().get("action") === "view"
-
+  const [modules, setModules] = useState([])
   const [show, setShow] = useState(false)
   const target = useRef(null)
+
+  //module
+  useEffect(async () => {
+    try {
+      let res = await api.get("/master/menu-links?size=999&sort=sort")
+      const cat = []
+      const mod = []
+      const comp = []
+
+      res.data.items.forEach((data) => {
+        if (!data.parent_link_id) {
+          cat.push(data)
+        } else {
+          mod.push(data)
+        }
+      })
+
+      console.log(cat)
+      let listMod = mod.map((m) => {
+        let catObj = cat.filter((c) => m.parent_link_id.includes(c.id))
+        if (catObj.length > 0) {
+          let catName = catObj[0].menu_link_name
+          m.categoryName = catName
+          comp.push(
+            <AccessManagerRow
+              moduleName={m.menu_link_name}
+              category={m.categoryName}
+            />,
+          )
+        }
+      })
+      // console.log(comp);
+      setModules(comp)
+    } catch (e) {
+      console.log(e)
+      throw e
+    }
+  }, [])
 
   useEffect(async () => {
     let api = new Api()
     let formId = props.match.params.id
-    console.log({ formId, isView })
-
-    let docTitle = "Edit User"
-
+    let docTitle = "Edit Flight Standard Ancillary Fee"
     if (!formId) {
-      docTitle = "Create User"
-    } else if (isView) {
-      docTitle = "User Management Details"
+      docTitle = "Create User Management"
     }
     dispatch(
       setUIParams({
-        title: isView ? "User Details" : docTitle,
+        title: docTitle,
         breadcrumbs: [
           {
-            text: "User & Access Management",
+            text: "User & Acccess Management",
           },
           {
             link: backUrl,
-            text: "User Management ",
+            text: "User Management",
           },
           {
             text: docTitle,
@@ -66,45 +94,23 @@ const UserManagementForm = (props) => {
         ],
       }),
     )
-    try {
-      if (formId) {
-        let { data } = await api.get(endpoint + "/" + formId)
-        setInitialForm(data)
-      }
-    } catch (e) {
-      openSnackbar(`error => ${e}`)
-    } finally {
-      setLoading(false)
-    }
-  }, [])
+  })
+  // Initialize form
+  const initialForm = {
+    // General Information
+    employee: "",
+    user_type: "",
+  }
+
+  const initialFormModalAddMap = {
+    caption: "",
+    image: "",
+  }
 
   // Schema for yup
   const validationSchema = Yup.object().shape({
-    employee: Yup.object()
-      .required("Employee is required.")
-      .test(
-        "Unique Employee Name",
-        "User already exists",
-        async (value, ctx) => {
-          let formId = props.match.params.id
-          try {
-            let res = await api.get(
-              `${env.API_URL}/master/employees?filters=["given_name","=","${value}"]`,
-            )
-
-            if (formId) {
-              return (
-                res.data.items.length === 0 || value === initialForm.given_name
-              )
-            } else {
-              return res.data.items.length === 0
-            }
-          } catch (e) {
-            return false
-          }
-        },
-      ),
-    user_type: Yup.object().required("User Type is required."),
+    employee: Yup.object().required("Employee is required."),
+    user_type: Yup.object().required("Employee is required."),
   })
 
   const onSubmit = async (values, a) => {
@@ -158,7 +164,7 @@ const UserManagementForm = (props) => {
         initialValues={initialForm}
         validationSchema={validationSchema}
         validateOnChange={false}
-        onSubmit={onSubmit}
+        onSubmit={async (values, { setSubmitting, resetForm }) => {}}
       >
         {({
           values,
@@ -172,7 +178,7 @@ const UserManagementForm = (props) => {
           setFieldValue,
           setFieldTouched,
         }) => (
-          <FormikForm onSubmit={handleSubmit}>
+          <Form onSubmit={handleSubmit}>
             <Card>
               <Card.Body>
                 <div style={{ padding: "0 2px 2px" }}>
@@ -183,11 +189,10 @@ const UserManagementForm = (props) => {
                     </Form.Label>
                     <FastField name="employee">
                       {({ field, form }) => (
-                        <div style={{ width: 150 }}>
+                        <div style={{ maxWidth: 200 }}>
                           <SelectAsync
                             {...field}
                             isClearable
-                            isDisabled={values.given_name || isView}
                             url={`master/employees`}
                             fieldName="given_name"
                             onChange={(v) => {
@@ -199,14 +204,14 @@ const UserManagementForm = (props) => {
                                 ? "is-invalid"
                                 : null
                             }`}
-                            components={
-                              isView
-                                ? {
-                                    DropdownIndicator: () => null,
-                                    IndicatorSeparator: () => null,
-                                  }
-                                : null
-                            }
+                            // components={
+                            //   isView
+                            //     ? {
+                            //         DropdownIndicator: () => null,
+                            //         IndicatorSeparator: () => null,
+                            //       }
+                            //     : null
+                            // }
                           />
                           {form.touched.employee && form.errors.employee && (
                             <Form.Control.Feedback type="invalid">
@@ -218,23 +223,21 @@ const UserManagementForm = (props) => {
                         </div>
                       )}
                     </FastField>
-                    {!formId ? (
-                      <Form.Label column md={3}>
-                        <Nav.Link href={`/master/employee/form`}>
-                          Create New Employee
-                        </Nav.Link>
-                      </Form.Label>
-                    ) : null}
+
+                    <Form.Label column md={3}>
+                      <Nav.Link href={`/master/employee/form`}>
+                        Create New Employee
+                      </Nav.Link>
+                    </Form.Label>
                   </Form.Group>
 
                   <Form.Group as={Row} className="mb-3">
                     <Form.Label column md={2}>
                       User Type
-                      <span className="form-label-required">*</span>
                     </Form.Label>
                     <FastField name="user_type">
                       {({ field, form }) => (
-                        <div style={{ width: 150 }}>
+                        <div style={{ maxWidth: 200 }}>
                           <SelectAsync
                             {...field}
                             isClearable
@@ -243,22 +246,20 @@ const UserManagementForm = (props) => {
                             onChange={(v) => {
                               setFieldValue("user_type", v)
                             }}
-                            value={values.user_type}
                             placeholder="Please choose"
                             className={`react-select ${
                               form.touched.user_type && form.errors.user_type
                                 ? "is-invalid"
                                 : null
                             }`}
-                            style={{ witdh: 200 }}
-                            components={
-                              isView
-                                ? {
-                                    DropdownIndicator: () => null,
-                                    IndicatorSeparator: () => null,
-                                  }
-                                : null
-                            }
+                            // components={
+                            //   isView
+                            //     ? {
+                            //         DropdownIndicator: () => null,
+                            //         IndicatorSeparator: () => null,
+                            //       }
+                            //     : null
+                            // }
                           />
                           {form.touched.user_type && form.errors.user_type && (
                             <Form.Control.Feedback type="invalid">
@@ -327,11 +328,11 @@ const UserManagementForm = (props) => {
               </Button>
             </div>
             <div></div>
-          </FormikForm>
+          </Form>
         )}
-      </Formik>{" "}
+      </Formik>
     </>
   )
 }
 
-export default withRouter(UserManagementForm)
+export default withRouter(FlightForm)
