@@ -55,6 +55,7 @@ export default class FormInputSelectAjax extends Component {
         }
         if (!this.props.children) {
           config.ajax = {
+            headers: { Authorization: `Bearer ${localStorage.getItem("ut")}` },
             url: this.api.env.endpoint(this.props.endpoint),
             processResults: (json) => {
               if (this.props.onResponse) {
