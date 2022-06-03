@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import { Tabs, TabPane, Row, Col, Form } from "react-bootstrap"
 import { FastField } from "formik"
+import NumberFormat from "react-number-format";
 
 const FeeSection = (props) => {
   let id = props.taxType ? props.taxType.id : "";
@@ -59,10 +60,30 @@ const FeeSection = (props) => {
                   <Col xs={10} md={9} lg={7}>
                       {
                         disabledAmount 
-                        ? <Form.Control style={{ maxWidth: "220px" }} disabled={true} />
+                        ? <Form.Control 
+                            style={{ maxWidth: "220px" }} 
+                            disabled={true} 
+                            className="grey-background"
+                          />
                         : <FastField name={props.fieldAmount}>
                         {({ field }) => (
-                          <Form.Control type="number" {...field} style={{ maxWidth: "220px" }} disabled={props.isView} />
+                          // <Form.Control type="number" {...field} style={{ maxWidth: "220px" }} disabled={props.isView} />
+                          <NumberFormat
+                            {...field} 
+                            className="form-control"
+                            maxLength={19}
+                            thousandsGroupStyle="thousand"
+                            displayType="input"
+                            type="text"
+                            thousandSeparator={true}
+                            allowNegative={true}
+                            disabled={props.isView}
+                            // onChange={(values) => {
+                              // const { value } = values;
+                              // props.setFieldValue(props.fieldAmount, value)
+                              // console.log(props.fieldAmount, values.target.value)
+                            // }}
+                          />
                         )}
                       </FastField>
                       }
@@ -128,11 +149,40 @@ const FeeSection = (props) => {
                 <Form.Group as={Row} className="mb-3">
                   {
                     disabledPercent
-                    ? <Form.Control type="number" style={{ maxWidth: "80px" }} className="mx-3" disabled={true} />
+                    ? <Form.Control 
+                        type="number" 
+                        style={{ maxWidth: "80px" }} 
+                        className="mx-3 grey-background" 
+                        disabled={true} 
+                      />
                     :
                     <FastField name={props.fieldPercent}>
                       {({ field }) => (
-                          <Form.Control {...field} type="number" style={{ maxWidth: "80px" }} className="mx-3" disabled={props.isView} />
+                          // <Form.Control {...field} type="number" style={{ maxWidth: "80px" }} className="mx-3" disabled={props.isView} />
+                          <Form.Control 
+                          {...field} 
+                          type="text" 
+                          minLength={0}
+                          maxLength={3}
+                          style={{ maxWidth: "80px" }} 
+                          className="mx-3" 
+                          disabled={props.isView} 
+                          onChange={(value) => {
+                            // console.log(props.values, props.fieldAmount)
+                            let pattern=/^\d+$/
+                            // console.log(pattern.test(value.target.value))
+                            if(pattern.test(value.target.value)) {
+                              if(value.target.value <= 100) {
+                                props.setFieldValue(props.fieldPercent, value.target.value)
+                              }
+                              if(value.target.value === "") {
+                                props.setFieldValue(props.fieldPercent, value.target.value)
+                              }
+                            } else { //for bugs field can alphabet
+                              props.setFieldValue(props.fieldPercent, "")
+                            }
+                          }}
+                        />
                       )}
                     </FastField>
                   }
@@ -141,10 +191,10 @@ const FeeSection = (props) => {
               </Col>
               <Col sm={12} md={6}>
               {disabledPercent 
-                ? <Form.Check type="checkbox" className="mt-2" label="Include Taxed" disabled={true} />
+                ? <Form.Check type="checkbox" className="mt-2" label="Include Taxes" disabled={true} />
                 : <FastField name={props.fieldIncludeTax}>
                     {({ field, }) => (
-                    <Form.Check {...field} type="checkbox" className="mt-2" label="Include Taxed" disabled={props.isView} />
+                    <Form.Check {...field} type="checkbox" className="mt-2" label="Include Taxes" disabled={props.isView} />
                     )}
                   </FastField>
               }
