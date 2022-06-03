@@ -1,28 +1,15 @@
-/* .table-module-user { */
-  /* clear: both;
+.table-module {
+  clear: both;
   max-width: none !important;
   border-collapse: separate !important;
   border-spacing: 0;
-  position: relative; */
+  position: relative;
+}
 
-/* } */
-
-.table-module-user thead {
+.table-module thead {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  font-size: 10px;
+  font-size: 16px;
   font-weight: 500;
   background-color: #5e5e5e;
   color: #ffffff;
-}
-
-.table-module-user th {
-  padding: 0.8em
-}
-
-.table-module-user td {
-  padding: 0.4em;
-  font-size: 10px;
-}
-.popover{
-  max-width:100%;
 }

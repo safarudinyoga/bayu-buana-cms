@@ -19,11 +19,11 @@ function ModuleAccess(props) {
 
   const api = new Api()
   useEffect(() => {
-    if (!props.userType.value) {
+    if (!props.match.params.id) {
       setLoading(false)
     }
-    setId(props.userType.value)
-  }, [props.userType.value])
+    setId(props.match.params.id)
+  }, [props.match.params.id])
 
   const [initialForm, setIntialForm] = useState({
     // Emergency Contact 1
@@ -116,34 +116,67 @@ function ModuleAccess(props) {
 
   return (
     <>
-      <div style={{maxWidth:'500px'}}>
-      <Card >
-        <Form.Label
-          style={{
-            textAlign: "center",
-            paddingTop: "20px",
-            textTransform: "uppercase",
-            fontWeight: "bold",
-          }}
-        >
-          Module Access List
-        </Form.Label>
-        <div
-            style={{ padding: "0 2px 2px" }}
-          >
-            <Table striped className="table-module-user">
-              <thead>
-                <tr>
-                  <th>Module Name</th>
-                  <th>Category</th>
-                  {capabilitiesHeader}
-                </tr>
-              </thead>
-              <tbody>{modules}</tbody>
-            </Table>
-          </div>
-      </Card>
-      </div>
+      <Formik
+        enableReinitialize
+        initialValues={initialForm}
+        validationSchema={validationSchema}
+        validator={() => ({})}
+        onSubmit={async (values, { setSubmitting, resetForm }) => {
+          try {
+            let res = await api.post(
+              `user/user-types/${id}/modules`,
+              allowedModule.current,
+            )
+            history.goBack()
+          } catch (e) {}
+        }}
+      >
+        {({
+          values,
+          errors,
+          touched,
+          dirty,
+          handleChange,
+          handleBlur,
+          handleSubmit,
+          isSubmitting,
+          isValid,
+          setFieldValue,
+          setFieldTouched,
+        }) => (
+          <Form onSubmit={handleSubmit}>
+            <Card>
+              <Form.Label
+                style={{
+                  textAlign: "center",
+                  paddingTop: "20px",
+                  textTransform: "uppercase",
+                  fontWeight: "bold",
+                }}
+              >
+                Module Access List
+              </Form.Label>
+              <Card.Body>
+                <div
+                  style={{ padding: "0 2px 2px", borderRadius: 8 }}
+                  className="table-responsive"
+                >
+                  <Table striped className="table-module">
+                    <thead>
+                      <tr>
+                        <th>Module Name</th>
+                        <th>Category</th>
+                        {capabilitiesHeader}
+                      </tr>
+                    </thead>
+                    <tbody>{modules}</tbody>
+                  </Table>
+                </div>
+              </Card.Body>
+            </Card>
+          </Form>
+        )}
+      </Formik>
     </>
   )
 }
