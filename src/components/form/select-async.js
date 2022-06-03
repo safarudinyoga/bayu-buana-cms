@@ -66,7 +66,7 @@ const Select = (props) => {
           env.API_URL
         }/${url}?sort=${sort? sort :fieldName}&filters=${encodeURIComponent(`[["status",${status}],["AND"],["${fieldName}","like","${search}"]${
           urlFilter !== undefined ? `,["AND"],${urlFilter}` : ""
-        }]`)}&size=10&page=${page - 1}`,
+        }]`)}&size=10&page=${page - 1}`,{ headers: { Authorization: `Bearer ${localStorage.getItem("ut")}` } },
       )
       .then(function (response) {
         return response.data
