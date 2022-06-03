@@ -174,7 +174,7 @@ function FormIntegrationPartner(props) {
                       <>
                         <Form.Control
                           type="number"
-                          disabled={isView}
+                          disabled={true}
                           isInvalid={
                             form.touched.integration_partner_code &&
                             form.errors.integration_partner_code
@@ -207,7 +207,7 @@ function FormIntegrationPartner(props) {
                       <>
                         <Form.Control
                           type="text"
-                          disabled={isView}
+                          disabled={true}
                           isInvalid={
                             form.touched.integration_partner_name &&
                             form.errors.integration_partner_name
