@@ -27,7 +27,6 @@ import showIcon from "assets/icons/show.svg"
 import ModalCreate from "components/Modal/bb-modal"
 import ModalDelete from "components/Modal/bb-modal-delete"
 import customPrint from '../../lib/customPrint'
-import { end } from "@popperjs/core"
 
 window.JSZip = JSZip
 
@@ -67,7 +66,7 @@ class BBDataTable extends Component {
     let self = this
     $.fn.dataTableExt.errMode = "none"
     let columns = []
-    const { recordName, msgType, module } = this.props
+    const { recordName, module } = this.props
     const { isCheckbox, isShowColumnAction } = this.state
     columns.push(isCheckbox ? {
       searchable: false,
@@ -132,12 +131,12 @@ class BBDataTable extends Component {
         var x = window.matchMedia("(max-width: 768px)")
         tooltipCust(x)
         x.addListener(tooltipCust)
-        const filteredRecordName = Object.keys(row)
-          .filter((key) => allowed.includes(key))
-          .reduce((obj, key) => {
-            obj[key] = row[key]
-            return obj
-          }, {})
+        // const filteredRecordName = Object.keys(row)
+        //   .filter((key) => allowed.includes(key))
+        //   .reduce((obj, key) => {
+        //     obj[key] = row[key]
+        //     return obj
+        //   }, {})
 
         let showSwitch = self.props.switchStatus
         let checked = ""
@@ -146,6 +145,7 @@ class BBDataTable extends Component {
         }
 
         let hideDetail = self.props.hideDetail
+        let showCopyAct = self.props.showCopyAct || false
 
         let infoDelete = self.props.infoDelete
         let info = ""
@@ -163,24 +163,29 @@ class BBDataTable extends Component {
           }).join(" ")
         }
 
-        const targetDataId = module == 'integration-partner-currencies'
+        const targetDataId = module == 'partner-currency'
           ? row.currency_id
-          : module == 'partner-hotel-suppliers'
+          : module === 'partner-hotel-suppliers'
           ? row.hotel_supplier_id
-          : module == 'partner-fee-taxes' 
+          : module === 'partner-fee-taxes' 
           ? row.fee_tax_type_id 
-          : module == 'partner-city' 
+          : module === 'partner-city' 
           ? row.city_id 
-          : module == 'partner-meal-plan' 
+          : module === 'partner-meal-plan' 
           ? row.integration_partner_meal_plan_type.meal_plan_type_id
-          : module == 'partner-cabin' 
+          : module === 'partner-cabin' 
           ? row.cabin_type_id
           : row.id
+
+        const showDelete = module !== "integration-partner" && module !== "identity-rules" && module !== "email-setup-template"
+
         return (
           `
           <a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item ${hideDetail ? "mr-2" : ""}" data-action="edit" data-id="${targetDataId}" title="Click to edit"><img src="${editIcon}"/></a>
+          
+          <a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item ${showCopyAct ? "d-inline" : "d-none"}" data-action="copy" data-id="${targetDataId}" title="Click to copy"><i class="fas fa-copy"></i></a>
           <a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="${hideDetail ? "d-none" : "d-inline"} table-row-action-item" data-action="view" data-id="${row.id}" title="Click to view details"><img src="${showIcon}"/></a>
-          <a href="javascript:void(0);" class="${showSwitch ? "d-inline" : "d-none"} custom-switch custom-switch-bb table-row-action-item" data-id="${module == 'employee' ? row.employee_id: row.id}" data-action="update_status" data-status="${row.status}" data-toggle="tooltip" data-placement="${placement}" title="${row.status == 1 ? "Deactivate" : "Activate"}">
+          <a href="javascript:void(0);" class="${showSwitch ? "d-inline" : "d-none"} custom-switch custom-switch-bb table-row-action-item" data-id="${module === 'employee' ? row.employee_id: row.id}" data-action="update_status" data-status="${row.status}" data-toggle="tooltip" data-placement="${placement}" title="${row.status === 1 ? "Deactivate" : "Activate"}">
             <input type="checkbox" class="custom-control-input check-status-${row.id}" id="customSwitch${row.id}" ${checked} data-action="update_status">
             <label class="custom-control-label" for="customSwitch${row.id}" data-action="update_status"></label>
           </a>
@@ -189,8 +194,7 @@ class BBDataTable extends Component {
             ? `<a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item mr-2" data-action="history" data-id="${row.id}" title="Click to view history"><img src="/img/icons/history.svg"/></a>`
             : ""
           }
-          ${
-            module !== "integration-partner" && module !== "identity-rules" ? `<a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item" data-action="delete" data-id="${targetDataId}" data-name="${cvtRecordName}" ${infoDelete ? `data-info="${info}"` : ""}  title="${module === "exchange-rate" || module === "partner-city" ? "Delete" : "Click to delete"}"><img src="${removeIcon}" /></a>`
+          ${showDelete? `<a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item" data-action="delete" data-id="${targetDataId}" data-name="${cvtRecordName}" ${infoDelete ? `data-info="${info}"` : ""}  title="${module === "exchange-rate" || module === "partner-city" ? "Delete" : "Click to delete"}"><img src="${removeIcon}" /></a>`
             : ""
           }
           `
@@ -540,12 +544,12 @@ class BBDataTable extends Component {
           },
           {
             targets: [1, 2],
-            className: !this.state.isCheckbox ? module == "employee" || module == "ancillary" ? "" : "custom-col-width": "cstm-col-width",
+            className: !this.state.isCheckbox ? module === "employee" || module === "ancillary" ? "" : "custom-col-width": "cstm-col-width",
           },
           {
             targets: [3],
-            className: !module == "loyalty-programs" ? "" : "cstm-col-width-2",
-            visible: module ? module == "standard-ancillary-fee" ? false : true : true
+            className: !module === "loyalty-programs" ? "" : "cstm-col-width-2",
+            visible: module ? module === "standard-ancillary-fee" || module === "email-setup" ? false : true : true
           },
           { responsivePriority: 1, targets: 1 },
           { responsivePriority: 2, targets: 2 },
@@ -555,12 +559,12 @@ class BBDataTable extends Component {
               // this case `data: 0`.
               "render": function ( data, type, row ) {
                 var datas = data;
-                if(module == 'employee'){
+                if(module === 'employee'){
                   datas = data +' '+ row.middle_name + ' ' + row.surname;
                 }
                   return datas
               },
-              "targets": module == 'employee' ? 3 : ''
+              "targets": module === 'employee' ? 3 : ''
           },
           {
               // The `data` parameter refers to the data for the cell (defined by the
@@ -568,7 +572,7 @@ class BBDataTable extends Component {
               // this case `data: 0`.
               "render": function ( data, type, row ) {
                 var datas = data;
-                if(module == 'employee'){
+                if(module === 'employee'){
                   let division = "";
                   if(row.division.division_name){
                     division = row.division.division_name
@@ -579,12 +583,16 @@ class BBDataTable extends Component {
                 }
                   return datas
               },
-              "targets": module == 'employee' ? 7 : ''
+              "targets": module === 'employee' ? 7 : ''
           },
-          { visible: false,  targets: module == 'employee' ? [ 4, 5, 8 ] : [] },
+          { visible: false,  targets: module === 'employee' ? [ 4, 5, 8 ] : [] },
           {
-            className: module ? module != "standard-ancillary-fee" ? this.props.actionWidthClass || "" : "width-ancillary" : "",
+            className: module ? module === "standard-ancillary-fee" || module === "email-setup" ? "width-ancillary" : this.props.actionWidthClass || "" : "",
             targets: [2],
+          },
+          {
+            className: module ? module === "email-setup-template" ? "width-ancillary" : this.props.actionWidthClass || "" : "",
+            targets: [ columns.length - 1],
           },
           {
             targets: [columns.length - 3, columns.length - 1],
@@ -670,7 +678,7 @@ class BBDataTable extends Component {
           this.queryParams.sort()
           let query = ''
           for(let pair of this.queryParams.entries()) {
-            if(query == '') query += '?'
+            if(query === '') query += '?'
             if(query.length > 1 ) query += '&'
             query += pair[0] + '=' + pair[1]
           }
@@ -703,7 +711,7 @@ class BBDataTable extends Component {
               .join("_")
           }
 
-          if(module == 'frequent_traveler_program'){
+          if(module === 'frequent_traveler_program'){
             module = 'loyalty_programs'
           }
 
@@ -1033,6 +1041,9 @@ class BBDataTable extends Component {
             } else {
               me.props.history.push(base + "/" + id)
             }
+            break
+          case "copy":
+            me.props.setCreateModal({show: true, id, disabled_form: false})
             break
           case "view":
             if(me.props.createOnModal) {

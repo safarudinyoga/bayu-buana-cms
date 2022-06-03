@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import { Card, Form, Row, Col, Button, Collapse } from "react-bootstrap"
 import { Formik, FastField } from "formik"
+import * as Yup from "yup"
 
 import useQuery from "lib/query"
 import Select from "react-select"
@@ -11,15 +12,33 @@ const InvoiceSetting = (props) => {
   const [monthly, setMonthly] = useState(false)
   const [daily, setDaily] = useState(false)
   const [weekly, setWeekly] = useState(false)
+  const [RecurringReminderType, setRecurringReminderType] = useState(false)
 
   const data = [
     { value: "before", label: "Before" },
     { value: "after", label: "After" },
   ]
 
+  const initialValues = {
+    every: "",
+    response_time: [],
+  }
+
+  const validationSchema = Yup.object().shape({
+    every: Yup.number()
+      .typeError("you must specify a number")
+      .min(0, "Min value 0.")
+      .max(30, "Max value 30."),
+    response_time: Yup.array().min(3, "Response Time is required."),
+  })
+
   return (
     <>
-      <Formik validator={() => ({})} enableReinitialize>
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        enableReinitialize
+      >
         {({
           values,
           errors,
@@ -39,7 +58,7 @@ const InvoiceSetting = (props) => {
                 {props.isMobile ? (
                   ""
                 ) : (
-                  <h3 className="card-heading">Invoice Setting</h3>
+                  <h3 className="card-heading">Invoice Settings</h3>
                 )}
                 <div
                   style={
@@ -83,7 +102,7 @@ const InvoiceSetting = (props) => {
                           </FastField>
                         </Col>
                         <Form.Label column md={3} lg={1}>
-                          Days
+                          Day(s)
                         </Form.Label>
 
                         <Col md={12} lg={2}>
@@ -106,53 +125,91 @@ const InvoiceSetting = (props) => {
                               type="checkbox"
                               label="Send Recurring Reminders"
                               className="mt-2 ml-1"
+                              onClick={() =>
+                                setRecurringReminderType(!RecurringReminderType)
+                              }
+                              aria-expanded={RecurringReminderType}
                             />
-
-                            <Form.Check
-                              inline
-                              className="mt-2 ml-5"
-                              label="Daily"
-                              name="group1"
-                              type="radio"
-                              id="inline-tek-2"
-                              onClick={() => setDaily(!daily)}
-                              aria-expanded={daily}
-                            />
+                            <Collapse in={RecurringReminderType}>
+                              <Form.Check
+                                inline
+                                className="mt-2 ml-5"
+                                label="Daily"
+                                name="group1"
+                                type="radio"
+                                id="inline-tek-2"
+                                onClick={() => setDaily(!daily)}
+                                aria-expanded={daily}
+                              />
+                            </Collapse>
                             <Collapse in={daily}>
                               <Row className="mt-3 ml-5">
-                                <Col sm={12} md={4}>
+                                <Col sm={12} md={5}>
                                   <Form.Group as={Row} className="mb-xs-3">
-                                    <Form.Label>Every</Form.Label>
-                                    <Col xs={10} md={4} lg={7}>
-                                      <Form.Control
-                                        style={{ maxWidth: "220px" }}
-                                      />
-                                    </Col>
-                                    <Form.Label>day (s)</Form.Label>
+                                    <Form.Label className="ml-4 ">
+                                      Every
+                                    </Form.Label>
+                                    <FastField name="every" disabled>
+                                      {({ field, form }) => (
+                                        <>
+                                          <Form.Control
+                                            type="text"
+                                            disabled={isView}
+                                            isInvalid={
+                                              form.touched.every &&
+                                              form.errors.every
+                                            }
+                                            minLength={1}
+                                            maxLength={128}
+                                            {...field}
+                                            style={{
+                                              width: "60px",
+                                              marginLeft: "12px",
+                                            }}
+                                          />
+                                          {form.touched.every &&
+                                            form.errors.every && (
+                                              <Form.Control.Feedback type="invalid">
+                                                {form.touched.every
+                                                  ? form.errors.every
+                                                  : null}
+                                              </Form.Control.Feedback>
+                                            )}
+                                        </>
+                                      )}
+                                    </FastField>
+
+                                    <Form.Label className="ml-2">
+                                      day(s)
+                                    </Form.Label>
                                   </Form.Group>
                                 </Col>
                               </Row>
                             </Collapse>
-                            <Form.Check
-                              className="mt-2 ml-5"
-                              label="Weekly"
-                              name="group1"
-                              type="radio"
-                              id="inline-tek-2"
-                              onClick={() => setWeekly(!weekly)}
-                              aria-expanded={weekly}
-                            />
+                            <Collapse in={RecurringReminderType}>
+                              <Form.Check
+                                className="mt-2 ml-5"
+                                label="Weekly"
+                                type="radio"
+                                name="group1"
+                                onClick={() => setWeekly(!weekly)}
+                                aria-expanded={weekly}
+                              />
+                            </Collapse>
+
                             <Collapse in={weekly}>
                               <Row className="mt-3 ml-5">
-                                <Col sm={12} md={4}>
+                                <Col sm={12} md={6}>
                                   <Form.Group as={Row} className="mb-xs-3">
-                                    <Form.Label>Every</Form.Label>
+                                    <Form.Label className="ml-4 ">
+                                      Every
+                                    </Form.Label>
                                     <Col xs={10} md={4} lg={5}>
                                       <Form.Control
                                         style={{ maxWidth: "220px" }}
                                       />
                                     </Col>
-                                    <Form.Label>week (s) On</Form.Label>
+                                    <Form.Label>week(s) on</Form.Label>
                                   </Form.Group>
                                 </Col>
                                 {[
@@ -160,7 +217,7 @@ const InvoiceSetting = (props) => {
                                   "Tue",
                                   "Wed",
                                   "Thu",
-                                  "Friday",
+                                  "Fri",
                                   "Sat",
                                   "Sun",
                                 ].map((type) => (
@@ -170,7 +227,7 @@ const InvoiceSetting = (props) => {
                                   >
                                     <Form.Label>{type}</Form.Label>
                                     <Form.Check
-                                      name="group1"
+                                      name="group"
                                       type="radio"
                                       id={`inline-${type}-1`}
                                     />
@@ -178,36 +235,41 @@ const InvoiceSetting = (props) => {
                                 ))}
                               </Row>
                             </Collapse>
-                            <Form.Check
-                              className="mt-2 ml-5"
-                              label="Monthly"
-                              name="group1"
-                              type="radio"
-                              id="inline-tek-2"
-                              onClick={() => setMonthly(!monthly)}
-                              aria-expanded={monthly}
-                            />
+                            <Collapse in={RecurringReminderType}>
+                              <Form.Check
+                                className="mt-2 ml-5"
+                                label="Monthly"
+                                name="group1"
+                                type="radio"
+                                id="inline-tek-2"
+                                onClick={() => setMonthly(!monthly)}
+                                aria-expanded={monthly}
+                              />
+                            </Collapse>
+
                             <Collapse in={monthly}>
                               <Row className="mt-3 ml-5">
-                                <Col sm={12} md={4}>
+                                <Col sm={12} md={6}>
                                   <Form.Group as={Row} className="mb-xs-3">
-                                    <Form.Label>Day</Form.Label>
+                                    <Form.Label className="ml-4 ">
+                                      Day
+                                    </Form.Label>
                                     <Col xs={10} md={4} lg={7}>
                                       <Form.Control
                                         style={{ maxWidth: "220px" }}
                                       />
                                     </Col>
-                                    <Form.Label>Of Every</Form.Label>
+                                    <Form.Label>of every</Form.Label>
                                   </Form.Group>
                                 </Col>
                                 <Col sm={12} md={4}>
                                   <Form.Group as={Row} className="mb-xs-3">
-                                    <Col xs={10} md={4} lg={7}>
+                                    <Col xs={10} md={6} lg={7}>
                                       <Form.Control
                                         style={{ maxWidth: "220px" }}
                                       />
                                     </Col>
-                                    <Form.Label>month (s)</Form.Label>
+                                    <Form.Label>month(s)</Form.Label>
                                   </Form.Group>
                                 </Col>
                               </Row>

@@ -3,7 +3,7 @@ import AutoSuggest from "react-autosuggest";
 import { ReactSVG } from "react-svg"
 
 function Routes(props) {
-  const { airports } = props
+  const { airports, smallSize } = props
 
   const [departureValue, setDepartureValue] = useState("");
   const [arrivalValue, setArrivalValue] = useState("");
@@ -45,8 +45,8 @@ function Routes(props) {
 
   return (
     <>
-      <div className='d-flex mr-4'>
-        <div className='form-group required position-relative'>
+      <div className={`d-flex ${smallSize ? "mr-2" : "mr-4"}`}>
+        <div className={`form-group required position-relative ${smallSize ? "routes-sm" : ""}`} >
           <label htmlFor="departure" className='form-with-label__title'>FROM <span className='label-required'></span></label>
           <ReactSVG src='/img/icons/flight-takeoff.svg' className='form-with-label__suggest-icon'/>
           <AutoSuggest
@@ -59,7 +59,10 @@ function Routes(props) {
             }}
             onSuggestionSelected={(_, { suggestion, suggestionValue }) => {
               console.log("Selected",suggestion)
-              props.handleTrip("departure_data", suggestion)
+              if(props.handleTrip) {
+                props.handleTrip("departure_data", suggestion)
+              }
+              
             }
               
             }
@@ -75,7 +78,7 @@ function Routes(props) {
             highlightFirstSuggestion={true}
           />
         </div>
-        <div className='form-group required position-relative'> 
+        <div className={`form-group required position-relative ${smallSize ? "routes-sm" : ""}`} > 
           <label htmlFor="arrival" className='form-with-label__title'>TO <span className='label-required'></span></label>
           <ReactSVG src='/img/icons/flight-land.svg' className='form-with-label__suggest-icon'/>
           <AutoSuggest
@@ -88,7 +91,10 @@ function Routes(props) {
             }}
             onSuggestionSelected={(_, { suggestion, suggestionValue }) => {
               console.log("Return Selected: ",suggestion)
-              props.handleTrip("arrival_data", suggestion)
+              if(props.handleTrip) {
+                props.handleTrip("arrival_data", suggestion)
+              }
+              
             }
               
             }
