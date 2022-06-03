@@ -1,21 +1,9 @@
 import React, { useEffect, useState, useRef } from "react"
-import { withRouter, useHistory, Link } from "react-router-dom"
-import {
-  Card,
-  Form,
-  Row,
-  Col,
-  OverlayTrigger,
-  Button,
-  Tooltip,
-  Tab,
-  Nav,
-  Modal,
-  Table,
-} from "react-bootstrap"
-import { useWindowSize } from "rooks"
-import AccessManagerRow from "components/table/access-manager-row"
-import FormHorizontal from "components/form/horizontal"
+import { withRouter, useHistory } from "react-router-dom"
+import { Card, Form, Row, Button, Nav, OverlayTrigger,Popover } from "react-bootstrap"
+import { useSnackbar } from "react-simple-snackbar"
+import ModuleAccess from "./module-access"
+import { setUIParams } from "redux/ui-store"
 import SelectAsync from "components/form/select-async"
 import createIcon from "assets/icons/create.svg"
 import { Formik, FastField, Field } from "formik"
@@ -124,14 +112,52 @@ const FlightForm = (props) => {
     employee: Yup.object().required("Employee is required."),
     user_type: Yup.object().required("Employee is required."),
   })
-  let [selectedJobTitle, setSelectedJobTitle] = useState([])
-  let [selectedJobTitleIds, setSelectedJobTitleIds] = useState([])
-  let [selectedDivision, setSelectedDivision] = useState([])
-  let [selectedDivisionIds, setSelectedDivisionIds] = useState([])
-  let [selectedOffice, setSelectedOffice] = useState([])
-  let [selectedOfficeIds, setSelectedOfficeIds] = useState([])
-  const { innerWidth, innerHeight, outerHeight, outerWidth } = useWindowSize()
 
+  const onSubmit = async (values, a) => {
+    try {
+      let formId = props.match.params.id
+
+      let form = {
+        user_account_id: values.employee
+          ? values.employee.value
+          : "00000000-0000-0000-0000-000000000000",
+
+        user_type_id: values.user_type
+          ? values.user_type.value
+          : "00000000-0000-0000-0000-000000000000",
+      }
+
+      if (!formId) {
+        //Proses Create Data
+        let res = await api.post(`/user/user-type-users`, form)
+        console.log(res)
+        openSnackbar(`Record has been successfully saved.`)
+        history.goBack()
+      } else {
+        let res = await api.put(`/user/user-type-users/${formId}`, form)
+        console.log(res)
+
+        dispatch(
+          setAlert({
+            message: `Record  has been successfully saved.`,
+          }),
+        )
+      }
+    } catch (e) {
+      dispatch(
+        setAlert({
+          message: "Failed to save this record.",
+        }),
+      )
+    }
+  }
+  const popoverBottom =(values) =>{
+    return (
+      <Popover id="popover-positioned-bottom" title="Popover bottom">
+        <ModuleAccess userType={values}/>
+      </Popover>
+    )
+  }
   return (
     <>
       <Formik
@@ -245,64 +271,39 @@ const FlightForm = (props) => {
                         </div>
                       )}
                     </FastField>
-                    <OverlayTrigger
-                      placement="bottom"
-                      overlay={
-                        <Tooltip id={`tooltip`}>
-                          <div
-                            {...props}
-                            style={{
-                              position: "absolute",
-                              backgroundColor: "#FFFFFF",
-                              padding: "10px 50px",
-                              color: "black",
-                              borderRadius: 3,
-
-                              boxShadow:
-                                "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
-                              ...props.style,
-                            }}
-                          >
-                            MODULE ACCESS LIST
-                            <FormHorizontal>
-                              <Table responsive>
-                                <thead
-                                  style={{
-                                    backgroundColor: "#5E5E5E",
-                                  }}
-                                >
-                                  <tr
-                                    style={{
-                                      color: "white",
-                                    }}
-                                  >
-                                    <th>Module Name</th>
-                                    <th>Category</th>
-                                    <th>View</th>
-                                    <th>Create</th>
-                                    <th>Delete</th>
-                                    <th>Edit</th>
-                                    <th>Mass Update</th>
-                                    <th>Export</th>
-                                  </tr>
-                                </thead>
-                                <tbody>{modules}</tbody>
-                              </Table>
-                            </FormHorizontal>
-                          </div>
-                        </Tooltip>
-                      }
-                    >
+                    <OverlayTrigger disabled trigger="click" placement="bottom" overlay={popoverBottom(values.user_type)} rootClose>
                       <Form.Label
                         column
                         md={2}
                         style={{ color: "#3E40AE", marginLeft: "14px" }}
                       >
-                        {" "}
                         View module access list
                       </Form.Label>
                     </OverlayTrigger>
                   </Form.Group>
+                  {/* <Overlay
+                    target={target.current}
+                    show={show}
+                    placement="bottom"
+                  >
+                    {(props) => (
+                      <div
+                        {...props}
+                        // style={{
+                        //   backgroundColor: "rgba(255, 100, 100, 0.85)",
+                        //   padding: "2px 10px",
+                        //   color: "white",
+                        //   borderRadius: 3,
+                        //   ...props.style,
+                        // }}
+                      >
+                        <Popover id="popover-positioned-bottom" title="Popover bottom">
+                          <strong>Holy guacamole!</strong> Check this info.
+                        </Popover>
+                        {/* <ModuleAccess userType={values.user_type}/>
+                      </div>
+                    )}
+                  </Overlay> */}
                 </div>
 
                 <div style={{ padding: "0 15px 15px 15px" }}>
