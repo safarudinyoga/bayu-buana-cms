@@ -17,10 +17,12 @@ import TaxFee from "./tax-fee"
 import BookingSettings from "./booking-settings"
 import InvoiceSettings from "./invoice-settings"
 import TravelAdvice from "./travel-advice"
-import EmailReceiptModal from "./tabel-email-sender"
 import UserAccessType from "./user-access-type"
 import DivisionCorporate from "./division_corporate"
 import MiscellaneousConfiguration from "./miscellaneous_configuration"
+import StaffAndManager from "./staff-and-manager";
+import Director from "./director";
+import Vip from "./vip";
 
 // const endpoint = "/user/profile"
 const backUrl = "/master/general-setup"
@@ -63,7 +65,7 @@ const TravelPolicy = (props) => {
             </Nav.Item>
 
             <Nav.Item>
-              <Nav.Link eventKey="general-information">
+              <Nav.Link eventKey="staff-and-manager">
                 <div>
                   <ReactSVG src="/img/icons/setup-general-information.svg" />
                   <span>Staff and Manager</span>
@@ -72,7 +74,7 @@ const TravelPolicy = (props) => {
             </Nav.Item>
 
             <Nav.Item>
-              <Nav.Link eventKey="handler-setup">
+              <Nav.Link eventKey="director">
                 <div>
                   <ReactSVG src="/img/icons/setup-handler-setup.svg" />
                   <span>Director</span>
@@ -81,7 +83,7 @@ const TravelPolicy = (props) => {
             </Nav.Item>
 
             <Nav.Item>
-              <Nav.Link eventKey="identity-rule">
+              <Nav.Link eventKey="vip">
                 <div>
                   <ReactSVG src="/img/icons/setup-identity-rule.svg" />
                   <span>VIP</span>
@@ -98,6 +100,24 @@ const TravelPolicy = (props) => {
         </Col>
         <Col sm={9}>
           <Tab.Content>
+            <Tab.Pane eventKey="director">
+              {tabKey === "director" ? (
+                <Director
+                  history={props.history}
+                  backUrl={backUrl}
+                  handleSelectTab={(v) => handleSelectTab(v)}
+                />
+              ) : null}
+            </Tab.Pane>
+            <Tab.Pane eventKey="vip">
+              {tabKey === "vip" ? (
+                <Vip
+                  history={props.history}
+                  backUrl={backUrl}
+                  handleSelectTab={(v) => handleSelectTab(v)}
+                />
+              ) : null}
+            </Tab.Pane>
             <Tab.Pane eventKey="general-information">
               {tabKey === "general-information" ? (
                 <GeneralInformation
@@ -115,18 +135,6 @@ const TravelPolicy = (props) => {
                   handleSelectTab={(v) => handleSelectTab(v)}
                 />
                 ) : null}
-            </Tab.Pane>
-            <Tab.Pane eventKey="identity-rule">
-              {tabKey === "identity-rule" ? (
-                <IdentityRule
-                  history={props.history}
-                  backUrl={backUrl}
-                  handleSelectTab={(v) => handleSelectTab(v)}
-                />
-                ) : null}
-            </Tab.Pane>
-            <Tab.Pane>
-              
             </Tab.Pane>
           </Tab.Content>
         </Col>
@@ -179,6 +187,16 @@ const TravelPolicy = (props) => {
         </Col>
         <Col sm={9}>
           <Tab.Content>
+          <Tab.Pane eventKey="staff-and-manager">
+              {tabKey === "staff-and-manager" ? (
+                <StaffAndManager 
+                  history={props.history}
+                  backUrl={backUrl}
+                  handleSelectTab={(v) => handleSelectTab(v)}
+                />
+                ): null} 
+            </Tab.Pane>
+
             <Tab.Pane eventKey="general-information">
               {tabKey === "general-information" ? (
                 <GeneralInformation
@@ -316,12 +334,6 @@ const TravelPolicy = (props) => {
             </Tab.Pane>
             <Tab.Pane eventKey="email">
               {tabKey === "email" ? (
-                // <EmailReceiptModal
-                //   history={props.history}
-                //   backUrl={backUrl}
-                //   // handleSelectTab={(v) => handleSelectTab(v)}
-                //   onClick={() => console.log("test")}
-                // />
                 <DivisionCorporate
                   history={props.history}
                   backUrl={backUrl}
