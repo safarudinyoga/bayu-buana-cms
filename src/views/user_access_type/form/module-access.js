@@ -9,8 +9,12 @@ import { Formik } from "formik"
 import * as Yup from "yup"
 import "../user-access-type.css"
 import DataTable from "react-data-table-component"
+import { useSnackbar } from "react-simple-snackbar"
 
 const backUrl = "/master/user-access-type"
+const options = {
+  position: "bottom-right",
+}
 
 function ModuleAccess(props) {
   const isView = useQuery().get("action") === "view"
@@ -23,6 +27,7 @@ function ModuleAccess(props) {
   const [capabilities, setCapabilities] = useState([])
   const [userTypeName, setUserTypeName] = useState(null)
   const allowedModule = useRef([])
+  const [openSnackbar] = useSnackbar(options)
 
   const api = new Api()
   useEffect(() => {
@@ -179,6 +184,7 @@ function ModuleAccess(props) {
         onSubmit={async (values, { setSubmitting, resetForm }) => {
           try {
             let res = await api.post(`user/user-types/${id}/modules`, allowedModule.current)
+            openSnackbar(`Record '${userTypeName}' has been successfully saved.`)
             history.goBack()
           } catch(e) {}
         }}
