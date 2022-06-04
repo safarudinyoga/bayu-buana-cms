@@ -23,16 +23,20 @@ const AddOrRemoveList = ({
   const [showFilter, setShowFilter] = useState(false)
   const [leftData, setLeftData] = useState(firstData)
   const [rightData, setRightData] = useState(secondData)
+  const [triger, setTriger] = useState(true)
 
   // console.log("secondData: ", secondData)
   // console.log("leftData: ", leftData)
 
   useEffect(async () => {
-    setLeftData(firstData)
-    setRightData(secondData)
+    if (triger) {
+      setLeftData(firstData)
+      setRightData(secondData)
+    }
   }, [firstData, secondData])
 
   const handleButtonAdd = () => {
+    setTriger(false)
     setLeftData((leftdata) => [...leftdata, ...rightData])
     setRightData((rightdata) => [])
     setFormValues((formValues) => [
@@ -48,6 +52,7 @@ const AddOrRemoveList = ({
   }
 
   const handleButtonRemove = () => {
+    setTriger(false)
     setLeftData((leftdata) => [])
     setRightData((rightdata) => [...rightdata, ...leftData])
     setFormValues((formValues) => [])

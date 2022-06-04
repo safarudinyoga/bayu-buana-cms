@@ -55,28 +55,6 @@ export default function EmployeeTable() {
     setSelectedJobTitleIds(ids)
   }
 
-  const onFilterChangeDivision = (e, values) => {
-    let ids = []
-    if (values && values.length > 0) {
-      for (let i in values) {
-        ids.push(values[i].id)
-      }
-    }
-    let findFilter = params.filters
-      ? params.filters.filter((v) => v[0] !== "division.id")
-      : []
-    if (ids.length > 0) {
-      setParams({
-        ...params,
-        filters: [...findFilter, ["division.id", "in", ids]],
-      })
-    } else {
-      setParams({ ...params, filters: [...findFilter] })
-    }
-    setSelectedDivision(values)
-    setSelectedDivisionIds(ids)
-  }
-
   const onFilterChangeOffice = (e, values) => {
     let ids = []
     if (values && values.length > 0) {
@@ -126,14 +104,14 @@ export default function EmployeeTable() {
               <FormInputSelectAjax
                 label="User Type"
                 onChange={onFilterChangeOffice}
-                endpoint="/master/employees"
-                column="office.office_name"
-                sort="office.office_name"
+                endpoint="/user/user-type-users"
+                column="user_type_name"
+                sort="user_type_name"
                 isGrouping={true}
-                fieldGroup="office.id"
+                fieldGroup="id"
                 value={selectedOfficeIds}
                 data={selectedOffice}
-                filter={`["office.id", "is not", null]`}
+                filter={`["user_account_id", "is not", null]`}
                 type="selectmultiple"
                 isFilter={true}
                 allowClear={false}
@@ -160,15 +138,15 @@ export default function EmployeeTable() {
             <>
               <FormInputSelectAjax
                 label="User Type"
-                onChange={onFilterChangeDivision}
-                endpoint="/master/employees"
-                column="division.division_name"
-                sort="division.division_name"
+                onChange={onFilterChangeOffice}
+                endpoint="/user/user-type-users"
+                column="user_type_name"
+                sort="user_type_name"
                 isGrouping={true}
-                fieldGroup="division.id"
-                value={selectedDivisionIds}
-                data={selectedDivision}
-                filter={`["division.id", "is not", null]`}
+                fieldGroup="id"
+                value={selectedOfficeIds}
+                data={selectedOffice}
+                filter={`["user_account_id", "is not", null]`}
                 type="selectmultiple"
                 isFilter={true}
                 allowClear={false}
@@ -264,7 +242,7 @@ export default function EmployeeTable() {
       },
       {
         title: "User Access Type",
-        data: "",
+        data: "user_type_name",
       },
       {
         title: "Last Login",
@@ -277,16 +255,14 @@ export default function EmployeeTable() {
         render: rowStatus,
       },
     ],
-    emptyTable: "No employees found",
-    recordName: ["given_name"],
+    emptyTable: "No user management found",
     btnDownload: ".buttons-csv",
     module: "user-management",
     showInfoDelete: true,
     switchStatus: true,
     infoDelete: [
-      { title: "Employee Number", recordName: "employee_number" },
       {
-        title: "Employee Name",
+        title: "Name",
         recordName: ["given_name", "middle_name", "surname"],
       },
     ],

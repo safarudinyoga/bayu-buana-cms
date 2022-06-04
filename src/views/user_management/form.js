@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react"
 import { withRouter, useHistory } from "react-router-dom"
-import { Card, Form, Row, Button, Nav, Overlay } from "react-bootstrap"
+import { Card, Form, Row, Button, Nav, Overlay, Popover } from "react-bootstrap"
 import { useSnackbar } from "react-simple-snackbar"
 import ModuleAccess from "./module-access"
 import { setUIParams } from "redux/ui-store"
@@ -146,6 +146,13 @@ const UserManagementForm = (props) => {
     }
   }
 
+  const popoverBottom = (values) => {
+    return (
+      <Popover id="popover-positioned-bottom" title="Popover bottom">
+        <ModuleAccess userType={values} />
+      </Popover>
+    )
+  }
   return (
     <>
       <Formik
@@ -275,26 +282,6 @@ const UserManagementForm = (props) => {
                       View module access list
                     </Form.Label>
                   </Form.Group>
-                  <Overlay
-                    target={target.current}
-                    show={show}
-                    placement="bottom"
-                  >
-                    {(props) => (
-                      <div
-                        {...props}
-                        // style={{
-                        //   backgroundColor: "rgba(255, 100, 100, 0.85)",
-                        //   padding: "2px 10px",
-                        //   color: "white",
-                        //   borderRadius: 3,
-                        //   ...props.style,
-                        // }}
-                      >
-                        <ModuleAccess />
-                      </div>
-                    )}
-                  </Overlay>
                 </div>
 
                 <div style={{ padding: "0 15px 15px 15px" }}>
