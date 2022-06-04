@@ -245,6 +245,7 @@ function CreatePartnerCredential(props) {
                 />
                 <FormikControl 
                     control="input" 
+                    type={integration_partner_code === 16 ? "text" : "password"}
                     required="label-required" 
                     label={integration_partner_code === 16 ? "Client Secret" : "Partner Password" } 
                     name="partner_password" 
