@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { ReactSVG } from "react-svg"
-import { default as SelectAsync } from "components/form/select-async"
+import { default as SelectAsync } from "./trip_select_async"
 import { SelectFetch } from "react-select-fetch"
 import Api from "config/api"
 import env from "config/environment"
@@ -18,34 +18,21 @@ function TripFlightClass(props) {
       
     }
   }, [])
-  
-
-  const customStyles = {
-    control: () => ({
-      height: 60,
-      border: "1px solid #ced4da"
-    }),
-    valueContainer: (provided, state) => ({
-      ...provided,
-      padding: '27px 8px'
-    })
-  }
 
 
   return (
     <div className={`position-relative traveller-container ${props.smallSize ? "traveller-sm mr-2" : ""}`}>
       <h4 className='form-with-label__title'> FLIGHT CLASS </h4>
       {/* <ReactSVG src='/img/icons/people.svg' className='form-with-label__suggest-icon' /> */}
-      <SelectFetch 
+      {/* <SelectFetch 
         styles={customStyles}
         
-      />
-      {/* <SelectAsync
+      /> */}
+      <SelectAsync
         url={`master/cabin-types`}
         fieldName="cabin_type_name"
         placeholder="Economy"
-        // styles={customStyles}
-      /> */}
+      />
       
       {/* <input type="text" className='form-control rounded-0 form-with-label' /> */}
     </div>  )

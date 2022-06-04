@@ -56,7 +56,7 @@ export default function UserAccessTypeTable() {
         render: rowStatus,
       },
     ],
-    emptyTable: "No user access type found",
+    emptyTable: "No Module found",
     recordName: ["user_type_code", "user_type_name"],
     switchStatus: true,
     customFilterStatus: {
@@ -66,6 +66,11 @@ export default function UserAccessTypeTable() {
         { value: "3", label: "Inactive" },
       ],
     },
+    showInfoDelete: true,
+    infoDelete: [
+      {title: "User Type Code", recordName: "user_type_code"},
+      {title: "User Type Name", recordName: "user_type_name"},  
+    ],
   })
 
 
