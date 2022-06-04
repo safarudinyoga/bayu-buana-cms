@@ -1,17 +1,11 @@
-import BBDataTable from "components/table/bb-data-table"
-import rowStatus from "lib/row-status"
-import React, { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
-import { setUIParams } from "redux/ui-store"
-import { Card, Form, Row, Col, Button, Modal } from "react-bootstrap"
+import React, { useState } from 'react'
+import { Col } from "react-bootstrap"
 import createIcon from "assets/icons/create.svg"
 import FormInputSelectAjax from "components/form/input-select-ajax"
 import {withRouter} from "react-router"
 import { Editor } from "react-draft-wysiwyg"
 import Api from "config/api"
 import FormBuilder from "components/form/builder"
-import TranslationForm from "components/form/translation-form"
-import FormAlert from "components/form/alert"
 import {OverlayTrigger, Tooltip} from "react-bootstrap"
 // import Form from "./form";
 
@@ -21,30 +15,6 @@ function TravelAdvice(props) {
   const [formBuilder, setFormBuilder] = useState(null)
   const [translations, setTranslations] = useState(["Indonesia"])
   const [title, setTitle] = React.useState("Travel Advice")
-  let dispatch = useDispatch()
-  useEffect(() => {
-    dispatch(
-      setUIParams({
-        title: "Sabre",
-        breadcrumbs: [
-          {
-            text: "Setup and Configurations",
-          },
-          {
-            text: "Intergration Partner",
-          },
-          {
-            text: "Sabre",
-          },
-        ],
-      }),
-    )
-  }, [])
-  
-
-  const onReset = () => {
-    setParams({ ...params, filters: [] })
-  }
 
   let [params, setParams] = useState({
     createOnModal: true,
