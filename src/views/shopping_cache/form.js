@@ -11,10 +11,14 @@ import TripCorporate from './components/trip_corporate'
 import TripMultitripSingle from './components/trip_multitrip_single'
 import TripMultitrip from './components/trip_multitrip'
 import TripDateOneway from './components/trip_date_oneway'
+import Api from "config/api"
 
 function ShoppingCacheCreate(props) {
   const dispatch = useDispatch()
   const [flightType, setFlightType] = useState("roundtrip")
+  const [airports, setAirports] = useState([])
+
+  let api = new Api()
 
   useEffect(async () => {
     // let formId = showCreateModal.id || props.id
@@ -48,41 +52,66 @@ function ShoppingCacheCreate(props) {
     // }
   }, [])
 
-  const airports = [
-    {
-      name: "Jakarta, Indonesia",
-      city: "Jakarta",
-      code: "JKT",
-      all: "All Airports"
-    },
-    { 
-      name: "Soekarno-Hatta Intl",
-      city: "Jakarta",
-      country: "Indonesia",
-      code: "CGK",
-      city_code: "JKT",
-    },
-    { 
-      name: "Halim Perdana Kusuma",
-      city: "Jakarta",
-      country: "Indonesia",
-      code: "HLP",
-      city_code: "JKT",
-    },
-    {
-      name: "Singapore, Singapore",
-      city: "Singapore",
-      code: "SIN",
-      all: "All Airports"
-    },
-    { 
-      name: "Singapore Changi Airport",
-      city: "Singapore",
-      country: "Singapore",
-      code: "SIN",
-      city_code: "SIN",
-    },
-  ]
+  useEffect(async () => {
+    try {
+      let res = await api.get("/master/airports?size=-1")
+      let airportDataArr = []
+
+      res.data.items.map(async (item, i) => {
+        let country = item.city ? await api.get(`/master/countries/${item.city.country_id}`) : ""
+
+        let airportData = {
+          name: item.airport_name,
+          code: item.airport_code, 
+          city: item.city ? item.city.city_name : "",
+          city_code: item.city ? item.city.city_code : "",
+          country: country.data ? country.data.country_name : ""
+        }
+
+        airportDataArr.push(airportData)
+      })
+      setAirports(airportDataArr)
+    } catch (error) {
+      
+    }
+  }, [])
+  
+
+  // const airports = [
+  //   {
+  //     name: "Jakarta, Indonesia",
+  //     city: "Jakarta",
+  //     code: "JKT",
+  //     all: "All Airports"
+  //   },
+  //   { 
+  //     name: "Soekarno-Hatta Intl",
+  //     city: "Jakarta",
+  //     country: "Indonesia",
+  //     code: "CGK",
+  //     city_code: "JKT",
+  //   },
+  //   { 
+  //     name: "Halim Perdana Kusuma",
+  //     city: "Jakarta",
+  //     country: "Indonesia",
+  //     code: "HLP",
+  //     city_code: "JKT",
+  //   },
+  //   {
+  //     name: "Singapore, Singapore",
+  //     city: "Singapore",
+  //     code: "SIN",
+  //     all: "All Airports"
+  //   },
+  //   { 
+  //     name: "Singapore Changi Airport",
+  //     city: "Singapore",
+  //     country: "Singapore",
+  //     code: "SIN",
+  //     city_code: "SIN",
+  //   },
+  // ]
 
   return (
     <>

@@ -25,10 +25,20 @@ function TripDateOneway(props) {
    <>
     <div className='d-flex mr-2'>
       <div className={`position-relative flex-grow-1 ${props.smallSize ? "trip-date-sm-container" : ""} ${props.medSize ? "trip-date-md-container" : ""}`}>
-        {/* <ReactDatePicker 
-          className='form-control rounded-0 form-with-label'
-        /> */}
-        <DatePicker 
+        <div className={`position-relative ${props.smallSize ? "trip-date-sm" : ""}`} style={{zIndex: 3000}}>
+          <h4 className='form-with-label__title'> DEPART <span className='label-required'></span></h4>
+          <ReactSVG src='/img/icons/date-range.svg' className='form-with-label__suggest-icon'/>
+          <ReactDatePicker 
+            className='form-control rounded-0 form-with-label'
+            selected={departTime}
+            dateFormat="dd MMMM yyyy"
+            onChange={(date) => {
+              setDepartTime(new Date(date))
+            }}
+          />
+        </div>
+        
+        {/* <DatePicker 
           render={<RenderDatepicker title={"DEPART"} />}
           numberOfMonths={2}
           fixMainPosition={true}
@@ -40,8 +50,8 @@ function TripDateOneway(props) {
           portal
           containerStyle={{zIndex: 3000}}
           arrowStyle={{zIndex: 3000}}
-        />
-      </div>
+        /> */}
+      </div> 
     </div>
    </>
   )

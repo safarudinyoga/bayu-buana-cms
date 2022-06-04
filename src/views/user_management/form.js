@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react"
 import { withRouter, useHistory } from "react-router-dom"
-import { Card, Form, Row, Button, Nav, OverlayTrigger,Popover } from "react-bootstrap"
+import { Card, Form, Row, Button, Nav, Overlay, Popover } from "react-bootstrap"
 import { useSnackbar } from "react-simple-snackbar"
 import ModuleAccess from "./module-access"
 import { setUIParams } from "redux/ui-store"
@@ -146,10 +146,10 @@ const UserManagementForm = (props) => {
     }
   }
 
-  const popoverBottom =(values) =>{
+  const popoverBottom = (values) => {
     return (
       <Popover id="popover-positioned-bottom" title="Popover bottom">
-        <ModuleAccess userType={values}/>
+        <ModuleAccess userType={values} />
       </Popover>
     )
   }
@@ -271,15 +271,16 @@ const UserManagementForm = (props) => {
                         </div>
                       )}
                     </FastField>
-                    <OverlayTrigger disabled trigger="click" placement="bottom" overlay={popoverBottom(values.user_type)} rootClose>
-                      <Form.Label
-                        column
-                        md={2}
-                        style={{ color: "#3E40AE", marginLeft: "14px" }}
-                      >
-                        View module access list
-                      </Form.Label>
-                    </OverlayTrigger>
+
+                    <Form.Label
+                      column
+                      md={2}
+                      style={{ color: "#3E40AE", marginLeft: "14px" }}
+                      ref={target}
+                      onClick={() => setShow(!show)}
+                    >
+                      View module access list
+                    </Form.Label>
                   </Form.Group>
                 </div>
 
