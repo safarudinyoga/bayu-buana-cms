@@ -262,7 +262,7 @@ function UserAccessTypeInformation(props) {
           disabled={isView || loading}
           label="Code"
           type="text"
-          minLength="2"
+          minLength="1"
           maxLength="4"
           hint="Code maximum 4 characters"
         />

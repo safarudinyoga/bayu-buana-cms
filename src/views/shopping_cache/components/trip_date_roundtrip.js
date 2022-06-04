@@ -22,14 +22,31 @@ function TripDateRoundtrip(props) {
     )
   }
 
+  function RenderReactDatepicker({title}) {
+    return (
+      <div className={`position-relative ${props.smallSize ? "trip-date-sm" : ""}`} style={{zIndex: 3000}}>
+        <h4 className='form-with-label__title'> {title} <span className='label-required'></span></h4>
+        <ReactSVG src='/img/icons/date-range.svg' className='form-with-label__suggest-icon'/>
+        <ReactDatePicker 
+          className='form-control rounded-0 form-with-label'
+          selected={departTime}
+          dateFormat="dd MMMM yyyy"
+          onChange={(date) => {
+            setDepartTime(new Date(date))
+          }}
+        />
+      </div>
+    )
+  }
+
   return (
    <>
     <div className='d-flex mr-2'>
       <div className={`position-relative flex-grow-1 ${props.smallSize ? "trip-date-sm-container" : ""} ${props.medSize ? "trip-date-md-container" : ""}`}>
-        {/* <ReactDatePicker 
-          className='form-control rounded-0 form-with-label'
-        /> */}
-        <DatePicker 
+        <RenderReactDatepicker 
+          title={"DEPART"}
+        />
+        {/* <DatePicker 
           render={<RenderDatepicker title={"DEPART"} />}
           numberOfMonths={2}
           fixMainPosition={true}
@@ -41,10 +58,13 @@ function TripDateRoundtrip(props) {
           portal
           containerStyle={{zIndex: 3000}}
           arrowStyle={{zIndex: 3000}}
-        />
+        /> */}
       </div>
       <div className={`position-relative flex-grow-1 ${props.smallSize ? "trip-date-sm-container" : ""} ${props.medSize ? "trip-date-md-container" : ""}`}>
-        <DatePicker 
+        <RenderReactDatepicker 
+          title={"RETURN"}
+        />
+        {/* <DatePicker 
           render={<RenderDatepicker title={"RETURN"} />}
           numberOfMonths={2}
           fixMainPosition={true}
@@ -54,7 +74,7 @@ function TripDateRoundtrip(props) {
             setReturnTime(new Date(date))
           }}
           portal
-        />
+        /> */}
       </div>
     </div>
    </>
