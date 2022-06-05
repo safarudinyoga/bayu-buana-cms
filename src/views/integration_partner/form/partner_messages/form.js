@@ -131,14 +131,14 @@ function MessageCreate(props) {
             label="Message"
             name="message"
             placeholder={"Please choose"}
-            url={`master/events`}
-            fieldName={"event_name"}
+            url={`master/event-types`}
+            fieldName={"event_type_name"}
             onChange={(v) => {
               setFieldValue("message", v)
             }}
-            urlFilter={`["event_code", "=", "1"],["OR"],["event_code", "=", "2"],["OR"],["event_code", "=", "3"],["OR"],["event_code", "=", "15"]`}
+            urlFilter={`["event_type_code", "=", "1"],["OR"],["event_type_code", "=", "2"],["OR"],["event_type_code", "=", "3"],["OR"],["event_type_code", "=", "15"]`}
             style={{ maxWidth: 250 }}
-            sort={"event_code"}
+            sort={"event_type_code"}
             size={formSize}
             isDisabled={isView || loading}
           />

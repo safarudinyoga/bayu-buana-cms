@@ -159,7 +159,7 @@ class BBDataTable extends Component {
             }else{
               title = row[data]
             }
-            return v.title + " : " + title
+            return v.title + ": " + title
           }).join(" ")
         }
 
@@ -713,6 +713,10 @@ class BBDataTable extends Component {
 
           if(module === 'frequent_traveler_program'){
             module = 'loyalty_programs'
+          }
+
+          if(module === 'fee_type'){
+            module = 'fee_tax_type'
           }
 
           let rowID = edit.triggerRow.data().id

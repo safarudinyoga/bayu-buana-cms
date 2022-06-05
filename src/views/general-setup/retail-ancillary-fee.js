@@ -109,89 +109,497 @@ const RetailAncillaryFee = (props) => {
   const [initialForm, setInitialForm] = useState({
     processing_fee_category_name: "",
     description: "",
+    // Flight
     domestic_reissue: "",
     domestic_reissue_fee_tax_id: "",
-    domestic_reissue_amount: null,
+    domestic_reissue_amount: "",
     domestic_reissue_amount_type: "",
-    domestic_reissue_percent: null,
+    domestic_reissue_percent: "",
     domestic_reissue_tax_include: false,
     domestic_revalidate: "",
     domestic_revalidate_fee_tax_id: "",
-    domestic_revalidate_amount: null,
+    domestic_revalidate_amount: "",
     domestic_revalidate_amount_type: "",
-    domestic_revalidate_percent: null,
+    domestic_revalidate_percent: "",
     domestic_revalidate_tax_include: false,
     domestic_refund: "",
     domestic_refund_fee_tax_id: "",
-    domestic_refund_amount: null,
+    domestic_refund_amount: "",
     domestic_refund_amount_type: "",
-    domestic_refund_percent: null,
+    domestic_refund_percent: "",
     domestic_refund_tax_include: false,
     domestic_void: "",
     domestic_void_fee_tax_id: "",
-    domestic_void_amount: null,
+    domestic_void_amount: "",
     domestic_void_amount_type: "",
-    domestic_void_percent: null,
+    domestic_void_percent: "",
     domestic_void_tax_include: false,
     domestic_rfp: "",
     domestic_rfp_fee_tax_id: "",
-    domestic_rfp_amount: null,
+    domestic_rfp_amount: "",
     domestic_rfp_amount_type: "",
-    domestic_rfp_percent: null,
+    domestic_rfp_percent: "",
     domestic_rfp_tax_include: false,
     domestic_non_gds: "",
     domestic_non_gds_fee_tax_id: "",
-    domestic_non_gds_amount: null,
+    domestic_non_gds_amount: "",
     domestic_non_gds_amount_type: "",
-    domestic_non_gds_percent: null,
+    domestic_non_gds_percent: "",
     domestic_non_gds_tax_include: false,
     international_reissue: "",
     international_reissue_fee_tax_id: "",
-    international_reissue_amount: null,
+    international_reissue_amount: "",
     international_reissue_amount_type: "",
-    international_reissue_percent: null,
+    international_reissue_percent: "",
     international_reissue_tax_include: false,
     international_revalidate: "",
     international_revalidate_fee_tax_id: "",
-    international_revalidate_amount: null,
+    international_revalidate_amount: "",
     international_revalidate_amount_type: "",
-    international_revalidate_percent: null,
+    international_revalidate_percent: "",
     international_revalidate_tax_include: false,
     international_refund: "",
     international_refund_fee_tax_id: "",
-    international_refund_amount: null,
+    international_refund_amount: "",
     international_refund_amount_type: "",
-    international_refund_percent: null,
+    international_refund_percent: "",
     international_refund_tax_include: false,
     international_void: "",
     international_void_fee_tax_id: "",
-    international_void_amount: null,
+    international_void_amount: "",
     international_void_amount_type: "",
-    international_void_percent: null,
+    international_void_percent: "",
     international_void_tax_include: false,
     international_rfp: "",
     international_rfp_fee_tax_id: "",
-    international_rfp_amount: null,
+    international_rfp_amount: "",
     international_rfp_amount_type: "",
-    international_rfp_percent: null,
+    international_rfp_percent: "",
     international_rfp_tax_include: false,
     international_non_gds: "",
     international_non_gds_fee_tax_id: "",
-    international_non_gds_amount: null,
+    international_non_gds_amount: "",
     international_non_gds_amount_type: "",
-    international_non_gds_percent: null,
+    international_non_gds_percent: "",
     international_non_gds_tax_include: false,
     other_emergency: "",
     other_emergency_fee_tax_id: "",
-    other_emergency_amount: null,
+    other_emergency_amount: "",
     other_emergency_amount_type: "",
-    other_emergency_percent: null,
-    other_emergency_tax_include: false
+    other_emergency_percent: "",
+    other_emergency_tax_include: false,
+
+    // Hotel
+    hotel_domestic_modify_fee: "",
+    hotel_domestic_modify_fee_tax_id: "",
+    hotel_domestic_modify_amount: "",
+    hotel_domestic_modify_amount_type: "",
+    hotel_domestic_modify_percent: "",
+    hotel_domestic_modify_tax_include: false,
+    hotel_domestic_refund_fee: "",
+    hotel_domestic_refund_fee_fee_tax_id: "",
+    hotel_domestic_refund_fee_amount: "",
+    hotel_domestic_refund_fee_amount_type: "",
+    hotel_domestic_refund_fee_percent: "",
+    hotel_domestic_refund_fee_tax_include: false,
+    hotel_domestic_non_gds: "",
+    hotel_domestic_non_gds_fee_tax_id: "",
+    hotel_domestic_non_gds_amount: "",
+    hotel_domestic_non_gds_amount_type: "",
+    hotel_domestic_non_gds_percent: "",
+    hotel_domestic_non_gds_tax_include: false,
+    hotel_international_modify_fee: "",
+    hotel_international_modify_fee_tax_id: "",
+    hotel_international_modify_amount: "",
+    hotel_international_modify_amount_type: "",
+    hotel_international_modify_percent: "",
+    hotel_international_modify_tax_include: false,
+    hotel_international_refund_fee: "",
+    hotel_international_refund_fee_fee_tax_id: "",
+    hotel_international_refund_fee_amount: "",
+    hotel_international_refund_fee_amount_type: "",
+    hotel_international_refund_fee_percent: "",
+    hotel_international_refund_fee_tax_include: false,
+    hotel_international_non_gds: "",
+    hotel_international_non_gds_fee_tax_id: "",
+    hotel_international_non_gds_amount: "",
+    hotel_international_non_gds_amount_type: "",
+    hotel_international_non_gds_percent: "",
+    hotel_international_non_gds_tax_include: false,
+    hotel_other_emergency_service: "",
+    hotel_other_emergency_service_amount: "",
+    hotel_other_emergency_service_amount_type: "",
+    hotel_other_emergency_service_percent: "",
+    hotel_other_emergency_service_tax_include: false,
   })
 
   // Schema for yup
   const validationSchema = Yup.object().shape({
-    processing_fee_category_name: Yup.string().required("Present Name is required."),
+    // processing_fee_category_name: Yup.string().required("Present Name is required."),
+    // Flight
+    domestic_reissue: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeDomesticReissue.fee_tax_type_name}.`),
+    domestic_reissue_amount: Yup
+      .string().when('domestic_reissue', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeDomesticReissue.fee_tax_type_name}.`)
+      }),
+    domestic_reissue_amount_type: Yup
+      .string().when('domestic_reissue', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    domestic_reissue_percent: Yup
+      .string().when('domestic_revalidate', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeDomesticReissue.fee_tax_type_name}.`)
+      }),
+    domestic_revalidate: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeDomesticRevalidate.fee_tax_type_name}.`),
+    domestic_revalidate_amount: Yup
+      .string().when('domestic_revalidate', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeDomesticRevalidate.fee_tax_type_name}.`)
+      }),
+    domestic_revalidate_amount_type: Yup
+      .string().when('domestic_revalidate', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    domestic_revalidate_percent: Yup
+      .string().when('domestic_revalidate', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeDomesticRevalidate.fee_tax_type_name}.`)
+      }),
+    domestic_refund: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeDomesticRefund.fee_tax_type_name}.`),
+    domestic_refund_amount: Yup
+      .string().when('domestic_refund', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeDomesticRefund.fee_tax_type_name}.`)
+      }),
+    domestic_refund_amount_type: Yup
+      .string().when('domestic_refund', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    domestic_refund_percent: Yup
+      .string().when('domestic_refund', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeDomesticRevalidate.fee_tax_type_name}.`)
+      }),
+    domestic_void: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeDomesticVoid.fee_tax_type_name}.`),
+    domestic_void_amount: Yup
+      .string().when('domestic_void', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeDomesticVoid.fee_tax_type_name}.`)
+      }),
+    domestic_void_amount_type: Yup
+      .string().when('domestic_void', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    domestic_void_percent: Yup
+      .string().when('domestic_void', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeDomesticVoid.fee_tax_type_name}.`)
+      }),
+    domestic_rfp: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeDomesticRfp.fee_tax_type_name}.`),
+    domestic_rfp_amount: Yup
+      .string().when('domestic_rfp', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeDomesticRfp.fee_tax_type_name}.`)
+      }),
+    domestic_rfp_amount_type: Yup
+      .string().when('domestic_rfp', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    domestic_rfp_percent: Yup
+      .string().when('domestic_rfp', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeDomesticRfp.fee_tax_type_name}.`)
+      }),
+    domestic_non_gds: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeDomesticNonGds.fee_tax_type_name}.`),
+    domestic_non_gds_amount: Yup
+      .string().when('domestic_non_gds', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeDomesticNonGds.fee_tax_type_name}.`)
+      }),
+    domestic_non_gds_amount_type: Yup
+      .string().when('domestic_non_gds', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    domestic_non_gds_percent: Yup
+      .string().when('domestic_non_gds', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeDomesticNonGds.fee_tax_type_name}.`)
+      }),
+    international_reissue: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeInternationalReissue.fee_tax_type_name}.`),
+    international_reissue_amount: Yup
+      .string().when('international_reissue', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeInternationalReissue.fee_tax_type_name}.`)
+      }),
+    international_reissue_amount_type: Yup
+      .string().when('international_reissue', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    international_reissue_percent: Yup
+      .string().when('international_reissue', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeInternationalReissue.fee_tax_type_name}.`)
+      }), 
+    international_revalidate: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeInternationalRevalidate.fee_tax_type_name}.`),
+    international_revalidate_amount: Yup
+      .string().when('international_revalidate', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeInternationalRevalidate.fee_tax_type_name}.`)
+      }),
+    international_revalidate_amount_type: Yup
+      .string().when('international_revalidate', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    international_revalidate_percent: Yup
+      .string().when('international_revalidate', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeInternationalRevalidate.fee_tax_type_name}.`)
+      }), 
+    international_refund: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeInternationalRefund.fee_tax_type_name}.`),
+    international_refund_amount: Yup
+      .string().when('international_refund', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeInternationalRefund.fee_tax_type_name}.`)
+      }),
+    international_refund_amount_type: Yup
+      .string().when('international_refund', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    international_refund_percent: Yup
+      .string().when('international_refund', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeInternationalVoid.fee_tax_type_name}.`)
+      }), 
+    international_void: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeInternationalVoid.fee_tax_type_name}.`),
+    international_void_amount: Yup
+      .string().when('international_void', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeInternationalVoid.fee_tax_type_name}.`)
+      }),
+    international_void_amount_type: Yup
+      .string().when('international_void', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    international_void_percent: Yup
+      .string().when('international_void', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeInternationalVoid.fee_tax_type_name}.`)
+      }), 
+    international_rfp: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeInternationalRfp.fee_tax_type_name}.`),
+    international_rfp_amount: Yup
+      .string().when('international_rfp', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeInternationalRfp.fee_tax_type_name}.`)
+      }),
+    international_rfp_amount_type: Yup
+      .string().when('international_rfp', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    international_rfp_percent: Yup
+      .string().when('international_rfp', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeInternationalRfp.fee_tax_type_name}.`)
+      }), 
+    international_non_gds: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeInternationalNonGds.fee_tax_type_name}.`),
+    international_non_gds_amount: Yup
+      .string().when('international_non_gds', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeInternationalNonGds.fee_tax_type_name}.`)
+      }),
+    international_non_gds_amount_type: Yup
+      .string().when('international_non_gds', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    international_non_gds_percent: Yup
+      .string().when('international_non_gds', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeInternationalNonGds.fee_tax_type_name}.`)
+      }), 
+    other_emergency: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeOtherEmergency.fee_tax_type_name}.`),
+    other_emergency_amount: Yup
+      .string().when('other_emergency', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeOtherEmergency.fee_tax_type_name}.`)
+      }),
+    other_emergency_amount_type: Yup
+      .string().when('other_emergency', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    other_emergency_percent: Yup
+      .string().when('other_emergency', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeOtherEmergency.fee_tax_type_name}.`)
+      }), 
+
+    // Hotel
+    hotel_domestic_modify_fee: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeDomesticHotel.fee_tax_type_name}.`),
+    hotel_domestic_modify_fee_amount: Yup
+      .string().when('hotel_domestic_modify_fee', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeDomesticHotel.fee_tax_type_name}.`)
+      }),
+    hotel_domestic_modify_fee_amount_type: Yup
+      .string().when('hotel_domestic_modify_fee', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    hotel_domestic_modify_fee_percent: Yup
+      .string().when('hotel_domestic_modify_fee', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeDomesticHotel.fee_tax_type_name}.`)
+      }), 
+    hotel_domestic_refund_fee: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeDomesticRefundHotel.fee_tax_type_name}.`),
+    hotel_domestic_refund_fee_amount: Yup
+      .string().when('hotel_domestic_refund_fee', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeDomesticRefundHotel.fee_tax_type_name}.`)
+      }),
+    hotel_domestic_refund_fee_amount_type: Yup
+      .string().when('hotel_domestic_refund_fee', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    hotel_domestic_refund_fee_percent: Yup
+      .string().when('hotel_domestic_refund_fee', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeDomesticRefundHotel.fee_tax_type_name}.`)
+      }), 
+    hotel_domestic_non_gds: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeDomesticNonGdsHotel.fee_tax_type_name}.`),
+    hotel_domestic_non_gds_amount: Yup
+      .string().when('hotel_domestic_non_gds', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeDomesticNonGdsHotel.fee_tax_type_name}.`)
+      }),
+    hotel_domestic_non_gds_amount_type: Yup
+      .string().when('hotel_domestic_non_gds', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    hotel_domestic_non_gds_percent: Yup
+      .string().when('hotel_domestic_non_gds', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeDomesticNonGdsHotel.fee_tax_type_name}.`)
+      }), 
+    hotel_international_modify: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeInternationalHotel.fee_tax_type_name}.`),
+    hotel_international_modify_amount: Yup
+      .string().when('hotel_international_modify', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeInternationalHotel.fee_tax_type_name}.`)
+      }),
+    hotel_international_modify_amount_type: Yup
+      .string().when('hotel_international_modify', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    hotel_international_modify_percent: Yup
+      .string().when('hotel_international_modify', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeInternationalHotel.fee_tax_type_name}.`)
+      }), 
+    hotel_international_refund_fee: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeInternationalRefundHotel.fee_tax_type_name}.`),
+    hotel_international_refund_fee_amount: Yup
+      .string().when('hotel_international_refund_fee', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeInternationalRefundHotel.fee_tax_type_name}.`)
+      }),
+    hotel_international_refund_fee_amount_type: Yup
+      .string().when('hotel_international_refund_fee', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    hotel_international_refund_fee_percent: Yup
+      .string().when('hotel_international_refund_fee', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeInternationalRefundHotel.fee_tax_type_name}.`)
+      }), 
+    hotel_international_non_gds: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeInternationalNonGdsHotel.fee_tax_type_name}.`),
+    hotel_international_non_gds_amount: Yup
+      .string().when('hotel_international_non_gds', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeInternationalNonGdsHotel.fee_tax_type_name}.`)
+      }),
+    hotel_international_non_gds_amount_type: Yup
+      .string().when('hotel_international_non_gds', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    hotel_international_non_gds_percent: Yup
+      .string().when('hotel_international_non_gds', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeInternationalNonGdsHotel.fee_tax_type_name}.`)
+      }), 
+    hotel_other_emergency_service: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeOtherEmergencyHotel.fee_tax_type_name}.`),
+    hotel_other_emergency_service_amount: Yup
+      .string().when('hotel_other_emergency_service', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeOtherEmergencyHotel.fee_tax_type_name}.`)
+      }),
+    hotel_other_emergency_service_amount_type: Yup
+      .string().when('hotel_other_emergency_service', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    hotel_other_emergency_service_percent: Yup
+      .string().when('hotel_other_emergency_service', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeOtherEmergencyHotel.fee_tax_type_name}.`)
+      }), 
+
   })
 
   useEffect(async() => {
@@ -236,6 +644,11 @@ const RetailAncillaryFee = (props) => {
       console.log(e)
     }
   }
+  //function for remove separator 
+  const removeSeparator = (value) => {
+    value = value.toString().split(",").join("")
+    return parseInt(value)
+  }
 
   const onSubmitFee = (values, id) => {
       let payloadDomestic = {
@@ -243,7 +656,7 @@ const RetailAncillaryFee = (props) => {
         domestic_reissue: {
           fee_tax_type_id: taxIdDomesticReissue,
           currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
-          amount: values.domestic_reissue == "amount" ? values.domestic_reissue_amount : null,
+          amount: values.domestic_reissue == "amount" ? removeSeparator(values.domestic_reissue_amount) : null,
           percent:values.domestic_reissue == "amount" ? null : values.domestic_reissue_percent,
           charge_type_id:values.domestic_reissue == "amount" ? values.domestic_reissue_amount_type : null,
           is_tax_inclusive:values.domestic_reissue == "amount" ? null : values.domestic_reissue_tax_include,
@@ -253,7 +666,7 @@ const RetailAncillaryFee = (props) => {
         domestic_revalidate: {
           fee_tax_type_id: taxIdDomesticRevalidate,
           currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
-          amount: values.domestic_revalidate == "amount" ? values.domestic_revalidate_amount : null,
+          amount: values.domestic_revalidate == "amount" ? removeSeparator(values.domestic_revalidate_amount) : null,
           percent:values.domestic_revalidate == "amount" ? null : values.domestic_revalidate_percent,
           charge_type_id:values.domestic_revalidate == "amount" ? values.domestic_revalidate_amount_type : null,
           is_tax_inclusive:values.domestic_revalidate == "amount" ? null : values.domestic_revalidate_tax_include,
@@ -263,7 +676,7 @@ const RetailAncillaryFee = (props) => {
         domestic_refund: {
           fee_tax_type_id: taxIdDomesticRefund,
           currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
-          amount: values.domestic_refund == "amount" ? values.domestic_refund_amount : null,
+          amount: values.domestic_refund == "amount" ? removeSeparator(values.domestic_refund_amount) : null,
           percent:values.domestic_refund == "amount" ? null : values.domestic_refund_percent,
           charge_type_id:values.domestic_refund == "amount" ? values.domestic_refund_amount_type : null,
           is_tax_inclusive:values.domestic_refund == "amount" ? null : values.domestic_refund_tax_include,
@@ -273,7 +686,7 @@ const RetailAncillaryFee = (props) => {
         domestic_void: {
           fee_tax_type_id: taxIdDomesticVoid,
           currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
-          amount: values.domestic_void == "amount" ? values.domestic_void_amount : null,
+          amount: values.domestic_void == "amount" ? removeSeparator(values.domestic_void_amount) : null,
           percent:values.domestic_void == "amount" ? null : values.domestic_void_percent,
           charge_type_id:values.domestic_void == "amount" ? values.domestic_void_amount_type : null,
           is_tax_inclusive:values.domestic_void == "amount" ? null : values.domestic_void_tax_include,
@@ -283,7 +696,7 @@ const RetailAncillaryFee = (props) => {
         domestic_frp: {
           fee_tax_type_id: taxIdDomesticRfp,
           currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
-          amount: values.domestic_rfp == "amount" ? values.domestic_rfp_amount : null,
+          amount: values.domestic_rfp == "amount" ? removeSeparator(values.domestic_rfp_amount) : null,
           percent:values.domestic_rfp == "amount" ? null : values.domestic_rfp_percent,
           charge_type_id:values.domestic_rfp == "amount" ? values.domestic_rfp_amount_type : null,
           is_tax_inclusive:values.domestic_rfp == "amount" ? null : values.domestic_rfp_tax_include,
@@ -293,7 +706,7 @@ const RetailAncillaryFee = (props) => {
         domestic_non_gds: {
           fee_tax_type_id: taxIdDomesticNonGds,
           currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
-          amount: values.domestic_non_gds == "amount" ? values.domestic_non_gds_amount : null,
+          amount: values.domestic_non_gds == "amount" ? removeSeparator(values.domestic_non_gds_amount) : null,
           percent:values.domestic_non_gds == "amount" ? null : values.domestic_non_gds_percent,
           charge_type_id:values.domestic_non_gds == "amount" ? values.domestic_non_gds_amount_type : null,
           is_tax_inclusive:values.domestic_non_gds == "amount" ? null : values.domestic_non_gds_tax_include,
@@ -303,7 +716,7 @@ const RetailAncillaryFee = (props) => {
         international_reissue: {
           fee_tax_type_id: taxIdInternationalReissue,
           currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
-          amount: values.international_reissue == "amount" ? values.international_reissue_amount : null,
+          amount: values.international_reissue == "amount" ? removeSeparator(values.international_reissue_amount) : null,
           percent:values.international_reissue == "amount" ? null : values.international_reissue_percent,
           charge_type_id:values.international_reissue == "amount" ? values.international_reissue_amount_type : null,
           is_tax_inclusive:values.international_reissue == "amount" ? null : values.international_reissue_tax_include,
@@ -313,7 +726,7 @@ const RetailAncillaryFee = (props) => {
         international_revalidate: {
           fee_tax_type_id: taxIdInternationalRevalidate,
           currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
-          amount: values.international_revalidate == "amount" ? values.international_revalidate_amount : null,
+          amount: values.international_revalidate == "amount" ? removeSeparator(values.international_revalidate_amount) : null,
           percent:values.international_revalidate == "amount" ? null : values.international_revalidate_percent,
           charge_type_id:values.international_revalidate == "amount" ? values.international_revalidate_amount_type : null,
           is_tax_inclusive:values.international_revalidate == "amount" ? null : values.international_revalidate_tax_include,
@@ -323,7 +736,7 @@ const RetailAncillaryFee = (props) => {
         international_refund: {
           fee_tax_type_id: taxIdInternationalRefund,
           currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
-          amount: values.international_refund == "amount" ? values.international_refund_amount : null,
+          amount: values.international_refund == "amount" ? removeSeparator(values.international_refund_amount) : null,
           percent:values.international_refund == "amount" ? null : values.international_refund_percent,
           charge_type_id:values.international_refund == "amount" ? values.dinternational_refund_amount_type : null,
           is_tax_inclusive:values.international_refund == "amount" ? null : values.international_refund_tax_include,
@@ -333,7 +746,7 @@ const RetailAncillaryFee = (props) => {
         international_void: {
           fee_tax_type_id: taxIdInternationalVoid,
           currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
-          amount: values.international_void == "amount" ? values.international_void_amount : null,
+          amount: values.international_void == "amount" ? removeSeparator(values.international_void_amount) : null,
           percent:values.international_void == "amount" ? null : values.international_void_percent,
           charge_type_id:values.international_void == "amount" ? values.international_void_amount_type : null,
           is_tax_inclusive:values.international_void == "amount" ? null : values.international_void_tax_include,
@@ -343,7 +756,7 @@ const RetailAncillaryFee = (props) => {
         international_frp: {
           fee_tax_type_id: taxIdInternationalRfp,
           currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
-          amount: values.international_rfp == "amount" ? values.international_rfp_amount : null,
+          amount: values.international_rfp == "amount" ? removeSeparator(values.international_rfp_amount) : null,
           percent:values.international_rfp == "amount" ? null : values.international_rfp_percent,
           charge_type_id:values.international_rfp == "amount" ? values.international_rfp_amount_type : null,
           is_tax_inclusive:values.international_rfp == "amount" ? null : values.international_rfp_tax_include,
@@ -353,7 +766,7 @@ const RetailAncillaryFee = (props) => {
         international_non_gds: {
           fee_tax_type_id: taxIdInternationalNonGds,
           currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
-          amount: values.international_non_gds == "amount" ? values.international_non_gds_amount : null,
+          amount: values.international_non_gds == "amount" ? removeSeparator(values.international_non_gds_amount) : null,
           percent:values.international_non_gds == "amount" ? null : values.international_non_gds_percent,
           charge_type_id:values.international_non_gds == "amount" ? values.international_non_gds_amount_type : null,
           is_tax_inclusive:values.international_non_gds == "amount" ? null : values.international_non_gds_tax_include,
@@ -363,13 +776,84 @@ const RetailAncillaryFee = (props) => {
         other_emergency_service: {
           fee_tax_type_id: taxIdOtherEmergency,
           currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
-          amount: values.other_emergency == "amount" ? values.other_emergency_amount : null,
+          amount: values.other_emergency == "amount" ? removeSeparator(values.other_emergency_amount) : null,
           percent:values.other_emergency == "amount" ? null : values.other_emergency_percent,
           charge_type_id:values.other_emergency == "amount" ? values.other_emergency_amount_type : null,
           is_tax_inclusive:values.other_emergency == "amount" ? null : values.other_emergency_tax_include,
           is_hidden: true,
           is_included: false,
         },
+        hotel_domestic_modify_fee: {
+          fee_tax_type_id: taxIdDomesticHotel,
+          currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
+          amount: values.hotel_domestic_modify_fee == "amount" ? removeSeparator(values.hotel_domestic_modify_fee_amount) : null,
+          percent:values.hotel_domestic_modify_fee == "amount" ? null : values.hotel_domestic_modify_fee_percent,
+          charge_type_id:values.hotel_domestic_modify_fee == "amount" ? values.hotel_domestic_modify_fee_amount_type : null,
+          is_tax_inclusive:values.hotel_domestic_modify_fee == "amount" ? null : values.hotel_domestic_modify_fee_tax_include,
+          is_hidden: true,
+          is_included: false,
+        },
+        hotel_domestic_refund_fee: {
+          fee_tax_type_id: taxIdDomesticRefundHotel,
+          currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
+          amount: values.hotel_domestic_refund_fee == "amount" ? removeSeparator(values.hotel_domestic_refund_fee_amount) : null,
+          percent:values.hotel_domestic_refund_fee == "amount" ? null : values.hotel_domestic_refund_fee_percent,
+          charge_type_id:values.hotel_domestic_refund_fee == "amount" ? values.hotel_domestic_refund_fee_amount_type : null,
+          is_tax_inclusive:values.hotel_domestic_refund_fee == "amount" ? null : values.hotel_domestic_refund_fee_tax_include,
+          is_hidden: true,
+          is_included: false,
+        },
+        hotel_domestic_non_gds: {
+          fee_tax_type_id: taxIdDomesticNonGdsHotel,
+          currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
+          amount: values.hotel_domestic_non_gds == "amount" ? removeSeparator(values.hotel_domestic_non_gds_amount) : null,
+          percent:values.hotel_domestic_non_gds == "amount" ? null : values.hotel_domestic_non_gds_percent,
+          charge_type_id:values.hotel_domestic_non_gds == "amount" ? values.hotel_domestic_non_gds_amount_type : null,
+          is_tax_inclusive:values.hotel_domestic_non_gds == "amount" ? null : values.hotel_domestic_non_gds_tax_include,
+          is_hidden: true,
+          is_included: false,
+        },
+        hotel_international_modify: {
+          fee_tax_type_id: taxIdInternationalHotel,
+          currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
+          amount: values.hotel_international_modify == "amount" ? removeSeparator(values.hotel_international_modify_amount) : null,
+          percent:values.hotel_international_modify == "amount" ? null : values.hotel_international_modify_percent,
+          charge_type_id:values.hotel_international_modify == "amount" ? values.hotel_international_modify_amount_type : null,
+          is_tax_inclusive:values.hotel_international_modify == "amount" ? null : values.hotel_international_modify_tax_include,
+          is_hidden: true,
+          is_included: false,
+        },
+        hotel_international_refund_fee: {
+          fee_tax_type_id: taxIdInternationalRefundHotel,
+          currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
+          amount: values.hotel_international_refund_fee == "amount" ? removeSeparator(values.hotel_international_refund_fee_amount) : null,
+          percent:values.hotel_international_refund_fee == "amount" ? null : values.hotel_international_refund_fee_percent,
+          charge_type_id:values.hotel_international_refund_fee == "amount" ? values.hotel_international_refund_fee_amount_type : null,
+          is_tax_inclusive:values.hotel_international_refund_fee == "amount" ? null : values.hotel_international_refund_fee_tax_include,
+          is_hidden: true,
+          is_included: false,
+        },
+        hotel_international_non_gds: {
+          fee_tax_type_id: taxIdInternationalNonGdsHotel,
+          currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
+          amount: values.hotel_international_non_gds == "amount" ? removeSeparator(values.hotel_international_non_gds_amount) : null,
+          percent:values.hotel_international_non_gds == "amount" ? null : values.hotel_international_non_gds_percent,
+          charge_type_id:values.hotel_international_non_gds == "amount" ? values.hotel_international_non_gds_amount_type : null,
+          is_tax_inclusive:values.hotel_international_non_gds == "amount" ? null : values.hotel_international_non_gds_tax_include,
+          is_hidden: true,
+          is_included: false,
+        },
+        hotel_other_emergency_service: {
+          fee_tax_type_id: taxIdOtherEmergencyHotel,
+          currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
+          amount: values.other_emergency == "amount" ? removeSeparator(values.other_emergency_amount) : null,
+          percent:values.other_emergency == "amount" ? null : values.other_emergency_percent,
+          charge_type_id:values.other_emergency == "amount" ? values.other_emergency_amount_type : null,
+          is_tax_inclusive:values.other_emergency == "amount" ? null : values.other_emergency_tax_include,
+          is_hidden: true,
+          is_included: false,
+        }
+
       }
       onSaveFee(payloadDomestic, 1)
   }
@@ -579,76 +1063,76 @@ const RetailAncillaryFee = (props) => {
                         {
                           title:"Domestic Modify Hotel Fee",
                           taxType:taxTypeDomesticHotel,
-                          fieldFeeTaxId:"domestic_hotel_fee_tax_id",
-                          fieldRadio:"domestic_hotel",
-                          fieldAmount:"domestic_hotel_amount",
-                          fieldAmountType:"domestic_hotel_amount_type",
-                          fieldPercent:"domestic_hotel_percent",
-                          fieldIncludeTax:"domestic_hotel_tax_include"
+                          fieldFeeTaxId:"hotel_domestic_modify_fee_fee_tax_id",
+                          fieldRadio:"hotel_domestic_modify_fee",
+                          fieldAmount:"hotel_domestic_modify_fee_amount",
+                          fieldAmountType:"hotel_domestic_modify_fee_amount_type",
+                          fieldPercent:"hotel_domestic_modify_fee_percent",
+                          fieldIncludeTax:"hotel_domestic_modify_fee_tax_include"
                         },
                         {
                           title:"Domestic Hotel Refund Fee",
                           taxType:taxTypeDomesticRefundHotel,
-                          fieldFeeTaxId:"domestic_refund_fee_tax_id",
-                          fieldRadio:"domestic_refund",
-                          fieldAmount:"domestic_refund_amount",
-                          fieldAmountType:"domestic_refund_amount_type",
-                          fieldPercent:"domestic_refund_percent",
-                          fieldIncludeTax:"domestic_refund_tax_include"
+                          fieldFeeTaxId:"hotel_domestic_refund_fee_fee_tax_id",
+                          fieldRadio:"hotel_domestic_refund_fee",
+                          fieldAmount:"hotel_domestic_refund_fee_amount",
+                          fieldAmountType:"hotel_domestic_refund_fee_amount_type",
+                          fieldPercent:"hotel_domestic_refund_fee_percent",
+                          fieldIncludeTax:"hotel_domestic_refund_fee_tax_include"
                         },
                         {
                           title:"Domestic Non-GDS Hotel Booking Process Fee",
                           taxType:taxTypeDomesticNonGdsHotel,
-                          fieldFeeTaxId:"domestic_non_gds_fee_tax_id",
-                          fieldRadio:"domestic_non_gds",
-                          fieldAmount:"domestic_non_gds_amount",
-                          fieldAmountType:"domestic_non_gds_amount_type",
-                          fieldPercent:"domestic_non_gds_percent",
-                          fieldIncludeTax:"domestic_non_gds_tax_include"
+                          fieldFeeTaxId:"hotel_domestic_non_gds_fee_tax_id",
+                          fieldRadio:"hotel_domestic_non_gds",
+                          fieldAmount:"hotel_domestic_non_gds_amount",
+                          fieldAmountType:"hotel_domestic_non_gds_amount_type",
+                          fieldPercent:"hotel_domestic_non_gds_percent",
+                          fieldIncludeTax:"hotel_domestic_non_gds_tax_include"
                         }
                       ]},
                       {title: "International", sections: [
                         {
                           title:"International Modify Hotel Fee",
                           taxType:taxTypeInternationalHotel,
-                          fieldFeeTaxId:"international_hotel_fee_tax_id",
-                          fieldRadio:"international_hotel",
-                          fieldAmount:"international_hotel_amount",
-                          fieldAmountType:"international_hotel_amount_type",
-                          fieldPercent:"international_hotel_percent",
-                          fieldIncludeTax:"international_hotel_tax_include"
+                          fieldFeeTaxId:"hotel_international_modify_fee_tax_id",
+                          fieldRadio:"hotel_international_modify",
+                          fieldAmount:"hotel_international_modify_amount",
+                          fieldAmountType:"hotel_international_modify_amount_type",
+                          fieldPercent:"hotel_international_modify_percent",
+                          fieldIncludeTax:"hotel_international_modify_tax_include"
                         },
                         {
                           title:"International Hotel Refund Fee",
                           taxType:taxTypeInternationalRefundHotel,
-                          fieldFeeTaxId:"international_refund_fee_tax_id",
-                          fieldRadio:"international_refund",
-                          fieldAmount:"international_refund_amount",
-                          fieldAmountType:"international_refund_amount_type",
-                          fieldPercent:"international_refund_percent",
-                          fieldIncludeTax:"international_refund_tax_include"
+                          fieldFeeTaxId:"hotel_international_refund_fee_fee_tax_id",
+                          fieldRadio:"hotel_international_refund_fee",
+                          fieldAmount:"hotel_international_refund_fee_amount",
+                          fieldAmountType:"hotel_international_refund_fee_amount_type",
+                          fieldPercent:"hotel_international_refund_fee_percent",
+                          fieldIncludeTax:"hotel_international_refund_fee_tax_include"
                         },
                         {
                           title:"International Non-GDS Hotel Booking Process Fee",
                           taxType:taxTypeInternationalNonGdsHotel,
-                          fieldFeeTaxId:"international_non_gds_fee_tax_id",
-                          fieldRadio:"international_non_gds",
-                          fieldAmount:"international_non_gds_amount",
-                          fieldAmountType:"international_non_gds_amount_type",
-                          fieldPercent:"international_non_gds_percent",
-                          fieldIncludeTax:"international_non_gds_tax_include"
+                          fieldFeeTaxId:"hotel_international_non_gds_fee_tax_id",
+                          fieldRadio:"hotel_international_non_gds",
+                          fieldAmount:"hotel_international_non_gds_amount",
+                          fieldAmountType:"hotel_international_non_gds_amount_type",
+                          fieldPercent:"hotel_international_non_gds_percent",
+                          fieldIncludeTax:"hotel_international_non_gds_tax_include"
                         }
                       ]},
                       {title: "Other", sections: 
                         [{
                           title:"Emergency Service Assistance 24 Hours Surcharge - Issued Only",
                           taxType:taxTypeOtherEmergencyHotel,
-                          fieldFeeTaxId:"other_emergency_fee_tax_id",
-                          fieldRadio:"other_emergency",
-                          fieldAmount:"other_emergency_amount",
-                          fieldAmountType:"other_emergency_amount_type",
-                          fieldPercent:"other_emergency_percent",
-                          fieldIncludeTax:"other_emergency_tax_include"
+                          fieldFeeTaxId:"hotel_other_emergency_service_fee_tax_id",
+                          fieldRadio:"hotel_other_emergency_service",
+                          fieldAmount:"hotel_other_emergency_service_amount",
+                          fieldAmountType:"hotel_other_emergency_service_amount_type",
+                          fieldPercent:"hotel_other_emergency_service_percent",
+                          fieldIncludeTax:"hotel_other_emergency_service_tax_include"
                         }]
                       },
                     ]}

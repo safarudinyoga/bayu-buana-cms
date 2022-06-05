@@ -37,7 +37,7 @@ export default function InvoiceEmailSetupTable() {
         isCheckbox: false,
         title: "Invoice Email Setup",
         titleModal: "Invoice Email Setup",
-        baseRoute: `/master/configurations/agent-email-categories/${routeParams.template_id}/form`,
+        baseRoute: `/master/invoice-email-setup/${routeParams.template_id}/form`,
         module: "email-setup-template",
         endpoint: `/master/configurations/agent-email-categories/${routeParams.template_id}`,
         deleteEndpoint: "",

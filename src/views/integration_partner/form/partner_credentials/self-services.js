@@ -1,4 +1,4 @@
-import { withRouter } from "react-router";
+import { withRouter, useHistory } from "react-router";
 import React, { useState, useEffect } from "react";
 import { Form, Button } from "react-bootstrap";
 import { Formik } from "formik";
@@ -10,6 +10,7 @@ import CancelButton from "components/button/cancel";
 import FormikControl from "../../../../components/formik/formikControl";
 
 function SelfServiceBooking(props) {
+  const history = useHistory()
   const integration_partner_code = props.integration_partner_code
   const partner_integration_id = props.match.params.id
   const endpoint = `/master/integration-partners/${partner_integration_id}/credential-self-service`;
@@ -178,6 +179,7 @@ function SelfServiceBooking(props) {
                 <FormikControl 
                     control="input" 
                     required="label-required" 
+                    type={integration_partner_code === 16 ? "text" : "password"}
                     label={integration_partner_code === 16 ? "Client Secret" : "Partner Password" } 
                     name="partner_password" 
                     style={{ maxWidth: 250 }} 
@@ -311,7 +313,7 @@ function SelfServiceBooking(props) {
                                 SAVE
                             </Button>
                         )}
-                        <CancelButton onClick={() => dispatch(setCreateModal({ show: false, id: null, disabled_form: false }))} />
+                        <CancelButton onClick={() => history.goBack()} />
                     </div>
                 )}
             </Form>
