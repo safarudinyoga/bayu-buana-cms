@@ -3,7 +3,6 @@ import { renderColumn } from "lib/translation"
 import React, { useEffect, useState } from "react"
 import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
-import Form from "./form-delete"
 export default function CorporateRatingTable() {
   let dispatch = useDispatch()
   useEffect(() => {
@@ -26,7 +25,6 @@ export default function CorporateRatingTable() {
     isCheckbox: false,
     showAdvancedOptions: false,
     hideDetail: true,
-    modalDelete: true,
     title: "Corporate Rating",
     titleModal: "Corporate Rating",
     baseRoute: "/master/corporate-rating/form",
@@ -50,7 +48,7 @@ export default function CorporateRatingTable() {
       },
       {
         title: "Translated Corporate Rating Type Level",
-        data: "corporate_rating_type_level_translation.corporate_rating_type_level_name",
+        data: "translation.corporate_rating_type_level_name",
         visible: false,
       },     
     ],
@@ -63,5 +61,5 @@ export default function CorporateRatingTable() {
     ],
   })
 
-  return <BBDataTable {...params} modalContent={Form}/>
+  return <BBDataTable {...params}/>
 }
