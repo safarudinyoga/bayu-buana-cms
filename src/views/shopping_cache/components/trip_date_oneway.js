@@ -21,6 +21,13 @@ function TripDateOneway(props) {
     )
   }
 
+  useEffect(() => {
+    if(props.handleCriteriaChange){
+      props.handleCriteriaChange("departure_datetime", departTime)
+    }
+  }, [departTime])
+  
+
   return (
    <>
     <div className='d-flex mr-2'>

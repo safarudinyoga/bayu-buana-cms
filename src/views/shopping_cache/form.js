@@ -1,24 +1,41 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { withRouter } from "react-router"
-import { setAlert, setCreateModal, setModalTitle } from "redux/ui-store"
-import { Tab, Tabs, Form, Accordion, Card, Button } from 'react-bootstrap'
+import { setModalTitle } from "redux/ui-store"
+import { Tab, Tabs, Button } from 'react-bootstrap'
 import Routes from 'views/extranet/components/micro-components/routes'
 import TripDateRoundtrip from './components/trip_date_roundtrip'
 import Travellers from 'views/extranet/components/micro-components/travellers'
 import TripFlightClass from './components/trip_flight_class'
 import TripCorporate from './components/trip_corporate'
-import TripMultitripSingle from './components/trip_multitrip_single'
 import TripMultitrip from './components/trip_multitrip'
 import TripDateOneway from './components/trip_date_oneway'
 import Api from "config/api"
+import TripRoundtrip from './components/trip_roundtrip'
+import TripOneway from './components/trip_oneway'
 
 function ShoppingCacheCreate(props) {
   const dispatch = useDispatch()
   const [flightType, setFlightType] = useState("roundtrip")
   const [airports, setAirports] = useState([])
+  const [cacheData, setCacheData] = useState({
+    cache_air_origin_destination_criteria: [],
+    cache_air_travel_preference_criteria: {},
+    cache_air_traveler_criteria: {},
+  })
+
 
   let api = new Api()
+
+  const handleCacheData = (key, value, key2=null, value2=null) => {
+    let cache = {...cacheData}
+
+    cache[key] = value
+    if(key2 && value2) {
+      cache[key2] = value2 
+     }
+    setCacheData(cache)
+  }
 
   useEffect(async () => {
     // let formId = showCreateModal.id || props.id
@@ -60,15 +77,19 @@ function ShoppingCacheCreate(props) {
       res.data.items.map(async (item, i) => {
         let country = item.city ? await api.get(`/master/countries/${item.city.country_id}`) : ""
 
-        let airportData = {
-          name: item.airport_name,
-          code: item.airport_code, 
-          city: item.city ? item.city.city_name : "",
-          city_code: item.city ? item.city.city_code : "",
-          country: country.data ? country.data.country_name : ""
+        let airportData = {}
+        if(item.city){
+          airportData = {
+            name: item.airport_name,
+            code: item.airport_code, 
+            city: item.city ? item.city.city_name : "",
+            city_code: item.city ? item.city.city_code : "",
+            country: country.data ? country.data.country_name : "",
+            airport_id: item.id,
+            city_id: item.city_id
+          }
+          airportDataArr.push(airportData)
         }
-
-        airportDataArr.push(airportData)
       })
       setAirports(airportDataArr)
     } catch (error) {
@@ -113,6 +134,18 @@ function ShoppingCacheCreate(props) {
   //   },
   // ]
 
+  useEffect(() => {
+    console.log(cacheData)
+  }, [cacheData])
+  
+  const handleSubmitData = async () => {
+    try {
+      let res = await api.post("/master/cache-criterias", cacheData)
+    } catch (error) {
+      
+    }
+  }
+
   return (
     <>
       <Tabs 
@@ -130,9 +163,8 @@ function ShoppingCacheCreate(props) {
           title="Roundtrip"
         >
           <div className='d-flex flex-wrap'>
-            <Routes smallSize={true} airports={airports}/>
-            <TripDateRoundtrip smallSize={true} />
-            <Travellers smallSize={true} />
+            <TripRoundtrip airports={airports} handleCacheData={handleCacheData} />
+            <Travellers smallSize={true} handleCacheData={handleCacheData} />
             <TripFlightClass smallSize={true} />
             <TripCorporate smallSize={true} />
           </div>
@@ -143,9 +175,8 @@ function ShoppingCacheCreate(props) {
           title="One Way"
         >
           <div className='d-flex flex-wrap'>
-            <Routes smallSize={true} airports={airports}/>
-            <TripDateOneway smallSize={true} />
-            <Travellers smallSize={true} />
+            <TripOneway airports={airports} handleCacheData={handleCacheData} />
+            <Travellers smallSize={true} handleCacheData={handleCacheData} />
             <TripFlightClass smallSize={true} />
             <TripCorporate smallSize={true} />
           </div>
@@ -163,13 +194,14 @@ function ShoppingCacheCreate(props) {
           variant="primary"
           type="submit"
           // disabled={!dirty || !isValid}
+          onClick={handleSubmitData}
           style={{ marginRight: 15 }}
         >
           SAVE
         </Button>
         <Button
           variant="secondary"
-          onClick={() => props.history.push("/")}
+          onClick={() => props.history.goBack()}
         >
           CANCEL
         </Button>

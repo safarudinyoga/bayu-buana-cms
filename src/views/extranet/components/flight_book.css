@@ -161,6 +161,11 @@
   margin-bottom: 10px;
 }
 
+.hotel-destination-container {
+  width: 300px;
+  margin-bottom: 10px;
+}
+
 .traveller-container .form-with-label__suggest-icon {
   bottom: 15px;
 }
