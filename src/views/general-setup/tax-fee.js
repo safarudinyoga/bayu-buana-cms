@@ -643,8 +643,8 @@ const TaxFee = (props) => {
                         {
                           title:"Service Fee VAT",
                           taxType:taxTypeOtherServiceFeeVat,
-                          fieldFeeTaxId:"domestic_other_service_fee_vat_fee_tax_id",
-                          fieldRadio:"domestic_flight_service_fee_vat",
+                          fieldFeeTaxId:"domestic_other_service_fee_vat_tax_id",
+                          fieldRadio:"domestic_other_service_fee_vat",
                           fieldAmount:"domestic_other_service_fee_vat_amount",
                           fieldAmountType:"domestic_other_service_fee_vat_amount_type",
                           fieldPercent:"domestic_other_service_fee_vat_percent",
