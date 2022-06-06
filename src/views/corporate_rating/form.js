@@ -55,6 +55,7 @@ function CorporateRatingForm(props) {
       required: false,
       min: 1,
       max: 9999,
+      checkRating: true,
     },
   }
 
@@ -104,13 +105,14 @@ function CorporateRatingForm(props) {
         if (res.data) {
           let currentCode = res.data.corporate_rating_type_level_code
           let currentName = res.data.corporate_rating_type_level_name
+          let rating = res.data.rating
 
           
           $.validator.addMethod(
             "checkName",
             function (value, element) {
               var req = false
-              let filters = JSON.stringify(["corporate_rating_type_level_name","like",element.value])
+              let filters = JSON.stringify([["corporate_rating_type.corporate_rating_type_code","6"],["AND"],["corporate_rating_type_level_name","like",element.value]])
               $.ajax({
                 type: "GET",
                 async: false,
@@ -140,7 +142,7 @@ function CorporateRatingForm(props) {
               $.ajax({
                 type: "GET",
                 async: false,
-                url: `${env.API_URL}/master/corporate-rating-type-levels?filters=["corporate_rating_type_level_code","=","${element.value}"]`,
+                url: `${env.API_URL}/master/corporate-rating-type-levels?filters=[["corporate_rating_type.corporate_rating_type_code","6"],["AND"],["corporate_rating_type_level_code","=","${element.value}"]]`,
                 success: function (res) {
                   if (res.items.length !== 0) {
                     if(currentCode == element.value){
@@ -158,6 +160,32 @@ function CorporateRatingForm(props) {
             },
             "Rating Code already exists",
           )
+
+          $.validator.addMethod(
+            "checkRating",
+            function (value, element) {
+              var req = false
+              $.ajax({
+                type: "GET",
+                async: false,
+                url: `${env.API_URL}/master/corporate-rating-type-levels?filters=[["corporate_rating_type.corporate_rating_type_code","6"],["AND"],["rating","=","${element.value}"]]`,
+                success: function (res) {
+                  if (res.items.length !== 0) {
+                    if(rating == element.value){
+                      req = true
+                    } else {
+                      req = false
+                    }
+                  } else {
+                    req = true
+                  }
+                },
+              })
+    
+              return req
+            },
+            "Rating already exists",
+          )
         }
       } catch (e) { }
 
@@ -174,7 +202,7 @@ function CorporateRatingForm(props) {
         "checkName",
         function (value, element) {
           var req = false
-          let filters = JSON.stringify(["corporate_rating_type_level_name","like",element.value])
+          let filters = JSON.stringify([["corporate_rating_type.corporate_rating_type_code","6"],["AND"],["corporate_rating_type_level_name","like",element.value]])
           $.ajax({
             type: "GET",
             async: false,
@@ -200,7 +228,7 @@ function CorporateRatingForm(props) {
           $.ajax({
             type: "GET",
             async: false,
-            url: `${env.API_URL}/master/corporate-rating-type-levels?filters=["corporate_rating_type_level_code","=","${element.value}"]`,
+            url: `${env.API_URL}/master/corporate-rating-type-levels?filters=[["corporate_rating_type.corporate_rating_type_code","6"],["AND"],["corporate_rating_type_level_code","=","${element.value}"]]`,
             success: function (res) {
               if (res.items.length !== 0) {
                 req = false
@@ -213,6 +241,28 @@ function CorporateRatingForm(props) {
           return req
         },
         "Rating Code already exists",
+      )
+
+      $.validator.addMethod(
+        "checkRating",
+        function (value, element) {
+          var req = false
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: `${env.API_URL}/master/corporate-rating-type-levels?filters=[["corporate_rating_type.corporate_rating_type_code","6"],["AND"],["rating","=","${element.value}"]]`,
+            success: function (res) {
+              if (res.items.length !== 0) {
+                req = false
+              } else {
+                req = true
+              }
+            },
+          })
+
+          return req
+        },
+        "Rating already exists",
       )
     }
   }, [])

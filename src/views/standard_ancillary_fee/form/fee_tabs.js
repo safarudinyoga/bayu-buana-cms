@@ -261,7 +261,7 @@ export const FeeTabs = (props) => {
 const FeedbackMessage = (props) => {
   return <FastField name="">
     {({ field,form }) => {
-      let message = form.errors[props.fieldRadio] || form.errors[props.fieldAmount] || form.errors[props.fieldAmountType] || form.errors[props.fieldPercent]
+      let message = form.errors[props.fieldRadio] || form.errors[props.fieldAmount]|| form.errors[props.fieldAmountType] || form.errors[props.fieldPercent]
 
       return form.touched[props.fieldRadio] &&
       message

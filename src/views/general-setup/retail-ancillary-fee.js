@@ -251,7 +251,7 @@ const RetailAncillaryFee = (props) => {
         then: Yup.string().required(`Please select charge type.`)
       }),
     domestic_reissue_percent: Yup
-      .string().when('domestic_revalidate', {
+      .string().when('domestic_reissue', {
         is: value => value === "percent",
         then: Yup.string().required(`Please enter percentage for ${taxTypeDomesticReissue.fee_tax_type_name}.`)
       }),
@@ -289,7 +289,7 @@ const RetailAncillaryFee = (props) => {
     domestic_refund_percent: Yup
       .string().when('domestic_refund', {
         is: value => value === "percent",
-        then: Yup.string().required(`Please enter percentage for ${taxTypeDomesticRevalidate.fee_tax_type_name}.`)
+        then: Yup.string().required(`Please enter percentage for ${taxTypeDomesticRefund.fee_tax_type_name}.`)
       }),
     domestic_void: Yup
       .string()
@@ -1047,6 +1047,7 @@ const RetailAncillaryFee = (props) => {
                     fHandleBlur={handleBlur}
                     setFieldValue={setFieldValue}
                     isView={isView}
+                    showTaxes={true}
                   />
                 </div>
               </Card.Body>
@@ -1141,6 +1142,7 @@ const RetailAncillaryFee = (props) => {
                     fHandleBlur={handleBlur}
                     setFieldValue={setFieldValue}
                     isView={isView}
+                    showTaxes={true}
                   />
                 </div>
               </Card.Body>
