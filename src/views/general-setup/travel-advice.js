@@ -90,6 +90,7 @@ function TravelAdvice(props) {
             size: 50,
           })
         //   setTranslations(res.data.items)
+        
     }, [])
 
 
