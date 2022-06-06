@@ -1,8 +1,9 @@
 import React, { useEffect } from "react"
+import { Card } from "react-bootstrap"
 import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
-// import BBDataTable from "components/table/bb-data-table"
-// import Form from "./form/identity-rule"
+import FormikControl from "../../components/formik/formikControl"
+import "./style.scss"
 
 const MiscellaneousConfiguration = (props) => {
 
@@ -26,9 +27,9 @@ const MiscellaneousConfiguration = (props) => {
     let params = {
         title: "Miscellaneous Configuration",
         titleModal: "Miscellaneous Configuration",
-        // baseRoute: "/master/corporate-management/form",
-        // endpoint: "/master/configurations/identity-rules",
-        // deleteEndpoint: "/master/batch-actions/delete/configurations/identity-rules",
+        baseRoute: "/master/corporate-management/form",
+        endpoint: "/master/configurations/identity-rules",
+        deleteEndpoint: "/master/batch-actions/delete/configurations/identity-rules",
         columns: [
         {
             title: "Restriction Base On",
@@ -60,10 +61,24 @@ const MiscellaneousConfiguration = (props) => {
     }
 
     return (
-        <div>
-            Miscellaneous Configuration
-            {/* <BBDataTable {...params} modalContent={Form} /> */}
-        </div>
+        <Card>
+        <Card.Body className="px-1 px-md-4">
+            <h3 className="misc-title">Miscellaneous Configuration</h3>
+            <div className="misc-wrapper"><h5>BOOKING LEAD TIME</h5><p>&ensp;-&ensp;require to book in advance</p></div>
+            <div className="misc-body">
+                <div className="misc-text"><h5>FLIGHT</h5> <span>&ensp;-&ensp;Minimum Booking days before departure</span>
+                <FormikControl
+                    control="Input"
+                    required="label-required"
+                    label="Specified Airline"
+                    name="airline_id"
+                    placeholder="Please Choose"
+                    
+                /></div>
+                <div className="misc-text"><h5>HOTEL</h5> <span>&ensp;-&ensp;Minimum Booking days before check-in</span></div>
+            </div>
+        </Card.Body>
+        </Card>
     )
 }
 export default MiscellaneousConfiguration

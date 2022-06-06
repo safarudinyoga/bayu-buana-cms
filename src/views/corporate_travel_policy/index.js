@@ -6,7 +6,7 @@ import { Row, Col, Tab, Nav } from "react-bootstrap"
 import { setUIParams } from "redux/ui-store"
 import GeneralInformation from "./general-information"
 import HandlerSetup from "./handler_setup/handler-setup"
-import IdentityRule from "./identity-rule"
+import DestinationRestriction from "./destination_restriction"
 import StandardService from "./standart_service/standard-service"
 import OverCreditApproverAssignment from "./over-credit-approver-assignment"
 import TravelConsultantAssignment from "./travel-consultant-assignment"
@@ -17,19 +17,20 @@ import TaxFee from "./tax-fee"
 import BookingSettings from "./booking-settings"
 import InvoiceSettings from "./invoice-settings"
 import TravelAdvice from "./travel-advice"
-import UserAccessType from "./user-access-type"
+import TravelPolicyDocument from "./travel-policy-document"
 import DivisionCorporate from "./division_corporate"
 import MiscellaneousConfiguration from "./miscellaneous_configuration"
 import StaffAndManager from "./staff-and-manager";
 import Director from "./director";
 import Vip from "./vip";
+import "./style.scss"
 
 // const endpoint = "/user/profile"
 const backUrl = "/master/general-setup"
 
 const TravelPolicy = (props) => {
   let dispatch = useDispatch()
-  const [tabKey, setTabKey] = useState("general-information")
+  const [tabKey, setTabKey] = useState("staff-and-manager")
   // const [modalShow, setModalShow] = useState(false)
 
   useEffect(async () => {
@@ -67,7 +68,7 @@ const TravelPolicy = (props) => {
             <Nav.Item>
               <Nav.Link eventKey="staff-and-manager">
                 <div>
-                  <ReactSVG src="/img/icons/setup-general-information.svg" />
+                  <ReactSVG src="/img/icons/corporate-staff-manager.svg" />
                   <span>Staff and Manager</span>
                 </div>
               </Nav.Link>
@@ -76,7 +77,7 @@ const TravelPolicy = (props) => {
             <Nav.Item>
               <Nav.Link eventKey="director">
                 <div>
-                  <ReactSVG src="/img/icons/setup-handler-setup.svg" />
+                  <ReactSVG src="/img/icons/corporate-director.svg" />
                   <span>Director</span>
                 </div>
               </Nav.Link>
@@ -85,17 +86,16 @@ const TravelPolicy = (props) => {
             <Nav.Item>
               <Nav.Link eventKey="vip">
                 <div>
-                  <ReactSVG src="/img/icons/setup-identity-rule.svg" />
+                  <ReactSVG src="/img/icons/corporate-vip.svg" />
                   <span>VIP</span>
                 </div>
               </Nav.Link>
             </Nav.Item>
-            <Nav.Item>
-              <div className="create-new">
-                <span>Create New</span>
-              </div>
-            </Nav.Item>
-            
+            <div className="create-new-btn">
+              <ReactSVG src="/img/icons/corporate-create-new.svg"/>
+              <span>Create New</span>
+            </div>
+
           </Nav>
         </Col>
         <Col sm={9}>
@@ -127,9 +127,36 @@ const TravelPolicy = (props) => {
                 />
               ) : null}
             </Tab.Pane>
+            <Tab.Pane eventKey="destination-restriction">
+              {tabKey === "destination-restriction" ? (
+                <DestinationRestriction
+                  history={props.history}
+                  backUrl={backUrl}
+                  handleSelectTab={(v) => handleSelectTab(v)}
+                />
+                ) : null}
+            </Tab.Pane>
             <Tab.Pane eventKey="handler-setup">
               {tabKey === "handler-setup" ? (
                 <HandlerSetup
+                  history={props.history}
+                  backUrl={backUrl}
+                  handleSelectTab={(v) => handleSelectTab(v)}
+                />
+                ) : null}
+            </Tab.Pane>
+            <Tab.Pane eventKey="travel-policy-document">
+              {tabKey === "travel-policy-document" ? (
+                <TravelPolicyDocument
+                  history={props.history}
+                  backUrl={backUrl}
+                  handleSelectTab={(v) => handleSelectTab(v)}
+                />
+                ): null} 
+            </Tab.Pane>
+            <Tab.Pane eventKey="miscellaneous-configuration">
+              {tabKey === "miscellaneous-configuration" ? (
+                <MiscellaneousConfiguration
                   history={props.history}
                   backUrl={backUrl}
                   handleSelectTab={(v) => handleSelectTab(v)}
@@ -150,9 +177,9 @@ const TravelPolicy = (props) => {
             </Nav.Item> 
 
             <Nav.Item>
-              <Nav.Link eventKey="identity-rule">
+              <Nav.Link eventKey="destination-restriction">
                 <div>
-                  <ReactSVG src="/img/icons/setup-general-information.svg" />
+                  <ReactSVG src="/img/icons/corporate-destination-restriction.svg" />
                   <span>Destination Restrictions</span>
                 </div>
               </Nav.Link>
@@ -161,7 +188,7 @@ const TravelPolicy = (props) => {
             <Nav.Item>
               <Nav.Link eventKey="handler-setup">
                 <div>
-                  <ReactSVG src="/img/icons/setup-handler-setup.svg" />
+                  <ReactSVG src="/img/icons/corporate-preferred-hotel.svg" />
                   <span>Prefered Hotel Chains</span>
                 </div>
               </Nav.Link>
@@ -170,16 +197,17 @@ const TravelPolicy = (props) => {
             <Nav.Item>
               <Nav.Link eventKey="miscellaneous-configuration">
                 <div>
-                  <ReactSVG src="/img/icons/setup-identity-rule.svg" />
+                  <ReactSVG src="/img/icons/corporate-miscellaneous.svg" />
                   <span>Miscellaneous configurations</span>
                 </div>
               </Nav.Link>
             </Nav.Item>
 
             <Nav.Item>
-              <Nav.Link eventKey="user-access-type">
+              <Nav.Link eventKey="travel-policy-document">
                 <div>
-                  <span>User Access Type</span>
+                  <ReactSVG src="/img/icons/corporate-travel-policy.svg" />
+                  <span>Travel Policy Document</span>
                 </div>
               </Nav.Link>
             </Nav.Item>
@@ -205,24 +233,6 @@ const TravelPolicy = (props) => {
                   handleSelectTab={(v) => handleSelectTab(v)}
                 />
               ) : null}
-            </Tab.Pane>
-            <Tab.Pane eventKey="handler-setup">
-              {tabKey === "handler-setup" ? (
-                <HandlerSetup
-                  history={props.history}
-                  backUrl={backUrl}
-                  handleSelectTab={(v) => handleSelectTab(v)}
-                />
-                ) : null}
-            </Tab.Pane>
-            <Tab.Pane eventKey="identity-rule">
-              {tabKey === "identity-rule" ? (
-                <IdentityRule
-                  history={props.history}
-                  backUrl={backUrl}
-                  handleSelectTab={(v) => handleSelectTab(v)}
-                />
-                ) : null}
             </Tab.Pane>
             <Tab.Pane eventKey="standard-service">
               {tabKey === "standard-service" ? (
@@ -323,15 +333,6 @@ const TravelPolicy = (props) => {
                 />
               ) : null}
             </Tab.Pane>
-            <Tab.Pane eventKey="user-access">
-              {tabKey === "user-access" ? (
-                <UserAccessType
-                  history={props.history}
-                  backUrl={backUrl}
-                  handleSelectTab={(v) => handleSelectTab(v)}
-                />
-                ): null} 
-            </Tab.Pane>
             <Tab.Pane eventKey="email">
               {tabKey === "email" ? (
                 <DivisionCorporate
@@ -340,16 +341,6 @@ const TravelPolicy = (props) => {
                   handleSelectTab={(v) => handleSelectTab(v)}
                 />
                 ): null} 
-            </Tab.Pane>
-
-            <Tab.Pane eventKey="miscellaneous-configuration">
-              {tabKey === "miscellaneous-configuration" ? (
-                <MiscellaneousConfiguration
-                  history={props.history}
-                  backUrl={backUrl}
-                  handleSelectTab={(v) => handleSelectTab(v)}
-                />
-                ) : null}
             </Tab.Pane>
 
           </Tab.Content>

@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux'
 import { setUIParams } from "redux/ui-store"
 import BBDataTable from "../../components/table/bb-data-table"
 import Form from "./form/identity-rule"
+import "./style.scss"
 
 const IdentityRule = (props) => {
 
@@ -27,7 +28,7 @@ const IdentityRule = (props) => {
 
   let params = {
     showAdvancedOptions: false,
-    title: "Identity Rule",
+    title: "Destinations Restrictions",
     titleModal: "Destinations Restrictions",
     baseRoute: "/master/identity-rules/form",
     endpoint: "/master/configurations/identity-rules",
@@ -61,12 +62,14 @@ const IdentityRule = (props) => {
     module: "identity-rules",
     isCheckbox: false,
     switchStatus: true,
+    isHideSearch: true,
   }
 
   return (
     <Card style={{marginBottom: 0}}>
-        <Card.Body className="px-1 px-md-4">
-          <h3 className="card-heading">Identity Rule</h3>
+        <Card.Body className="px-1 px-md-4 destination-title">
+          <h3>Destinations Restrictions</h3>
+          <p>Set destination travel restriction policy</p>
           <BBDataTable {...params} modalContent={Form} modalSize="lg"  />
         </Card.Body>
       </Card>

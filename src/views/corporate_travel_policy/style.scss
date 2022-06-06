@@ -1,0 +1,56 @@
+// nav side section
+.create-new-btn {
+  color: #e84d0e;
+  font-size: 14px;
+  text-align: center;
+  padding: 8px;
+  display: flex;
+  margin: 0 auto;
+  span {
+    padding: 1px 10px;
+  }
+}
+
+// destination restriction section
+.destination-title {
+  h3 {
+    font-size: 16px;
+    font-weight: bold;
+  }
+  p {
+    font-size: 14px;
+    font-weight: normal;
+    padding: 8px 0;
+    border-bottom: 1px solid #d3d3d3;
+  }
+}
+
+// miscellaneous configuration section
+.misc-title {
+  font-size: 16px;
+  font-weight: bold;
+  border-bottom: 1px solid #d3d3d3;
+}
+.misc-wrapper {
+  display: flex;
+  padding-top: 20px;
+  h5 {
+    font-size: 15px;
+    font-weight: bold;
+  }
+  p {
+    font-size: 14px;
+  }
+  h4 {
+    font-size: 14px;
+  }
+}
+.misc-body {
+  padding-left: 20px;
+}
+.misc-text {
+  display: flex;
+  h5 {
+    font-size: 15px;
+  }
+}
