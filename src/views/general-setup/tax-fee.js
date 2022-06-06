@@ -28,52 +28,43 @@ const TaxFee = (props) => {
   const formId = props.match.params.id
   const isView = useQuery().get("action") === "view"
 
-  const [taxTypeDomesticReissue, setTaxTypeDomesticReissue] = useState([])
-  const [taxTypeDomesticRevalidate, setTaxTypeDomesticRevalidate] = useState([])
-  const [taxTypeDomesticRefund, setTaxTypeDomesticRefund] = useState([])
-  const [taxTypeDomesticVoid, setTaxTypeDomesticVoid] = useState([])
-  const [taxTypeDomesticRfp, setTaxTypeDomesticRfp] = useState([])
-  const [taxTypeDomesticNonGds, setTaxTypeDomesticNonGds] = useState([])
-  const [taxTypeInternationalReissue, setTaxTypeInternationalReissue] = useState([])
-  const [taxTypeInternationalRevalidate, setTaxTypeInternationalRevalidate] = useState([])
-  const [taxTypeInternationalRefund, setTaxTypeInternationalRefund] = useState([])
-  const [taxTypeInternationalVoid, setTaxTypeInternationalVoid] = useState([])
-  const [taxTypeInternationalRfp, setTaxTypeInternationalRfp] = useState([])
-  const [taxTypeInternationalNonGds, setTaxTypeInternationalNonGds] = useState([])
-  const [taxTypeOtherEmergency, setTaxTypeOtherEmergency] = useState([])
+  const [taxTypeDomesticFlightVat, setTaxTypeDomesticFlightVat] = useState([])
+  const [taxTypeDomesticFlightServiceFeeVat, setTaxTypeDomesticFlightServiceFeeVat] = useState([])
+  const [taxTypeDomesticHotelVat, setTaxTypeDomesticHotelVat] = useState([])
+  const [taxTypeDomesticHotelServiceFeeVat, setTaxTypeDomesticHotelServiceFeeVat] = useState([])
+  const [taxTypeOtherVat, setTaxTypeOtherVat] = useState([])
+  const [taxTypeOtherServiceFeeVat, setTaxTypeOtherServiceFeeVat] = useState([])
+  const [taxTypeInternationalFlightVat, setTaxTypeInternationalFlightVat] = useState([])
+  const [taxTypeInternationalFlightServiceFeeVat, setTaxTypeInternationalFlightServiceFeeVat] = useState([])
+  const [taxTypeInternationalHotelVat, setTaxTypeInternationalHotelVat] = useState([])
+  const [taxTypeInternationalHotelServiceFeeVat, setTaxTypeInternationalHotelServiceFeeVat] = useState([])
   
-  const [taxIdDomesticReissue, setTaxIdDomesticReissue] = useState("")
-  const [taxIdDomesticRevalidate, setTaxIdDomesticRevalidate] = useState("")
-  const [taxIdDomesticRefund, setTaxIdDomesticRefund] = useState("")
-  const [taxIdDomesticVoid, setTaxIdDomesticVoid] = useState("")
-  const [taxIdDomesticRfp, setTaxIdDomesticRfp] = useState("")
-  const [taxIdDomesticNonGds, setTaxIdDomesticNonGds] = useState("")
-  const [taxIdInternationalReissue, setTaxIdInternationalReissue] = useState("")
-  const [taxIdInternationalRevalidate, setTaxIdInternationalRevalidate] = useState("")
-  const [taxIdInternationalRefund, setTaxIdInternationalRefund] = useState("")
-  const [taxIdInternationalVoid, setTaxIdInternationalVoid] = useState("")
-  const [taxIdInternationalRfp, setTaxIdInternationalRfp] = useState("")
-  const [taxIdInternationalNonGds, setTaxIdInternationalNonGds] = useState("")
-  const [taxIdOtherEmergency, setTaxIdOtherEmergency] = useState("")
+  const [taxIdDomesticFlightVat, setTaxIdDomesticFlightVat] = useState("")
+  const [taxIdDomesticFlightServiceFeeVat, setTaxIdDomesticFlightServiceFeeVat] = useState("")
+  const [taxIdDomesticHotelVat, setTaxIdDomesticHotelVat] = useState("")
+  const [taxIdDomesticHotelServiceFeeVat, setTaxIdDomesticHotelServiceFeeVat] = useState("")
+  const [taxIdOtherVat, setTaxIdOtherVat] = useState("")
+  const [taxIdOtherServiceFeeVat, setTaxIdOtherServiceFeeVat] = useState("")
+  const [taxIdInternationalFlightVat, setTaxIdInternationalFlightVat] = useState("")
+  const [taxIdInternationalFlightServiceFeeVat, setTaxIdInternationalFlightServiceFeeVat] = useState("")
+  const [taxIdInternationalHotelVat, setTaxIdInternationalHotelVat] = useState("")
+  const [taxIdInternationalHotelServiceFeeVat, setTaxIdInternationalHotelServiceFeeVat] = useState("")
 
   useEffect(async () => {
     let api = new Api()
   })
 
   useEffect(() => {
-    getFeeTaxType("33", setTaxTypeDomesticReissue, setTaxIdDomesticReissue)
-    getFeeTaxType("49", setTaxTypeDomesticRevalidate, setTaxIdDomesticRevalidate)
-    getFeeTaxType("35", setTaxTypeDomesticRefund, setTaxIdDomesticRefund)
-    getFeeTaxType("37", setTaxTypeDomesticVoid, setTaxIdDomesticVoid)
-    getFeeTaxType("39", setTaxTypeDomesticRfp, setTaxIdDomesticRfp)
-    getFeeTaxType("41", setTaxTypeDomesticNonGds, setTaxIdDomesticNonGds)
-    getFeeTaxType("34", setTaxTypeInternationalReissue, setTaxIdInternationalReissue)
-    getFeeTaxType("50", setTaxTypeInternationalRevalidate, setTaxIdInternationalRevalidate)
-    getFeeTaxType("36", setTaxTypeInternationalRefund, setTaxIdInternationalRefund)
-    getFeeTaxType("38", setTaxTypeInternationalVoid, setTaxIdInternationalVoid)
-    getFeeTaxType("40", setTaxTypeInternationalRfp, setTaxIdInternationalRfp)
-    getFeeTaxType("42", setTaxTypeInternationalNonGds, setTaxIdInternationalNonGds)
-    getFeeTaxType("6", setTaxTypeOtherEmergency, setTaxIdOtherEmergency)
+    getFeeTaxType("18", setTaxTypeDomesticFlightVat, setTaxIdDomesticFlightVat)
+    getFeeTaxType("23", setTaxTypeDomesticFlightServiceFeeVat, setTaxIdDomesticFlightServiceFeeVat)
+    getFeeTaxType("20", setTaxTypeDomesticHotelVat, setTaxIdDomesticHotelVat)
+    getFeeTaxType("25", setTaxTypeDomesticHotelServiceFeeVat, setTaxIdDomesticHotelServiceFeeVat)
+    getFeeTaxType("17", setTaxTypeOtherVat, setTaxIdOtherVat)
+    getFeeTaxType("22", setTaxTypeOtherServiceFeeVat, setTaxIdOtherServiceFeeVat)  
+    getFeeTaxType("19", setTaxTypeInternationalFlightVat, setTaxIdInternationalFlightVat)
+    getFeeTaxType("24", setTaxTypeInternationalFlightServiceFeeVat, setTaxIdInternationalFlightServiceFeeVat)
+    getFeeTaxType("21", setTaxTypeInternationalHotelVat, setTaxIdInternationalHotelVat)
+    getFeeTaxType("26", setTaxTypeInternationalHotelServiceFeeVat, setTaxIdInternationalHotelServiceFeeVat)
   }, [props.match.params.id])
   
   // Initialize form
@@ -212,7 +203,7 @@ const TaxFee = (props) => {
       let payloadDomestic = {
         processing_fee_category_id: id,
         domestic_reissue: {
-          fee_tax_type_id: taxIdDomesticReissue,
+          fee_tax_type_id: taxIdDomesticFlightVat,
           currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
           amount: values.domestic_reissue == "amount" ? values.domestic_reissue_amount : null,
           percent:values.domestic_reissue == "amount" ? null : values.domestic_reissue_percent,
@@ -222,7 +213,7 @@ const TaxFee = (props) => {
           is_included: false,
         },
         domestic_revalidate: {
-          fee_tax_type_id: taxIdDomesticRevalidate,
+          fee_tax_type_id: taxIdDomesticFlightServiceFeeVat,
           currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
           amount: values.domestic_revalidate == "amount" ? values.domestic_revalidate_amount : null,
           percent:values.domestic_revalidate == "amount" ? null : values.domestic_revalidate_percent,
@@ -232,7 +223,7 @@ const TaxFee = (props) => {
           is_included: false,
         },
         domestic_refund: {
-          fee_tax_type_id: taxIdDomesticRefund,
+          fee_tax_type_id: taxIdDomesticHotelVat,
           currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
           amount: values.domestic_refund == "amount" ? values.domestic_refund_amount : null,
           percent:values.domestic_refund == "amount" ? null : values.domestic_refund_percent,
@@ -242,7 +233,7 @@ const TaxFee = (props) => {
           is_included: false,
         },
         domestic_void: {
-          fee_tax_type_id: taxIdDomesticVoid,
+          fee_tax_type_id: taxIdDomesticHotelServiceFeeVat,
           currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
           amount: values.domestic_void == "amount" ? values.domestic_void_amount : null,
           percent:values.domestic_void == "amount" ? null : values.domestic_void_percent,
@@ -252,7 +243,7 @@ const TaxFee = (props) => {
           is_included: false,
         },
         domestic_frp: {
-          fee_tax_type_id: taxIdDomesticRfp,
+          fee_tax_type_id: taxIdOtherVat,
           currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
           amount: values.domestic_rfp == "amount" ? values.domestic_rfp_amount : null,
           percent:values.domestic_rfp == "amount" ? null : values.domestic_rfp_percent,
@@ -262,7 +253,7 @@ const TaxFee = (props) => {
           is_included: false,
         },
         domestic_non_gds: {
-          fee_tax_type_id: taxIdDomesticNonGds,
+          fee_tax_type_id: taxIdOtherServiceFeeVat,
           currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
           amount: values.domestic_non_gds == "amount" ? values.domestic_non_gds_amount : null,
           percent:values.domestic_non_gds == "amount" ? null : values.domestic_non_gds_percent,
@@ -272,7 +263,7 @@ const TaxFee = (props) => {
           is_included: false,
         },
         international_reissue: {
-          fee_tax_type_id: taxIdInternationalReissue,
+          fee_tax_type_id: taxIdInternationalFlightVat,
           currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
           amount: values.international_reissue == "amount" ? values.international_reissue_amount : null,
           percent:values.international_reissue == "amount" ? null : values.international_reissue_percent,
@@ -282,7 +273,7 @@ const TaxFee = (props) => {
           is_included: false,
         },
         international_revalidate: {
-          fee_tax_type_id: taxIdInternationalRevalidate,
+          fee_tax_type_id: taxIdInternationalFlightServiceFeeVat,
           currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
           amount: values.international_revalidate == "amount" ? values.international_revalidate_amount : null,
           percent:values.international_revalidate == "amount" ? null : values.international_revalidate_percent,
@@ -292,7 +283,7 @@ const TaxFee = (props) => {
           is_included: false,
         },
         international_refund: {
-          fee_tax_type_id: taxIdInternationalRefund,
+          fee_tax_type_id: taxIdInternationalHotelVat,
           currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
           amount: values.international_refund == "amount" ? values.international_refund_amount : null,
           percent:values.international_refund == "amount" ? null : values.international_refund_percent,
@@ -302,42 +293,12 @@ const TaxFee = (props) => {
           is_included: false,
         },
         international_void: {
-          fee_tax_type_id: taxIdInternationalVoid,
+          fee_tax_type_id: taxIdInternationalHotelServiceFeeVat,
           currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
           amount: values.international_void == "amount" ? values.international_void_amount : null,
           percent:values.international_void == "amount" ? null : values.international_void_percent,
           charge_type_id:values.international_void == "amount" ? values.international_void_amount_type : null,
           is_tax_inclusive:values.international_void == "amount" ? null : values.international_void_tax_include,
-          is_hidden: true,
-          is_included: false,
-        },
-        international_frp: {
-          fee_tax_type_id: taxIdInternationalRfp,
-          currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
-          amount: values.international_rfp == "amount" ? values.international_rfp_amount : null,
-          percent:values.international_rfp == "amount" ? null : values.international_rfp_percent,
-          charge_type_id:values.international_rfp == "amount" ? values.international_rfp_amount_type : null,
-          is_tax_inclusive:values.international_rfp == "amount" ? null : values.international_rfp_tax_include,
-          is_hidden: true,
-          is_included: false,
-        },
-        international_non_gds: {
-          fee_tax_type_id: taxIdInternationalNonGds,
-          currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
-          amount: values.international_non_gds == "amount" ? values.international_non_gds_amount : null,
-          percent:values.international_non_gds == "amount" ? null : values.international_non_gds_percent,
-          charge_type_id:values.international_non_gds == "amount" ? values.international_non_gds_amount_type : null,
-          is_tax_inclusive:values.international_non_gds == "amount" ? null : values.international_non_gds_tax_include,
-          is_hidden: true,
-          is_included: false,
-        },
-        other_emergency_service: {
-          fee_tax_type_id: taxIdOtherEmergency,
-          currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
-          amount: values.other_emergency == "amount" ? values.other_emergency_amount : null,
-          percent:values.other_emergency == "amount" ? null : values.other_emergency_percent,
-          charge_type_id:values.other_emergency == "amount" ? values.other_emergency_amount_type : null,
-          is_tax_inclusive:values.other_emergency == "amount" ? null : values.other_emergency_tax_include,
           is_hidden: true,
           is_included: false,
         },
@@ -395,7 +356,7 @@ const TaxFee = (props) => {
                       {title: "Domestic", sections: [
                         {
                           title:"Flight VAT",
-                          taxType:taxTypeDomesticReissue,
+                          taxType:taxTypeDomesticFlightVat,
                           fieldFeeTaxId:"domestic_reissue_fee_tax_id",
                           fieldRadio:"domestic_reissue",
                           fieldAmount:"domestic_reissue_amount",
@@ -405,7 +366,7 @@ const TaxFee = (props) => {
                         },
                         {
                           title:"Revalidate Fee",
-                          taxType:taxTypeDomesticRevalidate,
+                          taxType:taxTypeDomesticFlightServiceFeeVat,
                           fieldFeeTaxId:"domestic_revalidate_fee_tax_id",
                           fieldRadio:"domestic_revalidate",
                           fieldAmount:"domestic_revalidate_amount",
@@ -417,7 +378,7 @@ const TaxFee = (props) => {
                       {title: "International", sections: [
                         {
                           title:"Reissue Fee (Reissue & Reroute)",
-                          taxType:taxTypeInternationalReissue,
+                          taxType:taxTypeInternationalFlightVat,
                           fieldFeeTaxId:"international_reissue_fee_tax_id",
                           fieldRadio:"international_reissue",
                           fieldAmount:"international_reissue_amount",
@@ -427,7 +388,7 @@ const TaxFee = (props) => {
                         },
                         {
                           title:"Revalidate Fee",
-                          taxType:taxTypeInternationalRevalidate,
+                          taxType:taxTypeInternationalFlightServiceFeeVat,
                           fieldFeeTaxId:"international_revalidate_fee_tax_id",
                           fieldRadio:"international_revalidate",
                           fieldAmount:"international_revalidate_amount",
@@ -457,7 +418,7 @@ const TaxFee = (props) => {
                       {title: "Domestic", sections: [
                         {
                           title:"Flight VAT",
-                          taxType:taxTypeDomesticReissue,
+                          taxType:taxTypeDomesticHotelVat,
                           fieldFeeTaxId:"domestic_reissue_fee_tax_id",
                           fieldRadio:"domestic_reissue",
                           fieldAmount:"domestic_reissue_amount",
@@ -466,8 +427,8 @@ const TaxFee = (props) => {
                           fieldIncludeTax:"domestic_reissue_tax_include"
                         },
                         {
-                          title:"Revalidate Fee",
-                          taxType:taxTypeDomesticRevalidate,
+                          title:"Flight Service Fee VAT",
+                          taxType:taxTypeDomesticHotelServiceFeeVat,
                           fieldFeeTaxId:"domestic_revalidate_fee_tax_id",
                           fieldRadio:"domestic_revalidate",
                           fieldAmount:"domestic_revalidate_amount",
@@ -478,28 +439,8 @@ const TaxFee = (props) => {
                       ]},
                       {title: "International", sections: [
                         {
-                          title:"Reissue Fee (Reissue & Reroute)",
-                          taxType:taxTypeInternationalReissue,
-                          fieldFeeTaxId:"international_reissue_fee_tax_id",
-                          fieldRadio:"international_reissue",
-                          fieldAmount:"international_reissue_amount",
-                          fieldAmountType:"international_reissue_amount_type",
-                          fieldPercent:"international_reissue_percent",
-                          fieldIncludeTax:"international_reissue_tax_include"
-                        },
-                        {
-                          title:"Revalidate Fee",
-                          taxType:taxTypeInternationalRevalidate,
-                          fieldFeeTaxId:"international_revalidate_fee_tax_id",
-                          fieldRadio:"international_revalidate",
-                          fieldAmount:"international_revalidate_amount",
-                          fieldAmountType:"international_revalidate_amount_type",
-                          fieldPercent:"international_revalidate_percent",
-                          fieldIncludeTax:"international_revalidate_tax_include"
-                        },
-                        {
-                          title:"Refund Fee",
-                          taxType:taxTypeInternationalRefund,
+                          title:"Hotel Vat",
+                          taxType:taxTypeInternationalHotelVat,
                           fieldFeeTaxId:"international_refund_fee_tax_id",
                           fieldRadio:"international_refund",
                           fieldAmount:"international_refund_amount",
@@ -508,34 +449,14 @@ const TaxFee = (props) => {
                           fieldIncludeTax:"international_refund_tax_include"
                         },
                         {
-                          title:"Void Fee (Same Day)",
-                          taxType:taxTypeInternationalVoid,
+                          title:"Hotel Service Fee VAT",
+                          taxType:taxTypeInternationalHotelServiceFeeVat,
                           fieldFeeTaxId:"international_void_fee_tax_id",
                           fieldRadio:"international_void",
                           fieldAmount:"international_void_amount",
                           fieldAmountType:"international_void_amount_type",
                           fieldPercent:"international_void_percent",
                           fieldIncludeTax:"international_void_tax_include"
-                        },
-                        {
-                          title:"RFP Fee (Contact Fee)",
-                          taxType:taxTypeInternationalRfp,
-                          fieldFeeTaxId:"international_rfp_fee_tax_id",
-                          fieldRadio:"international_rfp",
-                          fieldAmount:"international_rfp_amount",
-                          fieldAmountType:"international_rfp_amount_type",
-                          fieldPercent:"international_rfp_percent",
-                          fieldIncludeTax:"international_rfp_tax_include"
-                        },
-                        {
-                          title:"Non-GDS Hotel Booking Process Fee",
-                          taxType:taxTypeInternationalNonGds,
-                          fieldFeeTaxId:"international_non_gds_fee_tax_id",
-                          fieldRadio:"international_non_gds",
-                          fieldAmount:"international_non_gds_amount",
-                          fieldAmountType:"international_non_gds_amount_type",
-                          fieldPercent:"international_non_gds_percent",
-                          fieldIncludeTax:"international_non_gds_tax_include"
                         }
                       ]},
                     ]}
@@ -558,8 +479,8 @@ const TaxFee = (props) => {
                     menu={[
                       {title: "Other", sections: [
                         {
-                          title:"Flight VAT",
-                          taxType:taxTypeDomesticReissue,
+                          title:"Rent Car VAT",
+                          taxType:taxTypeOtherVat,
                           fieldFeeTaxId:"domestic_reissue_fee_tax_id",
                           fieldRadio:"domestic_reissue",
                           fieldAmount:"domestic_reissue_amount",
@@ -568,8 +489,8 @@ const TaxFee = (props) => {
                           fieldIncludeTax:"domestic_reissue_tax_include"
                         },
                         {
-                          title:"Revalidate Fee",
-                          taxType:taxTypeDomesticRevalidate,
+                          title:"Service Fee VAT",
+                          taxType:taxTypeOtherServiceFeeVat,
                           fieldFeeTaxId:"domestic_revalidate_fee_tax_id",
                           fieldRadio:"domestic_revalidate",
                           fieldAmount:"domestic_revalidate_amount",
