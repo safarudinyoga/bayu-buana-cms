@@ -28,6 +28,7 @@ const FeeSection = (props) => {
   : props.values[props.fieldRadio] === "" 
   ? true 
   : props.values[props.fieldRadio] !== "percent"
+  let showTaxes = props.showTaxes
   return (
     <>
       <Form.Group>
@@ -202,13 +203,14 @@ const FeeSection = (props) => {
                 </Form.Group>
               </Col>
               <Col sm={12} md={6}>
-              {disabledPercent 
+              {showTaxes ? disabledPercent 
                 ? <Form.Check type="checkbox" className="mt-2" label="Include Taxes" disabled={true} />
                 : <FastField name={props.fieldIncludeTax}>
                     {({ field, }) => (
                     <Form.Check {...field} type="checkbox" className="mt-2" label="Include Taxes" disabled={props.isView} />
                     )}
                   </FastField>
+                  : null
               }
               </Col>
             </Row>
@@ -278,7 +280,6 @@ const FeedbackMessage = (props) => {
   return <FastField name="">
     {({ field,form }) => {
       let message = form.errors[props.fieldRadio] || form.errors[props.fieldAmount] || form.errors[props.fieldAmountType] || form.errors[props.fieldPercent]
-      console.log("haha", message)
       return form.touched[props.fieldRadio] && 
       message
       ? (

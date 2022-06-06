@@ -895,7 +895,6 @@ const RetailAncillaryFee = (props) => {
           setFieldTouched,
         }) => (
           <Form onSubmit={handleSubmit}>
-            {console.log(errors, "ini ada error")}
             <Card>
               <Card.Body>
                 <div style={{ padding: "0 2px 2px" }}>
@@ -1048,6 +1047,7 @@ const RetailAncillaryFee = (props) => {
                     fHandleBlur={handleBlur}
                     setFieldValue={setFieldValue}
                     isView={isView}
+                    showTaxes={true}
                   />
                 </div>
               </Card.Body>
@@ -1142,6 +1142,7 @@ const RetailAncillaryFee = (props) => {
                     fHandleBlur={handleBlur}
                     setFieldValue={setFieldValue}
                     isView={isView}
+                    showTaxes={true}
                   />
                 </div>
               </Card.Body>

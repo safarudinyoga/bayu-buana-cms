@@ -5,6 +5,7 @@ import { useSnackbar } from "react-simple-snackbar"
 import ModuleAccess from "./module-access"
 import { setUIParams } from "redux/ui-store"
 import SelectAsync from "components/form/select-async"
+import _ from "lodash"
 import { Formik, FastField, Form as FormikForm } from "formik"
 import * as Yup from "yup"
 import useQuery from "lib/query"
@@ -69,7 +70,18 @@ const UserManagementForm = (props) => {
     try {
       if (formId) {
         let { data } = await api.get(endpoint + "/" + formId)
-        setInitialForm(data)
+
+          setInitialForm({
+            ...initialForm,
+            employee: {
+              value: data.user_account_id,
+              label: data.given_name,
+            },
+            user_type: {
+              value: data.user_type_id,
+              label: data.user_type_name,
+            }
+          })
       }
     } catch (e) {
       openSnackbar(`error => ${e}`)
@@ -244,7 +256,6 @@ const UserManagementForm = (props) => {
                             onChange={(v) => {
                               setFieldValue("user_type", v)
                             }}
-                            value={values.user_type}
                             placeholder="Please choose"
                             className={`react-select ${
                               form.touched.user_type && form.errors.user_type
