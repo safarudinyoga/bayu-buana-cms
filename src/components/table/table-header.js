@@ -226,12 +226,13 @@ class TableHeader extends Component {
     const ExtraFilter = this.props.extraFilter
     const { customFilterStatus, hideCreate, isHidePrintLogo, module } = this.props
     const { pathname } = this.props.location
+    console.log(this.props.location);
 
     return (
       <div className="container-fluid pl-0">
         <div className="row">
           <div className="col-xs-12 col-sm-12 col-md-4 col-lg-3 col-xl-3">
-            {!this.props.isHideSearch && pathname !== "/master/general-setup" && (
+            {!this.props.isHideSearch && (
               <div className="input-group input-group-with-text">
                 <input
                   value={this.state.searchValue}

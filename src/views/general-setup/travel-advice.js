@@ -6,47 +6,27 @@ import {withRouter} from "react-router"
 import { Editor } from "react-draft-wysiwyg"
 import Api from "config/api"
 import FormBuilder from "components/form/builder"
-import {OverlayTrigger, Tooltip} from "react-bootstrap"
+import {OverlayTrigger, Tooltip, Form, Button} from "react-bootstrap"
+import TranslationForm from "components/form/translation-form"
+import FormAlert from "components/form/alert"
+import BBDataTable from "components/table/bb-data-table"
+
 // import Form from "./form";
 
 function TravelAdvice(props) {
+    console.log(props, 'props');
     const api = new Api()
+    const translationForm = React.createRef()
   const [visibleAdd, setVisibleAdd] = React.useState(false)
   const [formBuilder, setFormBuilder] = useState(null)
+  console.log(formBuilder);
   const [translations, setTranslations] = useState(["Indonesia"])
   const [title, setTitle] = React.useState("Travel Advice")
+  const [selectedContry, setSelectedContry] = useState(null)
+  const [data, setData] = useState(null)
+  const [urlText, setUrlText] = useState(null)
+  const [description, setDescription] = useState(null)
 
-  let [params, setParams] = useState({
-    createOnModal: true,
-    showAdvancedOptions: false,
-    isCheckbox: false,
-    title: "Partner Fee Tax",
-    titleModal: "Create Partner Fee Tax",
-    title: "Integration Partner",
-    titleModal: "Integration Partner",
-    baseRoute: "/master/integration-partners/3f61b5e0-d7cb-4f80-94e7-83114ff23903/fee-taxes",
-    endpoint: "/master/integration-partners/3f61b5e0-d7cb-4f80-94e7-83114ff23903/fee-taxes",
-    deleteEndpoint: "/master/batch-actions/delete/fee-tax-types",
-    hideDetail: true,
-    activationEndpoint: "/master/batch-actions/activate/hotels",
-    deactivationEndpoint: "/master/batch-actions/deactivate/hotels",
-    columns: [
-      {
-        title: "Fee Tax",
-        data: "fee_tax_type_name"
-      },
-      {
-        title: "Partner Fee Tax Code",
-        data: "fee_tax_type_code"
-      },
-      {
-        title: "Partner Fee Tax Name",
-        data: "fee_tax_type_name"
-      },
-    ],
-    emptyTable: "No Integration Partner Fee Tax found",
-    recordName: ["integration-partner-code", "integration-partner-name"],
-  });
   const translationFields = [
     {
       label: "URL",
@@ -83,15 +63,124 @@ function TravelAdvice(props) {
         height: "10rem",
     }
 
+    const fetchData = async() => {
+        const url = "/master/configurations/travel-advice"
+        let res = await api.get(url)
+        console.log(res, '<<<');
+        if (res.status === 200) {
+            setData(res.data.items)
+        }
+    }
+
     React.useEffect(async() => {
         const endpoint = "/master/cities"
 
         let res = await api.get(endpoint  + "/translations", {
             size: 50,
-          })
-        //   setTranslations(res.data.items)
+        })
+        setTranslations(res.data.items)
         
     }, [])
+    
+    React.useEffect(() => {
+        fetchData()
+
+    }, [])
+
+    const onSave = async () => {
+        // let translated = formBuilder.getTranslations()
+        // setLoading(true)
+        let api = new Api()
+        console.log(urlText);
+        try {
+            if (!selectedContry) {
+                console.log("error");
+            }
+            let endpoint = "master/configurations/travel-advice"
+            let payload = {
+                "content_description": {
+                  "description": description,
+                  "url": urlText
+                },
+                "content_description_id": "urn:uuid:2aac2d26-81be-d35f-9d4d-38945cbed6f8",
+                "country_id": selectedContry
+              }
+            let res = await api.post(endpoint, payload)
+            console.log(res);
+        //   if (!form.company_id) {
+        //     form.company_id = null
+        //   }
+        //   if (!form.numeric_code) {
+        //     form.numeric_code = null || ""
+        //   }
+          
+        //   if (!form.airline_asset) {
+        //     form.airline_asset = null
+        //   } else {
+        //     if (!form.airline_asset.multimedia_description_id) {
+        //       form.airline_asset = null
+        //     }
+        //   }
+    
+        //   let res = await api.putOrPost(endpoint, id, form)
+        //   setId(res.data.id)
+        //   for (let i in translated) {
+        //     let tl = translated[i]
+        //     let path = endpoint + "/" + res.data.id + "/translations"
+        //     await api.putOrPost(path, tl.id, tl)
+        //   }
+        } catch (e) {
+        //   dispatch(
+        //     setAlert({
+        //       message: `Failed to ${formId ? "update" : "save"} this record.`,
+        //     }),
+        //   )
+        } finally {
+        //   setLoading(false)
+        //   props.history.goBack()
+        //   dispatch(
+        //     setAlert({
+        //       message: `Record ${form.airline_code} - ${
+        //         form.airline_name
+        //       } has been successfully ${formId ? "updated" : "saved"}.`,
+        //     }),
+        //   )
+        }
+      }
+
+      let params = {
+        isCheckbox: false,
+        showAdvancedOptions: false,
+        createOnModal: false,
+        showHistory: false,
+        hideCreate: true,
+        isHideDownloadLogo: true,
+        isHideSearch: false,
+        title: "Handler Setup",
+        titleModal: "Handler Setup",
+        baseRoute: "/master/general-setup",
+        endpoint: "/master/configurations/travel-advice",
+        deleteEndpoint:
+          "/configurations/travel-advice/:id",
+        activationEndpoint:
+          "/master/batch-actions/activate/configurations/email-senders",
+        deactivationEndpoint:
+          "/master/batch-actions/deactivate/currency-conversions",
+        columns: [
+          {
+            title: "Country",
+            data: "country.country_name",
+          },
+          {
+            title: "URL",
+            data: "content_description.url",
+          },
+        ],
+        emptyTable: "No Email Sender found",
+        recordName: ["from_display", "from_email"],
+        btnDownload: ".buttons-csv",
+        module: "handler-setup",
+      }
 
 
   return (
@@ -103,90 +192,150 @@ function TravelAdvice(props) {
                     visibleAdd === false ?
                         <div className="row" style={{justifyContent: 'space-between', width: '90%', margin: 'auto',}}>
                             <div className="mt-5" >
-                                <p style={{fontStyle: 'italic'}}>No Travel Advice found</p>
+                                <div style={{width: '100%'}}>
+                                    {
+                                        data === null ?
+                                        <p style={{fontStyle: 'italic'}}>No Travel Advice found</p>
+                                        : 
+                                        null
+                                    }
+                                </div>
                             </div>
-                            <OverlayTrigger
-                                placement="top"
-                                overlay={<Tooltip>Click to create</Tooltip>}
-                            >
-                                <button
-                                    type="button"
-                                    // onClick={this.handleClick.bind(this)}
-                                    onClick={() => {
-                                        setVisibleAdd(true)
-                                        setTitle("Create New Travel Advice")
-                                    }}
-                                    className="btn btn-warning float-right button-new"
+                            {
+                                data === null ?
+                                <OverlayTrigger
+                                    placement="top"
+                                    overlay={<Tooltip>Click to create</Tooltip>}
                                 >
-                                    <img src={createIcon} className="mr-1" alt="new" />
-                                    Add Travel Advice
-                                </button>
-                            </OverlayTrigger>
+                                    <button
+                                        type="button"
+                                        // onClick={this.handleClick.bind(this)}
+                                        onClick={() => {
+                                            setVisibleAdd(true)
+                                            setTitle("Create New Travel Advice")
+                                        }}
+                                        className="btn btn-warning float-right button-new"
+                                    >
+                                        <img src={createIcon} className="mr-1" alt="new" />
+                                        Add Travel Advice
+                                    </button>
+                                </OverlayTrigger>
+                                : 
+                                <div style={{width: '100%'}}>
+                                    <Col sm={12}>
+                                        <div style={{ marginTop: 22 }}>
+                                        <Button
+                                            className="btn float-right button-override"
+                                            onClick={() => setVisibleAdd(true)}
+                                        >
+                                            <img src={createIcon} className="mr-1" alt="new" />
+                                            Add Travel Advice
+                                        </Button>
+                                        </div>
+                                    </Col>
+                                    <BBDataTable
+                                        {...params}
+                                    />
+                                </div>
+                            }
                         </div> 
                     :
                     <div style={{background: 'transparent', width: '100%'}}>
-                    <FormBuilder
-                        translations={translations}
-                        translationFields={translationFields}
-                        background={"transparent"}
-                        alertMessage={"Incomplete data"}
-                        back={() => {
-                            setVisibleAdd(false)
-                        }}
-                    >
-                        <div className="row" style={{ width: '140%', margin: 'auto', }}>
+                    {/* <FormBuilder
+                        onBuild={(el) => console.log(el)}
+                        // onSave={onSave}
+                        // back={() => {
+                        //     // setVisibleAdd(false)
+                        //     console.log('Bakc');
+                        // }}
+                        // translations={translations}
+                        // translationFields={translationFields}
+                        // background={"transparent"}
+                        // alertMessage={"Incomplete data"}
+                    > */}
+                        <div className="row" style={{ width: '95%', margin: 'auto', }}>
                             <div style={{width: '100%'}}>
                                 <FormInputSelectAjax
                                     label="Country"
                                     required={true}
-                                    // value={form.country_id}
+                                    value={selectedContry}
                                     name="country_id"
                                     endpoint="/master/countries"
                                     column="country_name"
                                     filter={`["status", "=", 1]`}
-                                    // data={countryData}
-                                    // onChange={(e) =>
-                                    //     setForm({...form, country_id: e.target.value || null})
-                                    // }
+                                    // data={selectedContry}
+                                    onChange={(e) =>
+                                        {
+                                            setSelectedContry(e.target.value)
+                                        }
+                                    }
                                     type="select"
                                     style={{width: '50%'}}
+                                    
                                 />
-                                <FormInputSelectAjax
-                                    label="URL"
-                                    // value={form.country_id}
-                                    name="country_id"
-                                    endpoint="/master/countries"
-                                    column="country_name"
-                                    filter={`["status", "=", 1]`}
-                                    // data={countryData}
-                                    // onChange={(e) =>
-                                    //     setForm({...form, country_id: e.target.value || null})
-                                    // }
-                                    type="select"
-                                    style={{width: '50%',}}
-                                />
+                                <div className="d-flex">
+                                    <Form.Label column xs={6} sm={6} md={3} lg={4}>
+                                        <p style={{textAlign: 'start', marginLeft: -7}} >URL</p>
+                                    </Form.Label>
+                                    <Col xs={7} sm={7} md={9} lg={9}>
+                                        <Form.Control
+                                            type="text"
+                                            minLength={1}
+                                            maxLength={36}
+                                            style={{ maxWidth: 250 }}
+                                            value={urlText}
+                                            onChange={(e) => setUrlText(e.target.value)}
+                                        />
+                                    </Col>
+                                </div>
                                 <div className="row" style={{display: 'flex'}}>
                                     <Col style={{}} >
                                         <p>Description</p>
                                     </Col>
                                     <Col sm={8}>
                                         <Editor
-                                            // editorState={editorState}
+                                            // editorState={description}
                                             toolbarClassName="toolbarClassName"
                                             wrapperClassName="wrapperClassName"
                                             wrapperStyle={wrapperStyle}
                                             editorStyle={editorStyle} 
                                             editorClassName="editorClassName"
-                                            // onEditorStateChange={this.onEditorStateChange}
+                                            // onEditorStateChange={(e) => setDescription(e.target.value)}
                                             toolbarStyle={{background: '#ECECEC 0% 0% no-repeat padding-box'}}
+                                            onChange={(e) => setDescription(e.blocks[0].text)}
                                         />
                                     </Col>
                                 </div>
                             </div>
-                    </div>
-                </FormBuilder>
+                        </div>
+                        <TranslationForm
+                            ref={translationForm}
+                            translations={translations}
+                            isView={props.isView}
+                            fields={translationFields}
+                        />
+                        <FormAlert
+                            isValid={props.isValid}
+                            message={"Incomplete data"}
+                        />
+
+                    {/* </FormBuilder> */}
                 </div>
                 }
+            </div>
+            <div style={{ marginBottom: 30, marginTop: 30, display: "flex" }}>
+                <Button
+                    variant="primary"
+                    type="submit"
+                    // disabled={isSubmitting || !dirty}
+                    style={{ marginRight: 15 }}
+                    onClick={() => onSave()}
+                >
+                    SAVE
+                </Button>
+                <Button variant="secondary" onClick={() => setVisibleAdd(false)}>
+                    CANCEL
+                </Button>
             </div>
       </div>
   )
