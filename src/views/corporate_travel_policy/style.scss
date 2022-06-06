@@ -16,12 +16,28 @@
   h3 {
     font-size: 16px;
     font-weight: bold;
+    margin: 0;
   }
   p {
     font-size: 14px;
     font-weight: normal;
     padding: 8px 0;
     border-bottom: 1px solid #d3d3d3;
+  }
+}
+
+// preferred hotel chains section
+.preferred-hotel-title {
+  font-size: 16px;
+  font-weight: bold;
+  border-bottom: 1px solid #d3d3d3;
+}
+.preferred-hotel-body {
+  display: flex;
+  h5 {
+    font-size: 15px;
+    margin: 10px;
+    font-weight: bold;
   }
 }
 
@@ -37,9 +53,11 @@
   h5 {
     font-size: 15px;
     font-weight: bold;
+    margin: 6px;
   }
   p {
     font-size: 14px;
+    margin: 4px 0;
   }
   h4 {
     font-size: 14px;
@@ -52,5 +70,20 @@
   display: flex;
   h5 {
     font-size: 15px;
+  }
+}
+
+// travel policy document section
+.travel-policy-title {
+  h3 {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 0;
+  }
+  p {
+    font-size: 14px;
+    font-weight: normal;
+    padding: 8px 0;
+    border-bottom: 1px solid #d3d3d3;
   }
 }

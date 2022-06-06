@@ -4,6 +4,7 @@ import { Card } from "react-bootstrap"
 import rowStatus from "lib/row-status"
 import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
+import { ReactSVG } from "react-svg"
 // import Form from "./form/identity-rule"
 
 const TravelPolicyDocument = () => {
@@ -26,8 +27,8 @@ const TravelPolicyDocument = () => {
 
   let params = {
     isCheckbox: false,
-    title: "User Access Type",
-    titleModal: "User Access Type",
+    title: "Travel Policy Document",
+    titleModal: "Travel Policy Document",
     baseRoute: "/master/identity-rules/form",
     endpoint: "/master/configurations/identity-rules",
     deleteEndpoint: "/master/batch-actions/delete/configurations/identity-rules",
@@ -71,9 +72,13 @@ const TravelPolicyDocument = () => {
 
   return  (
     <Card style={{marginBottom: 0}}>
-    <Card.Body className="px-1 px-md-4">
-      <h3 className="card-heading">Travel Policy Document</h3>
-      <BBDataTable {...params} modalSize="lg"  />
+    <Card.Body className="px-1 px-md-4 travel-policy-title">
+      <h3 className="">Travel Policy Document</h3>
+      <p>Travel Policy Guideline</p>
+      <div>
+        <ReactSVG src="/img/icons/corporate-travel-policy.svg" />
+      </div>
+      <span>Supported files: PDF or Microsoft World (.pdf, .doc, .docx)</span>
     </Card.Body>
   </Card>
   )

@@ -5,7 +5,6 @@ import { ReactSVG } from "react-svg"
 import { Row, Col, Tab, Nav } from "react-bootstrap"
 import { setUIParams } from "redux/ui-store"
 import GeneralInformation from "./general-information"
-import HandlerSetup from "./handler_setup/handler-setup"
 import DestinationRestriction from "./destination_restriction"
 import StandardService from "./standart_service/standard-service"
 import OverCreditApproverAssignment from "./over-credit-approver-assignment"
@@ -23,6 +22,7 @@ import MiscellaneousConfiguration from "./miscellaneous_configuration"
 import StaffAndManager from "./staff-and-manager";
 import Director from "./director";
 import Vip from "./vip";
+import PreferredHotelChain from "./preferred-hotel-chain";
 import "./style.scss"
 
 // const endpoint = "/user/profile"
@@ -136,9 +136,9 @@ const TravelPolicy = (props) => {
                 />
                 ) : null}
             </Tab.Pane>
-            <Tab.Pane eventKey="handler-setup">
-              {tabKey === "handler-setup" ? (
-                <HandlerSetup
+            <Tab.Pane eventKey="preferred-hotel-chain">
+              {tabKey === "preferred-hotel-chain" ? (
+                <PreferredHotelChain
                   history={props.history}
                   backUrl={backUrl}
                   handleSelectTab={(v) => handleSelectTab(v)}
@@ -186,10 +186,10 @@ const TravelPolicy = (props) => {
             </Nav.Item>
 
             <Nav.Item>
-              <Nav.Link eventKey="handler-setup">
+              <Nav.Link eventKey="preferred-hotel-chain">
                 <div>
                   <ReactSVG src="/img/icons/corporate-preferred-hotel.svg" />
-                  <span>Prefered Hotel Chains</span>
+                  <span>Preferred Hotel Chains</span>
                 </div>
               </Nav.Link>
             </Nav.Item>

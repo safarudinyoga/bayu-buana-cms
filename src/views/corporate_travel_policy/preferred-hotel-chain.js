@@ -2,23 +2,23 @@ import React, { useEffect } from "react"
 import { Card } from "react-bootstrap"
 import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
-import FormikControl from "../../components/formik/formikControl"
+// import FormikControl from "../../components/formik/formikControl"
 import { ReactSVG } from "react-svg"
 import "./style.scss"
 
-const MiscellaneousConfiguration = (props) => {
+const PreferredHotelChain = (props) => {
 
     let dispatch = useDispatch()
     useEffect(() => {
         dispatch(
             setUIParams({
-                title: "Miscellaneous Configuration",
+                title: "Preferred Hotel Chains",
                 breadcrumbs: [
                     {
                         text: "Corporate Management",
                     },
                     {
-                        text: "Miscellaneous Configuration",
+                        text: "Preferred Hotel Chains",
                     },
                 ],
             }),
@@ -26,8 +26,8 @@ const MiscellaneousConfiguration = (props) => {
         }, [])
     
     let params = {
-        title: "Miscellaneous Configuration",
-        titleModal: "Miscellaneous Configuration",
+        title: "Preferred Hotel Chains",
+        titleModal: "Preferred Hotel Chains",
         baseRoute: "/master/corporate-management/form",
         endpoint: "/master/configurations/identity-rules",
         deleteEndpoint: "/master/batch-actions/delete/configurations/identity-rules",
@@ -64,29 +64,12 @@ const MiscellaneousConfiguration = (props) => {
     return (
         <Card>
         <Card.Body className="px-1 px-md-4">
-            <h3 className="misc-title">Miscellaneous Configuration</h3>
-            <div className="misc-wrapper"><ReactSVG src="/img/icons/time.svg"/><h5>BOOKING LEAD TIME</h5><p>&ensp;-&ensp;require to book in advance</p></div>
-            <div className="misc-body">
-                <div className="misc-text"><h5>FLIGHT</h5> <span>&ensp;-&ensp;Minimum Booking days before departure</span>
-                <FormikControl
-                    control="Input"
-                    required="label-required"
-                    label="Specified Airline"
-                    name="airline_id"
-                    placeholder="Please Choose"
-                    
-                />
-                <ReactSVG src="/img/icons/info.svg" />
-                <p>days</p>
-                </div>
-                <div className="misc-text"><ReactSVG src="/img/icons/corporate-preferred-hotel.svg" />
-                    <h5>HOTEL</h5> <span>&ensp;-&ensp;Minimum Booking days before check-in</span>
-                    <ReactSVG src="/img/icons/info.svg" />
-                    <p>days</p>
-                </div>
-            </div>
+            <h3 className="preferred-hotel-title">Preferred Hotel Chains</h3>
+            <div className="preferred-hotel-body">
+                <ReactSVG src="/img/icons/corporate-preferred-hotel.svg" />
+                <h5>PREFERRED HOTEL CHAINS</h5></div>
         </Card.Body>
         </Card>
     )
 }
-export default MiscellaneousConfiguration
+export default PreferredHotelChain
