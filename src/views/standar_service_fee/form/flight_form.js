@@ -10,7 +10,7 @@ import { setUIParams } from "redux/ui-store"
 import Api from "config/api"
 import Select from "components/form/select-async"
 import useQuery from "lib/query"
-import { Menu } from "./menu"
+import { Menu } from "./menu_domestic"
 import { useSnackbar } from "react-simple-snackbar"
 import FlightOverrideServiceFeeTable from "../table/flight_override_service_table"
 
@@ -388,7 +388,7 @@ const FlightForm = (props) => {
                       Preset Name
                       <span className="form-label-required">*</span>
                     </Form.Label>
-                    <Col sm={10}>
+                    <Col sm={4}>
                       <FastField name="service_fee_category_name">
                         {({ field, form }) => (
                           <>
@@ -448,7 +448,7 @@ const FlightForm = (props) => {
                     </Col>
                   </Form.Group>
                   <Form.Group as={Row} className="mb-3">
-                    <Col sm={10}>
+                    <Col sm={12}>
                       <Menu
                         menu={[
                           {
@@ -463,19 +463,6 @@ const FlightForm = (props) => {
                                 fieldPercent: "domestic_flight_percent",
                                 fieldIncludeTax: "domestic_flight_tax_include",
                               },
-                              {
-                                title: "International Flight",
-                                taxType: taxTypeInternationalFlight,
-                                fieldFeeTaxId:
-                                  "international_flight_fee_tax_id",
-                                fieldRadio: "international_flight",
-                                fieldAmount: "international_flight_amount",
-                                fieldAmountType:
-                                  "international_flight_amount_type",
-                                fieldPercent: "international_flight_percent",
-                                fieldIncludeTax:
-                                  "international_flight_tax_include",
-                              },
                             ],
                           },
                         ]}
@@ -484,6 +471,20 @@ const FlightForm = (props) => {
                         fHandleBlur={handleBlur}
                         setFieldValue={setFieldValue}
                         isView={isView}
+                        amountSuffixSelections={[
+                          {
+                            label: "/Ticket",
+                            value: "de62950d-fbab-4e39-bd90-c2b6687c6b36",
+                          },
+                          {
+                            label: "/Person",
+                            value: "de03bf84-4bd8-4cdf-9348-00246f04bcad",
+                          },
+                          {
+                            label: "/Transaction",
+                            value: "5123b121-4f6a-4871-bef1-65408d663e19",
+                          },
+                        ]}
                       />
                     </Col>
                   </Form.Group>
