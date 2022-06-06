@@ -289,7 +289,7 @@ const RetailAncillaryFee = (props) => {
     domestic_refund_percent: Yup
       .string().when('domestic_refund', {
         is: value => value === "percent",
-        then: Yup.string().required(`Please enter percentage for ${taxTypeDomesticRevalidate.fee_tax_type_name}.`)
+        then: Yup.string().required(`Please enter percentage for ${taxTypeDomesticRefund.fee_tax_type_name}.`)
       }),
     domestic_void: Yup
       .string()
