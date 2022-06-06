@@ -25,6 +25,7 @@ class Sidebar extends Component {
                   <p>Dashboard</p>
                 </Link>
               </li>
+
               <li className="nav-item">
                 <Link to="#" className="nav-link">
                   <img src={BriefCaseIcon} alt="briefcase_icon" />
@@ -242,6 +243,7 @@ class Sidebar extends Component {
                   </li> */}
                 </ul>
               </li>
+
               <li className="nav-item">
                 <Link to="#" className="nav-link">
                   <img src="/img/icons/users.svg" alt="icon users" />
@@ -273,6 +275,7 @@ class Sidebar extends Component {
                   </li>
                 </ul>
               </li>
+
               <li className="nav-item">
                 <Link to="#" className="nav-link">
                   <img src="/img/icons/users.svg" alt="icon users" />
@@ -289,6 +292,7 @@ class Sidebar extends Component {
                   </li>
                 </ul>
               </li>
+
               <li className="nav-item">
                 <Link to="#" className="nav-link">
                   <img src="/img/icons/ic_settings.svg" alt="icon users" />
@@ -312,7 +316,7 @@ class Sidebar extends Component {
                     <Link to="/master/general-setup" className="nav-link">
                       <p>General Setup</p>
                     </Link>
-                  </li>                  
+                  </li>
                   {/* <li className="nav-item">
                     <Link to="/master/invoice-email-setup" className="nav-link">
                       <p>Invoice Email Setup</p>
@@ -330,6 +334,7 @@ class Sidebar extends Component {
                   </li> */}
                 </ul>
               </li>
+
               <li className="nav-item">
                 <Link to="#" className="nav-link">
                   <img src="/img/icons/ic_users.svg" alt="icon users" />
@@ -345,7 +350,24 @@ class Sidebar extends Component {
                     </Link>
                   </li>
                 </ul>
-              </li> 
+              </li>
+
+              {/* <li className="nav-item">
+                <Link to="/master/manage-corporate" className="nav-link">
+                  <img src="/img/icons/ic_users.svg" alt="icon users" />
+                  <p>
+                    Manage Corporate
+                    <i className="right fas fa-angle-right"></i>
+                  </p>
+                </Link> */}
+                {/* <ul className="nav nav-treeview">
+                  <li className="nav-item">
+                    <Link to="/master/user-access-type" className="nav-link">
+                      <p>User Access Type</p>
+                    </Link>
+                  </li>
+                </ul> */}
+              {/* </li> */}
             </ul>
           </nav>
         </div>
