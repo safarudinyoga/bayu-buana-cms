@@ -251,7 +251,7 @@ const RetailAncillaryFee = (props) => {
         then: Yup.string().required(`Please select charge type.`)
       }),
     domestic_reissue_percent: Yup
-      .string().when('domestic_revalidate', {
+      .string().when('domestic_reissue', {
         is: value => value === "percent",
         then: Yup.string().required(`Please enter percentage for ${taxTypeDomesticReissue.fee_tax_type_name}.`)
       }),
@@ -895,6 +895,7 @@ const RetailAncillaryFee = (props) => {
           setFieldTouched,
         }) => (
           <Form onSubmit={handleSubmit}>
+            {console.log(errors, "ini ada error")}
             <Card>
               <Card.Body>
                 <div style={{ padding: "0 2px 2px" }}>
