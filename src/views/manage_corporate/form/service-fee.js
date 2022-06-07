@@ -6,9 +6,9 @@ import { Form, Row, Col, Card, Button, Tabs, TabPane, Modal, ModalBody } from "r
 import Select from "components/form/select"
 import BbDataTable from 'components/table/bb-data-table'
 import createIcon from "assets/icons/create.svg"
+import ModalCustomServiceFee from 'views/manage_corporate/form/service-fee/modal-other-custom'
 
 // utils
-
 
 const TravelConsultantAssistant = ({ handleChangeModal  }) => {
   const [isSelectedOne, setisSelectedOne] = useState(false)
@@ -25,8 +25,8 @@ const TravelConsultantAssistant = ({ handleChangeModal  }) => {
       isSelected: false
     },
     other: {
-      key: '',
-      isSelected: false
+      key: 'custom',
+      isSelected: true
     }
   })
 
@@ -46,6 +46,7 @@ const TravelConsultantAssistant = ({ handleChangeModal  }) => {
     isHidePrintLogo: true,
     isHideSearch: true,
     isHideDownloadLogo: true,
+    isCheckbox: false,
     isShowColumnAction: false,
     hideCreate: true,
     baseRoute: "/master/manage-corporate/form",
@@ -78,6 +79,7 @@ const TravelConsultantAssistant = ({ handleChangeModal  }) => {
     isHidePrintLogo: true,
     isHideSearch: true,
     isHideDownloadLogo: true,
+    isCheckbox: false,
     isShowColumnAction: false,
     hideCreate: true,
     baseRoute: "/master/manage-corporate/form",
@@ -97,6 +99,60 @@ const TravelConsultantAssistant = ({ handleChangeModal  }) => {
       },
     ],
     emptyTable: "No Hotel Service Fee found",
+  })
+
+  const [paramsOther, setparamsOther] = useState({
+    custom: {
+      createOnModal: true,
+      titleModal: "Other Service Fee",
+      title: "other-custom-service-fee",
+      showAdvancedOptions: false,
+      isHidePrintLogo: true,
+      isHideSearch: false,
+      isCheckbox: false,
+      isHideDownloadLogo: true,
+      isShowColumnAction: true,
+      baseRoute: "/master/manage-corporate/form",
+      endpoint: "/master/ancillary-fee",
+      columns: [
+        {
+          title: "Type Of Service",
+          data: ""
+        },
+        {
+          title: "Service Fee",
+          data: ""
+        },
+      ],
+      emptyTable: "No Other Service Fee found",
+    },
+    nonCustom: {
+      title: "other-noncustom-service-fee",
+      showAdvancedOptions: false,
+      responsiveTablet: true,
+      isHidePrintLogo: true,
+      isHideSearch: true,
+      isHideDownloadLogo: true,
+      isShowColumnAction: false,
+      hideCreate: true,
+      baseRoute: "/master/manage-corporate/form",
+      endpoint: "/master/ancillary-fee",
+      columns: [
+        {
+          title: "Destination",
+          data: ""
+        },
+        {
+          title: "Apply Condition",
+          data: ""
+        },
+        {
+          title: "Service Fee",
+          data: ""
+        },
+      ],
+      emptyTable: "No Other Service Fee found",
+    }
   })
 
   const handleChange = (e, type) => {
@@ -136,12 +192,23 @@ const TravelConsultantAssistant = ({ handleChangeModal  }) => {
     }
   };
 
-  const onResetFlight = () => {
-    setParamsFlight({...paramsFlight, filters: []})
-  }
+  const handleReset = (type) => {
+    switch (type) {
+      case 'flight':
+        setParamsFlight({...paramsFlight, filters: []})
+        break;
 
-  const onResetHotel = () => {
-    setParamsHotel({...paramsHotel, filters: []})
+      case 'hotel':
+        setParamsHotel({...paramsHotel, filters: []})
+        break;
+
+      case 'other':
+        setparamsOther({...paramsOther, filters: []})
+        break;
+
+      default:
+        break;
+    }
   }
 
   return (
@@ -174,6 +241,7 @@ const TravelConsultantAssistant = ({ handleChangeModal  }) => {
           />
         </Col>
       </Form.Group>
+      {/* flight */}
       <section className='mb-4 ml-2'>
         <div className='wrapper_header'>
           <Card.Text className='uppercase margin-0'>
@@ -385,13 +453,14 @@ const TravelConsultantAssistant = ({ handleChangeModal  }) => {
             )}
             {isFieldSelected.flight.key === 'selected' && (
               <div className='mt-3' style={{ width: '98%', margin: '0 auto' }}>
-                <BbDataTable {...paramsFlight} onReset={onResetFlight} />
+                <BbDataTable {...paramsFlight} onReset={() => handleReset('flight')} />
               </div>
             )}
           </>
         )}
       </section>
 
+      {/* hotel */}
       <section className='mb-4 ml-2'>
         <div className='wrapper_header'>
           <Card.Text className='uppercase margin-0'>
@@ -603,12 +672,14 @@ const TravelConsultantAssistant = ({ handleChangeModal  }) => {
             )}
             {isFieldSelected.hotel.key === 'selected' && (
               <div className='mt-3' style={{ width: '98%', margin: '0 auto' }}>
-                <BbDataTable {...paramsHotel} onReset={onResetHotel} />
+                <BbDataTable {...paramsHotel} onReset={() => handleReset('hotel')} />
               </div>
             )}
           </>
         )}
       </section>
+
+      {/* other */}
       <section className='mb-4 ml-2'>
         <div className='wrapper_header'>
           <Card.Text className='uppercase margin-0'>
@@ -622,19 +693,38 @@ const TravelConsultantAssistant = ({ handleChangeModal  }) => {
               className='select'
               options={[
                 {
-                  value: 'silver',
-                  label: 'label'
+                  value: 'custom',
+                  label: 'custom'
                 },
                 {
-                  value: 'silver',
-                  label: 'label'
+                  value: 'noncustom',
+                  label: 'not-custom'
                 },
               ]}
+              onChange={(selected) => setisFieldSelected({
+                ...isFieldSelected,
+                other: {
+                  key: selected.value,
+                  isSelected: true
+                }
+              })}
               width={'300px'}
             />
           </div>
         </div>
         <div className='divider mb-3 mt-3' />
+        {isFieldSelected.other.isSelected &&
+          isFieldSelected.other.key === 'custom' ? (
+            <div className='mt-3' style={{ width: '98%', margin: '0 auto' }}>
+              <BbDataTable {...paramsOther.custom} onReset={() => handleReset('other')} modalContent={ModalCustomServiceFee} />
+            </div>
+          ) : isFieldSelected.other.isSelected &&
+          isFieldSelected.other.key === 'noncustom' (
+            <div className='mt-3' style={{ width: '98%', margin: '0 auto' }}>
+              <BbDataTable {...paramsOther.nonCustom} onReset={() => handleReset('other')} />
+            </div>
+          )
+        }
       </section>
     </div>
   )
