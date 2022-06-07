@@ -79,10 +79,9 @@ const TravelPolicyDocument = () => {
       <p>Travel Policy Guideline</p>
       <div>
         <ReactSVG src="/img/icons/corporate-travel-policy.svg" />
-        <ReactSVG src="/img/icons/bin.svg" />
         <img src={{showIcon}} alt="" />
-
         <span>Petro_XYZ-Global-Travel-Policy.PDF</span>
+        <ReactSVG src="/img/icons/bin.svg" />
       </div>
       <span>Supported files: PDF or Microsoft World (.pdf, .doc, .docx)</span>
     </Card.Body>

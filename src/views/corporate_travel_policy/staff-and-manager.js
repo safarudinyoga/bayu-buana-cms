@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
 import BBDataTable from "components/table/bb-data-table"
 import { Card } from "react-bootstrap"
-// import Form from "./form/identity-rule"
+import Form from "./form/identity-rule"
 
 const StaffAndManager = (props) => {
 
@@ -27,25 +27,25 @@ const StaffAndManager = (props) => {
     let params = {
         title: "Staff and Manager",
         titleModal: "Staff and Manager",
-        // baseRoute: "/master/corporate-management/form",
-        // endpoint: "/master/configurations/identity-rules",
-        // deleteEndpoint: "/master/batch-actions/delete/configurations/identity-rules",
+        baseRoute: "/master/corporate-management/form",
+        endpoint: "/master/configurations/identity-rules",
+        deleteEndpoint: "/master/batch-actions/delete/configurations/identity-rules",
         columns: [
         {
-            title: "Restriction Base On",
-            data: "restriction_base_on",
+            title: "Destination",
+            data: "destination",
         },
         {
-            title: "Destination Name",
-            data: "destination_name",
+            title: "Highest Cabin Class",
+            data: "highest_cabin_class",
         },
         {
-            title: "Type of Restriction",
-            data: "type_of_restriction",
+            title: "Preferred Airlines",
+            data: "preferred_airlines",
         },
         {
-            title: "Document(s)",
-            data: "document_name",
+            title: "Restrict Airlines",
+            data: "restrict_airlines",
         },
         {
             title: "Status",
@@ -58,6 +58,13 @@ const StaffAndManager = (props) => {
         module: "identity-rules",
         isCheckbox: false,
         switchStatus: true,   
+        showAdvancedOptions: false,
+        isHideSearch: true,
+        showInfoDelete: true,
+        infoDelete: [
+            {title: "Destination", recordName: "destination"}, 
+            {title: "Highest Cabin Class", recordName: "highest_cabin_class"},
+          ],
     }
 
     return (
@@ -65,7 +72,7 @@ const StaffAndManager = (props) => {
         <Card.Body>
             <div>
                 Staff and Manager
-                {/* <BBDataTable {...params} /> */}
+                <BBDataTable {...params} modalContent={Form} modalSize="lg" />
             </div>
         </Card.Body>
         </Card>
