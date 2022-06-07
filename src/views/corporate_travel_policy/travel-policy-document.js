@@ -14,13 +14,13 @@ const TravelPolicyDocument = () => {
   useEffect(() => {
     dispatch(
       setUIParams({
-        title: "Travel Policy Document",
+        title: "Travel Policy",
         breadcrumbs: [
           {
             text: "Corporate Management",
           },
           {
-            text: "Travel Policy Document",
+            text: "Travel Policy",
           },
         ],
       }),

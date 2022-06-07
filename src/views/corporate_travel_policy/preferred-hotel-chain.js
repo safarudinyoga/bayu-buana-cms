@@ -15,13 +15,13 @@ const PreferredHotelChain = (props) => {
     useEffect(() => {
         dispatch(
             setUIParams({
-                title: "Preferred Hotel Chains",
+                title: "Travel Policy",
                 breadcrumbs: [
                     {
                         text: "Corporate Management",
                     },
                     {
-                        text: "Preferred Hotel Chains",
+                        text: "Travel Policy",
                     },
                 ],
             }),

@@ -11,13 +11,13 @@ const StaffAndManager = (props) => {
     useEffect(() => {
         dispatch(
             setUIParams({
-                title: "Staff and Manager",
+                title: "Travel Policy",
                 breadcrumbs: [
                     {
                         text: "Corporate Management",
                     },
                     {
-                        text: "Staff and Manager",
+                        text: "Travel Policy",
                     },
                 ],
             }),

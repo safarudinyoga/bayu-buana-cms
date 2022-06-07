@@ -11,13 +11,13 @@ const MiscellaneousConfiguration = (props) => {
     useEffect(() => {
         dispatch(
             setUIParams({
-                title: "Miscellaneous Configuration",
+                title: "Travel Policy",
                 breadcrumbs: [
                     {
                         text: "Corporate Management",
                     },
                     {
-                        text: "Miscellaneous Configuration",
+                        text: "Travel Policy",
                     },
                 ],
             }),
