@@ -3,6 +3,18 @@ import { Tabs, TabPane, Row, Col, Form } from "react-bootstrap"
 import { FastField } from "formik"
 import NumberFormat from "react-number-format";
 
+// const AmountRadioSelections = (props) => {
+//   return props.disabledAmount
+//   ?
+//     <Form.Check type="radio" label={props.label} value={props.value} disabled={props.disabledAmount} />
+//   : 
+//     <FastField name={props.fieldAmountType}>
+//       {({ field, form }) => (
+//       <Form.Check {...field} value={props.value} checked={props.values[props.fieldAmountType] === props.value} type="radio" label={props.label}  disabled={props.isView}/>
+//       )}
+//     </FastField>
+// }
+
 const FeeSection = (props) => {
   let id = props.taxType ? props.taxType.id : "";
   let title = props.taxType ? props.taxType.fee_tax_type_name : props.title;
@@ -16,6 +28,7 @@ const FeeSection = (props) => {
   : props.values[props.fieldRadio] === "" 
   ? true 
   : props.values[props.fieldRadio] !== "percent"
+  let showTaxes = props.showTaxes
   return (
     <>
       <Form.Group>
@@ -190,19 +203,21 @@ const FeeSection = (props) => {
                 </Form.Group>
               </Col>
               <Col sm={12} md={6}>
-              {disabledPercent 
+              {showTaxes ? disabledPercent 
                 ? <Form.Check type="checkbox" className="mt-2" label="Include Taxes" disabled={true} />
                 : <FastField name={props.fieldIncludeTax}>
                     {({ field, }) => (
                     <Form.Check {...field} type="checkbox" className="mt-2" label="Include Taxes" disabled={props.isView} />
                     )}
                   </FastField>
+                  : null
               }
               </Col>
             </Row>
           </Col>
         </Row>
       </Form.Group>
+      <FeedbackMessage {...props} />
       {props.borderBottom && <h3 className="card-heading"></h3>}
     </>
   )
@@ -259,4 +274,19 @@ export const FeeTabs = (props) => {
         </Tabs>
       </div>
     )
-  }
+}
+
+const FeedbackMessage = (props) => {
+  return <FastField name="">
+    {({ field,form }) => {
+      let message = form.errors[props.fieldRadio] || form.errors[props.fieldAmount] || form.errors[props.fieldAmountType] || form.errors[props.fieldPercent]
+      return form.touched[props.fieldRadio] && 
+      message
+      ? (
+        <p className="fback-invalid">
+          {message}
+        </p>
+      ) : null
+    }}
+  </FastField>
+}

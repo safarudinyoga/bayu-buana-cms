@@ -150,28 +150,30 @@ const FeeSection = (props) => {
                     :
                     <FastField name={props.fieldPercent}>
                       {({ field }) => (
-                          <Form.Control 
-                            {...field} 
-                            type="text" 
-                            minLength={0}
-                            maxLength={3}
-                            style={{ maxWidth: "80px" }} 
-                            className="mx-3" 
-                            disabled={props.isView} 
-                            onChange={(value) => {
-                              // console.log(props.values, props.fieldAmount)
-                              let pattern=/^\d+$/
-                              // console.log(pattern.test(value.target.value))
-                              if(pattern.test(value.target.value)) {
-                                if(value.target.value <= 100) {
-                                  props.setFieldValue(props.fieldPercent, value.target.value)
-                                }
-                              }
-                              if(value.target.value === "") {
-                                props.setFieldValue(props.fieldPercent, value.target.value)
-                              }
-                            }}
-                          />
+                           <Form.Control 
+                           {...field} 
+                           type="text" 
+                           minLength={0}
+                           maxLength={3}
+                           style={{ maxWidth: "80px" }} 
+                           className="mx-3" 
+                           disabled={props.isView} 
+                           onChange={(value) => {
+                             // console.log(props.values, props.fieldAmount)
+                             let pattern=/^\d+$/
+                             // console.log(pattern.test(value.target.value))
+                             if(pattern.test(value.target.value)) {
+                               if(value.target.value <= 100) {
+                                 props.setFieldValue(props.fieldPercent, value.target.value)
+                               }
+                               if(value.target.value === "") {
+                                 props.setFieldValue(props.fieldPercent, value.target.value)
+                               }
+                             } else { //for bugs field can alphabet
+                               props.setFieldValue(props.fieldPercent, "")
+                             }
+                           }}
+                         />
                       )}
                     </FastField>
                   }
@@ -259,7 +261,7 @@ export const FeeTabs = (props) => {
 const FeedbackMessage = (props) => {
   return <FastField name="">
     {({ field,form }) => {
-      let message = form.errors[props.fieldRadio] || form.errors[props.fieldAmount] || form.errors[props.fieldAmountType] || form.errors[props.fieldPercent]
+      let message = form.errors[props.fieldRadio] || form.errors[props.fieldAmount]|| form.errors[props.fieldAmountType] || form.errors[props.fieldPercent]
 
       return form.touched[props.fieldRadio] &&
       message

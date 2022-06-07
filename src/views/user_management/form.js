@@ -1,10 +1,11 @@
 import React, { useEffect, useState, useRef } from "react"
 import { withRouter, useHistory } from "react-router-dom"
-import { Card, Form, Row, Button, Nav, OverlayTrigger,Popover } from "react-bootstrap"
+import { Card, Form, Row, Button, Nav, Overlay, Popover } from "react-bootstrap"
 import { useSnackbar } from "react-simple-snackbar"
 import ModuleAccess from "./module-access"
 import { setUIParams } from "redux/ui-store"
 import SelectAsync from "components/form/select-async"
+import _ from "lodash"
 import { Formik, FastField, Form as FormikForm } from "formik"
 import * as Yup from "yup"
 import useQuery from "lib/query"
@@ -69,7 +70,18 @@ const UserManagementForm = (props) => {
     try {
       if (formId) {
         let { data } = await api.get(endpoint + "/" + formId)
-        setInitialForm(data)
+
+          setInitialForm({
+            ...initialForm,
+            employee: {
+              value: data.user_account_id,
+              label: data.given_name,
+            },
+            user_type: {
+              value: data.user_type_id,
+              label: data.user_type_name,
+            }
+          })
       }
     } catch (e) {
       openSnackbar(`error => ${e}`)
@@ -146,10 +158,10 @@ const UserManagementForm = (props) => {
     }
   }
 
-  const popoverBottom =(values) =>{
+  const popoverBottom = (values) => {
     return (
       <Popover id="popover-positioned-bottom" title="Popover bottom">
-        <ModuleAccess userType={values}/>
+        <ModuleAccess userType={values} />
       </Popover>
     )
   }
@@ -244,7 +256,6 @@ const UserManagementForm = (props) => {
                             onChange={(v) => {
                               setFieldValue("user_type", v)
                             }}
-                            value={values.user_type}
                             placeholder="Please choose"
                             className={`react-select ${
                               form.touched.user_type && form.errors.user_type
@@ -271,15 +282,16 @@ const UserManagementForm = (props) => {
                         </div>
                       )}
                     </FastField>
-                    <OverlayTrigger disabled trigger="click" placement="bottom" overlay={popoverBottom(values.user_type)} rootClose>
-                      <Form.Label
-                        column
-                        md={2}
-                        style={{ color: "#3E40AE", marginLeft: "14px" }}
-                      >
-                        View module access list
-                      </Form.Label>
-                    </OverlayTrigger>
+
+                    <Form.Label
+                      column
+                      md={2}
+                      style={{ color: "#3E40AE", marginLeft: "14px" }}
+                      ref={target}
+                      onClick={() => setShow(!show)}
+                    >
+                      View module access list
+                    </Form.Label>
                   </Form.Group>
                 </div>
 

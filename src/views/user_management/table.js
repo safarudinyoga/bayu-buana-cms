@@ -197,11 +197,8 @@ export default function EmployeeTable() {
     columns: [
       {
         title: "",
-        data: "employee_asset.multimedia_description.url",
-        render: (data, type) => {
-          if (type === "myExport") {
-            return data || ""
-          }
+        data: "photo_url",
+        render: (data) => {
           if (data === undefined) {
             return (
               `<img class="image-profile-tabel mr-2" src="https://bbdev.monstercode.net/files/b3986414-5c5f-45a3-be6f-4fedcce2d022.png"/>` +
@@ -246,7 +243,14 @@ export default function EmployeeTable() {
       },
       {
         title: "Last Login",
-        data: "",
+        data: "last_login",
+        render: (data) => {
+          if (data === null) {
+            return ""
+          } else {
+            return data
+          }
+        },
       },
       {
         searchable: false,

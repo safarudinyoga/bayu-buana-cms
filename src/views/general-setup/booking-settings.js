@@ -1,69 +1,9 @@
-import BBDataTable from "components/table/bb-data-table"
-import rowStatus from "lib/row-status"
-import React, { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
-import { setUIParams } from "redux/ui-store"
+import React from 'react'
 import removeIcon from "assets/icons/remove.svg"
-import { Card, Form, Row, Col, Button, Modal } from "react-bootstrap"
+import { Form, Button} from "react-bootstrap"
 // import Form from "./form";
 
 export default function BookingSetting() {
-  let dispatch = useDispatch()
-  useEffect(() => {
-    dispatch(
-      setUIParams({
-        title: "Sabre",
-        breadcrumbs: [
-          {
-            text: "Setup and Configurations",
-          },
-          {
-            text: "Intergration Partner",
-          },
-          {
-            text: "Sabre",
-          },
-        ],
-      }),
-    )
-  }, [])
-
-  const onReset = () => {
-    setParams({ ...params, filters: [] })
-  }
-
-  let [params, setParams] = useState({
-    createOnModal: true,
-    showAdvancedOptions: false,
-    isCheckbox: false,
-    title: "Partner Fee Tax",
-    titleModal: "Create Partner Fee Tax",
-    title: "Integration Partner",
-    titleModal: "Integration Partner",
-    baseRoute: "/master/integration-partners/3f61b5e0-d7cb-4f80-94e7-83114ff23903/fee-taxes",
-    endpoint: "/master/integration-partners/3f61b5e0-d7cb-4f80-94e7-83114ff23903/fee-taxes",
-    deleteEndpoint: "/master/batch-actions/delete/fee-tax-types",
-    hideDetail: true,
-    activationEndpoint: "/master/batch-actions/activate/hotels",
-    deactivationEndpoint: "/master/batch-actions/deactivate/hotels",
-    columns: [
-      {
-        title: "Fee Tax",
-        data: "fee_tax_type_name"
-      },
-      {
-        title: "Partner Fee Tax Code",
-        data: "fee_tax_type_code"
-      },
-      {
-        title: "Partner Fee Tax Name",
-        data: "fee_tax_type_name"
-      },
-    ],
-    emptyTable: "No Integration Partner Fee Tax found",
-    recordName: ["integration-partner-code", "integration-partner-name"],
-  });
-
   const borderFeeTax = {
       borderRadius: 10,
       width: '100%'

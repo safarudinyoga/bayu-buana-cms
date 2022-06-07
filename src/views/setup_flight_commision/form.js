@@ -19,6 +19,8 @@ import engb from "date-fns/locale/en-GB"
 import "react-datepicker/dist/react-datepicker.css";
 import Select from "components/form/select"
 import { default as SelectAsync } from "components/form/select-async"
+import DateRangePicker from "views/special_date/date_range_picker"
+import { values } from "lodash"
 
 const endpoint = "/master/commission-claims"
 const backUrl = "/master/setup-flight-commission"
@@ -348,57 +350,17 @@ const FlightCommisionForm = (props) => {
                                 />
                               </Col>
                               {specifyPeriodIssue ? (
-                              <>
-                                <Col md={4} className="col-5">
-                                  <DatePicker
-                                    className="form-control date-picker"
-                                    ref={dateHighlight}
-                                    dateFormat="dd MMMM yyyy"
-                                    selected={periodIssueStart}
-                                    minDate={subYears(new Date(), 10)}
-                                    maxDate={addYears(new Date(), 10)} 
-                                    locale="engb"
-                                    value={new Date()}
+                                <Col>
+                                  <DateRangePicker
+                                    minDate={10}
+                                    maxDate={10}
+                                    value={formik.values.commission_claim_issue_date}
                                     onChange={(date) => {
                                       console.log(date)
-                                      setPeriodIssueStart(date)
-                                      formik.setFieldValue("issueStart", date)
-                                      formik.setFieldValue("commission_claim_issue_date.start_date", date)
-                                    }}
-                                    
-                                  />
-                                  <div className="icon-calender">
-                                    <img
-                                      src="/img/icons/date-range.svg"
-                                      className="calendar"
-                                    ></img>
-                                  </div>
-                                </Col>
-                                <Col md={1} className="text-center col-2">to</Col>
-                                <Col md={4} className="col-5">
-                                  <DatePicker
-                                    className="form-control date-picker"
-                                    onClick={setInputFocus}
-                                    dateFormat="dd MMMM yyyy"
-                                    selected={periodIssueEnd}
-                                    minDate={subYears(new Date(), 10)}
-                                    maxDate={addYears(new Date(), 10)} 
-                                    locale="engb"
-                                    onChange={(date) => {
-                                      setPeriodIssueEnd(date)
-                                      formik.setFieldValue("issueEnd", date)
                                     }}
                                   />
-                                  <div className="icon-calender">
-                                    <img
-                                      src="/img/icons/date-range.svg"
-                                      className="calendar"
-                                    ></img>
-                                  </div>
                                 </Col>
-                              </>
-                              
-                            ) : ""}
+                              ) : ""}
                             </Row>
                             
                             
@@ -437,47 +399,14 @@ const FlightCommisionForm = (props) => {
                               </Col>
                               {specifyPeriodDeparture ? (
                               <>
-                                <Col md={4} className="col-5">
-                                  <DatePicker
-                                    className="form-control date-picker"
-                                    dateFormat="dd MMMM yyyy"
-                                    selected={periodDepartureStart}
-                                    minDate={subYears(new Date(), 10)}
-                                    maxDate={addYears(new Date(), 10)} 
-                                    locale="engb"
+                                <Col>
+                                  <DateRangePicker
+                                    minDate={10}
+                                    maxDate={10}
                                     onChange={(date) => {
                                       console.log(date)
-                                      setPeriodDepartureStart(date)
-                                      formik.setFieldValue("departureStart", date)
                                     }}
                                   />
-                                  <div className="icon-calender">
-                                    <img
-                                      src="/img/icons/date-range.svg"
-                                      className="calendar"
-                                    ></img>
-                                  </div>
-                                </Col>
-                                <Col md={1} className="text-center col-2">to</Col>
-                                <Col md={4} className="col-5">
-                                  <DatePicker
-                                    className="form-control date-picker"
-                                    dateFormat="dd MMMM yyyy"
-                                    selected={periodDepartureEnd}
-                                    minDate={subYears(new Date(), 10)}
-                                    maxDate={addYears(new Date(), 10)} 
-                                    locale="engb"
-                                    onChange={(date) => {
-                                      setPeriodDepartureEnd(date)
-                                      formik.setFieldValue("departureEnd", date)
-                                    }}
-                                  />
-                                  <div className="icon-calender">
-                                    <img
-                                      src="/img/icons/date-range.svg"
-                                      className="calendar"
-                                    ></img>
-                                  </div>
                                 </Col>
                               </>
                             ) : ""}
