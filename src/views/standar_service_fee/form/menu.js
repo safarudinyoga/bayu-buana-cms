@@ -43,11 +43,14 @@ const FeeSection = (props) => {
   return (
     <>
       <Form.Group as={Row} className="mb-3">
-        <Form.Label colum md={2}>
-          {title}
-          <span className="form-label-required">*</span>
-        </Form.Label>
-        <Col md={4} className="ml-5">
+        <Col md={2}>
+          <Form.Label colum>
+            {title}
+            <span className="form-label-required">*</span>
+          </Form.Label>
+        </Col>
+
+        <Col md={4}>
           <Form.Group>
             <FastField name={props.fieldRadio}>
               {({ field, form }) => (
@@ -75,7 +78,7 @@ const FeeSection = (props) => {
                 <Form.Label column xs={2} md={3} lg={2} className="ml-xs-4">
                   IDR
                 </Form.Label>
-                <Col xs={10} md={3} lg={2}>
+                <Col xs={10} md={3} lg={8}>
                   {disabledAmount ? (
                     <Form.Control style={{ width: "200px" }} disabled={true} />
                   ) : (
@@ -117,7 +120,7 @@ const FeeSection = (props) => {
             </Col>
           </Row>
         </Col>
-        <Col md={2}>
+        <Col md={4}>
           <Form.Group>
             <FastField name={props.fieldRadio}>
               {({ field, form }) => (
@@ -143,7 +146,7 @@ const FeeSection = (props) => {
             </FastField>
           </Form.Group>
           <Row className="ml-3">
-            <Col sm={12} md={6}>
+            <Col sm={12} md={3}>
               <Form.Group as={Row} className="mb-3">
                 {disabledPercent ? (
                   <Form.Control
@@ -195,7 +198,7 @@ const FeeSection = (props) => {
                 </span>
               </Form.Group>
             </Col>
-            <Col sm={12} md={6}>
+            <Col sm={12} md={9}>
               {disabledPercent ? (
                 <Form.Check
                   type="checkbox"
@@ -225,7 +228,6 @@ const FeeSection = (props) => {
     </>
   )
 }
-
 const FeedbackMessage = (props) => {
   return (
     <FastField name="">
