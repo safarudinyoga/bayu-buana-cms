@@ -5,6 +5,8 @@ import rowStatus from "lib/row-status"
 import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
 import { ReactSVG } from "react-svg"
+import showIcon from "assets/icons/show.svg"
+
 // import Form from "./form/identity-rule"
 
 const TravelPolicyDocument = () => {
@@ -77,6 +79,10 @@ const TravelPolicyDocument = () => {
       <p>Travel Policy Guideline</p>
       <div>
         <ReactSVG src="/img/icons/corporate-travel-policy.svg" />
+        <ReactSVG src="/img/icons/bin.svg" />
+        <img src={{showIcon}} alt="" />
+
+        <span>Petro_XYZ-Global-Travel-Policy.PDF</span>
       </div>
       <span>Supported files: PDF or Microsoft World (.pdf, .doc, .docx)</span>
     </Card.Body>

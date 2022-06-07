@@ -7,7 +7,7 @@ import BBDataTable from "../../components/table/bb-data-table"
 import Form from "./form/identity-rule"
 import "./style.scss"
 
-const IdentityRule = (props) => {
+const DestinationRestriction = (props) => {
 
   let dispatch = useDispatch()
   useEffect(() => {
@@ -77,4 +77,4 @@ const IdentityRule = (props) => {
 
 }
 
-export default IdentityRule;
+export default DestinationRestriction;

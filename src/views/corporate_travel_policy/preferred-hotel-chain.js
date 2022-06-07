@@ -1,13 +1,16 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { Card } from "react-bootstrap"
 import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
-// import FormikControl from "../../components/formik/formikControl"
+import FormInputSelectMultiAjax from "components/form/input-select-multi-ajax"
 import { ReactSVG } from "react-svg"
 import "./style.scss"
 
 const PreferredHotelChain = (props) => {
 
+    const [form, setForm] = useState({
+        prefered_hotel_type: "",
+    })
     let dispatch = useDispatch()
     useEffect(() => {
         dispatch(
@@ -67,7 +70,11 @@ const PreferredHotelChain = (props) => {
             <h3 className="preferred-hotel-title">Preferred Hotel Chains</h3>
             <div className="preferred-hotel-body">
                 <ReactSVG src="/img/icons/corporate-preferred-hotel.svg" />
-                <h5>PREFERRED HOTEL CHAINS</h5></div>
+                <h5>PREFERRED HOTEL CHAINS</h5>
+                <FormInputSelectMultiAjax 
+                    label=""
+                />
+                </div>
         </Card.Body>
         </Card>
     )

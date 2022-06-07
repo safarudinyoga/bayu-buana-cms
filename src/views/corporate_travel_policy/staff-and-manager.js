@@ -1,7 +1,8 @@
 import React, { useEffect } from "react"
 import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
-// import BBDataTable from "components/table/bb-data-table"
+import BBDataTable from "components/table/bb-data-table"
+import { Card } from "react-bootstrap"
 // import Form from "./form/identity-rule"
 
 const StaffAndManager = (props) => {
@@ -60,10 +61,14 @@ const StaffAndManager = (props) => {
     }
 
     return (
-        <div>
-            Staff and Manager
-            {/* <BBDataTable {...params} modalContent={Form} /> */}
-        </div>
+        <Card>
+        <Card.Body>
+            <div>
+                Staff and Manager
+                {/* <BBDataTable {...params} /> */}
+            </div>
+        </Card.Body>
+        </Card>
     )
 }
 export default StaffAndManager

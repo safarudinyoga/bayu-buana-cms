@@ -70,7 +70,26 @@
   display: flex;
   h5 {
     font-size: 15px;
+    margin: auto 0;
   }
+  span {
+    margin: auto 0;
+  }
+  input {
+    max-width: 70px;
+    border-radius: 10px;
+    border: 1.5px solid #b4b4b4;
+    margin: 10px;
+    padding: 5px 0;
+  }
+  p {
+    margin: auto 0;
+  }
+}
+.misc-icon-info {
+  margin: auto 0;
+  transform: scale(1.2);
+  padding: 10px 4px;
 }
 
 // travel policy document section

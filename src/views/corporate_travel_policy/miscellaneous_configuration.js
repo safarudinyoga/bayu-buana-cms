@@ -2,7 +2,6 @@ import React, { useEffect } from "react"
 import { Card } from "react-bootstrap"
 import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
-import FormikControl from "../../components/formik/formikControl"
 import { ReactSVG } from "react-svg"
 import "./style.scss"
 
@@ -68,20 +67,14 @@ const MiscellaneousConfiguration = (props) => {
             <div className="misc-wrapper"><ReactSVG src="/img/icons/time.svg"/><h5>BOOKING LEAD TIME</h5><p>&ensp;-&ensp;require to book in advance</p></div>
             <div className="misc-body">
                 <div className="misc-text"><h5>FLIGHT</h5> <span>&ensp;-&ensp;Minimum Booking days before departure</span>
-                <FormikControl
-                    control="Input"
-                    required="label-required"
-                    label="Specified Airline"
-                    name="airline_id"
-                    placeholder="Please Choose"
-                    
-                />
-                <ReactSVG src="/img/icons/info.svg" />
+                <ReactSVG src="/img/icons/info.svg" className="misc-icon-info" />
+                <input type="number" maxLength="740" id="flight_days" name="flight_days" />
                 <p>days</p>
                 </div>
                 <div className="misc-text"><ReactSVG src="/img/icons/corporate-preferred-hotel.svg" />
                     <h5>HOTEL</h5> <span>&ensp;-&ensp;Minimum Booking days before check-in</span>
-                    <ReactSVG src="/img/icons/info.svg" />
+                    <ReactSVG src="/img/icons/info.svg" className="misc-icon-info"/>
+                    <input type="number" maxLength="740" id="hotel_days" name="hotel_days" />
                     <p>days</p>
                 </div>
             </div>
