@@ -4,18 +4,7 @@ import { withRouter } from 'react-router';
 import { ReactSVG } from "react-svg"
 import { Row, Col, Tab, Nav } from "react-bootstrap"
 import { setUIParams } from "redux/ui-store"
-import GeneralInformation from "./general-information"
 import DestinationRestriction from "./destination_restriction"
-import StandardService from "./standart_service/standard-service"
-import OverCreditApproverAssignment from "./over-credit-approver-assignment"
-import TravelConsultantAssignment from "./travel-consultant-assignment"
-import TeamAssignment from "./team-assignment"
-import RetailAncillaryFee from "./retail-ancillary-fee"
-import OtherAncillaryFee from "./other-ancillary-fee"
-import TaxFee from "./tax-fee"
-import BookingSettings from "./booking-settings"
-import InvoiceSettings from "./invoice-settings"
-import TravelAdvice from "./travel-advice"
 import TravelPolicyDocument from "./travel-policy-document"
 import DivisionCorporate from "./division_corporate"
 import MiscellaneousConfiguration from "./miscellaneous_configuration"
@@ -112,15 +101,6 @@ const TravelPolicy = (props) => {
             <Tab.Pane eventKey="vip">
               {tabKey === "vip" ? (
                 <Vip
-                  history={props.history}
-                  backUrl={backUrl}
-                  handleSelectTab={(v) => handleSelectTab(v)}
-                />
-              ) : null}
-            </Tab.Pane>
-            <Tab.Pane eventKey="general-information">
-              {tabKey === "general-information" ? (
-                <GeneralInformation
                   history={props.history}
                   backUrl={backUrl}
                   handleSelectTab={(v) => handleSelectTab(v)}
@@ -225,114 +205,6 @@ const TravelPolicy = (props) => {
                 ): null} 
             </Tab.Pane>
 
-            <Tab.Pane eventKey="general-information">
-              {tabKey === "general-information" ? (
-                <GeneralInformation
-                  history={props.history}
-                  backUrl={backUrl}
-                  handleSelectTab={(v) => handleSelectTab(v)}
-                />
-              ) : null}
-            </Tab.Pane>
-            <Tab.Pane eventKey="standard-service">
-              {tabKey === "standard-service" ? (
-                <StandardService
-                  history={props.history}
-                  backUrl={backUrl}
-                  handleSelectTab={(v) => handleSelectTab(v)}
-                />
-                ) : null}
-            </Tab.Pane>
-            <Tab.Pane eventKey="over-credit-approver-assignment">
-              {tabKey === "over-credit-approver-assignment" ? (
-                <OverCreditApproverAssignment
-                  history={props.history}
-                  backUrl={backUrl}
-                  handleSelectTab={(v) => handleSelectTab(v)}
-                />
-                ) : null}
-            </Tab.Pane>
-            <Tab.Pane eventKey="travel-consultant-assignment">
-              {tabKey === "travel-consultant-assignment" ? (
-                <TravelConsultantAssignment
-                  history={props.history}
-                  backUrl={backUrl}
-                  handleSelectTab={(v) => handleSelectTab(v)}
-                />
-                ) : null}
-            </Tab.Pane>
-            <Tab.Pane eventKey="team-assignment">
-              {tabKey === "team-assignment" ? (
-                <TeamAssignment
-                  history={props.history}
-                  backUrl={backUrl}
-                  handleSelectTab={(v) => handleSelectTab(v)}
-                />
-                ) : null}
-            </Tab.Pane>
-            <Tab.Pane eventKey="retail-ancillary-fee">
-              {tabKey === "retail-ancillary-fee" ? (
-                <RetailAncillaryFee
-                  history={props.history}
-                  backUrl={backUrl}
-                  handleSelectTab={(v) => handleSelectTab(v)}
-                />
-                ) : null}
-            </Tab.Pane>
-            <Tab.Pane eventKey="other-ancillary-fee">
-              {tabKey === "other-ancillary-fee" ? (
-                <OtherAncillaryFee
-                  history={props.history}
-                  backUrl={backUrl}
-                  handleSelectTab={(v) => handleSelectTab(v)}
-                />
-                ) : null}
-            </Tab.Pane>
-            <Tab.Pane eventKey="tax-fee">
-              {tabKey === "tax-fee" ? (
-                <TaxFee
-                  history={props.history}
-                  backUrl={backUrl}
-                  handleSelectTab={(v) => handleSelectTab(v)}
-                />
-                ) : null}
-            </Tab.Pane>
-            <Tab.Pane eventKey="booking-settings">
-              {tabKey === "booking-settings" ? (
-                <BookingSettings
-                  history={props.history}
-                  backUrl={backUrl}
-                  handleSelectTab={(v) => handleSelectTab(v)}
-                />
-                ) : null}
-            </Tab.Pane>
-            <Tab.Pane eventKey="invoice-settings">
-              {tabKey === "invoice-settings" ? (
-                <InvoiceSettings
-                  history={props.history}
-                  backUrl={backUrl}
-                  handleSelectTab={(v) => handleSelectTab(v)}
-                />
-                ) : null}
-            </Tab.Pane>
-            <Tab.Pane eventKey="travel-advice">
-              {tabKey === "travel-advice" ? (
-                <TravelAdvice
-                  history={props.history}
-                  backUrl={backUrl}
-                  handleSelectTab={(v) => handleSelectTab(v)}
-                />
-              ) : null}
-            </Tab.Pane>
-            <Tab.Pane eventKey="travel-advice">
-              {tabKey === "travel-advice" ? (
-                <TravelAdvice
-                  history={props.history}
-                  backUrl={backUrl}
-                  handleSelectTab={(v) => handleSelectTab(v)}
-                />
-              ) : null}
-            </Tab.Pane>
             <Tab.Pane eventKey="email">
               {tabKey === "email" ? (
                 <DivisionCorporate
