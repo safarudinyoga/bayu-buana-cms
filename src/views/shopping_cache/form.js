@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { withRouter } from "react-router"
-import { setModalTitle } from "redux/ui-store"
+import { setModalTitle, setCreateModal } from "redux/ui-store"
 import { Tab, Tabs, Button } from 'react-bootstrap'
 import Routes from 'views/extranet/components/micro-components/routes'
 import TripDateRoundtrip from './components/trip_date_roundtrip'
@@ -13,16 +13,18 @@ import TripDateOneway from './components/trip_date_oneway'
 import Api from "config/api"
 import TripRoundtrip from './components/trip_roundtrip'
 import TripOneway from './components/trip_oneway'
+import CancelButton from 'components/button/cancel'
 
 function ShoppingCacheCreate(props) {
   const dispatch = useDispatch()
-  const [flightType, setFlightType] = useState("roundtrip")
+  const [flightType, setFlightType] = useState("3234761b-3fd2-4fd0-ba48-3742ffd3e7cb")
   const [airports, setAirports] = useState([])
   const [cacheData, setCacheData] = useState({
     cache_air_origin_destination_criteria: [],
     cache_air_travel_preference_criteria: {},
     cache_air_traveler_criteria: {},
   })
+  const [tripTypes, setTripTypes] = useState([])
 
 
   let api = new Api()
@@ -146,6 +148,16 @@ function ShoppingCacheCreate(props) {
     }
   }
 
+  useEffect(async () => {
+    try {
+      let res = await api.get(`/master/trip-types?filters=["is_default","=","true"]&sort=sort`)
+      console.log("trip types",res.data)
+      setTripTypes(res.data.items)
+    } catch (error) {
+      
+    }
+  }, [])
+
   return (
     <>
       <Tabs 
@@ -158,9 +170,24 @@ function ShoppingCacheCreate(props) {
         mountOnEnter={true}
         unmountOnExit={true}
       >
+        {/* {
+          tripTypes ? (
+            tripTypes.map((item) => (
+              <Tab
+                eventKey={item.id}
+                title={item.trip_type_name}
+              >
+                <div className="d-flex flex-wrap">
+                  <TripComponents tripType={item} />
+                </div>
+              </Tab>
+            ))
+          ) : ""
+        } */}
         <Tab
-          eventKey="roundtrip"
+          eventKey="3234761b-3fd2-4fd0-ba48-3742ffd3e7cb"
           title="Roundtrip"
+
         >
           <div className='d-flex flex-wrap'>
             <TripRoundtrip airports={airports} handleCacheData={handleCacheData} />
@@ -171,7 +198,7 @@ function ShoppingCacheCreate(props) {
           
         </Tab>
         <Tab
-          eventKey="oneway"
+          eventKey="dd3254b3-719b-43f4-b45c-11a99727cf06"
           title="One Way"
         >
           <div className='d-flex flex-wrap'>
@@ -182,7 +209,7 @@ function ShoppingCacheCreate(props) {
           </div>
         </Tab>
         <Tab
-          eventKey="multi city"
+          eventKey="d521b5fe-29bf-48c6-ac6e-7ef9b42c9fa9"
           title="Multi City"
         >
           <TripMultitrip airports={airports} />
@@ -199,12 +226,7 @@ function ShoppingCacheCreate(props) {
         >
           SAVE
         </Button>
-        <Button
-          variant="secondary"
-          onClick={() => props.history.goBack()}
-        >
-          CANCEL
-        </Button>
+        <CancelButton onClick={() => dispatch(setCreateModal({show: false, id: null, disabled_form: false}))}/>
       </div>
     </>
   )
