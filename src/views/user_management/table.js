@@ -3,12 +3,9 @@ import BBDataTable from "components/table/bb-data-table"
 import rowStatus from "lib/row-status"
 import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
-import { renderColumn } from "lib/translation"
-import moment from "moment"
 import { useWindowSize } from "rooks"
 
 import FormInputSelectAjax from "components/form/input-select-ajax"
-import { findLastIndex } from "lodash"
 
 export default function EmployeeTable() {
   let dispatch = useDispatch()
@@ -34,7 +31,7 @@ export default function EmployeeTable() {
   let [selectedDivisionIds, setSelectedDivisionIds] = useState([])
   let [selectedOffice, setSelectedOffice] = useState([])
   let [selectedOfficeIds, setSelectedOfficeIds] = useState([])
-  const { innerWidth, innerHeight, outerHeight, outerWidth } = useWindowSize()
+  const { innerWidth } = useWindowSize()
 
   const onFilterChangeJobTitle = (e, values) => {
     let ids = []
@@ -56,28 +53,6 @@ export default function EmployeeTable() {
     }
     setSelectedJobTitle(values)
     setSelectedJobTitleIds(ids)
-  }
-
-  const onFilterChangeDivision = (e, values) => {
-    let ids = []
-    if (values && values.length > 0) {
-      for (let i in values) {
-        ids.push(values[i].id)
-      }
-    }
-    let findFilter = params.filters
-      ? params.filters.filter((v) => v[0] !== "division.id")
-      : []
-    if (ids.length > 0) {
-      setParams({
-        ...params,
-        filters: [...findFilter, ["division.id", "in", ids]],
-      })
-    } else {
-      setParams({ ...params, filters: [...findFilter] })
-    }
-    setSelectedDivision(values)
-    setSelectedDivisionIds(ids)
   }
 
   const onFilterChangeOffice = (e, values) => {
@@ -108,14 +83,14 @@ export default function EmployeeTable() {
         <FormInputSelectAjax
           label="Job Title"
           onChange={onFilterChangeJobTitle}
-          endpoint="/master/employees"
-          column="job_title.job_title_name"
-          sort="job_title.job_title_name"
+          endpoint="/user/user-type-users"
+          column="job_title_name"
+          sort="job_title_name"
           isGrouping={true}
-          fieldGroup="job_title.id"
+          fieldGroup="id"
           value={selectedJobTitleIds}
           data={selectedJobTitle}
-          filter={`["job_title.id", "is not", null]`}
+          filter={`["user_account_id", "is not", null]`}
           type="selectmultiple"
           isFilter={true}
           allowClear={false}
@@ -129,14 +104,14 @@ export default function EmployeeTable() {
               <FormInputSelectAjax
                 label="User Type"
                 onChange={onFilterChangeOffice}
-                endpoint="/master/employees"
-                column="office.office_name"
-                sort="office.office_name"
+                endpoint="/user/user-type-users"
+                column="user_type_name"
+                sort="user_type_name"
                 isGrouping={true}
-                fieldGroup="office.id"
+                fieldGroup="id"
                 value={selectedOfficeIds}
                 data={selectedOffice}
-                filter={`["office.id", "is not", null]`}
+                filter={`["user_account_id", "is not", null]`}
                 type="selectmultiple"
                 isFilter={true}
                 allowClear={false}
@@ -163,15 +138,15 @@ export default function EmployeeTable() {
             <>
               <FormInputSelectAjax
                 label="User Type"
-                onChange={onFilterChangeDivision}
-                endpoint="/master/employees"
-                column="division.division_name"
-                sort="division.division_name"
+                onChange={onFilterChangeOffice}
+                endpoint="/user/user-type-users"
+                column="user_type_name"
+                sort="user_type_name"
                 isGrouping={true}
-                fieldGroup="division.id"
-                value={selectedDivisionIds}
-                data={selectedDivision}
-                filter={`["division.id", "is not", null]`}
+                fieldGroup="id"
+                value={selectedOfficeIds}
+                data={selectedOffice}
+                filter={`["user_account_id", "is not", null]`}
                 type="selectmultiple"
                 isFilter={true}
                 allowClear={false}
@@ -211,21 +186,19 @@ export default function EmployeeTable() {
   }
   let [params, setParams] = useState({
     isCheckbox: false,
-    title: "Employee",
-    titleModal: "Employee",
+    title: "User Management",
+    titleModal: "User Management",
     baseRoute: "/master/user-management/form",
-    endpoint: "/user/user-accounts",
-    deleteEndpoint: "/master/batch-actions/delete/employees",
-    activationEndpoint: "/master/batch-actions/activate/employee",
-    deactivationEndpoint: "/master/batch-actions/deactivate/employee",
+    endpoint: "/user/user-type-users",
+    customSort: ["given_name"],
+    deleteEndpoint: "/master/batch-actions/delete/user-type-users",
+    activationEndpoint: "/master/batch-actions/activate/user-type-users",
+    deactivationEndpoint: "/master/batch-actions/deactivate/user-type-users",
     columns: [
       {
         title: "",
-        data: "employee_asset.multimedia_description.url",
-        render: (data, type) => {
-          if (type === "myExport") {
-            return data || ""
-          }
+        data: "photo_url",
+        render: (data) => {
           if (data === undefined) {
             return (
               `<img class="image-profile-tabel mr-2" src="https://bbdev.monstercode.net/files/b3986414-5c5f-45a3-be6f-4fedcce2d022.png"/>` +
@@ -240,12 +213,22 @@ export default function EmployeeTable() {
       },
       {
         title: "Name",
-        data: "person.middle_name",
+        data: "given_name",
+      },
+      {
+        title: "",
+        data: "middle_name",
+        visible: false,
+      },
+      {
+        title: "",
+        data: "surname",
+        visible: false,
       },
 
       {
         title: "Job title",
-        data: "person.given_name",
+        data: "job_title_name",
         render: (data) => {
           if (data === undefined) {
             return ""
@@ -254,42 +237,18 @@ export default function EmployeeTable() {
           }
         },
       },
-      {
-        title: "tes",
-        data: "person.middle_name",
-      },
-      {
-        title: "",
-        data: "person.surname",
-      },
-
       {
         title: "User Access Type",
-        data: "job_title.job_title_name",
-      },
-
-      {
-        title: "Branch Office",
-        data: "office.office_name",
-        render: (data) => {
-          if (data === undefined) {
-            return ""
-          } else {
-            return data
-          }
-        },
+        data: "user_type_name",
       },
       {
         title: "Last Login",
-        data: "hire_date",
-        render: function (data, type, row) {
-          if (data === undefined) {
+        data: "last_login",
+        render: (data) => {
+          if (data === null) {
             return ""
           } else {
-            if (type === "sort" || type === "type") {
-              return data
-            }
-            return moment(data).format("D MMM YYYY")
+            return data
           }
         },
       },
@@ -300,16 +259,14 @@ export default function EmployeeTable() {
         render: rowStatus,
       },
     ],
-    emptyTable: "No employees found",
-    recordName: ["employee_number", "person.given_name", "middle_name"],
+    emptyTable: "No user management found",
     btnDownload: ".buttons-csv",
-    module: "employee",
+    module: "user-management",
     showInfoDelete: true,
     switchStatus: true,
     infoDelete: [
-      { title: "Employee Number", recordName: "employee_number" },
       {
-        title: "Employee Name",
+        title: "Name",
         recordName: ["given_name", "middle_name", "surname"],
       },
     ],

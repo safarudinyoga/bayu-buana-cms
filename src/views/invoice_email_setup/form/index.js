@@ -112,23 +112,26 @@ const InvoiceEmailSetupForm = (props) => {
     let api = new Api()
     let formId = props.match.params.id
 
-    let docTitle = "Email Template 1 - Edit Invoice Per Transaction Email"
+    let docTitle = `${'Email Category Name'} - Edit ${'Email Template Name'}`
+    let docHeading = docTitle
     if (!formId) {
-      docTitle = "Edit Invoice Per Transaction Email"
+      docTitle = `Edit ${'Email Template Name'}`
+      docHeading = `${'Email Category Name'} - Edit ${'Email Template Name'}`
     } else if (isView) {
-      docTitle = "Invoice Email Setup Details"
+      docTitle = `$'{Email Template Name'} Detail`
+      docHeading = docTitle
     }
 
     dispatch(
       setUIParams({
-        title: docTitle,
+        title: docHeading,
         breadcrumbs: [
           {
-            text: "Setup and Configuration",
+            text: "Setup and Configurations",
           },
           {
             link: backToEmailSetup,
-            text: "Invoice Email Setup",
+            text: `${'Email Category Name'}`,
           },
           {
             link: backToEmailTemplate,
@@ -173,20 +176,18 @@ const InvoiceEmailSetupForm = (props) => {
   }, [])
 
   const initialValues = {
-    payment_gateway_code: "",
-    payment_gateway_name: "",
-    merchant_id: "",
-    terminal_id: "",
-    channel_code: "",
-    currency_id: "a",
-    transaction_url: "",
-    notification_url: "",
-    client_key: "",
-    server_key: "",
-    bank_id: "a",
-    virtual_account_number: "",
-    onvenience_store_code: "",
+    invoice_email_name: '',
+    invoice_email_type: '',
+    invoice_email_subject: ''
   }
+
+  const validationSchema = Yup.object().shape({
+    invoice_email_name: Yup.string().required(
+      "Invoice Email Name is required.",
+    ),
+    invoice_email_type: Yup.string().required("Email Type is required."),
+    invoice_email_subject: Yup.string().required("Email Subject is required."),
+  })
 
   const borderStyle = {
     border: "1px solid #ddd",
@@ -234,16 +235,8 @@ const InvoiceEmailSetupForm = (props) => {
     </Modal>
   )
 
-  const validationSchema = Yup.object().shape({
-    invoice_email_name: Yup.string().required(
-      "Invoice Email Name is required.",
-    ),
-    invoice_email_type: Yup.string().required("Email Type is required."),
-    invoice_email_subject: Yup.string().required("Email Subject is required."),
-  })
-
   const onSubmit = async (values, a) => {
-    console.log(values)
+    console.log(values, "<<<<<")
   }
 
   const SentModal = () => {
@@ -303,8 +296,9 @@ const InvoiceEmailSetupForm = (props) => {
     <Formik
       initialValues={formValues || initialValues}
       validationSchema={validationSchema}
-      onSubmit={onSubmit}
-      validateOnMount
+      onSubmit={() => {
+      console.log("jaaaaoooo")
+      }}
       enableReinitialize
     >
       {({ handleSubmit, isSubmitting, setFieldValue, values }) => (
@@ -410,7 +404,7 @@ const InvoiceEmailSetupForm = (props) => {
                               style={{ maxWidth: 399.79 }}
                               size={formSize}
                               disabled={isView || loading}
-                              maxLength={36}
+                              maxLength={256}
                             />
                             <FormikControl
                               control="input"
@@ -421,7 +415,7 @@ const InvoiceEmailSetupForm = (props) => {
                               style={{ maxWidth: 399.79 / 2 }}
                               size={formSize}
                               disabled={isView || loading}
-                              maxLength={36}
+                              maxLength={256}
                             />
                             <FormikControl
                               control="input"
@@ -432,7 +426,7 @@ const InvoiceEmailSetupForm = (props) => {
                               style={{ maxWidth: 399.79 }}
                               size={formSize}
                               disabled={isView || loading}
-                              maxLength={36}
+                              maxLength={256}
                             />
                           </Col>
                         </Row>
@@ -527,7 +521,7 @@ const InvoiceEmailSetupForm = (props) => {
                     SAVE
                   </Button>
                 )}
-                <CancelButton />
+                <CancelButton onClick={() => props.history.goBack() }/>
               </div>
             </Col>
             <PreviewModal bodyEmail={bodyEmail} />

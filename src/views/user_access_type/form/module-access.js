@@ -1,19 +1,20 @@
 import { withRouter, useHistory } from "react-router"
 import React, { useEffect, useRef, useState } from "react"
-import FormHorizontal from "components/form/horizontal"
-import FormBuilder from "components/form/builder"
 import useQuery from "lib/query"
 import BBDataTable from "components/table/bb-data-table"
 import { Table, Form, Card, Button } from "react-bootstrap"
-import rowStatus from "lib/row-status"
 import AccessManagerRow from "components/table/access-manager-row"
 import Api from "config/api"
 import { Formik } from "formik"
 import * as Yup from "yup"
 import "../user-access-type.css"
-import { useStateWithCallbackLazy, useStateWithCallback } from "use-state-with-callback"
+import DataTable from "react-data-table-component"
+import { useSnackbar } from "react-simple-snackbar"
 
 const backUrl = "/master/user-access-type"
+const options = {
+  position: "bottom-right",
+}
 
 function ModuleAccess(props) {
   const isView = useQuery().get("action") === "view"
@@ -24,7 +25,9 @@ function ModuleAccess(props) {
   const [modules, setModules] = useState([])
   const [capabilitiesHeader, setCapabilitiesHeader] = useState([])
   const [capabilities, setCapabilities] = useState([])
+  const [userTypeName, setUserTypeName] = useState(null)
   const allowedModule = useRef([])
+  const [openSnackbar] = useSnackbar(options)
 
   const api = new Api()
   useEffect(() => {
@@ -76,6 +79,30 @@ function ModuleAccess(props) {
     }
   }, [])
 
+  // useEffect(async () => {
+  //   try {
+  //     let resCap = await api.get('/master/capabilities')
+  //     const cap = []
+
+  //     cap.push(
+  //       { name: "Module Name", selector: row => row.module_name }, 
+  //       { name: "Category", selector: row => row.module_package_name }
+  //     )
+
+  //     resCap.data.items.forEach((data) => {
+  //       cap.push(
+  //         { name: data.capability_name }
+  //         // <th>{data.capability_name}</th>
+  //       )
+  //     })
+  //     setCapabilitiesHeader(cap)
+      
+  //   } catch (e) {
+  //     console.log(e)
+  //     throw e
+  //   }
+  // }, [])
+
   const sendAllowedModuleData = (index) => {
     if(Object.keys(index).length > 0) {
       if(allowedModule.current.some(e => e.id === index.id)){
@@ -87,12 +114,33 @@ function ModuleAccess(props) {
     }
   }
   
+  // useEffect(async () => {
+  //   try {
+  //     if(id){
+  //       let resModule = await api.get(`/user/user-types/${id}/modules`)
+  //       let dataModule = []
+
+  //       resModule.data.items.forEach((data) => {
+  //         dataModule.push({
+  //           id: data.id,
+  //           module_name: data.module_name
+  //         })
+  //       })
+  //     }
+  //   } catch (error) {
+      
+  //   }
+  // }, [id])
+  
 
   useEffect(async () => {
     let userTypeId = props.match.params.id
 
     try {
       if(id){
+        let res = await api.get(`/user/user-types/${id}`)
+        setUserTypeName(res.data.user_type_name)
+
         let resModule = await api.get(`/user/user-types/${id}/modules`)
 
         const modules = []
@@ -136,6 +184,7 @@ function ModuleAccess(props) {
         onSubmit={async (values, { setSubmitting, resetForm }) => {
           try {
             let res = await api.post(`user/user-types/${id}/modules`, allowedModule.current)
+            openSnackbar(`Record '${userTypeName}' has been successfully saved.`)
             history.goBack()
           } catch(e) {}
         }}
@@ -154,56 +203,64 @@ function ModuleAccess(props) {
             setFieldValue,
             setFieldTouched,
           }) => (
-            <Form onSubmit={handleSubmit}>
-              <Card>
-                <Card.Body>
-                  <div style={{ padding: "0 2px 2px", borderRadius: 8 }} className="table-responsive">
-                    <Table striped className="table-module">
-                      <thead>
-                        <tr>
-                          <th>Module Name</th>
-                          <th>Category</th>
-                          {capabilitiesHeader}
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {modules}
-                      </tbody>
-                    </Table>
-                  </div>
-                </Card.Body>
-              </Card>
-              {
-                isView ? (
-                  <div className="mb-2 mt-1 row justify-content-md-start justify-content-center">
-                    <Button
-                      variant="secondary"
-                      onClick={() => props.history.goBack()}                        
-                    >
-                      BACK
-                    </Button>
-                  </div>
-                ) : (
-                  <div className="ml-1 mt-3 row justify-content-md-start justify-content-center">
-                    <Button
-                      variant="primary"
-                      type="submit"
-                      style={{ marginRight: 15, marginBottom: 135 }}
-                    >
-                      {/* {props.employeeData?.id ? "SAVE" : "SAVE & NEXT"} */}
-                      SAVE
-                    </Button>
-                    <Button
-                      variant="secondary"
-                      onClick={() => props.history.goBack()}
-                    >
-                      CANCEL
-                    </Button>
-                  </div>
-                )
-              }
-              
-            </Form>
+            <>
+              <Form onSubmit={handleSubmit}>
+                <Card>
+                  <Card.Body>
+                    <h3 className="card-heading">Module Access {userTypeName ? `- ${userTypeName}` : ""}</h3>
+                    <div style={{ padding: "0 2px 2px", borderRadius: 8 }} className="table-responsive">
+                      {/* <DataTable
+                        columns={capabilitiesHeader}
+                        data={modules}
+                      /> */}
+                      <Table striped className="table-module">
+                        <thead>
+                          <tr>
+                            <th>Module Name</th>
+                            <th>Category</th>
+                            {capabilitiesHeader}
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {modules}
+                        </tbody>
+                      </Table>
+                    </div>
+                  </Card.Body>
+                </Card>
+                {
+                  isView ? (
+                    <div className="mb-2 mt-1 row justify-content-md-start justify-content-center">
+                      <Button
+                        variant="secondary"
+                        onClick={() => props.history.goBack()}                        
+                      >
+                        BACK
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="ml-1 mt-3 row justify-content-md-start justify-content-center">
+                      <Button
+                        variant="primary"
+                        type="submit"
+                        style={{ marginRight: 15, marginBottom: 135 }}
+                      >
+                        {/* {props.employeeData?.id ? "SAVE" : "SAVE & NEXT"} */}
+                        SAVE
+                      </Button>
+                      <Button
+                        variant="secondary"
+                        onClick={() => props.history.goBack()}
+                      >
+                        CANCEL
+                      </Button>
+                    </div>
+                  )
+                }
+                
+              </Form>
+            </>
+            
           )
         
         }

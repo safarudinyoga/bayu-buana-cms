@@ -3,33 +3,44 @@ import { SelectFetch } from "react-select-fetch"
 import axios from "axios"
 import env from "config/environment"
 
+// const customStyles = {
+//   option: (provided, state) => ({
+//     ...provided,
+//     color: "black",
+//     backgroundColor: state.isSelected ? "white" : "white",
+//     fontFamily: "Segoe UI, Tahoma, Geneva, Verdana, sans-serif",
+//     fontSize: 13,
+//     "&:hover": {
+//       backgroundColor: state.isFocused ? "#027F71" : "",
+//       color: state.isFocused ? "white" : "black",
+//     },
+//   }),
+//   control: (base, state) => ({
+//     ...base,
+//     border: "1px solid #DADEDF",
+//     fontSize: 13,
+//     backgroundColor: "white",
+//     boxShadow: state.isFocused ? 0 : 0,
+//     "&:hover": {
+//       border: "1px solid #DADEDF",
+//     },
+//   }),
+//   singleValue: (provided, state) => {
+//     const opacity = state.isDisabled ? 0.5 : 1
+//     const transition = "opacity 300ms"
+//     return { ...provided, opacity, transition }
+//   },
+// }
+
 const customStyles = {
-  option: (provided, state) => ({
+  control: () => ({
+    height: 60,
+    border: "1px solid #ced4da"
+  }),
+  valueContainer: (provided, state) => ({
     ...provided,
-    color: "black",
-    backgroundColor: state.isSelected ? "white" : "white",
-    fontFamily: "Segoe UI, Tahoma, Geneva, Verdana, sans-serif",
-    fontSize: 13,
-    "&:hover": {
-      backgroundColor: state.isFocused ? "#027F71" : "",
-      color: state.isFocused ? "white" : "black",
-    },
-  }),
-  control: (base, state) => ({
-    ...base,
-    border: "1px solid #DADEDF",
-    fontSize: 13,
-    backgroundColor: "white",
-    boxShadow: state.isFocused ? 0 : 0,
-    "&:hover": {
-      border: "1px solid #DADEDF",
-    },
-  }),
-  singleValue: (provided, state) => {
-    const opacity = state.isDisabled ? 0.5 : 1
-    const transition = "opacity 300ms"
-    return { ...provided, opacity, transition }
-  },
+    padding: '27px 8px'
+  })
 }
 
 const Select = (props) => {
@@ -66,7 +77,7 @@ const Select = (props) => {
           env.API_URL
         }/${url}?sort=${sort? sort :fieldName}&filters=${encodeURIComponent(`[["status",${status}],["AND"],["${fieldName}","like","${search}"]${
           urlFilter !== undefined ? `,["AND"],${urlFilter}` : ""
-        }]`)}&size=10&page=${page - 1}`,{ headers: { Authorization: `Bearer ${localStorage.getItem("ut")}` } },
+        }]`)}&size=10&page=${page - 1}`,
       )
       .then(function (response) {
         return response.data

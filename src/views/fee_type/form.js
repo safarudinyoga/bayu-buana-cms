@@ -22,22 +22,18 @@ function FeeTypeForm(props) {
   const [formBuilder, setFormBuilder] = useState(null)
   const [loading, setLoading] = useState(true)
   const [translations, setTranslations] = useState([])
-  const [subdivisionData, setSubdivisionData] = useState([])
-  const [countryData, setCountryData] = useState([])
   const [validCode, SetValidCode] = useState(formId)
   const [validName, SetValidName] = useState(formId)
   const [disabledSave, setDisabledSave] = useState(true)
   const [id, setId] = useState(null)
   const [form, setForm] = useState({
-    country_id: "",
-    state_province_category_id: "",
-    fee_type_code: "",
-    fee_type_name: "",
+    fee_tax_type_code: "",
+    fee_tax_type_name: "",
   })
   const translationFields = [
     {
       label: "Fee Type Name",
-      name: "fee-type-name",
+      name: "fee_tax_type_name",
       type: "text",
     },
     {
@@ -49,13 +45,13 @@ function FeeTypeForm(props) {
   ]
 
   const validationRules = {
-    fee_type_code: {
+    fee_tax_type_code: {
       required: true,
       minlength: 1,
       maxlength: 256,
       checkCode: true,
     },
-    fee_type_name: {
+    fee_tax_type_name: {
       required: true,
       minlength: 1,
       maxlength: 256,
@@ -64,10 +60,10 @@ function FeeTypeForm(props) {
   }
 
   const validationMessages = {
-    fee_type_name: {
+    fee_tax_type_name: {
       required: "Fee Type Name is required",
     },
-    fee_type_code: {
+    fee_tax_type_code: {
       required: "Fee Type Code is required",
     },
   }
@@ -105,20 +101,6 @@ function FeeTypeForm(props) {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
         console.log(res.data)
-        if (res.data.state_province_category) {
-          setSubdivisionData([
-            {
-              ...res.data.state_province_category,
-              text: res.data.state_province_category
-                .state_province_category_name,
-            },
-          ])
-        }
-        if (res.data.country) {
-          setCountryData([
-            { ...res.data.country, text: res.data.country.country_name },
-          ])
-        }
 
         if (res.data) {
           let currentCode = res.data.fee_tax_type_code
@@ -252,13 +234,7 @@ function FeeTypeForm(props) {
     setLoading(true)
     let api = new Api()
     try {
-      if (!form.country_id) {
-        form.country_id = null
-      }
 
-      if (!form.state_province_category_id) {
-        form.state_province_category_id = null
-      }
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
       for (let i in translated) {
@@ -306,7 +282,7 @@ function FeeTypeForm(props) {
           label="Fee Type Name"
           required={true}
           value={form.fee_tax_type_name}
-          name="fee_type_name"
+          name="fee_tax_type_name"
           cl="4"
           onChange={(e) =>
             setForm({ ...form, fee_tax_type_name: e.target.value })
@@ -334,7 +310,7 @@ function FeeTypeForm(props) {
           label="Fee Type Code"
           required={true}
           value={form.fee_tax_type_code}
-          name="fee_type_code"
+          name="fee_tax_type_code"
           cl={{ md: "12" }}
           cr="12"
           onChange={(e) =>
