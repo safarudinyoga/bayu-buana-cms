@@ -18,7 +18,7 @@ export default function SetupFlightCommisionTable() {
             text: "Master Data Management",
           },
           {
-            text: "Setup Flight Commissions",
+            text: "Setup Flight Commission",
           },
         ]
       })
