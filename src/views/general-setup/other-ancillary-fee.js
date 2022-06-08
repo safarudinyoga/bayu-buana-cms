@@ -5,8 +5,8 @@ import { Card, Form, Row, Col, Button } from "react-bootstrap"
 import Api from "config/api"
 import { useSnackbar } from "react-simple-snackbar"
 import { withRouter } from "react-router"
-import useQuery from "lib/query"
 import NumberFormat from "react-number-format"
+import CancelButton from "components/button/cancel"
 
 const endpointFee = "/master/agent-processing-fee-categories"
 const endpoint = "/master/agent-processing-fee-categories/3"
@@ -306,7 +306,7 @@ const Menu = (props) => {
 
 const OtherAncillaryFee = (props) => {
   let api = new Api()
-  const isView = useQuery().get("action") === "view"
+  // const isView = useQuery().get("action") === "view"
   const [openSnackbar] = useSnackbar(options)
   const [taxTypeMDRFee, setTaxTypeMDRFee] = useState([])
   const [taxTypeLatePayment, setTaxTypeLatePayment] = useState([])
@@ -398,10 +398,11 @@ const OtherAncillaryFee = (props) => {
   useEffect(async () => {
     try {
       if (formId) {
-        let { data } = await api.get(endpointFee + "/3/" + formId)
+        let res = await api.get(endpointFee + "/" + formId)
+        let data = res.data
         setInitialForm({
           ...initialForm,
-          ...data,
+
           domestic_reissue: checkprocessingType(
             data.domestic_reissue.charge_type_id,
           ),
@@ -490,8 +491,9 @@ const OtherAncillaryFee = (props) => {
       openSnackbar(
         `Ancillary Fee has been successfully ${formId ? "updated" : "saved"}.`,
       )
+      props.handleSelectTab("tax-fee")
     } catch (e) {
-      console.log(e)
+      openSnackbar(`Failed to save this record.`)
     }
   }
 
@@ -554,7 +556,7 @@ const OtherAncillaryFee = (props) => {
                   fHandleChange={handleChange}
                   fHandleBlur={handleBlur}
                   setFieldValue={setFieldValue}
-                  isView={isView}
+                  // isView={isView}
                   amountSuffixSelections={[
                     {
                       label: "/Transaction",
@@ -573,12 +575,11 @@ const OtherAncillaryFee = (props) => {
               >
                 SAVE & NEXT
               </Button>
-              <Button
-                variant="secondary"
-                onClick={() => props.history.push(props.backUrl)}
-              >
-                CANCEL
-              </Button>
+              <CancelButton
+                onClick={() => {
+                  props.handleSelectTab("retail-ancillary-fee")
+                }}
+              />
             </div>
           </Form>
         )}
