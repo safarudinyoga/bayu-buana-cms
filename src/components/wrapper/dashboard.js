@@ -1,4 +1,4 @@
-import Sidebar from "components/navigation/sidebar.js"
+import Sidebar from "components/navigation/sidebar"
 import Navbar from "components/navigation/navbar"
 import React, { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
