@@ -10,6 +10,11 @@ function Travellers(props) {
 
   const [travelerValue, setTravelerValue] = useState("")
   const [travelerCheckbox, setTravelerCheckbox] = useState(false)
+  const [travelerCacheData, setTravelerCacheData] = useState({
+    number_of_adults: 1,
+    number_of_children: 0,
+    number_of_infants: 0
+  })
 
 
   const regex = /^[0-9\b]+$/;
@@ -36,7 +41,12 @@ function Travellers(props) {
     let count = adultCount+childrenCount+infantCount
     if(props.onConfirm){
       props.onConfirm(travelerCheckbox, count)
-    }  
+    }
+
+    if(props.handleCacheData){
+      props.handleCacheData("cache_air_travel_preference_criteria", travelerCacheData, "cache_air_traveler_criteria", travelerCacheData)
+    }
+    
     document.body.click()
   }
 
@@ -238,6 +248,12 @@ function Travellers(props) {
     if(props.handleTrip){
       props.handleTrip("adult_count", adultCount)
     }
+
+    if(props.handleCacheData){
+      let travelerCache = {...travelerCacheData}
+      travelerCache.number_of_adults = adultCount
+      setTravelerCacheData(travelerCache)
+    }
     
   }, [adultCount])
 
@@ -245,12 +261,24 @@ function Travellers(props) {
     if(props.handleTrip){
       props.handleTrip("children_count", childrenCount)
     }
+
+    if(props.handleCacheData){
+      let travelerCache = {...travelerCacheData}
+      travelerCache.number_of_children = childrenCount
+      setTravelerCacheData(travelerCache)
+    }
     
   }, [childrenCount])
 
   useEffect(() => {
     if(props.handleTrip){
       props.handleTrip("infant_count", infantCount)
+    }
+
+    if(props.handleCacheData){
+      let travelerCache = {...travelerCacheData}
+      travelerCache.number_of_infants = infantCount
+      setTravelerCacheData(travelerCache)
     }
     
   }, [infantCount])
