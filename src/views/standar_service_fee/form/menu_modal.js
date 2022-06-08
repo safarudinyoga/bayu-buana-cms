@@ -42,197 +42,170 @@ const FeeSection = (props) => {
     : props.values[props.fieldRadio] !== "percent"
   return (
     <>
-      <Form.Group>
-        <Row>
-          <Col md={5} className="ml-2">
-            <Row>
-              <Form.Label>
-                {title}
-                <span className="form-label-required">*</span>
+      <Form.Group as={Row} className="mb-3">
+        <Col md={4}>
+          <Form.Label>
+            {title}
+            <span className="form-label-required">*</span>
+          </Form.Label>
+        </Col>
+
+        <Col>
+          <FastField name={props.fieldRadio}>
+            {({ field, form }) => (
+              <Form.Check
+                {...field}
+                value="amount"
+                type="radio"
+                label="Fixed Amount"
+                disabled={props.isView}
+                checked={props.values[props.fieldRadio] === "amount"}
+                onClick={() => {
+                  props.setFieldValue(props.fieldRadio + "_percent", "")
+                  props.setFieldValue(props.fieldRadio + "_tax_include", false)
+                }}
+              />
+            )}
+          </FastField>
+          <Form.Group as={Row} className="ml-4 mt-2">
+            <Col md="auto">
+              <Form.Label className={` ${disabledAmount ? "grey-text" : ""} `}>
+                IDR
               </Form.Label>
-            </Row>
-          </Col>
-          <Col>
-            <Form.Group>
-              <FastField name={props.fieldRadio}>
-                {({ field, form }) => (
-                  <Form.Check
-                    {...field}
-                    value="amount"
-                    type="radio"
-                    label="Fixed Amount"
-                    disabled={props.isView}
-                    checked={props.values[props.fieldRadio] === "amount"}
-                    onClick={() => {
-                      props.setFieldValue(props.fieldRadio + "_percent", "")
-                      props.setFieldValue(
-                        props.fieldRadio + "_tax_include",
-                        false,
-                      )
-                    }}
-                  />
-                )}
-              </FastField>
-            </Form.Group>
-            <Row className="ml-3">
-              <Col sm={12} md={4}>
-                <Form.Group as={Row} className="mb-xs-3">
-                  <Form.Label
-                    column
-                    xs={2}
-                    md={3}
-                    lg={3}
-                    className={`ml-xs-4 ${disabledAmount ? "grey-text" : ""} `}
-                  >
-                    IDR
-                  </Form.Label>
-                  <Col xs={10} md={4} lg={9}>
-                    {disabledAmount ? (
-                      <Form.Control
-                        style={{ width: "90px", marginLeft: "10px" }}
-                        disabled={true}
-                        className={"grey-background"}
-                      />
-                    ) : (
-                      <FastField name={props.fieldAmount}>
-                        {({ field }) => (
-                          <NumberFormat
-                            {...field}
-                            className="form-control"
-                            maxLength={19}
-                            thousandsGroupStyle="thousand"
-                            displayType="input"
-                            type="text"
-                            thousandSeparator={true}
-                            allowNegative={true}
-                            // onChange={(values) => {
-                            // const { value } = values;
-                            // props.setFieldValue(props.fieldAmount, value)
-                            // console.log(props.fieldAmount, values.target.value)
-                            // }}
-                          />
-                        )}
-                      </FastField>
-                    )}
-                  </Col>
-                </Form.Group>
-              </Col>
-              <Col sm={12} md={8}>
-                <Form.Group className="mb-3 ml-5 ">
-                  {props.amountSuffixSelections.map((suffix, i) => (
-                    <AmountRadioSelections
-                      key={i}
-                      {...props}
-                      disabledAmount={disabledAmount}
-                      value={suffix.value}
-                      label={suffix.label}
-                    />
-                  ))}
-                </Form.Group>
-              </Col>
-            </Row>
-            <Form.Group>
-              <FastField name={props.fieldRadio}>
-                {({ field, form }) => (
-                  <Form.Check
-                    {...field}
-                    value="percent"
-                    type="radio"
-                    label="Percentage"
-                    disabled={props.isView}
-                    checked={props.values[props.fieldRadio] === "percent"}
-                    onClick={() => {
-                      props.setFieldValue(props.fieldRadio + "_amount", "")
-                      props.setFieldValue(props.fieldRadio + "_amount_type", "")
-                    }}
-                  />
-                )}
-              </FastField>
-            </Form.Group>
-            <Row className="ml-3">
-              <Col sm={12} md={6}>
-                <Form.Group as={Row} className="mb-3">
-                  {disabledPercent ? (
+            </Col>
+            <Col md="auto">
+              {disabledAmount ? (
+                <Form.Control
+                  style={{ maxWidth: "200px" }}
+                  disabled={true}
+                  className={"grey-background"}
+                />
+              ) : (
+                <FastField name={props.fieldAmount}>
+                  {({ field }) => (
                     <Form.Control
-                      type="number"
-                      style={{ maxWidth: "80px" }}
-                      className="mx-3 grey-background"
-                      disabled={true}
+                      as={NumberFormat}
+                      style={{ maxWidth: "200px" }}
+                      {...field}
+                      className="form-control"
+                      maxLength={19}
+                      thousandsGroupStyle="thousand"
+                      displayType="input"
+                      type="text"
+                      thousandSeparator={true}
+                      allowNegative={true}
+                      // onChange={(values) => {
+                      // const { value } = values;
+                      // props.setFieldValue(props.fieldAmount, value)
+                      // console.log(props.fieldAmount, values.target.value)
+                      // }}
                     />
-                  ) : (
-                    <FastField name={props.fieldPercent}>
-                      {({ field }) => (
-                        <Form.Control
-                          {...field}
-                          type="text"
-                          minLength={0}
-                          maxLength={3}
-                          style={{ maxWidth: "80px" }}
-                          className="mx-3"
-                          disabled={props.isView}
-                          onChange={(value) => {
-                            // console.log(props.values, props.fieldAmount)
-                            let pattern = /^\d+$/
-                            // console.log(pattern.test(value.target.value))
-                            if (pattern.test(value.target.value)) {
-                              if (value.target.value <= 100) {
-                                props.setFieldValue(
-                                  props.fieldPercent,
-                                  value.target.value,
-                                )
-                              }
-                              if (value.target.value === "") {
-                                props.setFieldValue(
-                                  props.fieldPercent,
-                                  value.target.value,
-                                )
-                              }
-                            } else {
-                              //for bugs field can alphabet
-                              props.setFieldValue(props.fieldPercent, "")
-                            }
-                          }}
-                        />
-                      )}
-                    </FastField>
                   )}
-                  <span
-                    className={`text-lg mt-1 ${
-                      disabledPercent ? "grey-text" : ""
-                    } `}
-                  >
-                    %
-                  </span>
-                </Form.Group>
-              </Col>
-              <Col sm={12} md={6}>
-                {disabledPercent ? (
-                  <Form.Check
-                    type="checkbox"
-                    className="mt-2"
-                    label="Include Taxes"
-                    disabled={true}
-                  />
-                ) : (
-                  <FastField name={props.fieldIncludeTax}>
-                    {({ field }) => (
-                      <Form.Check
-                        {...field}
-                        type="checkbox"
-                        className="mt-2"
-                        label="Include Taxes"
-                        checked={
-                          props.values[props.fieldRadio + "_tax_include"]
+                </FastField>
+              )}
+            </Col>
+            <Col>
+              {props.amountSuffixSelections.map((suffix, i) => (
+                <AmountRadioSelections
+                  key={i}
+                  {...props}
+                  disabledAmount={disabledAmount}
+                  value={suffix.value}
+                  label={suffix.label}
+                />
+              ))}
+            </Col>
+          </Form.Group>
+          <FastField name={props.fieldRadio}>
+            {({ field, form }) => (
+              <Form.Check
+                {...field}
+                value="percent"
+                type="radio"
+                label="Percentage"
+                disabled={props.isView}
+                checked={props.values[props.fieldRadio] === "percent"}
+                onClick={() => {
+                  props.setFieldValue(props.fieldRadio + "_amount", "")
+                  props.setFieldValue(props.fieldRadio + "_amount_type", "")
+                }}
+              />
+            )}
+          </FastField>
+          <Form.Group as={Row} className="ml-3 mt-2">
+            {disabledPercent ? (
+              <Form.Control
+                type="text"
+                style={{ maxWidth: "80px" }}
+                className="mx-3 grey-background"
+                disabled={true}
+              />
+            ) : (
+              <FastField name={props.fieldPercent}>
+                {({ field }) => (
+                  <Form.Control
+                    {...field}
+                    type="text"
+                    minLength={0}
+                    maxLength={3}
+                    style={{ maxWidth: "80px" }}
+                    className="mx-3"
+                    disabled={props.isView}
+                    onChange={(value) => {
+                      // console.log(props.values, props.fieldAmount)
+                      let pattern = /^\d+$/
+                      // console.log(pattern.test(value.target.value))
+                      if (pattern.test(value.target.value)) {
+                        if (value.target.value <= 100) {
+                          props.setFieldValue(
+                            props.fieldPercent,
+                            value.target.value,
+                          )
                         }
-                        disabled={props.isView}
-                      />
-                    )}
-                  </FastField>
+                      }
+                      if (value.target.value === "") {
+                        props.setFieldValue(
+                          props.fieldPercent,
+                          value.target.value,
+                        )
+                      }
+                    }}
+                  />
                 )}
-              </Col>
-            </Row>
-          </Col>
-        </Row>
+              </FastField>
+            )}
+
+            <span
+              className={`text-lg mt-1 ${disabledPercent ? "grey-text" : ""} `}
+            >
+              %
+            </span>
+
+            <Col md="auto">
+              {disabledPercent ? (
+                <Form.Check
+                  type="checkbox"
+                  className="mt-2 ml-3"
+                  label="Include Taxes"
+                  disabled={true}
+                />
+              ) : (
+                <FastField name={props.fieldIncludeTax}>
+                  {({ field }) => (
+                    <Form.Check
+                      {...field}
+                      type="checkbox"
+                      className="mt-2"
+                      label="Include Taxes"
+                      checked={props.values[props.fieldRadio + "_tax_include"]}
+                      disabled={props.isView}
+                    />
+                  )}
+                </FastField>
+              )}
+            </Col>
+          </Form.Group>
+        </Col>
       </Form.Group>
 
       <FeedbackMessage {...props} />

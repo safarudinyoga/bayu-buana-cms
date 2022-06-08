@@ -20,6 +20,7 @@ export default function OtherTable() {
     ],
     emptyTable: "No Service Fees found",
     recordName: "preset_name",
+    module: "standard--fee",
   })
 
   return <BBDataTable {...params} />
