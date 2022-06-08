@@ -48,7 +48,8 @@ export default function InvoiceEmailSetupTable() {
         showAdvancedOptions: false,
         showCopyAct: true,
         module: "email-setup",
-        isCheckbox: false
+        isCheckbox: false,
+        isOpenNewTab: false,
     }
     return <BBDataTable {...params} modalContent={FormEmailCategory}/>
 }

@@ -29,15 +29,33 @@ function TripDateRoundtrip(props) {
         <ReactSVG src='/img/icons/date-range.svg' className='form-with-label__suggest-icon'/>
         <ReactDatePicker 
           className='form-control rounded-0 form-with-label'
-          selected={departTime}
+          selected={title === "DEPART" ? departTime : returnTime}
           dateFormat="dd MMMM yyyy"
           onChange={(date) => {
-            setDepartTime(new Date(date))
+            if(title === "DEPART") {
+              setDepartTime(new Date(date))
+            } else if (title === "RETURN") {
+              setReturnTime(new Date(date))
+            }
+            
           }}
         />
       </div>
     )
   }
+
+  useEffect(() => {
+    if(props.handleCriteriaChange){
+      props.handleCriteriaChange("departure_datetime", departTime)
+    }
+  }, [departTime])
+
+  useEffect(() => {
+    if(props.handleCriteriaChange){
+      props.handleCriteriaChange("arrival_datetime", returnTime)
+    }
+  }, [returnTime])
+  
 
   return (
    <>

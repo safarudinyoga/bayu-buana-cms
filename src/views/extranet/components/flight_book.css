@@ -152,12 +152,31 @@
   font-size: 0.8rem;
 }
 
-.traveller-sm .form-with-label__title, .trip-date-sm .form-with-label__title {
+.traveller-sm .form-with-label__title, .trip-date-sm .form-with-label__title, .room-container .form-with-label__title {
   font-size: 10px;
 }
 
 .traveller-container {
   width: 280px;
+  margin-bottom: 10px;
+}
+
+.traveller-container-guest {
+  width: 140px;
+  margin-bottom: 10px;
+}
+
+.room-container {
+  width: 90px;
+  margin-bottom: 10px;
+}
+
+.room-container .form-with-label__suggest-icon {
+  bottom: 7px;
+}
+
+.hotel-destination-container {
+  width: 300px;
   margin-bottom: 10px;
 }
 

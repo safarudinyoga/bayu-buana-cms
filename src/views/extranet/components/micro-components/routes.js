@@ -62,6 +62,9 @@ function Routes(props) {
               if(props.handleTrip) {
                 props.handleTrip("departure_data", suggestion)
               }
+              if(props.handleCriteriaChange) {
+                props.handleCriteriaChange("origin_airport_id", suggestion.airport_id, "origin_city_id", suggestion.city_id)
+              }
               
             }
               
@@ -93,6 +96,9 @@ function Routes(props) {
               console.log("Return Selected: ",suggestion)
               if(props.handleTrip) {
                 props.handleTrip("arrival_data", suggestion)
+              }
+              if(props.handleCriteriaChange) {
+                props.handleCriteriaChange("destination_airport_id", suggestion.airport_id, "destination_city_id", suggestion.city_id)
               }
               
             }

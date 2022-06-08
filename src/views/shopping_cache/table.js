@@ -8,6 +8,7 @@ import { Tabs, TabPane, Row } from "react-bootstrap"
 import { ReactSVG } from "react-svg"
 import FormInputSelectAjax from 'components/form/input-select-ajax'
 import FormCreate from "./form"
+import FormCreateHotel from "./hotel_form"
 
 export default function ShoppingCache() {
   const [key, setKey] = useState("CORPORATE CLIENT");
@@ -210,7 +211,7 @@ export default function ShoppingCache() {
                 </div>
             }
             >
-                <BBDataTable {...paramsHotels}  onReset={onReset} {...paramsHotels} modalContent={FormCreate} modalSize={"xl"} />
+                <BBDataTable {...paramsHotels}  onReset={onReset} {...paramsHotels} modalContent={FormCreateHotel} modalSize={"xl"} />
             </TabPane>
         </Tabs>
       </div>

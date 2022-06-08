@@ -8,16 +8,8 @@ import env from "config/environment"
 
 
 function TripFlightClass(props) {
-  const [flightClassOptions, setFlightClassOptions] = useState([])
+  const [flightClass, setFlightClass] = useState()
   let api = new Api()
-
-  useEffect(async () => {
-    try {
-      let res = await api.get('/master/cabin-types')
-    } catch (error) {
-      
-    }
-  }, [])
 
 
   return (
@@ -32,6 +24,8 @@ function TripFlightClass(props) {
         url={`master/cabin-types`}
         fieldName="cabin_type_name"
         placeholder="Economy"
+        value={flightClass}
+        onChange={setFlightClass}
       />
       
       {/* <input type="text" className='form-control rounded-0 form-with-label' /> */}

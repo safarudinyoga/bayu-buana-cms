@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #fff;
+      }
+    </style>
+  </defs>
+  <path id="puzzle" class="cls-1" d="M20.5,11H19V7a2,2,0,0,0-2-2H13V3.5a2.5,2.5,0,0,0-5,0V5H4a1.992,1.992,0,0,0-1.99,2l0,3.8H3.5a2.7,2.7,0,0,1,0,5.4H2L2,20a2,2,0,0,0,2,2H7.8V20.5a2.7,2.7,0,0,1,5.4,0V22H17a2,2,0,0,0,2-2V16h1.5a2.5,2.5,0,0,0,0-5Z" transform="translate(-1.999 -0.998)"/>
+</svg>
