@@ -1,0 +1,108 @@
+// nav side section
+.create-new-btn {
+  color: #e84d0e;
+  font-size: 14px;
+  text-align: center;
+  padding: 8px;
+  display: flex;
+  margin: 0 auto;
+  span {
+    padding: 1px 10px;
+  }
+}
+
+// destination restriction section
+.destination-title {
+  h3 {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 0;
+  }
+  p {
+    font-size: 14px;
+    font-weight: normal;
+    padding: 8px 0;
+    border-bottom: 1px solid #d3d3d3;
+  }
+}
+
+// preferred hotel chains section
+.preferred-hotel-title {
+  font-size: 16px;
+  font-weight: bold;
+  border-bottom: 1px solid #d3d3d3;
+}
+.preferred-hotel-body {
+  display: flex;
+  h5 {
+    font-size: 15px;
+    margin: 10px;
+    font-weight: bold;
+  }
+}
+
+// miscellaneous configuration section
+.misc-title {
+  font-size: 16px;
+  font-weight: bold;
+  border-bottom: 1px solid #d3d3d3;
+}
+.misc-wrapper {
+  display: flex;
+  padding-top: 20px;
+  h5 {
+    font-size: 15px;
+    font-weight: bold;
+    margin: 6px;
+  }
+  p {
+    font-size: 14px;
+    margin: 4px 0;
+  }
+  h4 {
+    font-size: 14px;
+  }
+}
+.misc-body {
+  padding-left: 20px;
+}
+.misc-text {
+  display: flex;
+  h5 {
+    font-size: 15px;
+    margin: auto 0;
+  }
+  span {
+    margin: auto 0;
+  }
+  input {
+    max-width: 70px;
+    border-radius: 10px;
+    border: 1.5px solid #b4b4b4;
+    margin: 10px;
+    padding: 5px 0;
+  }
+  p {
+    margin: auto 0;
+  }
+}
+.misc-icon-info {
+  margin: auto 0;
+  transform: scale(1.2);
+  padding: 10px 4px;
+}
+
+// travel policy document section
+.travel-policy-title {
+  h3 {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 0;
+  }
+  p {
+    font-size: 14px;
+    font-weight: normal;
+    padding: 8px 0;
+    border-bottom: 1px solid #d3d3d3;
+  }
+}

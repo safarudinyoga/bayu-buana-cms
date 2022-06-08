@@ -212,6 +212,10 @@ import CorporateDivisionTable from "views/corporate_division/table"
 import CorporateDivisionForm from "views/corporate_division/form"
 import CorporateDivisionHierarchy from "views/corporate_division/hierarchy"
 
+// Travel Policy Corporate
+// import CorporateTravelPolicyTable from "views/corporate_travel_policy/table"
+import CorporateTravelPolicy from "views/corporate_travel_policy"
+
 const RouteWithProps = ({
   path,
   exact,
@@ -774,6 +778,13 @@ const DashboardRoutes = () => {
           <CorporateDivisionHierarchy />
         </Route>
 
+        {/* Corporate Travel Policy */}
+        <Route exact path="/master/corporate-travel-policy">
+          <CorporateTravelPolicy />
+        </Route>
+        {/* <Route exact path="/master/corporate-travel-policy/form/:id?">
+          <CorporateTravelPolicyForm />
+        </Route> */}
       </Switch>
     </DashboardWrapper>
   )

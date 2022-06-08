@@ -4,7 +4,7 @@ import * as Yup from "yup"
 import { Card, Form, Row, Col, Button, Modal } from "react-bootstrap"
 import Api from "config/api"
 import FlightOverrideServiceFeeTable from "../table/flight_override_service_table"
-import { withRouter } from "react-router"
+import { withRouter, useHistory } from "react-router"
 import useQuery from "lib/query"
 import { Menu } from "./menu"
 import { MenuModal } from "./menu_modal"
@@ -341,6 +341,7 @@ const ModalOverrideServiceFee = (props) => {
 }
 const HotelForm = (props) => {
   let api = new Api()
+  const history = useHistory()
   const isView = useQuery().get("action") === "view"
   const dispatch = useDispatch()
   const formId = props.match.params.id
@@ -719,14 +720,12 @@ const HotelForm = (props) => {
               <Button
                 variant="primary"
                 type="submit"
+                disabled={isSubmitting || !dirty}
                 style={{ marginRight: 15 }}
               >
-                SAVE & NEXT
+                SAVE
               </Button>
-              <Button
-                variant="secondary"
-                onClick={() => props.history.goBack()}
-              >
+              <Button variant="secondary" onClick={() => history.goBack()}>
                 CANCEL
               </Button>
             </div>
