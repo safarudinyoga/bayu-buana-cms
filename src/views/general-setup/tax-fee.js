@@ -386,7 +386,7 @@ const TaxFee = (props) => {
         domestic_flight_vat: {
           fee_tax_type_id: taxIdDomesticFlightVat,
           currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
-          amount: values.domestic_flight_vat == "amount" ? values.removeSeparator(domestic_flight_vat_amount) : null,
+          amount: values.domestic_flight_vat == "amount" ? removeSeparator(values.domestic_flight_vat_amount) : null,
           percent:values.domestic_flight_vat == "amount" ? null : values.domestic_flight_vat_percent,
           charge_type_id:values.domestic_flight_vat == "amount" ? values.domestic_flight_vat_amount_type : null,
           is_hidden: true,
@@ -395,7 +395,7 @@ const TaxFee = (props) => {
         domestic_flight_service_fee_vat: {
           fee_tax_type_id: taxIdDomesticFlightServiceFeeVat,
           currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
-          amount: values.domestic_flight_service_fee_vat == "amount" ? values.removeSeparator(domestic_flight_service_fee_vat_amount) : null,
+          amount: values.domestic_flight_service_fee_vat == "amount" ? removeSeparator(values.domestic_flight_service_fee_vat_amount) : null,
           percent:values.domestic_flight_service_fee_vat == "amount" ? null : values.domestic_flight_service_fee_vat_percent,
           charge_type_id:values.domestic_flight_service_fee_vat == "amount" ? values.domestic_flight_service_fee_vat_amount_type : null,
           is_hidden: true,
@@ -404,7 +404,7 @@ const TaxFee = (props) => {
         international_flight_vat: {
           fee_tax_type_id: taxIdInternationalFlightVat,
           currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
-          amount: values.international_flight_vat == "amount" ? values.removeSeparator(international_flight_vat_amount) : null,
+          amount: values.international_flight_vat == "amount" ? removeSeparator(values.international_flight_vat_amount) : null,
           percent:values.international_flight_vat == "amount" ? null : values.international_flight_vat_percent,
           charge_type_id:values.international_flight_vat == "amount" ? values.international_flight_vat_amount_type : null,
           is_hidden: true,
@@ -413,7 +413,7 @@ const TaxFee = (props) => {
         international_flight_service_fee_vat: {
           fee_tax_type_id: taxIdInternationalFlightServiceFeeVat,
           currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
-          amount: values.international_flight_service_fee_vat == "amount" ? values.removeSeparator(international_flight_service_fee_vat_amount) : null,
+          amount: values.international_flight_service_fee_vat == "amount" ? removeSeparator(values.international_flight_service_fee_vat_amount) : null,
           percent:values.international_flight_service_fee_vat == "amount" ? null : values.international_flight_service_fee_vat_percent,
           charge_type_id:values.international_flight_service_fee_vat == "amount" ? values.international_flight_service_fee_vat_amount_type : null,
           is_hidden: true,
@@ -424,7 +424,7 @@ const TaxFee = (props) => {
         domestic_hotel_vat: {
           fee_tax_type_id: taxIdDomesticHotelVat,
           currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
-          amount: values.domestic_hotel_vat == "amount" ? values.removeSeparator(domestic_hotel_vat_amount) : null,
+          amount: values.domestic_hotel_vat == "amount" ? removeSeparator(values.domestic_hotel_vat_amount) : null,
           percent:values.domestic_hotel_vat == "amount" ? null : values.domestic_hotel_vat_percent,
           charge_type_id:values.domestic_hotel_vat == "amount" ? values.domestic_hotel_vat_amount_type : null,
           is_hidden: true,
@@ -433,7 +433,7 @@ const TaxFee = (props) => {
         domestic_hotel_service_fee_vat: {
           fee_tax_type_id: taxIdDomesticHotelServiceFeeVat,
           currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
-          amount: values.domestic_hotel_service_fee_vat == "amount" ? values.removeSeparator(domestic_hotel_service_fee_vat_amount) : null,
+          amount: values.domestic_hotel_service_fee_vat == "amount" ? removeSeparator(values.domestic_hotel_service_fee_vat_amount) : null,
           percent:values.domestic_hotel_service_fee_vat == "amount" ? null : values.domestic_hotel_service_fee_vat_percent,
           charge_type_id:values.domestic_hotel_service_fee_vat == "amount" ? values.domestic_hotel_service_fee_vat_amount_type : null,
           is_hidden: true,
@@ -442,7 +442,7 @@ const TaxFee = (props) => {
         international_hotel_vat: {
           fee_tax_type_id: taxIdInternationalHotelVat,
           currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
-          amount: values.international_hotel_vat == "amount" ? values.removeSeparator(international_hotel_vat_amount) : null,
+          amount: values.international_hotel_vat == "amount" ? removeSeparator(values.international_hotel_vat_amount) : null,
           percent:values.international_hotel_vat == "amount" ? null : values.international_hotel_vat_percent,
           charge_type_id:values.international_hotel_vat == "amount" ? values.international_hotel_vat_amount_type : null,
           is_hidden: true,
@@ -451,7 +451,7 @@ const TaxFee = (props) => {
         international_hotel_service_fee_vat: {
           fee_tax_type_id: taxIdInternationalHotelServiceFeeVat,
           currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
-          amount: values.international_hotel_service_fee_vat == "amount" ? values.removeSeparator(international_hotel_service_fee_vat_amount) : null,
+          amount: values.international_hotel_service_fee_vat == "amount" ? removeSeparator(values.international_hotel_service_fee_vat_amount) : null,
           percent:values.international_hotel_service_fee_vat == "amount" ? null : values.international_hotel_service_fee_vat_percent,
           charge_type_id:values.internahotel_flight_service_fee_vat == "amount" ? values.international_hotel_service_fee_vat_amount_type : null,
           is_hidden: true,
@@ -462,7 +462,7 @@ const TaxFee = (props) => {
         domestic_other_vat: {
           fee_tax_type_id: taxIdOtherRentCarVat,
           currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
-          amount: values.domestic_other_vat == "amount" ? values.removeSeparator(domestic_other_vat_amount) : null,
+          amount: values.domestic_other_vat == "amount" ? removeSeparator(values.domestic_other_vat_amount) : null,
           percent:values.domestic_other_vat == "amount" ? null : values.domestic_other_vat_percent,
           charge_type_id:values.domestic_other_vat == "amount" ? values.domestic_other_vat_amount_type : null,
           is_hidden: true,
@@ -471,7 +471,7 @@ const TaxFee = (props) => {
         domestic_other_service_fee_vat: {
           fee_tax_type_id: taxIdOtherServiceFeeVat,
           currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
-          amount: values.domestic_other_service_fee_vat == "amount" ? values.removeSeparator(domestic_other_service_fee_vat_amount) : null,
+          amount: values.domestic_other_service_fee_vat == "amount" ? removeSeparator(values.domestic_other_service_fee_vat_amount) : null,
           percent:values.domestic_other_service_fee_vat == "amount" ? null : values.domestic_other_service_fee_vat_percent,
           charge_type_id:values.domestic_other_service_fee_vat == "amount" ? values.domestic_other_service_fee_vat_amount_type : null,
           is_hidden: true,
