@@ -4,7 +4,7 @@ import * as Yup from "yup"
 import { Card, Form, Row, Col, Button, Modal } from "react-bootstrap"
 import Api from "config/api"
 import FlightOverrideServiceFeeTable from "../table/flight_override_service_table"
-import { withRouter } from "react-router"
+import { withRouter, useHistory } from "react-router"
 import useQuery from "lib/query"
 import { Menu } from "./menu"
 import { MenuModal } from "./menu_modal"
@@ -317,48 +317,45 @@ const ModalOverrideServiceFee = (props) => {
                     </FastField>
                   </Col>
                 </Form.Group>
-                <Form.Group as={Row} className="mb-3">
-                  <MenuModal
-                    menu={[
-                      {
-                        title: "MDR Fee",
-                        sections: [
-                          {
-                            title: "MDR FEE",
-                            taxType: taxTypeServiceFee,
-                            fieldFeeTaxId: "domestic_reissue_fee_tax_id",
-                            fieldRadio: "domestic_reissue",
-                            fieldAmount: "domestic_reissue_amount",
-                            fieldAmountType: "domestic_reissue_amount_type",
-                            fieldPercent: "domestic_reissue_percent",
-                            fieldIncludeTax: "domestic_reissue_tax_include",
-                          },
-                        ],
-                      },
-                    ]}
-                    values={values}
-                    fHandleChange={handleChange}
-                    fHandleBlur={handleBlur}
-                    setFieldValue={setFieldValue}
-                    // isView={isView}
-                    amountSuffixSelections={[
-                      {
-                        label: "/Ticket",
-                        value: "de62950d-fbab-4e39-bd90-c2b6687c6b36",
-                      },
-                      {
-                        label: "/Person",
-                        value: "de03bf84-4bd8-4cdf-9348-00246f04bcad",
-                      },
-                      {
-                        label: "/Transaction",
-                        value: "5123b121-4f6a-4871-bef1-65408d663e19",
-                      },
-                    ]}
-                    errors={errors}
-                  />
-                </Form.Group>
-
+                <MenuModal
+                  menu={[
+                    {
+                      title: "MDR Fee",
+                      sections: [
+                        {
+                          title: "MDR FEE",
+                          taxType: taxTypeServiceFee,
+                          fieldFeeTaxId: "domestic_reissue_fee_tax_id",
+                          fieldRadio: "domestic_reissue",
+                          fieldAmount: "domestic_reissue_amount",
+                          fieldAmountType: "domestic_reissue_amount_type",
+                          fieldPercent: "domestic_reissue_percent",
+                          fieldIncludeTax: "domestic_reissue_tax_include",
+                        },
+                      ],
+                    },
+                  ]}
+                  values={values}
+                  fHandleChange={handleChange}
+                  fHandleBlur={handleBlur}
+                  setFieldValue={setFieldValue}
+                  // isView={isView}
+                  amountSuffixSelections={[
+                    {
+                      label: "/Ticket",
+                      value: "de62950d-fbab-4e39-bd90-c2b6687c6b36",
+                    },
+                    {
+                      label: "/Person",
+                      value: "de03bf84-4bd8-4cdf-9348-00246f04bcad",
+                    },
+                    {
+                      label: "/Transaction",
+                      value: "5123b121-4f6a-4871-bef1-65408d663e19",
+                    },
+                  ]}
+                  errors={errors}
+                />
                 <div
                   style={{ marginBottom: 30, marginTop: 30, display: "flex" }}
                 >
@@ -383,6 +380,7 @@ const ModalOverrideServiceFee = (props) => {
 }
 const FlightForm = (props) => {
   let api = new Api()
+  const history = useHistory()
   const isView = useQuery().get("action") === "view"
   const dispatch = useDispatch()
   const formId = props.match.params.id
@@ -763,14 +761,12 @@ const FlightForm = (props) => {
               <Button
                 variant="primary"
                 type="submit"
+                disabled={isSubmitting || !dirty}
                 style={{ marginRight: 15 }}
               >
-                SAVE & NEXT
+                SAVE
               </Button>
-              <Button
-                variant="secondary"
-                onClick={() => props.history.goBack()}
-              >
+              <Button variant="secondary" onClick={() => history.goBack()}>
                 CANCEL
               </Button>
             </div>
