@@ -145,10 +145,189 @@ const TaxFee = (props) => {
   const validationSchema = Yup.object().shape({
     // processing_fee_category_name: Yup.string().required("Present Name is required."),
     // Flight
-
+    domestic_flight_vat: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeDomesticFlightVat.fee_tax_type_name}.`),
+    domestic_flight_vat_amount: Yup
+      .string().when('domestic_flight_vat', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeDomesticFlightVat.fee_tax_type_name}.`)
+      }),
+    domestic_flight_vat_amount_type: Yup
+      .string().when('domestic_flight_vat', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    domestic_flight_vat_percent: Yup
+      .string().when('domestic_flight_vat', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeDomesticFlightVat.fee_tax_type_name}.`)
+      }),
+    domestic_flight_service_fee_vat: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeDomesticFlightServiceFeeVat.fee_tax_type_name}.`),
+    domestic_flight_service_fee_vat_amount: Yup
+      .string().when('domestic_flight_service_fee_vat', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeDomesticFlightServiceFeeVat.fee_tax_type_name}.`)
+      }),
+    domestic_flight_service_fee_vat_amount_type: Yup
+      .string().when('domestic_flight_service_fee_vat', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    domestic_flight_service_fee_vat_percent: Yup
+      .string().when('domestic_flight_service_fee_vat', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeDomesticFlightServiceFeeVat.fee_tax_type_name}.`)
+      }),
+    international_flight_vat: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeInternationalFlightVat.fee_tax_type_name}.`),
+    international_flight_vat_amount: Yup
+      .string().when('international_flight_vat', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeInternationalFlightVat.fee_tax_type_name}.`)
+      }),
+    international_flight_vat_amount_type: Yup
+      .string().when('international_flight_vat', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    international_flight_vat_percent: Yup
+      .string().when('international_flight_vat', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeInternationalFlightVat.fee_tax_type_name}.`)
+      }),
+    international_flight_service_fee_vat: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeInternationalFlightServiceFeeVat.fee_tax_type_name}.`),
+    international_flight_service_fee_vat_amount: Yup
+      .string().when('international_flight_service_fee_vat', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeInternationalFlightServiceFeeVat.fee_tax_type_name}.`)
+      }),
+    international_flight_service_fee_vat_amount_type: Yup
+      .string().when('international_flight_service_fee_vat', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    international_flight_service_fee_vat_percent: Yup
+      .string().when('international_flight_service_fee_vat', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeInternationalFlightServiceFeeVat.fee_tax_type_name}.`)
+      }),
     // Hotel
+    domestic_hotel_vat: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeDomesticHotelVat.fee_tax_type_name}.`),
+    domestic_hotel_vat_amount: Yup
+      .string().when('domestic_hotel_vat', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeDomesticHotelVat.fee_tax_type_name}.`)
+      }),
+    domestic_hotel_vat_amount_type: Yup
+      .string().when('domestic_hotel_vat', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    domestic_hotel_vat_percent: Yup
+      .string().when('domestic_hotel_vat', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeDomesticHotelVat.fee_tax_type_name}.`)
+      }),
+    domestic_hotel_service_fee_vat: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeDomesticHotelServiceFeeVat.fee_tax_type_name}.`),
+    domestic_hotel_service_fee_vat_amount: Yup
+      .string().when('domestic_hotel_service_fee_vat', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeDomesticHotelServiceFeeVat.fee_tax_type_name}.`)
+      }),
+    domestic_hotel_service_fee_vat_amount_type: Yup
+      .string().when('domestic_hotel_service_fee_vat', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    domestic_hotel_service_fee_vat_percent: Yup
+      .string().when('domestic_hotel_service_fee_vat', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeDomesticHotelServiceFeeVat.fee_tax_type_name}.`)
+      }),
+    international_flight_vat: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeInternationalHotelVat.fee_tax_type_name}.`),
+    international_flight_vat_amount: Yup
+      .string().when('international_flight_vat', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeInternationalHotelVat.fee_tax_type_name}.`)
+      }),
+    international_flight_vat_amount_type: Yup
+      .string().when('international_flight_vat', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    international_flight_vat_percent: Yup
+      .string().when('international_flight_vat', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeInternationalHotelVat.fee_tax_type_name}.`)
+      }),
+    international_flight_service_fee_vat: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeInternationalHotelServiceFeeVat.fee_tax_type_name}.`),
+    international_flight_service_fee_vat_amount: Yup
+      .string().when('international_flight_service_fee_vat', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeInternationalHotelServiceFeeVat.fee_tax_type_name}.`)
+      }),
+    international_flight_service_fee_vat_amount_type: Yup
+      .string().when('international_flight_service_fee_vat', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    international_flight_service_fee_vat_percent: Yup
+      .string().when('international_flight_service_fee_vat', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeInternationalHotelServiceFeeVat.fee_tax_type_name}.`)
+      }),
 
     // Other
+    domestic_other_vat: Yup
+    .string()
+    .required(`Please enter fixed amount or percentage for ${taxTypeOtherRentCarVat.fee_tax_type_name}.`),
+    domestic_other_vat_amount: Yup
+      .string().when('domestic_other_vat', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeOtherRentCarVat.fee_tax_type_name}.`)
+      }),
+    domestic_other_vat_amount_type: Yup
+      .string().when('domestic_other_vat', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    domestic_other_vat_percent: Yup
+      .string().when('domestic_other_vat', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeOtherRentCarVat.fee_tax_type_name}.`)
+      }),
+    domestic_other_service_fee_vat: Yup
+    .string()
+    .required(`Please enter fixed amount or percentage for ${taxTypeOtherServiceFeeVat.fee_tax_type_name}.`),
+    domestic_other_service_fee_vat_amount: Yup
+      .string().when('domestic_other_service_fee_vat', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeOtherServiceFeeVat.fee_tax_type_name}.`)
+      }),
+    domestic_other_service_fee_vat_amount_type: Yup
+      .string().when('domestic_other_service_fee_vat', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    domestic_other_service_fee_vat_percent: Yup
+      .string().when('domestic_other_service_fee_vat', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeOtherServiceFeeVat.fee_tax_type_name}.`)
+      }),
   })
 
   useEffect(async() => {
@@ -192,6 +371,12 @@ const TaxFee = (props) => {
     } catch(e) {
       console.log(e)
     }
+  }
+
+  //function for remove separator 
+  const removeSeparator = (value) => {
+    value = value.toString().split(",").join("")
+    return parseInt(value)
   }
 
   const onSubmitFee = (values, id) => {
@@ -283,7 +468,6 @@ const TaxFee = (props) => {
           is_hidden: true,
           is_included: false,
         },
-
         domestic_other_service_fee_vat: {
           fee_tax_type_id: taxIdOtherServiceFeeVat,
           currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
