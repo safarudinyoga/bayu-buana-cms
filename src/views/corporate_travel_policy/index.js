@@ -6,7 +6,6 @@ import { Row, Col, Tab, Nav } from "react-bootstrap"
 import { setUIParams } from "redux/ui-store"
 import DestinationRestriction from "./destination_restriction"
 import TravelPolicyDocument from "./travel-policy-document"
-import DivisionCorporate from "./division_corporate"
 import MiscellaneousConfiguration from "./miscellaneous_configuration"
 import StaffAndManager from "./staff-and-manager";
 import Director from "./director";
@@ -143,6 +142,15 @@ const TravelPolicy = (props) => {
                 />
                 ) : null}
             </Tab.Pane>
+            <Tab.Pane eventKey="staff-and-manager">
+              {tabKey === "staff-and-manager" ? (
+                <StaffAndManager 
+                  history={props.history}
+                  backUrl={backUrl}
+                  handleSelectTab={(v) => handleSelectTab(v)}
+                />
+                ): null} 
+            </Tab.Pane>
           </Tab.Content>
         </Col>
       </Row>
@@ -192,30 +200,6 @@ const TravelPolicy = (props) => {
               </Nav.Link>
             </Nav.Item>
           </Nav>
-        </Col>
-        <Col sm={9}>
-          <Tab.Content>
-          <Tab.Pane eventKey="staff-and-manager">
-              {tabKey === "staff-and-manager" ? (
-                <StaffAndManager 
-                  history={props.history}
-                  backUrl={backUrl}
-                  handleSelectTab={(v) => handleSelectTab(v)}
-                />
-                ): null} 
-            </Tab.Pane>
-
-            <Tab.Pane eventKey="email">
-              {tabKey === "email" ? (
-                <DivisionCorporate
-                  history={props.history}
-                  backUrl={backUrl}
-                  handleSelectTab={(v) => handleSelectTab(v)}
-                />
-                ): null} 
-            </Tab.Pane>
-
-          </Tab.Content>
         </Col>
       </Row>
     </Tab.Container>
