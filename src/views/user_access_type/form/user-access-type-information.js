@@ -45,7 +45,7 @@ function UserAccessTypeInformation(props) {
     },
     user_type_code: {
       required: true,
-      minlength: 2,
+      minlength: 1,
       maxlength: 4,
       checkCode: true,
     },

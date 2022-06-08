@@ -39,4 +39,16 @@
       border-color: #31394d !important;
     }
   }
+  &.btn-preview {
+    color: #027F71;
+    background-color: #ffffff;
+    border-color: #027F71;
+    &:active,
+    &:visited,
+    &:hover {
+      color: #027F71 !important;
+      background-color: #ffffff !important;
+      border-color: #027F71 !important;
+    }
+  }
 }
