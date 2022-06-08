@@ -142,10 +142,6 @@
 
 .fa-trash {
   color: #3e40ae;
-}
-
-.width-ancillary {
-  width: 150px;
 } 
 
 table.dataTable > tbody > tr.child ul.dtr-details {
@@ -419,5 +415,10 @@ table.dataTable thead .sorting_desc_disabled:after {
 }
 .table-sm th {
   padding: 0.4rem 0.3rem;
+}
+
+.width-ancillary {
+  max-width: 150px !important;
+  width: 150px;
 }
 

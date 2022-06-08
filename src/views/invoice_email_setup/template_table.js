@@ -46,7 +46,7 @@ export default function InvoiceEmailSetupTable() {
         columns: [
             {
                 title: "Email Name",
-                data: "email_template_name",
+                data: "email_category_name",
             },
             {
                 title: "Type",
@@ -55,7 +55,8 @@ export default function InvoiceEmailSetupTable() {
         ],
         emptyTable: "No Email Template found",
         recordName: ["email_template_code", "email_template_name"],
-        showAdvancedOptions: false
+        showAdvancedOptions: false,
+        isOpenNewTab: false,
     }
     return <BBDataTable {...params} />
 }
