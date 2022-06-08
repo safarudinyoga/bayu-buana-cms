@@ -50,9 +50,9 @@ const TaxFee = (props) => {
   const [taxIdInternationalHotelVat, setTaxIdInternationalHotelVat] = useState("")
   const [taxIdInternationalHotelServiceFeeVat, setTaxIdInternationalHotelServiceFeeVat] = useState("")
 
-  // useEffect(async () => {
-  //   let api = new Api()
-  // })
+  useEffect(async () => {
+    let api = new Api()
+  })
 
   useEffect(() => {
     getFeeTaxType("18", setTaxTypeDomesticFlightVat, setTaxIdDomesticFlightVat)
@@ -326,32 +326,163 @@ const TaxFee = (props) => {
   useEffect(async() => {
     try {
       if(formId) {
-        let res = await api.get(endpoint + "/" + formId)
+        let {data} = await api.get(endpointFee+ "/" + formId)
         setInitialForm({
           ...initialForm, 
-          ...res.data,
+          ...data,
+          domestic_flight_vat: data.domestic_flight_vat.charge_type_id,
+          domestic_flight_vat_fee_tax_id: data.domestic_flight_vat.fee_tax_type_id,
+          domestic_flight_vat_amount: data.domestic_flight_vat.amount,
+          domestic_flight_vat_amount_type: data.domestic_flight_vat.charge_type_id,
+          domestic_flight_vat_percent: data.domestic_flight_vat.percent,
+
+          domestic_flight_service_fee_vat: data.domestic_flight_service_fee_vat.charge_type_id,
+          domestic_flight_service_fee_vat_fee_tax_id: data.domestic_flight_service_fee_vat.fee_tax_type_id,
+          domestic_flight_service_fee_vat_amount: data.domestic_flight_service_fee_vat.amount,
+          domestic_flight_service_fee_vat_amount_type: data.domestic_flight_service_fee_vat.charge_type_id,
+          domestic_flight_service_fee_vat_percent: data.domestic_flight_service_fee_vat.percent,
+
+          domestic_hotel_vat: data.domestic_hotel_vat.charge_type_id,
+          domestic_hotel_vat_fee_tax_id: data.domestic_hotel_vat.fee_tax_type_id,
+          domestic_hotel_vat_amount: data.domestic_hotel_vat.amount,
+          domestic_hotel_vat_amount_type: data.domestic_hotel_vat.charge_type_id,
+          domestic_hotel_vat_percent: data.domestic_hotel_vat.percent,
+          
+          domestic_hotel_service_fee_vat: data.domestic_hotel_service_fee_vat.charge_type_id,
+          domestic_hotel_service_fee_vat_fee_tax_id: data.domestic_hotel_service_fee_vat.fee_tax_type_id,
+          domestic_hotel_service_fee_vat_amount: data.domestic_hotel_service_fee_vat.amount,
+          domestic_hotel_service_fee_vat_amount_type: data.domestic_hotel_service_fee_vat.charge_type_id,
+          domestic_hotel_service_fee_vat_percent: data.domestic_hotel_service_fee_vat.percent,
+          
+          domestic_other_vat: data.domestic_other_vat.charge_type_id,
+          domestic_other_vat_fee_tax_id: data.domestic_other_vat.fee_tax_type_id,
+          domestic_other_vat_amount: data.domestic_other_vat.amount,
+          domestic_other_vat_amount_type: data.domestic_other_vat.charge_type_id,
+          domestic_other_vat_percent: data.domestic_other_vat.percent,
+          
+          domestic_other_service_fee_vat: data.domestic_other_service_fee_vat.charge_type_id,
+          domestic_other_service_fee_vat_fee_tax_id: data.domestic_other_service_fee_vat.fee_tax_type_id,
+          domestic_other_service_fee_vat_amount: data.domestic_other_service_fee_vat.amount,
+          domestic_other_service_fee_vat_amount_type: data.domestic_other_service_fee_vat.charge_type_id,
+          domestic_other_service_fee_vat_percent: data.domestic_other_service_fee_vat.percent,
+          
+          international_flight_vat: data.international_flight_vat.charge_type_id,
+          international_flight_vat_fee_tax_id: data.international_flight_vat.fee_tax_type_id,
+          international_flight_vat_amount: data.international_flight_vat.amount,
+          international_flight_vat_amount_type: data.international_flight_vat.charge_type_id,
+          international_flight_vat_percent: data.international_flight_vat.percent,
+          
+          international_flight_service_fee_vat: data.international_flight_service_fee_vat.charge_type_id,
+          international_flight_service_fee_vat_fee_tax_id: data.international_flight_service_fee_vat.fee_tax_type_id,
+          international_flight_service_fee_vat_amount: data.international_flight_service_fee_vat.amount,
+          international_flight_service_fee_vat_amount_type: data.international_flight_service_fee_vat.charge_type_id,
+          international_flight_service_fee_vat_percent: data.international_flight_service_fee_vat.percent,
+          
+          international_hotel_vat: data.international_hotel_vat.charge_type_id,
+          international_hotel_vat_fee_tax_id: data.international_hotel_vat.fee_tax_type_id,
+          international_hotel_vat_amount: data.international_hotel_vat.amount,
+          international_hotel_vat_amount_type: data.international_hotel_vat.charge_type_id,
+          international_hotel_vat_percent: data.international_hotel_vat.percent,
+          
+          international_hotel_service_fee_vat: data.international_hotel_service_fee_vat.charge_type_id,
+          international_hotel_service_fee_vat_fee_tax_id: data.international_hotel_service_fee_vat.fee_tax_type_id,
+          international_hotel_service_fee_vat_amount: data.international_hotel_service_fee_vat.amount,
+          international_hotel_service_fee_vat_amount_type: data.international_hotel_service_fee_vat.charge_type_id,
+          international_hotel_service_fee_vat_percent: data.international_hotel_service_fee_vat.percent,
+          
+          international_hotel_service_fee_vat: data.international_hotel_service_fee_vat.charge_type_id,
+          international_hotel_service_fee_vat_fee_tax_id: data.international_hotel_service_fee_vat.fee_tax_type_id,
+          international_hotel_service_fee_vat_amount: data.international_hotel_service_fee_vat.amount,
+          international_hotel_service_fee_vat_amount_type: data.international_hotel_service_fee_vat.charge_type_id,
+          international_hotel_service_fee_vat_percent: data.international_hotel_service_fee_vat.percent
         })
       }
     } catch (e) { console.log(e) }
   }, [])
 
-  const onSubmit = async(payload, values) => {
-    try {
-      if(formId) {
-        
-      } else {
-        let res = await api.post(endpoint, payload)
-        let idFee = res.data.id;
-        onSubmitFee(values, idFee)
+  const removeSeparator = (value) => {
+    value = value.toString().split(",").join("")
+    return parseInt(value)
+  }
+
+  const setPayload = (values) => {
+    let payloadDomestic = {
+      domestic_flight_vat: {
+        fee_tax_type_id: taxIdDomesticFlightVat,
+        amount: values.domestic_flight_vat == "amount" ? removeSeparator(values.domestic_flight_vat_amount) : null,
+        percent:values.domestic_flight_vat == "amount" ? null : values.domestic_flight_vat_percent,
+        charge_type_id:values.domestic_flight_vat == "amount" ? values.domestic_flight_vat_amount_type : null,
+      },
+      domestic_flight_service_fee_vat: {
+        fee_tax_type_id: taxIdDomesticFlightServiceFeeVat,
+        amount: values.domestic_flight_service_fee_vat == "amount" ? values.domestic_flight_service_fee_vat_amount : null,
+        percent:values.domestic_flight_service_fee_vat == "amount" ? null : values.domestic_flight_service_fee_vat_percent,
+        charge_type_id:values.domestic_flight_service_fee_vat == "amount" ? values.domestic_flight_service_fee_vat_amount_type : null,
+      },
+      domestic_hotel_vat: {
+        fee_tax_type_id: taxIdDomesticHotelVat,
+        amount: values.domestic_hotel_vat == "amount" ? values.domestic_hotel_vat_amount : null,
+        percent:values.domestic_hotel_vat == "amount" ? null : values.domestic_hotel_vat_percent,
+        charge_type_id:values.domestic_hotel_vat == "amount" ? values.domestic_hotel_vat_amount_type : null,
+      },
+      domestic_hotel_service_fee_vat: {
+        fee_tax_type_id: taxIdDomesticHotelServiceFeeVat,
+        amount: values.domestic_hotel_service_fee_vat == "amount" ? values.domestic_hotel_service_fee_vat_amount : null,
+        percent:values.domestic_hotel_service_fee_vat == "amount" ? null : values.domestic_hotel_service_fee_vat_percent,
+        charge_type_id:values.domestic_hotel_service_fee_vat == "amount" ? values.domestic_hotel_service_fee_vat_amount_type : null,
+      },
+      domestic_other_vat: {
+        fee_tax_type_id: taxIdOtherVat,
+        amount: values.domestic_other_vat == "amount" ? values.domestic_other_vat_amount : null,
+        percent:values.domestic_other_vat == "amount" ? null : values.domestic_other_vat_percent,
+        charge_type_id:values.domestic_other_vat == "amount" ? values.domestic_other_vat_amount_type : null,
+      },
+      domestic_other_service_fee_vat: {
+        fee_tax_type_id: taxIdOtherServiceFeeVat,
+        amount: values.domestic_other_service_fee_vat == "amount" ? values.domestic_other_service_fee_vat_amount : null,
+        percent:values.domestic_other_service_fee_vat == "amount" ? null : values.domestic_other_service_fee_vat_percent,
+        charge_type_id:values.domestic_other_service_fee_vat == "amount" ? values.domestic_other_service_fee_vat_amount_type : null,
+      },
+      international_flight_vat: {
+        fee_tax_type_id: taxIdInternationalFlightVat,
+        amount: values.international_flight_vat == "amount" ? values.international_flight_vat_amount : null,
+        percent:values.international_flight_vat == "amount" ? null : values.international_flight_vat_percent,
+        charge_type_id:values.international_flight_vat == "amount" ? values.international_flight_vat_amount_type : null,
+      },
+      international_flight_service_fee_vat: {
+        fee_tax_type_id: taxIdInternationalFlightServiceFeeVat,
+        amount: values.international_flight_service_fee_vat == "amount" ? values.international_flight_service_fee_vat_amount : null,
+        percent:values.international_flight_service_fee_vat == "amount" ? null : values.international_flight_service_fee_vat_percent,
+        charge_type_id:values.international_flight_service_fee_vat == "amount" ? values.international_flight_service_fee_vat_amount_type : null,
+      },
+      international_hotel_vat: {
+        fee_tax_type_id: taxIdInternationalHotelVat,
+        amount: values.international_hotel_vat == "amount" ? values.international_hotel_vat_amount : null,
+        percent:values.international_hotel_vat == "amount" ? null : values.international_hotel_vat_percent,
+        charge_type_id:values.international_hotel_vat == "amount" ? values.dinternational_hotel_vat_amount_type : null,
+      },
+      international_hotel_service_fee_vat: {
+        fee_tax_type_id: taxIdInternationalHotelServiceFeeVat,
+        amount: values.international_hotel_service_fee_vat == "amount" ? values.international_hotel_service_fee_vat_amount : null,
+        percent:values.international_hotel_service_fee_vat == "amount" ? null : values.international_hotel_service_fee_vat_percent,
+        charge_type_id:values.international_hotel_service_fee_vat == "amount" ? values.international_hotel_service_fee_vat_amount_type : null,
+      },
+    }
+    return payloadDomestic
+  }
+
+    const onSubmit = async(values) => {
+      try {
+        let payload = setPayload(values)
+        let res = await api.putOrPost(endpoint, formId, payload)
         openSnackbar(
-          `Tax Fee has been successfully saved.`,
+          `Tax Fee has been successfully ${formId ? 'updated' : 'saved'}.`,
         )
         history.goBack()
+      } catch(e) {
+        console.log(e)
       }
-    } catch(e) {
-      console.log(e)
     }
-  }
 
   const getFeeTaxType = async(code, setData, setId) => {
     try {
@@ -364,130 +495,13 @@ const TaxFee = (props) => {
     }
   }
 
-   //function for remove separator 
-  const removeSeparator = (value) => {
-    value = value.toString().split(",").join("")
-    return parseInt(value)
-  }
-
-  const onSubmitFee = (values, id) => {
-      let payloadDomestic = {
-        processing_fee_category_id: id,
-        domestic_flight_vat: {
-          fee_tax_type_id: taxIdDomesticFlightVat,
-          currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
-          amount: values.domestic_flight_vat == "amount" ? removeSeparator(values.domestic_flight_vat_amount) : null,
-          percent:values.domestic_flight_vat == "amount" ? null : values.domestic_flight_vat_percent,
-          charge_type_id:values.domestic_flight_vat == "amount" ? values.domestic_flight_vat_amount_type : null,
-          is_hidden: true,
-          is_included: false,
-        },
-        domestic_flight_service_fee_vat: {
-          fee_tax_type_id: taxIdDomesticFlightServiceFeeVat,
-          currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
-          amount: values.domestic_flight_service_fee_vat == "amount" ? values.domestic_flight_service_fee_vat_amount : null,
-          percent:values.domestic_flight_service_fee_vat == "amount" ? null : values.domestic_flight_service_fee_vat_percent,
-          charge_type_id:values.domestic_flight_service_fee_vat == "amount" ? values.domestic_flight_service_fee_vat_amount_type : null,
-          is_hidden: true,
-          is_included: false,
-        },
-        domestic_hotel_vat: {
-          fee_tax_type_id: taxIdDomesticHotelVat,
-          currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
-          amount: values.domestic_hotel_vat == "amount" ? values.domestic_hotel_vat_amount : null,
-          percent:values.domestic_hotel_vat == "amount" ? null : values.domestic_hotel_vat_percent,
-          charge_type_id:values.domestic_hotel_vat == "amount" ? values.domestic_hotel_vat_amount_type : null,
-          is_hidden: true,
-          is_included: false,
-        },
-        domestic_hotel_service_fee_vat: {
-          fee_tax_type_id: taxIdDomesticHotelServiceFeeVat,
-          currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
-          amount: values.domestic_hotel_service_fee_vat == "amount" ? values.domestic_hotel_service_fee_vat_amount : null,
-          percent:values.domestic_hotel_service_fee_vat == "amount" ? null : values.domestic_hotel_service_fee_vat_percent,
-          charge_type_id:values.domestic_hotel_service_fee_vat == "amount" ? values.domestic_hotel_service_fee_vat_amount_type : null,
-          is_hidden: true,
-          is_included: false,
-        },
-        domestic_other_vat: {
-          fee_tax_type_id: taxIdOtherVat,
-          currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
-          amount: values.domestic_other_vat == "amount" ? values.domestic_other_vat_amount : null,
-          percent:values.domestic_other_vat == "amount" ? null : values.domestic_other_vat_percent,
-          charge_type_id:values.domestic_other_vat == "amount" ? values.domestic_other_vat_amount_type : null,
-          is_hidden: true,
-          is_included: false,
-        },
-        domestic_other_service_fee_vat: {
-          fee_tax_type_id: taxIdOtherServiceFeeVat,
-          currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
-          amount: values.domestic_other_service_fee_vat == "amount" ? values.domestic_other_service_fee_vat_amount : null,
-          percent:values.domestic_other_service_fee_vat == "amount" ? null : values.domestic_other_service_fee_vat_percent,
-          charge_type_id:values.domestic_other_service_fee_vat == "amount" ? values.domestic_other_service_fee_vat_amount_type : null,
-          is_hidden: true,
-          is_included: false,
-        },
-        international_flight_vat: {
-          fee_tax_type_id: taxIdInternationalFlightVat,
-          currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
-          amount: values.international_flight_vat == "amount" ? values.international_flight_vat_amount : null,
-          percent:values.international_flight_vat == "amount" ? null : values.international_flight_vat_percent,
-          charge_type_id:values.international_flight_vat == "amount" ? values.international_flight_vat_amount_type : null,
-          is_hidden: true,
-          is_included: false,
-        },
-        international_flight_service_fee_vat: {
-          fee_tax_type_id: taxIdInternationalFlightServiceFeeVat,
-          currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
-          amount: values.international_flight_service_fee_vat == "amount" ? values.international_flight_service_fee_vat_amount : null,
-          percent:values.international_flight_service_fee_vat == "amount" ? null : values.international_flight_service_fee_vat_percent,
-          charge_type_id:values.international_flight_service_fee_vat == "amount" ? values.international_flight_service_fee_vat_amount_type : null,
-          is_hidden: true,
-          is_included: false,
-        },
-        international_hotel_vat: {
-          fee_tax_type_id: taxIdInternationalHotelVat,
-          currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
-          amount: values.international_hotel_vat == "amount" ? values.international_hotel_vat_amount : null,
-          percent:values.international_hotel_vat == "amount" ? null : values.international_hotel_vat_percent,
-          charge_type_id:values.international_hotel_vat == "amount" ? values.dinternational_hotel_vat_amount_type : null,
-          is_hidden: true,
-          is_included: false,
-        },
-        international_hotel_service_fee_vat: {
-          fee_tax_type_id: taxIdInternationalHotelServiceFeeVat,
-          currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
-          amount: values.international_hotel_service_fee_vat == "amount" ? values.international_hotel_service_fee_vat_amount : null,
-          percent:values.international_hotel_service_fee_vat == "amount" ? null : values.international_hotel_service_fee_vat_percent,
-          charge_type_id:values.international_hotel_service_fee_vat == "amount" ? values.international_hotel_service_fee_vat_amount_type : null,
-          is_hidden: true,
-          is_included: false,
-        },
-      }
-      onSaveFee(payloadDomestic, 1)
-  }
-
-  const onSaveFee = async(payload, productTypeCode) => {
-    try {
-    console.log('payload', payload)
-      let res = await api.post(endpointFee + "/"+ productTypeCode, payload)
-      console.log(res)
-    } catch(e) {
-      console.log(e)
-    }
-  }
-
   return (
     <>
       <Formik
         initialValues={initialForm}
         validationSchema={validationSchema}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
-          let formatted = {
-            processing_fee_category_name: values.processing_fee_category_name,
-            description: values.description,
-          }
-          onSubmit(formatted, values)
+          onSubmit(values)
         }}
         enableReinitialize
       >
