@@ -19,13 +19,14 @@ import { Button, Modal, ModalBody, ModalFooter } from "react-bootstrap"
 import ModalHeader from "react-bootstrap/esm/ModalHeader"
 import { withRouter } from "react-router"
 import { connect } from "react-redux"
-import { setAlert, setCreateModal, setReloadTable, setModalDelete } from "redux/ui-store"
+import { setAlert, setCreateModal, setReloadTable, setModalDelete, setCreateNewModal } from "redux/ui-store"
 import "./bb-data-table.css"
 import editIcon from "assets/icons/edit.svg"
 import removeIcon from "assets/icons/remove.svg"
 import CopyIcon from "assets/icons/ic_copy.svg"
 import showIcon from "assets/icons/show.svg"
 import ModalCreate from "components/Modal/bb-modal"
+import ModalCreateNew from "components/Modal/bb-modal-new"
 import ModalDelete from "components/Modal/bb-modal-delete"
 import customPrint from '../../lib/customPrint'
 
@@ -1043,7 +1044,12 @@ class BBDataTable extends Component {
             } else if(me.props.isReplaceTable) {
               me.props.setId(id);
               me.props.handleReplaceTable(!me.props.isReplaceTable)
-            } else {
+            } else if(me.props.createNewModal) {
+              me.props.setCreateModal({show: true, id, disabled_form: false})
+            }
+              
+            
+             else {
               me.props.history.push(base + "/" + id)
             }
             break
@@ -1053,6 +1059,8 @@ class BBDataTable extends Component {
           case "view":
             if(me.props.createOnModal) {
               me.props.setCreateModal({show: true, id, disabled_form: true})
+            } else if(me.props.createNewModal) {
+              me.props.setCreateNewModal({show: true, id, disabled_form: true})
             } else {
               me.props.history.push(base + "/" + id + "?action=view")
             }
@@ -1074,7 +1082,7 @@ class BBDataTable extends Component {
       })
     $.fn.DataTable.ext.pager.numbers_length = 5
 
-    const { showCreateModal, modalTitle, showModalDelete } = this.props
+    const { showCreateModal, modalTitle, modalTitleNew, showModalDelete, showCreateNewModal, createNewModal, createOnModal } = this.props
     return (
       <div ref={this.wrapper}>
         <Modal show={this.state.isOpen}>
@@ -1146,15 +1154,24 @@ class BBDataTable extends Component {
             </Button>
           </ModalFooter>
         </Modal>
-        <ModalCreate
+        
+        {createOnModal && <ModalCreate
           modalTitle={modalTitle}
           show={showCreateModal.show}
           onClick={() => this.props.setCreateModal({show: false, id: null, disabled_form: false})}
           modalContent={this.props.modalContent}
           modalSize={this.props.modalSize}
           scrollable={true}
-        />
+        />}
 
+        {createNewModal && <ModalCreateNew
+          modalTitle={modalTitleNew}
+          show={showCreateNewModal.show}
+          onClick={() => this.props.setCreateNewModal({show: false, id: null, disabled_form: false})}
+          modalContent={this.props.modalContentNew}
+          modalSize={this.props.modalSize}
+          scrollable={true}
+        />}
         <ModalDelete
           modalTitle={modalTitle}
           show={showModalDelete.show}
@@ -1167,6 +1184,7 @@ class BBDataTable extends Component {
         {this.props.module !== "fare-types" ? <TableHeader
           {...this.props}
           createOnModal={this.props.createOnModal}
+          createNewModal={this.props.createNewModal}
           selected={this.state.selected.length > 0 && !this.props.switchStatus}
           hideFilter={this.state.hideFilter}
           extraFilter={this.props.extraFilter}
@@ -1220,15 +1238,18 @@ const mapStateToProps = ({ ui }) => {
   return {
     stateAlert: ui.alert,
     showCreateModal: ui.showCreateModal,
+    showCreateNewModal: ui.showCreateNewModal,
     showModalDelete: ui.showModalDelete,
     reloadTable: ui.reloadTable,
     modalTitle: ui.modalTitle,
+    modalTitleNew: ui.modalTitleNew
   }
 }
 
 const mapDispatchToProps = (dispatch) => ({
   setAlert: (payload) => dispatch(setAlert(payload)),
   setCreateModal: (payload) => dispatch(setCreateModal(payload)),
+  setCreateNewModal: (payload) => dispatch(setCreateNewModal(payload)),
   setReloadTable: (payload) => dispatch(setReloadTable(payload)),
   setModalDelete: (payload) => dispatch(setModalDelete(payload)),
 })
