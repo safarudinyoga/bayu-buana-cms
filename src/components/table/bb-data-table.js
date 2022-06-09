@@ -215,7 +215,7 @@ class BBDataTable extends Component {
 
       let displayStart = 0;
       if(this.queryParams.get("page")) {
-        displayStart = 10 * (this.queryParams.get("page")-1)
+        displayStart = (this.props.sizePerPage ? this.props.sizePerPage : 10) * (this.queryParams.get("page")-1)
       }
       let endpoint = this.props.endpoint;
       if(this.props.filterData){
@@ -232,7 +232,7 @@ class BBDataTable extends Component {
         fixedColumns: true,
         serverSide: true,
         processing: true,
-        displayLength: 10,
+        displayLength: this.props.sizePerPage ? this.props.sizePerPage : 10,
         displayStart: displayStart,
         lengthMenu: [
           [10, 25, 50, 100, -1],
