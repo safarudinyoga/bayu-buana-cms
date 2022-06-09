@@ -1,7 +1,7 @@
 import React from "react"
 import BBDataTable from "components/table/bb-data-table"
 import { Card } from "react-bootstrap"
-import FormFlight from "../form/flight-policy-for-staff-and-manager.js"
+import FormHotel from "../form/hotel-policy-for-staff-and-manager.js"
 import "../style.scss"
 
 const HotelPolicyDataTable = () => {
@@ -42,8 +42,8 @@ const HotelPolicyDataTable = () => {
         showAdvancedOptions: false,
         isHideSearch: true,
         showInfoDelete: true,
-        createOnModal: true,
-        createNewModal: false,
+        createOnModal: false,
+        createNewModal: true,
         infoDelete: [
             {title: "Destination", recordName: "destination"}, 
             {title: "Highest Cabin Class", recordName: "highest_cabin_class"},
@@ -52,8 +52,8 @@ const HotelPolicyDataTable = () => {
 
     return (
         <div>
-            <div ><h5>Flight POLICY</h5></div>
-            <BBDataTable {...params} modalContent={FormFlight} modalSize="lg" />
+            <div ><h5>HOTEL POLICY</h5></div>
+            <BBDataTable {...params} modalContentNew={FormHotel} modalSize="lg" />
         </div>
     )
 }

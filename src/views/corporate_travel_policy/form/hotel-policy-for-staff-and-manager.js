@@ -16,9 +16,9 @@ const endpoint = "/master/configurations/standard-services"
 
 function HotelPolicy(props) {
   const dispatch = useDispatch()
-  const showCreateModal = useSelector((state) => state.ui.showCreateModal)
+  const showCreateModalNew = useSelector((state) => state.ui.showCreateModalNew)
   const API = new Api()
-  const isView = showCreateModal.disabled_form || props.isView
+  const isView = showCreateModalNew.disabled_form || props.isView
   const [id, setId] = useState(null)
   const [loading, setLoading] = useState(true)
   const [formValues, setFormValues] = useState(null)
@@ -70,7 +70,7 @@ function HotelPolicy(props) {
   }
 
   const duplicateValue = async(fieldName, value) => {
-    let filters = encodeURIComponent(JSON.stringify([[fieldName,"=",value],["AND"],["service_level.service_level_code",showCreateModal.service_level_code],["AND"],["status",1]]))
+    let filters = encodeURIComponent(JSON.stringify([[fieldName,"=",value],["AND"],["service_level.service_level_code",showCreateModalNew.service_level_code],["AND"],["status",1]]))
     let res = await API.get(endpoint + `?filters=${filters}`)
     let sameId = res.data.items.find((v) => v.id === id)
     if(!sameId) return res.data.items.length === 0 
@@ -86,7 +86,7 @@ Yup.addMethod(Yup.object, 'uniqueValueObject', function (fieldName, message) {
 })
 
   useEffect(async () => {
-    let formId = showCreateModal.id || props.id
+    let formId = showCreateModalNew.id || props.id
 
     let docTitle = "Edit Hotel Policy For Staff and Manager"
     if (!formId) {
@@ -130,7 +130,7 @@ Yup.addMethod(Yup.object, 'uniqueValueObject', function (fieldName, message) {
   }, [])
 
   useEffect(() => {
-    if (!showCreateModal.id) {
+    if (!showCreateModalNew.id) {
       setLoading(false)
     }
 
@@ -138,8 +138,8 @@ Yup.addMethod(Yup.object, 'uniqueValueObject', function (fieldName, message) {
       setLoading(false)
     }
 
-    setId(showCreateModal.id)
-  }, [showCreateModal.id, formValues])
+    setId(showCreateModalNew.id)
+  }, [showCreateModalNew.id, formValues])
 
   const initialValues = {
     task_type: "",
@@ -153,11 +153,11 @@ Yup.addMethod(Yup.object, 'uniqueValueObject', function (fieldName, message) {
 
   const onSubmit = async (values, a) => {
     try {
-      let formId = showCreateModal.id || props.id            
+      let formId = showCreateModalNew.id || props.id            
       let amount = (values.response_time[0].value * 1440) + (values.response_time[1].value * 60) + (values.response_time[2].value)
       let form = {
         task_type_id: values.task_type.value,
-        service_level_code: parseInt(showCreateModal.service_level_code),
+        service_level_code: parseInt(showCreateModalNew.service_level_code),
         amount: amount
       }
 
