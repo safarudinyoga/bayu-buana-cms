@@ -170,7 +170,7 @@ function ShoppingCacheCreate(props) {
         mountOnEnter={true}
         unmountOnExit={true}
       >
-        {/* {
+        {
           tripTypes ? (
             tripTypes.map((item) => (
               <Tab
@@ -178,13 +178,16 @@ function ShoppingCacheCreate(props) {
                 title={item.trip_type_name}
               >
                 <div className="d-flex flex-wrap">
-                  <TripComponents tripType={item} />
+                  {
+                    item.trip_type_code === "roundtrip" ? (<TripRoundtrip airports={airports} handleCacheData={handleCacheData} />) : 
+                    item.trip_type_code === "oneway" ? (<TripOneway airports={airports} handleCacheData={handleCacheData} />) : <TripMultitrip  airports={airports}/>
+                  }
                 </div>
               </Tab>
             ))
           ) : ""
-        } */}
-        <Tab
+        }
+        {/* <Tab
           eventKey="3234761b-3fd2-4fd0-ba48-3742ffd3e7cb"
           title="Roundtrip"
 
@@ -213,7 +216,7 @@ function ShoppingCacheCreate(props) {
           title="Multi City"
         >
           <TripMultitrip airports={airports} />
-        </Tab>
+        </Tab> */}
       </Tabs>
 
       <div className="mt-4 mb-5 ml-1 row justify-content-md-start justify-content-center">

@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import Routes from 'views/extranet/components/micro-components/routes'
+import Travellers from 'views/extranet/components/micro-components/travellers'
+import TripCorporate from './trip_corporate'
 import TripDateOneway from './trip_date_oneway'
+import TripFlightClass from './trip_flight_class'
 
 const TripOneway = (props) => {
   const [criteria, setCriteria] = useState({
@@ -32,6 +35,10 @@ const TripOneway = (props) => {
     <>
       <Routes smallSize={true} airports={props.airports} handleCriteriaChange={handleCriteriaChange} />
       <TripDateOneway smallSize={true} handleCriteriaChange={handleCriteriaChange} />
+
+      <Travellers smallSize={true} handleCacheData={props.handleCacheData} />
+      <TripFlightClass smallSize={true} />
+      <TripCorporate smallSize={true} />
     </>
   )
 }

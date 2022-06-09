@@ -27,20 +27,20 @@ export default function JobTitleTable() {
     isCheckbox: false,
     title: "Job Title",
     titleModal: "Job Title",
-    baseRoute: "/master/job-title/form",
-    endpoint: "/master/job-titles",
-    deleteEndpoint: "/master/batch-actions/delete/job-titles",
-    activationEndpoint: "/master/batch-actions/activate/job-titles",
-    deactivationEndpoint: "/master/batch-actions/deactivate/job-titles",
+    baseRoute: "/master/corporate-job-titles/form",
+    endpoint: "/master/corporate-job-titles",
+    deleteEndpoint: "/master/batch-actions/delete/corporate-job-titles",
+    activationEndpoint: "/master/batch-actions/activate/corporate-job-titles",
+    deactivationEndpoint: "/master/batch-actions/deactivate/corporate-job-titles",
     columns: [
       {
         title: "Code",
-        data: "job_title_code",
+        data: "corporate_job_title_code",
       },
       {
         title: "Name",
-        data: "job_title_name",
-        render: renderColumn("job_title", "job_title_name"),
+        data: "corporate_job_title_name",
+        render: renderColumn("job_title", "corporate_job_title_name"),
       },
       {
         searchable: false,
@@ -55,12 +55,12 @@ export default function JobTitleTable() {
       },
     ],
     emptyTable: "No job title found",
-    recordName: ["job_title_code", "job_title_name"],
+    recordName: ["corporate_job_title_code", "corporate_job_title_name"],
     showInfoDelete: true,
     btnDownload: ".buttons-csv",
     infoDelete: [
-      {title: "Job Title Code", recordName: "job_title_code"}, 
-      {title: "Job Title Name", recordName: "job_title_name"}
+      {title: "Job Title Code", recordName: "corporate_job_title_code"}, 
+      {title: "Job Title Name", recordName: "corporate_job_title_name"}
     ],
     switchStatus: true,
     customFilterStatus: {
