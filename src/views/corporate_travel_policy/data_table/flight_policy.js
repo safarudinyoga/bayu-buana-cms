@@ -52,12 +52,9 @@ const FlightPolicyDataTable = () => {
     return (
         <Card>
             <Card.Body>
-                <div ><h5>FLIGHT POLICY 123</h5></div>
+                <div ><h5>FLIGHT POLICY</h5></div>
                 <BBDataTable {...params} modalContent={FormFlight} modalSize="lg" />
             </Card.Body>
-        <div>
-            For BB data table view
-        </div>
         </Card>
     )
 }
