@@ -1,8 +1,8 @@
 import BBDataTable from "components/table/bb-data-table"
 import rowStatus from "lib/row-status"
-import React, {useEffect, useState} from "react"
-import {useDispatch} from "react-redux"
-import {setUIParams} from "redux/ui-store"
+import React, { useEffect, useState } from "react"
+import { useDispatch } from "react-redux"
+import { setUIParams } from "redux/ui-store"
 
 export default function DivisionTable() {
   let dispatch = useDispatch()
@@ -37,7 +37,7 @@ export default function DivisionTable() {
         data: "division_code",
       },
       {
-        title: "Division Name",
+        title: "Name",
         data: "division_name",
       },
       {
@@ -48,12 +48,14 @@ export default function DivisionTable() {
         title: "Manager",
         data: "manager.given_name",
         render: (data, d, row) => {
-          if(row.manager) {
-            return `${row.manager.given_name || ""} ${row.manager.middle_name || ""} ${row.manager.surname || ""}`
+          if (row.manager) {
+            return `${row.manager.given_name || ""} ${
+              row.manager.middle_name || ""
+            } ${row.manager.surname || ""}`
           } else {
             return ""
           }
-        }
+        },
       },
       {
         searchable: false,
@@ -72,19 +74,19 @@ export default function DivisionTable() {
     showInfoDelete: true,
     switchStatus: true,
     infoDelete: [
-      {title: "Division Code", recordName: "division_code"}, 
-      {title: "Division Name", recordName: "division_name"}
+      { title: "Division Code", recordName: "division_code" },
+      { title: "Division Name", recordName: "division_name" },
     ],
     customFilterStatus: {
       value: "",
       options: [
-        {value: "1", label: "Active"},
-        {value: "3", label: "Inactive"},
-      ]
+        { value: "1", label: "Active" },
+        { value: "3", label: "Inactive" },
+      ],
     },
     statusLabel: "Status",
-    isOpenNewTab: false
+    isOpenNewTab: false,
   })
 
-  return <BBDataTable {...params}/>
+  return <BBDataTable {...params} />
 }
