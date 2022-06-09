@@ -5,8 +5,9 @@ import { Card, Form, Row, Col, Button } from "react-bootstrap"
 import Api from "config/api"
 import { useSnackbar } from "react-simple-snackbar"
 import { withRouter } from "react-router"
-import useQuery from "lib/query"
 import NumberFormat from "react-number-format"
+import CancelButton from "components/button/cancel"
+import useQuery from "lib/query"
 
 const endpointFee = "/master/agent-processing-fee-categories"
 const endpoint = "/master/agent-processing-fee-categories/3"
@@ -397,33 +398,24 @@ const OtherAncillaryFee = (props) => {
 
   useEffect(async () => {
     try {
-      if (formId) {
-        let { data } = await api.get(endpointFee + "/3/" + formId)
+      if (!formId) {
+        let { data } = await api.get(endpointFee + "/3/")
+        console.log(data.items)
         setInitialForm({
           ...initialForm,
           ...data,
-          domestic_reissue: checkprocessingType(
-            data.domestic_reissue.charge_type_id,
-          ),
+          domestic_reissue: checkprocessingType(data.domestic_reissue.charge_type_id),
           domestic_reissue_fee_tax_id: data.domestic_reissue.fee_tax_type_id,
           domestic_reissue_amount: data.domestic_reissue.amount,
-          domestic_reissue_amount_type: checkChargeType(
-            data.domestic_reissue.charge_type_id,
-          ),
+          domestic_reissue_amount_type: checkChargeType(data.domestic_reissue.charge_type_id),
           domestic_reissue_percent: data.domestic_reissue.percent,
           domestic_reissue_tax_include: data.domestic_reissue.is_tax_inclusive,
-          domestic_revalidate: checkprocessingType(
-            data.domestic_revalidate.charge_type_id,
-          ),
-          domestic_revalidate_fee_tax_id:
-            data.domestic_revalidate.fee_tax_type_id,
+          domestic_revalidate: checkprocessingType(data.domestic_revalidate.charge_type_id),
+          domestic_revalidate_fee_tax_id: data.domestic_revalidate.fee_tax_type_id,
           domestic_revalidate_amount: data.domestic_revalidate.amount,
-          domestic_revalidate_amount_type: checkChargeType(
-            data.domestic_revalidate.charge_type_id,
-          ),
+          domestic_revalidate_amount_type: checkChargeType(data.domestic_revalidate.charge_type_id),
           domestic_revalidate_percent: data.domestic_revalidate.percent,
-          domestic_revalidate_tax_include:
-            data.domestic_revalidate.is_tax_inclusive,
+          domestic_revalidate_tax_include: data.domestic_revalidate.is_tax_inclusive,
         })
       }
     } catch (e) {
@@ -490,8 +482,9 @@ const OtherAncillaryFee = (props) => {
       openSnackbar(
         `Ancillary Fee has been successfully ${formId ? "updated" : "saved"}.`,
       )
+      props.handleSelectTab("tax-fee")
     } catch (e) {
-      console.log(e)
+      openSnackbar(`Failed to save this record.`)
     }
   }
 
@@ -554,7 +547,7 @@ const OtherAncillaryFee = (props) => {
                   fHandleChange={handleChange}
                   fHandleBlur={handleBlur}
                   setFieldValue={setFieldValue}
-                  isView={isView}
+                  // isView={isView}
                   amountSuffixSelections={[
                     {
                       label: "/Transaction",
@@ -573,12 +566,11 @@ const OtherAncillaryFee = (props) => {
               >
                 SAVE & NEXT
               </Button>
-              <Button
-                variant="secondary"
-                onClick={() => props.history.push(props.backUrl)}
-              >
-                CANCEL
-              </Button>
+              <CancelButton
+                onClick={() => {
+                  props.handleSelectTab("retail-ancillary-fee")
+                }}
+              />
             </div>
           </Form>
         )}
