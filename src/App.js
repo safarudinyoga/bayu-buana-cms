@@ -640,10 +640,10 @@ const DashboardRoutes = () => {
         </Route>
 
         {/* Job Title Corporate */}
-        <Route exact path="/master/job-title-corporate">
+        <Route exact path="/master/corporate-job-title">
           <JobTitleCorporateTable />
         </Route>
-        <Route exact path="/master/job-title-corporate/form/:id?">
+        <Route exact path="/master/corporate-job-title/form/:id?">
           <JobTitleCorporateForm />
         </Route>
 
