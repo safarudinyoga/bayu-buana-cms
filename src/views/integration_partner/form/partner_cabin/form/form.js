@@ -20,6 +20,7 @@ import FormikControl from "../../../../../components/formik/formikControl"
 import { setContentTitle } from "redux/ui-store"
 import { ReactSVG } from "react-svg"
 import createIcon from "assets/icons/create.svg"
+import axios from "axios"
 const endpoint = "/master/integration-partners";
 const FareFamilyModal = (props) => {
   return (
@@ -159,14 +160,72 @@ Yup.addMethod(Yup.string, 'uniqueValueString', function (fieldName, message) {
   // Schema for yup
   const validationSchema = Yup.object().shape({
     cabin_type_id: Yup.object()
+    .shape({
+      value: Yup.string(),
+      label: Yup.string(),
+    })
     .required("Cabin is required.")
-    .uniqueValueObject("cabin_type_id","Cabin already exists"),
+    .test(
+      "unique-cabin-id",
+      "Cabin already exists",
+      async (value,context) => {
+        let formId = props.partnerCabinId
+        try {
+          let res = await api.get(`${endpoint}/${id}/cabins?filters=["cabin_type_id","=","${value.value}"]`)
+
+          if(formId){
+            return res.data.items.length === 0 || value.value === formValues.cabin_type_id.value
+          } else {
+            return res.data.items.length === 0
+          }
+        } catch (error) {
+          console.log(error)
+          return false
+        } 
+      }
+    ),
+    // .uniqueValueObject("cabin_type_id","Cabin already exists"),
     cabin_type_code: Yup.string()
     .required("Partner Cabin Code is required")
-    .uniqueValueString('cabin_type_code', 'Partner Cabin Code already exists'),
+    .test(
+      "unique-partner-cabin-code",
+      "Partner Cabin Code already exists",
+      async (value, context) => {
+        let formId = props.partnerCabinId
+        try {
+          let res = await api.get(`${endpoint}/${id}/cabins?filters=["cabin_type_code","=","${value}"]`)
+
+          if(formId){
+            return res.data.items.length === 0 || value === formValues.cabin_type_code
+          } else {
+            return res.data.items.length === 0
+          }
+        } catch (error) {
+          return false
+        }
+      }
+    ),
+    
     cabin_type_name: Yup.string()
     .required("Partner Cabin Name is required")
-    .uniqueValueString('cabin_type_name', 'Partner Cabin Name already exists'),
+    .test(
+      "unique-partner-cabin-name",
+      "Partner Cabin Name already exists",
+      async (value, context) => {
+        let formId = props.partnerCabinId
+        try {
+          let res = await api.get(`${endpoint}/${id}/cabins?filters=["cabin_type_name","=","${value}"]`)
+
+          if(formId){
+            return res.data.items.length === 0 || value === formValues.cabin_type_code
+          } else {
+            return res.data.items.length === 0
+          }
+        } catch (error) {
+          return false
+        }
+      }
+    ),
   })
 
   useEffect(async () => {
@@ -216,7 +275,8 @@ Yup.addMethod(Yup.string, 'uniqueValueString', function (fieldName, message) {
             message: `Record 'Partner Cabin Name: ${values.cabin_type_name}' has been successfully saved.`,
         })
       );
-      dispatch(setCreateModal({ show: false, id: null, disabled_form: false }));
+      dispatch(setContentTitle("Partner Cabins"));
+      props.handleReplaceTable(props.isReplaceTable);
       
     } catch (e) {
       dispatch(
