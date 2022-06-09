@@ -145,10 +145,189 @@ const TaxFee = (props) => {
   const validationSchema = Yup.object().shape({
     // processing_fee_category_name: Yup.string().required("Present Name is required."),
     // Flight
-
+    domestic_flight_vat: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeDomesticFlightVat.fee_tax_type_name}.`),
+    domestic_flight_vat_amount: Yup
+      .string().when('domestic_flight_vat', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeDomesticFlightVat.fee_tax_type_name}.`)
+      }),
+    domestic_flight_vat_amount_type: Yup
+      .string().when('domestic_flight_vat', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    domestic_flight_vat_percent: Yup
+      .string().when('domestic_flight_vat', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeDomesticFlightVat.fee_tax_type_name}.`)
+      }),
+    domestic_flight_service_fee_vat: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeDomesticFlightServiceFeeVat.fee_tax_type_name}.`),
+    domestic_flight_service_fee_vat_amount: Yup
+      .string().when('domestic_flight_service_fee_vat', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeDomesticFlightServiceFeeVat.fee_tax_type_name}.`)
+      }),
+    domestic_flight_service_fee_vat_amount_type: Yup
+      .string().when('domestic_flight_service_fee_vat', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    domestic_flight_service_fee_vat_percent: Yup
+      .string().when('domestic_flight_service_fee_vat', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeDomesticFlightServiceFeeVat.fee_tax_type_name}.`)
+      }),
+    international_flight_vat: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeInternationalFlightVat.fee_tax_type_name}.`),
+    international_flight_vat_amount: Yup
+      .string().when('international_flight_vat', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeInternationalFlightVat.fee_tax_type_name}.`)
+      }),
+    international_flight_vat_amount_type: Yup
+      .string().when('international_flight_vat', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    international_flight_vat_percent: Yup
+      .string().when('international_flight_vat', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeInternationalFlightVat.fee_tax_type_name}.`)
+      }),
+    international_flight_service_fee_vat: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeInternationalFlightServiceFeeVat.fee_tax_type_name}.`),
+    international_flight_service_fee_vat_amount: Yup
+      .string().when('international_flight_service_fee_vat', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeInternationalFlightServiceFeeVat.fee_tax_type_name}.`)
+      }),
+    international_flight_service_fee_vat_amount_type: Yup
+      .string().when('international_flight_service_fee_vat', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    international_flight_service_fee_vat_percent: Yup
+      .string().when('international_flight_service_fee_vat', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeInternationalFlightServiceFeeVat.fee_tax_type_name}.`)
+      }),
     // Hotel
+    domestic_hotel_vat: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeDomesticHotelVat.fee_tax_type_name}.`),
+    domestic_hotel_vat_amount: Yup
+      .string().when('domestic_hotel_vat', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeDomesticHotelVat.fee_tax_type_name}.`)
+      }),
+    domestic_hotel_vat_amount_type: Yup
+      .string().when('domestic_hotel_vat', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    domestic_hotel_vat_percent: Yup
+      .string().when('domestic_hotel_vat', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeDomesticHotelVat.fee_tax_type_name}.`)
+      }),
+    domestic_hotel_service_fee_vat: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeDomesticHotelServiceFeeVat.fee_tax_type_name}.`),
+    domestic_hotel_service_fee_vat_amount: Yup
+      .string().when('domestic_hotel_service_fee_vat', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeDomesticHotelServiceFeeVat.fee_tax_type_name}.`)
+      }),
+    domestic_hotel_service_fee_vat_amount_type: Yup
+      .string().when('domestic_hotel_service_fee_vat', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    domestic_hotel_service_fee_vat_percent: Yup
+      .string().when('domestic_hotel_service_fee_vat', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeDomesticHotelServiceFeeVat.fee_tax_type_name}.`)
+      }),
+    international_flight_vat: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeInternationalHotelVat.fee_tax_type_name}.`),
+    international_flight_vat_amount: Yup
+      .string().when('international_flight_vat', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeInternationalHotelVat.fee_tax_type_name}.`)
+      }),
+    international_flight_vat_amount_type: Yup
+      .string().when('international_flight_vat', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    international_flight_vat_percent: Yup
+      .string().when('international_flight_vat', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeInternationalHotelVat.fee_tax_type_name}.`)
+      }),
+    international_flight_service_fee_vat: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeInternationalHotelServiceFeeVat.fee_tax_type_name}.`),
+    international_flight_service_fee_vat_amount: Yup
+      .string().when('international_flight_service_fee_vat', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeInternationalHotelServiceFeeVat.fee_tax_type_name}.`)
+      }),
+    international_flight_service_fee_vat_amount_type: Yup
+      .string().when('international_flight_service_fee_vat', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    international_flight_service_fee_vat_percent: Yup
+      .string().when('international_flight_service_fee_vat', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeInternationalHotelServiceFeeVat.fee_tax_type_name}.`)
+      }),
 
     // Other
+    domestic_other_vat: Yup
+    .string()
+    .required(`Please enter fixed amount or percentage for ${taxTypeOtherRentCarVat.fee_tax_type_name}.`),
+    domestic_other_vat_amount: Yup
+      .string().when('domestic_other_vat', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeOtherRentCarVat.fee_tax_type_name}.`)
+      }),
+    domestic_other_vat_amount_type: Yup
+      .string().when('domestic_other_vat', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    domestic_other_vat_percent: Yup
+      .string().when('domestic_other_vat', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeOtherRentCarVat.fee_tax_type_name}.`)
+      }),
+    domestic_other_service_fee_vat: Yup
+    .string()
+    .required(`Please enter fixed amount or percentage for ${taxTypeOtherServiceFeeVat.fee_tax_type_name}.`),
+    domestic_other_service_fee_vat_amount: Yup
+      .string().when('domestic_other_service_fee_vat', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeOtherServiceFeeVat.fee_tax_type_name}.`)
+      }),
+    domestic_other_service_fee_vat_amount_type: Yup
+      .string().when('domestic_other_service_fee_vat', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    domestic_other_service_fee_vat_percent: Yup
+      .string().when('domestic_other_service_fee_vat', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeOtherServiceFeeVat.fee_tax_type_name}.`)
+      }),
   })
 
   useEffect(async() => {
@@ -194,6 +373,12 @@ const TaxFee = (props) => {
     }
   }
 
+  //function for remove separator 
+  const removeSeparator = (value) => {
+    value = value.toString().split(",").join("")
+    return parseInt(value)
+  }
+
   const onSubmitFee = (values, id) => {
       let payloadDomestic = {
         processing_fee_category_id: id,
@@ -201,7 +386,7 @@ const TaxFee = (props) => {
         domestic_flight_vat: {
           fee_tax_type_id: taxIdDomesticFlightVat,
           currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
-          amount: values.domestic_flight_vat == "amount" ? values.domestic_flight_vat_amount : null,
+          amount: values.domestic_flight_vat == "amount" ? removeSeparator(values.domestic_flight_vat_amount) : null,
           percent:values.domestic_flight_vat == "amount" ? null : values.domestic_flight_vat_percent,
           charge_type_id:values.domestic_flight_vat == "amount" ? values.domestic_flight_vat_amount_type : null,
           is_hidden: true,
@@ -210,7 +395,7 @@ const TaxFee = (props) => {
         domestic_flight_service_fee_vat: {
           fee_tax_type_id: taxIdDomesticFlightServiceFeeVat,
           currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
-          amount: values.domestic_flight_service_fee_vat == "amount" ? values.domestic_flight_service_fee_vat_amount : null,
+          amount: values.domestic_flight_service_fee_vat == "amount" ? removeSeparator(values.domestic_flight_service_fee_vat_amount) : null,
           percent:values.domestic_flight_service_fee_vat == "amount" ? null : values.domestic_flight_service_fee_vat_percent,
           charge_type_id:values.domestic_flight_service_fee_vat == "amount" ? values.domestic_flight_service_fee_vat_amount_type : null,
           is_hidden: true,
@@ -219,7 +404,7 @@ const TaxFee = (props) => {
         international_flight_vat: {
           fee_tax_type_id: taxIdInternationalFlightVat,
           currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
-          amount: values.international_flight_vat == "amount" ? values.international_flight_vat_amount : null,
+          amount: values.international_flight_vat == "amount" ? removeSeparator(values.international_flight_vat_amount) : null,
           percent:values.international_flight_vat == "amount" ? null : values.international_flight_vat_percent,
           charge_type_id:values.international_flight_vat == "amount" ? values.international_flight_vat_amount_type : null,
           is_hidden: true,
@@ -228,7 +413,7 @@ const TaxFee = (props) => {
         international_flight_service_fee_vat: {
           fee_tax_type_id: taxIdInternationalFlightServiceFeeVat,
           currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
-          amount: values.international_flight_service_fee_vat == "amount" ? values.international_flight_service_fee_vat_amount : null,
+          amount: values.international_flight_service_fee_vat == "amount" ? removeSeparator(values.international_flight_service_fee_vat_amount) : null,
           percent:values.international_flight_service_fee_vat == "amount" ? null : values.international_flight_service_fee_vat_percent,
           charge_type_id:values.international_flight_service_fee_vat == "amount" ? values.international_flight_service_fee_vat_amount_type : null,
           is_hidden: true,
@@ -239,7 +424,7 @@ const TaxFee = (props) => {
         domestic_hotel_vat: {
           fee_tax_type_id: taxIdDomesticHotelVat,
           currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
-          amount: values.domestic_hotel_vat == "amount" ? values.domestic_hotel_vat_amount : null,
+          amount: values.domestic_hotel_vat == "amount" ? removeSeparator(values.domestic_hotel_vat_amount) : null,
           percent:values.domestic_hotel_vat == "amount" ? null : values.domestic_hotel_vat_percent,
           charge_type_id:values.domestic_hotel_vat == "amount" ? values.domestic_hotel_vat_amount_type : null,
           is_hidden: true,
@@ -248,7 +433,7 @@ const TaxFee = (props) => {
         domestic_hotel_service_fee_vat: {
           fee_tax_type_id: taxIdDomesticHotelServiceFeeVat,
           currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
-          amount: values.domestic_hotel_service_fee_vat == "amount" ? values.domestic_hotel_service_fee_vat_amount : null,
+          amount: values.domestic_hotel_service_fee_vat == "amount" ? removeSeparator(values.domestic_hotel_service_fee_vat_amount) : null,
           percent:values.domestic_hotel_service_fee_vat == "amount" ? null : values.domestic_hotel_service_fee_vat_percent,
           charge_type_id:values.domestic_hotel_service_fee_vat == "amount" ? values.domestic_hotel_service_fee_vat_amount_type : null,
           is_hidden: true,
@@ -257,7 +442,7 @@ const TaxFee = (props) => {
         international_hotel_vat: {
           fee_tax_type_id: taxIdInternationalHotelVat,
           currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
-          amount: values.international_hotel_vat == "amount" ? values.international_hotel_vat_amount : null,
+          amount: values.international_hotel_vat == "amount" ? removeSeparator(values.international_hotel_vat_amount) : null,
           percent:values.international_hotel_vat == "amount" ? null : values.international_hotel_vat_percent,
           charge_type_id:values.international_hotel_vat == "amount" ? values.international_hotel_vat_amount_type : null,
           is_hidden: true,
@@ -266,7 +451,7 @@ const TaxFee = (props) => {
         international_hotel_service_fee_vat: {
           fee_tax_type_id: taxIdInternationalHotelServiceFeeVat,
           currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
-          amount: values.international_hotel_service_fee_vat == "amount" ? values.international_hotel_service_fee_vat_amount : null,
+          amount: values.international_hotel_service_fee_vat == "amount" ? removeSeparator(values.international_hotel_service_fee_vat_amount) : null,
           percent:values.international_hotel_service_fee_vat == "amount" ? null : values.international_hotel_service_fee_vat_percent,
           charge_type_id:values.internahotel_flight_service_fee_vat == "amount" ? values.international_hotel_service_fee_vat_amount_type : null,
           is_hidden: true,
@@ -277,17 +462,16 @@ const TaxFee = (props) => {
         domestic_other_vat: {
           fee_tax_type_id: taxIdOtherRentCarVat,
           currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
-          amount: values.domestic_other_vat == "amount" ? values.domestic_other_vat_amount : null,
+          amount: values.domestic_other_vat == "amount" ? removeSeparator(values.domestic_other_vat_amount) : null,
           percent:values.domestic_other_vat == "amount" ? null : values.domestic_other_vat_percent,
           charge_type_id:values.domestic_other_vat == "amount" ? values.domestic_other_vat_amount_type : null,
           is_hidden: true,
           is_included: false,
         },
-
         domestic_other_service_fee_vat: {
           fee_tax_type_id: taxIdOtherServiceFeeVat,
           currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
-          amount: values.domestic_other_service_fee_vat == "amount" ? values.domestic_other_service_fee_vat_amount : null,
+          amount: values.domestic_other_service_fee_vat == "amount" ? removeSeparator(values.domestic_other_service_fee_vat_amount) : null,
           percent:values.domestic_other_service_fee_vat == "amount" ? null : values.domestic_other_service_fee_vat_percent,
           charge_type_id:values.domestic_other_service_fee_vat == "amount" ? values.domestic_other_service_fee_vat_amount_type : null,
           is_hidden: true,
