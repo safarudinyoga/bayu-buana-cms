@@ -142,7 +142,11 @@ class BBDataTable extends Component {
         let showSwitch = self.props.switchStatus
         let checked = ""
         if (showSwitch) {
-          checked = row.status == 1 ? "checked" : ""
+          if (module === 'manage-corporate') {
+            checked = row.agent_corporate.corporate.status === 1 ? "checked" : ""
+          } else {
+            checked = row.status == 1 ? "checked" : ""
+          }
         }
 
         let hideDetail = self.props.hideDetail
@@ -168,13 +172,13 @@ class BBDataTable extends Component {
           ? row.currency_id
           : module === 'partner-hotel-suppliers'
           ? row.hotel_supplier_id
-          : module === 'partner-fee-taxes' 
-          ? row.fee_tax_type_id 
-          : module === 'partner-city' 
-          ? row.city_id 
-          : module === 'partner-meal-plan' 
+          : module === 'partner-fee-taxes'
+          ? row.fee_tax_type_id
+          : module === 'partner-city'
+          ? row.city_id
+          : module === 'partner-meal-plan'
           ? row.integration_partner_meal_plan_type.meal_plan_type_id
-          : module === 'partner-cabin' 
+          : module === 'partner-cabin'
           ? row.cabin_type_id
           : row.id
 
@@ -183,7 +187,7 @@ class BBDataTable extends Component {
         return (
           `
           <a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item ${hideDetail ? "mr-2" : ""}" data-action="edit" data-id="${targetDataId}" title="Click to edit"><img src="${editIcon}"/></a>
-          
+
           <a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item ${showCopyAct ? "d-inline" : "d-none"}" data-action="copy" data-id="${targetDataId}" title="Click to copy"style="margin-left:7px;"><img src="${CopyIcon}" /></a>
           <a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="${hideDetail ? "d-none" : "d-inline"} table-row-action-item" data-action="view" data-id="${row.id}" title="Click to view details"><img src="${showIcon}"/></a>
           <a href="javascript:void(0);" class="${showSwitch ? "d-inline" : "d-none"} custom-switch custom-switch-bb table-row-action-item" data-id="${module === 'employee' ? row.employee_id: row.id}" data-action="update_status" data-status="${row.status}" data-toggle="tooltip" data-placement="${placement}" title="${row.status === 1 ? "Deactivate" : "Activate"}">
