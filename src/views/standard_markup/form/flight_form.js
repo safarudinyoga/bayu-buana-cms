@@ -23,6 +23,7 @@ import { setAlert, setUIParams } from "redux/ui-store"
 import Api from "config/api"
 import env from "config/environment"
 import Select from "components/form/select-async"
+import NumberFormat from "react-number-format";
 
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css"
 import "react-dropzone-uploader/dist/styles.css"
@@ -161,7 +162,7 @@ const FlightModal = (props) => {
                           <Col>
                             <Form.Check
                               type="checkbox"
-                              label="Include Taxed"
+                              label="Include Taxes"
                               className="mt-2"
                             />
                           </Col>
@@ -397,7 +398,16 @@ const FlightForm = (props) => {
                                   IDR
                                 </Form.Label>
                                 <Col xs={10} md={9} lg={7}>
-                                  <Form.Control style={{ maxWidth: "220px" }} />
+                                <NumberFormat
+                                  className="form-control"
+                                  maxLength={19}
+                                  thousandsGroupStyle="thousand"
+                                  displayType="input"
+                                  type="text"
+                                  thousandSeparator={true}
+                                  allowNegative={true}
+                                  disabled={props.isView}
+                                />
                                 </Col>
                               </Form.Group>
                             </Col>
@@ -435,7 +445,7 @@ const FlightForm = (props) => {
                                 <Col>
                                   <Form.Check
                                     type="checkbox"
-                                    label="Include Taxed"
+                                    label="Include Taxes"
                                     className="mt-2"
                                   />
                                 </Col>
@@ -472,7 +482,16 @@ const FlightForm = (props) => {
                                   IDR
                                 </Form.Label>
                                 <Col xs={10} md={9} lg={7}>
-                                  <Form.Control style={{ maxWidth: "220px" }} />
+                                  <NumberFormat
+                                    className="form-control"
+                                    maxLength={19}
+                                    thousandsGroupStyle="thousand"
+                                    displayType="input"
+                                    type="text"
+                                    thousandSeparator={true}
+                                    allowNegative={true}
+                                    disabled={props.isView}
+                                  />
                                 </Col>
                               </Form.Group>
                             </Col>
@@ -500,7 +519,30 @@ const FlightForm = (props) => {
                             <Col xs={3} md={2} lg={3} className="ml-4 ml-md-0">
                               <Form.Group as={Row} className="mb-3">
                                 <Col>
-                                  <Form.Control style={{ maxWidth: "80px" }} />
+                                <Form.Control 
+                                  // {...field} 
+                                  type="text" 
+                                  minLength={0}
+                                  maxLength={3}
+                                  style={{ maxWidth: "80px" }} 
+                                  className="mx-3" 
+                                  disabled={props.isView} 
+                                  onChange={(value) => {
+                                    // console.log(props.values, props.fieldAmount)
+                                    let pattern=/^\d+$/
+                                    // console.log(pattern.test(value.target.value))
+                                    // if(pattern.test(value.target.value)) {
+                                    //   if(value.target.value <= 100) {
+                                    //     props.setFieldValue(props.fieldPercent, value.target.value)
+                                    //   }
+                                    //   if(value.target.value === "") {
+                                    //     props.setFieldValue(props.fieldPercent, value.target.value)
+                                    //   }
+                                    // } else { //for bugs field can alphabet
+                                    //   props.setFieldValue(props.fieldPercent, "")
+                                    // }
+                                  }}
+                                />
                                 </Col>
                                 <span className="text-lg mt-1">%</span>
                               </Form.Group>
@@ -510,7 +552,7 @@ const FlightForm = (props) => {
                                 <Col>
                                   <Form.Check
                                     type="checkbox"
-                                    label="Include Taxed"
+                                    label="Include Taxes"
                                     className="mt-2"
                                   />
                                 </Col>

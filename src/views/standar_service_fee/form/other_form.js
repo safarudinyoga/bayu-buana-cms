@@ -327,7 +327,7 @@ const OtherModal = (props) => {
                   <span className="text-lg mt-1">%</span>
                   <Form.Check
                     type="checkbox"
-                    label="Include Taxed"
+                    label="Include n "
                     className="mt-2 ml-4"
                   />
                 </Form.Group>
