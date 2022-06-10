@@ -10,21 +10,52 @@ const DateRangePicker = (props) => {
   const [startDateClose, setStartDateClose] = useStateWithCallbackLazy(false)
   const [form, setForm] = useState([])
 
-  const startDatePicker = useRef()
-  const endDatePicker = useRef()
+  const datePickerRef = useRef()
 
   useEffect(() => {
     if(props.value) {
-      console.log(props.value)
-      setForm([])
+      setForm(props.value)
     }
   }, [props])
+
+  const RenderDatepickerStart = ({ openCalendar, value, handleValueChange }) => {
+    return (
+      <Row>
+        <Col>
+          <div className="position-relative datepicker-special-date">
+            <Icon className="special-date-icon" onClick={openCalendar} />
+            <input type="text"
+              className="form-control periode" 
+              onFocus={openCalendar}
+              value={value[0]}
+              onChange={handleValueChange}
+              id="startDate"
+            />
+          </div>
+        </Col>
+        <Col md={1} className={"text-center mt-1"}>to</Col>
+        <Col>
+          <div className="position-relative datepicker-special-date">
+            <Icon className="special-date-icon" onClick={openCalendar} />
+            <input type="text"
+              className="form-control periode" 
+              onFocus={openCalendar}
+              value={value[1]}
+              onChange={handleValueChange}
+              id="endDate"
+            />
+          </div>
+        </Col>
+      </Row>
+    )
+  }
 
 
   return (
     <DatePicker
      {...props}
       range
+      ref={datePickerRef}
       render={<RenderDatepickerStart />}
       numberOfMonths={2}
       format="DD MMMM YYYY"
@@ -34,7 +65,8 @@ const DateRangePicker = (props) => {
       onChange={
         (date) => {
           if(date.length === 1) {
-            endDatePicker.current.focus()
+            let endDate = document.getElementById("endDate")
+            endDate.focus();
             setForm(date)
           } else {
             setForm(date)
@@ -65,11 +97,12 @@ const DateRangePicker = (props) => {
           role={"button"} 
           onClick={
             () => {
-              // setStartDateClose(true, () => {
-              //   startDatePickerRef.current.closeCalendar()
-              //   let endDate = document.getElementById("endDate")
-              //   endDate.focus();
-              // })
+              console.log(form, "yyy")
+              // setStartDateClose(true)
+              setStartDateClose(true, () => {
+                datePickerRef.current.closeCalendar()
+                props.onChange(form)
+              })
             }
         }>
           APPLY
@@ -77,39 +110,6 @@ const DateRangePicker = (props) => {
       </div>
       
     </DatePicker>
-  )
-}
-
-function RenderDatepickerStart({ openCalendar, value, handleValueChange }) {
-  return (
-    <Row>
-      <Col>
-        <div className="position-relative datepicker-special-date">
-          <Icon className="special-date-icon" onClick={openCalendar} />
-          <input type="text"
-            className="form-control periode" 
-            onFocus={openCalendar}
-            value={value[0]}
-            onChange={handleValueChange}
-            id="startDate"
-            ref={startDatePicker}
-          />
-        </div>
-      </Col>
-      <Col md={1} className={"text-center mt-1"}>to</Col>
-      <Col>
-        <div className="position-relative datepicker-special-date">
-          <Icon className="special-date-icon" onClick={openCalendar} />
-          <input type="text"
-            className="form-control periode" 
-            onFocus={openCalendar}
-            value={value[1]}
-            onChange={handleValueChange}
-            ref={endDatePicker}
-          />
-        </div>
-      </Col>
-    </Row>
   )
 }
 
