@@ -21,7 +21,7 @@ const DateRangePicker = (props) => {
   const RenderDatepickerStart = ({ openCalendar, value, handleValueChange }) => {
     return (
       <Row>
-        <Col>
+        <Col md={4}>
           <div className="position-relative datepicker-special-date">
             <Icon className="special-date-icon" onClick={openCalendar} />
             <input type="text"
@@ -33,8 +33,8 @@ const DateRangePicker = (props) => {
             />
           </div>
         </Col>
-        <Col md={1} className={"text-center mt-1"}>to</Col>
-        <Col>
+        <Col md={1} className={"text-center mt-1"} >to</Col>
+        <Col md={4}>
           <div className="position-relative datepicker-special-date">
             <Icon className="special-date-icon" onClick={openCalendar} />
             <input type="text"
