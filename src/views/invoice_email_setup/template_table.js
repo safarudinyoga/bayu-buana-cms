@@ -15,7 +15,7 @@ export default function InvoiceEmailSetupTable() {
         let {data} = await API.get("/master/configurations/agent-email-categories/" + routeParams.template_id)
         dispatch(
             setUIParams({
-                title: data?.email_category_name || "Email Template 1",
+                title: data?.email_category_name || "${'Email Category Name'}",
                 breadcrumbs: [
                     {
                         text: "Setup and Configurations",
@@ -25,7 +25,7 @@ export default function InvoiceEmailSetupTable() {
                         link: backUrl,
                     },
                     {
-                        text: data?.email_category_name || "Email Template 1",
+                        text: data?.email_category_name || "${'Email Category Name'}",
                     },
                 ],
             }),

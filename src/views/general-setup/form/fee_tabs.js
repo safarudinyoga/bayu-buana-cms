@@ -3,17 +3,17 @@ import { Tabs, TabPane, Row, Col, Form } from "react-bootstrap"
 import { FastField } from "formik"
 import NumberFormat from "react-number-format";
 
-// const AmountRadioSelections = (props) => {
-//   return props.disabledAmount
-//   ?
-//     <Form.Check type="radio" label={props.label} value={props.value} disabled={props.disabledAmount} />
-//   : 
-//     <FastField name={props.fieldAmountType}>
-//       {({ field, form }) => (
-//       <Form.Check {...field} value={props.value} checked={props.values[props.fieldAmountType] === props.value} type="radio" label={props.label}  disabled={props.isView}/>
-//       )}
-//     </FastField>
-// }
+const AmountRadioSelections = (props) => {
+  return props.disabledAmount
+  ?
+    <Form.Check type="radio" label={props.label} value={props.value} disabled={props.disabledAmount} />
+  : 
+    <FastField name={props.fieldAmountType}>
+      {({ field, form }) => (
+      <Form.Check {...field} value={props.value} checked={props.values[props.fieldAmountType] === props.value} type="radio" label={props.label}  disabled={props.isView}/>
+      )}
+    </FastField>
+}
 
 const FeeSection = (props) => {
   let id = props.taxType ? props.taxType.id : "";
@@ -106,32 +106,13 @@ const FeeSection = (props) => {
               <Col sm={12} md={6}>
                 <Form.Group className="mb-3">
                   {
-                    disabledAmount
-                    ? (
-                      <>
-                        <Form.Check type="radio" label="/Ticket" disabled={disabledAmount} />
-                        <Form.Check type="radio" label="/Person" disabled={disabledAmount} />
-                        <Form.Check type="radio" label="/Transaction" disabled={disabledAmount} />
-                      </>
-                    ) : (
-                      <>
-                        <FastField name={props.fieldAmountType}>
-                          {({ field, form }) => (
-                          <Form.Check {...field} value="de62950d-fbab-4e39-bd90-c2b6687c6b36" checked={props.values[props.fieldAmountType] === "de62950d-fbab-4e39-bd90-c2b6687c6b36"} type="radio" label="/Ticket"  disabled={props.isView}/>
-                          )}
-                        </FastField>
-                        <FastField name={props.fieldAmountType}>
-                          {({ field, form }) => (
-                          <Form.Check {...field} value="de03bf84-4bd8-4cdf-9348-00246f04bcad" checked={props.values[props.fieldAmountType] === "de03bf84-4bd8-4cdf-9348-00246f04bcad"} type="radio" label="/Person" disabled={props.isView} />
-                          )}
-                        </FastField>
-                        <FastField name={props.fieldAmountType}>
-                          {({ field, form }) => (
-                          <Form.Check {...field} value="5123b121-4f6a-4871-bef1-65408d663e19" checked={props.values[props.fieldAmountType] === "5123b121-4f6a-4871-bef1-65408d663e19"} type="radio" label="/Transaction" disabled={props.isView} />
-                          )}
-                        </FastField>
-                      </>
-                    )
+                    props.amountSuffixSelections.map((suffix, i) => <AmountRadioSelections 
+                      key={i}
+                      {...props}
+                      disabledAmount={disabledAmount}
+                      value={suffix.value}
+                      label={suffix.label}
+                  />)
                   }
                 </Form.Group>
               </Col>
