@@ -805,6 +805,15 @@ const AuthRoutes = () => {
       <Route exact path="/auth/reset-password">
         <ResetPassword />
       </Route>
+      <Route exact path="/auth/corporate-login">
+        <Login />
+      </Route>
+      <Route exact path="/auth/corporate-forgot-password">
+        <ForgotPassword />
+      </Route>
+      <Route exact path="/auth/corporate-otp">
+        <OTP />
+      </Route>
     </AuthWrapper>
   )
 }
