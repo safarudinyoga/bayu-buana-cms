@@ -560,12 +560,12 @@ class BBDataTable extends Component {
               // this case `data: 0`.
               "render": function ( data, type, row ) {
                 var datas = data;
-                if(module === 'employee'){
+                if(module === 'employee' || module === 'user-management' ){
                   datas = data +' '+ row.middle_name + ' ' + row.surname;
                 }
                   return datas
               },
-              "targets": module === 'employee' ? 3 : ''
+              "targets": module === 'employee' ? 3 : module === 'user-management' ? 2 : ''
           },
           {
               // The `data` parameter refers to the data for the cell (defined by the
