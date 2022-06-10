@@ -2,7 +2,8 @@ import DatePicker, { DateObject }  from 'react-multi-date-picker'
 import Icon from "react-multi-date-picker/components/icon"
 import { useStateWithCallbackLazy } from 'use-state-with-callback';
 import React, { useEffect, useRef, useState } from "react"
-import { Col, Row } from 'react-bootstrap';
+import { Col, Row, Button } from 'react-bootstrap';
+import _ from "lodash"
 
 
 const DateRangePicker = (props) => {
@@ -13,8 +14,11 @@ const DateRangePicker = (props) => {
   const datePickerRef = useRef()
 
   useEffect(() => {
+    console.log(props.value)
     if(props.value) {
-      setForm(props.value)
+      if(props.value[0] !== null) {
+        setForm(props.value)
+      }
     }
   }, [props])
 
@@ -82,7 +86,7 @@ const DateRangePicker = (props) => {
       portal
     >
       <div className="d-flex justify-content-end p-4">
-        <div
+        <button
           className="pt-1"
           style={{color: "#1E83DC"}}
           role={"button"}
@@ -91,14 +95,13 @@ const DateRangePicker = (props) => {
           }}
         >
           Reset
-        </div>    
-        <div 
+        </button>    
+        <Button 
           className="btn btn-primary ml-4 px-4 py-2"
-          role={"button"} 
+          disabled={form.length < 2}
           onClick={
             () => {
               console.log(form, "yyy")
-              // setStartDateClose(true)
               setStartDateClose(true, () => {
                 datePickerRef.current.closeCalendar()
                 props.onChange(form)
@@ -106,7 +109,7 @@ const DateRangePicker = (props) => {
             }
         }>
           APPLY
-        </div>
+        </Button>
       </div>
       
     </DatePicker>

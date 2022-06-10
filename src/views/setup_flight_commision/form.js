@@ -19,7 +19,7 @@ import engb from "date-fns/locale/en-GB"
 import "react-datepicker/dist/react-datepicker.css";
 import Select from "components/form/select"
 import { default as SelectAsync } from "components/form/select-async"
-import DateRangePicker from "./date_range_picker"
+import DateRangePicker from "../../components/form/date_range_picker"
 import { values } from "lodash"
 
 const endpoint = "/master/commission-claims"
@@ -60,23 +60,10 @@ const FlightCommisionForm = (props) => {
     arrival_at: {},
     percent: "",
   })
-  const [optAirline, setOptAirline] = useState([])
-  const [optArrival, setOptArrival] = useState([])
-  const [optDeparture, setOptDeparture] = useState([])
-  const [arrivalCity, setArrivalCity] = useState()
-  const [departureCity, setDepartureCity] = useState()
   const [specifyPeriodIssue, setSpecifyPeriodIssue] = useState(false)
   const [specifyPeriodDeparture, setSpecifyPeriodDeparture] = useState(false)
 
   const [optionRoute, setOptionRoute] = useState([])
-
-  const [periodIssueStart, setPeriodIssueStart] = useState(new Date())
-  const [periodIssueEnd, setPeriodIssueEnd] = useState(new Date())
-
-  const [periodDepartureStart, setPeriodDepartureStart] = useState(new Date())
-  const [periodDepartureEnd, setPeriodDepartureEnd] = useState(new Date())
-
-  const [commission, setCommission] = useState("0.00")
 
   const dateHighlight = useRef(null);
   
@@ -131,12 +118,17 @@ const FlightCommisionForm = (props) => {
             end_date: new Date(data.commission_claim_departure_date.end_date).toDateString(),
           }
           : {
-            start_date: [],
-            end_date: [],
+            start_date: null,
+            end_date: null,
           },
-          commission_claim_issue_date: {
-            start_date: [],
-            end_date: [],
+          commission_claim_issue_date: data.commission_claim_issue_date.start_date 
+          ? {
+            start_date: new Date(data.commission_claim_issue_date.start_date).toDateString(),
+            end_date: new Date(data.commission_claim_issue_date.end_date).toDateString(),
+          }
+          : {
+            start_date: null,
+            end_date: null,
           }, 
           departure_from : {
             label: data.departure_city?.city_name || data.departure_airport_location?.airport_name,
@@ -250,13 +242,13 @@ const FlightCommisionForm = (props) => {
                 departure_city_code: values.departure_from && values.departure_from?.source === 'city' ? values.departure_from.value : null,
                 arrival_city_code: values.arrival_at && values.arrival_at?.source === 'city' ? values.arrival_at.value : null,
               },
-              commission_claim_departure_date: {
-                start_date: values.commission_claim_departure_date.start_date ? new Date(values.commission_claim_departure_date.start_date) : null,
-                end_date: values.commission_claim_departure_date.end_date ? new Date(values.commission_claim_departure_date.end_date) : null,
+              commission_claim_departure_date: !specifyPeriodDeparture ? {} : {
+                start_date: values.commission_claim_departure_date.start_date ? new Date(values.commission_claim_departure_date.start_date) : [],
+                end_date: values.commission_claim_departure_date.end_date ? new Date(values.commission_claim_departure_date.end_date) : [],
               },
-              commission_claim_issue_date: {
-                start_date: values.commission_claim_issue_date.start_date ? new Date(values.commission_claim_issue_date.start_date) : null,
-                end_date: values.commission_claim_issue_date.end_date ? new Date(values.commission_claim_issue_date.end_date) : null,
+              commission_claim_issue_date: !specifyPeriodIssue ? {} : {
+                start_date: values.commission_claim_issue_date.start_date ? new Date(values.commission_claim_issue_date.start_date) : [],
+                end_date: values.commission_claim_issue_date.end_date ? new Date(values.commission_claim_issue_date.end_date) : [],
               },
               percent: parseFloat(values.percent)
             }
@@ -321,7 +313,6 @@ const FlightCommisionForm = (props) => {
                                         fieldName="airport_name"
                                         onChange={(v) => {
                                           formik.setFieldValue("departure_from", v)
-                                          setOptDeparture(v)
                                         }}
                                         className={`react-select ${
                                           form.errors.departure_from
@@ -348,7 +339,6 @@ const FlightCommisionForm = (props) => {
                                         fieldName="airport_name"
                                         onChange={(v) => {
                                           formik.setFieldValue("arrival_at", v)
-                                          setOptArrival(v)
                                         }}
                                         className={`react-select ${
                                           form.errors.arrival_at
