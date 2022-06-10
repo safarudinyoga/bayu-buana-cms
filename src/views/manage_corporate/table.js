@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { setUIParams } from "redux/ui-store"
 import rowStatus from "lib/row-status"
-import { renderColumn } from "lib/translation"
 import BbDataTable from 'components/table/bb-data-table'
+import './manage_corporate.css'
 
 
 export default function ManageCorporateTable() {
@@ -15,11 +15,9 @@ export default function ManageCorporateTable() {
         title: "Manage Corporate",
         breadcrumbs: [
           {
-            // text: "Master Data Management", !old
             text: "Corporate Management",
           },
           {
-            // text: "Intergration Partner", !old
             text: 'Manage Corporate'
           },
         ],
@@ -27,9 +25,11 @@ export default function ManageCorporateTable() {
     )
   }, [])
 
-  let [params, setParams] = useState({
+  const params = {
+    isCheckbox: false,
     title: "Manage Corporate",
     titleModal: "Manage Corporate",
+    module: 'manage-corporate',
     showAdvancedOptions: false,
     responsiveTablet: true,
     baseRoute: "/master/manage-corporate/form",
@@ -40,11 +40,20 @@ export default function ManageCorporateTable() {
     columns: [
       {
         title: "Corporate Code",
-        data: ""
+        data: "agent_corporate.corporate.corporate_code"
       },
       {
         title: "Corporate Name",
-        data: ""
+        data: "agent_corporate",
+        render: (data) => {
+          return (
+            `
+              <h5 class="font-default size-15">${data.corporate.corporate_name}</h5>
+              <h5 class="font-default size-14">Group&nbsp;&nbsp;: ${data.corporate.corporate_code}</h5>
+              <div class="Stars" style="--rating: 2.3;">
+            `
+          )
+        }
       },
       {
         title: "Travel Consultant",
@@ -53,17 +62,67 @@ export default function ManageCorporateTable() {
       {
         searchable: false,
         title: "Status",
-        data: "status",
+        data: "agent_corporate.corporate.status",
         render: rowStatus,
       },
     ],
     emptyTable: "No Corporate found",
-    // recordName: ["manage-corporate-code", "manage-corporate-name"],
-  })
-
-  const onReset = () => {
-    setParams({...params, filters: []})
+    recordName: ["agent_corporate.corporate.corporate_code", "agent_corporate.corporate.corporate_name"],
+    switchStatus: true,
+    customFilterStatus: {
+      value: "",
+      options: [
+        { value: "1", label: "Active" },
+        { value: "3", label: "Inactive" },
+      ],
+    },
+    showInfoDelete: true,
   }
 
-  return <BbDataTable {...params} onReset={onReset} />
+  // let [params, setParams] = useState({
+  //   isCheckbox: false,
+  //   title: "Manage Corporate",
+  //   titleModal: "Manage Corporate",
+  //   module: 'manage-corporate',
+  //   showAdvancedOptions: false,
+  //   responsiveTablet: true,
+  //   baseRoute: "/master/manage-corporate/form",
+  //   endpoint: "/master/agent-corporates",
+  //   // deleteEndpoint: "/master/batch-actions/delete/hotels",
+  //   // activationEndpoint: "/master/batch-actions/activate/hotels",
+  //   // deactivationEndpoint: "/master/batch-actions/deactivate/hotels",
+  //   columns: [
+  //     {
+  //       title: "Corporate Code",
+  //       data: "agent_corporate.corporate.corporate_code"
+  //     },
+  //     {
+  //       title: "Corporate Name",
+  //       data: "agent_corporate.corporate.corporate_name"
+  //     },
+  //     {
+  //       title: "Travel Consultant",
+  //       data: ""
+  //     },
+  //     {
+  //       searchable: false,
+  //       title: "Status",
+  //       data: "agent_corporate.corporate.status",
+  //       render: rowStatus,
+  //     },
+  //   ],
+  //   emptyTable: "No Corporate found",
+  //   recordName: ["agent_corporate.corporate.corporate_code", "agent_corporate.corporate.corporate_name"],
+  //   switchStatus: true,
+  //   customFilterStatus: {
+  //     value: "",
+  //     options: [
+  //       { value: "1", label: "Active" },
+  //       { value: "3", label: "Inactive" },
+  //     ],
+  //   },
+  //   showInfoDelete: true,
+  // })
+
+  return <BbDataTable {...params} />
 }
