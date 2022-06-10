@@ -19,7 +19,7 @@ import engb from "date-fns/locale/en-GB"
 import "react-datepicker/dist/react-datepicker.css";
 import Select from "components/form/select"
 import { default as SelectAsync } from "components/form/select-async"
-import DateRangePicker from "views/special_date/date_range_picker"
+import DateRangePicker from "./date_range_picker"
 import { values } from "lodash"
 
 const endpoint = "/master/commission-claims"
@@ -103,7 +103,7 @@ const FlightCommisionForm = (props) => {
           },
           {
             link: backUrl,
-            text: "Flight Commissions",
+            text: "Setup Flight Commission",
           },
           {
             text: docTitle,

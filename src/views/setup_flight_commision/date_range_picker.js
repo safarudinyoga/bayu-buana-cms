@@ -10,7 +10,8 @@ const DateRangePicker = (props) => {
   const [startDateClose, setStartDateClose] = useStateWithCallbackLazy(false)
   const [form, setForm] = useState([])
 
-  const startDatePickerRef = useRef()
+  const startDatePicker = useRef()
+  const endDatePicker = useRef()
 
   useEffect(() => {
     if(props.value) {
@@ -30,10 +31,14 @@ const DateRangePicker = (props) => {
       minDate={props.minDate ? new DateObject().subtract(props.minDate, "years") : {}}
       maxDate={props.maxDate ?new DateObject().add(props.maxDate, "years") : {}}
       value={form}
-      ref={startDatePickerRef}
       onChange={
         (date) => {
-          setForm(date)
+          if(date.length === 1) {
+            endDatePicker.current.focus()
+            setForm(date)
+          } else {
+            setForm(date)
+          }
         }
       }
       onOpen={() => setStartDateClose(false)}
@@ -60,11 +65,11 @@ const DateRangePicker = (props) => {
           role={"button"} 
           onClick={
             () => {
-              setStartDateClose(true, () => {
-                startDatePickerRef.current.closeCalendar()
-                let endDate = document.getElementById("endDate")
-                endDate.focus();
-              })
+              // setStartDateClose(true, () => {
+              //   startDatePickerRef.current.closeCalendar()
+              //   let endDate = document.getElementById("endDate")
+              //   endDate.focus();
+              // })
             }
         }>
           APPLY
@@ -87,6 +92,7 @@ function RenderDatepickerStart({ openCalendar, value, handleValueChange }) {
             value={value[0]}
             onChange={handleValueChange}
             id="startDate"
+            ref={startDatePicker}
           />
         </div>
       </Col>
@@ -99,7 +105,7 @@ function RenderDatepickerStart({ openCalendar, value, handleValueChange }) {
             onFocus={openCalendar}
             value={value[1]}
             onChange={handleValueChange}
-            id="startDate"
+            ref={endDatePicker}
           />
         </div>
       </Col>
