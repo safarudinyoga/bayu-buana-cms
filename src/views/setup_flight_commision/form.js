@@ -56,6 +56,8 @@ const FlightCommisionForm = (props) => {
       departure_airport_location_code: "",
       departure_city_code: ""
     },
+    departure_from: {},
+    arrival_at: {},
     percent: "",
   })
   const [optAirline, setOptAirline] = useState([])
@@ -136,18 +138,17 @@ const FlightCommisionForm = (props) => {
             start_date: [],
             end_date: [],
           }, 
-          departureFrom : {
+          departure_from : {
             label: `${data.departure_city.city_name} (${data.departure_airport_location.airport_name})`,
             value: `${data.commission_claim_original_destination.departure_airport_location_code} - ${data.commission_claim_original_destination.departure_city_code}`
           },
-          arrivalAt: {
+          arrival_at: {
             label: `${data.arrival_city.city_name} (${data.arrival_airport_location.airport_name})`,
             value: `${data.commission_claim_original_destination.arrival_airport_location_code} - ${data.commission_claim_original_destination.arrival_city_code}`
           }
         })
         setSpecifyPeriodDeparture(data.commission_claim_departure_date.start_date)
         setSpecifyPeriodIssue(data.commission_claim_issue_date.start_date)
-        console.log("form id",  data)
       }
     } catch (e) {
       console.log(e)
@@ -174,7 +175,6 @@ const FlightCommisionForm = (props) => {
           })
         }
       })
-      // console.log("Options",options)
     } catch(e) {
       console.log("Error",e)
 
@@ -193,6 +193,16 @@ const FlightCommisionForm = (props) => {
 
   const percentNumber = /^100(\.0{0,2})? *%?$|^\d{1,2}(\.\d{1,2})? *%?$/
 
+  Yup.addMethod(Yup.object, 'pairRoutes', function(message) {
+    return this.test('unique', message, function() {
+      if (this.parent.arrival_at.value !== undefined && this.parent.departure_from.value !== undefined) {
+        return this.parent.arrival_at.value !== this.parent.departure_from.value
+      } else {
+        return true
+      }
+    })
+  })
+
   const validationSchema = Yup.object({
     airline_id: Yup.object().required("Airline is required"),
     arrival_airport_location_code: Yup.string(),
@@ -200,8 +210,8 @@ const FlightCommisionForm = (props) => {
     departure_airport_location_code: Yup.string(),
     departure_city_code: Yup.string(),
 
-    // departureFrom: Yup.object().notOneOf([Yup.ref('arrivalAt'), null], "Origin and Destination must be different."),
-    // arrivalAt: Yup.object().notOneOf([Yup.ref('departureFrom'), null], "Origin and Destination must be different."),
+    departure_from: Yup.object().pairRoutes("Origin and Destination must be different."),
+    arrival_at: Yup.object().pairRoutes("Origin and Destination must be different."),
 
     percent: Yup.string().matches(percentNumber, "Commision Percentage can only between 0.00 - 100.00").required("Commission Percentage is required.")
   })
@@ -214,14 +224,13 @@ const FlightCommisionForm = (props) => {
         enableReinitialize
         onSubmit={async (values, { setSubmitting }) => {
           try {
-            // console.log(values)
             let formatted = {
               airline_id: values.airline_id.value,
               commission_claim_original_destination: {
-                departure_airport_location_code: values.departureFrom ? values.departureFrom.value.split("-")[0].trim() : "",
-                departure_city_code: values.departureFrom ? values.departureFrom.value.split("-")[1].trim() : "",
-                arrival_airport_location_code: values.arrivalAt ? values.arrivalAt.value.split("-")[0].trim() : "",
-                arrival_city_code: values.arrivalAt ? values.arrivalAt.value.split("-")[1].trim() : "",
+                departure_airport_location_code: values.departure_from ? values.departure_from.value.split("-")[0].trim() : "",
+                departure_city_code: values.departure_from ? values.departure_from.value.split("-")[1].trim() : "",
+                arrival_airport_location_code: values.arrival_at ? values.arrival_at.value.split("-")[0].trim() : "",
+                arrival_city_code: values.arrival_at ? values.arrival_at.value.split("-")[1].trim() : "",
               },
               commission_claim_departure_date: {
                 start_date: specifyPeriodDeparture ? periodDepartureStart : null,
@@ -279,7 +288,7 @@ const FlightCommisionForm = (props) => {
                           <Col md={9} lg={8}>
                             <Row>
                               <Col md={5} lg={6}>
-                                <Field id={"departureFrom"} name={"departureFrom"}>
+                                <Field id={"departure_from"} name={"departure_from"}>
                                   {({ field, form, meta}) => (
                                     <div>
                                       <Select
@@ -289,16 +298,24 @@ const FlightCommisionForm = (props) => {
                                         // url={`master/airports`}
                                         fieldName="airport_name"
                                         onChange={(v) => {
-                                          formik.setFieldValue("departureFrom", v)
+                                          formik.setFieldValue("departure_from", v)
                                           setOptDeparture(v)
                                         }}
+                                        className={`react-select ${
+                                          form.errors.departure_from
+                                            ? "is-invalid"
+                                            : null
+                                        }`}
                                       />
+                                      {form.errors.departure_from ? (
+                                        <div className="invalid-feedback">{form.errors.departure_from}</div>
+                                      ) : null}
                                     </div>
                                   )}
                                 </Field>
                               </Col>
                               <Col md={5} lg={6}>
-                                <Field id={"arrivalAt"} name={"arrivalAt"}>
+                                <Field id={"arrival_at"} name={"arrival_at"}>
                                   {({ field, form, meta}) => (
                                     <div>
                                       <Select
@@ -308,10 +325,18 @@ const FlightCommisionForm = (props) => {
                                         // url={`master/airports`}
                                         fieldName="airport_name"
                                         onChange={(v) => {
-                                          formik.setFieldValue("arrivalAt", v)
+                                          formik.setFieldValue("arrival_at", v)
                                           setOptArrival(v)
                                         }}
+                                        className={`react-select ${
+                                          form.errors.arrival_at
+                                            ? "is-invalid"
+                                            : null
+                                        }`}
                                       />
+                                      {form.errors.arrival_at ? (
+                                        <div className="invalid-feedback">{form.errors.arrival_at}</div>
+                                      ) : null}
                                     </div>
                                   )}
                                 </Field>
@@ -354,9 +379,19 @@ const FlightCommisionForm = (props) => {
                                   <DateRangePicker
                                     minDate={10}
                                     maxDate={10}
-                                    value={formik.values.commission_claim_issue_date}
+                                    value={[formik.values.commission_claim_issue_date.start_date, formik.values.commission_claim_issue_date.end_date]}
                                     onChange={(date) => {
-                                      console.log(date)
+                                      if(date.length > 0) {
+                                        formik.setFieldValue("commission_claim_issue_date", {
+                                          start_date: date[0],
+                                          end_date: date[1],
+                                        })
+                                      } else {
+                                        formik.setFieldValue("commission_claim_issue_date", {
+                                          start_date: [],
+                                          end_date: [],
+                                        })
+                                      }
                                     }}
                                   />
                                 </Col>
@@ -403,8 +438,19 @@ const FlightCommisionForm = (props) => {
                                   <DateRangePicker
                                     minDate={10}
                                     maxDate={10}
+                                    value={[formik.values.commission_claim_departure_date.start_date, formik.values.commission_claim_departure_date.end_date]}
                                     onChange={(date) => {
-                                      console.log(date)
+                                      if(date.length > 0) {
+                                        formik.setFieldValue("commission_claim_departure_date", {
+                                          start_date: date[0],
+                                          end_date: date[1],
+                                        })
+                                      } else {
+                                        formik.setFieldValue("commission_claim_departure_date", {
+                                          start_date: [],
+                                          end_date: [],
+                                        })
+                                      }
                                     }}
                                   />
                                 </Col>
