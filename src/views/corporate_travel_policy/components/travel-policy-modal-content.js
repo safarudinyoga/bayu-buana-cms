@@ -1,7 +1,7 @@
 import { withRouter } from "react-router"
 import React, { useState, useEffect } from "react"
 import { Col, Form, Row, Button } from "react-bootstrap"
-import { Formik, FastField, ErrorMessage } from "formik"
+import { Formik, FastField, ErrorMessage, Field } from "formik"
 import TextError from "components/formik/textError"
 import * as Yup from "yup"
 import SelectAsync from "components/form/select-async"
@@ -14,7 +14,10 @@ import FormikControl from "../../../components/formik/formikControl"
 import _ from "lodash"
 const endpoint = "/master/configurations/standard-services"
 
-function FlightPolicy(props) {
+
+
+const TravelPolicyClass = (props) => {
+
   const dispatch = useDispatch()
   const showCreateModal = useSelector((state) => state.ui.showCreateModal)
   const API = new Api()
@@ -184,8 +187,8 @@ Yup.addMethod(Yup.object, 'uniqueValueObject', function (fieldName, message) {
       )
     }
   }
-  return (
-    <Formik
+    return (
+      <Formik
       initialValues={formValues || initialValues}
       validationSchema={validationSchema}
       onSubmit={onSubmit}
@@ -206,101 +209,66 @@ Yup.addMethod(Yup.object, 'uniqueValueObject', function (fieldName, message) {
         setFieldTouched,
       }) => (
         <Form onSubmit={handleSubmit} className="ml-2">
-          <Form.Group as={Row} className="form-group">
-            <Form.Label column sm={3}>
-              Destination<span className="form-label-required">*</span>
-            </Form.Label>
-            <Col sm={8}>
-              <FastField name="task_type">
-                {({ field, form }) => (
-                  <div style={{ maxWidth: 200 }}>
-                    <SelectAsync
-                      {...field}
-                      isClearable
-                      isDisabled={isView}
-                      url={`master/task-types`}
-                      fieldName="task_type_name"
-                      onChange={(v) => {
-                        setFieldValue("task_type", v)
-                      }}
-                      placeholder="Please choose"
-                      className={`react-select ${
-                        form.touched.task_type && form.errors.task_type
-                          ? "is-invalid"
-                          : null
-                      }`}
-                      components={
-                        isView
-                          ? {
-                              DropdownIndicator: () => null,
-                              IndicatorSeparator: () => null,
-                            }
-                          : null
-                      }
-                    />
-                    {form.touched.task_type && form.errors.task_type && (
-                      <Form.Control.Feedback type="invalid">
-                        {form.touched.task_type ? form.errors.task_type : null}
-                      </Form.Control.Feedback>
-                    )}
-                  </div>
-                )}
-              </FastField>
+          <Row className="form-group mb-0">
+            <Col lg={10} className="ml-0">
+                <FormikControl 
+                  control="input"
+                  label="Code"
+                  name="percent"
+                  required="label-required"
+                  className
+                  style={{ maxWidth: 100 }}
+                  // isDisabled={isView}
+                />
             </Col>
-          </Form.Group>
+            <span className="text-lg ml-0 percent">%</span>
+          </Row>
           
-          <Form.Group as={Row} className="form-group">
-                <Form.Label column md={3} lg={4}>
-                  Message Type<span className="form-label-required">*</span>
-                </Form.Label>
-                <Col md={9} lg={8}>
-                  <FastField name="message_type">
-                    {({ field, form }) => (
-                      <div style={{ maxWidth: 200 }}>
-                        <SelectAsync
+          <Row className="form-group mb-0">
+            <Col className="ml-0">
+                <FormikControl 
+                  control="input"
+                  label="Name"
+                  name="percent"
+                  required="label-required"
+                  className
+                  style={{ maxWidth: 100 }}
+                  // isDisabled={isView}
+                />
+            </Col>
+            <span className="text-lg ml-0 percent">%</span>
+          </Row>
+
+          <Row className="form-group required">
+            <Col md={3} lg={4}>
+              <label className="text-label-input" htmlFor={"routes"}>
+                Apply To
+              </label>
+            </Col>
+            <Col md={9} lg={8}>
+              <Row>
+                <Col md={6} lg={10}>
+                  <Field id={"departureFrom"} name={"departureFrom"}>
+                    {({ field, form, meta}) => (
+                      <div>
+                        <Select
                           {...field}
-                          isClearable
-                          url={`master/message-types`}
-                          fieldName="message_type_name"
-                          onChange={(v) => {
-                            setFieldValue("message_type", v)
-                          }}
-                          placeholder="Please choose"
-                          className={`react-select ${
-                            form.touched.message_type &&
-                            form.errors.message_type
-                              ? "is-invalid"
-                              : null
-                          }`}
+                          // options={optionRoute}
+                          placeholder="Please Choose"
+                          // url={`master/airports`}
+                          fieldName="airport_name"
+                          // onChange={(v) => {
+                          //   formik.setFieldValue("departureFrom", v)
+                          //   setOptDeparture(v)
+                          // }}
                         />
-                        {form.touched.message_type &&
-                          form.errors.message_type && (
-                            <Form.Control.Feedback type="invalid">
-                              {form.touched.message_type
-                                ? form.errors.message_type
-                                : null}
-                            </Form.Control.Feedback>
-                          )}
                       </div>
                     )}
-                  </FastField>
+                  </Field>
                 </Col>
-              </Form.Group>
-
-              <Row className="form-group mb-0">
-                <Col className="ml-0">
-                    <FormikControl 
-                      control="input"
-                      label="Commission Percentage"
-                      name="percent"
-                      required="label-required"
-                      className
-                      style={{ maxWidth: 100 }}
-                      // isDisabled={isView}
-                    />
-                </Col>
-                <span className="text-lg ml-0 percent">%</span>
               </Row>
+            </Col>
+          </Row>
 
           {!props.hideButton && (
             <div
@@ -338,7 +306,7 @@ Yup.addMethod(Yup.object, 'uniqueValueObject', function (fieldName, message) {
         </Form>
       )}
     </Formik>
-  )
+    )
 }
 
-export default withRouter(FlightPolicy)
+export default TravelPolicyClass

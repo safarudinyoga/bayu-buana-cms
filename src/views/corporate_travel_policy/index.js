@@ -13,8 +13,7 @@ import Vip from "./vip";
 import PreferredHotelChain from "./preferred-hotel-chain";
 import BBModal from "components/Modal/bb-modal";
 import CancelButton from "components/button/cancel";
-import { Formik } from "formik";
-import FormikControl from "components/formik/formikControl";
+import TravelPolicyClass from "./components/travel-policy-modal-content";
 import * as Yup from "yup";
 import Api from "config/api";
 import "./style.scss"
@@ -59,7 +58,7 @@ const TravelPolicy = (props) => {
         onClick={() => setShowCreateNew(false)}
         modalSize={"md"}
         modalTitle={"CREATE TRAVEL POLICY CLASS"}
-        modalBody={() => (
+        modalContent={() => (
           <TravelPolicyClass />
         )}
       />
@@ -95,87 +94,27 @@ const TravelPolicy = (props) => {
     .required("Travel Policy Class Name is required")
   })
 
-  const onSubmit = async (values) => {
-    try {
-      let form = {
-        travel_policy_class_code: values.travel_policy_class_code,
-        travel_policy_class_name: values.travel_policy_class_name,
-      }
-      let res = await API.post("/master/travel-policy-classes", values)
-      setShowCreateNew(false)
-      dispatch(
-        setAlert({
-          message: `Record ${form.travel_policy_class_name} has been successfully saved.`
-        })
-      )
-    } catch(e) {
-      dispatch(
-        setAlert({
-          message: "Failed to save this record.",
-        }),
-      )
-    }
-  }
-
-
-  const TravelPolicyClass = () => {
-    return (
-      <Formik
-				initialValues={formValues || initialValues}
-				validationSchema={validationSchema}
-				onSubmit={onSubmit}
-        validateOnMount
-        enableReinitialize
-			>
-				{
-					({
-						handleSubmit,
-						isSubmitting,
-            setFieldValue,
-            values,
-					}) => (
-						<Form onSubmit={handleSubmit} className="ml-2">
-              <FormikControl
-                control="input"
-                required="label-required"
-                label="Code"
-                name="travel_policy_class_code"
-                style={{ maxWidth: 36 }}
-                size={formSize}
-              />
-              <FormikControl
-                control="input"
-                required="label-required"
-                label="Name"
-                name="travel_policy_class_name"
-                style={{ maxWidth: 256 }}
-                size={formSize}
-                
-              />
-
-              {!props.hideButton && <div
-                style={{
-                  marginBottom: 30,
-                  marginTop: 30,
-                  display: "flex",
-                }}
-              >
-                {!isView && <Button
-                  variant="primary"
-                  type="submit"
-                  disabled={isSubmitting}
-                  style={{ marginRight: 15 }}
-                >
-                  SAVE
-                </Button>}
-                <CancelButton onClick={() => dispatch(setCreateModal({show: false, id: null, disabled_form: false}))}/>
-              </div>}
-						</Form>
-					)
-				}
-				
-			</Formik>
-    )}
+  // const onSubmit = async (values) => {
+  //   try {
+  //     let form = {
+  //       travel_policy_class_code: values.travel_policy_class_code,
+  //       travel_policy_class_name: values.travel_policy_class_name,
+  //     }
+  //     let res = await API.post("/master/travel-policy-classes", values)
+  //     setShowCreateNew(false)
+  //     dispatch(
+  //       setAlert({
+  //         message: `Record ${form.travel_policy_class_name} has been successfully saved.`
+  //       })
+  //     )
+  //   } catch(e) {
+  //     dispatch(
+  //       setAlert({
+  //         message: "Failed to save this record.",
+  //       }),
+  //     )
+  //   }
+  // }
 
   return (
     <Tab.Container activeKey={tabKey} onSelect={handleSelectTab}>
