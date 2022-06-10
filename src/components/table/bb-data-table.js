@@ -23,6 +23,7 @@ import { setAlert, setCreateModal, setReloadTable, setModalDelete } from "redux/
 import "./bb-data-table.css"
 import editIcon from "assets/icons/edit.svg"
 import removeIcon from "assets/icons/remove.svg"
+import CopyIcon from "assets/icons/ic_copy.svg"
 import showIcon from "assets/icons/show.svg"
 import ModalCreate from "components/Modal/bb-modal"
 import ModalDelete from "components/Modal/bb-modal-delete"
@@ -183,7 +184,7 @@ class BBDataTable extends Component {
           `
           <a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item ${hideDetail ? "mr-2" : ""}" data-action="edit" data-id="${targetDataId}" title="Click to edit"><img src="${editIcon}"/></a>
           
-          <a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item ${showCopyAct ? "d-inline" : "d-none"}" data-action="copy" data-id="${targetDataId}" title="Click to copy"><i class="fas fa-copy"></i></a>
+          <a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item ${showCopyAct ? "d-inline" : "d-none"}" data-action="copy" data-id="${targetDataId}" title="Click to copy"style="margin-left:7px;"><img src="${CopyIcon}" /></a>
           <a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="${hideDetail ? "d-none" : "d-inline"} table-row-action-item" data-action="view" data-id="${row.id}" title="Click to view details"><img src="${showIcon}"/></a>
           <a href="javascript:void(0);" class="${showSwitch ? "d-inline" : "d-none"} custom-switch custom-switch-bb table-row-action-item" data-id="${module === 'employee' ? row.employee_id: row.id}" data-action="update_status" data-status="${row.status}" data-toggle="tooltip" data-placement="${placement}" title="${row.status === 1 ? "Deactivate" : "Activate"}">
             <input type="checkbox" class="custom-control-input check-status-${row.id}" id="customSwitch${row.id}" ${checked} data-action="update_status">
@@ -214,7 +215,7 @@ class BBDataTable extends Component {
 
       let displayStart = 0;
       if(this.queryParams.get("page")) {
-        displayStart = 10 * (this.queryParams.get("page")-1)
+        displayStart = (this.props.sizePerPage ? this.props.sizePerPage : 10) * (this.queryParams.get("page")-1)
       }
       let endpoint = this.props.endpoint;
       if(this.props.filterData){
@@ -231,7 +232,7 @@ class BBDataTable extends Component {
         fixedColumns: true,
         serverSide: true,
         processing: true,
-        displayLength: 10,
+        displayLength: this.props.sizePerPage ? this.props.sizePerPage : 10,
         displayStart: displayStart,
         lengthMenu: [
           [10, 25, 50, 100, -1],
@@ -559,12 +560,12 @@ class BBDataTable extends Component {
               // this case `data: 0`.
               "render": function ( data, type, row ) {
                 var datas = data;
-                if(module === 'employee'){
+                if(module === 'employee' || module === 'user-management' ){
                   datas = data +' '+ row.middle_name + ' ' + row.surname;
                 }
                   return datas
               },
-              "targets": module === 'employee' ? 3 : ''
+              "targets": module === 'employee' ? 3 : module === 'user-management' ? 2 : ''
           },
           {
               // The `data` parameter refers to the data for the cell (defined by the

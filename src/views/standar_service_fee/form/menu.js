@@ -1,7 +1,31 @@
 import React from "react"
 import { Row, Col, Form } from "react-bootstrap"
 import { FastField } from "formik"
+import NumberFormat from "react-number-format"
 
+const AmountRadioSelections = (props) => {
+  return props.disabledAmount ? (
+    <Form.Check
+      type="radio"
+      label={props.label}
+      value={props.value}
+      disabled={props.disabledAmount}
+    />
+  ) : (
+    <FastField name={props.fieldAmountType}>
+      {({ field, form }) => (
+        <Form.Check
+          {...field}
+          value={props.value}
+          checked={props.values[props.fieldAmountType] === props.value}
+          type="radio"
+          label={props.label}
+          disabled={props.isView}
+        />
+      )}
+    </FastField>
+  )
+}
 const FeeSection = (props) => {
   let id = props.taxType ? props.taxType.id : ""
   console.log(id)
@@ -19,12 +43,15 @@ const FeeSection = (props) => {
   return (
     <>
       <Form.Group as={Row} className="mb-3">
-        <Form.Label colum md={2}>
-          {title}
-          <span className="form-label-required">*</span>
-        </Form.Label>
-        <Col md={5}>
-          <Form.Group className="ml-5">
+        <Col md={2}>
+          <Form.Label colum>
+            {title}
+            <span className="form-label-required">*</span>
+          </Form.Label>
+        </Col>
+
+        <Col md={4}>
+          <Form.Group>
             <FastField name={props.fieldRadio}>
               {({ field, form }) => (
                 <Form.Check
@@ -35,12 +62,9 @@ const FeeSection = (props) => {
                   disabled={props.isView}
                   checked={props.values[props.fieldRadio] === "amount"}
                   onClick={() => {
+                    props.setFieldValue(props.fieldRadio + "_percent", "")
                     props.setFieldValue(
-                      props.values[props.fieldRadio + "_percent"],
-                      null,
-                    )
-                    props.setFieldValue(
-                      props.values[props.fieldRadio + "_tax_include"],
+                      props.fieldRadio + "_tax_include",
                       false,
                     )
                   }}
@@ -48,43 +72,32 @@ const FeeSection = (props) => {
               )}
             </FastField>
           </Form.Group>
-          <Row className="ml-5">
+          <Row className="ml-3">
             <Col sm={12} md={6}>
-              <Form.Group as={Row} className="mb-xs-3">
-                <Form.Label column xs={2} md={3} lg={5} className="ml-xs-4">
+              <Form.Group as={Row} className="mb-xs-2">
+                <Form.Label column xs={2} md={3} lg={2} className="ml-xs-4">
                   IDR
                 </Form.Label>
-                <Col xs={10} md={9} lg={7}>
+                <Col xs={10} md={3} lg={8}>
                   {disabledAmount ? (
-                    <Form.Control
-                      style={{ maxWidth: "220px" }}
-                      disabled={true}
-                    />
+                    <Form.Control style={{ width: "200px" }} disabled={true} />
                   ) : (
                     <FastField name={props.fieldAmount}>
                       {({ field }) => (
-                        <Form.Control
-                          type="text"
+                        <NumberFormat
                           {...field}
-                          style={{ maxWidth: "220px" }}
-                          disabled={props.isView}
-                          maxLength={15}
-                          onChange={(value) => {
-                            // console.log(props.values, props.fieldAmount)
-                            let pattern = /^\d+$/
-                            // console.log(pattern.test(value.target.value))
-                            if (pattern.test(value.target.value)) {
-                              const changeToInteger = Number.parseInt(
-                                value.target.value,
-                              )
-                              // console.log(changeToInteger, "haha")
-                              // const separator = changeToInteger.toLocaleString('en-US', { maximumFractionDigits: 0 })
-                              props.setFieldValue(
-                                props.fieldAmount,
-                                changeToInteger,
-                              )
-                            }
-                          }}
+                          className="form-control"
+                          maxLength={19}
+                          thousandsGroupStyle="thousand"
+                          displayType="input"
+                          type="text"
+                          thousandSeparator={true}
+                          allowNegative={true}
+                          // onChange={(values) => {
+                          // const { value } = values;
+                          // props.setFieldValue(props.fieldAmount, value)
+                          // console.log(props.fieldAmount, values.target.value)
+                          // }}
                         />
                       )}
                     </FastField>
@@ -94,79 +107,20 @@ const FeeSection = (props) => {
             </Col>
             <Col sm={12} md={6}>
               <Form.Group className="mb-3">
-                {disabledAmount ? (
-                  <>
-                    <Form.Check
-                      type="radio"
-                      label="/Ticket"
-                      disabled={disabledAmount}
-                    />
-                    <Form.Check
-                      type="radio"
-                      label="/Person"
-                      disabled={disabledAmount}
-                    />
-                    <Form.Check
-                      type="radio"
-                      label="/Transaction"
-                      disabled={disabledAmount}
-                    />
-                  </>
-                ) : (
-                  <>
-                    <FastField name={props.fieldAmountType}>
-                      {({ field, form }) => (
-                        <Form.Check
-                          {...field}
-                          value="de62950d-fbab-4e39-bd90-c2b6687c6b36"
-                          checked={
-                            props.values[props.fieldAmountType] ===
-                            "de62950d-fbab-4e39-bd90-c2b6687c6b36"
-                          }
-                          type="radio"
-                          label="/Ticket"
-                          disabled={props.isView}
-                        />
-                      )}
-                    </FastField>
-                    <FastField name={props.fieldAmountType}>
-                      {({ field, form }) => (
-                        <Form.Check
-                          {...field}
-                          value="de03bf84-4bd8-4cdf-9348-00246f04bcad"
-                          checked={
-                            props.values[props.fieldAmountType] ===
-                            "de03bf84-4bd8-4cdf-9348-00246f04bcad"
-                          }
-                          type="radio"
-                          label="/Person"
-                          disabled={props.isView}
-                        />
-                      )}
-                    </FastField>
-                    <FastField name={props.fieldAmountType}>
-                      {({ field, form }) => (
-                        <Form.Check
-                          {...field}
-                          value="5123b121-4f6a-4871-bef1-65408d663e19"
-                          checked={
-                            props.values[props.fieldAmountType] ===
-                            "5123b121-4f6a-4871-bef1-65408d663e19"
-                          }
-                          type="radio"
-                          label="/Transaction"
-                          disabled={props.isView}
-                        />
-                      )}
-                    </FastField>
-                  </>
-                )}
+                {props.amountSuffixSelections.map((suffix, i) => (
+                  <AmountRadioSelections
+                    key={i}
+                    {...props}
+                    disabledAmount={disabledAmount}
+                    value={suffix.value}
+                    label={suffix.label}
+                  />
+                ))}
               </Form.Group>
             </Col>
           </Row>
         </Col>
-
-        <Col md={5}>
+        <Col md={4}>
           <Form.Group>
             <FastField name={props.fieldRadio}>
               {({ field, form }) => (
@@ -198,7 +152,7 @@ const FeeSection = (props) => {
                   <Form.Control
                     type="number"
                     style={{ maxWidth: "80px" }}
-                    className="mx-3"
+                    className="mx-3 grey-background"
                     disabled={true}
                   />
                 ) : (
@@ -235,10 +189,16 @@ const FeeSection = (props) => {
                     )}
                   </FastField>
                 )}
-                <span className="text-lg mt-1">%</span>
+                <span
+                  className={`text-lg mt-1 ${
+                    disabledPercent ? "grey-text" : ""
+                  } `}
+                >
+                  %
+                </span>
               </Form.Group>
             </Col>
-            <Col sm={12} md={6}>
+            <Col sm={12} md={9}>
               {disabledPercent ? (
                 <Form.Check
                   type="checkbox"
@@ -254,6 +214,7 @@ const FeeSection = (props) => {
                       type="checkbox"
                       className="mt-2"
                       label="Include Taxes"
+                      checked={props.values[props.fieldRadio + "_tax_include"]}
                       disabled={props.isView}
                     />
                   )}
@@ -263,7 +224,25 @@ const FeeSection = (props) => {
           </Row>
         </Col>
       </Form.Group>
+      <FeedbackMessage {...props} />
     </>
+  )
+}
+const FeedbackMessage = (props) => {
+  return (
+    <FastField name="">
+      {({ field, form }) => {
+        let message =
+          form.errors[props.fieldRadio] ||
+          form.errors[props.fieldAmount] ||
+          form.errors[props.fieldAmountType] ||
+          form.errors[props.fieldPercent]
+
+        return form.touched[props.fieldRadio] && message ? (
+          <p className="fback-invalid">{message}</p>
+        ) : null
+      }}
+    </FastField>
   )
 }
 const Fees = (props) => {

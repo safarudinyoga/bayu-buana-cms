@@ -1,35 +1,138 @@
-import React, { useEffect, useState } from "react"
-import { withRouter, useHistory } from "react-router"
-import { Card, Form, Row, Col, Button, Modal } from "react-bootstrap"
-import createIcon from "assets/icons/create.svg"
-import { ReactSVG } from "react-svg"
-import { Formik, FastField } from "formik"
+import { FastField, Formik } from "formik"
+import React, { useState, useEffect } from "react"
 import * as Yup from "yup"
-import { useDispatch } from "react-redux"
-import { setUIParams } from "redux/ui-store"
+import { Card, Form, Row, Col, Button, Modal } from "react-bootstrap"
 import Api from "config/api"
-import Select from "components/form/select-async"
+import FlightOverrideServiceFeeTable from "../table/flight_override_service_table"
+import { withRouter, useHistory } from "react-router"
 import useQuery from "lib/query"
 import { Menu } from "./menu"
-import { useSnackbar } from "react-simple-snackbar"
-import FlightOverrideServiceFeeTable from "../table/flight_override_service_table"
-
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css"
-import "react-dropzone-uploader/dist/styles.css"
+import { MenuModal } from "./menu_modal"
+import { ReactSVG } from "react-svg"
+import SelectAsync from "components/form/select-async"
+import createIcon from "assets/icons/create.svg"
+import { useDispatch } from "react-redux"
+import { setAlert, setCreateModal, setUIParams } from "redux/ui-store"
 
 const backUrl = "/master/standard-service-fee"
-const endpointFee = "/master/agent-processing-fee-categories"
 const endpoint = "/master/service-fee-categories"
 
-const options = {
-  position: "bottom-right",
-}
-const FlightModal = (props) => {
+//modal service fee
+const ModalOverrideServiceFee = (props) => {
+  let api = new Api()
+  let dispatch = useDispatch()
+
+  //get Fee tax
+  const [taxTypeServiceFee, setTaxTypeServiceFee] = useState([])
+  const [taxIdTypeServiceFee, setTaxIdTypeServiceFee] = useState("")
+
+  const getFeeTaxType = async (code, setData, setId) => {
+    try {
+      let res = await api.get(
+        `/master/fee-tax-types?filters=[["status","!=","0"],["and"],["fee_tax_type_code","${code}"]]`,
+      )
+      let data = res.data.items[0]
+      setData(data)
+      setId(data.id)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+  useEffect(() => {
+    getFeeTaxType("1", setTaxTypeServiceFee, setTaxIdTypeServiceFee)
+  }, [])
+
+  const initialValues = {
+    destination: "",
+    airline_service_type: "",
+    specified_airline: "",
+    specified_source: "",
+    domestic_reissue: "",
+    domestic_reissue_fee_tax_id: "",
+    domestic_reissue_amount: "",
+    domestic_reissue_amount_type: "",
+    domestic_reissue_percent: "",
+    domestic_reissue_tax_include: false,
+  }
+
+  const validationSchema = Yup.object().shape({
+    destination: Yup.object().required("Destination is required."),
+    domestic_reissue: Yup.string().required(
+      `Please enter fixed amount or percentage for ${taxTypeServiceFee.fee_tax_type_name}.`,
+    ),
+    domestic_reissue_amount: Yup.string().when("domestic_reissue", {
+      is: (value) => value === "amount",
+      then: Yup.string().required(
+        `Please enter fixed amount for ${taxTypeServiceFee.fee_tax_type_name}.`,
+      ),
+    }),
+    domestic_reissue_amount_type: Yup.string().when("domestic_reissue", {
+      is: (value) => value === "amount",
+      then: Yup.string().required(`Please select charge type.`),
+    }),
+    domestic_reissue_percent: Yup.string().when("domestic_reissue", {
+      is: (value) => value === "percent",
+      then: Yup.string().required(
+        `Please enter percentage for ${taxTypeServiceFee.fee_tax_type_name}.`,
+      ),
+    }),
+  })
+  const removeSeparator = (value) => {
+    value = value.toString().split(",").join("")
+    return parseInt(value)
+  }
+  const onSubmit = async (values, a) => {
+    try {
+      let form = {
+        description: values.job_title ? values.job_title.value : "esse sit",
+        service_fee_category_code: values.job_title
+          ? values.job_title.value
+          : "esse sit",
+        service_fee_category_name: values.job_title
+          ? values.job_title.value
+          : "esse sit",
+        domestic_reissue: {
+          fee_tax_type_id: taxIdTypeServiceFee,
+          amount:
+            values.domestic_reissue === "amount"
+              ? removeSeparator(values.domestic_reissue_amount)
+              : 0,
+          percent:
+            values.domestic_reissue === "amount"
+              ? 0
+              : parseFloat(values.domestic_reissue_percent),
+          charge_type_id:
+            values.domestic_reissue === "amount"
+              ? values.domestic_reissue_amount_type
+              : "00000000-0000-0000-0000-000000000000",
+          is_tax_inclusive:
+            values.domestic_reissue === "amount"
+              ? false
+              : values.domestic_reissue_tax_include,
+        },
+      }
+      let res = await api.putOrPost(endpoint, form)
+      console.log(res)
+      dispatch(setCreateModal({ show: false, id: null, disabled_form: false }))
+      dispatch(
+        setAlert({
+          message: `Service Fee has been successfully saved.`,
+        }),
+      )
+    } catch (e) {
+      dispatch(
+        setAlert({
+          message: "Failed to save this record.",
+        }),
+      )
+    }
+  }
   return (
     <Modal
       {...props}
       size="md"
-      aria-labelledby="contained-modal-title-vcenter"
+      dialogClassName="modal-50w"
+      aria-labelledby="example-custom-modal-styling-title"
       centered
     >
       <Modal.Body>
@@ -42,178 +145,250 @@ const FlightModal = (props) => {
               Add Flight Override Service Fee
             </p>
           </div>
-
-          <Form>
-            <Form.Group as={Row} className="mb-3">
-              <Form.Label column sm={4}>
-                Destination
-                <span className="form-label-required">*</span>
-              </Form.Label>
-              <Col sm={7}>
-                <FastField name="hotelBrand">
-                  {({ field, form }) => (
-                    <div style={{ maxWidth: 600 }}>
-                      <Select {...field} placeholder="Please choose" />
-                    </div>
-                  )}
-                </FastField>
-              </Col>
-            </Form.Group>
-            <Form.Group as={Row} className="mb-3">
-              <Form.Label column sm={4}>
-                Airline Service Type
-                <span className="form-label-required">*</span>
-              </Form.Label>
-              <Col sm={7}>
-                <FastField name="hotelBrand">
-                  {({ field, form }) => (
-                    <div style={{ maxWidth: 600 }}>
-                      <Select {...field} placeholder="Please choose" />
-                    </div>
-                  )}
-                </FastField>
-              </Col>
-            </Form.Group>
-            <Form.Group as={Row} className="mb-3">
-              <Form.Label column sm={4}>
-                Specified Airline
-                <span className="form-label-required">*</span>
-              </Form.Label>
-              <Col sm={7}>
-                <FastField name="hotelBrand">
-                  {({ field, form }) => (
-                    <div style={{ maxWidth: 600 }}>
-                      <Select {...field} placeholder="Please choose" />
-                    </div>
-                  )}
-                </FastField>
-              </Col>
-            </Form.Group>
-            <Form.Group as={Row} className="mb-3">
-              <Form.Label column sm={4}>
-                Specified Source
-                <span className="form-label-required">*</span>
-              </Form.Label>
-              <Col sm={7}>
-                <FastField name="hotelBrand">
-                  {({ field, form }) => (
-                    <div style={{ maxWidth: 600 }}>
-                      <Select {...field} placeholder="Please choose" />
-                    </div>
-                  )}
-                </FastField>
-              </Col>
-            </Form.Group>
-            <Form.Group as={Row} className="mb-3">
-              <Form.Label column md={4}>
-                Service Fee
-                <span className="form-label-required">*</span>
-              </Form.Label>
-              <Col md={8}>
-                <Form.Group>
-                  <Form.Check type="radio" label="Fixed Amount" />
-                </Form.Group>
-                <Row className="ml-3">
-                  <Col sm={12} md={6}>
-                    <Form.Group as={Row} className="mb-xs-3">
-                      <Form.Label
-                        column
-                        xs={2}
-                        md={3}
-                        lg={5}
-                        className="ml-xs-4"
-                      >
-                        IDR
-                      </Form.Label>
-                      <Col xs={10} md={9} lg={7}>
-                        <Form.Control style={{ maxWidth: "220px" }} />
-                      </Col>
-                    </Form.Group>
-                  </Col>
-                  <Col sm={12} md={6}>
-                    <Form.Group className="mb-3">
-                      <Form.Check type="radio" label="/Ticket" />
-                      <Form.Check type="radio" label="/Person" />
-                      <Form.Check type="radio" label="/Transaction" />
-                    </Form.Group>
-                  </Col>
-                </Row>
-
-                <Form.Group>
-                  <Form.Check type="radio" label="Percentage" />
-                </Form.Group>
-
+          <Formik
+            validateOnMount
+            enableReinitialize
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            onSubmit={onSubmit}
+          >
+            {({
+              values,
+              errors,
+              touched,
+              dirty,
+              handleChange,
+              handleBlur,
+              handleSubmit,
+              isSubmitting,
+              isValid,
+              setFieldValue,
+              setFieldTouched,
+            }) => (
+              <Form onSubmit={handleSubmit}>
                 <Form.Group as={Row} className="mb-3">
-                  <Form.Control style={{ maxWidth: "80px" }} className="mx-3" />
-                  <span className="text-lg mt-1">%</span>
-                  <Form.Check
-                    type="checkbox"
-                    label="Include Taxed"
-                    className="mt-2 ml-4"
-                  />
+                  <Form.Label column sm={4}>
+                    Destination
+                    <span className="form-label-required">*</span>
+                  </Form.Label>
+                  <Col sm={7}>
+                    <FastField name="destination">
+                      {({ field, form }) => (
+                        <div style={{ maxWidth: 600 }}>
+                          <SelectAsync
+                            {...field}
+                            isClearable
+                            url={`master/destination-groups`}
+                            fieldName="destination_group_name"
+                            onChange={(v) => {
+                              setFieldValue("destination", v)
+                            }}
+                            placeholder="Please choose"
+                            className={`react-select ${
+                              form.touched.destination &&
+                              form.errors.destination
+                                ? "is-invalid"
+                                : null
+                            }`}
+                          />
+                          {form.touched.destination &&
+                            form.errors.destination && (
+                              <Form.Control.Feedback type="invalid">
+                                {form.touched.destination
+                                  ? form.errors.destination
+                                  : null}
+                              </Form.Control.Feedback>
+                            )}
+                        </div>
+                      )}
+                    </FastField>
+                  </Col>
                 </Form.Group>
-              </Col>
-            </Form.Group>
-
-            <div style={{ marginBottom: 30, marginTop: 30, display: "flex" }}>
-              <Button
-                variant="primary"
-                type="submit"
-                style={{ marginRight: 15 }}
-              >
-                SAVE
-              </Button>
-              <Button variant="secondary" onClick={props.onHide}>
-                CANCEL
-              </Button>
-            </div>
-          </Form>
+                <Form.Group as={Row} className="mb-3">
+                  <Form.Label column sm={4}>
+                    Airline Service Type
+                  </Form.Label>
+                  <Col sm={7}>
+                    <div style={{ maxWidth: 600 }}>
+                      <FastField name="airline_service_type">
+                        {({ field, form }) => (
+                          <div style={{ maxWidth: 600 }}>
+                            <SelectAsync
+                              {...field}
+                              isClearable
+                              url={`master/airline-categories`}
+                              fieldName="airline_category_name"
+                              onChange={(v) => {
+                                setFieldValue("airline_service_type", v)
+                              }}
+                              placeholder="Please choose"
+                              className={`react-select ${
+                                form.touched.airline_service_type &&
+                                form.errors.airline_service_type
+                                  ? "is-invalid"
+                                  : null
+                              }`}
+                            />
+                            {form.touched.airline_service_type &&
+                              form.errors.airline_service_type && (
+                                <Form.Control.Feedback type="invalid">
+                                  {form.touched.airline_service_type
+                                    ? form.errors.airline_service_type
+                                    : null}
+                                </Form.Control.Feedback>
+                              )}
+                          </div>
+                        )}
+                      </FastField>
+                    </div>
+                  </Col>
+                </Form.Group>
+                <Form.Group as={Row} className="mb-3">
+                  <Form.Label column sm={4}>
+                    Specified Airline
+                  </Form.Label>
+                  <Col sm={7}>
+                    <FastField name="specified_airline">
+                      {({ field, form }) => (
+                        <div style={{ maxWidth: 600 }}>
+                          <SelectAsync
+                            {...field}
+                            isClearable
+                            url={`master/airlines`}
+                            fieldName="airline_name"
+                            onChange={(v) => {
+                              setFieldValue("specified_airline", v)
+                            }}
+                            placeholder="Please choose"
+                            className={`react-select ${
+                              form.touched.specified_airline &&
+                              form.errors.specified_airline
+                                ? "is-invalid"
+                                : null
+                            }`}
+                          />
+                          {form.touched.specified_airline &&
+                            form.errors.specified_airline && (
+                              <Form.Control.Feedback type="invalid">
+                                {form.touched.specified_airline
+                                  ? form.errors.specified_airline
+                                  : null}
+                              </Form.Control.Feedback>
+                            )}
+                        </div>
+                      )}
+                    </FastField>
+                  </Col>
+                </Form.Group>
+                <Form.Group as={Row} className="mb-3">
+                  <Form.Label column sm={4}>
+                    Specified Source
+                  </Form.Label>
+                  <Col sm={7}>
+                    <FastField name="specified_source">
+                      {({ field, form }) => (
+                        <div style={{ maxWidth: 600 }}>
+                          <SelectAsync
+                            {...field}
+                            isClearable
+                            url={`master/supplier-types`}
+                            fieldName="supplier_type_name"
+                            onChange={(v) => {
+                              setFieldValue("specified_source", v)
+                            }}
+                            placeholder="Please choose"
+                            className={`react-select ${
+                              form.touched.specified_source &&
+                              form.errors.specified_source
+                                ? "is-invalid"
+                                : null
+                            }`}
+                          />
+                          {form.touched.specified_source &&
+                            form.errors.specified_source && (
+                              <Form.Control.Feedback type="invalid">
+                                {form.touched.specified_source
+                                  ? form.errors.specified_source
+                                  : null}
+                              </Form.Control.Feedback>
+                            )}
+                        </div>
+                      )}
+                    </FastField>
+                  </Col>
+                </Form.Group>
+                <MenuModal
+                  menu={[
+                    {
+                      title: "MDR Fee",
+                      sections: [
+                        {
+                          title: "MDR FEE",
+                          taxType: taxTypeServiceFee,
+                          fieldFeeTaxId: "domestic_reissue_fee_tax_id",
+                          fieldRadio: "domestic_reissue",
+                          fieldAmount: "domestic_reissue_amount",
+                          fieldAmountType: "domestic_reissue_amount_type",
+                          fieldPercent: "domestic_reissue_percent",
+                          fieldIncludeTax: "domestic_reissue_tax_include",
+                        },
+                      ],
+                    },
+                  ]}
+                  values={values}
+                  fHandleChange={handleChange}
+                  fHandleBlur={handleBlur}
+                  setFieldValue={setFieldValue}
+                  // isView={isView}
+                  amountSuffixSelections={[
+                    {
+                      label: "/Ticket",
+                      value: "de62950d-fbab-4e39-bd90-c2b6687c6b36",
+                    },
+                    {
+                      label: "/Person",
+                      value: "de03bf84-4bd8-4cdf-9348-00246f04bcad",
+                    },
+                    {
+                      label: "/Transaction",
+                      value: "5123b121-4f6a-4871-bef1-65408d663e19",
+                    },
+                  ]}
+                  errors={errors}
+                />
+                <div
+                  style={{ marginBottom: 30, marginTop: 30, display: "flex" }}
+                >
+                  <Button
+                    variant="primary"
+                    type="submit"
+                    style={{ marginRight: 15 }}
+                  >
+                    SAVE
+                  </Button>
+                  <Button variant="secondary" onClick={props.onHide}>
+                    CANCEL
+                  </Button>
+                </div>
+              </Form>
+            )}
+          </Formik>
         </div>
       </Modal.Body>
     </Modal>
   )
 }
-
 const FlightForm = (props) => {
-  const history = useHistory()
-  let dispatch = useDispatch()
-  const [openSnackbar] = useSnackbar(options)
-  const formId = props.match.params.id
-  const isView = useQuery().get("action") === "view"
-
-  const [modalShow, setModalShow] = useState(false)
   let api = new Api()
-
-  useEffect(async () => {
-    let docTitle = "Edit Flight Standard Service Fee"
-    if (!formId) {
-      docTitle = "Create Flight Standard Service Fee"
-    }
-    dispatch(
-      setUIParams({
-        title: docTitle,
-        breadcrumbs: [
-          {
-            text: "Master Data Management",
-          },
-          {
-            link: backUrl,
-            text: "Standard Service Fee",
-          },
-          {
-            text: docTitle,
-          },
-        ],
-      }),
-    )
-  })
-
-  //get data fee tax
+  const history = useHistory()
+  const isView = useQuery().get("action") === "view"
+  const dispatch = useDispatch()
+  const formId = props.match.params.id
+  const [modalShow, setModalShow] = useState(false)
   const [taxTypeDomesticFlight, setTaxTypeDomesticFlight] = useState([])
   const [taxTypeInternationalFlight, setTaxTypeInternationalFlight] = useState(
     [],
   )
-
   const [taxIdDomesticFlight, setTaxIdDomesticFlight] = useState("")
   const [taxIdInternationalFlight, setTaxIdInternationalFlight] = useState("")
 
@@ -239,32 +414,101 @@ const FlightForm = (props) => {
     )
   }, [props.match.params.id])
 
-  // Initialize form
   const [initialForm, setInitialForm] = useState({
     service_fee_category_name: "",
+    service_fee_category_code: "",
     description: "",
-    domestic_flight: "",
-    domestic_flight_fee_tax_id: "",
-    domestic_flight_amount: null,
-    domestic_flight_amount_type: "",
-    domestic_flight_percent: null,
-    domestic_flight_tax_include: false,
-    international_flight: "",
-    international_flight_fee_tax_id: "",
-    international_flight_amount: null,
-    international_flight_amount_type: "",
-    international_flight_percent: null,
-    international_flight_tax_include: false,
+    domestic_reissue: "",
+    domestic_reissue_fee_tax_id: "",
+    domestic_reissue_amount: "",
+    domestic_reissue_amount_type: "",
+    domestic_reissue_percent: "",
+    domestic_reissue_tax_include: false,
+    domestic_revalidate: "",
+    domestic_revalidate_fee_tax_id: "",
+    domestic_revalidate_amount: "",
+    domestic_revalidate_amount_type: "",
+    domestic_revalidate_percent: "",
+    domestic_revalidate_tax_include: false,
   })
+
+  // Schema for yup
+  const validationSchema = Yup.object().shape({
+    service_fee_category_name: Yup.string()
+      .required(`Please enter Preset Name.`)
+      .min(1, "Must be exactly 1 digits")
+      .max(128, "Maximum number 128"),
+    domestic_reissue: Yup.string().required(
+      `Please enter fixed amount or percentage for ${taxTypeDomesticFlight.fee_tax_type_name}.`,
+    ),
+    domestic_reissue_amount: Yup.string().when("domestic_reissue", {
+      is: (value) => value === "amount",
+      then: Yup.string().required(
+        `Please enter fixed amount for ${taxTypeDomesticFlight.fee_tax_type_name}.`,
+      ),
+    }),
+    domestic_reissue_amount_type: Yup.string().when("domestic_reissue", {
+      is: (value) => value === "amount",
+      then: Yup.string().required(`Please select charge type.`),
+    }),
+    domestic_reissue_percent: Yup.string().when("domestic_reissue", {
+      is: (value) => value === "percent",
+      then: Yup.string().required(
+        `Please enter percentage for ${taxTypeDomesticFlight.fee_tax_type_name}.`,
+      ),
+    }),
+    domestic_revalidate: Yup.string().required(
+      `Please enter fixed amount or percentage for ${taxTypeInternationalFlight.fee_tax_type_name}.`,
+    ),
+    domestic_revalidate_amount: Yup.string().when("domestic_revalidate", {
+      is: (value) => value === "amount",
+      then: Yup.string().required(
+        `Please enter fixed amount for ${taxTypeInternationalFlight.fee_tax_type_name}.`,
+      ),
+    }),
+    domestic_revalidate_amount_type: Yup.string().when("domestic_revalidate", {
+      is: (value) => value === "amount",
+      then: Yup.string().required(`Please select charge type.`),
+    }),
+    domestic_revalidate_percent: Yup.string().when("domestic_revalidate", {
+      is: (value) => value === "percent",
+      then: Yup.string().required(
+        `Please enter percentage for ${taxTypeInternationalFlight.fee_tax_type_name}.`,
+      ),
+    }),
+  })
+
   useEffect(async () => {
+    let docTitle = "Edit Flight Standard Service Fee"
+    if (!formId) {
+      docTitle = "Create Flight Standard Service Fee"
+    }
+    dispatch(
+      setUIParams({
+        title: docTitle,
+        breadcrumbs: [
+          {
+            text: "Master Data Management",
+          },
+          {
+            link: backUrl,
+            text: "Standard Service Fee",
+          },
+          {
+            text: docTitle,
+          },
+        ],
+      }),
+    )
     try {
       if (formId) {
         let res = await api.get(endpoint + "/" + formId)
-        // let agent_res = await api.get(`endpointFee+ "/1/" + res.data.id)
+        let data = res.data
         setInitialForm({
           ...initialForm,
-          ...res.data,
-          // ...agent_res.data
+
+          description: data.description,
+          service_fee_category_name: data.service_fee_category_name,
         })
       }
     } catch (e) {
@@ -272,99 +516,92 @@ const FlightForm = (props) => {
     }
   }, [])
 
-  const onSubmit = async (payload, values) => {
+  const removeSeparator = (value) => {
+    value = value.toString().split(",").join("")
+    return parseInt(value)
+  }
+
+  const onSubmit = async (values, a) => {
     try {
-      if (formId) {
-      } else {
-        // let res = await api.post(endpoint, payload)
-        // let idFee = res.data.id;
-        onSubmitFee(values)
-        openSnackbar(`Service Fee has been successfully saved.`)
-        history.goBack()
+      let form = {
+        description: values.description,
+        service_fee_category_name: values.service_fee_category_name,
+        domestic_reissue: {
+          fee_tax_type_id: taxIdDomesticFlight,
+          amount:
+            values.domestic_reissue === "amount"
+              ? removeSeparator(values.domestic_reissue_amount)
+              : 0,
+          percent:
+            values.domestic_reissue === "amount"
+              ? 0
+              : parseFloat(values.domestic_reissue_percent),
+          charge_type_id:
+            values.domestic_reissue === "amount"
+              ? values.domestic_reissue_amount_type
+              : "00000000-0000-0000-0000-000000000000",
+          is_tax_inclusive:
+            values.domestic_reissue === "amount"
+              ? false
+              : values.domestic_reissue_tax_include,
+        },
+        domestic_revalidate: {
+          fee_tax_type_id: taxIdInternationalFlight,
+          amount:
+            values.domestic_revalidate === "amount"
+              ? removeSeparator(values.domestic_revalidate_amount)
+              : 0,
+          percent:
+            values.domestic_revalidate === "amount"
+              ? 0
+              : parseFloat(values.domestic_revalidate_percent),
+          charge_type_id:
+            values.domestic_revalidate === "amount"
+              ? values.domestic_revalidate_amount_type
+              : "00000000-0000-0000-0000-000000000000",
+          is_tax_inclusive:
+            values.domestic_revalidate === "amount"
+              ? false
+              : values.domestic_revalidate_tax_include,
+        },
       }
-    } catch (e) {
-      console.log(e)
-    }
-  }
-
-  const onSubmitFee = (values) => {
-    let payloadDomestic = {
-      domestic_flight: {
-        fee_tax_type_id: taxIdDomesticFlight,
-        amount:
-          values.domestic_flight === "amount" ? values.domestic_flight : 0,
-        percent:
-          values.domestic_flight === "amount"
-            ? 0
-            : values.domestic_flight_percent,
-        charge_type_id:
-          values.domestic_flight === "amount"
-            ? values.domestic_flight_amount_type
-            : null,
-        is_tax_inclusive:
-          values.domestic_flight === "amount"
-            ? false
-            : values.domestic_flight_tax_include,
-      },
-      international_flight: {
-        fee_tax_type_id: taxIdInternationalFlight,
-        amount:
-          values.international_flight === "amount"
-            ? values.international_flight_amount
-            : 0,
-        percent:
-          values.international_flight === "amount"
-            ? 0
-            : values.international_flight_percent,
-        charge_type_id:
-          values.international_flight === "amount"
-            ? values.international_flight_amount_type
-            : null,
-        is_tax_inclusive:
-          values.international_flight === "amount"
-            ? false
-            : values.international_flight_tax_include,
-      },
-    }
-    onSaveFee(payloadDomestic, 1)
-  }
-
-  const onSaveFee = async (payload, productTypeCode) => {
-    try {
-      console.log("payload", payload)
-      let res = await api.post(endpointFee + "/" + productTypeCode, payload)
+      let res = await api.putOrPost(endpoint, formId, form)
       console.log(res)
+
+      dispatch(setCreateModal({ show: false, id: null, disabled_form: false }))
+      dispatch(
+        setAlert({
+          message: `Service Fee has been successfully saved.`,
+        }),
+      )
+      props.history.goBack()
     } catch (e) {
-      console.log(e)
+      dispatch(
+        setAlert({
+          message: "Failed to save this record.",
+        }),
+      )
     }
   }
 
-  // Schema for yup
-  const validationSchema = Yup.object().shape({
-    service_fee_category_name: Yup.string()
-      .required("Please enter Preset Name.")
-      .min(1, "Min value 1.")
-      .max(128, "Max value 128."),
-    description: Yup.string()
-      .min(1, "Min value 1")
-      .max(4000, "Max value 4000."),
-  })
+  const formSizeModal = {
+    label: {
+      md: 3,
+      lg: 3,
+    },
+    value: {
+      md: 6,
+      lg: 6,
+    },
+  }
 
   return (
     <>
       <Formik
         initialValues={initialForm}
         validationSchema={validationSchema}
-        validateOnChange={false}
-        onSubmit={async (values, { setSubmitting, resetForm }) => {
-          console.log(values)
-          console.log(props)
-          let formatted = {
-            service_fee_category_name: values.preset_name,
-            description: values.description,
-          }
-          onSubmit(formatted, values)
-        }}
+        onSubmit={onSubmit}
+        validateOnMount
         enableReinitialize
       >
         {({
@@ -382,139 +619,141 @@ const FlightForm = (props) => {
           <Form onSubmit={handleSubmit}>
             <Card>
               <Card.Body>
-                <div style={{ padding: "0 2px 2px" }}>
-                  <Form.Group as={Row} className="mb-3">
-                    <Form.Label column md={2}>
-                      Preset Name
-                      <span className="form-label-required">*</span>
-                    </Form.Label>
-                    <Col sm={10}>
-                      <FastField name="service_fee_category_name">
-                        {({ field, form }) => (
-                          <>
-                            <Form.Control
-                              type="text"
-                              isInvalid={
-                                form.touched.service_fee_category_name &&
-                                form.errors.service_fee_category_name
-                              }
-                              minLength={1}
-                              maxLength={128}
-                              style={{ maxWidth: 300 }}
-                              {...field}
-                            />
-                            {form.touched.service_fee_category_name &&
-                              form.errors.service_fee_category_name && (
-                                <Form.Control.Feedback type="invalid">
-                                  {form.touched.service_fee_category_name
-                                    ? form.errors.service_fee_category_name
-                                    : null}
-                                </Form.Control.Feedback>
-                              )}
-                          </>
-                        )}
-                      </FastField>
-                    </Col>
-                  </Form.Group>
+                <Form.Group as={Row} className="mb-3">
+                  <Form.Label column md={2}>
+                    Preset Name
+                    <span className="form-label-required">*</span>
+                  </Form.Label>
+                  <Col sm={5}>
+                    <FastField name="service_fee_category_name">
+                      {({ field, form }) => (
+                        <>
+                          <Form.Control
+                            type="text"
+                            disabled={isView}
+                            isInvalid={
+                              form.touched.service_fee_category_name &&
+                              form.errors.service_fee_category_name
+                            }
+                            minLength={1}
+                            maxLength={128}
+                            style={{ maxWidth: 300 }}
+                            {...field}
+                          />
+                          {form.touched.service_fee_category_name &&
+                            form.errors.service_fee_category_name && (
+                              <Form.Control.Feedback type="invalid">
+                                {form.touched.service_fee_category_name
+                                  ? form.errors.service_fee_category_name
+                                  : null}
+                              </Form.Control.Feedback>
+                            )}
+                        </>
+                      )}
+                    </FastField>
+                  </Col>
+                </Form.Group>
+                <Form.Group as={Row} className="mb-3">
+                  <Form.Label column md={2}>
+                    Description
+                  </Form.Label>
+                  <Col sm={10}>
+                    <FastField name="description">
+                      {({ field, form }) => (
+                        <>
+                          <Form.Control
+                            as="textarea"
+                            isInvalid={
+                              form.touched.description &&
+                              form.errors.description
+                            }
+                            style={{ height: "88px", maxWidth: "416px" }}
+                            {...field}
+                          />
+                        </>
+                      )}
+                    </FastField>
+                  </Col>
+                </Form.Group>
 
-                  <Form.Group as={Row} className="mb-3">
-                    <Form.Label column md={2}>
-                      Description
-                    </Form.Label>
-                    <Col sm={10}>
-                      <FastField name="description">
-                        {({ field, form }) => (
-                          <>
-                            <Form.Control
-                              as="textarea"
-                              isInvalid={
-                                form.touched.description &&
-                                form.errors.description
-                              }
-                              style={{ height: "88px", maxWidth: "416px" }}
-                              {...field}
-                            />
-                            {form.touched.description &&
-                              form.errors.description && (
-                                <Form.Control.Feedback type="invalid">
-                                  {form.touched.description
-                                    ? form.errors.description
-                                    : null}
-                                </Form.Control.Feedback>
-                              )}
-                          </>
-                        )}
-                      </FastField>
-                    </Col>
-                  </Form.Group>
-                  <Form.Group as={Row} className="mb-3">
-                    <Col sm={10}>
-                      <Menu
-                        menu={[
-                          {
-                            sections: [
-                              {
-                                title: "Domestic Flight",
-                                taxType: taxTypeDomesticFlight,
-                                fieldFeeTaxId: "domestic_flight_fee_tax_id",
-                                fieldRadio: "domestic_flight",
-                                fieldAmount: "domestic_flight_amount",
-                                fieldAmountType: "domestic_flight_amount_type",
-                                fieldPercent: "domestic_flight_percent",
-                                fieldIncludeTax: "domestic_flight_tax_include",
-                              },
-                              {
-                                title: "International Flight",
-                                taxType: taxTypeInternationalFlight,
-                                fieldFeeTaxId:
-                                  "international_flight_fee_tax_id",
-                                fieldRadio: "international_flight",
-                                fieldAmount: "international_flight_amount",
-                                fieldAmountType:
-                                  "international_flight_amount_type",
-                                fieldPercent: "international_flight_percent",
-                                fieldIncludeTax:
-                                  "international_flight_tax_include",
-                              },
-                            ],
-                          },
-                        ]}
-                        values={values}
-                        fHandleChange={handleChange}
-                        fHandleBlur={handleBlur}
-                        setFieldValue={setFieldValue}
-                        isView={isView}
-                      />
-                    </Col>
-                  </Form.Group>
-
-                  {isView ? (
+                <Menu
+                  menu={[
+                    {
+                      title: "MDR Fee",
+                      sections: [
+                        {
+                          title: "Domestic Flight Service Fee",
+                          taxType: taxTypeDomesticFlight,
+                          fieldFeeTaxId: "domestic_reissue_fee_tax_id",
+                          fieldRadio: "domestic_reissue",
+                          fieldAmount: "domestic_reissue_amount",
+                          fieldAmountType: "domestic_reissue_amount_type",
+                          fieldPercent: "domestic_reissue_percent",
+                          fieldIncludeTax: "domestic_reissue_tax_include",
+                        },
+                        {
+                          title: "Late Payment",
+                          taxType: taxTypeInternationalFlight,
+                          fieldFeeTaxId: "domestic_revalidate_fee_tax_id",
+                          fieldRadio: "domestic_revalidate",
+                          fieldAmount: "domestic_revalidate_amount",
+                          fieldAmountType: "domestic_revalidate_amount_type",
+                          fieldPercent: "domestic_revalidate_percent",
+                          fieldIncludeTax: "domestic_revalidate_tax_include",
+                        },
+                      ],
+                    },
+                  ]}
+                  values={values}
+                  fHandleChange={handleChange}
+                  fHandleBlur={handleBlur}
+                  setFieldValue={setFieldValue}
+                  isView={isView}
+                  amountSuffixSelections={[
+                    {
+                      label: "/Ticket",
+                      value: "de62950d-fbab-4e39-bd90-c2b6687c6b36",
+                    },
+                    {
+                      label: "/Person",
+                      value: "de03bf84-4bd8-4cdf-9348-00246f04bcad",
+                    },
+                    {
+                      label: "/Transaction",
+                      value: "5123b121-4f6a-4871-bef1-65408d663e19",
+                    },
+                  ]}
+                  errors={errors}
+                />
+                {isView ? (
+                  <h3 className="card-heading">.</h3>
+                ) : (
+                  <>
                     <h3 className="card-heading">.</h3>
-                  ) : (
-                    <>
-                      <h3 className="card-heading">.</h3>
-                      <Col sm={12}>
-                        <div style={{ padding: "0 15px 15px 15px" }}>
-                          <button
-                            className="btn float-right button-override"
-                            onClick={() => setModalShow(true)}
-                          >
-                            <img src={createIcon} className="mr-1" alt="new" />
-                            Add Override Service Fee
-                          </button>
-                        </div>
-                      </Col>
-                      <br />
-                      <Col sm={12}>
-                        <FlightModal
-                          show={modalShow}
-                          onHide={() => setModalShow(false)}
-                        />
-                      </Col>
-                    </>
-                  )}
-                </div>
-                {formId && <FlightOverrideServiceFeeTable />}
+                    <Col sm={12}>
+                      <div style={{ padding: "0 15px 15px 15px" }}>
+                        <button
+                          type="button"
+                          className="btn float-right button-override"
+                          onClick={() => setModalShow(true)}
+                        >
+                          <img src={createIcon} className="mr-1" alt="new" />
+                          Add Override Service Fee
+                        </button>
+                      </div>
+                    </Col>
+                    <br />
+                    <Col sm={12}>
+                      <ModalOverrideServiceFee
+                        show={modalShow}
+                        isView={isView}
+                        size={formSizeModal}
+                        onHide={() => setModalShow(false)}
+                      />
+                    </Col>{" "}
+                    {formId && <FlightOverrideServiceFeeTable />}
+                  </>
+                )}
               </Card.Body>
             </Card>
 

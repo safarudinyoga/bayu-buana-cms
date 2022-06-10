@@ -8,11 +8,11 @@ import React, {useEffect, useState} from "react"
 import {useDispatch} from "react-redux"
 import {withRouter} from "react-router"
 import {setAlert, setUIParams} from "redux/ui-store"
-import FormInputSelectAjax from "../../components/form/input-select-ajax"
+// import FormInputSelectAjax from "../../components/form/input-select-ajax"
 import env from "../../config/environment"
 
-const endpoint = "/master/divisions"
-const backUrl = "/master/divisions"
+const endpoint = "/master/corporate-job-title"
+const backUrl = "/master/corporate-job-title"
 
 function JobTitleCorporateForm(props) {
   let dispatch = useDispatch()
@@ -22,68 +22,65 @@ function JobTitleCorporateForm(props) {
   const [formBuilder, setFormBuilder] = useState(null)
   const [loading, setLoading] = useState(true)
   const [translations, setTranslations] = useState([])
-  const [parentDivisionTypeData, setParentDivisionTypeData] = useState([])
-  const [employeeData, setEmployeeData] = useState([])
+  const [supplierTypeData, setSupplierTypeData] = useState([])
+  const [disabledSave, setDisabledSave] = useState(false)
+  const [validCode, SetValidCode] = useState(formId)
+  const [validName, SetValidName] = useState(formId)
   const [id, setId] = useState(null)
   const [form, setForm] = useState({
-    depth:0,
-    division_code: "",
-    division_name: "",
-    parent_division_id: "",
+    corporate_job_title_code: "",
+    corporate_job_title_name: "",
+    parent_id: "",
     manager_id: "",
   })
   const translationFields = [
     {
       label: "Name",
-      name: "division_name",
+      name: "corporate_job_title_name",
       type: "text",
     },
   ]
 
   const validationRules = {
-    division_code: {
+    corporate_job_title_code: {
       required: true,
       minlength: 1,
       maxlength: 36,
       checkCode: true,
       noSpace: true,      
     },
-    division_name: {
+    corporate_corporate_job_title_name: {
       required: true,
       minlength: 1,
       maxlength: 256,
       checkName: true,
       noSpace: true,
     },
-    parent_division_id: {},
+    parent_id: {},
     manager_id: {},
   }
 
   const validationMessages = {
-    division_code: {
-      required: "Division Code is required.",
-      minlength: "Division code must be at least 1 characters",
-      maxlength: "Division code cannot be longer than 36 characters",
+    corporate_job_title_code: {
+      required: "Job Title Code is required.",
+      minlength: "Job Title code must be at least 1 characters",
+      maxlength: "Job Title code cannot be longer than 36 characters",
     },
-    division_name: {
-      required: "Division Name is required.",
-      minlength: "Division name must be at least 1 characters",
-      maxlength: "Division name cannot be longer than 256 characters",
+    corporate_job_title_name: {
+      required: "Job Title Name is required.",
+      minlength: "Job Title name must be at least 1 characters",
+      maxlength: "Job Title name cannot be longer than 256 characters",
     },
-    parent_division_id: {},
   }
 
   useEffect(async () => {
     let api = new Api()    
 
-    let docTitle = "Edit Division"
-    let bcTitle = docTitle
+    let docTitle = "Edit Job Title"
     if (!formId) {
-      docTitle = "Create New Division"
-      bcTitle = "Create Division"
+      docTitle = "Create Job Title"
     } else if (isView) {
-      docTitle = "Division"
-      bcTitle = "Division Details"
+      docTitle = "Job Title Details"
     }
 
     dispatch(
@@ -95,10 +92,10 @@ function JobTitleCorporateForm(props) {
           },
           {
             link: backUrl,
-            text: "Division",
+            text: "Job Title",
           },
           {
-            text: bcTitle,
+            text: docTitle,
           },
         ],
       }),
@@ -107,25 +104,22 @@ function JobTitleCorporateForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data);
-        if (res.data.parent_division && res.data.parent_division_id) {
-          setParentDivisionTypeData([{...res.data.parent_division, id: res.data.parent_division_id, text: res.data.parent_division.division_name}])
-        }
-        if (res.data.manager) {
-          setEmployeeData([{...res.data.manager, text: res.data.manager.given_name}])
+        if (res.data.parent) {
+          setSupplierTypeData([{...res.data.parent, text: res.data.parent.parent_name}])
         }
         if (res.data) {
-          let currentCode = res.data.division_code
-          let currentName = res.data.division_name
+          let currentCode = res.data.corporate_job_title_code
+          let currentName = res.data.corporate_job_title_name
 
           $.validator.addMethod(
             "checkCode",
             function (value, element) {
               var req = false
-              let encodeFilters = encodeURIComponent(JSON.stringify(["division_code","=",element.value]))
+              let filters = JSON.stringify(["corporate_job_title_code","=",element.value])
               $.ajax({
                 type: "GET",
                 async: false,
-                url: `${env.API_URL}/master/divisions?filters=${encodeFilters}`,
+                url: `${env.API_URL}/master/corporate-job-titles?filters=${encodeURIComponent(filters)}`,
                 success: function (res) {
                   if (res.items.length !== 0) {
                     if (currentCode === element.value) {
@@ -139,20 +133,21 @@ function JobTitleCorporateForm(props) {
                 },
               })
 
+              SetValidCode(req)
               return req
             },
-            "Division Code already exists",
+            "Job Title Code already exists",
           )
 
           $.validator.addMethod(
             "checkName",
             function (value, element) {
               var req = false
-              let encodeFilters = encodeURIComponent(JSON.stringify(["division_name","=",element.value]))
+              let filters = JSON.stringify(["corporate_job_title_name","=",element.value])
               $.ajax({
                 type: "GET",
                 async: false,
-                url: `${env.API_URL}/master/divisions?filters=${encodeFilters}`,
+                url: `${env.API_URL}/master/corporate-job-titles?filters=${encodeURIComponent(filters)}`,
                 success: function (res) {
                   if (res.items.length !== 0) {
                     if (currentName === element.value) {
@@ -166,9 +161,10 @@ function JobTitleCorporateForm(props) {
                 },
               })
 
+              SetValidName(req)
               return req
             },
-            "Division Name already exists",
+            "Job Title Name already exists",
           )
         }
 
@@ -186,11 +182,11 @@ function JobTitleCorporateForm(props) {
         "checkCode",
         function (value, element) {
           var req = false
-          let encodeFilters = encodeURIComponent(JSON.stringify(["division_code","=",element.value]))
+          let filters = JSON.stringify(["corporate_job_title_code","=",element.value])
           $.ajax({
             type: "GET",
             async: false,
-            url: `${env.API_URL}/master/divisions?filters=${encodeFilters}`,
+            url: `${env.API_URL}/master/corporate-job-titles?filters=${encodeURIComponent(filters)}`,
             success: function (res) {
               if (res.items.length !== 0) {
                 req = false
@@ -199,22 +195,21 @@ function JobTitleCorporateForm(props) {
               }
             },
           })
-
-          console.log(req)
+          SetValidCode(req)
           return req
         },
-        "Division Code already exists",
+        "Job Title Code already exists",
       )
 
       $.validator.addMethod(
         "checkName",
         function (value, element) {
           var req = false
-          let encodeFilters = encodeURIComponent(JSON.stringify(["division_name","=",element.value]))
+          let filters = JSON.stringify(["corporate_job_title_name","=",element.value])
           $.ajax({
             type: "GET",
             async: false,
-            url: `${env.API_URL}/master/divisions?filters=${encodeFilters}`,
+            url: `${env.API_URL}/master/corporate-job-titles?filters=${encodeURIComponent(filters)}`,
             success: function (res) {
               if (res.items.length !== 0) {
                 req = false
@@ -223,14 +218,14 @@ function JobTitleCorporateForm(props) {
               }
             },
           })
-
+          SetValidName(req)
           return req
         },
-        "Division Name already exists",
+        "Job Title Name already exists",
       )
     }
   }, [])
-
+    
   useEffect(() => {
     if (!props.match.params.id) {
       setLoading(false)
@@ -282,82 +277,47 @@ function JobTitleCorporateForm(props) {
       onBuild={(el) => setFormBuilder(el)}
       isView={isView || loading}
       onSave={onSave}
+      disabledSave={disabledSave}
       back={backUrl}
       translations={translations}
       translationFields={translationFields}
       alertMessage={"Incomplete data"}
-      isValid={false}
+      isValid={true}
       rules={validationRules}
       validationMessages={validationMessages}
     >
       <FormHorizontal>
         <FormInputControl
-          label={isView ? "Division Name" : "Name"}
-          required={true}
-          value={form.division_name}
-          name="division_name"
+          label="Name"
+          required={!isView}
+          value={form.corporate_job_title_name}
+          name="corporate_job_title_name"
           onChange={(e) =>
-            setForm({...form, division_name: e.target.value})
+            setForm({...form, corporate_job_title_name: e.target.value})
           }
           disabled={isView || loading}
           type="text"
           minLength="1"
           maxLength="256"
         />
-
-        {(formId === undefined || !loading) && <FormInputSelectAjax
-          label="Parent Division"
-          value={form.parent_division_id}
-          name="parent_division_id"
-          endpoint="/master/divisions"
-          column="division_name"
-          filter={formId ? `[["id","!=","${formId}"],["and"],[["parent_division_id","!=","${formId}"],["or"],["parent_division_id","is",null]]]` : ``}
-          onChange={(e) =>
-            setForm({...form, parent_division_id: e.target.value || null})
-          }
-          data={parentDivisionTypeData}
-          disabled={isView || loading}
-          type="select"
-          placeholder="Select Parent Division"
-        />}
-
-        {(formId === undefined || !loading) && <FormInputSelectAjax
-          label="Manager"
-          value={form.manager_id}
-          val_id="employee_id"
-          name="manager_id"
-          endpoint="/master/employees"
-          renderColumn= {(item) => {
-            return `${item.given_name || ''} ${item.middle_name || ''} ${item.surname || ''} (${item.job_title.job_title_name || ''})`
-          }}
-          sort="employee_number"
-          filter={`["status", "=", 1]`}
-          onChange={(e) =>
-            setForm({...form, manager_id: e.target.value || null})
-          }
-          data={employeeData}
-          disabled={isView || loading}
-          type="select"
-          placeholder="Select Manager"
-        />}
       </FormHorizontal>
 
       <FormHorizontal>
         <FormInputControl
           label="Code"
-          required={true}
-          value={form.division_code}
-          name="division_code"
-          cl={{md:"12"}}
-          cr="12"
+          required={!isView}
+          value={form.corporate_job_title_code}
+          name="corporate_job_title_code"
+          cl={{md:"4"}}
+          cr={{md:8, lg: 5}}
           onChange={(e) =>
-            setForm({...form, division_code: e.target.value})
+            setForm({...form, corporate_job_title_code: e.target.value})
           }
           disabled={isView || loading}
           type="text"
           minLength="1"
           maxLength="36"
-          hint="Division Code maximum 36 characters"
+          hint="Job Title Code maximum 36 characters"
         />
       </FormHorizontal>
     </FormBuilder>

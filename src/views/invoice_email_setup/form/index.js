@@ -17,7 +17,7 @@ import * as Yup from "yup"
 import { Formik, FastField } from "formik"
 import { useDispatch } from "react-redux"
 import { withRouter } from "react-router"
-import { setUIParams } from "redux/ui-store"
+import { setAlert, setUIParams } from "redux/ui-store"
 import { Editor } from "react-draft-wysiwyg"
 import { EditorState } from "draft-js"
 import htmlToDraft from "html-to-draftjs"
@@ -27,6 +27,12 @@ import { stateToHTML } from "draft-js-export-html"
 import FormikControl from "components/formik/formikControl"
 import CancelButton from "components/button/cancel"
 import { useParams } from "react-router-dom"
+import ZoomIcon from "assets/icons/ic_zoom_out.svg"
+import TestIcon from "assets/icons/ic_test.svg"
+import EmailIcon from "assets/icons/ic_email_notif.svg"
+import PhoneIcon from "assets/icons/ic_phone_notif.svg"
+import VariableIcon from "assets/icons/ic_bubble_chart.svg"
+import WidgetIcon from "assets/icons/ic_puzzle.svg"
 
 const endpoint = "/master/employees"
 
@@ -57,7 +63,7 @@ const InvoiceEmailSetupForm = (props) => {
   const [formValues, setFormValues] = useState(null)
   const [showSentModal, setShowSentModal] = useState(false)
   const [sentModalMsg, setSentModalMsg] = useState("")
-  const [sentModalIc, setSentModalIc] = useState("fas fa-envelope")
+  const [sentModalIc, setSentModalIc] = useState("email")
 
   // const [editorState, setEditorState] = useState(() =>
   //   EditorState.createEmpty(),
@@ -112,13 +118,13 @@ const InvoiceEmailSetupForm = (props) => {
     let api = new Api()
     let formId = props.match.params.id
 
-    let docTitle = `${'Email Category Name'} - Edit ${'Email Template Name'}`
+    let docTitle = "${'Email Category Name'} - Edit ${'Email Template Name'}"
     let docHeading = docTitle
     if (!formId) {
-      docTitle = `Edit ${'Email Template Name'}`
-      docHeading = `${'Email Category Name'} - Edit ${'Email Template Name'}`
+      docTitle = "Edit ${'Email Template Name'}"
+      docHeading = "${'Email Category Name'} - Edit ${'Email Template Name'}"
     } else if (isView) {
-      docTitle = `$'{Email Template Name'} Detail`
+      docTitle = "${'Email Template Name'} Detail"
       docHeading = docTitle
     }
 
@@ -131,11 +137,11 @@ const InvoiceEmailSetupForm = (props) => {
           },
           {
             link: backToEmailSetup,
-            text: `${'Email Category Name'}`,
+            text: "Invoice Email Setup",
           },
           {
             link: backToEmailTemplate,
-            text: "Email Template 1",
+            text: "${'Email Category Name'}",
           },
           {
             text: docTitle,
@@ -176,9 +182,9 @@ const InvoiceEmailSetupForm = (props) => {
   }, [])
 
   const initialValues = {
-    invoice_email_name: '',
-    invoice_email_type: '',
-    invoice_email_subject: ''
+    invoice_email_name: 'abc',
+    invoice_email_type: 'acb',
+    invoice_email_subject: 'acb'
   }
 
   const validationSchema = Yup.object().shape({
@@ -236,7 +242,22 @@ const InvoiceEmailSetupForm = (props) => {
   )
 
   const onSubmit = async (values, a) => {
-    console.log(values, "<<<<<")
+    try {
+      props.history.goBack()
+      // throw 'myException';
+      dispatch(
+        setAlert({
+          message: `Invoice Email Template has been successfully saved.`,
+        }),
+      )
+    } catch (e) {
+      dispatch(
+        setAlert({
+          message: `Failed to save this record.`,
+        }),
+      )
+    } finally {
+    }
   }
 
   const SentModal = () => {
@@ -251,7 +272,7 @@ const InvoiceEmailSetupForm = (props) => {
       <Modal.Header closeButton>
       </Modal.Header>
       <Modal.Body className="d-flex flex-column align-items-center">
-        <i className={`${sentModalIc}`} style={{fontSize: 40}}></i>
+        <img src={sentModalIc === "mobile" ? PhoneIcon : EmailIcon} />
         <p>{sentModalMsg}</p>
         <div className="d-flex justify-content-center w-100" style={{borderTop:"1px solid #E4E4E4", marginTop:15}}>
           <Button
@@ -270,11 +291,11 @@ const InvoiceEmailSetupForm = (props) => {
     try {
       console.log(type)
       if(type === "Email Content") {
-        setSentModalIc("fas fa-envelope")
+        setSentModalIc("email")
         setSentModalMsg("Email has been sent to john.doe@petroxyz.com")
       }
       if(type === "Push Notification") {
-        setSentModalIc("fas fa-mobile-alt")
+        setSentModalIc("mobile")
         setSentModalMsg("Notification has been pushed to +628223701693")
       }
       setShowSentModal(true)
@@ -298,6 +319,7 @@ const InvoiceEmailSetupForm = (props) => {
       validationSchema={validationSchema}
       onSubmit={() => {
       console.log("jaaaaoooo")
+      onSubmit()
       }}
       enableReinitialize
     >
@@ -342,7 +364,7 @@ const InvoiceEmailSetupForm = (props) => {
                       cursor: "pointer",
                     }}
                   >
-                    <img src="/img/icons/users.svg" alt="icon users"></img>
+                    <img src={VariableIcon} alt="icon users"></img>
                     <p style={{ fontSize: 13 }}>Variable</p>
                   </div>
                 </OverlayTrigger>
@@ -381,7 +403,7 @@ const InvoiceEmailSetupForm = (props) => {
                       cursor: "pointer",
                     }}
                   >
-                    <img src="/img/icons/users.svg" alt="icon users"></img>
+                    <img src={WidgetIcon} alt="icon users"></img>
                     <p style={{ fontSize: 13 }}>Widget</p>
                   </div>
                 </OverlayTrigger>
@@ -403,7 +425,7 @@ const InvoiceEmailSetupForm = (props) => {
                               placeholder="Invoice Per Transactional Email"
                               style={{ maxWidth: 399.79 }}
                               size={formSize}
-                              disabled={isView || loading}
+                              disabled={true}
                               maxLength={256}
                             />
                             <FormikControl
@@ -414,7 +436,7 @@ const InvoiceEmailSetupForm = (props) => {
                               placeholder="Invoice Per Transactional"
                               style={{ maxWidth: 399.79 / 2 }}
                               size={formSize}
-                              disabled={isView || loading}
+                              disabled={true}
                               maxLength={256}
                             />
                             <FormikControl
@@ -469,17 +491,18 @@ const InvoiceEmailSetupForm = (props) => {
                                       <Row
                                         style={{
                                           padding: "10px 33px 20px",
-                                          marginTop: 50,
+                                          marginTop: 70,
                                         }}
                                       >
                                         <Button
-                                          className={"mr-3"}
+                                          className={"mr-3 btn-preview"}
                                           variant="secondary"
                                           onClick={() => {
                                             setShowModal(true)
                                             // convertContentToHTML()
                                           }}
                                         >
+                                          <img src={ZoomIcon} className={"mr-2"}/>
                                           PREVIEW
                                         </Button>
                                         <Button 
@@ -488,6 +511,7 @@ const InvoiceEmailSetupForm = (props) => {
                                             onSendTest(item)
                                           }}
                                         >
+                                          <img src={TestIcon} className={"mr-2"}/>
                                           SEND TEST
                                         </Button>
                                       </Row>

@@ -101,35 +101,6 @@ class Sidebar extends Component {
   render() {
     const { menu, currentMenu } = this.state
 
-    const remapMenu = [...menu, {
-      menu: {
-        menu_name: 'Manage Corporate',
-        menu_code: 'manage_corporate'
-      },
-      description: 'Manage Corporate',
-      is_expanded: true,
-      is_authenticated: true,
-      menu_link_asset: {
-        multimedia_description: {
-          url: "https://bbdev.monstercode.net/files/1402e489-5533-47db-acf8-bdbc4db0e097.svg",
-          file_name: "1402e489-5533-47db-acf8-bdbc4db0e097.svg"
-        }
-      },
-      url: '#',
-      submenu: [
-        {
-          url: '/master/manage-corporate',
-          menu: {
-            menu_name: 'Manage Corporate',
-            menu_code: 'manage_corporate'
-          },
-          description: 'Manage Corporate',
-          is_expanded: false,
-          is_authenticated: true,
-        }
-      ]
-    }]
-
     return (
       <aside className="main-sidebar sidebar-dark-primary elevation-4"
         // {extranet ? "extranet-sidebar" : ""}
@@ -145,7 +116,7 @@ class Sidebar extends Component {
               data-accordion="false"
             >
               {
-                remapMenu.map((m, k) => <ParentMenu key={k} menu={m} currentMenu={currentMenu} menuHandler={this.onClickMenu} />)
+                menu.map((m, k) => <ParentMenu key={k} menu={m} currentMenu={currentMenu} menuHandler={this.onClickMenu} />)
               }
               {/* <li className="nav-item parent-menu">
                 <Link to="#" className="nav-link">

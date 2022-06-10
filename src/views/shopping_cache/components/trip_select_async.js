@@ -122,7 +122,7 @@ const Select = (props) => {
         {},
         {
           IndicatorSeparator: () => null,
-          DropdownIndicator: Icon,
+          // DropdownIndicator: Icon,
         },
         props.components,
       )}
