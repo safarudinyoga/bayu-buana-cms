@@ -71,7 +71,7 @@ export default function IntegrationPartnerCabinTypesTable(props) {
           <h3 className="card-heading">{contentTitle}</h3>
           {
           isReplaceTable ? <PartnerCabins isReplaceTable={isReplaceTable} handleReplaceTable={handleReplaceTable} partnerCabinId={partnerCabinId}/> :
-          <BBDataTable {...params} modalContent={DeleteModal} handleReplaceTable={handleReplaceTable} setId={setId}/>
+          <BBDataTable {...params} modalDeleteContent={DeleteModal} handleReplaceTable={handleReplaceTable} setId={setId}/>
           }
           </Card.Body>
       </Card>
