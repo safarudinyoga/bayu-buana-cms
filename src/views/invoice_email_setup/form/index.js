@@ -17,7 +17,7 @@ import * as Yup from "yup"
 import { Formik, FastField } from "formik"
 import { useDispatch } from "react-redux"
 import { withRouter } from "react-router"
-import { setUIParams } from "redux/ui-store"
+import { setAlert, setUIParams } from "redux/ui-store"
 import { Editor } from "react-draft-wysiwyg"
 import { EditorState } from "draft-js"
 import htmlToDraft from "html-to-draftjs"
@@ -118,13 +118,13 @@ const InvoiceEmailSetupForm = (props) => {
     let api = new Api()
     let formId = props.match.params.id
 
-    let docTitle = `${'Email Category Name'} - Edit ${'Email Template Name'}`
+    let docTitle = "${'Email Category Name'} - Edit ${'Email Template Name'}"
     let docHeading = docTitle
     if (!formId) {
-      docTitle = `Edit ${'Email Template Name'}`
-      docHeading = `${'Email Category Name'} - Edit ${'Email Template Name'}`
+      docTitle = "Edit ${'Email Template Name'}"
+      docHeading = "${'Email Category Name'} - Edit ${'Email Template Name'}"
     } else if (isView) {
-      docTitle = `$'{Email Template Name'} Detail`
+      docTitle = "${'Email Template Name'} Detail"
       docHeading = docTitle
     }
 
@@ -141,7 +141,7 @@ const InvoiceEmailSetupForm = (props) => {
           },
           {
             link: backToEmailTemplate,
-            text: `${'Email Category Name'}`,
+            text: "${'Email Category Name'}",
           },
           {
             text: docTitle,
@@ -182,9 +182,9 @@ const InvoiceEmailSetupForm = (props) => {
   }, [])
 
   const initialValues = {
-    invoice_email_name: '',
-    invoice_email_type: '',
-    invoice_email_subject: ''
+    invoice_email_name: 'abc',
+    invoice_email_type: 'acb',
+    invoice_email_subject: 'acb'
   }
 
   const validationSchema = Yup.object().shape({
@@ -242,7 +242,22 @@ const InvoiceEmailSetupForm = (props) => {
   )
 
   const onSubmit = async (values, a) => {
-    console.log(values, "<<<<<")
+    try {
+      props.history.goBack()
+      // throw 'myException';
+      dispatch(
+        setAlert({
+          message: `Invoice Email Template has been successfully saved.`,
+        }),
+      )
+    } catch (e) {
+      dispatch(
+        setAlert({
+          message: `Failed to save this record.`,
+        }),
+      )
+    } finally {
+    }
   }
 
   const SentModal = () => {
@@ -304,6 +319,7 @@ const InvoiceEmailSetupForm = (props) => {
       validationSchema={validationSchema}
       onSubmit={() => {
       console.log("jaaaaoooo")
+      onSubmit()
       }}
       enableReinitialize
     >
@@ -409,7 +425,7 @@ const InvoiceEmailSetupForm = (props) => {
                               placeholder="Invoice Per Transactional Email"
                               style={{ maxWidth: 399.79 }}
                               size={formSize}
-                              disabled={isView || loading}
+                              disabled={true}
                               maxLength={256}
                             />
                             <FormikControl
@@ -420,7 +436,7 @@ const InvoiceEmailSetupForm = (props) => {
                               placeholder="Invoice Per Transactional"
                               style={{ maxWidth: 399.79 / 2 }}
                               size={formSize}
-                              disabled={isView || loading}
+                              disabled={true}
                               maxLength={256}
                             />
                             <FormikControl

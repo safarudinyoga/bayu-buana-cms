@@ -68,7 +68,7 @@ function MessageCreate(props) {
   }
 
   const validationSchema = Yup.object().shape({
-    message: Yup.object().required("Messages is required."),
+    message: Yup.object().required("Message is required."),
     message_code: Yup.string().required("Message Code is required."),
     message_name: Yup.string().required("Message Name is required."),
   })
