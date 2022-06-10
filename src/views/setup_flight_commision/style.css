@@ -15,7 +15,7 @@ input.date-picker {
 }
 
 span.percent {
-    left: 37vw;
+    left: 27vw;
     top: 82%;
     position: absolute;
 }
@@ -38,7 +38,7 @@ span.percent {
     }    
     
     span.percent {
-        left: 30vw;
+        left: 13vw;
         top: 90%;
     }
     
