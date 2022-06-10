@@ -1048,6 +1048,20 @@ const RetailAncillaryFee = (props) => {
                     setFieldValue={setFieldValue}
                     isView={isView}
                     showTaxes={true}
+                    amountSuffixSelections={[
+                      {
+                        label: "/Ticket",
+                        value: "de62950d-fbab-4e39-bd90-c2b6687c6b36",
+                      },
+                      {
+                        label: "/Person",
+                        value: "de03bf84-4bd8-4cdf-9348-00246f04bcad",
+                      },
+                      {
+                        label: "/Transaction",
+                        value: "5123b121-4f6a-4871-bef1-65408d663e19",
+                      },
+                    ]}
                   />
                 </div>
               </Card.Body>
@@ -1143,6 +1157,14 @@ const RetailAncillaryFee = (props) => {
                     setFieldValue={setFieldValue}
                     isView={isView}
                     showTaxes={true}
+                    amountSuffixSelections={[
+                      {
+                        label:"/Room Night", value:"b95094b2-0883-4e03-8e67-ceb32314b332"},
+                      {
+                        label:"/Room", value:"02103ce7-ecfe-446e-baa1-cb3c6d982fe9"},
+                      {
+                        label:"/Transaction", value:"5123b121-4f6a-4871-bef1-65408d663e19"},
+                    ]}
                   />
                 </div>
               </Card.Body>
