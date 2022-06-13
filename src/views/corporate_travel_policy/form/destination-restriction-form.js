@@ -13,7 +13,7 @@ import Select from "components/form/select"
 import _ from "lodash"
 const endpoint = "/master/configurations/standard-services"
 
-function StandartService(props) {
+function DestinationRestriction(props) {
   const dispatch = useDispatch()
   const showCreateModal = useSelector((state) => state.ui.showCreateModal)
   const API = new Api()
@@ -75,9 +75,9 @@ Yup.addMethod(Yup.object, 'uniqueValueObject', function (fieldName, message) {
   useEffect(async () => {
     let formId = showCreateModal.id || props.id
 
-    let docTitle = "Edit Standard Service"
+    let docTitle = "Edit Destination Restriction"
     if (!formId) {
-      docTitle = "Create Standard Service 123"
+      docTitle = "CREATE DESTINATION RESTRICTIONS"
     }
 
     dispatch(setModalTitle(docTitle))
@@ -364,4 +364,4 @@ Yup.addMethod(Yup.object, 'uniqueValueObject', function (fieldName, message) {
   )
 }
 
-export default withRouter(StandartService)
+export default withRouter(DestinationRestriction)

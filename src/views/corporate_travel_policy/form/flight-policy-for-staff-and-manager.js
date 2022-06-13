@@ -319,6 +319,7 @@ function FlightPolicy(props) {
                 <Col sm={12} md={10}>
                   <Form.Group className="mb-3">
                     <h>Differentiate Short and Long Flights?</h>
+
                     <Row className="form-group mb-0">
                       <Col className="ml-0">
                         <FormikControl
@@ -356,15 +357,21 @@ function FlightPolicy(props) {
                         aria-labelledby="headingOne"
                         data-parent="#accordion"
                       >
-                        <Form.Group as={Row} className="mb-xs-3">
-                        <div
-                            style={{
-                              backgroundColor: "#997e5a",
-                              color: "white",
-                            }}
-                          >
-                            Collapse One
-                          </div>
+                        <Form.Group as={Row} className="mb-xl-3">
+                        <div>
+                          <table >
+                          <tr>
+                            <th style={{border:"1px solid #B5B5B5"}}>Comfort</th>
+                            <th style={{border:"1px solid #B5B5B5"}}>Short Flight<span> - Up to 8 hours</span></th>
+                            <th style={{border:"1px solid #B5B5B5"}}>Long Flight<span> - Over 8 hours</span></th>
+                          </tr>
+                          <tr>
+                            <td style={{border:"1px solid #B5B5B5"}}>Cabin Class</td>
+                            <td style={{border:"1px solid #B5B5B5"}}>Flight Short</td>
+                            <td style={{border:"1px solid #B5B5B5"}}>Flight Long</td>
+                          </tr>
+                          </table>
+                        </div>
                          </Form.Group>
                       </Col>
 
