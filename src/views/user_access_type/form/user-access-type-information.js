@@ -32,7 +32,7 @@ function UserAccessTypeInformation(props) {
       label: "Name",
       name: "user_type_name",
       type: "text",
-      maxLength: 64,
+      maxLength: 256,
     },
   ]
 
@@ -40,13 +40,13 @@ function UserAccessTypeInformation(props) {
     user_type_name: {
       required: true,
       minlength: 1,
-      maxlength: 64,
+      maxlength: 256,
       checkName: true,
     },
     user_type_code: {
       required: true,
       minlength: 1,
-      maxlength: 4,
+      maxlength: 36,
       checkCode: true,
     },
   }
@@ -247,7 +247,7 @@ function UserAccessTypeInformation(props) {
           disabled={isView || loading}
           type="text"
           minLength="1"
-          maxLength="64"
+          maxLength="256"
         />
       </FormHorizontal>
 
@@ -263,8 +263,8 @@ function UserAccessTypeInformation(props) {
           label="Code"
           type="text"
           minLength="1"
-          maxLength="4"
-          hint="Code maximum 4 characters"
+          maxLength="36"
+          hint="Code maximum 36 characters"
         />
       </FormHorizontal>
     </FormBuilder>
