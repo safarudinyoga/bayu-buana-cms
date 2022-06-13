@@ -35,7 +35,13 @@ function IntegrationPartnerCorporateCreate(props) {
         if(formId){
             try {
                 let res = await API.get(endpoint + "/" + id + "/corporates/" + formId);
-                setFormValues(res.data);
+                setFormValues({
+                    ...res.data,
+                    corporate_id: !res.data.corporate?.id ? "" : {
+                        label: res.data.corporate.corporate_name,
+                        value:res.data.corporate.id
+                    }
+                });
             } catch (e) {}
         }
         setLoading(false);
