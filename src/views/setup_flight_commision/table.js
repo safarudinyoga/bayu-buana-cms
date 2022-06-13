@@ -166,17 +166,19 @@ export default function SetupFlightCommisionTable() {
   const dateFormat = (v) => moment(v).format('D MMM YYYY')
 
   const routesFormat = (row) => {
-    if(!row.arrival_city.city_name && !row.departure_city.city_name) {
+    let origin = row.departure_city?.city_name || row.departure_airport_location?.airport_name
+    let destination = row.arrival_city?.city_name || row.arrival_airport_location?.airport_name
+    if(!origin && !destination) {
       return "Any routes"
     }
-    if(!row.departure_city.city_name) {
-      return `From any origin to ${row.arrival_city.city_name}`
+    if(!origin) {
+      return `From any origin to ${destination}`
     }
-    if(!row.arrival_city.city_name) {
-      return `From ${row.departure_city.city_name} to any destinations`
+    if(!destination) {
+      return `From ${origin} to any destinations`
     }
 
-   return `${row.departure_city.city_name} - ${row.arrival_city.city_name}`
+   return `${origin} - ${destination}`
   }
 
   let params = {

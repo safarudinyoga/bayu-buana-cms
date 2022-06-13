@@ -141,10 +141,10 @@ const FeeSection = (props) => {
               </Col>
               <Col sm={12} md={6}>
               {disabledPercent 
-                ? <Form.Check type="checkbox" className="mt-2" label="Include Taxed" disabled={true} />
+                ? <Form.Check type="checkbox" className="mt-2" label="Include Taxes" disabled={true} />
                 : <FastField name={props.fieldIncludeTax}>
                     {({ field, }) => (
-                    <Form.Check {...field} type="checkbox" className="mt-2" label="Include Taxed" disabled={props.isView} />
+                    <Form.Check {...field} type="checkbox" className="mt-2" label="Include Taxes" disabled={props.isView} />
                     )}
                   </FastField>
               }

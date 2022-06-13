@@ -6,7 +6,7 @@ import {
   Button,
   Modal
 } from "react-bootstrap"
-import { Formik, FastField, Field } from "formik"
+import { Formik, FastField, Field, yupToFormErrors } from "formik"
 import * as Yup from "yup"
 import { useDispatch, useSelector } from "react-redux"
 import { setAlert, setModalTitle, setCreateModal } from "redux/ui-store"
@@ -20,9 +20,123 @@ import FormikControl from "../../../../../components/formik/formikControl"
 import { setContentTitle } from "redux/ui-store"
 import { ReactSVG } from "react-svg"
 import createIcon from "assets/icons/create.svg"
-import axios from "axios"
+import TabelFareFamily from "../tabel-fare-family"
+
 const endpoint = "/master/integration-partners";
 const FareFamilyModal = (props) => {
+  let dispatch = useDispatch()
+  const { id } = useParams()
+  const [fareFormValues, setFareFormValues] = useState(null)
+  const [cabinId, setCabinId] = useState(null)
+  const [fareFamilyId, setFareFamilyId] = useState(null)
+  const [loading, setLoading] = useState(true);
+  let api = new Api()
+  
+  const initialFareFormValues = {
+    fare_type_id: "",
+    booking_class_1: "",
+    booking_class_2: "",
+    booking_class_3: "",
+    booking_class_4: "",
+    booking_class_5: "",
+    booking_class_6: "",
+    booking_class_7: "",
+    booking_class_8: "",
+  }
+
+  Yup.addMethod(Yup.object, "optional", function(
+    isOptional = true,
+    defaultValue = ""
+  ) {
+    return this.transform(function(value){
+      if(!isOptional) return value
+
+      if (
+        value &&
+        Object.values(value).some(v => !(v === null || v === undefined || v === ""))
+      ) {
+        return value;
+      }
+
+      return defaultValue
+    }).default(defaultValue)
+  })
+
+  const validationSchemaFare = Yup.object().shape( {
+    fare_type_id: Yup.object()
+      .shape({
+        value: Yup.string(),
+        label: Yup.string(),
+      })
+      .required("Fare Family is required.")
+      .test(
+        "unique-fare-family",
+        "Fare Family already exists",
+        async (value, context) => {
+          let cabinId = props.partnerCabinId
+          try {
+            let res = await api.get(`${endpoint}/${id}/cabins/${cabinId}/fare-family?filters=["fare_type_id","=","${value.value}"]`)
+            
+            return res.data.items.length === 0
+          } catch (error) {
+            return false
+          }
+        }
+      ),
+    booking_class_1: Yup.string().optional(),
+    booking_class_2: Yup.string().optional(),
+    booking_class_3: Yup.string().optional(),
+    booking_class_4: Yup.string().optional(),
+    booking_class_5: Yup.string().optional(),
+    booking_class_6: Yup.string().optional(),
+    booking_class_7: Yup.string().optional(),
+    booking_class_8: Yup.string().optional(),
+  })
+
+
+
+  const onSubmit = async (values, a) => {
+    console.log(values)
+
+    let formatted = {
+      fare_: values.fare_type_id.value,
+      booking_class: `${values.booking_class_1} ${values.booking_class_2} ${values.booking_class_3} ${values.booking_class_4} ${values.booking_class_5} ${values.booking_class_6} ${values.booking_class_7} ${values.booking_class_8}`.trim() ,
+    }
+
+    try {
+      if(fareFamilyId){
+        let res = await api.put(endpoint + "/" + id + "/cabins/" + cabinId + "/fare-family/" + fareFamilyId, formatted)
+      } else {
+        let res = await api.post(endpoint + "/" + id + "/cabins/" + cabinId + "/fare-family/", formatted)
+
+        console.log(res)
+      }
+      dispatch(
+        setAlert({
+
+        })
+      )
+      
+    } catch (error) {
+      dispatch(
+        setAlert({
+            message: "Failed to save this record.",
+        })
+      );
+    } 
+  }
+  useEffect(() => {
+    if (!props.partnerCabinId) {
+      setLoading(false);
+  }
+
+  if (fareFormValues) {
+      setLoading(false);
+  }
+  console.log(props.partnerCabinId)
+    setCabinId(props.partnerCabinId)
+  }, [props.partnerCabinId, fareFormValues])
+
   return (
     <Modal
       {...props}
@@ -40,78 +154,125 @@ const FareFamilyModal = (props) => {
             <p className="modals-header mt-3">CREATE FARE FAMILY</p>
           </div>
 
-          <Form>
-            <FormikControl
-                control="selectAsync"
-                required={props.isView ? "" : "label-required"}
-                label="Fare Family"
-                name="fare_type_id"
-                placeholder={"Please Choose."}
-                url={`master/fare-types`}
-                fieldName={"fare_type_name"}
-                onChange={(v) => {
-                    
-                }}
-                size={props.size}
-                components={
-                  props.isView
-                        ? {
-                              DropdownIndicator: () => null,
-                              IndicatorSeparator: () => null,
-                          }
-                        : null
-                }
-                isDisabled={props.isView}
-            />
+          <Formik
+            initialValues={fareFormValues || initialFareFormValues}
+            validationSchema={validationSchemaFare}
+            onSubmit={onSubmit}
+            enableReinitialize
+            validateOnMount
+          >
+            {({ dirty, handleSubmit, isSubmitting, setFieldValue, handleChange, values }) =>(
+              <Form onSubmit={handleSubmit}>
+                <FormikControl
+                    control="selectAsync"
+                    required={props.isView ? "" : "label-required"}
+                    label="Fare Family"
+                    name="fare_type_id"
+                    placeholder={"Please Choose."}
+                    url={`master/fare-types`}
+                    fieldName={"fare_type_name"}
+                    onChange={(v) => {
+                      console.log("Kepanggil", v)
+                      setFieldValue("fare_type_id", v)
+                    }}
+                    size={props.size}
+                    components={
+                      props.isView
+                            ? {
+                                  DropdownIndicator: () => null,
+                                  IndicatorSeparator: () => null,
+                              }
+                            : null
+                    }
+                    isDisabled={props.isView}
+                />
 
 
-            <Form.Group as={Row} className="mb-4">
-              <Form.Label column md={3}>
-                Booking Class
-                <span className="form-label-required">*</span>
-              </Form.Label>
-              <Col md={9}>
-                <Row className="mt-md-2">
-                <Col>
-                            <Form.Control style={{ maxWidth: "120px" }} />
-                          </Col>
-                          <Col>
-                            <Form.Control style={{ maxWidth: "120px" }} />
-                          </Col>
-                          <Col>
-                            <Form.Control style={{ maxWidth: "120px" }} />
-                          </Col>
-                          <Col>
-                            <Form.Control style={{ maxWidth: "120px" }} />
-                          </Col>
-                          <Col>
-                            <Form.Control style={{ maxWidth: "120px" }} />
-                          </Col>
-                          <Col>
-                            <Form.Control style={{ maxWidth: "120px" }} />
-                          </Col>
-                          <Col>
-                            <Form.Control style={{ maxWidth: "120px" }} />
-                          </Col>
-                          <Col>
-                            <Form.Control style={{ maxWidth: "120px" }} />
-                          </Col>
-                </Row>
-              </Col>
-            </Form.Group>
+                <Form.Group as={Row} className="mb-4">
+                  <Form.Label column md={3}>
+                    Booking Class
+                    <span className="form-label-required">*</span>
+                  </Form.Label>
+                  <Col md={9}>
+                    <Row className="mt-md-2">
+                      <Col>
+                        <Form.Control 
+                          style={{ maxWidth: "120px" }}
+                          onChange={handleChange}
+                          name="booking_class_1"
+                        />
+                      </Col>
+                      <Col>
+                        <Form.Control 
+                          style={{ maxWidth: "120px" }} 
+                          onChange={handleChange}
+                          name="booking_class_2"
+                        />
+                      </Col>
+                      <Col>
+                        <Form.Control 
+                          style={{ maxWidth: "120px" }} 
+                          onChange={handleChange}
+                          name="booking_class_3"
+                        />
+                      </Col>
+                      <Col>
+                        <Form.Control 
+                          style={{ maxWidth: "120px" }} 
+                          onChange={handleChange}
+                          name="booking_class_4"
+                        />
+                      </Col>
+                      <Col>
+                        <Form.Control 
+                          style={{ maxWidth: "120px" }} 
+                          onChange={handleChange}
+                          name="booking_class_5"
+                        />
+                      </Col>
+                      <Col>
+                        <Form.Control 
+                          style={{ maxWidth: "120px" }} 
+                          onChange={handleChange}
+                          name="booking_class_6"  
+                        />
+                      </Col>
+                      <Col>
+                        <Form.Control 
+                          style={{ maxWidth: "120px" }} 
+                          onChange={handleChange}
+                          name="booking_class_7"
+                        />
+                      </Col>
+                      <Col>
+                        <Form.Control 
+                          style={{ maxWidth: "120px" }} 
+                          onChange={handleChange}
+                          name="booking_class_8"
+                        />
+                      </Col>
+                    </Row>
+                  </Col>
+                </Form.Group>
 
-            <div style={{ marginBottom: 30, marginTop: 30, display: "flex" }}>
-              <Button
-                variant="primary"
-                style={{ marginRight: 15 }}
-              >
-                SAVE
-              </Button>
-              <Button variant="secondary" onClick={props.onHide}>
-                CANCEL
-              </Button>
-            </div>
-          </Form>
+                <div style={{ marginBottom: 30, marginTop: 30, display: "flex" }}>
+                  <Button
+                    variant="primary"
+                    style={{ marginRight: 15 }}
+                    type="submit"
+                    disabled={isSubmitting}
+                  >
+                    SAVE
+                  </Button>
+                  <Button variant="secondary" onClick={props.onHide}>
+                    CANCEL
+                  </Button>
+                </div>
+              </Form>
+            )}
+            
+          </Formik>
+          
         </div>
       </Modal.Body>
     </Modal>
@@ -285,7 +446,7 @@ Yup.addMethod(Yup.string, 'uniqueValueString', function (fieldName, message) {
         })
     );
     }
-};
+  };
   useEffect(() => {
     if (!props.partnerCabinId) {
       setLoading(false);
@@ -324,105 +485,114 @@ Yup.addMethod(Yup.string, 'uniqueValueString', function (fieldName, message) {
   return (
     <div>
       <Formik initialValues={formValues || initialValues} validationSchema={validationSchema} onSubmit={onSubmit} validateOnMount enableReinitialize>
-            {({ dirty, handleSubmit, isSubmitting, setFieldValue, handleChange, values }) => (
-                <Form onSubmit={handleSubmit} className="ml-2">
-                    <FormikControl
-                        control="selectAsync"
-                        required={isView ? "" : "label-required"}
-                        label="Cabin"
-                        name="cabin_type_id"
-                        placeholder={"Please Choose."}
-                        url={`master/cabin-types`}
-                        fieldName={"cabin_type_name"}
-                        onChange={(v) => {
-                            setFieldValue("cabin_type_id", v);
-                        }}
-                        style={{ maxWidth: 250 }}
-                        size={formSize}
-                        components={
-                            isView
-                                ? {
-                                      DropdownIndicator: () => null,
-                                      IndicatorSeparator: () => null,
-                                  }
-                                : null
-                        }
-                        isDisabled={isView}
-                    />
+        {({ dirty, handleSubmit, isSubmitting, setFieldValue, handleChange, values }) => (
+          <Form onSubmit={handleSubmit} className="ml-2">
+            <FormikControl
+                control="selectAsync"
+                required={isView ? "" : "label-required"}
+                label="Cabin"
+                name="cabin_type_id"
+                placeholder={"Please Choose."}
+                url={`master/cabin-types`}
+                fieldName={"cabin_type_name"}
+                onChange={(v) => {
+                    setFieldValue("cabin_type_id", v);
+                }}
+                style={{ maxWidth: 250 }}
+                size={formSize}
+                components={
+                    isView
+                        ? {
+                              DropdownIndicator: () => null,
+                              IndicatorSeparator: () => null,
+                          }
+                        : null
+                }
+                isDisabled={isView}
+            />
 
-                    <FormikControl
-                        control="input"
-                        required="label-required"
-                        label="Partner Cabin Code"
-                        name="cabin_type_code"
-                        style={{ maxWidth: 250 }}
-                        size={formSize}
-                        disabled={isView || loading}
-                        onChange={(e) => {
-                            setFieldValue("cabin_type_code", e.target.value);
-                        }}
-                        maxLength={36}
-                    />
+            <FormikControl
+                control="input"
+                required="label-required"
+                label="Partner Cabin Code"
+                name="cabin_type_code"
+                style={{ maxWidth: 250 }}
+                size={formSize}
+                disabled={isView || loading}
+                onChange={(e) => {
+                    setFieldValue("cabin_type_code", e.target.value);
+                }}
+                maxLength={36}
+            />
 
-                    <FormikControl
-                        control="input"
-                        required="label-required"
-                        label="Partner Cabin Name"
-                        name="cabin_type_name"
-                        style={{ maxWidth: 250 }}
-                        size={formSize}
-                        disabled={isView || loading}
-                        onChange={(e) => {
-                            setFieldValue("cabin_type_name", e.target.value);
-                        }}
-                        maxLength={256}
-                    />
-                    {isView ? <h3 className="card-heading"></h3> : <><h3 className="card-heading"></h3>
-                        <Col sm={12}>
-                          <div style={{ padding: "0 15px 15px 15px" }} >
-                            <button
-                              type="button"
-                              className="btn float-right button-override"
-                              onClick={() => setModalShow(true)}
-                            >
-                              <img src={createIcon} className="mr-1" alt="new" />
-                              Add New Fare Family
-                            </button>
+            <FormikControl
+                control="input"
+                required="label-required"
+                label="Partner Cabin Name"
+                name="cabin_type_name"
+                style={{ maxWidth: 250 }}
+                size={formSize}
+                disabled={isView || loading}
+                onChange={(e) => {
+                    setFieldValue("cabin_type_name", e.target.value);
+                }}
+                maxLength={256}
+            />
+            {isView ? <h3 className="card-heading"></h3> : 
+              <>
+                <h3 className="card-heading"></h3>
+                <Col sm={12}>
+                  <div style={{ padding: "0 15px 15px 15px" }} >
+                    <button
+                      type="button"
+                      className="btn float-right button-override"
+                      onClick={() => setModalShow(true)}
+                    >
+                      <img src={createIcon} className="mr-1" alt="new" />
+                      Add New Fare Family
+                    </button>
 
-                          </div>
-                        </Col>
-                        <br />
-                        <Col sm={12}>
-                          <FareFamilyModal
-                            show={modalShow}
-                            isView={isView}
-                            size={formSizeModal}
-                            onHide={() => setModalShow(false)}
-                          />
-                        </Col>  </>}
+                  </div>
+                </Col>
+                <br />
+                <Col sm={12}>
+                  <FareFamilyModal
+                    show={modalShow}
+                    isView={isView}
+                    size={formSizeModal}
+                    onHide={() => setModalShow(false)}
+                    partnerCabinId={cabinId}
 
-                    {!props.hideButton && (
-                        <div
-                            style={{
-                                marginBottom: 30,
-                                marginTop: 30,
-                                display: "flex",
-                            }}
-                        >
-                            {!isView && (
-                                <Button variant="primary" type="submit" disabled={isSubmitting} style={{ marginRight: 15 }}>
-                                    SAVE
-                                </Button>
-                            )}
-                            <CancelButton onClick={() => {
-                              dispatch(setContentTitle("Partner Cabins"));
-                              props.handleReplaceTable(props.isReplaceTable);
-                            }} />
-                        </div>
+                  />
+                </Col>  
+              </>
+            }
+
+
+            {props.partnerCabinId && <TabelFareFamily />}
+
+            {!props.hideButton && (
+                <div
+                    style={{
+                        marginBottom: 30,
+                        marginTop: 30,
+                        display: "flex",
+                    }}
+                >
+                    {!isView && (
+                        <Button variant="primary" type="submit" disabled={isSubmitting} style={{ marginRight: 15 }}>
+                            SAVE
+                        </Button>
                     )}
-                </Form>
+                    <CancelButton onClick={() => {
+                      dispatch(setContentTitle("Partner Cabins"));
+                      props.handleReplaceTable(props.isReplaceTable);
+                    }} />
+                </div>
             )}
-        </Formik>
+          </Form>
+        )}
+      </Formik>
     </div>
   )
 }
