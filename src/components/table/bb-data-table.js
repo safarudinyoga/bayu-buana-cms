@@ -28,6 +28,7 @@ import showIcon from "assets/icons/show.svg"
 import ModalCreate from "components/Modal/bb-modal"
 import ModalDelete from "components/Modal/bb-modal-delete"
 import customPrint from '../../lib/customPrint'
+import { createLanguageServiceSourceFile } from "typescript"
 
 window.JSZip = JSZip
 
@@ -154,6 +155,14 @@ class BBDataTable extends Component {
 
         let infoDelete = self.props.infoDelete
         let info = ""
+
+        // dynamicly accessing nested object with notation
+        const pathNotation = (path, obj) => {
+          return path.split('.').reduce(function(prev, curr) {
+            return prev ? prev[curr] : null
+          }, obj || self)
+        }
+
         if(infoDelete) {
           info = infoDelete.map(v => {
             let data = v.recordName
@@ -161,8 +170,12 @@ class BBDataTable extends Component {
             let title = ""
             if(result){
               title = data.map(v => row[v]).join(" ")
-            }else{
-              title = row[data]
+            } else {
+              if (module === 'manage-corporate') {
+                title = pathNotation(data, row)
+              } else {
+                title = row[data]
+              }
             }
             return v.title + ": " + title
           }).join(" ")
@@ -180,6 +193,12 @@ class BBDataTable extends Component {
           ? row.integration_partner_meal_plan_type.meal_plan_type_id
           : module === 'partner-cabin'
           ? row.cabin_type_id
+          : module === 'manage-corporate'
+          ? row.agent_corporate.id
+          : row.id
+
+        const targetDetailId = module === 'manage-corporate'
+          ? row.agent_corporate.id
           : row.id
 
         const showDelete = module !== "integration-partner" && module !== "identity-rules" && module !== "email-setup-template"
@@ -189,7 +208,7 @@ class BBDataTable extends Component {
           <a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item ${hideDetail ? "mr-2" : ""}" data-action="edit" data-id="${targetDataId}" title="Click to edit"><img src="${editIcon}"/></a>
 
           <a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item ${showCopyAct ? "d-inline" : "d-none"}" data-action="copy" data-id="${targetDataId}" title="Click to copy"style="margin-left:7px;"><img src="${CopyIcon}" /></a>
-          <a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="${hideDetail ? "d-none" : "d-inline"} table-row-action-item" data-action="view" data-id="${row.id}" title="Click to view details"><img src="${showIcon}"/></a>
+          <a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="${hideDetail ? "d-none" : "d-inline"} table-row-action-item" data-action="view" data-id="${targetDetailId}" title="Click to view details"><img src="${showIcon}"/></a>
           <a href="javascript:void(0);" class="${showSwitch ? "d-inline" : "d-none"} custom-switch custom-switch-bb table-row-action-item" data-id="${module === 'employee' ? row.employee_id: row.id}" data-action="update_status" data-status="${row.status}" data-toggle="tooltip" data-placement="${placement}" title="${row.status === 1 ? "Deactivate" : "Activate"}">
             <input type="checkbox" class="custom-control-input check-status-${row.id}" id="customSwitch${row.id}" ${checked} data-action="update_status">
             <label class="custom-control-label" for="customSwitch${row.id}" data-action="update_status"></label>
@@ -1078,7 +1097,7 @@ class BBDataTable extends Component {
       })
     $.fn.DataTable.ext.pager.numbers_length = 5
 
-    const { showCreateModal, modalTitle, showModalDelete } = this.props
+    const { showCreateModal, modalTitle, showModalDelete, module, deleteEndpoint} = this.props
     return (
       <div ref={this.wrapper}>
         <Modal show={this.state.isOpen}>
@@ -1118,7 +1137,7 @@ class BBDataTable extends Component {
                     })
                 } else {
                   this.api
-                    .post(this.props.deleteEndpoint, this.state.selected)
+                    .post(deleteEndpoint, this.state.selected)
                     .then(() => {
                       this.dt.ajax.reload()
                       this.props.setAlert({
