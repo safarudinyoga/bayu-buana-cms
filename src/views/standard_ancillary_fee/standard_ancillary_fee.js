@@ -15,7 +15,8 @@ const ControlledTabs = () => {
   const params = useHistory()
 
   useEffect(() =>{
-    console.log(params)
+    const currentKey = localStorage.getItem("saf_key")
+    setKey( currentKey || "flight")
   },[])
 
   return (
