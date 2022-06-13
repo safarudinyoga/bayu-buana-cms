@@ -146,8 +146,9 @@ function IntegrationPartnerCorporateCreate(props) {
                         label="Corporate"
                         name="corporate_id"
                         placeholder={values.currency_name || "Please Choose."}
-                        url={`master/companies`}
-                        fieldName={"company_name"}
+                        url={`master/agent-corporates`}
+                        fieldName={"agent_corporate.corporate.corporate_name"}
+                        cstmValue={"agent_corporate.corporate_id"}
                         onChange={(v) => {
                             setFieldValue("corporate_id", v);
                         }}
