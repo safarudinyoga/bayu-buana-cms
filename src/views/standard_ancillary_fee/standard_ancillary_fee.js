@@ -8,9 +8,15 @@ import HotelTable from "./table/hotel_table"
 import OtherTable from "./table/other_table"
 import infoIcon from "assets/icons/information.svg"
 import { ReactSVG } from "react-svg"
+import { useParams, useHistory } from "react-router-dom"
 
 const ControlledTabs = () => {
   const [key, setKey] = useState("flight")
+  const params = useHistory()
+
+  useEffect(() =>{
+    console.log(params)
+  },[])
 
   return (
     <div className="card">
@@ -33,7 +39,9 @@ const ControlledTabs = () => {
             </div>
           }
         >
-          <FlightTable />
+          <FlightTable
+            nextTab={() => setKey("hotel")}
+          />
         </TabPane>
         <TabPane
           className="m-3"
