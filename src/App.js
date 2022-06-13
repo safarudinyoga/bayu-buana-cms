@@ -216,6 +216,9 @@ import CorporateDivisionHierarchy from "views/corporate_division/hierarchy"
 // import CorporateTravelPolicyTable from "views/corporate_travel_policy/table"
 import CorporateTravelPolicy from "views/corporate_travel_policy"
 
+//corporate profile
+import CorporateProfile from "views/corporate_profile/index"
+
 const RouteWithProps = ({
   path,
   exact,
@@ -766,7 +769,10 @@ const DashboardRoutes = () => {
         <Route path="/master/tax-fee">
           <TaxFeeForm />
         </Route>
-
+        {/* Corporate Profile */}
+        <Route path="/master/corporate-profile">
+          <CorporateProfile />
+        </Route>
         {/* Corporate Division */}
         <Route exact path="/master/corporate-divisions">
           <CorporateDivisionTable />
