@@ -210,18 +210,17 @@ Yup.addMethod(Yup.object, 'uniqueValueObject', function (fieldName, message) {
       }) => (
         <Form onSubmit={handleSubmit} className="ml-2">
           <Row className="form-group mb-0">
-            <Col lg={10} className="ml-0">
+            <Col className="ml-0">
                 <FormikControl 
                   control="input"
                   label="Code"
                   name="percent"
                   required="label-required"
                   className
-                  style={{ maxWidth: 100 }}
+                  style={{ maxWidth: 130, borderRadius: 4 }}
                   // isDisabled={isView}
                 />
             </Col>
-            <span className="text-lg ml-0 percent">%</span>
           </Row>
           
           <Row className="form-group mb-0">
@@ -232,11 +231,10 @@ Yup.addMethod(Yup.object, 'uniqueValueObject', function (fieldName, message) {
                   name="percent"
                   required="label-required"
                   className
-                  style={{ maxWidth: 100 }}
+                  style={{ maxWidth: 250, borderRadius: 4 }}
                   // isDisabled={isView}
                 />
             </Col>
-            <span className="text-lg ml-0 percent">%</span>
           </Row>
 
           <Row className="form-group required">

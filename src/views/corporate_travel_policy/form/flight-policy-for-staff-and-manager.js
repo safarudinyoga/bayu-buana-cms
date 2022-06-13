@@ -313,273 +313,93 @@ function FlightPolicy(props) {
             </Col>
           </Form.Group>
 
-          <Row className="form-group mb-0">
-            <Col className="ml-0">
-              <FormikControl
-                control="input"
-                label="Commission Percentage"
-                name="percent"
-                required="label-required"
-                className
-                style={{ maxWidth: 100 }}
-                // isDisabled={isView}
-              />
-            </Col>
-          </Row>
-
           <Row>
             <Col sm={12} md={12} lg={8}>
               <Form.Group as={Row} className="form-group" id="accordion">
                 <Col sm={12} md={10}>
                   <Form.Group className="mb-3">
-                    <Form.Check
-                      type="checkbox"
-                      label="Send Recurring Reminders"
-                      className="mt-2 ml-1"
-                      onClick={() =>
-                        setRecurringReminderType(!RecurringReminderType)
-                      }
-                      aria-expanded={RecurringReminderType}
-                    />
-
-                    <Collapse in={RecurringReminderType} id="headingOne">
-                      <Form.Check
-                        inline
-                        className="mt-2 ml-5"
-                        label="Daily"
-                        name="group1"
-                        type="radio"
-                        id="inline-tek-2"
-                        data-toggle="collapse"
-                        data-target="#collapseOne"
-                        aria-expanded="true"
-                        aria-controls="collapseOne"
-                      />
-                    </Collapse>
-                    <Row
-                      className="mt-3 ml-5 collapse"
-                      id="collapseOne"
-                      aria-labelledby="headingOne"
-                      data-parent="#accordion"
-                    >
-                      <Col sm={12} md={5}>
-                        <Form.Group as={Row} className="mb-xs-3">
-                          <Form.Label className="ml-4 ">Every</Form.Label>
-                          <FastField name="every" disabled>
-                            {({ field, form }) => (
-                              <>
-                                <NumberFormat
-                                  {...field}
-                                  className="form-control"
-                                  thousandsGroupStyle="thousand"
-                                  displayType="input"
-                                  type="text"
-                                  style={{
-                                    width: "60px",
-                                    marginLeft: "12px",
-                                  }}
-                                  isInvalid={
-                                    form.touched.every && form.errors.every
-                                  }
-                                  isAllowed={(values) => {
-                                    const { formattedValue, floatValue } =
-                                      values
-                                    return (
-                                      formattedValue === "" || floatValue <= 700
-                                    )
-                                  }}
-                                  allowNegative={true}
-                                />
-                                {form.touched.every && form.errors.every && (
-                                  <Form.Control.Feedback type="invalid">
-                                    {form.touched.every
-                                      ? form.errors.every
-                                      : null}
-                                  </Form.Control.Feedback>
-                                )}
-                              </>
-                            )}
-                          </FastField>
-
-                          <Form.Label className="ml-2">day(s)</Form.Label>
-                        </Form.Group>
+                    <h>Differentiate Short and Long Flights?</h>
+                    <Row className="form-group mb-0">
+                      <Col className="ml-0">
+                        <FormikControl
+                          control="input"
+                          label="Short Flight Duration up to"
+                          name="percent"
+                          required="label-required"
+                          className
+                          style={{ maxWidth: 100 }}
+                          // isDisabled={isView}
+                        />
                       </Col>
                     </Row>
-
-                    <Collapse in={RecurringReminderType} id="headingTwo">
-                      <Form.Check
-                        className="mt-2 ml-5 collapsed"
-                        label="Weekly"
-                        type="radio"
-                        name="group1"
-                        data-toggle="collapse"
-                        data-target="#collapseTwo"
-                        aria-expanded="false"
-                        aria-controls="collapseTwo"
-                      />
-                    </Collapse>
-
-                    <Row
-                      className="mt-3 ml-5 collapse"
-                      aria-labelledby="headingTwo"
-                      data-parent="#accordion"
-                      id="collapseTwo"
-                    >
-                      <Col sm={12} md={6}>
+                    
+                    <Row>
+                        <Collapse in={RecurringReminderType} id="headingOne">
+                          <Form.Check
+                            inline
+                            className="mt-2 ml-5"
+                            label="Yes"
+                            name="group1"
+                            type="radio"
+                            id="inline-tek-2"
+                            data-toggle="collapse"
+                            data-target="#collapseOne"
+                            aria-expanded="true"
+                            aria-controls="collapseOne"
+                          />
+                        </Collapse>
+                        <Col
+                        sm={12}
+                        md={6}
+                        className="mt-3 ml-5 collapse"
+                        id="collapseOne"
+                        aria-labelledby="headingOne"
+                        data-parent="#accordion"
+                      >
                         <Form.Group as={Row} className="mb-xs-3">
-                          <Form.Label className="ml-4 ">Every</Form.Label>
-                          <Col xs={10} md={4} lg={5}>
-                            <FastField name="weekly" disabled>
-                              {({ field, form }) => (
-                                <>
-                                  <NumberFormat
-                                    {...field}
-                                    className="form-control"
-                                    thousandsGroupStyle="thousand"
-                                    displayType="input"
-                                    type="text"
-                                    style={{ maxWidth: "220px" }}
-                                    isInvalid={
-                                      form.touched.every && form.errors.every
-                                    }
-                                    isAllowed={(values) => {
-                                      const { formattedValue, floatValue } =
-                                        values
-                                      return (
-                                        formattedValue === "" ||
-                                        floatValue <= 700
-                                      )
-                                    }}
-                                    allowNegative={true}
-                                  />
-                                  {form.touched.every && form.errors.every && (
-                                    <Form.Control.Feedback type="invalid">
-                                      {form.touched.every
-                                        ? form.errors.every
-                                        : null}
-                                    </Form.Control.Feedback>
-                                  )}
-                                </>
-                              )}
-                            </FastField>
-                          </Col>
-                          <Form.Label>week(s) on</Form.Label>
-                        </Form.Group>
-                      </Col>
-                      {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map(
-                        (type) => (
-                          <div key={`inline-${type}`} className="mb-3 ml-2">
-                            <Form.Label>{type}</Form.Label>
-                            <Form.Check
-                              name="group"
-                              type="radio"
-                              id={`inline-${type}-1`}
-                            />
+                        <div
+                            style={{
+                              backgroundColor: "#997e5a",
+                              color: "white",
+                            }}
+                          >
+                            Collapse One
                           </div>
-                        ),
-                      )}
-                    </Row>
+                         </Form.Group>
+                      </Col>
 
-                    <Collapse in={RecurringReminderType} id="headingThree">
-                      <Form.Check
-                        className="mt-2 ml-5 collapse"
-                        label="Monthly"
-                        name="group1"
-                        type="radio"
-                        data-toggle="collapse"
-                        data-target="#collapseThree"
-                        aria-expanded="false"
-                        aria-controls="collapseThree"
-                      />
-                    </Collapse>
-
-                    <Row
-                      className="mt-3 ml-5 collapse"
-                      aria-labelledby="headingThree"
-                      data-parent="#accordion"
-                      id="collapseThree"
-                    >
-                      <Col sm={12} md={6}>
+                      <Collapse in={RecurringReminderType} id="headingTwo">
+                        <Form.Check
+                          className="mt-2 ml-5 collapsed"
+                          label="No"
+                          type="radio"
+                          name="group1"
+                          data-toggle="collapse"
+                          data-target="#collapseTwo"
+                          aria-expanded="false"
+                          aria-controls="collapseTwo"
+                        />
+                      </Collapse>
+                      <Col
+                        sm={12}
+                        md={6}
+                        className="mt-3 ml-5 collapse"
+                        aria-labelledby="headingTwo"
+                        data-parent="#accordion"
+                        id="collapseTwo"
+                      >
                         <Form.Group as={Row} className="mb-xs-3">
-                          <Form.Label className="ml-4 ">Day</Form.Label>
-                          <Col xs={10} md={4} lg={7}>
-                            <FastField name="montly" disabled>
-                              {({ field, form }) => (
-                                <>
-                                  <NumberFormat
-                                    {...field}
-                                    className="form-control"
-                                    thousandsGroupStyle="thousand"
-                                    displayType="input"
-                                    type="text"
-                                    style={{ maxWidth: "100px" }}
-                                    isInvalid={
-                                      form.touched.every && form.errors.every
-                                    }
-                                    isAllowed={(values) => {
-                                      const { formattedValue, floatValue } =
-                                        values
-                                      return (
-                                        formattedValue === "" ||
-                                        floatValue <= 31
-                                      )
-                                    }}
-                                    allowNegative={true}
-                                  />
-                                  {form.touched.every && form.errors.every && (
-                                    <Form.Control.Feedback type="invalid">
-                                      {form.touched.every
-                                        ? form.errors.every
-                                        : null}
-                                    </Form.Control.Feedback>
-                                  )}
-                                </>
-                              )}
-                            </FastField>
-                          </Col>
-                          <Form.Label>of every</Form.Label>
+                          <div
+                            style={{
+                              backgroundColor: "#425778",
+                              color: "white",
+                            }}
+                          >
+                            Collapse Two
+                          </div>
                         </Form.Group>
                       </Col>
-                      <Col sm={12} md={4}>
-                        <Form.Group as={Row} className="mb-xs-3">
-                          <Col xs={10} md={6} lg={7}>
-                            <FastField name="every-monthy" disabled>
-                              {({ field, form }) => (
-                                <>
-                                  <NumberFormat
-                                    {...field}
-                                    className="form-control"
-                                    thousandsGroupStyle="thousand"
-                                    displayType="input"
-                                    type="text"
-                                    style={{ maxWidth: "220px" }}
-                                    isInvalid={
-                                      form.touched.every && form.errors.every
-                                    }
-                                    isAllowed={(values) => {
-                                      const { formattedValue, floatValue } =
-                                        values
-                                      return (
-                                        formattedValue === "" ||
-                                        floatValue <= 700
-                                      )
-                                    }}
-                                    allowNegative={true}
-                                  />
-                                  {form.touched.every && form.errors.every && (
-                                    <Form.Control.Feedback type="invalid">
-                                      {form.touched.every
-                                        ? form.errors.every
-                                        : null}
-                                    </Form.Control.Feedback>
-                                  )}
-                                </>
-                              )}
-                            </FastField>
-                          </Col>
-                          <Form.Label>month(s)</Form.Label>
-                        </Form.Group>
-                      </Col>
+                      
                     </Row>
                   </Form.Group>
                 </Col>
