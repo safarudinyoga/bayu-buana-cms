@@ -1,40 +1,30 @@
 import { withRouter } from "react-router"
 import React, { useState, useEffect } from "react"
 import { Col, Form, Row, Button } from "react-bootstrap"
-import { Formik, FastField, ErrorMessage } from "formik"
+import { Formik, FastField, ErrorMessage, Field } from "formik"
 import TextError from "components/formik/textError"
 import * as Yup from "yup"
 import SelectAsync from "components/form/select-async"
 import Api from "config/api"
 import { useDispatch, useSelector } from "react-redux"
-import { setAlert, setCreateModal, setModalTitle } from "redux/ui-store"
-import FormInputSelectMultiAjax from "components/form/input-select-multi-ajax"
+import { setAlert, setCreateNewModal, setModalTitleNew } from "redux/ui-store"
 import CancelButton from "components/button/cancel"
 import Select from "components/form/select"
+import FormikControl from "../../../components/formik/formikControl"
 import _ from "lodash"
 const endpoint = "/master/configurations/standard-services"
 
-function HotelPolicy(props) {
+
+
+function HotelPolicy (props) {
+
   const dispatch = useDispatch()
-  const showCreateModalNew = useSelector((state) => state.ui.showCreateModalNew)
+  const showCreateNewModal = useSelector((state) => state.ui.showCreateNewModal)
   const API = new Api()
-  const isView = showCreateModalNew.disabled_form || props.isView
+  const isView = showCreateNewModal.disabled_form || props.isView
   const [id, setId] = useState(null)
   const [loading, setLoading] = useState(true)
   const [formValues, setFormValues] = useState(null)
-  const [categoryData, setCategoryData] = useState([])
-  const [form, setForm] = useState({
-    room_amenity_type_code: "",
-    room_amenity_type_name: "",
-    room_amenity_category_room_amenity_type: [],
-    room_amenity_type_asset: {
-      multimedia_description_id: null,
-      multimedia_description: {
-        url: "",
-      },
-    },
-  })
-
 
   const selectDays = () => {
     const options = []
@@ -70,7 +60,7 @@ function HotelPolicy(props) {
   }
 
   const duplicateValue = async(fieldName, value) => {
-    let filters = encodeURIComponent(JSON.stringify([[fieldName,"=",value],["AND"],["service_level.service_level_code",showCreateModalNew.service_level_code],["AND"],["status",1]]))
+    let filters = encodeURIComponent(JSON.stringify([[fieldName,"=",value],["AND"],["service_level.service_level_code",showCreateNewModal.service_level_code],["AND"],["status",1]]))
     let res = await API.get(endpoint + `?filters=${filters}`)
     let sameId = res.data.items.find((v) => v.id === id)
     if(!sameId) return res.data.items.length === 0 
@@ -86,14 +76,14 @@ Yup.addMethod(Yup.object, 'uniqueValueObject', function (fieldName, message) {
 })
 
   useEffect(async () => {
-    let formId = showCreateModalNew.id || props.id
+    let formId = showCreateNewModal.id || props.id
 
     let docTitle = "Edit Hotel Policy For Staff and Manager"
     if (!formId) {
       docTitle = "CREATE HOTEL POLICY FOR STAFF AND MANAGER"
     }
 
-    dispatch(setModalTitle(docTitle))
+    dispatch(setModalTitleNew(docTitle))
 
     if (formId) {
       try {
@@ -130,7 +120,7 @@ Yup.addMethod(Yup.object, 'uniqueValueObject', function (fieldName, message) {
   }, [])
 
   useEffect(() => {
-    if (!showCreateModalNew.id) {
+    if (!showCreateNewModal.id) {
       setLoading(false)
     }
 
@@ -138,8 +128,8 @@ Yup.addMethod(Yup.object, 'uniqueValueObject', function (fieldName, message) {
       setLoading(false)
     }
 
-    setId(showCreateModalNew.id)
-  }, [showCreateModalNew.id, formValues])
+    setId(showCreateNewModal.id)
+  }, [showCreateNewModal.id, formValues])
 
   const initialValues = {
     task_type: "",
@@ -153,11 +143,11 @@ Yup.addMethod(Yup.object, 'uniqueValueObject', function (fieldName, message) {
 
   const onSubmit = async (values, a) => {
     try {
-      let formId = showCreateModalNew.id || props.id            
+      let formId = showCreateNewModal.id || props.id            
       let amount = (values.response_time[0].value * 1440) + (values.response_time[1].value * 60) + (values.response_time[2].value)
       let form = {
         task_type_id: values.task_type.value,
-        service_level_code: parseInt(showCreateModalNew.service_level_code),
+        service_level_code: parseInt(showCreateNewModal.service_level_code),
         amount: amount
       }
 
@@ -168,7 +158,7 @@ Yup.addMethod(Yup.object, 'uniqueValueObject', function (fieldName, message) {
           form,
         )
         dispatch(
-          setCreateModal({ show: false, id: null, disabled_form: false }),
+          setCreateNewModal({ show: false, id: null, disabled_form: false }),
         )
         dispatch(
           setAlert({
@@ -181,7 +171,7 @@ Yup.addMethod(Yup.object, 'uniqueValueObject', function (fieldName, message) {
           form,
         )
         dispatch(
-          setCreateModal({ show: false, id: null, disabled_form: false }),
+          setCreateNewModal({ show: false, id: null, disabled_form: false }),
         )
         dispatch(
           setAlert({
@@ -197,8 +187,8 @@ Yup.addMethod(Yup.object, 'uniqueValueObject', function (fieldName, message) {
       )
     }
   }
-  return (
-    <Formik
+    return (
+      <Formik
       initialValues={formValues || initialValues}
       validationSchema={validationSchema}
       onSubmit={onSubmit}
@@ -219,87 +209,67 @@ Yup.addMethod(Yup.object, 'uniqueValueObject', function (fieldName, message) {
         setFieldTouched,
       }) => (
         <Form onSubmit={handleSubmit} className="ml-2">
-          <Form.Group as={Row} className="form-group">
-            <Form.Label column sm={3}>
-              Destination<span className="form-label-required">*</span>
-            </Form.Label>
-            <Col sm={8}>
-              <FastField name="task_type">
-                {({ field, form }) => (
-                  <div style={{ maxWidth: 200 }}>
-                    <SelectAsync
-                      {...field}
-                      isClearable
-                      isDisabled={isView}
-                      url={`master/task-types`}
-                      fieldName="task_type_name"
-                      onChange={(v) => {
-                        setFieldValue("task_type", v)
-                      }}
-                      placeholder="Please choose"
-                      className={`react-select ${
-                        form.touched.task_type && form.errors.task_type
-                          ? "is-invalid"
-                          : null
-                      }`}
-                      components={
-                        isView
-                          ? {
-                              DropdownIndicator: () => null,
-                              IndicatorSeparator: () => null,
-                            }
-                          : null
-                      }
-                    />
-                    {form.touched.task_type && form.errors.task_type && (
-                      <Form.Control.Feedback type="invalid">
-                        {form.touched.task_type ? form.errors.task_type : null}
-                      </Form.Control.Feedback>
-                    )}
-                  </div>
-                )}
-              </FastField>
+          <Row className="form-group mb-0">
+            <Col lg={10} className="ml-0">
+                <FormikControl 
+                  control="input"
+                  label="Code"
+                  name="percent"
+                  required="label-required"
+                  className
+                  style={{ maxWidth: 100 }}
+                  // isDisabled={isView}
+                />
             </Col>
-          </Form.Group>
+            <span className="text-lg ml-0 percent">%</span>
+          </Row>
           
-            <Col className="policy-class-modal-title">
-            <h3>CABIN CLASS</h3>
-
-              <h3>PREFERRED AIRLINES</h3>
-            <FormInputSelectMultiAjax
-              label="Select preferred airlines"
-              value={form.room_amenity_category_room_amenity_type ? form.room_amenity_category_room_amenity_type.map((item) => item.room_amenity_category_id) : []}
-              filter={`["status", "=", 1]`}
-              name="room_amenity_category_room_amenity_type"
-              data={categoryData}
-              endpoint="/master/room-amenity-categories"
-              column="room_amenity_category_name"
-              onChange={(e, values) => {
-                setForm(form => ({...form, room_amenity_category_room_amenity_type: values.map(v => (
-                  {room_amenity_category_id: v.id}
-                ))}))
-              }}
-              disabled={isView || loading}
-              type="selectmultiple" />
-            
-              <h3>RESTRICT AIRLINES</h3>
-            <FormInputSelectMultiAjax
-              label="Select restricted airlines"
-              value={form.room_amenity_category_room_amenity_type ? form.room_amenity_category_room_amenity_type.map((item) => item.room_amenity_category_id) : []}
-              filter={`["status", "=", 1]`}
-              name="room_amenity_category_room_amenity_type"
-              data={categoryData}
-              endpoint="/master/room-amenity-categories"
-              column="room_amenity_category_name"
-              onChange={(e, values) => {
-                setForm(form => ({...form, room_amenity_category_room_amenity_type: values.map(v => (
-                  {room_amenity_category_id: v.id}
-                ))}))
-              }}
-              disabled={isView || loading}
-              type="selectmultiple" />
+          <Row className="form-group mb-0">
+            <Col className="ml-0">
+                <FormikControl 
+                  control="input"
+                  label="Name"
+                  name="percent"
+                  required="label-required"
+                  className
+                  style={{ maxWidth: 100 }}
+                  // isDisabled={isView}
+                />
             </Col>
-            
+            <span className="text-lg ml-0 percent">%</span>
+          </Row>
+
+          <Row className="form-group required">
+            <Col md={3} lg={4}>
+              <label className="text-label-input" htmlFor={"routes"}>
+                Apply To
+              </label>
+            </Col>
+            <Col md={9} lg={8}>
+              <Row>
+                <Col md={6} lg={10}>
+                  <Field id={"departureFrom"} name={"departureFrom"}>
+                    {({ field, form, meta}) => (
+                      <div>
+                        <Select
+                          {...field}
+                          // options={optionRoute}
+                          placeholder="Please Choose"
+                          // url={`master/airports`}
+                          fieldName="airport_name"
+                          // onChange={(v) => {
+                          //   formik.setFieldValue("departureFrom", v)
+                          //   setOptDeparture(v)
+                          // }}
+                        />
+                      </div>
+                    )}
+                  </Field>
+                </Col>
+              </Row>
+            </Col>
+          </Row>
+
           {!props.hideButton && (
             <div
               style={{
@@ -323,7 +293,7 @@ Yup.addMethod(Yup.object, 'uniqueValueObject', function (fieldName, message) {
               <CancelButton
                 onClick={() =>
                   dispatch(
-                    setCreateModal({
+                    setCreateNewModal({
                       show: false,
                       id: null,
                       disabled_form: false,
@@ -336,7 +306,7 @@ Yup.addMethod(Yup.object, 'uniqueValueObject', function (fieldName, message) {
         </Form>
       )}
     </Formik>
-  )
+    )
 }
 
-export default withRouter(HotelPolicy)
+export default withRouter (HotelPolicy)
