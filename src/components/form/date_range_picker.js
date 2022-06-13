@@ -18,6 +18,8 @@ const DateRangePicker = (props) => {
     if(props.value) {
       if(props.value[0] !== null) {
         setForm(props.value)
+      } else {
+        setForm([])
       }
     }
   }, [props])
