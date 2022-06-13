@@ -26,7 +26,7 @@ import removeIcon from "assets/icons/remove.svg"
 import CopyIcon from "assets/icons/ic_copy.svg"
 import showIcon from "assets/icons/show.svg"
 import ModalCreate from "components/Modal/bb-modal"
-import ModalCreateNew from "components/Modal/bb-modal-new"
+import ModalCreateNew from "components/Modal/bb-modal"
 import ModalDelete from "components/Modal/bb-modal-delete"
 import customPrint from '../../lib/customPrint'
 
