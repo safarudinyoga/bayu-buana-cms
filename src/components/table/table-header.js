@@ -29,8 +29,8 @@ const DropdownIndicator = (props) => {
 const customStyles = {
   option: (provided, state) => ({
     ...provided,
-    color: "#333333",
-    backgroundColor: state.isSelected ? "white" : "white",
+    color: state.isSelected ? "white" : "#333333",
+    backgroundColor: state.isSelected ? "#027F71" : "white",
     padding: 10,
     fontFamily: "Segoe UI, Tahoma, Geneva, Verdana, sans-serif",
     fontSize: 15,
@@ -401,7 +401,7 @@ class TableHeader extends Component {
                       </label>
                       <Select
                         components={{ DropdownIndicator }}
-                        value={{
+                        defaultValue={{
                           value: this.state.yearValue,
                           label: this.state.yearValue,
                         }}

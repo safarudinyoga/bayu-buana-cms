@@ -399,7 +399,8 @@ const HotelForm = (props) => {
       openSnackbar(
         `Ancillary Fee has been successfully ${formId ? 'updated' : 'saved'}.`,
       )
-        history.replace(backUrl)
+      localStorage.setItem("saf_key", "other")
+      history.replace(backUrl)
     } catch(e) {
       openSnackbar(
         `Failed save record`,
