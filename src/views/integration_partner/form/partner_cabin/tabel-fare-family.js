@@ -45,7 +45,7 @@ export default function IntegrationPartnerCabinTypesTable() {
   })
 
   return <>
-                  <BBDataTable {...params} onReset={onReset} modalContent={DeleteModal} />
+    <BBDataTable {...params} onReset={onReset} modalContent={DeleteModal} />
   </>
 
 

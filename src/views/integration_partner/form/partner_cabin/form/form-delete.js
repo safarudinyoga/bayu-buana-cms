@@ -27,7 +27,7 @@ function DeleteForm(props) {
     if(formId) {
       try {
         console.log("MASUK KESINI")
-        let {data} = await API.get(`/master/integration-partner/${props.match.params.id}/cabins/${formId}`)
+        let {data} = await API.get(`/master/integration-partners/${props.match.params.id}/cabins/${formId}`)
         setFormValues(data)
       } catch(e) {
         console.log(e)
