@@ -4,7 +4,7 @@ import { Card } from "react-bootstrap"
 import FormFlight from "../form/flight-policy-for-staff-and-manager.js"
 import "../style.scss"
 
-const HotelPolicyDataTable = () => {
+const FlightPolicyDataTable = () => {
     let params = {
         title: "Staff and Manager",
         titleModal: "Staff and Manager",
@@ -57,4 +57,4 @@ const HotelPolicyDataTable = () => {
         </div>
     )
 }
-export default HotelPolicyDataTable
+export default FlightPolicyDataTable
