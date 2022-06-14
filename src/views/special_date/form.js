@@ -13,6 +13,7 @@ import env from "../../config/environment"
 import DatePicker, { DateObject }  from 'react-multi-date-picker'
 import Icon from "react-multi-date-picker/components/icon"
 import "./special-date.css"
+import DateRangePicker from "../../components/form/date_range_picker"
 
 const endpoint = "/master/agent-special-dates"
 const backUrl = "/master/special-date"
@@ -205,36 +206,6 @@ function SpecialDateForm(props) {
     }
   }
 
-  function RenderDatepickerStart({ openCalendar, value, handleValueChange }) {
-    return (
-      <div className="position-relative datepicker-special-date">
-        <Icon className="special-date-icon" onClick={openCalendar} />
-        <input type="text"
-          className="form-control periode" 
-          onFocus={openCalendar}
-          value={value}
-          onChange={handleValueChange}
-          id="startDate"
-        />
-      </div>
-    )
-  }
-
-  function RenderDatepickerEnd({ openCalendar, value, handleValueChange }) {
-    return (
-      <div className="position-relative datepicker-special-date">
-        <Icon className="special-date-icon" onClick={openCalendar} />
-        <input type="text"
-          className="form-control periode" 
-          onFocus={openCalendar} 
-          value={value}
-          onChange={handleValueChange}
-          id="endDate"
-        />
-      </div>
-    )
-  }
-
   return (
     <FormBuilder
       onBuild={(el) => setFormBuilder(el)}
@@ -266,128 +237,35 @@ function SpecialDateForm(props) {
         <div className="row d-flex align-items-center">
           <div className="col-12 col-md-3 col-lg-4 form-group required">
             <span className="text-label-input">
-              Periode
+              Period
             </span>
             <span className='label-required'></span> 
           </div>
-          <div className="col-8 col-md-4 col-lg-3 mb-2 datepicker-special-date-container">
-            <DatePicker
-              render={<RenderDatepickerStart />}
-              numberOfMonths={2}
-              format="DD MMMM YYYY"
-              minDate={new DateObject().subtract(10, "years")}
-              maxDate={new DateObject().add(10, "years") && form.end_date}
-              value={form.start_date}
-              ref={startDatePickerRef}
-              onChange={
-                (date) => {
-                  setForm({...form, start_date: new Date(date)})
-                  setStartDateClose(false)
+          <div className="col-8 col-md-9 col-lg-7 mb-2 datepicker-special-date-container">
+            <DateRangePicker
+              minDate={10}
+              maxDate={10}
+              value={[form.start_date, form.end_date]}
+              onChange={(date) => {
+                if(date.length > 0) {
+                  setForm({
+                    ...form,
+                    start_date: date[0],
+                    end_date: date[1]
+                  })
+                } else {
+                  setForm({
+                    ...form,
+                    start_date: null,
+                    end_date: null
+                  })
                 }
-              }
-              onOpen={() => setStartDateClose(false)}
-              onClose={() => startDateClose}
-              fixMainPosition={true}
-              portal
-            >
-              <div className="d-flex justify-content-end p-4">
-                <div
-                  className="pt-1"
-                  style={{color: "#1E83DC"}}
-                  role={"button"}
-                  onClick={() => {
-                    if(formId) {
-                      if(form.end_date < new Date(initStartDate)){
-                        setForm({...form, end_date: new Date(initEndDate), start_date: new Date(initStartDate)})
-                      } else {
-                        setForm({...form, start_date: new Date(initStartDate)})
-                      }
-                      
-                    }
-                    else {
-                      setForm({...form, start_date: new Date()})
-                    }
-                  }}
-                >
-                  Reset
-                </div>    
-                <div 
-                  className="btn btn-primary ml-4 px-4 py-2"
-                  role={"button"} 
-                  onClick={
-                    () => {
-                      setStartDateClose(true, () => {
-                        startDatePickerRef.current.closeCalendar()
-                        let endDate = document.getElementById("endDate")
-                        endDate.focus();
-                      })
-                    }
-                }>
-                  APPLY
-                </div>
-              </div>
-              
-            </DatePicker>
-          </div>
-            
-          <span className="text-center mb-2">to</span>
-          <div className="col-8 col-md-4 col-lg-3 mb-2 datepicker-special-date-container">
-            <DatePicker
-              render={<RenderDatepickerEnd />}
-              numberOfMonths={2}
-              format="DD MMMM YYYY"
-              minDate={new DateObject().subtract(10, "years") && form.start_date}
-              maxDate={new DateObject().add(10, "years")}
-              value={form.end_date}
-              ref={endDatePickerRef}
-              onChange={
-                (date) => {
-                  setForm({...form, end_date: new Date(date)})
-                  setEndDateClose(false)
-                }}
-              onOpen={() => setEndDateClose(false)}
-              onClose={() => endDateClose}
-              fixMainPosition={true}
-              portal 
-            >
-              <div className="d-flex justify-content-end p-4">
-                <div
-                  className="pt-1"
-                  style={{color: "#1E83DC"}}
-                  role={"button"}
-                  onClick={() => {
-                    if(formId) {
-                      if(form.start_date > new Date(initEndDate)){
-                        setForm({...form, start_date: new Date(initStartDate), end_date: new Date(initEndDate)})
-                      } else {
-                        setForm({...form, end_date: new Date(initEndDate)})
-                      }
-                    }
-                    else {
-                      setForm({...form, end_date: new Date()})
-                    }
-                  }}
-                >
-                  Reset
-                </div>    
-                <div 
-                  className="btn btn-primary ml-4 px-4 py-2"
-                  role={"button"} 
-                  onClick={
-                    () => {
-                      setEndDateClose(true, () => {
-                        endDatePickerRef.current.closeCalendar()
-                      })
-                    }
-                }>
-                  APPLY
-                </div>
-              </div>
-            </DatePicker>
+              }}
+            />
           </div>
         </div>
         
-        <div className="form-check col-sm-6 col-md-6 col-lg-5 offset-sm-4 offset-md-3 offset-lg-4 mt-2">
+        <div className="form-check col-sm-6 col-md-6 col-lg-6 offset-sm-4 offset-md-3 offset-lg-4 mt-2">
           <input 
             className="form-check-input" 
             type="checkbox"

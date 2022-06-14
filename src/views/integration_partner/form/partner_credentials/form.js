@@ -175,8 +175,8 @@ function CreatePartnerCredential(props) {
         let form = {
           ...values,
           "office_id": values.office_id.value,
-          agency_id: values.agency_id === "" ? "00000000-0000-0000-0000-000000000000" : values.agency_id,
-          system_id: values.system_id === "" ? "00000000-0000-0000-0000-000000000000" : values.system_id,
+          agency_id: values.agency_id,
+          system_id: values.system_id,
         };
         let res = await API.putOrPost(endpoint, id, form);
 
@@ -187,7 +187,6 @@ function CreatePartnerCredential(props) {
           })
         );
       } catch (e) {
-        console.LOG (e)
         dispatch(
           setAlert({
             message: "Failed to save this record.",
