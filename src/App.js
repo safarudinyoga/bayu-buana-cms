@@ -212,6 +212,11 @@ import CorporateDivisionTable from "views/corporate_division/table"
 import CorporateDivisionForm from "views/corporate_division/form"
 import CorporateDivisionHierarchy from "views/corporate_division/hierarchy"
 
+// Master Corporate Divisions
+import CorporateUserAccessTypeTable from "views/corporate_user_access_type/table"
+import CorporateUserAccessTypeForm from "views/corporate_user_access_type/form"
+
+
 // Travel Policy Corporate
 // import CorporateTravelPolicyTable from "views/corporate_travel_policy/table"
 import CorporateTravelPolicy from "views/corporate_travel_policy"
@@ -776,6 +781,14 @@ const DashboardRoutes = () => {
         </Route>
         <Route path="/master/corporate-divisions/hierarchy/:id?">
           <CorporateDivisionHierarchy />
+        </Route>
+
+        {/* Corporate Division */}
+        <Route exact path="/master/corporate-user-access-type">
+          <CorporateUserAccessTypeTable />
+        </Route>
+        <Route path="/master/corporate-user-access-type/form/:id?">
+          <CorporateUserAccessTypeForm />
         </Route>
 
         {/* Corporate Travel Policy */}
