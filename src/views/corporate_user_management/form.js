@@ -46,7 +46,7 @@ const UserManagementForm = (props) => {
     let docTitle = "Edit User"
 
     if (!formId) {
-      docTitle = "Create User Management"
+      docTitle = "Create User Access"
     } else if (isView) {
       docTitle = "User Management Details"
     }
@@ -55,7 +55,7 @@ const UserManagementForm = (props) => {
         title: isView ? "User Details" : docTitle,
         breadcrumbs: [
           {
-            text: "User & Access Management",
+            text: "Manage Access",
           },
           {
             link: backUrl,
