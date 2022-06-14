@@ -639,6 +639,7 @@ const FlightForm = (props) => {
       openSnackbar(
         `Ancillary Fee has been successfully ${formId ? 'updated' : 'saved'}.`,
       )
+      localStorage.setItem("saf_key", "hotel")
       history.goBack()
     } catch(e) {
       console.log(e)

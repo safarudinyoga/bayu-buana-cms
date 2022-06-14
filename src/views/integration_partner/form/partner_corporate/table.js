@@ -30,7 +30,8 @@ export default function IntegrationPartnerCorporateTable() {
     recordName: ["corporate_code", "corporate.corporate_name"],
     btnDownload: ".buttons-csv",
     module: "integration-partner-corporate",
-    searchText: "Search"
+    searchText: "Search",
+    customSort: ["id"],
   }
 
   return (

@@ -203,6 +203,7 @@ const FlightForm = (props) => {
         validationSchema={validationSchema}
         validateOnChange={false}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
+          localStorage.setItem("saf_key", "flight")
         }}
       >
         {({
