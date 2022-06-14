@@ -32,7 +32,6 @@ export default function UserAccessTypeTable() {
     activationEndpoint: "/master/batch-actions/activate/user-types",
     deactivationEndpoint: "/master/batch-actions/deactivate/user-types",
     columns: [
-
       {
         title: "Code",
         data: "user_type_code",
@@ -69,7 +68,7 @@ export default function UserAccessTypeTable() {
     showInfoDelete: true,
     infoDelete: [
       {title: "User Type Code", recordName: "user_type_code"},
-      {title: "User Type Name", recordName: "user_type_name"},  
+      {title: "User Type Name", recordName: "user_type_name"},
     ],
   })
 

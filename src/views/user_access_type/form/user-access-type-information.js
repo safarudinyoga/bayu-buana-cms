@@ -21,6 +21,7 @@ function UserAccessTypeInformation(props) {
   const isView = useQuery().get("action") === "view"
   const [formBuilder, setFormBuilder] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [isValid, setIsValid] = useState(true)
   const [translations, setTranslations] = useState([])
   const [id, setId] = useState(null)
   const [form, setForm] = useState({
@@ -32,7 +33,7 @@ function UserAccessTypeInformation(props) {
       label: "Name",
       name: "user_type_name",
       type: "text",
-      maxLength: 64,
+      maxLength: 256,
     },
   ]
 
@@ -40,13 +41,13 @@ function UserAccessTypeInformation(props) {
     user_type_name: {
       required: true,
       minlength: 1,
-      maxlength: 64,
+      maxlength: 256,
       checkName: true,
     },
     user_type_code: {
       required: true,
       minlength: 1,
-      maxlength: 4,
+      maxlength: 36,
       checkCode: true,
     },
   }
@@ -85,9 +86,11 @@ function UserAccessTypeInformation(props) {
                   if (res.items.length !== 0) {
                     if(currentName.toUpperCase() === element.value.toUpperCase()){
                       req = true
+                      setIsValid(req)
                     } else {
                       let duplicateVal = res.items.find( e => e.user_type_name.toUpperCase() === element.value.toUpperCase())
                       req = !duplicateVal
+                      setIsValid(req)
                     }
                   } else {
                     req = true
@@ -112,11 +115,14 @@ function UserAccessTypeInformation(props) {
                   if (res.items.length !== 0) {
                     if (currentCode === element.value) {
                       req = true
+                      setIsValid(req)
                     } else {
                       req = false
+                      setIsValid(req)
                     }
                   } else {
                     req = true
+                    setIsValid(req)
                   }
                 },
               })
@@ -148,8 +154,10 @@ function UserAccessTypeInformation(props) {
               if (res.items.length !== 0) {
                 let duplicateVal = res.items.find( e => e.user_type_name.toUpperCase() === element.value.toUpperCase())
                 req = !duplicateVal
+                setIsValid(req)
               } else {
                 req = true
+                setIsValid(req)
               }
             },
           })
@@ -170,8 +178,10 @@ function UserAccessTypeInformation(props) {
             success: function (res) {
               if (res.items.length !== 0) {
                 req = false
+                setIsValid(false)
               } else {
                 req = true
+                setIsValid(true)
               }
             },
           })
@@ -236,6 +246,7 @@ function UserAccessTypeInformation(props) {
       showHeaderTitle={true}
       headerTitle={"User Access Type Information"}
       txtSave={"SAVE & NEXT"}
+      disabledSave={!isValid}
     >
       <FormHorizontal>
         <FormInputControl
@@ -247,7 +258,7 @@ function UserAccessTypeInformation(props) {
           disabled={isView || loading}
           type="text"
           minLength="1"
-          maxLength="64"
+          maxLength="256"
         />
       </FormHorizontal>
 
@@ -263,8 +274,8 @@ function UserAccessTypeInformation(props) {
           label="Code"
           type="text"
           minLength="1"
-          maxLength="4"
-          hint="Code maximum 4 characters"
+          maxLength="36"
+          hint="Code maximum 36 characters"
         />
       </FormHorizontal>
     </FormBuilder>

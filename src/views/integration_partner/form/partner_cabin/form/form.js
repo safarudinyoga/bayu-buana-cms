@@ -20,7 +20,8 @@ import FormikControl from "../../../../../components/formik/formikControl"
 import { setContentTitle } from "redux/ui-store"
 import { ReactSVG } from "react-svg"
 import createIcon from "assets/icons/create.svg"
-import axios from "axios"
+import TabelFareFamily from "../tabel-fare-family"
+
 const endpoint = "/master/integration-partners";
 const FareFamilyModal = (props) => {
   let dispatch = useDispatch()
@@ -99,7 +100,7 @@ const FareFamilyModal = (props) => {
 
     let formatted = {
       fare_: values.fare_type_id.value,
-      booking_class: `${values.booking_class_1} ${values.booking_class_2} ${values.booking_class_3} ${values.booking_class_4} ${values.booking_class_5} ${values.booking_class_6} ${values.booking_class_7} ${values.booking_class_8}` ,
+      booking_class: `${values.booking_class_1} ${values.booking_class_2} ${values.booking_class_3} ${values.booking_class_4} ${values.booking_class_5} ${values.booking_class_6} ${values.booking_class_7} ${values.booking_class_8}`.trim() ,
     }
 
     try {
@@ -484,107 +485,114 @@ Yup.addMethod(Yup.string, 'uniqueValueString', function (fieldName, message) {
   return (
     <div>
       <Formik initialValues={formValues || initialValues} validationSchema={validationSchema} onSubmit={onSubmit} validateOnMount enableReinitialize>
-            {({ dirty, handleSubmit, isSubmitting, setFieldValue, handleChange, values }) => (
-                <Form onSubmit={handleSubmit} className="ml-2">
-                    <FormikControl
-                        control="selectAsync"
-                        required={isView ? "" : "label-required"}
-                        label="Cabin"
-                        name="cabin_type_id"
-                        placeholder={"Please Choose."}
-                        url={`master/cabin-types`}
-                        fieldName={"cabin_type_name"}
-                        onChange={(v) => {
-                            setFieldValue("cabin_type_id", v);
-                        }}
-                        style={{ maxWidth: 250 }}
-                        size={formSize}
-                        components={
-                            isView
-                                ? {
-                                      DropdownIndicator: () => null,
-                                      IndicatorSeparator: () => null,
-                                  }
-                                : null
-                        }
-                        isDisabled={isView}
-                    />
+        {({ dirty, handleSubmit, isSubmitting, setFieldValue, handleChange, values }) => (
+          <Form onSubmit={handleSubmit} className="ml-2">
+            <FormikControl
+                control="selectAsync"
+                required={isView ? "" : "label-required"}
+                label="Cabin"
+                name="cabin_type_id"
+                placeholder={"Please Choose."}
+                url={`master/cabin-types`}
+                fieldName={"cabin_type_name"}
+                onChange={(v) => {
+                    setFieldValue("cabin_type_id", v);
+                }}
+                style={{ maxWidth: 250 }}
+                size={formSize}
+                components={
+                    isView
+                        ? {
+                              DropdownIndicator: () => null,
+                              IndicatorSeparator: () => null,
+                          }
+                        : null
+                }
+                isDisabled={isView}
+            />
 
-                    <FormikControl
-                        control="input"
-                        required="label-required"
-                        label="Partner Cabin Code"
-                        name="cabin_type_code"
-                        style={{ maxWidth: 250 }}
-                        size={formSize}
-                        disabled={isView || loading}
-                        onChange={(e) => {
-                            setFieldValue("cabin_type_code", e.target.value);
-                        }}
-                        maxLength={36}
-                    />
+            <FormikControl
+                control="input"
+                required="label-required"
+                label="Partner Cabin Code"
+                name="cabin_type_code"
+                style={{ maxWidth: 250 }}
+                size={formSize}
+                disabled={isView || loading}
+                onChange={(e) => {
+                    setFieldValue("cabin_type_code", e.target.value);
+                }}
+                maxLength={36}
+            />
 
-                    <FormikControl
-                        control="input"
-                        required="label-required"
-                        label="Partner Cabin Name"
-                        name="cabin_type_name"
-                        style={{ maxWidth: 250 }}
-                        size={formSize}
-                        disabled={isView || loading}
-                        onChange={(e) => {
-                            setFieldValue("cabin_type_name", e.target.value);
-                        }}
-                        maxLength={256}
-                    />
-                    {isView ? <h3 className="card-heading"></h3> : <><h3 className="card-heading"></h3>
-                        <Col sm={12}>
-                          <div style={{ padding: "0 15px 15px 15px" }} >
-                            <button
-                              type="button"
-                              className="btn float-right button-override"
-                              onClick={() => setModalShow(true)}
-                            >
-                              <img src={createIcon} className="mr-1" alt="new" />
-                              Add New Fare Family
-                            </button>
+            <FormikControl
+                control="input"
+                required="label-required"
+                label="Partner Cabin Name"
+                name="cabin_type_name"
+                style={{ maxWidth: 250 }}
+                size={formSize}
+                disabled={isView || loading}
+                onChange={(e) => {
+                    setFieldValue("cabin_type_name", e.target.value);
+                }}
+                maxLength={256}
+            />
+            {isView ? <h3 className="card-heading"></h3> : 
+              <>
+                <h3 className="card-heading"></h3>
+                <Col sm={12}>
+                  <div style={{ padding: "0 15px 15px 15px" }} >
+                    <button
+                      type="button"
+                      className="btn float-right button-override"
+                      onClick={() => setModalShow(true)}
+                    >
+                      <img src={createIcon} className="mr-1" alt="new" />
+                      Add New Fare Family
+                    </button>
 
-                          </div>
-                        </Col>
-                        <br />
-                        <Col sm={12}>
-                          <FareFamilyModal
-                            show={modalShow}
-                            isView={isView}
-                            size={formSizeModal}
-                            onHide={() => setModalShow(false)}
-                            partnerCabinId={cabinId}
+                  </div>
+                </Col>
+                <br />
+                <Col sm={12}>
+                  <FareFamilyModal
+                    show={modalShow}
+                    isView={isView}
+                    size={formSizeModal}
+                    onHide={() => setModalShow(false)}
+                    partnerCabinId={cabinId}
 
-                          />
-                        </Col>  </>}
+                  />
+                </Col>  
+              </>
+            }
 
-                    {!props.hideButton && (
-                        <div
-                            style={{
-                                marginBottom: 30,
-                                marginTop: 30,
-                                display: "flex",
-                            }}
-                        >
-                            {!isView && (
-                                <Button variant="primary" type="submit" disabled={isSubmitting} style={{ marginRight: 15 }}>
-                                    SAVE
-                                </Button>
-                            )}
-                            <CancelButton onClick={() => {
-                              dispatch(setContentTitle("Partner Cabins"));
-                              props.handleReplaceTable(props.isReplaceTable);
-                            }} />
-                        </div>
+
+            {props.partnerCabinId && <TabelFareFamily />}
+
+            {!props.hideButton && (
+                <div
+                    style={{
+                        marginBottom: 30,
+                        marginTop: 30,
+                        display: "flex",
+                    }}
+                >
+                    {!isView && (
+                        <Button variant="primary" type="submit" disabled={isSubmitting} style={{ marginRight: 15 }}>
+                            SAVE
+                        </Button>
                     )}
-                </Form>
+                    <CancelButton onClick={() => {
+                      dispatch(setContentTitle("Partner Cabins"));
+                      props.handleReplaceTable(props.isReplaceTable);
+                    }} />
+                </div>
             )}
-        </Formik>
+          </Form>
+        )}
+      </Formik>
     </div>
   )
 }

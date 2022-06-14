@@ -2,6 +2,7 @@ import React from "react"
 import { SelectFetch } from "react-select-fetch"
 import axios from "axios"
 import env from "config/environment"
+import _ from "lodash"
 
 const customStyles = {
   option: (provided, state) => ({
@@ -33,7 +34,7 @@ const customStyles = {
 }
 
 const Select = (props) => {
-  const { fieldName, urlFilter, status=1, sort } = props
+  const { fieldName, urlFilter, status=1, sort, cstmValue } = props
   const Icon = ({ innerRef, innerProps }) => (
     <img
       src="/img/icons/arrow-down.svg"
@@ -52,9 +53,11 @@ const Select = (props) => {
     })
 
   const filteringKey = (v, n) => {
-    const asArray = Object.entries(v)
-    const filtered = asArray.filter(([key, value]) => key == n)
-    return filtered[0][1]
+    // const asArray = Object.entries(v)
+    // const filtered = asArray.filter(([key, value]) => key == n)
+    //return filtered[0][1]
+    const getVal = _.get(v, n)
+    return getVal
   }
 
   const get = async (url, params) => {
@@ -81,15 +84,15 @@ const Select = (props) => {
     let filteredOptions
     if (!search) {
       filteredOptions = response.items.map((item) => ({
-        value: item.id,
+        value: cstmValue ? filteringKey(item, cstmValue) : item.id,
         label: filteringKey(item, fieldName),
       }))
     } else {
       const searchLower = search.toLowerCase()
 
       filteredOptions = response.items
-        .map((item) => ({
-          value: item.id,
+      .map((item) => ({
+          value: cstmValue ? filteringKey(item, cstmValue) : item.id,
           label: filteringKey(item, fieldName),
         }))
         .filter(({ label }) => label.toLowerCase().includes(searchLower))
