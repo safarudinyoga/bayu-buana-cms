@@ -34,7 +34,6 @@ export default function ManageCorporateTable() {
     responsiveTablet: true,
     baseRoute: "/master/manage-corporate/form",
     endpoint: "/master/agent-corporates",
-    // deleteEndpoint: "/master/batch-actions/delete/hotels",
     // activationEndpoint: "/master/batch-actions/activate/hotels",
     // deactivationEndpoint: "/master/batch-actions/deactivate/hotels",
     columns: [
@@ -48,8 +47,8 @@ export default function ManageCorporateTable() {
         render: (data) => {
           return (
             `
-              <h5 class="font-default size-15">${data.corporate.corporate_name}</h5>
-              <h5 class="font-default size-14">Group&nbsp;&nbsp;: ${data.corporate.corporate_code}</h5>
+              <h5 class="font-default size-15" style='margin-bottom: 3px;'>${data.corporate.corporate_name}</h5>
+              <h5 class="font-default size-14 margin-0">Group&nbsp;&nbsp;: ${data.corporate.corporate_code}</h5>
               <div class="Stars" style="--rating: 2.3;">
             `
           )
@@ -77,52 +76,12 @@ export default function ManageCorporateTable() {
       ],
     },
     showInfoDelete: true,
+    infoDelete: [
+      {title: "Corporate Code", recordName: "agent_corporate.corporate.corporate_code"},
+      {title: "Corporate Name", recordName: "agent_corporate.corporate.corporate_name"},
+    ],
+    id: 'agent_corporate.id'
   }
-
-  // let [params, setParams] = useState({
-  //   isCheckbox: false,
-  //   title: "Manage Corporate",
-  //   titleModal: "Manage Corporate",
-  //   module: 'manage-corporate',
-  //   showAdvancedOptions: false,
-  //   responsiveTablet: true,
-  //   baseRoute: "/master/manage-corporate/form",
-  //   endpoint: "/master/agent-corporates",
-  //   // deleteEndpoint: "/master/batch-actions/delete/hotels",
-  //   // activationEndpoint: "/master/batch-actions/activate/hotels",
-  //   // deactivationEndpoint: "/master/batch-actions/deactivate/hotels",
-  //   columns: [
-  //     {
-  //       title: "Corporate Code",
-  //       data: "agent_corporate.corporate.corporate_code"
-  //     },
-  //     {
-  //       title: "Corporate Name",
-  //       data: "agent_corporate.corporate.corporate_name"
-  //     },
-  //     {
-  //       title: "Travel Consultant",
-  //       data: ""
-  //     },
-  //     {
-  //       searchable: false,
-  //       title: "Status",
-  //       data: "agent_corporate.corporate.status",
-  //       render: rowStatus,
-  //     },
-  //   ],
-  //   emptyTable: "No Corporate found",
-  //   recordName: ["agent_corporate.corporate.corporate_code", "agent_corporate.corporate.corporate_name"],
-  //   switchStatus: true,
-  //   customFilterStatus: {
-  //     value: "",
-  //     options: [
-  //       { value: "1", label: "Active" },
-  //       { value: "3", label: "Inactive" },
-  //     ],
-  //   },
-  //   showInfoDelete: true,
-  // })
 
   return <BbDataTable {...params} />
 }
