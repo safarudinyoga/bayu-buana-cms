@@ -4,7 +4,7 @@ import CancelButton from 'components/button/cancel'
 import './bb-modal.css'
 
 const ModalCreate = ({show, onClick, modalContent, modalTitle, modalSize, scrollable=false}) => {
-	// console.log('test: ', s)
+	// console.log('test modal: ', show , modalTitle)
 	const Content = modalContent
 	return (
 		<Modal 
