@@ -6,7 +6,7 @@ import { Col, Row, Button } from 'react-bootstrap';
 import _ from "lodash"
 
 
-const DateRangePicker = (props) => {
+const DateRangePicker = ({value, onChange= ()=>{}, minDate, maxDate, placeholder="" }) => {
 
   const [startDateClose, setStartDateClose] = useStateWithCallbackLazy(false)
   const [form, setForm] = useState([])
@@ -14,15 +14,15 @@ const DateRangePicker = (props) => {
   const datePickerRef = useRef()
 
   useEffect(() => {
-    console.log(props.value)
-    if(props.value) {
-      if(props.value[0] !== null) {
-        setForm(props.value)
+    console.log(value, '>>>>')
+    if(value) {
+      if(value[0] !== null) {
+        setForm(value)
       } else {
         setForm([])
       }
     }
-  }, [props])
+  }, [value])
 
   const RenderDatepickerStart = ({ openCalendar, value, handleValueChange }) => {
     return (
@@ -36,6 +36,7 @@ const DateRangePicker = (props) => {
               value={value[0]}
               onChange={handleValueChange}
               id="startDate"
+              placeholder={placeholder}
             />
           </div>
         </Col>
@@ -49,6 +50,7 @@ const DateRangePicker = (props) => {
               value={value[1]}
               onChange={handleValueChange}
               id="endDate"
+              placeholder={placeholder}
             />
           </div>
         </Col>
@@ -59,14 +61,13 @@ const DateRangePicker = (props) => {
 
   return (
     <DatePicker
-     {...props}
       range
       ref={datePickerRef}
       render={<RenderDatepickerStart />}
       numberOfMonths={2}
       format="DD MMMM YYYY"
-      minDate={props.minDate ? new DateObject().subtract(props.minDate, "years") : {}}
-      maxDate={props.maxDate ?new DateObject().add(props.maxDate, "years") : {}}
+      minDate={minDate ? new DateObject().subtract(minDate, "years") : {}}
+      maxDate={maxDate ?new DateObject().add(maxDate, "years") : {}}
       value={form}
       onChange={
         (date) => {
@@ -93,7 +94,7 @@ const DateRangePicker = (props) => {
           style={{color: "#1E83DC"}}
           role={"button"}
           onClick={() => {
-            props.onChange([])
+            onChange([])
           }}
         >
           Reset
@@ -106,7 +107,7 @@ const DateRangePicker = (props) => {
               console.log(form, "yyy")
               setStartDateClose(true, () => {
                 datePickerRef.current.closeCalendar()
-                props.onChange(form)
+                onChange(form)
               })
             }
         }>

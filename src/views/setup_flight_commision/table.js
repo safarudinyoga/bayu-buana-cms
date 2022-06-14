@@ -6,6 +6,7 @@ import { renderColumn } from "lib/translation"
 import DatePicker from 'react-datepicker'
 import moment from 'moment'
 import './style.css'
+import DateRangePicker from 'components/form/date_range_picker'
 
 export default function SetupFlightCommisionTable() {
   let dispatch = useDispatch()
@@ -25,45 +26,9 @@ export default function SetupFlightCommisionTable() {
     )
   }, [])
 
-  const NextDay = (date = new Date()) => {
-    date.setDate(date.getDate() + 1)
-    return date
-  }
+  const [selectedIssue, setSelectedIssue] = useState([])
 
-  const MinDate = (date = new Date()) => { 
-    date.setFullYear(date.getFullYear() - 1)
-
-    return date
-  }
-
-  const MaxDate = (date = new Date()) => {
-    date.setFullYear(date.getFullYear() + 1)
-
-    return date
-  }
-
-  const [selectedIssueStart, setSelectedIssueStart] = useState(new Date())
-  const [selectedIssueEnd, setSelectedIssueEnd] = useState(NextDay)
-
-  const [selectedDepartureStart, setSelectedDepartureStart] = useState(new Date())
-  const [selectedDepartureEnd, setSelectedDepartureEnd] = useState(NextDay)
-
-
-  // const onFilterChange = (e, values) => {
-  //   let ids = []
-  //   if (values && values.length > 0) {
-  //     for (let i in values) {
-  //       ids.push(values[i].id)
-  //     }
-  //   }
-  //   if (ids.length > 0) {
-  //     setParams({ ...params, filters: [["country_id", "in", ids]] })
-  //   } else {
-  //     setParams({ ...params, filters: [] })
-  //   }
-  //   setSelectedCountries(values)
-  //   setSelectedCountryIds(ids)
-  // }
+  const [selectedDeparture, setSelectedDeparture] = useState([])
 
   const extraFilter = () => {
     return (
@@ -72,41 +37,13 @@ export default function SetupFlightCommisionTable() {
           <div className="col-xs-4">
             <label className="text-label-filter font-weight-bold">Period of Issue</label>
             <div className="row mb-3 mb-sm-0 align-items-center">
-              <div className="col-md-5 col-5">
-                <DatePicker 
-                  className="form-control date-picker"
-                  dateFormat="dd MMMM yyyy"
-                  selected={selectedIssueStart}
-                  onChange={(date) => {
-                    setSelectedIssueStart(date)
-                  }}
-                  minDate={MinDate}
-                />
-                <div className="icon-calender">
-                    <img
-                      src="/img/icons/date-range.svg"
-                      className="calendar"
-                    ></img>
-                </div>
-              </div>
-              <span className="col-md-1 col-2" align="center"> to </span>
-              <div className="col-md-5 col-5">
-                <DatePicker 
-                  className="form-control date-picker"
-                  dateFormat="dd MMMM yyyy"
-                  selected={selectedIssueEnd}
-                  onChange={(date) => {
-                    setSelectedIssueEnd(date)
-                  }}
-                  maxDate={MaxDate}
-                />
-                 <div className="icon-calender">
-                    <img
-                      src="/img/icons/date-range.svg"
-                      className="calendar"
-                    ></img>
-                </div>
-              </div>
+              <DateRangePicker 
+                minDate={1} 
+                maxDate={1} 
+                value={selectedIssue}
+                placeholder={"dd/mm/yyyy"}
+                onChange={(date) => setSelectedIssue(date)}
+              />
             </div>
           </div>
         </div>
@@ -114,41 +51,13 @@ export default function SetupFlightCommisionTable() {
           <div className="col-xs-4">
             <label className="text-label-filter font-weight-bold">Period of Departure</label>
             <div className="row mb-3 mb-sm-0 align-items-center">
-              <div className="col-md-5 col-5">
-                <DatePicker 
-                  className="form-control date-picker"
-                  dateFormat="dd MMMM yyyy"
-                  selected={selectedDepartureStart}
-                  onChange={(date) => {
-                    setSelectedDepartureStart(date)
-                  }}
-                  minDate={MinDate}
-                />
-                <div className="icon-calender">
-                    <img
-                      src="/img/icons/date-range.svg"
-                      className="calendar"
-                    ></img>
-                </div>
-              </div>
-              <span className="col-md-1 col-2" align="center"> to </span>
-              <div className="col-md-5 col-5">
-                <DatePicker 
-                  className="form-control date-picker"
-                  dateFormat="dd MMMM yyyy"
-                  selected={selectedDepartureEnd}
-                  onChange={(date) => {
-                    setSelectedDepartureEnd(date)
-                  }}
-                  maxDate={MaxDate}
-                />
-                <div className="icon-calender">
-                    <img
-                      src="/img/icons/date-range.svg"
-                      className="calendar"
-                    ></img>
-                </div>
-              </div>
+              <DateRangePicker
+                minDate={1} 
+                maxDate={1} 
+                value={selectedDeparture}
+                placeholder={"dd/mm/yyyy"}
+                onChange={(date) => setSelectedDeparture(date)}
+              />
             </div>
           </div>
         </div>
@@ -157,11 +66,11 @@ export default function SetupFlightCommisionTable() {
     )
   }
 
-  // const onReset = () => {
-  //   setParams({ ...params, filters: [] })
-  //   setSelectedCountries([])
-  //   setSelectedCountryIds([])
-  // }
+  const onReset = () => {
+    setParams({ ...params, filters: [] })
+    setSelectedDeparture([])
+    setSelectedIssue([])
+  }
 
   const dateFormat = (v) => moment(v).format('D MMM YYYY')
 
@@ -181,7 +90,7 @@ export default function SetupFlightCommisionTable() {
    return `${origin} - ${destination}`
   }
 
-  let params = {
+  let [params, setParams] = {
     title: "Setup Flight Commision",
     baseRoute: "/master/setup-flight-commission/form",
     endpoint: "/master/commission-claims",
@@ -246,5 +155,5 @@ export default function SetupFlightCommisionTable() {
   }
 
 
-  return <BBDataTable {...params} extraFilter={extraFilter}/>
+  return <BBDataTable {...params} extraFilter={extraFilter} onReset={onReset}/>
 }
