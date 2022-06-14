@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import Calendar from 'react-awesome-calendar';
 import BCalendar from "rc-year-calendar";
+import { Calendar as BigCalendar, momentLocalizer } from 'react-big-calendar'
+import moment from 'moment'
 import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
 import Select from 'components/form/select';
 import Api from "config/api"
+
+import 'react-big-calendar/lib/css/react-big-calendar.css'
+import Year from './components/year';
 
 const backUrl = "/master/special-date"
 
@@ -12,6 +17,8 @@ function SpecialDateCalendar() {
   const [mode, setMode] = useState({label: "Yearly", value: "year"})
   const [events, setEvents] = useState([])
 
+  const localizer = momentLocalizer(moment)
+  localizer.formats.yearHeaderFormat = 'YYYY'
   let dispatch = useDispatch()
   useEffect(async () => {
     let api = new Api()
@@ -78,12 +85,20 @@ function SpecialDateCalendar() {
       </div> */}
       
       <div className='calendar-container'>
+        {/* <BigCalendar
+          localizer={localizer}
+          events={[]}
+          toolbar={true}
+          views={{
+            month: true,
+            year: (<div>Hello Year</div>)
+          }}
+          style={{ height: 500 }}
+          messages={{ year: 'Year' }}
+        /> */}
         <Calendar
           events={events}
         />
-        {/* {
-          mode.value == "year" ? <BCalendar /> : <Calendar />
-        } */}
       </div>
     </>
   )
