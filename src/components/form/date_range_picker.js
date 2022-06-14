@@ -101,7 +101,6 @@ const DateRangePicker = (props) => {
           disabled={form.length < 2}
           onClick={
             () => {
-              console.log(form, "yyy")
               setStartDateClose(true, () => {
                 datePickerRef.current.closeCalendar()
                 props.onChange(form)

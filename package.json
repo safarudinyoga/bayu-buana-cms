@@ -46,6 +46,7 @@
     "react": "^17.0.2",
     "react-autosuggest": "^10.1.0",
     "react-awesome-calendar": "^1.0.14",
+    "react-big-calendar": "^0.40.1",
     "react-bootstrap": "1.6.4",
     "react-calendar-month-view": "^0.7.0",
     "react-compound-slider": "^3.3.1",
