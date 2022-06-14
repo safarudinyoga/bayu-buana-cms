@@ -111,7 +111,7 @@ class TableHeader extends Component {
       isHideDownloadLogo: props.isHideDownloadLogo ?? false,
       searchValue: "",
       statusValue: "0",
-      yearValue: new Date().getFullYear(),
+      yearValue: "",
     }
 
     this.toggleFilter = this.toggleFilter.bind(this)
@@ -178,7 +178,7 @@ class TableHeader extends Component {
       showFilter: false,
       searchValue: "",
       statusValue: "0",
-      yearValue: new Date().getFullYear(),
+      yearValue: "",
     })
 
     if (this.props.customFilterStatus) {
@@ -401,10 +401,11 @@ class TableHeader extends Component {
                       </label>
                       <Select
                         components={{ DropdownIndicator }}
-                        defaultValue={{
-                          value: this.state.yearValue,
-                          label: this.state.yearValue,
-                        }}
+                        // defaultValue={{
+                        //   value: this.state.yearValue,
+                        //   label: this.state.yearValue,
+                        // }}
+                        defaultValue={this.state.yearValue}
                         onChange={this.handleYear.bind(this)}
                         styles={customStyles}
                         options={selectYear()}

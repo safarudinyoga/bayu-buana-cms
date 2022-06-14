@@ -803,7 +803,7 @@ class BBDataTable extends Component {
 
   onYear(value) {
     this.inProgress = true
-    if (value + "" !== "0") {
+    if (value + "" !== "") {
       this.setState({
         year: value,
         extraFilters:[["start_date", "like", value],["or"],["end_date", "like", value]]
@@ -829,6 +829,7 @@ class BBDataTable extends Component {
     setTimeout(() => {
       this.setState({
         extraFilters: [],
+        year: ""
       })
       setTimeout(() => {
         this.onSearch("")
