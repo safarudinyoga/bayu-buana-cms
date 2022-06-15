@@ -1138,7 +1138,12 @@ const GeneralInformation = (props) => {
                         <Form.Label column md={3} lg={4}>
                           Gender <span className="form-label-required">*</span>
                         </Form.Label>
-                        <Col md={9} lg={8}>
+                        {
+                          isView 
+                                ? <p className="pl-2 mt-1">{
+                                  values.gender === "db24d53c-7d36-4770-8598-dc36174750ad" ? "Female" : "Male"
+                                }</p>
+                                : <Col md={9} lg={8}>
                           <div
                             style={{
                               height: 38,
@@ -1190,6 +1195,7 @@ const GeneralInformation = (props) => {
                             )}
                           </div>
                         </Col>
+                        }
                       </Form.Group>
                       <Form.Group as={Row} className="form-group">
                         <Form.Label column md={3} lg={4}>
@@ -1508,7 +1514,6 @@ const GeneralInformation = (props) => {
                       <Field name="currentProvince">
                         {({ field, form }) => (
                           <>
-                            {console.log(field, 'fi')}
                             <div style={{ maxWidth: 200 }}>
                               <Select
                                 {...field}
