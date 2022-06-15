@@ -1,8 +1,7 @@
 import { withRouter } from "react-router"
 import React, { useState, useEffect } from "react"
-import { Col, Form, Row, Button } from "react-bootstrap"
-import { Formik, FastField, ErrorMessage, Field } from "formik"
-import TextError from "components/formik/textError"
+import { Col, Form, Row, Button, Collapse } from "react-bootstrap"
+import { Formik, FastField, } from "formik"
 import * as Yup from "yup"
 import SelectAsync from "components/form/select-async"
 import Api from "config/api"
@@ -25,6 +24,7 @@ function HotelPolicy (props) {
   const [id, setId] = useState(null)
   const [loading, setLoading] = useState(true)
   const [formValues, setFormValues] = useState(null)
+  const [RecurringReminderType, setRecurringReminderType] = useState(true)
 
   const selectDays = () => {
     const options = []
@@ -209,66 +209,87 @@ Yup.addMethod(Yup.object, 'uniqueValueObject', function (fieldName, message) {
         setFieldTouched,
       }) => (
         <Form onSubmit={handleSubmit} className="ml-2">
-          <Row className="form-group mb-0">
-            <Col lg={10} className="ml-0">
-                <FormikControl 
-                  control="input"
-                  label="Code"
-                  name="percent"
-                  required="label-required"
-                  className
-                  style={{ maxWidth: 100 }}
-                  // isDisabled={isView}
-                />
-            </Col>
-            <span className="text-lg ml-0 percent">%</span>
-          </Row>
-          
-          <Row className="form-group mb-0">
-            <Col className="ml-0">
-                <FormikControl 
-                  control="input"
-                  label="Name"
-                  name="percent"
-                  required="label-required"
-                  className
-                  style={{ maxWidth: 100 }}
-                  // isDisabled={isView}
-                />
-            </Col>
-            <span className="text-lg ml-0 percent">%</span>
-          </Row>
-
-          <Row className="form-group required">
-            <Col md={3} lg={4}>
-              <label className="text-label-input" htmlFor={"routes"}>
-                Apply To
-              </label>
-            </Col>
-            <Col md={9} lg={8}>
-              <Row>
-                <Col md={6} lg={10}>
-                  <Field id={"departureFrom"} name={"departureFrom"}>
-                    {({ field, form, meta}) => (
-                      <div>
-                        <Select
-                          {...field}
-                          // options={optionRoute}
-                          placeholder="Please Choose"
-                          // url={`master/airports`}
-                          fieldName="airport_name"
-                          // onChange={(v) => {
-                          //   formik.setFieldValue("departureFrom", v)
-                          //   setOptDeparture(v)
-                          // }}
-                        />
-                      </div>
+          <Form.Group as={Row} className="form-group">
+              Destination<span className="form-label-required">*</span>
+            <Col sm={8}>
+              <FastField name="task_type">
+                {({ field, form }) => (
+                  <div style={{ maxWidth: 200 }}>
+                    <SelectAsync
+                      {...field}
+                      isClearable
+                      isDisabled={isView}
+                      url={`master/task-types`}
+                      fieldName="task_type_name"
+                      onChange={(v) => {
+                        setFieldValue("task_type", v)
+                      }}
+                      placeholder="Please choose"
+                      className={`react-select ${
+                        form.touched.task_type && form.errors.task_type
+                          ? "is-invalid"
+                          : null
+                      }`}
+                      components={
+                        isView
+                          ? {
+                              DropdownIndicator: () => null,
+                              IndicatorSeparator: () => null,
+                            }
+                          : null
+                      }
+                    />
+                    {form.touched.task_type && form.errors.task_type && (
+                      <Form.Control.Feedback type="invalid">
+                        {form.touched.task_type ? form.errors.task_type : null}
+                      </Form.Control.Feedback>
                     )}
-                  </Field>
-                </Col>
-              </Row>
+                  </div>
+                )}
+              </FastField>
             </Col>
-          </Row>
+          </Form.Group>
+          <Col className="policy-class-modal">
+            <h6>RESTRICTED PROPERTY TYPE</h6>
+            <Col md={10} lg={8} className="d-flex">
+            <span>Select restricted property type</span>
+              <FastField name="task_type">
+                {({ field, form }) => (
+                  <div style={{ maxWidth: 200 }}>
+                    <SelectAsync
+                      {...field}
+                      isClearable
+                      isDisabled={isView}
+                      url={`master/task-types`}
+                      fieldName="task_type_name"
+                      onChange={(v) => {
+                        setFieldValue("task_type", v)
+                      }}
+                      placeholder="Please choose"
+                      className={`react-select ${
+                        form.touched.task_type && form.errors.task_type
+                          ? "is-invalid"
+                          : null
+                      }`}
+                      components={
+                        isView
+                          ? {
+                              DropdownIndicator: () => null,
+                              IndicatorSeparator: () => null,
+                            }
+                          : null
+                      }
+                    />
+                    {form.touched.task_type && form.errors.task_type && (
+                      <Form.Control.Feedback type="invalid">
+                        {form.touched.task_type ? form.errors.task_type : null}
+                      </Form.Control.Feedback>
+                    )}
+                  </div>
+                )}
+              </FastField>
+            </Col>
+          </Col>
 
           {!props.hideButton && (
             <div
