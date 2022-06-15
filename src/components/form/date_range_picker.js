@@ -14,7 +14,6 @@ const DateRangePicker = ({value, onChange= ()=>{}, minDate, maxDate, placeholder
   const datePickerRef = useRef()
 
   useEffect(() => {
-    console.log(value, '>>>>')
     if(value) {
       if(value[0] !== null) {
         setForm(value)
@@ -27,7 +26,7 @@ const DateRangePicker = ({value, onChange= ()=>{}, minDate, maxDate, placeholder
   const RenderDatepickerStart = ({ openCalendar, value, handleValueChange }) => {
     return (
       <Row>
-        <Col md={4}>
+        <Col md={5}>
           <div className="position-relative datepicker-special-date">
             <Icon className="special-date-icon" onClick={openCalendar} />
             <input type="text"
@@ -41,7 +40,7 @@ const DateRangePicker = ({value, onChange= ()=>{}, minDate, maxDate, placeholder
           </div>
         </Col>
         <Col md={1} className={"text-center mt-1"} >to</Col>
-        <Col md={4}>
+        <Col md={5}>
           <div className="position-relative datepicker-special-date">
             <Icon className="special-date-icon" onClick={openCalendar} />
             <input type="text"
