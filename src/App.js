@@ -232,6 +232,10 @@ import CorporateTravelPurposeForm from "views//corporate_travel_purpose/form"
 import CorporateProfile from "views/corporate_profile/corporate-profile"
 import CorporateProfileForm from "views/corporate_profile/form/index"
 
+//corporate profile
+import CorporateProfile from "views/corporate_profile/corporate-profile"
+import CorporateProfileForm from "views/corporate_profile/form/index"
+
 const RouteWithProps = ({
   path,
   exact,
