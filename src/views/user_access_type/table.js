@@ -42,11 +42,11 @@ export default function UserAccessTypeTable() {
       },
       {
         title: "Number of assigned modules",
-        data: "user_type_name",
+        data: "number_of_assigned_modules",
       },
       {
         title: "Number of assigned users",
-        data: "user_type_name",
+        data: "number_of_assigned_users",
       },
       {
         searchable: false,
