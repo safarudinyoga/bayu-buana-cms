@@ -119,12 +119,24 @@
     font-weight: 600;
   }
 }
-.policy-class-modal-title {
+.policy-class-modal {
   h6 {   
     font-size: 14px;
     font-weight: bold;
     background-color: #F3F3FB;
     padding: 12px;
     border-radius: 12px;
+  }
+  tr{
+    th{
+      border: 1px solid #d9dfe7;
+      padding: 8px;
+    }
+  }
+  tr{
+    td{
+      border: 1px solid #d9dfe7;
+      padding: 8px;
+    }
   }
 }
