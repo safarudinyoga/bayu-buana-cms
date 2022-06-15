@@ -57,7 +57,7 @@ function DeleteForm(props) {
       dispatch(setModalDelete({show: false, id: null, disabled_form: false}))
       dispatch(
 				setAlert({
-				  message: `Record Partner Payment Gateway Name : ${formValues.payment_gateway_name} was successfully deleted.`,
+				  message: `Record 'Partner Payment Gateway Name: ${formValues.payment_gateway_name}' was successfully deleted.`,
 				}),
       )
 		} catch(e) {

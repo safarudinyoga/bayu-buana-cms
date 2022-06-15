@@ -68,7 +68,7 @@ function MessageCreate(props) {
   }
 
   const validationSchema = Yup.object().shape({
-    message: Yup.object().required("Messages is required."),
+    message: Yup.object().required("Message is required."),
     message_code: Yup.string().required("Message Code is required."),
     message_name: Yup.string().required("Message Name is required."),
   })
@@ -131,14 +131,14 @@ function MessageCreate(props) {
             label="Message"
             name="message"
             placeholder={"Please choose"}
-            url={`master/event-types`}
-            fieldName={"event_type_name"}
+            url={`master/events`}
+            fieldName={"event_name"}
             onChange={(v) => {
               setFieldValue("message", v)
             }}
-            urlFilter={`["event_type_code", "=", "1"],["OR"],["event_type_code", "=", "2"],["OR"],["event_type_code", "=", "3"],["OR"],["event_type_code", "=", "15"]`}
+            urlFilter={`["event_code", "=", "1"],["OR"],["event_code", "=", "2"],["OR"],["event_code", "=", "3"],["OR"],["event_code", "=", "15"]`}
             style={{ maxWidth: 250 }}
-            sort={"event_type_code"}
+            sort={"event_code"}
             size={formSize}
             isDisabled={isView || loading}
           />

@@ -24,6 +24,7 @@ import {
   setCreateModal,
   setReloadTable,
   setModalDelete,
+  setCreateNewModal,
 } from "redux/ui-store"
 import "./bb-data-table.css"
 import editIcon from "assets/icons/edit.svg"
@@ -31,8 +32,10 @@ import removeIcon from "assets/icons/remove.svg"
 import CopyIcon from "assets/icons/ic_copy.svg"
 import showIcon from "assets/icons/show.svg"
 import ModalCreate from "components/Modal/bb-modal"
+import ModalCreateNew from "components/Modal/bb-modal"
 import ModalDelete from "components/Modal/bb-modal-delete"
 import customPrint from "../../lib/customPrint"
+import { createLanguageServiceSourceFile } from "typescript"
 
 window.JSZip = JSZip
 
@@ -153,7 +156,12 @@ class BBDataTable extends Component {
               let showSwitch = self.props.switchStatus
               let checked = ""
               if (showSwitch) {
-                checked = row.status == 1 ? "checked" : ""
+                if (module === "manage-corporate") {
+                  checked =
+                    row.agent_corporate.corporate.status === 1 ? "checked" : ""
+                } else {
+                  checked = row.status == 1 ? "checked" : ""
+                }
               }
 
               let hideDetail = self.props.hideDetail
@@ -161,6 +169,14 @@ class BBDataTable extends Component {
 
               let infoDelete = self.props.infoDelete
               let info = ""
+
+              // dynamicly accessing nested object with notation
+              const pathNotation = (path, obj) => {
+                return path.split(".").reduce(function (prev, curr) {
+                  return prev ? prev[curr] : null
+                }, obj || self)
+              }
+
               if (infoDelete) {
                 info = infoDelete
                   .map((v) => {
@@ -170,7 +186,11 @@ class BBDataTable extends Component {
                     if (result) {
                       title = data.map((v) => row[v]).join(" ")
                     } else {
-                      title = row[data]
+                      if (module === "manage-corporate") {
+                        title = pathNotation(data, row)
+                      } else {
+                        title = row[data]
+                      }
                     }
                     return v.title + ": " + title
                   })
@@ -190,7 +210,12 @@ class BBDataTable extends Component {
                   ? row.integration_partner_meal_plan_type.meal_plan_type_id
                   : module === "partner-cabin"
                   ? row.cabin_type_id
+                  : module === "manage-corporate"
+                  ? row.agent_corporate.id
                   : row.id
+
+              const targetDetailId =
+                module === "manage-corporate" ? row.agent_corporate.id : row.id
 
               const showDelete =
                 module !== "integration-partner" &&
@@ -201,15 +226,13 @@ class BBDataTable extends Component {
           <a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item ${
                 hideDetail ? "mr-2" : ""
               }" data-action="edit" data-id="${targetDataId}" title="Click to edit"><img src="${editIcon}"/></a>
-          
+
           <a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item ${
                 showCopyAct ? "d-inline" : "d-none"
               }" data-action="copy" data-id="${targetDataId}" title="Click to copy"style="margin-left:7px;"><img src="${CopyIcon}" /></a>
           <a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="${
                 hideDetail ? "d-none" : "d-inline"
-              } table-row-action-item" data-action="view" data-id="${
-                row.id
-              }" title="Click to view details"><img src="${showIcon}"/></a>
+              } table-row-action-item" data-action="view" data-id="${targetDetailId}" title="Click to view details"><img src="${showIcon}"/></a>
           <a href="javascript:void(0);" class="${
             showSwitch ? "d-inline" : "d-none"
           } custom-switch custom-switch-bb table-row-action-item" data-id="${
@@ -262,7 +285,9 @@ class BBDataTable extends Component {
 
       let displayStart = 0
       if (this.queryParams.get("page")) {
-        displayStart = 10 * (this.queryParams.get("page") - 1)
+        displayStart =
+          (this.props.sizePerPage ? this.props.sizePerPage : 10) *
+          (this.queryParams.get("page") - 1)
       }
       let endpoint = this.props.endpoint
       if (this.props.filterData) {
@@ -279,7 +304,7 @@ class BBDataTable extends Component {
         fixedColumns: true,
         serverSide: true,
         processing: true,
-        displayLength: 10,
+        displayLength: this.props.sizePerPage ? this.props.sizePerPage : 10,
         displayStart: displayStart,
         lengthMenu: [
           [10, 25, 50, 100, -1],
@@ -617,12 +642,13 @@ class BBDataTable extends Component {
             // this case `data: 0`.
             render: function (data, type, row) {
               var datas = data
-              if (module === "employee") {
+              if (module === "employee" || module === "user-management") {
                 datas = data + " " + row.middle_name + " " + row.surname
               }
               return datas
             },
-            targets: module === "employee" ? 3 : "",
+            targets:
+              module === "employee" ? 3 : module === "user-management" ? 2 : "",
           },
           {
             // The `data` parameter refers to the data for the cell (defined by the
@@ -853,7 +879,7 @@ class BBDataTable extends Component {
 
   onYear(value) {
     this.inProgress = true
-    if (value + "" !== "0") {
+    if (value + "" !== "") {
       this.setState({
         year: value,
         extraFilters: [
@@ -887,6 +913,7 @@ class BBDataTable extends Component {
     setTimeout(() => {
       this.setState({
         extraFilters: [],
+        year: "",
       })
       setTimeout(() => {
         this.onSearch("")
@@ -1130,6 +1157,8 @@ class BBDataTable extends Component {
             } else if (me.props.isReplaceTable) {
               me.props.setId(id)
               me.props.handleReplaceTable(!me.props.isReplaceTable)
+            } else if (me.props.createNewModal) {
+              me.props.setCreateModal({ show: true, id, disabled_form: false })
             } else {
               me.props.history.push(base + "/" + id)
             }
@@ -1140,6 +1169,15 @@ class BBDataTable extends Component {
           case "view":
             if (me.props.createOnModal) {
               me.props.setCreateModal({ show: true, id, disabled_form: true })
+            } else if (me.props.isReplaceTable) {
+              me.props.setId(id)
+              me.props.handleReplaceTable(!me.props.isReplaceTable)
+            } else if (me.props.createNewModal) {
+              me.props.setCreateNewModal({
+                show: true,
+                id,
+                disabled_form: true,
+              })
             } else {
               me.props.history.push(base + "/" + id + "?action=view")
             }
@@ -1161,7 +1199,17 @@ class BBDataTable extends Component {
       })
     $.fn.DataTable.ext.pager.numbers_length = 5
 
-    const { showCreateModal, modalTitle, showModalDelete } = this.props
+    const {
+      showCreateModal,
+      modalTitle,
+      modalTitleNew,
+      showModalDelete,
+      showCreateNewModal,
+      createNewModal,
+      createOnModal,
+      module,
+      deleteEndpoint,
+    } = this.props
     return (
       <div ref={this.wrapper}>
         <Modal show={this.state.isOpen}>
@@ -1211,7 +1259,7 @@ class BBDataTable extends Component {
                     })
                 } else {
                   this.api
-                    .post(this.props.deleteEndpoint, this.state.selected)
+                    .post(deleteEndpoint, this.state.selected)
                     .then(() => {
                       this.dt.ajax.reload()
                       this.props.setAlert({
@@ -1243,21 +1291,40 @@ class BBDataTable extends Component {
             </Button>
           </ModalFooter>
         </Modal>
-        <ModalCreate
-          modalTitle={modalTitle}
-          show={showCreateModal.show}
-          onClick={() =>
-            this.props.setCreateModal({
-              show: false,
-              id: null,
-              disabled_form: false,
-            })
-          }
-          modalContent={this.props.modalContent}
-          modalSize={this.props.modalSize}
-          scrollable={true}
-        />
 
+        {createOnModal && (
+          <ModalCreate
+            modalTitle={modalTitle}
+            show={showCreateModal.show}
+            onClick={() =>
+              this.props.setCreateModal({
+                show: false,
+                id: null,
+                disabled_form: false,
+              })
+            }
+            modalContent={this.props.modalContent}
+            modalSize={this.props.modalSize}
+            scrollable={true}
+          />
+        )}
+
+        {createNewModal && (
+          <ModalCreateNew
+            modalTitle={modalTitleNew}
+            show={showCreateNewModal.show}
+            onClick={() =>
+              this.props.setCreateNewModal({
+                show: false,
+                id: null,
+                disabled_form: false,
+              })
+            }
+            modalContent={this.props.modalContentNew}
+            modalSize={this.props.modalSize}
+            scrollable={true}
+          />
+        )}
         <ModalDelete
           modalTitle={modalTitle}
           show={showModalDelete.show}
@@ -1277,6 +1344,7 @@ class BBDataTable extends Component {
           <TableHeader
             {...this.props}
             createOnModal={this.props.createOnModal}
+            createNewModal={this.props.createNewModal}
             selected={
               this.state.selected.length > 0 && !this.props.switchStatus
             }
@@ -1334,15 +1402,18 @@ const mapStateToProps = ({ ui }) => {
   return {
     stateAlert: ui.alert,
     showCreateModal: ui.showCreateModal,
+    showCreateNewModal: ui.showCreateNewModal,
     showModalDelete: ui.showModalDelete,
     reloadTable: ui.reloadTable,
     modalTitle: ui.modalTitle,
+    modalTitleNew: ui.modalTitleNew,
   }
 }
 
 const mapDispatchToProps = (dispatch) => ({
   setAlert: (payload) => dispatch(setAlert(payload)),
   setCreateModal: (payload) => dispatch(setCreateModal(payload)),
+  setCreateNewModal: (payload) => dispatch(setCreateNewModal(payload)),
   setReloadTable: (payload) => dispatch(setReloadTable(payload)),
   setModalDelete: (payload) => dispatch(setModalDelete(payload)),
 })

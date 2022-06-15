@@ -77,6 +77,7 @@ export default function IntegrationPartnerCabinTypesTable(props) {
     btnDownload: ".buttons-csv",
     module:"integration-partner-cabins",
     recordName: ["cabin_type.cabin_type_name", "cabin_type_code", "cabin_type_name"],
+    sizePerPage: 5,
   })
 
   return <>

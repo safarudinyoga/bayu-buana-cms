@@ -216,9 +216,21 @@ import CorporateDivisionTable from "views/corporate_division/table"
 import CorporateDivisionForm from "views/corporate_division/form"
 import CorporateDivisionHierarchy from "views/corporate_division/hierarchy"
 
-// Travel Policy Corporate
-// import CorporateTravelPolicyTable from "views/corporate_travel_policy/table"
-import CorporateTravelPolicy from "views/corporate_travel_policy"
+// Master Corporate Divisions
+import CorporateUserAccessTypeTable from "views/corporate_user_access_type/table"
+import CorporateUserAccessTypeForm from "views/corporate_user_access_type/form"
+
+
+// Travel Policy Management Corporate
+import CorporateTravelPolicyMangement from "views/corporate_travel_policy_management"
+
+// User Management Corporate
+import CorporateUserManagementTable from "views/corporate_user_management/table"
+import CorporateUserManagementForm from "views/corporate_user_management/form"
+
+// Corporate Travel Purpose
+import CorporateTravelPurposeTable from "views/corporate_travel_purpose/table"
+import CorporateTravelPurposeForm from "views//corporate_travel_purpose/form"
 
 const RouteWithProps = ({
   path,
@@ -791,13 +803,38 @@ const DashboardRoutes = () => {
           <CorporateDivisionHierarchy />
         </Route>
 
+        {/* Corporate Division */}
+        <Route exact path="/master/corporate-user-access-type">
+          <CorporateUserAccessTypeTable />
+        </Route>
+        <Route path="/master/corporate-user-access-type/form/:id?">
+          <CorporateUserAccessTypeForm />
+        </Route>
+
         {/* Corporate Travel Policy */}
         <Route exact path="/master/corporate-travel-policy">
-          <CorporateTravelPolicy />
+          <CorporateTravelPolicyMangement />
         </Route>
+
+        {/* Corporate User Management */}
+        <Route exact path="/master/corporate-user-management">
+          <CorporateUserManagementTable />
+        </Route>
+        <Route path="/master/corporate-user-management/form/:id?">
+          <CorporateUserManagementForm />
+        </Route>
+
         {/* <Route exact path="/master/corporate-travel-policy/form/:id?">
           <CorporateTravelPolicyForm />
         </Route> */}
+
+        {/* Corporate Travel Purpose */}
+        <Route exact path="/master/corporate-travel-purpose">
+          <CorporateTravelPurposeTable />
+        </Route>
+        <Route path="/master/corporate-travel-purpose/form/:id?">
+          <CorporateTravelPurposeForm />
+        </Route>
       </Switch>
     </DashboardWrapper>
   )
@@ -817,6 +854,15 @@ const AuthRoutes = () => {
       </Route>
       <Route exact path="/auth/reset-password">
         <ResetPassword />
+      </Route>
+      <Route exact path="/auth/corporate-login">
+        <Login />
+      </Route>
+      <Route exact path="/auth/corporate-forgot-password">
+        <ForgotPassword />
+      </Route>
+      <Route exact path="/auth/corporate-otp">
+        <OTP />
       </Route>
     </AuthWrapper>
   )

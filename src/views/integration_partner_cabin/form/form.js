@@ -17,7 +17,7 @@ import useQuery from "lib/query"
 import TabelFareFamily from "../tabel-fare-family"
 
 import * as Yup from "yup"
-import _ from "lodash"
+import _, { values } from "lodash"
 
 import createIcon from "assets/icons/create.svg"
 import { Formik, FastField, Field, ErrorMessage } from "formik"
@@ -28,6 +28,40 @@ const endpoint = "/master/integration-partner-cabin-types"
 const backUrl = "/master/integration-partner"
 
 const FareFamilyModal = (props) => {
+  let api = new Api()
+  const [formFareFamily, setFormFareFamily] = useState({
+    fare_family: "",
+    booking_class: "",
+  })
+
+  const initialValuesFareFamily = {
+    fare_family: "",
+    booking_class: "",
+  }
+
+  const validationSchemaFareFamily = Yup.object().shape({
+    fare_family: Yup.object().required("Fare Family is required"),
+    booking_class: Yup.string().required("Booking Class is required")
+  })
+
+  const handleFareFamilySubmit = async(values, a) => {
+    try {
+      let formId = props.match.params.id
+      let form = {
+        fare_family: values.fare_family,
+        booking_class: values.booking_class
+      }
+
+      if(!formId){
+        let res = await api.post(`/master/interation-partner-cabin-types/${props.cabinType}/fare-family`,form)
+      } else {
+        let res = await api.post(`/master/interation-partner-cabin-types/${props.cabinType}/fare-family/${formId}`,form)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <Modal
       {...props}
@@ -44,80 +78,119 @@ const FareFamilyModal = (props) => {
             <p className="modals-header mt-3">CREATE FARE FAMILY</p>
           </div>
 
-          <Form>
-            <Form.Group as={Row} className="mb-3">
-              <Form.Label column sm={4}>
-                Fare Family
-                <span className="form-label-required">*</span>
-              </Form.Label>
-              <Col sm={7}>
-                <FastField name="hotelBrand">
-                  {({ field, form }) => (
-                    <div style={{ maxWidth: 600 }}>
-                      <Select {...field} placeholder="Please choose" />
-                    </div>
-                  )}
-                </FastField>
-              </Col>
-            </Form.Group>
+          <Formik
+            initialValues={formFareFamily || initialValuesFareFamily}
+            validationSchema={validationSchemaFareFamily}
 
-            <Form.Group as={Row} className="mb-3">
-              <Form.Label column md={4}>
-                Booking Class
-                <span className="form-label-required">*</span>
-              </Form.Label>
-              <Col md={8}>
-                <Row className="mt-md-2">
-                  <Col lg={12}>
-                    <Row>
-                      <Col xs={12} md={12} lg={12} className="ml-4 ml-md-0">
-                        <Form.Group as={Row} className="mb-3">
-                          <Col>
-                            <Form.Control style={{ maxWidth: "80px" }} />
+            onSubmit={handleFareFamilySubmit}
+            enableReinitialize
+          >
+            {({
+              values,
+              errors,
+              touched,
+              dirty,
+              handleChange,
+              handleBlur,
+              handleSubmit,
+              isValid,
+              isSubmitting,
+              setFieldValue,
+              setFieldTouched,
+            }) => (
+              <Form onSubmit={handleSubmit}>
+                <Form.Group as={Row} className="mb-3">
+                  <Form.Label column sm={4}>
+                    Fare Family
+                    <span className="form-label-required">*</span>
+                  </Form.Label>
+                  <Col sm={7}>
+                    <FastField name="fare_family">
+                      {({ field, form }) => (
+                        <div style={{ maxWidth: 600 }}>
+                          <Select 
+                            {...field} 
+                            placeholder="Please choose"
+                            onChange={(v) => {
+                              setFieldValue("fare_family", v)
+                            }} 
+                          />
+                          {form.touched.fare_family &&
+                            form.errors.fare_family && (
+                              <Form.Control.Feedback type="invalid">
+                                {form.touched.fare_family
+                                  ? form.errors.fare_family
+                                  : null}
+                              </Form.Control.Feedback>
+                            )
+                          }
+                        </div>
+                      )}
+                    </FastField>
+                  </Col>
+                </Form.Group>
+
+                <Form.Group as={Row} className="mb-3">
+                  <Form.Label column md={4}>
+                    Booking Class
+                    <span className="form-label-required">*</span>
+                  </Form.Label>
+                  <Col md={8}>
+                    <Row className="mt-md-2">
+                      <Col lg={12}>
+                        <Row>
+                          <Col xs={12} md={12} lg={12} className="ml-4 ml-md-0">
+                            <Form.Group as={Row} className="mb-3">
+                              <Col>
+                                <Form.Control style={{ maxWidth: "80px" }} />
+                              </Col>
+                              <Col>
+                                <Form.Control style={{ maxWidth: "80px" }} />
+                              </Col>
+                              <Col>
+                                <Form.Control style={{ maxWidth: "80px" }} />
+                              </Col>
+                              <Col>
+                                <Form.Control style={{ maxWidth: "80px" }} />
+                              </Col>
+                              <Col>
+                                <Form.Control style={{ maxWidth: "80px" }} />
+                              </Col>
+                              <Col>
+                                <Form.Control style={{ maxWidth: "80px" }} />
+                              </Col>
+                              <Col>
+                                <Form.Control style={{ maxWidth: "80px" }} />
+                              </Col>
+                              <Col>
+                                <Form.Control style={{ maxWidth: "80px" }} />
+                              </Col>
+                            </Form.Group>
                           </Col>
-                          <Col>
-                            <Form.Control style={{ maxWidth: "80px" }} />
-                          </Col>
-                          <Col>
-                            <Form.Control style={{ maxWidth: "80px" }} />
-                          </Col>
-                          <Col>
-                            <Form.Control style={{ maxWidth: "80px" }} />
-                          </Col>
-                          <Col>
-                            <Form.Control style={{ maxWidth: "80px" }} />
-                          </Col>
-                          <Col>
-                            <Form.Control style={{ maxWidth: "80px" }} />
-                          </Col>
-                          <Col>
-                            <Form.Control style={{ maxWidth: "80px" }} />
-                          </Col>
-                          <Col>
-                            <Form.Control style={{ maxWidth: "80px" }} />
-                          </Col>
-                        </Form.Group>
+
+                        </Row>
                       </Col>
-
                     </Row>
                   </Col>
-                </Row>
-              </Col>
-            </Form.Group>
+                </Form.Group>
 
-            <div style={{ marginBottom: 30, marginTop: 30, display: "flex" }}>
-              <Button
-                variant="primary"
-                type="submit"
-                style={{ marginRight: 15 }}
-              >
-                SAVE
-              </Button>
-              <Button variant="secondary" onClick={props.onHide}>
-                CANCEL
-              </Button>
-            </div>
-          </Form>
+                <div style={{ marginBottom: 30, marginTop: 30, display: "flex" }}>
+                  <Button
+                    variant="primary"
+                    type="submit"
+                    style={{ marginRight: 15 }}
+                  >
+                    SAVE
+                  </Button>
+                  <Button variant="secondary" onClick={props.onHide}>
+                    CANCEL
+                  </Button>
+                </div>
+              </Form>
+            )}
+          </Formik>
+
+          
         </div>
       </Modal.Body>
     </Modal>
@@ -558,6 +631,7 @@ function PartnerCabins(props) {
                           <FareFamilyModal
                             show={modalShow}
                             onHide={() => setModalShow(false)}
+                            cabinType={props.match.params.id}
                           />
                         </Col>
 
@@ -565,7 +639,7 @@ function PartnerCabins(props) {
 
                       </>}
 
-                      {formId && < TabelFareFamily />}
+                      {< TabelFareFamily />}
 
                       {
                         props.isMobile

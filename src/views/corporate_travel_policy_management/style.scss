@@ -106,3 +106,25 @@
     border-bottom: 1px solid #d3d3d3;
   }
 }
+.travel-policy-body {
+  border-bottom: 1px solid #b4b4b4;
+  margin-bottom: 24px;
+  padding-bottom: 8px;
+  h3 {
+    font-size: 16px;
+      font-weight: bold;
+  }
+  u{
+    color: #3e40ae;
+    font-weight: 600;
+  }
+}
+.policy-class-modal-title {
+  h6 {   
+    font-size: 14px;
+    font-weight: bold;
+    background-color: #F3F3FB;
+    padding: 12px;
+    border-radius: 12px;
+  }
+}

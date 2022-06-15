@@ -34,7 +34,7 @@ export default function IntegrationPartnerCabinTypesTable(props) {
     titleModal: "Integration Partner",
     showAdvancedOptions: false,
     baseRoute: "/master/integration-partner-cabin-types/form",
-    endpoint: `/master/integration-partners/${id}/cabins`,
+    endpoint: `/master/integration-partners/${id}/cabin-types`,
     deleteEndpoint: "/master/batch-actions/delete/master/integration-partner-cabin-types",
     activationEndpoint: "/master/batch-actions/activate/integration-partner-cabin-types",
     deactivationEndpoint: "/master/batch-actions/deactivate/integration-partner-cabin-types",
@@ -71,7 +71,7 @@ export default function IntegrationPartnerCabinTypesTable(props) {
           <h3 className="card-heading">{contentTitle}</h3>
           {
           isReplaceTable ? <PartnerCabins isReplaceTable={isReplaceTable} handleReplaceTable={handleReplaceTable} partnerCabinId={partnerCabinId}/> :
-          <BBDataTable {...params} modalContent={DeleteModal} handleReplaceTable={handleReplaceTable} setId={setId}/>
+          <BBDataTable {...params} modalDeleteContent={DeleteModal} handleReplaceTable={handleReplaceTable} setId={setId}/>
           }
           </Card.Body>
       </Card>

@@ -34,19 +34,19 @@ const UserManagementForm = (props) => {
   let formId = props.match.params.id
   const [loading, setLoading] = useState(true)
   const isView = useQuery().get("action") === "view"
-
+  const [showhide, setShowhide]=useState(false);
+ 
   const [show, setShow] = useState(false)
   const target = useRef(null)
 
   useEffect(async () => {
     let api = new Api()
     let formId = props.match.params.id
-    console.log({ formId, isView })
 
     let docTitle = "Edit User"
 
     if (!formId) {
-      docTitle = "Create User"
+      docTitle = "Create User Management"
     } else if (isView) {
       docTitle = "User Management Details"
     }
@@ -136,12 +136,10 @@ const UserManagementForm = (props) => {
       if (!formId) {
         //Proses Create Data
         let res = await api.post(`/user/user-type-users`, form)
-        console.log(res)
         openSnackbar(`Record has been successfully saved.`)
         history.goBack()
       } else {
         let res = await api.put(`/user/user-type-users/${formId}`, form)
-        console.log(res)
 
         dispatch(
           setAlert({
@@ -190,6 +188,7 @@ const UserManagementForm = (props) => {
               <Card.Body>
                 <div style={{ padding: "0 2px 2px" }}>
                   <Form.Group as={Row} className="mb-3">
+                 
                     <Form.Label column md={2}>
                       Select Employee to Grant Access
                       <span className="form-label-required">*</span>
@@ -255,6 +254,7 @@ const UserManagementForm = (props) => {
                             fieldName="user_type_name"
                             onChange={(v) => {
                               setFieldValue("user_type", v)
+                              if(v) setShowhide(v.value)
                             }}
                             placeholder="Please choose"
                             className={`react-select ${
@@ -282,16 +282,43 @@ const UserManagementForm = (props) => {
                         </div>
                       )}
                     </FastField>
+                    
 
-                    <Form.Label
-                      column
-                      md={2}
-                      style={{ color: "#3E40AE", marginLeft: "14px" }}
-                      ref={target}
-                      onClick={() => setShow(!show)}
-                    >
-                      View module access list
-                    </Form.Label>
+{showhide ? (
+  <>
+   <Form.Label
+                       column
+                       md={2}
+                       style={{ color: "#3E40AE", marginLeft: "14px" }}
+                       ref={target}
+                       onClick={() => setShow(!show)}
+                     >
+                       View module access list
+                     </Form.Label>
+                     <Overlay
+                     target={target.current}
+                     show={show}
+                     placement="bottom"
+                   >
+                     {(props) => (
+                       <div
+                         {...props}
+                         // style={{
+                         //   backgroundColor: "rgba(255, 100, 100, 0.85)",
+                         //   padding: "2px 10px",
+                         //   color: "white",
+                         //   borderRadius: 3,
+                         //   ...props.style,
+                         // }}
+                       >
+                         <ModuleAccess value={showhide} />
+                       </div>
+                     )}
+                   </Overlay>
+  </>
+                      
+                    ) : null}
+                    
                   </Form.Group>
                 </div>
 

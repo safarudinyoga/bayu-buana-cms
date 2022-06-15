@@ -84,10 +84,9 @@ class Sidebar extends Component {
     $('li.nav-item.parent-menu.menu-is-opening.menu-open').find('ul.nav.nav-treeview').css("display","none")
   }
   onClickMenu(menu) {
+    localStorage.removeItem("saf_key")
+    
     let self = this.state
-    // $('li.parent-menu.menu-is-opening.menu-open').find('ul.nav-treeview.menu-is-opening.menu-open').css("display","none")
-    // $('li.parent-menu.menu-is-opening.menu-open').find('ul.nav-treeview.menu-is-opening.menu-open').removeClass('menu-is-opening menu-open')
-    // $('li.parent-menu.menu-is-opening.menu-open').removeClass('menu-is-opening menu-open')
     $('ul.nav-treeview a').filter(function() {
       return this.href === window.location.origin + self.currentMenu;
     }).parentsUntil(".bb-sidebar-nav > .nav-sidebar").remove('menu-is-opening menu-open');
@@ -117,7 +116,7 @@ class Sidebar extends Component {
             >
               {
                 menu.map((m, k) => <ParentMenu key={k} menu={m} currentMenu={currentMenu} menuHandler={this.onClickMenu} />)
-              }              
+              }
               {/* <li className="nav-item parent-menu">
                 <Link to="#" className="nav-link">
                   <img src="/img/icons/home.svg" alt="icon users" />

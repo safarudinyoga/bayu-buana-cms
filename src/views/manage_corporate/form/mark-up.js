@@ -22,6 +22,7 @@ const MarkUp = props => {
     showAdvancedOptions: false,
     responsiveTablet: true,
     isHidePrintLogo: true,
+    isCheckbox: false,
     isHideSearch: true,
     isHideDownloadLogo: true,
     hideCreate: true,
@@ -55,6 +56,7 @@ const MarkUp = props => {
     responsiveTablet: true,
     isHidePrintLogo: true,
     isHideSearch: true,
+    isCheckbox: false,
     isHideDownloadLogo: true,
     hideCreate: true,
     isShowColumnAction: false,
@@ -77,12 +79,48 @@ const MarkUp = props => {
     emptyTable: "No Hotel Markup found",
   })
 
-  const onResetFlight = () => {
-    setParamsFlight({...paramsFlight, filters: []})
-  }
+  const [paramsOther, setParamsOther] = useState({
+    title: "other-custom-markup",
+    showAdvancedOptions: false,
+    responsiveTablet: true,
+    isHidePrintLogo: true,
+    isHideSearch: true,
+    isHideDownloadLogo: true,
+    hideCreate: true,
+    isCheckbox: false,
+    isShowColumnAction: false,
+    baseRoute: "/master/manage-corporate/form",
+    endpoint: "/master/ancillary-fee",
+    columns: [
+      {
+        title: "Type of Service",
+        data: ""
+      },
+      {
+        title: "Markup",
+        data: ""
+      },
+    ],
+    emptyTable: "No Hotel Markup found",
+  })
 
-  const onResetHotel = () => {
-    setParamsHotel({...paramsHotel, filters: []})
+  const handleReset = (type) => {
+    switch (type) {
+      case 'flight':
+        setParamsFlight({...paramsFlight, filters: []})
+        break;
+
+      case 'hotel':
+        setParamsHotel({...paramsHotel, filters: []})
+        break;
+
+      case 'other':
+        setParamsOther({...paramsOther, filters: []})
+        break;
+
+      default:
+        break;
+    }
   }
 
   return (
@@ -136,7 +174,7 @@ const MarkUp = props => {
                     </Row>
                   </div>
                   <div className='mt-3' style={{ width: '98%', margin: '0 auto' }}>
-                    <BbDataTable {...paramsFlight} onReset={onResetFlight} />
+                    <BbDataTable {...paramsFlight} onReset={() => handleReset('flight')} />
                   </div>
                 </>
               )}
@@ -187,7 +225,7 @@ const MarkUp = props => {
                     </Row>
                   </div>
                   <div className='mt-3' style={{ width: '98%', margin: '0 auto' }}>
-                    <BbDataTable {...paramsHotel} onReset={onResetHotel} />
+                    <BbDataTable {...paramsHotel} onReset={() => handleReset('hotel')} />
                   </div>
                 </>
               )}
@@ -214,11 +252,22 @@ const MarkUp = props => {
                         label: 'label'
                       },
                     ]}
+                    onChange={(selected) => setisFieldSelected({
+                      ...isFieldSelected,
+                      other: true
+                    })}
                     width={'250px'}
                   />
                 </div>
               </div>
               <div className='divider mb-3 mt-3' />
+              { isFieldSelected.other && (
+                <>
+                  <div className='mt-3' style={{ width: '98%', margin: '0 auto' }}>
+                    <BbDataTable {...paramsOther} onReset={() => handleReset('other')} />
+                  </div>
+                </>
+              )}
             </section>
           </div>
         </Card.Body>

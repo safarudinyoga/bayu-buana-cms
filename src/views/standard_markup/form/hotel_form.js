@@ -13,6 +13,7 @@ import Api from "config/api"
 import env from "config/environment"
 import Select from "components/form/select-async"
 import HotelTabel from "../table/hotel_table"
+import NumberFormat from "react-number-format";
 
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css"
 import "react-dropzone-uploader/dist/styles.css"
@@ -131,7 +132,16 @@ function HotelModal(props) {
                             IDR
                           </Form.Label>
                           <Col xs={10} md={9} lg={9}>
-                            <Form.Control style={{ maxWidth: "220px" }} />
+                          <NumberFormat
+                            className="form-control"
+                            maxLength={19}
+                            thousandsGroupStyle="thousand"
+                            displayType="input"
+                            type="text"
+                            thousandSeparator={true}
+                            allowNegative={true}
+                            disabled={props.isView}
+                          />
                           </Col>
                         </Form.Group>
                       </Col>
@@ -166,7 +176,7 @@ function HotelModal(props) {
                           <Col>
                             <Form.Check
                               type="checkbox"
-                              label="Include Taxed"
+                              label="Include Taxes"
                               className="mt-2"
                             />
                           </Col>
@@ -362,7 +372,16 @@ const HotelForm = (props) => {
                                   IDR
                                 </Form.Label>
                                 <Col xs={10} md={9} lg={7}>
-                                  <Form.Control style={{ maxWidth: "220px" }} />
+                                <NumberFormat
+                                    className="form-control"
+                                    maxLength={19}
+                                    thousandsGroupStyle="thousand"
+                                    displayType="input"
+                                    type="text"
+                                    thousandSeparator={true}
+                                    allowNegative={true}
+                                    disabled={props.isView}
+                                  />
                                 </Col>
                               </Form.Group>
                             </Col>
@@ -400,7 +419,7 @@ const HotelForm = (props) => {
                                 <Col>
                                   <Form.Check
                                     type="checkbox"
-                                    label="Include Taxed"
+                                    label="Include Taxes"
                                     className="mt-2"
                                   />
                                 </Col>
@@ -475,7 +494,7 @@ const HotelForm = (props) => {
                                 <Col>
                                   <Form.Check
                                     type="checkbox"
-                                    label="Include Taxed"
+                                    label="Include Taxes"
                                     className="mt-2"
                                   />
                                 </Col>
