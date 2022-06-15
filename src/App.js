@@ -224,6 +224,10 @@ import CorporateTravelPolicyMangement from "views/corporate_travel_policy_manage
 import CorporateUserManagementTable from "views/corporate_user_management/table"
 import CorporateUserManagementForm from "views/corporate_user_management/form"
 
+// Corporate Travel Purpose
+import CorporateTravelPurposeTable from "views/corporate_travel_purpose/table"
+import CorporateTravelPurposeForm from "views//corporate_travel_purpose/form"
+
 const RouteWithProps = ({
   path,
   exact,
@@ -807,6 +811,17 @@ const DashboardRoutes = () => {
           <CorporateUserManagementForm />
         </Route>
 
+        {/* <Route exact path="/master/corporate-travel-policy/form/:id?">
+          <CorporateTravelPolicyForm />
+        </Route> */}
+
+        {/* Corporate Travel Purpose */}
+        <Route exact path="/master/corporate-travel-purpose">
+          <CorporateTravelPurposeTable />
+        </Route>
+        <Route path="/master/corporate-travel-purpose/form/:id?">
+          <CorporateTravelPurposeForm />
+        </Route>
       </Switch>
     </DashboardWrapper>
   )
