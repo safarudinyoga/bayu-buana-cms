@@ -216,7 +216,6 @@ import CorporateDivisionHierarchy from "views/corporate_division/hierarchy"
 import CorporateUserAccessTypeTable from "views/corporate_user_access_type/table"
 import CorporateUserAccessTypeForm from "views/corporate_user_access_type/form"
 
-
 // Travel Policy Management Corporate
 import CorporateTravelPolicyMangement from "views/corporate_travel_policy_management"
 
@@ -227,10 +226,6 @@ import CorporateUserManagementForm from "views/corporate_user_management/form"
 // Corporate Travel Purpose
 import CorporateTravelPurposeTable from "views/corporate_travel_purpose/table"
 import CorporateTravelPurposeForm from "views//corporate_travel_purpose/form"
-
-//corporate profile
-import CorporateProfile from "views/corporate_profile/corporate-profile"
-import CorporateProfileForm from "views/corporate_profile/form/index"
 
 //corporate profile
 import CorporateProfile from "views/corporate_profile/corporate-profile"
