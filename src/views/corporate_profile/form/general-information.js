@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react"
 import { Form, Row, Col, Card, Button } from "react-bootstrap"
 import { useFormik } from "formik"
 import * as Yup from "yup"
+import moment from "moment"
 
 // components
 import Select from "components/form/select"
@@ -359,6 +360,10 @@ const GeneralInfomation = (props) => {
       <Card style={{ marginBotton: 0 }}>
         <Card.Body>
           {/* contact information */}
+          <h4>PETRO XYZ</h4>
+          <br /> {moment().format("DD MMMM YY")}
+          <br />
+          <div className="Stars" />
           <h3 className="card-heading">Contacts</h3>
           <div style={{ padding: "0 15px 15px 15px" }}>
             <Row>
@@ -459,7 +464,6 @@ const GeneralInfomation = (props) => {
               </Col>
             </Row>
           </div>
-
           {/* Correspondence Address */}
           <h3 className="card-heading">Correspondence Address</h3>
           <div style={{ padding: "0 15px 15px 15px" }}>
@@ -697,7 +701,6 @@ const GeneralInfomation = (props) => {
               </Col>
             </Row>
           </div>
-
           {/* Billing Address  */}
           <h3 className="card-heading">Billing Address</h3>
           <div style={{ padding: "0 15px 15px 15px" }}>
@@ -932,7 +935,6 @@ const GeneralInfomation = (props) => {
               </Col>
             </Row>
           </div>
-
           {/* Other Information */}
           <h3 className="card-heading">Others</h3>
           <div
