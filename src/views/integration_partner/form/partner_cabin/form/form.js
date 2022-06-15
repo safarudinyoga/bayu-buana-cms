@@ -75,7 +75,7 @@ const FareFamilyModal = (props) => {
         async (value, context) => {
           let cabinId = props.partnerCabinId
           try {
-            let res = await api.get(`${endpoint}/${id}/cabins/${cabinId}/fare-family?filters=["fare_type_id","=","${value.value}"]`)
+            let res = await api.get(`${endpoint}/${id}/cabin-types/${cabinId}/fare-family?filters=["fare_type_id","=","${value.value}"]`)
             
             return res.data.items.length === 0
           } catch (error) {
@@ -105,9 +105,9 @@ const FareFamilyModal = (props) => {
 
     try {
       if(fareFamilyId){
-        let res = await api.put(endpoint + "/" + id + "/cabins/" + cabinId + "/fare-family/" + fareFamilyId, formatted)
+        let res = await api.put(endpoint + "/" + id + "/cabin-types/" + cabinId + "/fare-family/" + fareFamilyId, formatted)
       } else {
-        let res = await api.post(endpoint + "/" + id + "/cabins/" + cabinId + "/fare-family/", formatted)
+        let res = await api.post(endpoint + "/" + id + "/cabin-types/" + cabinId + "/fare-family/", formatted)
 
         console.log(res)
       }
@@ -290,7 +290,7 @@ const Cabins = (props) => {
 
   const duplicateValue = async(fieldName, value) => {
     let filters = encodeURIComponent(JSON.stringify([[fieldName,"=",value],["AND"],["integration_partner_id",id],["AND"],["status",1]]))
-    let res = await api.get(endpoint + "/" + id + "/cabins?" + `filters=${filters}`)
+    let res = await api.get(endpoint + "/" + id + "/cabin-types?" + `filters=${filters}`)
     let sameId = res.data.items.find((v) => v.id === cabinId)
     if(!sameId) return res.data.items.length === 0 
 
@@ -332,7 +332,7 @@ Yup.addMethod(Yup.string, 'uniqueValueString', function (fieldName, message) {
       async (value,context) => {
         let formId = props.partnerCabinId
         try {
-          let res = await api.get(`${endpoint}/${id}/cabins?filters=["cabin_type_id","=","${value.value}"]`)
+          let res = await api.get(`${endpoint}/${id}/cabin-types?filters=["cabin_type_id","=","${value.value}"]`)
 
           if(formId){
             return res.data.items.length === 0 || value.value === formValues.cabin_type_id.value
@@ -354,7 +354,7 @@ Yup.addMethod(Yup.string, 'uniqueValueString', function (fieldName, message) {
       async (value, context) => {
         let formId = props.partnerCabinId
         try {
-          let res = await api.get(`${endpoint}/${id}/cabins?filters=["cabin_type_code","=","${value}"]`)
+          let res = await api.get(`${endpoint}/${id}/cabin-types?filters=["cabin_type_code","=","${value}"]`)
 
           if(formId){
             return res.data.items.length === 0 || value === formValues.cabin_type_code
@@ -375,7 +375,7 @@ Yup.addMethod(Yup.string, 'uniqueValueString', function (fieldName, message) {
       async (value, context) => {
         let formId = props.partnerCabinId
         try {
-          let res = await api.get(`${endpoint}/${id}/cabins?filters=["cabin_type_name","=","${value}"]`)
+          let res = await api.get(`${endpoint}/${id}/cabin-types?filters=["cabin_type_name","=","${value}"]`)
 
           if(formId){
             return res.data.items.length === 0 || value === formValues.cabin_type_code
@@ -401,7 +401,7 @@ Yup.addMethod(Yup.string, 'uniqueValueString', function (fieldName, message) {
     dispatch(setContentTitle(docTitle));
     if(formId) {
       try {
-        let res = await api.get(endpoint + "/" + id + "/cabins/" + formId);
+        let res = await api.get(endpoint + "/" + id + "/cabin-types/" + formId);
         setFormValues({ 
           ...formValues,
           cabin_type_id: _.isEmpty(res.data.cabin_type) ? '' : {
@@ -427,9 +427,9 @@ Yup.addMethod(Yup.string, 'uniqueValueString', function (fieldName, message) {
 
     try {
       if(cabinId){
-        let res = await api.put(endpoint + "/" + id + "/cabins/" + cabinId, formatted);
+        let res = await api.put(endpoint + "/" + id + "/cabin-types/" + cabinId, formatted);
       }else{
-          let res = await api.post(endpoint + "/" + id + "/cabins", formatted);
+          let res = await api.post(endpoint + "/" + id + "/cabin-types", formatted);
       }
       dispatch(
         setAlert({
