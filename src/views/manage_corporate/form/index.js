@@ -175,7 +175,7 @@ const ManageCorporateForm = ({ match }) => {
               <Col sm={9}>
                 <Tab.Content>
                   <Tab.Pane eventKey="general-information">
-                    <GeneralInformation data={data.general_information} />
+                    <GeneralInformation data={data != null ? data.general_information : ""} />
                   </Tab.Pane>
                   <Tab.Pane eventKey="mark-up">
                     <MarkUp />
