@@ -291,10 +291,12 @@ const Cabins = (props) => {
   const duplicateValue = async(fieldName, value) => {
     let filters = encodeURIComponent(JSON.stringify([[fieldName,"=",value],["AND"],["integration_partner_id",id],["AND"],["status",1]]))
     let res = await api.get(endpoint + "/" + id + "/cabin-types?" + `filters=${filters}`)
-    let sameId = res.data.items.find((v) => v.id === cabinId)
-    if(!sameId) return res.data.items.length === 0 
 
-    return true
+    if(cabinId) {
+      return res.data.items.length === 0 || value === formValues[fieldName] || formValues[fieldName].value
+    } else {
+      return res.data.items.length === 0
+    }
 }
 
 Yup.addMethod(Yup.object, 'uniqueValueObject', function (fieldName, message) {
@@ -326,67 +328,14 @@ Yup.addMethod(Yup.string, 'uniqueValueString', function (fieldName, message) {
       label: Yup.string(),
     })
     .required("Cabin is required.")
-    .test(
-      "unique-cabin-id",
-      "Cabin already exists",
-      async (value,context) => {
-        let formId = props.partnerCabinId
-        try {
-          let res = await api.get(`${endpoint}/${id}/cabin-types?filters=["cabin_type_id","=","${value.value}"]`)
-
-          if(formId){
-            return res.data.items.length === 0 || value.value === formValues.cabin_type_id.value
-          } else {
-            return res.data.items.length === 0
-          }
-        } catch (error) {
-          console.log(error)
-          return false
-        } 
-      }
-    ),
-    // .uniqueValueObject("cabin_type_id","Cabin already exists"),
+    .uniqueValueObject("cabin_type_id","Cabin already exists"),
     cabin_type_code: Yup.string()
     .required("Partner Cabin Code is required")
-    .test(
-      "unique-partner-cabin-code",
-      "Partner Cabin Code already exists",
-      async (value, context) => {
-        let formId = props.partnerCabinId
-        try {
-          let res = await api.get(`${endpoint}/${id}/cabin-types?filters=["cabin_type_code","=","${value}"]`)
-
-          if(formId){
-            return res.data.items.length === 0 || value === formValues.cabin_type_code
-          } else {
-            return res.data.items.length === 0
-          }
-        } catch (error) {
-          return false
-        }
-      }
-    ),
+    .uniqueValueString("cabin_type_code","Partner Cabin Code already exists"),
     
     cabin_type_name: Yup.string()
     .required("Partner Cabin Name is required")
-    .test(
-      "unique-partner-cabin-name",
-      "Partner Cabin Name already exists",
-      async (value, context) => {
-        let formId = props.partnerCabinId
-        try {
-          let res = await api.get(`${endpoint}/${id}/cabin-types?filters=["cabin_type_name","=","${value}"]`)
-
-          if(formId){
-            return res.data.items.length === 0 || value === formValues.cabin_type_code
-          } else {
-            return res.data.items.length === 0
-          }
-        } catch (error) {
-          return false
-        }
-      }
-    ),
+    .uniqueValueString("cabin_type_name","Partner Cabin Name already exists"),
   })
 
   useEffect(async () => {
@@ -569,7 +518,7 @@ Yup.addMethod(Yup.string, 'uniqueValueString', function (fieldName, message) {
             }
 
 
-            {props.partnerCabinId && <TabelFareFamily />}
+            {props.partnerCabinId && <TabelFareFamily partnerCabinId={props.partnerCabinId} partnerId={id} />}
 
             {!props.hideButton && (
                 <div

@@ -217,9 +217,16 @@ import CorporateUserAccessTypeTable from "views/corporate_user_access_type/table
 import CorporateUserAccessTypeForm from "views/corporate_user_access_type/form"
 
 
-// Travel Policy Corporate
-// import CorporateTravelPolicyTable from "views/corporate_travel_policy/table"
-import CorporateTravelPolicy from "views/corporate_travel_policy"
+// Travel Policy Management Corporate
+import CorporateTravelPolicyMangement from "views/corporate_travel_policy_management"
+
+// User Management Corporate
+import CorporateUserManagementTable from "views/corporate_user_management/table"
+import CorporateUserManagementForm from "views/corporate_user_management/form"
+
+// Corporate Travel Purpose
+import CorporateTravelPurposeTable from "views/corporate_travel_purpose/table"
+import CorporateTravelPurposeForm from "views//corporate_travel_purpose/form"
 
 const RouteWithProps = ({
   path,
@@ -793,11 +800,28 @@ const DashboardRoutes = () => {
 
         {/* Corporate Travel Policy */}
         <Route exact path="/master/corporate-travel-policy">
-          <CorporateTravelPolicy />
+          <CorporateTravelPolicyMangement />
         </Route>
+
+        {/* Corporate User Management */}
+        <Route exact path="/master/corporate-user-management">
+          <CorporateUserManagementTable />
+        </Route>
+        <Route path="/master/corporate-user-management/form/:id?">
+          <CorporateUserManagementForm />
+        </Route>
+
         {/* <Route exact path="/master/corporate-travel-policy/form/:id?">
           <CorporateTravelPolicyForm />
         </Route> */}
+
+        {/* Corporate Travel Purpose */}
+        <Route exact path="/master/corporate-travel-purpose">
+          <CorporateTravelPurposeTable />
+        </Route>
+        <Route path="/master/corporate-travel-purpose/form/:id?">
+          <CorporateTravelPurposeForm />
+        </Route>
       </Switch>
     </DashboardWrapper>
   )

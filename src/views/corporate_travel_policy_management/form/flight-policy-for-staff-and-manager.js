@@ -13,6 +13,7 @@ import Select from "components/form/select"
 import FormikControl from "../../../components/formik/formikControl"
 import _ from "lodash"
 import NumberFormat from "react-number-format"
+import "../style.scss"
 
 const endpoint = "/master/configurations/standard-services"
 
@@ -235,9 +236,7 @@ function FlightPolicy(props) {
       }) => (
         <Form onSubmit={handleSubmit} className="ml-2">
           <Form.Group as={Row} className="form-group">
-            <Form.Label column sm={3}>
               Destination<span className="form-label-required">*</span>
-            </Form.Label>
             <Col sm={8}>
               <FastField name="task_type">
                 {({ field, form }) => (
@@ -276,7 +275,9 @@ function FlightPolicy(props) {
               </FastField>
             </Col>
           </Form.Group>
-
+          <Col className="policy-class-modal-title">
+            <h6>CABIN CLASS</h6>
+          </Col>
           <Form.Group as={Row} className="form-group">
             <Form.Label column md={3} lg={4}>
               Message Type<span className="form-label-required">*</span>
@@ -312,14 +313,12 @@ function FlightPolicy(props) {
               </FastField>
             </Col>
           </Form.Group>
-
           <Row>
             <Col sm={12} md={12} lg={8}>
               <Form.Group as={Row} className="form-group" id="accordion">
                 <Col sm={12} md={10}>
                   <Form.Group className="mb-3">
                     <h>Differentiate Short and Long Flights?</h>
-
                     <Row className="form-group mb-0">
                       <Col className="ml-0">
                         <FormikControl
@@ -333,23 +332,22 @@ function FlightPolicy(props) {
                         />
                       </Col>
                     </Row>
-                    
                     <Row>
-                        <Collapse in={RecurringReminderType} id="headingOne">
-                          <Form.Check
-                            inline
-                            className="mt-2 ml-5"
-                            label="Yes"
-                            name="group1"
-                            type="radio"
-                            id="inline-tek-2"
-                            data-toggle="collapse"
-                            data-target="#collapseOne"
-                            aria-expanded="true"
-                            aria-controls="collapseOne"
-                          />
-                        </Collapse>
-                        <Col
+                      <Collapse in={RecurringReminderType} id="headingOne">
+                        <Form.Check
+                          inline
+                          className="mt-2 ml-5"
+                          label="Yes"
+                          name="group1"
+                          type="radio"
+                          id="inline-tek-2"
+                          data-toggle="collapse"
+                          data-target="#collapseOne"
+                          aria-expanded="true"
+                          aria-controls="collapseOne"
+                        />
+                      </Collapse>
+                      <Col
                         sm={12}
                         md={6}
                         className="mt-3 ml-5 collapse"
@@ -358,21 +356,33 @@ function FlightPolicy(props) {
                         data-parent="#accordion"
                       >
                         <Form.Group as={Row} className="mb-xl-3">
-                        <div>
-                          <table >
-                          <tr>
-                            <th style={{border:"1px solid #B5B5B5"}}>Comfort</th>
-                            <th style={{border:"1px solid #B5B5B5"}}>Short Flight<span> - Up to 8 hours</span></th>
-                            <th style={{border:"1px solid #B5B5B5"}}>Long Flight<span> - Over 8 hours</span></th>
-                          </tr>
-                          <tr>
-                            <td style={{border:"1px solid #B5B5B5"}}>Cabin Class</td>
-                            <td style={{border:"1px solid #B5B5B5"}}>Flight Short</td>
-                            <td style={{border:"1px solid #B5B5B5"}}>Flight Long</td>
-                          </tr>
-                          </table>
-                        </div>
-                         </Form.Group>
+                          <div>
+                            <table>
+                              <tr>
+                                <th style={{ border: "1px solid #B5B5B5" }}>
+                                  Comfort
+                                </th>
+                                <th style={{ border: "1px solid #B5B5B5" }}>
+                                  Short Flight<span> - Up to 8 hours</span>
+                                </th>
+                                <th style={{ border: "1px solid #B5B5B5" }}>
+                                  Long Flight<span> - Over 8 hours</span>
+                                </th>
+                              </tr>
+                              <tr>
+                                <td style={{ border: "1px solid #B5B5B5" }}>
+                                  Cabin Class
+                                </td>
+                                <td style={{ border: "1px solid #B5B5B5" }}>
+                                  Flight Short
+                                </td>
+                                <td style={{ border: "1px solid #B5B5B5" }}>
+                                  Flight Long
+                                </td>
+                              </tr>
+                            </table>
+                          </div>
+                        </Form.Group>
                       </Col>
 
                       <Collapse in={RecurringReminderType} id="headingTwo">
@@ -396,23 +406,116 @@ function FlightPolicy(props) {
                         id="collapseTwo"
                       >
                         <Form.Group as={Row} className="mb-xs-3">
-                          <div
-                            style={{
-                              backgroundColor: "#425778",
-                              color: "white",
-                            }}
-                          >
-                            Collapse Two
+                          <div>
+                            <table>
+                              <tr>
+                                <th style={{ border: "1px solid #B5B5B5" }}>
+                                  COMFORT
+                                </th>
+                                <th style={{ border: "1px solid #B5B5B5" }}>
+                                  SHORT FLIGHT<span> - Up to 8 hours</span>
+                                </th>
+                              </tr>
+                              <tr>
+                                <td style={{ border: "1px solid #B5B5B5" }}>
+                                  Highest Cabin Class
+                                </td>
+                                <td style={{ border: "1px solid #B5B5B5" }}>
+                                  Flight Short
+                                </td>
+                              </tr>
+                            </table>
                           </div>
                         </Form.Group>
                       </Col>
-                      
                     </Row>
                   </Form.Group>
                 </Col>
               </Form.Group>
             </Col>
           </Row>
+          <Col className="policy-class-modal-title">
+            <h6>PREFERRED AIRLINES</h6>
+            <Col md={10} lg={8} className="d-flex">
+              <span>Select preferred airlines</span>
+              <FastField name="task_type">
+                {({ field, form }) => (
+                  <div style={{ maxWidth: 200 }}>
+                    <SelectAsync
+                      {...field}
+                      isClearable
+                      isDisabled={isView}
+                      url={`master/task-types`}
+                      fieldName="task_type_name"
+                      onChange={(v) => {
+                        setFieldValue("task_type", v)
+                      }}
+                      placeholder="Please choose"
+                      className={`react-select ${
+                        form.touched.task_type && form.errors.task_type
+                          ? "is-invalid"
+                          : null
+                      }`}
+                      components={
+                        isView
+                          ? {
+                              DropdownIndicator: () => null,
+                              IndicatorSeparator: () => null,
+                            }
+                          : null
+                      }
+                    />
+                    {form.touched.task_type && form.errors.task_type && (
+                      <Form.Control.Feedback type="invalid">
+                        {form.touched.task_type ? form.errors.task_type : null}
+                      </Form.Control.Feedback>
+                    )}
+                  </div>
+                )}
+              </FastField>
+            </Col>
+          </Col>
+          <Col className="policy-class-modal-title">
+            <h6>RESTRICTED AIRLINES</h6>
+            <Col md={10} lg={8} className="d-flex">
+            <span>Select restricted airlines</span>
+              <FastField name="task_type">
+                {({ field, form }) => (
+                  <div style={{ maxWidth: 200 }}>
+                    <SelectAsync
+                      {...field}
+                      isClearable
+                      isDisabled={isView}
+                      url={`master/task-types`}
+                      fieldName="task_type_name"
+                      onChange={(v) => {
+                        setFieldValue("task_type", v)
+                      }}
+                      placeholder="Please choose"
+                      className={`react-select ${
+                        form.touched.task_type && form.errors.task_type
+                          ? "is-invalid"
+                          : null
+                      }`}
+                      components={
+                        isView
+                          ? {
+                              DropdownIndicator: () => null,
+                              IndicatorSeparator: () => null,
+                            }
+                          : null
+                      }
+                    />
+                    {form.touched.task_type && form.errors.task_type && (
+                      <Form.Control.Feedback type="invalid">
+                        {form.touched.task_type ? form.errors.task_type : null}
+                      </Form.Control.Feedback>
+                    )}
+                  </div>
+                )}
+              </FastField>
+            </Col>
+          </Col>
 
           {!props.hideButton && (
             <div
