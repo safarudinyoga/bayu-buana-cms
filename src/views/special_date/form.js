@@ -250,8 +250,8 @@ function SpecialDateForm(props) {
                 if(date.length > 0) {
                   setForm({
                     ...form,
-                    start_date: date[0],
-                    end_date: date[1]
+                    start_date: new Date(date[0]),
+                    end_date: new Date(date[1])
                   })
                 } else {
                   setForm({

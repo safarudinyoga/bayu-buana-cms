@@ -21,20 +21,21 @@ export default function IntegrationMessageTable() {
     columns: [
       {
         title: "Messages",
-        data: "message_name",
+        data: "event_name",
       },
       {
         title: "Partner Messages Code",
-        data: "message_id",
+        data: "event_code",
       },
       {
         title: "Partner Messages Name",
-        data: "message_name",
+        data: "event_name",
       },
     ],
     emptyTable: "No Messages found",
-    recordName: ["message_name", "message_id", "message_name"],
-    searchText: "Search"
+    recordName: ["event_name", "event_code"],
+    searchText: "Search",
+    customSort: ["event_name"]
   })
 
   return (

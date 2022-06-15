@@ -27,7 +27,7 @@ function DeleteForm(props) {
     if(formId) {
       try {
         console.log("MASUK KESINI")
-        let {data} = await API.get(`/master/integration-partners/${props.match.params.id}/cabins/${formId}`)
+        let {data} = await API.get(`/master/integration-partners/${props.match.params.id}/cabin-types/${formId}`)
         setFormValues(data)
       } catch(e) {
         console.log(e)
@@ -55,7 +55,7 @@ function DeleteForm(props) {
 	
 	const onSubmit = async (values, a) => {
 		try {
-      let res = await API.delete(`/master/integration-partners/${props.match.params.id}/cabins/${id}`)
+      let res = await API.delete(`/master/integration-partners/${props.match.params.id}/cabin-types/${id}`)
       dispatch(setModalDelete({show: false, id: null, disabled_form: false}))
       dispatch(
 				setAlert({

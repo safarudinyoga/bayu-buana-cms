@@ -104,7 +104,6 @@ const DateRangePicker = ({value, onChange= ()=>{}, minDate, maxDate, placeholder
           disabled={form.length < 2}
           onClick={
             () => {
-              console.log(form, "yyy")
               setStartDateClose(true, () => {
                 datePickerRef.current.closeCalendar()
                 onChange(form)
