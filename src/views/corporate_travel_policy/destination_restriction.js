@@ -4,7 +4,7 @@ import { Card } from "react-bootstrap"
 import { useDispatch } from 'react-redux'
 import { setUIParams } from "redux/ui-store"
 import BBDataTable from "../../components/table/bb-data-table"
-import Form from "./form/identity-rule"
+import Form from "./form/destination-restriction-form.js"
 import "./style.scss"
 
 const DestinationRestriction = (props) => {
@@ -63,6 +63,7 @@ const DestinationRestriction = (props) => {
     isCheckbox: false,
     switchStatus: true,
     isHideSearch: true,
+    createOnModal: true,
   }
 
   return (
@@ -70,7 +71,7 @@ const DestinationRestriction = (props) => {
         <Card.Body className="px-1 px-md-4 destination-title">
           <h3>Destinations Restrictions</h3>
           <p>Set destination travel restriction policy</p>
-          <BBDataTable {...params} modalContent={Form} modalSize="lg"  />
+          <BBDataTable {...params} modalContent={Form} modalSize="md"  />
         </Card.Body>
       </Card>
   )

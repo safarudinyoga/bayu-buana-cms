@@ -35,7 +35,7 @@ const HotelForm = (props) => {
   const [taxTypeInternationalHotel, setTaxTypeInternationalHotel] = useState([])
   const [taxTypeInternationalNonGds, setTaxTypeInternationalNonGds] = useState([])
   const [taxTypeInternationalRefund, setTaxTypeInternationalRefund] = useState([])
-  const [taxTypeInternationalFrp, setTaxTypeInternationalFrp] = useState([])
+  const [taxTypeInternationalRfp, setTaxTypeInternationalRfp] = useState([])
   const [taxTypeOtherEmergency, setTaxTypeOtherEmergency] = useState([])
   
   const [taxIdDomesticHotel, setTaxIdDomesticHotel] = useState("")
@@ -45,7 +45,7 @@ const HotelForm = (props) => {
   const [taxIdInternationalHotel, setTaxIdInternationalHotel] = useState("")
   const [taxIdInternationalNonGds, setTaxIdInternationalNonGds] = useState("")
   const [taxIdInternationalRefund, setTaxIdInternationalRefund] = useState("")
-  const [taxIdInternationalFrp, setTaxIdInternationalFrp] = useState("")
+  const [taxIdInternationalRfp, setTaxIdInternationalRfp] = useState("")
   const [taxIdOtherEmergency, setTaxIdOtherEmergency] = useState("")
   useEffect(async () => {
     let api = new Api()
@@ -80,7 +80,7 @@ const HotelForm = (props) => {
     getFeeTaxType("47", setTaxTypeDomesticNonGds, setTaxIdDomesticNonGds)
     getFeeTaxType("44", setTaxTypeInternationalHotel, setTaxIdInternationalHotel)
     getFeeTaxType("46", setTaxTypeInternationalRefund, setTaxIdInternationalRefund)
-    getFeeTaxType("40", setTaxTypeInternationalFrp, setTaxIdInternationalFrp)
+    getFeeTaxType("40", setTaxTypeInternationalRfp, setTaxIdInternationalRfp)
     getFeeTaxType("48", setTaxTypeInternationalNonGds, setTaxIdInternationalNonGds)
     getFeeTaxType("6", setTaxTypeOtherEmergency, setTaxIdOtherEmergency)
   }, [props.match.params.id])
@@ -101,12 +101,12 @@ const HotelForm = (props) => {
     domestic_refund_amount_type: "",
     domestic_refund_percent: "",
     domestic_refund_tax_include: false,
-    domestic_frp: "",
-    domestic_frp_fee_tax_id: "",
-    domestic_frp_amount: "",
-    domestic_frp_amount_type: "",
-    domestic_frp_percent: "",
-    domestic_frp_tax_include: false,
+    domestic_rfp: "",
+    domestic_rfp_fee_tax_id: "",
+    domestic_rfp_amount: "",
+    domestic_rfp_amount_type: "",
+    domestic_rfp_percent: "",
+    domestic_rfp_tax_include: false,
     domestic_non_gds: "",
     domestic_non_gds_fee_tax_id: "",
     domestic_non_gds_amount: "",
@@ -125,12 +125,12 @@ const HotelForm = (props) => {
     international_refund_amount_type: "",
     international_refund_percent: "",
     international_refund_tax_include: false,
-    international_frp: "",
-    international_frp_fee_tax_id: "",
-    international_frp_amount: "",
-    international_frp_amount_type: "",
-    international_frp_percent: "",
-    international_frp_tax_include: false,
+    international_rfp: "",
+    international_rfp_fee_tax_id: "",
+    international_rfp_amount: "",
+    international_rfp_amount_type: "",
+    international_rfp_percent: "",
+    international_rfp_tax_include: false,
     international_non_gds: "",
     international_non_gds_fee_tax_id: "",
     international_non_gds_amount: "",
@@ -184,21 +184,21 @@ const HotelForm = (props) => {
         is: value => value === "percent",
         then: Yup.string().required(`Please enter percentage for ${taxTypeDomesticRefund.fee_tax_type_name}.`)
       }),
-    domestic_frp: Yup
+    domestic_rfp: Yup
       .string()
       .required(`Please enter fixed amount or percentage for ${taxTypeDomesticRfp.fee_tax_type_name}.`),
-    domestic_frp_amount: Yup
-      .string().when('domestic_frp', {
+    domestic_rfp_amount: Yup
+      .string().when('domestic_rfp', {
         is: value => value === "amount",
         then: Yup.string().required(`Please enter fixed amount for ${taxTypeDomesticRfp.fee_tax_type_name}.`)
       }),
-    domestic_frp_amount_type: Yup
-      .string().when('domestic_frp', {
+    domestic_rfp_amount_type: Yup
+      .string().when('domestic_rfp', {
         is: value => value === "amount",
         then: Yup.string().required(`Please select charge type.`)
       }),
-    domestic_frp_percent: Yup
-      .string().when('domestic_frp', {
+    domestic_rfp_percent: Yup
+      .string().when('domestic_rfp', {
         is: value => value === "percent",
         then: Yup.string().required(`Please enter percentage for ${taxTypeDomesticRfp.fee_tax_type_name}.`)
       }),
@@ -256,23 +256,23 @@ const HotelForm = (props) => {
         is: value => value === "percent",
         then: Yup.string().required(`Please enter percentage for ${taxTypeInternationalRefund.fee_tax_type_name}.`)
       }),
-    international_frp: Yup
+    international_rfp: Yup
       .string()
-      .required(`Please enter fixed amount or percentage for ${taxIdInternationalFrp.fee_tax_type_name}.`),
-    international_frp_amount: Yup
-      .string().when('international_frp', {
+      .required(`Please enter fixed amount or percentage for ${taxTypeInternationalRfp.fee_tax_type_name}.`),
+    international_rfp_amount: Yup
+      .string().when('international_rfp', {
         is: value => value === "amount",
-        then: Yup.string().required(`Please enter fixed amount for ${taxIdInternationalFrp.fee_tax_type_name}.`)
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeInternationalRfp.fee_tax_type_name}.`)
       }),
-    international_frp_amount_type: Yup
-      .string().when('international_frp', {
+    international_rfp_amount_type: Yup
+      .string().when('international_rfp', {
         is: value => value === "amount",
         then: Yup.string().required(`Please select charge type.`)
       }),
-    international_frp_percent: Yup
-      .string().when('international_frp', {
+    international_rfp_percent: Yup
+      .string().when('international_rfp', {
         is: value => value === "percent",
-        then: Yup.string().required(`Please enter percentage for ${taxIdInternationalFrp.fee_tax_type_name}.`)
+        then: Yup.string().required(`Please enter percentage for ${taxTypeInternationalRfp.fee_tax_type_name}.`)
       }),
     international_non_gds: Yup
       .string()
@@ -333,12 +333,12 @@ const HotelForm = (props) => {
           domestic_refund_amount_type: data.domestic_refund.charge_type_id,
           domestic_refund_percent: data.domestic_refund.percent,
           domestic_refund_tax_include: data.domestic_refund.is_tax_inclusive,
-          domestic_frp: checkprocessingType(data.domestic_frp.charge_type_id),
-          domestic_frp_fee_tax_id: data.domestic_frp.fee_tax_type_id,
-          domestic_frp_amount: data.domestic_frp.amount,
-          domestic_frp_amount_type: data.domestic_frp.charge_type_id,
-          domestic_frp_percent: data.domestic_frp.percent,
-          domestic_frp_tax_include: data.domestic_frp.is_tax_inclusive,
+          domestic_rfp: checkprocessingType(data.domestic_rfp.charge_type_id),
+          domestic_rfp_fee_tax_id: data.domestic_rfp.fee_tax_type_id,
+          domestic_rfp_amount: data.domestic_rfp.amount,
+          domestic_rfp_amount_type: data.domestic_rfp.charge_type_id,
+          domestic_rfp_percent: data.domestic_rfp.percent,
+          domestic_rfp_tax_include: data.domestic_rfp.is_tax_inclusive,
           domestic_non_gds: checkprocessingType(data.domestic_non_gds.charge_type_id),
           domestic_non_gds_fee_tax_id: data.domestic_non_gds.fee_tax_type_id,
           domestic_non_gds_amount: data.domestic_non_gds.amount,
@@ -357,12 +357,12 @@ const HotelForm = (props) => {
           international_refund_amount_type: data.international_refund.charge_type_id,
           international_refund_percent: data.international_refund.percent,
           international_refund_tax_include: data.international_refund.is_tax_inclusive,
-          international_frp: checkprocessingType(data.international_frp.charge_type_id),
-          international_frp_fee_tax_id: data.international_frp.fee_tax_type_id,
-          international_frp_amount: data.international_frp.amount,
-          international_frp_amount_type: data.international_frp.charge_type_id,
-          international_frp_percent: data.international_frp.percent,
-          international_frp_tax_include: data.international_frp.is_tax_inclusive,
+          international_rfp: checkprocessingType(data.international_rfp.charge_type_id),
+          international_rfp_fee_tax_id: data.international_rfp.fee_tax_type_id,
+          international_rfp_amount: data.international_rfp.amount,
+          international_rfp_amount_type: data.international_rfp.charge_type_id,
+          international_rfp_percent: data.international_rfp.percent,
+          international_rfp_tax_include: data.international_rfp.is_tax_inclusive,
           international_non_gds: checkprocessingType(data.international_non_gds.charge_type_id),
           international_non_gds_fee_tax_id: data.international_non_gds.fee_tax_type_id,
           international_non_gds_amount: data.international_non_gds.amount,
@@ -432,12 +432,12 @@ const HotelForm = (props) => {
           charge_type_id:values.domestic_refund == "amount" ? values.domestic_refund_amount_type : "00000000-0000-0000-0000-000000000000",
           is_tax_inclusive:values.domestic_refund == "amount" ? false : values.domestic_refund_tax_include,
         },
-        domestic_frp: {
+        domestic_rfp: {
           fee_tax_type_id: taxIdDomesticRfp,
-          amount: values.domestic_frp == "amount" ? removeSeparator(values.domestic_frp_amount) : 0,
-          percent:values.domestic_frp == "amount" ? 0 : parseFloat(values.domestic_frp_percent),
-          charge_type_id:values.domestic_frp == "amount" ? values.domestic_frp_amount_type : "00000000-0000-0000-0000-000000000000",
-          is_tax_inclusive:values.domestic_frp == "amount" ? false : values.domestic_frp_tax_include,
+          amount: values.domestic_rfp == "amount" ? removeSeparator(values.domestic_rfp_amount) : 0,
+          percent:values.domestic_rfp == "amount" ? 0 : parseFloat(values.domestic_rfp_percent),
+          charge_type_id:values.domestic_rfp == "amount" ? values.domestic_rfp_amount_type : "00000000-0000-0000-0000-000000000000",
+          is_tax_inclusive:values.domestic_rfp == "amount" ? false : values.domestic_rfp_tax_include,
         },
         domestic_non_gds: {
           fee_tax_type_id: taxIdDomesticNonGds,
@@ -460,12 +460,12 @@ const HotelForm = (props) => {
           charge_type_id:values.international_refund == "amount" ? values.international_refund_amount_type : "00000000-0000-0000-0000-000000000000",
           is_tax_inclusive:values.international_refund == "amount" ? false : values.international_refund_tax_include,
         },
-        international_frp: {
-          fee_tax_type_id: taxIdInternationalFrp,
-          amount: values.international_frp == "amount" ? removeSeparator(values.international_frp_amount) : 0,
-          percent:values.international_frp == "amount" ? 0 : parseFloat(values.international_frp_percent),
-          charge_type_id:values.international_frp == "amount" ? values.international_frp_amount_type : "00000000-0000-0000-0000-000000000000",
-          is_tax_inclusive:values.international_frp == "amount" ? false : values.international_frp_tax_include,
+        international_rfp: {
+          fee_tax_type_id: taxIdInternationalRfp,
+          amount: values.international_rfp == "amount" ? removeSeparator(values.international_rfp_amount) : 0,
+          percent:values.international_rfp == "amount" ? 0 : parseFloat(values.international_rfp_percent),
+          charge_type_id:values.international_rfp == "amount" ? values.international_rfp_amount_type : "00000000-0000-0000-0000-000000000000",
+          is_tax_inclusive:values.international_rfp == "amount" ? false : values.international_rfp_tax_include,
         },
         international_non_gds: {
           fee_tax_type_id: taxIdInternationalNonGds,
@@ -590,12 +590,12 @@ const HotelForm = (props) => {
                         {
                           title:"Domestic RFP Fee (Contact Fee)",
                           taxType:taxTypeDomesticRfp,
-                          fieldFeeTaxId:"domestic_frp_fee_tax_id",
-                          fieldRadio:"domestic_frp",
-                          fieldAmount:"domestic_frp_amount",
-                          fieldAmountType:"domestic_frp_amount_type",
-                          fieldPercent:"domestic_frp_percent",
-                          fieldIncludeTax:"domestic_frp_tax_include"
+                          fieldFeeTaxId:"domestic_rfp_fee_tax_id",
+                          fieldRadio:"domestic_rfp",
+                          fieldAmount:"domestic_rfp_amount",
+                          fieldAmountType:"domestic_rfp_amount_type",
+                          fieldPercent:"domestic_rfp_percent",
+                          fieldIncludeTax:"domestic_rfp_tax_include"
                         },
                         {
                           title:"Domestic Non-GDS Hotel Booking Process Fee",
@@ -631,13 +631,13 @@ const HotelForm = (props) => {
                         },
                         {
                           title:"International RFP Fee (Contact Fee)",
-                          taxType:taxTypeInternationalFrp,
-                          fieldFeeTaxId:"international_frp_fee_tax_id",
-                          fieldRadio:"international_frp",
-                          fieldAmount:"international_frp_amount",
-                          fieldAmountType:"international_frp_amount_type",
-                          fieldPercent:"international_frp_percent",
-                          fieldIncludeTax:"international_frp_tax_include"
+                          taxType:taxTypeInternationalRfp,
+                          fieldFeeTaxId:"international_rfp_fee_tax_id",
+                          fieldRadio:"international_rfp",
+                          fieldAmount:"international_rfp_amount",
+                          fieldAmountType:"international_rfp_amount_type",
+                          fieldPercent:"international_rfp_percent",
+                          fieldIncludeTax:"international_rfp_tax_include"
                         },
                         {
                           title:"International Non-GDS Hotel Booking Process Fee",
