@@ -469,7 +469,7 @@ const GeneralInformation = (props) => {
           label: data.country_name,
           value: data.id,
         })
-        // setSelectPermanentCountry(options)
+        setSelectPermanentCountry(options)
       })
     } catch (e) {}
   }, [])
@@ -1634,7 +1634,7 @@ const GeneralInformation = (props) => {
                       Country <span className="form-label-required">*</span>
                     </Form.Label>
                     <Col sm={9}>
-                      {selectPermanentCountry.length !== 0 && (
+                      {/* {selectPermanentCountry.length !== 0 && ( */}
                         <div style={{ maxWidth: 300 }}>
                           <SelectAsync
                             isClearable
@@ -1685,7 +1685,7 @@ const GeneralInformation = (props) => {
                             </>
                           )}
                         </div>
-                      )}
+                      {/* )} */}
                     </Col>
                   </Form.Group>
                   <Form.Group as={Row} className="form-group">
