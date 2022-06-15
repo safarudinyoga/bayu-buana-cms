@@ -17,7 +17,7 @@ const IdentityRule = (props) => {
             text: "Setup and Configuration",
           },
           {
-            text: "Identity Rule",
+            text: "General Setup",
           },
         ],
       }),
