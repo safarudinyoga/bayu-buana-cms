@@ -31,10 +31,12 @@ const FeeTaxes = (props) => {
   const duplicateValue = async(fieldName, value) => {
     let filters = encodeURIComponent(JSON.stringify([[fieldName,"=",value],["AND"],["integration_partner_id",id],["AND"],["status",1]]))
     let res = await api.get(endpoint + "/" + id + "/fee-taxes?" + `filters=${filters}`)
-    let sameId = res.data.items.find((v) => v.id === feeTaxId)
-    if(!sameId) return res.data.items.length === 0 
 
-    return true
+    if(feeTaxId){
+      return res.data.items.length === 0 || value === formValues[fieldName] || formValues[fieldName].value
+    } else {
+      return res.data.items.length === 0
+    }
 }
 
 Yup.addMethod(Yup.object, 'uniqueValueObject', function (fieldName, message) {
