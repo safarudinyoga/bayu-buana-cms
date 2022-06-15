@@ -217,8 +217,8 @@ import CorporateUserAccessTypeTable from "views/corporate_user_access_type/table
 import CorporateUserAccessTypeForm from "views/corporate_user_access_type/form"
 
 
-// Travel Policy Corporate
-import CorporateTravelPolicy from "views/corporate_travel_policy"
+// Travel Policy Management Corporate
+import CorporateTravelPolicyMangement from "views/corporate_travel_policy_management"
 
 // User Management Corporate
 import CorporateUserManagementTable from "views/corporate_user_management/table"
@@ -796,7 +796,7 @@ const DashboardRoutes = () => {
 
         {/* Corporate Travel Policy */}
         <Route exact path="/master/corporate-travel-policy">
-          <CorporateTravelPolicy />
+          <CorporateTravelPolicyMangement />
         </Route>
 
         {/* Corporate User Management */}
