@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom"
 import BBDataTable from "components/table/bb-data-table"
 import { Card } from "react-bootstrap"
 import Form from "./form"
-import FormDelete from "./form-delete"
+// import FormDelete from "./form-delete"
 
 export default function IntegrationPartnerMealPlansTable() {
   const param = useParams()
@@ -13,12 +13,13 @@ export default function IntegrationPartnerMealPlansTable() {
     showAdvancedOptions: false,
     createOnModal: true,
     hideDetail: true,
-    modalDelete: true,
+    // modalDelete: true,
     title: "Partner Meal Plans",
     titleModal: "Partner Meal Plans",
     baseRoute: "/master/integration-partner-meal-plans/form",
     endpoint: `/master/integration-partners/${id}/meal-plans`,
-    deleteEndpoint: "master/batch-actions/delete/master/integration-partner-meal-plan-types",
+    // deleteEndpoint: "master/batch-actions/delete/master/integration-partner-meal-plan-types",
+    deleteEndpoint: `/master/integration-partners/${id}/meal-plans`,
     btnDownload: ".buttons-csv",
     columns: [
       {
@@ -35,7 +36,11 @@ export default function IntegrationPartnerMealPlansTable() {
       },
     ],
     emptyTable: "No Partner Meal Plans found",
-    recordName: ["meal_plan_type_name"],
+    recordName: ["integration_partner_meal_plan_type.meal_plan_type_name"],
+    showInfoDelete: true,
+    infoDelete: [
+      {title: "Partner Meal Plan Name", recordName: "integration_partner_meal_plan_type.meal_plan_type_name"}, 
+    ],
     searchText: "Search",
     module: "partner-meal-plan",
   })
@@ -45,7 +50,7 @@ export default function IntegrationPartnerMealPlansTable() {
       <Card>
         <Card.Body>
           <h3 className="card-heading">Partner Meal Plans</h3>
-          <BBDataTable {...params} modalContent={Form} modalDeleteContent={FormDelete} />
+          <BBDataTable {...params} modalContent={Form} />
           {/* test */}
         </Card.Body>
       </Card>
