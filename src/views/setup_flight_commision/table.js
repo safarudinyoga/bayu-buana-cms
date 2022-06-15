@@ -30,6 +30,39 @@ export default function SetupFlightCommisionTable() {
 
   const [selectedDeparture, setSelectedDeparture] = useState([])
 
+  const onChangeIssue = (date) => {
+    let findFilter = params.filters
+      ? params.filters.filter((v) => v[0] !== "commission_claim_issue_date.start_date" && v[0] !== "commission_claim_issue_date.end_date")
+      : []
+
+    if(date.length > 0) {
+      setParams({
+        ...params,
+        filters: [...findFilter, ["commission_claim_issue_date.start_date","like",`${convertTZ(date[0])}`],["commission_claim_issue_date.end_date","like",`${convertTZ(date[1])}`]]
+      })
+    }
+    setSelectedIssue(date)
+  }
+
+  const onChangeDeparture = (date) => {
+    let findFilter = params.filters
+      ? params.filters.filter((v) => v[0] !== "commission_claim_departure_date.start_date" && v[0] !== "commission_claim_departure_date.end_date")
+      : []
+
+    if(date.length > 0) {
+      setParams({
+        ...params,
+        filters: [...findFilter, ["commission_claim_departure_date.start_date","like",`${convertTZ(date[0])}`],["commission_claim_departure_date.end_date","like",`${convertTZ(date[1])}`]]
+      })
+    }
+    setSelectedDeparture(date)
+  }
+
+  const convertTZ = (date) => {
+    let formatDate = new Date(date)
+    return moment(formatDate).format("YYYY-MM-DD")
+  }
+
   const extraFilter = () => {
     return (
       <>
@@ -42,7 +75,7 @@ export default function SetupFlightCommisionTable() {
                 maxDate={1} 
                 value={selectedIssue}
                 placeholder={"dd/mm/yyyy"}
-                onChange={(date) => setSelectedIssue(date)}
+                onChange={(date) => onChangeIssue(date)}
               />
             </div>
           </div>
@@ -56,7 +89,7 @@ export default function SetupFlightCommisionTable() {
                 maxDate={1} 
                 value={selectedDeparture}
                 placeholder={"dd/mm/yyyy"}
-                onChange={(date) => setSelectedDeparture(date)}
+                onChange={(date) => onChangeDeparture(date)}
               />
             </div>
           </div>
@@ -90,7 +123,7 @@ export default function SetupFlightCommisionTable() {
    return `${origin} - ${destination}`
   }
 
-  let [params, setParams] = {
+  let [params, setParams] = useState({
     title: "Setup Flight Commision",
     baseRoute: "/master/setup-flight-commission/form",
     endpoint: "/master/commission-claims",
@@ -152,7 +185,7 @@ export default function SetupFlightCommisionTable() {
     isShowStatus: false,
     hideDetail: true,
     searchText: "Search"
-  }
+  })
 
 
   return <BBDataTable {...params} extraFilter={extraFilter} onReset={onReset}/>
