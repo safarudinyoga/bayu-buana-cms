@@ -224,7 +224,7 @@ class BBDataTable extends Component {
             }" id="customSwitch${
                 row.id
               }" ${checked} data-action="update_status">
-            <label class="custom-control-label mt-2" for="customSwitch${
+            <label class="custom-control-label" for="customSwitch${
               row.id
             }" data-action="update_status"></label>
           </a>
