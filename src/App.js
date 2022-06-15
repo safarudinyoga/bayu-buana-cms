@@ -217,7 +217,8 @@ import CorporateDivisionHierarchy from "views/corporate_division/hierarchy"
 import CorporateTravelPolicy from "views/corporate_travel_policy"
 
 //corporate profile
-import CorporateProfile from "views/corporate_profile/index"
+import CorporateProfile from "views/corporate_profile/corporate-profile"
+import CorporateProfileForm from "views/corporate_profile/form/index"
 
 const RouteWithProps = ({
   path,
@@ -770,8 +771,11 @@ const DashboardRoutes = () => {
           <TaxFeeForm />
         </Route>
         {/* Corporate Profile */}
-        <Route path="/master/corporate-profile">
+        <Route exact path="/master/corporate-profile">
           <CorporateProfile />
+        </Route>
+        <Route path="/master/corporate-profile/form/:id?">
+          <CorporateProfileForm />
         </Route>
         {/* Corporate Division */}
         <Route exact path="/master/corporate-divisions">
