@@ -1120,11 +1120,11 @@ class BBDataTable extends Component {
       })
     $.fn.DataTable.ext.pager.numbers_length = 5
 
-    const { showCreateModal, modalTitle, modalTitleNew, showModalDelete, showCreateNewModal, createNewModal, createOnModal, module, deleteEndpoint } = this.props
+    const { showCreateModal, modalTitle, modalTitleNew, showModalDelete, showCreateNewModal, createNewModal, createOnModal, module, deleteEndpoint, showModalHeader = true} = this.props
     return (
       <div ref={this.wrapper}>
         <Modal show={this.state.isOpen}>
-          {this.props.showModalHeader ?
+          {showModalHeader ?
             <ModalHeader>
             Delete{" "}
             {this.props.titleModal

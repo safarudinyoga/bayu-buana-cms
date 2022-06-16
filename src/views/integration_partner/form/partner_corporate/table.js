@@ -36,6 +36,7 @@ export default function IntegrationPartnerCorporateTable() {
     module: "integration-partner-corporate",
     searchText: "Search",
     customSort: ["id"],
+    showModalHeader: false,
   }
 
   return (
