@@ -43,6 +43,7 @@ export default function IntegrationPartnerMealPlansTable() {
     ],
     searchText: "Search",
     module: "partner-meal-plan",
+    showModalHeader: false,
   })
 
   return (

@@ -1124,14 +1124,17 @@ class BBDataTable extends Component {
     return (
       <div ref={this.wrapper}>
         <Modal show={this.state.isOpen}>
-          <ModalHeader>
+          {this.props.showModalHeader ?
+            <ModalHeader>
             Delete{" "}
             {this.props.titleModal
               ? this.state.deleteType === "single"
                 ? this.props.titleModal
                 : this.props.title
               : this.props.title}
-          </ModalHeader>
+          </ModalHeader> : ""
+          }
+          
           <ModalBody>Are you sure you want to delete {
             this.props.showInfoDelete ? this.state.selected.length > 0 ? "this" : `'${this.state.info}'` : "this"
           }?</ModalBody>
