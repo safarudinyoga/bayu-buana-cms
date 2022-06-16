@@ -804,10 +804,10 @@ const DashboardRoutes = () => {
         </Route>
 
         {/* Corporate Division */}
-        <Route exact path="/master/corporate-user-access-type">
+        <Route exact path="/master/corporate-user-type">
           <CorporateUserAccessTypeTable />
         </Route>
-        <Route path="/master/corporate-user-access-type/form/:id?">
+        <Route path="/master/corporate-user-type/form/:id?">
           <CorporateUserAccessTypeForm />
         </Route>
 

@@ -170,11 +170,27 @@ class BBDataTable extends Component {
               let infoDelete = self.props.infoDelete
               let info = ""
 
-              // dynamicly accessing nested object with notation
-              const pathNotation = (path, obj) => {
-                return path.split(".").reduce(function (prev, curr) {
-                  return prev ? prev[curr] : null
-                }, obj || self)
+        if(infoDelete) {
+          info = infoDelete.map(v => {
+            let data = v.recordName
+            // console.log("ini data", data)
+            let result = Array.isArray(data);
+            // console.log("ini result", result)
+            let title = ""
+            if(result){
+              title = data.map(v => row[v]).join(" ")
+            } else {
+              if (module === 'manage-corporate') {
+                title = pathNotation(data, row)
+              } else {
+                data = data.split(".")
+                if(data.length > 1) {
+                  title = row[data[0]][data[1]]
+                } else {
+                  title = row[data]
+                }
+                // console.log("ini row", row)
+                // console.log("ini title", title)
               }
 
               if (infoDelete) {

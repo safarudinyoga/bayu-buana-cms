@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import Form from "./form";
 import { Card } from "react-bootstrap"
 import { useParams } from "react-router-dom";
-import FormDelete from "./form-delete"
+// import FormDelete from "./form-delete"
 
 export default function IntegrationFeeTaxes() {
 
@@ -15,7 +15,7 @@ export default function IntegrationFeeTaxes() {
     isCheckbox: false,
     title: "",
     titleModal: "",
-    modalDelete: true,
+    // modalDelete: true,
     baseRoute: `/master/integration-partners/${param.id}/fee-taxes`,
     endpoint: `/master/integration-partners/${param.id}/fee-taxes`,
     deleteEndpoint: `/master/integration-partners/${param.id}/fee-taxes`,
@@ -40,6 +40,10 @@ export default function IntegrationFeeTaxes() {
     emptyTable: "No partner fee taxes found",
     recordName: ["fee_tax_type_code", "fee_tax_type_name"],
     searchText: "Search",
+    showInfoDelete: true,
+    infoDelete: [
+      {title: "Partner Fee Tax", recordName: "fee_tax_type_name"}, 
+    ],
     module: "partner-fee-taxes",
     isOpenNewTab:false
   });
@@ -48,7 +52,7 @@ export default function IntegrationFeeTaxes() {
     <Card>
       <Card.Body>
         <h3 className="card-heading">Partner Fee Taxes</h3>
-        <BBDataTable {...params} modalContent={Form} modalDeleteContent={FormDelete} />
+        <BBDataTable {...params} modalContent={Form} />
       </Card.Body>
     </Card>
   )

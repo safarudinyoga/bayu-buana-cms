@@ -3,7 +3,7 @@ import BBDataTable from "components/table/bb-data-table"
 import Form from "./form"
 import { Card } from "react-bootstrap"
 import { useParams } from "react-router-dom"
-import FormDelete from "./form-delete"
+// import FormDelete from "./form-delete"
 
 export default function PartnerCityTable(props) {
 
@@ -15,7 +15,7 @@ export default function PartnerCityTable(props) {
     hideDetail: true,
     title: "",
     titleModal: "",
-    modalDelete: true,
+    // modalDelete: true,
     baseRoute: "/master/integration-partner-cities/form",
     endpoint: `/master/integration-partners/${id}/cities`,
     deleteEndpoint: "/master/batch-actions/delete/integration-partner-cities",
@@ -38,6 +38,10 @@ export default function PartnerCityTable(props) {
     ],
     emptyTable: "No partner cities found",
     recordName: ["city_name"],
+    showInfoDelete: true,
+    infoDelete: [
+      {title: "Partner City Name", recordName: "city_name"}, 
+    ],
     isOpenNewTab: false,
     module: "partner-city",
     searchText: "Search"
@@ -46,7 +50,7 @@ export default function PartnerCityTable(props) {
     <Card>
       <Card.Body>
         <h3 className="card-heading">Partner Cities</h3>
-        <BBDataTable {...params} modalContent={Form} modalDeleteContent={FormDelete} />
+        <BBDataTable {...params} modalContent={Form} />
       </Card.Body>
     </Card>
   </>
