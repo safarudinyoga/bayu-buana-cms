@@ -1077,6 +1077,7 @@ class BBDataTable extends Component {
             } else if(me.props.isReplaceTable) {
               me.props.setId(id);
               me.props.handleReplaceTable(!me.props.isReplaceTable)
+              me.props.handleIsDetail(false)
             } else if(me.props.createNewModal) {
               me.props.setCreateModal({show: true, id, disabled_form: false})
             }
@@ -1094,6 +1095,10 @@ class BBDataTable extends Component {
               me.props.setCreateModal({show: true, id, disabled_form: true})
             } else if(me.props.createNewModal) {
               me.props.setCreateNewModal({show: true, id, disabled_form: true})
+            } else if(me.props.isReplaceTable) {
+              me.props.setId(id);
+              me.props.handleReplaceTable(!me.props.isReplaceTable)
+              me.props.handleIsDetail(true)
             } else {
               me.props.history.push(base + "/" + id + "?action=view")
             }

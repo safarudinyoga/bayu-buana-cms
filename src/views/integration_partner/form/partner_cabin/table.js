@@ -18,10 +18,15 @@ export default function IntegrationPartnerCabinTypesTable(props) {
 
   const contentTitle = useSelector((state) => state.ui.contentTitle)
   const [isReplaceTable, setIsReplaceTable] = useState(false)
+  const [isDetail, setIsDetail] = useState(false)
   const [partnerCabinId, setPartnerCabinId] = useState(null)
 
   const handleReplaceTable = async (key) => {
     setIsReplaceTable(!key)
+  }
+
+  const handleIsDetail = (key) => {
+    setIsDetail(key)
   }
 
   const setId = async (id) => {
@@ -74,8 +79,8 @@ export default function IntegrationPartnerCabinTypesTable(props) {
         <Card.Body>
           <h3 className="card-heading">{contentTitle}</h3>
           {
-          isReplaceTable ? <PartnerCabins isReplaceTable={isReplaceTable} handleReplaceTable={handleReplaceTable} partnerCabinId={partnerCabinId}/> :
-          <BBDataTable {...params} handleReplaceTable={handleReplaceTable} setId={setId}/>
+          isReplaceTable ? <PartnerCabins isReplaceTable={isReplaceTable} handleReplaceTable={handleReplaceTable} partnerCabinId={partnerCabinId} isDetail={isDetail}/> :
+          <BBDataTable {...params} handleReplaceTable={handleReplaceTable} setId={setId} handleIsDetail={handleIsDetail}/>
           }
           </Card.Body>
       </Card>
