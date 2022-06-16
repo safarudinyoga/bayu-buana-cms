@@ -107,6 +107,10 @@ export default function HotelSupplierTable() {
     ],
     emptyTable: "No hotel suppliers found",
     recordName: ["hotel_supplier_code", "hotel_supplier_name"],
+    showInfoDelete: true,
+    infoDelete: [
+      {title: "Hotel Supplier Name", recordName: "hotel_supplier_name"}, 
+    ],
   })
 
   return <BBDataTable {...params} extraFilter={extraFilter} onReset={onReset} {...params} />

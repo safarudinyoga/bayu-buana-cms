@@ -55,6 +55,10 @@ export default function RoomLocationTypeTable() {
       },
     ],
     recordName: ["room_location_type_code", "room_location_type_name"],
+    showInfoDelete: true,
+    infoDelete: [
+      {title: "Room Location Type Name", recordName: "room_location_type_name"}, 
+    ],
   }
   return <BBDataTable {...params} />
 }

@@ -65,6 +65,10 @@ export default function OccupancyTypeTable() {
     ],
     emptyTable: "No occupancy types found",
     recordName: ["occupancy_type_code", "occupancy_type_name"],
+    showInfoDelete: true,
+    infoDelete: [
+      {title: "Occupancy Type Name", recordName: "occupancy_type_name"}, 
+    ],
   }
   return <BBDataTable {...params} />
 }

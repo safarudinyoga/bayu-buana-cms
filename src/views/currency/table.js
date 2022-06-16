@@ -59,6 +59,10 @@ export default function CurrencyTable() {
     ],
     emptyTable: "No currencies found",
     recordName: ["currency_code", "currency_name"],
+    showInfoDelete: true,
+    infoDelete: [
+      {title: "Currency Name", recordName: "currency_name"}, 
+    ],
   }
   return <BBDataTable {...params} />
 }

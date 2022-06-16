@@ -59,6 +59,10 @@ export default function RatingTypeTable() {
     ],
     emptyTable: "No rating types found",
     recordName: ["rating_type_code", "rating_type_name"],
+    showInfoDelete: true,
+    infoDelete: [
+      {title: "Rating Type Name", recordName: "rating_type_name"}, 
+    ],
   }
   return <BBDataTable {...params} />
 }

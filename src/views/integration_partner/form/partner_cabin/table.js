@@ -1,6 +1,6 @@
 import BBDataTable from "components/table/bb-data-table"
 import React, { useEffect, useState } from "react"
-import DeleteModal from "./form/form-delete"
+// import DeleteModal from "./form/form-delete"
 import { Card} from "react-bootstrap"
 import PartnerCabins from "./form/form"
 import { useDispatch, useSelector } from "react-redux"
@@ -30,7 +30,7 @@ export default function IntegrationPartnerCabinTypesTable(props) {
   let [params, setParams] = useState({
     isCheckbox: false,
     title: "Integration Partner",
-    modalDelete: true,
+    // modalDelete: true,
     titleModal: "Integration Partner",
     showAdvancedOptions: false,
     baseRoute: "/master/integration-partner-cabin-types/form",
@@ -61,6 +61,10 @@ export default function IntegrationPartnerCabinTypesTable(props) {
     isOpenNewTab: false,
     module:"partner-cabin",
     recordName: ["cabin_type.cabin_type_name", "cabin_type_code", "cabin_type_name"],
+    showInfoDelete: true,
+    infoDelete: [
+      {title: "Partner Cabin Name", recordName: "cabin_type_name"}, 
+    ],
     searchText: "Search"
   })
 
@@ -71,7 +75,7 @@ export default function IntegrationPartnerCabinTypesTable(props) {
           <h3 className="card-heading">{contentTitle}</h3>
           {
           isReplaceTable ? <PartnerCabins isReplaceTable={isReplaceTable} handleReplaceTable={handleReplaceTable} partnerCabinId={partnerCabinId}/> :
-          <BBDataTable {...params} modalDeleteContent={DeleteModal} handleReplaceTable={handleReplaceTable} setId={setId}/>
+          <BBDataTable {...params} handleReplaceTable={handleReplaceTable} setId={setId}/>
           }
           </Card.Body>
       </Card>

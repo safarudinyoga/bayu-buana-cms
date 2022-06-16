@@ -68,6 +68,10 @@ export default function AttractionCategoryTable() {
     ],
     emptyTable: "No attraction categories found",
     recordName: "attraction_category_name",
+    showInfoDelete: true,
+    infoDelete: [
+      {title: "Attraction Category Name", recordName: "attraction_category_name"}, 
+    ],
   }
   return <BBDataTable {...params} />
 }
