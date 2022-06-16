@@ -35,7 +35,6 @@ const UserManagementForm = (props) => {
   const [loading, setLoading] = useState(true)
   const isView = useQuery().get("action") === "view"
   const [showhide, setShowhide]=useState(false);
-  console.log("tes", showhide)
  
   const [show, setShow] = useState(false)
   const target = useRef(null)
@@ -43,7 +42,6 @@ const UserManagementForm = (props) => {
   useEffect(async () => {
     let api = new Api()
     let formId = props.match.params.id
-    console.log({ formId, isView })
 
     let docTitle = "Edit User"
 
@@ -138,12 +136,10 @@ const UserManagementForm = (props) => {
       if (!formId) {
         //Proses Create Data
         let res = await api.post(`/user/user-type-users`, form)
-        console.log(res)
         openSnackbar(`Record has been successfully saved.`)
         history.goBack()
       } else {
         let res = await api.put(`/user/user-type-users/${formId}`, form)
-        console.log(res)
 
         dispatch(
           setAlert({
@@ -259,7 +255,6 @@ const UserManagementForm = (props) => {
                             onChange={(v) => {
                               setFieldValue("user_type", v)
                               if(v) setShowhide(v.value)
-                              console.log(v.value)
                             }}
                             placeholder="Please choose"
                             className={`react-select ${

@@ -105,6 +105,10 @@ export default function ZoneTable() {
     ],
     emptyTable: "No zones found",
     recordName: ["zone_code", "zone_name"],
+    showInfoDelete: true,
+    infoDelete: [
+      {title: "Zone Name", recordName: "zone_name"}, 
+    ],
   })
 
   return <BBDataTable {...params} extraFilter={extraFilter} onReset={onReset} />

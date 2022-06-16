@@ -124,6 +124,10 @@ export default function HotelAmenityTable() {
     ],
     emptyTable: "No hotel amenity types found",
     recordName: ["hotel_amenity_type_code", "hotel_amenity_type_name"],
+    showInfoDelete: true,
+    infoDelete: [
+      {title: "Hotel Amenity Type Name", recordName: "hotel_amenity_type_name"}, 
+    ],
   })
 
   const onReset = () => {

@@ -203,6 +203,10 @@ import IdentityRuleTable from "views/identity_rule/table"
 import TaxFeeForm from "views/tax_fee/form"
 import ShoppingCache from "views/shopping_cache/table"
 
+// Travel Policy Class
+import TravelPolicyClass from "views/travel-policy-class/table"
+import TravelPolicyClassForm from "views/travel-policy-class/form"
+
 // Job Title Corporate
 import JobTitleCorporateForm from "./views/job_title_corporate/form"
 import JobTitleCorporateTable from "./views/job_title_corporate/table"
@@ -213,17 +217,23 @@ import CorporateDivisionForm from "views/corporate_division/form"
 import CorporateDivisionHierarchy from "views/corporate_division/hierarchy"
 
 // Master Corporate Divisions
-import CorporateUserAccessTypeTable from "views/corporate_user_access_type/table"
-import CorporateUserAccessTypeForm from "views/corporate_user_access_type/form"
+import CorporateUserAccessTypeTable from "views/corporate_user_type/table"
+import CorporateUserAccessTypeForm from "views/corporate_user_type/form"
 
+// Travel Policy Management Corporate
+import CorporateTravelPolicyMangement from "views/corporate_travel_policy_management"
 
-// Travel Policy Corporate
-// import CorporateTravelPolicyTable from "views/corporate_travel_policy/table"
-import CorporateTravelPolicy from "views/corporate_travel_policy"
+// User Management Corporate
+import CorporateUserManagementTable from "views/corporate_user_management/table"
+import CorporateUserManagementForm from "views/corporate_user_management/form"
 
 // Corporate Travel Purpose
 import CorporateTravelPurposeTable from "views/corporate_travel_purpose/table"
 import CorporateTravelPurposeForm from "views//corporate_travel_purpose/form"
+
+//corporate profile
+import CorporateProfile from "views/corporate_profile/corporate-profile"
+import CorporateProfileForm from "views/corporate_profile/form/index"
 
 const RouteWithProps = ({
   path,
@@ -503,6 +513,15 @@ const DashboardRoutes = () => {
         <Route exact path="/master/aircrafts">
           <AircraftTable />
         </Route>
+
+        {/* Travel Policy Class */}
+        <Route exact path="/master/travel-policy-class">
+          <TravelPolicyClass />
+        </Route>
+        <Route path="/master/travel-policy-class/form/:id?">
+          <TravelPolicyClassForm />
+        </Route>
+
         <Route path="/master/aircrafts/form/:id?">
           <AircraftForm />
         </Route>
@@ -775,7 +794,13 @@ const DashboardRoutes = () => {
         <Route path="/master/tax-fee">
           <TaxFeeForm />
         </Route>
-
+        {/* Corporate Profile */}
+        <Route exact path="/master/corporate-profile">
+          <CorporateProfile />
+        </Route>
+        <Route path="/master/corporate-profile/form/:id?">
+          <CorporateProfileForm />
+        </Route>
         {/* Corporate Division */}
         <Route exact path="/master/corporate-divisions">
           <CorporateDivisionTable />
@@ -788,17 +813,26 @@ const DashboardRoutes = () => {
         </Route>
 
         {/* Corporate Division */}
-        <Route exact path="/master/corporate-user-access-type">
+        <Route exact path="/master/corporate-user-type">
           <CorporateUserAccessTypeTable />
         </Route>
-        <Route path="/master/corporate-user-access-type/form/:id?">
+        <Route path="/master/corporate-user-type/form/:id?">
           <CorporateUserAccessTypeForm />
         </Route>
 
         {/* Corporate Travel Policy */}
         <Route exact path="/master/corporate-travel-policy">
-          <CorporateTravelPolicy />
+          <CorporateTravelPolicyMangement />
         </Route>
+
+        {/* Corporate User Management */}
+        <Route exact path="/master/corporate-user-management">
+          <CorporateUserManagementTable />
+        </Route>
+        <Route path="/master/corporate-user-management/form/:id?">
+          <CorporateUserManagementForm />
+        </Route>
+
         {/* <Route exact path="/master/corporate-travel-policy/form/:id?">
           <CorporateTravelPolicyForm />
         </Route> */}
