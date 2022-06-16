@@ -72,6 +72,10 @@ export default function AttractionTable() {
     ],
     emptyTable: "No attractions found",
     recordName: "attraction_name",
+    showInfoDelete: true,
+    infoDelete: [
+      {title: "Attraction Name", recordName: "attraction_name"}, 
+    ],
   })
 
   const onFilterChangeAttractionCategories = (e, values) => {

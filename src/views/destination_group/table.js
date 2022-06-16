@@ -55,6 +55,10 @@ export default function DestinationGroupTable() {
     ],
     emptyTable: "No destination groups found",
     recordName: ["destination_group_code", "destination_group_name"],
+    showInfoDelete: true,
+    infoDelete: [
+      {title: "Destination Group Name", recordName: "destination_group_name"}, 
+    ],
   }
   return <BBDataTable {...params} />
 }

@@ -106,6 +106,10 @@ export default function CityTable() {
     ],
     emptyTable: "No cities found",
     recordName: ["city_code", "city_name"],
+    showInfoDelete: true,
+    infoDelete: [
+      {title: "City Name", recordName: "city_name"}, 
+    ],
   })
 
   return <BBDataTable {...params} extraFilter={extraFilter} onReset={onReset} />

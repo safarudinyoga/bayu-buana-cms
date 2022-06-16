@@ -55,6 +55,10 @@ export default function SpecialRequestTable() {
     ],
     emptyTable: "No special requests found",
     recordName: ["special_request_code", "special_request_name"],
+    showInfoDelete: true,
+    infoDelete: [
+      {title: "Special Request Name", recordName: "special_request_name"}, 
+    ],
   }
   return <BBDataTable {...params} />
 }

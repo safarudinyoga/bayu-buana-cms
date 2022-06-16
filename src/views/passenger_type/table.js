@@ -59,6 +59,10 @@ export default function PassengerTypeTable() {
     ],
     emptyTable: "No passenger types found",
     recordName: ["passenger_type_code", "passenger_type_name"],
+    showInfoDelete: true,
+    infoDelete: [
+      {title: "Passenger Type Name", recordName: "passenger_type_name"}, 
+    ],
   }
   return <BBDataTable {...params} />
 }

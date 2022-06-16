@@ -71,6 +71,10 @@ export default function LanguageTable() {
     ],
     emptyTable: "No languages found",
     recordName: ["language_code", "language_name"],
+    showInfoDelete: true,
+    infoDelete: [
+      {title: "Language Name", recordName: "language_name"}, 
+    ],
   }
   return <BBDataTable {...params} />
 }

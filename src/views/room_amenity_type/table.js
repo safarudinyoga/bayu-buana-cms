@@ -81,6 +81,10 @@ export default function RoomAmenityTypeTable() {
     ],
     emptyTable: "No room amenity types found",
     recordName: ["room_amenity_type_code", "room_amenity_type_name"],
+    showInfoDelete: true,
+    infoDelete: [
+      {title: "Room Amenity Type Name", recordName: "room_amenity_type_name"}, 
+    ],
   })
 
   useEffect(() => {
