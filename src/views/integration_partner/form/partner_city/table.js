@@ -16,16 +16,16 @@ export default function PartnerCityTable(props) {
     title: "",
     titleModal: "",
     modalDelete: true,
-    baseRoute: "/master/integration-partner-cities/form",
+    baseRoute: `/master/integration-partners/${id}/cities`,
     endpoint: `/master/integration-partners/${id}/cities`,
-    deleteEndpoint: "/master/batch-actions/delete/integration-partner-cities",
+    deleteEndpoint: `/master/integration-partners/${id}/cities`,
     activationEndpoint: "/master/batch-actions/activate/integration-partner-cities",
     deactivationEndpoint: "/master/batch-actions/deactivate/integration-partner-cities",
     btnDownload: ".buttons-csv",
     columns: [
       {
         title: "City",
-        data: "city.city_name",
+        data: "city_name",
       },
       {
         title: "Partner City Code",
