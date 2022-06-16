@@ -45,7 +45,8 @@ export default function IntegrationFeeTaxes() {
       {title: "Partner Fee Tax", recordName: "fee_tax_type_name"}, 
     ],
     module: "partner-fee-taxes",
-    isOpenNewTab:false
+    isOpenNewTab:false,
+    showModalHeader: false,
   });
 
   return (
