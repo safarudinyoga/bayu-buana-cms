@@ -66,7 +66,7 @@ const MiscellaneousConfiguration = (props) => {
             <h3 className="misc-title">Miscellaneous Configuration</h3>
             <div className="misc-wrapper"><ReactSVG src="/img/icons/time.svg"/><h5>BOOKING LEAD TIME</h5><p>&ensp;-&ensp;require to book in advance</p></div>
             <div className="misc-body">
-                <div className="misc-text"><h5>FLIGHT</h5> <span>&ensp;-&ensp;Minimum Booking days before departure</span>
+                <div className="misc-text"><ReactSVG src="/img/icons/plane-up.svg" /><h5>FLIGHT</h5> <span>&ensp;-&ensp;Minimum Booking days before departure</span>
                 <ReactSVG src="/img/icons/info.svg" className="misc-icon-info" />
                 <input type="number" maxLength="740" id="flight_days" name="flight_days" />
                 <p>days</p>
