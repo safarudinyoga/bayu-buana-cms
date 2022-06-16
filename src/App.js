@@ -203,6 +203,10 @@ import IdentityRuleTable from "views/identity_rule/table"
 import TaxFeeForm from "views/tax_fee/form"
 import ShoppingCache from "views/shopping_cache/table"
 
+// Travel Policy Class
+import TravelPolicyClass from "views/travel-policy-class/table"
+import TravelPolicyClassForm from "views/travel-policy-class/form"
+
 // Job Title Corporate
 import JobTitleCorporateForm from "./views/job_title_corporate/form"
 import JobTitleCorporateTable from "./views/job_title_corporate/table"
@@ -506,6 +510,15 @@ const DashboardRoutes = () => {
         <Route exact path="/master/aircrafts">
           <AircraftTable />
         </Route>
+
+        {/* Travel Policy Class */}
+        <Route exact path="/master/travel-policy-class">
+          <TravelPolicyClass />
+        </Route>
+        <Route path="/master/travel-policy-class/form/:id?">
+          <TravelPolicyClassForm />
+        </Route>
+
         <Route path="/master/aircrafts/form/:id?">
           <AircraftForm />
         </Route>

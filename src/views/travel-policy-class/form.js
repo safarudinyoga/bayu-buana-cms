@@ -11,10 +11,10 @@ import { setAlert, setUIParams } from "redux/ui-store"
 import FormInputSelectAjax from "../../components/form/input-select-ajax"
 import env from "../../config/environment"
 
-const endpoint = "/master/divisions"
-const backUrl = "/master/divisions"
+const endpoint = "/master/corporate-travel-policy-classes"
+const backUrl = "/master/travel-policy-class"
 
-function DivisionForm(props) {
+function TravelPolicyClassForm(props) {
   let dispatch = useDispatch()
 
   let formId = props.match.params.id
@@ -22,68 +22,65 @@ function DivisionForm(props) {
   const [formBuilder, setFormBuilder] = useState(null)
   const [loading, setLoading] = useState(true)
   const [translations, setTranslations] = useState([])
-  const [parentDivisionTypeData, setParentDivisionTypeData] = useState([])
-  const [employeeData, setEmployeeData] = useState([])
+  const [supplierTypeData, setSupplierTypeData] = useState([])
   const [id, setId] = useState(null)
+  const [disabledSave, setDisabledSave] = useState(true)
+  const [validCode, SetValidCode] = useState(formId)
+  const [validName, SetValidName] = useState(formId)
   const [form, setForm] = useState({
-    depth: 0,
-    division_code: "",
-    division_name: "",
-    parent_division_id: "",
-    manager_id: "",
+    travel_policy_class_code: "",
+    travel_policy_class_name: "",
+    // parent_id: "",
+    // manager_id: "",
   })
   const translationFields = [
     {
       label: "Name",
-      name: "division_name",
+      name: "travel_policy_class_name",
       type: "text",
     },
   ]
 
   const validationRules = {
-    division_code: {
+    travel_policy_class_code: {
       required: true,
       minlength: 1,
       maxlength: 36,
       checkCode: true,
       noSpace: true,
     },
-    division_name: {
+    travel_policy_class_name: {
       required: true,
       minlength: 1,
       maxlength: 256,
       checkName: true,
       noSpace: true,
     },
-    parent_division_id: {},
-    manager_id: {},
+    // parent_id: {},
+    // manager_id: {},
   }
 
   const validationMessages = {
-    division_code: {
-      required: "Division Code is required.",
-      minlength: "Division code must be at least 1 characters",
-      maxlength: "Division code cannot be longer than 36 characters",
+    travel_policy_class_code: {
+      required: "Travel Policy Code is required.",
+      minlength: "Travel Policy Code must be at least 1 characters",
+      maxlength: "Travel Policy Code cannot be longer than 36 characters",
     },
-    division_name: {
-      required: "Division Name is required.",
-      minlength: "Division name must be at least 1 characters",
-      maxlength: "Division name cannot be longer than 256 characters",
+    travel_policy_class_name: {
+      required: "Travel Policy Name is required.",
+      minlength: "Travel Policy Name must be at least 1 characters",
+      maxlength: "Travel Policy Name cannot be longer than 256 characters",
     },
-    parent_division_id: {},
   }
 
   useEffect(async () => {
     let api = new Api()
 
-    let docTitle = "Edit Division"
-    let bcTitle = docTitle
+    let docTitle = "Edit Travel Policy"
     if (!formId) {
-      docTitle = "Create New Division"
-      bcTitle = "Create Division"
+      docTitle = "Create Travel Policy"
     } else if (isView) {
-      docTitle = "Division"
-      bcTitle = "Division Details"
+      docTitle = "Travel Policy Details"
     }
 
     dispatch(
@@ -95,10 +92,10 @@ function DivisionForm(props) {
           },
           {
             link: backUrl,
-            text: "Division",
+            text: "Travel Policy",
           },
           {
-            text: bcTitle,
+            text: docTitle,
           },
         ],
       }),
@@ -107,35 +104,32 @@ function DivisionForm(props) {
       try {
         let res = await api.get(endpoint + "/" + formId)
         setForm(res.data)
-        if (res.data.parent_division && res.data.parent_division_id) {
-          setParentDivisionTypeData([
-            {
-              ...res.data.parent_division,
-              id: res.data.parent_division_id,
-              text: res.data.parent_division.division_name,
-            },
-          ])
-        }
-        if (res.data.manager) {
-          setEmployeeData([
-            { ...res.data.manager, text: res.data.manager.given_name },
+        if (res.data.parent) {
+          setSupplierTypeData([
+            { ...res.data.parent, text: res.data.parent.parent_name },
           ])
         }
         if (res.data) {
-          let currentCode = res.data.division_code
-          let currentName = res.data.division_name
+          let currentCode = res.data.travel_policy_class_code
+          let currentName = res.data.travel_policy_class_name
 
           $.validator.addMethod(
             "checkCode",
             function (value, element) {
               var req = false
-              let encodeFilters = encodeURIComponent(
-                JSON.stringify(["division_code", "=", element.value]),
-              )
+              let filters = JSON.stringify([
+                "travel_policy_class_code",
+                "=",
+                element.value,
+              ])
               $.ajax({
                 type: "GET",
                 async: false,
-                url: `${env.API_URL}/master/divisions?filters=${encodeFilters}`,
+                url: `${
+                  env.API_URL
+                }/master/corporate-travel-policy-classes?filters=${encodeURIComponent(
+                  filters,
+                )}`,
                 success: function (res) {
                   if (res.items.length !== 0) {
                     if (currentCode === element.value) {
@@ -149,22 +143,29 @@ function DivisionForm(props) {
                 },
               })
 
+              SetValidCode(req)
               return req
             },
-            "Division Code already exists",
+            "Travel Policy Code already exists",
           )
 
           $.validator.addMethod(
             "checkName",
             function (value, element) {
               var req = false
-              let encodeFilters = encodeURIComponent(
-                JSON.stringify(["division_name", "=", element.value]),
-              )
+              let filters = JSON.stringify([
+                "travel_policy_class_name",
+                "=",
+                element.value,
+              ])
               $.ajax({
                 type: "GET",
                 async: false,
-                url: `${env.API_URL}/master/divisions?filters=${encodeFilters}`,
+                url: `${
+                  env.API_URL
+                }/master/corporate-travel-policy-classes?filters=${encodeURIComponent(
+                  filters,
+                )}`,
                 success: function (res) {
                   if (res.items.length !== 0) {
                     if (currentName === element.value) {
@@ -178,9 +179,10 @@ function DivisionForm(props) {
                 },
               })
 
+              SetValidName(req)
               return req
             },
-            "Division Name already exists",
+            "Travel Policy Name already exists",
           )
         }
       } catch (e) {}
@@ -197,13 +199,19 @@ function DivisionForm(props) {
         "checkCode",
         function (value, element) {
           var req = false
-          let encodeFilters = encodeURIComponent(
-            JSON.stringify(["division_code", "=", element.value]),
-          )
+          let filters = JSON.stringify([
+            "travel_policy_class_code",
+            "=",
+            element.value,
+          ])
           $.ajax({
             type: "GET",
             async: false,
-            url: `${env.API_URL}/master/divisions?filters=${encodeFilters}`,
+            url: `${
+              env.API_URL
+            }/master/corporate-travel-policy-classes?filters=${encodeURIComponent(
+              filters,
+            )}`,
             success: function (res) {
               if (res.items.length !== 0) {
                 req = false
@@ -212,24 +220,29 @@ function DivisionForm(props) {
               }
             },
           })
-
-          console.log(req)
+          SetValidCode(req)
           return req
         },
-        "Division Code already exists",
+        "Travel Policy Code already exists",
       )
 
       $.validator.addMethod(
         "checkName",
         function (value, element) {
           var req = false
-          let encodeFilters = encodeURIComponent(
-            JSON.stringify(["division_name", "=", element.value]),
-          )
+          let filters = JSON.stringify([
+            "travel_policy_class_name",
+            "=",
+            element.value,
+          ])
           $.ajax({
             type: "GET",
             async: false,
-            url: `${env.API_URL}/master/divisions?filters=${encodeFilters}`,
+            url: `${
+              env.API_URL
+            }/master/corporate-travel-policy-classes?filters=${encodeURIComponent(
+              filters,
+            )}`,
             success: function (res) {
               if (res.items.length !== 0) {
                 req = false
@@ -238,13 +251,30 @@ function DivisionForm(props) {
               }
             },
           })
-
+          SetValidName(req)
           return req
         },
-        "Division Name already exists",
+        "Travel Policy Name already exists",
       )
     }
   }, [])
+
+  const checkValue = () => {
+    if (
+      validCode &&
+      validName &&
+      form.travel_policy_class_code !== "" &&
+      form.travel_policy_class_name !== ""
+    ) {
+      setDisabledSave(false)
+    } else {
+      setDisabledSave(true)
+    }
+  }
+
+  useEffect(() => {
+    checkValue()
+  }, [form, validCode, validName])
 
   useEffect(() => {
     if (!props.match.params.id) {
@@ -258,16 +288,8 @@ function DivisionForm(props) {
     setLoading(true)
     let api = new Api()
     try {
-      if (!form.parent_division_id) {
-        form.parent_division_id = formId
-          ? "00000000-0000-0000-0000-000000000000"
-          : null
-        delete form.parent_division
-      } else {
-        form.depth = parseInt(form.depth) + 1
-      }
-      if (!form.manager_id) {
-        form.manager_id = formId ? "00000000-0000-0000-0000-000000000000" : null
+      if (!form.parent_id) {
+        form.parent_id = null
       }
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
@@ -281,7 +303,9 @@ function DivisionForm(props) {
       props.history.goBack()
       dispatch(
         setAlert({
-          message: `Record ${form.division_name} has been successfully saved.`,
+          message: `Record '${!formId ? "Travel Policy " : ""}${
+            form.travel_policy_class_name
+          }' has been successfully saved.`,
         }),
       )
     } catch (e) {
@@ -291,6 +315,7 @@ function DivisionForm(props) {
           message: `Failed to save this record.`,
         }),
       )
+    } finally {
     }
   }
 
@@ -299,6 +324,7 @@ function DivisionForm(props) {
       onBuild={(el) => setFormBuilder(el)}
       isView={isView || loading}
       onSave={onSave}
+      disabledSave={disabledSave}
       back={backUrl}
       translations={translations}
       translationFields={translationFields}
@@ -309,82 +335,40 @@ function DivisionForm(props) {
     >
       <FormHorizontal>
         <FormInputControl
-          label={isView ? "Division Name" : "Name"}
-          required={true}
-          value={form.division_name}
-          name="division_name"
-          onChange={(e) => setForm({ ...form, division_name: e.target.value })}
+          label="Name"
+          required={!isView}
+          value={form.travel_policy_class_name}
+          name="travel_policy_class_name"
+          onChange={(e) =>
+            setForm({ ...form, travel_policy_class_name: e.target.value })
+          }
           disabled={isView || loading}
           type="text"
           minLength="1"
           maxLength="256"
         />
-
-        {(formId === undefined || !loading) && (
-          <FormInputSelectAjax
-            label="Parent Division"
-            value={form.parent_division_id}
-            name="parent_division_id"
-            endpoint="/master/divisions"
-            column="division_name"
-            filter={
-              formId
-                ? `[["id","!=","${formId}"],["and"],[["parent_division_id","!=","${formId}"],["or"],["parent_division_id","is",null]]]`
-                : ``
-            }
-            onChange={(e) =>
-              setForm({ ...form, parent_division_id: e.target.value || null })
-            }
-            data={parentDivisionTypeData}
-            disabled={isView || loading}
-            type="select"
-            placeholder="Select Parent Division"
-          />
-        )}
-
-        {(formId === undefined || !loading) && (
-          <FormInputSelectAjax
-            label="Manager"
-            value={form.manager_id}
-            val_id="employee_id"
-            name="manager_id"
-            endpoint="/master/employees"
-            renderColumn={(item) => {
-              return `${item.given_name || ""} ${item.middle_name || ""} ${
-                item.surname || ""
-              } (${item.job_title.job_title_name || ""})`
-            }}
-            sort="employee_number"
-            filter={`["status", "=", 1]`}
-            onChange={(e) =>
-              setForm({ ...form, manager_id: e.target.value || null })
-            }
-            data={employeeData}
-            disabled={isView || loading}
-            type="select"
-            placeholder="Select Manager"
-          />
-        )}
       </FormHorizontal>
 
       <FormHorizontal>
         <FormInputControl
           label="Code"
-          required={true}
-          value={form.division_code}
-          name="division_code"
-          cl={{ md: "12" }}
-          cr="12"
-          onChange={(e) => setForm({ ...form, division_code: e.target.value })}
+          required={!isView}
+          value={form.travel_policy_class_code}
+          name="travel_policy_class_code"
+          cl={{ md: "4" }}
+          cr={{ md: 8, lg: 5 }}
+          onChange={(e) =>
+            setForm({ ...form, travel_policy_class_code: e.target.value })
+          }
           disabled={isView || loading}
           type="text"
           minLength="1"
           maxLength="36"
-          hint="Division Code maximum 36 characters"
+          hint="Travel Policy Code maximum 36 characters"
         />
       </FormHorizontal>
     </FormBuilder>
   )
 }
 
-export default withRouter(DivisionForm)
+export default withRouter(TravelPolicyClassForm)
