@@ -217,8 +217,8 @@ import CorporateDivisionForm from "views/corporate_division/form"
 import CorporateDivisionHierarchy from "views/corporate_division/hierarchy"
 
 // Master Corporate Divisions
-import CorporateUserAccessTypeTable from "views/corporate_user_access_type/table"
-import CorporateUserAccessTypeForm from "views/corporate_user_access_type/form"
+import CorporateUserAccessTypeTable from "views/corporate_user_type/table"
+import CorporateUserAccessTypeForm from "views/corporate_user_type/form"
 
 // Travel Policy Management Corporate
 import CorporateTravelPolicyMangement from "views/corporate_travel_policy_management"
