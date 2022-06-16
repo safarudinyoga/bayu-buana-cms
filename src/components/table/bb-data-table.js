@@ -11,7 +11,7 @@ import "datatables.net-colreorder-bs4"
 import "datatables.net-responsive-bs4"
 import "datatables.net-rowreorder-bs4"
 import "datatables.net-rowreorder-bs4/css/rowReorder.bootstrap4.css"
-import "../../lib/paginationNoEllipses"
+import "../../lib/paginationNoEllipses";
 import $ from "jquery"
 import JSZip from "jszip"
 import React, { Component } from "react"
@@ -19,13 +19,7 @@ import { Button, Modal, ModalBody, ModalFooter } from "react-bootstrap"
 import ModalHeader from "react-bootstrap/esm/ModalHeader"
 import { withRouter } from "react-router"
 import { connect } from "react-redux"
-import {
-  setAlert,
-  setCreateModal,
-  setReloadTable,
-  setModalDelete,
-  setCreateNewModal,
-} from "redux/ui-store"
+import { setAlert, setCreateModal, setReloadTable, setModalDelete, setCreateNewModal } from "redux/ui-store"
 import "./bb-data-table.css"
 import editIcon from "assets/icons/edit.svg"
 import removeIcon from "assets/icons/remove.svg"
@@ -34,7 +28,7 @@ import showIcon from "assets/icons/show.svg"
 import ModalCreate from "components/Modal/bb-modal"
 import ModalCreateNew from "components/Modal/bb-modal"
 import ModalDelete from "components/Modal/bb-modal-delete"
-import customPrint from "../../lib/customPrint"
+import customPrint from '../../lib/customPrint'
 import { createLanguageServiceSourceFile } from "typescript"
 
 window.JSZip = JSZip
@@ -77,26 +71,22 @@ class BBDataTable extends Component {
     let columns = []
     const { recordName, module } = this.props
     const { isCheckbox, isShowColumnAction } = this.state
-    columns.push(
-      isCheckbox
-        ? {
-            searchable: false,
-            orderable: false,
-            title:
-              '<svg class="float-left row-handle nopadding" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none"></svg><input type="checkbox" id="cb-th" class="select-checkbox-all ml-2 mr-1"/>',
-            render: function (val, display, row) {
-              return (
-                '<svg class="float-left row-handle nopadding" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none"><rect id="backgroundrect" width="100%" height="100%" x="0" y="0" fill="none" stroke="none"/><path d="M7.098360577225684,13 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 z" fill="#707070" id="svg_1" class=""/><path d="M11.901639938354492,13 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 z" fill="#707070" id="svg_2" class=""/></svg> <input type="checkbox" data-id="' +
-                row.id +
-                '" class="float-left select-checkbox-item ml-2 mr-1"/>'
-              )
-            },
-          }
-        : {
-            searchable: false,
-            orderable: false,
-          },
-    )
+    columns.push(isCheckbox ? {
+      searchable: false,
+      orderable: false,
+      title:
+        '<svg class="float-left row-handle nopadding" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none"></svg><input type="checkbox" id="cb-th" class="select-checkbox-all ml-2 mr-1"/>',
+      render: function (val, display, row) {
+        return (
+          '<svg class="float-left row-handle nopadding" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none"><rect id="backgroundrect" width="100%" height="100%" x="0" y="0" fill="none" stroke="none"/><path d="M7.098360577225684,13 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 z" fill="#707070" id="svg_1" class=""/><path d="M11.901639938354492,13 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 zm0,-5 a1.5,1.5 0 1 1 -3,0 a1.5,1.5 0 0 1 3,0 z" fill="#707070" id="svg_2" class=""/></svg> <input type="checkbox" data-id="' +
+          row.id +
+          '" class="float-left select-checkbox-item ml-2 mr-1"/>'
+        )
+      },
+    } : {
+      searchable: false,
+      orderable: false
+    })
 
     let visibleColumns = []
 
@@ -111,64 +101,68 @@ class BBDataTable extends Component {
 
     const allowed = [this.props.recordName]
     const isOpenNewTab = this.props.isOpenNewTab ?? true
-    columns.push(
-      isShowColumnAction
-        ? {
-            searchable: false,
-            orderable: false,
-            title: "Actions",
-            render: function (value, display, row, meta) {
-              let placement = meta.row > 0 ? "top" : "bottom"
-              $(function () {
-                $('[data-toggle="tooltip"]').tooltip({ trigger: "hover" })
-              })
-              function tooltipCust(x) {
-                if (x.matches) {
-                  $(function () {
-                    $('[data-toggle="tooltip"]').tooltip()
-                  })
-                } else {
-                  $(function () {
-                    $('[data-toggle="tooltip"]').tooltip("hide")
-                  })
-                }
-              }
+    columns.push( isShowColumnAction ? {
+      searchable: false,
+      orderable: false,
+      title: "Actions",
+      render: function (value, display, row, meta) {
+        let placement = meta.row > 0 ? 'top' : 'bottom'
+        $(function () {
+          $('[data-toggle="tooltip"]').tooltip({trigger: "hover"})
+        })
+        function tooltipCust(x) {
+          if (x.matches) {
+            $(function () {
+              $('[data-toggle="tooltip"]').tooltip()
+            })
+          } else {
+            $(function () {
+              $('[data-toggle="tooltip"]').tooltip("hide")
+            })
+          }
+        }
 
-              const cvtRecordName = recordName
-                ? Array.isArray(recordName)
-                  ? recordName
-                      .map((v) => row[v])
-                      .filter((v) => v)
-                      .join(" - ")
-                  : row[recordName]
-                : ""
+        const cvtRecordName = recordName
+          ? Array.isArray(recordName)
+            ? recordName
+                .map((v) => row[v])
+                .filter((v) => v)
+                .join(" - ")
+            : row[recordName]
+          : ""
 
-              var x = window.matchMedia("(max-width: 768px)")
-              tooltipCust(x)
-              x.addListener(tooltipCust)
-              // const filteredRecordName = Object.keys(row)
-              //   .filter((key) => allowed.includes(key))
-              //   .reduce((obj, key) => {
-              //     obj[key] = row[key]
-              //     return obj
-              //   }, {})
+        var x = window.matchMedia("(max-width: 768px)")
+        tooltipCust(x)
+        x.addListener(tooltipCust)
+        // const filteredRecordName = Object.keys(row)
+        //   .filter((key) => allowed.includes(key))
+        //   .reduce((obj, key) => {
+        //     obj[key] = row[key]
+        //     return obj
+        //   }, {})
 
-              let showSwitch = self.props.switchStatus
-              let checked = ""
-              if (showSwitch) {
-                if (module === "manage-corporate") {
-                  checked =
-                    row.agent_corporate.corporate.status === 1 ? "checked" : ""
-                } else {
-                  checked = row.status == 1 ? "checked" : ""
-                }
-              }
+        let showSwitch = self.props.switchStatus
+        let checked = ""
+        if (showSwitch) {
+          if (module === 'manage-corporate') {
+            checked = row.agent_corporate.corporate.status === 1 ? "checked" : ""
+          } else {
+            checked = row.status == 1 ? "checked" : ""
+          }
+        }
 
-              let hideDetail = self.props.hideDetail
-              let showCopyAct = self.props.showCopyAct || false
+        let hideDetail = self.props.hideDetail
+        let showCopyAct = self.props.showCopyAct || false
 
-              let infoDelete = self.props.infoDelete
-              let info = ""
+        let infoDelete = self.props.infoDelete
+        let info = ""
+
+        // dynamicly accessing nested object with notation
+        const pathNotation = (path, obj) => {
+          return path.split('.').reduce(function(prev, curr) {
+            return prev ? prev[curr] : null
+          }, obj || self)
+        }
 
         if(infoDelete) {
           info = infoDelete.map(v => {
@@ -192,121 +186,72 @@ class BBDataTable extends Component {
                 // console.log("ini row", row)
                 // console.log("ini title", title)
               }
+            }
+            return v.title + ": " + title
+          }).join(" ")
+        }
 
-              if (infoDelete) {
-                info = infoDelete
-                  .map((v) => {
-                    let data = v.recordName
-                    let result = Array.isArray(data)
-                    let title = ""
-                    if (result) {
-                      title = data.map((v) => row[v]).join(" ")
-                    } else {
-                      if (module === "manage-corporate") {
-                        title = pathNotation(data, row)
-                      } else {
-                        title = row[data]
-                      }
-                    }
-                    return v.title + ": " + title
-                  })
-                  .join(" ")
-              }
+        const targetDataId = module == 'partner-currency'
+          ? row.currency_id
+          : module === 'partner-hotel-suppliers'
+          ? row.hotel_supplier_id
+          : module === 'partner-fee-taxes'
+          ? row.fee_tax_type_id
+          : module === 'partner-city'
+          ? row.city_id
+          : module === 'partner-meal-plan'
+          ? row.integration_partner_meal_plan_type.meal_plan_type_id
+          : module === 'partner-cabin'
+          ? row.cabin_type_id
+          : module === 'manage-corporate'
+          ? row.agent_corporate.id
+          : row.id
 
-              const targetDataId =
-                module == "partner-currency"
-                  ? row.currency_id
-                  : module === "partner-hotel-suppliers"
-                  ? row.hotel_supplier_id
-                  : module === "partner-fee-taxes"
-                  ? row.fee_tax_type_id
-                  : module === "partner-city"
-                  ? row.city_id
-                  : module === "partner-meal-plan"
-                  ? row.integration_partner_meal_plan_type.meal_plan_type_id
-                  : module === "partner-cabin"
-                  ? row.cabin_type_id
-                  : module === "manage-corporate"
-                  ? row.agent_corporate.id
-                  : row.id
+        const targetDetailId = module === 'manage-corporate'
+          ? row.agent_corporate.id
+          : row.id
 
-              const targetDetailId =
-                module === "manage-corporate" ? row.agent_corporate.id : row.id
+        const showDelete = module !== "integration-partner" && module !== "identity-rules" && module !== "email-setup-template"
 
-              const showDelete =
-                module !== "integration-partner" &&
-                module !== "identity-rules" &&
-                module !== "email-setup-template"
+        return (
+          `
+          <a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item ${hideDetail ? "mr-2" : ""}" data-action="edit" data-id="${targetDataId}" title="Click to edit"><img src="${editIcon}"/></a>
 
-              return `
-          <a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item ${
-                hideDetail ? "mr-2" : ""
-              }" data-action="edit" data-id="${targetDataId}" title="Click to edit"><img src="${editIcon}"/></a>
-
-          <a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item ${
-                showCopyAct ? "d-inline" : "d-none"
-              }" data-action="copy" data-id="${targetDataId}" title="Click to copy"style="margin-left:7px;"><img src="${CopyIcon}" /></a>
-          <a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="${
-                hideDetail ? "d-none" : "d-inline"
-              } table-row-action-item" data-action="view" data-id="${targetDetailId}" title="Click to view details"><img src="${showIcon}"/></a>
-          <a href="javascript:void(0);" class="${
-            showSwitch ? "d-inline" : "d-none"
-          } custom-switch custom-switch-bb table-row-action-item" data-id="${
-                module === "employee" ? row.employee_id : row.id
-              }" data-action="update_status" data-status="${
-                row.status
-              }" data-toggle="tooltip" data-placement="${placement}" title="${
-                row.status === 1 ? "Deactivate" : "Activate"
-              }">
-            <input type="checkbox" class="custom-control-input check-status-${
-              row.id
-            }" id="customSwitch${
-                row.id
-              }" ${checked} data-action="update_status">
-            <label class="custom-control-label" for="customSwitch${
-              row.id
-            }" data-action="update_status"></label>
+          <a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item ${showCopyAct ? "d-inline" : "d-none"}" data-action="copy" data-id="${targetDataId}" title="Click to copy"style="margin-left:7px;"><img src="${CopyIcon}" /></a>
+          <a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="${hideDetail ? "d-none" : "d-inline"} table-row-action-item" data-action="view" data-id="${targetDetailId}" title="Click to view details"><img src="${showIcon}"/></a>
+          <a href="javascript:void(0);" class="${showSwitch ? "d-inline" : "d-none"} custom-switch custom-switch-bb table-row-action-item" data-id="${module === 'employee' ? row.employee_id: row.id}" data-action="update_status" data-status="${row.status}" data-toggle="tooltip" data-placement="${placement}" title="${row.status === 1 ? "Deactivate" : "Activate"}">
+            <input type="checkbox" class="custom-control-input check-status-${row.id}" id="customSwitch${row.id}" ${checked} data-action="update_status">
+            <label class="custom-control-label mt-2" for="customSwitch${row.id}" data-action="update_status"></label>
           </a>
           ${
             self.props.showHistory
-              ? `<a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item mr-2" data-action="history" data-id="${row.id}" title="Click to view history"><img src="/img/icons/history.svg"/></a>`
-              : ""
+            ? `<a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item mr-2" data-action="history" data-id="${row.id}" title="Click to view history"><img src="/img/icons/history.svg"/></a>`
+            : ""
           }
-          ${
-            showDelete
-              ? `<a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item" data-action="delete" data-id="${targetDataId}" data-name="${cvtRecordName}" ${
-                  infoDelete ? `data-info="${info}"` : ""
-                }  title="${
-                  module === "exchange-rate" || module === "partner-city"
-                    ? "Delete"
-                    : "Click to delete"
-                }"><img src="${removeIcon}" /></a>`
-              : ""
+          ${showDelete? `<a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="table-row-action-item" data-action="delete" data-id="${targetDataId}" data-name="${cvtRecordName}" ${infoDelete ? `data-info="${info}"` : ""}  title="${module === "exchange-rate" || module === "partner-city" ? "Delete" : "Click to delete"}"><img src="${removeIcon}" /></a>`
+            : ""
           }
           `
-            },
-          }
-        : {
-            searchable: false,
-            orderable: false,
-          },
-    )
+        )
+      },
+    } : {
+      searchable: false,
+      orderable: false,
+    })
 
     const initialize = () => {
       let headers = {}
-      let auth = localStorage.getItem("ut")
+      let auth = localStorage.getItem('ut')
       if (auth) {
-        headers = { Authorization: `Bearer ${auth}` }
+        headers = { Authorization : `Bearer ${auth}` }
       }
 
-      let displayStart = 0
-      if (this.queryParams.get("page")) {
-        displayStart =
-          (this.props.sizePerPage ? this.props.sizePerPage : 10) *
-          (this.queryParams.get("page") - 1)
+      let displayStart = 0;
+      if(this.queryParams.get("page")) {
+        displayStart = (this.props.sizePerPage ? this.props.sizePerPage : 10) * (this.queryParams.get("page")-1)
       }
-      let endpoint = this.props.endpoint
-      if (this.props.filterData) {
+      let endpoint = this.props.endpoint;
+      if(this.props.filterData){
         endpoint = endpoint + "?filters=" + this.props.filterData
       }
       let dt = $(this.table.current).DataTable({
@@ -521,16 +466,16 @@ class BBDataTable extends Component {
                     }
                   }
                   overrideParams.sort = orders.join(",")
-                  if (orders.join(",") !== this.queryParams.get("sort")) {
-                    this.queryParams.set("page", 1)
+                  if(orders.join(",") !== this.queryParams.get('sort')) {
+                    this.queryParams.set('page', 1)
                   }
                 }
               } else {
-                overrideParams.sort = this.queryParams.has("sort")
-                  ? this.queryParams.get("sort")
-                  : this.props.customSort
-                  ? this.props.customSort.join(",")
-                  : "sort"
+                overrideParams.sort = this.queryParams.has('sort')
+                ? this.queryParams.get('sort')
+                : this.props.customSort
+                ? this.props.customSort.join(",")
+                : 'sort'
               }
               if (params.search.value) {
                 let searchValue = params.search.value.replace(/^\s+|\s+$/g, "")
@@ -574,7 +519,7 @@ class BBDataTable extends Component {
                 overrideParams.filters = "[" + extraFilters.join(",") + "]"
               }
             } catch (e) {}
-            this.queryParams.set("sort", overrideParams.sort)
+            this.queryParams.set('sort', overrideParams.sort)
             return overrideParams
           },
         },
@@ -587,7 +532,7 @@ class BBDataTable extends Component {
               stripHtml: false,
               columns: visibleColumns,
             },
-            action: function (e, dt, node, config) {
+            action: function ( e, dt, node, config ) {
               customPrint(e, dt, node, config, isOpenNewTab)
             },
           },
@@ -627,100 +572,77 @@ class BBDataTable extends Component {
           // },
           {
             orderable: false,
-            className: !this.state.isCheckbox
-              ? "wo-checkbox"
-              : "select-checkbox",
+            className: !this.state.isCheckbox ? "wo-checkbox": "select-checkbox",
             targets: [0],
             width: "5%",
           },
           {
             targets: [1, 2],
-            className: !this.state.isCheckbox
-              ? module === "employee" || module === "ancillary"
-                ? ""
-                : "custom-col-width"
-              : "cstm-col-width",
+            className: !this.state.isCheckbox ? module === "employee" || module === "ancillary" ? "" : "custom-col-width": "cstm-col-width",
           },
           {
             targets: [3],
             className: !module === "loyalty-programs" ? "" : "cstm-col-width-2",
-            visible: module
-              ? module === "standard-ancillary-fee" || module === "email-setup"
-                ? false
-                : true
-              : true,
+            visible: module ? module === "standard-ancillary-fee" || module === "email-setup" ? false : true : true
           },
           { responsivePriority: 1, targets: 1 },
           { responsivePriority: 2, targets: 2 },
           {
-            // The `data` parameter refers to the data for the cell (defined by the
-            // `data` option, which defaults to the column being worked with, in
-            // this case `data: 0`.
-            render: function (data, type, row) {
-              var datas = data
-              if (module === "employee" || module === "user-management") {
-                datas = data + " " + row.middle_name + " " + row.surname
-              }
-              return datas
-            },
-            targets:
-              module === "employee" ? 3 : module === "user-management" ? 2 : "",
-          },
-          {
-            // The `data` parameter refers to the data for the cell (defined by the
-            // `data` option, which defaults to the column being worked with, in
-            // this case `data: 0`.
-            render: function (data, type, row) {
-              var datas = data
-              if (module === "employee") {
-                let division = ""
-                if (row.division.division_name) {
-                  division = row.division.division_name
+              // The `data` parameter refers to the data for the cell (defined by the
+              // `data` option, which defaults to the column being worked with, in
+              // this case `data: 0`.
+              "render": function ( data, type, row ) {
+                var datas = data;
+                if(module === 'employee' || module === 'user-management' ){
+                  datas = data +' '+ row.middle_name + ' ' + row.surname;
                 }
-
-                datas = data + "<br/>" + division
-                if (type === "myExport") datas = `${data} / ${division}`
-              }
-              return datas
-            },
-            targets: module === "employee" ? 7 : "",
+                  return datas
+              },
+              "targets": module === 'employee' ? 3 : module === 'user-management' ? 2 : ''
           },
-          { visible: false, targets: module === "employee" ? [4, 5, 8] : [] },
           {
-            className: module
-              ? module === "standard-ancillary-fee" || module === "email-setup"
-                ? "width-ancillary"
-                : this.props.actionWidthClass || ""
-              : "",
+              // The `data` parameter refers to the data for the cell (defined by the
+              // `data` option, which defaults to the column being worked with, in
+              // this case `data: 0`.
+              "render": function ( data, type, row ) {
+                var datas = data;
+                if(module === 'employee'){
+                  let division = "";
+                  if(row.division.division_name){
+                    division = row.division.division_name
+                  }
+
+                  datas = data +'<br/>'+ division
+                  if (type === "myExport") datas =`${data} / ${division}`
+                }
+                  return datas
+              },
+              "targets": module === 'employee' ? 7 : ''
+          },
+          { visible: false,  targets: module === 'employee' ? [ 4, 5, 8 ] : [] },
+          {
+            className: module ? module === "standard-ancillary-fee" || module === "email-setup" ? "width-ancillary" : this.props.actionWidthClass || "" : "",
             targets: [2],
           },
           {
-            className: module
-              ? module === "email-setup-template"
-                ? "width-ancillary"
-                : this.props.actionWidthClass || ""
-              : "",
-            targets: [columns.length - 1],
+            className: module ? module === "email-setup-template" ? "width-ancillary" : this.props.actionWidthClass || "" : "",
+            targets: [ columns.length - 1],
           },
           {
             targets: [columns.length - 3, columns.length - 1],
-            className: module === "branch-office" ? "desktop" : "",
+            className: module === "branch-office" ? "desktop" : ""
           },
           {
-            targets: [
-              columns.length - 4,
-              columns.length - 3,
-              columns.length - 2,
-              columns.length - 1,
-            ],
-            className: module === "employee" ? "desktop" : "",
-          },
+            targets: [columns.length - 4, columns.length - 3, columns.length - 2, columns.length - 1],
+            className: module === "employee" ? "desktop" : ""
+          }
           // {
           //   orderable: false,
-          // className: "table-row-action",
+            // className: "table-row-action",
           //   targets: [columns.length - 1],
           //   width: "20%",
           // },
+
         ],
         // select: {
         //   style: "multi",
@@ -752,6 +674,8 @@ class BBDataTable extends Component {
           lengthMenu: "_MENU_",
         },
         fnDrawCallback: (t) => {
+
+
           const { selected } = this.state
           let wrapper = $(".dataTables_paginate", t.nTableWrapper)
           wrapper.append(
@@ -760,9 +684,7 @@ class BBDataTable extends Component {
           wrapper.prepend(
             '<span class="d-md-none float-left mt-2 mr-2 text-label-page">Page: </span>',
           )
-          $(".pagination", wrapper).addClass(
-            "float-right float-left-sm mobile-margin",
-          )
+          $(".pagination", wrapper).addClass("float-right float-left-sm mobile-margin")
 
           // Hide pagination if empty data
           // if (t.fnRecordsDisplay() === 1) {
@@ -788,17 +710,14 @@ class BBDataTable extends Component {
           $(".select-checkbox-all").prop("checked", checkedHeader)
 
           this.queryParams.sort()
-          let query = ""
-          for (let pair of this.queryParams.entries()) {
-            if (query === "") query += "?"
-            if (query.length > 1) query += "&"
-            query += pair[0] + "=" + pair[1]
+          let query = ''
+          for(let pair of this.queryParams.entries()) {
+            if(query === '') query += '?'
+            if(query.length > 1 ) query += '&'
+            query += pair[0] + '=' + pair[1]
           }
-          if (query !== "") {
-            this.props.history.replace({
-              pathname: this.props.location.pathname,
-              search: query,
-            })
+          if(query !== '') {
+          this.props.history.replace({ pathname: this.props.location.pathname, search: query})
           }
         },
       })
@@ -826,12 +745,12 @@ class BBDataTable extends Component {
               .join("_")
           }
 
-          if (module === "frequent_traveler_program") {
-            module = "loyalty_programs"
+          if(module === 'frequent_traveler_program'){
+            module = 'loyalty_programs'
           }
 
-          if (module === "fee_type") {
-            module = "fee_tax_type"
+          if(module === 'fee_type'){
+            module = 'fee_tax_type'
           }
 
           let rowID = edit.triggerRow.data().id
@@ -841,18 +760,16 @@ class BBDataTable extends Component {
           let targetIdx = rowPositionDiff === 0 ? 1 : diff.length - 2
           let sort = dt.row(diff[targetIdx].node)?.data()?.sort || 0
           try {
-            let res = await this.api.post(
-              `/master/batch-actions/sort/${module}`,
-              { id: rowID, sort },
-            )
+            let res = await this.api.post(`/master/batch-actions/sort/${module}`, { id: rowID, sort })
             $(this.table.current).DataTable().draw(false)
-          } catch (e) {}
+          } catch (e) {
+          }
         }
       })
 
-      dt.on("page.dt", async () => {
-        var info = dt.page.info()
-        this.queryParams.set("page", info.page + 1)
+      dt.on('page.dt', async () => {
+        var info = dt.page.info();
+        this.queryParams.set("page", info.page+1)
       })
 
       this.dt = dt
@@ -898,20 +815,12 @@ class BBDataTable extends Component {
     if (value + "" !== "") {
       this.setState({
         year: value,
-        extraFilters: [
-          ["start_date", "like", value],
-          ["or"],
-          ["end_date", "like", value],
-        ],
+        extraFilters:[["start_date", "like", value],["or"],["end_date", "like", value]]
       })
     } else {
       this.setState({
         year: new Date().getFullYear(),
-        extraFilters: [
-          ["start_date", "like", new Date().getFullYear()],
-          ["or"],
-          ["end_date", "like", new Date().getFullYear()],
-        ],
+        extraFilters:[["start_date", "like", new Date().getFullYear()],["or"],["end_date", "like", new Date().getFullYear()]]
       })
     }
     setTimeout(() => {
@@ -929,7 +838,7 @@ class BBDataTable extends Component {
     setTimeout(() => {
       this.setState({
         extraFilters: [],
-        year: "",
+        year: ""
       })
       setTimeout(() => {
         this.onSearch("")
@@ -960,7 +869,8 @@ class BBDataTable extends Component {
           .trigger()
         this.dt.page.len(prevLen).draw()
       }, 1500)
-    } catch (e) {}
+    } catch (e) {
+    }
   }
 
   onToggleFilter(show) {
@@ -1028,7 +938,7 @@ class BBDataTable extends Component {
       deleteType: "single",
       id: id,
       name: name,
-      info: info || name,
+      info: info || name
     })
   }
 
@@ -1038,22 +948,16 @@ class BBDataTable extends Component {
     let switchBtn = $(`.check-status-${id}`, table)
     if (status === 1) {
       switchBtn.prop("checked", false)
-      $(item).data("status", "3")
-      this.setState(
-        {
-          selected: [id],
-        },
-        () => this.onStatusUpdate(3),
-      )
+      $(item).data("status", '3')
+      this.setState({
+        selected: [id]
+      }, () => this.onStatusUpdate(3))
     } else {
       switchBtn.prop("checked", true)
-      $(item).data("status", "1")
-      this.setState(
-        {
-          selected: [id],
-        },
-        () => this.onStatusUpdate(1),
-      )
+      $(item).data("status", '1')
+      this.setState({
+        selected: [id]
+      }, () => this.onStatusUpdate(1))
     }
   }
 
@@ -1168,46 +1072,42 @@ class BBDataTable extends Component {
         $('[data-toggle="tooltip"]').tooltip("hide")
         switch ($(this).data("action")) {
           case "edit":
-            if (me.props.createOnModal) {
-              me.props.setCreateModal({ show: true, id, disabled_form: false })
-            } else if (me.props.isReplaceTable) {
-              me.props.setId(id)
+            if(me.props.createOnModal) {
+              me.props.setCreateModal({show: true, id, disabled_form: false})
+            } else if(me.props.isReplaceTable) {
+              me.props.setId(id);
               me.props.handleReplaceTable(!me.props.isReplaceTable)
-            } else if (me.props.createNewModal) {
-              me.props.setCreateModal({ show: true, id, disabled_form: false })
-            } else {
+            } else if(me.props.createNewModal) {
+              me.props.setCreateModal({show: true, id, disabled_form: false})
+            }
+              
+            
+             else {
               me.props.history.push(base + "/" + id)
             }
             break
           case "copy":
-            me.props.setCreateModal({ show: true, id, disabled_form: false })
+            me.props.setCreateModal({show: true, id, disabled_form: false})
             break
           case "view":
-            if (me.props.createOnModal) {
-              me.props.setCreateModal({ show: true, id, disabled_form: true })
-            } else if (me.props.isReplaceTable) {
-              me.props.setId(id)
-              me.props.handleReplaceTable(!me.props.isReplaceTable)
-            } else if (me.props.createNewModal) {
-              me.props.setCreateNewModal({
-                show: true,
-                id,
-                disabled_form: true,
-              })
+            if(me.props.createOnModal) {
+              me.props.setCreateModal({show: true, id, disabled_form: true})
+            } else if(me.props.createNewModal) {
+              me.props.setCreateNewModal({show: true, id, disabled_form: true})
             } else {
               me.props.history.push(base + "/" + id + "?action=view")
             }
             break
           case "history":
-            me.props.history.push(routeHistory + "/" + id)
+            me.props.history.push(routeHistory + "/" + id )
             break
           case "update_status":
             me.updateStatus.bind(me)(id, this)
             break
           default:
-            if (me.props.modalDelete) {
-              me.props.setModalDelete({ show: true, id, disabled_form: false })
-            } else {
+            if(me.props.modalDelete) {
+              me.props.setModalDelete({show: true, id, disabled_form: false})
+            }else{
               me.deleteAction.bind(me)(id, name, info)
             }
             break
@@ -1215,17 +1115,7 @@ class BBDataTable extends Component {
       })
     $.fn.DataTable.ext.pager.numbers_length = 5
 
-    const {
-      showCreateModal,
-      modalTitle,
-      modalTitleNew,
-      showModalDelete,
-      showCreateNewModal,
-      createNewModal,
-      createOnModal,
-      module,
-      deleteEndpoint,
-    } = this.props
+    const { showCreateModal, modalTitle, modalTitleNew, showModalDelete, showCreateNewModal, createNewModal, createOnModal, module, deleteEndpoint } = this.props
     return (
       <div ref={this.wrapper}>
         <Modal show={this.state.isOpen}>
@@ -1237,15 +1127,9 @@ class BBDataTable extends Component {
                 : this.props.title
               : this.props.title}
           </ModalHeader>
-          <ModalBody>
-            Are you sure you want to delete{" "}
-            {this.props.showInfoDelete
-              ? this.state.selected.length > 0
-                ? "this"
-                : `'${this.state.info}'`
-              : "this"}
-            ?
-          </ModalBody>
+          <ModalBody>Are you sure you want to delete {
+            this.props.showInfoDelete ? this.state.selected.length > 0 ? "this" : `'${this.state.info}'` : "this"
+          }?</ModalBody>
           <ModalFooter>
             <Button
               variant="danger"
@@ -1258,11 +1142,7 @@ class BBDataTable extends Component {
                     .delete(this.props.endpoint + "/" + this.state.id)
                     .then(() => {
                       this.props.setAlert({
-                        message: `Record ${
-                          this.props.showInfoDelete
-                            ? `'${this.state.info}'`
-                            : this.state.name
-                        } was successfully deleted.`,
+                        message: `Record ${this.props.showInfoDelete ? `'${this.state.info}'` : this.state.name} was successfully deleted.`,
                       })
                     })
                     .catch(function (error) {
@@ -1307,82 +1187,55 @@ class BBDataTable extends Component {
             </Button>
           </ModalFooter>
         </Modal>
+        
+        {createOnModal && <ModalCreate
+          modalTitle={modalTitle}
+          show={showCreateModal.show}
+          onClick={() => this.props.setCreateModal({show: false, id: null, disabled_form: false})}
+          modalContent={this.props.modalContent}
+          modalSize={this.props.modalSize}
+          scrollable={true}
+        />}
 
-        {createOnModal && (
-          <ModalCreate
-            modalTitle={modalTitle}
-            show={showCreateModal.show}
-            onClick={() =>
-              this.props.setCreateModal({
-                show: false,
-                id: null,
-                disabled_form: false,
-              })
-            }
-            modalContent={this.props.modalContent}
-            modalSize={this.props.modalSize}
-            scrollable={true}
-          />
-        )}
-
-        {createNewModal && (
-          <ModalCreateNew
-            modalTitle={modalTitleNew}
-            show={showCreateNewModal.show}
-            onClick={() =>
-              this.props.setCreateNewModal({
-                show: false,
-                id: null,
-                disabled_form: false,
-              })
-            }
-            modalContent={this.props.modalContentNew}
-            modalSize={this.props.modalSize}
-            scrollable={true}
-          />
-        )}
+        {createNewModal && <ModalCreateNew
+          modalTitle={modalTitleNew}
+          show={showCreateNewModal.show}
+          onClick={() => this.props.setCreateNewModal({show: false, id: null, disabled_form: false})}
+          modalContent={this.props.modalContentNew}
+          modalSize={this.props.modalSize}
+          scrollable={true}
+        />}
         <ModalDelete
           modalTitle={modalTitle}
           show={showModalDelete.show}
-          onClick={() =>
-            this.props.setModalDelete({
-              show: false,
-              id: null,
-              disabled_form: false,
-            })
-          }
+          onClick={() => this.props.setModalDelete({show: false, id: null, disabled_form: false})}
           modalContent={this.props.modalDeleteContent}
           modalSize={this.props.modalSize}
           scrollable={true}
         />
 
-        {this.props.module !== "fare-types" ? (
-          <TableHeader
-            {...this.props}
-            createOnModal={this.props.createOnModal}
-            createNewModal={this.props.createNewModal}
-            selected={
-              this.state.selected.length > 0 && !this.props.switchStatus
-            }
-            hideFilter={this.state.hideFilter}
-            extraFilter={this.props.extraFilter}
-            onSearch={this.onSearch.bind(this)}
-            onStatus={this.onStatus.bind(this)}
-            onYear={this.onYear.bind(this)}
-            onReset={this.onReset.bind(this)}
-            onPrint={this.onPrint.bind(this)}
-            onDownload={this.onDownload.bind(this)}
-            onToggleFilter={this.onToggleFilter.bind(this)}
-            onStatusUpdate={this.onStatusUpdate.bind(this)}
-            onRemove={this.onRemoveSelected.bind(this)}
-            hideCreate={this.props.hideCreate}
-            handleReplaceTable={this.props.handleReplaceTable}
-          >
-            {this.props.children}
-          </TableHeader>
-        ) : (
-          ""
-        )}
+        {this.props.module !== "fare-types" ? <TableHeader
+          {...this.props}
+          createOnModal={this.props.createOnModal}
+          createNewModal={this.props.createNewModal}
+          selected={this.state.selected.length > 0 && !this.props.switchStatus}
+          hideFilter={this.state.hideFilter}
+          extraFilter={this.props.extraFilter}
+          onSearch={this.onSearch.bind(this)}
+          onStatus={this.onStatus.bind(this)}
+          onYear={this.onYear.bind(this)}
+          onReset={this.onReset.bind(this)}
+          onPrint={this.onPrint.bind(this)}
+          onDownload={this.onDownload.bind(this)}
+          onToggleFilter={this.onToggleFilter.bind(this)}
+          onStatusUpdate={this.onStatusUpdate.bind(this)}
+          onRemove={this.onRemoveSelected.bind(this)}
+          hideCreate={this.props.hideCreate}
+          handleReplaceTable={this.props.handleReplaceTable}
+        >
+          {this.props.children}
+        </TableHeader>
+        :""}
         {/* {
           this.props.module === "room" ? null :
           <TableHeader
@@ -1422,7 +1275,7 @@ const mapStateToProps = ({ ui }) => {
     showModalDelete: ui.showModalDelete,
     reloadTable: ui.reloadTable,
     modalTitle: ui.modalTitle,
-    modalTitleNew: ui.modalTitleNew,
+    modalTitleNew: ui.modalTitleNew
   }
 }
 
