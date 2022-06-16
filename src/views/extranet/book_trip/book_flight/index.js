@@ -193,9 +193,9 @@ function BookFlight() {
 
 			</Col>
 			{/* Select currency and language */}
-			<Col sm={{span: 2, offset: 5}}>
+			<Col sm={{span: 3, offset: 4}}>
 						<Row>
-							<Col>
+							{/* <Col> */}
 							{/* <OverlayTrigger
 								placement="bottom"
 								overlay={<Tooltip>Choose your language</Tooltip>}
@@ -204,23 +204,30 @@ function BookFlight() {
 								defaultValue={selectLanguage}
 								options={selectLanguage}
 								components={{ MenuList: MenuListLanguage }}
-								formatOptionLabel={language => (
+								formatOptionLabel={(language, opt) => (
 									<div className="selectLanguage">
 									  <img 
 									  	src={language.image} 
 										alt="language-image"
 										className="language-image"
 									  />
-									  <span className='language-value'>{language.value}</span>
+									  {/* {console.log(opt)} */}
+									  {opt.context === "menu" && <span className='language-value'>{language.value}</span>}
+									  
 									</div>
 								)}
 								label="Language"
-								styles={{control: customControlStyles}}
+								styles={{
+									control: customControlStyles,
+									input: () => ({
+										width: 90
+									}),
+								}}
 							/> 
 							{/* </OverlayTrigger> */}
 							
-							</Col>
-							<Col>
+							{/* </Col>
+							<Col> */}
 							{/* <OverlayTrigger
 								placement="bottom"
 								overlay={<Tooltip>Choose your currency</Tooltip>}
@@ -231,16 +238,21 @@ function BookFlight() {
 								components={{ MenuList: MenuListCurrency }}
 								label="Currency"
 								className="selectCurrencies"
-								formatOptionLabel={currency => (
+								formatOptionLabel={(currency, opt) => (
 									<div className="selectCurrencies">
 									  <span className='currencies-label'>{currency.label}</span>
-									  <span className='currencies-value'>{currency.value}</span>
+									  {opt.context === "menu" && <span className='currencies-value'>{currency.value}</span>}
 									</div>
 								)}
-								styles={{control: customControlStyles}}
+								styles={{
+									control: customControlStyles,
+									input: () => ({
+										width: 90,
+									})
+								}}
 							/>
 							{/* </OverlayTrigger> */}
-							</Col>
+							{/* </Col> */}
 						</Row>
 					</Col>
 
