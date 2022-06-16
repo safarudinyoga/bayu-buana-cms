@@ -75,7 +75,7 @@ const FareFamilyModal = (props) => {
         async (value, context) => {
           let cabinId = props.partnerCabinId
           try {
-            let res = await api.get(`${endpoint}/${id}/cabin-types/${cabinId}/fare-family?filters=["fare_type_id","=","${value.value}"]`)
+            let res = await api.get(`${endpoint}/${id}/cabin-types/${cabinId}/fare-families?filters=["fare_type_id","=","${value.value}"]`)
             
             return res.data.items.length === 0
           } catch (error) {
@@ -96,20 +96,18 @@ const FareFamilyModal = (props) => {
 
 
   const onSubmit = async (values, a) => {
-    console.log(values)
-
+    let datadata = []
+    datadata.push(values.booking_class_1)
     let formatted = {
-      fare_: values.fare_type_id.value,
-      booking_class: `${values.booking_class_1} ${values.booking_class_2} ${values.booking_class_3} ${values.booking_class_4} ${values.booking_class_5} ${values.booking_class_6} ${values.booking_class_7} ${values.booking_class_8}`.trim() ,
+      fare_type_id: values.fare_type_id.value,
+      booking_classes: datadata,
     }
 
     try {
       if(fareFamilyId){
-        let res = await api.put(endpoint + "/" + id + "/cabin-types/" + cabinId + "/fare-family/" + fareFamilyId, formatted)
+        let res = await api.put(endpoint + "/" + id + "/cabin-types/" + cabinId + "/fare-families/" + fareFamilyId, formatted)
       } else {
-        let res = await api.post(endpoint + "/" + id + "/cabin-types/" + cabinId + "/fare-family/", formatted)
-
-        console.log(res)
+        let res = await api.post(endpoint + "/" + id + "/cabin-types/" + cabinId + "/fare-families/", formatted)
       }
       dispatch(
         setAlert({
@@ -128,12 +126,11 @@ const FareFamilyModal = (props) => {
   useEffect(() => {
     if (!props.partnerCabinId) {
       setLoading(false);
-  }
+    }
 
-  if (fareFormValues) {
+    if (fareFormValues) {
       setLoading(false);
-  }
-  console.log(props.partnerCabinId)
+    }
     setCabinId(props.partnerCabinId)
   }, [props.partnerCabinId, fareFormValues])
 
@@ -172,7 +169,6 @@ const FareFamilyModal = (props) => {
                     url={`master/fare-types`}
                     fieldName={"fare_type_name"}
                     onChange={(v) => {
-                      console.log("Kepanggil", v)
                       setFieldValue("fare_type_id", v)
                     }}
                     size={props.size}
@@ -284,7 +280,7 @@ const Cabins = (props) => {
   const [cabinId, setCabinId] = useState(null)
   const [formValues, setFormValues] = useState(null)
   const [modalShow, setModalShow] = useState(false)
-  const isView = props.isView;
+  const [isView, setIsView] = useState(false);
   const [loading, setLoading] = useState(true);
   let api = new Api()
 
@@ -293,7 +289,7 @@ const Cabins = (props) => {
     let res = await api.get(endpoint + "/" + id + "/cabin-types?" + `filters=${filters}`)
 
     if(cabinId) {
-      return res.data.items.length === 0 || value === formValues[fieldName] || formValues[fieldName].value
+      return res.data.items.length === 0 || value === formValues[fieldName] || value === formValues[fieldName].value
     } else {
       return res.data.items.length === 0
     }
@@ -340,14 +336,7 @@ Yup.addMethod(Yup.string, 'uniqueValueString', function (fieldName, message) {
 
   useEffect(async () => {
     let formId = props.partnerCabinId
-    let docTitle = "Edit Partner Cabins";
-    if (!formId) {
-        docTitle = "Create Partner Cabins";
-    } else if (isView) {
-        docTitle = "Partner Cabins Details";
-    }
 
-    dispatch(setContentTitle(docTitle));
     if(formId) {
       try {
         let res = await api.get(endpoint + "/" + id + "/cabin-types/" + formId);
@@ -378,7 +367,7 @@ Yup.addMethod(Yup.string, 'uniqueValueString', function (fieldName, message) {
       if(cabinId){
         let res = await api.put(endpoint + "/" + id + "/cabin-types/" + cabinId, formatted);
       }else{
-          let res = await api.post(endpoint + "/" + id + "/cabin-types", formatted);
+        let res = await api.post(endpoint + "/" + id + "/cabin-types", formatted);
       }
       dispatch(
         setAlert({
@@ -399,13 +388,24 @@ Yup.addMethod(Yup.string, 'uniqueValueString', function (fieldName, message) {
   useEffect(() => {
     if (!props.partnerCabinId) {
       setLoading(false);
-  }
+    }
 
-  if (formValues) {
+    if (formValues) {
       setLoading(false);
-  }
-  console.log(props.partnerCabinId)
+    }
+    let docTitle = "Edit Partner Cabins";
+    if(props.isDetail){
+      docTitle = "Partner Cabins Details";
+    }else{
+      if (!props.partnerCabinId) {
+          docTitle = "Create Partner Cabins";
+      } 
+    }
+
+    dispatch(setContentTitle(docTitle));
     setCabinId(props.partnerCabinId)
+    setIsView(props.isDetail)
+
   }, [props.partnerCabinId, formValues])
 
   const formSize = {
@@ -430,7 +430,6 @@ Yup.addMethod(Yup.string, 'uniqueValueString', function (fieldName, message) {
     },
   };
 
-  console.log('formValues', formValues)
   return (
     <div>
       <Formik initialValues={formValues || initialValues} validationSchema={validationSchema} onSubmit={onSubmit} validateOnMount enableReinitialize>
@@ -533,7 +532,7 @@ Yup.addMethod(Yup.string, 'uniqueValueString', function (fieldName, message) {
                             SAVE
                         </Button>
                     )}
-                    <CancelButton onClick={() => {
+                    <CancelButton txtback={isView ? "BACK" : "CANCEL"} onClick={() => {
                       dispatch(setContentTitle("Partner Cabins"));
                       props.handleReplaceTable(props.isReplaceTable);
                     }} />
