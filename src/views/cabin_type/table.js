@@ -55,6 +55,10 @@ export default function CabinTypeTable() {
     ],
     emptyTable: "No cabin types found",
     recordName: ["cabin_type_code", "cabin_type_name"],
+    showInfoDelete: true,
+    infoDelete: [
+      {title: "Cabin Type Name", recordName: "cabin_type_name"}, 
+    ],
   }
   return <BBDataTable {...params} />
 }

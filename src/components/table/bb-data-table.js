@@ -167,7 +167,9 @@ class BBDataTable extends Component {
         if(infoDelete) {
           info = infoDelete.map(v => {
             let data = v.recordName
+            // console.log("ini data", data)
             let result = Array.isArray(data);
+            // console.log("ini result", result)
             let title = ""
             if(result){
               title = data.map(v => row[v]).join(" ")
@@ -175,7 +177,14 @@ class BBDataTable extends Component {
               if (module === 'manage-corporate') {
                 title = pathNotation(data, row)
               } else {
-                title = row[data]
+                data = data.split(".")
+                if(data.length > 1) {
+                  title = row[data[0]][data[1]]
+                } else {
+                  title = row[data]
+                }
+                // console.log("ini row", row)
+                // console.log("ini title", title)
               }
             }
             return v.title + ": " + title
@@ -212,7 +221,7 @@ class BBDataTable extends Component {
           <a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="${hideDetail ? "d-none" : "d-inline"} table-row-action-item" data-action="view" data-id="${targetDetailId}" title="Click to view details"><img src="${showIcon}"/></a>
           <a href="javascript:void(0);" class="${showSwitch ? "d-inline" : "d-none"} custom-switch custom-switch-bb table-row-action-item" data-id="${module === 'employee' ? row.employee_id: row.id}" data-action="update_status" data-status="${row.status}" data-toggle="tooltip" data-placement="${placement}" title="${row.status === 1 ? "Deactivate" : "Activate"}">
             <input type="checkbox" class="custom-control-input check-status-${row.id}" id="customSwitch${row.id}" ${checked} data-action="update_status">
-            <label class="custom-control-label" for="customSwitch${row.id}" data-action="update_status"></label>
+            <label class="custom-control-label mt-2" for="customSwitch${row.id}" data-action="update_status"></label>
           </a>
           ${
             self.props.showHistory
@@ -1068,6 +1077,7 @@ class BBDataTable extends Component {
             } else if(me.props.isReplaceTable) {
               me.props.setId(id);
               me.props.handleReplaceTable(!me.props.isReplaceTable)
+              me.props.handleIsDetail(false)
             } else if(me.props.createNewModal) {
               me.props.setCreateModal({show: true, id, disabled_form: false})
             }
@@ -1083,11 +1093,12 @@ class BBDataTable extends Component {
           case "view":
             if(me.props.createOnModal) {
               me.props.setCreateModal({show: true, id, disabled_form: true})
+            } else if(me.props.createNewModal) {
+              me.props.setCreateNewModal({show: true, id, disabled_form: true})
             } else if(me.props.isReplaceTable) {
               me.props.setId(id);
               me.props.handleReplaceTable(!me.props.isReplaceTable)
-            } else if(me.props.createNewModal) {
-              me.props.setCreateNewModal({show: true, id, disabled_form: true})
+              me.props.handleIsDetail(true)
             } else {
               me.props.history.push(base + "/" + id + "?action=view")
             }
@@ -1109,18 +1120,21 @@ class BBDataTable extends Component {
       })
     $.fn.DataTable.ext.pager.numbers_length = 5
 
-    const { showCreateModal, modalTitle, modalTitleNew, showModalDelete, showCreateNewModal, createNewModal, createOnModal, module, deleteEndpoint } = this.props
+    const { showCreateModal, modalTitle, modalTitleNew, showModalDelete, showCreateNewModal, createNewModal, createOnModal, module, deleteEndpoint, showModalHeader = true} = this.props
     return (
       <div ref={this.wrapper}>
         <Modal show={this.state.isOpen}>
-          <ModalHeader>
+          {showModalHeader ?
+            <ModalHeader>
             Delete{" "}
             {this.props.titleModal
               ? this.state.deleteType === "single"
                 ? this.props.titleModal
                 : this.props.title
               : this.props.title}
-          </ModalHeader>
+          </ModalHeader> : ""
+          }
+          
           <ModalBody>Are you sure you want to delete {
             this.props.showInfoDelete ? this.state.selected.length > 0 ? "this" : `'${this.state.info}'` : "this"
           }?</ModalBody>

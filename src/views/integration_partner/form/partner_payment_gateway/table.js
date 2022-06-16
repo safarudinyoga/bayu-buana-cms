@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom"
 import BBDataTable from "components/table/bb-data-table"
 import { Card } from "react-bootstrap"
 import Form from "./form"
-import FormDelete from "./form-delete"
+// import FormDelete from "./form-delete"
 
 export default function IntegrationPartnerPaymentGatewayTable() {
   const param = useParams()
@@ -13,7 +13,7 @@ export default function IntegrationPartnerPaymentGatewayTable() {
     showAdvancedOptions: false,
     createOnModal: true,
     hideDetail: true,
-    modalDelete: true,
+    // modalDelete: true,
     title: "Partner Payment Gateway",
     titleModal: "Partner Payment Gateway",
     baseRoute: "/master/integration-payment-gateway/form",
@@ -35,7 +35,12 @@ export default function IntegrationPartnerPaymentGatewayTable() {
       "payment_gateway.payment_gateway_code",
       "payment_gateway.payment_gateway_name",
     ],
-    searchText: "Search"
+    showInfoDelete: true,
+    infoDelete: [
+      {title: "Partner Payment Gateway Name", recordName: "payment_gateway.payment_gateway_name"}, 
+    ],
+    searchText: "Search",
+    showModalHeader: false,
   })
 
   return (
@@ -43,7 +48,7 @@ export default function IntegrationPartnerPaymentGatewayTable() {
       <Card>
         <Card.Body>
           <h3 className="card-heading">Partner Payment Gateways</h3>
-          <BBDataTable {...params} modalContent={Form} modalDeleteContent={FormDelete}/>
+          <BBDataTable {...params} modalContent={Form} />
         </Card.Body>
       </Card>
     </>

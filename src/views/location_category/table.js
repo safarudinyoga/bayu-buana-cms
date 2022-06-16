@@ -56,6 +56,10 @@ export default function LocationCategoryTable() {
     ],
     emptyTable: "No location categories found",
     recordName: ["location_category_code", "location_category_name"],
+    showInfoDelete: true,
+    infoDelete: [
+      {title: "Location Category Name", recordName: "location_category_name"}, 
+    ],
   }
   return <BBDataTable {...params} />
 }

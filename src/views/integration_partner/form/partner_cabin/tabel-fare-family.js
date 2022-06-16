@@ -19,10 +19,10 @@ export default function IntegrationPartnerCabinTypesTable(props) {
     titleModal: "Integration Partner",
     showAdvancedOptions: false,
     baseRoute: "/master/form",
-    endpoint: `/master/integration-partners/${partnerId}/cabin-types/${partnerCabinId}/fare-family`,
-    deleteEndpoint: "/master/batch-actions/delete/fare-types",
-    activationEndpoint: "/master/batch-actions/activate/fare-types",
-    deactivationEndpoint: "/master/batch-actions/deactivate/fare-types",
+    endpoint: `/master/integration-partners/${partnerId}/cabin-types/${partnerCabinId}/fare-families`,
+    deleteEndpoint: "/master/batch-actions/delete/fare-families",
+    activationEndpoint: "/master/batch-actions/activate/fare-families",
+    deactivationEndpoint: "/master/batch-actions/deactivate/fare-families",
     columns: [
       {
         title: "Fare Family",
@@ -36,7 +36,7 @@ export default function IntegrationPartnerCabinTypesTable(props) {
 
     ],
     emptyTable: "No Partner Fare Family found",
-    
+    customSort:['fare_type_id'],
     showInfoDelete: true,
     isOpenNewTab: false,
     hideDetail: true,

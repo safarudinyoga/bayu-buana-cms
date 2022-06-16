@@ -56,6 +56,10 @@ export default function PropertyCategoryTable() {
     ],
     emptyTable: "No property categories found",
     recordName: ["property_category_code", "property_category_name"],
+    showInfoDelete: true,
+    infoDelete: [
+      {title: "Property Category Name", recordName: "property_category_name"}, 
+    ],
   }
   return <BBDataTable {...params} />
 }

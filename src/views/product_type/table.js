@@ -60,6 +60,10 @@ export default function ProductTypeTable() {
       },
     ],
     recordName: ["product_type_code", "product_type_name"],
+    showInfoDelete: true,
+    infoDelete: [
+      {title: "Product Type Name", recordName: "product_type_name"}, 
+    ],
   }
   return <BBDataTable {...params} />
 }

@@ -64,6 +64,10 @@ export default function AirportTable() {
     ],
     emptyTable: "No airports found",
     recordName: ["airport_code", "airport_name"],
+    showInfoDelete: true,
+    infoDelete: [
+      {title: "Airport Name", recordName: "airport_name"}, 
+    ],
   })
 
   useEffect(() => {

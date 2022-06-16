@@ -45,6 +45,7 @@ export default function IntegrationPartnerCountriesTable() {
     infoDelete: [
       {title: "Partner Country Name", recordName: "country_name"}, 
     ],
+    showModalHeader: false,
   })
 
   return <><Card>

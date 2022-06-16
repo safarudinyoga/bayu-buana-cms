@@ -55,6 +55,10 @@ export default function AircraftTable() {
     ],
     emptyTable: "No aircrafts found",
     recordName: ["aircraft_code", "aircraft_name"],
+    showInfoDelete: true,
+    infoDelete: [
+      {title: "Aircraft Name", recordName: "aircraft_name"}, 
+    ],
   }
   return <BBDataTable {...params} />
 }

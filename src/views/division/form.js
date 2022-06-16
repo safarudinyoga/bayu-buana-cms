@@ -4,10 +4,10 @@ import FormInputControl from "components/form/input-control"
 import Api from "config/api"
 import $ from "jquery"
 import useQuery from "lib/query"
-import React, {useEffect, useState} from "react"
-import {useDispatch} from "react-redux"
-import {withRouter} from "react-router"
-import {setAlert, setUIParams} from "redux/ui-store"
+import React, { useEffect, useState } from "react"
+import { useDispatch } from "react-redux"
+import { withRouter } from "react-router"
+import { setAlert, setUIParams } from "redux/ui-store"
 import FormInputSelectAjax from "../../components/form/input-select-ajax"
 import env from "../../config/environment"
 
@@ -26,7 +26,7 @@ function DivisionForm(props) {
   const [employeeData, setEmployeeData] = useState([])
   const [id, setId] = useState(null)
   const [form, setForm] = useState({
-    depth:0,
+    depth: 0,
     division_code: "",
     division_name: "",
     parent_division_id: "",
@@ -46,7 +46,7 @@ function DivisionForm(props) {
       minlength: 1,
       maxlength: 36,
       checkCode: true,
-      noSpace: true,      
+      noSpace: true,
     },
     division_name: {
       required: true,
@@ -74,7 +74,7 @@ function DivisionForm(props) {
   }
 
   useEffect(async () => {
-    let api = new Api()    
+    let api = new Api()
 
     let docTitle = "Edit Division"
     let bcTitle = docTitle
@@ -106,12 +106,20 @@ function DivisionForm(props) {
     if (formId) {
       try {
         let res = await api.get(endpoint + "/" + formId)
-        setForm(res.data);
+        setForm(res.data)
         if (res.data.parent_division && res.data.parent_division_id) {
-          setParentDivisionTypeData([{...res.data.parent_division, id: res.data.parent_division_id, text: res.data.parent_division.division_name}])
+          setParentDivisionTypeData([
+            {
+              ...res.data.parent_division,
+              id: res.data.parent_division_id,
+              text: res.data.parent_division.division_name,
+            },
+          ])
         }
         if (res.data.manager) {
-          setEmployeeData([{...res.data.manager, text: res.data.manager.given_name}])
+          setEmployeeData([
+            { ...res.data.manager, text: res.data.manager.given_name },
+          ])
         }
         if (res.data) {
           let currentCode = res.data.division_code
@@ -121,7 +129,9 @@ function DivisionForm(props) {
             "checkCode",
             function (value, element) {
               var req = false
-              let encodeFilters = encodeURIComponent(JSON.stringify(["division_code","=",element.value]))
+              let encodeFilters = encodeURIComponent(
+                JSON.stringify(["division_code", "=", element.value]),
+              )
               $.ajax({
                 type: "GET",
                 async: false,
@@ -148,7 +158,9 @@ function DivisionForm(props) {
             "checkName",
             function (value, element) {
               var req = false
-              let encodeFilters = encodeURIComponent(JSON.stringify(["division_name","=",element.value]))
+              let encodeFilters = encodeURIComponent(
+                JSON.stringify(["division_name", "=", element.value]),
+              )
               $.ajax({
                 type: "GET",
                 async: false,
@@ -171,22 +183,23 @@ function DivisionForm(props) {
             "Division Name already exists",
           )
         }
-
-      } catch (e) { }
+      } catch (e) {}
 
       try {
         let res = await api.get(endpoint + "/" + formId + "/translations", {
           size: 50,
         })
         setTranslations(res.data.items)
-      } catch (e) { }
+      } catch (e) {}
       setLoading(false)
     } else {
       $.validator.addMethod(
         "checkCode",
         function (value, element) {
           var req = false
-          let encodeFilters = encodeURIComponent(JSON.stringify(["division_code","=",element.value]))
+          let encodeFilters = encodeURIComponent(
+            JSON.stringify(["division_code", "=", element.value]),
+          )
           $.ajax({
             type: "GET",
             async: false,
@@ -210,7 +223,9 @@ function DivisionForm(props) {
         "checkName",
         function (value, element) {
           var req = false
-          let encodeFilters = encodeURIComponent(JSON.stringify(["division_name","=",element.value]))
+          let encodeFilters = encodeURIComponent(
+            JSON.stringify(["division_name", "=", element.value]),
+          )
           $.ajax({
             type: "GET",
             async: false,
@@ -244,7 +259,9 @@ function DivisionForm(props) {
     let api = new Api()
     try {
       if (!form.parent_division_id) {
-        form.parent_division_id = formId ? "00000000-0000-0000-0000-000000000000" : null
+        form.parent_division_id = formId
+          ? "00000000-0000-0000-0000-000000000000"
+          : null
         delete form.parent_division
       } else {
         form.depth = parseInt(form.depth) + 1
@@ -296,50 +313,58 @@ function DivisionForm(props) {
           required={true}
           value={form.division_name}
           name="division_name"
-          onChange={(e) =>
-            setForm({...form, division_name: e.target.value})
-          }
+          onChange={(e) => setForm({ ...form, division_name: e.target.value })}
           disabled={isView || loading}
           type="text"
           minLength="1"
           maxLength="256"
         />
 
-        {(formId === undefined || !loading) && <FormInputSelectAjax
-          label="Parent Division"
-          value={form.parent_division_id}
-          name="parent_division_id"
-          endpoint="/master/divisions"
-          column="division_name"
-          filter={formId ? `[["id","!=","${formId}"],["and"],[["parent_division_id","!=","${formId}"],["or"],["parent_division_id","is",null]]]` : ``}
-          onChange={(e) =>
-            setForm({...form, parent_division_id: e.target.value || null})
-          }
-          data={parentDivisionTypeData}
-          disabled={isView || loading}
-          type="select"
-          placeholder="Select Parent Division"
-        />}
+        {(formId === undefined || !loading) && (
+          <FormInputSelectAjax
+            label="Parent Division"
+            value={form.parent_division_id}
+            name="parent_division_id"
+            endpoint="/master/divisions"
+            column="division_name"
+            filter={
+              formId
+                ? `[["id","!=","${formId}"],["and"],[["parent_division_id","!=","${formId}"],["or"],["parent_division_id","is",null]]]`
+                : ``
+            }
+            onChange={(e) =>
+              setForm({ ...form, parent_division_id: e.target.value || null })
+            }
+            data={parentDivisionTypeData}
+            disabled={isView || loading}
+            type="select"
+            placeholder="Select Parent Division"
+          />
+        )}
 
-        {(formId === undefined || !loading) && <FormInputSelectAjax
-          label="Manager"
-          value={form.manager_id}
-          val_id="employee_id"
-          name="manager_id"
-          endpoint="/master/employees"
-          renderColumn= {(item) => {
-            return `${item.given_name || ''} ${item.middle_name || ''} ${item.surname || ''} (${item.job_title.job_title_name || ''})`
-          }}
-          sort="employee_number"
-          filter={`["status", "=", 1]`}
-          onChange={(e) =>
-            setForm({...form, manager_id: e.target.value || null})
-          }
-          data={employeeData}
-          disabled={isView || loading}
-          type="select"
-          placeholder="Select Manager"
-        />}
+        {(formId === undefined || !loading) && (
+          <FormInputSelectAjax
+            label="Manager"
+            value={form.manager_id}
+            val_id="employee_id"
+            name="manager_id"
+            endpoint="/master/employees"
+            renderColumn={(item) => {
+              return `${item.given_name || ""} ${item.middle_name || ""} ${
+                item.surname || ""
+              } (${item.job_title.job_title_name || ""})`
+            }}
+            sort="employee_number"
+            filter={`["status", "=", 1]`}
+            onChange={(e) =>
+              setForm({ ...form, manager_id: e.target.value || null })
+            }
+            data={employeeData}
+            disabled={isView || loading}
+            type="select"
+            placeholder="Select Manager"
+          />
+        )}
       </FormHorizontal>
 
       <FormHorizontal>
@@ -348,11 +373,9 @@ function DivisionForm(props) {
           required={true}
           value={form.division_code}
           name="division_code"
-          cl={{md:"12"}}
+          cl={{ md: "12" }}
           cr="12"
-          onChange={(e) =>
-            setForm({...form, division_code: e.target.value})
-          }
+          onChange={(e) => setForm({ ...form, division_code: e.target.value })}
           disabled={isView || loading}
           type="text"
           minLength="1"
