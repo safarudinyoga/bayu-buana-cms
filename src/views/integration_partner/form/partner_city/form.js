@@ -32,10 +32,12 @@ const Cities = (props) => {
   const duplicateValue = async(fieldName, value) => {
     let filters = encodeURIComponent(JSON.stringify([[fieldName,"=",value],["AND"],["integration_partner_id",id],["AND"],["status",1]]))
     let res = await api.get(endpoint + "/" + id + "/cities?" + `filters=${filters}`)
-    let sameId = res.data.items.find((v) => v.id === cityId)
-    if(!sameId) return res.data.items.length === 0 
 
-    return true
+    if(cityId){
+      return res.data.items.length === 0 || value === formValues[fieldName] || formValues[fieldName].value
+    } else {
+      return res.data.items.length === 0
+    }
 }
 
 Yup.addMethod(Yup.object, 'uniqueValueObject', function (fieldName, message) {
@@ -91,6 +93,7 @@ Yup.addMethod(Yup.string, 'uniqueValueString', function (fieldName, message) {
     if(formId) {
       try {
         let res = await api.get(endpoint + "/" + id + "/cities/" + formId);
+        console.log(res);
         setFormValues({ 
           ...formValues,
           city_id: _.isEmpty(res.data.city) ? '' : {

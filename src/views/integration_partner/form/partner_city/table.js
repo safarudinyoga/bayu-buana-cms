@@ -18,14 +18,14 @@ export default function PartnerCityTable(props) {
     // modalDelete: true,
     baseRoute: "/master/integration-partner-cities/form",
     endpoint: `/master/integration-partners/${id}/cities`,
-    deleteEndpoint: "/master/batch-actions/delete/integration-partner-cities",
+    deleteEndpoint: `/master/integration-partners/${id}/cities`,
     activationEndpoint: "/master/batch-actions/activate/integration-partner-cities",
     deactivationEndpoint: "/master/batch-actions/deactivate/integration-partner-cities",
     btnDownload: ".buttons-csv",
     columns: [
       {
         title: "City",
-        data: "city.city_name",
+        data: "city_name",
       },
       {
         title: "Partner City Code",
@@ -44,7 +44,8 @@ export default function PartnerCityTable(props) {
     ],
     isOpenNewTab: false,
     module: "partner-city",
-    searchText: "Search"
+    searchText: "Search",
+    showModalHeader: false,
   }
   return <>
     <Card>

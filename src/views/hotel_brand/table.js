@@ -55,6 +55,10 @@ export default function HotelBrandTable() {
     ],
     emptyTable: "No hotel brands found",
     recordName: ["hotel_brand_code", "hotel_brand_name"],
+    showInfoDelete: true,
+    infoDelete: [
+      {title: "Hotel Brand Name", recordName: "hotel_brand_name"}, 
+    ],
   }
   return <BBDataTable {...params} />
 }

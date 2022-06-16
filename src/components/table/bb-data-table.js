@@ -1077,6 +1077,7 @@ class BBDataTable extends Component {
             } else if(me.props.isReplaceTable) {
               me.props.setId(id);
               me.props.handleReplaceTable(!me.props.isReplaceTable)
+              me.props.handleIsDetail(false)
             } else if(me.props.createNewModal) {
               me.props.setCreateModal({show: true, id, disabled_form: false})
             }
@@ -1094,6 +1095,10 @@ class BBDataTable extends Component {
               me.props.setCreateModal({show: true, id, disabled_form: true})
             } else if(me.props.createNewModal) {
               me.props.setCreateNewModal({show: true, id, disabled_form: true})
+            } else if(me.props.isReplaceTable) {
+              me.props.setId(id);
+              me.props.handleReplaceTable(!me.props.isReplaceTable)
+              me.props.handleIsDetail(true)
             } else {
               me.props.history.push(base + "/" + id + "?action=view")
             }
@@ -1115,18 +1120,21 @@ class BBDataTable extends Component {
       })
     $.fn.DataTable.ext.pager.numbers_length = 5
 
-    const { showCreateModal, modalTitle, modalTitleNew, showModalDelete, showCreateNewModal, createNewModal, createOnModal, module, deleteEndpoint } = this.props
+    const { showCreateModal, modalTitle, modalTitleNew, showModalDelete, showCreateNewModal, createNewModal, createOnModal, module, deleteEndpoint, showModalHeader = true} = this.props
     return (
       <div ref={this.wrapper}>
         <Modal show={this.state.isOpen}>
-          <ModalHeader>
+          {showModalHeader ?
+            <ModalHeader>
             Delete{" "}
             {this.props.titleModal
               ? this.state.deleteType === "single"
                 ? this.props.titleModal
                 : this.props.title
               : this.props.title}
-          </ModalHeader>
+          </ModalHeader> : ""
+          }
+          
           <ModalBody>Are you sure you want to delete {
             this.props.showInfoDelete ? this.state.selected.length > 0 ? "this" : `'${this.state.info}'` : "this"
           }?</ModalBody>

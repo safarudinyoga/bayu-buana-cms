@@ -150,6 +150,10 @@ export default function DestinationTable() {
     ],
     emptyTable: "No destinations found",
     recordName: ["destination_code", "destination_name"],
+    showInfoDelete: true,
+    infoDelete: [
+      {title: "Destination Name", recordName: "destination_name"}, 
+    ],
   })
 
   return <BBDataTable {...params} extraFilter={extraFilter} onReset={onReset} />
