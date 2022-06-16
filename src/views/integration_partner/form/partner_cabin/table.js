@@ -29,9 +29,9 @@ export default function IntegrationPartnerCabinTypesTable(props) {
   }
   let [params, setParams] = useState({
     isCheckbox: false,
-    title: "Integration Partner",
+    title: "",
     // modalDelete: true,
-    titleModal: "Integration Partner",
+    titleModal: "",
     showAdvancedOptions: false,
     baseRoute: "/master/integration-partner-cabin-types/form",
     endpoint: `/master/integration-partners/${id}/cabin-types`,
@@ -65,7 +65,8 @@ export default function IntegrationPartnerCabinTypesTable(props) {
     infoDelete: [
       {title: "Partner Cabin Name", recordName: "cabin_type_name"}, 
     ],
-    searchText: "Search"
+    searchText: "Search",
+    showModalHeader: false,
   })
 
   return (

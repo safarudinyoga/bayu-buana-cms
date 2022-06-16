@@ -44,7 +44,8 @@ export default function PartnerCityTable(props) {
     ],
     isOpenNewTab: false,
     module: "partner-city",
-    searchText: "Search"
+    searchText: "Search",
+    showModalHeader: false,
   }
   return <>
     <Card>

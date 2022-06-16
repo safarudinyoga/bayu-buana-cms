@@ -49,6 +49,7 @@ export default function IntegrasiPartnerHotels() {
     infoDelete: [
       {title: "Partner Hotel Name", recordName: "hotel_name"}, 
     ],
+    showModalHeader: false,
     customFilterStatus: {
       value: "",
       options: [

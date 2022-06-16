@@ -43,6 +43,7 @@ import SelfServices from "./self-services"
       searchText: "Search",
       isOpenNewTab: false,
       customSort: ["id"],
+      showModalHeader: false,
     }
   
     return (
