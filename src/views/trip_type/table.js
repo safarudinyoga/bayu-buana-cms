@@ -63,6 +63,7 @@ export default function TripTypeTable() {
     recordName: ["trip_type_code", "trip_type_name"],
     showInfoDelete: true,
     infoDelete: [
+      {title: "Trip Type Code", recordName: "trip_type_code"}, 
       {title: "Trip Type Name", recordName: "trip_type_name"}, 
     ],
   }

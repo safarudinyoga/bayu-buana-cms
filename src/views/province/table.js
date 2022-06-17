@@ -109,6 +109,7 @@ export default function ProvinceTable() {
     recordName: ["state_province_code", "state_province_name"],
     showInfoDelete: true,
     infoDelete: [
+      {title: "State / Province Code", recordName: "state_province_code"}, 
       {title: "State / Province Name", recordName: "state_province_name"}, 
     ],
   })

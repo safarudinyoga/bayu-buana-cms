@@ -8,11 +8,19 @@ import Select, {components} from "react-select"
 // import {OverlayTrigger, Tooltip} from "react-bootstrap"
 import FlightList from './step/select-flight'
 import Passenger from './step/passengers'
-import FlightBookSuggest from '../../components/flight_book-autosuggest'
+import SelectSeat from './step/select_seats'
+import AddOn from './step/add_ons'
+import Review from './step/review'
+import Confirmation from './step/confirmation'
+import useQuery from "lib/query"
+
 import BBModal from 'components/Modal/bb-modal'
+import FlightBookSuggest from '../../components/flight_book-autosuggest'
 
 function BookFlight() {
   const dispatch = useDispatch()
+	let currentKey = useQuery().get("key") || "select-flight"
+
 	const [flight, setFLight] = useState({
 		origin: {
 			city: "Jakarta",
@@ -36,7 +44,7 @@ function BookFlight() {
 	let api = new Api()
 	const [selectLanguage, setSelectLanguage] = useState([])
 	const [selectCurrencies, setSelectCurrencies] = useState([])
-	const [tabKey, setTabKey] = useState("select-flight")
+	const [tabKey, setTabKey] = useState(currentKey)
 	const [showFlightModal, setShowFlightModal] = useState(false)
 
 	const customControlStyles = base => ({
@@ -263,7 +271,7 @@ function BookFlight() {
 					Important Notice: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
 				</Alert>
 		}
-        <Tabs activeKey={tabKey} id="uncontrolled-tab-example" className="book-trip-tabs" onSelect={() => {}}>
+		<Tabs activeKey={tabKey} id="uncontrolled-tab-example" className="book-trip-tabs" onSelect={() => {}}>
 			<Tab eventKey="select-flight" title="Select Flight" tabClassName="book-trip-tab-link">
 				<FlightList
 					key={"select-flight"}
@@ -276,16 +284,24 @@ function BookFlight() {
 				/>
 			</Tab>
 			<Tab eventKey="select-seats" title="Select Seats" tabClassName="book-trip-tab-link">
-				haii
+				<SelectSeat
+					handleSelectTab={(v) => onChangeTab(v)}
+				/>
 			</Tab>
 			<Tab eventKey="add-ons" title="Add Ons" tabClassName="book-trip-tab-link">
-				haii
+				<AddOn
+					handleSelectTab={(v) => onChangeTab(v)}
+				/>
 			</Tab>
 			<Tab eventKey="review" title="Review" tabClassName="book-trip-tab-link">
-				haii
+				<Review
+					handleSelectTab={(v) => onChangeTab(v)}
+				/>
 			</Tab>
 			<Tab eventKey="confirmation" title="Confirmation" tabClassName="book-trip-tab-link">
-				haii
+				<Confirmation
+					handleSelectTab={(v) => onChangeTab(v)}
+				/>
 			</Tab>
         </Tabs>
 

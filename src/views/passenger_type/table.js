@@ -61,6 +61,7 @@ export default function PassengerTypeTable() {
     recordName: ["passenger_type_code", "passenger_type_name"],
     showInfoDelete: true,
     infoDelete: [
+      {title: "Passenger Type Code", recordName: "passenger_type_code"}, 
       {title: "Passenger Type Name", recordName: "passenger_type_name"}, 
     ],
   }

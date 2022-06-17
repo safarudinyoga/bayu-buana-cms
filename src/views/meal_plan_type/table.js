@@ -70,6 +70,7 @@ export default function MealPlanTypeTable() {
     ],
     showInfoDelete: true,
     infoDelete: [
+      {title: "Meal Plan Type Code", recordName: "meal_plan_type_code"}, 
       {title: "Meal Plan Type Name", recordName: "meal_plan_type_name"}, 
     ],
   }

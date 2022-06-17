@@ -224,7 +224,7 @@ class TableHeader extends Component {
 
   render() {
     const ExtraFilter = this.props.extraFilter
-    const { customFilterStatus, hideCreate, isHidePrintLogo } = this.props
+    const { customFilterStatus, hideCreate, isHidePrintLogo, module } = this.props
     const { pathname } = this.props.location
 
     return (
@@ -311,6 +311,8 @@ class TableHeader extends Component {
                       ? "Create New"
                       : pathname === "/internal/shopping-cache"
                       ? "Add Shopping Criteria"
+                      : module === 'custom-other-service-fee-manage-corporate'
+                      ? "Add Override Service Fee"
                       : "Create New"}
                   </button>
                 </OverlayTrigger>

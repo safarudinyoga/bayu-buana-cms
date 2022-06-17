@@ -167,9 +167,7 @@ class BBDataTable extends Component {
         if(infoDelete) {
           info = infoDelete.map(v => {
             let data = v.recordName
-            // console.log("ini data", data)
             let result = Array.isArray(data);
-            // console.log("ini result", result)
             let title = ""
             if(result){
               title = data.map(v => row[v]).join(" ")
@@ -183,12 +181,10 @@ class BBDataTable extends Component {
                 } else {
                   title = row[data]
                 }
-                // console.log("ini row", row)
-                // console.log("ini title", title)
               }
             }
             return v.title + ": " + title
-          }).join(" ")
+          }).join(",")
         }
 
         const targetDataId = module == 'partner-currency'
@@ -200,7 +196,7 @@ class BBDataTable extends Component {
           : module === 'partner-city'
           ? row.city_id
           : module === 'partner-meal-plan'
-          ? row.integration_partner_meal_plan_type.meal_plan_type_id
+          ? row.meal_plan_type_id
           : module === 'partner-cabin'
           ? row.cabin_type_id
           : module === 'manage-corporate'
@@ -221,7 +217,7 @@ class BBDataTable extends Component {
           <a href="javascript:void(0);" data-toggle="tooltip" data-placement="${placement}" class="${hideDetail ? "d-none" : "d-inline"} table-row-action-item" data-action="view" data-id="${targetDetailId}" title="Click to view details"><img src="${showIcon}"/></a>
           <a href="javascript:void(0);" class="${showSwitch ? "d-inline" : "d-none"} custom-switch custom-switch-bb table-row-action-item" data-id="${module === 'employee' ? row.employee_id: row.id}" data-action="update_status" data-status="${row.status}" data-toggle="tooltip" data-placement="${placement}" title="${row.status === 1 ? "Deactivate" : "Activate"}">
             <input type="checkbox" class="custom-control-input check-status-${row.id}" id="customSwitch${row.id}" ${checked} data-action="update_status">
-            <label class="custom-control-label mt-2" for="customSwitch${row.id}" data-action="update_status"></label>
+            <label class="custom-control-label" for="customSwitch${row.id}" data-action="update_status"></label>
           </a>
           ${
             self.props.showHistory
@@ -932,7 +928,6 @@ class BBDataTable extends Component {
   }
 
   deleteAction(id, name, info) {
-    // let titleInfo = this.props.titleInfoDelete ? this.props.titleInfoDelete : ""
     this.setState({
       isOpen: true,
       deleteType: "single",
@@ -1121,6 +1116,10 @@ class BBDataTable extends Component {
     $.fn.DataTable.ext.pager.numbers_length = 5
 
     const { showCreateModal, modalTitle, modalTitleNew, showModalDelete, showCreateNewModal, createNewModal, createOnModal, module, deleteEndpoint, showModalHeader = true} = this.props
+
+    let infoFromState = this.state.info
+    infoFromState = infoFromState ? infoFromState.split(",") : []
+
     return (
       <div ref={this.wrapper}>
         <Modal show={this.state.isOpen}>
@@ -1134,11 +1133,21 @@ class BBDataTable extends Component {
               : this.props.title}
           </ModalHeader> : ""
           }
-          concole.log({this.props.showInfoDelete.length})
-          <ModalBody>Are you sure you want to delete {
-            this.props.showInfoDelete ? this.state.selected.length > 0 ? "this" : `'${this.state.info}'` : "this" 
-          }?</ModalBody>
-
+          
+          <ModalBody>
+          {
+            this.state.selected.length > 0 || infoFromState.length === 0
+            ? <p>Are you sure want to delete this ?</p>
+            : infoFromState.length > 1
+            ? (
+              <>
+                <>Are you sure want to delete this ?</>
+                {infoFromState.map((d) => (<><br/>{d}</>))}
+              </>
+            )
+            : `Are you sure want to delete '${infoFromState}' ?`
+          }
+          </ModalBody>
           <ModalFooter>
             <Button
               variant="danger"
@@ -1151,7 +1160,7 @@ class BBDataTable extends Component {
                     .delete(this.props.endpoint + "/" + this.state.id)
                     .then(() => {
                       this.props.setAlert({
-                        message: `Record ${this.props.showInfoDelete ? `'${this.state.info}'` : this.state.name} was successfully deleted.`,
+                        message: `Record ${this.props.showInfoDelete ? `'${this.state.info.split(",").join(" ")}'` : this.state.name} was successfully deleted.`,
                       })
                     })
                     .catch(function (error) {
