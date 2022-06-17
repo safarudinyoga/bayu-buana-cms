@@ -97,7 +97,7 @@ const FeeSection = (props) => {
                   >
                     IDR
                   </Form.Label>
-                  <Col xs={10} md={9} lg={7}>
+                  <Col xs={10} md={6} lg={7}>
                     {disabledAmount ? (
                       <Form.Control
                         style={{ maxWidth: "220px" }}
@@ -143,7 +143,6 @@ const FeeSection = (props) => {
               </Col>
             </Row>
           </Col>
-
           <Col md={6}>
             <Form.Group>
               <FastField name={props.fieldRadio}>
@@ -246,14 +245,14 @@ const FeeSection = (props) => {
         </Row>
       </Form.Group>
       <FeedbackMessage {...props} />
-      {props.borderBottom && <h3 className="card-heading">.</h3>}
+      {props.borderBottom && <h3 className="card-heading"></h3>}
     </>
   )
 }
 const Fees = (props) => {
   return (
     <Form className="mb-3 pt-3 pl-3">
-      <Col md={8}>
+      <Col md={12}>
         {props.sections.map((val, i) => (
           <FeeSection
             title={val.title}
@@ -404,18 +403,28 @@ const OtherAncillaryFee = (props) => {
         setInitialForm({
           ...initialForm,
           ...data,
-          domestic_reissue: checkprocessingType(data.domestic_reissue.charge_type_id),
+          domestic_reissue: checkprocessingType(
+            data.domestic_reissue.charge_type_id,
+          ),
           domestic_reissue_fee_tax_id: data.domestic_reissue.fee_tax_type_id,
           domestic_reissue_amount: data.domestic_reissue.amount,
-          domestic_reissue_amount_type: checkChargeType(data.domestic_reissue.charge_type_id),
+          domestic_reissue_amount_type: checkChargeType(
+            data.domestic_reissue.charge_type_id,
+          ),
           domestic_reissue_percent: data.domestic_reissue.percent,
           domestic_reissue_tax_include: data.domestic_reissue.is_tax_inclusive,
-          domestic_revalidate: checkprocessingType(data.domestic_revalidate.charge_type_id),
-          domestic_revalidate_fee_tax_id: data.domestic_revalidate.fee_tax_type_id,
+          domestic_revalidate: checkprocessingType(
+            data.domestic_revalidate.charge_type_id,
+          ),
+          domestic_revalidate_fee_tax_id:
+            data.domestic_revalidate.fee_tax_type_id,
           domestic_revalidate_amount: data.domestic_revalidate.amount,
-          domestic_revalidate_amount_type: checkChargeType(data.domestic_revalidate.charge_type_id),
+          domestic_revalidate_amount_type: checkChargeType(
+            data.domestic_revalidate.charge_type_id,
+          ),
           domestic_revalidate_percent: data.domestic_revalidate.percent,
-          domestic_revalidate_tax_include: data.domestic_revalidate.is_tax_inclusive,
+          domestic_revalidate_tax_include:
+            data.domestic_revalidate.is_tax_inclusive,
         })
       }
     } catch (e) {

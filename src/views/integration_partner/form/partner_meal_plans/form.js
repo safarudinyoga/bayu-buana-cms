@@ -30,7 +30,7 @@ const MealPlans = (props) => {
 
   const duplicateValue = async(fieldName, value) => {
     let filters = encodeURIComponent(JSON.stringify([[fieldName,"=",value],["AND"],["integration_partner_id",id],["AND"],["status",1]]))
-    let res = await api.get(endpoint + "/" + id + "/meal-plans?" + `filters=${filters}`)
+    let res = await api.get(endpoint + "/" + id + "/meal-plan-types?" + `filters=${filters}`)
     let sameId = res.data.items.find((v) => v.id === mealPlanId)
     if(!sameId) return res.data.items.length === 0 
 
@@ -81,7 +81,7 @@ Yup.addMethod(Yup.string, 'uniqueValueString', function (fieldName, message) {
 
     if(formId) {
       try {
-        let res = await api.get(endpoint + "/" + id + "/meal-plans/" + formId);
+        let res = await api.get(endpoint + "/" + id + "/meal-plan-types/" + formId);
         setFormValues({ 
           ...formValues,
           meal_plan_type_id: _.isEmpty(res.data.meal_plan_type) ? '' : {
@@ -107,9 +107,9 @@ Yup.addMethod(Yup.string, 'uniqueValueString', function (fieldName, message) {
 
     try {
       if(mealPlanId){
-        let res = await api.put(endpoint + "/" + id + "/meal-plans/" + mealPlanId, formatted);
+        let res = await api.put(endpoint + "/" + id + "/meal-plan-types/" + mealPlanId, formatted);
       }else{
-          let res = await api.post(endpoint + "/" + id + "/meal-plans", formatted);
+          let res = await api.post(endpoint + "/" + id + "/meal-plan-types", formatted);
       }
       dispatch(
         setAlert({

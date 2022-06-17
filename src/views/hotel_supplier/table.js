@@ -109,6 +109,7 @@ export default function HotelSupplierTable() {
     recordName: ["hotel_supplier_code", "hotel_supplier_name"],
     showInfoDelete: true,
     infoDelete: [
+      {title: "Hotel Supplier Code", recordName: "hotel_supplier_code"}, 
       {title: "Hotel Supplier Name", recordName: "hotel_supplier_name"}, 
     ],
   })

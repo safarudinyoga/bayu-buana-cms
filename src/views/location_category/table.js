@@ -58,6 +58,7 @@ export default function LocationCategoryTable() {
     recordName: ["location_category_code", "location_category_name"],
     showInfoDelete: true,
     infoDelete: [
+      {title: "Location Category Code", recordName: "location_category_code"}, 
       {title: "Location Category Name", recordName: "location_category_name"}, 
     ],
   }

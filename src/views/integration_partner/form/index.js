@@ -20,6 +20,7 @@ import { useSnackbar } from "react-simple-snackbar"
 import PartnerCabin from "./partner_cabin/table"
 import PartnerInformation from "./partner-information"
 import PartnerCorporate from "./partner_corporate/table"
+import { useHistory } from "react-router-dom"
 
 const endpoint = "/master/integration-partners"
 const backUrl = "/master/integration-partner"
@@ -30,7 +31,7 @@ const options = {
 const IntegrationPartnerForm = (props) => {
   const [openSnackbar] = useSnackbar(options)
   const dispatch = useDispatch()
-  const isView = useQuery().get("action") === "view"
+  const history = useHistory()
   const [tabKey, setTabKey] = useState("partner-information")
   const [data, setData] = useState(null)
 
@@ -65,6 +66,9 @@ const IntegrationPartnerForm = (props) => {
   }, [])
 
   const handleSelectTab = async (key) => {
+    let newurl = history.location.pathname
+    window.history.pushState({path:newurl},'',newurl)
+
     setTabKey(key)
   }
 

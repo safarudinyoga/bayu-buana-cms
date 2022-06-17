@@ -83,6 +83,7 @@ export default function RoomAmenityTypeTable() {
     recordName: ["room_amenity_type_code", "room_amenity_type_name"],
     showInfoDelete: true,
     infoDelete: [
+      {title: "Room Amenity Type Code", recordName: "room_amenity_type_code"}, 
       {title: "Room Amenity Type Name", recordName: "room_amenity_type_name"}, 
     ],
   })

@@ -73,6 +73,7 @@ export default function LanguageTable() {
     recordName: ["language_code", "language_name"],
     showInfoDelete: true,
     infoDelete: [
+      {title: "Language Code", recordName: "language_code"}, 
       {title: "Language Name", recordName: "language_name"}, 
     ],
   }

@@ -57,6 +57,7 @@ export default function CabinTypeTable() {
     recordName: ["cabin_type_code", "cabin_type_name"],
     showInfoDelete: true,
     infoDelete: [
+      {title: "Cabin Type Code", recordName: "cabin_type_code"}, 
       {title: "Cabin Type Name", recordName: "cabin_type_name"}, 
     ],
   }

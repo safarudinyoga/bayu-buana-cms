@@ -349,6 +349,7 @@ export default function EmployeeTable() {
     },
     statusLabel: "Status",   
     isOpenNewTab: false,    
+    customSort:["sort", "given_name"]
     
   })
 

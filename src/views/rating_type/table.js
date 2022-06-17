@@ -61,6 +61,7 @@ export default function RatingTypeTable() {
     recordName: ["rating_type_code", "rating_type_name"],
     showInfoDelete: true,
     infoDelete: [
+      {title: "Rating Type Code", recordName: "rating_type_code"}, 
       {title: "Rating Type Name", recordName: "rating_type_name"}, 
     ],
   }

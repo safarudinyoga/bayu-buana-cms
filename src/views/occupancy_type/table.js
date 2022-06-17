@@ -67,6 +67,7 @@ export default function OccupancyTypeTable() {
     recordName: ["occupancy_type_code", "occupancy_type_name"],
     showInfoDelete: true,
     infoDelete: [
+      {title: "Occupancy Type Code", recordName: "occupancy_type_code"}, 
       {title: "Occupancy Type Name", recordName: "occupancy_type_name"}, 
     ],
   }

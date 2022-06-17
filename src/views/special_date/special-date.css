@@ -76,6 +76,11 @@
   border-radius: 8px;
 }
 
+.periode {
+  background: none !important;
+}
+
+
 @media only screen and (max-width: 320px) {
   .periode {
     font-size: 0.7rem !important;
