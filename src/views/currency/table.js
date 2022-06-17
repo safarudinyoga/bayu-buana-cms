@@ -61,6 +61,7 @@ export default function CurrencyTable() {
     recordName: ["currency_code", "currency_name"],
     showInfoDelete: true,
     infoDelete: [
+      {title: "Currency Code", recordName: "currency_code"}, 
       {title: "Currency Name", recordName: "currency_name"}, 
     ],
   }

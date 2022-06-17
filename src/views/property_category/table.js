@@ -58,6 +58,7 @@ export default function PropertyCategoryTable() {
     recordName: ["property_category_code", "property_category_name"],
     showInfoDelete: true,
     infoDelete: [
+      {title: "Property Category Code", recordName: "property_category_code"}, 
       {title: "Property Category Name", recordName: "property_category_name"}, 
     ],
   }

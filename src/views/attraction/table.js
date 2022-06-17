@@ -74,6 +74,7 @@ export default function AttractionTable() {
     recordName: "attraction_name",
     showInfoDelete: true,
     infoDelete: [
+      {title: "Attraction Code", recordName: "attraction_code"}, 
       {title: "Attraction Name", recordName: "attraction_name"}, 
     ],
   })

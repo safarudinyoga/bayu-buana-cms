@@ -57,6 +57,7 @@ export default function HotelBrandTable() {
     recordName: ["hotel_brand_code", "hotel_brand_name"],
     showInfoDelete: true,
     infoDelete: [
+      {title: "Hotel Brand Code", recordName: "hotel_brand_code"}, 
       {title: "Hotel Brand Name", recordName: "hotel_brand_name"}, 
     ],
   }

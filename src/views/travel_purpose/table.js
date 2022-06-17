@@ -57,6 +57,7 @@ export default function TravelPurposeTable() {
     recordName: ["travel_purpose_code", "travel_purpose_name"],
     showInfoDelete: true,
     infoDelete: [
+      {title: "Travel Purpose Code", recordName: "travel_purpose_code"}, 
       {title: "Travel Purpose Name", recordName: "travel_purpose_name"}, 
     ],
   }
