@@ -12,12 +12,15 @@ import SelectSeat from './step/select_seats'
 import AddOn from './step/add_ons'
 import Review from './step/review'
 import Confirmation from './step/confirmation'
+import useQuery from "lib/query"
 
 import BBModal from 'components/Modal/bb-modal'
 import FlightBookSuggest from '../../components/flight_book-autosuggest'
 
 function BookFlight() {
   const dispatch = useDispatch()
+	let currentKey = useQuery().get("key") || "select-flight"
+
 	const [flight, setFLight] = useState({
 		origin: {
 			city: "Jakarta",
@@ -41,7 +44,7 @@ function BookFlight() {
 	let api = new Api()
 	const [selectLanguage, setSelectLanguage] = useState([])
 	const [selectCurrencies, setSelectCurrencies] = useState([])
-	const [tabKey, setTabKey] = useState("select-flight")
+	const [tabKey, setTabKey] = useState(currentKey)
 	const [showFlightModal, setShowFlightModal] = useState(false)
 
 	const customControlStyles = base => ({
