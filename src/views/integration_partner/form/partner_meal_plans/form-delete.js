@@ -25,7 +25,7 @@ function DeleteForm(props) {
     console.log('formId', formId)
     if(formId) {
       try {
-        let {data} = await API.get(endpoint + "/" + id + "/meal-plans/" + formId)
+        let {data} = await API.get(endpoint + "/" + id + "/meal-plan-types/" + formId)
         console.log(data)
         setFormValues({
           meal_plan_type_name: data.meal_plan_type_name,
@@ -52,7 +52,7 @@ function DeleteForm(props) {
 	
 	const onSubmit = async (values, a) => {
 		try {
-      let res = await API.delete(endpoint + "/" + id + "/meal-plans/" + idMealPlan)
+      let res = await API.delete(endpoint + "/" + id + "/meal-plan-types/" + idMealPlan)
       dispatch(setModalDelete({show: false, id: null, disabled_form: false}))
       dispatch(
 				setAlert({

@@ -17,9 +17,9 @@ export default function IntegrationPartnerMealPlansTable() {
     title: "Partner Meal Plans",
     titleModal: "Partner Meal Plans",
     baseRoute: "/master/integration-partner-meal-plans/form",
-    endpoint: `/master/integration-partners/${id}/meal-plans`,
+    endpoint: `/master/integration-partners/${id}/meal-plan-types`,
     // deleteEndpoint: "master/batch-actions/delete/master/integration-partner-meal-plan-types",
-    deleteEndpoint: `/master/integration-partners/${id}/meal-plans`,
+    deleteEndpoint: `/master/batch-actions/delete/integration-partner-meal-plan-types`,
     btnDownload: ".buttons-csv",
     columns: [
       {
@@ -28,18 +28,18 @@ export default function IntegrationPartnerMealPlansTable() {
       },
       {
         title: "Partner Meal Plan Code",
-        data: "integration_partner_meal_plan_type.meal_plan_type_code",
+        data: "meal_plan_type_code",
       },
       {
         title: "Partner Meal Plan Name",
-        data: "integration_partner_meal_plan_type.meal_plan_type_name",
+        data: "meal_plan_type_name",
       },
     ],
     emptyTable: "No Partner Meal Plans found",
-    recordName: ["integration_partner_meal_plan_type.meal_plan_type_name"],
+    recordName: ["meal_plan_type_name"],
     showInfoDelete: true,
     infoDelete: [
-      {title: "Partner Meal Plan Name", recordName: "integration_partner_meal_plan_type.meal_plan_type_name"}, 
+      {title: "Partner Meal Plan Name", recordName: "meal_plan_type_name"}, 
     ],
     searchText: "Search",
     module: "partner-meal-plan",
