@@ -167,9 +167,7 @@ class BBDataTable extends Component {
         if(infoDelete) {
           info = infoDelete.map(v => {
             let data = v.recordName
-            // console.log("ini data", data)
             let result = Array.isArray(data);
-            // console.log("ini result", result)
             let title = ""
             if(result){
               title = data.map(v => row[v]).join(" ")
@@ -183,8 +181,6 @@ class BBDataTable extends Component {
                 } else {
                   title = row[data]
                 }
-                // console.log("ini row", row)
-                // console.log("ini title", title)
               }
             }
             return v.title + ": " + title
