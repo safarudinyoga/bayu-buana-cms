@@ -55,6 +55,10 @@ export default function FlightTypeTable() {
     ],
     emptyTable: "No flight types found",
     recordName: ["flight_type_code", "flight_type_name"],
+    showInfoDelete: true,
+    infoDelete: [
+      {title: "Flight Type Name", recordName: "flight_type_name"}, 
+    ],
   }
   return <BBDataTable {...params} />
 }

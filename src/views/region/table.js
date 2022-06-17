@@ -55,6 +55,10 @@ export default function RegionTable() {
     ],
     emptyTable: "No regions found",
     recordName: ["region_code", "region_name"],
+    showInfoDelete: true,
+    infoDelete: [
+      {title: "Region Name", recordName: "region_name"}, 
+    ],
   }
   return <BBDataTable {...params} />
 }

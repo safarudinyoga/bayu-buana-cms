@@ -61,6 +61,10 @@ export default function TripTypeTable() {
     ],
     emptyTable: "No trip types found",
     recordName: ["trip_type_code", "trip_type_name"],
+    showInfoDelete: true,
+    infoDelete: [
+      {title: "Trip Type Name", recordName: "trip_type_name"}, 
+    ],
   }
   return <BBDataTable {...params} />
 }

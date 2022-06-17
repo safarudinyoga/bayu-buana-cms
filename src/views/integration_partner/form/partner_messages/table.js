@@ -35,7 +35,8 @@ export default function IntegrationMessageTable() {
     emptyTable: "No Messages found",
     recordName: ["event_name", "event_code"],
     searchText: "Search",
-    customSort: ["event_name"]
+    customSort: ["event_name"],
+    showModalHeader: false,
   })
 
   return (

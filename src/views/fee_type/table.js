@@ -56,6 +56,10 @@ export default function FeeTypeTable() {
     infoDelete: [{ title: "Fee Type Name", recordName: "fee_tax_type_name" }],
     emptyTable: "No Fee Type found",
     recordName: ["fee_tax_type_code", "fee_tax_type_name"],
+    showInfoDelete: true,
+    infoDelete: [
+      {title: "Fee Type Name", recordName: "fee_tax_type_name"}, 
+    ],
   })
 
   return <BBDataTable {...params} />

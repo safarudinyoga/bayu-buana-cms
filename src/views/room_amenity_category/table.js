@@ -67,6 +67,10 @@ export default function RoomAmenityCategoryTable() {
     ],
     emptyTable: "No room amenity categories found",
     recordName: "room_amenity_category_name",
+    showInfoDelete: true,
+    infoDelete: [
+      {title: "Room Amenity Category Name", recordName: "room_amenity_category_name"}, 
+    ],
   }
   return <BBDataTable {...params} />
 }

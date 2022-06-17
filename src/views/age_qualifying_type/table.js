@@ -56,6 +56,10 @@ export default function AgeQualifyingTypeTable() {
     ],
     emptyTable: "No age qualifying types found",
     recordName: ["age_qualifying_type_code", "age_qualifying_type_name"],
+    showInfoDelete: true,
+    infoDelete: [
+      {title: "Age Qualifying Type Name", recordName: "age_qualifying_type_name"}, 
+    ],
   }
   return <BBDataTable {...params} />
 }

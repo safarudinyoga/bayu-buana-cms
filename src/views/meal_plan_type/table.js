@@ -68,6 +68,10 @@ export default function MealPlanTypeTable() {
         visible: false,
       },
     ],
+    showInfoDelete: true,
+    infoDelete: [
+      {title: "Meal Plan Type Name", recordName: "meal_plan_type_name"}, 
+    ],
   }
   return <BBDataTable {...params} />
 }

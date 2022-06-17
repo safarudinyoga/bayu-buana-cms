@@ -107,6 +107,10 @@ export default function ProvinceTable() {
     ],
     emptyTable: "No state / provinces found",
     recordName: ["state_province_code", "state_province_name"],
+    showInfoDelete: true,
+    infoDelete: [
+      {title: "State / Province Name", recordName: "state_province_name"}, 
+    ],
   })
 
   return <BBDataTable {...params} extraFilter={extraFilter} onReset={onReset} />

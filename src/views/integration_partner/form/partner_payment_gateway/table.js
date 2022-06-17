@@ -39,7 +39,8 @@ export default function IntegrationPartnerPaymentGatewayTable() {
     infoDelete: [
       {title: "Partner Payment Gateway Name", recordName: "payment_gateway.payment_gateway_name"}, 
     ],
-    searchText: "Search"
+    searchText: "Search",
+    showModalHeader: false,
   })
 
   return (
