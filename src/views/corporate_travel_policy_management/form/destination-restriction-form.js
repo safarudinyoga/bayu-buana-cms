@@ -1,6 +1,6 @@
 import { withRouter } from "react-router"
 import React, { useState, useEffect } from "react"
-import { Col, Form, Row, Button } from "react-bootstrap"
+import { Col, Form, Row, Button, Collapse } from "react-bootstrap"
 import { Formik, FastField, ErrorMessage } from "formik"
 import TextError from "components/formik/textError"
 import * as Yup from "yup"
@@ -11,6 +11,8 @@ import { setAlert, setCreateModal, setModalTitle } from "redux/ui-store"
 import CancelButton from "components/button/cancel"
 import Select from "components/form/select"
 import _ from "lodash"
+import FormikControl from "components/formik/formikControl"
+
 const endpoint = "/master/configurations/standard-services"
 
 function DestinationRestriction(props) {
@@ -21,7 +23,7 @@ function DestinationRestriction(props) {
   const [id, setId] = useState(null)
   const [loading, setLoading] = useState(true)
   const [formValues, setFormValues] = useState(null)
-
+  const [RecurringReminderType, setRecurringReminderType] = useState(true)
 
   const selectDays = () => {
     const options = []
@@ -56,21 +58,32 @@ function DestinationRestriction(props) {
     return options
   }
 
-  const duplicateValue = async(fieldName, value) => {
-    let filters = encodeURIComponent(JSON.stringify([[fieldName,"=",value],["AND"],["service_level.service_level_code",showCreateModal.service_level_code],["AND"],["status",1]]))
+  const duplicateValue = async (fieldName, value) => {
+    let filters = encodeURIComponent(
+      JSON.stringify([
+        [fieldName, "=", value],
+        ["AND"],
+        [
+          "service_level.service_level_code",
+          showCreateModal.service_level_code,
+        ],
+        ["AND"],
+        ["status", 1],
+      ]),
+    )
     let res = await API.get(endpoint + `?filters=${filters}`)
     let sameId = res.data.items.find((v) => v.id === id)
-    if(!sameId) return res.data.items.length === 0 
+    if (!sameId) return res.data.items.length === 0
 
     return true
-}
+  }
 
-Yup.addMethod(Yup.object, 'uniqueValueObject', function (fieldName, message) {
-    return this.test('unique', message, function(field) {
-        if(field) return duplicateValue(fieldName, field.value)
-        return true
+  Yup.addMethod(Yup.object, "uniqueValueObject", function (fieldName, message) {
+    return this.test("unique", message, function (field) {
+      if (field) return duplicateValue(fieldName, field.value)
+      return true
     })
-})
+  })
 
   useEffect(async () => {
     let formId = showCreateModal.id || props.id
@@ -86,29 +99,33 @@ Yup.addMethod(Yup.object, 'uniqueValueObject', function (fieldName, message) {
       try {
         let res = await API.get(endpoint + "/" + formId)
         let data = res.data
-        let day = Math.round(data.amount/1440)
-          let hour = Math.round((data.amount % 1440)/60)
-          let minute = (data.amount % 1440) % 60
+        let day = Math.round(data.amount / 1440)
+        let hour = Math.round((data.amount % 1440) / 60)
+        let minute = (data.amount % 1440) % 60
         setFormValues({
           ...formValues,
-          task_type: _.isEmpty(data.task_type) ? "" : {
-            value: data.task_type_id,
-            label: data.task_type.task_type_name
-          },
-          response_time: data.amount ? [
-            {
-              value: day,
-              label: day,
-            },
-            {
-              value: hour,
-              label: hour,
-            },
-            {
-              value: minute,
-              label: minute,
-            },
-          ] : [],
+          task_type: _.isEmpty(data.task_type)
+            ? ""
+            : {
+                value: data.task_type_id,
+                label: data.task_type.task_type_name,
+              },
+          response_time: data.amount
+            ? [
+                {
+                  value: day,
+                  label: day,
+                },
+                {
+                  value: hour,
+                  label: hour,
+                },
+                {
+                  value: minute,
+                  label: minute,
+                },
+              ]
+            : [],
         })
       } catch (e) {
         console.log(e)
@@ -134,18 +151,23 @@ Yup.addMethod(Yup.object, 'uniqueValueObject', function (fieldName, message) {
   }
 
   const validationSchema = Yup.object().shape({
-    task_type: Yup.object().required("Task Type is required.").uniqueValueObject("task_type_id","Task Type already exists"),
+    task_type: Yup.object()
+      .required("Task Type is required.")
+      .uniqueValueObject("task_type_id", "Task Type already exists"),
     response_time: Yup.array().min(3, "Response Time is required."),
   })
 
   const onSubmit = async (values, a) => {
     try {
-      let formId = showCreateModal.id || props.id            
-      let amount = (values.response_time[0].value * 1440) + (values.response_time[1].value * 60) + (values.response_time[2].value)
+      let formId = showCreateModal.id || props.id
+      let amount =
+        values.response_time[0].value * 1440 +
+        values.response_time[1].value * 60 +
+        values.response_time[2].value
       let form = {
         task_type_id: values.task_type.value,
         service_level_code: parseInt(showCreateModal.service_level_code),
-        amount: amount
+        amount: amount,
       }
 
       if (!formId) {
@@ -206,125 +228,308 @@ Yup.addMethod(Yup.object, 'uniqueValueObject', function (fieldName, message) {
         setFieldTouched,
       }) => (
         <Form onSubmit={handleSubmit} className="ml-2">
-          <Form.Group as={Row} className="form-group">
-            <Form.Label column sm={3}>
-              Task Type<span className="form-label-required">*</span>
-            </Form.Label>
-            <Col sm={8}>
-              <FastField name="task_type">
-                {({ field, form }) => (
-                  <div style={{ maxWidth: 200 }}>
-                    <SelectAsync
-                      {...field}
-                      isClearable
-                      isDisabled={isView}
-                      url={`master/task-types`}
-                      fieldName="task_type_name"
-                      onChange={(v) => {
-                        setFieldValue("task_type", v)
-                      }}
-                      placeholder="Please choose"
-                      className={`react-select ${
-                        form.touched.task_type && form.errors.task_type
-                          ? "is-invalid"
-                          : null
-                      }`}
-                      components={
-                        isView
-                          ? {
-                              DropdownIndicator: () => null,
-                              IndicatorSeparator: () => null,
-                            }
-                          : null
-                      }
-                    />
-                    {form.touched.task_type && form.errors.task_type && (
-                      <Form.Control.Feedback type="invalid">
-                        {form.touched.task_type ? form.errors.task_type : null}
-                      </Form.Control.Feedback>
-                    )}
+          <Col sm={12} md={12} lg={8}>
+            <Form.Group as={Row} className="form-group" id="accordion">
+              <Col sm={12} md={12} xl={12}>
+                <Form.Group className="mb-3">
+                  <div className="d-flex">
+                    <h>Restriction Based On</h>
+                    <span className="form-label-required">*</span>
+                    <Collapse in={RecurringReminderType} id="headingOne">
+                      <Form.Check
+                        inline
+                        className="mt-2 ml-5"
+                        label="Country"
+                        name="group1"
+                        type="radio"
+                        id="inline-tek-2"
+                        data-toggle="collapse"
+                        data-target="#collapseOne"
+                        aria-expanded="true"
+                        aria-controls="collapseOne"
+                      />
+                    </Collapse>
+                    <Collapse in={RecurringReminderType} id="headingTwo">
+                      <Form.Check
+                        className="mt-2 ml-5 collapsed"
+                        label="City"
+                        type="radio"
+                        name="group1"
+                        data-toggle="collapse"
+                        data-target="#collapseTwo"
+                        aria-expanded="false"
+                        aria-controls="collapseTwo"
+                      />
+                    </Collapse>
                   </div>
-                )}
-              </FastField>
-            </Col>
-          </Form.Group>
-          <Form.Group as={Row} className="form-group">
-            <Form.Label column sm={3}>
-              Response Time<span className="form-label-required">*</span>
-            </Form.Label>
+                  <Row>
+                    <Col
+                      sm={12}
+                      md={6}
+                      xl={12}
+                      className="mt-3 ml-5 collapse"
+                      id="collapseOne"
+                      aria-labelledby="headingOne"
+                      data-parent="#accordion"
+                    >
+                      <Form.Group as={Row} className="mb-xl-3">
+                        <Col md={10} lg={8} className="d-flex">
+                          <span>Select Country</span>
+                          <span className="form-label-required">*</span>
+                          <FastField name="task_type">
+                            {({ field, form }) => (
+                              <div style={{ maxWidth: 200 }}>
+                                <SelectAsync
+                                  {...field}
+                                  isClearable
+                                  isDisabled={isView}
+                                  url={`master/task-types`}
+                                  fieldName="task_type_name"
+                                  onChange={(v) => {
+                                    setFieldValue("task_type", v)
+                                  }}
+                                  placeholder="Please choose"
+                                  className={`react-select ${
+                                    form.touched.task_type &&
+                                    form.errors.task_type
+                                      ? "is-invalid"
+                                      : null
+                                  }`}
+                                  components={
+                                    isView
+                                      ? {
+                                          DropdownIndicator: () => null,
+                                          IndicatorSeparator: () => null,
+                                        }
+                                      : null
+                                  }
+                                />
+                                {form.touched.task_type &&
+                                  form.errors.task_type && (
+                                    <Form.Control.Feedback type="invalid">
+                                      {form.touched.task_type
+                                        ? form.errors.task_type
+                                        : null}
+                                    </Form.Control.Feedback>
+                                  )}
+                              </div>
+                            )}
+                          </FastField>
+                        </Col>
+                        <Col md={10} lg={8} className="d-flex">
+                          <span>Select city</span>
+                          <span className="form-label-required">*</span>
+                          <FastField name="task_type">
+                            {({ field, form }) => (
+                              <div style={{ maxWidth: 200 }}>
+                                <SelectAsync
+                                  {...field}
+                                  isClearable
+                                  isDisabled={isView}
+                                  url={`master/task-types`}
+                                  fieldName="task_type_name"
+                                  onChange={(v) => {
+                                    setFieldValue("task_type", v)
+                                  }}
+                                  placeholder="Please choose"
+                                  className={`react-select ${
+                                    form.touched.task_type &&
+                                    form.errors.task_type
+                                      ? "is-invalid"
+                                      : null
+                                  }`}
+                                  components={
+                                    isView
+                                      ? {
+                                          DropdownIndicator: () => null,
+                                          IndicatorSeparator: () => null,
+                                        }
+                                      : null
+                                  }
+                                />
+                                {form.touched.task_type &&
+                                  form.errors.task_type && (
+                                    <Form.Control.Feedback type="invalid">
+                                      {form.touched.task_type
+                                        ? form.errors.task_type
+                                        : null}
+                                    </Form.Control.Feedback>
+                                  )}
+                              </div>
+                            )}
+                          </FastField>
+                        </Col>
+                      </Form.Group>
+                    </Col>
+                    <Col
+                      sm={12}
+                      md={6}
+                      xl={12}
+                      className="mt-3 ml-5 collapse"
+                      aria-labelledby="headingTwo"
+                      data-parent="#accordion"
+                      id="collapseTwo"
+                    >
+                      <Form.Group as={Row} className="mb-xs-3">
+                        <Col md={10} lg={8} className="d-flex">
+                          <span>Select city</span>
+                          <span className="form-label-required">*</span>
+                          <FastField name="task_type">
+                            {({ field, form }) => (
+                              <div style={{ maxWidth: 200 }}>
+                                <SelectAsync
+                                  {...field}
+                                  isClearable
+                                  isDisabled={isView}
+                                  url={`master/task-types`}
+                                  fieldName="task_type_name"
+                                  onChange={(v) => {
+                                    setFieldValue("task_type", v)
+                                  }}
+                                  placeholder="Please choose"
+                                  className={`react-select ${
+                                    form.touched.task_type &&
+                                    form.errors.task_type
+                                      ? "is-invalid"
+                                      : null
+                                  }`}
+                                  components={
+                                    isView
+                                      ? {
+                                          DropdownIndicator: () => null,
+                                          IndicatorSeparator: () => null,
+                                        }
+                                      : null
+                                  }
+                                />
+                                {form.touched.task_type &&
+                                  form.errors.task_type && (
+                                    <Form.Control.Feedback type="invalid">
+                                      {form.touched.task_type
+                                        ? form.errors.task_type
+                                        : null}
+                                    </Form.Control.Feedback>
+                                  )}
+                              </div>
+                            )}
+                          </FastField>
+                        </Col>
+                      </Form.Group>
+                    </Col>
+                  </Row>
+                </Form.Group>
+              </Col>
+            </Form.Group>
+          </Col>
+          <Col sm={12} md={12} lg={8}>
+            <Form.Group as={Row} className="form-group" id="accordion">
+              <Col sm={12} md={12} xl={12}>
+                <Form.Group className="mb-3">
+                  <div className="d-flex">
+                    <h>Type of Restriction</h>
+                    <span className="form-label-required">*</span>
+                    <Collapse in={RecurringReminderType} id="headingOne">
+                      <Form.Check
+                        inline
+                        className="mt-2 ml-5"
+                        label="Block"
+                        name="group1"
+                        type="radio"
+                        id="inline-tek-2"
+                        data-toggle="collapse"
+                        data-target="#collapseOne"
+                        aria-expanded="true"
+                        aria-controls="collapseOne"
+                      />
+                    </Collapse>
+                    <Collapse in={RecurringReminderType} id="headingTwo">
+                      <Form.Check
+                        className="mt-2 ml-5 collapsed"
+                        label="With Condition"
+                        type="radio"
+                        name="group1"
+                        data-toggle="collapseBlock"
+                        data-target="#collapseTwo"
+                        aria-expanded="false"
+                        aria-controls="collapseTwo"
+                      />
+                    </Collapse>
+                  </div>
+                  <Row>
+                    <Col
+                      sm={12}
+                      md={6}
+                      xl={12}
+                      className="mt-3 ml-5 collapseBlock"
+                      id="collapseOne"
+                      aria-labelledby="headingOne"
+                      data-parent="#accordion"
+                    >
+                      <Form.Group as={Row} className="mb-xl-3">
+                        
+                      </Form.Group>
+                    </Col>
+                    <Col
+                      sm={12}
+                      md={6}
+                      xl={12}
+                      className="mt-3 ml-5 collapse"
+                      aria-labelledby="headingTwo"
+                      data-parent="#accordion"
+                      id="collapseTwo"
+                    >
+                      <Form.Group as={Row} className="mb-xs-3">
+                        <Col md={10} lg={8} className="d-flex">
+                          <span>Select city</span>
+                          <span className="form-label-required">*</span>
+                          <FastField name="task_type">
+                            {({ field, form }) => (
+                              <div style={{ maxWidth: 200 }}>
+                                <SelectAsync
+                                  {...field}
+                                  isClearable
+                                  isDisabled={isView}
+                                  url={`master/task-types`}
+                                  fieldName="task_type_name"
+                                  onChange={(v) => {
+                                    setFieldValue("task_type", v)
+                                  }}
+                                  placeholder="Please choose"
+                                  className={`react-select ${
+                                    form.touched.task_type &&
+                                    form.errors.task_type
+                                      ? "is-invalid"
+                                      : null
+                                  }`}
+                                  components={
+                                    isView
+                                      ? {
+                                          DropdownIndicator: () => null,
+                                          IndicatorSeparator: () => null,
+                                        }
+                                      : null
+                                  }
+                                />
+                                {form.touched.task_type &&
+                                  form.errors.task_type && (
+                                    <Form.Control.Feedback type="invalid">
+                                      {form.touched.task_type
+                                        ? form.errors.task_type
+                                        : null}
+                                    </Form.Control.Feedback>
+                                  )}
+                              </div>
+                            )}
+                          </FastField>
+                        </Col>
+                      </Form.Group>
+                    </Col>
+                  </Row>
+                </Form.Group>
+              </Col>
+            </Form.Group>
+          </Col>
 
-            <Col sm={9}>
-              <div style={{ maxWidth: 450, display: "flex" }}>
-              <div style={{ maxWidth: 50, flex: 1 }}>
-                <Select
-                    options={selectDays()}
-                    value={values.response_time[0]}
-                    isDisabled={isView}
-                    placeholder="Days"
-                    className={`react-select ${
-                      touched.title && Boolean(errors.title)
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    onChange={(v) => {
-                      setFieldValue("response_time[0]", v)
-                    }}
-                  />
-                </div>
-                <Form.Label column sm={2}>
-                  Days
-                </Form.Label>
-                <div style={{ maxWidth: 55, flex: 1 }}>
-                <Select
-                    options={selectHours()}
-                    value={values.response_time[1]}
-                    placeholder="Hours"
-                    isDisabled={isView}
-                    disabled={true}
-                    className={`react-select ${
-                      touched.title && Boolean(errors.title)
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    onChange={(v) => {
-                      setFieldValue("response_time[1]", v)
-                    }}
-                  />
-                </div>
-                <Form.Label column sm={2}>
-                  Hours
-                </Form.Label>
-                <div style={{ maxWidth: 65, flex: 1 }}>
-                <Select
-                    options={selectMinutes()}
-                    value={values.response_time[2]}
-                    placeholder="Minutes"
-                    isDisabled={isView}
-                    className={`react-select ${
-                      touched.title && Boolean(errors.title)
-                        ? "is-invalid"
-                        : ""
-                    }`}
-                    onChange={(v) => {
-                      setFieldValue("response_time[2]", v)
-                    }}
-                  />
-                </div>
-                <Form.Label column sm={2}>
-                  Minutes
-                </Form.Label>
-              </div>
-              <ErrorMessage
-                component={TextError}
-                name="response_time"
-              />
-              {touched.title && Boolean(errors.title) && (
-                <div className="invalid-feedback">
-                  {touched.title ? errors.title : ""}
-                </div>
-              )}
-            </Col>
-          </Form.Group>
           {!props.hideButton && (
             <div
               style={{
