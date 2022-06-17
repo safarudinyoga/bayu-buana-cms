@@ -9,6 +9,7 @@ import Radio from './radioForm'
 import Switch from "./switch"
 // import CheckboxGroup from './CheckboxGroup'
 import ImageProfile from './inputImageProfile'
+import DateRangePicker from "./date_range_picker"
 // import DatePicker from './DatePicker'
 // import ChakraInput from './ChakraInput'
 
@@ -24,7 +25,7 @@ function FormikControl(props) {
     case "selectOnly":
       return <SelectOnly {...rest} />
     case "selectAsync":
-      return <SelectAsync {...rest} />    
+      return <SelectAsync {...rest} />
     case 'checkboxOnly':
       return <Checkbox {...rest} />
     case 'radio':
@@ -37,6 +38,8 @@ function FormikControl(props) {
       return <ImageProfile {...rest} />
     // case 'chakraInput':
     //   return <ChakraInput {...rest} />
+    case 'dateRange':
+      return <DateRangePicker {...rest} />
     default:
       return null
   }

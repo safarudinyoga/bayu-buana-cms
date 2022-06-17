@@ -41,6 +41,7 @@ export default function IntegrasiPartnerHotelSupplier() {
     infoDelete: [
       {title: "Partner Hotel Supplier", recordName: "hotel_supplier_name"}, 
     ],
+    showModalHeader: false,
     customFilterStatus: {
       value: "",
       options: [

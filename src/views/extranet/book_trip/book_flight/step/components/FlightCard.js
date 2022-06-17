@@ -1,7 +1,12 @@
-import { Col, Row, Card, Form, Button } from 'react-bootstrap'
+import { Col, Row, Card, Form, Button, OverlayTrigger, Tooltip, Popover } from 'react-bootstrap'
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { setUIParams } from 'redux/ui-store'
+import briefcaseIC from 'assets/icons/briefcase.svg'
+import videoIC from 'assets/icons/video.svg'
+import seatIC from 'assets/icons/seat.svg'
+import restaurantIC from 'assets/icons/restaurant.svg'
+import shieldIC from 'assets/icons/shield.svg'
 
 const ex_logo = 'https://ik.imagekit.io/tvlk/image/imageResource/2021/07/12/1626063527483-f24d3eae611b51022ab0d1fc1457c820.png?tr=q-75,w-28'
 
@@ -59,7 +64,23 @@ function FlightCard({data, handleSelectTab, tripType}) {
 							SQ 765
 						</div>
 						<div>
-							<p>+2 more</p>
+							<div>
+								<img src={briefcaseIC} style={{padding: "0 5px 0 5px"}} />
+								<img src={videoIC} style={{padding: "0 5px 0 5px"}} />
+								<img src={restaurantIC} style={{padding: "0 5px 0 5px"}} />
+								<img src={seatIC} style={{padding: "0 5px 0 5px"}} />
+								<img src={shieldIC} style={{padding: "0 5px 0 5px"}} />
+							</div>
+							<OverlayTrigger placement="right" overlay={
+								<Popover>
+									<div className='px-2'>
+										<img src={seatIC} style={{padding: "0 5px 0 5px"}} />
+										<img src={shieldIC} style={{padding: "0 5px 0 5px"}} />
+									</div>
+								</Popover>
+							}>
+								<p className='text-center' style={{fontSize:11}}>+2 more</p>
+            </OverlayTrigger>
 						</div>
 					</Col>
 				</Row>

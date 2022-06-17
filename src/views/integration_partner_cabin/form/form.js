@@ -639,7 +639,7 @@ function PartnerCabins(props) {
 
                       </>}
 
-                      {formId && < TabelFareFamily />}
+                      {< TabelFareFamily />}
 
                       {
                         props.isMobile

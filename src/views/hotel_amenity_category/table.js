@@ -72,6 +72,10 @@ export default function HotelAmenityCategoryTable() {
     ],
     emptyTable: "No hotel amenity categories found",
     recordName: "hotel_amenity_category_name",
+    showInfoDelete: true,
+    infoDelete: [
+      {title: "Hotel Amenity Category Name", recordName: "hotel_amenity_category_name"}, 
+    ],
   }
   return <BBDataTable {...params} />
 }

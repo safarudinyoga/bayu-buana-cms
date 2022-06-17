@@ -12,7 +12,7 @@ import { OverlayTrigger, Tooltip } from "react-bootstrap"
 import { Link, withRouter } from "react-router-dom"
 import Select, { components } from "react-select"
 import { connect } from "react-redux"
-import { setCreateModal } from "redux/ui-store"
+import { setCreateModal, setCreateNewModal } from "redux/ui-store"
 import "../button/button.css"
 import "./table-header.css"
 
@@ -29,8 +29,8 @@ const DropdownIndicator = (props) => {
 const customStyles = {
   option: (provided, state) => ({
     ...provided,
-    color: "#333333",
-    backgroundColor: state.isSelected ? "white" : "white",
+    color: state.isSelected ? "white" : "#333333",
+    backgroundColor: state.isSelected ? "#027F71" : "white",
     padding: 10,
     fontFamily: "Segoe UI, Tahoma, Geneva, Verdana, sans-serif",
     fontSize: 15,
@@ -111,7 +111,7 @@ class TableHeader extends Component {
       isHideDownloadLogo: props.isHideDownloadLogo ?? false,
       searchValue: "",
       statusValue: "0",
-      yearValue: new Date().getFullYear(),
+      yearValue: "",
     }
 
     this.toggleFilter = this.toggleFilter.bind(this)
@@ -125,13 +125,14 @@ class TableHeader extends Component {
       this.handleToggle()
     }, 200)
   }
-
   handleClick() {
     if (this.props.createOnModal) {
       this.props.setCreateModal({ show: true, disabled_form: false, })
       if(this.props.module == 'standard-service'){
         this.props.setCreateModal({ show: true, disabled_form: false, service_level_code: this.props.serviceLevelCode})
       }
+    } else if (this.props.createNewModal) {
+      this.props.setCreateNewModal({ show: true, disabled_form: false, })
     } else if (this.props.isReplaceTable) {
       this.props.setId(null)
       this.props.handleReplaceTable(!this.props.isReplaceTable)
@@ -177,7 +178,7 @@ class TableHeader extends Component {
       showFilter: false,
       searchValue: "",
       statusValue: "0",
-      yearValue: new Date().getFullYear(),
+      yearValue: "",
     })
 
     if (this.props.customFilterStatus) {
@@ -223,7 +224,7 @@ class TableHeader extends Component {
 
   render() {
     const ExtraFilter = this.props.extraFilter
-    const { customFilterStatus, hideCreate, isHidePrintLogo } = this.props
+    const { customFilterStatus, hideCreate, isHidePrintLogo, module } = this.props
     const { pathname } = this.props.location
 
     return (
@@ -310,6 +311,8 @@ class TableHeader extends Component {
                       ? "Create New"
                       : pathname === "/internal/shopping-cache"
                       ? "Add Shopping Criteria"
+                      : module === 'custom-other-service-fee-manage-corporate'
+                      ? "Add Override Service Fee"
                       : "Create New"}
                   </button>
                 </OverlayTrigger>
@@ -400,10 +403,11 @@ class TableHeader extends Component {
                       </label>
                       <Select
                         components={{ DropdownIndicator }}
-                        value={{
-                          value: this.state.yearValue,
-                          label: this.state.yearValue,
-                        }}
+                        // defaultValue={{
+                        //   value: this.state.yearValue,
+                        //   label: this.state.yearValue,
+                        // }}
+                        defaultValue={this.state.yearValue}
                         onChange={this.handleYear.bind(this)}
                         styles={customStyles}
                         options={selectYear()}
@@ -486,6 +490,7 @@ class TableHeader extends Component {
 
 const mapDispatchToProps = (dispatch) => ({
   setCreateModal: (payload) => dispatch(setCreateModal(payload)),
+  setCreateNewModal: (payload) => dispatch(setCreateNewModal(payload)),
 })
 
 export default connect(null, mapDispatchToProps)(withRouter(TableHeader))

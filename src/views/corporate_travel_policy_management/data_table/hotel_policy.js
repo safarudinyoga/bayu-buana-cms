@@ -1,29 +1,10 @@
-import React, { useEffect } from "react"
-import { useDispatch } from "react-redux"
-import { setUIParams } from "redux/ui-store"
+import React from "react"
 import BBDataTable from "components/table/bb-data-table"
 import { Card } from "react-bootstrap"
-import Form from "./form/identity-rule"
+import FormHotel from "../form/hotel-policy-for-staff-and-manager.js"
+import "../style.scss"
 
-const StaffAndManager = (props) => {
-
-    let dispatch = useDispatch()
-    useEffect(() => {
-        dispatch(
-            setUIParams({
-                title: "Travel Policy",
-                breadcrumbs: [
-                    {
-                        text: "Corporate Management",
-                    },
-                    {
-                        text: "Travel Policy",
-                    },
-                ],
-            }),
-        )
-        }, [])
-    
+const HotelPolicyDataTable = () => {
     let params = {
         title: "Staff and Manager",
         titleModal: "Staff and Manager",
@@ -55,12 +36,14 @@ const StaffAndManager = (props) => {
         emptyTable: "No Identity Rule found",
         recordName: ["identity_code", "identity_name"],
         btnDownload: ".buttons-csv",
-        module: "identity-rules",
+        module: "hotel_policy",
         isCheckbox: false,
         switchStatus: true,   
         showAdvancedOptions: false,
         isHideSearch: true,
         showInfoDelete: true,
+        createOnModal: false,
+        createNewModal: true,
         infoDelete: [
             {title: "Destination", recordName: "destination"}, 
             {title: "Highest Cabin Class", recordName: "highest_cabin_class"},
@@ -68,14 +51,10 @@ const StaffAndManager = (props) => {
     }
 
     return (
-        <Card>
-        <Card.Body>
-            <div>
-                Staff and Manager
-                <BBDataTable {...params} modalContent={Form} modalSize="lg" />
-            </div>
-        </Card.Body>
-        </Card>
+        <div>
+            <div><h5>HOTELS</h5></div>
+            <BBDataTable {...params} modalContentNew={FormHotel} modalSize="lg" />
+        </div>
     )
 }
-export default StaffAndManager
+export default HotelPolicyDataTable

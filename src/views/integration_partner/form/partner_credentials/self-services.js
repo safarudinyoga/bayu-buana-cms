@@ -27,7 +27,6 @@ function SelfServiceBooking(props) {
   useEffect(async () => {
     try {
       let res = await API.get(endpoint + "/");
-      console.log(res.data)
       setFormValues({
         ...res.data,
       });
@@ -132,15 +131,15 @@ function SelfServiceBooking(props) {
       try {
         let form = {
           ...values,
-          agency_id: values.agency_id === "" ? "00000000-0000-0000-0000-000000000000" : values.agency_id,
-          system_id: values.system_id === "" ? "00000000-0000-0000-0000-000000000000" : values.system_id,
+          agency_id: values.agency_id,
+          system_id: values.system_id,
         };
         let res = await API.put(endpoint, form);
 
         dispatch(setCreateModal({ show: false, id: null, disabled_form: false }));
         dispatch(
           setAlert({
-            message: `Credentials for 'Company/ Branch Name: ${values.ofice_id.label}' has been successfully saved.`,
+            message: `Credentials for Self Servise Booking Tool has been successfully saved.`,
           })
         );
       } catch (e) {

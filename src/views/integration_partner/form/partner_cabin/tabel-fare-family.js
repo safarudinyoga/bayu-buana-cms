@@ -5,8 +5,9 @@ import DeleteModal from "./form/form-delete"
 
 
 
-export default function IntegrationPartnerCabinTypesTable() {
+export default function IntegrationPartnerCabinTypesTable(props) {
 
+  const { partnerId, partnerCabinId } = props
   const onReset = () => {
     setParams({ ...params, filters: [] })
   }
@@ -18,10 +19,10 @@ export default function IntegrationPartnerCabinTypesTable() {
     titleModal: "Integration Partner",
     showAdvancedOptions: false,
     baseRoute: "/master/form",
-    endpoint: "/master/fare-types",
-    deleteEndpoint: "/master/batch-actions/delete/fare-types",
-    activationEndpoint: "/master/batch-actions/activate/fare-types",
-    deactivationEndpoint: "/master/batch-actions/deactivate/fare-types",
+    endpoint: `/master/integration-partners/${partnerId}/cabin-types/${partnerCabinId}/fare-families`,
+    deleteEndpoint: "/master/batch-actions/delete/fare-families",
+    activationEndpoint: "/master/batch-actions/activate/fare-families",
+    deactivationEndpoint: "/master/batch-actions/deactivate/fare-families",
     columns: [
       {
         title: "Fare Family",
@@ -35,7 +36,7 @@ export default function IntegrationPartnerCabinTypesTable() {
 
     ],
     emptyTable: "No Partner Fare Family found",
-    
+    customSort:['fare_type_id'],
     showInfoDelete: true,
     isOpenNewTab: false,
     hideDetail: true,
@@ -45,7 +46,7 @@ export default function IntegrationPartnerCabinTypesTable() {
   })
 
   return <>
-                  <BBDataTable {...params} onReset={onReset} modalContent={DeleteModal} />
+    <BBDataTable {...params} onReset={onReset} modalContent={DeleteModal} />
   </>
 
 

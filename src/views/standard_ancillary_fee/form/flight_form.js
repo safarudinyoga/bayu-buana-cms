@@ -55,6 +55,9 @@ const FlightForm = (props) => {
   const [taxIdInternationalRfp, setTaxIdInternationalRfp] = useState("")
   const [taxIdInternationalNonGds, setTaxIdInternationalNonGds] = useState("")
   const [taxIdOtherEmergency, setTaxIdOtherEmergency] = useState("")
+
+  const [tabKey, setTabKey] = useState("Domestic")
+
   useEffect(async () => {
     let api = new Api()
     let docTitle = "Edit Flight Standard Ancillary Fee"
@@ -639,6 +642,7 @@ const FlightForm = (props) => {
       openSnackbar(
         `Ancillary Fee has been successfully ${formId ? 'updated' : 'saved'}.`,
       )
+      localStorage.setItem("saf_key", "hotel")
       history.goBack()
     } catch(e) {
       console.log(e)
@@ -735,6 +739,7 @@ const FlightForm = (props) => {
                   </Form.Group>
                   
                   <FeeTabs
+                    tabKey={tabKey}
                     menu={[
                       {title: "Domestic", sections: [
                         {
@@ -889,7 +894,17 @@ const FlightForm = (props) => {
               </Card.Body>
             </Card>
             <div style={{ marginBottom: 30, marginTop: 30, display: "flex" }}>
-              <Button
+              {
+                errors 
+                ? <Button
+                variant="primary"
+                onClick={() => console.log(errors)}
+                disabled={isSubmitting || !dirty}
+                style={{ marginRight: 15 }}
+              >
+                SAVE
+              </Button>
+                : <Button
                 variant="primary"
                 type="submit"
                 disabled={isSubmitting || !dirty}
@@ -897,6 +912,7 @@ const FlightForm = (props) => {
               >
                 SAVE
               </Button>
+              }
               <Button variant="secondary" onClick={() => history.goBack()}>
                 CANCEL
               </Button>

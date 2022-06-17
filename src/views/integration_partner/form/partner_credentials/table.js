@@ -42,6 +42,8 @@ import SelfServices from "./self-services"
       module: "partner_credentials",
       searchText: "Search",
       isOpenNewTab: false,
+      customSort: ["id"],
+      showModalHeader: false,
     }
   
     return (

@@ -229,7 +229,7 @@ const Fees = (props) => {
 }
 
 export const FeeTabs = (props) => {
-  const [key, setKey] = useState(props.menu[0].title)
+  const [key, setKey] = useState(props.tabKey || props.menu[0].title)
   return (
     <div className="card">
 

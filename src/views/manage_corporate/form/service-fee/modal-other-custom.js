@@ -31,10 +31,10 @@ const ModalCustomServiceFee = props => {
       <Row>
         <Col sm={12}>
           <Form.Group as={Row} className='form-group'>
-            <Form.Label column sm={4}>
+            <Form.Label column sm={3}>
               Type of Other Service <span className="form-label-required">*</span>
             </Form.Label>
-            <Col lg={8}>
+            <Col lg={9}>
               <Select
                 isClearable
                 placeholder="Please Choose"
@@ -55,10 +55,10 @@ const ModalCustomServiceFee = props => {
             </Col>
           </Form.Group>
           <Form.Group as={Row} className='form-group d-flex align-items-start'>
-            <Form.Label column sm={4}>
+            <Form.Label column sm={3}>
               Service Fee <span className="form-label-required">*</span>
             </Form.Label>
-            <Col lg={8} className='col-form-label'>
+            <Col lg={9} className='col-form-label'>
               <Form.Group className='form-group' style={{ minWidth: '60%', margin: '0 auto' }}>
                 <div>
                   <Form.Check
@@ -71,7 +71,7 @@ const ModalCustomServiceFee = props => {
                     className='mr-2 mb-2'
                   />
                   <div style={{ paddingLeft: '26px' }} className='mt-2'>
-                    <Form.Group as={Row} className='row d-flex justify-content-start align-items-start  form-group mb-3'>
+                    <Form.Group as={Row} className='row d-flex justify-content-start align-items-start form-group mb-1'>
                       <Form.Label column>
                         IDR
                       </Form.Label>
@@ -84,7 +84,7 @@ const ModalCustomServiceFee = props => {
                         className='mr-3 ml-2'
                       />
                       <div className='d-flex flex-column justify-content-start mt-1'>
-                        {['/Ticket', '/Person', '/Transaction'].map((res, i) =>
+                        {['/Unit', '/Transaction'].map((res, i) =>
                           <Form.Check
                             name={`fixedAmount-${i+1}`}
                             id={`fixedAmount-${i+1}`}

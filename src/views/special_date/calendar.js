@@ -1,17 +1,28 @@
 import React, { useEffect, useState } from 'react'
-import Calendar from 'react-awesome-calendar';
-import BCalendar from "rc-year-calendar";
+// import Calendar from 'react-awesome-calendar';
+import Calendar from "rc-year-calendar";
+import CalendarMonthView from 'react-calendar-month-view';
+import moment from 'moment'
 import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
 import Select from 'components/form/select';
+import Api from "config/api"
+
+import 'react-big-calendar/lib/css/react-big-calendar.css'
+import Year from './components/year';
+import { event } from 'jquery';
 
 const backUrl = "/master/special-date"
 
 function SpecialDateCalendar() {
   const [mode, setMode] = useState({label: "Yearly", value: "year"})
+  const [events, setEvents] = useState([])
+  const [monthEvents, setMonthEvents] = useState([])
 
   let dispatch = useDispatch()
-  useEffect(() => {
+  useEffect(async () => {
+    let api = new Api()
+
     dispatch(
       setUIParams({
         title: "Calendar",
@@ -29,11 +40,52 @@ function SpecialDateCalendar() {
         ],
       }),
     )
+    
+    try {
+      let res = await api.get("/master/agent-special-dates?size=-1")
+      let apiEvents = []
+      console.log(res.data.items)
+
+      res.data.items.map((item, i) => {
+        let eventData = {}
+        let colorArray = ['#fd3153', '#1ccb9e', '#3694DF', ]
+
+        eventData = {
+          id: item.id,
+          // color: `#${Math.floor(Math.random()*16777215).toString(16)}`,
+          startDate: new Date(item.start_date),
+          endDate: new Date(item.end_date),
+          name: item.special_date_name
+        }
+        apiEvents.push(eventData)
+      })
+      setEvents(apiEvents)
+
+    } catch (error) {
+      
+    }
+
+
   }, [])
+
+  const _renderDay = (day) => {
+    const date = new Date(day)
+
+    let eventDay = events.find((v) => moment(v.startDate).isSame(moment(date), 'day'))
+    console.log(eventDay)
+    if(eventDay){
+      return (
+        <div className='event-title-box'>
+          <span className='event-title'>{eventDay.name}</span>
+        </div>)
+    }
+  }
+
+  const currentYear = new Date().getFullYear();
 
   return (
     <>
-      {/* <div className="row">
+      <div className="row">
         <Select 
           className="col-2 offset-10 mb-4"
           value={mode}
@@ -45,13 +97,31 @@ function SpecialDateCalendar() {
             setMode(v)
           }}
         />  
-      </div> */}
+      </div>
       
       <div className='calendar-container'>
-        <Calendar />
-        {/* {
-          mode.value == "year" ? <BCalendar /> : <Calendar />
-        } */}
+        {/* <BigCalendar
+          localizer={localizer}
+          events={[]}
+          toolbar={true}
+          views={{
+            month: true,
+            year: (<div>Hello Year</div>)
+          }}
+          style={{ height: 500 }}
+          messages={{ year: 'Year' }}
+        /> */}
+        {
+          mode.value === "year" ? (
+            <Calendar dataSource={events} />
+          ) : (
+            <CalendarMonthView width="100%" renderDay={_renderDay}/>
+          )
+        }
+      </div>
+      <div className='mt-4 inline-flex'>
+        <div className='special-date-color-box mr-2'></div>
+        <span>Special Date</span>
       </div>
     </>
   )

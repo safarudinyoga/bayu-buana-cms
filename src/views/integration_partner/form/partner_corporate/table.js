@@ -28,9 +28,15 @@ export default function IntegrationPartnerCorporateTable() {
     ],
     emptyTable: "No Partner Corporate found",
     recordName: ["corporate_code", "corporate.corporate_name"],
+    showInfoDelete: true,
+    infoDelete: [
+      {title: "Partner Corporate Name", recordName: "corporate.corporate_name"}, 
+    ],
     btnDownload: ".buttons-csv",
     module: "integration-partner-corporate",
-    searchText: "Search"
+    searchText: "Search",
+    customSort: ["id"],
+    showModalHeader: false,
   }
 
   return (

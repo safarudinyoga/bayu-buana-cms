@@ -71,6 +71,10 @@ export default function AirlineTable() {
     ],
     emptyTable: "No airlines found",
     recordName: ["airline_code", "airline_name"],
+    showInfoDelete: true,
+    infoDelete: [
+      {title: "Airline Name", recordName: "airline_name"}, 
+    ],
   }
   return <BBDataTable {...params} />
 }
