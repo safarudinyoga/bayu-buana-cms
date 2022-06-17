@@ -25,7 +25,7 @@ const TravelConsultantAssistant = ({ handleChangeModal  }) => {
       isSelected: false
     },
     other: {
-      key: 'custom',
+      key: '',
       isSelected: true
     }
   })
@@ -103,6 +103,7 @@ const TravelConsultantAssistant = ({ handleChangeModal  }) => {
 
   const [paramsOther, setparamsOther] = useState({
     custom: {
+      module: 'custom-other-service-fee-manage-corporate',
       createOnModal: true,
       titleModal: "Other Service Fee",
       title: "other-custom-service-fee",
@@ -719,7 +720,7 @@ const TravelConsultantAssistant = ({ handleChangeModal  }) => {
               <BbDataTable {...paramsOther.custom} onReset={() => handleReset('other')} modalContent={ModalCustomServiceFee} />
             </div>
           ) : isFieldSelected.other.isSelected &&
-          isFieldSelected.other.key === 'noncustom' (
+          isFieldSelected.other.key === 'noncustom' && (
             <div className='mt-3' style={{ width: '98%', margin: '0 auto' }}>
               <BbDataTable {...paramsOther.nonCustom} onReset={() => handleReset('other')} />
             </div>
