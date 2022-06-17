@@ -239,6 +239,9 @@ import CorporateProfileForm from "views/corporate_profile/form/index"
 import CorporateAirlineFareTable from "views/corporate_airline_fare/table"
 import CorporateAirlineFareForm from "views/corporate_airline_fare/form"
 
+//corporate user profile
+import CorporateUserProfile from "views/corporate_user_profile/index"
+
 const RouteWithProps = ({
   path,
   exact,
@@ -827,6 +830,11 @@ const DashboardRoutes = () => {
         {/* Corporate Travel Policy */}
         <Route exact path="/master/corporate-travel-policy">
           <CorporateTravelPolicyMangement />
+        </Route>
+
+        {/* Corporate User Profile */}
+        <Route exact path="/master/corporate-user-profile/:tabs?">
+          <CorporateUserProfile />
         </Route>
 
         {/* Corporate User Management */}
