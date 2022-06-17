@@ -360,3 +360,25 @@
 .alert-dismissible .close, .alert-dismissible .mailbox-attachment-close {
   z-index: 0;
 }
+
+.trip-txt-header {
+  text-align: left;
+  font: normal normal bold 18px/24px Segoe UI;
+  letter-spacing: 0.36px;
+  color: #333333;
+  text-transform: uppercase;
+  opacity: 1;
+}
+
+.note-list {
+  list-style-type: "\1F5F8";
+  color: #818181;
+  font-size: 12px;
+  padding-inline-start: 20px !important;
+}
+.text-16 {
+  font-size: 16px;
+}
+.text-14 {
+  font-size: 14px;
+}
