@@ -57,6 +57,7 @@ export default function AircraftTable() {
     recordName: ["aircraft_code", "aircraft_name"],
     showInfoDelete: true,
     infoDelete: [
+      {title: "Aircraft COde", recordName: "aircraft_code"}, 
       {title: "Aircraft Name", recordName: "aircraft_name"}, 
     ],
   }

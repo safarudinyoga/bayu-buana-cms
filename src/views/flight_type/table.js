@@ -57,6 +57,7 @@ export default function FlightTypeTable() {
     recordName: ["flight_type_code", "flight_type_name"],
     showInfoDelete: true,
     infoDelete: [
+      {title: "Flight Type Code", recordName: "flight_type_code"}, 
       {title: "Flight Type Name", recordName: "flight_type_name"}, 
     ],
   }

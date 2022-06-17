@@ -107,6 +107,7 @@ export default function ZoneTable() {
     recordName: ["zone_code", "zone_name"],
     showInfoDelete: true,
     infoDelete: [
+      {title: "Zone Code", recordName: "zone_code"}, 
       {title: "Zone Name", recordName: "zone_name"}, 
     ],
   })

@@ -108,6 +108,7 @@ export default function CountryTable() {
     recordName: ["country_code", "country_name"],
     showInfoDelete: true,
     infoDelete: [
+      {title: "Country Code", recordName: "country_code"}, 
       {title: "Country Name", recordName: "country_name"}, 
     ],
   })

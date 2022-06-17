@@ -66,6 +66,7 @@ export default function AirportTable() {
     recordName: ["airport_code", "airport_name"],
     showInfoDelete: true,
     infoDelete: [
+      {title: "Airport Code", recordName: "airport_code"}, 
       {title: "Airport Name", recordName: "airport_name"}, 
     ],
   })

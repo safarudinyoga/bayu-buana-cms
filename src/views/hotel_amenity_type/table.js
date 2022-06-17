@@ -126,6 +126,7 @@ export default function HotelAmenityTable() {
     recordName: ["hotel_amenity_type_code", "hotel_amenity_type_name"],
     showInfoDelete: true,
     infoDelete: [
+      {title: "Hotel Amenity Type Code", recordName: "hotel_amenity_type_code"}, 
       {title: "Hotel Amenity Type Name", recordName: "hotel_amenity_type_name"}, 
     ],
   })

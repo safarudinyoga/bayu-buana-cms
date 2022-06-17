@@ -57,6 +57,7 @@ export default function RegionTable() {
     recordName: ["region_code", "region_name"],
     showInfoDelete: true,
     infoDelete: [
+      {title: "Region Code", recordName: "region_code"}, 
       {title: "Region Name", recordName: "region_name"}, 
     ],
   }
