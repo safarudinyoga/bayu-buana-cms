@@ -121,7 +121,7 @@ function IntegrationPartnerCorporateCreate(props) {
             dispatch(setCreateModal({ show: false, id: null, disabled_form: false }));
             dispatch(
                 setAlert({
-                    message: `Record 'From Integration Partner Corporates: ${form.corporate_code} - ${form.corporate_name}' has been successfully saved.`,
+                    message: `Record 'From Integration Partner Corporates: ${form.corporate_code} - ${values.corporate_id.label}' has been successfully saved.`,
                 })
             );
         } catch (e) {
