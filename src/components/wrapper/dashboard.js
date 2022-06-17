@@ -17,8 +17,8 @@ const DashboardWrapper = (props) => {
 
   useEffect(() => {
     history.listen((location, action) => {
-      if(!localStorage.getItem('ut')) window.location.reload()
-    });
+      if (!localStorage.getItem("ut")) window.location.reload()
+    })
 
     document.body.className = [
       "hold-transition",
@@ -34,20 +34,20 @@ const DashboardWrapper = (props) => {
     stateAlert && openSnackbar(stateAlert.message)
   }, [stateAlert])
 
-
-
   const signout = async () => {
-    dispatch(setAlert({
-      message: `You have been successfully logged out!`,
-    }))
+    dispatch(
+      setAlert({
+        message: `You have been successfully logged out!`,
+      }),
+    )
     setTimeout(() => {
-      localStorage.removeItem("ut");
-      localStorage.removeItem("rt");
-      localStorage.removeItem("persist_code");
-      localStorage.removeItem("menu");
-      history.push("/auth/login");
-    }, 700);
-  };
+      localStorage.removeItem("ut")
+      localStorage.removeItem("rt")
+      localStorage.removeItem("persist_code")
+      localStorage.removeItem("menu")
+      history.push("/auth/login")
+    }, 700)
+  }
 
   return (
     <div>
@@ -59,7 +59,8 @@ const DashboardWrapper = (props) => {
           <section className="content">{props.children}</section>
         </div>
         <div className="footer text-center text-md-left">
-          &copy; 2021 - {new Date().getFullYear()} Bayu Buana Travel Services. All Rights Reserved.
+          &copy; 2021 - {new Date().getFullYear()} Bayu Buana Travel Services.
+          All Rights Reserved.
         </div>
       </div>
     </div>
