@@ -1,21 +1,21 @@
 import React, { useEffect, useRef, useState } from 'react'
-import PropTypes from 'prop-types'
 import { Form, Row, Col, Card, Button } from "react-bootstrap"
 import { useFormik } from "formik"
 import * as Yup from "yup"
 import DatePicker from 'react-datepicker'
 
-// components
+// components & styles
 import Select from "components/form/select"
 import SelectAsync from "components/form/select-async"
 import ImageDefault from 'assets/icons/image_default.svg'
+import TextError from 'components/formik/textError'
 import './_form.sass'
 
 // utils
 import Api from "config/api"
 import NoImage from "assets/no_image.png"
 import useQuery from "lib/query"
-import TextError from 'components/formik/textError'
+import { errorMessage } from 'lib/errorMessageHandler'
 
 const slugDictionary = {
   corporate_code: 'Corporate Code',
@@ -30,10 +30,6 @@ const slugDictionary = {
 const GeneralInfomation = (props) => {
   let api = new Api()
   const isView = useQuery().get("action") === "view"
-
-  const errorMessage = (field) => {
-    return `${field} is required.`
-  }
 
   const { handleSubmit, handleChange, values, errors, touched, setFieldTouched, setFieldValue, setValues } = useFormik({
     initialValues: {
@@ -342,10 +338,6 @@ const GeneralInfomation = (props) => {
 
     return dateCopy;
   }
-
-  useEffect(() => {
-    console.log({values, errors});
-  }, [values, errors])
 
   return (
     <Form onSubmit={handleSubmit}>
