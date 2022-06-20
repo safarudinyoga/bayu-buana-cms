@@ -4,7 +4,8 @@ import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
 import { renderColumn } from "lib/translation"
 import { Card } from "react-bootstrap"
-import Form from "../form/branch-office"
+// import Form from "../form/branch-office"
+import Form from '../../corporate_branch_office/forms/branch_offices'
 
 export default function OfficeTable() {
   let dispatch = useDispatch()

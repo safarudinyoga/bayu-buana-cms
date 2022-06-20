@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react"
 import Api from "config/api"
 import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
+import FormInputSelectMultiAjax from "components/form/input-select-multi-ajax"
 import FormBuilder from "components/form/builder"
 import useQuery from "lib/query"
 import env from "../../config/environment"
@@ -19,10 +20,12 @@ function DestinationGroupForm(props) {
   const [formBuilder, setFormBuilder] = useState(null)
   const [loading, setLoading] = useState(true)
   const [translations, setTranslations] = useState([])
+  const [countryData, setCountryData] = useState([])
   const [id, setId] = useState(null)
   const [form, setForm] = useState({
     destination_group_code: "",
     destination_group_name: "",
+    destination_group_country: [],
   })
   const translationFields = [
     {
@@ -144,6 +147,14 @@ function DestinationGroupForm(props) {
             },
             "Destination Group Code already exists",
           )
+
+          if (res.data.destination_group_country) {
+            setCountryData(res.data.destination_group_country.map(value => {
+              if (value.country) {
+                return {id: value.country.id, text: value.country.country_name}
+              }
+            }))
+          }
         }
       } catch (e) {}
 
@@ -218,6 +229,10 @@ function DestinationGroupForm(props) {
       if (!form.destination_group_code) {
         form.destination_group_code = null
       }
+
+      if (!form.destination_group_country) {
+        form.destination_group_country = null
+      }
       let res = await api.putOrPost(endpoint, id, form)
       setId(res.data.id)
       for (let i in translated) {
@@ -271,6 +286,21 @@ function DestinationGroupForm(props) {
           minLength="1"
           maxLength="256"
         />
+        {
+          !loading &&
+          <FormInputSelectMultiAjax
+            label="Country"
+            value={form.destination_group_country ? form.destination_group_country.map((item) => item.country_id) : []}
+            name="destination_group_country"
+            data={countryData}
+            endpoint="/master/countries"
+            column="country_name"
+            filter={`["status", "=", 1]`}
+            onChange={(e, values) => setForm(form => ({...form, destination_group_country: values.map(v => ({country_id: v.id}))}))}
+            disabled={isView || loading}
+            type="selectmultiple"
+          />
+          }
       </FormHorizontal>
 
       <FormHorizontal>

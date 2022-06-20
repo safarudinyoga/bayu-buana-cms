@@ -58,6 +58,7 @@ export default function AgeQualifyingTypeTable() {
     recordName: ["age_qualifying_type_code", "age_qualifying_type_name"],
     showInfoDelete: true,
     infoDelete: [
+      {title: "Age Qualifying Type Code", recordName: "age_qualifying_type_code"}, 
       {title: "Age Qualifying Type Name", recordName: "age_qualifying_type_name"}, 
     ],
   }

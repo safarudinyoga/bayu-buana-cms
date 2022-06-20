@@ -57,6 +57,7 @@ export default function RoomViewTypeTable() {
     recordName: ["room_view_type_code", "room_view_type_name"],
     showInfoDelete: true,
     infoDelete: [
+      {title: "Room View Type Code", recordName: "room_view_type_code"}, 
       {title: "Room View Type Name", recordName: "room_view_type_name"}, 
     ],
   }

@@ -73,6 +73,7 @@ export default function AirlineTable() {
     recordName: ["airline_code", "airline_name"],
     showInfoDelete: true,
     infoDelete: [
+      {title: "Airline Code", recordName: "airline_code"}, 
       {title: "Airline Name", recordName: "airline_name"}, 
     ],
   }

@@ -152,6 +152,7 @@ export default function DestinationTable() {
     recordName: ["destination_code", "destination_name"],
     showInfoDelete: true,
     infoDelete: [
+      {title: "Destination Code", recordName: "destination_code"}, 
       {title: "Destination Name", recordName: "destination_name"}, 
     ],
   })

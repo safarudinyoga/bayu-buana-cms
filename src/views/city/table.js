@@ -108,6 +108,7 @@ export default function CityTable() {
     recordName: ["city_code", "city_name"],
     showInfoDelete: true,
     infoDelete: [
+      {title: "City Code", recordName: "city_code"}, 
       {title: "City Name", recordName: "city_name"}, 
     ],
   })

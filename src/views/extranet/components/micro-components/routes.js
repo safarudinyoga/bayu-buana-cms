@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import AutoSuggest from "react-autosuggest";
+import { Form } from 'react-bootstrap';
 import { ReactSVG } from "react-svg"
 
 function Routes(props) {
@@ -53,14 +54,13 @@ function Routes(props) {
             suggestions={suggestions}
             onSuggestionsClearRequested={() => setSuggestions([])}
             onSuggestionsFetchRequested={({ value }) => {
-              console.log(value);
               setDepartureValue(value);
               setSuggestions(getSuggestions(airports,value));
             }}
             onSuggestionSelected={(_, { suggestion, suggestionValue }) => {
               console.log("Selected",suggestion)
-              if(props.handleTrip) {
-                props.handleTrip("departure_data", suggestion)
+              if(props.formik){
+                props.formik.setFieldValue("departure_data", suggestion)
               }
               if(props.handleCriteriaChange) {
                 props.handleCriteriaChange("origin_airport_id", suggestion.airport_id, "origin_city_id", suggestion.city_id)
@@ -77,9 +77,16 @@ function Routes(props) {
               onChange: (_, { newValue, method }) => {
                 setDepartureValue(newValue);
               },
+              id: "departure_data",
+              name: "departure_data"
             }}
             highlightFirstSuggestion={true}
           />
+          {props.formik.touched.departure_data && props.formik.errors.departure_data && (
+            <Form.Control.Feedback type="invalid">
+              {props.formik.touched.departure_data ? props.formik.errors.departure_data : null}
+            </Form.Control.Feedback>
+          )}
         </div>
         <div className={`form-group required position-relative ${smallSize ? "routes-sm" : ""}`} > 
           <label htmlFor="arrival" className='form-with-label__title'>TO <span className='label-required'></span></label>
@@ -94,8 +101,8 @@ function Routes(props) {
             }}
             onSuggestionSelected={(_, { suggestion, suggestionValue }) => {
               console.log("Return Selected: ",suggestion)
-              if(props.handleTrip) {
-                props.handleTrip("arrival_data", suggestion)
+              if(props.formik){
+                props.formik.setFieldValue("arrival_data", suggestion)
               }
               if(props.handleCriteriaChange) {
                 props.handleCriteriaChange("destination_airport_id", suggestion.airport_id, "destination_city_id", suggestion.city_id)

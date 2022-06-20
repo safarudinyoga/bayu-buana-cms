@@ -57,6 +57,7 @@ export default function SpecialRequestTable() {
     recordName: ["special_request_code", "special_request_name"],
     showInfoDelete: true,
     infoDelete: [
+      {title: "Special Request Code", recordName: "special_request_code"}, 
       {title: "Special Request Name", recordName: "special_request_name"}, 
     ],
   }

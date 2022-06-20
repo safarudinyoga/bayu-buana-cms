@@ -57,6 +57,7 @@ export default function DestinationGroupTable() {
     recordName: ["destination_group_code", "destination_group_name"],
     showInfoDelete: true,
     infoDelete: [
+      {title: "Destination Group Code", recordName: "destination_group_code"}, 
       {title: "Destination Group Name", recordName: "destination_group_name"}, 
     ],
   }
