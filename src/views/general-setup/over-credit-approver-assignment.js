@@ -29,7 +29,7 @@ const OverCreditApproverAssignment = (props) => {
           given_name: item.given_name,
           middle_name: item.middle_name,
           surname: item.surname,
-          office: item.office,
+          office_name: item.office.office_name,
         })),
       ])
     } catch (e) {
@@ -47,7 +47,7 @@ const OverCreditApproverAssignment = (props) => {
           given_name: item.person.given_name,
           middle_name: item.person.middle_name,
           surname: item.person.surname,
-          office: item.office,
+          office_name: item.office.office_name,
         })),
       )
     } catch (e) {

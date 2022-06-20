@@ -102,7 +102,7 @@ const AddOrRemoveList = ({
                   {canRemoveIndex ? (
                     <div className="w-100 d-flex justify-content-between align-items-center">
                       {item.given_name} {item.middle_name} {item.surname} (
-                      {item?.office?.office_name})
+                      {item?.office_name})
                       <FieldArray
                         name="employee"
                         render={(arr) => (
@@ -381,7 +381,7 @@ const AddOrRemoveList = ({
                     </svg>
                     <div className="w-100 d-flex justify-content-between">
                       {item.given_name} {item.middle_name} {item.surname}
-                      <span>({item?.office?.name})</span>
+                      <span>({item?.office_name})</span>
                     </div>
                   </div>
                 </li>
