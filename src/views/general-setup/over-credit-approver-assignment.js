@@ -24,7 +24,7 @@ const OverCreditApproverAssignment = (props) => {
       )
       setListEmployee([
         ...res.data.items.map((item) => ({
-          agent_employee: item.agent_employee,
+          agent_id: item?.agent_employee.agent_id,
           employee_id: item.employee_id,
           given_name: item.given_name,
           middle_name: item.middle_name,
@@ -40,7 +40,16 @@ const OverCreditApproverAssignment = (props) => {
   const getListOverCredit = async () => {
     try {
       let res = await api.get(`/master/configurations/over-credit-approvers`)
-      setListOverCredit(res.data.items)
+      setListOverCredit(
+        res.data.items.map((item) => ({
+          agent_id: item?.agent_employee?.agent_id,
+          employee_id: item?.employee_id,
+          given_name: item.person.given_name,
+          middle_name: item.person.middle_name,
+          surname: item.person.surname,
+          office: item.office,
+        })),
+      )
     } catch (e) {
       console.log(e)
     }
@@ -113,7 +122,7 @@ const OverCreditApproverAssignment = (props) => {
                     //     office: "qwe",
                     //   },
                     // ]}
-                    firstData={[]}
+                    firstData={listOverCredit}
                     secondData={listEmployee}
                     firstCardTitle="list of over credit approvers"
                     secondCardTitle="employee name"

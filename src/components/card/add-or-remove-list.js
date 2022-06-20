@@ -26,7 +26,7 @@ const AddOrRemoveList = ({
   const [triger, setTriger] = useState(true)
 
   // console.log("secondData: ", secondData)
-  // console.log("leftData: ", leftData)
+  console.log("leftData: ", leftData)
 
   useEffect(async () => {
     if (triger) {
@@ -41,11 +41,11 @@ const AddOrRemoveList = ({
     setRightData((rightdata) => [])
     setFormValues((formValues) => [
       ...leftData.map((item) => ({
-        agent_id: item.agent_employee.agent_id,
+        agent_id: item.agent_id,
         employee_id: item.employee_id,
       })),
       ...rightData.map((item) => ({
-        agent_id: item.agent_employee.agent_id,
+        agent_id: item.agent_id,
         employee_id: item.employee_id,
       })),
     ])
@@ -111,7 +111,7 @@ const AddOrRemoveList = ({
                               control="input"
                               name={`employee[${i}].agent_id`}
                               type="hidden"
-                              value={item.agent_employee.agent_id}
+                              value={item.agent_id}
                             />
                             <FormikControl
                               control="input"
@@ -187,7 +187,7 @@ const AddOrRemoveList = ({
                                 control="input"
                                 name={`employee[${i}].agent_id`}
                                 type="hidden"
-                                value={item.agent_employee.agent_id}
+                                value={item.agent_id}
                               />
                               <FormikControl
                                 control="input"
@@ -293,7 +293,7 @@ const AddOrRemoveList = ({
                 label="Branch Office"
                 // onChange={}
                 endpoint="/master/employees"
-                column="given_name"
+                column="office.office_name"
                 sort="given_name"
                 isGrouping={true}
                 fieldGroup="employee_id"

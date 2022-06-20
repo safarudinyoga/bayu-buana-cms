@@ -20,7 +20,16 @@ function TravelConsultantAssignment(props) {
       let res = await api.get(
         `/master/employees?filters=[["status","=",1]]&sort=given_name`,
       )
-      setListEmployee(res.data.items)
+      setListEmployee(
+        res.data.items.map((item) => ({
+          agent_id: item.agent_employee.agent_id,
+          employee_id: item.employee_id,
+          given_name: item.given_name,
+          middle_name: item.middle_name,
+          surname: item.surname,
+          office: item.office,
+        })),
+      )
     } catch (e) {
       console.log(e)
     }
@@ -29,7 +38,16 @@ function TravelConsultantAssignment(props) {
   const getLisTravelConsultant = async () => {
     try {
       let res = await api.get(`/master/configurations/travel-consultants`)
-      setListTravelConsultant(res.data.items)
+      setListTravelConsultant(
+        res.data.items.map((item) => ({
+          agent_id: item?.agent_employee?.agent_id,
+          employee_id: item?.employee_id,
+          given_name: item.person.given_name,
+          middle_name: item.person.middle_name,
+          surname: item.person.surname,
+          office: item.office,
+        })),
+      )
     } catch (e) {
       console.log(e)
     }
@@ -65,12 +83,13 @@ function TravelConsultantAssignment(props) {
     employee: [],
   }
 
-  console.log("formValues: ", formValues)
+  // console.log("formValues: ", formValues)
+  console.log("listTravelConsultant: ", listTravelConsultant)
 
   return (
     <>
       <Formik
-       initialValues={formValues || initialValues}
+        initialValues={formValues || initialValues}
         onSubmit={onSubmit}
         validateOnMount
         enableReinitialize
@@ -82,7 +101,7 @@ function TravelConsultantAssignment(props) {
                 <h3 className="card-heading">Travel Consultant Assignment</h3>
                 <div style={{ padding: "0 15px 40px 0" }}>
                   <CardAddOrRemove
-                    firstData={[]}
+                    firstData={listTravelConsultant}
                     secondData={listEmployee}
                     firstCardTitle="list of travel consultant"
                     secondCardTitle="employee name"
