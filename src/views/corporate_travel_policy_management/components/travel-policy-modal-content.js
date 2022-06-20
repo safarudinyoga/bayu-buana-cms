@@ -132,13 +132,13 @@ Yup.addMethod(Yup.object, 'uniqueValueObject', function (fieldName, message) {
   }, [showCreateModal.id, formValues])
 
   const initialValues = {
-    task_type: "",
-    response_time: [],
+    travel_policy_class_name: "",
+    travel_policy_class_code: "",
   }
 
   const validationSchema = Yup.object().shape({
-    task_type: Yup.object().required("Task Type is required.").uniqueValueObject("task_type_id","Task Type already exists"),
-    response_time: Yup.array().min(3, "Response Time is required."),
+    travel_policy_class_code: Yup.string().required("Travel Policy Class Code is required.").uniqueValueObject("travel_policy_class_code","Travel Policy Class Code already exists"),
+    travel_policy_class_name: Yup.string().required("Travel Policy Class Name is required.").uniqueValueObject("travel_policy_class_name","Travel Policy Class Name already exists"),
   })
 
   const onSubmit = async (values, a) => {
@@ -189,7 +189,7 @@ Yup.addMethod(Yup.object, 'uniqueValueObject', function (fieldName, message) {
   }
     return (
       <Formik
-      initialValues={formValues || initialValues}
+      initialValues={initialValues}
       validationSchema={validationSchema}
       onSubmit={onSubmit}
       validateOnMount
@@ -214,11 +214,11 @@ Yup.addMethod(Yup.object, 'uniqueValueObject', function (fieldName, message) {
                 <FormikControl 
                   control="input"
                   label="Code"
-                  name="percent"
+                  name="travel_policy_class_code"
                   required="label-required"
                   className
                   style={{ maxWidth: 130, borderRadius: 4 }}
-                  // isDisabled={isView}
+                  isDisabled={isView}
                 />
             </Col>
           </Row>
@@ -228,7 +228,7 @@ Yup.addMethod(Yup.object, 'uniqueValueObject', function (fieldName, message) {
                 <FormikControl 
                   control="input"
                   label="Name"
-                  name="percent"
+                  name="travel_policy_class_name"
                   required="label-required"
                   className
                   style={{ maxWidth: 250, borderRadius: 4 }}
@@ -282,7 +282,7 @@ Yup.addMethod(Yup.object, 'uniqueValueObject', function (fieldName, message) {
                 <Button
                   variant="primary"
                   type="submit"
-                  disabled={isSubmitting}
+                  disabled={true}
                   style={{ marginRight: 15 }}
                 >
                   SAVE
