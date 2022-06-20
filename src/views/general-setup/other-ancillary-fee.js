@@ -7,10 +7,9 @@ import { useSnackbar } from "react-simple-snackbar"
 import { withRouter } from "react-router"
 import NumberFormat from "react-number-format"
 import CancelButton from "components/button/cancel"
-import useQuery from "lib/query"
 
 const endpointFee = "/master/agent-processing-fee-categories"
-const endpoint = "/master/agent-processing-fee-categories/3"
+const endpoint = "/master/agent-processing-fee-categories/3/"
 const options = {
   position: "bottom-right",
 }
@@ -245,7 +244,7 @@ const FeeSection = (props) => {
         </Row>
       </Form.Group>
       <FeedbackMessage {...props} />
-      {props.borderBottom && <h3 className="card-heading"></h3>}
+      {props.borderBottom && <h3 className="card-heading">&nbsp;</h3>}
     </>
   )
 }
@@ -306,15 +305,17 @@ const Menu = (props) => {
 
 const OtherAncillaryFee = (props) => {
   let api = new Api()
-  const isView = useQuery().get("action") === "view"
+  // const isView = useQuery().get("action") === "view"
   const [openSnackbar] = useSnackbar(options)
   const [taxTypeMDRFee, setTaxTypeMDRFee] = useState([])
   const [taxTypeLatePayment, setTaxTypeLatePayment] = useState([])
+  const [id, setId] = useState(null)
 
   const [taxIdMDRFee, setTaxIdMDRFee] = useState("")
   const [taxIdLatePayment, setTaxIdLatePayment] = useState("")
   const formId = props.match.params.id
 
+  console.log("tes", id)
   const getFeeTaxType = async (code, setData, setId) => {
     try {
       let res = await api.get(
@@ -398,11 +399,12 @@ const OtherAncillaryFee = (props) => {
   useEffect(async () => {
     try {
       if (!formId) {
-        let { data } = await api.get(endpointFee + "/3/")
-        console.log(data.items)
+        let res = await api.get(endpointFee + "/3/")
+        let data = res.data.items[0]
+        setId(data.id)
+
         setInitialForm({
           ...initialForm,
-          ...data,
           domestic_reissue: checkprocessingType(
             data.domestic_reissue.charge_type_id,
           ),
@@ -483,11 +485,17 @@ const OtherAncillaryFee = (props) => {
     }
     return payloadDomestic
   }
+
   const onSubmit = async (values) => {
     try {
       let payload = setPayload(values)
-      let res = await api.putOrPost(endpoint, formId, payload)
-      console.log(res)
+      // let res = await api.putOrPost(endpoint, formId, payload)
+      if (!formId) {
+        let res = await api.put(endpoint + id, payload)
+      } else {
+        let res = await api.post(endpoint, formId, payload)
+      }
+
       openSnackbar(
         `Ancillary Fee has been successfully ${formId ? "updated" : "saved"}.`,
       )
