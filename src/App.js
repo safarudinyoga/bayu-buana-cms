@@ -24,6 +24,8 @@ import AttractionForm from "views/attraction/form"
 import AttractionTable from "views/attraction/table"
 import AttractionCategoryForm from "views/attraction_category/form"
 import AttractionCategoryTable from "views/attraction_category/table"
+import BranchOfficeForm from "views/branch_office/form"
+import BranchOfficeTable from "views/branch_office/table"
 import CabinTypeForm from "views/cabin_type/form"
 import CabinTypeTable from "views/cabin_type/table"
 import CityForm from "views/city/form"
@@ -525,6 +527,13 @@ const DashboardRoutes = () => {
         </Route>
         <Route exact path="/master/aircrafts">
           <AircraftTable />
+        </Route>
+
+        <Route exact path="/master/branch-offices">
+          <BranchOfficeTable />
+        </Route>
+        <Route path="/master/branch-offices/form/:id?">
+          <BranchOfficeForm />
         </Route>
 
         {/* Travel Policy Class */}
