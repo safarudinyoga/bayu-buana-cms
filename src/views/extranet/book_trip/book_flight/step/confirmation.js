@@ -1,9 +1,20 @@
 import React, {useState, useEffect} from "react"
+import { Col, Row } from "react-bootstrap"
 
 
 const Confirmation = () => {
   return (
-    <p>This feature is not yet available</p>
+    <div>
+      <Row>
+        <Col md={11}>
+
+        </Col>
+
+        <Col md={1}>
+
+        </Col>
+      </Row>
+    </div>
   )
 }
 

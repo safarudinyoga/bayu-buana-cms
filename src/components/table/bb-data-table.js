@@ -467,10 +467,10 @@ class BBDataTable extends Component {
                   }
                 }
               } else {
-                overrideParams.sort = this.queryParams.has('sort')
-                ? this.queryParams.get('sort')
-                : this.props.customSort
+                overrideParams.sort = this.props.customSort
                 ? this.props.customSort.join(",")
+                : this.queryParams.has('sort')
+                ? this.queryParams.get('sort')
                 : 'sort'
               }
               if (params.search.value) {
@@ -1137,15 +1137,12 @@ class BBDataTable extends Component {
           <ModalBody>
           {
             this.state.selected.length > 0 || infoFromState.length === 0
-            ? <p>Are you sure want to delete this ?</p>
-            : infoFromState.length > 1
-            ? (
+            ? <p>Are you sure want to delete this?</p>
+            :
               <>
-                <>Are you sure want to delete this ?</>
+                <>Are you sure want to delete this?</>
                 {infoFromState.map((d) => (<><br/>{d}</>))}
               </>
-            )
-            : `Are you sure want to delete '${infoFromState}' ?`
           }
           </ModalBody>
           <ModalFooter>

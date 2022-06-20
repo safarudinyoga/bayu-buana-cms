@@ -24,6 +24,8 @@ import AttractionForm from "views/attraction/form"
 import AttractionTable from "views/attraction/table"
 import AttractionCategoryForm from "views/attraction_category/form"
 import AttractionCategoryTable from "views/attraction_category/table"
+import BranchOfficeForm from "views/branch_office/form"
+import BranchOfficeTable from "views/branch_office/table"
 import CabinTypeForm from "views/cabin_type/form"
 import CabinTypeTable from "views/cabin_type/table"
 import CityForm from "views/city/form"
@@ -135,7 +137,7 @@ import IntegrationPartnerCabinsForm from "views/integration_partner_cabin/form/f
 // import FareFamiyTabel from "views/integration_partner_cabin/tabel-fare-family"
 import IntegrationFeeTaxes from "views/partner_fee_taxes/table"
 import FeeTaxForm from "views/partner_fee_taxes/form"
-import CreateHotel from "views/partner_hotels/form"
+// import CreateHotel from "views/partner_hotels/form"
 import FormPartnerHotel from "views/partner_hotels/form"
 import IntegrationPartnerCountriesTable from "views/integration_partner_countries/table"
 import IntegrationPartnerCurrenciesTable from "views/integration_partner_currencies/table"
@@ -151,8 +153,7 @@ import UserProfile from "views/user_profile/form"
 import Login from "./views/auth/login"
 import ForgotPassword from "views/auth/forgot_password"
 import OTP from "views/auth/otp"
-import OfficeTable from "./views/branch_office/table"
-import OfficeForm from "./views/branch_office/form"
+
 import DivisionForm from "./views/division/form"
 import DivisionTable from "./views/division/table"
 import DivisionHierarchy from "./views/division/hierarchy"
@@ -217,6 +218,10 @@ import CorporateDivisionForm from "views/corporate_division/form"
 import CorporateDivisionHierarchy from "views/corporate_division/hierarchy"
 
 // Master Corporate Divisions
+import CorporateEmployeeTable from "views/corporate_employee/table"
+import CorporateEmployeeForm from "views/corporate_employee/form/index"
+
+// Master Corporate Divisions
 import CorporateUserAccessTypeTable from "views/corporate_user_type/table"
 import CorporateUserAccessTypeForm from "views/corporate_user_type/form"
 
@@ -241,6 +246,9 @@ import CorporateAirlineFareForm from "views/corporate_airline_fare/form"
 
 //corporate user profile
 import CorporateUserProfile from "views/corporate_user_profile/index"
+
+// corporate office
+// import OfficeTable from "./views/corporate_branch_office/table"
 
 const RouteWithProps = ({
   path,
@@ -521,6 +529,13 @@ const DashboardRoutes = () => {
           <AircraftTable />
         </Route>
 
+        <Route exact path="/master/branch-offices">
+          <BranchOfficeTable />
+        </Route>
+        <Route path="/master/branch-offices/form/:id?">
+          <BranchOfficeForm />
+        </Route>
+
         {/* Travel Policy Class */}
         <Route exact path="/master/travel-policy-class">
           <TravelPolicyClass />
@@ -682,14 +697,6 @@ const DashboardRoutes = () => {
           <JobTitleCorporateForm />
         </Route>
 
-        {/* Branch Office */}
-        <Route exact path="/master/branch-offices">
-          <OfficeTable />
-        </Route>
-        <Route path="/master/branch-offices/form/:id?">
-          <OfficeForm />
-        </Route>
-
         {/* Master Invoice Email Setup */}
         <Route exact path="/master/invoice-email-setup">
           <InvoiceEmailSetupTable />
@@ -827,6 +834,14 @@ const DashboardRoutes = () => {
           <CorporateUserAccessTypeForm />
         </Route>
 
+         {/* Corporate Employee */}
+         <Route exact path="/master/corporate-employee">
+          <CorporateEmployeeTable />
+        </Route>
+        <Route path="/master/corporate-employee/form/:id?">
+          <CorporateEmployeeForm />
+        </Route>
+
         {/* Corporate Travel Policy */}
         <Route exact path="/master/corporate-travel-policy">
           <CorporateTravelPolicyMangement />
@@ -836,6 +851,11 @@ const DashboardRoutes = () => {
         <Route exact path="/master/corporate-user-profile/:tabs?">
           <CorporateUserProfile />
         </Route>
+
+        {/* Corporate Branch Office */}
+        {/* <Route exact path="/master/branch-offices">
+          <OfficeTable />
+        </Route> */}
 
         {/* Corporate User Management */}
         <Route exact path="/master/corporate-user-management">
