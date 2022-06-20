@@ -151,8 +151,7 @@ import UserProfile from "views/user_profile/form"
 import Login from "./views/auth/login"
 import ForgotPassword from "views/auth/forgot_password"
 import OTP from "views/auth/otp"
-import OfficeTable from "./views/branch_office/table"
-import OfficeForm from "./views/branch_office/form"
+
 import DivisionForm from "./views/division/form"
 import DivisionTable from "./views/division/table"
 import DivisionHierarchy from "./views/division/hierarchy"
@@ -241,6 +240,9 @@ import CorporateAirlineFareForm from "views/corporate_airline_fare/form"
 
 //corporate user profile
 import CorporateUserProfile from "views/corporate_user_profile/index"
+
+// corporate office
+import OfficeTable from "./views/corporate_branch_office/table"
 
 const RouteWithProps = ({
   path,
@@ -682,14 +684,6 @@ const DashboardRoutes = () => {
           <JobTitleCorporateForm />
         </Route>
 
-        {/* Branch Office */}
-        <Route exact path="/master/branch-offices">
-          <OfficeTable />
-        </Route>
-        <Route path="/master/branch-offices/form/:id?">
-          <OfficeForm />
-        </Route>
-
         {/* Master Invoice Email Setup */}
         <Route exact path="/master/invoice-email-setup">
           <InvoiceEmailSetupTable />
@@ -836,6 +830,11 @@ const DashboardRoutes = () => {
         <Route exact path="/master/corporate-user-profile/:tabs?">
           <CorporateUserProfile />
         </Route>
+
+        {/* Corporate Branch Office */}
+        {/* <Route exact path="/master/branch-offices">
+          <OfficeTable />
+        </Route> */}
 
         {/* Corporate User Management */}
         <Route exact path="/master/corporate-user-management">
