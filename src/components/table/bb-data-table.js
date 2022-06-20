@@ -467,10 +467,10 @@ class BBDataTable extends Component {
                   }
                 }
               } else {
-                overrideParams.sort = this.queryParams.has('sort')
-                ? this.queryParams.get('sort')
-                : this.props.customSort
+                overrideParams.sort = this.props.customSort
                 ? this.props.customSort.join(",")
+                : this.queryParams.has('sort')
+                ? this.queryParams.get('sort')
                 : 'sort'
               }
               if (params.search.value) {
