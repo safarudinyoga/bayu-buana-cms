@@ -135,7 +135,7 @@ import IntegrationPartnerCabinsForm from "views/integration_partner_cabin/form/f
 // import FareFamiyTabel from "views/integration_partner_cabin/tabel-fare-family"
 import IntegrationFeeTaxes from "views/partner_fee_taxes/table"
 import FeeTaxForm from "views/partner_fee_taxes/form"
-import CreateHotel from "views/partner_hotels/form"
+// import CreateHotel from "views/partner_hotels/form"
 import FormPartnerHotel from "views/partner_hotels/form"
 import IntegrationPartnerCountriesTable from "views/integration_partner_countries/table"
 import IntegrationPartnerCurrenciesTable from "views/integration_partner_currencies/table"
@@ -216,6 +216,10 @@ import CorporateDivisionForm from "views/corporate_division/form"
 import CorporateDivisionHierarchy from "views/corporate_division/hierarchy"
 
 // Master Corporate Divisions
+import CorporateEmployeeTable from "views/corporate_employee/table"
+import CorporateEmployeeForm from "views/corporate_employee/form/index"
+
+// Master Corporate Divisions
 import CorporateUserAccessTypeTable from "views/corporate_user_type/table"
 import CorporateUserAccessTypeForm from "views/corporate_user_type/form"
 
@@ -242,7 +246,7 @@ import CorporateAirlineFareForm from "views/corporate_airline_fare/form"
 import CorporateUserProfile from "views/corporate_user_profile/index"
 
 // corporate office
-import OfficeTable from "./views/corporate_branch_office/table"
+// import OfficeTable from "./views/corporate_branch_office/table"
 
 const RouteWithProps = ({
   path,
@@ -819,6 +823,14 @@ const DashboardRoutes = () => {
         </Route>
         <Route path="/master/corporate-user-type/form/:id?">
           <CorporateUserAccessTypeForm />
+        </Route>
+
+         {/* Corporate Employee */}
+         <Route exact path="/master/corporate-employee">
+          <CorporateEmployeeTable />
+        </Route>
+        <Route path="/master/corporate-employee/form/:id?">
+          <CorporateEmployeeForm />
         </Route>
 
         {/* Corporate Travel Policy */}
