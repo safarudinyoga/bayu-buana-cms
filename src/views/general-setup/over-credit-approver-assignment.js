@@ -11,7 +11,7 @@ const OverCreditApproverAssignment = (props) => {
   const dispatch = useDispatch()
   const [listEmployee, setListEmployee] = useState([])
   const [listOverCredit, setListOverCredit] = useState([])
-  const [formValues, setFormValues] = useState(null)
+  const [formValues, setFormValues] = useState([])
   const endpoint = `/master/configurations/over-credit-approvers`
   let api = new Api()
 
@@ -58,6 +58,7 @@ const OverCreditApproverAssignment = (props) => {
   useEffect(async () => {
     getListOverCredit()
     getListEmployee()
+    console.log("formValues: ", formValues)
   }, [])
 
   const onSubmit = async (values, a) => {
@@ -104,24 +105,6 @@ const OverCreditApproverAssignment = (props) => {
                 </h3>
                 <div style={{ padding: "0 15px 40px 0" }}>
                   <CardAddOrRemove
-                    // firstData={[
-                    //   {
-                    //     agent_employee: "asd",
-                    //     employee_id: "asd",
-                    //     given_name: "asd",
-                    //     middle_name: "asd",
-                    //     surname: "asd",
-                    //     office: "asd",
-                    //   },
-                    //   {
-                    //     agent_employee: "qwe",
-                    //     employee_id: "qwe",
-                    //     given_name: "qwe",
-                    //     middle_name: "qwe",
-                    //     surname: "qwe",
-                    //     office: "qwe",
-                    //   },
-                    // ]}
                     firstData={listOverCredit}
                     secondData={listEmployee}
                     firstCardTitle="list of over credit approvers"

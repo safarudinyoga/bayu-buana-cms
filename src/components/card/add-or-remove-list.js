@@ -58,23 +58,30 @@ const AddOrRemoveList = ({
     setFormValues((formValues) => [])
   }
 
-  const handleRemoveIndexArray = (e) => {
+  const handleLeftToRight = (e) => {
     const newData = leftData.filter((item) => item !== e)
     setLeftData((leftdata) => newData)
     setRightData((rightdata) => [...rightdata, e])
   }
 
+  const handleRightToLeft = (e) => {
+    const newData = rightData.filter((item) => item !== e)
+    setRightData((rightdata) => newData)
+    setLeftData((leftdata) => [...leftdata, e])
+  }
+
   const handleSelectAssignmentLeader = (e) => {
     console.log("e: ", e)
-    setFormValues((data) =>
-      data.map((item) => ({
-        ...item,
-        can_issue_ticket:
-          item.employee_id === e
-            ? !item.can_issue_ticket
-            : item.can_issue_ticket,
-      })),
-    )
+    console.log("form: ")
+    setFormValues("aaaa")
+    // setFormValues((data) => [
+    //   ...data.map((item) => ({
+    //     can_issue_tickets:
+    //       item.given_name + item.middle_name + item.surname === e
+    //         ? !item.can_issue_ticket
+    //         : item.can_issue_ticket,
+    //   })),
+    // ])
   }
 
   return (
@@ -124,7 +131,7 @@ const AddOrRemoveList = ({
                       />
                       <span
                         className="btn-x-circle"
-                        onClick={() => handleRemoveIndexArray(item)}
+                        onClick={() => handleLeftToRight(item)}
                       >
                         <img src={xCircle} alt="right" />
                       </span>
@@ -143,9 +150,14 @@ const AddOrRemoveList = ({
                           <Field
                             type="checkbox"
                             name="can_issue_ticket"
-                            onChange={() =>
-                              handleSelectAssignmentLeader(item.employee_id)
-                            }
+                            value={item.given_name}
+                            // onChange={() =>
+                            //   handleSelectAssignmentLeader(
+                            //     item.given_name +
+                            //       item.middle_name +
+                            //       item.surname,
+                            //   )
+                            // }
                             className="add-remove-cb"
                           />
                           <img src={flightTicket} alt="flight-ticket" />
@@ -228,7 +240,7 @@ const AddOrRemoveList = ({
                   <img src={flightTicket} alt="flight-ticket" />
                 </div>
                 <span style={{ fontSize: "12px", paddingLeft: "8px" }}>
-                  Click to assign/forbid ttravel consultant to issue flight
+                  Click to assign/forbid travel consultant to issue flight
                   ticket.
                 </span>
               </div>
@@ -348,7 +360,10 @@ const AddOrRemoveList = ({
           <Card.Body style={{ padding: "8px 10px 10px 9px" }}>
             <ol class="list list-general-setup">
               {rightData.map((item) => (
-                <li className="item-general-setup">
+                <li
+                  className="item-general-setup cursor-pointer"
+                  onClick={() => handleRightToLeft(item)}
+                >
                   <div className="d-flex align-items-center">
                     <svg
                       class="float-left row-handle nopadding"

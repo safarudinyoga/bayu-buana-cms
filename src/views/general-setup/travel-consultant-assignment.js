@@ -46,6 +46,7 @@ function TravelConsultantAssignment(props) {
           middle_name: item.person.middle_name,
           surname: item.person.surname,
           office_name: item.office.office_name,
+          // can_issue_ticket: false,
         })),
       )
     } catch (e) {
@@ -101,6 +102,18 @@ function TravelConsultantAssignment(props) {
                 <h3 className="card-heading">Travel Consultant Assignment</h3>
                 <div style={{ padding: "0 15px 40px 0" }}>
                   <CardAddOrRemove
+                    // firstData={[
+                    //   ...listTravelConsultant,
+                    //   {
+                    //     agent_id: "aaa",
+                    //     employee_id: "aaa",
+                    //     given_name: "aaa",
+                    //     middle_name: "aaa",
+                    //     surname: "aaa",
+                    //     office_name: "aaa",
+                    //     can_issue_ticket: true,
+                    //   },
+                    // ]}
                     firstData={listTravelConsultant}
                     secondData={listEmployee}
                     firstCardTitle="list of travel consultant"
