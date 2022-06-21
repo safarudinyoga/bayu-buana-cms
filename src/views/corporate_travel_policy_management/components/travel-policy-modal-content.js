@@ -85,38 +85,6 @@ Yup.addMethod(Yup.object, 'uniqueValueObject', function (fieldName, message) {
 
     dispatch(setModalTitle(docTitle))
 
-    if (formId) {
-      try {
-        let res = await API.get(endpoint + "/" + formId)
-        let data = res.data
-        let day = Math.round(data.amount/1440)
-          let hour = Math.round((data.amount % 1440)/60)
-          let minute = (data.amount % 1440) % 60
-        setFormValues({
-          ...formValues,
-          task_type: _.isEmpty(data.task_type) ? "" : {
-            value: data.task_type_id,
-            label: data.task_type.task_type_name
-          },
-          response_time: data.amount ? [
-            {
-              value: day,
-              label: day,
-            },
-            {
-              value: hour,
-              label: hour,
-            },
-            {
-              value: minute,
-              label: minute,
-            },
-          ] : [],
-        })
-      } catch (e) {
-        console.log(e)
-      }
-    }
   }, [])
 
   useEffect(() => {
@@ -134,11 +102,12 @@ Yup.addMethod(Yup.object, 'uniqueValueObject', function (fieldName, message) {
   const initialValues = {
     travel_policy_class_name: "",
     travel_policy_class_code: "",
+    travel_policy_apply_to: "",
   }
 
   const validationSchema = Yup.object().shape({
-    travel_policy_class_code: Yup.string().required("Travel Policy Class Code is required.").uniqueValueObject("travel_policy_class_code","Travel Policy Class Code already exists"),
-    travel_policy_class_name: Yup.string().required("Travel Policy Class Name is required.").uniqueValueObject("travel_policy_class_name","Travel Policy Class Name already exists"),
+    travel_policy_class_code: Yup.object().required("Travel Policy Class Code is required.").uniqueValueObject("travel_policy_class_code","Travel Policy Class Code already exists"),
+    travel_policy_class_name: Yup.object().required("Travel Policy Class Name is required.").uniqueValueObject("travel_policy_class_name","Travel Policy Class Name already exists"),
   })
 
   const onSubmit = async (values, a) => {
@@ -189,7 +158,7 @@ Yup.addMethod(Yup.object, 'uniqueValueObject', function (fieldName, message) {
   }
     return (
       <Formik
-      initialValues={initialValues}
+      initialValues={formValues || initialValues}
       validationSchema={validationSchema}
       onSubmit={onSubmit}
       validateOnMount
@@ -217,8 +186,10 @@ Yup.addMethod(Yup.object, 'uniqueValueObject', function (fieldName, message) {
                   name="travel_policy_class_code"
                   required="label-required"
                   className
+                  minLength={1}
+                  maxLength={36}
                   style={{ maxWidth: 130, borderRadius: 4 }}
-                  isDisabled={isView}
+                  // isDisabled={isView}
                 />
             </Col>
           </Row>
@@ -231,6 +202,8 @@ Yup.addMethod(Yup.object, 'uniqueValueObject', function (fieldName, message) {
                   name="travel_policy_class_name"
                   required="label-required"
                   className
+                  minLength={1}
+                  maxLength={256}
                   style={{ maxWidth: 250, borderRadius: 4 }}
                   // isDisabled={isView}
                 />
@@ -282,7 +255,7 @@ Yup.addMethod(Yup.object, 'uniqueValueObject', function (fieldName, message) {
                 <Button
                   variant="primary"
                   type="submit"
-                  disabled={true}
+                  disabled={isSubmitting}
                   style={{ marginRight: 15 }}
                 >
                   SAVE

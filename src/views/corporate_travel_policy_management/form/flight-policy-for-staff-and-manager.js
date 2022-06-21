@@ -155,6 +155,7 @@ function FlightPolicy(props) {
   const initialValues = {
     task_type: "",
     response_time: [],
+    short_flight_duration_up_to: "",
   }
 
   const validationSchema = Yup.object().shape({
@@ -162,6 +163,7 @@ function FlightPolicy(props) {
       .required("Task Type is required.")
       .uniqueValueObject("task_type_id", "Task Type already exists"),
     response_time: Yup.array().min(3, "Response Time is required."),
+    short_flight_duration_up_to: Yup.object().required("Please enter Short Flight Duration up to."),
   })
 
   const onSubmit = async (values, a) => {
@@ -317,8 +319,10 @@ function FlightPolicy(props) {
                         <FormikControl
                           control="input"
                           label="Short Flight Duration up to"
-                          name="percent"
+                          name="short_flight_duration_up_to"
                           required="label-required"
+                          minLength={1}
+                          maxLength={100}
                           className
                           style={{ maxWidth: 100 }}
                           // isDisabled={isView}

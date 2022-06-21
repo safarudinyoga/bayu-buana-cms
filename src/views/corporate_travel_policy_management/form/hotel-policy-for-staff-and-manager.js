@@ -289,8 +289,8 @@ function HotelPolicy(props) {
                 name="special_date_name"
                 disabled={isView || loading}
                 type="text"
-                minLength="1"
-                maxLength="256"
+                minLength={0}
+                maxLength={15}
                 cl={{ md: 3 }}
                 cr={{ md: 7 }}
               />
