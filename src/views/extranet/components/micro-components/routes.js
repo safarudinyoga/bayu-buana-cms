@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import AutoSuggest from "react-autosuggest";
-import { Form } from 'react-bootstrap';
 import { ReactSVG } from "react-svg"
-import { preProcessFile } from 'typescript';
 
 function Routes(props) {
   const { airports, smallSize } = props

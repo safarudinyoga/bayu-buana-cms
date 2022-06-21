@@ -1,10 +1,10 @@
-import "admin-lte/plugins/jquery-validation/additional-methods"
-import "admin-lte/plugins/jquery-validation/jquery.validate"
 import CancelButton from "components/button/cancel"
 import SaveButton from "components/button/save"
 import $ from "jquery"
 import React, {Component} from "react"
-
+import 'jquery-validation'
+// import "admin-lte/plugins/jquery-validation/additional-methods"
+// import "admin-lte/plugins/jquery-validation/jquery.validate"
 export default class FormContainer extends Component {
   constructor(props) {
     super(props)
