@@ -188,7 +188,7 @@ const Confirmation = () => {
             <p>Change on Trip Plane</p>
             <Button 
               onClick={(e) => {}}
-              className="btn-flight-select mr-3"
+              className="btn-flight-select mx-3"
             >
                 Request for change
             </Button>
