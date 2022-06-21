@@ -245,6 +245,10 @@ function Travellers(props) {
   )
 
   useEffect(() => {
+    if(props.formik){
+      props.formik.setFieldValue("adult_count", adultCount)
+    }
+
     if(props.handleTrip){
       props.handleTrip("adult_count", adultCount)
     }
@@ -258,6 +262,10 @@ function Travellers(props) {
   }, [adultCount])
 
   useEffect(() => {
+    if(props.formik){
+      props.formik.setFieldValue("children_count", childrenCount)
+    }
+
     if(props.handleTrip){
       props.handleTrip("children_count", childrenCount)
     }
@@ -271,6 +279,10 @@ function Travellers(props) {
   }, [childrenCount])
 
   useEffect(() => {
+    if(props.formik){
+      props.formik.setFieldValue("infant_count", infantCount)
+    }
+
     if(props.handleTrip){
       props.handleTrip("infant_count", infantCount)
     }
@@ -290,7 +302,7 @@ function Travellers(props) {
         <h4 className='form-with-label__title'> TRAVELERS <span className='label-required'></span></h4>
         <ReactSVG src='/img/icons/people.svg' className='form-with-label__suggest-icon' />
         <OverlayTrigger trigger="click" placement='bottom' overlay={popover} rootClose={true}>
-          <input type="text" className='form-control rounded-0 form-with-label' value={travelerValue} />
+          <input type="text" className='form-control rounded-0 form-with-label' name="travelers" id="travelers" value={travelerValue} />
         </OverlayTrigger>
       </div>
     </>
