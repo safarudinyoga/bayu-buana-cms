@@ -8,6 +8,8 @@ import Oneway from './micro-components/oneway';
 import FlightPref from './micro-components/flight_pref';
 import MultiTrip from './micro-components/multi_trip';
 import Api from "config/api"
+import { Formik } from 'formik';
+import * as Yup from "yup"
 
 
 const FlightBook = (props) => {
@@ -15,6 +17,7 @@ const FlightBook = (props) => {
 
   const history = useHistory()
   const [flightType, setFlightType] = useState("roundtrip")
+  const [airports, setAirports] = useState([])
   const [tripData, setTripData] = useState({
     trip_type_code: "roundtrip"
   })
@@ -22,43 +25,68 @@ const FlightBook = (props) => {
     trip_type_code: "oneway"
   })
 
-  const airports = [
-    {
-      name: "Jakarta, Indonesia",
-      city: "Jakarta",
-      code: "JKT",
-      all: "All Airports"
-    },
-    { 
-      name: "Soekarno-Hatta Intl",
-      city: "Jakarta",
-      country: "Indonesia",
-      code: "CGK",
-      city_code: "JKT",
-    },
-    { 
-      name: "Halim Perdana Kusuma",
-      city: "Jakarta",
-      country: "Indonesia",
-      code: "HLP",
-      city_code: "JKT",
-    },
-    {
-      name: "Singapore, Singapore",
-      city: "Singapore",
-      code: "SIN",
-      all: "All Airports"
-    },
-    { 
-      name: "Singapore Changi Airport",
-      city: "Singapore",
-      country: "Singapore",
-      code: "SIN",
-      city_code: "SIN",
-    },
-  ]
+  const initialValues = {
+    depart_time: "",
+    return_time: "",
+    departure_data: "",
+    arrival_data: "",
+    adult_count: 1,
+    children_count: 0,
+    infant_count: 0,
+  }
 
-  const handleSearch = async () => {
+  
+
+  const validationSchema = Yup.object().shape({
+    depart_time: Yup.string().required("Depart Time is required"),
+    return_time: Yup.string().required("Return Time is required"),
+    departure_data: Yup.object().required("Departing from city or airport is required."),
+    arrival_data: Yup.object().required("Arriving to city or airport is required."),
+    adult_count: Yup.number(),
+    children_count: Yup.number(),
+    infant_count: Yup.number()
+  })
+
+  const onewayValidationSchema = Yup.object().shape({
+    depart_time: Yup.string().required("Depart Time is required"),
+    departure_data: Yup.object().required("Departing from city or airport is required."),
+    arrival_data: Yup.object().required("Arriving to city or airport is required."),
+    adult_count: Yup.number(),
+    children_count: Yup.number(),
+    infant_count: Yup.number()
+  })
+
+  useEffect(async () => {
+    try {
+      let res = await api.get("/master/airports?size=-1")
+      let airportDataArr = []
+
+      res.data.items.map(async (item, i) => {
+        let country = item.city ? await api.get(`/master/countries/${item.city.country_id}`) : ""
+
+        let airportData = {}
+        if(item.city){
+          airportData = {
+            name: item.airport_name,
+            code: item.airport_code, 
+            city: item.city ? item.city.city_name : "",
+            city_code: item.city ? item.city.city_code : "",
+            country: country.data ? country.data.country_name : "",
+            airport_id: item.id,
+            city_id: item.city_id
+          }
+          airportDataArr.push(airportData)
+        }
+      })
+      setAirports(airportDataArr)
+    } catch (error) {
+      
+    }
+  }, [])
+
+  const handleSearch = async (values, a) => {
+    console.log("MASUK KESINI", values)
+
     let formatted = {
       is_personal_trip: props.personalTrip,
       trip_type_code: tripData.trip_type_code,
@@ -84,7 +112,6 @@ const FlightBook = (props) => {
       // )
     } catch(e) {}
 
-    history.push("/extranet/book-trip/book-flight")
   }
 
   const handleTrip = (key, value, append=false) => {
@@ -127,12 +154,45 @@ const FlightBook = (props) => {
           eventKey="roundtrip"
           title="Roundtrip"
         >
-          <Roundtrip handleTrip={handleTrip} airports={airports} />
-          <FlightPref />
+          <Formik
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            onSubmit={handleSearch}
+            validateOnMount
+            enableReinitialize
+          >
+            {({
+              values,
+              errors,
+              touched,
+              dirty,
+              handleChange,
+              handleBlur,
+              handleSubmit,
+              isSubmitting,
+              isValid,
+              setFieldValue,
+              setFieldTouched,
+            }) => (
+              <Form onSubmit={handleSubmit}>
+                <Roundtrip handleTrip={handleTrip} formik={{errors, touched, setFieldValue}} airports={airports} />
+                <FlightPref />
 
-          <div className='my-3'>
-            <Button className='text-uppercase btn-extranet' type="button" onClick={handleSearch}>Search</Button>
-          </div>
+                <div className='my-3'>
+                  <Button 
+                    className='text-uppercase btn-extranet' 
+                    type="submit"
+                    disabled={isSubmitting} 
+                  >
+                    Search
+                  </Button>
+                </div>
+              </Form>
+            )}
+          </Formik>
+          
+
+          
           <div className="recent-search">
             <span className='text-uppercase recent-flight-title ml-2'>Recent Flight Searches</span>
             <span className='ml-4 recent-flight-title recent-flight-clear-all'>Clear all</span>
@@ -154,15 +214,8 @@ const FlightBook = (props) => {
           eventKey="oneway"
           title="One Way"
         >
-          <Oneway airports={airports} handleTrip={handleTrip} />
-          <div className='my-3'>
-            <Form.Check label="Add a hotel" />
-          </div>
-          <FlightPref />
-
-          <div className='my-3'>
-            <Button className='text-uppercase btn-extranet' type="button" onClick={() => history.push("/extranet/book-trip/book-flight")}>Search</Button>
-          </div>
+          <Oneway handleTrip={handleTrip} airports={airports} />
+         
           <div className="recent-search">
             <span className='text-uppercase recent-flight-title ml-2'>Recent Flight Searches</span>
             <span className='ml-4 recent-flight-title recent-flight-clear-all'>Clear all</span>
@@ -184,12 +237,7 @@ const FlightBook = (props) => {
           eventKey="multi city"
           title="Multi City"
         >
-          <MultiTrip airports={airports} handleTrip={handleTrip} />
-          <FlightPref />
-
-          <div className='my-3'>
-            <Button className='text-uppercase btn-extranet' type="button" onClick={() => history.push("/extranet/book-trip/book-flight")}>Search</Button>
-          </div>
+          <MultiTrip airports={airports} />
           <div className="recent-search">
             <span className='text-uppercase recent-flight-title ml-2'>Recent Flight Searches</span>
             <span className='ml-4 recent-flight-title recent-flight-clear-all'>Clear all</span>

@@ -1,80 +1,139 @@
-import React, { useEffect, useState } from 'react'
-import Oneway from './oneway'
+import React, { useState } from 'react'
+import { FieldArray, Formik } from 'formik';
+import * as Yup from "yup"
+import { Form, Button } from 'react-bootstrap'
+import Routes from './routes';
+import DatePicker from 'react-multi-date-picker';
+import FlightPref from './flight_pref';
+import { ReactSVG } from "react-svg"
+import Travellers from './travellers';
 
-function MultiTrip(props) {
-  const { handleTrip } = props
-
-  const [trips, setTrips] = useState([])
-  const [tripCounter, setTripCounter] = useState(0)
-
-  const airports = [
-    {
-      name: "Jakarta, Indonesia",
-      city: "Jakarta",
-      code: "JKT",
-      all: "All Airports"
-    },
-    { 
-      name: "Soekarno-Hatta Intl",
-      city: "Jakarta",
-      country: "Indonesia",
-      code: "CGK",
-      city_code: "JKT",
-    },
-    { 
-      name: "Halim Perdana Kusuma",
-      city: "Jakarta",
-      country: "Indonesia",
-      code: "HLP",
-      city_code: "JKT",
-    },
-  ]
-
-  useEffect(() => {
-    setTrips([...trips, <Oneway handleTrip={handleTrip} id="default-trip" key="default-trip" airports={airports} />, <Oneway handleTrip={handleTrip} counter={tripCounter} id={`trip-${tripCounter}`} key={`trip-${tripCounter}`} airports={airports} multitrip handleRemoveTrip={handleRemoveTrip} />])
-    setTripCounter(tripCounter+1)
-  }, [])
+const MultiTrip = (props) => {
+  const { airports, handleTrip  } = props
   
-
-  const handleAddTrip = () => {
-    setTripCounter(tripCounter+1)
-    setTrips([...trips, <Oneway handleTrip={handleTrip} counter={tripCounter} id={`trip-${tripCounter}`} key={`trip-${tripCounter}`} airports={airports} multitrip={true} handleRemoveTrip={handleRemoveTrip} />])
+  const initialValues = {
+    trips: [
+      {
+        depart_time: "",
+        departure_data: "",
+        arrival_data: ""
+      }
+    ]
   }
 
-  const handleRemoveTrip = (index) => {
-    const tripList = [...trips]
-    tripList.splice(index, 1);
-    setTrips(tripList)
+  const [departTime, setDepartTime] = useState(new Date())
 
-    // // console.log("yang dipencet:",index.target.parentNode.id)
-    // // let trip = [...trips]
-    // // console.log(trip)
-    // let trip = [...trips.filter((item) => 
-    // // {
-    //   // // console.log("List Trips",trips)
-    //   // console.log("item key",item.key)
-    //   // console.log("index target id",index.target.parentNode.id)
-    //   // console.log("is item key and index target id same? ",item.key !== index.target.parentNode.id)
-    //   item.key !== index.target.parentNode.id
-    // // }
-    // )]
-    // // console.log("the trip",trip)
-    // setTrips(trip)
+  const [travelerCheckboxConfirm, setTravelerCheckboxConfirm] = useState(false)
+  const [travelerCount, setTravelerCount] = useState(0)
+
+  function handleTravellerCheckboxConfirm(confirm, count){
+    setTravelerCheckboxConfirm(confirm)
+    setTravelerCount(count)
   }
 
-  useEffect(() => {
-    console.log(trips)
-  }, [trips])
-  
+  const validationSchema = Yup.object().shape({
+    trips: Yup.array().of(
+      Yup.object().shape({
+        depart_time: Yup.string().required("Depart Time is required"),
+        departure_data: Yup.object().required("Departing from city or airport is required."),
+        arrival_data: Yup.object().required("Arriving to city or airport is required."),
+      })
+    )
+  })
+
+  const onSubmit = async (values, a) => {
+    console.log("Values", values)
+  }
+
+  function RenderDatepicker({ openCalendar, value, handleValueChange }){
+    return (
+      <div style={{width: 190}} className='position-relative'>
+        <h4 className='form-with-label__title'> DEPART <span className='label-required'></span></h4>
+        <ReactSVG src='/img/icons/date-range.svg' className='form-with-label__suggest-icon'/>
+        <input type="text" 
+          className='form-control rounded-0 form-with-label' 
+          onFocus={openCalendar} 
+          value={value} 
+          onChange={handleValueChange}
+          />
+      </div>
+    )
+  }
 
   return (
-    <>
-      <div>
-        {trips}
-      </div>
-      <button className='btn btn-primary mb-2' onClick={handleAddTrip}>Add more</button>
-    </>
-    
+    <Formik
+      initialValues={initialValues}
+      validationSchema={validationSchema}
+      onSubmit={onSubmit}
+    >
+      {({ errors, values, touched, handleSubmit, isSubmitting, setFieldValue }) => (
+        <Form onSubmit={handleSubmit}>
+          <FieldArray 
+            name="trips"
+            render={arrayHelpers => (
+              <>
+                {values.trips && values.trips.length > 0 ? (
+                  values.trips.map((trip, index) => (
+                    <>
+                      <div key={index} className="d-flex flex-wrap">
+                        <Routes index={index} airports={airports} formik={{errors, touched, setFieldValue}} />
+
+                        <div className="mr-4">
+                          <div className="d-flex">
+                            <div className="position-relative flex-grow-1 book-trip-datepicker">
+                            <DatePicker 
+                              render={<RenderDatepicker />}
+                              numberOfMonths={2}
+                              fixMainPosition={true}
+                              format="ddd, DD MMMM YYYY"
+                              value={departTime}
+                              onChange={(date) => {
+                                setDepartTime(date)
+                              }}
+                              portal
+                            />
+                            </div>
+                          </div>
+                        </div>
+                        {
+                          index > 0 ? (
+                            <Button
+                              onClick={() => arrayHelpers.remove(index)}
+                            >
+                              REMOVE
+                            </Button>
+                          ) : (
+                            <Travellers handleTrip={handleTrip} onConfirm={handleTravellerCheckboxConfirm} />
+                          )
+                        }
+                      </div>
+                    </>
+                    
+                  ))
+                ) : ""}
+                <Button
+                  onClick={() => arrayHelpers.insert({depart_time: "", departure_data: "", arrival_data: ""})}
+                  className="mb-4"
+                >
+                  Add New
+                </Button>
+              </>
+            )}
+          />
+          <FlightPref />
+
+          <div className='my-3'>
+            <Button 
+              className='text-uppercase btn-extranet' 
+              type="submit"
+              disabled={isSubmitting}  
+              >
+                Search
+              </Button>
+          </div>
+        </Form>
+      )}
+    </Formik>
   )
 }
 

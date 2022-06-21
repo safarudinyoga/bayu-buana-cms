@@ -37,6 +37,7 @@ export default function IntegrationPartnerCorporateTable() {
     searchText: "Search",
     customSort: ["id"],
     showModalHeader: false,
+    isPartner: true
   }
 
   return (
