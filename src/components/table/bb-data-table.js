@@ -29,7 +29,6 @@ import ModalCreate from "components/Modal/bb-modal"
 import ModalCreateNew from "components/Modal/bb-modal"
 import ModalDelete from "components/Modal/bb-modal-delete"
 import customPrint from '../../lib/customPrint'
-import { createLanguageServiceSourceFile } from "typescript"
 
 window.JSZip = JSZip
 
@@ -1138,13 +1137,19 @@ class BBDataTable extends Component {
           {
             this.state.selected.length > 0 || infoFromState.length === 0
             ? <p>Are you sure want to delete this?</p>
-            :
+            : this.props.isPartner ?
+            `Are you sure want to delete '${infoFromState}' ?`
+            : 
+            (
               <>
-                <>Are you sure want to delete this?</>
-                {infoFromState.map((d) => (<><br/>{d}</>))}
-              </>
+              <>Are you sure want to delete this?</>
+              {infoFromState.map((d) => (<><br/>{d}</>))}
+            </>
+            ) 
+             
           }
           </ModalBody>
+         
           <ModalFooter>
             <Button
               variant="danger"

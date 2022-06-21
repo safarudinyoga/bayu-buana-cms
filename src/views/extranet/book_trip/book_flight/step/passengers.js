@@ -1,14 +1,14 @@
 import { Col, Row, Card, Form, Button, Alert, Accordion, Modal } from 'react-bootstrap'
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { setUIParams } from 'redux/ui-store'
-import FlightCard from './components/FlightCard'
-import Select, {components} from "react-select"
-import arrowdownIcon from "assets/icons/arrow-down.svg"
-import moment from 'moment'
-import flights from './flights.json'
-import AdsImage from 'assets/ads.png'
-import BBModal from 'components/Modal/bb-modal';
+// import { setUIParams } from 'redux/ui-store'
+// import FlightCard from './components/FlightCard'
+// import Select, {components} from "react-select"
+// import arrowdownIcon from "assets/icons/arrow-down.svg"
+// import moment from 'moment'
+// import flights from './flights.json'
+// import AdsImage from 'assets/ads.png'
+import PopupConfirmation from './components/flight-step-confirmation-modal'
 
 const ex_logo = 'https://ik.imagekit.io/tvlk/image/imageResource/2021/07/12/1626063527483-f24d3eae611b51022ab0d1fc1457c820.png?tr=q-75,w-28'
 
@@ -42,7 +42,8 @@ function Passenger({handleSelectTab}) {
 	})
 	const [data, setData] = useState([])
 	const [show, setShow] = useState(false)
-	const [showConfirmation, setShowConfirmation] = useState(false)
+	const [showSelectSeats, setShowSelectSeats] = useState(false)
+	const [showAddOns, setShowAddOns] = useState(false)
 
 	const handleClose = () => setShow(false)
 	const handleShow = () => setShow(true)
@@ -254,38 +255,6 @@ function Passenger({handleSelectTab}) {
 		</Accordion>
 		)
 	}
-
-	const PopupConfirmation = () => {
-		return (
-			<BBModal
-				show={showConfirmation}
-				size="sm"
-				onClick={() => setShowConfirmation(false)}
-				scrollable={true}
-				modalContent={() => (
-					<>
-						<p>Would you like to choose your Flight Seat?</p>
-						<p>** fees apply</p>
-
-						<div className='d-flex'>
-							<Button 
-								className='mr-3'
-								onClick={(e) => { 
-									setShowConfirmation(false)
-										handleSelectTab("select-seats")
-								}}
-							>
-								YES
-							</Button>
-							<Button onClick={(e) => setShowConfirmation(false)}>
-								NO
-							</Button>
-						</div>
-					</>
-				)}
-			/>
-		)
-	}
   
 	return (
     <div className='pt-4'>
@@ -311,7 +280,7 @@ function Passenger({handleSelectTab}) {
 			<div className='d-flex'>
 				<Button 
 				onClick={(e) => { 
-						setShowConfirmation(true)
+						setShowSelectSeats(true)
 				}}
 				className="btn-flight-select mr-3"
 				>
@@ -321,7 +290,33 @@ function Passenger({handleSelectTab}) {
 			</div>
 
 			<FareRulesModal/>
-			<PopupConfirmation/>
+			<PopupConfirmation
+				contentText={"Would you like to choose your Flight Seat?"}
+				show={showSelectSeats}
+				onClose={() => setShowSelectSeats(false)}
+				onClickYes={() => {
+					setShowSelectSeats(false)
+					handleSelectTab('select-seats')
+				}}
+				onClickNo={() => {
+					setShowSelectSeats(false)
+					setShowAddOns(true)
+				}}
+			/>
+
+			<PopupConfirmation
+				contentText={'Would you like to choose your Add-Ons?'}
+				show={showAddOns}
+				onClose={() => setShowAddOns(false)}
+				onClickYes={() => {
+					setShowAddOns(false)
+					handleSelectTab('add-ons')
+				}}
+				onClickNo={() => {
+					setShowAddOns(false)
+					handleSelectTab('review')
+				}}
+			/>
     </div>
   )
 }
