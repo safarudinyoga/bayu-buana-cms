@@ -4,9 +4,12 @@ import { ReactSVG } from 'react-svg';
 import DatePicker from 'react-multi-date-picker'
 import Travellers from './travellers';
 import Routes from './routes';
+import { Formik } from 'formik';
+import * as Yup from "yup"
+import FlightPref from './flight_pref';
 
 const Oneway = (props) => {
-  const { airports, multitrip, handleRemoveTrip, id, counter, handleTrip } = props
+  const { airports, multitrip, handleRemoveTrip, id, counter, handleTrip, formik } = props
 
   const [departTime, setDepartTime] = useState(new Date())
 
@@ -37,39 +40,108 @@ const Oneway = (props) => {
     setTravelerCount(count)
   }
 
+  const initialValues = {
+    depart_time: "",
+    departure_data: "",
+    arrival_data: "",
+    adult_count: 1,
+    children_count: 0,
+    infant_count: 0,
+  }
+
+  const validationSchema = Yup.object().shape({
+    depart_time: Yup.string().required("Depart Time is required"),
+    departure_data: Yup.object().required("Departing from city or airport is required."),
+    arrival_data: Yup.object().required("Arriving to city or airport is required."),
+    adult_count: Yup.number(),
+    children_count: Yup.number(),
+    infant_count: Yup.number()
+  })
+
+  const handleSearch = async (values, a) => {
+    console.log("MASUK KE ONEWAY COMP", values)
+  }
+
   return (
     <>
-      <div className='d-flex flex-wrap' id={id}>
-        <Routes airports={airports} />
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={handleSearch}
+        validateOnMount
+        enableReinitialize
+      >
+        {({
+          values,
+          errors,
+          touched,
+          dirty,
+          handleChange,
+          handleBlur,
+          handleSubmit,
+          isSubmitting,
+          isValid,
+          setFieldValue,
+          setFieldTouched,
+        }) => (
+          <Form onSubmit={handleSubmit}>
+              {/* <Oneway airports={airports} formik={{errors, touched, setFieldValue}} handleTrip={handleTrip} /> */}
+              <div className='d-flex flex-wrap' id={id}>
+                <Routes airports={airports} formik={{errors, touched, setFieldValue}} />
 
-        <div className='mr-4'>
-          <div className='d-flex'>
-            <div style={{width: 173}} className="position-relative flex-grow-1 book-trip-datepicker">
-              <DatePicker 
-                render={<RenderDatepicker />}
-                numberOfMonths={2}
-                fixMainPosition={true}
-                format="ddd, DD MMMM YYYY"
-                value={departTime}
-                onChange={(date) => {
-                  setDepartTime(date)
-                }}
-                portal
-              />
-            </div>
-          </div>
-        </div>
-        {
-          multitrip ? (
-            <div onClick={removeTripCallback(counter)}>
-              Remove
-            </div>
-          ) : (
-            <Travellers handleTrip={handleTrip} onConfirm={handleTravellerCheckboxConfirm} />
-          )
-        }
-        
-      </div>
+                <div className='mr-4'>
+                  <div className='d-flex'>
+                    <div style={{width: 173}} className="position-relative flex-grow-1 book-trip-datepicker">
+                      <DatePicker 
+                        render={<RenderDatepicker />}
+                        numberOfMonths={2}
+                        fixMainPosition={true}
+                        format="ddd, DD MMMM YYYY"
+                        value={departTime}
+                        onChange={(date) => {
+                          setDepartTime(date)
+                        }}
+                        portal
+                      />
+                    </div>
+                  </div>
+                </div>
+                {
+                  multitrip ? (
+                    <div onClick={removeTripCallback(counter)}>
+                      Remove
+                    </div>
+                  ) : (
+                    <Travellers handleTrip={handleTrip} onConfirm={handleTravellerCheckboxConfirm} />
+                  )
+                }
+              </div>
+              {
+                multitrip ? "" : (
+                  <>
+                    <div className='my-3'>
+                      <Form.Check label="Add a hotel" />
+                    </div>
+                    <FlightPref />
+
+                    <div className='my-3'>
+                      <Button 
+                        className='text-uppercase btn-extranet' 
+                        type="submit"
+                        disabled={isSubmitting}  
+                        >
+                          Search
+                      </Button>
+                    </div>
+                  </>
+                )
+              }
+              
+          </Form>
+        )}
+      </Formik>
+
+      
       {/* end of first row */}
       
     </>

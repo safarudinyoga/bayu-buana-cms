@@ -287,6 +287,17 @@ div[class~=”show”] + div[class=”card-header”] .accordion-arrow {
   top: 352px;
 }
 
+.routes-invalid {
+  width: 100%;
+  margin-top: 0.25rem;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+  padding: 0.15rem;
+  font-size: 80%;
+  color: #dc3545;
+  position: absolute;
+}
+
 /* React MultiDatePicker */
 .book-trip-datepicker .rmdp-week-day {
   color: #333333;
