@@ -1,5 +1,7 @@
 import React, {useState, useEffect} from "react"
-import { Col, Row, Card, Alert } from "react-bootstrap"
+import { Col, Row, Card, Alert, Button } from "react-bootstrap"
+import CheckInIC from 'assets/icons/foursquare-check-in.svg'
+import Buttons from "react-multi-date-picker/components/button"
 
 const ex_logo = 'https://ik.imagekit.io/tvlk/image/imageResource/2021/07/12/1626063527483-f24d3eae611b51022ab0d1fc1457c820.png?tr=q-75,w-28'
 
@@ -100,16 +102,16 @@ const Confirmation = () => {
             <p>Mrs. Sienna Bright</p>
             <p>Ms. Marry Bright</p>
           </Col>
-          <Col style={{maxWidth: 145}}sm={{span: 2, offset: 5}}>
+          <Col sm={{span: 2, offset: 3}}>
             <p className="font-weight-normal">CGK-HKG-CGK</p>
             <p className="font-weight-normal">CGK-HKG-CGK</p>
           </Col>
-          <Col style={{maxWidth: 145}} sm={2}>
+          <Col sm={2}>
             <p className="font-weight-normal">Fare-roundtrip</p>
             <p className="font-weight-normal">Fare-roundtrip</p>
             <p className="text-16">Sub-total</p>
           </Col>
-          <Col className="text-right" style={{maxWidth: 145}}  sm={2}>
+          <Col className="text-right"  sm={2}>
             <p className="font-weight-normal">IDR 6,985,345</p>
             <p className="font-weight-normal">IDR 6,985,345</p>
             <p className="text-16">IDR 6,589,123</p>
@@ -125,9 +127,9 @@ const Confirmation = () => {
       <Row>
         <Col md={10}>
           <Card>
-            <Card.Body>
+            <Card.Body className="d-flex">
               <div>
-
+                <img src={CheckInIC}/>
               </div>
               <div>
                 <p>Booking Code: {"{{booking_code}}"}</p>
@@ -143,9 +145,24 @@ const Confirmation = () => {
 
           <Card>
             <Card.Body>
-              <FlightDetail/>
-              <div className='border'></div>
-              <FlightDetail footer={true}/>
+              <p>Your Booking Details</p>
+              <p>Jakarta - Hongkong - Jakarta</p>
+              <p>12 Dec 2020- 17 Dec 2020</p>
+              <p>AIRLINE BOOKING CODE / PNR: DEDWQDS</p>
+              <p>Traveller(s): 1. Mrs. Sienna Johnson</p>
+              <p>2. Ms. Marry Bright</p>
+
+              <div className="mb-3 gray-list px-4">
+                <p>PRICE PER-TRAVELLER (Roundtrip)</p>
+                <p>IDR 3,294,700</p>
+              </div>
+
+              <div className="px-4">
+                <FlightDetail/>
+                <div className='border'></div>
+                <FlightDetail footer={true}/>
+              </div>
+
             </Card.Body>
           </Card>
 
@@ -166,6 +183,17 @@ const Confirmation = () => {
               <p>Travel Purpose: Site Survey</p>
             </Card.Body>
           </Card>
+
+          <div className="d-flex">
+            <p>Change on Trip Plane</p>
+            <Button 
+              onClick={(e) => {}}
+              className="btn-flight-select mr-3"
+            >
+                Request for change
+            </Button>
+            <p className="text-danger">Fees May Apply</p>
+          </div>
 
         </Col>
 
