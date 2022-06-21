@@ -29,14 +29,31 @@ const FlightBook = (props) => {
     depart_time: "",
     return_time: "",
     departure_data: "",
-    arrival_data: ""
+    arrival_data: "",
+    adult_count: 1,
+    children_count: 0,
+    infant_count: 0,
   }
+
+  
 
   const validationSchema = Yup.object().shape({
     depart_time: Yup.string().required("Depart Time is required"),
     return_time: Yup.string().required("Return Time is required"),
     departure_data: Yup.object().required("Departing from city or airport is required."),
-    arrival_data: Yup.object().required("Arriving to city or airport is required.")
+    arrival_data: Yup.object().required("Arriving to city or airport is required."),
+    adult_count: Yup.number(),
+    children_count: Yup.number(),
+    infant_count: Yup.number()
+  })
+
+  const onewayValidationSchema = Yup.object().shape({
+    depart_time: Yup.string().required("Depart Time is required"),
+    departure_data: Yup.object().required("Departing from city or airport is required."),
+    arrival_data: Yup.object().required("Arriving to city or airport is required."),
+    adult_count: Yup.number(),
+    children_count: Yup.number(),
+    infant_count: Yup.number()
   })
 
   useEffect(async () => {
@@ -69,7 +86,6 @@ const FlightBook = (props) => {
 
   const handleSearch = async (values, a) => {
     console.log("MASUK KESINI", values)
-
 
     let formatted = {
       is_personal_trip: props.personalTrip,
@@ -143,6 +159,7 @@ const FlightBook = (props) => {
             validationSchema={validationSchema}
             onSubmit={handleSearch}
             validateOnMount
+            enableReinitialize
           >
             {({
               values,
@@ -197,15 +214,8 @@ const FlightBook = (props) => {
           eventKey="oneway"
           title="One Way"
         >
-          <Oneway airports={airports} handleTrip={handleTrip} />
-          <div className='my-3'>
-            <Form.Check label="Add a hotel" />
-          </div>
-          <FlightPref />
-
-          <div className='my-3'>
-            <Button className='text-uppercase btn-extranet' type="button" onClick={() => history.push("/extranet/book-trip/book-flight")}>Search</Button>
-          </div>
+          <Oneway handleTrip={handleTrip} airports={airports} />
+         
           <div className="recent-search">
             <span className='text-uppercase recent-flight-title ml-2'>Recent Flight Searches</span>
             <span className='ml-4 recent-flight-title recent-flight-clear-all'>Clear all</span>
@@ -227,12 +237,7 @@ const FlightBook = (props) => {
           eventKey="multi city"
           title="Multi City"
         >
-          <MultiTrip airports={airports} handleTrip={handleTrip} />
-          <FlightPref />
-
-          <div className='my-3'>
-            <Button className='text-uppercase btn-extranet' type="button" onClick={() => history.push("/extranet/book-trip/book-flight")}>Search</Button>
-          </div>
+          <MultiTrip airports={airports} />
           <div className="recent-search">
             <span className='text-uppercase recent-flight-title ml-2'>Recent Flight Searches</span>
             <span className='ml-4 recent-flight-title recent-flight-clear-all'>Clear all</span>
