@@ -15,7 +15,6 @@ export default function IntegrationPartnerCabinTypesTable(props) {
   let [params, setParams] = useState({
     isCheckbox: false,
     title: "Integration Partner",
-    modalDelete: true,
     titleModal: "Integration Partner",
     showAdvancedOptions: false,
     baseRoute: "/master/form",
@@ -26,18 +25,17 @@ export default function IntegrationPartnerCabinTypesTable(props) {
     columns: [
       {
         title: "Fare Family",
-        data: "fare_type_name",
+        data: "fare_type_id",
 
       },
       {
         title: "Booking Class",
-        // data: "fare_type_code"
+        data: "booking_class_names"
       },
 
     ],
     emptyTable: "No Partner Fare Family found",
     customSort:['fare_type_id'],
-    showInfoDelete: true,
     isOpenNewTab: false,
     hideDetail: true,
     btnDownload: ".buttons-csv",

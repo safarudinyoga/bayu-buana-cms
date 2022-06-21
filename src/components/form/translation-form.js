@@ -1,7 +1,7 @@
 import Api from "config/api"
 import $ from "jquery"
 import { Component } from "react"
-import { Card, Form, Row, Col, Button, Modal } from "react-bootstrap"
+import { Col } from "react-bootstrap"
 import FormHorizontal from "./horizontal"
 import FormInputControl from "./input-control"
 import { Editor } from "react-draft-wysiwyg"
@@ -10,7 +10,6 @@ import arrowdownIcon from 'assets/icons/arrow-down.svg';
 
 export default class TranslationForm extends Component {
   constructor(props) {
-    console.log(props, 'translation form');
     super(props)
     this.state = {
       pillStyle: {},
