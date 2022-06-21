@@ -382,3 +382,16 @@
 .text-14 {
   font-size: 14px;
 }
+.gray-list {
+  display: flex;
+  justify-content: space-between;
+  background-color: #F3F3FB;
+  border: 1px solid #EFEFEF;
+  border-radius: 8px;
+  padding: 14px 0;
+}
+.gray-list>p {
+  margin: 0;
+  color: #333333;
+  font-weight: 600;
+}

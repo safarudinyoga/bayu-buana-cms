@@ -82,7 +82,7 @@ const Roundtrip = (props) => {
             </div>
           </div>
         </div>
-        <Travellers onConfirm={handleTravellerCheckboxConfirm} handleTrip={handleTrip} />
+        <Travellers onConfirm={handleTravellerCheckboxConfirm} handleTrip={handleTrip} formik={formik} />
       </div>
       {/* end of first row */}
       {
