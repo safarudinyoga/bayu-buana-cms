@@ -6,15 +6,17 @@ import { ReactSVG } from "react-svg"
 import Travellers from './travellers';
 import Routes from './routes';
 import TravelerList from './traveler_list';
+import { Formik } from 'formik';
 
 const Roundtrip = (props) => {
-  const { airports, handleTrip } = props
+  const { airports, handleTrip, formik } = props
 
   const [departTime, setDepartTime] = useState(new Date())
   const [returnTime, setReturnTime] = useState(new Date())
 
   const [travelerCheckboxConfirm, setTravelerCheckboxConfirm] = useState(false)
   const [travelerCount, setTravelerCount] = useState(0)
+
 
   function RenderDatepicker({ openCalendar, value, handleValueChange, title }){
     return (
@@ -36,66 +38,19 @@ const Roundtrip = (props) => {
     setTravelerCount(count)
   }
 
-  
-  
-  // function TravelerList() {
-  //   let divs = []
-
-  //   const travelerDiv = (i) => {
-  //     let traveler =
-  //       <div>
-  //         <div className="row my-2">
-  //           <div className="col-md-2">
-  //             Traveler {i+1}{isGuest ? "/Guest" : ""}
-  //           </div>
-  //           <div className='col-md-6'>
-  //             {isGuest ? (
-  //               <div>
-  //                 GUEST
-  //               </div>
-  //             ) : (
-  //               <Select 
-  //                 options={[
-  //                   {value: "Mr. Adam Smith (Procurement Manager)", label: "Mr. Adam Smith (Procurement Manager)"},
-  //                   {value: "Mr. Bobby White (Engineer)", label: "Mr. Bobby White (Engineer)"},
-  //                   {value: "Ms. Carina Wong (Finance Controller)", label: "Ms. Carina Wong (Finance Controller)"},
-  //                   {value: "Ms. Dina Dash (Sales Manager)", label: "Ms. Dina Dash (Sales Manager)"},
-  //                   {value: "Mr. Jonny Setiawan (Engineer)", label: "Mr. Jonny Setiawan (Engineer)"},
-  //                 ]}
-  //                 components={{ Menu: CustomMenu }}
-  //               />
-  //             )}
-              
-  //           </div>
-  //         </div>
-  //       </div>
-  //     return traveler
-  //   } 
-    
-
-  //   for(let i = 0; i < travelerCount; i++){
-  //     divs.push(
-  //       travelerDiv(i)
-  //     )
-  //   }
-  //   return divs
-  // }
-
   useEffect(() => {
-    handleTrip("depart_time", departTime)
-    
+    formik.setFieldValue("depart_time", departTime)
   }, [departTime])
 
   useEffect(() => {
-    handleTrip("return_time", returnTime)
-    
+    formik.setFieldValue("return_time", returnTime)
   }, [returnTime])
   
 
   return (
     <>
       <div className='d-flex flex-wrap'>
-        <Routes handleTrip={handleTrip} airports={airports} />
+        <Routes formik={formik} airports={airports} />
         
         <div className='mr-4'>
           <div className='d-flex'>
