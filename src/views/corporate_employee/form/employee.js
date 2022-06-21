@@ -339,53 +339,6 @@ const Subscriptions = (props) => {
 
                   <Form.Group as={Row} className="form-group">
                     <Form.Label column sm={3}>
-                      Job Title <span className="form-label-required">*</span>
-                    </Form.Label>
-                    <Col sm={9}>
-                      <FastField name="job_title">
-                        {({ field, form }) => (
-                          <div style={{ maxWidth: 200 }}>
-                            <SelectAsync
-                              {...field}
-                              isClearable
-                              isDisabled={isView}
-                              url={`master/job-titles`}
-                              fieldName="job_title_name"
-                              onChange={(v) => {
-                                setFieldValue("job_title", v)
-                              }}
-                              placeholder="Please choose"
-                              className={`react-select ${
-                                form.touched.job_title &&
-                                form.errors.job_title
-                                  ? "is-invalid"
-                                  : null
-                              }`}
-                              components={
-                                isView
-                                  ? {
-                                      DropdownIndicator: () => null,
-                                      IndicatorSeparator: () => null,
-                                    }
-                                  : null
-                              }
-                            />
-                            {form.touched.job_title &&
-                              form.errors.job_title && (
-                                <Form.Control.Feedback type="invalid">
-                                  {form.touched.job_title
-                                    ? form.errors.job_title
-                                    : null}
-                                </Form.Control.Feedback>
-                              )}
-                          </div>
-                        )}
-                      </FastField>
-                    </Col>
-                  </Form.Group>
-
-                  <Form.Group as={Row} className="form-group">
-                    <Form.Label column sm={3}>
                       Division
                     </Form.Label>
                     <Col sm={9}>
@@ -469,6 +422,53 @@ const Subscriptions = (props) => {
                                 <Form.Control.Feedback type="invalid">
                                   {form.touched.office
                                     ? form.errors.office
+                                    : null}
+                                </Form.Control.Feedback>
+                              )}
+                          </div>
+                        )}
+                      </FastField>
+                    </Col>
+                  </Form.Group>
+
+                  <Form.Group as={Row} className="form-group">
+                    <Form.Label column sm={3}>
+                      Job Title <span className="form-label-required">*</span>
+                    </Form.Label>
+                    <Col sm={9}>
+                      <FastField name="job_title">
+                        {({ field, form }) => (
+                          <div style={{ maxWidth: 200 }}>
+                            <SelectAsync
+                              {...field}
+                              isClearable
+                              isDisabled={isView}
+                              url={`master/job-titles`}
+                              fieldName="job_title_name"
+                              onChange={(v) => {
+                                setFieldValue("job_title", v)
+                              }}
+                              placeholder="Please choose"
+                              className={`react-select ${
+                                form.touched.job_title &&
+                                form.errors.job_title
+                                  ? "is-invalid"
+                                  : null
+                              }`}
+                              components={
+                                isView
+                                  ? {
+                                      DropdownIndicator: () => null,
+                                      IndicatorSeparator: () => null,
+                                    }
+                                  : null
+                              }
+                            />
+                            {form.touched.job_title &&
+                              form.errors.job_title && (
+                                <Form.Control.Feedback type="invalid">
+                                  {form.touched.job_title
+                                    ? form.errors.job_title
                                     : null}
                                 </Form.Control.Feedback>
                               )}
@@ -656,7 +656,7 @@ const Subscriptions = (props) => {
                       </div>
                     </>
                   )}
-                  <div className="d-flex flex-row-reverse">
+                  {/* <div className="d-flex flex-row-reverse">
                     <div
                       onClick={() => setAdditionalRole(!additionalRole)}
                       style={{
@@ -667,7 +667,7 @@ const Subscriptions = (props) => {
                     >
                       Add Additional Role
                     </div>
-                  </div>
+                  </div> */}
                   {/* End Aditional Role section */}
                 </div>
 
