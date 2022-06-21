@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Col, Row, Card, Form, Button, Alert, Accordion, Modal } from 'react-bootstrap'
 import BBModal from 'components/Modal/bb-modal';
+import HelpIC from 'assets/icons/help.svg'
 
 const PopupConfirmation = (props) => {
   return (
@@ -11,8 +12,13 @@ const PopupConfirmation = (props) => {
       scrollable={true}
       modalContent={() => (
         <div className='text-center'>
-          <p>{props.contentText}</p>
-          <p>** fees apply</p>
+          <div className='d-flex justify-content-center align-items-start'>
+            <img src={HelpIC} className='mr-2' />
+            <div>
+              <p className='m-0'>{props.contentText}</p>
+              <p>** fees apply</p>
+            </div>
+          </div>
 
           <div className='d-flex justify-content-center'>
             <Button 
