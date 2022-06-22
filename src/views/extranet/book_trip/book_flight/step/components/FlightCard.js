@@ -7,6 +7,8 @@ import videoIC from 'assets/icons/video.svg'
 import seatIC from 'assets/icons/seat.svg'
 import restaurantIC from 'assets/icons/restaurant.svg'
 import shieldIC from 'assets/icons/shield.svg'
+import moment from 'moment'
+import ThousandSeparator from 'lib/thousand-separator'
 
 const ex_logo = 'https://ik.imagekit.io/tvlk/image/imageResource/2021/07/12/1626063527483-f24d3eae611b51022ab0d1fc1457c820.png?tr=q-75,w-28'
 
@@ -14,6 +16,7 @@ function FlightCard({data, handleSelectTab, tripType}) {
   const dispatch = useDispatch()
 	const [Flight, setFlight] = useState({})
 	const [fullCondition, setFullCondition] = useState(false)
+	const [selectedCabin, setSelectedCabin] = useState(null)
 
 
 	useEffect(async() => {
@@ -22,17 +25,18 @@ function FlightCard({data, handleSelectTab, tripType}) {
 		} catch(e) {}
 	}, [])
 
-	const FlightInfo = ({showDetailTxt=true}) => {
+	const FlightInfo = ({showDetailTxt=true, airline}) => {
+		const { routes } = airline
 		return (
 			<>
-			<Row className='flight-details-header'>
+				<Row className='flight-details-header'>
 					<Col sm={6} className="d-flex justify-content-between card-flight-h">
 						<div className="d-flex align-items-start">
-							<img src={ex_logo} width={20}/>
-							<p className='m-0 pl-1'>{Flight.plane}</p>
+							<img src={airline?.airline_logo || ""} width={20}/>
+							<p className='m-0 pl-1'>{airline?.airline_name || ""}</p>
 						</div>
-						<p><i class="fas fa-clock"></i> {Flight.time_estimation} (1stop)</p>
-						<p>{Flight.class} (N)</p>
+						<p><i class="fas fa-clock"></i> {Flight?.estimation} ({airline?.routes ? airline.routes.length -1 : 0} stop)</p>
+						<p>{routes[0]?.cabin_type_name} ({routes[0]?.cabin_type_code})</p>
 					</Col>
 					<Col sm={{span: 3, offset: 3}} className={`${showDetailTxt?"d-inline":"d-none"} btn-flight-link text-right`}>
 						<a>Show Details</a>
@@ -41,46 +45,52 @@ function FlightCard({data, handleSelectTab, tripType}) {
 				<Row className='flight-details-content'>
 					<Col sm={6} className={"d-flex justify-content-between align-items-center"}>
 						<div>
-							<p>02:10</p>
-							<p>CGK</p>
-							<p>12 Dec</p>
+							<p>{moment(routes[0]?.departure_date).format("HH:mm")}</p>
+							<p>{routes[0]?.departure_airport_code}</p>
+							<p>{moment(routes[0]?.departure_date).format("DD MMM")}</p>
 						</div>
 						<div className='flight-line align-center text-center'>
-							<p>788 miles</p>
+							<p>{routes[0]?.mileage} miles</p>
 							<div className='links mb-3'>
 								<i class="fas fa-plane plane-ic"></i>
 							</div>
 							<p>1h 5m</p>
 						</div>
 						<div>
-							<p>10:15</p>
-							<p>HKG</p>
-							<p>12 Dec</p>
+							<p>{moment(routes[0]?.arrival_date).format("HH:mm")}</p>
+							<p>{routes[0]?.arrival_airport_code}</p>
+							<p>{moment(routes[0]?.arrival_date).format("DD MMM")}</p>
 						</div>
 					</Col>
 					<Col sm={5} className={"d-flex justify-content-between align-items-start"}>
-						<div>
-							SQ 955
-							SQ 765
+						<div className='pl-2'>
+						{
+							routes?.map((r) => (
+								<p className='m-0'>{r.source_code} {r.source_number}</p>
+							))
+						}
 						</div>
 						<div>
 							<div>
-								<img src={briefcaseIC} style={{padding: "0 5px 0 5px"}} />
-								<img src={videoIC} style={{padding: "0 5px 0 5px"}} />
-								<img src={restaurantIC} style={{padding: "0 5px 0 5px"}} />
-								<img src={seatIC} style={{padding: "0 5px 0 5px"}} />
-								<img src={shieldIC} style={{padding: "0 5px 0 5px"}} />
+								{routes[0].facility_bagage && <img src={briefcaseIC} style={{padding: "0 5px 0 5px"}} />}
+								{routes[0].facility_film && <img src={videoIC} style={{padding: "0 5px 0 5px"}} />}
+								{routes[0].facility_meal && <img src={restaurantIC} style={{padding: "0 5px 0 5px"}} />}
+								{routes[0].facility_seat_selection && <img src={seatIC} style={{padding: "0 5px 0 5px"}} />}
+								{routes[0].facility_protection && <img src={shieldIC} style={{padding: "0 5px 0 5px"}} />}
 							</div>
-							<OverlayTrigger placement="right" overlay={
-								<Popover>
-									<div className='px-2'>
-										<img src={seatIC} style={{padding: "0 5px 0 5px"}} />
-										<img src={shieldIC} style={{padding: "0 5px 0 5px"}} />
-									</div>
-								</Popover>
-							}>
-								<p className='text-center' style={{fontSize:11}}>+2 more</p>
-            </OverlayTrigger>
+							{
+								(routes[0].facility_wifi || routes[0].facility_charger) &&
+									<OverlayTrigger placement="right" overlay={
+										<Popover>
+											<div className='px-2'>
+												{routes[0].facility_wifi && <img src={seatIC} style={{padding: "0 5px 0 5px"}} />}
+												{routes[0].facility_charger && <img src={shieldIC} style={{padding: "0 5px 0 5px"}} />}
+											</div>
+										</Popover>
+									}>
+										<p className='text-center' style={{fontSize:11}}>+2 more</p>
+								</OverlayTrigger>
+							}
 						</div>
 					</Col>
 				</Row>
@@ -88,20 +98,31 @@ function FlightCard({data, handleSelectTab, tripType}) {
 		)
 	}
 
-	const SelectCard = ({title}) => {
+	const SelectCard = ({cabin={}}) => {
+		const {fares} = cabin 
 		return (
-			<Col sm={2} onClick={() => setFullCondition(!fullCondition)} className="flight-card-right d-flex flex-column align-content-center align-items-center justify-content-center">
+			<Col
+				sm={2} 
+				onClick={() => {
+					setFullCondition(!fullCondition)
+					if(tripType !== "without-ndc") {
+						setSelectedCabin(cabin)
+					}
+				}} 
+				className="flight-card-right d-flex flex-column align-content-center align-items-center justify-content-center"
+			>
 				{
-					title ?<div className='header-flight-card-right' style={{}}>
-						<p>{title}</p>
+					cabin.name &&
+					<div className='header-flight-card-right' style={{}}>
+						<p>{cabin.name}</p>
 					</div>
-					: null
 				}
 				
-				<p>IDR <b>10,999,999</b></p>
-				<p className='flight-type'>roundtrip</p>
+				<p>IDR <b>{ThousandSeparator(fares[0]?.price)}</b></p>
+				<p className='flight-type'>{fares[0]?.trip_type_name}</p>
+					{/* (!fullCondition && tripType !== "SQ") && */}
 				{
-					!fullCondition &&
+					(!fullCondition) &&
 						<Button 
 						onClick={(e) => { 
 							e.stopPropagation();
@@ -110,9 +131,15 @@ function FlightCard({data, handleSelectTab, tripType}) {
 						className="btn-flight-select"
 						>Select</Button>
 				}
-				<p className='lowest-fare'><i class="fas fa-circle"></i> Lowest Fare</p>
-				<p className='travel-policy'><i className="fas fa-exclamation-triangle"></i> Travel Policy</p>
-				<p className='rest-seat'>Only 2 seat left</p>
+				{
+					tripType !== "SQ" && <>
+						<p className='lowest-fare'><i class="fas fa-circle"></i> Lowest Fare</p>
+						<p className='travel-policy'><i className="fas fa-exclamation-triangle"></i> Travel Policy</p>
+					</>
+				}
+				<div className='pt-4'>
+					{fares[0]?.available_seats <= 2 && <p className='rest-seat'>Only 2 seat left</p>}
+				</div>
 				<i className={`fas fa-angle-${fullCondition ? "up" : "down"}`}></i>
 			</Col>
 		)
@@ -124,25 +151,40 @@ function FlightCard({data, handleSelectTab, tripType}) {
     <Card className='flight-card'>
 			<Row style={{marginLeft: 0, marginRight:0}}>
 				<Col sm={tripType !== "without-ndc" ? 8 : 10} className="flight-card-left">
-					<FlightInfo/>
-					<div className='middle-border'></div>
-					<FlightInfo showDetailTxt={false} />
+				{
+					Flight?.airlines?.map((airline, idx) => (
+						<>
+							<FlightInfo key={idx} airline={airline}/>
+							{idx < Flight.airlines?.length-1 ? 
+							<div className='middle-border'></div> : <></>}
+						</>
+					))
+				}
 				</Col>
 				{
 					tripType !== "without-ndc"
 					? (
 						<>
-							<SelectCard title={"economy"}/>
-							<SelectCard title={"premium economy"}/>
+						{
+							Flight?.cabins?.map((cabin, i) => (
+								<SelectCard key={i} cabin={cabin}/>
+							))
+						}
 						</>
 					)
-					: <SelectCard/>
+					: <SelectCard cabin={Flight?.cabins[0]}/>
 				}
 			</Row>
 			{/* FULL FARE CONDITIONS */}
 			{
 				fullCondition 
-				?(
+				? selectedCabin !== null
+				? (
+					<div>
+						ya
+					</div>
+				)
+				: (
 					<div className='full-conditions'>
 						<div className='full-conditions-header'>
 							<p>Full Fare Conditions</p>

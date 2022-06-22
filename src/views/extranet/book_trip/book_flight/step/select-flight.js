@@ -67,7 +67,8 @@ function FlightList({handleSelectTab}) {
 
 	useEffect(async() => {
 		try {
-			setData(flights.data)
+			setData(flights.items)
+			setTripType(flights.source_type)
 		} catch(e) {}
 	}, [])
 	const customStyles = {
