@@ -212,6 +212,7 @@ const GeneralSetup = (props) => {
                   history={props.history}
                   backUrl={backUrl}
                   handleSelectTab={(v) => handleSelectTab(v)}
+                  setTabKey={setTabKey}
                 />
                 ) : null}
             </Tab.Pane>

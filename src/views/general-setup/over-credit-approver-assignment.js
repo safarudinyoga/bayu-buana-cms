@@ -7,7 +7,7 @@ import CancelButton from "components/button/cancel"
 import { useDispatch } from "react-redux"
 import { setAlert } from "redux/ui-store"
 
-const OverCreditApproverAssignment = (props) => {
+const OverCreditApproverAssignment = ({ setTabKey }) => {
   const dispatch = useDispatch()
   const [listEmployee, setListEmployee] = useState([])
   const [listOverCredit, setListOverCredit] = useState([])
@@ -15,7 +15,7 @@ const OverCreditApproverAssignment = (props) => {
   const endpoint = `/master/configurations/over-credit-approvers`
   let api = new Api()
 
-  console.log("listEmp: ", listEmployee)
+  // console.log("listEmp: ", listEmployee)
 
   const getListEmployee = async () => {
     try {
@@ -73,6 +73,9 @@ const OverCreditApproverAssignment = (props) => {
           message: `Over Credit Approver has been successfully updated.`,
         }),
       )
+      setTimeout(() => {
+        setTabKey("travel-consultant-assignment")
+      }, 1000)
     } catch (e) {
       dispatch(
         setAlert({
