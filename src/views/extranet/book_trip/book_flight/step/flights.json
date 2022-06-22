@@ -162,7 +162,7 @@
             {
               "id": "fcee9740-30ee-4d46-af2f-d58cf49f8642",
               "fare_name": "ECONOMY LITE",
-              "price": 12000000,
+              "price": 10000000,
               "bagage_max_kg": 20,
               "currency_code": "IDR",
               "currency_name": "Indonesia Rupiah",
@@ -207,7 +207,7 @@
             {
               "id": "fcee9740-30ee-4d46-af2f-d58cf49f8642",
               "fare_name": "ECONOMY STANDARD",
-              "price": 12000000,
+              "price": 11000000,
               "bagage_max_kg": 20,
               "currency_code": "IDR",
               "currency_name": "Indonesia Rupiah",
@@ -298,49 +298,6 @@
             {
               "id": "fcee9740-30ee-4d46-af2f-d58cf49f8642",
               "fare_name": "PREMIUM LITE",
-              "price": 12000000,
-              "bagage_max_kg": 20,
-              "currency_code": "IDR",
-              "currency_name": "Indonesia Rupiah",
-              "seat_selection_allowed": true,
-              "seat_selection_fee": 0,
-              "seat_selection_types": [
-                "Standard Seats",
-                "Forward Zone Seats"
-              ],
-              "kris_flyer_miles_percentage": 75.1,
-              "upgrade_miles_allowed": false,
-              "cancelation_allowed": true,
-              "cancelation_refundable": true,
-              "cancelation_fee": 0,
-              "booking_change_fee_before": 0,
-              "booking_change_fee_after": 0,
-              "trip_type_code": "Roundtrip",
-              "trip_type_name": "Round Trip",
-              "no_show_fee": 0,
-              "available_seats": 2,
-              "available_cabin_types": [
-                {
-                  "cabin_type_code": "N",
-                  "cabin_type_name": "Economy"
-                },
-                {
-                  "cabin_type_code": "P",
-                  "cabin_type_name": "Premium"
-                },
-                {
-                  "cabin_type_code": "N",
-                  "cabin_type_name": "Economy"
-                },
-                {
-                  "cabin_type_code": "P",
-                  "cabin_type_name": "Premium"
-                }
-              ]
-            },
-            {
-              "id": "fcee9740-30ee-4d46-af2f-d58cf49f8642",
-              "fare_name": "PREMIUM STANDARD",
               "price": 12000000,
               "bagage_max_kg": 20,
               "currency_code": "IDR",

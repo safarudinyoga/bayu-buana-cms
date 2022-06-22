@@ -120,9 +120,9 @@ function FlightCard({data, handleSelectTab, tripType}) {
 				
 				<p>IDR <b>{ThousandSeparator(fares[0]?.price)}</b></p>
 				<p className='flight-type'>{fares[0]?.trip_type_name}</p>
-					{/* (!fullCondition && tripType !== "SQ") && */}
+					{/* (!fullCondition) && */}
 				{
-					(!fullCondition) &&
+					(!fullCondition && tripType !== "SQ") &&
 						<Button 
 						onClick={(e) => { 
 							e.stopPropagation();
@@ -138,7 +138,7 @@ function FlightCard({data, handleSelectTab, tripType}) {
 					</>
 				}
 				<div className='pt-4'>
-					{fares[0]?.available_seats <= 2 && <p className='rest-seat'>Only 2 seat left</p>}
+					{fares[0]?.available_seats <= 2 && <p className='rest-seat'>Only {fares[0].available_seats} seat left</p>}
 				</div>
 				<i className={`fas fa-angle-${fullCondition ? "up" : "down"}`}></i>
 			</Col>
@@ -179,11 +179,102 @@ function FlightCard({data, handleSelectTab, tripType}) {
 			{
 				fullCondition 
 				? selectedCabin !== null
+				? selectedCabin.name === "ECONOMY"
 				? (
-					<div>
-						ya
-					</div>
+					<>
+						<Row className='m-0'>
+							<Col className='px-3 py-2 text-center bg-header-grey'>Fare Conditions</Col>
+							{
+							selectedCabin.fares.map((fare, idx) => (
+								<Col className={`px-3 py-2 text-center bg-header-green-${idx+1}`} key={idx}>{fare.fare_name}</Col>
+							))
+							}
+						</Row>
+						<Row className='m-0'>
+							<Col className='p-3 border fare-section'>
+								<div className=''>
+									<p>Baggage</p>
+									<p>Seat Selection</p>
+								</div>
+							</Col>
+							{
+								selectedCabin.fares.map((fare, idx) => (
+									<Col className='p-3 border fare-section' key={idx}>
+										<p>{fare.bagage_max_kg}kg</p>
+										<p>{fare.seat_selection_fee > 0
+											?	`from ${fare.currecy_code} ${fare.seat_selection_fee}`
+											: fare.seat_selection_types.join(" & ")
+										}</p>
+									</Col>
+								))
+							}
+						</Row>
+						<Row className='m-0'>
+							<Col className='p-3 border fare-section'>
+								<div>
+									<p>Earn KrisFlyer miles</p>
+									<p>Upgrade with miles</p>
+								</div>
+							</Col>
+							{
+								selectedCabin.fares.map((fare, idx) => (
+									<Col className='p-3 border fare-section' key={idx}>
+										<p>{fare.kris_flyer_miles_percentage}%</p>
+										<p>{fare.upgrade_miles_allowed 
+											?	"Allowed"
+											: "Not Allowed"
+										}</p>
+									</Col>
+								))
+							}
+						</Row>
+						<Row className='m-0'>
+							<Col className='p-3 border fare-section'>
+								<div className=''>
+									<p>Cancellation</p>
+									<p>Booking Change</p>
+									<p>No Show</p>
+								</div>
+							</Col>
+							{
+								selectedCabin.fares.map((fare, idx) => (
+									<Col className='p-3 border fare-section' key={idx}>
+										<p>{fare.cancelation_allowed 
+											?	"Allowed"
+											: "Not Allowed"
+										}</p>
+										<p>{fare.change_booking_before || "-"}</p>
+										<p>{fare.no_show_fee}</p>
+									</Col>
+								))
+							}
+						</Row>
+						<Row className='m-0'>
+							<Col className='p-3 border fare-section'>
+							</Col>
+							{
+								selectedCabin.fares.map((fare, idx) => (
+									<Col className='p-3 border fare-section d-flex flex-column align-content-center align-items-center ' key={idx}>
+										<p>{fare.currency_code} <b>{ThousandSeparator(fare.price)}</b></p>
+										<p className='flight-type'>{fare.trip_type_name}</p>
+										<Button 
+											onClick={(e) => { 
+												e.stopPropagation();
+												handleSelectTab("passengers")
+											}}
+											className="btn-flight-select"
+										>Select
+										</Button>
+										<p className='rest-seat'>{fare.available_seats <= 2 ? `only ${fare.available_seats} seat left` : ""}</p>
+									</Col>
+								))
+							}
+						</Row>
+					</>
 				)
+				:<div>
+						<div>Fare Conditions</div>
+					</div>
 				: (
 					<div className='full-conditions'>
 						<div className='full-conditions-header'>
