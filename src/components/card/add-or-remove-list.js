@@ -26,7 +26,7 @@ const AddOrRemoveList = ({
   const [triger, setTriger] = useState(true)
 
   // console.log("secondData: ", secondData)
-  // console.log("leftData: ", leftData)
+  console.log("leftData: ", leftData)
 
   useEffect(async () => {
     if (triger) {
@@ -41,11 +41,11 @@ const AddOrRemoveList = ({
     setRightData((rightdata) => [])
     setFormValues((formValues) => [
       ...leftData.map((item) => ({
-        agent_id: item.agent_employee.agent_id,
+        agent_id: item.agent_id,
         employee_id: item.employee_id,
       })),
       ...rightData.map((item) => ({
-        agent_id: item.agent_employee.agent_id,
+        agent_id: item.agent_id,
         employee_id: item.employee_id,
       })),
     ])
@@ -58,23 +58,30 @@ const AddOrRemoveList = ({
     setFormValues((formValues) => [])
   }
 
-  const handleRemoveIndexArray = (e) => {
+  const handleLeftToRight = (e) => {
     const newData = leftData.filter((item) => item !== e)
     setLeftData((leftdata) => newData)
     setRightData((rightdata) => [...rightdata, e])
   }
 
+  const handleRightToLeft = (e) => {
+    const newData = rightData.filter((item) => item !== e)
+    setRightData((rightdata) => newData)
+    setLeftData((leftdata) => [...leftdata, e])
+  }
+
   const handleSelectAssignmentLeader = (e) => {
     console.log("e: ", e)
-    setFormValues((data) =>
-      data.map((item) => ({
-        ...item,
-        can_issue_ticket:
-          item.employee_id === e
-            ? !item.can_issue_ticket
-            : item.can_issue_ticket,
-      })),
-    )
+    console.log("form: ")
+    setFormValues("aaaa")
+    // setFormValues((data) => [
+    //   ...data.map((item) => ({
+    //     can_issue_tickets:
+    //       item.given_name + item.middle_name + item.surname === e
+    //         ? !item.can_issue_ticket
+    //         : item.can_issue_ticket,
+    //   })),
+    // ])
   }
 
   return (
@@ -102,7 +109,7 @@ const AddOrRemoveList = ({
                   {canRemoveIndex ? (
                     <div className="w-100 d-flex justify-content-between align-items-center">
                       {item.given_name} {item.middle_name} {item.surname} (
-                      {item?.office?.office_name})
+                      {item?.office_name})
                       <FieldArray
                         name="employee"
                         render={(arr) => (
@@ -111,7 +118,7 @@ const AddOrRemoveList = ({
                               control="input"
                               name={`employee[${i}].agent_id`}
                               type="hidden"
-                              value={item.agent_employee.agent_id}
+                              value={item.agent_id}
                             />
                             <FormikControl
                               control="input"
@@ -124,7 +131,7 @@ const AddOrRemoveList = ({
                       />
                       <span
                         className="btn-x-circle"
-                        onClick={() => handleRemoveIndexArray(item)}
+                        onClick={() => handleLeftToRight(item)}
                       >
                         <img src={xCircle} alt="right" />
                       </span>
@@ -143,9 +150,14 @@ const AddOrRemoveList = ({
                           <Field
                             type="checkbox"
                             name="can_issue_ticket"
-                            onChange={() =>
-                              handleSelectAssignmentLeader(item.employee_id)
-                            }
+                            value={item.given_name}
+                            // onChange={() =>
+                            //   handleSelectAssignmentLeader(
+                            //     item.given_name +
+                            //       item.middle_name +
+                            //       item.surname,
+                            //   )
+                            // }
                             className="add-remove-cb"
                           />
                           <img src={flightTicket} alt="flight-ticket" />
@@ -187,7 +199,7 @@ const AddOrRemoveList = ({
                                 control="input"
                                 name={`employee[${i}].agent_id`}
                                 type="hidden"
-                                value={item.agent_employee.agent_id}
+                                value={item.agent_id}
                               />
                               <FormikControl
                                 control="input"
@@ -228,7 +240,7 @@ const AddOrRemoveList = ({
                   <img src={flightTicket} alt="flight-ticket" />
                 </div>
                 <span style={{ fontSize: "12px", paddingLeft: "8px" }}>
-                  Click to assign/forbid ttravel consultant to issue flight
+                  Click to assign/forbid travel consultant to issue flight
                   ticket.
                 </span>
               </div>
@@ -293,7 +305,7 @@ const AddOrRemoveList = ({
                 label="Branch Office"
                 // onChange={}
                 endpoint="/master/employees"
-                column="given_name"
+                column="office.office_name"
                 sort="given_name"
                 isGrouping={true}
                 fieldGroup="employee_id"
@@ -348,7 +360,10 @@ const AddOrRemoveList = ({
           <Card.Body style={{ padding: "8px 10px 10px 9px" }}>
             <ol class="list list-general-setup">
               {rightData.map((item) => (
-                <li className="item-general-setup">
+                <li
+                  className="item-general-setup cursor-pointer"
+                  onClick={() => handleRightToLeft(item)}
+                >
                   <div className="d-flex align-items-center">
                     <svg
                       class="float-left row-handle nopadding"
@@ -381,7 +396,7 @@ const AddOrRemoveList = ({
                     </svg>
                     <div className="w-100 d-flex justify-content-between">
                       {item.given_name} {item.middle_name} {item.surname}
-                      <span>({item?.office?.name})</span>
+                      <span>({item?.office_name})</span>
                     </div>
                   </div>
                 </li>

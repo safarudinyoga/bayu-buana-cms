@@ -2,16 +2,16 @@ import React, { Component } from "react"
 import { Link } from "react-router-dom"
 import { connect } from "react-redux"
 import "./sidebar.scss"
-import getMenu from '../../config/menu';
+import getMenu from "../../config/menu"
 import $ from "jquery"
-import * as AdminLte from  "admin-lte"
+import * as AdminLte from "admin-lte"
 
-const SubMenu = ({menu, currentMenu, menuHandler}) => {
+const SubMenu = ({ menu, currentMenu, menuHandler }) => {
   return (
     <li className="nav-item">
       <Link
         to={menu.url}
-        className={`nav-link ${currentMenu === menu.url ? "active-link": ""}`}
+        className={`nav-link ${currentMenu === menu.url ? "active-link" : ""}`}
         onClick={() => menuHandler(menu.url)}
       >
         <p>{menu.description}</p>
@@ -20,93 +20,115 @@ const SubMenu = ({menu, currentMenu, menuHandler}) => {
   )
 }
 
-const ParentMenu = ({menu, currentMenu, menuHandler}) => {
-  let {submenu, menu_link_asset, id} = menu
-  let findMenu = submenu.find(sm => sm.url === currentMenu)
+const ParentMenu = ({ menu, currentMenu, menuHandler }) => {
+  let { submenu, menu_link_asset, id } = menu
+  let findMenu = submenu.find((sm) => sm.url === currentMenu)
   return (
     <li className="nav-item parent-menu" id={id}>
-      <Link to={menu.url} className={`nav-link mb-0 ${findMenu ? "menu-open active-menu": ""}`}>
-        <img src={menu_link_asset.multimedia_description.url} alt={menu_link_asset.multimedia_description.file_name} />
-        <p>
-          {menu.description}
-        </p>
-          {menu.is_expanded && <i className="right fas fa-angle-right ic-right"></i>}
+      <Link
+        to={menu.url}
+        className={`nav-link mb-0 ${findMenu ? "menu-open active-menu" : ""}`}
+      >
+        <img
+          src={menu_link_asset.multimedia_description.url}
+          alt={menu_link_asset.multimedia_description.file_name}
+        />
+        <p>{menu.description}</p>
+        {menu.is_expanded && (
+          <i className="right fas fa-angle-right ic-right"></i>
+        )}
       </Link>
-      {
-        submenu.length > 0 && (
-          <ul className="nav nav-treeview">
-            {
-              submenu.map((m, k) => <SubMenu key={k} menu={m} currentMenu={currentMenu} menuHandler={menuHandler} />)
-            }
-          </ul>
-        )
-      }
+      {submenu.length > 0 && (
+        <ul className="nav nav-treeview">
+          {submenu.map((m, k) => (
+            <SubMenu
+              key={k}
+              menu={m}
+              currentMenu={currentMenu}
+              menuHandler={menuHandler}
+            />
+          ))}
+        </ul>
+      )}
     </li>
   )
 }
 class Sidebar extends Component {
-  constructor (props) {
-    super(props);
+  constructor(props) {
+    super(props)
     this.state = {
-      menu : [],
-      sideNav: '',
+      menu: [],
+      sideNav: "",
       currentMenu: "",
     }
     this.onClickMenu = this.onClickMenu.bind(this)
-    $('[data-widget="treeview"]').each(function() {
-        AdminLte.Treeview._jQueryInterface.call($(this), 'init');
-    });
+    $('[data-widget="treeview"]').each(function () {
+      AdminLte.Treeview._jQueryInterface.call($(this), "init")
+    })
   }
 
-
-  async componentDidMount () {
-    this.setState({currentMenu : window.location.pathname}, () => {
-      $('ul.nav-treeview a').filter(function() {
-        return this.href === window.location.origin + window.location.pathname;
-      }).parentsUntil(".bb-sidebar-nav > .nav-sidebar").addClass('menu-is-opening menu-open');
+  async componentDidMount() {
+    this.setState({ currentMenu: window.location.pathname }, () => {
+      $("ul.nav-treeview a")
+        .filter(function () {
+          return this.href === window.location.origin + window.location.pathname
+        })
+        .parentsUntil(".bb-sidebar-nav > .nav-sidebar")
+        .addClass("menu-is-opening menu-open")
     })
-    let menu = JSON.parse(localStorage.getItem('menu'))
-    if(menu && menu.length > 0) {
-      this.setState({menu})
+    let menu = JSON.parse(localStorage.getItem("menu"))
+    if (menu && menu.length > 0) {
+      this.setState({ menu })
     } else {
       try {
         let menu = await getMenu()
-        this.setState({menu})
-      } catch (e) {console.log(e)}
+        this.setState({ menu })
+      } catch (e) {
+        console.log(e)
+      }
     }
   }
 
-  handleHoverOn(){
-    $('li.nav-item.parent-menu.menu-is-opening.menu-open').find('ul.nav.nav-treeview').css("display","block")
+  handleHoverOn() {
+    $("li.nav-item.parent-menu.menu-is-opening.menu-open")
+      .find("ul.nav.nav-treeview")
+      .css("display", "block")
   }
 
-  handleHoverOff(){
-    $('li.nav-item.parent-menu.menu-is-opening.menu-open').find('ul.nav.nav-treeview').css("display","none")
+  handleHoverOff() {
+    $("li.nav-item.parent-menu.menu-is-opening.menu-open")
+      .find("ul.nav.nav-treeview")
+      .css("display", "none")
   }
   onClickMenu(menu) {
     localStorage.removeItem("saf_key")
-    
+
     let self = this.state
-    $('ul.nav-treeview a').filter(function() {
-      return this.href === window.location.origin + self.currentMenu;
-    }).parentsUntil(".bb-sidebar-nav > .nav-sidebar").remove('menu-is-opening menu-open');
+    $("ul.nav-treeview a")
+      .filter(function () {
+        return this.href === window.location.origin + self.currentMenu
+      })
+      .parentsUntil(".bb-sidebar-nav > .nav-sidebar")
+      .remove("menu-is-opening menu-open")
     setTimeout(() => {
-      this.setState({currentMenu: menu})
-    }, 500);
-
-
+      this.setState({ currentMenu: menu })
+    }, 500)
   }
 
   render() {
     const { menu, currentMenu } = this.state
 
     return (
-      <aside className="main-sidebar sidebar-dark-primary elevation-4"
+      <aside
+        id="default"
+        className={`main-sidebar ${false && "corporate"} sidebar-dark-primary elevation-4`}
         // {extranet ? "extranet-sidebar" : ""}
       >
-        <div className="sidebar"
-        onMouseEnter={this.handleHoverOn}
-        onMouseLeave={this.handleHoverOff}>
+        <div
+          className="sidebar"
+          onMouseEnter={this.handleHoverOn}
+          onMouseLeave={this.handleHoverOff}
+        >
           <nav className="bb-sidebar-nav">
             <ul
               className="nav nav-sidebar flex-column"
@@ -114,9 +136,14 @@ class Sidebar extends Component {
               role="menu"
               data-accordion="false"
             >
-              {
-                menu.map((m, k) => <ParentMenu key={k} menu={m} currentMenu={currentMenu} menuHandler={this.onClickMenu} />)
-              }
+              {menu.map((m, k) => (
+                <ParentMenu
+                  key={k}
+                  menu={m}
+                  currentMenu={currentMenu}
+                  menuHandler={this.onClickMenu}
+                />
+              ))}
               {/* <li className="nav-item parent-menu">
                 <Link to="#" className="nav-link">
                   <img src="/img/icons/home.svg" alt="icon users" />
