@@ -2,7 +2,7 @@ import React, { useEffect } from "react"
 import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
 // import BBDataTable from "components/table/bb-data-table"
-import { Card, OverlayTrigger, Tooltip } from "react-bootstrap"
+import { Card, OverlayTrigger, Tooltip, Popover } from "react-bootstrap"
 import { Link } from "react-router-dom"
 // import FormFlight from "./form/flight-policy-for-staff-and-manager.js"
 import FormHotel from "./form/hotel-policy-for-staff-and-manager.js"
@@ -30,18 +30,46 @@ const StaffAndManager = (props) => {
         )
         }, [])
 
+        const renderTooltip = (props) => (
+            <Tooltip id="button-tooltip" {...props} >
+              <div className="staff-and-manager-tooltip">
+                <ul>
+                    <li>Procurement manager</li>
+                    <li>Engineer</li>
+                    <li>Finance Controller</li>
+                    <li>IT Manager</li>
+                    <li>Sales Manager</li>
+                    <li>Engineer</li>
+                    <li>System Analyst</li>
+                    <li>Sales Supervisor</li>
+                </ul>
+                <ul>
+                    <li>Procurement manager</li>
+                    <li>Engineer</li>
+                    <li>Finance Controller</li>
+                    <li>IT Manager</li>
+                    <li>Sales Manager</li>
+                    <li>Engineer</li>
+                    <li>System Analyst</li>
+                    <li>Sales Supervisor</li>
+                </ul>
+              </div>
+            </Tooltip>
+        );
+
     return (
         <Card>
         <Card.Body>
-            <div className="travel-policy-body"><h3>Staff and Manager</h3><u data-toggle="tooltip" data-placement="bottom" title="Procurement manager
-            Engineer
-            Finance Controller
-            IT Manager
-            Sales Manager
-            Engineer
-            System Analyst
-            Sales Supervisor">16 Job Position</u>
-            <span> are under this policy class</span></div> 
+            <div className="travel-policy-body"><h3>Staff and Manager</h3>
+            <span><OverlayTrigger
+                placement="bottom"
+                delay={{ show: 250, hide: 400 }}
+                overlay={renderTooltip}
+            >
+            <u>16 Job Position</u>
+            </OverlayTrigger>
+            &nbsp;are under this policy class</span>
+            </div>
             <Card>
                 <Card.Body>
                 <FlightPolicyDataTable />

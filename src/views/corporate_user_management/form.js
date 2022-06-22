@@ -232,7 +232,7 @@ const UserManagementForm = (props) => {
                     </FastField>
                     {!formId ? (
                       <Form.Label column md={3}>
-                        <Nav.Link href={`/master/employee/form`}>
+                        <Nav.Link href={`/master/corporate-user-profile`}>
                           Create New Employee
                         </Nav.Link>
                       </Form.Label>
