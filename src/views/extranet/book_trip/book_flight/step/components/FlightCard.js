@@ -10,8 +10,6 @@ import shieldIC from 'assets/icons/shield.svg'
 import moment from 'moment'
 import ThousandSeparator from 'lib/thousand-separator'
 
-const ex_logo = 'https://ik.imagekit.io/tvlk/image/imageResource/2021/07/12/1626063527483-f24d3eae611b51022ab0d1fc1457c820.png?tr=q-75,w-28'
-
 function FlightCard({data, handleSelectTab, tripType}) {
   const dispatch = useDispatch()
 	const [Flight, setFlight] = useState({})
@@ -144,6 +142,19 @@ function FlightCard({data, handleSelectTab, tripType}) {
 			</Col>
 		)
 	}
+	const onSelectFlight = (e, fare) => { 
+		e.stopPropagation();
+		let selectedFlight = {
+			airlines: Flight.airlines,
+			estimation: Flight.estimation,
+			fare: {
+				cabin_name: selectedCabin.name,
+				...fare
+			}
+		}
+		localStorage.setItem("selectedFlight", JSON.stringify(selectedFlight))
+		handleSelectTab("passengers")
+	}
 
 
   
@@ -257,10 +268,7 @@ function FlightCard({data, handleSelectTab, tripType}) {
 										<p>{fare.currency_code} <b>{ThousandSeparator(fare.price)}</b></p>
 										<p className='flight-type'>{fare.trip_type_name}</p>
 										<Button 
-											onClick={(e) => { 
-												e.stopPropagation();
-												handleSelectTab("passengers")
-											}}
+											onClick={(e) => onSelectFlight(e, fare)}
 											className="btn-flight-select"
 										>Select
 										</Button>
@@ -324,7 +332,7 @@ function FlightCard({data, handleSelectTab, tripType}) {
 								</Col>
 								<Col sm={4} className="d-flex flex-column justify-content-center align-items-center">
 									<p>{selectedCabin.fares[0].currency_code} <b>{ThousandSeparator(selectedCabin.fares[0].price)}</b></p>
-									<Button className=' btn-flight-select px-5' onClick={() => console.log("yee")}>Select</Button>
+									<Button className=' btn-flight-select px-5' onClick={(e) => onSelectFlight(e, selectedCabin.fares[0])}>Select</Button>
 								</Col>
 							</Row>
 						</div>
