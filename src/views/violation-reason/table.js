@@ -25,8 +25,8 @@ export default function ViolationReasonTable() {
 
   let [params, setParams] = useState({
     isCheckbox: false,
-    title: "Job Title",
-    titleModal: "Job Title",
+    title: "Violation Reason",
+    titleModal: "Violation Reason",
     baseRoute: "/master/violation-reason/form",
     endpoint: "/master/job-titles",
     deleteEndpoint: "/master/batch-actions/delete/job-titles",
