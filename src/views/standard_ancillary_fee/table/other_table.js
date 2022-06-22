@@ -69,6 +69,6 @@ export default function OtherTable() {
     setSelectedCities(values)
     setSelectedCityIds(ids)
   }  
-  return <p className="text-center">This feature is not yet available</p>
-  // return <BBDataTable {...params}  />
+  // return <p className="text-center">This feature is not yet available</p>
+  return <BBDataTable {...params}  />
 }
