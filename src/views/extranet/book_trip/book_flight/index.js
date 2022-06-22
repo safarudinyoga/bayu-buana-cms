@@ -93,7 +93,6 @@ function BookFlight() {
 	useEffect(async () => {
 		try {
 		  let res = await api.get("/master/languages?size=10")
-		  console.log(res, "hahahah")
 		  const options = []
 		  res.data.items.forEach((data) => {
 			options.push({
@@ -103,14 +102,12 @@ function BookFlight() {
 			})
 			setSelectLanguage(options)
 		  })
-		  console.log(selectLanguage, "cobaaak")
 		} catch (e) {}
 	}, [])
 
 	useEffect(async () => {
 		try {
 		  let res = await api.get("/master/currencies?size=10")
-		  console.log(res, "ehheheh")
 		  const options = []
 		  res.data.items.forEach((data) => {
 			options.push({
@@ -219,7 +216,6 @@ function BookFlight() {
 										alt="language-image"
 										className="language-image"
 									  />
-									  {/* {console.log(opt)} */}
 									  {opt.context === "menu" && <span className='language-value'>{language.value}</span>}
 									  
 									</div>

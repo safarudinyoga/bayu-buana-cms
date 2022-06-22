@@ -176,7 +176,7 @@ const Confirmation = () => {
 
           <Card>
             <Card.Body>
-              <h5>RESERVATION ADDITIONAL INFORMATION</h5>
+              <h6>RESERVATION ADDITIONAL INFORMATION</h6>
               <p>Project Name: Project Name Sample</p>
               <p>Project: Project1</p>
               <p>Cost Center: Manufacture</p>
@@ -184,15 +184,15 @@ const Confirmation = () => {
             </Card.Body>
           </Card>
 
-          <div className="d-flex">
-            <p>Change on Trip Plane</p>
+          <div className="d-flex align-items-center">
+            <p className="m-0">Change on Trip Planes</p>
             <Button 
               onClick={(e) => {}}
               className="btn-flight-select mx-3"
             >
                 Request for change
             </Button>
-            <p className="text-danger">Fees May Apply</p>
+            <p className="m-0 text-danger">Fees May Apply</p>
           </div>
 
         </Col>
