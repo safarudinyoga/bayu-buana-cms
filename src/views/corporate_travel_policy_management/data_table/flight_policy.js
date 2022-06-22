@@ -52,7 +52,6 @@ const FlightPolicyDataTable = () => {
 
     return (
         <div>
-            <div ><h5>FLIGHTS POLICY</h5></div>
             <BBDataTable {...params} modalContent={FormFlight} modalSize="lg" />
         </div>
     )
