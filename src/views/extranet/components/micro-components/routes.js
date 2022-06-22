@@ -95,6 +95,15 @@ function Routes(props) {
               {props.formik.touched.departure_data ? props.formik.errors.departure_data : null}
             </div>
           )}
+          {props.formik.errors.trips &&
+            props.formik.errors.trips[props.index] &&
+            props.formik.errors.trips[props.index].departure_data && (
+            <div className='routes-invalid'>
+              { props.formik.touched.trips && 
+                props.formik.touched.trips[props.index] &&
+                props.formik.touched.trips[props.index].departure_data ? props.formik.errors.trips[props.index].departure_data : null}
+            </div>
+          )}
           
         </div>
         <div className={`form-group required position-relative arrival-box mb-4 ${smallSize ? "routes-sm" : ""}`} > 
