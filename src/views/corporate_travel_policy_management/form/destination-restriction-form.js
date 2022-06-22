@@ -244,9 +244,9 @@ function DestinationRestriction(props) {
                         type="radio"
                         id="inline-tek-2"
                         data-toggle="collapse"
-                        data-target="#collapseOne"
-                        aria-expanded="true"
-                        aria-controls="collapseOne"
+                        data-target="#collapseCountry"
+                        aria-expanded="false"
+                        aria-controls="collapseCountry"
                       />
                     </Collapse>
                     <Collapse in={RecurringReminderType} id="headingTwo">
@@ -256,9 +256,9 @@ function DestinationRestriction(props) {
                         type="radio"
                         name="group1"
                         data-toggle="collapse"
-                        data-target="#collapseTwo"
+                        data-target="#collapseCity"
                         aria-expanded="false"
-                        aria-controls="collapseTwo"
+                        aria-controls="collapseCity"
                       />
                     </Collapse>
                   </div>
@@ -268,7 +268,7 @@ function DestinationRestriction(props) {
                       md={6}
                       xl={12}
                       className="mt-3 ml-5 collapse"
-                      id="collapseOne"
+                      id="collapseCountry"
                       aria-labelledby="headingOne"
                       data-parent="#accordion"
                     >
@@ -368,7 +368,7 @@ function DestinationRestriction(props) {
                       className="mt-3 ml-5 collapse"
                       aria-labelledby="headingTwo"
                       data-parent="#accordion"
-                      id="collapseTwo"
+                      id="collapseCity"
                     >
                       <Form.Group as={Row} className="mb-xs-3">
                         <Col md={10} lg={8} className="d-flex">
@@ -436,10 +436,10 @@ function DestinationRestriction(props) {
                         name="group1"
                         type="radio"
                         id="inline-tek-2"
-                        data-toggle="collapse"
-                        data-target="#collapseOne"
-                        aria-expanded="true"
-                        aria-controls="collapseOne"
+                        data-toggle="collapseBlock"
+                        data-target="#collapseBlock"
+                        aria-expanded="false"
+                        aria-controls="collapseBlock"
                       />
                     </Collapse>
                     <Collapse in={RecurringReminderType} id="headingTwo">
@@ -448,10 +448,10 @@ function DestinationRestriction(props) {
                         label="With Condition"
                         type="radio"
                         name="group1"
-                        data-toggle="collapseBlock"
-                        data-target="#collapseTwo"
+                        data-toggle="collapseWithCondition"
+                        data-target="#collapseWithCondition"
                         aria-expanded="false"
-                        aria-controls="collapseTwo"
+                        aria-controls="collapseWithCondition"
                       />
                     </Collapse>
                   </div>
@@ -461,25 +461,26 @@ function DestinationRestriction(props) {
                       md={6}
                       xl={12}
                       className="mt-3 ml-5 collapseBlock"
-                      id="collapseOne"
+                      id="collapseBlock"
                       aria-labelledby="headingOne"
                       data-parent="#accordion"
                     >
                       <Form.Group as={Row} className="mb-xl-3">
-                        
+                        <div style={{display:"none"}}>Block Section</div>
                       </Form.Group>
                     </Col>
                     <Col
                       sm={12}
                       md={6}
                       xl={12}
-                      className="mt-3 ml-5 collapse"
+                      className="mt-3 ml-5 collapseWithCondition"
                       aria-labelledby="headingTwo"
                       data-parent="#accordion"
-                      id="collapseTwo"
+                      id="collapseWithCondition"
                     >
                       <Form.Group as={Row} className="mb-xs-3">
-                        <Col md={10} lg={8} className="d-flex">
+                        <div>With Condition Show</div>
+                        {/* <Col md={10} lg={8} className="d-flex">
                           <span>Select city</span>
                           <span className="form-label-required">*</span>
                           <FastField name="task_type">
@@ -521,7 +522,7 @@ function DestinationRestriction(props) {
                               </div>
                             )}
                           </FastField>
-                        </Col>
+                        </Col> */}
                       </Form.Group>
                     </Col>
                   </Row>
