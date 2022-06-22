@@ -178,8 +178,7 @@ function FlightCard({data, handleSelectTab, tripType}) {
 			{/* FULL FARE CONDITIONS */}
 			{
 				fullCondition 
-				? selectedCabin !== null
-				? selectedCabin.name === "ECONOMY"
+				? selectedCabin !== null && selectedCabin.name === "ECONOMY"
 				? (
 					<>
 						<Row className='m-0'>
@@ -193,8 +192,8 @@ function FlightCard({data, handleSelectTab, tripType}) {
 						<Row className='m-0'>
 							<Col className='p-3 border fare-section'>
 								<div className=''>
-									<p>Baggage</p>
-									<p>Seat Selection</p>
+									<p className='text-bold'>Baggage</p>
+									<p className='text-bold'>Seat Selection</p>
 								</div>
 							</Col>
 							{
@@ -212,8 +211,8 @@ function FlightCard({data, handleSelectTab, tripType}) {
 						<Row className='m-0'>
 							<Col className='p-3 border fare-section'>
 								<div>
-									<p>Earn KrisFlyer miles</p>
-									<p>Upgrade with miles</p>
+									<p className='text-bold'>Earn KrisFlyer miles</p>
+									<p className='text-bold'>Upgrade with miles</p>
 								</div>
 							</Col>
 							{
@@ -231,9 +230,9 @@ function FlightCard({data, handleSelectTab, tripType}) {
 						<Row className='m-0'>
 							<Col className='p-3 border fare-section'>
 								<div className=''>
-									<p>Cancellation</p>
-									<p>Booking Change</p>
-									<p>No Show</p>
+									<p className='text-bold'>Cancellation</p>
+									<p className='text-bold'>Booking Change</p>
+									<p className='text-bold'>No Show</p>
 								</div>
 							</Col>
 							{
@@ -272,13 +271,10 @@ function FlightCard({data, handleSelectTab, tripType}) {
 						</Row>
 					</>
 				)
-				:<div>
-						<div>Fare Conditions</div>
-					</div>
 				: (
 					<div className='full-conditions'>
-						<div className='full-conditions-header'>
-							<p>Full Fare Conditions</p>
+						<div className={`full-conditions-header ${selectedCabin.name === "PREMIUM ECONOMY" &&"bg-header-dark"}`}>
+							<p>{selectedCabin.name === "PREMIUM ECONOMY" ? "Travel policy - most compliant" : "Full Fare Conditions"}</p>
 						</div>
 						<div className='full-conditions-content'>
 							<Row>
@@ -289,7 +285,7 @@ function FlightCard({data, handleSelectTab, tripType}) {
 												<p><i className="fas fa-suitcase mr-1"></i> Baggage</p>
 											</Col>
 											<Col>
-												<p>20 kg</p>
+												<p>{selectedCabin.fares[0].bagage_max_kg} kg</p>
 											</Col>
 										</Row>
 										<Row>
@@ -297,7 +293,12 @@ function FlightCard({data, handleSelectTab, tripType}) {
 												<p><i className="fas fa-suitcase mr-1"></i> Seat Selection</p>
 											</Col>
 											<Col>
-												<p>Complimentary</p>
+												<p>
+												{selectedCabin.fares[0].seat_selection_fee > 0
+													?	`from ${selectedCabin.fares[0].currecy_code} ${selectedCabin.fares[0].seat_selection_fee}`
+													: selectedCabin.fares[0].seat_selection_types.join(" & ")
+												}
+												</p>
 											</Col>
 										</Row>
 										<Row>
@@ -305,7 +306,10 @@ function FlightCard({data, handleSelectTab, tripType}) {
 												<p><i className="fas fa-suitcase mr-1"></i> Cancelation</p>
 											</Col>
 											<Col>
-												<p>Not Allowed</p>
+												<p>{selectedCabin.fares[0].cancelation_allowed 
+													?	"Allowed"
+													: "Not Allowed"
+												}</p>
 											</Col>
 										</Row>
 										<Row>
@@ -313,13 +317,13 @@ function FlightCard({data, handleSelectTab, tripType}) {
 												<p><i className="fas fa-suitcase mr-1"></i> Booking Change</p>
 											</Col>
 											<Col>
-												<p>Complimentary</p>
+												<p>{selectedCabin.fares[0].change_booking_before || "-"}</p>
 											</Col>
 										</Row>
 									</div>
 								</Col>
 								<Col sm={4} className="d-flex flex-column justify-content-center align-items-center">
-									<p>IDR 10,999,999</p>
+									<p>{selectedCabin.fares[0].currency_code} <b>{ThousandSeparator(selectedCabin.fares[0].price)}</b></p>
 									<Button className=' btn-flight-select px-5' onClick={() => console.log("yee")}>Select</Button>
 								</Col>
 							</Row>

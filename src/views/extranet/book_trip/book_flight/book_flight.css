@@ -417,3 +417,7 @@
 .fare-section>p {
   text-align: center;
 }
+.bg-header-dark {
+  background-color: #435151;
+  color: #FFFFFF;
+}
