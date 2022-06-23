@@ -43,14 +43,13 @@ const FeeSection = (props) => {
   return (
     <>
       <Form.Group as={Row} className="mb-3">
-        <Col md={2}>
+        <Col md={3}>
           <Form.Label colum>
             {title}
             <span className="form-label-required">*</span>
           </Form.Label>
         </Col>
-
-        <Col md={4}>
+        <Col md={5}>
           <Form.Group>
             <FastField name={props.fieldRadio}>
               {({ field, form }) => (
@@ -73,39 +72,55 @@ const FeeSection = (props) => {
             </FastField>
           </Form.Group>
           <Row className="ml-3">
-            <Col sm={12} md={6}>
-              <Form.Group as={Row} className="mb-xs-2">
-                <Form.Label column xs={2} md={3} lg={2} className="ml-xs-4">
-                  IDR
-                </Form.Label>
-                <Col xs={10} md={3} lg={8}>
-                  {disabledAmount ? (
-                    <Form.Control style={{ width: "200px" }} disabled={true} />
-                  ) : (
-                    <FastField name={props.fieldAmount}>
-                      {({ field }) => (
-                        <NumberFormat
-                          {...field}
-                          className="form-control"
-                          maxLength={19}
-                          thousandsGroupStyle="thousand"
-                          displayType="input"
-                          type="text"
-                          thousandSeparator={true}
-                          allowNegative={true}
-                          // onChange={(values) => {
-                          // const { value } = values;
-                          // props.setFieldValue(props.fieldAmount, value)
-                          // console.log(props.fieldAmount, values.target.value)
-                          // }}
-                        />
-                      )}
-                    </FastField>
-                  )}
-                </Col>
+            <Col lg={1} md={1}>
+              <Form.Label className="ml-xs-4">IDR</Form.Label>
+            </Col>
+            <Col lg={6} md={6}>
+              <Form.Group className="mb-3">
+                {disabledAmount ? (
+                  <Form.Control
+                    style={{ maxWidth: "220px" }}
+                    disabled={true}
+                    className={"grey-background"}
+                  />
+                ) : (
+                  <FastField name={props.fieldAmount}>
+                    {({ field }) => (
+                      <Form.Control
+                        as={NumberFormat}
+                        {...field}
+                        style={{ maxWidth: "220px" }}
+                        disabled={props.isView}
+                        className="form-control"
+                        maxLength={19}
+                        thousandsGroupStyle="thousand"
+                        displayType="input"
+                        type="text"
+                        thousandSeparator={true}
+                        allowNegative={true}
+                        // onChange={(value) => {
+                        //   // console.log(props.values, props.fieldAmount)
+                        //   let pattern = /^\d+$/
+                        //   // console.log(pattern.test(value.target.value))
+                        //   if (pattern.test(value.target.value)) {
+                        //     const changeToInteger = Number.parseInt(
+                        //       value.target.value,
+                        //     )
+                        //     // console.log(changeToInteger, "haha")
+                        //     // const separator = changeToInteger.toLocaleString('en-US', { maximumFractionDigits: 0 })
+                        //     props.setFieldValue(
+                        //       props.fieldAmount,
+                        //       changeToInteger,
+                        //     )
+                        //   }
+                        // }}
+                      />
+                    )}
+                  </FastField>
+                )}
               </Form.Group>
             </Col>
-            <Col sm={12} md={6}>
+            <Col lg={3} md={3}>
               <Form.Group className="mb-3">
                 {props.amountSuffixSelections.map((suffix, i) => (
                   <AmountRadioSelections
@@ -146,7 +161,7 @@ const FeeSection = (props) => {
             </FastField>
           </Form.Group>
           <Row className="ml-3">
-            <Col sm={12} md={3}>
+            <Col md={7}>
               <Form.Group as={Row} className="mb-3">
                 {disabledPercent ? (
                   <Form.Control
@@ -198,7 +213,7 @@ const FeeSection = (props) => {
                 </span>
               </Form.Group>
             </Col>
-            <Col sm={12} md={9}>
+            <Col md={5}>
               {disabledPercent ? (
                 <Form.Check
                   type="checkbox"
