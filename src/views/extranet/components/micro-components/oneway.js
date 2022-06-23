@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Form, Button } from 'react-bootstrap'
 import { ReactSVG } from 'react-svg';
 import DatePicker from 'react-multi-date-picker'
@@ -46,7 +46,7 @@ const Oneway = (props) => {
   }
 
   const initialValues = {
-    depart_time: "",
+    depart_time: new Date(),
     departure_data: "",
     arrival_data: "",
     adult_count: 1,
@@ -63,10 +63,11 @@ const Oneway = (props) => {
     infant_count: Yup.number()
   })
 
-  const handleSearch = async (values, a) => {
-    history.push("/extranet/book-trip/book-flight")
+  const handleSearch = (values, a) => {
     console.log("MASUK KE ONEWAY COMP", values)
+    history.push("/extranet/book-trip/book-flight")
   }
+  
 
   useEffect(() => {
     setFieldValue("depart_time", departTime)
@@ -95,7 +96,6 @@ const Oneway = (props) => {
           setFieldTouched,
         }) => (
           <Form onSubmit={handleSubmit}>
-              {/* <Oneway airports={airports} formik={{errors, touched, setFieldValue}} handleTrip={handleTrip} /> */}
               <div className='d-flex flex-wrap' id={id}>
                 <Routes airports={airports} formik={{errors, touched, setFieldValue}} />
 

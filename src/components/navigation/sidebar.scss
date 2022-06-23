@@ -51,6 +51,12 @@
 .main-sidebar:hover {
   background-color: rgba(2, 127, 113, 0.9);
 }
+.main-sidebar.corporate{
+  background-color: rgba(49, 57, 77, 1);
+}
+.main-sidebar.corporate:hover {
+  background-color: rgba(49, 57, 77, 0.9);
+}
 
 @media (min-width: 992px) {
   .sidebar-mini.sidebar-collapse .main-sidebar:hover, .sidebar-mini.sidebar-collapse .main-sidebar.sidebar-focused {

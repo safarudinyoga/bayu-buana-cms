@@ -852,11 +852,6 @@ const DashboardRoutes = () => {
           <CorporateUserProfile />
         </Route>
 
-        {/* Corporate Branch Office */}
-        {/* <Route exact path="/master/branch-offices">
-          <OfficeTable />
-        </Route> */}
-
         {/* Corporate User Management */}
         <Route exact path="/master/corporate-user-management">
           <CorporateUserManagementTable />

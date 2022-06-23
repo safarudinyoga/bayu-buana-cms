@@ -34,10 +34,12 @@
 }
 .preferred-hotel-body {
   display: flex;
-  h5 {
+  span {
     font-size: 15px;
-    margin: 10px;
     font-weight: bold;
+  }
+  .icon {
+    margin: 4px;
   }
 }
 
@@ -85,6 +87,9 @@
   p {
     margin: auto 0;
   }
+  .icon {
+    margin: auto 8px;
+  }
 }
 .misc-icon-info {
   margin: auto 0;
@@ -119,7 +124,7 @@
     font-weight: 600;
   }
 }
-.policy-class-modal-title {
+.policy-class-modal {
   h6 {   
     font-size: 14px;
     font-weight: bold;
@@ -127,4 +132,27 @@
     padding: 12px;
     border-radius: 12px;
   }
+  tr{
+    th{
+      border: 1px solid #d9dfe7;
+      padding: 8px;
+    }
+  }
+  tr{
+    td{
+      border: 1px solid #d9dfe7;
+      padding: 8px;
+    }
+  }
+}
+.hotel-class-modal {
+  max-width: 200px;
+  padding-left: 25%;
+}
+.staff-and-manager-tooltip {
+  display: flex;
+  width: 30vw;
+  height: auto;
+  background-color: #F3F3FB;
+  color: black;
 }

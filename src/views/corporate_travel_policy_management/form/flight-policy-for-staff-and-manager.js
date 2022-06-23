@@ -155,6 +155,7 @@ function FlightPolicy(props) {
   const initialValues = {
     task_type: "",
     response_time: [],
+    short_flight_duration_up_to: "",
   }
 
   const validationSchema = Yup.object().shape({
@@ -162,6 +163,7 @@ function FlightPolicy(props) {
       .required("Task Type is required.")
       .uniqueValueObject("task_type_id", "Task Type already exists"),
     response_time: Yup.array().min(3, "Response Time is required."),
+    short_flight_duration_up_to: Yup.object().required("Please enter Short Flight Duration up to."),
   })
 
   const onSubmit = async (values, a) => {
@@ -275,57 +277,52 @@ function FlightPolicy(props) {
               </FastField>
             </Col>
           </Form.Group>
-          <Col className="policy-class-modal-title">
+          <Col className="policy-class-modal">
             <h6>CABIN CLASS</h6>
           </Col>
-          <Form.Group as={Row} className="form-group">
-            <Form.Label column md={3} lg={4}>
-              Message Type<span className="form-label-required">*</span>
-            </Form.Label>
-            <Col md={9} lg={8}>
-              <FastField name="message_type">
-                {({ field, form }) => (
-                  <div style={{ maxWidth: 200 }}>
-                    <SelectAsync
-                      {...field}
-                      isClearable
-                      url={`master/message-types`}
-                      fieldName="message_type_name"
-                      onChange={(v) => {
-                        setFieldValue("message_type", v)
-                      }}
-                      placeholder="Please choose"
-                      className={`react-select ${
-                        form.touched.message_type && form.errors.message_type
-                          ? "is-invalid"
-                          : null
-                      }`}
-                    />
-                    {form.touched.message_type && form.errors.message_type && (
-                      <Form.Control.Feedback type="invalid">
-                        {form.touched.message_type
-                          ? form.errors.message_type
-                          : null}
-                      </Form.Control.Feedback>
-                    )}
-                  </div>
-                )}
-              </FastField>
-            </Col>
-          </Form.Group>
-          <Row>
             <Col sm={12} md={12} lg={8}>
               <Form.Group as={Row} className="form-group" id="accordion">
-                <Col sm={12} md={10}>
+                <Col sm={12} md={12} xl={12}>
                   <Form.Group className="mb-3">
-                    <h>Differentiate Short and Long Flights?</h>
+                    <div className="d-flex">
+                      <h>Differentiate Short and Long Flights?</h><span className="form-label-required">*</span>
+                      <Collapse in={RecurringReminderType} id="headingOne">
+                          <Form.Check
+                            inline
+                            className="mt-2 ml-5"
+                            label="Yes"
+                            name="group1"
+                            type="radio"
+                            id="inline-tek-2"
+                            data-toggle="collapse"
+                            data-target="#collapseOne"
+                            aria-expanded="true"
+                            aria-controls="collapseOne"
+                          />
+                        </Collapse>
+                        <Collapse in={RecurringReminderType} id="headingTwo">
+                          <Form.Check
+                            className="mt-2 ml-5 collapsed"
+                            label="No"
+                            type="radio"
+                            name="group1"
+                            data-toggle="collapse"
+                            data-target="#collapseTwo"
+                            aria-expanded="false"
+                            aria-controls="collapseTwo"
+                          />
+                        </Collapse>
+                      </div>
+                      
                     <Row className="form-group mb-0">
-                      <Col className="ml-0">
+                      <Col sm={12} md={12} xl={12} className="ml-0">
                         <FormikControl
                           control="input"
                           label="Short Flight Duration up to"
-                          name="percent"
+                          name="short_flight_duration_up_to"
                           required="label-required"
+                          minLength={1}
+                          maxLength={100}
                           className
                           style={{ maxWidth: 100 }}
                           // isDisabled={isView}
@@ -333,23 +330,10 @@ function FlightPolicy(props) {
                       </Col>
                     </Row>
                     <Row>
-                      <Collapse in={RecurringReminderType} id="headingOne">
-                        <Form.Check
-                          inline
-                          className="mt-2 ml-5"
-                          label="Yes"
-                          name="group1"
-                          type="radio"
-                          id="inline-tek-2"
-                          data-toggle="collapse"
-                          data-target="#collapseOne"
-                          aria-expanded="true"
-                          aria-controls="collapseOne"
-                        />
-                      </Collapse>
                       <Col
                         sm={12}
                         md={6}
+                        xl={12}
                         className="mt-3 ml-5 collapse"
                         id="collapseOne"
                         aria-labelledby="headingOne"
@@ -357,49 +341,105 @@ function FlightPolicy(props) {
                       >
                         <Form.Group as={Row} className="mb-xl-3">
                           <div>
-                            <table>
+                            <table className="policy-class-modal">
                               <tr>
-                                <th style={{ border: "1px solid #B5B5B5" }}>
+                                <th>
                                   Comfort
                                 </th>
-                                <th style={{ border: "1px solid #B5B5B5" }}>
+                                <th>
                                   Short Flight<span> - Up to 8 hours</span>
                                 </th>
-                                <th style={{ border: "1px solid #B5B5B5" }}>
+                                <th>
                                   Long Flight<span> - Over 8 hours</span>
                                 </th>
                               </tr>
                               <tr>
-                                <td style={{ border: "1px solid #B5B5B5" }}>
-                                  Cabin Class
+                                <td>
+                                  Cabin Class<span className="form-label-required">*</span>
                                 </td>
-                                <td style={{ border: "1px solid #B5B5B5" }}>
-                                  Flight Short
+                                <td>
+                                <FastField name="flight_long">
+                                  {({ field, form }) => (
+                                    <div style={{ maxWidth: 200 }}>
+                                      <SelectAsync
+                                        {...field}
+                                        isClearable
+                                        isDisabled={isView}
+                                        url={`master/task-types`}
+                                        fieldName="flight_long_name"
+                                        onChange={(v) => {
+                                          setFieldValue("flight_long", v)
+                                        }}
+                                        placeholder="Please choose"
+                                        className={`react-select ${
+                                          form.touched.flight_long && form.errors.flight_long
+                                            ? "is-invalid"
+                                            : null
+                                        }`}
+                                        components={
+                                          isView
+                                            ? {
+                                                DropdownIndicator: () => null,
+                                                IndicatorSeparator: () => null,
+                                              }
+                                            : null
+                                        }
+                                      />
+                                      {form.touched.flight_long && form.errors.flight_long && (
+                                        <Form.Control.Feedback type="invalid">
+                                          {form.touched.flight_long ? form.errors.flight_long : null}
+                                        </Form.Control.Feedback>
+                                      )}
+                                    </div>
+                                  )}
+                                </FastField>
                                 </td>
-                                <td style={{ border: "1px solid #B5B5B5" }}>
-                                  Flight Long
+                                <td>
+                                <FastField name="flight_long">
+                                  {({ field, form }) => (
+                                    <div style={{ maxWidth: 200 }}>
+                                      <SelectAsync
+                                        {...field}
+                                        isClearable
+                                        isDisabled={isView}
+                                        url={`master/task-types`}
+                                        fieldName="flight_long_name"
+                                        onChange={(v) => {
+                                          setFieldValue("flight_long", v)
+                                        }}
+                                        placeholder="Please choose"
+                                        className={`react-select ${
+                                          form.touched.flight_long && form.errors.flight_long
+                                            ? "is-invalid"
+                                            : null
+                                        }`}
+                                        components={
+                                          isView
+                                            ? {
+                                                DropdownIndicator: () => null,
+                                                IndicatorSeparator: () => null,
+                                              }
+                                            : null
+                                        }
+                                      />
+                                      {form.touched.flight_long && form.errors.flight_long && (
+                                        <Form.Control.Feedback type="invalid">
+                                          {form.touched.flight_long ? form.errors.flight_long : null}
+                                        </Form.Control.Feedback>
+                                      )}
+                                    </div>
+                                  )}
+                                </FastField>
                                 </td>
                               </tr>
                             </table>
                           </div>
                         </Form.Group>
                       </Col>
-
-                      <Collapse in={RecurringReminderType} id="headingTwo">
-                        <Form.Check
-                          className="mt-2 ml-5 collapsed"
-                          label="No"
-                          type="radio"
-                          name="group1"
-                          data-toggle="collapse"
-                          data-target="#collapseTwo"
-                          aria-expanded="false"
-                          aria-controls="collapseTwo"
-                        />
-                      </Collapse>
                       <Col
                         sm={12}
                         md={6}
+                        xl={12}
                         className="mt-3 ml-5 collapse"
                         aria-labelledby="headingTwo"
                         data-parent="#accordion"
@@ -407,21 +447,55 @@ function FlightPolicy(props) {
                       >
                         <Form.Group as={Row} className="mb-xs-3">
                           <div>
-                            <table>
+                            <table className="policy-class-modal">
                               <tr>
-                                <th style={{ border: "1px solid #B5B5B5" }}>
+                                <th>
                                   COMFORT
                                 </th>
-                                <th style={{ border: "1px solid #B5B5B5" }}>
+                                <th>
                                   SHORT FLIGHT<span> - Up to 8 hours</span>
                                 </th>
                               </tr>
                               <tr>
-                                <td style={{ border: "1px solid #B5B5B5" }}>
-                                  Highest Cabin Class
+                                <td>
+                                  Highest Cabin Class<span className="form-label-required">*</span>
                                 </td>
-                                <td style={{ border: "1px solid #B5B5B5" }}>
-                                  Flight Short
+                                <td>
+                                  <FastField name="flight_long">
+                                    {({ field, form }) => (
+                                      <div style={{ maxWidth: 200 }}>
+                                        <SelectAsync
+                                          {...field}
+                                          isClearable
+                                          isDisabled={isView}
+                                          url={`master/task-types`}
+                                          fieldName="flight_long_name"
+                                          onChange={(v) => {
+                                            setFieldValue("flight_long", v)
+                                          }}
+                                          placeholder="Please choose"
+                                          className={`react-select ${
+                                            form.touched.flight_long && form.errors.flight_long
+                                              ? "is-invalid"
+                                              : null
+                                          }`}
+                                          components={
+                                            isView
+                                              ? {
+                                                  DropdownIndicator: () => null,
+                                                  IndicatorSeparator: () => null,
+                                                }
+                                              : null
+                                          }
+                                        />
+                                        {form.touched.flight_long && form.errors.flight_long && (
+                                          <Form.Control.Feedback type="invalid">
+                                            {form.touched.flight_long ? form.errors.flight_long : null}
+                                          </Form.Control.Feedback>
+                                        )}
+                                      </div>
+                                    )}
+                                  </FastField>
                                 </td>
                               </tr>
                             </table>
@@ -433,8 +507,7 @@ function FlightPolicy(props) {
                 </Col>
               </Form.Group>
             </Col>
-          </Row>
-          <Col className="policy-class-modal-title">
+          <Col className="policy-class-modal">
             <h6>PREFERRED AIRLINES</h6>
             <Col md={10} lg={8} className="d-flex">
               <span>Select preferred airlines</span>
@@ -475,7 +548,7 @@ function FlightPolicy(props) {
               </FastField>
             </Col>
           </Col>
-          <Col className="policy-class-modal-title">
+          <Col className="policy-class-modal">
             <h6>RESTRICTED AIRLINES</h6>
             <Col md={10} lg={8} className="d-flex">
             <span>Select restricted airlines</span>

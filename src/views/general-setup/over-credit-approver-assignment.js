@@ -11,7 +11,7 @@ const OverCreditApproverAssignment = (props) => {
   const dispatch = useDispatch()
   const [listEmployee, setListEmployee] = useState([])
   const [listOverCredit, setListOverCredit] = useState([])
-  const [formValues, setFormValues] = useState(null)
+  const [formValues, setFormValues] = useState([])
   const endpoint = `/master/configurations/over-credit-approvers`
   let api = new Api()
 
@@ -24,12 +24,12 @@ const OverCreditApproverAssignment = (props) => {
       )
       setListEmployee([
         ...res.data.items.map((item) => ({
-          agent_employee: item.agent_employee,
+          agent_id: item?.agent_employee.agent_id,
           employee_id: item.employee_id,
           given_name: item.given_name,
           middle_name: item.middle_name,
           surname: item.surname,
-          office: item.office,
+          office_name: item.office.office_name,
         })),
       ])
     } catch (e) {
@@ -40,7 +40,16 @@ const OverCreditApproverAssignment = (props) => {
   const getListOverCredit = async () => {
     try {
       let res = await api.get(`/master/configurations/over-credit-approvers`)
-      setListOverCredit(res.data.items)
+      setListOverCredit(
+        res.data.items.map((item) => ({
+          agent_id: item?.agent_employee?.agent_id,
+          employee_id: item?.employee_id,
+          given_name: item.person.given_name,
+          middle_name: item.person.middle_name,
+          surname: item.person.surname,
+          office_name: item.office.office_name,
+        })),
+      )
     } catch (e) {
       console.log(e)
     }
@@ -49,6 +58,7 @@ const OverCreditApproverAssignment = (props) => {
   useEffect(async () => {
     getListOverCredit()
     getListEmployee()
+    console.log("formValues: ", formValues)
   }, [])
 
   const onSubmit = async (values, a) => {
@@ -95,25 +105,7 @@ const OverCreditApproverAssignment = (props) => {
                 </h3>
                 <div style={{ padding: "0 15px 40px 0" }}>
                   <CardAddOrRemove
-                    // firstData={[
-                    //   {
-                    //     agent_employee: "asd",
-                    //     employee_id: "asd",
-                    //     given_name: "asd",
-                    //     middle_name: "asd",
-                    //     surname: "asd",
-                    //     office: "asd",
-                    //   },
-                    //   {
-                    //     agent_employee: "qwe",
-                    //     employee_id: "qwe",
-                    //     given_name: "qwe",
-                    //     middle_name: "qwe",
-                    //     surname: "qwe",
-                    //     office: "qwe",
-                    //   },
-                    // ]}
-                    firstData={[]}
+                    firstData={listOverCredit}
                     secondData={listEmployee}
                     firstCardTitle="list of over credit approvers"
                     secondCardTitle="employee name"

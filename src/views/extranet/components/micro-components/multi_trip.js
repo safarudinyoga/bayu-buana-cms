@@ -116,7 +116,7 @@ const MultiTrip = (props) => {
                 ) : ""}
                 <Button
                   onClick={() => arrayHelpers.insert({depart_time: "", departure_data: "", arrival_data: ""})}
-                  className="mb-4"
+                  className="my-4"
                 >
                   Add New
                 </Button>

@@ -712,7 +712,10 @@ const GeneralInformation = (props) => {
             <Card style={{marginBottom: 0}}>
               <Card.Body>
                 {props.isMobile ? "" : <h3 className="card-heading">General Information</h3>}
-                <div style={props.isMobile ? {padding: "0"} : { padding: "0 15px 15px 15px" }}>
+                <div style={props.isMobile ? {padding: "0"} : { padding: "0 15px 15px 15px" }}> 
+                <div style={props.isMobile ? {textAlign:"center"} : {textAlign: "right"}}>
+                  User Profile Image
+                </div>
                   <Row>
                   {
                     // Tablet
@@ -721,8 +724,8 @@ const GeneralInformation = (props) => {
                         <div
                           className="img-profile-wrapper"
                           style={{marginBottom: 20}}
-                        >
-                          <Row>
+                        > 
+                          <Row> 
                             {photoProfile.length == 0 && (
                               <Image
                                 src="/img/media/profile.svg"
@@ -766,8 +769,9 @@ const GeneralInformation = (props) => {
                                       />
                                       )}
                                     </div>
-                                  ))}
+                                  ))} 
                                   {!isView && (
+                                    
                                   <Button
                                     variant="secondary"
                                     style={{margin: "auto 20px"}}
@@ -1216,6 +1220,27 @@ const GeneralInformation = (props) => {
                           </FastField>
                         </Col>
                       </Form.Group>
+                      <FormikControl
+                        control="selectAsync"
+                        label="Nationality"
+                        name="nationality"
+                        placeholder={values.nationality}
+                        url={`master/nationality`}
+                        fieldName={"nationality"}
+                        onChange={(v) => {
+                          setFieldValue("nationality", v)
+                        }}
+                        style={{ maxWidth: 300 }}
+                        components={
+                          isView
+                            ? {
+                                DropdownIndicator: () => null,
+                                IndicatorSeparator: () => null,
+                              }
+                            : null
+                        }
+                        isDisabled={isView}
+                      />
                     </Col>
 
                     {

@@ -1,219 +1,397 @@
 {
-  "data": [
+  "items": [
     {
-      "id": 1,
-      "plane": "Singapore Airlines",
-      "time_estimation": "7h 3m",
-      "class": "Economy",
-      "origin": {
-        "city": "Jakarta",
-        "code": "JKT",
-        "airport": "Soekarno-Hatta Intl.",
-        "terminal": 3
-      },
-      "destination": {
-        "city": "Hong Kong",
-        "code": "HKG",
-        "airport": "Hong Kong Intl.",
-        "terminal": 3
-      },
-      "trip": "Roundtrip",
-      "departure_date": "2022-12-12 14:00:00",
-      "return_date": "2022-12-17 12:25:00",
-      "passengers": {
-        "adult": 2,
-        "child": 0,
-        "infant": 0
-      },
-      "departure_detail": {
-        "departure_time": "2022-12-12 14:00:00",
-        "arrival_time": "2022-12-12 22:30:00",
-        "transit": {
-          "arrival_time": "2022-12-12 16:00:00",
-          "departure_time": "2022-12-12 17:50:00",
-          "country": "Singapore",
-          "city": "Singapore",
-          "city_Code": "SIN",
-          "airport": "Changi",
-          "terminal": 1
+      "session_id": "fcee9740-30ee-4d46-af2f-d58cf49f8642",
+      "created_at": "2021-12-31T21:12:31.000Z",
+      "expired_at": "2021-12-31T21:12:31.000Z",
+      "estimation": "7h 50m",
+      "airlines": [
+        {
+          "airline_code": "SQ",
+          "airline_name": "Singapore Airline",
+          "airline_logo":"https://ik.imagekit.io/tvlk/image/imageResource/2021/07/12/1626063527483-f24d3eae611b51022ab0d1fc1457c820.png?tr=q-75,w-28",
+          "routes": [
+            {
+              "source_code": "SQ",
+              "source_number": "995",
+              "aircraft_code": "777-300ER",
+              "aircraft_name": "Boeing 777-300ER",
+              "mileage": 1800,
+              "previous_arrival_date": null,
+              "departure_date": "2021-12-29T18:12:31.000Z",
+              "departure_airport_code": "CGK",
+              "departure_airport_name": "Soekarno Hatta Intl.",
+              "departure_city_code": "JKT",
+              "departure_city_name": "Jakarta",
+              "departure_terminal": "Terminal 3",
+              "arrival_date": "2021-12-29T21:12:31.000Z",
+              "arrival_airport_code": "SIN",
+              "arrival_airport_name": "Changi Airport",
+              "arrival_city_code": "SIN",
+              "arrival_city_name": "Singapore",
+              "arrival_terminal": "Terminal 3",
+              "cabin_type_code": "N",
+              "cabin_type_name": "Economy",
+              "facility_bagage": true,
+              "facility_wifi": true,
+              "facility_meal": true,
+              "facility_seat_selection": true,
+              "facility_protection": true,
+              "facility_charger": true,
+              "rules": [
+                "Rule A",
+                "Rule B",
+                "Rule C"
+              ]
+            },
+            {
+              "source_code": "SQ",
+              "source_number": "995",
+              "aircraft_code": "777-300ER",
+              "aircraft_name": "Boeing 777-300ER",
+              "mileage": 1800,
+              "previous_arrival_date": "2021-12-31T21:12:31.000Z",
+              "departure_date": "2022-01-01T21:12:31.000Z",
+              "departure_airport_code": "SIN",
+              "departure_airport_name": "Changi",
+              "departure_city_code": "SIN",
+              "departure_city_name": "Singapore",
+              "departure_terminal": "Terminal 3",
+              "arrival_date": "2022-01-02T21:12:31.000Z",
+              "arrival_airport_code": "HK",
+              "arrival_airport_name": "Hong Kong Intl.",
+              "arrival_city_code": "HK",
+              "arrival_city_name": "Hong Kong",
+              "arrival_terminal": "Terminal 1",
+              "cabin_type_code": "N",
+              "cabin_type_name": "Economy",
+              "facility_bagage": true,
+              "facility_wifi": true,
+              "facility_meal": true,
+              "facility_seat_selection": true,
+              "facility_protection": true,
+              "facility_charger": true,
+              "rules": [
+                "Rule A",
+                "Rule B",
+                "Rule C"
+              ]
+            }
+          ]
+        },
+        {
+          "airline_code": "SQ",
+          "airline_name": "Singapore Airline",
+          "airline_logo":"https://ik.imagekit.io/tvlk/image/imageResource/2021/07/12/1626063527483-f24d3eae611b51022ab0d1fc1457c820.png?tr=q-75,w-28",
+          "routes": [
+            {
+              "source_code": "SQ",
+              "source_number": "995",
+              "aircraft_code": "777-300ER",
+              "aircraft_name": "Boeing 777-300ER",
+              "mileage": 1800,
+              "previous_arrival_date": null,
+              "departure_date": "2021-12-30T21:12:31.000Z",
+              "departure_airport_code": "CGK",
+              "departure_airport_name": "Soekarno Hatta Intl.",
+              "departure_city_code": "JKT",
+              "departure_city_name": "Jakarta",
+              "departure_terminal": "Terminal 3",
+              "arrival_date": "2021-12-31T21:12:31.000Z",
+              "arrival_airport_code": "SIN",
+              "arrival_airport_name": "Changi",
+              "arrival_city_code": "SIN",
+              "arrival_city_name": "Singapore",
+              "arrival_terminal": "Terminal 3",
+              "cabin_type_code": "N",
+              "cabin_type_name": "Economy",
+              "facility_bagage": true,
+              "facility_wifi": true,
+              "facility_meal": true,
+              "facility_seat_selection": true,
+              "facility_protection": true,
+              "facility_charger": true,
+              "facility_film": true,
+              "rules": [
+                "Rule A",
+                "Rule B",
+                "Rule C"
+              ]
+            },
+            {
+              "source_code": "SQ",
+              "source_number": "995",
+              "aircraft_code": "777-300ER",
+              "aircraft_name": "Boeing 777-300ER",
+              "mileage": 1800,
+              "previous_arrival_date": "2021-12-31T21:12:31.000Z",
+              "departure_date": "2022-01-01T21:12:31.000Z",
+              "departure_airport_code": "SIN",
+              "departure_airport_name": "Changi",
+              "departure_city_code": "SIN",
+              "departure_city_name": "Singapore",
+              "departure_terminal": "Terminal 3",
+              "arrival_date": "2022-01-02T21:12:31.000Z",
+              "arrival_airport_code": "HK",
+              "arrival_airport_name": "Hong Kong Intl.",
+              "arrival_city_code": "HK",
+              "arrival_city_name": "Hong Kong",
+              "arrival_terminal": "Terminal 1",
+              "cabin_type_code": "N",
+              "cabin_type_name": "Economy",
+              "facility_bagage": true,
+              "facility_wifi": true,
+              "facility_meal": true,
+              "facility_seat_selection": true,
+              "facility_protection": true,
+              "facility_charger": true,
+              "facility_film": true,
+              "rules": [
+                "Rule A",
+                "Rule B",
+                "Rule C"
+              ]
+            }
+          ]
         }
-      },
-      "return_detail": {
-        "departure_time": "2022-12-12 14:00:00",
-        "arrival_time": "2022-12-12 22:30:00"
-      }
-    },
-    {
-      "id": 2,
-      "plane": "Singapore Airlines",
-      "time_estimation": "7h 3m",
-      "class": "Economy",
-      "origin": {
-        "city": "Jakarta",
-        "code": "JKT",
-        "airport": "Soekarno-Hatta Intl.",
-        "terminal": 3
-      },
-      "destination": {
-        "city": "Hong Kong",
-        "code": "HKG",
-        "airport": "Hong Kong Intl.",
-        "terminal": 3
-      },
-      "trip": "Roundtrip",
-      "departure_date": "2022-12-12 14:00:00",
-      "return_date": "2022-12-17 12:25:00",
-      "passengers": {
-        "adult": 2,
-        "child": 0,
-        "infant": 0
-      },
-      "departure_detail": {
-        "departure_time": "2022-12-12 14:00:00",
-        "arrival_time": "2022-12-12 22:30:00",
-        "transit": {
-          "arrival_time": "2022-12-12 16:00:00",
-          "departure_time": "2022-12-12 17:50:00",
-          "country": "Singapore",
-          "city": "Singapore",
-          "city_Code": "SIN",
-          "airport": "Changi",
-          "terminal": 1
+      ],
+      "cabins": [
+        {
+          "name": "ECONOMY",
+          "fares": [
+            {
+              "id": "fcee9740-30ee-4d46-af2f-d58cf49f8642",
+              "fare_name": "ECONOMY LITE",
+              "price": 12000000,
+              "bagage_max_kg": 20,
+              "currency_code": "IDR",
+              "currency_name": "Indonesia Rupiah",
+              "seat_selection_allowed": true,
+              "seat_selection_fee": 0,
+              "seat_selection_types": [
+                "Standard Seats",
+                "Forward Zone Seats"
+              ],
+              "kris_flyer_miles_percentage": 75.1,
+              "upgrade_miles_allowed": false,
+              "cancelation_allowed": true,
+              "cancelation_refundable": true,
+              "cancelation_fee": 0,
+              "booking_change_fee_before": 0,
+              "booking_change_fee_after": 0,
+              "change_booking_before": "Complimentary",
+              "change_booking_after": "Complimentary",
+              "trip_type_code": "Roundtrip",
+              "trip_type_name": "Round Trip",
+              "no_show_fee": 0,
+              "available_seats": 3,
+              "available_cabin_types": [
+                {
+                  "cabin_type_code": "N",
+                  "cabin_type_name": "Economy"
+                },
+                {
+                  "cabin_type_code": "P",
+                  "cabin_type_name": "Premium"
+                },
+                {
+                  "cabin_type_code": "N",
+                  "cabin_type_name": "Economy"
+                },
+                {
+                  "cabin_type_code": "P",
+                  "cabin_type_name": "Premium"
+                }
+              ]
+            },
+            {
+              "id": "fcee9740-30ee-4d46-af2f-d58cf49f8642",
+              "fare_name": "ECONOMY STANDARD",
+              "price": 12000000,
+              "bagage_max_kg": 20,
+              "currency_code": "IDR",
+              "currency_name": "Indonesia Rupiah",
+              "seat_selection_allowed": true,
+              "seat_selection_fee": 0,
+              "seat_selection_types": [
+                "Standard Seats",
+                "Forward Zone Seats"
+              ],
+              "kris_flyer_miles_percentage": 75.1,
+              "upgrade_miles_allowed": false,
+              "cancelation_allowed": true,
+              "cancelation_refundable": true,
+              "cancelation_fee": 0,
+              "booking_change_fee_before": 0,
+              "booking_change_fee_after": 0,
+              "trip_type_code": "Roundtrip",
+              "trip_type_name": "Round Trip",
+              "no_show_fee": 0,
+              "available_seats": 2,
+              "available_cabin_types": [
+                {
+                  "cabin_type_code": "N",
+                  "cabin_type_name": "Economy"
+                },
+                {
+                  "cabin_type_code": "P",
+                  "cabin_type_name": "Premium"
+                },
+                {
+                  "cabin_type_code": "N",
+                  "cabin_type_name": "Economy"
+                },
+                {
+                  "cabin_type_code": "P",
+                  "cabin_type_name": "Premium"
+                }
+              ]
+            },
+            {
+              "id": "fcee9740-30ee-4d46-af2f-d58cf49f8642",
+              "fare_name": "ECONOMY FLEXI",
+              "price": 12000000,
+              "bagage_max_kg": 20,
+              "currency_code": "IDR",
+              "currency_name": "Indonesia Rupiah",
+              "seat_selection_allowed": true,
+              "seat_selection_fee": 0,
+              "seat_selection_types": [
+                "Standard Seats",
+                "Forward Zone Seats"
+              ],
+              "kris_flyer_miles_percentage": 75.1,
+              "upgrade_miles_allowed": false,
+              "cancelation_allowed": true,
+              "cancelation_refundable": true,
+              "cancelation_fee": 0,
+              "booking_change_fee_before": 0,
+              "booking_change_fee_after": 0,
+              "trip_type_code": "Roundtrip",
+              "trip_type_name": "Round Trip",
+              "no_show_fee": 0,
+              "available_seats": 2,
+              "available_cabin_types": [
+                {
+                  "cabin_type_code": "N",
+                  "cabin_type_name": "Economy"
+                },
+                {
+                  "cabin_type_code": "P",
+                  "cabin_type_name": "Premium"
+                },
+                {
+                  "cabin_type_code": "N",
+                  "cabin_type_name": "Economy"
+                },
+                {
+                  "cabin_type_code": "P",
+                  "cabin_type_name": "Premium"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "PREMIUM ECONOMY",
+          "fares": [
+            {
+              "id": "fcee9740-30ee-4d46-af2f-d58cf49f8642",
+              "fare_name": "PREMIUM LITE",
+              "price": 12000000,
+              "bagage_max_kg": 20,
+              "currency_code": "IDR",
+              "currency_name": "Indonesia Rupiah",
+              "seat_selection_allowed": true,
+              "seat_selection_fee": 0,
+              "seat_selection_types": [
+                "Standard Seats",
+                "Forward Zone Seats"
+              ],
+              "kris_flyer_miles_percentage": 75.1,
+              "upgrade_miles_allowed": false,
+              "cancelation_allowed": true,
+              "cancelation_refundable": true,
+              "cancelation_fee": 0,
+              "booking_change_fee_before": 0,
+              "booking_change_fee_after": 0,
+              "trip_type_code": "Roundtrip",
+              "trip_type_name": "Round Trip",
+              "no_show_fee": 0,
+              "available_seats": 2,
+              "available_cabin_types": [
+                {
+                  "cabin_type_code": "N",
+                  "cabin_type_name": "Economy"
+                },
+                {
+                  "cabin_type_code": "P",
+                  "cabin_type_name": "Premium"
+                },
+                {
+                  "cabin_type_code": "N",
+                  "cabin_type_name": "Economy"
+                },
+                {
+                  "cabin_type_code": "P",
+                  "cabin_type_name": "Premium"
+                }
+              ]
+            },
+            {
+              "id": "fcee9740-30ee-4d46-af2f-d58cf49f8642",
+              "fare_name": "PREMIUM STANDARD",
+              "price": 12000000,
+              "bagage_max_kg": 20,
+              "currency_code": "IDR",
+              "currency_name": "Indonesia Rupiah",
+              "seat_selection_allowed": true,
+              "seat_selection_fee": 0,
+              "seat_selection_types": [
+                "Standard Seats",
+                "Forward Zone Seats"
+              ],
+              "kris_flyer_miles_percentage": 75.1,
+              "upgrade_miles_allowed": false,
+              "cancelation_allowed": true,
+              "cancelation_refundable": true,
+              "cancelation_fee": 0,
+              "booking_change_fee_before": 0,
+              "booking_change_fee_after": 0,
+              "trip_type_code": "Roundtrip",
+              "trip_type_name": "Round Trip",
+              "no_show_fee": 0,
+              "available_seats": 2,
+              "available_cabin_types": [
+                {
+                  "cabin_type_code": "N",
+                  "cabin_type_name": "Economy"
+                },
+                {
+                  "cabin_type_code": "P",
+                  "cabin_type_name": "Premium"
+                },
+                {
+                  "cabin_type_code": "N",
+                  "cabin_type_name": "Economy"
+                },
+                {
+                  "cabin_type_code": "P",
+                  "cabin_type_name": "Premium"
+                }
+              ]
+            }
+          ]
         }
-      },
-      "return_detail": {
-        "departure_time": "2022-12-12 14:00:00",
-        "arrival_time": "2022-12-12 22:30:00"
-      }
-    },
-    {
-      "id": 3,
-      "plane": "Singapore Airlines",
-      "time_estimation": "7h 3m",
-      "class": "Economy",
-      "origin": {
-        "city": "Jakarta",
-        "code": "JKT",
-        "airport": "Soekarno-Hatta Intl.",
-        "terminal": 3
-      },
-      "destination": {
-        "city": "Hong Kong",
-        "code": "HKG",
-        "airport": "Hong Kong Intl.",
-        "terminal": 3
-      },
-      "trip": "Roundtrip",
-      "departure_date": "2022-12-12 14:00:00",
-      "return_date": "2022-12-17 12:25:00",
-      "passengers": {
-        "adult": 2,
-        "child": 0,
-        "infant": 0
-      },
-      "departure_detail": {
-        "departure_time": "2022-12-12 14:00:00",
-        "arrival_time": "2022-12-12 22:30:00",
-        "transit": {
-          "arrival_time": "2022-12-12 16:00:00",
-          "departure_time": "2022-12-12 17:50:00",
-          "country": "Singapore",
-          "city": "Singapore",
-          "city_Code": "SIN",
-          "airport": "Changi",
-          "terminal": 1
-        }
-      },
-      "return_detail": {
-        "departure_time": "2022-12-12 14:00:00",
-        "arrival_time": "2022-12-12 22:30:00"
-      }
-    },
-    {
-      "id": 4,
-      "plane": "Singapore Airlines",
-      "time_estimation": "7h 3m",
-      "class": "Economy",
-      "origin": {
-        "city": "Jakarta",
-        "code": "JKT",
-        "airport": "Soekarno-Hatta Intl.",
-        "terminal": 3
-      },
-      "destination": {
-        "city": "Hong Kong",
-        "code": "HKG",
-        "airport": "Hong Kong Intl.",
-        "terminal": 3
-      },
-      "trip": "Roundtrip",
-      "departure_date": "2022-12-12 14:00:00",
-      "return_date": "2022-12-17 12:25:00",
-      "passengers": {
-        "adult": 2,
-        "child": 0,
-        "infant": 0
-      },
-      "departure_detail": {
-        "departure_time": "2022-12-12 14:00:00",
-        "arrival_time": "2022-12-12 22:30:00",
-        "transit": {
-          "arrival_time": "2022-12-12 16:00:00",
-          "departure_time": "2022-12-12 17:50:00",
-          "country": "Singapore",
-          "city": "Singapore",
-          "city_Code": "SIN",
-          "airport": "Changi",
-          "terminal": 1
-        }
-      },
-      "return_detail": {
-        "departure_time": "2022-12-12 14:00:00",
-        "arrival_time": "2022-12-12 22:30:00"
-      }
-    },
-    {
-      "id": 5,
-      "plane": "Singapore Airlines",
-      "time_estimation": "7h 3m",
-      "class": "Economy",
-      "origin": {
-        "city": "Jakarta",
-        "code": "JKT",
-        "airport": "Soekarno-Hatta Intl.",
-        "terminal": 3
-      },
-      "destination": {
-        "city": "Hong Kong",
-        "code": "HKG",
-        "airport": "Hong Kong Intl.",
-        "terminal": 3
-      },
-      "trip": "Roundtrip",
-      "departure_date": "2022-12-12 14:00:00",
-      "return_date": "2022-12-17 12:25:00",
-      "passengers": {
-        "adult": 2,
-        "child": 0,
-        "infant": 0
-      },
-      "departure_detail": {
-        "departure_time": "2022-12-12 14:00:00",
-        "arrival_time": "2022-12-12 22:30:00",
-        "transit": {
-          "arrival_time": "2022-12-12 16:00:00",
-          "departure_time": "2022-12-12 17:50:00",
-          "country": "Singapore",
-          "city": "Singapore",
-          "city_Code": "SIN",
-          "airport": "Changi",
-          "terminal": 1
-        }
-      },
-      "return_detail": {
-        "departure_time": "2022-12-12 14:00:00",
-        "arrival_time": "2022-12-12 22:30:00"
-      }
+      ]
     }
-  ]
+  ],
+  "page": 0,
+  "size": 10,
+  "max_page": 1,
+  "total_pages": 1,
+  "total": 10,
+  "last": false,
+  "visible": 10,
+  "source_type": "SQ"
 }
