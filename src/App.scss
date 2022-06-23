@@ -326,30 +326,34 @@ select.bg-dark-grey > option {
   height: calc(1.25rem - 4px);
   border-radius: 50%;
 }
-.custom-switch.custom-switch-bb .custom-control-input:checked~.custom-control-label::before {
-  background-color: #9596CC;
-  border-color: #9596CC;
+.custom-switch.custom-switch-bb
+  .custom-control-input:checked
+  ~ .custom-control-label::before {
+  background-color: #9596cc;
+  border-color: #9596cc;
   box-shadow: inset 0 0.25rem 0.25rem rgba(0, 0, 0, 0.1);
 }
-.custom-switch.custom-switch-bb .custom-control-input:checked~.custom-control-label::after {
-  background-color: #3E40AE;
+.custom-switch.custom-switch-bb
+  .custom-control-input:checked
+  ~ .custom-control-label::after {
+  background-color: #3e40ae;
 }
 .custom-control-label::before {
   border-color: #dee2e6;
 }
 //Employee Tabel/Form Image Profile
-.image-profile-tabel{
+.image-profile-tabel {
   width: 28px;
   height: 28px;
   border-radius: 50%;
 }
-.image-profile-form{
+.image-profile-form {
   width: 125px;
   height: 125px;
   border-radius: 50%;
 }
 @media only screen and (width: 768px) {
-  .image-profile-form{
+  .image-profile-form {
     width: 81px;
     height: 81px;
     border-radius: 50%;
@@ -368,3 +372,6 @@ select.bg-dark-grey > option {
   margin: 0;
 }
 
+.modal-dialog {
+  max-width: 900px !important;
+}
