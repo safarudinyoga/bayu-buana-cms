@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import BBDataTable from "components/table/bb-data-table"
 
-export default function FlightTable() { 
+export default function FlightTable() {
   let [selectedCities, setSelectedCities] = useState([])
   let [selectedCityIds, setSelectedCityIds] = useState([])
   let [selectedCountries, setSelectedCountries] = useState([])
@@ -9,31 +9,51 @@ export default function FlightTable() {
 
   let [params, setParams] = useState({
     title: "Standard Markup",
+    hideDetail: true,
     baseRoute: "/master/standard-markup/form/flight-form",
-    endpoint: "/master/standard-markup",
+    endpoint: `/master/agent-markup-categories/1`,
     deleteEndpoint: "/master/standard-markup",
     activationEndpoint: "/master/standard-markup",
     deactivationEndpoint: "/master/standard-markup",
     columns: [
       {
         title: "Preset Name",
-        data: "preset_name",
+        data: "markup_category_name",
       },
       {
         title: "Domestic Mark Up",
-        data: "domestic_markup",
+        data: "domestic_flight_markup",
+        render: (val) => {
+          if (val.is_tax_inclusive) {
+            return `${val.percent}% Include Tax `
+          } else {
+            return `IDR ${val.amount}/Ticket`
+          }
+        },
       },
       {
         title: "International Mark Up",
-        data: "international_markup",
+        data: "international_flight_markup",
+        render: (val) => {
+          if (val.is_tax_inclusive) {
+            return `${val.percent}% Include Tax `
+          } else {
+            return `IDR ${val.amount}/Ticket`
+          }
+        },
       },
       {
         title: "Number Of Override",
-        data: "number_of_override",
+        data: "sort",
       },
     ],
     emptyTable: "No flight found",
-    recordName: "hotel_name",
+    recordName: [
+      "markup_category_name",
+      "domestic_flight_markup.amount",
+      "international_flight_markup.amount",
+      "sort",
+    ],
   })
 
   const onFilterChangeCountries = (e, values) => {
@@ -75,6 +95,6 @@ export default function FlightTable() {
     }
     setSelectedCities(values)
     setSelectedCityIds(ids)
-  }  
-  return <BBDataTable {...params}  />
+  }
+  return <BBDataTable {...params} />
 }
