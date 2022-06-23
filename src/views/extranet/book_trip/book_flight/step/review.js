@@ -2,7 +2,6 @@ import React, {useState, useEffect} from "react"
 import { Col, Row, Card, Form, Button, Alert, Accordion, Modal } from 'react-bootstrap'
 import moment from 'moment'
 import ThousandSeparator from 'lib/thousand-separator'
-const ex_logo = 'https://ik.imagekit.io/tvlk/image/imageResource/2021/07/12/1626063527483-f24d3eae611b51022ab0d1fc1457c820.png?tr=q-75,w-28'
 
 const Review = ({handleSelectTab}) => {
 
@@ -61,7 +60,7 @@ const Review = ({handleSelectTab}) => {
 			<Modal.Body>
 				<ul>
 					<li>Cancelation allow with fee</li>
-					<li>Baggage allow up to 30 kg</li>
+					<li>Baggage allow up to 20 kg</li>
 					<li>Exchange Before Flight (free)</li>
 					<li>Exchange After Flight (with fee $100)</li>
 					<li>Refund Before Flight (with fee $90)</li>
