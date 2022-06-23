@@ -70,6 +70,7 @@
     "react-svg": "^14.1.1",
     "react-switch": "^6.0.0",
     "rooks": "^5.1.0",
+    "sass": "^1.52.3",
     "select2": "^4.0",
     "styled-components": "5.2.1",
     "throttle-debounce": "^3.0.1",
@@ -82,7 +83,6 @@
   "devDependencies": {
     "@popperjs/core": "^2.10.2",
     "@testing-library/dom": "^8.10.1",
-    "node-sass": "^6.0.1",
     "popper.js": "^1.16.1",
     "serve": "^13.0.2",
     "tempusdominus-core": "^5.19.0"

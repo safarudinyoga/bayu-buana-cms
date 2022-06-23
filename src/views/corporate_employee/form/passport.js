@@ -16,7 +16,7 @@ const options = {
   position: "bottom-right",
 }
 
-const Employee = (props) => {
+const Passport = (props) => {
   const isView = useQuery().get("action") === "view"
   let api = new Api()
   const [openSnackbar] = useSnackbar(options)
@@ -619,7 +619,7 @@ const Employee = (props) => {
                   {additionalRole && (
                     <>
                       <div style={{ padding: "0 15px 15px" }}>
-                        <h6 className="mt-2">Employment</h6>
+                        <h6 className="mt-2">Employmentsssss</h6>
                         <div className="p-2">
                           {/* <FormikControl
                               control="selectAsync"
@@ -690,7 +690,7 @@ const Employee = (props) => {
                         disabled={props.finishStep > 0 || props.employeeData?.id ? (!isValid || isSubmitting) : (!dirty || isSubmitting)}
                         style={{ marginRight: 15, marginBottom: 20, marginTop: 85 }}
                       >
-                      {props.employeeData?.id ? "SAVE" : "SAVE & NEXT"}
+                       SAVE
                       </Button>
                       <Button
                         variant="secondary"
@@ -723,7 +723,7 @@ const Employee = (props) => {
                     disabled={props.finishStep > 0 || props.employeeData?.id ? (!isValid || isSubmitting) : (!dirty || isSubmitting)}
                     style={{ marginRight: 15, marginBottom: 135 }}
                   >
-                    {props.employeeData?.id ? "SAVE" : "SAVE & NEXT"}
+                    SAVE
                   </Button>
                   <Button
                     variant="secondary"
@@ -741,4 +741,4 @@ const Employee = (props) => {
   );
 }
 
-export default Employee;
+export default Passport;
