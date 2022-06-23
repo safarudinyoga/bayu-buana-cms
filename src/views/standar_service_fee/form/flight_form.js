@@ -173,11 +173,11 @@ const ModalOverrideServiceFee = (props) => {
             }) => (
               <Form onSubmit={handleSubmit}>
                 <Form.Group as={Row} className="mb-3">
-                  <Form.Label column md={4} sm={4} lg={4}>
+                  <Form.Label column md={3} sm={3} lg={3}>
                     Destination
                     <span className="form-label-required">*</span>
                   </Form.Label>
-                  <Col md={8} sm={8} lg={8}>
+                  <Col md={9} sm={9} lg={9}>
                     <FastField name="destination">
                       {({ field, form }) => (
                         <div style={{ maxWidth: 600 }}>
@@ -211,10 +211,10 @@ const ModalOverrideServiceFee = (props) => {
                   </Col>
                 </Form.Group>
                 <Form.Group as={Row} className="mb-3">
-                  <Form.Label column md={4} sm={4} lg={4}>
+                  <Form.Label column md={3} sm={3} lg={3}>
                     Airline Service Type
                   </Form.Label>
-                  <Col md={8} sm={8} lg={8}>
+                  <Col md={9} sm={9} lg={9}>
                     <div style={{ maxWidth: 600 }}>
                       <FastField name="airline_service_type">
                         {({ field, form }) => (
@@ -250,10 +250,10 @@ const ModalOverrideServiceFee = (props) => {
                   </Col>
                 </Form.Group>
                 <Form.Group as={Row} className="mb-3">
-                  <Form.Label column md={4} sm={4} lg={4}>
+                  <Form.Label column md={3} sm={3} lg={3}>
                     Specified Airline
                   </Form.Label>
-                  <Col md={8} sm={8} lg={8}>
+                  <Col md={9} sm={9} lg={9}>
                     <FastField name="specified_airline">
                       {({ field, form }) => (
                         <div style={{ maxWidth: 600 }}>
@@ -287,10 +287,10 @@ const ModalOverrideServiceFee = (props) => {
                   </Col>
                 </Form.Group>
                 <Form.Group as={Row} className="mb-3">
-                  <Form.Label column md={4} sm={4} lg={4}>
+                  <Form.Label column md={3} sm={3} lg={3}>
                     Specified Source
                   </Form.Label>
-                  <Col md={8} sm={8} lg={8}>
+                  <Col md={9} sm={9} lg={9}>
                     <FastField name="specified_source">
                       {({ field, form }) => (
                         <div style={{ maxWidth: 600 }}>
