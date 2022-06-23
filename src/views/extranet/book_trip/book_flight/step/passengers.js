@@ -10,12 +10,15 @@ import React, { useEffect, useState } from 'react'
 import PopupConfirmation from './components/flight-step-confirmation-modal'
 import moment from 'moment'
 import ThousandSeparator from 'lib/thousand-separator'
+import { encrypt } from "lib/bb-crypt"
 
 function Passenger({handleSelectTab}) {
 	const [Flight, setFlight] = useState({})
 	const [show, setShow] = useState(false)
 	const [showSelectSeats, setShowSelectSeats] = useState(false)
 	const [showAddOns, setShowAddOns] = useState(false)
+	const [passenger1, setPassenger1] = useState("Mrs. Sienna Bright")
+	const [passenger2, setPassenger2] = useState("Ms. Marry Bright")
 
 	const handleClose = () => setShow(false)
 	const handleShow = () => setShow(true)
@@ -182,7 +185,11 @@ function Passenger({handleSelectTab}) {
 									<Col sm={5}>
 											<Form.Group>
 													<Form.Label>CONTACT NAME</Form.Label>
-													<Form.Control as="select">
+													<Form.Control as="select"
+														onChange={(e)=> {
+															eventKey === 1 ? setPassenger1(e.target.value) : setPassenger2(e.target.value)
+														}}
+													>
 															<option>Mrs. Sienna Bright</option>
 															<option>Ms. Marry Bright</option>
 													</Form.Control>
@@ -298,6 +305,9 @@ function Passenger({handleSelectTab}) {
 				<Button 
 				onClick={(e) => { 
 						setShowSelectSeats(true)
+						let passengers = JSON.stringify([passenger1,passenger2])
+        		passengers = encrypt(passengers)
+						localStorage.setItem("psg", passengers)
 				}}
 				className="btn-flight-select mr-3"
 				>

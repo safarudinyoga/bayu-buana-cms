@@ -2,16 +2,22 @@ import React, {useState, useEffect} from "react"
 import { Col, Row, Card, Form, Button, Alert, Accordion, Modal } from 'react-bootstrap'
 import moment from 'moment'
 import ThousandSeparator from 'lib/thousand-separator'
+import { decrypt } from "lib/bb-crypt"
 
 const Review = ({handleSelectTab}) => {
 
 
 	const [Flight, setFlight] = useState({})
+  const [Passengers, setPassengers] = useState([])
 	const [show, setShow] = useState(false)
 	const handleShow = () => setShow(true)
   
   useEffect(async() => {
 		let selectedFlight = localStorage.getItem("selectedFlight")
+		let passengers = localStorage.getItem("psg")
+    passengers = decrypt(passengers)
+    passengers = JSON.parse(passengers)
+    setPassengers(passengers)
 		if(selectedFlight) {
 			selectedFlight = JSON.parse(selectedFlight)
 			setFlight(selectedFlight)
@@ -113,8 +119,8 @@ const Review = ({handleSelectTab}) => {
       <div className={`d-${footer ? "block": "none"} flight-detail-footer pt-3 text-bold`}>
         <Row>
           <Col sm={3}>
-            <p>Mrs. Sienna Bright</p>
-            <p>Ms. Marry Bright</p>
+            <p>{Passengers[0]}</p>
+            <p>{Passengers[1]}</p>
           </Col>
           <Col style={{maxWidth: 145}}sm={{span: 2, offset: 5}}>
             <p className="font-weight-normal">CGK-HKG-CGK</p>
