@@ -579,11 +579,11 @@ const HotelForm = (props) => {
             <Card>
               <Card.Body>
                 <Form.Group as={Row} className="mb-3">
-                  <Form.Label column md={2}>
+                  <Form.Label column md={3}>
                     Preset Name
                     <span className="form-label-required">*</span>
                   </Form.Label>
-                  <Col sm={5}>
+                  <Col md={9}>
                     <FastField name="service_fee_category_name">
                       {({ field, form }) => (
                         <>
@@ -613,10 +613,10 @@ const HotelForm = (props) => {
                   </Col>
                 </Form.Group>
                 <Form.Group as={Row} className="mb-3">
-                  <Form.Label column md={2}>
+                  <Form.Label column md={3}>
                     Description
                   </Form.Label>
-                  <Col sm={10}>
+                  <Col md={9}>
                     <FastField name="description">
                       {({ field, form }) => (
                         <>
@@ -685,10 +685,10 @@ const HotelForm = (props) => {
                   errors={errors}
                 />
                 {isView ? (
-                  <h3 className="card-heading">.</h3>
+                  <h3 className="card-heading">&nbsp;</h3>
                 ) : (
                   <>
-                    <h3 className="card-heading">.</h3>
+                    <h3 className="card-heading">&nbsp;</h3>
                     <Col sm={12}>
                       <div style={{ padding: "0 15px 15px 15px" }}>
                         <button
