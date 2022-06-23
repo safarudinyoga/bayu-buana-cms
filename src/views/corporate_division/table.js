@@ -27,10 +27,11 @@ export default function CorporateDivisionTable() {
     title: "Division",
     titleModal: "Division",
     baseRoute: "/master/corporate-divisions/form",
-    endpoint: "/master/divisions",
-    deleteEndpoint: "/master/batch-actions/delete/divisions",
-    activationEndpoint: "/master/batch-actions/activate/divisions",
-    deactivationEndpoint: "/master/batch-actions/deactivate/divisions",
+    endpoint: "/master/corporate-divisions",
+    deleteEndpoint: "/master/batch-actions/delete/corporate-divisions",
+    activationEndpoint: "/master/batch-actions/activate/corporate-divisions",
+    deactivationEndpoint:
+      "/master/batch-actions/deactivate/corporate-divisions",
     columns: [
       {
         title: "Code",
@@ -49,11 +50,13 @@ export default function CorporateDivisionTable() {
         data: "manager.given_name",
         render: (data, d, row) => {
           if (row.manager) {
-            return `${row.manager.given_name || ""} ${row.manager.middle_name || ""} ${row.manager.surname || ""}`
+            return `${row.manager.given_name || ""} ${
+              row.manager.middle_name || ""
+            } ${row.manager.surname || ""}`
           } else {
             return ""
           }
-        }
+        },
       },
       {
         searchable: false,
@@ -73,17 +76,17 @@ export default function CorporateDivisionTable() {
     switchStatus: true,
     infoDelete: [
       { title: "Division Code", recordName: "division_code" },
-      { title: "Division Name", recordName: "division_name" }
+      { title: "Division Name", recordName: "division_name" },
     ],
     customFilterStatus: {
       value: "",
       options: [
         { value: "1", label: "Active" },
         { value: "3", label: "Inactive" },
-      ]
+      ],
     },
     statusLabel: "Status",
-    isOpenNewTab: false
+    isOpenNewTab: false,
   })
 
   return <BBDataTable {...params} />

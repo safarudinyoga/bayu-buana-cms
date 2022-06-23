@@ -121,6 +121,43 @@ const Confirmation = () => {
     </div>
   )
 
+  const FlightRelated = () => {
+    return (
+      <>
+        <div className="mb-3 gray-list px-4">
+          <p>OTHER FLIGHT RELATED AND ADD-ONS</p>
+          <p>Total Add Ons IDR 1,000,000</p>
+        </div>
+        <div className="px-4">
+            <p className="font-weight-bold">Mrs. Sienna Bright</p>
+          <Row>
+            <Col className="d-flex">
+              <div className="px-3">
+                <p>CGK-HKG</p>
+                <p>CGK-HKG</p>
+                <p>CGK-SIN</p>
+              </div>
+              <div>
+                <p>Additional Baggage 5Kg Departing</p>
+                <p>Travel Insurance</p>
+                <p>Seat 42J, 42K</p>
+              </div>
+            </Col>
+            <Col className="text-right" style={{maxWidth: 145}}  sm={2}>
+              <p>IDR 500,000</p>
+              <p>IDR 160,000</p>
+              <p>IDR 650,000</p>
+            </Col>
+          </Row>
+          <div className="d-flex justify-content-end">
+            <p style={{width:145}} className="text-16 font-weight-bold pl-1">Sub-total</p>
+            <p style={{width:145}} className="text-16 font-weight-bold text-right">IDR 6,589,123</p>
+          </div>
+        </div>
+      </>
+    )
+  }
+
 
   return (
     <div className="pt-4">
@@ -156,12 +193,13 @@ const Confirmation = () => {
                 <p>PRICE PER-TRAVELLER (Roundtrip)</p>
                 <p>IDR 3,294,700</p>
               </div>
-
               <div className="px-4">
                 <FlightDetail/>
                 <div className='border'></div>
                 <FlightDetail footer={true}/>
               </div>
+
+              <FlightRelated/>
 
             </Card.Body>
           </Card>
@@ -176,7 +214,7 @@ const Confirmation = () => {
 
           <Card>
             <Card.Body>
-              <h5>RESERVATION ADDITIONAL INFORMATION</h5>
+              <h6>RESERVATION ADDITIONAL INFORMATION</h6>
               <p>Project Name: Project Name Sample</p>
               <p>Project: Project1</p>
               <p>Cost Center: Manufacture</p>
@@ -184,15 +222,15 @@ const Confirmation = () => {
             </Card.Body>
           </Card>
 
-          <div className="d-flex">
-            <p>Change on Trip Plane</p>
+          <div className="d-flex align-items-center">
+            <p className="m-0">Change on Trip Planes</p>
             <Button 
               onClick={(e) => {}}
               className="btn-flight-select mx-3"
             >
                 Request for change
             </Button>
-            <p className="text-danger">Fees May Apply</p>
+            <p className="m-0 text-danger">Fees May Apply</p>
           </div>
 
         </Col>

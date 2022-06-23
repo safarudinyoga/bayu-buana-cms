@@ -1,13 +1,41 @@
 import React, {useState, useEffect} from "react"
 import { Col, Row, Card, Form, Button, Alert, Accordion, Modal } from 'react-bootstrap'
-
+import moment from 'moment'
+import ThousandSeparator from 'lib/thousand-separator'
 const ex_logo = 'https://ik.imagekit.io/tvlk/image/imageResource/2021/07/12/1626063527483-f24d3eae611b51022ab0d1fc1457c820.png?tr=q-75,w-28'
 
 const Review = ({handleSelectTab}) => {
 
 
+	const [Flight, setFlight] = useState({})
 	const [show, setShow] = useState(false)
 	const handleShow = () => setShow(true)
+  useEffect(async() => {
+		let selectedFlight = localStorage.getItem("selectedFlight")
+		if(selectedFlight) {
+			selectedFlight = JSON.parse(selectedFlight)
+			setFlight(selectedFlight)
+		}
+	}, [])
+
+  const FareRulesModal = () => (
+		<Modal show={show} onHide={() => setShow(false)} centered>
+			<Modal.Header closeButton>
+				<Modal.Title>
+					FARE RULES DETAIL
+				</Modal.Title>
+			</Modal.Header>
+			<Modal.Body>
+				<ul>
+					<li>Cancelation allow with fee</li>
+					<li>Baggage allow up to 30 kg</li>
+					<li>Exchange Before Flight (free)</li>
+					<li>Exchange After Flight (with fee $100)</li>
+					<li>Refund Before Flight (with fee $90)</li>
+				</ul>
+			</Modal.Body>
+		</Modal>
+	)
 
   const FlightDetail = ({footer}) => (
     <div>
@@ -73,25 +101,6 @@ const Review = ({handleSelectTab}) => {
     </div>
   )
 
-  const FareRulesModal = () => (
-		<Modal show={show} onHide={() => setShow(false)} centered>
-			<Modal.Header closeButton>
-				<Modal.Title>
-					FARE RULES DETAIL
-				</Modal.Title>
-			</Modal.Header>
-			<Modal.Body>
-				<ul>
-					<li>Cancelation allow with fee</li>
-					<li>Baggage allow up to 30 kg</li>
-					<li>Exchange Before Flight (free)</li>
-					<li>Exchange After Flight (with fee $100)</li>
-					<li>Refund Before Flight (with fee $90)</li>
-				</ul>
-			</Modal.Body>
-		</Modal>
-	)
-
   const FlightInfo = () => (
 		<Row className='mt-3'>
 			<Col sm={6} className={"d-flex justify-content-between align-items-center pb-3"}>
@@ -156,45 +165,6 @@ const Review = ({handleSelectTab}) => {
           <FlightDetail/>
           <div className='border'></div>
           <FlightDetail footer={true}/>
-        </Card.Body>
-      </Card>
-    )
-  }
-
-  const FlightRelated = () => {
-    return (
-      <Card>
-        <Card.Header>
-          <div className="d-flex justify-content-between">
-            <p className="m-0 font-weight-bold">OTHER FLIGHT RELATED AND ADD-ONS</p>
-            <p className="m-0 font-weight-normal">Total Add Ons IDR 1,000,000</p>
-          </div>
-        </Card.Header>
-        <Card.Body>
-            <p className="font-weight-bold">Mrs. Sienna Bright</p>
-          <Row>
-            <Col className="d-flex">
-              <div className="px-3">
-                <p>CGK-HKG</p>
-                <p>CGK-HKG</p>
-                <p>CGK-SIN</p>
-              </div>
-              <div>
-                <p>Additional Baggage 5Kg Departing</p>
-                <p>Travel Insurance</p>
-                <p>Seat 42J, 42K</p>
-              </div>
-            </Col>
-            <Col className="text-right" style={{maxWidth: 145}}  sm={2}>
-              <p>IDR 500,000</p>
-              <p>IDR 160,000</p>
-              <p>IDR 650,000</p>
-            </Col>
-          </Row>
-          <div className="d-flex justify-content-end">
-            <p style={{width:145}} className="text-16 font-weight-bold pl-1">Sub-total</p>
-            <p style={{width:145}} className="text-16 font-weight-bold text-right">IDR 6,589,123</p>
-          </div>
         </Card.Body>
       </Card>
     )
@@ -266,7 +236,6 @@ const Review = ({handleSelectTab}) => {
     <div className="pt-4">
       <p className='trip-txt-header pl-2'>Review For Booking</p>
       <Flights/>
-      <FlightRelated/>
 
       <Row className="mx-0 mb-4" style={{borderRadius: 4, backgroundColor: "#F2F2F2", borderColor: "#DCDCDC"}}>
         <Col className="px-3">
