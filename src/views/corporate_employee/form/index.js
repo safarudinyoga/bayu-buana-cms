@@ -135,13 +135,17 @@ const UserProfile = (props) => {
           setForm({...Data, ...form, ...values})
           if(finishStep < 2) setStep(2)
         } else if(tabKey === "employment") {
+          setTabKey("passport")
+          setForm({...Data, ...form, ...values})
+          if(finishStep < 3) setStep(3)
+        } else if(tabKey === "passport") {
           setTabKey("frequent-traveler-programs")
           setForm({...Data, ...form, ...values})
-          if(finishStep < 2) setStep(2)
+          if(finishStep < 4) setStep(4)
         } else if(tabKey === "frequent-traveler-programs") {
           setTabKey("traveler-setting")
           setForm({...Data, ...form, ...values})
-          if(finishStep < 2) setStep(2)
+          if(finishStep < 5) setStep(5)
         } else {
           setForm({...Data, ...form, ...values})
           await onSave({...Data, ...form, ...values})
@@ -178,7 +182,7 @@ const UserProfile = (props) => {
 
       if (!formId) {
         //ProsesCreateData
-          let res = await api.post("master/employees", values)
+          let res = await api.post("master/corporate-employee", values)
           openSnackbar(
             `Record 'Employee Number: ${
               values.employee_number
@@ -193,7 +197,7 @@ const UserProfile = (props) => {
           history.goBack()
       } else {
         //ProsesUpdateData
-          let res = await api.put(`master/employees/${formId}`, values)
+          let res = await api.put(`master/corporate-employee/${formId}`, values)
           openSnackbar(
             `Record 'Employee Number: ${
               values.employee_number
@@ -230,7 +234,10 @@ const UserProfile = (props) => {
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
-                    <Nav.Link eventKey="emergency-contacts" disabled={finishStep < 1 && !Data?.id} >
+                    <Nav.Link 
+                      eventKey="emergency-contacts" 
+                      // disabled={finishStep < 1 && !Data?.id} 
+                    >
                       <div>
                         <ReactSVG src="/img/icons/emergency-contacts.svg" />
                         <span>Emergency Contacts</span>
@@ -238,7 +245,10 @@ const UserProfile = (props) => {
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
-                    <Nav.Link eventKey="employment" disabled={finishStep < 2 && !Data?.id}>
+                    <Nav.Link 
+                      eventKey="employment" 
+                      // disabled={finishStep < 2 && !Data?.id}
+                    >
                       <div>
                         <ReactSVG src="/img/icons/employment.svg" />
                         <span>Employment</span>
@@ -246,7 +256,10 @@ const UserProfile = (props) => {
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
-                    <Nav.Link eventKey="passport" disabled={finishStep < 3 && !Data?.id}>
+                    <Nav.Link 
+                      eventKey="passport" 
+                      // disabled={finishStep < 3 && !Data?.id}
+                    >
                       <div>
                         <ReactSVG src="/img/icons/employment.svg" />
                         <span>Passport</span>
@@ -254,7 +267,10 @@ const UserProfile = (props) => {
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
-                    <Nav.Link eventKey="frequent-traveler-programs" disabled={finishStep < 4 && !Data?.id}>
+                    <Nav.Link 
+                      eventKey="frequent-traveler-programs" 
+                      // disabled={finishStep < 4 && !Data?.id}
+                    >
                       <div>
                         <ReactSVG src="/img/icons/employment.svg" />
                         <span>Frequent Traveler Programs</span>
@@ -262,7 +278,10 @@ const UserProfile = (props) => {
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
-                    <Nav.Link eventKey="traveler-setting" disabled={finishStep < 5 && !Data?.id}>
+                    <Nav.Link 
+                      eventKey="traveler-setting" 
+                      // disabled={finishStep < 5 && !Data?.id}
+                    >
                       <div>
                         <ReactSVG src="/img/icons/employment.svg" />
                         <span>Traveler Setting</span>

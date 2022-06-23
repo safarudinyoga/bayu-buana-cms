@@ -85,101 +85,101 @@ const GeneralInformation = (props) => {
   const phoneRegExp = /^\d+$/
 
   // Schema for yup
-  const validationSchema = Yup.object().shape({
-    // General Information
-    title: Yup.object().required("Title is required."),
-    firstName: Yup.string().required("Employee First Name is required."),
-    middleName: Yup.string(),
-    lastName: Yup.string().required("Employee Last Name is required."),
-    birth_date: Yup.array().min(3, "Date of Birth is required."),
-    gender: Yup.string().required("Gender is required."),
-    idCardNumber: Yup.string(),
+  // const validationSchema = Yup.object().shape({
+  //   // General Information
+  //   title: Yup.object().required("Title is required."),
+  //   firstName: Yup.string().required("Employee First Name is required."),
+  //   middleName: Yup.string(),
+  //   lastName: Yup.string().required("Employee Last Name is required."),
+  //   birth_date: Yup.array().min(3, "Date of Birth is required."),
+  //   gender: Yup.string().required("Gender is required."),
+  //   idCardNumber: Yup.string(),
 
-    // Contacts
+  //   // Contacts
 
-    homePhone: Yup.string()
-          .required("Home Phone is required.")
-          .matches(phoneRegExp, 'Home Phone is not valid'),
-    mobilePhone: Yup.string()
-          .required("Mobile Phone is required.")
-          .matches(phoneRegExp, 'Mobile Phone is not valid'),
-    email: Yup.string()
-      .email("Email is not valid.")
-      .required("Email is required.")
-      .test(
-        "Unique Email Contacts",
-        "Email already exists", // <- key, message
-        (value) => {
-          let formId = props?.employeeData?.id
-            if (formId === undefined) {
-              return new Promise((resolve, reject) => {
-                axios
-                  .get(
-                    `${env.API_URL}/master/employees?filters=["contact.email","like","${value}"]`,
-                  )
-                  .then((res) => {
-                    resolve(
-                      !res.data.items.find(
-                        (e) =>
-                          e.contact.email.toUpperCase() === value.toUpperCase(),
-                      ),
-                    )
-                  })
-                  .catch((res, error) => {
-                    resolve(
-                      res.data.items.find(
-                        (e) =>
-                          e.contact.email.toUpperCase() === value.toUpperCase(),
-                      ),
-                    )
-                  })
-              })
-            } else {
-              return new Promise((resolve, reject) => {
-                axios
-                  .get(
-                    `${env.API_URL}/master/employees?filters=["contact.email","like","${value}"]`,
-                  )
-                  .then((res) => {
-                    resolve(
-                      !res.data.items.find(
-                        (e) =>
-                          e.contact.email.toUpperCase() === value.toUpperCase(),
-                      ) || value === initialForm.email,
-                    )
-                  })
-                  .catch((res, error) => {
-                    resolve(
-                      res.data.items.find(
-                        (e) =>
-                          e.contact.email.toUpperCase() === value.toUpperCase(),
-                      ),
-                    )
-                  })
-              })
-            }
-        },
-      ),
-    otherEmail: Yup.string().email("Email is not valid."),
+  //   homePhone: Yup.string()
+  //         .required("Home Phone is required.")
+  //         .matches(phoneRegExp, 'Home Phone is not valid'),
+  //   mobilePhone: Yup.string()
+  //         .required("Mobile Phone is required.")
+  //         .matches(phoneRegExp, 'Mobile Phone is not valid'),
+  //   email: Yup.string()
+  //     .email("Email is not valid.")
+  //     .required("Email is required.")
+  //     .test(
+  //       "Unique Email Contacts",
+  //       "Email already exists", // <- key, message
+  //       (value) => {
+  //         let formId = props?.employeeData?.id
+  //           if (formId === undefined) {
+  //             return new Promise((resolve, reject) => {
+  //               axios
+  //                 .get(
+  //                   `${env.API_URL}/master/employees?filters=["contact.email","like","${value}"]`,
+  //                 )
+  //                 .then((res) => {
+  //                   resolve(
+  //                     !res.data.items.find(
+  //                       (e) =>
+  //                         e.contact.email.toUpperCase() === value.toUpperCase(),
+  //                     ),
+  //                   )
+  //                 })
+  //                 .catch((res, error) => {
+  //                   resolve(
+  //                     res.data.items.find(
+  //                       (e) =>
+  //                         e.contact.email.toUpperCase() === value.toUpperCase(),
+  //                     ),
+  //                   )
+  //                 })
+  //             })
+  //           } else {
+  //             return new Promise((resolve, reject) => {
+  //               axios
+  //                 .get(
+  //                   `${env.API_URL}/master/employees?filters=["contact.email","like","${value}"]`,
+  //                 )
+  //                 .then((res) => {
+  //                   resolve(
+  //                     !res.data.items.find(
+  //                       (e) =>
+  //                         e.contact.email.toUpperCase() === value.toUpperCase(),
+  //                     ) || value === initialForm.email,
+  //                   )
+  //                 })
+  //                 .catch((res, error) => {
+  //                   resolve(
+  //                     res.data.items.find(
+  //                       (e) =>
+  //                         e.contact.email.toUpperCase() === value.toUpperCase(),
+  //                     ),
+  //                   )
+  //                 })
+  //             })
+  //           }
+  //       },
+  //     ),
+  //   otherEmail: Yup.string().email("Email is not valid."),
 
-    // Current Address
-    currentAddress: Yup.string(),
-    currentCountry: Yup.object().required("Country is required."),
-    currentProvince: Yup.object().nullable(true),
-    currentCity: Yup.object().nullable(true),
-    currentZipCode: Yup.string(),
+  //   // Current Address
+  //   currentAddress: Yup.string(),
+  //   currentCountry: Yup.object().required("Country is required."),
+  //   currentProvince: Yup.object().nullable(true),
+  //   currentCity: Yup.object().nullable(true),
+  //   currentZipCode: Yup.string(),
 
-    // Permanent Address
-    sameAddress: Yup.boolean(),
-    permanentAddress: Yup.string(),
-    permanentCountry: Yup.object().when("sameAddress", {
-      is: false,
-      then: Yup.object().required("Country is required."),
-    }),
-    permanentProvince: Yup.object().nullable(true),
-    permanentCity: Yup.object().nullable(true),
-    permanentZipCode: Yup.string(),
-  })
+  //   // Permanent Address
+  //   sameAddress: Yup.boolean(),
+  //   permanentAddress: Yup.string(),
+  //   permanentCountry: Yup.object().when("sameAddress", {
+  //     is: false,
+  //     then: Yup.object().required("Country is required."),
+  //   }),
+  //   permanentProvince: Yup.object().nullable(true),
+  //   permanentCity: Yup.object().nullable(true),
+  //   permanentZipCode: Yup.string(),
+  // })
 
   const resetDate = (date, months=defmonths, years=defyears) => {
     const today = new Date()
@@ -640,7 +640,7 @@ const GeneralInformation = (props) => {
     <>
       <Formik
         initialValues={initialForm}
-        validationSchema={validationSchema}
+        // validationSchema={validationSchema}
         validator={() => ({})}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
 
@@ -887,7 +887,7 @@ const GeneralInformation = (props) => {
                     <Col sm={9} md={12} lg={9}>
                     <FormikControl
                         control="selectAsync"
-                        required={isView ? "" : "label-required"}
+                        // required={isView ? "" : "label-required"}
                         label="Title"
                         name="title"
                         placeholder={values.name_prefixName || "Mr."}
@@ -907,50 +907,6 @@ const GeneralInformation = (props) => {
                         }
                         isDisabled={isView}
                       />
-                      {/* <Form.Group as={Row} className="form-group">
-                        <Form.Label column md={3} lg={4}>
-                          Title <span className="form-label-required">*</span>
-                        </Form.Label>
-                        <Col md={9} lg={8}>
-                          <FastField name="title">
-                            {({ field, form }) => (
-                              <>
-                                <div style={{ width: 90 }}>
-                                  <Select
-                                    {...field}
-                                    options={selectNamePrefix}
-                                    isDisabled={isView}
-                                    defaultValue={values.title}
-                                    className={`react-select ${
-                                      form.touched.title && form.errors.title
-                                        ? "is-invalid"
-                                        : null
-                                    }`}
-                                    onChange={(v) => {
-                                      setFieldValue("title", v)
-                                    }}
-                                    components={
-                                      isView
-                                        ? {
-                                            DropdownIndicator: () => null,
-                                            IndicatorSeparator: () => null,
-                                          }
-                                        : null
-                                    }
-                                  />
-                                  {form.touched.title && form.errors.title && (
-                                    <Form.Control.Feedback type="invalid">
-                                      {form.touched.title
-                                        ? form.errors.title
-                                        : null}
-                                    </Form.Control.Feedback>
-                                  )}
-                                </div>
-                              </>
-                            )}
-                          </FastField>
-                        </Col>
-                      </Form.Group> */}
                       <Form.Group as={Row} className="form-group">
                         <Form.Label column md={3} lg={4}>
                           First Name{" "}
