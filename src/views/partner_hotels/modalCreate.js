@@ -31,7 +31,6 @@ import "react-dropzone-uploader/dist/styles.css"
 const endpoint = "/integration-partner-hotels"
 
 const ModalCreate = (props) => {
-  console.log(props);
   const isView = useQuery().get("action") === "view"
   let dispatch = useDispatch()
 
@@ -139,7 +138,6 @@ const ModalCreate = (props) => {
 
   const save = async (e, value) => {
       e.preventDefault()
-      console.log(value, "masuk save");
       const payload = {
         "description": "esse eu laboris do ullamco",
         "hotel_id": "ebfe7458-2d01-fe1e-0dd1-625270611b41",
@@ -158,6 +156,7 @@ const ModalCreate = (props) => {
         "room_view_type_id": "urn:uuid:5a8fe6c1-e625-aa8e-1db9-84bff6383356",
         "segment_category_id": "db7c7f00-5273-2d33-9cf4-6dfe6c1bdeac"
       };
+      console.log(payload, 'payload');
       return new Promise((resolve, rejecet) => {
         axios.post(api.env.endpoint("/master/room-types"), payload)
             .then((res) => {
@@ -185,6 +184,7 @@ const ModalCreate = (props) => {
         validationSchema={validationSchemaModalAddMap}
         validateOnChange={false}
         // onSubmit={async (values, { setSubmitting, resetForm }) => {
+        //   console.log(values, 'sini ya<<<')
         // }}
         onSubmit={save}
       >
