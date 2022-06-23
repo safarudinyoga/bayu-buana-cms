@@ -185,16 +185,20 @@ function BookFlight() {
     <div className='mt-2'>
 		<Row className='mb-3'>
 			<Col sm={5}>
-				<p>{flight.origin.city.toUpperCase()} ({flight.origin.code}) TO {flight.destination.city.toUpperCase()} ({flight.destination.code}) - {flight.trip}</p>
-				<Row className='align-items-center'>
-					<Col sm={6}>
-						<p className='mb-0'>{flight.departure_date.toUpperCase()} - {flight.return_date.toUpperCase()}</p>
-					</Col>
-					<Col sm={2}> 2 Adults</Col>
-					<Col sm={4}>
-						<Button variant="secondary" className='px-4' onClick={() => setShowFlightModal(true)}>Modify</Button>
-					</Col>
-				</Row>
+			{
+				tabKey === "select-flight" && <>
+					<p>{flight.origin.city.toUpperCase()} ({flight.origin.code}) TO {flight.destination.city.toUpperCase()} ({flight.destination.code}) - {flight.trip}</p>
+					<Row className='align-items-center'>
+						<Col sm={6}>
+							<p className='mb-0'>{flight.departure_date.toUpperCase()} - {flight.return_date.toUpperCase()}</p>
+						</Col>
+						<Col sm={2}> 2 Adults</Col>
+						<Col sm={4}>
+							<Button variant="secondary" className='px-4' onClick={() => setShowFlightModal(true)}>Modify</Button>
+						</Col>
+					</Row>
+				</>
+			}
 
 			</Col>
 			{/* Select currency and language */}
