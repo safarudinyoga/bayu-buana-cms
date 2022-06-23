@@ -7,9 +7,11 @@ import DatePicker from 'react-multi-date-picker';
 import FlightPref from './flight_pref';
 import { ReactSVG } from "react-svg"
 import Travellers from './travellers';
+import { useHistory } from 'react-router';
 
 const MultiTrip = (props) => {
   const { airports, handleTrip  } = props
+  const history = useHistory()
   
   const initialValues = {
     trips: [
@@ -42,6 +44,7 @@ const MultiTrip = (props) => {
   })
 
   const onSubmit = async (values, a) => {
+    history.push("/extranet/book-trip/book-flight")
     console.log("Values", values)
   }
 

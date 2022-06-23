@@ -1,15 +1,20 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Form, Button } from 'react-bootstrap'
 import { ReactSVG } from 'react-svg';
 import DatePicker from 'react-multi-date-picker'
 import Travellers from './travellers';
 import Routes from './routes';
-import { Formik } from 'formik';
+import { Formik, useFormikContext } from 'formik';
 import * as Yup from "yup"
 import FlightPref from './flight_pref';
+import { useHistory } from 'react-router';
 
 const Oneway = (props) => {
   const { airports, multitrip, handleRemoveTrip, id, counter, handleTrip, formik } = props
+
+  const { setFieldValue } = useFormikContext()
+
+  const history = useHistory()
 
   const [departTime, setDepartTime] = useState(new Date())
 
@@ -59,8 +64,13 @@ const Oneway = (props) => {
   })
 
   const handleSearch = async (values, a) => {
+    history.push("/extranet/book-trip/book-flight")
     console.log("MASUK KE ONEWAY COMP", values)
   }
+
+  useEffect(() => {
+    setFieldValue("depart_time", departTime)
+  }, [departTime])
 
   return (
     <>
@@ -100,6 +110,7 @@ const Oneway = (props) => {
                         value={departTime}
                         onChange={(date) => {
                           setDepartTime(date)
+                          setFieldValue("depart_time",date)
                         }}
                         portal
                       />
