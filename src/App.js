@@ -247,6 +247,9 @@ import CorporateAirlineFareForm from "views/corporate_airline_fare/form"
 //corporate user profile
 import CorporateUserProfile from "views/corporate_user_profile/index"
 
+//create_user_access
+import CreateUserAccess from "views/create_user_access/table"
+
 // corporate office
 // import OfficeTable from "./views/corporate_branch_office/table"
 
@@ -834,8 +837,8 @@ const DashboardRoutes = () => {
           <CorporateUserAccessTypeForm />
         </Route>
 
-         {/* Corporate Employee */}
-         <Route exact path="/master/corporate-employee">
+        {/* Corporate Employee */}
+        <Route exact path="/master/corporate-employee">
           <CorporateEmployeeTable />
         </Route>
         <Route path="/master/corporate-employee/form/:id?">
@@ -870,6 +873,10 @@ const DashboardRoutes = () => {
         </Route>
         <Route path="/master/corporate-travel-purpose/form/:id?">
           <CorporateTravelPurposeForm />
+        </Route>
+
+        <Route exact path="/master/create-user-access">
+          <CreateUserAccess />
         </Route>
 
         {/* Corporate Airline Fare */}
