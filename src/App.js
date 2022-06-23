@@ -124,24 +124,9 @@ import FlightCommisionForm from "views/setup_flight_commision/form"
 import ExchageRateTable from "views/exchange_rate/table"
 import ExchangeRateForm from "views/exchange_rate/form"
 import ExchangeRateHistory from "views/exchange_rate/history"
-// Master Integration PartnerG
+// Master Integration Partner
 import IntegrationPartnerForm from "views/integration_partner/form/index"
 import IntegrationPartnerTable from "views/integration_partner/table"
-import IntegrationPaymentGatewayTable from "views/integration_partner/form/partner_payment_gateway/table"
-import IntegrationPaymentGatewayForm from "views/integration_partner/form/partner_payment_gateway/form"
-import IntegrationPartnerMealPlansTable from "views/integration_partner/form/partner_meal_plans/table"
-import IntegrationPartnerMealPlansForm from "views/integration_partner/form/partner_meal_plans/form"
-import IntegrationPartnerCitiesTable from "views/integration_partner_city/tabel"
-import IntegrationPartnerCabinTypesTable from "views/integration_partner_cabin/tabel"
-import IntegrationPartnerCabinsForm from "views/integration_partner_cabin/form/form"
-// import FareFamiyTabel from "views/integration_partner_cabin/tabel-fare-family"
-import IntegrationFeeTaxes from "views/partner_fee_taxes/table"
-import FeeTaxForm from "views/partner_fee_taxes/form"
-// import CreateHotel from "views/partner_hotels/form"
-import FormPartnerHotel from "views/partner_hotels/form"
-import IntegrationPartnerCountriesTable from "views/integration_partner_countries/table"
-import IntegrationPartnerCurrenciesTable from "views/integration_partner_currencies/table"
-import IntegrationPartnerCurrenciesForm from "views/integration_partner_currencies/form"
 
 // Master Manage Corporate
 import CorporateTable from "views/manage_corporate/table"
@@ -191,8 +176,6 @@ import BookTrip from "views/extranet/book_trip/book_trip"
 import BookFlight from "views/extranet/book_trip/book_flight"
 
 // import Api from "config/api"
-import IntegrationPartnerHotels from "views/partner_hotels/table"
-import IntegrationPartnerHotelSupplier from "views/partner_hotel_supplier/table"
 import BookingSetting from "views/booking_setting/table"
 import TravelAdvice from "views/travel_advice/table"
 import GeneralInformation from "views/general_information/table"
@@ -353,69 +336,8 @@ const DashboardRoutes = () => {
         <Route exact path="/master/integration-partner">
           <IntegrationPartnerTable />
         </Route>
-        <Route exact path="/master/integration-partner/partner-fee-tax">
-          <IntegrationFeeTaxes />
-        </Route>
-        <Route
-          exact
-          path="/master/integration-partner/partner-fee-tax/form/:id?"
-        >
-          <FeeTaxForm />
-        </Route>
-        <Route exact path="/master/integration-partner/partner-hotels">
-          <IntegrationPartnerHotels />
-        </Route>
-        <Route exact path="/master/integration-partner-hotels/form/:id?">
-          <FormPartnerHotel />
-        </Route>
-        <Route exact path="/master/integration-partner-hotel-supplier">
-          <IntegrationPartnerHotelSupplier />
-        </Route>
-        {/* <Route exact path="/master/integration-partner-hotels/form/:id?">
-          <FormPartnerHotel />
-        </Route> */}
         <Route path="/master/integration-partner/form/:id?">
           <IntegrationPartnerForm />
-        </Route>
-        <Route exact path="/master/integration-payment-gateway">
-          <IntegrationPaymentGatewayTable />
-        </Route>
-        <Route exact path="/master/integration-payment-gateway/form/:id?">
-          <IntegrationPaymentGatewayForm />
-        </Route>
-        <Route exact path="/master/integration-partner-meal-plans">
-          <IntegrationPartnerMealPlansTable />
-        </Route>
-        <Route exact path="/master/integration-partner-meal-plans/form/:id?">
-          <IntegrationPartnerMealPlansForm />
-        </Route>
-        <Route exact path="/master/integration-partner-cabin-types">
-          <IntegrationPartnerCabinTypesTable />
-        </Route>
-        <Route path="/master/integration-partner-cabin-types/form/:id?">
-          <IntegrationPartnerCabinsForm />
-        </Route>
-        <Route exact path="/master/integration-partner-cities">
-          <IntegrationPartnerCitiesTable />
-        </Route>
-        <Route exact path="/master/integration-partner-countries">
-          <IntegrationPartnerCountriesTable />
-        </Route>
-        <Route exact path="/master/integration-partner-currencies">
-          <IntegrationPartnerCurrenciesTable />
-        </Route>
-        <Route path="/master/integration-partner-currencies/form/:id?">
-          <IntegrationPartnerCurrenciesForm />
-        </Route>
-
-        <Route exact path="/master/integration-partner-countries">
-          <IntegrationPartnerCountriesTable />
-        </Route>
-        <Route exact path="/master/integration-partner-currencies">
-          <IntegrationPartnerCurrenciesTable />
-        </Route>
-        <Route path="/master/integration-partner-currencies/form/:id?">
-          <IntegrationPartnerCurrenciesForm />
         </Route>
         <Route exact path="/master/flight-types">
           <FlightTypeTable />
