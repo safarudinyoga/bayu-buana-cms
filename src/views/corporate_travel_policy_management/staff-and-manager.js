@@ -71,11 +71,13 @@ const StaffAndManager = (props) => {
             &nbsp;are under this policy class</span>
             </div>
             <Card>
+                <div className="policy-title"><h5>FLIGHTS POLICY</h5></div>
                 <Card.Body>
                 <FlightPolicyDataTable />
                 </Card.Body>
             </Card>
             <Card>
+                <div className="policy-title"><h5>HOTELS</h5></div>
                 <Card.Body>
                     <HotelPolicyDataTable />
                 </Card.Body>
