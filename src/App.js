@@ -192,8 +192,8 @@ import TravelPolicyClass from "views/travel-policy-class/table"
 import TravelPolicyClassForm from "views/travel-policy-class/form"
 
 // Job Title Corporate
-import JobTitleCorporateForm from "./views/job_title_corporate/form"
-import JobTitleCorporateTable from "./views/job_title_corporate/table"
+import JobTitleCorporateForm from "./views/corporate_job_title/form"
+import JobTitleCorporateTable from "./views/corporate_job_title/table"
 
 // Master Corporate Divisions
 import CorporateDivisionTable from "views/corporate_division/table"
