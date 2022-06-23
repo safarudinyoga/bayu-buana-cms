@@ -10,8 +10,6 @@ import shieldIC from 'assets/icons/shield.svg'
 import moment from 'moment'
 import ThousandSeparator from 'lib/thousand-separator'
 
-const ex_logo = 'https://ik.imagekit.io/tvlk/image/imageResource/2021/07/12/1626063527483-f24d3eae611b51022ab0d1fc1457c820.png?tr=q-75,w-28'
-
 function FlightCard({data, handleSelectTab, tripType}) {
   const dispatch = useDispatch()
 	const [Flight, setFlight] = useState({})
@@ -120,9 +118,9 @@ function FlightCard({data, handleSelectTab, tripType}) {
 				
 				<p>IDR <b>{ThousandSeparator(fares[0]?.price)}</b></p>
 				<p className='flight-type'>{fares[0]?.trip_type_name}</p>
-					{/* (!fullCondition && tripType !== "SQ") && */}
+					{/* (!fullCondition) && */}
 				{
-					(!fullCondition) &&
+					(!fullCondition && tripType !== "SQ") &&
 						<Button 
 						onClick={(e) => { 
 							e.stopPropagation();
@@ -138,11 +136,24 @@ function FlightCard({data, handleSelectTab, tripType}) {
 					</>
 				}
 				<div className='pt-4'>
-					{fares[0]?.available_seats <= 2 && <p className='rest-seat'>Only 2 seat left</p>}
+					{fares[0]?.available_seats <= 2 && <p className='rest-seat'>Only {fares[0].available_seats} seat left</p>}
 				</div>
 				<i className={`fas fa-angle-${fullCondition ? "up" : "down"}`}></i>
 			</Col>
 		)
+	}
+	const onSelectFlight = (e, fare) => { 
+		e.stopPropagation();
+		let selectedFlight = {
+			airlines: Flight.airlines,
+			estimation: Flight.estimation,
+			fare: {
+				cabin_name: selectedCabin.name,
+				...fare
+			}
+		}
+		localStorage.setItem("selectedFlight", JSON.stringify(selectedFlight))
+		handleSelectTab("passengers")
 	}
 
 
@@ -178,16 +189,100 @@ function FlightCard({data, handleSelectTab, tripType}) {
 			{/* FULL FARE CONDITIONS */}
 			{
 				fullCondition 
-				? selectedCabin !== null
+				? selectedCabin !== null && selectedCabin.name === "ECONOMY"
 				? (
-					<div>
-						ya
-					</div>
+					<>
+						<Row className='m-0'>
+							<Col className='px-3 py-2 text-center bg-header-grey'>Fare Conditions</Col>
+							{
+							selectedCabin.fares.map((fare, idx) => (
+								<Col className={`px-3 py-2 text-center bg-header-green-${idx+1}`} key={idx}>{fare.fare_name}</Col>
+							))
+							}
+						</Row>
+						<Row className='m-0'>
+							<Col className='p-3 border fare-section'>
+								<div className=''>
+									<p className='text-bold'>Baggage</p>
+									<p className='text-bold'>Seat Selection</p>
+								</div>
+							</Col>
+							{
+								selectedCabin.fares.map((fare, idx) => (
+									<Col className='p-3 border fare-section' key={idx}>
+										<p>{fare.bagage_max_kg}kg</p>
+										<p>{fare.seat_selection_fee > 0
+											?	`from ${fare.currecy_code} ${fare.seat_selection_fee}`
+											: fare.seat_selection_types.join(" & ")
+										}</p>
+									</Col>
+								))
+							}
+						</Row>
+						<Row className='m-0'>
+							<Col className='p-3 border fare-section'>
+								<div>
+									<p className='text-bold'>Earn KrisFlyer miles</p>
+									<p className='text-bold'>Upgrade with miles</p>
+								</div>
+							</Col>
+							{
+								selectedCabin.fares.map((fare, idx) => (
+									<Col className='p-3 border fare-section' key={idx}>
+										<p>{fare.kris_flyer_miles_percentage}%</p>
+										<p>{fare.upgrade_miles_allowed 
+											?	"Allowed"
+											: "Not Allowed"
+										}</p>
+									</Col>
+								))
+							}
+						</Row>
+						<Row className='m-0'>
+							<Col className='p-3 border fare-section'>
+								<div className=''>
+									<p className='text-bold'>Cancellation</p>
+									<p className='text-bold'>Booking Change</p>
+									<p className='text-bold'>No Show</p>
+								</div>
+							</Col>
+							{
+								selectedCabin.fares.map((fare, idx) => (
+									<Col className='p-3 border fare-section' key={idx}>
+										<p>{fare.cancelation_allowed 
+											?	"Allowed"
+											: "Not Allowed"
+										}</p>
+										<p>{fare.change_booking_before || "-"}</p>
+										<p>{fare.no_show_fee}</p>
+									</Col>
+								))
+							}
+						</Row>
+						<Row className='m-0'>
+							<Col className='p-3 border fare-section'>
+							</Col>
+							{
+								selectedCabin.fares.map((fare, idx) => (
+									<Col className='p-3 border fare-section d-flex flex-column align-content-center align-items-center ' key={idx}>
+										<p>{fare.currency_code} <b>{ThousandSeparator(fare.price)}</b></p>
+										<p className='flight-type'>{fare.trip_type_name}</p>
+										<Button 
+											onClick={(e) => onSelectFlight(e, fare)}
+											className="btn-flight-select"
+										>Select
+										</Button>
+										<p className='rest-seat'>{fare.available_seats <= 2 ? `only ${fare.available_seats} seat left` : ""}</p>
+									</Col>
+								))
+							}
+						</Row>
+					</>
 				)
 				: (
 					<div className='full-conditions'>
-						<div className='full-conditions-header'>
-							<p>Full Fare Conditions</p>
+						<div className={`full-conditions-header ${selectedCabin.name === "PREMIUM ECONOMY" &&"bg-header-dark"}`}>
+							<p>{selectedCabin.name === "PREMIUM ECONOMY" ? "Travel policy - most compliant" : "Full Fare Conditions"}</p>
 						</div>
 						<div className='full-conditions-content'>
 							<Row>
@@ -198,7 +293,7 @@ function FlightCard({data, handleSelectTab, tripType}) {
 												<p><i className="fas fa-suitcase mr-1"></i> Baggage</p>
 											</Col>
 											<Col>
-												<p>20 kg</p>
+												<p>{selectedCabin.fares[0].bagage_max_kg} kg</p>
 											</Col>
 										</Row>
 										<Row>
@@ -206,7 +301,12 @@ function FlightCard({data, handleSelectTab, tripType}) {
 												<p><i className="fas fa-suitcase mr-1"></i> Seat Selection</p>
 											</Col>
 											<Col>
-												<p>Complimentary</p>
+												<p>
+												{selectedCabin.fares[0].seat_selection_fee > 0
+													?	`from ${selectedCabin.fares[0].currecy_code} ${selectedCabin.fares[0].seat_selection_fee}`
+													: selectedCabin.fares[0].seat_selection_types.join(" & ")
+												}
+												</p>
 											</Col>
 										</Row>
 										<Row>
@@ -214,7 +314,10 @@ function FlightCard({data, handleSelectTab, tripType}) {
 												<p><i className="fas fa-suitcase mr-1"></i> Cancelation</p>
 											</Col>
 											<Col>
-												<p>Not Allowed</p>
+												<p>{selectedCabin.fares[0].cancelation_allowed 
+													?	"Allowed"
+													: "Not Allowed"
+												}</p>
 											</Col>
 										</Row>
 										<Row>
@@ -222,14 +325,14 @@ function FlightCard({data, handleSelectTab, tripType}) {
 												<p><i className="fas fa-suitcase mr-1"></i> Booking Change</p>
 											</Col>
 											<Col>
-												<p>Complimentary</p>
+												<p>{selectedCabin.fares[0].change_booking_before || "-"}</p>
 											</Col>
 										</Row>
 									</div>
 								</Col>
 								<Col sm={4} className="d-flex flex-column justify-content-center align-items-center">
-									<p>IDR 10,999,999</p>
-									<Button className=' btn-flight-select px-5' onClick={() => console.log("yee")}>Select</Button>
+									<p>{selectedCabin.fares[0].currency_code} <b>{ThousandSeparator(selectedCabin.fares[0].price)}</b></p>
+									<Button className=' btn-flight-select px-5' onClick={(e) => onSelectFlight(e, selectedCabin.fares[0])}>Select</Button>
 								</Col>
 							</Row>
 						</div>
