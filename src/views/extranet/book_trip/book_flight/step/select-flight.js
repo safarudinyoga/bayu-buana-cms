@@ -14,7 +14,7 @@ import useQuery from "lib/query"
 function FlightList({handleSelectTab}) {
   const dispatch = useDispatch()
 	let flightType = useQuery().get("trip-type") || "without-ndc"
-	console.log(flightType)
+	
 	const [viewBy, setViewBy] = useState('trip-type')
 	const [flightInfo, setFlightInfo] = useState({
 		plane: "Singapore Airlines",

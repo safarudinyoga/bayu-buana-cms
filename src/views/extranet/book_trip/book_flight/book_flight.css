@@ -394,19 +394,30 @@
   color: #333333;
   font-weight: 600;
 }
-.background-grey {
+.bg-header-grey {
   background-color: #B4B4B4;
   color: #FFFFFF;
+  text-transform: uppercase;
 }
-.background-green-1 {
+.bg-header-green-1 {
   background-color: #286754;
   color: #FFFFFF;
+  text-transform: uppercase;
 }
-.background-green-2 {
+.bg-header-green-2 {
   background-color: #12533F;
   color: #FFFFFF;
+  text-transform: uppercase;
 }
-.background-green-3 {
+.bg-header-green-3 {
   background-color: #084935;
+  color: #FFFFFF;
+  text-transform: uppercase;
+}
+.fare-section>p {
+  text-align: center;
+}
+.bg-header-dark {
+  background-color: #435151;
   color: #FFFFFF;
 }
