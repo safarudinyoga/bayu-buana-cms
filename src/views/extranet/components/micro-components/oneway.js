@@ -12,8 +12,6 @@ import { useHistory } from 'react-router';
 const Oneway = (props) => {
   const { airports, multitrip, handleRemoveTrip, id, counter, handleTrip, formik } = props
 
-  const { setFieldValue } = useFormikContext()
-
   const history = useHistory()
 
   const [departTime, setDepartTime] = useState(new Date())
@@ -67,11 +65,6 @@ const Oneway = (props) => {
     console.log("MASUK KE ONEWAY COMP", values)
     history.push("/extranet/book-trip/book-flight")
   }
-  
-
-  useEffect(() => {
-    setFieldValue("depart_time", departTime)
-  }, [departTime])
 
   return (
     <>
