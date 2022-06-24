@@ -63,8 +63,8 @@ function FlightCard({data, handleSelectTab, tripType}) {
 					<Col sm={5} className={"d-flex justify-content-between align-items-start"}>
 						<div className='pl-2'>
 						{
-							routes?.map((r) => (
-								<p className='m-0'>{r.source_code} {r.source_number}</p>
+							routes?.map((r, i) => (
+								<p key={i} className='m-0'>{r.source_code} {r.source_number}</p>
 							))
 						}
 						</div>
@@ -124,7 +124,7 @@ function FlightCard({data, handleSelectTab, tripType}) {
 						<Button 
 						onClick={(e) => { 
 							e.stopPropagation();
-							handleSelectTab("passengers")
+							handleSelectTab("2")
 						}}
 						className="btn-flight-select"
 						>Select</Button>
@@ -152,8 +152,9 @@ function FlightCard({data, handleSelectTab, tripType}) {
 				...fare
 			}
 		}
+		localStorage.removeItem("selectedFlight")
 		localStorage.setItem("selectedFlight", JSON.stringify(selectedFlight))
-		handleSelectTab("passengers")
+		handleSelectTab("2")
 	}
 
 
