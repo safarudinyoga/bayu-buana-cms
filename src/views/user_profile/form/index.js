@@ -1,22 +1,17 @@
 import React, { useEffect, useState } from "react"
-import Api from "config/api"
 import { useDispatch } from 'react-redux';
 import { withRouter } from 'react-router';
 import { ReactSVG } from "react-svg"
 import { Row, Col, Tab, Nav, Accordion } from "react-bootstrap"
 import { setUIParams } from "redux/ui-store"
-
 import GeneralInformation from "./general-information"
 import EmergencyContacts from "./emergency-contacts"
 import SecuritySettings from "./security-settings"
 import Subscriptions from "./subscriptions"
-import UserProfileMobile from "./user-profile-mobile";
 import "./user-profile-form.css"
-
 import { useWindowSize } from "rooks"
 import { Card } from "react-bootstrap";
 
-const endpoint = "/user/profile"
 const backUrl = "/profile"
 
 const UserProfile = (props) => {
@@ -24,23 +19,10 @@ const UserProfile = (props) => {
 
   let dispatch = useDispatch()
 
-  let api = new Api()
-
   const [tabKey, setTabKey] = useState(selectedTab ? selectedTab : "general-information")
-  const [accordionKey, setAccordionKey] = useState("gi")
-  const { innerWidth, innerHeight, outerHeight, outerWidth } = useWindowSize();
-
-  const [loading, setLoading] = useState(true)
-  const [form, setForm] = useState({
-    id: "",
-    aircraft_name: "",
-    model: "",
-    icao_code: "",
-    aircraft_code: "",
-  })
+  const { innerWidth, } = useWindowSize();
 
   useEffect(async () => {
-    let api = new Api()
     let formId = props.match.params.id
 
     let docTitle = "User Profile"
@@ -58,20 +40,11 @@ const UserProfile = (props) => {
         ],
       }),
     )
-    // try {
-    //   let res = await api.get(endpoint)
-    //   setForm(res.data)
-    // } catch (e) {}
-    // setLoading(false)
   }, [])
 
   const handleSelectTab = async (key) => {
     setTabKey(key)
     props.history.push("/profile/"+key)
-  }
-
-  const handleSelectAccordion = async (key) => {
-    setAccordionKey(key)
   }
 
   return (
@@ -169,7 +142,6 @@ const UserProfile = (props) => {
                   history={props.history}
                   backUrl={backUrl}
                   isMobile={true}
-                  handleSelectAccordion={(v) => handleSelectAccordion(v)}
                 />
               </Accordion.Collapse>
             </Card>
@@ -185,7 +157,6 @@ const UserProfile = (props) => {
                   history={props.history}
                   backUrl={backUrl}
                   isMobile={true}
-                  handleSelectAccordion={(v) => handleSelectAccordion(v)}
                 />
               </Accordion.Collapse> 
             </Card>
@@ -201,7 +172,6 @@ const UserProfile = (props) => {
                   history={props.history}
                   backUrl={backUrl}
                   isMobile={true}
-                  handleSelectAccordion={(v) => handleSelectAccordion(v)}
                 />
               </Accordion.Collapse> 
             </Card>
@@ -217,7 +187,6 @@ const UserProfile = (props) => {
                   history={props.history}
                   backUrl={backUrl}
                   isMobile={true}
-                  handleSelectAccordion={(v) => handleSelectAccordion(v)}
                 />
               </Accordion.Collapse> 
             </Card>

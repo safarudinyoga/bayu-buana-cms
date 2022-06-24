@@ -23,7 +23,6 @@ const Subscriptions = (props) => {
     try {
       let res = await api.get("/user/profile")
       let data = res.data;
-      console.log(data);
       setInitialForm({
         ...initialForm,
         dealSubscription: data.user_setting.receive_travel_deals,
@@ -37,7 +36,6 @@ const Subscriptions = (props) => {
       enableReinitialize
       initialValues={initialForm}
       onSubmit={async (values, { setSubmitting, resetForm }) => {
-        console.log(values)
 
         let formatted = {
           user_setting: {
@@ -47,7 +45,7 @@ const Subscriptions = (props) => {
         }
 
         try {
-          let res = await api.put("user/profile", formatted)
+          await api.put("user/profile", formatted)
           openSnackbar(
             `Subscriptions has been successfully updated.`
           )
