@@ -1,16 +1,13 @@
 import { FastField, Formik } from 'formik';
 import React, { useState, useEffect } from 'react';
-import { Card, Col, Form, Row, Button } from 'react-bootstrap';
+import { Card, Col, Form, Row, Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import axios from "axios"
 import Api from "config/api"
 import { useSnackbar } from "react-simple-snackbar"
 import _ from "lodash"
 import useQuery from "lib/query"
-import Select from "components/form/select"
-import SelectAsync from "components/form/select-async"
-import * as Yup from "yup"
-import env from "config/environment"
-import removeIcon from "assets/icons/remove.svg"
+
+import "./traveler-setting.css"
 
 const options = {
   position: "bottom-right",
@@ -20,9 +17,6 @@ const Employee = (props) => {
   const isView = useQuery().get("action") === "view"
   let api = new Api()
   const [openSnackbar] = useSnackbar(options)
-  const [additionalRole, setAdditionalRole] = useState(false)  
-  const [defmonths, setMonths] = useState({ value: 1, label: "" })
-  const [defyears, setYears] = useState({ value: 1921, label: "" }) 
 
   const [initialForm, setInitialForm] = useState({
     employee_number: "",
@@ -32,155 +26,6 @@ const Employee = (props) => {
     hire_date: [],
     npwp: "",
   })
-
-  const numberSimbol = /^[0-9!@#$%-._^&*()_+\-=\[\]{};':"\\|,.<>\/?]*$/
-  const validationSchema = Yup.object({
-    employee_number: Yup.string()
-      .required("Employee Number is required.")
-      .test(
-        "Unique Employee Number",
-        "Employee Number already exists", // <- key, message
-        async (value, ctx) => {
-          let formId = props?.employeeData?.id
-            try {
-              let res = await axios.get(`${env.API_URL}/master/employees?filters=["employee_number","=","${value}"]`)
-
-              if (formId) {
-                return res.data.items.length === 0 ||
-                value === initialForm.employee_number
-              } else {
-                return res.data.items.length === 0
-              }
-            } catch(e) {
-              return false
-            }
-        }
-      ),
-    job_title: Yup.object().required("Job Title is required."),
-    npwp: Yup.string().matches(numberSimbol, "NPWP must be a number"),
-  })
-
-  const resetDate = (date, months=defmonths, years=defyears) => {
-    const today = new Date()
-    let currentYear = today.getFullYear()
-    let currentMonth = today.getMonth() + 1
-    let currentDate = today.getDate()
-
-    if (years.value === currentYear) {
-      if (months.value > currentMonth) {
-        return true
-      } else {
-        if(date.value > currentDate) {
-          return true
-        } else {
-          return false
-        }
-      }
-    }
-
-    if (months.value === 2 && years.value % 4 == 0) {
-      return date.value > 29
-    }
-    if (months.value === 2 && years.value % 4 != 0) {
-      return date.value > 28
-    }
-    if (
-      months.value === 4 ||
-      months.value === 6 ||
-      months.value === 9 ||
-      months.value === 11
-    ) {
-      return date.value > 30
-    }
-    return false
-  }
-
-   // Hire Date
-   const selectDay = (months=defmonths, years=defyears) => {
-    const options = []
-    const today = new Date()
-    let currentYear = today.getFullYear()
-    let currentMonth = today.getMonth() + 1
-    let currentDate = today.getDate()
-    if (years.value === currentYear && months.value === currentMonth) {
-      for (let i = 1; i <= currentDate; i++) {
-        options.push({
-          label: i,
-          value: i,
-        })
-      }
-    } else {
-      if (months.value === 2 && years.value % 4 == 0) {
-        for (let i = 1; i <= 29; i++) {
-          options.push({
-            label: i,
-            value: i,
-          })
-        }
-      } else if (months.value === 2 && years.value % 4 != 0) {
-        for (let i = 1; i <= 28; i++) {
-          options.push({
-            label: i,
-            value: i,
-          })
-        }
-      } else if (
-        months.value === 4 ||
-        months.value === 6 ||
-        months.value === 9 ||
-        months.value === 11
-      ) {
-        for (let i = 1; i <= 30; i++) {
-          options.push({
-            label: i,
-            value: i,
-          })
-        }
-      } else {
-        for (let i = 1; i <= 31; i++) {
-          options.push({
-            label: i,
-            value: i,
-          })
-        }
-      }
-    }
-    return options
-  }
-  const selectMonth = (years=defyears) => {
-    const options = []
-    const today = new Date();
-    let currentYear = today.getFullYear();
-    let currentMonth = today.getMonth()+1;
-    const month = Array.from({ length: years.value === currentYear ? currentMonth : 12 }, (e, i) => {
-      return new Date(null, i + 1, null).toLocaleDateString("en", {
-        month: "long",
-      })
-    })
-    
-    month.forEach((data, i) => {
-      options.push({
-        label: data,
-        value: i + 1,
-      })
-    })
-    return options
-  }
-  const selectYear = () => {
-    const options = []
-
-    const startYear = 1921
-    const endYear = new Date().getFullYear()
-
-    for (let i = endYear; i >= startYear; i--) {
-      options.push({
-        label: i,
-        value: i,
-      })
-    }
-
-    return options
-  }
 
   useEffect(async () => {
     try {
@@ -226,21 +71,11 @@ const Employee = (props) => {
   }, [props.employeeData, props.formData])
 
 
-  function dateFormat(date) {
-    var d = new Date(date),
-      day = "" + d.getDate(),
-      month = "" + (d.getMonth() + 1),
-      year = d.getFullYear()
-    if (month.length < 2) month = "0" + month
-    if (day.length < 2) day = "0" + day
-    return [year, month, day].join("-")
-  }
 
   return (
     <Formik
       enableReinitialize
       initialValues={initialForm}
-      validationSchema={validationSchema}
       onSubmit={async (values, { setSubmitting, resetForm }) => {
         try {
           let formatted = {
@@ -248,14 +83,6 @@ const Employee = (props) => {
             job_title_id: values.job_title ? values.job_title.value : "00000000-0000-0000-0000-000000000000",
             division_id: values.division ? values.division.value : "00000000-0000-0000-0000-000000000000",
             office_id: values.office ? values.office.value : "00000000-0000-0000-0000-000000000000",
-            hire_date: values.hire_date.length > 0
-            ? values.hire_date[0].value !== '' 
-            ? dateFormat([
-                values.hire_date[2].value,
-                values.hire_date[1].value,
-                values.hire_date[0].value,
-              ])
-            : null : null,
             npwp: values.npwp,
             job_title: values.job_title ? {
               id: values.job_title.value,
@@ -296,379 +123,46 @@ const Employee = (props) => {
           <Form onSubmit={handleSubmit}>
             <Card style={{marginBottom: 0}}>
               <Card.Body>
-                <h3 className="card-heading">Employment</h3>
+                <h3 className="card-heading">Status</h3>
                 {/* {console.log("values ===> ", values)} */}
                 <div style={props.isMobile ? {padding: "0 0 30px 0"} : { padding: "0 15px 30px 15px" }}>
-                  <Form.Group as={Row} className="form-group">
-                    <Form.Label column xs={5} sm={5} md={3} lg={3}>
-                      Employee ID <span className="form-label-required">*</span>
-                    </Form.Label>
-                    <Col xs={7} sm={7} md={9} lg={9}>
-                      <FastField name="employee_number" disabled>
-                        {({ field, form }) => (
-                          <>
-                            <Form.Control
-                              {...field}
-                              type="text"
-                              value={values.employee_number}
-                              minLength={1}
-                              maxLength={36}
-                              onChange={handleChange}
-                              onBlur={handleBlur}
-                              disabled={isView}
-                              style={{ maxWidth: 250 }}
-                              isInvalid={
-                                form.touched.employee_number &&
-                                form.errors.employee_number
-                              }
-                            />
-
-                            {form.touched.employee_number &&
-                              form.errors.employee_number && (
-                                <Form.Control.Feedback type="invalid">
-                                  {form.touched.employee_number
-                                    ? form.errors.employee_number
-                                    : null}
-                                </Form.Control.Feedback>
-                            )}
-                          </>
-                        )}
-                      </FastField>
-                    </Col>
-                  </Form.Group>
-
-                  <Form.Group as={Row} className="form-group">
-                    <Form.Label column sm={3}>
-                      Division
-                    </Form.Label>
-                    <Col sm={9}>
-                      <FastField name="division">
-                        {({ field, form }) => (
-                          <div style={{ maxWidth: 200 }}>
-                            <SelectAsync
-                              {...field}
-                              isClearable
-                              isDisabled={isView}
-                              url={`master/divisions`}
-                              fieldName="division_name"
-                              onChange={(v) => {
-                                setFieldValue("division", v)
-                              }}
-                              placeholder="Please choose"
-                              className={`react-select ${
-                                form.touched.division &&
-                                form.errors.division
-                                  ? "is-invalid"
-                                  : null
-                              }`}
-                              components={
-                                isView
-                                  ? {
-                                      DropdownIndicator: () => null,
-                                      IndicatorSeparator: () => null,
-                                    }
-                                  : null
-                              }
-                            />
-                            {form.touched.division &&
-                              form.errors.division && (
-                                <Form.Control.Feedback type="invalid">
-                                  {form.touched.division
-                                    ? form.errors.division
-                                    : null}
-                                </Form.Control.Feedback>
-                              )}
-                          </div>
-                        )}
-                      </FastField>
-                    </Col>
-                  </Form.Group>
-
-                  <Form.Group as={Row} className="form-group">
-                    <Form.Label column sm={3}>
-                      Branch Office
-                    </Form.Label>
-                    <Col sm={9}>
-                      <FastField name="office">
-                        {({ field, form }) => (
-                          <div style={{ maxWidth: 250 }}>
-                            <SelectAsync
-                              {...field}
-                              isClearable
-                              isDisabled={isView}
-                              url={`master/offices`}
-                              fieldName="office_name"
-                              onChange={(v) => {
-                                setFieldValue("office", v)
-                              }}
-                              placeholder="Please choose"
-                              className={`react-select ${
-                                form.touched.office &&
-                                form.errors.office
-                                  ? "is-invalid"
-                                  : null
-                              }`}
-                              components={
-                                isView
-                                  ? {
-                                      DropdownIndicator: () => null,
-                                      IndicatorSeparator: () => null,
-                                    }
-                                  : null
-                              }
-                            />
-                            {form.touched.office &&
-                              form.errors.office && (
-                                <Form.Control.Feedback type="invalid">
-                                  {form.touched.office
-                                    ? form.errors.office
-                                    : null}
-                                </Form.Control.Feedback>
-                              )}
-                          </div>
-                        )}
-                      </FastField>
-                    </Col>
-                  </Form.Group>
-
-                  <Form.Group as={Row} className="form-group">
-                    <Form.Label column sm={3}>
-                      Job Title <span className="form-label-required">*</span>
-                    </Form.Label>
-                    <Col sm={9}>
-                      <FastField name="job_title">
-                        {({ field, form }) => (
-                          <div style={{ maxWidth: 200 }}>
-                            <SelectAsync
-                              {...field}
-                              isClearable
-                              isDisabled={isView}
-                              url={`master/job-titles`}
-                              fieldName="job_title_name"
-                              onChange={(v) => {
-                                setFieldValue("job_title", v)
-                              }}
-                              placeholder="Please choose"
-                              className={`react-select ${
-                                form.touched.job_title &&
-                                form.errors.job_title
-                                  ? "is-invalid"
-                                  : null
-                              }`}
-                              components={
-                                isView
-                                  ? {
-                                      DropdownIndicator: () => null,
-                                      IndicatorSeparator: () => null,
-                                    }
-                                  : null
-                              }
-                            />
-                            {form.touched.job_title &&
-                              form.errors.job_title && (
-                                <Form.Control.Feedback type="invalid">
-                                  {form.touched.job_title
-                                    ? form.errors.job_title
-                                    : null}
-                                </Form.Control.Feedback>
-                              )}
-                          </div>
-                        )}
-                      </FastField>
-                    </Col>
-                  </Form.Group>
-
-                  <Form.Group as={Row} className="form-group">
-                    <Form.Label column sm={3}>
-                      Hiring Date
-                    </Form.Label>
-                    <Col sm={9}>
-                      <div style={{ maxWidth: 450, display: "flex" }}>
-                        <div style={{ marginRight: 3, minWidth: 65, flex: 1 }}>
-                          <Select
-                            options={selectDay(values.hire_date[1], values.hire_date[2])}
-                            value={values.hire_date[0]}
-                            isDisabled={isView}
-                            placeholder="Day"
-                            className={`react-select ${
-                              touched.title && Boolean(errors.title)
-                                ? "is-invalid"
-                                : ""
-                            }`}                           
-                            components={
-                              isView
-                                ? {
-                                    DropdownIndicator: () => null,
-                                    IndicatorSeparator: () => null,
-                                  }
-                                : null
-                            }              
-                            style={{
-                              margin: 0
-                            }}                
-                            onChange={(v) => {
-                              setFieldValue("hire_date[0]", v)
-                            }}
-                          />
-                        </div>
-                        <div style={{ marginRight: 3, minWidth: 105, flex: 1 }}>
-                          <Select
-                            options={selectMonth(values.hire_date[2])}
-                            value={values.hire_date[1]}
-                            placeholder="Month"
-                            isDisabled={isView}
-                            disabled={true}
-                            className={`react-select ${
-                              touched.title && Boolean(errors.title)
-                                ? "is-invalid"
-                                : ""
-                            }`} 
-                            components={
-                              isView
-                                ? {
-                                    DropdownIndicator: () => null,
-                                    IndicatorSeparator: () => null,
-                                  }
-                                : null
-                            }           
-                            onChange={(v) => {
-                              setFieldValue("hire_date[1]", v)
-                              if (resetDate(values.hire_date[0], v, values.hire_date[2])) {
-                                setFieldValue("hire_date[0]", {value: 1, label: "1"})
-                              }
-                            }}
-                          />
-                        </div>
-                        <div style={{ marginRight: 3, minWidth: 75, flex: 1 }}>
-                          <Select
-                            options={selectYear()}
-                            value={values.hire_date[2]}
-                            placeholder="Year"
-                            isDisabled={isView}
-                            className={`react-select ${
-                              touched.title && Boolean(errors.title)
-                                ? "is-invalid"
-                                : ""
-                            }`}
-                            components={
-                              isView
-                                ? {
-                                    DropdownIndicator: () => null,
-                                    IndicatorSeparator: () => null,
-                                  }
-                                : null
-                            }       
-                            style={{
-                              margin: 0
-                            }}                       
-                            onChange={(v) => {
-                              setFieldValue("hire_date[2]", v)
-                              if (resetDate(values.hire_date[0], values.hire_date[1], v)) {
-                                setFieldValue("hire_date[1]", {value: 1, label: "January"})
-                                setFieldValue("hire_date[0]", {value: 1, label: "1"})
-                              }
-                            }}
-                          />
-                        </div>
-                        {
-                          isView ? 
-                            <></> : 
-                            <div style={{marginRight: 3, paddingTop: 2}}>
-                              <Button 
-                                variant="secondary"
-                                onClick={() => {
-                                  setFieldValue("hire_date[2]", {value: "", label: "Year"})
-                                  setFieldValue("hire_date[1]", {value: "", label: "Month"})
-                                  setFieldValue("hire_date[0]", {value: "", label: "Day"})
-                                }}
-                              >
-                                <img src={removeIcon} />
-                              </Button>
-                          </div>
-                        }
-                        
-                      </div>
-                      {touched.title && Boolean(errors.title) && (
-                        <div className="invalid-feedback">
-                          {touched.title ? errors.title : ""}
-                        </div>
+                <Form.Group as={Row} className="form-group">
+                  <Form.Label column sm={6}>
+                    Allow booking for other travelers
+                  </Form.Label>
+                  <Col sm={6}>
+                    <OverlayTrigger
+                      key={"offers"}
+                      placement="top"
+                      overlay={
+                        <Tooltip id="offers-top">
+                          {
+                            values.dealSubscription ? "Deactivate" : "Activate"
+                          }
+                        </Tooltip>
+                      }
+                    > 
+                      {({ ref, ...triggerHandler }) => (
+                        <Form.Switch
+                          {...triggerHandler}
+                          ref={ref}
+                          id="deals-subscription"
+                          name="deals-subscription"
+                          checked={values.dealSubscription}
+                          className="traveler-switch"
+                          onChange={(e) => 
+                            setFieldValue("dealSubscription", !values.dealSubscription)
+                          }
+                          
+                        />
                       )}
-                    </Col>
-                  </Form.Group>
+                      
+                    </OverlayTrigger>
+                  
+                  </Col>
+                </Form.Group>
 
-                  <Form.Group as={Row} className="form-group">
-                    <Form.Label column sm={3}>
-                      NPWP
-                    </Form.Label>
-                    <Col sm={9}>
-                      <Form.Control
-                        name="npwp"
-                        type="text"
-                        value={values.npwp}
-                        minLength={1}
-                        maxLength={36}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        style={{ maxWidth: 200 }}
-                        disabled={isView}
-                      />
-                    </Col>
-                  </Form.Group>
-
-                  {/* Aditional Role section */}
-                  {additionalRole && (
-                    <>
-                      <div style={{ padding: "0 15px 15px" }}>
-                        <h6 className="mt-2">Employment</h6>
-                        <div className="p-2">
-                          {/* <FormikControl
-                              control="selectAsync"
-                              required="label-required"
-                              label="Job Title"
-                              name="job_title_id"
-                              url={`master/job-titles`}
-                              fieldName={"job_title_name"}
-                              onChange={(v) => {
-                                formik.setFieldValue("job_title_id", v)
-                              }}
-                              placeholder={
-                                formik.values.job_title_id ||
-                                "Please choose"
-                              }
-                              style={{ maxWidth: 200 }}
-                            />
-                            <FormikControl
-                              control="selectAsync"
-                              label="Division"
-                              name="division_id"
-                              url={`master/divisions`}
-                              fieldName={"division_name"}
-                              onChange={(v) => {
-                                formik.setFieldValue("division_id", v)
-                              }}
-                              placeholder={
-                                formik.values.division_id ||
-                                "Please choose"
-                              }
-                              style={{ maxWidth: 200 }}
-                            /> */}
-                        </div>
-                      </div>
-                    </>
-                  )}
-                  {/* <div className="d-flex flex-row-reverse">
-                    <div
-                      onClick={() => setAdditionalRole(!additionalRole)}
-                      style={{
-                        color: "#1743BE",
-                        fontSize: 13,
-                        cursor: "pointer",
-                      }}
-                    >
-                      Add Additional Role
-                    </div>
-                  </div> */}
-                  {/* End Aditional Role section */}
+              
                 </div>
 
               

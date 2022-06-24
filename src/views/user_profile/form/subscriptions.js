@@ -142,41 +142,28 @@ const Subscriptions = (props) => {
                   </Col>
                 </Form.Group>
               </div>
-              <div style={{ marginBottom: 30, marginTop: 30 }} className="mobile-button">
-              <Button
-                variant="primary"
-                type="submit"
-                style={{ marginRight: 15 }}
-              >
-                SAVE
-              </Button>
-              <Button
-                variant="secondary"
-                onClick={() => props.history.push("/")}
-              >
-                CANCEL
-              </Button>
-            </div>
-              </Card.Body>
+             
               {
-                props.isMobile ? (
-                  <div className="mb-5 ml-1 row justify-content-md-start justify-content-center">
-                    <Button
-                      variant="primary"
-                      type="submit"
-                      style={{ marginRight: 15 }}
-                    >
-                      SAVE
-                    </Button>
-                    <Button
-                      variant="secondary"
-                      onClick={() => props.history.push("/")}
-                    >
-                      CANCEL
-                    </Button>
-                  </div>
-                ) : ""
-              }
+                  props.isMobile ? (
+                    <div className="mb-5 ml-1 row justify-content-md-start justify-content-center">
+                      <Button
+                        variant="primary"
+                        type="submit"
+                        disabled={!dirty || !isValid}
+                        style={{ marginRight: 15 }}
+                      >
+                        SAVE
+                      </Button>
+                      <Button
+                        variant="secondary"
+                        onClick={() => props.history.push("/")}
+                      >
+                        CANCEL
+                      </Button>
+                    </div>
+                  ) : ""
+                }
+              </Card.Body>
             </Card>
             {
               props.isMobile ? "" : (
@@ -184,6 +171,7 @@ const Subscriptions = (props) => {
                   <Button
                     variant="primary"
                     type="submit"
+                    disabled={!dirty || !isValid}
                     style={{ marginRight: 15 }}
                   >
                     SAVE
