@@ -1,3 +1,4 @@
+import { ErrorMessage, getIn } from 'formik';
 import React, { useEffect, useState } from 'react'
 import AutoSuggest from "react-autosuggest";
 import { ReactSVG } from "react-svg"
@@ -42,13 +43,14 @@ function Routes(props) {
     console.log(departureValue)
     if((departureValue == "" || departureValue == null) && props.formik ){
       console.log("KOSONG INI")
-      props.formik.setFieldValue("departure_data", "")
+      props.formik.setFieldValue(`trips[${props.index}].departure_data`, "")
     }
   }, [departureValue])
-
+  
   useEffect(() => {
-    console.log(props.formik)
-  }, [props.formik.errors])
+    // console.log(props.formik.errors)
+    console.log(getIn(props.formik.errors), "Errors")
+  }, [props.formik])
   
   
 
@@ -67,12 +69,20 @@ function Routes(props) {
             }}
             onSuggestionSelected={(_, { suggestion, suggestionValue }) => {
               console.log("Selected",suggestion)
-              if(props.formik){
+              console.log("PROPS FORMIK", props.formik)
+
+              if(props.formik && props.index >= 0){
+                props.formik.setFieldValue(`trips[${props.index}].departure_data`, suggestion)
+              }
+
+              else if(props.formik){
                 props.formik.setFieldValue("departure_data", suggestion)
               }
+
               if(props.handleCriteriaChange) {
                 props.handleCriteriaChange("origin_airport_id", suggestion.airport_id, "origin_city_id", suggestion.city_id)
               }
+              
               
             }
               
@@ -85,16 +95,34 @@ function Routes(props) {
               onChange: (_, { newValue, method }) => {
                 setDepartureValue(newValue);
               },
-              id: "departure_data",
-              name: "departure_data"
+              id: props.index ? `departure_data-${props.index}` : "departure_data",
+              name: props.index ? `departure_data-${props.index}` :"departure_data"
             }}
             highlightFirstSuggestion={true}
           />
+          {/* tampilan untuk error departure data non multitrip START */}
           {props.formik.errors.departure_data && (
             <div className='routes-invalid'>
               {props.formik.touched.departure_data ? props.formik.errors.departure_data : null}
             </div>
           )}
+          {/* tampilan untuk error departure data non multitrip END */}
+          {/* tampilan untuk error departure data multitrip START */}
+          {
+            props.formik.errors.trips &&
+            props.formik.errors.trips[props.index] &&
+            props.formik.errors.trips[props.index].departure_data ? (
+              <div className='routes-invalid'>
+                {
+                props.formik.touched.trips && 
+                props.formik.touched.trips[props.index] &&
+                props.formik.touched.trips[props.index].departure_data 
+                  ? 
+                  props.formik.errors.trips[props.index].departure_data : null}
+              </div>
+            ) : null
+          }
+          {/* tampilan untuk error departure data multitrip END */}
           
         </div>
         <div className={`form-group required position-relative arrival-box mb-4 ${smallSize ? "routes-sm" : ""}`} > 
@@ -110,7 +138,11 @@ function Routes(props) {
             }}
             onSuggestionSelected={(_, { suggestion, suggestionValue }) => {
               console.log("Return Selected: ",suggestion)
-              if(props.formik){
+              if(props.formik && props.index >= 0){
+                props.formik.setFieldValue(`trips[${props.index}].arrival_data`, suggestion)
+              }
+              
+              else if(props.formik){
                 props.formik.setFieldValue("arrival_data", suggestion)
               }
               if(props.handleCriteriaChange) {
@@ -133,11 +165,27 @@ function Routes(props) {
             }}
             highlightFirstSuggestion={true}
           />
+          {/* tampilan untuk error arrival data non multitrip START */}
           {props.formik.errors.arrival_data && (
             <div className='routes-invalid'>
               {props.formik.touched.arrival_data ? props.formik.errors.arrival_data : null}
             </div>
           )}
+          {/* tampilan untuk error arrival data non multitrip END */}
+          
+          {/* tampilan untuk error arrival data multitrip START */}
+          {
+            props.formik.errors.trips &&
+            props.formik.errors.trips[props.index] &&
+            props.formik.errors.trips[props.index].arrival_data ? (
+              <div className='routes-invalid'>
+                {props.formik.touched.trips && 
+                props.formik.touched.trips[props.index] &&
+                props.formik.touched.trips[props.index].arrival_data ? props.formik.errors.trips[props.index].arrival_data : null}
+              </div>
+            ) : null
+          }
+          {/* tampilan untuk error arrival data multitrip END */}
         </div>
       </div>
     </>

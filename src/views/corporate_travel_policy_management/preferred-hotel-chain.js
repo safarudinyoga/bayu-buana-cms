@@ -9,7 +9,7 @@ import "./style.scss"
 const PreferredHotelChain = (props) => {
 
     const [form, setForm] = useState({
-        prefered_hotel_type: "",
+        prefered_hotel_type: [],
     })
     let dispatch = useDispatch()
     useEffect(() => {
@@ -69,11 +69,22 @@ const PreferredHotelChain = (props) => {
         <Card.Body className="px-1 px-md-4">
             <h3 className="preferred-hotel-title">Preferred Hotel Chains</h3>
             <div className="preferred-hotel-body">
-                <ReactSVG src="/img/icons/corporate-preferred-hotel.svg" />
-                <h5>PREFERRED HOTEL CHAINS</h5>
-                <FormInputSelectMultiAjax 
-                    label=""
-                />
+                <ReactSVG src="/img/icons/corporate-preferred-hotel.svg" className="icon"/>
+                {/* <h5>PREFERRED HOTEL CHAINS</h5> */}
+                <FormInputSelectMultiAjax
+                    label="PREFERRED HOTEL CHAINS"
+                    value={form.prefered_hotel_type ? form.prefered_hotel_type.map((item) => item.prefered_hotel_type_id) : []}
+                    filter={`["status", "=", 1]`}
+                    name="prefered_hotel_type"
+                    endpoint="/master/corporate-travel-policy"
+                    column="prefered_hotel_type_name"
+                    onChange={(e, values) => {
+                    setForm(form => ({...form, prefered_hotel_type: values.map(v => (
+                        {room_amenity_category_id: v.id}
+                    ))}))
+                    }}
+                    disabled={false}
+                    type="selectmultiple" />
                 </div>
         </Card.Body>
         </Card>

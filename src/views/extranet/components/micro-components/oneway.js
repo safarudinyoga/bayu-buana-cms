@@ -1,15 +1,18 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Form, Button } from 'react-bootstrap'
 import { ReactSVG } from 'react-svg';
 import DatePicker from 'react-multi-date-picker'
 import Travellers from './travellers';
 import Routes from './routes';
-import { Formik } from 'formik';
+import { Formik, useFormikContext } from 'formik';
 import * as Yup from "yup"
 import FlightPref from './flight_pref';
+import { useHistory } from 'react-router';
 
 const Oneway = (props) => {
   const { airports, multitrip, handleRemoveTrip, id, counter, handleTrip, formik } = props
+
+  const history = useHistory()
 
   const [departTime, setDepartTime] = useState(new Date())
 
@@ -41,7 +44,7 @@ const Oneway = (props) => {
   }
 
   const initialValues = {
-    depart_time: "",
+    depart_time: new Date(),
     departure_data: "",
     arrival_data: "",
     adult_count: 1,
@@ -58,8 +61,9 @@ const Oneway = (props) => {
     infant_count: Yup.number()
   })
 
-  const handleSearch = async (values, a) => {
+  const handleSearch = (values, a) => {
     console.log("MASUK KE ONEWAY COMP", values)
+    history.push("/extranet/book-trip/book-flight")
   }
 
   return (
@@ -85,7 +89,6 @@ const Oneway = (props) => {
           setFieldTouched,
         }) => (
           <Form onSubmit={handleSubmit}>
-              {/* <Oneway airports={airports} formik={{errors, touched, setFieldValue}} handleTrip={handleTrip} /> */}
               <div className='d-flex flex-wrap' id={id}>
                 <Routes airports={airports} formik={{errors, touched, setFieldValue}} />
 
@@ -100,6 +103,7 @@ const Oneway = (props) => {
                         value={departTime}
                         onChange={(date) => {
                           setDepartTime(date)
+                          setFieldValue("depart_time",date)
                         }}
                         portal
                       />

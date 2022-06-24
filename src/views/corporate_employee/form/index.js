@@ -11,6 +11,10 @@ import useQuery from "lib/query"
 import GeneralInformation from "./general-information"
 import EmergencyContacts from "./emergency-contacts"
 import Employment from "./employee"
+import Passport from "./passport"
+import FrequentTravelerPrograms from "./frequent-traveler-programs";
+import TravelerSetting from "./traveler-setting"
+
 import "./employee-form.css"
 
 import { useWindowSize } from "rooks"
@@ -130,6 +134,18 @@ const UserProfile = (props) => {
           setTabKey("employment")
           setForm({...Data, ...form, ...values})
           if(finishStep < 2) setStep(2)
+        } else if(tabKey === "employment") {
+          setTabKey("passport")
+          setForm({...Data, ...form, ...values})
+          if(finishStep < 3) setStep(3)
+        } else if(tabKey === "passport") {
+          setTabKey("frequent-traveler-programs")
+          setForm({...Data, ...form, ...values})
+          if(finishStep < 4) setStep(4)
+        } else if(tabKey === "frequent-traveler-programs") {
+          setTabKey("traveler-setting")
+          setForm({...Data, ...form, ...values})
+          if(finishStep < 5) setStep(5)
         } else {
           setForm({...Data, ...form, ...values})
           await onSave({...Data, ...form, ...values})
@@ -166,7 +182,7 @@ const UserProfile = (props) => {
 
       if (!formId) {
         //ProsesCreateData
-          let res = await api.post("master/employees", values)
+          let res = await api.post("master/corporate-employee", values)
           openSnackbar(
             `Record 'Employee Number: ${
               values.employee_number
@@ -181,7 +197,7 @@ const UserProfile = (props) => {
           history.goBack()
       } else {
         //ProsesUpdateData
-          let res = await api.put(`master/employees/${formId}`, values)
+          let res = await api.put(`master/corporate-employee/${formId}`, values)
           openSnackbar(
             `Record 'Employee Number: ${
               values.employee_number
@@ -218,7 +234,10 @@ const UserProfile = (props) => {
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
-                    <Nav.Link eventKey="emergency-contacts" disabled={finishStep < 1 && !Data?.id} >
+                    <Nav.Link 
+                      eventKey="emergency-contacts" 
+                      // disabled={finishStep < 1 && !Data?.id} 
+                    >
                       <div>
                         <ReactSVG src="/img/icons/emergency-contacts.svg" />
                         <span>Emergency Contacts</span>
@@ -226,7 +245,10 @@ const UserProfile = (props) => {
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
-                    <Nav.Link eventKey="employment" disabled={finishStep < 2 && !Data?.id}>
+                    <Nav.Link 
+                      eventKey="employment" 
+                      // disabled={finishStep < 2 && !Data?.id}
+                    >
                       <div>
                         <ReactSVG src="/img/icons/employment.svg" />
                         <span>Employment</span>
@@ -234,7 +256,10 @@ const UserProfile = (props) => {
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
-                    <Nav.Link eventKey="passport" disabled={finishStep < 3 && !Data?.id}>
+                    <Nav.Link 
+                      eventKey="passport" 
+                      // disabled={finishStep < 3 && !Data?.id}
+                    >
                       <div>
                         <ReactSVG src="/img/icons/employment.svg" />
                         <span>Passport</span>
@@ -242,18 +267,24 @@ const UserProfile = (props) => {
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
-                    <Nav.Link eventKey="frequent-traveller-programs" disabled={finishStep < 4 && !Data?.id}>
+                    <Nav.Link 
+                      eventKey="frequent-traveler-programs" 
+                      // disabled={finishStep < 4 && !Data?.id}
+                    >
                       <div>
                         <ReactSVG src="/img/icons/employment.svg" />
-                        <span>Frequent Traveller Programs</span>
+                        <span>Frequent Traveler Programs</span>
                       </div>
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
-                    <Nav.Link eventKey="traveller" disabled={finishStep < 5 && !Data?.id}>
+                    <Nav.Link 
+                      eventKey="traveler-setting" 
+                      // disabled={finishStep < 5 && !Data?.id}
+                    >
                       <div>
                         <ReactSVG src="/img/icons/employment.svg" />
-                        <span>Traveller Setting</span>
+                        <span>Traveler Setting</span>
                       </div>
                     </Nav.Link>
                   </Nav.Item>
@@ -287,6 +318,42 @@ const UserProfile = (props) => {
                   </Tab.Pane>
                   <Tab.Pane eventKey="employment">
                     <Employment
+                      history={props.history}
+                      backUrl={backUrl}
+                      handleSelectTab={(v) => handleSelectTab(v)}
+                      isMobile={false}
+                      employeeData={Data}
+                      onSubmit={onSubmit}
+                      finishStep={finishStep}
+                      formData={form}
+                    />
+                  </Tab.Pane>
+                  <Tab.Pane eventKey="passport">
+                    <Passport
+                      history={props.history}
+                      backUrl={backUrl}
+                      handleSelectTab={(v) => handleSelectTab(v)}
+                      isMobile={false}
+                      employeeData={Data}
+                      onSubmit={onSubmit}
+                      finishStep={finishStep}
+                      formData={form}
+                    />
+                  </Tab.Pane>
+                  <Tab.Pane eventKey="frequent-traveler-programs">
+                    <FrequentTravelerPrograms
+                      history={props.history}
+                      backUrl={backUrl}
+                      handleSelectTab={(v) => handleSelectTab(v)}
+                      isMobile={false}
+                      employeeData={Data}
+                      onSubmit={onSubmit}
+                      finishStep={finishStep}
+                      formData={form}
+                    />
+                  </Tab.Pane>
+                  <Tab.Pane eventKey="traveler-setting">
+                    <TravelerSetting
                       history={props.history}
                       backUrl={backUrl}
                       handleSelectTab={(v) => handleSelectTab(v)}

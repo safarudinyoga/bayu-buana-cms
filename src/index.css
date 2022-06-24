@@ -1,7 +1,7 @@
 @font-face {
   font-family: "Segoe UI";
-  src: url('./assets/fonts/segoeuihis.woff') format('woff'),
-       url('./assets/fonts/segoeuihis.ttf') format('truetype');
+  src: url("./assets/fonts/segoeuihis.woff") format("woff"),
+    url("./assets/fonts/segoeuihis.ttf") format("truetype");
 }
 html {
   overflow-y: scroll;
@@ -22,7 +22,8 @@ code {
 }
 
 @media print {
-  html, body {
-      height: 99%;
+  html,
+  body {
+    height: 99%;
   }
 }

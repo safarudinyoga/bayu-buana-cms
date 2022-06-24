@@ -8,7 +8,7 @@ function Travellers(props) {
   const [childrenCount, setChildrenCount] = useState(0)
   const [infantCount, setInfantCount] = useState(0)
 
-  const [travelerValue, setTravelerValue] = useState("")
+  const [travelerValue, setTravelerValue] = useState("1 Adult")
   const [travelerCheckbox, setTravelerCheckbox] = useState(false)
   const [travelerCacheData, setTravelerCacheData] = useState({
     number_of_adults: 1,

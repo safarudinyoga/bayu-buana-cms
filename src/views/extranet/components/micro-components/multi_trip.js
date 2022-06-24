@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { FieldArray, Formik } from 'formik';
 import * as Yup from "yup"
 import { Form, Button } from 'react-bootstrap'
@@ -7,21 +7,23 @@ import DatePicker from 'react-multi-date-picker';
 import FlightPref from './flight_pref';
 import { ReactSVG } from "react-svg"
 import Travellers from './travellers';
+import { useHistory } from 'react-router';
 
 const MultiTrip = (props) => {
   const { airports, handleTrip  } = props
+  const history = useHistory()
   
   const initialValues = {
     trips: [
       {
-        depart_time: "",
+        depart_time: new Date(),
         departure_data: "",
         arrival_data: ""
       }
     ]
   }
 
-  const [departTime, setDepartTime] = useState(new Date())
+  const [departTime, setDepartTime] = useState({ 0: new Date() })
 
   const [travelerCheckboxConfirm, setTravelerCheckboxConfirm] = useState(false)
   const [travelerCount, setTravelerCount] = useState(0)
@@ -42,8 +44,14 @@ const MultiTrip = (props) => {
   })
 
   const onSubmit = async (values, a) => {
+    history.push("/extranet/book-trip/book-flight")
     console.log("Values", values)
   }
+
+  useEffect(() => {
+    console.log("DPRT", departTime)
+  }, [departTime])
+  
 
   function RenderDatepicker({ openCalendar, value, handleValueChange }){
     return (
@@ -75,25 +83,45 @@ const MultiTrip = (props) => {
                 {values.trips && values.trips.length > 0 ? (
                   values.trips.map((trip, index) => (
                     <>
-                      <div key={index} className="d-flex flex-wrap">
-                        <Routes index={index} airports={airports} formik={{errors, touched, setFieldValue}} />
+                      <div key={index} className="d-flex flex-wrap mb-2">
+                        <Routes index={index} airports={airports} formik={{errors, touched, setFieldValue, values}} />
 
                         <div className="mr-4">
                           <div className="d-flex">
                             <div className="position-relative flex-grow-1 book-trip-datepicker">
-                            <DatePicker 
-                              render={<RenderDatepicker />}
-                              numberOfMonths={2}
-                              fixMainPosition={true}
-                              format="ddd, DD MMMM YYYY"
-                              value={departTime}
-                              onChange={(date) => {
-                                setDepartTime(date)
-                              }}
-                              portal
-                            />
+                              <DatePicker 
+                                render={<RenderDatepicker />}
+                                numberOfMonths={2}
+                                fixMainPosition={true}
+                                format="ddd, DD MMMM YYYY"
+                                value={departTime[index]}
+                                onChange={(date) => {
+                                  setDepartTime({
+                                    ...departTime,
+                                    [index]: new Date(date)
+                                  })
+                                  setFieldValue(`trips[${index}].depart_time`, date)
+                                }}
+                                portal
+                              />
                             </div>
+                            
                           </div>
+                          {/* tampilan error untuk depart time START */}
+                          {
+                            errors.trips &&
+                            errors.trips[index] &&
+                            errors.trips[index].depart_time ? (
+                              <div className="routes-invalid">
+                                {
+                                  touched.trips &&
+                                  touched.trips[index] &&
+                                  touched.trips[index].depart_time ? (errors.trips[index].depart_time) : null
+                                }
+                              </div>
+                            ) : null
+                          }
+                          {/* tampilan error untuk depart time END */}
                         </div>
                         {
                           index > 0 ? (
@@ -112,8 +140,8 @@ const MultiTrip = (props) => {
                   ))
                 ) : ""}
                 <Button
-                  onClick={() => arrayHelpers.insert({depart_time: "", departure_data: "", arrival_data: ""})}
-                  className="mb-4"
+                  onClick={() => arrayHelpers.push({depart_time: "", departure_data: "", arrival_data: ""})}
+                  className="my-4"
                 >
                   Add New
                 </Button>

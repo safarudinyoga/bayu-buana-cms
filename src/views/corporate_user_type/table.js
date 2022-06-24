@@ -12,7 +12,7 @@ export default function UserAccessTypeTable() {
         title: "User Access Type",
         breadcrumbs: [
           {
-            text: "User & Access Management",
+            text: "Setup & Configuration",
           },
           {
             text: "User Access Type",

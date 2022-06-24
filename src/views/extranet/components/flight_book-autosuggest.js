@@ -86,6 +86,7 @@ const FlightBook = (props) => {
 
   const handleSearch = async (values, a) => {
     console.log("MASUK KESINI", values)
+    history.push("/extranet/book-trip/book-flight")
 
     let formatted = {
       is_personal_trip: props.personalTrip,
