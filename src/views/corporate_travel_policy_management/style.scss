@@ -117,7 +117,7 @@
   padding-bottom: 8px;
   h3 {
     font-size: 16px;
-      font-weight: bold;
+    font-weight: bold;
   }
   u{
     color: #3e40ae;
@@ -155,4 +155,13 @@
   height: auto;
   background-color: #F3F3FB;
   color: black;
+}
+.policy-title {
+  background-color: #F3F3FB;
+  border-radius: 8px 8px 0 0;
+  padding: 14px;
+  h5 {
+    font-size: 16px;
+    font-weight: bold;
+  }
 }

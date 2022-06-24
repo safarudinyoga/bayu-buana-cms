@@ -105,7 +105,7 @@ const InvoiceSettings = props => {
           <h3 className="card-heading">Invoice Settings</h3>
           <div className='invoice_settings pl-2 pr-2'>
             <Card style={{ boxShadow: 'none' }}>
-              <Card.Header className='uppercase'>DUE DAYS</Card.Header>
+              <Card.Header className='uppercase title'>DUE DAYS</Card.Header>
               <Card.Body>
                 <Form.Group as={Row} className='align-items-center form-group'>
                   <Form.Label column lg={4}>
@@ -164,7 +164,7 @@ const InvoiceSettings = props => {
               </Card.Body>
             </Card>
             <Card style={{ boxShadow: 'none' }}>
-              <Card.Header className='uppercase'>
+              <Card.Header className='uppercase title'>
                 INVOICE DELIVERY
               </Card.Header>
               <Card.Body>
@@ -185,7 +185,7 @@ const InvoiceSettings = props => {
               </Card.Body>
             </Card>
             <Card style={{ boxShadow: 'none' }}>
-              <Card.Header className='uppercase'>
+              <Card.Header className='uppercase title'>
                 SPLIT INVOICE
               </Card.Header>
               <Card.Body>
@@ -220,7 +220,7 @@ const InvoiceSettings = props => {
               </Card.Body>
             </Card>
             <Card style={{ boxShadow: 'none' }}>
-              <Card.Header className='uppercase'>
+              <Card.Header className='uppercase title'>
                 TAX INVOICE
               </Card.Header>
               <Card.Body>
@@ -240,7 +240,7 @@ const InvoiceSettings = props => {
               </Card.Body>
             </Card>
             <Card style={{ boxShadow: 'none' }}>
-              <Card.Header className='uppercase'>
+              <Card.Header className='uppercase title'>
                 INVOICE PAYMENT
               </Card.Header>
               <Card.Body>
@@ -260,7 +260,7 @@ const InvoiceSettings = props => {
               </Card.Body>
             </Card>
             <Card style={{ boxShadow: 'none' }}>
-              <Card.Header className='uppercase'>
+              <Card.Header className='uppercase title'>
                 INVOICE DELIVERY PERIOD
               </Card.Header>
               <Card.Body>
@@ -480,7 +480,7 @@ const InvoiceSettings = props => {
               </Card.Body>
             </Card>
             <Card style={{ boxShadow: 'none' }}>
-              <Card.Header className=''>
+              <Card.Header className='title'>
                 INVOICE GROUPING (Applicable for Batch Invoice only)
               </Card.Header>
               <Card.Body>
@@ -505,7 +505,7 @@ const InvoiceSettings = props => {
               </Card.Body>
             </Card>
             <Card style={{ boxShadow: 'none' }}>
-              <Card.Header className='uppercase'>
+              <Card.Header className='uppercase title'>
                 EMAIL CATEGORY
               </Card.Header>
               <Card.Body>
@@ -546,7 +546,7 @@ const InvoiceSettings = props => {
               </Card.Body>
             </Card>
             <Card style={{ boxShadow: 'none' }}>
-              <Card.Header className='uppercase'>
+              <Card.Header className='uppercase title'>
                 INVOICE EMAIL RECIPIENT
               </Card.Header>
               <Card.Body>

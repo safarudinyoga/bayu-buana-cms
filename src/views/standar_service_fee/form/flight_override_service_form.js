@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from "uuid"
 import * as Yup from "yup"
 import SelectAsync from "components/form/select-async"
 import Api from "config/api"
-import { Menu } from "./menu"
+import { MenuModal } from "./menu_modal"
 import { useParams } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
 import { setAlert, setCreateModal, setModalTitle } from "redux/ui-store"
@@ -159,41 +159,35 @@ function FlightOverrideServiceForm(props) {
         setFieldTouched,
       }) => (
         <Form onSubmit={handleSubmit} className="ml-2">
-          <Form.Group as={Row} className="form-group">
-            <Form.Label column sm={4}>
-              City<span className="form-label-required">*</span>
+          <Form.Group as={Row} className="mb-3">
+            <Form.Label column md={4} sm={4} lg={4}>
+              Destination
+              <span className="form-label-required">*</span>
             </Form.Label>
-            <Col sm={8}>
-              <FastField name="city">
+            <Col md={8} sm={8} lg={8}>
+              <FastField name="destination">
                 {({ field, form }) => (
-                  <div style={{ maxWidth: 200 }}>
+                  <div style={{ maxWidth: 600 }}>
                     <SelectAsync
                       {...field}
                       isClearable
-                      isDisabled={isView}
-                      url={`master/cities`}
-                      fieldName="city_name"
+                      url={`master/destination-groups`}
+                      fieldName="destination_group_name"
                       onChange={(v) => {
-                        setFieldValue("city", v)
+                        setFieldValue("destination", v)
                       }}
                       placeholder="Please choose"
                       className={`react-select ${
-                        form.touched.city && form.errors.city
+                        form.touched.destination && form.errors.destination
                           ? "is-invalid"
                           : null
                       }`}
-                      components={
-                        isView
-                          ? {
-                              DropdownIndicator: () => null,
-                              IndicatorSeparator: () => null,
-                            }
-                          : null
-                      }
                     />
-                    {form.touched.city && form.errors.city && (
+                    {form.touched.destination && form.errors.destination && (
                       <Form.Control.Feedback type="invalid">
-                        {form.touched.city ? form.errors.city : null}
+                        {form.touched.destination
+                          ? form.errors.destination
+                          : null}
                       </Form.Control.Feedback>
                     )}
                   </div>
@@ -201,160 +195,167 @@ function FlightOverrideServiceForm(props) {
               </FastField>
             </Col>
           </Form.Group>
-          <Form.Group as={Row} className="form-group">
-            <Form.Label column md={3} lg={4}>
-              Partner City Code <span className="form-label-required">*</span>
+          <Form.Group as={Row} className="mb-3">
+            <Form.Label column md={4} sm={4} lg={4}>
+              Airline Service Type
             </Form.Label>
-            <Col md={9} lg={8}>
-              <FastField name="city_code" disabled>
+            <Col md={8} sm={8} lg={8}>
+              <div style={{ maxWidth: 500 }}>
+                <FastField name="airline_service_type">
+                  {({ field, form }) => (
+                    <div style={{ maxWidth: 500 }}>
+                      <SelectAsync
+                        {...field}
+                        isClearable
+                        url={`master/airline-categories`}
+                        fieldName="airline_category_name"
+                        onChange={(v) => {
+                          setFieldValue("airline_service_type", v)
+                        }}
+                        placeholder="Please choose"
+                        className={`react-select ${
+                          form.touched.airline_service_type &&
+                          form.errors.airline_service_type
+                            ? "is-invalid"
+                            : null
+                        }`}
+                      />
+                      {form.touched.airline_service_type &&
+                        form.errors.airline_service_type && (
+                          <Form.Control.Feedback type="invalid">
+                            {form.touched.airline_service_type
+                              ? form.errors.airline_service_type
+                              : null}
+                          </Form.Control.Feedback>
+                        )}
+                    </div>
+                  )}
+                </FastField>
+              </div>
+            </Col>
+          </Form.Group>
+          <Form.Group as={Row} className="mb-3">
+            <Form.Label column md={4} sm={4} lg={4}>
+              Specified Airline
+            </Form.Label>
+            <Col md={8} sm={8} lg={8}>
+              <FastField name="specified_airline">
                 {({ field, form }) => (
-                  <>
-                    <Form.Control
-                      type="text"
-                      disabled={isView}
-                      isInvalid={
-                        form.touched.city_code && form.errors.city_code
-                      }
-                      minLength={1}
-                      maxLength={128}
+                  <div style={{ maxWidth: 600 }}>
+                    <SelectAsync
                       {...field}
-                      style={{ maxWidth: 300 }}
+                      isClearable
+                      url={`master/airlines`}
+                      fieldName="airline_name"
+                      onChange={(v) => {
+                        setFieldValue("specified_airline", v)
+                      }}
+                      placeholder="Please choose"
+                      className={`react-select ${
+                        form.touched.specified_airline &&
+                        form.errors.specified_airline
+                          ? "is-invalid"
+                          : null
+                      }`}
                     />
-                    {form.touched.city_code && form.errors.city_code && (
-                      <Form.Control.Feedback type="invalid">
-                        {form.touched.city_code ? form.errors.city_code : null}
-                      </Form.Control.Feedback>
-                    )}
-                  </>
+                    {form.touched.specified_airline &&
+                      form.errors.specified_airline && (
+                        <Form.Control.Feedback type="invalid">
+                          {form.touched.specified_airline
+                            ? form.errors.specified_airline
+                            : null}
+                        </Form.Control.Feedback>
+                      )}
+                  </div>
                 )}
               </FastField>
             </Col>
           </Form.Group>
-          <Form.Group as={Row} className="form-group">
-            <Form.Label column md={3} lg={4}>
-              Partner City Name <span className="form-label-required">*</span>
+          <Form.Group as={Row} className="mb-3">
+            <Form.Label column md={4} sm={4} lg={4}>
+              Specified Source
             </Form.Label>
-            <Col md={9} lg={8}>
-              <FastField name="city_name" disabled>
+            <Col md={8} sm={8} lg={8}>
+              <FastField name="specified_source">
                 {({ field, form }) => (
-                  <>
-                    <Form.Control
-                      type="text"
-                      disabled={isView}
-                      isInvalid={
-                        form.touched.city_name && form.errors.city_name
-                      }
-                      minLength={1}
-                      maxLength={128}
+                  <div style={{ maxWidth: 600 }}>
+                    <SelectAsync
                       {...field}
-                      style={{ maxWidth: 300 }}
+                      isClearable
+                      url={`master/supplier-types`}
+                      fieldName="supplier_type_name"
+                      onChange={(v) => {
+                        setFieldValue("specified_source", v)
+                      }}
+                      placeholder="Please choose"
+                      className={`react-select ${
+                        form.touched.specified_source &&
+                        form.errors.specified_source
+                          ? "is-invalid"
+                          : null
+                      }`}
                     />
-                    {form.touched.city_name && form.errors.city_name && (
-                      <Form.Control.Feedback type="invalid">
-                        {form.touched.city_name ? form.errors.city_name : null}
-                      </Form.Control.Feedback>
-                    )}
-                  </>
+                    {form.touched.specified_source &&
+                      form.errors.specified_source && (
+                        <Form.Control.Feedback type="invalid">
+                          {form.touched.specified_source
+                            ? form.errors.specified_source
+                            : null}
+                        </Form.Control.Feedback>
+                      )}
+                  </div>
                 )}
               </FastField>
             </Col>
+            <MenuModal
+              menu={[
+                {
+                  title: "MDR Fee",
+                  sections: [
+                    {
+                      title: "MDR FEE",
+                      taxType: taxTypeServiceFee,
+                      fieldFeeTaxId: "domestic_flight_service_fee_tax_id",
+                      fieldRadio: "domestic_flight_service",
+                      fieldAmount: "domestic_flight_service_amount",
+                      fieldAmountType: "domestic_flight_service_amount_type",
+                      fieldPercent: "domestic_flight_service_percent",
+                      fieldIncludeTax: "domestic_flight_service_tax_include",
+                    },
+                  ],
+                },
+              ]}
+              values={values}
+              fHandleChange={handleChange}
+              fHandleBlur={handleBlur}
+              setFieldValue={setFieldValue}
+              // isView={isView}
+              amountSuffixSelections={[
+                {
+                  label: "/Ticket",
+                  value: "de62950d-fbab-4e39-bd90-c2b6687c6b36",
+                },
+                {
+                  label: "/Person",
+                  value: "de03bf84-4bd8-4cdf-9348-00246f04bcad",
+                },
+                {
+                  label: "/Transaction",
+                  value: "5123b121-4f6a-4871-bef1-65408d663e19",
+                },
+              ]}
+              errors={errors}
+            />
           </Form.Group>
-          <Form.Group as={Row} className="form-group">
-            <Form.Label column md={3} lg={4}>
-              Latitude
-            </Form.Label>
-            <Col md={9} lg={8}>
-              <FastField name="latitude" disabled>
-                {({ field, form }) => (
-                  <>
-                    <Form.Control
-                      type="text"
-                      disabled={isView}
-                      minLength={1}
-                      maxLength={16}
-                      {...field}
-                      style={{ maxWidth: 300 }}
-                    />
-                  </>
-                )}
-              </FastField>
-            </Col>
-          </Form.Group>
-          <Form.Group as={Row} className="form-group">
-            <Form.Label column md={3} lg={4}>
-              Longitude
-            </Form.Label>
-            <Col md={9} lg={8}>
-              <FastField name="longitude" disabled>
-                {({ field, form }) => (
-                  <>
-                    <Form.Control
-                      type="text"
-                      disabled={isView}
-                      minLength={1}
-                      maxLength={16}
-                      {...field}
-                      style={{ maxWidth: 300 }}
-                    />
-                  </>
-                )}
-              </FastField>
-            </Col>
-          </Form.Group>
-          <Menu
-            menu={[
-              {
-                sections: [
-                  {
-                    title: "Service Fee",
-                    taxType: taxTypeServiceFee,
-                    fieldFeeTaxId: "domestic_flight_fee_tax_id",
-                    fieldRadio: "domestic_flight",
-                    fieldAmount: "domestic_flight_amount",
-                    fieldAmountType: "domestic_flight_amount_type",
-                    fieldPercent: "domestic_flight_percent",
-                    fieldIncludeTax: "domestic_flight_tax_include",
-                  },
-                ],
-              },
-            ]}
-            values={values}
-            fHandleChange={handleChange}
-            fHandleBlur={handleBlur}
-            setFieldValue={setFieldValue}
-            isView={isView}
-          />
-          {!props.hideButton && (
-            <div
-              style={{
-                marginBottom: 30,
-                marginTop: 30,
-                display: "flex",
-              }}
-            >
-              {!isView && (
-                <Button
-                  variant="primary"
-                  type="submit"
-                  disabled={isSubmitting}
-                  style={{ marginRight: 15 }}
-                >
-                  SAVE
-                </Button>
-              )}
-              <CancelButton
-                onClick={() =>
-                  dispatch(
-                    setCreateModal({
-                      show: false,
-                      id: null,
-                      disabled_form: false,
-                    }),
-                  )
-                }
-              />
-            </div>
-          )}
+
+          <div style={{ marginBottom: 30, marginTop: 30, display: "flex" }}>
+            <Button variant="primary" type="submit" style={{ marginRight: 15 }}>
+              SAVE
+            </Button>
+            <Button variant="secondary" onClick={props.onHide}>
+              CANCEL
+            </Button>
+          </div>
         </Form>
       )}
     </Formik>

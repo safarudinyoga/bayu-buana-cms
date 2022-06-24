@@ -8,7 +8,7 @@ export default function FlightTable() {
     showAdvancedOptions: false,
     hideDetail: true,
     baseRoute: "/master/standard-service-fee/form/flight-form",
-    endpoint: "/master/service-fee-categories",
+    endpoint: "/master/agent-service-fee-categories/1",
     deleteEndpoint: "/master/batch-actions/delete/service-fee-categories",
     activationEndpoint: "/master/batch-actions/activate/service-fee-categories",
     deactivationEndpoint:
@@ -20,7 +20,7 @@ export default function FlightTable() {
       },
       {
         title: "Domestic Service Fee",
-        data: "Currency.Currency Code",
+        data: "domestic_flight_service.amount",
       },
       {
         title: "International Service Fee",

@@ -690,7 +690,7 @@ const Employee = (props) => {
                         disabled={props.finishStep > 0 || props.employeeData?.id ? (!isValid || isSubmitting) : (!dirty || isSubmitting)}
                         style={{ marginRight: 15, marginBottom: 20, marginTop: 85 }}
                       >
-                      {props.employeeData?.id ? "SAVE" : "SAVE & NEXT"}
+                      SAVE
                       </Button>
                       <Button
                         variant="secondary"
@@ -723,7 +723,7 @@ const Employee = (props) => {
                     disabled={props.finishStep > 0 || props.employeeData?.id ? (!isValid || isSubmitting) : (!dirty || isSubmitting)}
                     style={{ marginRight: 15, marginBottom: 135 }}
                   >
-                    {props.employeeData?.id ? "SAVE" : "SAVE & NEXT"}
+                    SAVE
                   </Button>
                   <Button
                     variant="secondary"
