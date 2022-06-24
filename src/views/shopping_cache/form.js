@@ -219,7 +219,7 @@ function ShoppingCacheCreate(props) {
         </Tab> */}
       </Tabs>
 
-      <div className="mt-4 mb-5 ml-1 row justify-content-md-start justify-content-center">
+      {/* <div className="mt-4 mb-5 ml-1 row justify-content-md-start justify-content-center">
         <Button
           variant="primary"
           type="submit"
@@ -230,7 +230,7 @@ function ShoppingCacheCreate(props) {
           SAVE
         </Button>
         <CancelButton onClick={() => dispatch(setCreateModal({show: false, id: null, disabled_form: false}))}/>
-      </div>
+      </div> */}
     </>
   )
 }

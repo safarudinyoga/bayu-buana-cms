@@ -433,12 +433,12 @@ const FlightForm = (props) => {
     domestic_flight_service_amount_type: "",
     domestic_flight_service_percent: "",
     domestic_flight_service_tax_include: false,
-    domestic_revalidate: "",
-    domestic_revalidate_fee_tax_id: "",
-    domestic_revalidate_amount: "",
-    domestic_revalidate_amount_type: "",
-    domestic_revalidate_percent: "",
-    domestic_revalidate_tax_include: false,
+    international_flight_service: "",
+    international_flight_service_fee_tax_id: "",
+    international_flight_service_amount: "",
+    international_flight_service_amount_type: "",
+    international_flight_service_percent: "",
+    international_flight_service_tax_include: false,
   })
 
   // Schema for yup
@@ -447,6 +447,9 @@ const FlightForm = (props) => {
       .required(`Please enter Preset Name.`)
       .min(1, "Must be exactly 1 digits")
       .max(128, "Maximum number 128"),
+    description: Yup.string()
+      .min(1, "Must be exactly 1 digits")
+      .max(4000, "Maximum number 4000"),
     domestic_flight_service: Yup.string().required(
       `Please enter fixed amount or percentage for ${taxTypeDomesticFlight.fee_tax_type_name}.`,
     ),
@@ -475,25 +478,34 @@ const FlightForm = (props) => {
         ),
       },
     ),
-    domestic_revalidate: Yup.string().required(
+    international_flight_service: Yup.string().required(
       `Please enter fixed amount or percentage for ${taxTypeInternationalFlight.fee_tax_type_name}.`,
     ),
-    domestic_revalidate_amount: Yup.string().when("domestic_revalidate", {
-      is: (value) => value === "amount",
-      then: Yup.string().required(
-        `Please enter fixed amount for ${taxTypeInternationalFlight.fee_tax_type_name}.`,
-      ),
-    }),
-    domestic_revalidate_amount_type: Yup.string().when("domestic_revalidate", {
-      is: (value) => value === "amount",
-      then: Yup.string().required(`Please select charge type.`),
-    }),
-    domestic_revalidate_percent: Yup.string().when("domestic_revalidate", {
-      is: (value) => value === "percent",
-      then: Yup.string().required(
-        `Please enter percentage for ${taxTypeInternationalFlight.fee_tax_type_name}.`,
-      ),
-    }),
+    international_flight_service_amount: Yup.string().when(
+      "international_flight_service",
+      {
+        is: (value) => value === "amount",
+        then: Yup.string().required(
+          `Please enter fixed amount for ${taxTypeInternationalFlight.fee_tax_type_name}.`,
+        ),
+      },
+    ),
+    international_flight_service_amount_type: Yup.string().when(
+      "international_flight_service",
+      {
+        is: (value) => value === "amount",
+        then: Yup.string().required(`Please select charge type.`),
+      },
+    ),
+    international_flight_service_percent: Yup.string().when(
+      "international_flight_service",
+      {
+        is: (value) => value === "percent",
+        then: Yup.string().required(
+          `Please enter percentage for ${taxTypeInternationalFlight.fee_tax_type_name}.`,
+        ),
+      },
+    ),
   })
 
   useEffect(async () => {
@@ -522,9 +534,10 @@ const FlightForm = (props) => {
       if (formId) {
         let res = await api.get(endpoint + "/" + formId)
         let data = res.data
+
+        console.log("tes", data)
         setInitialForm({
           ...initialForm,
-
           description: data.description,
           service_fee_category_name: data.service_fee_category_name,
         })
@@ -563,24 +576,24 @@ const FlightForm = (props) => {
               ? false
               : values.domestic_flight_service_tax_include,
         },
-        domestic_revalidate: {
+        international_flight_service: {
           charge_type: taxIdInternationalFlight,
           amount:
-            values.domestic_revalidate === "amount"
-              ? removeSeparator(values.domestic_revalidate_amount)
+            values.international_flight_service === "amount"
+              ? removeSeparator(values.international_flight_service_amount)
               : 0,
           percent:
-            values.domestic_revalidate === "amount"
+            values.international_flight_service === "amount"
               ? 0
-              : parseFloat(values.domestic_revalidate_percent),
+              : parseFloat(values.international_flight_service_percent),
           charge_type_id:
-            values.domestic_revalidate === "amount"
-              ? values.domestic_revalidate_amount_type
+            values.international_flight_service === "amount"
+              ? values.international_flight_service_amount_type
               : "00000000-0000-0000-0000-000000000000",
           is_tax_inclusive:
-            values.domestic_revalidate === "amount"
+            values.international_flight_service === "amount"
               ? false
-              : values.domestic_revalidate_tax_include,
+              : values.international_flight_service_tax_include,
         },
       }
       let res = await api.putOrPost(endpoint, formId, form)
@@ -688,6 +701,14 @@ const FlightForm = (props) => {
                             style={{ height: "88px", maxWidth: "416px" }}
                             {...field}
                           />
+                          {form.touched.description &&
+                            form.errors.description && (
+                              <Form.Control.Feedback type="invalid">
+                                {form.touched.description
+                                  ? form.errors.description
+                                  : null}
+                              </Form.Control.Feedback>
+                            )}
                         </>
                       )}
                     </FastField>
@@ -714,12 +735,15 @@ const FlightForm = (props) => {
                         {
                           title: "Late Payment",
                           taxType: taxTypeInternationalFlight,
-                          fieldFeeTaxId: "domestic_revalidate_fee_tax_id",
-                          fieldRadio: "domestic_revalidate",
-                          fieldAmount: "domestic_revalidate_amount",
-                          fieldAmountType: "domestic_revalidate_amount_type",
-                          fieldPercent: "domestic_revalidate_percent",
-                          fieldIncludeTax: "domestic_revalidate_tax_include",
+                          fieldFeeTaxId:
+                            "international_flight_service_fee_tax_id",
+                          fieldRadio: "international_flight_service",
+                          fieldAmount: "international_flight_service_amount",
+                          fieldAmountType:
+                            "international_flight_service_amount_type",
+                          fieldPercent: "international_flight_service_percent",
+                          fieldIncludeTax:
+                            "international_flight_service_tax_include",
                         },
                       ],
                     },
@@ -754,6 +778,7 @@ const FlightForm = (props) => {
                       <div style={{ padding: "0 15px 15px 15px" }}>
                         <button
                           type="button"
+                          disabled={isSubmitting || !dirty}
                           className="btn float-right button-override"
                           onClick={() => setModalShow(true)}
                         >

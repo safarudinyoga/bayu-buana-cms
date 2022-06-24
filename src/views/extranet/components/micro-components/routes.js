@@ -101,7 +101,7 @@ function Routes(props) {
             highlightFirstSuggestion={true}
           />
           {/* tampilan untuk error departure data non multitrip START */}
-          {props.formik.errors.departure_data && (
+          {props.formik && props.formik.errors.departure_data && (
             <div className='routes-invalid'>
               {props.formik.touched.departure_data ? props.formik.errors.departure_data : null}
             </div>
@@ -109,6 +109,8 @@ function Routes(props) {
           {/* tampilan untuk error departure data non multitrip END */}
           {/* tampilan untuk error departure data multitrip START */}
           {
+            props.formik &&
+            props.formik.errors &&
             props.formik.errors.trips &&
             props.formik.errors.trips[props.index] &&
             props.formik.errors.trips[props.index].departure_data ? (
@@ -123,7 +125,6 @@ function Routes(props) {
             ) : null
           }
           {/* tampilan untuk error departure data multitrip END */}
-          
         </div>
         <div className={`form-group required position-relative arrival-box mb-4 ${smallSize ? "routes-sm" : ""}`} > 
           <label htmlFor="arrival" className='form-with-label__title'>TO <span className='label-required'></span></label>
@@ -172,7 +173,7 @@ function Routes(props) {
             </div>
           )}
           {/* tampilan untuk error arrival data non multitrip END */}
-          
+
           {/* tampilan untuk error arrival data multitrip START */}
           {
             props.formik.errors.trips &&

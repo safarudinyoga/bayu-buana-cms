@@ -68,7 +68,6 @@ const EmergencyContacts = (props) => {
       initialValues={initialForm}
       validationSchema={validationSchema}
       onSubmit={async (values, { setSubmitting, resetForm }) => {
-        console.log(values)
 
         let formatted = {
           emergency_contact: {
@@ -84,30 +83,11 @@ const EmergencyContacts = (props) => {
         }
 
         try {
-          let res = await api.put("user/profile", formatted)
+          await api.put("user/profile", formatted)
           openSnackbar(
             `Your profile has been successfully updated.`
           )
         } catch(e) {}
-        
-        // setSubmitting(true)
-
-        // try {
-        //   let res = await api.post("master/employees", {
-        //     division_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-        //     employee_number: "string",
-        //     hire_date: "2021-11-14T01:32:53.237Z",
-        //     job_title_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-        //     office_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-        //     person_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-        //     user_account_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-        //   })
-        //   console.log(res)
-        //   resetForm()
-        //   setSubmitting(false)
-        // } catch (e) {}
-
-        // return props.handleSelectTab("security-settings")
       }}
     >
       {({
