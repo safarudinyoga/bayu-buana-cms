@@ -30,7 +30,6 @@ const Confirmation = () => {
 	}
 
 	const diff_minutes = (date1, date2) => {
-		console.log(date1, date2)
 		let milliseconds = date2.getTime() - date1.getTime()
 		let seconds = Math.floor(milliseconds / 1000);
 		let minutes = Math.floor(seconds / 60);
@@ -41,7 +40,6 @@ const Confirmation = () => {
 	
 		minutes = minutes % 60;
 		hours = hours % 24;
-		console.log(hours, seconds, "<<<")
 	
 		return `${padTo2Digits(hours)}h ${padTo2Digits(minutes)}m`;
 	}
