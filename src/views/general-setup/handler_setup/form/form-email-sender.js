@@ -27,7 +27,7 @@ function FormEmailSender(props) {
   })
 
   const validationSchema = Yup.object().shape({
-    message_type: Yup.object().required("Task Type is required."),
+    message_type: Yup.object().required("Message Type is required."),
     sender_name: Yup.string().max(256).required("Sender Name is required"),
     sender_email: Yup.string()
       .max(256)

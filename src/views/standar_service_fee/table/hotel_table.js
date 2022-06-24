@@ -8,7 +8,7 @@ export default function HotelTable() {
     showAdvancedOptions: false,
     hideDetail: true,
     baseRoute: "/master/standard-service-fee/form/hotel-form",
-    endpoint: "/master/service-fee-categories",
+    endpoint: "/master/agent-service-fee-categories/2",
     deleteEndpoint: "/master/batch-actions/delete/hotels",
     activationEndpoint: "/master/batch-actions/activate/hotels",
     deactivationEndpoint: "/master/batch-actions/deactivate/hotels",
@@ -19,11 +19,11 @@ export default function HotelTable() {
       },
       {
         title: "Domestic Service Fee",
-        data: "Currency.Currency Code",
+        data: "domestic_flight_service.amount",
       },
       {
         title: "International Service Fee",
-        data: "Currency.Currency Code",
+        data: "international_flight_service.amount",
       },
       {
         title: "Number of Override",
