@@ -53,7 +53,7 @@ const SecuritySettings = (props) => {
                           username: email,
                           password: value
                         })
-                        if(res.status == 200){
+                        if(res.status === 200){
                           return true
                         }
                       } catch(e) {
@@ -70,7 +70,7 @@ const SecuritySettings = (props) => {
                       .required("Confirm password is required")
                       .min(8, "Confirm Password must be at least 8 characters")
                       .max(256)
-                      .oneOf([Yup.ref('newPassword'), null], 'New Password must match'),
+                      .oneOf([Yup.ref('newPassword'), null], 'New password and confirm password does not match.'),
   })
 
   const signout = async () => {
@@ -145,7 +145,7 @@ const SecuritySettings = (props) => {
         }
 
         try {
-          let res = await api.put("user/profile", formatted)
+          await api.put("user/profile", formatted)
           openSnackbar(
             `Password has been successfully changed.`
           )
@@ -153,9 +153,6 @@ const SecuritySettings = (props) => {
         } catch(e) {
 
         }
-        
-
-        // return props.handleSelectTab("subscriptions")
       }}
     >
       {({
