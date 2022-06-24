@@ -8,6 +8,7 @@ import { setUIParams } from "redux/ui-store"
 import Select from "components/form/select"
 import SelectAsync from "components/form/select-async"
 import TextError from 'components/formik/textError'
+import '../../corporate_branch_office.css'
 
 // utils
 import Api from "config/api"
@@ -205,14 +206,14 @@ const BranchOfficeForm = ({ match }) => {
   }
 
   return (
-    <Form>
+    <Form style={{ padding: '0 47px' }}>
       <Row>
         <Col lg={12}>
           <Form.Group as={Row} className='form-group'>
-            <Form.Label column sm={3} className='mb-2'>
+            <Form.Label column sm={4} className='mb-1'>
               Company/ Branch Name <span className="form-label-required">*</span>
             </Form.Label>
-            <Col md={3} lg={9}>
+            <Col md={3} lg={8}>
               <Form.Control
                 value={values.office_name}
                 name="office_name"
@@ -224,21 +225,21 @@ const BranchOfficeForm = ({ match }) => {
                 placeholder=""
                 // disabled={isView}
                 // disabled={isView || loading}
-                // style={{ maxWidth: 150 }}
-                // className={touched?.general_information?.corporate_code && errors?.general_information?.corporate_code && 'is-invalid'}
+                style={{ maxWidth: 300 }}
+                className={touched?.office_name && errors?.office_name && 'is-invalid'}
               />
-              {/* {touched?.general_information?.corporate_code && errors?.general_information?.corporate_code && (
+              {touched?.office_name && errors?.office_name && (
                 <TextError>
-                  {errors.general_information.corporate_code}
+                  {errors.office_name}
                 </TextError>
-              )} */}
+              )}
             </Col>
           </Form.Group>
           <Form.Group as={Row} className='form-group'>
-            <Form.Label column sm={3} className='mb-2'>
+            <Form.Label column sm={4} className='mb-1'>
               Address
             </Form.Label>
-            <Col md={3} lg={9}>
+            <Col md={3} lg={8}>
               <textarea
                 value={values.address_line}
                 name="address_line"
@@ -249,21 +250,15 @@ const BranchOfficeForm = ({ match }) => {
                 placeholder=""
                 // disabled={isView}
                 // disabled={isView || loading}
-                // style={{ resize: 'none', maxWidth: 400 }}
-                className={`form-control mb-2 ${touched?.address_line && errors?.address_line && 'is-invalid'}`}
+                style={{ width: 400, resize: 'none', height: '80px', borderRadius: '8px', border: '1px solid #ced4da' }}
               />
-              {touched?.address_line && errors?.address_line && (
-                <TextError>
-                  {errors.address_line}
-                </TextError>
-              )}
             </Col>
           </Form.Group>
           <Form.Group as={Row} className='form-group'>
-            <Form.Label column sm={3} className='mb-2'>
+            <Form.Label column sm={4} className='mb-1'>
               Country <span className="form-label-required">*</span>
             </Form.Label>
-            <Col lg={9} md={3}>
+            <Col lg={8} md={3}>
               <div style={{ maxWidth: 300 }}>
                 <SelectAsync
                   isClearable
@@ -306,10 +301,10 @@ const BranchOfficeForm = ({ match }) => {
             </Col>
           </Form.Group>
           <Form.Group as={Row} className='form-group'>
-            <Form.Label column sm={3} className='mb-2'>
+            <Form.Label column sm={4} className='mb-1'>
               State/Province
             </Form.Label>
-            <Col md={3} lg={9}>
+            <Col md={3} lg={8}>
               <div style={{ maxWidth: 200 }}>
                 <Select
                   isClearable
@@ -337,10 +332,10 @@ const BranchOfficeForm = ({ match }) => {
             </Col>
           </Form.Group>
           <Form.Group as={Row} className='form-group'>
-            <Form.Label column sm={3} className='mb-2'>
+            <Form.Label column sm={4} className='mb-1'>
               City
             </Form.Label>
-            <Col md={3} lg={9}>
+            <Col md={3} lg={8}>
               <div style={{ maxWidth: 200 }}>
                 <Select
                   isClearable
@@ -366,10 +361,10 @@ const BranchOfficeForm = ({ match }) => {
             </Col>
           </Form.Group>
           <Form.Group as={Row} className='form-group'>
-            <Form.Label column sm={3} className='mb-2'>
+            <Form.Label column sm={4} className='mb-1'>
               Zip Code
             </Form.Label>
-            <Col md={3} lg={9}>
+            <Col md={3} lg={8}>
               <Form.Control
                 value={values.postal_code}
                 name="postal_code"
@@ -386,10 +381,10 @@ const BranchOfficeForm = ({ match }) => {
             </Col>
           </Form.Group>
           <Form.Group as={Row} className='form-group'>
-            <Form.Label column sm={3} className='mb-2'>
+            <Form.Label column sm={4} className='mb-1'>
               Geo Location
             </Form.Label>
-            <Col md={3} lg={9}>
+            <Col md={3} lg={8}>
             <div style={{ display: "flex" }}>
               <div style={{ marginRight: 10 }}>
                 <Form.Control
@@ -423,10 +418,10 @@ const BranchOfficeForm = ({ match }) => {
             </Col>
           </Form.Group>
           <Form.Group as={Row} className='form-group'>
-            <Form.Label column sm={3} className='mb-2'>
+            <Form.Label column sm={4} className='mb-1'>
               Phone Number
             </Form.Label>
-            <Col md={3} lg={9}>
+            <Col md={3} lg={8}>
               <Form.Control
                 value={values.phone_number}
                 name="phone_number"
@@ -443,10 +438,10 @@ const BranchOfficeForm = ({ match }) => {
             </Col>
           </Form.Group>
           <Form.Group as={Row} className='form-group'>
-            <Form.Label column sm={3} className='mb-2'>
+            <Form.Label column sm={4} className='mb-1'>
               Fax
             </Form.Label>
-            <Col md={3} lg={9}>
+            <Col md={3} lg={8}>
               <Form.Control
                 value={values.fax_number}
                 name="fax_number"
@@ -463,10 +458,10 @@ const BranchOfficeForm = ({ match }) => {
             </Col>
           </Form.Group>
           <Form.Group as={Row} className='form-group'>
-            <Form.Label column sm={3} className='mb-2'>
+            <Form.Label column sm={4} className='mb-1'>
               Email
             </Form.Label>
-            <Col md={3} lg={9}>
+            <Col md={3} lg={8}>
               <Form.Control
                 value={values.email}
                 name="email"

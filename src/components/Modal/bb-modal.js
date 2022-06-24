@@ -5,9 +5,9 @@ import './bb-modal.css'
 const ModalCreate = ({show, onClick, modalContent, modalTitle, modalSize, scrollable=false}) => {
 	const Content = modalContent
 	return (
-		<Modal 
+		<Modal
 			size={modalSize}
-			show={show} 
+			show={show}
 			onHide={onClick}
 			aria-labelledby="contained-modal-title-vcenter"
 			centered
@@ -17,8 +17,8 @@ const ModalCreate = ({show, onClick, modalContent, modalTitle, modalSize, scroll
 		<Modal.Header closeButton className="bb-modal-header">
 		</Modal.Header>
 		<ModalBody className="bb-modal-body">
-			{modalTitle 
-				? <p className="bb-modal-title">{modalTitle}</p> 
+			{modalTitle
+				? <p className="bb-modal-title">{modalTitle}</p>
 				: null
 			}
 			{modalContent ? <Content onHide={onClick}/> : null}

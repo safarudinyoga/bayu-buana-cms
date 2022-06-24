@@ -118,7 +118,7 @@
 
 .accordion .card {
   display: flex;
-  flex-direction: column-reverse;
+  flex-direction: column;
 }
 
 .sublabel-traveller {
@@ -189,7 +189,7 @@
 }
 
 .traveller-container.traveller-sm .form-with-label__suggest-icon {
-  bottom: 7px;
+  bottom: 20px;
 }
 
 /*card-header == <Accordion.Toggle/>*/

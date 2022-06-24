@@ -214,6 +214,13 @@ export default function EmployeeTable() {
       {
         title: "Name",
         data: "given_name",
+        render: (data) => {
+          if (data === undefined) {
+            return ""
+          } else {
+            return data
+          }
+        },
       },
       {
         title: "",
