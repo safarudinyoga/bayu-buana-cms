@@ -34,12 +34,27 @@ function TripDateRoundtrip(props) {
           onChange={(date) => {
             if(title === "DEPART") {
               setDepartTime(new Date(date))
+              props.formik.setFieldValue("departure_datetime", new Date(date))
             } else if (title === "RETURN") {
               setReturnTime(new Date(date))
+              props.formik.setFieldValue("arrival_datetime", new Date(date))
             }
-            
           }}
         />
+        {
+          props.formik && props.formik.errors.departure_datetime && title === "DEPART" ? (
+            <div className="route-invalid">
+              {props.formik.touched.departure_datetime ? props.formik.errors.departure_datetime : null}
+            </div>
+          ) : null
+        }
+        {
+          props.formik && props.formik.errors.arrival_datetime && title === "RETURN" ? (
+            <div className="route-invalid">
+              {props.formik.touched.arrival_datetime ? props.formik.errors.arrival_datetime : null}
+            </div>
+          ) : null
+        }
       </div>
     )
   }
