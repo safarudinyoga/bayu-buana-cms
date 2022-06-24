@@ -3,7 +3,7 @@ import BBDataTable from "components/table/bb-data-table"
 import { useDispatch, useSelector } from "react-redux"
 import { Card, Form, Row, Col, Modal, Button } from "react-bootstrap"
 import { withRouter } from "react-router"
-import { Formik, FastField } from "formik"
+import { Formik, FastField, FieldArray } from "formik"
 import { setAlert, setCreateModal } from "redux/ui-store"
 import createIcon from "assets/icons/create.svg"
 import * as Yup from "yup"
@@ -12,7 +12,7 @@ import SelectAsync from "components/form/select-async"
 import { ReactSVG } from "react-svg"
 import removeIcon from "assets/icons/remove.svg"
 
-const endpoint = "/master/configurations/email-senders"
+const endpoint = "/master/configurations/senders"
 
 function FormEmailReceipt(props) {
   const API = new Api()
@@ -24,8 +24,12 @@ function FormEmailReceipt(props) {
   const [initialForm, setInitialForm] = useState([
     {
       message_type: "",
-      sender_name: "",
-      sender_email: "",
+      email_receipt: [
+        {
+          sender_name: "",
+          sender_email: "",
+        },
+      ],
     },
   ])
 
@@ -50,11 +54,15 @@ function FormEmailReceipt(props) {
 
   const validationSchema = Yup.object().shape({
     message_type: Yup.object().required("Task Type is required."),
-    sender_name: Yup.string().max(256).required("Sender Name is required"),
-    sender_email: Yup.string()
-      .max(256)
-      .email("Sender Email is not valid")
-      .required("Sender Email is required."),
+    email_receipt: Yup.array().of(
+      Yup.object().shape({
+        sender_name: Yup.string().max(256).required("Sender Name is required"),
+        sender_email: Yup.string()
+          .max(256)
+          .email("Sender Email is not valid")
+          .required("Sender Email is required."),
+      }),
+    ),
   })
 
   useEffect(async () => {
@@ -192,16 +200,109 @@ function FormEmailReceipt(props) {
                 </FastField>
               </Col>
             </Form.Group>
-
-            {initialForm.map((input, index) => {
-              return (
-                <div key={index}>
-                  <Form.Group as={Row} className="form-group">
-                    <Form.Label column md={3} lg={4}>
+            <FieldArray
+              name="email_receipt"
+              render={(arrayHelpers) => (
+                <>
+                  {values.email_receipt && values.email_receipt.length > 0
+                    ? values.email_receipt.map((email_receipt, index) => (
+                        <>
+                          <div key={index}>
+                            <Col md={9} lg={4} key={index}>
+                              <FastField name="recipient_name" disabled>
+                                {({ field, form }) => (
+                                  <>
+                                    <Form.Control
+                                      type="text"
+                                      isInvalid={
+                                        form.touched.recipient_name &&
+                                        form.errors.recipient_name
+                                      }
+                                      minLength={1}
+                                      maxLength={128}
+                                      {...field}
+                                      style={{ maxWidth: 300 }}
+                                      placeholder="Recipient Name"
+                                      onChange={(e) =>
+                                        handleInputChange(e, index)
+                                      }
+                                    />
+                                    {form.touched.recipient_name &&
+                                      form.errors.recipient_name && (
+                                        <Form.Control.Feedback type="invalid">
+                                          {form.touched.recipient_name
+                                            ? form.errors.recipient_name
+                                            : null}
+                                        </Form.Control.Feedback>
+                                      )}
+                                  </>
+                                )}
+                              </FastField>
+                            </Col>
+                            <Col md={9} lg={3}>
+                              <FastField name="lastName" disabled>
+                                {({ field, form }) => (
+                                  <>
+                                    <Form.Control
+                                      type="text"
+                                      isInvalid={
+                                        form.touched.recipient_email &&
+                                        form.errors.recipient_email
+                                      }
+                                      placeholder="Recipient Email"
+                                      minLength={1}
+                                      maxLength={128}
+                                      {...field}
+                                      style={{ maxWidth: 300 }}
+                                      onChange={(e) =>
+                                        handleInputChange(e, index)
+                                      }
+                                    />
+                                    {form.touched.recipient_email &&
+                                      form.errors.recipient_email && (
+                                        <Form.Control.Feedback type="invalid">
+                                          {form.touched.recipient_email
+                                            ? form.errors.recipient_email
+                                            : null}
+                                        </Form.Control.Feedback>
+                                      )}
+                                  </>
+                                )}
+                              </FastField>
+                            </Col>
+                            {index > 0 ? (
+                              <Button
+                                onClick={() => arrayHelpers.remove(index)}
+                              >
+                                REMOVE
+                              </Button>
+                            ) : (
+                              ""
+                            )}
+                          </div>
+                        </>
+                      ))
+                    : ""}
+                  <Button
+                    onClick={() =>
+                      arrayHelpers.push({ sender_name: "", sender_email: "" })
+                    }
+                    className="my-4"
+                  >
+                    Add New
+                  </Button>
+                </>
+              )}
+            />
+            <Form.Group as={Row} className="form-group">
+              {initialForm.map((input, index) => {
+                return (
+                  <>
+                    <Form.Label column md={3} lg={4} key={index}>
                       Recipient
                       <span className="form-label-required">*</span>
                     </Form.Label>
-                    <Col md={9} lg={4}>
+                    <Col md={9} lg={4} key={index}>
                       <FastField name="recipient_name" disabled>
                         {({ field, form }) => (
                           <>
@@ -275,10 +376,11 @@ function FormEmailReceipt(props) {
                         </Button>
                       )}
                     </Col>
-                  </Form.Group>
-                </div>
-              )
-            })}
+                  </>
+                )
+              })}
+            </Form.Group>
+
             <Button
               // onClick={addFields}
               onClick={handleAddClick}
