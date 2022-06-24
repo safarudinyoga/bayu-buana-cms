@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { Card, Form, Row, Col, Button, Image, CloseButton } from "react-bootstrap"
-import { Formik, FastField, Field } from "formik"
+import { Formik, FastField, Field, ErrorMessage } from "formik"
+import TextError from "components/formik/textError"
 import * as Yup from "yup"
 import ImageUploading from "react-images-uploading"
 import axios from "axios"
@@ -13,7 +14,6 @@ import Api from "config/api"
 import env from "config/environment"
 import Select from "components/form/select"
 import { default as SelectAsync } from "components/form/select-async"
-import { auto } from "@popperjs/core"
 
 const options = {
   position: "bottom-right",
@@ -29,14 +29,13 @@ const GeneralInformation = (props) => {
   const [photoProfile, setPhotoProfile] = useState([])
   const [photoData, setPhotoData] = useState()
   const [imageChanged, setImageChanged] = useState(false)
-  const maxNumber = 1
-  const { innerWidth, innerHeight, outerHeight, outerWidth } = useWindowSize();
+  const defmonths = { value: 1, label: "" }
+  const defyears = { value: 1921, label: "" }
+  const { innerWidth } = useWindowSize();
 
   const [showCloseBtn, setShowCloseBtn] = useState(false)
   const [openSnackbar] = useSnackbar(options)
   let api = new Api()
-
-  
 
   // Initialize form
   const [initialForm, setInitialForm] = useState({
@@ -45,13 +44,9 @@ const GeneralInformation = (props) => {
     firstName: "",
     middleName: "",
     lastName: "",
-    // dateOfBirth: "",
-    gender: "male",
+    gender: "",
     idCardNumber: "",
-    dobDay: { value: 1, label: 1 },
-    dobMonth: { value: 1, label: "January" },
-    dobYear: { value: 1921, label: 1921 },
-
+    birth_date: [],
     // Contacts
     homePhone: "",
     mobilePhone: "",
@@ -83,7 +78,7 @@ const GeneralInformation = (props) => {
     firstName: Yup.string().required("First Name is required."),
     middleName: Yup.string(),
     lastName: Yup.string().required("Last Name is required."),
-    // dateOfBirth: Yup.string().required("Date of Birth is required."),
+    birth_date: Yup.array().min(3, "Date of Birth is required."),
     gender: Yup.string().required("Gender is required."),
     idCardNumber: Yup.string(),
 
@@ -108,7 +103,7 @@ const GeneralInformation = (props) => {
                 `${env.API_URL}/master/employees?filters=["email","=","${value}"]`,
               )
               .then((res) => {
-                resolve(res.data.items.length == 0)
+                resolve(res.data.items.length === 0)
               })
               .catch((error) => {
                 resolve(false)
@@ -137,14 +132,49 @@ const GeneralInformation = (props) => {
     permanentZipCode: Yup.string(),
   })
 
-  // Birthday
-  const selectDay = () => {
-    const options = []
-    const today = new Date();
-    let currentYear = today.getFullYear();
-    let currentMonth = today.getMonth()+1;
+  const resetDate = (date, months=defmonths, years=defyears) => {
+    const today = new Date()
+    let currentYear = today.getFullYear()
+    let currentMonth = today.getMonth() + 1
     let currentDate = today.getDate()
-    if(initialForm.dobYear.value === currentYear && initialForm.dobMonth.value === currentMonth){
+
+    if (years.value === currentYear) {
+      if (months.value > currentMonth) {
+        return true
+      } else {
+        if(date.value > currentDate) {
+          return true
+        } else {
+          return false
+        }
+      }
+    }
+
+    if (months.value === 2 && years.value % 4 === 0) {
+      return date.value > 29
+    }
+    if (months.value === 2 && years.value % 4 !== 0) {
+      return date.value > 28
+    }
+    if (
+      months.value === 4 ||
+      months.value === 6 ||
+      months.value === 9 ||
+      months.value === 11
+    ) {
+      return date.value > 30
+    }
+    return false
+  }
+
+  // Birthday
+  const selectDay = (months=defmonths, years=defyears) => {
+    const options = []
+    const today = new Date()
+    let currentYear = today.getFullYear()
+    let currentMonth = today.getMonth() + 1
+    let currentDate = today.getDate()
+    if (years.value === currentYear && months.value === currentMonth) {
       for (let i = 1; i <= currentDate; i++) {
         options.push({
           label: i,
@@ -152,21 +182,26 @@ const GeneralInformation = (props) => {
         })
       }
     } else {
-      if(initialForm.dobMonth.value === 2 && initialForm.dobYear.value % 4 == 0){
+      if (months.value === 2 && years.value % 4 === 0) {
         for (let i = 1; i <= 29; i++) {
           options.push({
             label: i,
             value: i,
           })
         }
-      } else if(initialForm.dobMonth.value === 2 && initialForm.dobYear.value % 4 != 0){
+      } else if (months.value === 2 && years.value % 4 !== 0) {
         for (let i = 1; i <= 28; i++) {
           options.push({
             label: i,
             value: i,
           })
         }
-      } else if(initialForm.dobMonth.value === 4 || initialForm.dobMonth.value === 6 || initialForm.dobMonth.value === 9 || initialForm.dobMonth.value === 11) {
+      } else if (
+        months.value === 4 ||
+        months.value === 6 ||
+        months.value === 9 ||
+        months.value === 11
+      ) {
         for (let i = 1; i <= 30; i++) {
           options.push({
             label: i,
@@ -181,22 +216,20 @@ const GeneralInformation = (props) => {
           })
         }
       }
-      
     }
-    
     return options
   }
-  const selectMonth = () => {
+  const selectMonth = (years=defyears) => {
     const options = []
     const today = new Date();
     let currentYear = today.getFullYear();
     let currentMonth = today.getMonth()+1;
-    const month = Array.from({ length: initialForm.dobYear.value === currentYear ? currentMonth : 12 }, (e, i) => {
+    const month = Array.from({ length: years.value === currentYear ? currentMonth : 12 }, (e, i) => {
       return new Date(null, i + 1, null).toLocaleDateString("en", {
         month: "long",
       })
     })
-    
+
     month.forEach((data, i) => {
       options.push({
         label: data,
@@ -221,6 +254,13 @@ const GeneralInformation = (props) => {
     return options
   }
 
+  const dateFormat = (d,m,y) => {
+    let day = d < 10 ? ("0"+d) : d;
+    let month = m < 10 ? ("0"+m) : m;
+    let year = y;
+
+    return year+"-"+month+"-"+day
+  }
   // Current Country state
   const handleChangeCurrentCountry = async (v) => {
     try {
@@ -358,7 +398,6 @@ const GeneralInformation = (props) => {
   // Upload profile
   const onChangePhotoProfile = (imageList, addUpdateIndex) => {
     // data for submit
-    console.log(imageList, addUpdateIndex)
     setImageChanged(true)
 
     if(imageList.length > 0){
@@ -375,7 +414,6 @@ const GeneralInformation = (props) => {
 
   useEffect(async () => {
     try {
-      console.log("PhotoProfile", photoProfile)
       let res = await api.get("/master/countries")
       const options = []
       res.data.items.forEach((data) => {
@@ -408,18 +446,14 @@ const GeneralInformation = (props) => {
     try {
       let res = await api.get("/user/profile")
       let data = res.data;
-      console.log("DATA", data)
       handleChangeCurrentCountry(_.isEmpty(data.address) ? "" : data.address.country ? data.address.country_id : "")
       handleChangePermanentCountry(_.isEmpty(data.permanent_address) ? "" : data.permanent_address.country ? data.permanent_address.country_id : "")
-      
-
-
+    
       setPhotoProfile([{
         data_url: data.employee_asset.multimedia_description ?  data.employee_asset.multimedia_description.url : "/img/media/profile.svg"
       }])
 
       setPhotoData(data.employee_asset.multimedia_description ? data.employee_asset.multimedia_description.id : "")
-      
       
       setInitialForm({
         ...initialForm,
@@ -433,30 +467,22 @@ const GeneralInformation = (props) => {
         lastName: data.surname ? data.surname : "",
         gender: _.isEmpty(data.gender) ? "" : data.gender.id,
         idCardNumber: data.ktp ? data.ktp : "",
-        dobDay: data.birth_date ? {
-          value: parseInt(data.birth_date.split("-")[2]),
-          label: parseInt(data.birth_date.split("-")[2]), 
-        } : {
-          value: 1,
-          label: 1,
-        },
-        dobMonth: data.birth_date ? {
-          value: parseInt(data.birth_date.split("-")[1]),
-          label: new Date(null, parseInt(data.birth_date.split("-")[1]), null).toLocaleDateString("en", {
-            month: "long",
-          }), 
-        }: {
-          value: 1,
-          label: 1,
-        },
-        dobYear: data.birth_date ? {
-          value: parseInt(data.birth_date.split("-")[0]),
-          label: parseInt(data.birth_date.split("-")[0]),  
-        } : {
-          value: 1921,
-          label: 1921,
-        },
-        
+        birth_date: data.birth_date ? [
+          {
+            value: parseInt(data.birth_date.split("-")[2]),
+            label: parseInt(data.birth_date.split("-")[2]),
+          },
+          {
+            value: parseInt(data.birth_date.split("-")[1]),
+              label: new Date(null, parseInt(data.birth_date.split("-")[1]), null).toLocaleDateString("en", {
+              month: "long",
+            })
+          },
+          {
+            value: parseInt(data.birth_date.split("-")[0]),
+            label: parseInt(data.birth_date.split("-")[0]),
+          },
+        ] : [],
         // Contacts
         homePhone: _.isEmpty(data.contact) ? "" : data.contact.phone_number ? data.contact.phone_number : "",
         mobilePhone: _.isEmpty(data.contact) ? "" : data.contact.mobile_phone_number ? data.contact.mobile_phone_number : "",
@@ -481,11 +507,11 @@ const GeneralInformation = (props) => {
 
         // Permanent Address
         sameAddress: (
-          data.permanent_address.address_line == data.address.address_line && 
-          data.permanent_address.country_id == data.address.country_id &&
-          data.permanent_address.city_id == data.address.city_id &&
-          data.permanent_address.state_province_id == data.address.state_province_id &&
-          data.permanent_address.postal_code == data.address.postal_code
+          data.permanent_address.address_line === data.address.address_line && 
+          data.permanent_address.country_id === data.address.country_id &&
+          data.permanent_address.city_id === data.address.city_id &&
+          data.permanent_address.state_province_id === data.address.state_province_id &&
+          data.permanent_address.postal_code === data.address.postal_code
         ) ? true : false,
         permanentAddress: _.isEmpty(data.permanent_address) ? "" : data.permanent_address.address_line ? data.permanent_address.address_line : "",
         permanentCountry: _.isEmpty(data.permanent_address) ? "" : data.permanent_address.country ? {
@@ -516,9 +542,6 @@ const GeneralInformation = (props) => {
         validationSchema={validationSchema}
         validator={() => ({})}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
-          let day = values.dobDay.value < 10 ? ("0"+values.dobDay.value) : values.dobDay.value;
-          let month = values.dobMonth.value < 10 ? ("0"+values.dobMonth.value) : values.dobMonth.value;
-          let year = values.dobYear.value;
 
           let formatted = {
             address: {
@@ -541,7 +564,7 @@ const GeneralInformation = (props) => {
             given_name: values.firstName,
             middle_name: values.middleName,
             surname: values.lastName,
-            birth_date: year+"-"+month+"-"+day,
+            birth_date: dateFormat(values.birth_date[0].value, values.birth_date[1].value, values.birth_date[2].value),
             name_prefix_id: values.title.value,
             gender_id: values.gender,
             permanent_address: values.sameAddress ? {
@@ -558,9 +581,8 @@ const GeneralInformation = (props) => {
               postal_code: values.permanentZipCode ? values.permanentZipCode : "" 
             }
           }
-          console.log(formatted);
 
-          let res = await api.put("user/profile", formatted)
+          await api.put("user/profile", formatted)
           openSnackbar(
             `Your profile has been successfully updated.`
           )
@@ -595,7 +617,7 @@ const GeneralInformation = (props) => {
                           style={{marginBottom: 20}}
                         >
                           <Row>
-                            {photoProfile.length == 0 && (
+                            {photoProfile.length === 0 && (
                               <Image
                                 src="/img/media/profile.svg"
                                 className="img-profile"
@@ -632,7 +654,7 @@ const GeneralInformation = (props) => {
                                         className="img-profile"
                                       />
                                       <CloseButton
-                                        style={{position: "absolute", top: 0, right: 0, display: showCloseBtn && photoProfile[0].data_url != "/img/media/profile.svg" ? "block" : "none"}}
+                                        style={{position: "absolute", top: 0, right: 0, display: showCloseBtn && photoProfile[0].data_url !== "/img/media/profile.svg" ? "block" : "none"}}
                                         onClick={() => onImageRemove(0)} 
                                       />
                                     </div>
@@ -677,7 +699,7 @@ const GeneralInformation = (props) => {
                           style={{ textAlign: "center" }}
                         >
                           <div>
-                            {photoProfile.length == 0 && (
+                            {photoProfile.length === 0 && (
                               <Image
                                 src="/img/media/profile.svg"
                                 className="img-profile"
@@ -714,7 +736,7 @@ const GeneralInformation = (props) => {
                                         className="img-profile"
                                       />
                                       <CloseButton
-                                        style={{position: "absolute", top: 0, right: 0, display: showCloseBtn && photoProfile[0].data_url != "/img/media/profile.svg" ? "block" : "none"}}
+                                        style={{position: "absolute", top: 0, right: 0, display: showCloseBtn && photoProfile[0].data_url !== "/img/media/profile.svg" ? "block" : "none"}}
                                         onClick={() => onImageRemove(0)} 
                                       />
                                     </div>
@@ -880,68 +902,64 @@ const GeneralInformation = (props) => {
                         <Col sm={8}>
                           <div style={{ width: 320, display: "flex" }}>
                             <div style={{ marginRight: 12, flex: 1 }}>
-                              <Select
-                                options={selectDay()}
-                                value={values.dobDay}
+                            <Select
+                                options={selectDay(values.birth_date[1], values.birth_date[2])}
+                                value={values.birth_date[0]}
+                                placeholder="Day"
                                 className={`react-select ${
                                   touched.title && Boolean(errors.title)
                                     ? "is-invalid"
                                     : ""
                                 }`}
-                                components={{
-                                  IndicatorSeparator: () => null,
-                                }}
-                                style={{ marginRight: 12 }}
                                 onChange={(v) => {
-                                  setFieldValue("dobDay", v)
+                                  setFieldValue("birth_date[0]", v)
                                 }}
                               />
                             </div>
                             <div style={{ marginRight: 12, flex: 2 }}>
                               <Select
-                                options={selectMonth()}
-                                value={values.dobMonth}
+                                options={selectMonth(values.birth_date[2])}
+                                value={values.birth_date[1]}
+                                placeholder="Month"
+                                disabled={true}
                                 className={`react-select ${
                                   touched.title && Boolean(errors.title)
                                     ? "is-invalid"
                                     : ""
                                 }`}
-                                components={{
-                                  IndicatorSeparator: () => null,
-                                }}
-                                style={{ marginRight: 12 }}
                                 onChange={(v) => {
-                                  // setInitialForm({
-                                  //   ...initialForm,
-                                  //   dobMonth: v
-                                  // })
-                                  setFieldValue("dobMonth", v)
+                                  setFieldValue("birth_date[1]", v)
+                                  if (resetDate(values.birth_date[0], v, values.birth_date[2])) {
+                                    setFieldValue("birth_date[0]", {value: 1, label: "1"})
+                                  }
                                 }}
                               />
                             </div>
                             <div style={{ flex: 1 }}>
                               <Select
                                 options={selectYear()}
-                                value={values.dobYear}
+                                value={values.birth_date[2]}
+                                placeholder="Year"
                                 className={`react-select ${
                                   touched.title && Boolean(errors.title)
                                     ? "is-invalid"
                                     : ""
                                 }`}
-                                components={{
-                                  IndicatorSeparator: () => null,
-                                }}
-                                style={{ marginRight: 12 }}
                                 onChange={(v) => {
-                                  setFieldValue("dobYear", v)
-                                  // setInitialForm({
-                                  //   ...initialForm,
-                                  //   dobYear: v
-                                  // })
+                                  setFieldValue("birth_date[2]", v)
+
+                                  if (resetDate(values.birth_date[0], values.birth_date[1], v)) {
+                                    setFieldValue("birth_date[0]", {value: 1, label: "1"})
+                                    setFieldValue("birth_date[1]", {value: 1, label: "January"})
+                                  }
                                 }}
                               />
                             </div>
                           </div>
+                          <ErrorMessage
+                            component={TextError}
+                            name="birth_date"
+                          />
                           {touched.title && Boolean(errors.title) && (
                             <div className="invalid-feedback">
                               {touched.title ? errors.title : ""}
@@ -968,9 +986,6 @@ const GeneralInformation = (props) => {
                                   checked={values.gender === "db24d53c-7d36-4770-8598-dc36174750af"}
                                   type="radio"
                                   label="Male"
-                                  isInvalid={
-                                    form.touched.gender && form.errors.gender
-                                  }
                                   style={{ marginRight: 30 }}
                                   inline
                                   onChange={() =>
@@ -986,22 +1001,18 @@ const GeneralInformation = (props) => {
                                   checked={values.gender === "db24d53c-7d36-4770-8598-dc36174750ad"}
                                   type="radio"
                                   label="Female"
-                                  isInvalid={
-                                    form.touched.gender && form.errors.gender
-                                  }
                                   inline
                                   onChange={() =>
                                     setFieldValue("gender", "db24d53c-7d36-4770-8598-dc36174750ad")
                                   }
                                 />
                               )}
-                            </FastField>
-                            {touched.gender && errors.gender && (
-                              <Form.Control.Feedback type="invalid">
-                                {touched.gender ? errors.gender : null}
-                              </Form.Control.Feedback>
-                            )}
+                            </FastField>                            
                           </div>
+                          <ErrorMessage
+                              component={TextError}
+                              name="gender"
+                            />
                         </Col>
                       </Form.Group>
                       <Form.Group as={Row} className="form-group">
@@ -1032,7 +1043,7 @@ const GeneralInformation = (props) => {
                             style={{ textAlign: "center" }}
                           >
                             <div>
-                              {photoProfile.length == 0 && (
+                              {photoProfile.length === 0 && (
                                 <Image
                                   src="/img/media/profile.svg"
                                   className="img-profile"
@@ -1069,7 +1080,7 @@ const GeneralInformation = (props) => {
                                           className="img-profile"
                                         />
                                         <CloseButton
-                                          style={{position: "absolute", top: 0, right: 0, display: showCloseBtn && photoProfile[0].data_url != "/img/media/profile.svg" ? "block" : "none"}}
+                                          style={{position: "absolute", top: 0, right: 0, display: showCloseBtn && photoProfile[0].data_url !== "/img/media/profile.svg" ? "block" : "none"}}
                                           onClick={() => onImageRemove(0)} 
                                         />
                                       </div>
@@ -1495,7 +1506,7 @@ const GeneralInformation = (props) => {
                           }}
                           onBlur={setFieldTouched}
                           isDisabled={
-                            values.permanentCountry == "" || values.sameAddress
+                            values.permanentCountry === "" || values.sameAddress
                           }
                         />
                       </div>
@@ -1522,7 +1533,7 @@ const GeneralInformation = (props) => {
                           }}
                           onBlur={setFieldTouched}
                           isDisabled={
-                            values.permanentCountry == "" || values.sameAddress
+                            values.permanentCountry === "" || values.sameAddress
                           }
                         />
                       </div>
