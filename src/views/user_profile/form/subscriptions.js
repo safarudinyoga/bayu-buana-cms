@@ -67,7 +67,7 @@ const Subscriptions = (props) => {
       }) => {
         return (
           <Form onSubmit={handleSubmit}>
-            <Card>
+            <Card style={{marginBottom: 0}}>
               <Card.Body>
               <h3 className="card-heading">Subscriptions</h3>
               <div style={{ padding: "0 15px 15px" }}>

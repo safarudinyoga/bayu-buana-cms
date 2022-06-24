@@ -2,6 +2,7 @@ import React from "react"
 import { FastField } from "formik"
 import { Row, Col } from "react-bootstrap"
 import Select from "components/form/select"
+import Hints from "assets/icons/hint.svg";
 
 function selectForm(props) {
   const {
@@ -15,6 +16,7 @@ function selectForm(props) {
     onChange,
     isDisabled,
     size,
+    useHint = false,
     ...rest
   } = props
   const objectName = name.split(".")
@@ -24,6 +26,7 @@ function selectForm(props) {
         <Col md={size?.label?.md || 3} lg={size?.label?.lg || 4}>
           <label className="text-label-input" htmlFor={name}>
             {label}
+            {useHint? <img src={Hints} alt="hint" className="ml-0"></img> : ""}
             <span className={required || ""} />
           </label>
         </Col>
