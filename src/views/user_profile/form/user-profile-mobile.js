@@ -1,39 +1,18 @@
 import React, { useEffect, useState } from "react"
-import Api from "config/api"
 import { useDispatch } from 'react-redux';
 import { withRouter } from 'react-router';
 import { ReactSVG } from "react-svg"
-import { Card, Form, Row, Col, Accordion } from "react-bootstrap"
+import { Card, Accordion } from "react-bootstrap"
 import { setUIParams } from "redux/ui-store"
-
 import GeneralInformation from "./general-information"
 import EmergencyContacts from "./emergency-contacts"
 import SecuritySettings from "./security-settings"
 import Subscriptions from "./subscriptions"
-import { fill } from "lodash";
-
-const endpoint = "/user/profile"
 const backUrl = "/profile"
 
 const UserProfileMobile = (props) => {
   let dispatch = useDispatch()
-
-  let api = new Api()
-
-  // const [tabKey, setTabKey] = useState("general-information")
- 
-
-  const [loading, setLoading] = useState(true)
-  const [form, setForm] = useState({
-    id: "",
-    aircraft_name: "",
-    model: "",
-    icao_code: "",
-    aircraft_code: "",
-  })
-
   useEffect(async () => {
-    let api = new Api()
     let formId = props.match.params.id
 
     let docTitle = "User Profile"
