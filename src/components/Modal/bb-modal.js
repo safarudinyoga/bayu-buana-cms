@@ -1,10 +1,8 @@
 import React from "react"
-import { Button, Modal, ModalBody, ModalFooter } from "react-bootstrap"
-import CancelButton from 'components/button/cancel'
+import { Modal, ModalBody } from "react-bootstrap"
 import './bb-modal.css'
 
 const ModalCreate = ({show, onClick, modalContent, modalTitle, modalSize, scrollable=false}) => {
-	// console.log('test modal: ', show , modalTitle)
 	const Content = modalContent
 	return (
 		<Modal 
