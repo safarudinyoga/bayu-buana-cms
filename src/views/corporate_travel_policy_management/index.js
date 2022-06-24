@@ -55,6 +55,7 @@ const TravelPolicy = (props) => {
     return (
       <BBModal 
         show={showCreateNew}
+        modalSize={"md"}
         onClick={() => setShowCreateNew(false)}
         modalTitle={"CREATE TRAVEL POLICY CLASS"}
         modalContent={() => (
