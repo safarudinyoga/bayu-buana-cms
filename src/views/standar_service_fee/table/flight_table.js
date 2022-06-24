@@ -24,7 +24,7 @@ export default function FlightTable() {
       },
       {
         title: "International Service Fee",
-        data: "Currency.Currency Code",
+        data: "international_flight_service.amount",
       },
       {
         title: "Number of Override",
