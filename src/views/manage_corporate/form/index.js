@@ -42,8 +42,8 @@ const ManageCorporateForm = ({ match }) => {
 
   const isView = useQuery().get("action") === "view"
 
-  // const [tabKey, setTabKey] = useState("general-information")
-  const [tabKey, setTabKey] = useState("service-fee")
+  const [tabKey, setTabKey] = useState("general-information")
+  // const [tabKey, setTabKey] = useState("service-fee")
   const [data, setData] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
 
