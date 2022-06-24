@@ -7,6 +7,7 @@
 .book-trip-tabs {
 	display: flex;
 	justify-content: space-between;
+  align-items: center;
 	background-color: #ECECEC;
 	border-top-right-radius: 0 !important;
 	border-top-left-radius: 0 !important;
@@ -420,4 +421,52 @@
 .bg-header-dark {
   background-color: #435151;
   color: #FFFFFF;
+}
+
+/* New Tabs */
+.flight-step-tabs {
+  text-align: center;
+	background-color: #ECECEC;
+}
+.flight-step-tabs > div > a {
+  text-transform: uppercase;
+	font-weight: bold;
+	color: #4D4D4D;
+}
+.flight-step-tabs .nav-link {
+  text-decoration: none;
+  border: none;
+  /* pointer-events: none; */
+}
+.flight-step-tabs .nav-link:hover {
+  color: transparent;
+}
+.flight-step-tabs .nav-link.active {
+  width: 90%;
+	border: 0 !important;
+	background-color: #31394D !important;
+	color: #FDC300 !important;
+	box-shadow: none !important;
+	border-top-left-radius: 0;
+	border-top-right-radius: 0;
+}
+.flight-step-tabs .done{
+	background-color: #31394D !important;
+}
+.flight-step-tabs .done>a{
+	color: #FDC300 !important;
+}
+.flight-step-tabs .nav-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: content;
+}
+.arrow-right {
+  width: 0; 
+  height: 0; 
+  border-top: 19px solid transparent;
+  border-bottom: 19px solid transparent;
+  border-left: 27px solid #31394D;
+  box-shadow: #286754;
 }
