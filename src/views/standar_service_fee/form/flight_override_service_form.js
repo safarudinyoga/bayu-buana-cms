@@ -11,6 +11,7 @@ import { useParams } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
 import { setAlert, setCreateModal, setModalTitle } from "redux/ui-store"
 import CancelButton from "components/button/cancel"
+import FormInputSelectMultiAjax from "components/form/input-select-multi-ajax"
 
 const endpoint = "/master/service-fee-categories"
 
@@ -171,6 +172,7 @@ function FlightOverrideServiceForm(props) {
                     <SelectAsync
                       {...field}
                       isClearable
+                      isMulti
                       url={`master/destination-groups`}
                       fieldName="destination_group_name"
                       onChange={(v) => {
@@ -183,6 +185,7 @@ function FlightOverrideServiceForm(props) {
                           : null
                       }`}
                     />
+
                     {form.touched.destination && form.errors.destination && (
                       <Form.Control.Feedback type="invalid">
                         {form.touched.destination
@@ -347,7 +350,31 @@ function FlightOverrideServiceForm(props) {
               errors={errors}
             />
           </Form.Group>
-
+          <FormInputSelectMultiAjax
+            label="Room Amenity Category"
+            // value={
+            //   form.room_amenity_category_room_amenity_type
+            //     ? form.room_amenity_category_room_amenity_type.map(
+            //         (item) => item.room_amenity_category_id,
+            //       )
+            //     : []
+            // }
+            filter={`["status", "=", 1]`}
+            name="destination_group_name"
+            // data={categoryData}
+            endpoint="/master/room-amenity-categories"
+            column="room_amenity_category_name"
+            // onChange={(e, values) => {
+            //   setForm(form => ({...form, room_amenity_category_room_amenity_type: values.map(v => (
+            //     {room_amenity_category_id: v.id}
+            //   ))}))
+            // }}
+            onChange={(v) => {
+              setFieldValue("destination", v)
+            }}
+            disabled={isView || loading}
+            type="selectmultiple"
+          />
           <div style={{ marginBottom: 30, marginTop: 30, display: "flex" }}>
             <Button variant="primary" type="submit" style={{ marginRight: 15 }}>
               SAVE
