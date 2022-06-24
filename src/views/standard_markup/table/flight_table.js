@@ -12,7 +12,7 @@ export default function FlightTable() {
     hideDetail: true,
     baseRoute: "/master/standard-markup/form/flight-form",
     endpoint: `/master/agent-markup-categories/1`,
-    deleteEndpoint: "/master/standard-markup",
+    deleteEndpoint: "/master/agent-markup-categories/1",
     activationEndpoint: "/master/standard-markup",
     deactivationEndpoint: "/master/standard-markup",
     columns: [
@@ -24,10 +24,18 @@ export default function FlightTable() {
         title: "Domestic Mark Up",
         data: "domestic_flight_markup",
         render: (val) => {
-          if (val.is_tax_inclusive) {
-            return `${val.percent}% Include Tax `
-          } else {
+          if (val.charge_type_id === "c93288b6-29d3-4e20-aa83-5ee6261f64ff") {
             return `IDR ${val.amount}/Ticket`
+          } else if (
+            val.charge_type_id === "de03bf84-4bd8-4cdf-9348-00246f04bcad"
+          ) {
+            return `IDR ${val.amount}/Person`
+          } else if (
+            val.charge_type_id === "5123b121-4f6a-4871-bef1-65408d663e19"
+          ) {
+            return `IDR ${val.amount}/Transaction`
+          } else {
+            return `${val.percent}% Include Tax `
           }
         },
       },
@@ -35,10 +43,18 @@ export default function FlightTable() {
         title: "International Mark Up",
         data: "international_flight_markup",
         render: (val) => {
-          if (val.is_tax_inclusive) {
-            return `${val.percent}% Include Tax `
-          } else {
+          if (val.charge_type_id === "c93288b6-29d3-4e20-aa83-5ee6261f64ff") {
             return `IDR ${val.amount}/Ticket`
+          } else if (
+            val.charge_type_id === "de03bf84-4bd8-4cdf-9348-00246f04bcad"
+          ) {
+            return `IDR ${val.amount}/Person`
+          } else if (
+            val.charge_type_id === "5123b121-4f6a-4871-bef1-65408d663e19"
+          ) {
+            return `IDR ${val.amount}/Transaction`
+          } else {
+            return `${val.percent}% Include Tax `
           }
         },
       },

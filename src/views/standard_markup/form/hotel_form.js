@@ -8,16 +8,17 @@ import * as Yup from "yup"
 import axios from "axios"
 
 import { useDispatch } from "react-redux"
-import { setUIParams } from "redux/ui-store"
+import { setAlert, setUIParams } from "redux/ui-store"
 import Api from "config/api"
 import env from "config/environment"
 import Select from "components/form/select-async"
 import HotelTabel from "../table/hotel_table"
-import NumberFormat from "react-number-format";
+import NumberFormat from "react-number-format"
 
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css"
 import "react-dropzone-uploader/dist/styles.css"
 
+const endpoint = "/master/agent-markup-categories/2"
 const backUrl = "/master/standard-markup"
 
 function HotelModal(props) {
@@ -123,25 +124,20 @@ function HotelModal(props) {
                       </Col>
                       <Col sm={12} md={5}>
                         <Form.Group as={Row} className="mb-xs-3">
-                          <Form.Label
-                            column
-                            xs={2}
-                            md={3}
-                            lg={3}                            
-                          >
+                          <Form.Label column xs={2} md={3} lg={3}>
                             IDR
                           </Form.Label>
                           <Col xs={10} md={9} lg={9}>
-                          <NumberFormat
-                            className="form-control"
-                            maxLength={19}
-                            thousandsGroupStyle="thousand"
-                            displayType="input"
-                            type="text"
-                            thousandSeparator={true}
-                            allowNegative={true}
-                            disabled={props.isView}
-                          />
+                            <NumberFormat
+                              className="form-control"
+                              maxLength={19}
+                              thousandsGroupStyle="thousand"
+                              displayType="input"
+                              type="text"
+                              thousandSeparator={true}
+                              allowNegative={true}
+                              disabled={props.isView}
+                            />
                           </Col>
                         </Form.Group>
                       </Col>
@@ -210,8 +206,8 @@ function HotelModal(props) {
 const HotelForm = (props) => {
   const history = useHistory()
   let dispatch = useDispatch()
-  const [selectCountry, setSelectCountry] = useState([])
-  const [selectHotelBrand, setSelectHotelBrand] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [id, setId] = useState(null)
   const [modalShow, setModalShow] = useState(false)
   let api = new Api()
 
@@ -240,9 +236,20 @@ const HotelForm = (props) => {
       }),
     )
   })
-  // Initialize form
+
   const initialForm = {
-    // Translations
+    markup_category_name: "",
+    description: "",
+    domestic: "",
+    domestic_amount: 0,
+    domestic_charge_type_id: "c93288b6-29d3-4e20-aa83-5ee6261f64ff",
+    domestic_percent: 0,
+    domestic_is_tax_inclusive: "",
+    international: "",
+    international_amount: 0,
+    international_charge_type_id: "c93288b6-29d3-4e20-aa83-5ee6261f64ff",
+    international_percent: 0,
+    international_is_tax_inclusive: "",
   }
 
   const initialFormModalAddMap = {}
@@ -259,30 +266,55 @@ const HotelForm = (props) => {
         validationSchema={validationSchema}
         validateOnChange={false}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
-          console.log(values)
-          console.log(props)
+          // console.log(values)
+          // console.log(props)
           // setSubmitting(true)
+          setLoading(true)
+          let api = new Api()
+          try {
+            let form = {
+              description: values.description,
+              domestic_flight_markup: {
+                amount: 0,
+                charge_type_id: values.domestic_charge_type_id,
+                is_tax_inclusive: false,
+                percent: 0,
+              },
+              domestic_hotel_markup: {
+                amount: parseInt(values.domestic_amount),
+                charge_type_id: values.domestic_charge_type_id,
+                is_tax_inclusive: true,
+                percent: 10,
+              },
+              international_flight_markup: {
+                amount: 0,
+                charge_type_id: values.international_charge_type_id,
+                is_tax_inclusive: false,
+                percent: 0,
+              },
+              international_hotel_markup: {
+                amount: parseInt(values.international_amount),
+                charge_type_id: values.international_charge_type_id,
+                is_tax_inclusive: false,
+                percent: 0,
+              },
+              markup_category_name: values.markup_category_name,
+            }
+            console.log("form: ", form)
+            await api.putOrPost(endpoint, id, form)
 
-          // try {
-          //   let res = await api.post("master/persons", {
-          //     birth_date: "2021-11-13T04:31:17.022Z",
-          //     business_entity_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-          //     citizen_country_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-          //     gender_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-          //     given_name: "string",
-          //     marital_status_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-          //     middle_name: "string",
-          //     name_prefix_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-          //     name_suffix: "string",
-          //     name_title: "string",
-          //     religion_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-          //     surname: "string",
-          //     surname_prefix: "string",
-          //   })
-          //   console.log(res)
-          //   resetForm()
-          //   setSubmitting(false)
-          // } catch (e) {}
+            dispatch(
+              setAlert({
+                message: `Markup has been successfully saved.`,
+              }),
+            )
+          } catch (e) {
+            dispatch(
+              setAlert({
+                message: "Failed to save this record.",
+              }),
+            )
+          }
         }}
       >
         {({
@@ -307,48 +339,32 @@ const HotelForm = (props) => {
                       <span className="form-label-required">*</span>
                     </Form.Label>
                     <Col sm={10}>
-                      <FastField name="res">
-                        {({ field, form }) => (
-                          <>
-                            <Form.Control
-                              type="text"
-                              isInvalid={
-                                form.touched.hotelCode && form.errors.hotelCode
-                              }
-                              minLength={1}
-                              maxLength={128}
-                              style={{ maxWidth: 300 }}
-                              {...field}
-                            />
-                            {form.touched.hotelCode &&
-                              form.errors.hotelCode && (
-                                <Form.Control.Feedback type="invalid">
-                                  {form.touched.hotelCode
-                                    ? form.errors.hotelCode
-                                    : null}
-                                </Form.Control.Feedback>
-                              )}
-                          </>
-                        )}
-                      </FastField>
+                      <Field
+                        className="form-control"
+                        type="text"
+                        name="markup_category_name"
+                        minLength={1}
+                        maxLength={128}
+                        style={{ maxWidth: 300 }}
+                      />
                     </Col>
                   </Form.Group>
-
                   <Form.Group as={Row} className="mb-3">
                     <Form.Label column md={2}>
                       Description
                     </Form.Label>
                     <Col sm={10}>
-                      <Form.Control
+                      <Field
                         as="textarea"
+                        name="description"
+                        className="form-control"
                         style={{ height: "88px", maxWidth: "416px" }}
                       />
                     </Col>
                   </Form.Group>
-
                   <Form.Group as={Row} className="mb-3">
                     <Form.Label column md={2}>
-                      Domestic Hotel Mark-up
+                      Domestic Flight Mark-up
                       <span className="form-label-required">*</span>
                     </Form.Label>
                     <Col md={10}>
@@ -357,7 +373,14 @@ const HotelForm = (props) => {
                           <Row>
                             <Col sm={12} md={3} lg={12}>
                               <Form.Group>
-                                <Form.Check type="radio" label="Fixed Amount" />
+                                <label>
+                                  <Field
+                                    type="radio"
+                                    name="domestic"
+                                    value="domestic_fixed_amount"
+                                  />
+                                  <span className="ml-2">Fixed Amount</span>
+                                </label>
                               </Form.Group>
                             </Col>
                             <Col sm={12} md={5} className="ml-lg-4">
@@ -372,15 +395,25 @@ const HotelForm = (props) => {
                                   IDR
                                 </Form.Label>
                                 <Col xs={10} md={9} lg={7}>
-                                <NumberFormat
+                                  <NumberFormat
+                                    name="domestic_amount"
                                     className="form-control"
                                     maxLength={19}
                                     thousandsGroupStyle="thousand"
                                     displayType="input"
                                     type="text"
                                     thousandSeparator={true}
-                                    allowNegative={true}
-                                    disabled={props.isView}
+                                    allowNegative={false}
+                                    onBlur={(v) => {
+                                      setFieldValue(
+                                        "domestic_amount",
+                                        v.target.value.replaceAll(",", ""),
+                                      )
+                                    }}
+                                    disabled={
+                                      values.domestic !==
+                                      "domestic_fixed_amount"
+                                    }
                                   />
                                 </Col>
                               </Form.Group>
@@ -388,12 +421,42 @@ const HotelForm = (props) => {
                             <Col sm={12} md={4}>
                               <Form.Group className="mb-3 ml-5 ml-md-0">
                                 <Col>
-                                  <Form.Check type="radio" label="/RoomNight" />
-                                  <Form.Check type="radio" label="/Room" />
-                                  <Form.Check
-                                    type="radio"
-                                    label="/Transaction"
-                                  />
+                                  <label>
+                                    <Field
+                                      type="radio"
+                                      name="domestic_charge_type_id"
+                                      value="c93288b6-29d3-4e20-aa83-5ee6261f64ff"
+                                      disabled={
+                                        values.domestic !==
+                                        "domestic_fixed_amount"
+                                      }
+                                    />
+                                    <span className="ml-2">/Ticket</span>
+                                  </label>
+                                  <label>
+                                    <Field
+                                      type="radio"
+                                      name="domestic_charge_type_id"
+                                      value="de03bf84-4bd8-4cdf-9348-00246f04bcad"
+                                      disabled={
+                                        values.domestic !==
+                                        "domestic_fixed_amount"
+                                      }
+                                    />
+                                    <span className="ml-2">/Person</span>
+                                  </label>
+                                  <label>
+                                    <Field
+                                      type="radio"
+                                      name="domestic_charge_type_id"
+                                      value="5123b121-4f6a-4871-bef1-65408d663e19"
+                                      disabled={
+                                        values.domestic !==
+                                        "domestic_fixed_amount"
+                                      }
+                                    />
+                                    <span className="ml-2">/Transaction</span>
+                                  </label>
                                 </Col>
                               </Form.Group>
                             </Col>
@@ -403,25 +466,57 @@ const HotelForm = (props) => {
                           <Row>
                             <Col sm={12} md={3} lg={12}>
                               <Form.Group>
-                                <Form.Check type="radio" label="Percentage" />
+                                <label>
+                                  <Field
+                                    type="radio"
+                                    name="domestic"
+                                    value="percentage"
+                                  />
+                                  <span className="ml-2">Percentage</span>
+                                </label>
                               </Form.Group>
                             </Col>
                             <Col xs={3} md={2} lg={3} className="ml-4 ml-md-0">
                               <Form.Group as={Row} className="mb-3">
                                 <Col>
-                                  <Form.Control style={{ maxWidth: "80px" }} />
+                                  <NumberFormat
+                                    name="domestic_percent"
+                                    className="form-control"
+                                    maxLength={19}
+                                    displayType="input"
+                                    type="text"
+                                    allowNegative={false}
+                                    onBlur={(v) => {
+                                      setFieldValue(
+                                        "domestic_percent",
+                                        v.target.value.replaceAll(",", ""),
+                                      )
+                                    }}
+                                    isAllowed={(values) => {
+                                      const { floatValue } = values
+                                      return (
+                                        floatValue >= 1 && floatValue <= 100
+                                      )
+                                    }}
+                                    disabled={values.domestic !== "percentage"}
+                                  />
                                 </Col>
-                                <span className="text-lg mt-1">%</span>
+                                <p className="text-lg mt-1">%</p>
                               </Form.Group>
                             </Col>
                             <Col xs={7} md={6} lg={9}>
                               <Form.Group className="">
                                 <Col>
-                                  <Form.Check
-                                    type="checkbox"
-                                    label="Include Taxes"
-                                    className="mt-2"
-                                  />
+                                  <label>
+                                    <Field
+                                      type="checkbox"
+                                      name="domestic_is_tax_inclusive"
+                                      disabled={
+                                        values.domestic !== "percentage"
+                                      }
+                                    />
+                                    <span className="ml-2">Include Taxes</span>
+                                  </label>
                                 </Col>
                               </Form.Group>
                             </Col>
@@ -432,7 +527,7 @@ const HotelForm = (props) => {
                   </Form.Group>
                   <Form.Group as={Row} className="mb-3">
                     <Form.Label column md={2}>
-                      International Hotel Mark-up
+                      International Flight Mark-up
                       <span className="form-label-required">*</span>
                     </Form.Label>
                     <Col md={10}>
@@ -441,7 +536,15 @@ const HotelForm = (props) => {
                           <Row>
                             <Col sm={12} md={3} lg={12}>
                               <Form.Group>
-                                <Form.Check type="radio" label="Fixed Amount" />
+                                <label>
+                                  <Field
+                                    type="radio"
+                                    name="international"
+                                    value="international_fixed_amount"
+                                  />
+                                  <span className="ml-2">Fixed Amount</span>
+                                </label>
+                                {/* <Form.Check type="radio" label="Fixed Amount" /> */}
                               </Form.Group>
                             </Col>
                             <Col sm={12} md={5} className="ml-lg-4">
@@ -456,19 +559,68 @@ const HotelForm = (props) => {
                                   IDR
                                 </Form.Label>
                                 <Col xs={10} md={9} lg={7}>
-                                  <Form.Control style={{ maxWidth: "220px" }} />
+                                  <NumberFormat
+                                    name="international_amount"
+                                    className="form-control"
+                                    maxLength={19}
+                                    thousandsGroupStyle="thousand"
+                                    displayType="input"
+                                    type="text"
+                                    thousandSeparator={true}
+                                    allowNegative={false}
+                                    onBlur={(v) => {
+                                      setFieldValue(
+                                        "international_amount",
+                                        v.target.value.replaceAll(",", ""),
+                                      )
+                                    }}
+                                    disabled={
+                                      values.international !==
+                                      "international_fixed_amount"
+                                    }
+                                  />
                                 </Col>
                               </Form.Group>
                             </Col>
                             <Col sm={12} md={4}>
                               <Form.Group className="mb-3 ml-5 ml-md-0">
                                 <Col>
-                                  <Form.Check type="radio" label="/RoomNight" />
-                                  <Form.Check type="radio" label="/Room" />
-                                  <Form.Check
-                                    type="radio"
-                                    label="/Transaction"
-                                  />
+                                  <label>
+                                    <Field
+                                      type="radio"
+                                      name="international_charge_type_id"
+                                      value="c93288b6-29d3-4e20-aa83-5ee6261f64ff"
+                                      disabled={
+                                        values.international !==
+                                        "international_fixed_amount"
+                                      }
+                                    />
+                                    <span className="ml-2">/Ticket</span>
+                                  </label>
+                                  <label>
+                                    <Field
+                                      type="radio"
+                                      name="international_charge_type_id"
+                                      value="de03bf84-4bd8-4cdf-9348-00246f04bcad"
+                                      disabled={
+                                        values.international !==
+                                        "international_fixed_amount"
+                                      }
+                                    />
+                                    <span className="ml-2">/Person</span>
+                                  </label>
+                                  <label>
+                                    <Field
+                                      type="radio"
+                                      name="international_charge_type_id"
+                                      value="5123b121-4f6a-4871-bef1-65408d663e19"
+                                      disabled={
+                                        values.international !==
+                                        "international_fixed_amount"
+                                      }
+                                    />
+                                    <span className="ml-2">/Transaction</span>
+                                  </label>
                                 </Col>
                               </Form.Group>
                             </Col>
@@ -478,25 +630,59 @@ const HotelForm = (props) => {
                           <Row>
                             <Col sm={12} md={3} lg={12}>
                               <Form.Group>
-                                <Form.Check type="radio" label="Percentage" />
+                                <label>
+                                  <Field
+                                    type="radio"
+                                    name="international"
+                                    value="percentage"
+                                  />
+                                  <span className="ml-2">Percentage</span>
+                                </label>
                               </Form.Group>
                             </Col>
                             <Col xs={3} md={2} lg={3} className="ml-4 ml-md-0">
                               <Form.Group as={Row} className="mb-3">
                                 <Col>
-                                  <Form.Control style={{ maxWidth: "80px" }} />
+                                  <NumberFormat
+                                    name="international_percent"
+                                    className="form-control"
+                                    maxLength={19}
+                                    displayType="input"
+                                    type="text"
+                                    allowNegative={false}
+                                    onBlur={(v) => {
+                                      setFieldValue(
+                                        "international_percent",
+                                        v.target.value.replaceAll(",", ""),
+                                      )
+                                    }}
+                                    isAllowed={(values) => {
+                                      const { floatValue } = values
+                                      return (
+                                        floatValue >= 1 && floatValue <= 100
+                                      )
+                                    }}
+                                    disabled={
+                                      values.international !== "percentage"
+                                    }
+                                  />
                                 </Col>
-                                <span className="text-lg mt-1">%</span>
+                                <p className="text-lg mt-1">%</p>
                               </Form.Group>
                             </Col>
                             <Col xs={7} md={6} lg={9}>
                               <Form.Group className="">
                                 <Col>
-                                  <Form.Check
-                                    type="checkbox"
-                                    label="Include Taxes"
-                                    className="mt-2"
-                                  />
+                                  <label>
+                                    <Field
+                                      type="checkbox"
+                                      name="international_is_tax_inclusive"
+                                      disabled={
+                                        values.international !== "percentage"
+                                      }
+                                    />
+                                    <span className="ml-2">Include Taxes</span>
+                                  </label>
                                 </Col>
                               </Form.Group>
                             </Col>

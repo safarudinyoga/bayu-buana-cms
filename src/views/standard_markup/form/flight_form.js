@@ -29,6 +29,7 @@ import FormikControl from "components/formik/formikControl"
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css"
 import "react-dropzone-uploader/dist/styles.css"
 
+const endpoint = "/master/agent-markup-categories/1"
 const backUrl = "/master/standard-markup"
 
 const FlightModal = (props) => {
@@ -197,10 +198,12 @@ const FlightModal = (props) => {
 const FlightForm = (props) => {
   const history = useHistory()
   let dispatch = useDispatch()
+  const [loading, setLoading] = useState(true)
   const [id, setId] = useState(null)
+  const [formValues, setFormValues] = useState(null)
   const [modalShow, setModalShow] = useState(false)
-  let api = new Api()
-console.log('asdasdasda: ', props.match.params.id)
+  const api = new Api()
+
   useEffect(async () => {
     let api = new Api()
     let formId = props.match.params.id
@@ -225,20 +228,51 @@ console.log('asdasdasda: ', props.match.params.id)
         ],
       }),
     )
-  })
 
-  // Initialize form
-  const initialForm = {
+    if (formId) {
+      try {
+        let { data } = await api.get(endpoint + "/" + formId)
+        setFormValues({
+          // ...data,
+          markup_category_name: data.markup_category_name,
+          description: data.description,
+          domestic: "",
+          domestic_amount: data.domestic_flight_markup.amount,
+          domestic_charge_type_id: data.domestic_flight_markup.charge_type_id,
+          domestic_percent:data.domestic_flight_markup.percent,
+          domestic_is_tax_inclusive: data.domestic_flight_markup.is_tax_inclusive,
+          international: "",
+          international_amount: data.international_flight_markup.amount,
+          international_charge_type_id: data.international_flight_markup.charge_type_id,
+          international_percent: data.international_flight_markup.percent,
+          international_is_tax_inclusive: data.international_flight_markup.is_tax_inclusive,
+        })
+      } catch (e) {
+        console.log(e)
+      }
+    }
+  }, [])
+
+  console.log("form values : ", formValues)
+
+  useEffect(() => {
+    if (!props.match.params.id) {
+      setLoading(false)
+    }
+    setId(props.match.params.id)
+  }, [props.match.params.id])
+
+  const initialValues = {
     markup_category_name: "",
     description: "",
     domestic: "",
     domestic_amount: 0,
-    domestic_charge_type_id: "",
+    domestic_charge_type_id: "c93288b6-29d3-4e20-aa83-5ee6261f64ff",
     domestic_percent: 0,
     domestic_is_tax_inclusive: "",
     international: "",
     international_amount: 0,
-    international_charge_type_id: "",
+    international_charge_type_id: "c93288b6-29d3-4e20-aa83-5ee6261f64ff",
     international_percent: 0,
     international_is_tax_inclusive: "",
   }
@@ -256,11 +290,13 @@ console.log('asdasdasda: ', props.match.params.id)
   return (
     <>
       <Formik
-        initialValues={initialForm}
+        initialValues={formValues || initialValues}
         validationSchema={validationSchema}
         validateOnChange={false}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
-          // console.log("submit: ", values)
+          console.log("submit: ", values)
+          setLoading(true)
+          let api = new Api()
           try {
             let form = {
               description: values.description,
@@ -283,18 +319,18 @@ console.log('asdasdasda: ', props.match.params.id)
                 percent: 0,
               },
               international_hotel_markup: {
-                amount: 0 ,
+                amount: 0,
                 charge_type_id: values.international_charge_type_id,
                 is_tax_inclusive: false,
                 percent: 0,
               },
               markup_category_name: values.markup_category_name,
             }
-            // let res = await API.putOrPost(endpoint, id, form);
+            await api.putOrPost(endpoint, id, form)
 
             dispatch(
               setAlert({
-                message: `Record 'Partner Payment Gateway Name: ${form.payment_gateway_name}' has been successfully saved.`,
+                message: `Markup has been successfully saved.`,
               }),
             )
           } catch (e) {
@@ -396,7 +432,7 @@ console.log('asdasdasda: ', props.match.params.id)
                                     onBlur={(v) => {
                                       setFieldValue(
                                         "domestic_amount",
-                                        v.target.value.replaceAll(',', ''),
+                                        v.target.value.replaceAll(",", ""),
                                       )
                                     }}
                                     disabled={
@@ -478,7 +514,7 @@ console.log('asdasdasda: ', props.match.params.id)
                                     onBlur={(v) => {
                                       setFieldValue(
                                         "domestic_percent",
-                                        v.target.value.replaceAll(',', ''),
+                                        v.target.value.replaceAll(",", ""),
                                       )
                                     }}
                                     isAllowed={(values) => {
@@ -560,7 +596,7 @@ console.log('asdasdasda: ', props.match.params.id)
                                     onBlur={(v) => {
                                       setFieldValue(
                                         "international_amount",
-                                        v.target.value.replaceAll(',', ''),
+                                        v.target.value.replaceAll(",", ""),
                                       )
                                     }}
                                     disabled={
@@ -642,7 +678,7 @@ console.log('asdasdasda: ', props.match.params.id)
                                     onBlur={(v) => {
                                       setFieldValue(
                                         "international_percent",
-                                        v.target.value.replaceAll(',', ''),
+                                        v.target.value.replaceAll(",", ""),
                                       )
                                     }}
                                     isAllowed={(values) => {
