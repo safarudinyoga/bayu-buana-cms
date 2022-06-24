@@ -13,6 +13,7 @@ import ThousandSeparator from 'lib/thousand-separator'
 function FlightCard({data, handleSelectTab, tripType}) {
   const dispatch = useDispatch()
 	const [Flight, setFlight] = useState({})
+	const [activeCabinDesc, setActiveCabinDesc] = useState("")
 	const [fullCondition, setFullCondition] = useState(false)
 	const [selectedCabin, setSelectedCabin] = useState(null)
 
@@ -96,13 +97,28 @@ function FlightCard({data, handleSelectTab, tripType}) {
 		)
 	}
 
+	const setBackground = (name) => {
+		switch(name) {
+			case "ECONOMY":
+				return "bg-header-green-1"
+			case "PREMIUM ECONOMY":
+				return "bg-header-dark"
+			default:
+				return ""
+		}
+	}
+
 	const SelectCard = ({cabin={}}) => {
 		const {fares} = cabin 
 		return (
 			<Col
 				sm={2} 
 				onClick={() => {
-					setFullCondition(!fullCondition)
+					if(cabin.name === activeCabinDesc) {
+						setActiveCabinDesc("")
+					} else {
+						setActiveCabinDesc(cabin.name)
+					}
 					if(tripType !== "without-ndc") {
 						setSelectedCabin(cabin)
 					}
@@ -116,16 +132,12 @@ function FlightCard({data, handleSelectTab, tripType}) {
 					</div>
 				}
 				
-				<p>IDR <b>{ThousandSeparator(fares[0]?.price)}</b></p>
+				<p>{fares[0]?.currency_code} <b>{ThousandSeparator(fares[0]?.price)}</b></p>
 				<p className='flight-type'>{fares[0]?.trip_type_name}</p>
-					{/* (!fullCondition) && */}
 				{
-					(!fullCondition && tripType !== "SQ") &&
+					(cabin.name !== activeCabinDesc && tripType !== "SQ") &&
 						<Button 
-						onClick={(e) => { 
-							e.stopPropagation();
-							handleSelectTab("2")
-						}}
+						onClick={(e) => onSelectFlight(e, selectedCabin.fares[0])}
 						className="btn-flight-select"
 						>Select</Button>
 				}
@@ -138,7 +150,7 @@ function FlightCard({data, handleSelectTab, tripType}) {
 				<div className='pt-4'>
 					{fares[0]?.available_seats <= 2 && <p className='rest-seat'>Only {fares[0].available_seats} seat left</p>}
 				</div>
-				<i className={`fas fa-angle-${fullCondition ? "up" : "down"}`}></i>
+				<i className={`fas fa-angle-${cabin.name === activeCabinDesc ? "up" : "down"}`}></i>
 			</Col>
 		)
 	}
@@ -166,7 +178,11 @@ function FlightCard({data, handleSelectTab, tripType}) {
 				{
 					Flight?.airlines?.map((airline, idx) => (
 						<>
-							<FlightInfo key={idx} airline={airline}/>
+							<FlightInfo 
+								key={idx} 
+								airline={airline}
+								showDetailTxt={idx === 0}
+							/>
 							{idx < Flight.airlines?.length-1 ? 
 							<div className='middle-border'></div> : <></>}
 						</>
@@ -189,7 +205,7 @@ function FlightCard({data, handleSelectTab, tripType}) {
 			</Row>
 			{/* FULL FARE CONDITIONS */}
 			{
-				fullCondition 
+				activeCabinDesc !== ""
 				? selectedCabin !== null && selectedCabin.name === "ECONOMY"
 				? (
 					<>

@@ -395,14 +395,17 @@
   color: #333333;
   font-weight: 600;
 }
+.bg-header-black {
+
+}
 .bg-header-grey {
   background-color: #B4B4B4;
   color: #FFFFFF;
   text-transform: uppercase;
 }
 .bg-header-green-1 {
-  background-color: #286754;
-  color: #FFFFFF;
+  background-color: #286754 !important;
+  color: #FFFFFF !important;
   text-transform: uppercase;
 }
 .bg-header-green-2 {
@@ -419,8 +422,8 @@
   text-align: center;
 }
 .bg-header-dark {
-  background-color: #435151;
-  color: #FFFFFF;
+  background-color: #435151 !important;
+  color: #FFFFFF !important;
 }
 
 /* New Tabs */

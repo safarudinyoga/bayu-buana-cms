@@ -12,6 +12,8 @@ import { encrypt } from "lib/bb-crypt"
 import FlightInfo from './components/FlightInfo'
 
 function Passenger({handleSelectTab}) {
+	const selectedFlight = localStorage.getItem("selectedFlight")
+	
 	const [Flight, setFlight] = useState({})
 	const [showSelectSeats, setShowSelectSeats] = useState(false)
 	const [showAddOns, setShowAddOns] = useState(false)
@@ -20,12 +22,11 @@ function Passenger({handleSelectTab}) {
 
 
 	useEffect(async() => {
-		let selectedFlight = localStorage.getItem("selectedFlight")
 		if(selectedFlight) {
-			selectedFlight = JSON.parse(selectedFlight)
-			setFlight(selectedFlight)
+			let parseFlight = JSON.parse(selectedFlight)
+			setFlight(parseFlight)
 		}
-	}, [])
+	}, [selectedFlight])
 
 	function padTo2Digits(num) {
 		return num.toString().padStart(2, '0');
