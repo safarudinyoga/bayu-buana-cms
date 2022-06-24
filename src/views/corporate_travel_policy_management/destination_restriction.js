@@ -71,7 +71,7 @@ const DestinationRestriction = (props) => {
         <Card.Body className="px-1 px-md-4 destination-title">
           <h3>Destinations Restrictions</h3>
           <p>Set destination travel restriction policy</p>
-          <BBDataTable {...params} modalContent={Form} modalSize="md"  />
+          <BBDataTable {...params} modalContent={Form} />
         </Card.Body>
       </Card>
   )
