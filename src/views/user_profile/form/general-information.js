@@ -115,7 +115,7 @@ const GeneralInformation = (props) => {
 
     // Current Address
     currentAddress: Yup.string(),
-    currentCountry: Yup.object().required("Country is required."),
+    currentCountry: Yup.object().required("Country is required.").nullable(),
     currentProvince: Yup.object().nullable(true),
     currentCity: Yup.object().nullable(true),
     currentZipCode: Yup.string(),
@@ -125,7 +125,7 @@ const GeneralInformation = (props) => {
     permanentAddress: Yup.string(),
     permanentCountry: Yup.object().when("sameAddress", {
       is: false,
-      then: Yup.object().required("Country is required."),
+      then: Yup.object().required("Country is required.").nullable(),
     }),
     permanentProvince: Yup.object().nullable(true),
     permanentCity: Yup.object().nullable(true),
@@ -263,6 +263,7 @@ const GeneralInformation = (props) => {
   }
   // Current Country state
   const handleChangeCurrentCountry = async (v) => {
+    console.log("value",v)
     try {
       let res = await api.get(
         `/master/state-provinces?filters=[["country_id","=","${v}"],["AND"],["status","=",1]]&sort=state_province_name`,
@@ -1281,6 +1282,7 @@ const GeneralInformation = (props) => {
                                 setFieldValue("currentCountry", v)
                                 setFieldValue("currentProvince", null)
                                 setFieldValue("currentCity", null)
+                                if(v === null) v = {label: '', value: ''} 
                                 handleChangeCurrentCountry(v.value)
                               }}
                               placeholder="Please choose"

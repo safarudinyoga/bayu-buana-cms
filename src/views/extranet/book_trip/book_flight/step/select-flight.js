@@ -300,7 +300,13 @@ function FlightList({handleSelectTab}) {
 							data.map((d,i) => {
 								return (
 									<>
-										<FlightCard key={i} data={d} viewBy={viewBy} handleSelectTab={handleSelectTab} tripType={tripType} />
+										<FlightCard 
+											key={i} 
+											data={d} 
+											viewBy={viewBy} 
+											handleSelectTab={handleSelectTab} 
+											tripType={tripType}
+										/>
 										{
 											i === 1 && <img src={AdsImage} width="100%" style={{marginBottom: "1rem"}}/>
 										}
