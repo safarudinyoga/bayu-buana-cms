@@ -34,8 +34,6 @@ export default function ManageCorporateTable() {
     responsiveTablet: true,
     baseRoute: "/master/manage-corporate/form",
     endpoint: "/master/agent-corporates",
-    // activationEndpoint: "/master/batch-actions/activate/hotels",
-    // deactivationEndpoint: "/master/batch-actions/deactivate/hotels",
     columns: [
       {
         title: "Corporate Code",
