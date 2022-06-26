@@ -69,7 +69,7 @@ export default function HotelBrandTable() {
         title: "Standard Mark-Up",
         breadcrumbs: [
           {
-            text: "Master Data Management",
+            text: "Setup and Configurations",
           },
           {
             text: "Standard Mark-Up",
