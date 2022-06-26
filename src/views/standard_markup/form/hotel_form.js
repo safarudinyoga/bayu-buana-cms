@@ -241,21 +241,54 @@ const HotelForm = (props) => {
     markup_category_name: "",
     description: "",
     domestic: "",
-    domestic_amount: 0,
-    domestic_charge_type_id: "c93288b6-29d3-4e20-aa83-5ee6261f64ff",
-    domestic_percent: 0,
+    domestic_amount: "",
+    domestic_charge_type_id: "",
+    domestic_percent: "",
     domestic_is_tax_inclusive: "",
     international: "",
-    international_amount: 0,
-    international_charge_type_id: "c93288b6-29d3-4e20-aa83-5ee6261f64ff",
-    international_percent: 0,
-    international_is_tax_inclusive: "",
+    international_amount: "",
+    international_charge_type_id: "",
+    international_percent: "",
+    international_is_tax_inclusive: false,
   }
 
   const initialFormModalAddMap = {}
 
   // Schema for yup
-  const validationSchema = Yup.object().shape({})
+  const validationSchema = Yup.object().shape({
+    markup_category_name: Yup.string().required("Please enter Preset Name."),
+    description: Yup.string(),
+    domestic: Yup.string().required("Please enter fixed amount or percentage."),
+    domestic_amount: Yup.string().when("domestic", {
+      is: "domestic_fixed_amount",
+      then: Yup.string().required("Please enter fixed amount for ."),
+    }),
+    domestic_charge_type_id: Yup.string().when("domestic", {
+      is: "domestic_fixed_amount",
+      then: Yup.string().required("Please select charge type."),
+    }),
+    domestic_percent: Yup.string().when("domestic", {
+      is: "domestic_percentage",
+      then: Yup.string().required("Please enter percentage for ."),
+    }),
+    domestic_is_tax_inclusive: Yup.boolean(),
+    international: Yup.string().required(
+      "Please enter fixed amount or percentage for .",
+    ),
+    international_amount: Yup.string().when("international", {
+      is: "international_fixed_amount",
+      then: Yup.string().required("Please enter fixed amount for ."),
+    }),
+    international_charge_type_id: Yup.string().when("international", {
+      is: "international_fixed_amount",
+      then: Yup.string().required("Please select charge type."),
+    }),
+    international_percent: Yup.string().when("international", {
+      is: "international_percentage",
+      then: Yup.string().required("Please enter percentage for ."),
+    }),
+    international_is_tax_inclusive: Yup.boolean(),
+  })
 
   const validationSchemaModalAddMap = Yup.object().shape({})
 
@@ -276,25 +309,37 @@ const HotelForm = (props) => {
               description: values.description,
               domestic_flight_markup: {
                 amount: 0,
-                charge_type_id: values.domestic_charge_type_id,
+                charge_type_id:
+                  values.domestic_charge_type_id === ""
+                    ? "c93288b6-29d3-4e20-aa83-5ee6261f64ff"
+                    : values.domestic_charge_type_id,
                 is_tax_inclusive: false,
                 percent: 0,
               },
               domestic_hotel_markup: {
-                amount: parseInt(values.domestic_amount),
-                charge_type_id: values.domestic_charge_type_id,
+                amount: parseInt(values.domestic_amount) || 0,
+                charge_type_id:
+                  values.domestic_charge_type_id === ""
+                    ? "c93288b6-29d3-4e20-aa83-5ee6261f64ff"
+                    : values.domestic_charge_type_id,
                 is_tax_inclusive: true,
                 percent: 10,
               },
               international_flight_markup: {
                 amount: 0,
-                charge_type_id: values.international_charge_type_id,
+                charge_type_id:
+                  values.international_charge_type_id === ""
+                    ? "c93288b6-29d3-4e20-aa83-5ee6261f64ff"
+                    : values.international_charge_type_id,
                 is_tax_inclusive: false,
                 percent: 0,
               },
               international_hotel_markup: {
-                amount: parseInt(values.international_amount),
-                charge_type_id: values.international_charge_type_id,
+                amount: parseInt(values.international_amount) || 0,
+                charge_type_id:
+                  values.international_charge_type_id === ""
+                    ? "c93288b6-29d3-4e20-aa83-5ee6261f64ff"
+                    : values.international_charge_type_id,
                 is_tax_inclusive: false,
                 percent: 0,
               },
@@ -340,13 +385,20 @@ const HotelForm = (props) => {
                     </Form.Label>
                     <Col sm={10}>
                       <Field
-                        className="form-control"
+                        className={
+                          errors.markup_category_name
+                            ? "form-control is-invalid"
+                            : "form-control"
+                        }
                         type="text"
                         name="markup_category_name"
                         minLength={1}
                         maxLength={128}
                         style={{ maxWidth: 300 }}
                       />
+                      <div className="invalid-feedback">
+                        {errors.markup_category_name}
+                      </div>
                     </Col>
                   </Form.Group>
                   <Form.Group as={Row} className="mb-3">
@@ -356,6 +408,8 @@ const HotelForm = (props) => {
                     <Col sm={10}>
                       <Field
                         as="textarea"
+                        minLength={1}
+                        maxLength={4000}
                         name="description"
                         className="form-control"
                         style={{ height: "88px", maxWidth: "416px" }}
@@ -397,7 +451,11 @@ const HotelForm = (props) => {
                                 <Col xs={10} md={9} lg={7}>
                                   <NumberFormat
                                     name="domestic_amount"
-                                    className="form-control"
+                                    className={
+                                      errors.domestic_amount
+                                        ? "form-control is-invalid"
+                                        : "form-control"
+                                    }
                                     maxLength={19}
                                     thousandsGroupStyle="thousand"
                                     displayType="input"
@@ -410,17 +468,32 @@ const HotelForm = (props) => {
                                         v.target.value.replaceAll(",", ""),
                                       )
                                     }}
+                                    isAllowed={(values) => {
+                                      const { floatValue } = values
+                                      return (
+                                        floatValue >= 1 &&
+                                        floatValue <= 999999999999999
+                                      )
+                                    }}
                                     disabled={
                                       values.domestic !==
                                       "domestic_fixed_amount"
                                     }
                                   />
+                                  <div
+                                    style={{
+                                      color: "#dc3545",
+                                      fontSize: "80%",
+                                    }}
+                                  >
+                                    {errors.domestic_amount}
+                                  </div>
                                 </Col>
                               </Form.Group>
                             </Col>
                             <Col sm={12} md={4}>
                               <Form.Group className="mb-3 ml-5 ml-md-0">
-                                <Col>
+                                <Col className="d-flex flex-column">
                                   <label>
                                     <Field
                                       type="radio"
@@ -457,9 +530,20 @@ const HotelForm = (props) => {
                                     />
                                     <span className="ml-2">/Transaction</span>
                                   </label>
+                                  <div
+                                    style={{
+                                      color: "#dc3545",
+                                      fontSize: "80%",
+                                    }}
+                                  >
+                                    {errors.domestic_charge_type_id}
+                                  </div>
                                 </Col>
                               </Form.Group>
                             </Col>
+                            <div style={{ color: "#dc3545", fontSize: "80%" }}>
+                              {errors.domestic}
+                            </div>
                           </Row>
                         </Col>
                         <Col lg={6}>
@@ -470,7 +554,7 @@ const HotelForm = (props) => {
                                   <Field
                                     type="radio"
                                     name="domestic"
-                                    value="percentage"
+                                    value="domestic_percentage"
                                   />
                                   <span className="ml-2">Percentage</span>
                                 </label>
@@ -481,7 +565,11 @@ const HotelForm = (props) => {
                                 <Col>
                                   <NumberFormat
                                     name="domestic_percent"
-                                    className="form-control"
+                                    className={
+                                      errors.domestic_percent
+                                        ? "form-control is-invalid"
+                                        : "form-control"
+                                    }
                                     maxLength={19}
                                     displayType="input"
                                     type="text"
@@ -498,8 +586,18 @@ const HotelForm = (props) => {
                                         floatValue >= 1 && floatValue <= 100
                                       )
                                     }}
-                                    disabled={values.domestic !== "percentage"}
+                                    disabled={
+                                      values.domestic !== "domestic_percentage"
+                                    }
                                   />
+                                  <div
+                                    style={{
+                                      color: "#dc3545",
+                                      fontSize: "80%",
+                                    }}
+                                  >
+                                    {errors.domestic_percent}
+                                  </div>
                                 </Col>
                                 <p className="text-lg mt-1">%</p>
                               </Form.Group>
@@ -512,7 +610,8 @@ const HotelForm = (props) => {
                                       type="checkbox"
                                       name="domestic_is_tax_inclusive"
                                       disabled={
-                                        values.domestic !== "percentage"
+                                        values.domestic !==
+                                        "domestic_percentage"
                                       }
                                     />
                                     <span className="ml-2">Include Taxes</span>
@@ -561,7 +660,11 @@ const HotelForm = (props) => {
                                 <Col xs={10} md={9} lg={7}>
                                   <NumberFormat
                                     name="international_amount"
-                                    className="form-control"
+                                    className={
+                                      errors.international_amount
+                                        ? "form-control is-invalid"
+                                        : "form-control"
+                                    }
                                     maxLength={19}
                                     thousandsGroupStyle="thousand"
                                     displayType="input"
@@ -574,17 +677,32 @@ const HotelForm = (props) => {
                                         v.target.value.replaceAll(",", ""),
                                       )
                                     }}
+                                    isAllowed={(values) => {
+                                      const { floatValue } = values
+                                      return (
+                                        floatValue >= 1 &&
+                                        floatValue <= 999999999999999
+                                      )
+                                    }}
                                     disabled={
                                       values.international !==
                                       "international_fixed_amount"
                                     }
                                   />
+                                  <div
+                                    style={{
+                                      color: "#dc3545",
+                                      fontSize: "80%",
+                                    }}
+                                  >
+                                    {errors.international_amount}
+                                  </div>
                                 </Col>
                               </Form.Group>
                             </Col>
                             <Col sm={12} md={4}>
                               <Form.Group className="mb-3 ml-5 ml-md-0">
-                                <Col>
+                                <Col className="d-flex flex-column">
                                   <label>
                                     <Field
                                       type="radio"
@@ -621,6 +739,14 @@ const HotelForm = (props) => {
                                     />
                                     <span className="ml-2">/Transaction</span>
                                   </label>
+                                  <div
+                                    style={{
+                                      color: "#dc3545",
+                                      fontSize: "80%",
+                                    }}
+                                  >
+                                    {errors.international_charge_type_id}
+                                  </div>
                                 </Col>
                               </Form.Group>
                             </Col>
@@ -634,7 +760,7 @@ const HotelForm = (props) => {
                                   <Field
                                     type="radio"
                                     name="international"
-                                    value="percentage"
+                                    value="international_percentage"
                                   />
                                   <span className="ml-2">Percentage</span>
                                 </label>
@@ -645,7 +771,11 @@ const HotelForm = (props) => {
                                 <Col>
                                   <NumberFormat
                                     name="international_percent"
-                                    className="form-control"
+                                    className={
+                                      errors.international_percent
+                                        ? "form-control is-invalid"
+                                        : "form-control"
+                                    }
                                     maxLength={19}
                                     displayType="input"
                                     type="text"
@@ -663,9 +793,18 @@ const HotelForm = (props) => {
                                       )
                                     }}
                                     disabled={
-                                      values.international !== "percentage"
+                                      values.international !==
+                                      "international_percentage"
                                     }
                                   />
+                                  <div
+                                    style={{
+                                      color: "#dc3545",
+                                      fontSize: "80%",
+                                    }}
+                                  >
+                                    {errors.international_percent}
+                                  </div>
                                 </Col>
                                 <p className="text-lg mt-1">%</p>
                               </Form.Group>
@@ -678,7 +817,8 @@ const HotelForm = (props) => {
                                       type="checkbox"
                                       name="international_is_tax_inclusive"
                                       disabled={
-                                        values.international !== "percentage"
+                                        values.international !==
+                                        "international_percentage"
                                       }
                                     />
                                     <span className="ml-2">Include Taxes</span>
@@ -689,6 +829,9 @@ const HotelForm = (props) => {
                           </Row>
                         </Col>
                       </Row>
+                      <div style={{ color: "#dc3545", fontSize: "80%" }}>
+                        {errors.international}
+                      </div>
                     </Col>
                   </Form.Group>
                 </div>
