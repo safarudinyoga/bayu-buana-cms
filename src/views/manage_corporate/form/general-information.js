@@ -5,6 +5,8 @@ import * as Yup from "yup"
 import DatePicker from 'react-datepicker'
 import { debounce } from 'lodash'
 import { useDispatch } from "react-redux"
+import { ReactSVG } from "react-svg"
+import '../../../'
 
 // components & styles
 import Select from "components/form/select"
@@ -19,6 +21,7 @@ import NoImage from "assets/no_image.png"
 import useQuery from "lib/query"
 import { errorMessage } from 'lib/errorMessageHandler'
 import { setAlert } from "redux/ui-store"
+import moment from 'moment'
 
 const slugDictionary = {
   corporate_code: 'Corporate Code',
@@ -411,14 +414,28 @@ const GeneralInfomation = (props) => {
   };
 
   useEffect(() => {
+    console.log({errors});
     if (errors && isSubmitting) {
       goTo()
     }
   }, [errors])
 
+  const generateArrayOfYears = () => {
+    const yearNow = moment().year()
+    const max = yearNow + 10
+    const min = yearNow - 10
+    const years = []
+
+    for (let i = max; i >= min; i--) {
+      years.push(i)
+    }
+
+    return years
+  }
+
   useEffect(() => {
-    console.log({ touched, errors });
-  }, [touched, errors])
+    console.log({ values });
+  }, [values])
 
   return (
     <Form onSubmit={handleSubmit} ref={ref}>
@@ -609,11 +626,66 @@ const GeneralInfomation = (props) => {
                         selectsStart
                         minDate={handleYears(10, new Date(), 'subtract')}
                         maxDate={handleYears(10, new Date(), 'add')}
+                        monthsShown={2}
+                        popperClassName='manage_corporate_date'
+                        popperModifiers={[
+                          {
+                            name: "offset",
+                            options: {
+                              offset: [-180, 0],
+                            },
+                          },
+                        ]}
+                        renderCustomHeader={({
+                          date,
+                          changeYear,
+                          monthDate,
+                          customHeaderCount,
+                          decreaseMonth,
+                          increaseMonth,
+                        }) => (
+                          <div>
+                            <button
+                              aria-label="Previous Month"
+                              className={
+                                "react-datepicker__navigation react-datepicker__navigation--previous"
+                              }
+                              style={customHeaderCount === 1 ? { visibility: "hidden" } : null}
+                              onClick={decreaseMonth}
+                            >
+                            </button>
+                            <span className="react-datepicker__current-month">
+                              {monthDate.toLocaleString("en-US", {
+                                month: "long",
+                                // year: "numeric",
+                              })}
+                              <select
+                                value={moment(date).year()}
+                                onChange={({ target: { value } }) => changeYear(value)}
+                                className='select_year'
+                              >
+                                {generateArrayOfYears().map((option) => (
+                                  <option key={option} value={option}>
+                                    {option}
+                                  </option>
+                                ))}
+                              </select>
+                            </span>
+                            <button
+                              aria-label="Next Month"
+                              className={
+                                "react-datepicker__navigation react-datepicker__navigation--next"
+                              }
+                              style={customHeaderCount === 0 ? { visibility: "hidden" } : null}
+                              onClick={increaseMonth}
+                            >
+                              <span className="react-datepicker__navigation-icon--next"></span>
+                            </button>
+                          </div>
+                        )}
                       />
                     </Col>
-                    <Col lg={1}>
-                      <span className="text-center">to</span>
-                    </Col>
+                      <span className="text-center">To</span>
                     <Col lg={4}>
                       <DatePicker
                         className="form-control text-center"
@@ -622,11 +694,12 @@ const GeneralInfomation = (props) => {
                           setFieldValue('general_information.corporate_contract.date_end', date)
                         }}
                         selected={values.general_information.corporate_contract.date_end}
-                        selectsEnd
-                        startDate={values.general_information.corporate_contract.date_start}
-                        endDate={values.general_information.corporate_contract.date_end}
-                        minDate={values.general_information.corporate_contract.date_start}
-                        maxDate={handleYears(10, new Date(), 'add')}
+                        // selectsEnd
+                        // startDate={values.general_information.corporate_contract.date_start}
+                        // endDate={values.general_information.corporate_contract.date_end}
+                        // minDate={values.general_information.corporate_contract.date_start}
+                        // maxDate={handleYears(10, new Date(), 'add')}
+                        // monthsShown={2}
                       />
                     </Col>
                     {/* {touched?.general_information?.corporate_npwp && errors?.general_information?.corporate_npwp && (
@@ -767,7 +840,7 @@ const GeneralInfomation = (props) => {
                         isClearable
                         name="correspondence_address.country"
                         url={`master/countries`}
-                        value={values.correspondence_address.country}
+                        value={!values.correspondence_address.country.value ? null : values.correspondence_address.country}
                         placeholder="Please choose"
                         fieldName="country_name"
                         className={`react-select ${
@@ -978,7 +1051,7 @@ const GeneralInfomation = (props) => {
                         isClearable
                         name="billing_address.country"
                         url={`master/countries`}
-                        value={values.billing_address.country}
+                        value={!values.billing_address.country.value ? null : values.billing_address.country}
                         placeholder="Please choose"
                         fieldName="country_name"
                         className={`react-select ${
