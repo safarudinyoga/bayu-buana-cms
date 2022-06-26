@@ -25,7 +25,14 @@ function TripFlightClass(props) {
         fieldName="cabin_type_name"
         placeholder="Economy"
         value={flightClass}
-        onChange={setFlightClass}
+        onChange={(v) => {
+          setFlightClass(v)
+          props.formik.setFieldValue("cabin_type_id", v.value)
+        }}
+        components={{
+          DropdownIndicator: () => null,
+          IndicatorSeparator: () => null,
+        }}
       />
       
       {/* <input type="text" className='form-control rounded-0 form-with-label' /> */}

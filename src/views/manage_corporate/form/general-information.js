@@ -1,8 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { Form, Row, Col, Card, Button } from "react-bootstrap"
 import { useFormik } from "formik"
 import * as Yup from "yup"
 import DatePicker from 'react-datepicker'
+import { debounce } from 'lodash'
+import { useDispatch } from "react-redux"
+import { ReactSVG } from "react-svg"
+import '../../../'
 
 // components & styles
 import Select from "components/form/select"
@@ -16,6 +20,8 @@ import Api from "config/api"
 import NoImage from "assets/no_image.png"
 import useQuery from "lib/query"
 import { errorMessage } from 'lib/errorMessageHandler'
+import { setAlert } from "redux/ui-store"
+import moment from 'moment'
 
 const slugDictionary = {
   corporate_code: 'Corporate Code',
@@ -29,13 +35,14 @@ const slugDictionary = {
 
 const GeneralInfomation = (props) => {
   let api = new Api()
+  let dispatch = useDispatch()
   const isView = useQuery().get("action") === "view"
 
-  const { handleSubmit, handleChange, values, errors, touched, setFieldTouched, setFieldValue, setValues } = useFormik({
+  const { handleSubmit, handleChange, values, errors, touched, setFieldTouched, setFieldValue, setValues, validateField, isSubmitting} = useFormik({
     initialValues: {
+      corporate_code: '',
+      corporate_name: '',
       general_information: {
-        corporate_code: '',
-        corporate_name: '',
         parent_company: '',
         corporate_type: {
           value: '',
@@ -87,9 +94,48 @@ const GeneralInfomation = (props) => {
       }
     },
     validationSchema: Yup.object({
+      corporate_code: Yup.string().required(errorMessage(slugDictionary['corporate_code'])).test('uniqueCorporateCode', '', async function(val) {
+        try {
+          if (val !== undefined && val) {
+            const { status, data } = await api.get(`/master/agent-corporates?filters=${encodeURIComponent(JSON.stringify(['corporate_code','=',`${val}`]))}`)
+
+            if ([200, 201].includes(status)) {
+              if (data.items && data.items.length) {
+                return this.createError({message: 'Corporate Code already exists!'})
+              }
+            }
+          }
+        } catch (error) {
+          dispatch(
+            setAlert({
+              message: 'Failed to checking this record.',
+            }),
+          )
+        }
+
+        return true
+      }),
+      corporate_name: Yup.string().required(errorMessage(slugDictionary['corporate_name'])).test('uniqueCorporateName', '', async function(val) {
+        try {
+          if (val !== undefined && val) {
+            const { status, data } = await api.get(`/master/agent-corporates?filters=${encodeURIComponent(JSON.stringify(['corporate_name','=',`${val}`]))}`)
+
+            if ([200, 201].includes(status)) {
+              if (data.items && data.items.length) {
+                return this.createError({message: 'Corporate Name already exists!'})
+              }
+            }
+          }
+        } catch (error) {
+          dispatch(
+            setAlert({
+              message: 'Failed to checking this record.',
+            }),
+          )
+        }
+        return true
+      }),
       general_information: Yup.object({
-        corporate_code: Yup.string().required(errorMessage(slugDictionary['corporate_code'])),
-        corporate_name: Yup.string().required(errorMessage(slugDictionary['corporate_name'])),
         corporate_type: Yup.object({
           value: Yup.string().required(errorMessage(slugDictionary['corporate_type']))
         }),
@@ -110,13 +156,14 @@ const GeneralInfomation = (props) => {
         })
       }),
     }),
+    validateOnChange: false,
     onSubmit: (val) => {
       const payload = {
         general_information: {
           "corporate_general_information": {
-            "corporate_code": val.general_information.corporate_code,
-            "corporate_name": val.general_information.corporate_name,
-            "parent_corporate_id": val.general_information.parent_company?.value || ''
+            "corporate_code": val.corporate_code,
+            "corporate_name": val.corporate_name,
+            "parent_corporate_id": val.general_information.parent_company?.value || null
           },
           "contact_general_information": {
               "email": val.contact_information.corporate_email,
@@ -125,18 +172,18 @@ const GeneralInfomation = (props) => {
           },
           "correspondence_address": {
               "address_line": val.correspondence_address.address,
-              "country_id": val.correspondence_address.country.value,
-              "state_province_id": val.correspondence_address.province?.value || '',
-              "city_id": val.correspondence_address.city?.value || '',
+              "country_id": val.correspondence_address.country.value || null,
+              "state_province_id": val.correspondence_address.province?.value || null,
+              "city_id": val.correspondence_address.city?.value || null,
               "postal_code": val.correspondence_address.zipcode,
               "latitude": Number(val.correspondence_address.geo_location.lat),
               "longitude": Number(val.correspondence_address.geo_location.lng)
           },
           "billing_address": {
               "address_line": val.billing_address.address,
-              "country_id": val.billing_address.country.value,
-              "state_province_id": val.billing_address.province?.value || '',
-              "city_id": val.billing_address.city?.value || '',
+              "country_id": val.billing_address.country.value || null,
+              "state_province_id": val.billing_address.province?.value || null,
+              "city_id": val.billing_address.city?.value || null,
               "postal_code": val.billing_address.zipcode,
               "latitude": Number(val.billing_address.geo_location.lat),
               "longitude": Number(val.billing_address.geo_location.lng)
@@ -144,7 +191,7 @@ const GeneralInfomation = (props) => {
           "corporate_asset" : {
               "multimedia_description" : val.other_information.logo.data?.id || ''
           },
-          "industry_id": val.general_information.corporate_type.value || '',
+          "industry_id": val.general_information.corporate_type.value || null,
           "website": val.other_information.website,
           "internal_remark": val.other_information.internal_remark,
           "npwp": val.general_information.corporate_npwp,
@@ -161,8 +208,8 @@ const GeneralInfomation = (props) => {
     console.log(payload);
 
     try {
-      const res = await api.post('/master/agent-corporates', payload)
-      console.log(res);
+      // const res = await api.post('/master/agent-corporates', payload)
+      // console.log(res);
     } catch (error) {
 
     }
@@ -339,8 +386,59 @@ const GeneralInfomation = (props) => {
     return dateCopy;
   }
 
+  const debouncedValidateCode = useMemo(
+    () => debounce(() => validateField('corporate_code'), 2000),
+    [validateField],
+  );
+  const debouncedValidateName = useMemo(
+    () => debounce(() => validateField('corporate_name'), 1000),
+    [validateField],
+  );
+
+  useEffect(() => {
+    if (values.corporate_code !== undefined && values.corporate_code) {
+      debouncedValidateCode(values)
+    }
+  }, [values.corporate_code, debouncedValidateCode]);
+
+  useEffect(() => {
+    if (values.corporate_name !== undefined && values.corporate_name) {
+      debouncedValidateName(values)
+    }
+  }, [values.corporate_name, debouncedValidateName]);
+
+  const ref = useRef(null);
+  const goTo=(id)=>{
+    ref.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    ref.current.focus({ preventScroll: true });
+  };
+
+  useEffect(() => {
+    console.log({errors});
+    if (errors && isSubmitting) {
+      goTo()
+    }
+  }, [errors])
+
+  const generateArrayOfYears = () => {
+    const yearNow = moment().year()
+    const max = yearNow + 10
+    const min = yearNow - 10
+    const years = []
+
+    for (let i = max; i >= min; i--) {
+      years.push(i)
+    }
+
+    return years
+  }
+
+  useEffect(() => {
+    console.log({ values });
+  }, [values])
+
   return (
-    <Form onSubmit={handleSubmit}>
+    <Form onSubmit={handleSubmit} ref={ref}>
       <Card style={{marginBotton: 0}}>
         <Card.Body>
           {/* general information */}
@@ -354,9 +452,9 @@ const GeneralInfomation = (props) => {
                   </Form.Label>
                   <Col md={3} lg={9}>
                     <Form.Control
-                      value={values.general_information.corporate_code}
-                      name="general_information.corporate_code"
-                      id="general_information.corporate_code"
+                      value={values.corporate_code}
+                      name="corporate_code"
+                      id="corporate_code"
                       onChange={handleChange}
                       type="text"
                       minLength={1}
@@ -365,11 +463,11 @@ const GeneralInfomation = (props) => {
                       disabled={isView}
                       // disabled={isView || loading}
                       style={{ maxWidth: 150 }}
-                      className={touched?.general_information?.corporate_code && errors?.general_information?.corporate_code && 'is-invalid'}
+                      className={errors?.corporate_code && 'is-invalid'}
                     />
-                    {touched?.general_information?.corporate_code && errors?.general_information?.corporate_code && (
+                    {errors?.corporate_code && (
                       <TextError>
-                        {errors.general_information.corporate_code}
+                        {errors.corporate_code}
                       </TextError>
                     )}
                   </Col>
@@ -380,9 +478,9 @@ const GeneralInfomation = (props) => {
                   </Form.Label>
                   <Col md={3} lg={9}>
                     <Form.Control
-                      value={values.general_information.corporate_name}
-                      name="general_information.corporate_name"
-                      id="general_information.corporate_name"
+                      value={values.corporate_name}
+                      name="corporate_name"
+                      id="corporate_name"
                       onChange={handleChange}
                       type="text"
                       minLength={1}
@@ -391,11 +489,11 @@ const GeneralInfomation = (props) => {
                       disabled={isView}
                       // disabled={isView || loading}
                       style={{ maxWidth: 400 }}
-                      className={touched?.general_information?.corporate_name && errors?.general_information?.corporate_name && 'is-invalid'}
+                      className={errors?.corporate_name && 'is-invalid'}
                     />
-                    {touched?.general_information?.corporate_name && errors?.general_information?.corporate_name && (
+                    {errors?.corporate_name && (
                       <TextError>
-                        {errors.general_information.corporate_name}
+                        {errors.corporate_name}
                       </TextError>
                     )}
                   </Col>
@@ -528,11 +626,66 @@ const GeneralInfomation = (props) => {
                         selectsStart
                         minDate={handleYears(10, new Date(), 'subtract')}
                         maxDate={handleYears(10, new Date(), 'add')}
+                        monthsShown={2}
+                        popperClassName='manage_corporate_date'
+                        popperModifiers={[
+                          {
+                            name: "offset",
+                            options: {
+                              offset: [-180, 0],
+                            },
+                          },
+                        ]}
+                        renderCustomHeader={({
+                          date,
+                          changeYear,
+                          monthDate,
+                          customHeaderCount,
+                          decreaseMonth,
+                          increaseMonth,
+                        }) => (
+                          <div>
+                            <button
+                              aria-label="Previous Month"
+                              className={
+                                "react-datepicker__navigation react-datepicker__navigation--previous"
+                              }
+                              style={customHeaderCount === 1 ? { visibility: "hidden" } : null}
+                              onClick={decreaseMonth}
+                            >
+                            </button>
+                            <span className="react-datepicker__current-month">
+                              {monthDate.toLocaleString("en-US", {
+                                month: "long",
+                                // year: "numeric",
+                              })}
+                              <select
+                                value={moment(date).year()}
+                                onChange={({ target: { value } }) => changeYear(value)}
+                                className='select_year'
+                              >
+                                {generateArrayOfYears().map((option) => (
+                                  <option key={option} value={option}>
+                                    {option}
+                                  </option>
+                                ))}
+                              </select>
+                            </span>
+                            <button
+                              aria-label="Next Month"
+                              className={
+                                "react-datepicker__navigation react-datepicker__navigation--next"
+                              }
+                              style={customHeaderCount === 0 ? { visibility: "hidden" } : null}
+                              onClick={increaseMonth}
+                            >
+                              <span className="react-datepicker__navigation-icon--next"></span>
+                            </button>
+                          </div>
+                        )}
                       />
                     </Col>
-                    <Col lg={1}>
-                      <span className="text-center">to</span>
-                    </Col>
+                      <span className="text-center">To</span>
                     <Col lg={4}>
                       <DatePicker
                         className="form-control text-center"
@@ -541,11 +694,12 @@ const GeneralInfomation = (props) => {
                           setFieldValue('general_information.corporate_contract.date_end', date)
                         }}
                         selected={values.general_information.corporate_contract.date_end}
-                        selectsEnd
-                        startDate={values.general_information.corporate_contract.date_start}
-                        endDate={values.general_information.corporate_contract.date_end}
-                        minDate={values.general_information.corporate_contract.date_start}
-                        maxDate={handleYears(10, new Date(), 'add')}
+                        // selectsEnd
+                        // startDate={values.general_information.corporate_contract.date_start}
+                        // endDate={values.general_information.corporate_contract.date_end}
+                        // minDate={values.general_information.corporate_contract.date_start}
+                        // maxDate={handleYears(10, new Date(), 'add')}
+                        // monthsShown={2}
                       />
                     </Col>
                     {/* {touched?.general_information?.corporate_npwp && errors?.general_information?.corporate_npwp && (
@@ -686,7 +840,7 @@ const GeneralInfomation = (props) => {
                         isClearable
                         name="correspondence_address.country"
                         url={`master/countries`}
-                        value={values.correspondence_address.country}
+                        value={!values.correspondence_address.country.value ? null : values.correspondence_address.country}
                         placeholder="Please choose"
                         fieldName="country_name"
                         className={`react-select ${
@@ -897,7 +1051,7 @@ const GeneralInfomation = (props) => {
                         isClearable
                         name="billing_address.country"
                         url={`master/countries`}
-                        value={values.billing_address.country}
+                        value={!values.billing_address.country.value ? null : values.billing_address.country}
                         placeholder="Please choose"
                         fieldName="country_name"
                         className={`react-select ${
@@ -1179,7 +1333,9 @@ const GeneralInfomation = (props) => {
         </Button>
         <Button
           variant="secondary"
-          // onClick={() => props.history.goBack()}
+          onClick={() => {
+            // console.log(props.history);
+          }}
           style={{ padding: '0 21px' }}
         >
           CANCEL

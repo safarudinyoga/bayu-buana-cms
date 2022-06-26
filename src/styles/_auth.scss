@@ -232,3 +232,8 @@ $grey: #818181;
 		margin-top: 4.5%;
 	}
 }
+
+.disabled-dash:disabled {
+	background-color: #fff;
+    border: 1px solid #ced4da;
+}

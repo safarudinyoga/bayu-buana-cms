@@ -29,6 +29,7 @@ export default function OfficeTable() {
     isCheckbox: false,
     isHideSearch: true,
     createOnModal: true,
+    modalSize: 'lg',
     customSort: ["sort", "office_name"],
     module: "branch-office",
     showAdvancedOptions: false,
@@ -66,6 +67,7 @@ export default function OfficeTable() {
       { title: "Company/ Branch Office Name", recordName: "office_name" },
     ],
     isOpenNewTab: false,
+    modalClassName: 'corporate_branch_office_modal'
     // actionWidthClass: "custom-action",
   })
 

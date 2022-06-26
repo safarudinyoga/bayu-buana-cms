@@ -78,7 +78,7 @@
 .modal_service_fee
   @media screen and (min-width: 576px)
     .modal-dialog
-      max-width: 650px !important
+      max-width: 650px
 
 .other_information
   .wrapper
@@ -154,4 +154,107 @@
   font-weight: 600
   color: #333
 
+.select_year
+  border: none
+  background: none
+  font-family: 'Segoe UI', sans-serif
+  font-size: 15px
+  color: #333
+  font-weight: 500
+
+  &:focus, &:hover
+    border: none
+
+.manage_corporate_date
+  width: max-content
+  padding-top: 0 !important
+
+  .react-datepicker
+    background: #fff
+    box-shadow: 0px 3px 6px #00000029
+    border-radius: 8px
+    border: none
+    padding: 20px 15px 25px
+
+    .react-datepicker__triangle
+      &::after,&::before
+        content: none
+
+    .react-datepicker__navigation--next
+      background: url('../../../assets/icons/arrow-right.svg') no-repeat fixed center
+      background-size: 12px 12px
+
+    .react-datepicker__navigation--previous
+      background: url('../../../assets/icons/arrow-left.svg') no-repeat fixed center
+      background-size: 12px 12px
+
+    .react-datepicker__header
+      background-color: #fff
+      border: none
+      position: unset
+
+      .react-datepicker__current-month
+        font-family: 'Segoe UI', sans-serif
+        font-size: 15px
+        color: #333
+        font-weight: 500
+        text-transform: uppercase
+
+      .react-datepicker__day-names
+        margin-top: 24px
+
+    .react-datepicker__day
+      font-family: 'Segoe UI', sans-serif
+      font-size: 13px
+      color: #4a4a4a
+      margin: 0 5px 10px
+
+    .react-datepicker__day-name
+      font-family: 'Segoe UI', sans-serif
+      font-size: 11px
+      color: #4a4a4a
+      margin: 0 5px
+
+    .react-datepicker__day--today
+      font-weight: 900
+      color: #000
+
+    .react-datepicker__day--range-start, .react-datepicker__day--range-end
+      background-color: #0088FF
+      border-radius: 5px
+      color: #fff !important
+
+    .react-datepicker__day--in-range
+      &:not(.react-datepicker__day--range-start, .react-datepicker__day--range-end)
+        box-sizing: content-box
+        margin: 0 0 10px
+        padding: 0 5px 0
+        background-color: #cde7ff
+        border-radius: 0
+
+        &:first-child
+          border-top-left-radius: 5px
+          border-bottom-left-radius: 5px
+
+        &:last-child
+          border-top-right-radius: 5px
+          border-bottom-right-radius: 5px
+
+    .react-datepicker__month-container
+      position: relative
+
+      .react-datepicker__month, .react-datepicker__header
+        margin-right: 1rem
+
+      &:last-child
+        &::before
+          content: ''
+          border-left: 1px solid #CECECE
+          position: absolute
+          height: 75%
+          left: 0
+          top: 19%
+
+        .react-datepicker__month, .react-datepicker__header
+          margin-left: 1rem
 

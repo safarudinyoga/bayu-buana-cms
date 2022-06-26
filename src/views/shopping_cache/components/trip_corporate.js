@@ -7,8 +7,12 @@ function TripCorporate(props) {
       <h4 className='form-with-label__title'> CORPORATE </h4>
       <SelectAsync
         url={`master/agent-corporates`}
-        fieldName="corporate_name"
+        fieldName="agent_corporate.corporate.corporate_name"
         placeholder=""
+        components={{
+          DropdownIndicator: () => null,
+          IndicatorSeparator: () => null,
+        }}
       />
     </div>
   )

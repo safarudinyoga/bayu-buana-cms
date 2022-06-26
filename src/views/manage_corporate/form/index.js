@@ -42,8 +42,8 @@ const ManageCorporateForm = ({ match }) => {
 
   const isView = useQuery().get("action") === "view"
 
-  // const [tabKey, setTabKey] = useState("general-information")
-  const [tabKey, setTabKey] = useState("service-fee")
+  const [tabKey, setTabKey] = useState("general-information")
+  // const [tabKey, setTabKey] = useState("service-fee")
   const [data, setData] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
 
@@ -117,6 +117,22 @@ const ManageCorporateForm = ({ match }) => {
                   <Nav.Item>
                     <Nav.Link eventKey="mark-up">
                       <div>
+                        <ReactSVG src="/img/icons/corporate-system-administrator.svg" />
+                        <span>System Administrator</span>
+                      </div>
+                    </Nav.Link>
+                  </Nav.Item>
+                  <Nav.Item>
+                    <Nav.Link eventKey="mark-up">
+                      <div>
+                        <ReactSVG src="/img/icons/corporate-setting.svg" />
+                        <span>Settings</span>
+                      </div>
+                    </Nav.Link>
+                  </Nav.Item>
+                  <Nav.Item>
+                    <Nav.Link eventKey="mark-up">
+                      <div>
                         <ReactSVG src="/img/icons/corporate-markup.svg" />
                         <span>Mark Up</span>
                       </div>
@@ -139,6 +155,14 @@ const ManageCorporateForm = ({ match }) => {
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
+                    <Nav.Link eventKey="ancillary-fee">
+                      <div>
+                        <ReactSVG src="/img/icons/corporate-assign-team.svg" />
+                        <span>Assign Team</span>
+                      </div>
+                    </Nav.Link>
+                  </Nav.Item>
+                  <Nav.Item>
                     <Nav.Link eventKey="credit-limit">
                       <div>
                         <ReactSVG src="/img/icons/corporate-credit-limit.svg" />
@@ -155,10 +179,26 @@ const ManageCorporateForm = ({ match }) => {
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
+                    <Nav.Link eventKey="invoice-settings">
+                      <div>
+                        <ReactSVG src="/img/icons/corporate-corporate-rating.svg" />
+                        <span>Corporate Rating</span>
+                      </div>
+                    </Nav.Link>
+                  </Nav.Item>
+                  <Nav.Item>
                     <Nav.Link eventKey="corporate-fare">
                       <div>
                         <ReactSVG src="/img/icons/corporate-corporate-fare.svg" />
                         <span>Corporate Fare</span>
+                      </div>
+                    </Nav.Link>
+                  </Nav.Item>
+                  <Nav.Item>
+                    <Nav.Link eventKey="corporate-fare">
+                      <div>
+                        <ReactSVG src="/img/icons/corporate-upload-document.svg" />
+                        <span>Upload Document</span>
                       </div>
                     </Nav.Link>
                   </Nav.Item>

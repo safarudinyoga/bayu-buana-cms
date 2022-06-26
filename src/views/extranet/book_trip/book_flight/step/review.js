@@ -2,16 +2,25 @@ import React, {useState, useEffect} from "react"
 import { Col, Row, Card, Form, Button, Alert, Accordion, Modal } from 'react-bootstrap'
 import moment from 'moment'
 import ThousandSeparator from 'lib/thousand-separator'
+import { decrypt } from "lib/bb-crypt"
 
 const Review = ({handleSelectTab}) => {
 
 
 	const [Flight, setFlight] = useState({})
+  const [Passengers, setPassengers] = useState([])
 	const [show, setShow] = useState(false)
 	const handleShow = () => setShow(true)
   
   useEffect(async() => {
+
+    window.scrollTo({top: 0, behavior: 'smooth'});
+
 		let selectedFlight = localStorage.getItem("selectedFlight")
+		let passengers = localStorage.getItem("psg")
+    passengers = decrypt(passengers)
+    passengers = JSON.parse(passengers)
+    setPassengers(passengers)
 		if(selectedFlight) {
 			selectedFlight = JSON.parse(selectedFlight)
 			setFlight(selectedFlight)
@@ -23,7 +32,6 @@ const Review = ({handleSelectTab}) => {
 	}
 
 	const diff_minutes = (date1, date2) => {
-		console.log(date1, date2)
 		let milliseconds = date2.getTime() - date1.getTime()
 		let seconds = Math.floor(milliseconds / 1000);
 		let minutes = Math.floor(seconds / 60);
@@ -34,7 +42,6 @@ const Review = ({handleSelectTab}) => {
 	
 		minutes = minutes % 60;
 		hours = hours % 24;
-		console.log(hours, seconds, "<<<")
 	
 		return `${padTo2Digits(hours)}h ${padTo2Digits(minutes)}m`;
 	}
@@ -113,8 +120,8 @@ const Review = ({handleSelectTab}) => {
       <div className={`d-${footer ? "block": "none"} flight-detail-footer pt-3 text-bold`}>
         <Row>
           <Col sm={3}>
-            <p>Mrs. Sienna Bright</p>
-            <p>Ms. Marry Bright</p>
+            <p>{Passengers[0]}</p>
+            <p>{Passengers[1]}</p>
           </Col>
           <Col style={{maxWidth: 145}}sm={{span: 2, offset: 5}}>
             <p className="font-weight-normal">CGK-HKG-CGK</p>
@@ -300,13 +307,13 @@ const Review = ({handleSelectTab}) => {
       <div className='d-flex'>
 				<Button 
 				onClick={(e) => { 
-          handleSelectTab('confirmation')
+          handleSelectTab('6')
 				}}
 				className="btn-flight-select mr-3"
 				>
 						Issue Ticket Now
 				</Button>
-				<Button variant="secondary" onClick={() => handleSelectTab('add-ons')}>Cancel</Button>
+				<Button variant="secondary" onClick={() => handleSelectTab('4')}>Cancel</Button>
 			</div>
 
 

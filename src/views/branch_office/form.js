@@ -389,10 +389,10 @@ function OfficeForm(props) {
         form.building_room = ""
       }
       if (!form.state_province_id) {
-        form.state_province_id = "00000000-0000-0000-0000-000000000000"
+        form.state_province_id = null
       }
       if (!form.city_id) {
-        form.city_id = "00000000-0000-0000-0000-000000000000"
+        form.city_id = null
       }
       if (!form.postal_code) {
         form.postal_code = ""
@@ -545,7 +545,7 @@ function OfficeForm(props) {
             id="attr_city"
             data={cityData}
             endpoint="/master/cities"
-            filter={form.state_province_id || form.state_province_id !== "" 
+            filter={form.state_province_id && form.state_province_id !== "" && form.state_province_id !== null 
               ? `[["country.id", "=", "${form.country_id}"],["AND"],["state_province_id", "=", "${form.state_province_id}"],["AND"],["status", "=", 1]]` 
               : `[["country.id", "=", "${form.country_id}"],["AND"],["status", "=", 1]]`
             }
