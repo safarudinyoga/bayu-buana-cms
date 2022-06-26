@@ -223,7 +223,7 @@ const HotelForm = (props) => {
         title: docTitle,
         breadcrumbs: [
           {
-            text: "Master Data Management",
+            text: "Setup and Configurations",
           },
           {
             link: backUrl,
