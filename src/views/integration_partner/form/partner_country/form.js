@@ -5,44 +5,43 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import Api from "config/api";
 import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom"
 import { setAlert, setCreateModal, setModalTitle } from "redux/ui-store";
 import CancelButton from "components/button/cancel";
 import FormikControl from "../../../../components/formik/formikControl";
 
 function ExchangeRateCreate(props) {
-    const partner_integration_id = props.match.params.id
-    const endpoint = `/master/integration-partner-countries`;
+    // const partner_integration_id = props.match.params.id
+    const endpoint = "/master/integration-partners";
     const dispatch = useDispatch();
 
     const showCreateModal = useSelector((state) => state.ui.showCreateModal);
     const API = new Api();
+    const { id } = useParams()
     const isView = showCreateModal.disabled_form || props.isView;
-    const [id, setId] = useState(null);
+    const [countriesId, setCountriesId] = useState(null);
     const [loading, setLoading] = useState(true);
     const [formValues, setFormValues] = useState(null);
 
     
     useEffect(async () => {
-        let formId = showCreateModal.id || props.id;
+        let formId = showCreateModal.id || props.id
 
-        let docTitle = "EDIT PARTNER COUNTRIES";
+        let docTitle = "Edit Partner Countries";
         if (!formId) {
-            docTitle = "NEW PARTNER COUNTRIES";
-        } else if (isView) {
-            docTitle = "Exchange Rate Details";
+            docTitle = "Create Partner Countries";
         }
 
         dispatch(setModalTitle(docTitle));
 
         if (formId) {
             try {
-                let res = await API.get(endpoint + "/" + formId);
+                let res = await API.get(endpoint + "/" + id + "/countries/" + formId);
                 setFormValues({
                     ...res.data,
-                    country: {
-                        value: res.data.country.id,
-                        label:res.data.country.country_name,
-                    }
+                    country_id: res.data.country_id,
+                    country_name:res.data.country_name,
+                    nationality: res.data.nationality,
                 });
             } catch (e) {
                 console.log(e);
@@ -59,18 +58,18 @@ function ExchangeRateCreate(props) {
             setLoading(false);
         }
 
-        setId(showCreateModal.id);
+        setCountriesId(showCreateModal.id);
     }, [showCreateModal.id, formValues]);
 
     const initialValues = {
-        country: "",
+        country_id: "",
         country_code: "",
         country_name: "",
         nationality: "",
     };
 
     const duplicateValue = async(fieldName, value) => {
-        let filters = encodeURIComponent(JSON.stringify([[fieldName,"=",value],["AND"],["integration_partner_id",partner_integration_id],["AND"],["status",1]]))
+        let filters = encodeURIComponent(JSON.stringify([[fieldName,"=",value],["AND"],["integration_partner_id",id],["AND"],["status",1]]))
         let res = await API.get(endpoint + "?" + `filters=${filters}`)
         let sameId = res.data.items.find((v) => v.id === id)
         if(!sameId) return res.data.items.length === 0 
@@ -109,13 +108,19 @@ function ExchangeRateCreate(props) {
     const onSubmit = async (values, a) => {
         try {
             let form = {
-                country_id:values.country.value,
+                country_id: values.country.value,
                 country_name: values.country_name,
                 country_code: values.country_code,
                 nationality: values.nationality,
-                integration_partner_id: partner_integration_id,
+                integration_partner_id: id
             };
-            let res = await API.putOrPost("/master/integration-partner-countries", id, form);
+            // console.log(endpoint + "/" + id + "/countries/" + countriesId, "ini endpoint")
+
+            if(countriesId){
+                let res = await API.put(endpoint + "/" + id + "/countries/" + countriesId, form);
+              }else{
+                  let res = await API.post(endpoint + "/" + id + "/countries/", form);
+              }
 
             dispatch(setCreateModal({ show: false, id: null, disabled_form: false }));
             dispatch(
