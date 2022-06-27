@@ -87,7 +87,7 @@ function IdentityRuleCreate(props) {
             dispatch(setCreateModal({ show: false, id: null, disabled_form: false }));
             dispatch(
                 setAlert({
-                    message: `Record 'From Identity Rule: ${form.identity_code} - ${form.identity_name}' has been successfully saved.`,
+                    message: `Record 'From Identity Rule has been successfully saved.`,
                 })
             );
         } catch (e) {
