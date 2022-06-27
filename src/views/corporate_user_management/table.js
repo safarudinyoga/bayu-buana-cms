@@ -6,7 +6,7 @@ import { setUIParams } from "redux/ui-store"
 import { useWindowSize } from "rooks"
 
 import FormInputSelectAjax from "components/form/input-select-ajax"
-import DateRangePicker from "components/form/date_range_picker"
+import DateRangePicker from "components/form/date-range-picker"
 
 export default function EmployeeTable() {
   let dispatch = useDispatch()

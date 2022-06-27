@@ -68,12 +68,18 @@ const AddOrRemoveList = ({
     const newData = rightData.filter((item) => item !== e)
     setRightData((rightdata) => newData)
     setLeftData((leftdata) => [...leftdata, e])
+    setFormValues((formValues) => [
+      ...leftData.map((item) => ({
+        agent_id: item.agent_id,
+        employee_id: item.employee_id,
+      })),
+    ])
   }
 
   const handleSelectAssignmentLeader = (e) => {
     console.log("e: ", e)
     console.log("form: ")
-    setFormValues("aaaa")
+    // setFormValues("aaaa")
     // setFormValues((data) => [
     //   ...data.map((item) => ({
     //     can_issue_tickets:
