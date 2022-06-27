@@ -2,8 +2,11 @@ import BBDataTable from "components/table/bb-data-table"
 import { Card } from "react-bootstrap"
 import React, {  useState } from 'react'
 import Form from "./form"
+import { useParams } from "react-router-dom";
 
 export default function IntegrationPartnerCountriesTable() {
+
+  const param = useParams()
 
   let [params, setParams] = useState({
     isCheckbox: false,
@@ -12,9 +15,9 @@ export default function IntegrationPartnerCountriesTable() {
     hideDetail: true,
     title: "Integration Partner",
     titleModal: "Integration Partner Countries",
-    baseRoute: "/master/integration-partner-countries/form",
-    endpoint: "/master/integration-partner-countries",
-    deleteEndpoint: "/master/batch-actions/delete/integration-partner-countries",
+    baseRoute: `/master/integration-partners/${param.id}/countries`,
+    endpoint: `/master/integration-partners/${param.id}/countries`,
+    deleteEndpoint: `/master/integration-partners/${param.id}/countries`,
     activationEndpoint: "/master/batch-actions/activate/integration-partner-countries",
     deactivationEndpoint: "/master/batch-actions/deactivate/integration-partner-countries",
     btnDownload: ".buttons-csv",
