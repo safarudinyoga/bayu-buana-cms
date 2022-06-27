@@ -104,19 +104,21 @@ Yup.addMethod(Yup.string, 'uniqueValueString', function (fieldName, message) {
       meal_plan_type_id: values.meal_plan_type_id.value,
       integration_partner_id: id
     }
-
+    
     try {
       if(mealPlanId){
         let res = await api.put(endpoint + "/" + id + "/meal-plan-types/" + mealPlanId, formatted);
       }else{
           let res = await api.post(endpoint + "/" + id + "/meal-plan-types", formatted);
       }
+      
+      dispatch(setCreateModal({ show: false, id: null, disabled_form: false }));
       dispatch(
         setAlert({
             message: `Record 'Partner Meal Plan Name: ${values.meal_plan_type_name}' has been successfully saved.`,
         })
       );
-      dispatch(setCreateModal({ show: false, id: null, disabled_form: false }));
+     
       
     } catch (e) {
       dispatch(
