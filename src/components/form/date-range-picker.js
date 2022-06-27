@@ -88,7 +88,7 @@ const DateRangePicker = ({value, onChange= ()=>{}, minDate, maxDate, placeholder
       <div className="d-flex justify-content-end p-4">
         <button
           className="pt-1"
-          style={{color: "#1E83DC"}}
+          style={{color: "#1E83DC", background: "none", border: 'none'}}
           onClick={() => {
             onChange([])
           }}
