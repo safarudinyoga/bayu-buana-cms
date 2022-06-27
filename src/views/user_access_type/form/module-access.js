@@ -10,6 +10,7 @@ import * as Yup from "yup"
 import "../user-access-type.css"
 import DataTable from "react-data-table-component"
 import { useSnackbar } from "react-simple-snackbar"
+import BootstrapTable from 'react-bootstrap-table-next';
 
 const backUrl = "/master/user-access-type"
 const options = {
@@ -28,6 +29,15 @@ function ModuleAccess(props) {
   const [userTypeName, setUserTypeName] = useState(null)
   const allowedModule = useRef([])
   const [openSnackbar] = useSnackbar(options)
+  const [tableColumns, setTableColumns] = useState([])
+  const [tableHeader, setTableHeader] = useState([{
+    dataField: 'module_name',
+    text: "Module Name",
+    sort: true
+  }, {
+    dataField: 'category',
+    text: 'Category'
+  }])
 
   const api = new Api()
   useEffect(() => {
@@ -67,6 +77,16 @@ function ModuleAccess(props) {
       const cap = []
 
       resCap.data.items.forEach((data) => {
+        setTableHeader(tableHeader => [
+          ...tableHeader,
+          {
+            dataField: data.capability_code,
+            text: data.capability_name, 
+            formatter: switchFormatter,
+            formatExtraData: `${data.capability_code}`
+          }
+        ])
+
         cap.push(
           <th>{data.capability_name}</th>
         )
@@ -78,6 +98,11 @@ function ModuleAccess(props) {
       throw e
     }
   }, [])
+
+  useEffect(() => {
+    console.log("TABLE HEADER",tableHeader)
+  }, [tableHeader])
+  
 
   // useEffect(async () => {
   //   try {
@@ -154,14 +179,37 @@ function ModuleAccess(props) {
             capabilities: data.capabilities
           }])
 
+          console.log("TableData",data)
+
+          let userAccessData = {
+            id: data.id,
+            module_name: data.module_name,
+            category: data.module_package_name,
+            activate: data.capabilities.allow_activate,
+            bulk_update: data.capabilities.allow_bulk_update,
+            create: data.capabilities.allow_create,
+            delete: data.capabilities.allow_delete,
+            edit: data.capabilities.allow_edit,
+            export: data.capabilities.allow_export,
+            publish: data.capabilities.allow_publish,
+            view: data.capabilities.allow_view
+          }
+
+          setTableColumns(tableColumns => [
+            ...tableColumns,
+            userAccessData
+          ])
+
           modules.push(
-            <AccessManagerRow 
-              moduleName={data.module_name} 
-              category={data.module_package_name} 
-              capabilities={data.capabilities}
-              moduleId={data.id}
-              sendAllowedModuleData={sendAllowedModuleData}
-            />
+            <tr>
+              <td>{data.module_name}</td>
+              <td>{data.module_package_name}</td>
+              <AccessManagerRow 
+                capabilities={data.capabilities}
+                moduleId={data.id}
+                sendAllowedModuleData={sendAllowedModuleData}
+              />
+            </tr>
           )
           
         })
@@ -173,6 +221,25 @@ function ModuleAccess(props) {
       throw e
     }
   }, [id])
+
+  const handleChange = (v, cell, row) => {
+    let currentValue = !cell
+    console.log(v)
+  }
+
+  function switchFormatter(cell, row, rowIndex, formatExtraData){
+    return (
+      <Form.Check 
+        type="switch"
+        id={`${formatExtraData}-${row.id}`}
+        defaultChecked={cell}
+        className="custom-switch-bb"
+        onChange={(v) => {
+          handleChange(v, cell, row)
+        }}
+      />
+    )
+  }
   
   return (
     <>
@@ -213,7 +280,7 @@ function ModuleAccess(props) {
                         columns={capabilitiesHeader}
                         data={modules}
                       /> */}
-                      <Table striped className="table-module">
+                      {/* <Table striped className="table-module">
                         <thead>
                           <tr>
                             <th>Module Name</th>
@@ -224,7 +291,8 @@ function ModuleAccess(props) {
                         <tbody>
                           {modules}
                         </tbody>
-                      </Table>
+                      </Table> */}
+                      <BootstrapTable keyField='module_name' columns={tableHeader} data={tableColumns}/>
                     </div>
                   </Card.Body>
                 </Card>

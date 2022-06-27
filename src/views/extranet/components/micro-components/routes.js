@@ -1,4 +1,4 @@
-import { ErrorMessage, getIn } from 'formik';
+import { ErrorMessage, Field, getIn } from 'formik';
 import React, { useEffect, useState } from 'react'
 import AutoSuggest from "react-autosuggest";
 import { ReactSVG } from "react-svg"
@@ -21,6 +21,7 @@ function Routes(props) {
   }
   
   function renderSuggestion(suggestion, {query}) {
+    console.log("render suggest",suggestion)
     return (
       <div className={`d-flex ${suggestion.all ? "" : "ml-2"}`}>
         <div className="mr-auto">
@@ -57,6 +58,7 @@ function Routes(props) {
   return (
     <>
       <div className={`d-flex ${smallSize ? "mr-2" : "mr-4"}`}>
+        {/* <Field name={props.formik && props.index >= 0 ? `trips[${props.index}].departure_data` : } */}
         <div className={`form-group required position-relative departure-box mb-4 ${smallSize ? "routes-sm" : ""}`} >
           <label htmlFor="departure" className='form-with-label__title'>FROM <span className='label-required'></span></label>
           <ReactSVG src='/img/icons/flight-takeoff.svg' className='form-with-label__suggest-icon'/>

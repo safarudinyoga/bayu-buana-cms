@@ -50,11 +50,12 @@ function AccessManagerRow(props) {
   }, [allowedModule])
   
   return (
-    <tr>
-      <td>{moduleName}</td>
-      <td>{category}</td>
-      {capabilityCheckBoxes}
-    </tr>
+    {capabilityCheckBoxes}
+    // <tr>
+    //   <td>{moduleName}</td>
+    //   <td>{category}</td>
+    //   {capabilityCheckBoxes}
+    // </tr>
   )
 }
 
