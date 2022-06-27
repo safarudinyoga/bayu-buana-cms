@@ -13,6 +13,7 @@ import { Col, OverlayTrigger, Tooltip, Button } from "react-bootstrap"
 import BBDataTable from "components/table/bb-data-table"
 import createIcon from "assets/icons/create.svg"
 import FormInputSelectAjax from "components/form/input-select-ajax"
+import { Alert } from "bootstrap"
 
 const endpoint = "master/configurations/travel-advice"
 const backUrl = "master/configurations/travel-advice"
@@ -30,6 +31,7 @@ function TravelAdvice(props) {
   const [data, setData] = useState(null)
   const [title, setTitle] = React.useState("Travel Advice")
   const [selectedContry, setSelectedContry] = useState(null)
+  const [errorDescription, setErrorDescription] = useState(false)
   const [form, setForm] = useState({
     selectedCountry: "",
     url: "",
@@ -66,11 +68,16 @@ function TravelAdvice(props) {
       minlength: 1,
       maxlength: 256,
       checkName: true,
+      checkCode: true,
     },
   }
 
   const validationMessages = {
     country: {
+      required: "Country is required.",
+      max: "Age Qualifying Type Code cannot be more than 32767",
+    },
+    description: {
       required: "Country is required.",
       max: "Age Qualifying Type Code cannot be more than 32767",
     },
@@ -175,45 +182,50 @@ function TravelAdvice(props) {
   }, [props.match.params.id])
 
   const onSave = async () => {
-    let translated = formBuilder.getTranslations()
-    setLoading(true)
-    let api = new Api()
-    console.log("ok", form);
-    // let endpoint = "master/configurations/travel-advice"
-    try {
-        let payload = {
-            "content_description": {
-                "description": form.description,
-                "url": form.url
-            },
-            "content_description_id": "urn:uuid:2aac2d26-81be-d35f-9d4d-38945cbed6f8",
-            "country_id": form.selectedCountry
+    if (form.description === "") {
+      console.log("masuk sini");
+      setErrorDescription(true)
+    } else {
+      let translated = formBuilder.getTranslations()
+      setLoading(true)
+      let api = new Api()
+      console.log("ok", form);
+      // let endpoint = "master/configurations/travel-advice"
+      try {
+          let payload = {
+              "content_description": {
+                  "description": form.description,
+                  "url": form.url
+              },
+              "content_description_id": "urn:uuid:2aac2d26-81be-d35f-9d4d-38945cbed6f8",
+              "country_id": form.selectedCountry
+          }
+      let res = await api.post(endpoint, payload)
+      console.log(res);
+        setId(res.data.id)
+        for (let i in translated) {
+          let tl = translated[i]
+          let path = endpoint + "/" + res.data.id + "/translations"
+          await api.putOrPost(path, tl.id, tl)
         }
-    let res = await api.post(endpoint, payload)
-    console.log(res);
-      setId(res.data.id)
-      for (let i in translated) {
-        let tl = translated[i]
-        let path = endpoint + "/" + res.data.id + "/translations"
-        await api.putOrPost(path, tl.id, tl)
+      } catch (e) {
+        dispatch(
+          setAlert({
+            message: `Failed to ${formId ? "update" : "save"} this record.`,
+          }),
+        )
+      } finally {
+        setLoading(false)
+      //   props.history.goBack()
+      setVisibleAdd(false)
+        dispatch(
+          setAlert({
+            message: `Record ${form.selectedCountry} - ${
+              form.age_qualifying_type_name
+            } has been successfully ${formId ? "updated" : "saved"}.`,
+          }),
+        )
       }
-    } catch (e) {
-      dispatch(
-        setAlert({
-          message: `Failed to ${formId ? "update" : "save"} this record.`,
-        }),
-      )
-    } finally {
-      setLoading(false)
-    //   props.history.goBack()
-    setVisibleAdd(false)
-      dispatch(
-        setAlert({
-          message: `Record ${form.country} - ${
-            form.age_qualifying_type_name
-          } has been successfully ${formId ? "updated" : "saved"}.`,
-        }),
-      )
     }
   }
 
@@ -352,6 +364,7 @@ function TravelAdvice(props) {
                     isValid={false}
                     rules={validationRules}
                     validationMessages={validationMessages}
+                    visibleAdd={() => setVisibleAdd(false)}
                 >
                     <FormHorizontal>
                         <FormInputSelectAjax
@@ -387,7 +400,9 @@ function TravelAdvice(props) {
                         />
                         <div className="row" style={{display: 'flex', width: '205%'}}>
                             <Col sm={2}>
-                                <p>Description</p>
+                                <p>Description
+                                <span className={"text-label-input label-required"} style={{color: 'red', marginLeft: 3}}>*</span>  
+                                </p>
                             </Col>
                             <Col sm={7}>
                                 <div >
@@ -397,6 +412,8 @@ function TravelAdvice(props) {
                                         toolbarClassName="toolbarClassName"
                                         wrapperClassName="wrapperClassName"
                                         wrapperStyle={wrapperStyle}
+                                        name="description"
+                                        column="country_name"
                                         editorStyle={editorStyle} 
                                         editorClassName="editorClassName"
                                         // onEditorStateChange={(e) => setDescription(e.target.value)}
@@ -404,9 +421,15 @@ function TravelAdvice(props) {
                                         onChange={(e) => {
                                             // setDescription(e.blocks[0].text)
                                             setForm({...form, description: e.blocks[0].text})
+                                            setErrorDescription(false)
                                         }}
                                         maxLength={4000}
                                     />
+                                    {
+                                      errorDescription ?
+                                      <p style={{marginTop: -5, color: '#ED858C'}}>Description is required.</p>
+                                      :null
+                                    }
                                 </div>
                             </Col>
                         </div>

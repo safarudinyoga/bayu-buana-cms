@@ -181,7 +181,6 @@ export default class TranslationForm extends Component {
           >
             <FormHorizontal>
               {fields.map((field, index) => {
-                console.log(field);
                 if (field.type === "richtext") {
                   return (
                     <div className="row">
