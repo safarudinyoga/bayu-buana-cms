@@ -9,7 +9,7 @@ import React, { useEffect, useState } from 'react'
 import PopupConfirmation from './components/flight-step-confirmation-modal'
 import ThousandSeparator from 'lib/thousand-separator'
 import { encrypt } from "lib/bb-crypt"
-import FlightInfo from './components/FlightInfo'
+import FlightInfo from './components/flight-info'
 
 function Passenger({handleSelectTab}) {
 	const selectedFlight = localStorage.getItem("selectedFlight")
