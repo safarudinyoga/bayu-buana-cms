@@ -13,7 +13,7 @@ import env from "../../config/environment"
 import DatePicker, { DateObject }  from 'react-multi-date-picker'
 import Icon from "react-multi-date-picker/components/icon"
 import "./special-date.css"
-import DateRangePicker from "../../components/form/date_range_picker"
+import DateRangePicker from "../../components/form/date-range-picker"
 
 const endpoint = "/master/agent-special-dates"
 const backUrl = "/master/special-date"
