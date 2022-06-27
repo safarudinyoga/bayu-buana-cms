@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setAlert, setCreateModal, setModalTitle } from "redux/ui-store";
 import CancelButton from "components/button/cancel";
 import FormikControl from "components/formik/formikControl";
+import "./identity-rule.css"
 
 
 const endpoint = "/master/configurations/identity-rules";
@@ -200,6 +201,7 @@ function IdentityRuleCreate(props) {
                     <FormikControl
                         control="switch"
                         required="label-required"
+                        className={"identity-rule-switch"}
                         label="Reset numbers periodically?"
                         name="is_reset"
                         value={values.is_reset}
