@@ -18,7 +18,7 @@ const SelectSeat = ({ handleSelectTab }) => {
         >
             continue booking
         </Button>
-        <Button variant="secondary" onClick={() => handleSelectTab('passengers')}>Back</Button>
+        <Button variant="secondary" onClick={() => handleSelectTab('2')}>Back</Button>
       </div>
 
 			<PopupConfirmation
@@ -27,11 +27,11 @@ const SelectSeat = ({ handleSelectTab }) => {
 				onClose={() => setShowAddOns(false)}
 				onClickYes={() => {
 					setShowAddOns(false)
-					handleSelectTab('add-ons')
+					handleSelectTab('4')
 				}}
 				onClickNo={() => {
 					setShowAddOns(false)
-					handleSelectTab('review')
+					handleSelectTab('5')
 				}}
 			/>
     </>
