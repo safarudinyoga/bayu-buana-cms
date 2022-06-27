@@ -22,7 +22,7 @@ import Api from "config/api"
 import env from "config/environment"
 import Select from "components/form/select-async"
 import HotelTabel from "../table/hotel_table"
-import NumberFormat from "react-number-format";
+import NumberFormat from "react-number-format"
 
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css"
 import "react-dropzone-uploader/dist/styles.css"
@@ -81,25 +81,20 @@ const OtherModal = (props) => {
                       </Col>
                       <Col sm={12} md={5}>
                         <Form.Group as={Row} className="mb-xs-3">
-                          <Form.Label
-                            column
-                            xs={2}
-                            md={3}
-                            lg={3}                            
-                          >
+                          <Form.Label column xs={2} md={3} lg={3}>
                             IDR
                           </Form.Label>
                           <Col xs={10} md={9} lg={9}>
-                          <NumberFormat
-                            className="form-control"
-                            maxLength={19}
-                            thousandsGroupStyle="thousand"
-                            displayType="input"
-                            type="text"
-                            thousandSeparator={true}
-                            allowNegative={true}
-                            disabled={props.isView}
-                          />
+                            <NumberFormat
+                              className="form-control"
+                              maxLength={19}
+                              thousandsGroupStyle="thousand"
+                              displayType="input"
+                              type="text"
+                              thousandSeparator={true}
+                              allowNegative={true}
+                              disabled={props.isView}
+                            />
                           </Col>
                         </Form.Group>
                       </Col>
@@ -184,7 +179,7 @@ const OtherForm = (props) => {
         title: docTitle,
         breadcrumbs: [
           {
-            text: "Master Data Management",
+            text: "Setup and Configurations",
           },
           {
             link: backUrl,
@@ -208,7 +203,10 @@ const OtherForm = (props) => {
   // Schema for yup
   const validationSchema = Yup.object().shape({})
 
-  const validationSchemaModalAddMap = Yup.object().shape({})
+  const validationSchemaModalAddMap = Yup.object().shape({
+    markup_category_name: Yup.string().required("Please enter Preset Name."),
+    description: Yup.string(),
+  })
 
   return (
     <>

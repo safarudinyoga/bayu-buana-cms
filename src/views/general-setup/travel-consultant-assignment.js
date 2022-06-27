@@ -7,7 +7,7 @@ import CancelButton from "components/button/cancel"
 import { useDispatch } from "react-redux"
 import { setAlert } from "redux/ui-store"
 
-function TravelConsultantAssignment(props) {
+function TravelConsultantAssignment({ setTabKey }) {
   const dispatch = useDispatch()
   const [listEmployee, setListEmployee] = useState([])
   const [listTravelConsultant, setListTravelConsultant] = useState([])
@@ -71,6 +71,9 @@ function TravelConsultantAssignment(props) {
           message: `Travel Consultant has been successfully updated.`,
         }),
       )
+      setTimeout(() => {
+        setTabKey("team-assignment")
+      }, 1000)
     } catch (e) {
       dispatch(
         setAlert({
