@@ -4,7 +4,6 @@ import "./breadcrumb.css"
 import env from "config/environment"
 import { Link } from "react-router-dom"
 import AdImage from "../../assets/ad_img.png"
-import { useHistory } from "react-router-dom"
 
 function PageTitle() {
   const title = useSelector((state) => state.ui.title)
@@ -58,7 +57,7 @@ export default class Breadcrumb extends Component {
             isExtranet && (
               <div className="col-12 col-sm-6">
           {
-            isExtranet && <img src={AdImage} className="ad-image"/>
+            isExtranet && <img src={AdImage} className="ad-image" alt="ad"/>
           }
           </div>
           )
