@@ -67,17 +67,19 @@ export default function Data() {
                             />
                             {
                                 el.url ?
-                                <FormInputControl
-                                    label="Hotel Supplier Name"
-                                    // value={form.hotel_supplier_name}
-                                    name="hotel_supplier_name"
-                                    // onChange={(e) =>
-                                    //     setForm({...form, hotel_supplier_name: e.target.value})
-                                    // }
-                                    type="text"
-                                    minLength="1"
-                                    maxLength="256"
-                                />
+                                <div style={{width: '100%', paddingLeft: 20}}>
+                                    <FormInputControl
+                                        label="URL"
+                                        // value={form.hotel_supplier_name}
+                                        name="url"
+                                        // onChange={(e) =>
+                                        //     setForm({...form, hotel_supplier_name: e.target.value})
+                                        // }
+                                        type="url"
+                                        minLength="1"
+                                        maxLength="256"
+                                    />
+                                </div>
                                 :null
                             }
                         </div>

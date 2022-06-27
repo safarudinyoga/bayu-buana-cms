@@ -181,6 +181,7 @@ export default class TranslationForm extends Component {
           >
             <FormHorizontal>
               {fields.map((field, index) => {
+                console.log(field);
                 if (field.type === "richtext") {
                   return (
                     <div className="row">
@@ -188,7 +189,7 @@ export default class TranslationForm extends Component {
                           <p>Description</p>
                       </Col>
                       <Col sm={7} >
-                        <div style={{width: '270%', display: 'flex', flexWrap: 'wrap'}} >
+                        <div style={{width: '270%', height: "40vh", display: 'flex', flexWrap: 'wrap', overflow : 'auto'}} >
                             <Editor
                             // editorState={editorState}
                             toolbarClassName="toolbarClassName"
@@ -202,6 +203,26 @@ export default class TranslationForm extends Component {
                         </Col>
                     </div>
                   )
+                } if (field.type === "Description") {
+                    return (
+                      <FormInputControl
+                        wrapperAlign="start"
+                        disabled={this.props.isView || this.state.loading}
+                        key={index}
+                        id={"trans-" + lang.language_code + "-" + field.name}
+                        // onChange={this.onValueChange.bind(
+                        //   this,
+                        //   lang.language_code,
+                        //   field.name,
+                        // )}
+                        name={field.name + "_" + lang.language_code}
+                        type={field.type}
+                        label={field.label}
+                        cl={{ lg: 5 }}
+                        style={{width: 400}}
+                        maxLength={field?.maxLength || "256"}
+                      />
+                    )
                 }
                 return (
                   <FormInputControl
