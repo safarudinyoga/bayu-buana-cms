@@ -386,6 +386,7 @@ const FlightCommisionForm = (props) => {
                                   <DateRangePicker
                                     minDate={10}
                                     maxDate={10}
+                                    id="period_issue"
                                     value={[formik.values.commission_claim_issue_date.start_date, formik.values.commission_claim_issue_date.end_date]}
                                     onChange={(date) => {
                                       if(date.length > 0) {
@@ -445,6 +446,7 @@ const FlightCommisionForm = (props) => {
                                   <DateRangePicker
                                     minDate={10}
                                     maxDate={10}
+                                    id="period_departure"
                                     value={[formik.values.commission_claim_departure_date.start_date, formik.values.commission_claim_departure_date.end_date]}
                                     onChange={(date) => {
                                       if(date.length > 0) {

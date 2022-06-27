@@ -4,7 +4,7 @@ import { useStateWithCallbackLazy } from 'use-state-with-callback';
 import React, { useEffect, useRef, useState } from "react"
 import { Col, Row, Button } from 'react-bootstrap';
 
-const DateRangePicker = ({value, onChange= ()=>{}, minDate, maxDate, placeholder="" }) => {
+const DateRangePicker = ({value, onChange= ()=>{}, minDate, maxDate, placeholder="", id="" }) => {
 
   const [, setStartDateClose] = useStateWithCallbackLazy(false)
   const [form, setForm] = useState([])
@@ -32,7 +32,7 @@ const DateRangePicker = ({value, onChange= ()=>{}, minDate, maxDate, placeholder
               onFocus={openCalendar}
               value={value[0]}
               onChange={handleValueChange}
-              id="startDate"
+              id={`startDate_${id}`}
               placeholder={placeholder}
             />
           </div>
@@ -46,7 +46,7 @@ const DateRangePicker = ({value, onChange= ()=>{}, minDate, maxDate, placeholder
               onFocus={openCalendar}
               value={value[1]}
               onChange={handleValueChange}
-              id="endDate"
+              id={`endDate_${id}`}
               placeholder={placeholder}
             />
           </div>
@@ -69,7 +69,7 @@ const DateRangePicker = ({value, onChange= ()=>{}, minDate, maxDate, placeholder
       onChange={
         (date) => {
           if(date.length === 1) {
-            let endDate = document.getElementById("endDate")
+            let endDate = document.getElementById(`endDate_${id}`)
             endDate.focus();
             setForm(date)
           } else {
