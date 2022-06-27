@@ -1,5 +1,4 @@
-import { Collapse } from 'bootstrap'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Form } from "react-bootstrap"
 import useQuery from "lib/query"
 
@@ -9,15 +8,6 @@ function AccessManagerRow(props) {
   const isView = useQuery().get("action") === "view"
   const [capabilityCheckBoxes, setCapabilityCheckBoxes] = useState([])
   const [allowedModule, setAllowedModule] = useState([])
-  const [checkedCapabilities, setCheckedCapabilities] = useState([])
-  const [currentModule, setCurrentModule] = useState({
-    id: "",
-    capabilities: {}
-  })
-  const [currentCapabilities, setCurrentCapabilities] = useState(capabilities)
-  const [capabilityChecked, setCapabilityChecked] = useState(new Array(Object.keys(capabilities).length).fill(false))
-  // const checkedValue = useRef(false)
-
 
   // When the switch is clicked, add the capability and id to the state and then pass the state to module-access component
   const handleChange = (capability, id, capabilityValue, capabilitiesList) => {
@@ -29,26 +19,13 @@ function AccessManagerRow(props) {
     }
 
     capsList[capability] = !capabilityValue
-    setCurrentCapabilities(prev => ({
-      ...prev,
-      [capability]: !capabilityValue
-    }))
-
     setAllowedModule({...allowedModule,  id: id, capabilities: caps})
     
-  }
-
-  useEffect(() => {
-    // console.log("Current Module",currentModule)
-  }, [currentModule])
-  
+  }  
 
   useEffect(() => {
     const caps = []
-    console.log("FROM API", capabilities)
     for(let cap in capabilities) {
-      console.log(allowedModule["capabilities"] ? allowedModule["capabilities"][cap] : capabilities[cap])
-      // console.log(moduleId+"_"+cap+":"+capabilities[cap])
       caps.push(
         <td>
           <Form.Check 
@@ -69,11 +46,9 @@ function AccessManagerRow(props) {
   }, [])
 
   useEffect(() => {
-    // console.log("Allowed Module", allowedModule)
     sendAllowedModuleData(allowedModule)
   }, [allowedModule])
   
-
   return (
     <tr>
       <td>{moduleName}</td>

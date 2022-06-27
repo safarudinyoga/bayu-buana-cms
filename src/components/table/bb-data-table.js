@@ -98,7 +98,6 @@ class BBDataTable extends Component {
       }
     } catch (e) {}
 
-    const allowed = [this.props.recordName]
     const isOpenNewTab = this.props.isOpenNewTab ?? true
     columns.push( isShowColumnAction ? {
       searchable: false,
@@ -133,12 +132,6 @@ class BBDataTable extends Component {
         var x = window.matchMedia("(max-width: 768px)")
         tooltipCust(x)
         x.addListener(tooltipCust)
-        // const filteredRecordName = Object.keys(row)
-        //   .filter((key) => allowed.includes(key))
-        //   .reduce((obj, key) => {
-        //     obj[key] = row[key]
-        //     return obj
-        //   }, {})
 
         let showSwitch = self.props.switchStatus
         let checked = ""
@@ -146,7 +139,7 @@ class BBDataTable extends Component {
           if (module === 'manage-corporate') {
             checked = row.agent_corporate.corporate.status === 1 ? "checked" : ""
           } else {
-            checked = row.status == 1 ? "checked" : ""
+            checked = row.status === 1 ? "checked" : ""
           }
         }
 
@@ -186,7 +179,7 @@ class BBDataTable extends Component {
           }).join(",")
         }
 
-        const targetDataId = module == 'partner-currency'
+        const targetDataId = module === 'partner-currency'
           ? row.currency_id
           : module === 'partner-hotel-suppliers'
           ? row.hotel_supplier_id
@@ -556,15 +549,8 @@ class BBDataTable extends Component {
         },
         responsive: true,
         autoWidth: false,
-        // scrollX: true,
         scrollCollapse: false,
         columnDefs: [
-          // {
-          //   targets: 0,
-          //   checkboxes: {
-          //     selectRow: true,
-          //   },
-          // },
           {
             orderable: false,
             className: !this.state.isCheckbox ? "wo-checkbox": "select-checkbox",
@@ -631,17 +617,8 @@ class BBDataTable extends Component {
             targets: [columns.length - 4, columns.length - 3, columns.length - 2, columns.length - 1],
             className: module === "employee" ? "desktop" : ""
           }
-          // {
-          //   orderable: false,
-            // className: "table-row-action",
-          //   targets: [columns.length - 1],
-          //   width: "20%",
-          // },
 
         ],
-        // select: {
-        //   style: "multi",
-        // },
         order: [],
         columns: columns,
         dom:
@@ -681,16 +658,10 @@ class BBDataTable extends Component {
           )
           $(".pagination", wrapper).addClass("float-right float-left-sm mobile-margin")
 
-          // Hide pagination if empty data
-          // if (t.fnRecordsDisplay() === 1) {
-          //   $(t.nTableWrapper).find(".dataTables_length").hide()
-          //   $(t.nTableWrapper).find(".dataTables_info").hide()
-          //   $(t.nTableWrapper).find(".dataTables_paginate").hide()
-          // } else {
           $(t.nTableWrapper).find(".dataTables_length").show()
           $(t.nTableWrapper).find(".dataTables_info").show()
           $(t.nTableWrapper).find(".dataTables_paginate").show()
-          // }
+
           let items = $(".select-checkbox-item", t.nTableWrapper)
           let itemsSelected = []
           for (let i = 0; i < items.length; i++) {
@@ -755,7 +726,7 @@ class BBDataTable extends Component {
           let targetIdx = rowPositionDiff === 0 ? 1 : diff.length - 2
           let sort = dt.row(diff[targetIdx].node)?.data()?.sort || 0
           try {
-            let res = await this.api.post(`/master/batch-actions/sort/${module}`, { id: rowID, sort })
+            await this.api.post(`/master/batch-actions/sort/${module}`, { id: rowID, sort })
             $(this.table.current).DataTable().draw(false)
           } catch (e) {
           }
@@ -906,17 +877,6 @@ class BBDataTable extends Component {
         })
     }
   }
-
-  // onYearUpdate(year) {
-  //   this.api
-  //     .get(`${this.props.endpoint}?filters=[["start_date","like","${year}"],["or"],["end_date","like","${year}"]]`)
-  //     .then(() => {
-  //       this.dt.ajax.reload()
-  //     })
-  //     .finally(() => {
-  //       this.deselectAll()
-  //     })
-  // }
 
   onRemoveSelected() {
     this.setState({
@@ -1114,7 +1074,7 @@ class BBDataTable extends Component {
       })
     $.fn.DataTable.ext.pager.numbers_length = 5
 
-    const { showCreateModal, modalTitle, modalTitleNew, showModalDelete, showCreateNewModal, createNewModal, createOnModal, module, deleteEndpoint, showModalHeader = true} = this.props
+    const { showCreateModal, modalTitle, modalTitleNew, showModalDelete, showCreateNewModal, createNewModal, createOnModal, deleteEndpoint, showModalHeader = true} = this.props
 
     let infoFromState = this.state.info
     infoFromState = infoFromState ? infoFromState.split(",") : []

@@ -8,7 +8,7 @@ import { Field } from "formik"
 
 const DateRangePicker = (props) => {
 
-  const [startDateClose, setStartDateClose] = useStateWithCallbackLazy(false)
+  const [, setStartDateClose] = useStateWithCallbackLazy(false)
   const [form, setForm] = useState([])
 
   const datePickerRef = useRef()
@@ -107,7 +107,6 @@ const DateRangePicker = (props) => {
         <button
           className="pt-1"
           style={{ color: "#1E83DC" }}
-          role={"button"}
           onClick={() => {
             props.onChange([])
           }}
