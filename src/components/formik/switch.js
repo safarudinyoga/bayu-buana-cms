@@ -1,5 +1,4 @@
 import React from "react"
-import { Field } from "formik"
 import { Row, Col } from "react-bootstrap"
 import Switch from "react-switch"
 import Hints from "assets/icons/hint.svg";

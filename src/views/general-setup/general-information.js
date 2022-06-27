@@ -1,19 +1,17 @@
-import React, { useEffect, useState } from "react"
-import { useLocation } from "react-router-dom"
-import { useDispatch } from "react-redux"
-import { setUIParams } from "redux/ui-store"
-import { Tabs, TabPane, Row } from "react-bootstrap"
+import React, { useRef, useState } from "react"
+import { Tabs, TabPane } from "react-bootstrap"
 import { Editor } from "react-draft-wysiwyg"
-import infoIcon from "assets/icons/information.svg"
-import { ReactSVG } from "react-svg"
+import { EditorState } from 'draft-js';
 import Data from "../general_information/data";
-// import FlightBookSelect from "./flight_book-react-select"
-// import FlightBookSuggest from "./flight_book-autosuggest"
-// import "./flight_book.css"
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
 const GeneralInformation = (props) => {
   const [key, setKey] = useState("CORPORATE CLIENT");
-
+  const importantNoticeRef = useRef(null);
+  const [editorImportantNoticeState, setImportantNoticeState] = useState(
+    EditorState.createEmpty()
+  );
+  const MAX_LENGTH = 10;
     const titleText = {
         fontSize: 16,
         color: '#333333',
@@ -68,8 +66,72 @@ const GeneralInformation = (props) => {
         },
     ];
 
+    const _getLengthOfSelectedText = () => {
+        const currentSelection = importantNoticeRef.current.getSelection();
+        const isCollapsed = currentSelection.isCollapsed();
     
+        let length = 0;
+    
+        if (!isCollapsed) {
+          const currentContent = importantNoticeRef.current.getCurrentContent();
+          const startKey = currentSelection.getStartKey();
+          const endKey = currentSelection.getEndKey();
+          const startBlock = currentContent.getBlockForKey(startKey);
+          const isStartAndEndBlockAreTheSame = startKey === endKey;
+          const startBlockTextLength = startBlock.getLength();
+          const startSelectedTextLength = startBlockTextLength - currentSelection.getStartOffset();
+          const endSelectedTextLength = currentSelection.getEndOffset();
+          const keyAfterEnd = currentContent.getKeyAfter(endKey);
+          console.log(currentSelection)
+          if (isStartAndEndBlockAreTheSame) {
+            length += currentSelection.getEndOffset() - currentSelection.getStartOffset();
+          } else {
+            let currentKey = startKey;
+    
+            while (currentKey && currentKey !== keyAfterEnd) {
+              if (currentKey === startKey) {
+                length += startSelectedTextLength + 1;
+              } else if (currentKey === endKey) {
+                length += endSelectedTextLength;
+              } else {
+                length += currentContent.getBlockForKey(currentKey).getLength() + 1;
+              }
+    
+              currentKey = currentContent.getKeyAfter(currentKey);
+            };
+          }
+        }
+    
+        return length;
+    }
 
+    const _handleBeforeInput = () => {
+        const currentContent = importantNoticeRef.current.getCurrentContent();
+        const currentContentLength = currentContent.getPlainText('').length;
+        const selectedTextLength = _getLengthOfSelectedText();
+    
+        if (currentContentLength - selectedTextLength > MAX_LENGTH - 1) {
+          console.log('you can type max ten characters');
+    
+          return 'handled';
+        }
+    }
+
+    const _handlePastedText = (pastedText) => {
+        const currentContent = importantNoticeRef.current.getCurrentContent();
+        const currentContentLength = currentContent.getPlainText('').length;
+        const selectedTextLength = _getLengthOfSelectedText();
+    
+        if (currentContentLength + pastedText.length - selectedTextLength > MAX_LENGTH) {
+          console.log('you can type max ten characters');
+    
+          return 'handled';
+        }
+    }
+    const _handleChange = (editorState) => {
+        setImportantNoticeState(editorState)
+        console.log('handle', editorState)
+    }
   return (
     <div className="row">
         <div className=" border">
@@ -79,13 +141,16 @@ const GeneralInformation = (props) => {
                 <div>
                     <p>Important Notice</p>
                     <Editor
-                        // editorState={editorState}
+                        ref={importantNoticeRef}
+                        editorState={editorImportantNoticeState}
                         toolbarClassName="toolbarClassName"
                         wrapperClassName="wrapperClassName"
                         editorClassName="editorClassName"
+                        handleBeforeInput={_handleBeforeInput}
+                        handlePastedText={_handlePastedText}
+                        onEditorStateChange={_handleChange}
                         wrapperStyle={wrapperStyle}
                         editorStyle={editorStyle} 
-                        // onEditorStateChange={this.onEditorStateChange}
                         toolbarStyle={{background: '#ECECEC 0% 0% no-repeat padding-box'}}
                     />
                 </div>

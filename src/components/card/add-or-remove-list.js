@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Card, Form, Row, Col, ListGroup, Button, Image } from "react-bootstrap"
+import { Card, Row, Col } from "react-bootstrap"
 import downIcon from "assets/icons/double-down.svg"
 import upIcon from "assets/icons/double-up.svg"
 import arrowLeft from "assets/icons/arrow-left.svg"
