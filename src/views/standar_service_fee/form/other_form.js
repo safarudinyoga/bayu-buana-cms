@@ -130,7 +130,7 @@ const OtherModal = (props) => {
   return (
     <Modal
       {...props}
-      size="md"
+      size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
     >
@@ -164,14 +164,16 @@ const OtherModal = (props) => {
             }) => (
               <Form onSubmit={handleSubmit}>
                 <Form.Group as={Row} className="mb-3">
-                  <Form.Label className="mr-2">
-                    Type of Other Service
-                    <span className="form-label-required">*</span>
-                  </Form.Label>
-                  <Col sm={7}>
+                  <Col md={3}>
+                    <Form.Label>
+                      Type of Other Service
+                      <span className="form-label-required">*</span>
+                    </Form.Label>
+                  </Col>
+                  <Col md={9}>
                     <FastField name="destination">
                       {({ field, form }) => (
-                        <div style={{ maxWidth: 600 }}>
+                        <div style={{ maxWidth: 300 }}>
                           <SelectAsync
                             {...field}
                             isClearable
@@ -200,47 +202,43 @@ const OtherModal = (props) => {
                       )}
                     </FastField>
                   </Col>
+                  <MenuModal
+                    menu={[
+                      {
+                        title: "MDR Fee",
+                        sections: [
+                          {
+                            title: "MDR FEE",
+                            taxType: taxTypeServiceFee,
+                            fieldFeeTaxId: "domestic_reissue_fee_tax_id",
+                            fieldRadio: "domestic_reissue",
+                            fieldAmount: "domestic_reissue_amount",
+                            fieldAmountType: "domestic_reissue_amount_type",
+                            fieldPercent: "domestic_reissue_percent",
+                            fieldIncludeTax: "domestic_reissue_tax_include",
+                          },
+                        ],
+                      },
+                    ]}
+                    values={values}
+                    fHandleChange={handleChange}
+                    fHandleBlur={handleBlur}
+                    setFieldValue={setFieldValue}
+                    // isView={isView}
+                    amountSuffixSelections={[
+                      {
+                        label: "/Unit",
+                        value: "4f1f8b74-673f-42ae-b7a8-577b0121cd3f",
+                      },
+                      {
+                        label: "/Transaction",
+                        value: "5123b121-4f6a-4871-bef1-65408d663e19",
+                      },
+                    ]}
+                    errors={errors}
+                  />
                 </Form.Group>
 
-                <MenuModal
-                  menu={[
-                    {
-                      title: "MDR Fee",
-                      sections: [
-                        {
-                          title: "MDR FEE",
-                          taxType: taxTypeServiceFee,
-                          fieldFeeTaxId: "domestic_reissue_fee_tax_id",
-                          fieldRadio: "domestic_reissue",
-                          fieldAmount: "domestic_reissue_amount",
-                          fieldAmountType: "domestic_reissue_amount_type",
-                          fieldPercent: "domestic_reissue_percent",
-                          fieldIncludeTax: "domestic_reissue_tax_include",
-                        },
-                      ],
-                    },
-                  ]}
-                  values={values}
-                  fHandleChange={handleChange}
-                  fHandleBlur={handleBlur}
-                  setFieldValue={setFieldValue}
-                  // isView={isView}
-                  amountSuffixSelections={[
-                    {
-                      label: "/Ticket",
-                      value: "de62950d-fbab-4e39-bd90-c2b6687c6b36",
-                    },
-                    {
-                      label: "/Person",
-                      value: "de03bf84-4bd8-4cdf-9348-00246f04bcad",
-                    },
-                    {
-                      label: "/Transaction",
-                      value: "5123b121-4f6a-4871-bef1-65408d663e19",
-                    },
-                  ]}
-                  errors={errors}
-                />
                 <div
                   style={{ marginBottom: 30, marginTop: 30, display: "flex" }}
                 >
@@ -259,95 +257,6 @@ const OtherModal = (props) => {
             )}
           </Formik>
         </div>
-        {/* <div style={{ padding: "0 2px 2px" }}>
-          <div className="mb-5">
-            <div className="modal-button-close" onClick={props.onHide}>
-              <ReactSVG src="/img/icons/close.svg" />
-            </div>
-            <p className="modals-header mt-3">Add Type of Service Fee</p>
-          </div>
-
-          <Form>
-            <Form.Group as={Row} className="mb-3">
-              <Form.Label column sm={7}>
-                Type of Other Service
-                <span className="form-label-required">*</span>
-              </Form.Label>
-              <Col sm={5}>
-                <FastField name="hotelBrand">
-                  {({ field, form }) => (
-                    <div style={{ maxWidth: 600 }}>
-                      <Select {...field} placeholder="Please choose" />
-                    </div>
-                  )}
-                </FastField>
-              </Col>
-            </Form.Group>
-
-            <Form.Group as={Row} className="mb-3">
-              <Form.Label column md={4}>
-                Service Fee
-                <span className="form-label-required">*</span>
-              </Form.Label>
-              <Col md={5}>
-                <Form.Group>
-                  <Form.Check type="radio" label="Fixed Amount" />
-                </Form.Group>
-                <Row className="ml-3">
-                  <Col sm={12} md={6}>
-                    <Form.Group as={Row} className="mb-xs-3">
-                      <Form.Label
-                        column
-                        xs={2}
-                        md={3}
-                        lg={5}
-                        className="ml-xs-4"
-                      >
-                        IDR
-                      </Form.Label>
-                      <Col xs={10} md={9} lg={7}>
-                        <Form.Control style={{ maxWidth: "220px" }} />
-                      </Col>
-                    </Form.Group>
-                  </Col>
-                  <Col sm={12} md={6}>
-                    <Form.Group className="mb-3">
-                      <Form.Check type="radio" label="/Unit" />
-                      <Form.Check type="radio" label="/Transaction" />
-                    </Form.Group>
-                  </Col>
-                </Row>
-
-                <Form.Group>
-                  <Form.Check type="radio" label="Percentage" />
-                </Form.Group>
-
-                <Form.Group as={Row} className="mb-3">
-                  <Form.Control style={{ maxWidth: "80px" }} className="mx-3" />
-                  <span className="text-lg mt-1">%</span>
-                  <Form.Check
-                    type="checkbox"
-                    label="Include n "
-                    className="mt-2 ml-4"
-                  />
-                </Form.Group>
-              </Col>
-            </Form.Group>
-
-            <div style={{ marginBottom: 30, marginTop: 30, display: "flex" }}>
-              <Button
-                variant="primary"
-                type="submit"
-                style={{ marginRight: 15 }}
-              >
-                SAVE
-              </Button>
-              <Button variant="secondary" onClick={props.onHide}>
-                CANCEL
-              </Button>
-            </div>
-          </Form>
-        </div> */}
       </Modal.Body>
     </Modal>
   )
@@ -373,8 +282,8 @@ const OtherForm = (props) => {
       lg: 3,
     },
     value: {
-      md: 6,
-      lg: 6,
+      md: 8,
+      lg: 8,
     },
   }
   useEffect(async () => {
@@ -520,6 +429,8 @@ const OtherForm = (props) => {
                         <OtherModal
                           show={modalShow}
                           size={formSizeModal}
+                          // className="modal-lg"
+
                           onHide={() => setModalShow(false)}
                         />
                       </Col>

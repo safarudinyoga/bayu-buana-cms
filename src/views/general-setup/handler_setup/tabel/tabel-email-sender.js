@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import BBDataTable from "components/table/bb-data-table"
 import { useDispatch } from "react-redux"
 import { Card, Form, Row, Col, Modal, Button } from "react-bootstrap"
@@ -8,8 +8,11 @@ import { setAlert, setCreateModal } from "redux/ui-store"
 import createIcon from "assets/icons/create.svg"
 import * as Yup from "yup"
 import Api from "config/api"
+import FormEmail from "../form/form-email-sender"
 import SelectAsync from "components/form/select-async"
 import { ReactSVG } from "react-svg"
+
+const endpoint = "/master/configurations/email-senders"
 
 const EmailSenderModal = (props) => {
   const API = new Api()
@@ -33,29 +36,16 @@ const EmailSenderModal = (props) => {
     try {
       let formId = props.id
       let form = {
-        agent_id: values.agent_id
-          ? values.agent_id.value
-          : "00000000-0000-0000-0000-000000000000",
-        from_employee_id: values.from_employee_id
-          ? values.from_employee_id.value
-          : "00000000-0000-0000-0000-000000000000",
-        from_person_id: values.from_person_id
-          ? values.from_person_id.value
-          : "00000000-0000-0000-0000-000000000000",
-        from_user_account_id: values.from_user_account_id
-          ? values.from_user_account_id.value
-          : "00000000-0000-0000-0000-000000000000",
         message_type_id: values.message_type
           ? values.message_type.value
           : "00000000-0000-0000-0000-000000000000",
-        message_type: values.message_type,
         from_display: values.sender_name,
         from_email: values.sender_email,
       }
 
       if (!formId) {
         //Proses Create Data
-        let res = await API.post(`/master/configurations/email-senders`, form)
+        let res = await API.post(endpoint, form)
         console.log(res)
 
         dispatch(
@@ -85,9 +75,7 @@ const EmailSenderModal = (props) => {
         props.onHide()
       }
     } catch (e) {
-      dispatch(
-        setCreateModal({ show: false, id: null, disabled_form: false }),
-      )
+      dispatch(setCreateModal({ show: false, id: null, disabled_form: false }))
       dispatch(
         setAlert({
           message: "Failed to save this record.",
@@ -266,12 +254,37 @@ const EmailSenderModal = (props) => {
 }
 
 function EmailSenderTable() {
+  let api = new Api()
   const [modalShow, setModalShow] = useState(false)
+  const [initialForm, setInitialForm] = useState({
+    sender_name: "",
+    sender_email: "",
+  })
+
+  const validationSchema = Yup.object().shape({
+    sender_name: Yup.string(),
+    sender_email: Yup.string(),
+  })
+
+  useEffect(async () => {
+    try {
+      let res = await api.get(endpoint)
+      let data = res.data.items[0]
+      console.log("tes", data)
+      setInitialForm({
+        ...initialForm,
+        sender_name: data.from_display,
+        sender_email: data.from_email,
+      })
+    } catch (e) {
+      console.log(e)
+    }
+  }, [])
 
   let params = {
     isCheckbox: false,
     showAdvancedOptions: false,
-    createOnModal: false,
+    createOnModal: true,
     showHistory: false,
     hideDetail: true,
     hideCreate: true,
@@ -289,7 +302,7 @@ function EmailSenderTable() {
     columns: [
       {
         title: "Message Type",
-        data: "message_type_name",
+        data: "message_type.message_type_name",
       },
       {
         title: "Sender Name",
@@ -298,6 +311,9 @@ function EmailSenderTable() {
       {
         title: "Sender Email",
         data: "from_email",
+        render: (data, type) => {
+          return data || ""
+        },
       },
     ],
     emptyTable: "No Email Sender found",
@@ -307,53 +323,79 @@ function EmailSenderTable() {
   }
   return (
     <>
-      <Card style={{ backgroundColor: "#F8F8F8", padding: "20px" }}>
-        <Form.Label className="text-uppercase">Default Email Sender</Form.Label>
+      <Formik
+        initialValues={initialForm}
+        validationSchema={validationSchema}
+        enableReinitialize
+      >
+        {({
+          values,
+          errors,
+          touched,
+          dirty,
+          handleChange,
+          handleBlur,
+          handleSubmit,
+          isSubmitting,
+          setFieldValue,
+          setFieldTouched,
+        }) => (
+          <Form>
+            {" "}
+            <Card style={{ backgroundColor: "#F8F8F8", padding: "20px" }}>
+              <Form.Label className="text-uppercase">
+                Default Email Sender
+              </Form.Label>
+              <Form.Group as={Row} className="form-group">
+                <Form.Label column xs={5} sm={5} md={3} lg={3}>
+                  Sender Name
+                </Form.Label>
+                <Col xs={7} sm={7} md={9} lg={9}>
+                  <Form.Control
+                    type="text"
+                    minLength={1}
+                    maxLength={36}
+                    value={values.sender_name}
+                    style={{ maxWidth: 250 }}
+                  />
+                </Col>
+              </Form.Group>
+              <Form.Group as={Row} className="form-group">
+                <Form.Label column xs={5} sm={5} md={3} lg={3}>
+                  Sender Email
+                </Form.Label>
+                <Col xs={7} sm={7} md={9} lg={9}>
+                  <Form.Control
+                    type="text"
+                    minLength={1}
+                    maxLength={36}
+                    style={{ maxWidth: 250 }}
+                    value={values.sender_email}
+                  />
+                </Col>
+              </Form.Group>
+            </Card>
+            <Col sm={12}>
+              <div style={{ padding: "0 15px 15px 15px" }}>
+                <Button
+                  className="btn float-right button-override"
+                  onClick={() => setModalShow(true)}
+                >
+                  <img src={createIcon} className="mr-1" alt="new" />
+                  Add Email Sender
+                </Button>
+              </div>
+            </Col>
+          </Form>
+        )}
+      </Formik>
 
-        <Form.Group as={Row} className="form-group">
-          <Form.Label column xs={5} sm={5} md={3} lg={3}>
-            Sender Name
-          </Form.Label>
-          <Col xs={7} sm={7} md={9} lg={9}>
-            <Form.Control
-              type="text"
-              minLength={1}
-              maxLength={36}
-              style={{ maxWidth: 250 }}
-            />
-          </Col>
-        </Form.Group>
-        <Form.Group as={Row} className="form-group">
-          <Form.Label column xs={5} sm={5} md={3} lg={3}>
-            Sender Email
-          </Form.Label>
-          <Col xs={7} sm={7} md={9} lg={9}>
-            <Form.Control
-              type="text"
-              minLength={1}
-              maxLength={36}
-              style={{ maxWidth: 250 }}
-            />
-          </Col>
-        </Form.Group>
-      </Card>
-      <Col sm={12}>
-        <div style={{ padding: "0 15px 15px 15px" }}>
-          <Button
-            className="btn float-right button-override"
-            onClick={() => setModalShow(true)}
-          >
-            <img src={createIcon} className="mr-1" alt="new" />
-            Add Email Sender
-          </Button>
-        </div>
-      </Col>
       <br />
       <Col sm={12}>
         <EmailSenderModal show={modalShow} onHide={() => setModalShow(false)} />
       </Col>
 
-      <BBDataTable {...params} />
+      <BBDataTable {...params} modalContent={FormEmail} />
     </>
   )
 }

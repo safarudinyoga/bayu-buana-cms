@@ -23,7 +23,6 @@ const Subscriptions = (props) => {
     try {
       let res = await api.get("/user/profile")
       let data = res.data;
-      console.log(data);
       setInitialForm({
         ...initialForm,
         dealSubscription: data.user_setting.receive_travel_deals,
@@ -37,7 +36,6 @@ const Subscriptions = (props) => {
       enableReinitialize
       initialValues={initialForm}
       onSubmit={async (values, { setSubmitting, resetForm }) => {
-        console.log(values)
 
         let formatted = {
           user_setting: {
@@ -47,7 +45,7 @@ const Subscriptions = (props) => {
         }
 
         try {
-          let res = await api.put("user/profile", formatted)
+          await api.put("user/profile", formatted)
           openSnackbar(
             `Subscriptions has been successfully updated.`
           )
@@ -69,7 +67,7 @@ const Subscriptions = (props) => {
       }) => {
         return (
           <Form onSubmit={handleSubmit}>
-            <Card>
+            <Card style={{marginBottom: 0}}>
               <Card.Body>
               <h3 className="card-heading">Subscriptions</h3>
               <div style={{ padding: "0 15px 15px" }}>
@@ -142,41 +140,28 @@ const Subscriptions = (props) => {
                   </Col>
                 </Form.Group>
               </div>
-              <div style={{ marginBottom: 30, marginTop: 30 }} className="mobile-button">
-              <Button
-                variant="primary"
-                type="submit"
-                style={{ marginRight: 15 }}
-              >
-                SAVE
-              </Button>
-              <Button
-                variant="secondary"
-                onClick={() => props.history.push("/")}
-              >
-                CANCEL
-              </Button>
-            </div>
-              </Card.Body>
+             
               {
-                props.isMobile ? (
-                  <div className="mb-5 ml-1 row justify-content-md-start justify-content-center">
-                    <Button
-                      variant="primary"
-                      type="submit"
-                      style={{ marginRight: 15 }}
-                    >
-                      SAVE
-                    </Button>
-                    <Button
-                      variant="secondary"
-                      onClick={() => props.history.push("/")}
-                    >
-                      CANCEL
-                    </Button>
-                  </div>
-                ) : ""
-              }
+                  props.isMobile ? (
+                    <div className="mb-5 ml-1 row justify-content-md-start justify-content-center">
+                      <Button
+                        variant="primary"
+                        type="submit"
+                        disabled={!dirty || !isValid}
+                        style={{ marginRight: 15 }}
+                      >
+                        SAVE
+                      </Button>
+                      <Button
+                        variant="secondary"
+                        onClick={() => props.history.push("/")}
+                      >
+                        CANCEL
+                      </Button>
+                    </div>
+                  ) : ""
+                }
+              </Card.Body>
             </Card>
             {
               props.isMobile ? "" : (
@@ -184,6 +169,7 @@ const Subscriptions = (props) => {
                   <Button
                     variant="primary"
                     type="submit"
+                    disabled={!dirty || !isValid}
                     style={{ marginRight: 15 }}
                   >
                     SAVE

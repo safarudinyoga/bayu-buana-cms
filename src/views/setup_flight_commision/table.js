@@ -6,7 +6,7 @@ import { renderColumn } from "lib/translation"
 import DatePicker from 'react-datepicker'
 import moment from 'moment'
 import './style.css'
-import DateRangePicker from 'components/form/date_range_picker'
+import DateRangePicker from 'components/form/date-range-picker'
 
 export default function SetupFlightCommisionTable() {
   let dispatch = useDispatch()

@@ -32,7 +32,7 @@ export default class FormInputSelectMultiAjax extends Component {
   }
 
   init() {
-    const {isFilter, allowClear} = this.props
+    const {isFilter} = this.props
     setTimeout(() => {
       try {
         let config = {

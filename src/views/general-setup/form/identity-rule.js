@@ -9,6 +9,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { setAlert, setCreateModal, setModalTitle } from "redux/ui-store";
 import CancelButton from "components/button/cancel";
 import FormikControl from "components/formik/formikControl";
+import "./identity-rule.css"
+
 
 const endpoint = "/master/configurations/identity-rules";
 
@@ -128,24 +130,60 @@ function IdentityRuleCreate(props) {
                             size={formTextSize}
                             label="Prefix"
                             name="prefix"
-                            style={{ maxWidth: 250 }}
+                            maxLength= {36}
+                            style={{ 
+                                maxWidth: 150,
+                                paddingRight: 0
+                            }}
                             disabled={isView || loading}
                             onChange={(e) => {
                                 setFieldValue("prefix", e.target.value);
                             }}
                         />
+                        
+                        <Form.Control 
+                            type="text" 
+                            value="-"
+                            disabled
+                            className="form-group disabled-dash"
+                            style= {{
+                                maxWidth: 45,
+                                textAlign: "center",
+                                marginTop: 32,
+                                marginRight: 10,
+                            }}
+                        /> 
+                        
 
                         <FormikControl
                             control="input"
                             size={formTextSize}
                             label="Dynamic Prefix"
                             name="dynamic_prefix"
-                            style={{ maxWidth: 250 }}
+                            maxLength= {36}
+                            style={{ 
+                                maxWidth: 250,
+                                paddingRight: 0,
+                            }}
                             disabled={isView || loading}
                             onChange={(e) => {
                                 setFieldValue("dynamic_prefix", e.target.value);
                             }}
                         />
+                        
+                        <Form.Control 
+                            type="text" 
+                            value="-"
+                            disabled
+                            className="form-group disabled-dash"
+                            style= {{
+                                maxWidth: 45,
+                                textAlign: "center",
+                                marginTop: 32,
+                                marginRight: 10,
+                                marginLeft: -10
+                            }}
+                        /> 
 
                         <FormikControl
                             control="input"
@@ -159,16 +197,18 @@ function IdentityRuleCreate(props) {
                             }}
                         />
                     </div>
-
+                    
                     <FormikControl
                         control="switch"
                         required="label-required"
+                        className={"identity-rule-switch"}
                         label="Reset numbers periodically?"
                         name="is_reset"
                         value={values.is_reset}
                         onChange={(v) => setFieldValue("is_reset", v)}
                         size={formSize}
                         disabled={isView || loading}
+                        useHint={true}
                     />
 
                     <FormikControl
@@ -197,7 +237,9 @@ function IdentityRuleCreate(props) {
                                 : null
                         }
                         isDisabled={isView}
+                        useHint={true}
                     />
+                   
 
                     {!props.hideButton && (
                         <div

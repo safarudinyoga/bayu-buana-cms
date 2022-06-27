@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Card, Form, Row, Col, ListGroup, Button, Image } from "react-bootstrap"
+import { Card, Row, Col } from "react-bootstrap"
 import downIcon from "assets/icons/double-down.svg"
 import upIcon from "assets/icons/double-up.svg"
 import arrowLeft from "assets/icons/arrow-left.svg"
@@ -68,12 +68,18 @@ const AddOrRemoveList = ({
     const newData = rightData.filter((item) => item !== e)
     setRightData((rightdata) => newData)
     setLeftData((leftdata) => [...leftdata, e])
+    setFormValues((formValues) => [
+      ...leftData.map((item) => ({
+        agent_id: item.agent_id,
+        employee_id: item.employee_id,
+      })),
+    ])
   }
 
   const handleSelectAssignmentLeader = (e) => {
     console.log("e: ", e)
     console.log("form: ")
-    setFormValues("aaaa")
+    // setFormValues("aaaa")
     // setFormValues((data) => [
     //   ...data.map((item) => ({
     //     can_issue_tickets:

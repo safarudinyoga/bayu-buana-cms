@@ -1,77 +1,61 @@
 import React, {useState, useEffect} from "react"
 import { Col, Row, Card, Form, Button, Alert, Accordion, Modal } from 'react-bootstrap'
-
-const ex_logo = 'https://ik.imagekit.io/tvlk/image/imageResource/2021/07/12/1626063527483-f24d3eae611b51022ab0d1fc1457c820.png?tr=q-75,w-28'
+import moment from 'moment'
+import ThousandSeparator from 'lib/thousand-separator'
+import { decrypt } from "lib/bb-crypt"
 
 const Review = ({handleSelectTab}) => {
 
 
+	const [Flight, setFlight] = useState({})
+  const [Passengers, setPassengers] = useState([])
 	const [show, setShow] = useState(false)
 	const handleShow = () => setShow(true)
+  
+  useEffect(async() => {
 
-  const FlightDetail = ({footer}) => (
-    <div>
-      <Row>
-        <Col sm={11}>
-          <Row className="w-50">
-            <Col>
-              <p className='text-bold m-0'>Jakarta <i class="fas fa-arrow-right"></i> Hongkong</p>
-            </Col>
-            <Col>
-              <p className='text-bold m-0'>
-                <small>
-                  <i className='fas fa-clock mr-1'></i> 7h 5m (1 Stop)
-                </small>
-              </p>
-            </Col>
-          </Row>
-          <FlightInfo/>
-          <div className='transit-wrapper align-center'>
-            <div className='links'>
-              <p className='transit-info'>
-                <i className='fas fa-clock mr-1'></i>
-                  Transit 1h 50m in Singapore (SIN)
-              </p>
-            </div>
-          </div>
-          <FlightInfo/>
-        </Col>
-        <Col sm={1}>
-        </Col>
-      </Row>
-      <div className={`d-${footer ? "block": "none"} flight-detail-footer pt-3`}>
-        <p className="my-0" style={{fontSize: 12, color: "#818181"}}>Notes</p>
-        <ul className="note-list">
-          <li>Roundtrip price for 1 traveler: IDR 3,294,700</li>
-          <li>Service Fee: IDR 100,000 per ticket</li>
-          <li>After Office Charge: IDR 50,000 per ticket</li>
-          <li>Price quoted above is subject to change and not guaranteed until ticketed.</li>
-        </ul>
-      </div>
-      <div className={`d-${footer ? "block": "none"} flight-detail-footer pt-3 text-bold`}>
-        <Row>
-          <Col sm={3}>
-            <p>Mrs. Sienna Bright</p>
-            <p>Ms. Marry Bright</p>
-          </Col>
-          <Col style={{maxWidth: 145}}sm={{span: 2, offset: 5}}>
-            <p className="font-weight-normal">CGK-HKG-CGK</p>
-            <p className="font-weight-normal">CGK-HKG-CGK</p>
-          </Col>
-          <Col style={{maxWidth: 145}} sm={2}>
-            <p className="font-weight-normal">Fare-roundtrip</p>
-            <p className="font-weight-normal">Fare-roundtrip</p>
-            <p className="text-16">Sub-total</p>
-          </Col>
-          <Col className="text-right" style={{maxWidth: 145}}  sm={2}>
-            <p className="font-weight-normal">IDR 6,985,345</p>
-            <p className="font-weight-normal">IDR 6,985,345</p>
-            <p className="text-16">IDR 6,589,123</p>
-          </Col>
-        </Row>
-      </div>
-    </div>
-  )
+    window.scrollTo({top: 0, behavior: 'smooth'});
+
+		let selectedFlight = localStorage.getItem("selectedFlight")
+		let passengers = localStorage.getItem("psg")
+    passengers = decrypt(passengers)
+    passengers = JSON.parse(passengers)
+    setPassengers(passengers)
+		if(selectedFlight) {
+			selectedFlight = JSON.parse(selectedFlight)
+			setFlight(selectedFlight)
+		}
+	}, [])
+
+	function padTo2Digits(num) {
+		return num.toString().padStart(2, '0');
+	}
+
+	const diff_minutes = (date1, date2) => {
+		let milliseconds = date2.getTime() - date1.getTime()
+		let seconds = Math.floor(milliseconds / 1000);
+		let minutes = Math.floor(seconds / 60);
+		let hours = Math.floor(minutes / 60);
+	
+		seconds = seconds % 60;
+		minutes = seconds >= 30 ? minutes + 1 : minutes;
+	
+		minutes = minutes % 60;
+		hours = hours % 24;
+	
+		return `${padTo2Digits(hours)}h ${padTo2Digits(minutes)}m`;
+	}
+
+	const TransitLine = ({previous_arrival_date, departure_date}) => (
+		<div className='transit-wrapper align-center'>
+			<div className='links'>
+				<p className='transit-info'>
+					<i className='fas fa-clock mr-1'></i>
+					Transit {diff_minutes(previous_arrival_date, departure_date)} in Singapore (SIN)
+				</p>
+			</div>
+		</div>
+	)
 
   const FareRulesModal = () => (
 		<Modal show={show} onHide={() => setShow(false)} centered>
@@ -83,7 +67,7 @@ const Review = ({handleSelectTab}) => {
 			<Modal.Body>
 				<ul>
 					<li>Cancelation allow with fee</li>
-					<li>Baggage allow up to 30 kg</li>
+					<li>Baggage allow up to 20 kg</li>
 					<li>Exchange Before Flight (free)</li>
 					<li>Exchange After Flight (with fee $100)</li>
 					<li>Refund Before Flight (with fee $90)</li>
@@ -92,49 +76,115 @@ const Review = ({handleSelectTab}) => {
 		</Modal>
 	)
 
-  const FlightInfo = () => (
+  const FlightDetail = ({footer, airline}) => (
+    <div>
+      <Row>
+        <Col sm={11}>
+          <Row className="w-50">
+						<Col>
+							<p className='text-bold m-0'>Jakarta <i class="fas fa-arrow-right"></i> Hongkong</p>
+						</Col>
+						<Col>
+							<p className='text-bold m-0'>
+								<small>
+									<i className='fas fa-clock mr-1'></i> {Flight.estimation} ({Flight.routes ? Flight.routes.length -1 : 0} Stop)
+								</small>
+							</p>
+						</Col>
+					</Row>
+          {
+						airline.routes?.map((route, i) => {
+							return (<div key={i}>
+								{route?.previous_arrival_date !== null 
+								&& <TransitLine 
+									previous_arrival_date = {new Date(route?.previous_arrival_date)}
+									departure_date = {new Date(route?.departure_date)}
+								/>}
+								<FlightInfo route={route} airline={airline}/>
+							</div>)
+						})
+					}
+        </Col>
+        <Col sm={1}>
+        </Col>
+      </Row>
+      <div className={`d-${footer ? "block": "none"} flight-detail-footer pt-3`}>
+        <p className="my-0" style={{fontSize: 12, color: "#818181"}}>Notes</p>
+        <ul className="note-list">
+          <li>Roundtrip price for 1 traveler: {Flight?.fare?.currency_code}{ThousandSeparator(Flight.fare.price)}</li>
+          <li>Service Fee: IDR 100,000 per ticket</li>
+          <li>After Office Charge: IDR{Flight?.fare?.booking_change_fee_after} per ticket</li>
+          <li>Price quoted above is subject to change and not guaranteed until ticketed.</li>
+        </ul>
+      </div>
+      <div className={`d-${footer ? "block": "none"} flight-detail-footer pt-3 text-bold`}>
+        <Row>
+          <Col sm={3}>
+            <p>{Passengers[0]}</p>
+            <p>{Passengers[1]}</p>
+          </Col>
+          <Col style={{maxWidth: 145}}sm={{span: 2, offset: 5}}>
+            <p className="font-weight-normal">CGK-HKG-CGK</p>
+            <p className="font-weight-normal">CGK-HKG-CGK</p>
+          </Col>
+          <Col style={{maxWidth: 145}} sm={2}>
+            <p className="font-weight-normal">Fare-roundtrip</p>
+            <p className="font-weight-normal">Fare-roundtrip</p>
+            <p className="text-16">Sub-total</p>
+          </Col>
+          <Col className="text-right" style={{maxWidth: 145}}  sm={2}>
+            <p className="font-weight-normal">{Flight?.fare?.currency_code}{ThousandSeparator(Flight.fare.price)}</p>
+            <p className="font-weight-normal">{Flight?.fare?.currency_code}{ThousandSeparator(Flight.fare.price)}</p>
+            <p className="text-16">{Flight?.fare?.currency_code} {ThousandSeparator((Flight?.fare?.price * 2))}</p>
+          </Col>
+        </Row>
+      </div>
+    </div>
+  )
+
+  const FlightInfo = ({route, airline}) => (
 		<Row className='mt-3'>
 			<Col sm={6} className={"d-flex justify-content-between align-items-center pb-3"}>
 				<div>
-					<p>02:10 pm</p>
-					<p>12 Dec</p>
-					<p>CGK - Hong Kong</p>
-					<p>Hong Kong Intl.</p>
-					<p>Terminal 3</p>
+					<p>{moment(route?.departure_date).format("HH:mm")}</p>
+					<p>{moment(route?.departure_date).format("DD MMM")}</p>
+					<p>{route.departure_city_code} - {route.departure_city_name}</p>
+					<p>{route.departure_airport_name}</p>
+					<p>{route.departure_terminal}</p>
 				</div>
 				<div className='flight-line align-center text-center'>
-					<p>788 miles</p>
+					<p>{route.mileage} miles</p>
 					<div className='links mb-3'>
 						<i class="fas fa-plane plane-ic"></i>
 					</div>
-					<p>1h 5m</p>
+					<p>{diff_minutes(new Date(route.departure_date), new Date(route.arrival_date))}</p>
 				</div>
 				<div>
-					<p>02:10 pm</p>
-					<p>12 Dec</p>
-					<p>CGK - Hong Kong</p>
-					<p>Hong Kong Intl.</p>
-					<p>Terminal 3</p>
+				<p>{moment(route?.arrival_date).format("HH:mm")}</p>
+					<p>{moment(route?.arrival_date).format("DD MMM")}</p>
+					<p>{route.arrival_city_code} - {route.arrival_city_name}</p>
+					<p>{route.arrival_airport_name}</p>
+					<p>{route.arrival_terminal}</p>
 				</div>
 			</Col>
 			<Col sm={6}>
 				<Row>
 					<Col sm={6} className={"d-flex align-items-start"}>
-						<img src={ex_logo} width={20}/>
+						<img src={airline.airline_logo} width={20}/>
 						<div>
-							<p>Singapore Airlines</p>
-							<p>Boeing 777-300ER</p>
-							<p>conomy (N)</p>
+							<p>{airline.airline_name}</p>
+							<p>{route.aircraft_name}</p>
+							<p>{route.cabin_type_name} ({route.cabin_type_code})</p>
 						</div>
-						<p>SQ 955</p>
+						<p>{route.source_code} {route.source_number}</p>
 					</Col>
 					<Col sm={6}>
 						<div></div>
 						<ul>
 							<li>Cancelation allow with fee</li>
 							<li>Free changes</li>
-							<li>No show fee apply</li>
-							<li>Baggage allow up 30kg</li>
+							<li>{route.no_show_fee > 0? "Fee"+route.no_show_fee :"No show fee apply"}</li>
+							<li>Baggage allow up {Flight.fare.bagage_max_kg}</li>
 						</ul>
 						<a className='small pointer' onClick={handleShow}>Fare Rules</a>
 					</Col>
@@ -149,52 +199,19 @@ const Review = ({handleSelectTab}) => {
         <Card.Header>
           <div className="d-flex justify-content-between">
             <p className="m-0">FLIGHTS</p>
-            <p className="m-0 font-weight-bold">Total Flights IDR 6,985,345</p>
+            <p className="m-0 font-weight-bold">Total Flights {Flight?.fare?.currency_code} {ThousandSeparator((Flight?.fare?.price * 2)+200000)}</p>
           </div>
         </Card.Header>
         <Card.Body>
-          <FlightDetail/>
-          <div className='border'></div>
-          <FlightDetail footer={true}/>
-        </Card.Body>
-      </Card>
-    )
-  }
-
-  const FlightRelated = () => {
-    return (
-      <Card>
-        <Card.Header>
-          <div className="d-flex justify-content-between">
-            <p className="m-0 font-weight-bold">OTHER FLIGHT RELATED AND ADD-ONS</p>
-            <p className="m-0 font-weight-normal">Total Add Ons IDR 1,000,000</p>
-          </div>
-        </Card.Header>
-        <Card.Body>
-            <p className="font-weight-bold">Mrs. Sienna Bright</p>
-          <Row>
-            <Col className="d-flex">
-              <div className="px-3">
-                <p>CGK-HKG</p>
-                <p>CGK-HKG</p>
-                <p>CGK-SIN</p>
+          {
+            Flight?.airlines?.map((airline, idx) => (
+              <div key={idx}>
+                <FlightDetail key={idx} airline={airline} footer={idx === Flight.airlines?.length-1}/>
+                {idx < Flight.airlines?.length-1 ? 
+                <div className='middle-border'></div> : <></>}
               </div>
-              <div>
-                <p>Additional Baggage 5Kg Departing</p>
-                <p>Travel Insurance</p>
-                <p>Seat 42J, 42K</p>
-              </div>
-            </Col>
-            <Col className="text-right" style={{maxWidth: 145}}  sm={2}>
-              <p>IDR 500,000</p>
-              <p>IDR 160,000</p>
-              <p>IDR 650,000</p>
-            </Col>
-          </Row>
-          <div className="d-flex justify-content-end">
-            <p style={{width:145}} className="text-16 font-weight-bold pl-1">Sub-total</p>
-            <p style={{width:145}} className="text-16 font-weight-bold text-right">IDR 6,589,123</p>
-          </div>
+            ))
+          }
         </Card.Body>
       </Card>
     )
@@ -266,14 +283,13 @@ const Review = ({handleSelectTab}) => {
     <div className="pt-4">
       <p className='trip-txt-header pl-2'>Review For Booking</p>
       <Flights/>
-      <FlightRelated/>
 
       <Row className="mx-0 mb-4" style={{borderRadius: 4, backgroundColor: "#F2F2F2", borderColor: "#DCDCDC"}}>
         <Col className="px-3">
           <p className="font-weight-bold my-4">Credit Limit Status: OK</p>
         </Col>
         <Col className="px-3">
-          <p className="font-weight-bold my-4 text-right">Grand Total: IDR 7,889,400</p>
+          <p className="font-weight-bold my-4 text-right">Grand Total: {Flight?.fare?.currency_code} {ThousandSeparator((Flight?.fare?.price * 2)+200000)}</p>
         </Col>
       </Row>
 
@@ -291,13 +307,13 @@ const Review = ({handleSelectTab}) => {
       <div className='d-flex'>
 				<Button 
 				onClick={(e) => { 
-          handleSelectTab('confirmation')
+          handleSelectTab('6')
 				}}
 				className="btn-flight-select mr-3"
 				>
 						Issue Ticket Now
 				</Button>
-				<Button variant="secondary" onClick={() => handleSelectTab('add-ons')}>Cancel</Button>
+				<Button variant="secondary" onClick={() => handleSelectTab('4')}>Cancel</Button>
 			</div>
 
 

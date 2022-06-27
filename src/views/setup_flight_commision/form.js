@@ -1,26 +1,22 @@
 import React, { useEffect, useState, useRef } from "react"
 import { withRouter, useHistory } from "react-router"
 import FormikControl from "../../components/formik/formikControl"
-import { Row, Col, Tab, Nav, Card, Button, Image, Form as BSForm } from "react-bootstrap"
+import { Row, Col, Card, Button, Form as BSForm } from "react-bootstrap"
 import useQuery from "lib/query"
-import axios from "axios"
 import Api from "config/api"
-import env from "config/environment"
-import { Form, Formik, ErrorMessage, Field } from "formik"
+import { Form, Formik, Field } from "formik"
 import * as Yup from "yup"
 import { useSnackbar } from "react-simple-snackbar"
-import TextError from "components/formik/textError"
 import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
 
-import DatePicker, { registerLocale } from "react-datepicker"
+import { registerLocale } from "react-datepicker"
 import engb from "date-fns/locale/en-GB"
 
 import "react-datepicker/dist/react-datepicker.css";
 import Select from "components/form/select"
-import { default as SelectAsync } from "components/form/select-async"
-import DateRangePicker from "../../components/form/date_range_picker"
-import { values } from "lodash"
+import DateRangePicker from "../../components/form/date-range-picker"
+import _ from "lodash"
 
 const endpoint = "/master/commission-claims"
 const backUrl = "/master/setup-flight-commission"
@@ -112,23 +108,13 @@ const FlightCommisionForm = (props) => {
             value: data.airline.id,
             label: data.airline.airline_name
           },
-          commission_claim_departure_date: data.commission_claim_departure_date.start_date 
-          ? {
-            start_date: new Date(data.commission_claim_departure_date.start_date).toDateString(),
-            end_date: new Date(data.commission_claim_departure_date.end_date).toDateString(),
-          }
-          : {
-            start_date: null,
-            end_date: null,
+          commission_claim_departure_date: {
+            start_date: data.commission_claim_departure_date.start_date ? new Date(data.commission_claim_departure_date.start_date) : null,
+            end_date: data.commission_claim_departure_date.end_date ? new Date(data.commission_claim_departure_date.end_date) : null,
           },
-          commission_claim_issue_date: data.commission_claim_issue_date.start_date 
-          ? {
-            start_date: new Date(data.commission_claim_issue_date.start_date).toDateString(),
-            end_date: new Date(data.commission_claim_issue_date.end_date).toDateString(),
-          }
-          : {
-            start_date: null,
-            end_date: null,
+          commission_claim_issue_date: {
+            start_date: _.isEmpty(data.commission_claim_issue_date.start_date) ? null : new Date(data.commission_claim_issue_date.start_date),
+            end_date: _.isEmpty(data.commission_claim_issue_date.end_date) ? null : new Date(data.commission_claim_issue_date.end_date),
           }, 
           departure_from : {
             label: data.departure_city?.city_name || data.departure_airport_location?.airport_name,
@@ -391,6 +377,7 @@ const FlightCommisionForm = (props) => {
                                   <DateRangePicker
                                     minDate={10}
                                     maxDate={10}
+                                    id="period_issue"
                                     value={[formik.values.commission_claim_issue_date.start_date, formik.values.commission_claim_issue_date.end_date]}
                                     onChange={(date) => {
                                       if(date.length > 0) {
@@ -450,6 +437,7 @@ const FlightCommisionForm = (props) => {
                                   <DateRangePicker
                                     minDate={10}
                                     maxDate={10}
+                                    id="period_departure"
                                     value={[formik.values.commission_claim_departure_date.start_date, formik.values.commission_claim_departure_date.end_date]}
                                     onChange={(date) => {
                                       if(date.length > 0) {

@@ -21,11 +21,11 @@ import SelfServices from "./self-services"
       columns: [
         {
           title: "Company/Branch Name",
-          data: "office.office_name",
+          data: "corporate_group_name",
         },
         {
           title: "Address",
-          data: "office.address_line",
+          data: "address.address_line",
         },
         {
           title: "PCC",

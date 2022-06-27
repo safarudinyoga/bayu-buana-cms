@@ -397,6 +397,9 @@ const HotelForm = (props) => {
       .required(`Please enter Preset Name.`)
       .min(1, "Must be exactly 1 digits")
       .max(128, "Maximum number 128"),
+    description: Yup.string()
+      .min(1, "Minimun Number 1")
+      .max(4000, "Maximum Number 4000"),
     domestic_reissue: Yup.string().required(
       `Please enter fixed amount or percentage for ${taxTypeDomesticHotel.fee_tax_type_name}.`,
     ),
@@ -579,11 +582,11 @@ const HotelForm = (props) => {
             <Card>
               <Card.Body>
                 <Form.Group as={Row} className="mb-3">
-                  <Form.Label column md={2}>
+                  <Form.Label column md={3}>
                     Preset Name
                     <span className="form-label-required">*</span>
                   </Form.Label>
-                  <Col sm={5}>
+                  <Col md={9}>
                     <FastField name="service_fee_category_name">
                       {({ field, form }) => (
                         <>
@@ -613,10 +616,10 @@ const HotelForm = (props) => {
                   </Col>
                 </Form.Group>
                 <Form.Group as={Row} className="mb-3">
-                  <Form.Label column md={2}>
+                  <Form.Label column md={3}>
                     Description
                   </Form.Label>
-                  <Col sm={10}>
+                  <Col md={9}>
                     <FastField name="description">
                       {({ field, form }) => (
                         <>
@@ -629,6 +632,14 @@ const HotelForm = (props) => {
                             style={{ height: "88px", maxWidth: "416px" }}
                             {...field}
                           />
+                          {form.touched.description &&
+                            form.errors.description && (
+                              <Form.Control.Feedback type="invalid">
+                                {form.touched.description
+                                  ? form.errors.description
+                                  : null}
+                              </Form.Control.Feedback>
+                            )}
                         </>
                       )}
                     </FastField>
@@ -670,12 +681,12 @@ const HotelForm = (props) => {
                   isView={isView}
                   amountSuffixSelections={[
                     {
-                      label: "/Ticket",
-                      value: "de62950d-fbab-4e39-bd90-c2b6687c6b36",
+                      label: "/Room Night",
+                      value: "b95094b2-0883-4e03-8e67-ceb32314b332",
                     },
                     {
-                      label: "/Person",
-                      value: "de03bf84-4bd8-4cdf-9348-00246f04bcad",
+                      label: "/Room",
+                      value: "02103ce7-ecfe-446e-baa1-cb3c6d982fe9",
                     },
                     {
                       label: "/Transaction",
@@ -685,10 +696,10 @@ const HotelForm = (props) => {
                   errors={errors}
                 />
                 {isView ? (
-                  <h3 className="card-heading">.</h3>
+                  <h3 className="card-heading">&nbsp;</h3>
                 ) : (
                   <>
-                    <h3 className="card-heading">.</h3>
+                    <h3 className="card-heading">&nbsp;</h3>
                     <Col sm={12}>
                       <div style={{ padding: "0 15px 15px 15px" }}>
                         <button

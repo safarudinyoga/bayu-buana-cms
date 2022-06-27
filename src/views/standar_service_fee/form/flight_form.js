@@ -13,14 +13,16 @@ import SelectAsync from "components/form/select-async"
 import createIcon from "assets/icons/create.svg"
 import { useDispatch } from "react-redux"
 import { setAlert, setCreateModal, setUIParams } from "redux/ui-store"
+import FormInputSelectAjax from "components/form/input-select-ajax"
 
 const backUrl = "/master/standard-service-fee"
-const endpoint = "/master/service-fee-categories"
+const endpoint = "/master/agent-service-fee-categories/1"
 
 //modal service fee
 const ModalOverrideServiceFee = (props) => {
   let api = new Api()
   let dispatch = useDispatch()
+  const [parentDivisionTypeData, setParentDivisionTypeData] = useState([])
 
   //get Fee tax
   const [taxTypeServiceFee, setTaxTypeServiceFee] = useState([])
@@ -47,35 +49,44 @@ const ModalOverrideServiceFee = (props) => {
     airline_service_type: "",
     specified_airline: "",
     specified_source: "",
-    domestic_reissue: "",
-    domestic_reissue_fee_tax_id: "",
-    domestic_reissue_amount: "",
-    domestic_reissue_amount_type: "",
-    domestic_reissue_percent: "",
-    domestic_reissue_tax_include: false,
+    domestic_flight_service: "",
+    domestic_flight_service_fee_tax_id: "",
+    domestic_flight_service_amount: "",
+    domestic_flight_service_amount_type: "",
+    domestic_flight_service_percent: "",
+    domestic_flight_service_tax_include: false,
   }
 
   const validationSchema = Yup.object().shape({
     destination: Yup.object().required("Destination is required."),
-    domestic_reissue: Yup.string().required(
+    domestic_flight_service: Yup.string().required(
       `Please enter fixed amount or percentage for ${taxTypeServiceFee.fee_tax_type_name}.`,
     ),
-    domestic_reissue_amount: Yup.string().when("domestic_reissue", {
-      is: (value) => value === "amount",
-      then: Yup.string().required(
-        `Please enter fixed amount for ${taxTypeServiceFee.fee_tax_type_name}.`,
-      ),
-    }),
-    domestic_reissue_amount_type: Yup.string().when("domestic_reissue", {
-      is: (value) => value === "amount",
-      then: Yup.string().required(`Please select charge type.`),
-    }),
-    domestic_reissue_percent: Yup.string().when("domestic_reissue", {
-      is: (value) => value === "percent",
-      then: Yup.string().required(
-        `Please enter percentage for ${taxTypeServiceFee.fee_tax_type_name}.`,
-      ),
-    }),
+    domestic_flight_service_amount: Yup.string().when(
+      "domestic_flight_service",
+      {
+        is: (value) => value === "amount",
+        then: Yup.string().required(
+          `Please enter fixed amount for ${taxTypeServiceFee.fee_tax_type_name}.`,
+        ),
+      },
+    ),
+    domestic_flight_service_amount_type: Yup.string().when(
+      "domestic_flight_service",
+      {
+        is: (value) => value === "amount",
+        then: Yup.string().required(`Please select charge type.`),
+      },
+    ),
+    domestic_flight_service_percent: Yup.string().when(
+      "domestic_flight_service",
+      {
+        is: (value) => value === "percent",
+        then: Yup.string().required(
+          `Please enter percentage for ${taxTypeServiceFee.fee_tax_type_name}.`,
+        ),
+      },
+    ),
   })
   const removeSeparator = (value) => {
     value = value.toString().split(",").join("")
@@ -91,28 +102,26 @@ const ModalOverrideServiceFee = (props) => {
         service_fee_category_name: values.job_title
           ? values.job_title.value
           : "esse sit",
-        domestic_reissue: {
-          fee_tax_type_id: taxIdTypeServiceFee,
+        domestic_flight_service: {
+          charge_type: taxIdTypeServiceFee,
           amount:
-            values.domestic_reissue === "amount"
-              ? removeSeparator(values.domestic_reissue_amount)
+            values.domestic_flight_service === "amount"
+              ? removeSeparator(values.domestic_flight_service_amount)
               : 0,
-          percent:
-            values.domestic_reissue === "amount"
-              ? 0
-              : parseFloat(values.domestic_reissue_percent),
-          charge_type_id:
-            values.domestic_reissue === "amount"
-              ? values.domestic_reissue_amount_type
-              : "00000000-0000-0000-0000-000000000000",
-          is_tax_inclusive:
-            values.domestic_reissue === "amount"
-              ? false
-              : values.domestic_reissue_tax_include,
+          percent: values.domestic_flight_service
+            ? 0
+            : parseFloat(values.domestic_flight_service_percent),
+          currency_id: values.domestic_flight_service
+            ? values.domestic_flight_service
+            : "00000000-0000-0000-0000-000000000000",
+          is_tax_inclusive: values.domestic_flight_service
+            ? true
+            : values.domestic_flight_service_tax_include,
         },
       }
       let res = await api.putOrPost(endpoint, form)
       console.log(res)
+      props.handleSelectTab("flight")
       dispatch(setCreateModal({ show: false, id: null, disabled_form: false }))
       dispatch(
         setAlert({
@@ -145,6 +154,27 @@ const ModalOverrideServiceFee = (props) => {
               Add Flight Override Service Fee
             </p>
           </div>
+          <div className="col-6">
+            <FormInputSelectAjax
+              // label="Parent Division"
+              // value={form.parent_division_id}
+              name="parent_division_id"
+              endpoint="/master/corporate-divisions"
+              column="division_name"
+              // filter={
+              //   formId
+              //     ? `[["id","!=","${formId}"],["and"],[["parent_division_id","!=","${formId}"],["or"],["parent_division_id","is",null]]]`
+              //     : ``
+              // }
+              // onChange={(e) =>
+              //   setForm({ ...form, parent_division_id: e.target.value || null })
+              // }
+              data={parentDivisionTypeData}
+              // disabled={isView || loading}
+              type="select"
+              placeholder="Select Parent Division"
+            />
+          </div>
           <Formik
             validateOnMount
             enableReinitialize
@@ -167,12 +197,13 @@ const ModalOverrideServiceFee = (props) => {
             }) => (
               <Form onSubmit={handleSubmit}>
                 <Form.Group as={Row} className="mb-3">
-                  <Form.Label column sm={4}>
+                  <Form.Label column md={3} sm={3} lg={3}>
                     Destination
                     <span className="form-label-required">*</span>
                   </Form.Label>
-                  <Col sm={7}>
-                    <FastField name="destination">
+
+                  <Col md={9} sm={9} lg={9}>
+                    {/* <FastField name="destination">
                       {({ field, form }) => (
                         <div style={{ maxWidth: 600 }}>
                           <SelectAsync
@@ -201,14 +232,33 @@ const ModalOverrideServiceFee = (props) => {
                             )}
                         </div>
                       )}
-                    </FastField>
+                    </FastField> */}
+                    <FormInputSelectAjax
+                      // label="Parent Division"
+                      // value={form.parent_division_id}
+                      name="parent_division_id"
+                      endpoint="/master/corporate-divisions"
+                      column="division_name"
+                      // filter={
+                      //   formId
+                      //     ? `[["id","!=","${formId}"],["and"],[["parent_division_id","!=","${formId}"],["or"],["parent_division_id","is",null]]]`
+                      //     : ``
+                      // }
+                      // onChange={(e) =>
+                      //   setForm({ ...form, parent_division_id: e.target.value || null })
+                      // }
+                      data={parentDivisionTypeData}
+                      // disabled={isView || loading}
+                      type="select"
+                      placeholder="Select Parent Division"
+                    />
                   </Col>
                 </Form.Group>
                 <Form.Group as={Row} className="mb-3">
-                  <Form.Label column sm={4}>
+                  <Form.Label column md={3} sm={3} lg={3}>
                     Airline Service Type
                   </Form.Label>
-                  <Col sm={7}>
+                  <Col md={9} sm={9} lg={9}>
                     <div style={{ maxWidth: 600 }}>
                       <FastField name="airline_service_type">
                         {({ field, form }) => (
@@ -244,10 +294,10 @@ const ModalOverrideServiceFee = (props) => {
                   </Col>
                 </Form.Group>
                 <Form.Group as={Row} className="mb-3">
-                  <Form.Label column sm={4}>
+                  <Form.Label column md={3} sm={3} lg={3}>
                     Specified Airline
                   </Form.Label>
-                  <Col sm={7}>
+                  <Col md={9} sm={9} lg={9}>
                     <FastField name="specified_airline">
                       {({ field, form }) => (
                         <div style={{ maxWidth: 600 }}>
@@ -281,10 +331,10 @@ const ModalOverrideServiceFee = (props) => {
                   </Col>
                 </Form.Group>
                 <Form.Group as={Row} className="mb-3">
-                  <Form.Label column sm={4}>
+                  <Form.Label column md={3} sm={3} lg={3}>
                     Specified Source
                   </Form.Label>
-                  <Col sm={7}>
+                  <Col md={9} sm={9} lg={9}>
                     <FastField name="specified_source">
                       {({ field, form }) => (
                         <div style={{ maxWidth: 600 }}>
@@ -316,46 +366,49 @@ const ModalOverrideServiceFee = (props) => {
                       )}
                     </FastField>
                   </Col>
+                  <MenuModal
+                    menu={[
+                      {
+                        title: "MDR Fee",
+                        sections: [
+                          {
+                            title: "MDR FEE",
+                            taxType: taxTypeServiceFee,
+                            fieldFeeTaxId: "domestic_flight_service_fee_tax_id",
+                            fieldRadio: "domestic_flight_service",
+                            fieldAmount: "domestic_flight_service_amount",
+                            fieldAmountType:
+                              "domestic_flight_service_amount_type",
+                            fieldPercent: "domestic_flight_service_percent",
+                            fieldIncludeTax:
+                              "domestic_flight_service_tax_include",
+                          },
+                        ],
+                      },
+                    ]}
+                    values={values}
+                    fHandleChange={handleChange}
+                    fHandleBlur={handleBlur}
+                    setFieldValue={setFieldValue}
+                    // isView={isView}
+                    amountSuffixSelections={[
+                      {
+                        label: "/Ticket",
+                        value: "de62950d-fbab-4e39-bd90-c2b6687c6b36",
+                      },
+                      {
+                        label: "/Person",
+                        value: "de03bf84-4bd8-4cdf-9348-00246f04bcad",
+                      },
+                      {
+                        label: "/Transaction",
+                        value: "5123b121-4f6a-4871-bef1-65408d663e19",
+                      },
+                    ]}
+                    errors={errors}
+                  />
                 </Form.Group>
-                <MenuModal
-                  menu={[
-                    {
-                      title: "MDR Fee",
-                      sections: [
-                        {
-                          title: "MDR FEE",
-                          taxType: taxTypeServiceFee,
-                          fieldFeeTaxId: "domestic_reissue_fee_tax_id",
-                          fieldRadio: "domestic_reissue",
-                          fieldAmount: "domestic_reissue_amount",
-                          fieldAmountType: "domestic_reissue_amount_type",
-                          fieldPercent: "domestic_reissue_percent",
-                          fieldIncludeTax: "domestic_reissue_tax_include",
-                        },
-                      ],
-                    },
-                  ]}
-                  values={values}
-                  fHandleChange={handleChange}
-                  fHandleBlur={handleBlur}
-                  setFieldValue={setFieldValue}
-                  // isView={isView}
-                  amountSuffixSelections={[
-                    {
-                      label: "/Ticket",
-                      value: "de62950d-fbab-4e39-bd90-c2b6687c6b36",
-                    },
-                    {
-                      label: "/Person",
-                      value: "de03bf84-4bd8-4cdf-9348-00246f04bcad",
-                    },
-                    {
-                      label: "/Transaction",
-                      value: "5123b121-4f6a-4871-bef1-65408d663e19",
-                    },
-                  ]}
-                  errors={errors}
-                />
+
                 <div
                   style={{ marginBottom: 30, marginTop: 30, display: "flex" }}
                 >
@@ -416,20 +469,19 @@ const FlightForm = (props) => {
 
   const [initialForm, setInitialForm] = useState({
     service_fee_category_name: "",
-    service_fee_category_code: "",
     description: "",
-    domestic_reissue: "",
-    domestic_reissue_fee_tax_id: "",
-    domestic_reissue_amount: "",
-    domestic_reissue_amount_type: "",
-    domestic_reissue_percent: "",
-    domestic_reissue_tax_include: false,
-    domestic_revalidate: "",
-    domestic_revalidate_fee_tax_id: "",
-    domestic_revalidate_amount: "",
-    domestic_revalidate_amount_type: "",
-    domestic_revalidate_percent: "",
-    domestic_revalidate_tax_include: false,
+    domestic_flight_service: "",
+    domestic_flight_service_fee_tax_id: "",
+    domestic_flight_service_amount: "",
+    domestic_flight_service_amount_type: "",
+    domestic_flight_service_percent: "",
+    domestic_flight_service_tax_include: false,
+    international_flight_service: "",
+    international_flight_service_fee_tax_id: "",
+    international_flight_service_amount: "",
+    international_flight_service_amount_type: "",
+    international_flight_service_percent: "",
+    international_flight_service_tax_include: false,
   })
 
   // Schema for yup
@@ -438,44 +490,65 @@ const FlightForm = (props) => {
       .required(`Please enter Preset Name.`)
       .min(1, "Must be exactly 1 digits")
       .max(128, "Maximum number 128"),
-    domestic_reissue: Yup.string().required(
+    description: Yup.string()
+      .min(1, "Must be exactly 1 digits")
+      .max(4000, "Maximum number 4000"),
+    domestic_flight_service: Yup.string().required(
       `Please enter fixed amount or percentage for ${taxTypeDomesticFlight.fee_tax_type_name}.`,
     ),
-    domestic_reissue_amount: Yup.string().when("domestic_reissue", {
-      is: (value) => value === "amount",
-      then: Yup.string().required(
-        `Please enter fixed amount for ${taxTypeDomesticFlight.fee_tax_type_name}.`,
-      ),
-    }),
-    domestic_reissue_amount_type: Yup.string().when("domestic_reissue", {
-      is: (value) => value === "amount",
-      then: Yup.string().required(`Please select charge type.`),
-    }),
-    domestic_reissue_percent: Yup.string().when("domestic_reissue", {
-      is: (value) => value === "percent",
-      then: Yup.string().required(
-        `Please enter percentage for ${taxTypeDomesticFlight.fee_tax_type_name}.`,
-      ),
-    }),
-    domestic_revalidate: Yup.string().required(
+    domestic_flight_service_amount: Yup.string().when(
+      "domestic_flight_service",
+      {
+        is: (value) => value === "amount",
+        then: Yup.string().required(
+          `Please enter fixed amount for ${taxTypeDomesticFlight.fee_tax_type_name}.`,
+        ),
+      },
+    ),
+    domestic_flight_service_amount_type: Yup.string().when(
+      "domestic_flight_service",
+      {
+        is: (value) => value === "charge_type",
+        then: Yup.string().required(`Please select charge type.`),
+      },
+    ),
+    domestic_flight_service_percent: Yup.string().when(
+      "domestic_flight_service",
+      {
+        is: (value) => value === "percent",
+        then: Yup.string().required(
+          `Please enter percentage for ${taxTypeDomesticFlight.fee_tax_type_name}.`,
+        ),
+      },
+    ),
+    international_flight_service: Yup.string().required(
       `Please enter fixed amount or percentage for ${taxTypeInternationalFlight.fee_tax_type_name}.`,
     ),
-    domestic_revalidate_amount: Yup.string().when("domestic_revalidate", {
-      is: (value) => value === "amount",
-      then: Yup.string().required(
-        `Please enter fixed amount for ${taxTypeInternationalFlight.fee_tax_type_name}.`,
-      ),
-    }),
-    domestic_revalidate_amount_type: Yup.string().when("domestic_revalidate", {
-      is: (value) => value === "amount",
-      then: Yup.string().required(`Please select charge type.`),
-    }),
-    domestic_revalidate_percent: Yup.string().when("domestic_revalidate", {
-      is: (value) => value === "percent",
-      then: Yup.string().required(
-        `Please enter percentage for ${taxTypeInternationalFlight.fee_tax_type_name}.`,
-      ),
-    }),
+    international_flight_service_amount: Yup.string().when(
+      "international_flight_service",
+      {
+        is: (value) => value === "amount",
+        then: Yup.string().required(
+          `Please enter fixed amount for ${taxTypeInternationalFlight.fee_tax_type_name}.`,
+        ),
+      },
+    ),
+    international_flight_service_amount_type: Yup.string().when(
+      "international_flight_service",
+      {
+        is: (value) => value === "amount",
+        then: Yup.string().required(`Please select charge type.`),
+      },
+    ),
+    international_flight_service_percent: Yup.string().when(
+      "international_flight_service",
+      {
+        is: (value) => value === "percent",
+        then: Yup.string().required(
+          `Please enter percentage for ${taxTypeInternationalFlight.fee_tax_type_name}.`,
+        ),
+      },
+    ),
   })
 
   useEffect(async () => {
@@ -504,9 +577,10 @@ const FlightForm = (props) => {
       if (formId) {
         let res = await api.get(endpoint + "/" + formId)
         let data = res.data
+
+        console.log("tes", data)
         setInitialForm({
           ...initialForm,
-
           description: data.description,
           service_fee_category_name: data.service_fee_category_name,
         })
@@ -526,43 +600,42 @@ const FlightForm = (props) => {
       let form = {
         description: values.description,
         service_fee_category_name: values.service_fee_category_name,
-        domestic_reissue: {
-          fee_tax_type_id: taxIdDomesticFlight,
+        domestic_flight_service: {
+          currency_id: taxIdDomesticFlight,
           amount:
-            values.domestic_reissue === "amount"
-              ? removeSeparator(values.domestic_reissue_amount)
+            values.domestic_flight_service === "amount"
+              ? removeSeparator(values.domestic_flight_service_amount)
               : 0,
           percent:
-            values.domestic_reissue === "amount"
+            values.domestic_flight_service === "amount"
               ? 0
-              : parseFloat(values.domestic_reissue_percent),
-          charge_type_id:
-            values.domestic_reissue === "amount"
-              ? values.domestic_reissue_amount_type
+              : parseFloat(values.domestic_flight_service_percent),
+          charge_type:
+            values.domestic_flight_service_amount_type === "amount"
+              ? values.domestic_flight_service_amount_type
               : "00000000-0000-0000-0000-000000000000",
-          is_tax_inclusive:
-            values.domestic_reissue === "amount"
-              ? false
-              : values.domestic_reissue_tax_include,
+          is_tax_inclusive: values.domestic_flight_service
+            ? false
+            : values.domestic_flight_service_tax_include,
         },
-        domestic_revalidate: {
-          fee_tax_type_id: taxIdInternationalFlight,
+        international_flight_service: {
+          currency_id: taxIdInternationalFlight,
           amount:
-            values.domestic_revalidate === "amount"
-              ? removeSeparator(values.domestic_revalidate_amount)
+            values.international_flight_service === "amount"
+              ? removeSeparator(values.international_flight_service_amount)
               : 0,
           percent:
-            values.domestic_revalidate === "amount"
+            values.international_flight_service === "amount"
               ? 0
-              : parseFloat(values.domestic_revalidate_percent),
-          charge_type_id:
-            values.domestic_revalidate === "amount"
-              ? values.domestic_revalidate_amount_type
+              : parseFloat(values.international_flight_service_percent),
+          charge_type:
+            values.international_flight_service === "charge_type"
+              ? values.international_flight_service_amount_type
               : "00000000-0000-0000-0000-000000000000",
           is_tax_inclusive:
-            values.domestic_revalidate === "amount"
+            values.international_flight_service === "amount"
               ? false
-              : values.domestic_revalidate_tax_include,
+              : values.international_flight_service_tax_include,
         },
       }
       let res = await api.putOrPost(endpoint, formId, form)
@@ -620,11 +693,11 @@ const FlightForm = (props) => {
             <Card>
               <Card.Body>
                 <Form.Group as={Row} className="mb-3">
-                  <Form.Label column md={2}>
+                  <Form.Label column md={3}>
                     Preset Name
                     <span className="form-label-required">*</span>
                   </Form.Label>
-                  <Col sm={5}>
+                  <Col sm={9}>
                     <FastField name="service_fee_category_name">
                       {({ field, form }) => (
                         <>
@@ -654,10 +727,10 @@ const FlightForm = (props) => {
                   </Col>
                 </Form.Group>
                 <Form.Group as={Row} className="mb-3">
-                  <Form.Label column md={2}>
+                  <Form.Label column md={3}>
                     Description
                   </Form.Label>
-                  <Col sm={10}>
+                  <Col sm={9}>
                     <FastField name="description">
                       {({ field, form }) => (
                         <>
@@ -670,6 +743,14 @@ const FlightForm = (props) => {
                             style={{ height: "88px", maxWidth: "416px" }}
                             {...field}
                           />
+                          {form.touched.description &&
+                            form.errors.description && (
+                              <Form.Control.Feedback type="invalid">
+                                {form.touched.description
+                                  ? form.errors.description
+                                  : null}
+                              </Form.Control.Feedback>
+                            )}
                         </>
                       )}
                     </FastField>
@@ -684,22 +765,27 @@ const FlightForm = (props) => {
                         {
                           title: "Domestic Flight Service Fee",
                           taxType: taxTypeDomesticFlight,
-                          fieldFeeTaxId: "domestic_reissue_fee_tax_id",
-                          fieldRadio: "domestic_reissue",
-                          fieldAmount: "domestic_reissue_amount",
-                          fieldAmountType: "domestic_reissue_amount_type",
-                          fieldPercent: "domestic_reissue_percent",
-                          fieldIncludeTax: "domestic_reissue_tax_include",
+                          fieldFeeTaxId: "domestic_flight_service_fee_tax_id",
+                          fieldRadio: "domestic_flight_service",
+                          fieldAmount: "domestic_flight_service_amount",
+                          fieldAmountType:
+                            "domestic_flight_service_amount_type",
+                          fieldPercent: "domestic_flight_service_percent",
+                          fieldIncludeTax:
+                            "domestic_flight_service_tax_include",
                         },
                         {
                           title: "Late Payment",
                           taxType: taxTypeInternationalFlight,
-                          fieldFeeTaxId: "domestic_revalidate_fee_tax_id",
-                          fieldRadio: "domestic_revalidate",
-                          fieldAmount: "domestic_revalidate_amount",
-                          fieldAmountType: "domestic_revalidate_amount_type",
-                          fieldPercent: "domestic_revalidate_percent",
-                          fieldIncludeTax: "domestic_revalidate_tax_include",
+                          fieldFeeTaxId:
+                            "international_flight_service_fee_tax_id",
+                          fieldRadio: "international_flight_service",
+                          fieldAmount: "international_flight_service_amount",
+                          fieldAmountType:
+                            "international_flight_service_amount_type",
+                          fieldPercent: "international_flight_service_percent",
+                          fieldIncludeTax:
+                            "international_flight_service_tax_include",
                         },
                       ],
                     },
@@ -726,14 +812,15 @@ const FlightForm = (props) => {
                   errors={errors}
                 />
                 {isView ? (
-                  <h3 className="card-heading">.</h3>
+                  <h3 className="card-heading">&nbsp;</h3>
                 ) : (
                   <>
-                    <h3 className="card-heading">.</h3>
+                    <h3 className="card-heading">&nbsp;</h3>
                     <Col sm={12}>
                       <div style={{ padding: "0 15px 15px 15px" }}>
                         <button
                           type="button"
+                          disabled={isSubmitting || !dirty}
                           className="btn float-right button-override"
                           onClick={() => setModalShow(true)}
                         >

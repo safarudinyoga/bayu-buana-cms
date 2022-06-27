@@ -9,13 +9,13 @@ const AddOn = ({ handleSelectTab }) => {
       <div className='d-flex'>
         <Button 
         onClick={(e) => { 
-          handleSelectTab("review")
+          handleSelectTab("5")
         }}
         className="btn-flight-select mr-3"
         >
             continue booking
         </Button>
-        <Button variant="secondary" onClick={() => handleSelectTab('select-seats')}>Back</Button>
+        <Button variant="secondary" onClick={() => handleSelectTab('3')}>Back</Button>
       </div>
     </div>
   )

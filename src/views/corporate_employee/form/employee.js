@@ -16,7 +16,7 @@ const options = {
   position: "bottom-right",
 }
 
-const Subscriptions = (props) => {
+const Employee = (props) => {
   const isView = useQuery().get("action") === "view"
   let api = new Api()
   const [openSnackbar] = useSnackbar(options)
@@ -619,7 +619,7 @@ const Subscriptions = (props) => {
                   {additionalRole && (
                     <>
                       <div style={{ padding: "0 15px 15px" }}>
-                        <h6 className="mt-2">Employmentsssss</h6>
+                        <h6 className="mt-2">Employment</h6>
                         <div className="p-2">
                           {/* <FormikControl
                               control="selectAsync"
@@ -690,7 +690,7 @@ const Subscriptions = (props) => {
                         disabled={props.finishStep > 0 || props.employeeData?.id ? (!isValid || isSubmitting) : (!dirty || isSubmitting)}
                         style={{ marginRight: 15, marginBottom: 20, marginTop: 85 }}
                       >
-                       SAVE
+                      {props.employeeData?.id ? "SAVE" : "SAVE & NEXT"}
                       </Button>
                       <Button
                         variant="secondary"
@@ -723,7 +723,7 @@ const Subscriptions = (props) => {
                     disabled={props.finishStep > 0 || props.employeeData?.id ? (!isValid || isSubmitting) : (!dirty || isSubmitting)}
                     style={{ marginRight: 15, marginBottom: 135 }}
                   >
-                    SAVE
+                    {props.employeeData?.id ? "SAVE" : "SAVE & NEXT"}
                   </Button>
                   <Button
                     variant="secondary"
@@ -741,4 +741,4 @@ const Subscriptions = (props) => {
   );
 }
 
-export default Subscriptions;
+export default Employee;

@@ -1,7 +1,5 @@
 import React from 'react'
 import { Field} from 'formik'
-import { Row, Col } from "react-bootstrap"
-
 
 function Checkbox (props) {
   const { label, name, checked, ...rest } = props

@@ -34,8 +34,8 @@ const UserManagementForm = (props) => {
   let formId = props.match.params.id
   const [loading, setLoading] = useState(true)
   const isView = useQuery().get("action") === "view"
-  const [showhide, setShowhide]=useState(false);
- 
+  const [showhide, setShowhide] = useState(false)
+
   const [show, setShow] = useState(false)
   const target = useRef(null)
 
@@ -71,17 +71,17 @@ const UserManagementForm = (props) => {
       if (formId) {
         let { data } = await api.get(endpoint + "/" + formId)
 
-          setInitialForm({
-            ...initialForm,
-            employee: {
-              value: data.user_account_id,
-              label: data.given_name,
-            },
-            user_type: {
-              value: data.user_type_id,
-              label: data.user_type_name,
-            }
-          })
+        setInitialForm({
+          ...initialForm,
+          employee: {
+            value: data.user_account_id,
+            label: data.given_name,
+          },
+          user_type: {
+            value: data.user_type_id,
+            label: data.user_type_name,
+          },
+        })
       }
     } catch (e) {
       openSnackbar(`error => ${e}`)
@@ -101,17 +101,19 @@ const UserManagementForm = (props) => {
           let formId = props.match.params.id
           try {
             let res = await api.get(
-              `${env.API_URL}/master/employees?filters=["given_name","=","${value}"]`,
+              `${env.API_URL}/user/user-type-users?filters=["given_name","=","${value.label}"]`,
             )
 
             if (formId) {
               return (
-                res.data.items.length === 0 || value === initialForm.given_name
+                res.data.items.length === 0 ||
+                value.label === initialForm.given_name
               )
             } else {
               return res.data.items.length === 0
             }
           } catch (e) {
+            console.log('e', e)
             return false
           }
         },
@@ -188,8 +190,7 @@ const UserManagementForm = (props) => {
               <Card.Body>
                 <div style={{ padding: "0 2px 2px" }}>
                   <Form.Group as={Row} className="mb-3">
-                 
-                    <Form.Label column md={2}>
+                    <Form.Label column md={3}>
                       Select Employee to Grant Access
                       <span className="form-label-required">*</span>
                     </Form.Label>
@@ -240,7 +241,7 @@ const UserManagementForm = (props) => {
                   </Form.Group>
 
                   <Form.Group as={Row} className="mb-3">
-                    <Form.Label column md={2}>
+                    <Form.Label column md={3}>
                       User Type
                       <span className="form-label-required">*</span>
                     </Form.Label>
@@ -254,7 +255,7 @@ const UserManagementForm = (props) => {
                             fieldName="user_type_name"
                             onChange={(v) => {
                               setFieldValue("user_type", v)
-                              if(v) setShowhide(v.value)
+                              if (v) setShowhide(v.value)
                             }}
                             placeholder="Please choose"
                             className={`react-select ${
@@ -282,43 +283,40 @@ const UserManagementForm = (props) => {
                         </div>
                       )}
                     </FastField>
-                    
 
-{showhide ? (
-  <>
-   <Form.Label
-                       column
-                       md={2}
-                       style={{ color: "#3E40AE", marginLeft: "14px" }}
-                       ref={target}
-                       onClick={() => setShow(!show)}
-                     >
-                       View module access list
-                     </Form.Label>
-                     <Overlay
-                     target={target.current}
-                     show={show}
-                     placement="bottom"
-                   >
-                     {(props) => (
-                       <div
-                         {...props}
-                         // style={{
-                         //   backgroundColor: "rgba(255, 100, 100, 0.85)",
-                         //   padding: "2px 10px",
-                         //   color: "white",
-                         //   borderRadius: 3,
-                         //   ...props.style,
-                         // }}
-                       >
-                         <ModuleAccess value={showhide} />
-                       </div>
-                     )}
-                   </Overlay>
-  </>
-                      
+                    {showhide ? (
+                      <>
+                        <Form.Label
+                          column
+                          md={2}
+                          style={{ color: "#3E40AE", marginLeft: "14px" }}
+                          ref={target}
+                          onClick={() => setShow(!show)}
+                        >
+                          View module access list
+                        </Form.Label>
+                        <Overlay
+                          target={target.current}
+                          show={show}
+                          placement="bottom"
+                        >
+                          {(props) => (
+                            <div
+                              {...props}
+                              // style={{
+                              //   backgroundColor: "rgba(255, 100, 100, 0.85)",
+                              //   padding: "2px 10px",
+                              //   color: "white",
+                              //   borderRadius: 3,
+                              //   ...props.style,
+                              // }}
+                            >
+                              <ModuleAccess value={showhide} />
+                            </div>
+                          )}
+                        </Overlay>
+                      </>
                     ) : null}
-                    
                   </Form.Group>
                 </div>
 

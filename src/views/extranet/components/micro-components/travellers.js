@@ -8,7 +8,7 @@ function Travellers(props) {
   const [childrenCount, setChildrenCount] = useState(0)
   const [infantCount, setInfantCount] = useState(0)
 
-  const [travelerValue, setTravelerValue] = useState("")
+  const [travelerValue, setTravelerValue] = useState("1 Adult")
   const [travelerCheckbox, setTravelerCheckbox] = useState(false)
   const [travelerCacheData, setTravelerCacheData] = useState({
     number_of_adults: 1,
@@ -45,6 +45,12 @@ function Travellers(props) {
 
     if(props.handleCacheData){
       props.handleCacheData("cache_air_travel_preference_criteria", travelerCacheData, "cache_air_traveler_criteria", travelerCacheData)
+    }
+
+    if(props.formik){
+      props.formik.setFieldValue("number_of_adults", adultCount)
+      props.formik.setFieldValue("number_of_children", childrenCount)
+      props.fomrik.setFieldValue("number_of_infants", infantCount)
     }
     
     document.body.click()
@@ -245,9 +251,6 @@ function Travellers(props) {
   )
 
   useEffect(() => {
-    if(props.formik){
-      props.formik.setFieldValue("adult_count", adultCount)
-    }
 
     if(props.handleTrip){
       props.handleTrip("adult_count", adultCount)
@@ -262,9 +265,6 @@ function Travellers(props) {
   }, [adultCount])
 
   useEffect(() => {
-    if(props.formik){
-      props.formik.setFieldValue("children_count", childrenCount)
-    }
 
     if(props.handleTrip){
       props.handleTrip("children_count", childrenCount)
@@ -279,9 +279,6 @@ function Travellers(props) {
   }, [childrenCount])
 
   useEffect(() => {
-    if(props.formik){
-      props.formik.setFieldValue("infant_count", infantCount)
-    }
 
     if(props.handleTrip){
       props.handleTrip("infant_count", infantCount)

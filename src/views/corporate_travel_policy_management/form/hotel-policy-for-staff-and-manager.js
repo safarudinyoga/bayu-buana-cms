@@ -1,23 +1,21 @@
 import { withRouter } from "react-router"
 import React, { useState, useEffect } from "react"
-import { Col, Form, Row, Button } from "react-bootstrap"
-import { Formik, FastField, ErrorMessage, Field } from "formik"
-import TextError from "components/formik/textError"
+import { Col, Form, Button } from "react-bootstrap"
+import { Formik, FastField } from "formik"
 import * as Yup from "yup"
 import SelectAsync from "components/form/select-async"
 import Api from "config/api"
 import { useDispatch, useSelector } from "react-redux"
 import { setAlert, setCreateNewModal, setModalTitleNew } from "redux/ui-store"
 import CancelButton from "components/button/cancel"
-import Select from "components/form/select"
-import FormikControl from "../../../components/formik/formikControl"
+import FormInputControl from "components/form/input-control"
 import _ from "lodash"
+import { ReactSVG } from "react-svg"
+import "../style.scss"
+
 const endpoint = "/master/configurations/standard-services"
 
-
-
-function HotelPolicy (props) {
-
+function HotelPolicy(props) {
   const dispatch = useDispatch()
   const showCreateNewModal = useSelector((state) => state.ui.showCreateNewModal)
   const API = new Api()
@@ -25,6 +23,14 @@ function HotelPolicy (props) {
   const [id, setId] = useState(null)
   const [loading, setLoading] = useState(true)
   const [formValues, setFormValues] = useState(null)
+  const [RecurringReminderType, setRecurringReminderType] = useState(true)
+
+  const [form, setForm] = useState({
+    special_date_name: "",
+    start_date: new Date(),
+    end_date: new Date(),
+    fixed: false,
+  })
 
   const selectDays = () => {
     const options = []
@@ -59,21 +65,32 @@ function HotelPolicy (props) {
     return options
   }
 
-  const duplicateValue = async(fieldName, value) => {
-    let filters = encodeURIComponent(JSON.stringify([[fieldName,"=",value],["AND"],["service_level.service_level_code",showCreateNewModal.service_level_code],["AND"],["status",1]]))
+  const duplicateValue = async (fieldName, value) => {
+    let filters = encodeURIComponent(
+      JSON.stringify([
+        [fieldName, "=", value],
+        ["AND"],
+        [
+          "service_level.service_level_code",
+          showCreateNewModal.service_level_code,
+        ],
+        ["AND"],
+        ["status", 1],
+      ]),
+    )
     let res = await API.get(endpoint + `?filters=${filters}`)
     let sameId = res.data.items.find((v) => v.id === id)
-    if(!sameId) return res.data.items.length === 0 
+    if (!sameId) return res.data.items.length === 0
 
     return true
-}
+  }
 
-Yup.addMethod(Yup.object, 'uniqueValueObject', function (fieldName, message) {
-    return this.test('unique', message, function(field) {
-        if(field) return duplicateValue(fieldName, field.value)
-        return true
+  Yup.addMethod(Yup.object, "uniqueValueObject", function (fieldName, message) {
+    return this.test("unique", message, function (field) {
+      if (field) return duplicateValue(fieldName, field.value)
+      return true
     })
-})
+  })
 
   useEffect(async () => {
     let formId = showCreateNewModal.id || props.id
@@ -89,29 +106,33 @@ Yup.addMethod(Yup.object, 'uniqueValueObject', function (fieldName, message) {
       try {
         let res = await API.get(endpoint + "/" + formId)
         let data = res.data
-        let day = Math.round(data.amount/1440)
-          let hour = Math.round((data.amount % 1440)/60)
-          let minute = (data.amount % 1440) % 60
+        let day = Math.round(data.amount / 1440)
+        let hour = Math.round((data.amount % 1440) / 60)
+        let minute = (data.amount % 1440) % 60
         setFormValues({
           ...formValues,
-          task_type: _.isEmpty(data.task_type) ? "" : {
-            value: data.task_type_id,
-            label: data.task_type.task_type_name
-          },
-          response_time: data.amount ? [
-            {
-              value: day,
-              label: day,
-            },
-            {
-              value: hour,
-              label: hour,
-            },
-            {
-              value: minute,
-              label: minute,
-            },
-          ] : [],
+          task_type: _.isEmpty(data.task_type)
+            ? ""
+            : {
+                value: data.task_type_id,
+                label: data.task_type.task_type_name,
+              },
+          response_time: data.amount
+            ? [
+                {
+                  value: day,
+                  label: day,
+                },
+                {
+                  value: hour,
+                  label: hour,
+                },
+                {
+                  value: minute,
+                  label: minute,
+                },
+              ]
+            : [],
         })
       } catch (e) {
         console.log(e)
@@ -137,18 +158,23 @@ Yup.addMethod(Yup.object, 'uniqueValueObject', function (fieldName, message) {
   }
 
   const validationSchema = Yup.object().shape({
-    task_type: Yup.object().required("Task Type is required.").uniqueValueObject("task_type_id","Task Type already exists"),
+    task_type: Yup.object()
+      .required("Task Type is required.")
+      .uniqueValueObject("task_type_id", "Task Type already exists"),
     response_time: Yup.array().min(3, "Response Time is required."),
   })
 
   const onSubmit = async (values, a) => {
     try {
-      let formId = showCreateNewModal.id || props.id            
-      let amount = (values.response_time[0].value * 1440) + (values.response_time[1].value * 60) + (values.response_time[2].value)
+      let formId = showCreateNewModal.id || props.id
+      let amount =
+        values.response_time[0].value * 1440 +
+        values.response_time[1].value * 60 +
+        values.response_time[2].value
       let form = {
         task_type_id: values.task_type.value,
         service_level_code: parseInt(showCreateNewModal.service_level_code),
-        amount: amount
+        amount: amount,
       }
 
       if (!formId) {
@@ -187,8 +213,8 @@ Yup.addMethod(Yup.object, 'uniqueValueObject', function (fieldName, message) {
       )
     }
   }
-    return (
-      <Formik
+  return (
+    <Formik
       initialValues={formValues || initialValues}
       validationSchema={validationSchema}
       onSubmit={onSubmit}
@@ -209,66 +235,161 @@ Yup.addMethod(Yup.object, 'uniqueValueObject', function (fieldName, message) {
         setFieldTouched,
       }) => (
         <Form onSubmit={handleSubmit} className="ml-2">
-          <Row className="form-group mb-0">
-            <Col lg={10} className="ml-0">
-                <FormikControl 
-                  control="input"
-                  label="Code"
-                  name="percent"
-                  required="label-required"
-                  className
-                  style={{ maxWidth: 100 }}
-                  // isDisabled={isView}
-                />
-            </Col>
-            <span className="text-lg ml-0 percent">%</span>
-          </Row>
-          
-          <Row className="form-group mb-0">
-            <Col className="ml-0">
-                <FormikControl 
-                  control="input"
-                  label="Name"
-                  name="percent"
-                  required="label-required"
-                  className
-                  style={{ maxWidth: 100 }}
-                  // isDisabled={isView}
-                />
-            </Col>
-            <span className="text-lg ml-0 percent">%</span>
-          </Row>
-
-          <Row className="form-group required">
-            <Col md={3} lg={4}>
-              <label className="text-label-input" htmlFor={"routes"}>
-                Apply To
-              </label>
-            </Col>
-            <Col md={9} lg={8}>
-              <Row>
-                <Col md={6} lg={10}>
-                  <Field id={"departureFrom"} name={"departureFrom"}>
-                    {({ field, form, meta}) => (
-                      <div>
-                        <Select
-                          {...field}
-                          // options={optionRoute}
-                          placeholder="Please Choose"
-                          // url={`master/airports`}
-                          fieldName="airport_name"
-                          // onChange={(v) => {
-                          //   formik.setFieldValue("departureFrom", v)
-                          //   setOptDeparture(v)
-                          // }}
-                        />
-                      </div>
+          <div className="col">
+            <div className="d-flex">
+              <div>
+                Destination<span className="form-label-required">*</span>
+              </div>
+              <FastField name="task_type">
+                {({ field, form }) => (
+                  <div className="hotel-class-modal">
+                    <SelectAsync
+                      {...field}
+                      isClearable
+                      isDisabled={isView}
+                      url={`master/task-types`}
+                      fieldName="task_type_name"
+                      onChange={(v) => {
+                        setFieldValue("task_type", v)
+                      }}
+                      placeholder="Please choose"
+                      className={`react-select ${
+                        form.touched.task_type && form.errors.task_type
+                          ? "is-invalid"
+                          : null
+                      }`}
+                      components={
+                        isView
+                          ? {
+                              DropdownIndicator: () => null,
+                              IndicatorSeparator: () => null,
+                            }
+                          : null
+                      }
+                    />
+                    {form.touched.task_type && form.errors.task_type && (
+                      <Form.Control.Feedback type="invalid">
+                        {form.touched.task_type ? form.errors.task_type : null}
+                      </Form.Control.Feedback>
                     )}
-                  </Field>
-                </Col>
-              </Row>
+                  </div>
+                )}
+              </FastField>
+            </div>
+            <div className="row align-item-center">
+              <div className="d-flex">
+                <ReactSVG src="/img/icons/price.svg" className="price-icon" />
+                <div className="d-flex flex-column hotel-price">
+                  <h5>PRICE</h5>
+                  <h6>Maximum Nightly Rate (IDR)</h6>
+                  <span>(Include Tax & Service charge)</span>
+                </div>
+              </div>
+              <FormInputControl
+                required={false}
+                value={form.special_date_name}
+                name="special_date_name"
+                disabled={isView || loading}
+                type="text"
+                minLength={0}
+                maxLength={15}
+                cl={{ md: 3 }}
+                cr={{ md: 7 }}
+              />
+            </div>
+            <div className="d-flex flex-row ">
+              <div className="d-flex">
+                <ReactSVG
+                  src="/img/icons/star-rating.svg"
+                  className="star-rating-icon"
+                />
+                <div className="d-flex flex-column">
+                  <h6>PROPERTY STAR RATING</h6>
+                  <span>Highest Star Rating</span>
+                </div>
+              </div>
+              <div className="col-8 col-md-9 col-lg-7 mb-2">
+                <FastField name="task_type">
+                  {({ field, form }) => (
+                    <div style={{ maxWidth: 200 }}>
+                      <SelectAsync
+                        {...field}
+                        isClearable
+                        isDisabled={isView}
+                        url={`master/task-types`}
+                        fieldName="task_type_name"
+                        onChange={(v) => {
+                          setFieldValue("task_type", v)
+                        }}
+                        placeholder="Please choose"
+                        className={`react-select ${
+                          form.touched.task_type && form.errors.task_type
+                            ? "is-invalid"
+                            : null
+                        }`}
+                        components={
+                          isView
+                            ? {
+                                DropdownIndicator: () => null,
+                                IndicatorSeparator: () => null,
+                              }
+                            : null
+                        }
+                      />
+                      {form.touched.task_type && form.errors.task_type && (
+                        <Form.Control.Feedback type="invalid">
+                          {form.touched.task_type
+                            ? form.errors.task_type
+                            : null}
+                        </Form.Control.Feedback>
+                      )}
+                    </div>
+                  )}
+                </FastField>
+              </div>
+            </div>
+          </div>
+          <Col className="policy-class-modal">
+            <h6>RESTRICTED PROPERTY TYPE</h6>
+            <Col md={10} lg={8} className="d-flex">
+              <span>Select restricted property type</span>
+              <FastField name="task_type">
+                {({ field, form }) => (
+                  <div style={{ maxWidth: 200 }}>
+                    <SelectAsync
+                      {...field}
+                      isClearable
+                      isDisabled={isView}
+                      url={`master/task-types`}
+                      fieldName="task_type_name"
+                      onChange={(v) => {
+                        setFieldValue("task_type", v)
+                      }}
+                      placeholder="Please choose"
+                      className={`react-select ${
+                        form.touched.task_type && form.errors.task_type
+                          ? "is-invalid"
+                          : null
+                      }`}
+                      components={
+                        isView
+                          ? {
+                              DropdownIndicator: () => null,
+                              IndicatorSeparator: () => null,
+                            }
+                          : null
+                      }
+                    />
+                    {form.touched.task_type && form.errors.task_type && (
+                      <Form.Control.Feedback type="invalid">
+                        {form.touched.task_type ? form.errors.task_type : null}
+                      </Form.Control.Feedback>
+                    )}
+                  </div>
+                )}
+              </FastField>
             </Col>
-          </Row>
+          </Col>
 
           {!props.hideButton && (
             <div
@@ -306,7 +427,7 @@ Yup.addMethod(Yup.object, 'uniqueValueObject', function (fieldName, message) {
         </Form>
       )}
     </Formik>
-    )
+  )
 }
 
-export default withRouter (HotelPolicy)
+export default withRouter(HotelPolicy)

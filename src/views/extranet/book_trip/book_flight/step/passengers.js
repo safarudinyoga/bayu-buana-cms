@@ -1,159 +1,100 @@
 import { Col, Row, Card, Form, Button, Alert, Accordion, Modal } from 'react-bootstrap'
 import React, { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
 // import { setUIParams } from 'redux/ui-store'
 // import FlightCard from './components/FlightCard'
 // import Select, {components} from "react-select"
 // import arrowdownIcon from "assets/icons/arrow-down.svg"
-// import moment from 'moment'
 // import flights from './flights.json'
 // import AdsImage from 'assets/ads.png'
 import PopupConfirmation from './components/flight-step-confirmation-modal'
-
-const ex_logo = 'https://ik.imagekit.io/tvlk/image/imageResource/2021/07/12/1626063527483-f24d3eae611b51022ab0d1fc1457c820.png?tr=q-75,w-28'
+import ThousandSeparator from 'lib/thousand-separator'
+import { encrypt } from "lib/bb-crypt"
+import FlightInfo from './components/flight-info'
 
 function Passenger({handleSelectTab}) {
-  const dispatch = useDispatch()
-	const [viewBy, setViewBy] = useState('fares')
-	const [flightInfo, setFlightInfo] = useState({
-		plane: "Singapore Airlines",
-		time_estimation: "7h 3m",
-		class: "Economy",
-		origin: {
-			city: "Jakarta",
-			code: "JKT",
-			airport: "Soekarno-Hatta Intl.",
-			terminal: 3,
-		},
-		destination: {
-			city: "Hong Kong",
-			code: "HKG",
-			airport: "Hong Kong Intl.",
-			terminal: 3,
-		},
-		trip: "Roundtrip",
-		departure_date: "2022-12-12 14:00:00",
-		return_date: "2022-12-17 12:25:00",
-		passengers: {
-			adult: 2,
-			child: 0,
-			infant: 0,
-		},
-	})
-	const [data, setData] = useState([])
-	const [show, setShow] = useState(false)
+	const selectedFlight = localStorage.getItem("selectedFlight")
+	
+	const [Flight, setFlight] = useState({})
 	const [showSelectSeats, setShowSelectSeats] = useState(false)
 	const [showAddOns, setShowAddOns] = useState(false)
+	const [passenger1, setPassenger1] = useState("Mrs. Sienna Bright")
+	const [passenger2, setPassenger2] = useState("Ms. Marry Bright")
 
-	const handleClose = () => setShow(false)
-	const handleShow = () => setShow(true)
 
+	useEffect(async() => {
+		if(selectedFlight) {
+			let parseFlight = JSON.parse(selectedFlight)
+			setFlight(parseFlight)
+		}
+	}, [selectedFlight])
 
-	const FareRulesModal = () => (
-		<Modal show={show} onHide={handleClose} centered>
-			<Modal.Header closeButton>
-				<Modal.Title>
-					FARE RULES DETAIL
-				</Modal.Title>
-			</Modal.Header>
-			<Modal.Body>
-				<ul>
-					<li>Cancelation allow with fee</li>
-					<li>Baggage allow up to 30 kg</li>
-					<li>Exchange Before Flight (free)</li>
-					<li>Exchange After Flight (with fee $100)</li>
-					<li>Refund Before Flight (with fee $90)</li>
-				</ul>
-			</Modal.Body>
-		</Modal>
-	)
+	function padTo2Digits(num) {
+		return num.toString().padStart(2, '0');
+	}
 
-	const FlightInfo = () => (
-		<Row className='mt-3'>
-			<Col sm={6} className={"d-flex justify-content-between align-items-center pb-3"}>
-				<div>
-					<p>02:10 pm</p>
-					<p>12 Dec</p>
-					<p>CGK - Hong Kong</p>
-					<p>Hong Kong Intl.</p>
-					<p>Terminal 3</p>
-				</div>
-				<div className='flight-line align-center text-center'>
-					<p>788 miles</p>
-					<div className='links mb-3'>
-						<i class="fas fa-plane plane-ic"></i>
-					</div>
-					<p>1h 5m</p>
-				</div>
-				<div>
-					<p>02:10 pm</p>
-					<p>12 Dec</p>
-					<p>CGK - Hong Kong</p>
-					<p>Hong Kong Intl.</p>
-					<p>Terminal 3</p>
-				</div>
-			</Col>
-			<Col sm={6}>
-				<Row>
-					<Col sm={6} className={"d-flex align-items-start"}>
-						<img src={ex_logo} width={20}/>
-						<div>
-							<p>Singapore Airlines</p>
-							<p>Boeing 777-300ER</p>
-							<p>conomy (N)</p>
-						</div>
-						<p>SQ 955</p>
-					</Col>
-					<Col sm={6}>
-						<div></div>
-						<ul>
-							<li>Cancelation allow with fee</li>
-							<li>Free changes</li>
-							<li>No show fee apply</li>
-							<li>Baggage allow up 30kg</li>
-						</ul>
-						<a className='small pointer' onClick={handleShow}>Fare Rules</a>
-					</Col>
-				</Row>
-			</Col>
-		</Row>
-	)
+	const diff_minutes = (date1, date2) => {
+		let milliseconds = date2.getTime() - date1.getTime()
+		let seconds = Math.floor(milliseconds / 1000);
+		let minutes = Math.floor(seconds / 60);
+		let hours = Math.floor(minutes / 60);
+	
+		seconds = seconds % 60;
+		minutes = seconds >= 30 ? minutes + 1 : minutes;
+	
+		minutes = minutes % 60;
+		hours = hours % 24;
+	
+		return `${padTo2Digits(hours)}h ${padTo2Digits(minutes)}m`;
+	}
 
-	const FlightDetail = ({footer}) => (
-			<div>
-					<Row>
-							<Col sm={11}>
-									<Row className="w-50">
-											<Col>
-													<p className='text-bold m-0'>Jakarta <i class="fas fa-arrow-right"></i> Hongkong</p>
-											</Col>
-											<Col>
-													<p className='text-bold m-0'>
-															<small>
-																	<i className='fas fa-clock mr-1'></i> 7h 5m (1 Stop)
-															</small>
-													</p>
-											</Col>
-									</Row>
-									<FlightInfo/>
-									<div className='transit-wrapper align-center'>
-											<div className='links'>
-													<p className='transit-info'>
-															<i className='fas fa-clock mr-1'></i>
-															Transit 1h 50m in Singapore (SIN)
-													</p>
-											</div>
-									</div>
-									<FlightInfo/>
-									<div className={`d-${footer ? "block": "none"} flight-detail-footer pt-3 text-bold`}>
-											<p>Roundtrip price for 1 traveler: IDR 3.294.700</p>
-									</div>
-							</Col>
-							<Col sm={1}>
-							<Button variant="secondary" onClick={() => handleSelectTab('select-flight')}>CHANGE</Button>
-							</Col>
-					</Row>
+	const TransitLine = ({previous_arrival_date, departure_date}) => (
+		<div className='transit-wrapper align-center'>
+			<div className='links'>
+				<p className='transit-info'>
+					<i className='fas fa-clock mr-1'></i>
+					Transit {diff_minutes(previous_arrival_date, departure_date)} in Singapore (SIN)
+				</p>
 			</div>
+		</div>
+	)
+
+	const FlightDetail = ({airline, footer}) => (
+		<div>
+			<Row>
+				<Col sm={11}>
+					<Row className="w-50">
+						<Col>
+							<p className='text-bold m-0'>Jakarta <i class="fas fa-arrow-right"></i> Hongkong</p>
+						</Col>
+						<Col>
+							<p className='text-bold m-0'>
+								<small>
+									<i className='fas fa-clock mr-1'></i> {Flight.estimation} ({Flight.routes ? Flight.routes.length -1 : 0} Stop)
+								</small>
+							</p>
+						</Col>
+					</Row>
+					{
+						airline.routes?.map((route, i) => {
+							return (<div key={i}>
+								{route?.previous_arrival_date !== null 
+								&& <TransitLine 
+									previous_arrival_date = {new Date(route?.previous_arrival_date)}
+									departure_date = {new Date(route?.departure_date)}
+								/>}
+								<FlightInfo route={route} airline={airline} fare={Flight?.fare}/>
+							</div>)
+						})
+					}
+					<div className={`d-${footer ? "block": "none"} flight-detail-footer pt-3 text-bold`}>
+							<p>Roundtrip price for 1 traveler: {Flight.fare.currency_code}{ThousandSeparator(Flight.fare.price)}</p>
+					</div>
+				</Col>
+				<Col sm={1}>
+					<Button variant="secondary" onClick={() => handleSelectTab('1')}>CHANGE</Button>
+				</Col>
+			</Row>
+		</div>
 	)
 
 	const PassengerForm = ({eventKey}) => {
@@ -168,12 +109,13 @@ function Passenger({handleSelectTab}) {
 									<Col sm={5}>
 											<Form.Group>
 													<Form.Label>CONTACT NAME</Form.Label>
-													<Form.Control as="select">
-															<option>Ana</option>
-															<option>Dina</option>
-															<option>Lina</option>
-															<option>Tina</option>
-															<option>Rina</option>
+													<Form.Control as="select"
+														onChange={(e)=> {
+															eventKey === 1 ? setPassenger1(e.target.value) : setPassenger2(e.target.value)
+														}}
+													>
+															<option>Mrs. Sienna Bright</option>
+															<option>Ms. Marry Bright</option>
 													</Form.Control>
 											</Form.Group>
 											<Form.Group as={Row}>
@@ -260,9 +202,15 @@ function Passenger({handleSelectTab}) {
     <div className='pt-4'>
 			<p className='trip-txt-header'>REVIEW YOUR TRIP</p>
 			<Card className="passengers-flight-detail">
-				<FlightDetail/>
-				<div className='border-dotted'></div>
-				<FlightDetail footer={true}/>
+				{
+					Flight?.airlines?.map((airline, idx) => (
+						<div key={idx}>
+							<FlightDetail key={idx} airline={airline} footer={idx === Flight.airlines?.length-1}/>
+							{idx < Flight.airlines?.length-1 ? 
+							<div className='middle-border'></div> : <></>}
+						</div>
+					))
+				}
 			</Card>
 			<Alert variant="secondary" className="notice-alert">
 				<h6 className='text-danger'>IMPORTANT NOTES :</h6>
@@ -281,22 +229,24 @@ function Passenger({handleSelectTab}) {
 				<Button 
 				onClick={(e) => { 
 						setShowSelectSeats(true)
+						let passengers = JSON.stringify([passenger1,passenger2])
+        		passengers = encrypt(passengers)
+						localStorage.setItem("psg", passengers)
 				}}
 				className="btn-flight-select mr-3"
 				>
 						continue booking
 				</Button>
-				<Button variant="secondary" onClick={() => handleSelectTab('select-flight')}>Back</Button>
+				<Button variant="secondary" onClick={() => handleSelectTab('1')}>Back</Button>
 			</div>
 
-			<FareRulesModal/>
 			<PopupConfirmation
 				contentText={"Would you like to choose your Flight Seat?"}
 				show={showSelectSeats}
 				onClose={() => setShowSelectSeats(false)}
 				onClickYes={() => {
 					setShowSelectSeats(false)
-					handleSelectTab('select-seats')
+					handleSelectTab('3')
 				}}
 				onClickNo={() => {
 					setShowSelectSeats(false)
@@ -310,11 +260,11 @@ function Passenger({handleSelectTab}) {
 				onClose={() => setShowAddOns(false)}
 				onClickYes={() => {
 					setShowAddOns(false)
-					handleSelectTab('add-ons')
+					handleSelectTab('4')
 				}}
 				onClickNo={() => {
 					setShowAddOns(false)
-					handleSelectTab('review')
+					handleSelectTab('5')
 				}}
 			/>
     </div>

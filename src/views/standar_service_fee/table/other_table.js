@@ -8,19 +8,19 @@ export default function OtherTable() {
     showAdvancedOptions: false,
     hideDetail: true,
     baseRoute: "/master/standard-service-fee/form/other-form",
-    endpoint: "/master/hotels",
+    endpoint: "/master/agent-service-fee-categories/3",
     deleteEndpoint: "/master/batch-actions/delete/hotels",
     activationEndpoint: "/master/batch-actions/activate/hotels",
     deactivationEndpoint: "/master/batch-actions/deactivate/hotels",
     columns: [
       {
         title: "Preset Name",
-        data: "preset_name",
+        data: "service_fee_category_name",
       },
     ],
     emptyTable: "No Service Fees found",
     recordName: "preset_name",
-    module: "standard--fee",
+    module: "standard-fee-other",
   })
 
   return <BBDataTable {...params} />

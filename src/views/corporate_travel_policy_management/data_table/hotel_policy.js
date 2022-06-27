@@ -52,7 +52,6 @@ const HotelPolicyDataTable = () => {
 
     return (
         <div>
-            <div><h5>HOTELS</h5></div>
             <BBDataTable {...params} modalContentNew={FormHotel} modalSize="lg" />
         </div>
     )

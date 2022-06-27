@@ -42,7 +42,7 @@ export default function FlightOverrideServiceFeeTable() {
 
   return (
     <>
-      <BBDataTable {...params} modalContent={Form} />
+      <BBDataTable {...params} modalContent={Form} modalSize="lg" />
     </>
   )
 }

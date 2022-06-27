@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react"
+import React, { Component } from "react"
 import "./navbar.css"
 import infoIcon from "assets/icons/information.svg"
 import notifIcon from "assets/icons/notification.svg"
@@ -12,6 +12,7 @@ export default class Navbar extends Component {
     super(props)
     this.state = {
       profile: {},
+      fullname:"",
       loading: true,
     }
     
@@ -23,7 +24,15 @@ export default class Navbar extends Component {
     await this.api
       .get("/user/profile")
       .then((res) => {
-        this.setState({ profile: res.data} )
+        let name = ""
+        if(res.data.given_name && res.data.middle_name && res.data.surname){
+          name = res.data.given_name + ' ' + res.data.middle_name + ' ' + res.data.surname
+        }else if(res.data.given_name && res.data.surname){
+          name = res.data.given_name + ' ' + res.data.surname
+        }else {
+          name = res.data.given_name
+        }
+        this.setState({ profile: res.data, fullname:name} )
       })
       .finally(() => {
         this.setState({ loading: false })
@@ -94,7 +103,7 @@ export default class Navbar extends Component {
                     className="img-size-50 img-circle mr-3"
                   />
                   <div className="media-body mt-2">
-                    <h3 className="dropdown-item-title">{`${this.state.profile.given_name} ${this.state.profile.middle_name} ${this.state.profile.surname}`}</h3>
+                    <h3 className="dropdown-item-title">{`${this.state.fullname}`}</h3>
                   </div>
                 </div>
               </a>
@@ -104,9 +113,9 @@ export default class Navbar extends Component {
               <a href="/profile/security-settings" className="dropdown-item">
                 <i className="fas fa-unlock mr-2"></i> Change Password
               </a>
-              <a className="dropdown-item cursor-pointer" onClick={() => this.props.signout()}>
+              <span className="dropdown-item cursor-pointer" onClick={() => this.props.signout()}>
                 <i className="fas fa-sign-out-alt mr-2"></i> Sign Out
-              </a>
+              </span>
             </div>
           </li>
         </ul>
