@@ -189,6 +189,11 @@ function IdentityRuleCreate(props) {
                             control="input"
                             size={formTextSize}
                             label="Next Number"
+                            onKeyPress={(event) => {
+                                if (!/[0-9]/.test(event.key)) {
+                                  event.preventDefault();
+                                }
+                              }}
                             name="next_number"
                             style={{ maxWidth: 250 }}
                             disabled={isView || loading}
