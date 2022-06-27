@@ -26,9 +26,10 @@ function selectForm(props) {
         <Col md={size?.label?.md || 3} lg={size?.label?.lg || 4}>
           <label className="text-label-input" htmlFor={name}>
             {label}
-            {useHint? <img src={Hints} alt="hint" className="ml-0"></img> : ""}
             <span className={required || ""} />
+            {useHint ? <img src={Hints} alt="hint" className="ml-0"></img> : ""}
           </label>
+           
         </Col>
         <Col md={size?.value?.md || 9} lg={size?.value?.lg || 8}>
           <FastField id={name} name={name} {...rest}>
@@ -68,6 +69,7 @@ function selectForm(props) {
         <label className="text-label-input" htmlFor={name}>
           {label}
           <span className={required || ""} />
+          {useHint ? <img src={Hints} alt="hint" className="ml-0"></img> : ""}
         </label>
       </Col>
       <Col md={size?.value?.md || 9} lg={size?.value?.lg || 8}>
