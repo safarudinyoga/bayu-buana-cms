@@ -16,6 +16,7 @@ import engb from "date-fns/locale/en-GB"
 import "react-datepicker/dist/react-datepicker.css";
 import Select from "components/form/select"
 import DateRangePicker from "../../components/form/date-range-picker"
+import _ from "lodash"
 
 const endpoint = "/master/commission-claims"
 const backUrl = "/master/setup-flight-commission"
@@ -107,23 +108,13 @@ const FlightCommisionForm = (props) => {
             value: data.airline.id,
             label: data.airline.airline_name
           },
-          commission_claim_departure_date: data.commission_claim_departure_date.start_date 
-          ? {
-            start_date: new Date(data.commission_claim_departure_date.start_date).toDateString(),
-            end_date: new Date(data.commission_claim_departure_date.end_date).toDateString(),
-          }
-          : {
-            start_date: null,
-            end_date: null,
+          commission_claim_departure_date: {
+            start_date: data.commission_claim_departure_date.start_date ? new Date(data.commission_claim_departure_date.start_date) : null,
+            end_date: data.commission_claim_departure_date.end_date ? new Date(data.commission_claim_departure_date.end_date) : null,
           },
-          commission_claim_issue_date: data.commission_claim_issue_date.start_date 
-          ? {
-            start_date: new Date(data.commission_claim_issue_date.start_date).toDateString(),
-            end_date: new Date(data.commission_claim_issue_date.end_date).toDateString(),
-          }
-          : {
-            start_date: null,
-            end_date: null,
+          commission_claim_issue_date: {
+            start_date: _.isEmpty(data.commission_claim_issue_date.start_date) ? null : new Date(data.commission_claim_issue_date.start_date),
+            end_date: _.isEmpty(data.commission_claim_issue_date.end_date) ? null : new Date(data.commission_claim_issue_date.end_date),
           }, 
           departure_from : {
             label: data.departure_city?.city_name || data.departure_airport_location?.airport_name,
