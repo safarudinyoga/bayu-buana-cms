@@ -227,6 +227,10 @@ import CorporateProfileForm from "views/corporate_profile/form/index"
 import CorporateAirlineFareTable from "views/corporate_airline_fare/table"
 import CorporateAirlineFareForm from "views/corporate_airline_fare/form"
 
+// Violation Reason 
+import ViolationReasonTable from "views/violation-reason/table"
+import ViolationReasonForm from "./views/violation-reason/form"
+
 //corporate user profile
 import CorporateUserProfile from "views/corporate_user_profile/index"
 
