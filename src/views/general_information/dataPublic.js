@@ -3,18 +3,13 @@ import { Editor } from "react-draft-wysiwyg"
 import {withRouter} from "react-router"
 import { stateToHTML } from "draft-js-export-html"
 import FormInputControl from "components/form/input-control"
-import { useDispatch, useSelector } from 'react-redux';
-import Hints from "assets/icons/hint.svg"
-import { setCorporateClient } from 'redux/ui-store';
 
-
-const Data = (props) => {
+const DataPublic = (props) => {
     console.log(props, 'props');
-    let dispatch = useDispatch()
-    const a = useSelector((a) => a.ui.corporateClient)
-    console.log(a, '<<');
-    const initialState = JSON.parse('{"entityMap":{},"blocks":[{"key":"1ljs","text":"Initializing from content state","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}]}')
+    const [, forceUpdate] = React.useReducer(x => x + 1, 0);
+
     let corporateTab = {}
+    console.log(corporateTab);
     const wrapperStyle = {
         border: '1px solid #D3D3D3',
         marginBottom: 20
@@ -70,10 +65,13 @@ const Data = (props) => {
         },
     ];
 
-    const handleEditorState = (editorState, el) => {
+    const handleEditorState = (editorState, el, idx) => {
         // console.log(props.tab, el, state);
         const name = props.tab
         const html = stateToHTML(editorState.getCurrentContent())
+        dummyData[idx].value = html
+        forceUpdate()
+        console.log(dummyData);
         if (name === "CORPORATE CLIENT") {
             if (el.code === "flightTerm") {
                 corporateTab = {
@@ -134,17 +132,13 @@ const Data = (props) => {
             if (el.code === "visa") {
                 corporateTab = {
                     ...corporateTab,
-                    termOfUse: html
+                    visa: html
                 }
                 // state.corporateClient.visa.value = html
             }
         }
+        forceUpdate()
         console.log(corporateTab);
-        dispatch(
-            setCorporateClient({
-                data: corporateTab
-            })
-        )
         // props.input(state)
         // // const contentBlock = htmlToDraft(html)
         // // setBodyEmail(html)
@@ -157,21 +151,17 @@ const Data = (props) => {
                 dummyData.map((el, idx) => {
                     return (
                         <div>
-                            <p style={{fontSize: 15}} >{el.name}
-                                <span>
-                                    <img src={Hints} alt="hint" className="ml-1 mb-2" title={"ticketing"}/>
-                                </span> 
-                            </p>
+                            <p style={{fontSize: 15}} >{el.name}</p>
                             <Editor
                                 // editorState={editorState}
                                 // value="asdasda"
-                                contentState={el.code === a.name ? a.name : ""}
+                                contentState={el.value}
                                 toolbarClassName="toolbarClassName"
                                 wrapperClassName="wrapperClassName"
                                 editorClassName="editorClassName"
                                 wrapperStyle={wrapperStyle}
                                 editorStyle={editorStyle} 
-                                onEditorStateChange={(editorState) => handleEditorState(editorState, el)}
+                                onEditorStateChange={(editorState) => handleEditorState(editorState, el, idx)}
                                 toolbarStyle={{background: '#ECECEC 0% 0% no-repeat padding-box'}}
                             />
                             {
@@ -181,12 +171,11 @@ const Data = (props) => {
                                         label="URL"
                                         // value={form.hotel_supplier_name}
                                         name="url"
-                                        // onChange={(e) =>
-                                        //     props.data(e.target.value)
-                                        // }
+                                        onChange={(e) =>
+                                            props.data(e.target.value)
+                                        }
                                         minLength="1"
                                         maxLength="256"
-                                        hint="URL maximum 33 characters"
                                     />
                                 </div>
                                 :null
@@ -199,4 +188,4 @@ const Data = (props) => {
     )
 }
 
-export default Data
+export default DataPublic

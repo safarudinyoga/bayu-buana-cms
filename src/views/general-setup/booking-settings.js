@@ -6,7 +6,7 @@ import Hints from "assets/icons/hint.svg"
 // import Form from "./form";
 
 export default function BookingSetting() {
-  const [, forceUpdate] = React.useReducer(x => x + 1, 0);
+  const [, forceUpdate] = useReducer(x => x + 1, 0);
   const [limitOffset, setLimitOffset] = React.useState(180)
   const [limitPeriod, setLimitPeriod] = React.useState(240)
   const borderFeeTax = {
