@@ -9,20 +9,21 @@ export default function OtherTable() {
 
   let [params, setParams] = useState({
     title: "Standard Markup",
+    hideDetail: true,
     baseRoute: "/master/standard-markup/form/other-form",
-    endpoint: "/master/standard-markup/",
+    endpoint:  `/master/agent-markup-categories/3`,
     deleteEndpoint: "/master/standard-markup/",
     activationEndpoint: "/master/standard-markup/",
     deactivationEndpoint: "/master/standard-markup/",
     columns: [
       {
-        title: "Hotel Name",
-        data: "hotel_name",
+        title: "Preset Name",
+        data: "markup_category_name",
       },
       
     ],
     emptyTable: "No other found",
-    recordName: "hotel_name",
+    recordName: "markup_category_name",
   })
 
   const onFilterChangeCountries = (e, values) => {

@@ -1,4 +1,4 @@
-import React, { Component } from "react"
+import React from "react"
 import NoImage from "assets/no_image.png"
 import UploadIcon from "assets/icons/upload.svg"
 import "./input-image.css"

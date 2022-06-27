@@ -1,11 +1,7 @@
 import React, {useState} from "react"
-import NoImage from "assets/imageNull.png"
 import ImageUploading from "react-images-uploading"
-import { Row,Button, CloseButton, Image } from "react-bootstrap"
-
+import { Button, CloseButton, Image } from "react-bootstrap"
 import "../form/input-image.css"
-import { useDispatch } from "react-redux"
-import { setAlert } from "redux/ui-store"
 
 const FormInputFile = ({
   id,
@@ -20,21 +16,13 @@ const FormInputFile = ({
   mediaSpec,
   photoProfile=[],
 }) => {
-  let dispatch = useDispatch()
   const [showCloseBtn, setShowCloseBtn] = useState(false)
-  const acceptFormat = accept
-    ? accept
-        .split(",")
-        .map((v) => "image/" + v.substring(1))
-        .join(",")
-    : "image/jpeg,image/jpg,image/png"
-
   return (
     <div
       className="d-md-flex d-lg-block justify-content-md-center align-items-md-center"
       style={{marginBottom: 20}}
     >
-        {photoProfile.length == 0 && (
+        {photoProfile.length === 0 && (
           <Image
             src="/img/media/profile.svg"
             className="img-profile"
