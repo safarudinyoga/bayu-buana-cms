@@ -205,7 +205,7 @@ function IdentityRuleCreate(props) {
                     
                     <FormikControl
                         control="switch"
-                        required="label-required"
+                        required={isView ? "" : "label-required"}
                         className={"identity-rule-switch"}
                         label="Reset numbers periodically?"
                         name="is_reset"
