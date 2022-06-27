@@ -34,6 +34,7 @@ const DateRangePicker = ({value, onChange= ()=>{}, minDate, maxDate, placeholder
               onChange={handleValueChange}
               id={`startDate_${id}`}
               placeholder={placeholder}
+              autoComplete="off"
             />
           </div>
         </Col>
@@ -48,6 +49,7 @@ const DateRangePicker = ({value, onChange= ()=>{}, minDate, maxDate, placeholder
               onChange={handleValueChange}
               id={`endDate_${id}`}
               placeholder={placeholder}
+              autoComplete="off"
             />
           </div>
         </Col>
