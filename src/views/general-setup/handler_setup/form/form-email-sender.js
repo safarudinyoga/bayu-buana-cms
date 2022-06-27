@@ -7,6 +7,7 @@ import { Formik, FastField } from "formik"
 import { setAlert, setCreateModal } from "redux/ui-store"
 import createIcon from "assets/icons/create.svg"
 import * as Yup from "yup"
+import _ from "lodash"
 import Api from "config/api"
 import SelectAsync from "components/form/select-async"
 import { ReactSVG } from "react-svg"
@@ -42,9 +43,17 @@ function FormEmailSender(props) {
       try {
         let { data } = await API.get(endpoint + "/" + formId)
         setId(data.id)
+
+        console.log("tes", data)
         setInitialForm({
           ...initialForm,
-          message_type: data.message_type_name,
+
+          message_type: _.isEmpty(data.message_type)
+            ? ""
+            : {
+                value: data.message_type.id,
+                label: data.message_type.message_type_name,
+              },
           sender_name: data.from_display,
           sender_email: data.from_email,
         })
