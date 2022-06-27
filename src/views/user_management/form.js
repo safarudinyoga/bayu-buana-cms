@@ -101,7 +101,7 @@ const UserManagementForm = (props) => {
           let formId = props.match.params.id
           try {
             let res = await api.get(
-              `${env.API_URL}/user/user-type-users?filters=["given_name","=","${value}"]`,
+              `${env.API_URL}/user/user-type-users?filters=["given_name","=","${value.label}"]`,
             )
 
             if (formId) {

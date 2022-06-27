@@ -13,6 +13,7 @@ import SelectAsync from "components/form/select-async"
 import createIcon from "assets/icons/create.svg"
 import { useDispatch } from "react-redux"
 import { setAlert, setCreateModal, setUIParams } from "redux/ui-store"
+import FormInputSelectAjax from "components/form/input-select-ajax"
 
 const backUrl = "/master/standard-service-fee"
 const endpoint = "/master/agent-service-fee-categories/1"
@@ -21,6 +22,7 @@ const endpoint = "/master/agent-service-fee-categories/1"
 const ModalOverrideServiceFee = (props) => {
   let api = new Api()
   let dispatch = useDispatch()
+  const [parentDivisionTypeData, setParentDivisionTypeData] = useState([])
 
   //get Fee tax
   const [taxTypeServiceFee, setTaxTypeServiceFee] = useState([])
@@ -152,6 +154,27 @@ const ModalOverrideServiceFee = (props) => {
               Add Flight Override Service Fee
             </p>
           </div>
+          <div className="col-6">
+            <FormInputSelectAjax
+              // label="Parent Division"
+              // value={form.parent_division_id}
+              name="parent_division_id"
+              endpoint="/master/corporate-divisions"
+              column="division_name"
+              // filter={
+              //   formId
+              //     ? `[["id","!=","${formId}"],["and"],[["parent_division_id","!=","${formId}"],["or"],["parent_division_id","is",null]]]`
+              //     : ``
+              // }
+              // onChange={(e) =>
+              //   setForm({ ...form, parent_division_id: e.target.value || null })
+              // }
+              data={parentDivisionTypeData}
+              // disabled={isView || loading}
+              type="select"
+              placeholder="Select Parent Division"
+            />
+          </div>
           <Formik
             validateOnMount
             enableReinitialize
@@ -178,8 +201,9 @@ const ModalOverrideServiceFee = (props) => {
                     Destination
                     <span className="form-label-required">*</span>
                   </Form.Label>
+
                   <Col md={9} sm={9} lg={9}>
-                    <FastField name="destination">
+                    {/* <FastField name="destination">
                       {({ field, form }) => (
                         <div style={{ maxWidth: 600 }}>
                           <SelectAsync
@@ -208,7 +232,26 @@ const ModalOverrideServiceFee = (props) => {
                             )}
                         </div>
                       )}
-                    </FastField>
+                    </FastField> */}
+                    <FormInputSelectAjax
+                      // label="Parent Division"
+                      // value={form.parent_division_id}
+                      name="parent_division_id"
+                      endpoint="/master/corporate-divisions"
+                      column="division_name"
+                      // filter={
+                      //   formId
+                      //     ? `[["id","!=","${formId}"],["and"],[["parent_division_id","!=","${formId}"],["or"],["parent_division_id","is",null]]]`
+                      //     : ``
+                      // }
+                      // onChange={(e) =>
+                      //   setForm({ ...form, parent_division_id: e.target.value || null })
+                      // }
+                      data={parentDivisionTypeData}
+                      // disabled={isView || loading}
+                      type="select"
+                      placeholder="Select Parent Division"
+                    />
                   </Col>
                 </Form.Group>
                 <Form.Group as={Row} className="mb-3">
