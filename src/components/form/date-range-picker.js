@@ -3,12 +3,10 @@ import Icon from "react-multi-date-picker/components/icon"
 import { useStateWithCallbackLazy } from 'use-state-with-callback';
 import React, { useEffect, useRef, useState } from "react"
 import { Col, Row, Button } from 'react-bootstrap';
-import _ from "lodash"
-
 
 const DateRangePicker = ({value, onChange= ()=>{}, minDate, maxDate, placeholder="" }) => {
 
-  const [startDateClose, setStartDateClose] = useStateWithCallbackLazy(false)
+  const [, setStartDateClose] = useStateWithCallbackLazy(false)
   const [form, setForm] = useState([])
 
   const datePickerRef = useRef()
@@ -91,7 +89,6 @@ const DateRangePicker = ({value, onChange= ()=>{}, minDate, maxDate, placeholder
         <button
           className="pt-1"
           style={{color: "#1E83DC"}}
-          role={"button"}
           onClick={() => {
             onChange([])
           }}

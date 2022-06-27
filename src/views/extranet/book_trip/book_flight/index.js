@@ -1,4 +1,4 @@
-import { Alert, Col, Tab, Tabs, Row, Button, Modal } from 'react-bootstrap'
+import { Alert, Col, Tab, Tabs, Row, Button, Nav } from 'react-bootstrap'
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { setUIParams } from 'redux/ui-store'
@@ -6,7 +6,7 @@ import Api from "config/api"
 import './book_flight.css'
 import Select, {components} from "react-select"
 // import {OverlayTrigger, Tooltip} from "react-bootstrap"
-import FlightList from './step/select-flight'
+import FlightList from './step/select_flight'
 import Passenger from './step/passengers'
 import SelectSeat from './step/select_seats'
 import AddOn from './step/add_ons'
@@ -19,7 +19,7 @@ import FlightBookSuggest from '../../components/flight_book-autosuggest'
 
 function BookFlight() {
   const dispatch = useDispatch()
-	let currentKey = useQuery().get("key") || "select-flight"
+	let currentKey = useQuery().get("key") || "1"
 
 	const [flight, setFLight] = useState({
 		origin: {
@@ -185,16 +185,20 @@ function BookFlight() {
     <div className='mt-2'>
 		<Row className='mb-3'>
 			<Col sm={5}>
-				<p>{flight.origin.city.toUpperCase()} ({flight.origin.code}) TO {flight.destination.city.toUpperCase()} ({flight.destination.code}) - {flight.trip}</p>
-				<Row className='align-items-center'>
-					<Col sm={6}>
-						<p className='mb-0'>{flight.departure_date.toUpperCase()} - {flight.return_date.toUpperCase()}</p>
-					</Col>
-					<Col sm={2}> 2 Adults</Col>
-					<Col sm={4}>
-						<Button variant="secondary" className='px-4' onClick={() => setShowFlightModal(true)}>Modify</Button>
-					</Col>
-				</Row>
+			{
+				tabKey === "1" && <>
+					<p>{flight.origin.city.toUpperCase()} ({flight.origin.code}) TO {flight.destination.city.toUpperCase()} ({flight.destination.code}) - {flight.trip}</p>
+					<Row className='align-items-center'>
+						<Col sm={6}>
+							<p className='mb-0'>{flight.departure_date.toUpperCase()} - {flight.return_date.toUpperCase()}</p>
+						</Col>
+						<Col sm={2}> 2 Adults</Col>
+						<Col sm={4}>
+							<Button variant="secondary" className='px-4' onClick={() => setShowFlightModal(true)}>Modify</Button>
+						</Col>
+					</Row>
+				</>
+			}
 
 			</Col>
 			{/* Select currency and language */}
@@ -267,39 +271,82 @@ function BookFlight() {
 					Important Notice: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
 				</Alert>
 		}
-		<Tabs activeKey={tabKey} id="uncontrolled-tab-example" className="book-trip-tabs" onSelect={() => {}}>
-			<Tab eventKey="select-flight" title="Select Flight" tabClassName="book-trip-tab-link">
-				<FlightList
-					key={"select-flight"}
-					handleSelectTab={(v) => onChangeTab(v)}
-				/>
-			</Tab>
-			<Tab eventKey="passengers" title="Passengers" tabClassName="book-trip-tab-link">
-				<Passenger
-					handleSelectTab={(v) => onChangeTab(v)}
-				/>
-			</Tab>
-			<Tab eventKey="select-seats" title="Select Seats" tabClassName="book-trip-tab-link">
-				<SelectSeat
-					handleSelectTab={(v) => onChangeTab(v)}
-				/>
-			</Tab>
-			<Tab eventKey="add-ons" title="Add Ons" tabClassName="book-trip-tab-link">
-				<AddOn
-					handleSelectTab={(v) => onChangeTab(v)}
-				/>
-			</Tab>
-			<Tab eventKey="review" title="Review" tabClassName="book-trip-tab-link">
-				<Review
-					handleSelectTab={(v) => onChangeTab(v)}
-				/>
-			</Tab>
-			<Tab eventKey="confirmation" title="Confirmation" tabClassName="book-trip-tab-link">
-				<Confirmation
-					handleSelectTab={(v) => onChangeTab(v)}
-				/>
-			</Tab>
-        </Tabs>
+		<Tab.Container
+			defaultActiveKey={"1"} 
+			activeKey={tabKey} 
+			onSelect={(k) => {
+				console.log(k)
+				if(k < tabKey && tabKey !== "6") {
+					onChangeTab(k)
+				}
+			}}
+		>
+      <Nav variant="tabs" className="flex justify-content-between align-item-center flex-wrap flight-step-tabs">
+        <Nav.Item className={tabKey > "1" ? "done":""}>
+          <Nav.Link eventKey="1">
+					Select Flight
+					</Nav.Link>
+					<div className={tabKey === "1" ? 'arrow-right':""}></div>
+        </Nav.Item>
+        <Nav.Item className={tabKey > "2" ? "done":""}>
+          <Nav.Link eventKey="2">Passengers</Nav.Link>
+					<div className={tabKey === "2" ? 'arrow-right':""}></div>
+        </Nav.Item>
+        <Nav.Item className={tabKey > "3" ? "done":""}>
+          <Nav.Link eventKey="3">Select Seats</Nav.Link>
+					<div className={tabKey === "3" ? 'arrow-right':""}></div>
+        </Nav.Item>
+        <Nav.Item className={tabKey > "4" ? "done":""}>
+          <Nav.Link eventKey="4">Add Ons</Nav.Link>
+					<div className={tabKey === "4" ? 'arrow-right':""}></div>
+        </Nav.Item>
+        <Nav.Item className={tabKey > "5" ? "done":""}>
+          <Nav.Link eventKey="5">Review</Nav.Link>
+					<div className={tabKey === "5" ? 'arrow-right':""}></div>
+        </Nav.Item>
+        <Nav.Item className={tabKey === "6" ? "done":""}>
+          <Nav.Link eventKey="6">Confirmation</Nav.Link>
+        </Nav.Item>
+      </Nav>
+			<Tab.Content>
+				<Tab.Pane eventKey="1">
+					<FlightList
+						key={"1"}
+						handleSelectTab={(v) => onChangeTab(v)}
+					/>
+				</Tab.Pane>
+				<Tab.Pane eventKey="2">
+					<Passenger
+						key={"2"}
+						handleSelectTab={(v) => onChangeTab(v)}
+					/>
+				</Tab.Pane>
+				<Tab.Pane eventKey="3">
+					<SelectSeat
+						key={"3"}
+						handleSelectTab={(v) => onChangeTab(v)}
+					/>
+				</Tab.Pane>
+				<Tab.Pane eventKey="4">
+					<AddOn
+						key={"4"}
+						handleSelectTab={(v) => onChangeTab(v)}
+					/>
+				</Tab.Pane>
+				<Tab.Pane eventKey="5">
+					<Review
+						key={"5"}
+						handleSelectTab={(v) => onChangeTab(v)}
+					/>
+				</Tab.Pane>
+				<Tab.Pane eventKey="6">
+					<Confirmation
+						key={"6"}
+						handleSelectTab={(v) => onChangeTab(v)}
+					/>
+				</Tab.Pane>
+			</Tab.Content>
+    </Tab.Container>
 
 		<FLightModal/>
     </div>

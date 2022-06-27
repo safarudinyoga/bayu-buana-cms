@@ -3,15 +3,22 @@ import { Col, Row, Card, Alert, Button } from "react-bootstrap"
 import CheckInIC from 'assets/icons/foursquare-check-in.svg'
 import moment from 'moment'
 import ThousandSeparator from 'lib/thousand-separator'
+import { decrypt } from "lib/bb-crypt"
 
 const ex_logo = 'https://ik.imagekit.io/tvlk/image/imageResource/2021/07/12/1626063527483-f24d3eae611b51022ab0d1fc1457c820.png?tr=q-75,w-28'
 
 const Confirmation = () => {
 
 	const [Flight, setFlight] = useState({})
+  const [Passengers, setPassengers] = useState([])
 
   useEffect(async() => {
 		let selectedFlight = localStorage.getItem("selectedFlight")
+    let passengers = localStorage.getItem("psg")
+    passengers = decrypt(passengers)
+    passengers = JSON.parse(passengers)
+    setPassengers(passengers)
+
 		if(selectedFlight) {
 			selectedFlight = JSON.parse(selectedFlight)
 			setFlight(selectedFlight)
@@ -23,7 +30,6 @@ const Confirmation = () => {
 	}
 
 	const diff_minutes = (date1, date2) => {
-		console.log(date1, date2)
 		let milliseconds = date2.getTime() - date1.getTime()
 		let seconds = Math.floor(milliseconds / 1000);
 		let minutes = Math.floor(seconds / 60);
@@ -34,7 +40,6 @@ const Confirmation = () => {
 	
 		minutes = minutes % 60;
 		hours = hours % 24;
-		console.log(hours, seconds, "<<<")
 	
 		return `${padTo2Digits(hours)}h ${padTo2Digits(minutes)}m`;
 	}
@@ -145,8 +150,8 @@ const Confirmation = () => {
       <div className={`d-${footer ? "block": "none"} flight-detail-footer pt-3 text-bold`}>
         <Row>
           <Col sm={3}>
-            <p>Mrs. Sienna Bright</p>
-            <p>Ms. Marry Bright</p>
+            <p>{Passengers[0]}</p>
+            <p>{Passengers[1]}</p>
           </Col>
           <Col sm={{span: 2, offset: 3}}>
             <p className="font-weight-normal">CGK-HKG-CGK</p>
@@ -175,7 +180,7 @@ const Confirmation = () => {
           <p>Total Add Ons IDR 1,000,000</p>
         </div>
         <div className="px-4">
-            <p className="font-weight-bold">Mrs. Sienna Bright</p>
+            <p className="font-weight-bold">{Passengers[0]}</p>
           <Row>
             <Col className="d-flex">
               <div className="px-3">
@@ -217,7 +222,7 @@ const Confirmation = () => {
               <div>
                 <p>Booking Code: {"{{booking_code}}"}</p>
                 <p>Partner Booking Code / PNR: {"{{partner_booking_code}}"}</p>
-                <p>Thank You, {"{{name}}"}</p>
+                <p>Thank You, {Passengers[0]}</p>
                 <p>Your Flight Ticket has been Issued!</p>
               </div>
               <div>
@@ -232,8 +237,8 @@ const Confirmation = () => {
               <p>Jakarta - Hongkong - Jakarta</p>
               <p>{Flight?.airlines?.map((a)=> " "+moment(a.routes[0].departure_date).format("DD MMM YYYY"))}</p>
               <p>AIRLINE BOOKING CODE / PNR: DEDWQDS</p>
-              <p>Traveller(s): 1. Mrs. Sienna Johnson</p>
-              <p>2. Ms. Marry Bright</p>
+              <p>Traveller(s): 1. {Passengers[0]}</p>
+              <p>2. {Passengers[1]}</p>
 
               <div className="mb-3 gray-list px-4">
                 <p>PRICE PER-TRAVELLER (Roundtrip)</p>

@@ -101,12 +101,12 @@ const UserManagementForm = (props) => {
           let formId = props.match.params.id
           try {
             let res = await api.get(
-              `${env.API_URL}/master/employees?filters=["given_name","=","${value}"]`,
+              `${env.API_URL}/master/employees?filters=["given_name","=","${value.label}"]`,
             )
 
             if (formId) {
               return (
-                res.data.items.length === 0 || value === initialForm.given_name
+                res.data.items.length === 0 || value.label === initialForm.given_name
               )
             } else {
               return res.data.items.length === 0

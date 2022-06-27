@@ -2,9 +2,7 @@ import { Col, Row, Card, Form, Button } from 'react-bootstrap'
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { setUIParams } from 'redux/ui-store'
-import FlightCard from './components/FlightCard'
-import Select, {components} from "react-select"
-import arrowdownIcon from "assets/icons/arrow-down.svg"
+import FlightCard from './components/flight-card'
 import moment from 'moment'
 import flights from './flights.json'
 import AdsImage from 'assets/ads.png'
@@ -71,51 +69,7 @@ function FlightList({handleSelectTab}) {
 			setTripType(flights.source_type)
 		} catch(e) {}
 	}, [])
-	const customStyles = {
-		option: (provided, state) => ({
-			...provided,
-			color: "#333333",
-			backgroundColor: state.isSelected ? "white" : "white",
-			padding: 10,
-			fontFamily: "Segoe UI, Tahoma, Geneva, Verdana, sans-serif",
-			fontSize: 15,
-			"&:hover": {
-				// Overwrittes the different states of border
-				backgroundColor: state.isFocused ? "#027F71" : "",
-				color: state.isFocused ? "white" : "#333333",
-			},
-		}),
-		control: (base, state) => ({
-			...base,
-			height: 6,
-			width: 60,
-			marginTop: -1,
-			marginLeft: 8,
-			border: "1px solid #DADEDF",
-			fontSize: 12,
-			fontFamily: "Segoe UI, Tahoma, Geneva, Verdana, sans-serif",
-			backgroundColor: "white",
-			boxShadow: state.isFocused ? 0 : 0,
-			"&:hover": {
-				border: "1px solid #DADEDF",
-			},
-		}),
-		singleValue: (provided, state) => {
-			const opacity = state.isDisabled ? 0.5 : 1
-			const transition = "opacity 300ms"
-			return {...provided, opacity, transition}
-		},
-	}
-	const DownIcon = () => {
-		return <img src={arrowdownIcon} alt="down" />;
-	};
-	const DropdownIndicator = props => {
-		return (
-			<components.DropdownIndicator {...props}>
-				<DownIcon />
-			</components.DropdownIndicator>
-		);
-	};
+
 	const TimeSelect = (props) => {
 		return (
 			<Form.Control as="select" className='time-select' size='sm' defaultValue={props.value}>
@@ -300,7 +254,13 @@ function FlightList({handleSelectTab}) {
 							data.map((d,i) => {
 								return (
 									<>
-										<FlightCard key={i} data={d} viewBy={viewBy} handleSelectTab={handleSelectTab} tripType={tripType} />
+										<FlightCard 
+											key={i} 
+											data={d} 
+											viewBy={viewBy} 
+											handleSelectTab={handleSelectTab} 
+											tripType={tripType}
+										/>
 										{
 											i === 1 && <img src={AdsImage} width="100%" style={{marginBottom: "1rem"}}/>
 										}

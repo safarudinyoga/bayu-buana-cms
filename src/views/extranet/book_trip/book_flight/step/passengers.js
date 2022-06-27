@@ -4,107 +4,35 @@ import React, { useEffect, useState } from 'react'
 // import FlightCard from './components/FlightCard'
 // import Select, {components} from "react-select"
 // import arrowdownIcon from "assets/icons/arrow-down.svg"
-// import moment from 'moment'
 // import flights from './flights.json'
 // import AdsImage from 'assets/ads.png'
 import PopupConfirmation from './components/flight-step-confirmation-modal'
-import moment from 'moment'
 import ThousandSeparator from 'lib/thousand-separator'
+import { encrypt } from "lib/bb-crypt"
+import FlightInfo from './components/flight-info'
 
 function Passenger({handleSelectTab}) {
+	const selectedFlight = localStorage.getItem("selectedFlight")
+	
 	const [Flight, setFlight] = useState({})
-	const [show, setShow] = useState(false)
 	const [showSelectSeats, setShowSelectSeats] = useState(false)
 	const [showAddOns, setShowAddOns] = useState(false)
+	const [passenger1, setPassenger1] = useState("Mrs. Sienna Bright")
+	const [passenger2, setPassenger2] = useState("Ms. Marry Bright")
 
-	const handleClose = () => setShow(false)
-	const handleShow = () => setShow(true)
 
 	useEffect(async() => {
-		let selectedFlight = localStorage.getItem("selectedFlight")
 		if(selectedFlight) {
-			selectedFlight = JSON.parse(selectedFlight)
-			setFlight(selectedFlight)
+			let parseFlight = JSON.parse(selectedFlight)
+			setFlight(parseFlight)
 		}
-	}, [])
-
-
-	const FareRulesModal = () => (
-		<Modal show={show} onHide={handleClose} centered>
-			<Modal.Header closeButton>
-				<Modal.Title>
-					FARE RULES DETAIL
-				</Modal.Title>
-			</Modal.Header>
-			<Modal.Body>
-				<ul>
-					<li>Cancelation allow with fee</li>
-					<li>Baggage allow up to 30 kg</li>
-					<li>Exchange Before Flight (free)</li>
-					<li>Exchange After Flight (with fee $100)</li>
-					<li>Refund Before Flight (with fee $90)</li>
-				</ul>
-			</Modal.Body>
-		</Modal>
-	)
-
-	const FlightInfo = ({route, airline}) => (
-		<Row className='mt-3'>
-			<Col sm={6} className={"d-flex justify-content-between align-items-center pb-3"}>
-				<div>
-					<p>{moment(route?.departure_date).format("HH:mm")}</p>
-					<p>{moment(route?.departure_date).format("DD MMM")}</p>
-					<p>{route.departure_city_code} - {route.departure_city_name}</p>
-					<p>{route.departure_airport_name}</p>
-					<p>{route.departure_terminal}</p>
-				</div>
-				<div className='flight-line align-center text-center'>
-					<p>{route.mileage} miles</p>
-					<div className='links mb-3'>
-						<i class="fas fa-plane plane-ic"></i>
-					</div>
-					<p>{diff_minutes(new Date(route.departure_date), new Date(route.arrival_date))}</p>
-				</div>
-				<div>
-				<p>{moment(route?.arrival_date).format("HH:mm")}</p>
-					<p>{moment(route?.arrival_date).format("DD MMM")}</p>
-					<p>{route.arrival_city_code} - {route.arrival_city_name}</p>
-					<p>{route.arrival_airport_name}</p>
-					<p>{route.arrival_terminal}</p>
-				</div>
-			</Col>
-			<Col sm={6}>
-				<Row>
-					<Col sm={6} className={"d-flex align-items-start"}>
-						<img src={airline.airline_logo} width={20}/>
-						<div>
-							<p>{airline.airline_name}</p>
-							<p>{route.aircraft_name}</p>
-							<p>{route.cabin_type_name} ({route.cabin_type_code})</p>
-						</div>
-						<p>{route.source_code} {route.source_number}</p>
-					</Col>
-					<Col sm={6}>
-						<div></div>
-						<ul>
-							<li>Cancelation allow with fee</li>
-							<li>Free changes</li>
-							<li>{route.no_show_fee > 0? "Fee"+route.no_show_fee :"No show fee apply"}</li>
-							<li>Baggage allow up {Flight.fare.bagage_max_kg}</li>
-						</ul>
-						<a className='small pointer' onClick={handleShow}>Fare Rules</a>
-					</Col>
-				</Row>
-			</Col>
-		</Row>
-	)
+	}, [selectedFlight])
 
 	function padTo2Digits(num) {
 		return num.toString().padStart(2, '0');
 	}
 
 	const diff_minutes = (date1, date2) => {
-		console.log(date1, date2)
 		let milliseconds = date2.getTime() - date1.getTime()
 		let seconds = Math.floor(milliseconds / 1000);
 		let minutes = Math.floor(seconds / 60);
@@ -115,7 +43,6 @@ function Passenger({handleSelectTab}) {
 	
 		minutes = minutes % 60;
 		hours = hours % 24;
-		console.log(hours, seconds, "<<<")
 	
 		return `${padTo2Digits(hours)}h ${padTo2Digits(minutes)}m`;
 	}
@@ -155,7 +82,7 @@ function Passenger({handleSelectTab}) {
 									previous_arrival_date = {new Date(route?.previous_arrival_date)}
 									departure_date = {new Date(route?.departure_date)}
 								/>}
-								<FlightInfo route={route} airline={airline}/>
+								<FlightInfo route={route} airline={airline} fare={Flight?.fare}/>
 							</div>)
 						})
 					}
@@ -164,7 +91,7 @@ function Passenger({handleSelectTab}) {
 					</div>
 				</Col>
 				<Col sm={1}>
-					<Button variant="secondary" onClick={() => handleSelectTab('select-flight')}>CHANGE</Button>
+					<Button variant="secondary" onClick={() => handleSelectTab('1')}>CHANGE</Button>
 				</Col>
 			</Row>
 		</div>
@@ -182,7 +109,11 @@ function Passenger({handleSelectTab}) {
 									<Col sm={5}>
 											<Form.Group>
 													<Form.Label>CONTACT NAME</Form.Label>
-													<Form.Control as="select">
+													<Form.Control as="select"
+														onChange={(e)=> {
+															eventKey === 1 ? setPassenger1(e.target.value) : setPassenger2(e.target.value)
+														}}
+													>
 															<option>Mrs. Sienna Bright</option>
 															<option>Ms. Marry Bright</option>
 													</Form.Control>
@@ -298,22 +229,24 @@ function Passenger({handleSelectTab}) {
 				<Button 
 				onClick={(e) => { 
 						setShowSelectSeats(true)
+						let passengers = JSON.stringify([passenger1,passenger2])
+        		passengers = encrypt(passengers)
+						localStorage.setItem("psg", passengers)
 				}}
 				className="btn-flight-select mr-3"
 				>
 						continue booking
 				</Button>
-				<Button variant="secondary" onClick={() => handleSelectTab('select-flight')}>Back</Button>
+				<Button variant="secondary" onClick={() => handleSelectTab('1')}>Back</Button>
 			</div>
 
-			<FareRulesModal/>
 			<PopupConfirmation
 				contentText={"Would you like to choose your Flight Seat?"}
 				show={showSelectSeats}
 				onClose={() => setShowSelectSeats(false)}
 				onClickYes={() => {
 					setShowSelectSeats(false)
-					handleSelectTab('select-seats')
+					handleSelectTab('3')
 				}}
 				onClickNo={() => {
 					setShowSelectSeats(false)
@@ -327,11 +260,11 @@ function Passenger({handleSelectTab}) {
 				onClose={() => setShowAddOns(false)}
 				onClickYes={() => {
 					setShowAddOns(false)
-					handleSelectTab('add-ons')
+					handleSelectTab('4')
 				}}
 				onClickNo={() => {
 					setShowAddOns(false)
-					handleSelectTab('review')
+					handleSelectTab('5')
 				}}
 			/>
     </div>
