@@ -62,7 +62,7 @@ deploy_testing:
   script:
     - sed -i "s/{API_VERSION}/$(date +%Y%m%d%H%M%S)/g" kubernetes-deploy-dev.yml
     - sed -i "s/{SECRET}/${DOCKER_SECRET}/g" kubernetes-deploy-dev.yml
-    - kubectl --kubeconfig="$K8S_DO_SECRET" apply -f kubernetes-deploy-dev.yml
+    - kubectl --kubeconfig="$K8S_DO_SECRET" --v=9 apply -f kubernetes-deploy-dev.yml 
   needs: ["release"]
   only:
     refs:
