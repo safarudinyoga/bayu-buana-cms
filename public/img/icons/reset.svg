@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="30" height="30" viewBox="0 0 60 60" align='center'>
+  <g id="refresh_icon" data-name="refresh icon" transform="translate(12 9)">
+    <g id="Icon_feather-refresh-cw" data-name="Icon feather-refresh-cw" transform="translate(7 9)">
+      <path id="Path_263" data-name="Path 263" d="M31.231,6v6.226H25.5" transform="translate(-10.218 -4.965)" fill="none" stroke="#1E83DC" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <path id="Path_264" data-name="Path 264" d="M1.5,27.226V21H7.231" transform="translate(-1.5 -9.588)" fill="none" stroke="#1E83DC" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <path id="Path_265" data-name="Path 265" d="M3.9,10.727A8.879,8.879,0,0,1,10.1,4.734,8.151,8.151,0,0,1,18.081,7.24l4.432,4.524M1.5,15.915,5.932,20.44a8.151,8.151,0,0,0,7.977,2.507,8.879,8.879,0,0,0,6.207-5.993" transform="translate(-1.5 -4.503)" fill="none" stroke="#1E83DC" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+    </g>
+  </g>
+</svg>

@@ -28,8 +28,9 @@ const AncillaryFee = ({
   })
 
   const [key, setKey] = useState('domestic')
-  const [params, setParams] = useState({
+  const [paramsFlight, setParamsFlight] = useState({
     title: "Ancillary Fee",
+    isCheckbox: false,
     showAdvancedOptions: false,
     responsiveTablet: true,
     isHidePrintLogo: true,
@@ -52,8 +53,48 @@ const AncillaryFee = ({
     emptyTable: "No Corporate Fare found",
   })
 
-  const onReset = () => {
-    setParams({...params, filters: []})
+  const [paramsHotel, setParamsHotel] = useState({
+    title: "Ancillary Fee",
+    isCheckbox: false,
+    showAdvancedOptions: false,
+    responsiveTablet: true,
+    isHidePrintLogo: true,
+    isHideSearch: true,
+    isHideDownloadLogo: true,
+    isShowColumnAction: false,
+    hideCreate: true,
+    baseRoute: "/master/manage-corporate/form",
+    endpoint: "/master/ancillary-fee",
+    columns: [
+      {
+        title: "Fee Type",
+        data: ""
+      },
+      {
+        title: "Processing Fee",
+        data: ""
+      },
+    ],
+    emptyTable: "No Corporate Fare found",
+  })
+
+  const handleReset = (type) => {
+    switch (type) {
+      case 'flight':
+        setParamsFlight({...paramsFlight, filters: []})
+        break;
+
+      case 'hotel':
+        setParamsHotel({...paramsHotel, filters: []})
+        break;
+
+      // case 'other':
+      //   setparamsOther({...paramsOther, filters: []})
+      //   break;
+
+      default:
+        break;
+    }
   }
 
   const Domestic = () => (
@@ -126,6 +167,39 @@ const AncillaryFee = ({
           <Card.Text className='mb-0'>/Room</Card.Text>
         </div>
       </div>
+      <div className='divider mb-4 mt-4' />
+      <Card.Text className='mb-2 pl-1 mt-4'>Hotel Refund Fee</Card.Text>
+      <div className='pl-5'>
+        <Card.Text className='mb-2'>Percentage</Card.Text>
+        <div className='d-flex align-items-center justify-content-start'>
+          <Form.Control
+            type='text'
+            minLength={1}
+            maxLength={16}
+            placeholder=''
+            style={{ width: '50px', margin: '0 10px 0 0' }}
+          />
+          <Card.Text className='m-0 mr-2'>%</Card.Text>
+          <Card.Text className='m-0'>Include Taxes</Card.Text>
+        </div>
+      </div>
+      <div className='divider mb-4 mt-4' />
+      <Card.Text className='mb-2 pl-1 mt-4'>Non-GDS Hotel Booking Process Fee</Card.Text>
+      <div className='pl-5'>
+        <Card.Text className='mb-2'>Fixed Amount</Card.Text>
+        <div className='d-flex align-items-center justify-content-start'>
+          <Card.Text className='uppercase mb-0'>idr</Card.Text>
+          <Form.Control
+            type='text'
+            minLength={1}
+            maxLength={16}
+            placeholder=''
+            style={{ width: '120px', margin: '0 11px' }}
+          />
+          <Card.Text className='mb-0'>/Room</Card.Text>
+        </div>
+      </div>
+      <div className='divider mb-4 mt-4' />
     </>
   )
 
@@ -164,11 +238,27 @@ const AncillaryFee = ({
     },
   ]
 
+  const [isFieldSelected, setisFieldSelected] = useState({
+    flight: {
+      key: '',
+      isSelected: false
+    },
+    hotel: {
+      key: '',
+      isSelected: false
+    },
+    other: {
+      key: '',
+      isSelected: true
+    }
+  })
+
+
   return (
     <Form onSubmit={handleSubmit}>
       <Card style={{marginBotton: 0}}>
         <Card.Body>
-          {isMobile ? "" : <h3 className="card-heading">Ancillary Fee</h3>}
+          <h3 className="card-heading">Ancillary Fee</h3>
           <div className='ancillary_fee'>
             <div className='wrapper_header'>
               <Card.Text className='uppercase margin-0'>
@@ -182,21 +272,28 @@ const AncillaryFee = ({
                   className='select'
                   options={[
                     {
-                      value: 'silver',
-                      label: 'label'
+                      value: 'custom',
+                      label: 'Custom'
                     },
                     {
-                      value: 'silver',
-                      label: 'label'
+                      value: 'selected',
+                      label: 'Selected'
                     },
                   ]}
+                  onChange={(selected) => setisFieldSelected({
+                    ...isFieldSelected,
+                    flight: {
+                      key: selected.value,
+                      isSelected: true
+                    }
+                  })}
                 />
               </div>
             </div>
             <div className='divider mb-2 mt-2' />
-            <div className='mb-3'>
-              <BbDataTable {...params} onReset={onReset} />
-            </div>
+            {isFieldSelected.flight.isSelected && isFieldSelected.flight.key === 'selected' && <div className='mb-3'>
+              <BbDataTable {...paramsFlight} onReset={() => handleReset('flight')} />
+            </div>}
             <div className='wrapper_header'>
               <Card.Text className='uppercase margin-0'>
                 Hotel
@@ -209,19 +306,29 @@ const AncillaryFee = ({
                   className='select'
                   options={[
                     {
-                      value: 'silver',
-                      label: 'label'
+                      value: 'custom',
+                      label: 'Custom'
                     },
                     {
-                      value: 'silver',
-                      label: 'label'
+                      value: 'selected',
+                      label: 'Selected'
                     },
                   ]}
+                  onChange={(selected) => setisFieldSelected({
+                    ...isFieldSelected,
+                    hotel: {
+                      key: selected.value,
+                      isSelected: true
+                    }
+                  })}
                 />
               </div>
             </div>
-            <div className='divider mb-4 mt-2' />
-            <div className='card mt-4'>
+            <div className='divider mb-2 mt-2' />
+            {isFieldSelected.hotel.isSelected && isFieldSelected.hotel.key === 'selected' && <div className='mb-3'>
+              <BbDataTable {...paramsHotel} onReset={() => handleReset('hotel')} />
+            </div>}
+            {isFieldSelected.hotel.isSelected && isFieldSelected.hotel.key === 'custom' && <div className='card mt-4'>
               <Tabs
                 id='ancillary-fee'
                 activeKey={key}
@@ -245,7 +352,7 @@ const AncillaryFee = ({
                   </TabPane>
                 )}
               </Tabs>
-            </div>
+            </div>}
             <div className='wrapper_header'>
               <Card.Text className='uppercase margin-0'>
                 Other
@@ -258,18 +365,18 @@ const AncillaryFee = ({
                   className='select'
                   options={[
                     {
-                      value: 'silver',
-                      label: 'label'
+                      value: 'custom',
+                      label: 'Custom'
                     },
                     {
-                      value: 'silver',
-                      label: 'label'
+                      value: 'selected',
+                      label: 'Selected'
                     },
                   ]}
                 />
               </div>
             </div>
-            <div className='divider mb-4 mt-2' />
+            <div className='divider mb-2 mt-2' />
           </div>
         </Card.Body>
       </Card>

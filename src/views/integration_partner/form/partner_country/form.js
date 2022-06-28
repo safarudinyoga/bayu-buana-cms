@@ -40,10 +40,14 @@ function ExchangeRateCreate(props) {
                 let res = await API.get(endpoint + "/" + id + "/countries/" + formId);
                 setFormValues({
                     ...res.data,
+<<<<<<< HEAD
                     country_id : _.isEmpty(res.data.country) ? '' : {
                         value: res.data.country.id,
                         label: res.data.country.country_name,
                       },
+=======
+                    country_id: _.isEmpty(res.data.country_id),
+>>>>>>> 2ab8846167213bfff9c7902b34e82b2d3619d18e
                     country_name:res.data.country_name,
                     nationality: res.data.nationality,
                 });
