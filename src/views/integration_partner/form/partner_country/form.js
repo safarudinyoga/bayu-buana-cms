@@ -4,6 +4,7 @@ import { Form, Button } from "react-bootstrap";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import Api from "config/api";
+import _ from "lodash"
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom"
 import { setAlert, setCreateModal, setModalTitle } from "redux/ui-store";
@@ -39,7 +40,10 @@ function ExchangeRateCreate(props) {
                 let res = await API.get(endpoint + "/" + id + "/countries/" + formId);
                 setFormValues({
                     ...res.data,
-                    country_id: res.data.country_id,
+                    country_id : _.isEmpty(res.data.country) ? '' : {
+                        value: res.data.country.id,
+                        label: res.data.country.country_name,
+                      },
                     country_name:res.data.country_name,
                     nationality: res.data.nationality,
                 });
@@ -70,11 +74,13 @@ function ExchangeRateCreate(props) {
 
     const duplicateValue = async(fieldName, value) => {
         let filters = encodeURIComponent(JSON.stringify([[fieldName,"=",value],["AND"],["integration_partner_id",id],["AND"],["status",1]]))
-        let res = await API.get(endpoint + "?" + `filters=${filters}`)
-        let sameId = res.data.items.find((v) => v.id === id)
-        if(!sameId) return res.data.items.length === 0 
-
-        return true
+        let res = await API.get(endpoint + "/" + id + "/countries?" + `filters=${filters}`)
+    
+        if(countriesId){
+          return res.data.items.length === 0 || value === formValues[fieldName] || formValues[fieldName].value
+        } else {
+          return res.data.items.length === 0
+        }
     }
 
     Yup.addMethod(Yup.object, 'uniqueValueObject', function (fieldName, message) {
@@ -92,7 +98,7 @@ function ExchangeRateCreate(props) {
     })
 
     const validationSchema = Yup.object().shape({
-        country: Yup.object()
+        country_id: Yup.object()
             .required("Country is required.")
             .uniqueValueObject("country_id","Country already exists"),
         country_code: Yup.string()
@@ -108,7 +114,7 @@ function ExchangeRateCreate(props) {
     const onSubmit = async (values, a) => {
         try {
             let form = {
-                country_id: values.country.value,
+                country_id: values.country_id.value,
                 country_name: values.country_name,
                 country_code: values.country_code,
                 nationality: values.nationality,
@@ -154,12 +160,12 @@ function ExchangeRateCreate(props) {
                         control="selectAsync"
                         required={isView ? "" : "label-required"}
                         label="Country"
-                        name="country"
+                        name="country_id"
                         placeholder={"Please choose"}
                         url={`master/countries`}
                         fieldName={"country_name"}
                         onChange={(v) => {
-                          setFieldValue("country", v)
+                          setFieldValue("country_id", v)
                         }}
                         style={{ maxWidth: 250 }}
                         components={

@@ -42,6 +42,7 @@ export default function IntegrationPartnerCurrenciesTable() {
     searchText: "Search",
     isOpenNewTab: false,
     showModalHeader: false,
+    customSort:["sort"]
   }
   return (
     <Card>
