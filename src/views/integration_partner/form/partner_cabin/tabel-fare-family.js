@@ -1,7 +1,7 @@
 import BBDataTable from "components/table/bb-data-table"
 import { Card} from "react-bootstrap"
 import React, { useState } from 'react'
-import DeleteModal from "./form/form-delete"
+import FareFamilyModal from "./form/form-fare-family"
 
 
 
@@ -25,7 +25,7 @@ export default function IntegrationPartnerCabinTypesTable(props) {
     columns: [
       {
         title: "Fare Family",
-        data: "fare_type_id",
+        data: "fare_type.fare_type_name",
 
       },
       {
@@ -37,14 +37,14 @@ export default function IntegrationPartnerCabinTypesTable(props) {
     emptyTable: "No Partner Fare Family found",
     customSort:['fare_type_id'],
     isOpenNewTab: false,
-    hideDetail: true,
     btnDownload: ".buttons-csv",
     module:"fare-types",
     recordName: ["fare_type_name"],
+    createOnModal: true,
   })
 
   return <>
-    <BBDataTable {...params} onReset={onReset} modalContent={DeleteModal} />
+    <BBDataTable {...params} onReset={onReset} modalContent={FareFamilyModal} />
   </>
 
 
