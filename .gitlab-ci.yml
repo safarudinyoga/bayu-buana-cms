@@ -68,6 +68,8 @@ deploy_testing:
     refs:
       - master
   when: manual
+  tags:
+    - ciputat01
 
 deploy_staging:
   stage: "deploy"
