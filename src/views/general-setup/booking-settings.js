@@ -1,6 +1,8 @@
-import React from 'react'
+import React, {useState} from 'react'
 import removeIcon from "assets/icons/remove.svg"
 import { Form, Button} from "react-bootstrap"
+import { Formik } from "formik"
+import * as Yup from "yup"
 // import Form from "./form";
 
 export default function BookingSetting() {
@@ -19,48 +21,11 @@ export default function BookingSetting() {
       paddingLeft: 20
   };
 
-  const data = [
+const [countId, setCountId] = useState(1)
+
+const [afterOfficeHoursData, setAfterOfficeHoursData] = useState([
     {
-        day: [
-            {
-                label: "Mon",
-                value: true,
-            },
-            {
-                label: "Tue",
-                value: true,
-            },
-            {
-                label: "Wed",
-                value: true,
-            },
-            {
-                label: "Thu",
-                value: true,
-            },
-            {
-                label: "Fri",
-                value: true,
-            },
-            {
-                label: "Sat",
-                value: false,
-            },
-            {
-                label: "Sun",
-                value: false,
-            },
-        ],
-        time: [
-            {
-                timeStart: "17:00",
-            },
-            {
-                timeEnd: "07:00"
-            },
-        ]
-    },
-    {
+        id: 1,
         day: [
             {
                 label: "Mon",
@@ -84,11 +49,11 @@ export default function BookingSetting() {
             },
             {
                 label: "Sat",
-                value: true,
+                value: false,
             },
             {
                 label: "Sun",
-                value: true,
+                value: false,
             },
         ],
         time: [
@@ -96,14 +61,76 @@ export default function BookingSetting() {
                 timeStart: "00:00",
             },
             {
-                timeEnd: "24:00"
+                timeEnd: "00:00"
             },
         ]
-    },
-  ]
+    }
+])
+
+  const validationSchema = Yup.object().shape({
+    trips: Yup.array().of(
+      Yup.object().shape({
+        depart_time: Yup.string().required("Depart Time is required"),
+        departure_data: Yup.object().required("Departing from city or airport is required."),
+        arrival_data: Yup.object().required("Arriving to city or airport is required."),
+      })
+    )
+  })
+
+  const onSubmit = async (values, a) => {
+    console.log("Values", values)
+  }
+
+  const handleAddOfficeHour = () => {
+    setCountId(countId + 1)
+    let obj = {
+        id: countId,
+        day: [
+            {
+                label: "Mon",
+                value: false,
+            },
+            {
+                label: "Tue",
+                value: false,
+            },
+            {
+                label: "Wed",
+                value: false,
+            },
+            {
+                label: "Thu",
+                value: false,
+            },
+            {
+                label: "Fri",
+                value: false,
+            },
+            {
+                label: "Sat",
+                value: false,
+            },
+            {
+                label: "Sun",
+                value: false,
+            },
+        ],
+        time: [
+            {
+                timeStart: 0
+            },
+            {
+                timeEnd: 0
+            },
+        ]
+    };
+    setAfterOfficeHoursData([...afterOfficeHoursData, obj])
+};
 
   return (
-      <div className="">
+      <Formik initialValues={afterOfficeHoursData} onSubmit={onSubmit} validationSchem={validationSchema} >
+        {({setFieldValue, values, handleSubmit}) =>(
+      <Form onSsubmit={handleSubmit} className="">
         <div className="border" style={borderFeeTax}>
             <h1 style={titleText}>Booking Settings</h1>
             <hr />
@@ -117,6 +144,19 @@ export default function BookingSetting() {
                     <div className="row">
                         <div className="border" style={{width: 60, height: 34, borderRadius: 8,}} >
                             <p style={{textAlign: 'end', width: 45, paddingTop: 2}} >180</p>
+                            <Form.Control 
+                                type="text"
+                                minLength={0}
+                                maxLength={4}
+                                onChange={(value) => {
+                                    let pattern = /^\d+$/
+                                    if (pattern.text(value.target.value)) {
+                                        if (value.target.value <= 9999) {
+                                            setFieldValue("ticketingTimeLimitOffset", value.target.value)
+                                        }
+                                    }
+                                }}
+                            />
                         </div>
                         <p style={{paddingLeft: 5, paddingTop: 2}}>Minutes</p>
                     </div>
@@ -128,7 +168,7 @@ export default function BookingSetting() {
                     </div>
                     <div>
                         {
-                            data.map((el, idx) => {
+                            afterOfficeHoursData.map((el, idx) => {
                                 return (
                                     <div key={idx} className="row" style={{borderBottom: '1px solid #D3D3D3', marginBottom: 10}} >
                                         {
@@ -182,27 +222,30 @@ export default function BookingSetting() {
                                 )
                             })
                         }
-                        <p style={{color: '#1103C4', fontSize: 14, textAlign: 'end'}}>Add After Office Hours</p>
+                        {afterOfficeHoursData.id}
+                        <p style={{color: '#1103C4', fontSize: 14, textAlign: 'end'}} onClick={handleAddOfficeHour}>Add After Office Hours</p>
+                    </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        <div className="row" style={{marginTop: 10}}>
-          <Button
-            variant="primary"
-            type="submit"
-            // disabled={isSubmitting || !dirty}
-            style={{ marginRight: 15, marginLeft: 10 }}
-          >
-            SAVE & NEXT
-          </Button>
-          <Button
-            variant="secondary"
-            // onClick={() => props.history.push(props.backUrl)}
-          >
-            CANCEL
-          </Button>
-        </div>
-      </div>
+                <div className="row" style={{marginTop: 10}}>
+                <Button
+                    variant="primary"
+                    type="submit"
+                    // disabled={isSubmitting || !dirty}
+                    style={{ marginRight: 15, marginLeft: 10 }}
+                >
+                    SAVE & NEXT
+                </Button>
+                <Button
+                    variant="secondary"
+                    // onClick={() => props.history.push(props.backUrl)}
+                >
+                    CANCEL
+                </Button>
+                </div>
+            </Form>
+            )}
+    </Formik>
   )
 }
