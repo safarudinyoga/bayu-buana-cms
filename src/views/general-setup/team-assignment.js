@@ -21,7 +21,7 @@ const TravelAdvice = (props) => {
     isHideDownloadLogo: true,
     title: "Team Assignment",
     titleModal: "Team Assignment",
-    baseRoute: "/master/general-team-assignment/form",
+    baseRoute: "/master/configurations/team-assignments",
     endpoint: "",
     deleteEndpoint: "",
     columns: [
