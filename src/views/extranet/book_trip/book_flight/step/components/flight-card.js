@@ -170,8 +170,6 @@ function FlightCard({data, handleSelectTab, tripType, viewBy}) {
 		handleSelectTab("2")
 	}
 
-
-  
   return (
     <Card className='flight-card'>
 			<Row style={{marginLeft: 0, marginRight:0}}>
