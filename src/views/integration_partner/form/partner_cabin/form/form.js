@@ -517,7 +517,7 @@ Yup.addMethod(Yup.string, 'uniqueValueString', function (fieldName, message) {
             }
 
 
-            {props.partnerCabinId && <TabelFareFamily partnerCabinId={props.partnerCabinId} partnerId={id} />}
+            {props.partnerCabinId && <TabelFareFamily isView={isView} partnerCabinId={props.partnerCabinId} partnerId={id} FareFamilyModal={FareFamilyModal}/>}
 
             {!props.hideButton && (
                 <div
