@@ -40,7 +40,10 @@ function ExchangeRateCreate(props) {
                 let res = await API.get(endpoint + "/" + id + "/countries/" + formId);
                 setFormValues({
                     ...res.data,
-                    country_id: _.isEmpty(res.data.country_id),
+                    country_id : _.isEmpty(res.data.country) ? '' : {
+                        value: res.data.country.id,
+                        label: res.data.country.country_name,
+                      },
                     country_name:res.data.country_name,
                     nationality: res.data.nationality,
                 });
@@ -71,11 +74,13 @@ function ExchangeRateCreate(props) {
 
     const duplicateValue = async(fieldName, value) => {
         let filters = encodeURIComponent(JSON.stringify([[fieldName,"=",value],["AND"],["integration_partner_id",id],["AND"],["status",1]]))
-        let res = await API.get(endpoint + "?" + `filters=${filters}`)
-        let sameId = res.data.items.find((v) => v.id === id)
-        if(!sameId) return res.data.items.length === 0 
-
-        return true
+        let res = await API.get(endpoint + "/" + id + "/countries?" + `filters=${filters}`)
+    
+        if(countriesId){
+          return res.data.items.length === 0 || value === formValues[fieldName] || formValues[fieldName].value
+        } else {
+          return res.data.items.length === 0
+        }
     }
 
     Yup.addMethod(Yup.object, 'uniqueValueObject', function (fieldName, message) {
