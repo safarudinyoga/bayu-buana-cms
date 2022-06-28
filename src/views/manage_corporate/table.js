@@ -63,7 +63,7 @@ export default function ManageCorporateTable() {
         render: rowStatus,
       },
     ],
-    emptyTable: "No Corporate found",
+    emptyTable: "No Corporates found",
     recordName: ["agent_corporate.corporate.corporate_code", "agent_corporate.corporate.corporate_name"],
     switchStatus: true,
     customFilterStatus: {
