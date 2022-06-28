@@ -9,6 +9,7 @@ import useQuery from "lib/query"
 
 // components & styles
 import GeneralInformation from './general-information'
+import BranchOffice from './branch-offices'
 import CorporateFare from './corporate-fare'
 import AncillaryFee from './ancillary-fee'
 import CreditLimit from './credit-limit'
@@ -16,6 +17,7 @@ import ImportDatabaseEmployee from "views/manage_corporate/form/import-database-
 import InvoiceSettings from "views/manage_corporate/form/invoice-settings"
 import MarkUp from "views/manage_corporate/form/mark-up"
 import ServiceFee from "views/manage_corporate/form/service-fee"
+import SystemAdministrator from "views/manage_corporate/form/system-administrator"
 import Api from "config/api"
 import '../manage_corporate.css'
 
@@ -43,7 +45,7 @@ const ManageCorporateForm = ({ match }) => {
   const isView = useQuery().get("action") === "view"
 
   // const [tabKey, setTabKey] = useState("general-information")
-  const [tabKey, setTabKey] = useState("ancillary-fee")
+  const [tabKey, setTabKey] = useState("system-administrator")
   const [data, setData] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
 
@@ -111,6 +113,14 @@ const ManageCorporateForm = ({ match }) => {
                       <div>
                         <ReactSVG src="/img/icons/corporate-general-information.svg" />
                         <span>General Information</span>
+                      </div>
+                    </Nav.Link>
+                  </Nav.Item>
+                  <Nav.Item>
+                    <Nav.Link eventKey="branch-office">
+                      <div>
+                        <ReactSVG src="/img/icons/corporate-branch-office.svg" />
+                        <span>Branch Offices</span>
                       </div>
                     </Nav.Link>
                   </Nav.Item>
@@ -216,6 +226,12 @@ const ManageCorporateForm = ({ match }) => {
                 <Tab.Content>
                   <Tab.Pane eventKey="general-information">
                     <GeneralInformation data={data != null ? data.general_information : ""} />
+                  </Tab.Pane>
+                  <Tab.Pane eventKey="branch-office">
+                    <BranchOffice />
+                  </Tab.Pane>
+                  <Tab.Pane eventKey="system-administrator">
+                    <SystemAdministrator />
                   </Tab.Pane>
                   <Tab.Pane eventKey="mark-up">
                     <MarkUp />

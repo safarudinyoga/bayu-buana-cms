@@ -6,7 +6,6 @@ import DatePicker from 'react-datepicker'
 import { debounce } from 'lodash'
 import { useDispatch } from "react-redux"
 import { ReactSVG } from "react-svg"
-import reset from '../../../assets/icons/reset.svg'
 
 // components & styles
 import Select from "components/form/select"
