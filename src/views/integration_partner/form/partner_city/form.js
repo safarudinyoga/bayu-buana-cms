@@ -127,12 +127,13 @@ Yup.addMethod(Yup.string, 'uniqueValueString', function (fieldName, message) {
       }else{
           let res = await api.post(endpoint + "/" + id + "/cities", formatted);
       }
+      dispatch(setCreateModal({ show: false, id: null, disabled_form: false }));
       dispatch(
         setAlert({
             message: `Record 'Partner City Name: ${values.city_name}' has been successfully saved.`,
         })
       );
-      dispatch(setCreateModal({ show: false, id: null, disabled_form: false }));
+      
       
     } catch (e) {
       dispatch(
@@ -167,7 +168,13 @@ Yup.addMethod(Yup.string, 'uniqueValueString', function (fieldName, message) {
   console.log('formValues', formValues)
   return (
     <div>
-      <Formik initialValues={formValues || initialValues} validationSchema={validationSchema} onSubmit={onSubmit} validateOnMount enableReinitialize>
+      <Formik 
+        initialValues={formValues || initialValues} 
+        validationSchema={validationSchema} 
+        onSubmit={onSubmit} 
+        validateOnMount 
+        enableReinitialize
+      >
             {({ dirty, handleSubmit, isSubmitting, setFieldValue, handleChange, values }) => (
                 <Form onSubmit={handleSubmit} className="ml-2">
                     <FormikControl

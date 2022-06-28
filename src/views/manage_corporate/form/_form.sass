@@ -5,7 +5,7 @@
 .divider
   border: 1px solid #d3d3d3
 
-.ancillary_fee,
+.ancillary_fee
   .wrapper_header
     padding: 0 25px
     display: flex
@@ -160,21 +160,51 @@
   font-family: 'Segoe UI', sans-serif
   font-size: 15px
   color: #333
-  font-weight: 500
+  font-weight: 900
+  margin-left: 5px
+  outline: none
+  cursor: pointer
 
   &:focus, &:hover
     border: none
+    outline: none
 
 .manage_corporate_date
   width: max-content
+  height: auto
   padding-top: 0 !important
+
+  .wrapper-helper-button
+    position: absolute
+    right: 35px
+    bottom: 27px
+    display: flex
+    justify-content: flex-end
+    align-items: center
+
+    .wrapper_reset
+      display: flex
+      cursor: pointer
+      justify-content: flex-start
+      align-items: center
+
+    .reset
+      font-size: 13px
+      color: #1E83DC
+      font-weight: 400
+      margin: 0
+
+    .button_apply
+      border-radius: 6px
+      margin-left: 20px
+      padding: 8px 37px
 
   .react-datepicker
     background: #fff
     box-shadow: 0px 3px 6px #00000029
     border-radius: 8px
     border: none
-    padding: 20px 15px 25px
+    padding: 20px 15px 70px
 
     .react-datepicker__triangle
       &::after,&::before
@@ -197,7 +227,7 @@
         font-family: 'Segoe UI', sans-serif
         font-size: 15px
         color: #333
-        font-weight: 500
+        font-weight: 900
         text-transform: uppercase
 
       .react-datepicker__day-names
@@ -218,6 +248,13 @@
     .react-datepicker__day--today
       font-weight: 900
       color: #000
+      background-color: unset
+
+    .react-datepicker__day--selected
+      color: #fff !important
+
+    .react-datepicker__day--in-selecting-range
+      background-color: rgba(33, 107, 165, 0.5) !important
 
     .react-datepicker__day--range-start, .react-datepicker__day--range-end
       background-color: #0088FF

@@ -38,17 +38,17 @@ const Currencies = (props) => {
 }
 
 Yup.addMethod(Yup.object, 'uniqueValueObject', function (fieldName, message) {
-    return this.test('unique', message, function(field) {
-        if(field) return duplicateValue(fieldName, field.value)
-        return true
-    })
+  return this.test('unique', message, function(field) {
+      if(field) return duplicateValue(fieldName, field.value)
+      return true
+  })
 })
 
 Yup.addMethod(Yup.string, 'uniqueValueString', function (fieldName, message) {
-    return this.test('unique', message, function(field) {
-        if(field) return duplicateValue(fieldName, field)
-        return true
-    })
+  return this.test('unique', message, function(field) {
+      if(field) return duplicateValue(fieldName, field)
+      return true
+  })
 })
   // Initialize form
   const initialValues = {
@@ -152,7 +152,13 @@ Yup.addMethod(Yup.string, 'uniqueValueString', function (fieldName, message) {
   console.log('formValues', formValues)
   return (
     <div>
-      <Formik initialValues={formValues || initialValues} validationSchema={validationSchema} onSubmit={onSubmit} validateOnMount enableReinitialize>
+      <Formik 
+        initialValues={formValues || initialValues} 
+        validationSchema={validationSchema} 
+        onSubmit={onSubmit} 
+        validateOnMount 
+        enableReinitialize
+      >
             {({ dirty, handleSubmit, isSubmitting, setFieldValue, handleChange, values }) => (
                 <Form onSubmit={handleSubmit} className="ml-2">
                     <FormikControl
@@ -190,7 +196,7 @@ Yup.addMethod(Yup.string, 'uniqueValueString', function (fieldName, message) {
                         onChange={(e) => {
                             setFieldValue("currency_code", e.target.value);
                         }}
-                        maxLength={36}
+                        maxLength={3 }
                     />
 
                     <FormikControl
