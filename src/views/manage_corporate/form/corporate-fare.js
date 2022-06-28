@@ -34,7 +34,7 @@ const CorporateFare = ({
     isHidePrintLogo: true,
     isHideDownloadLogo: true,
     isShowColumnAction: false,
-    hideCreate: true,
+    isCheckbox: false,
     baseRoute: "/master/manage-corporate/form",
     endpoint: "/master/corporate-fare",
     columns: [
