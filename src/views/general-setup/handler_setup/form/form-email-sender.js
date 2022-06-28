@@ -111,7 +111,7 @@ function FormEmailSender(props) {
     <>
       {" "}
       <div className="mb-5">
-        <p className="modals-header mt-3">add email receipt</p>
+        <p className="modals-header mt-3">Edit Email Sender</p>
       </div>
       <Formik
         validateOnMount
