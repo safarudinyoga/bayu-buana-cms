@@ -391,6 +391,13 @@ export default function EmailReceiptTable() {
     recordName: ["message_type_name"],
     btnDownload: ".buttons-csv",
     module: "handler-setup",
+    showInfoDelete: true,
+    infoDelete: [
+      {
+        title: `Email Recipient for 'Message Type`,
+        recordName: "message_type.message_type_name",
+      },
+    ],
   }
   return (
     <>

@@ -6,6 +6,7 @@ import { setUIParams } from "redux/ui-store"
 import { useWindowSize } from "rooks"
 
 import FormInputSelectAjax from "components/form/input-select-ajax"
+import moment from "moment"
 
 export default function EmployeeTable() {
   let dispatch = useDispatch()
@@ -251,11 +252,11 @@ export default function EmployeeTable() {
       {
         title: "Last Login",
         data: "last_login",
-        render: (data) => {
+        render: (data, type) => {
           if (data === null) {
             return ""
           } else {
-            return data
+            return moment(data).format("DD MMMM YYYY")
           }
         },
       },
