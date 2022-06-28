@@ -87,7 +87,7 @@ function IdentityRuleCreate(props) {
             dispatch(setCreateModal({ show: false, id: null, disabled_form: false }));
             dispatch(
                 setAlert({
-                    message: `Record 'From Identity Rule: ${form.identity_code} - ${form.identity_name}' has been successfully saved.`,
+                    message: `Record 'From Identity Rule has been successfully saved.`,
                 })
             );
         } catch (e) {
@@ -189,6 +189,11 @@ function IdentityRuleCreate(props) {
                             control="input"
                             size={formTextSize}
                             label="Next Number"
+                            onKeyPress={(event) => {
+                                if (!/[0-9]/.test(event.key)) {
+                                  event.preventDefault();
+                                }
+                              }}
                             name="next_number"
                             style={{ maxWidth: 250 }}
                             disabled={isView || loading}
@@ -200,7 +205,7 @@ function IdentityRuleCreate(props) {
                     
                     <FormikControl
                         control="switch"
-                        required="label-required"
+                        required={isView ? "" : "label-required"}
                         className={"identity-rule-switch"}
                         label="Reset numbers periodically?"
                         name="is_reset"
