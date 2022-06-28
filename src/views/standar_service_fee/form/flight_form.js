@@ -154,27 +154,7 @@ const ModalOverrideServiceFee = (props) => {
               Add Flight Override Service Fee
             </p>
           </div>
-          <div className="col-6">
-            <FormInputSelectAjax
-              // label="Parent Division"
-              // value={form.parent_division_id}
-              name="parent_division_id"
-              endpoint="/master/corporate-divisions"
-              column="division_name"
-              // filter={
-              //   formId
-              //     ? `[["id","!=","${formId}"],["and"],[["parent_division_id","!=","${formId}"],["or"],["parent_division_id","is",null]]]`
-              //     : ``
-              // }
-              // onChange={(e) =>
-              //   setForm({ ...form, parent_division_id: e.target.value || null })
-              // }
-              data={parentDivisionTypeData}
-              // disabled={isView || loading}
-              type="select"
-              placeholder="Select Parent Division"
-            />
-          </div>
+
           <Formik
             validateOnMount
             enableReinitialize
@@ -197,10 +177,10 @@ const ModalOverrideServiceFee = (props) => {
             }) => (
               <Form onSubmit={handleSubmit}>
                 <Form.Group as={Row} className="mb-3">
-                  <Form.Label column md={3} sm={3} lg={3}>
+                  {/* <Form.Label column md={3} sm={3} lg={3}>
                     Destination
                     <span className="form-label-required">*</span>
-                  </Form.Label>
+                  </Form.Label> */}
 
                   <Col md={9} sm={9} lg={9}>
                     {/* <FastField name="destination">
@@ -234,8 +214,8 @@ const ModalOverrideServiceFee = (props) => {
                       )}
                     </FastField> */}
                     <FormInputSelectAjax
-                      // label="Parent Division"
-                      // value={form.parent_division_id}
+                      label="Destination"
+                      value={initialValues.destination}
                       name="parent_division_id"
                       endpoint="/master/corporate-divisions"
                       column="division_name"
@@ -250,7 +230,7 @@ const ModalOverrideServiceFee = (props) => {
                       data={parentDivisionTypeData}
                       // disabled={isView || loading}
                       type="select"
-                      placeholder="Select Parent Division"
+                      placeholder="Destination"
                     />
                   </Col>
                 </Form.Group>

@@ -132,7 +132,7 @@ function FormEmailReceipt(props) {
     <>
       {" "}
       <div className="mb-5">
-        <p className="modals-header mt-3">add email receipt</p>
+        <p className="modals-header mt-3">Edit Email Recipient</p>
       </div>
       <Formik
         validateOnMount
@@ -283,14 +283,6 @@ function FormEmailReceipt(props) {
                         </>
                       ))
                     : ""}
-                  <Button
-                    onClick={() =>
-                      arrayHelpers.push({ sender_name: "", sender_email: "" })
-                    }
-                    className="my-4"
-                  >
-                    Add New
-                  </Button>
                 </>
               )}
             />
