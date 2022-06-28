@@ -96,7 +96,7 @@ const EmailSenderModal = (props) => {
           <div className="modal-button-close" onClick={props.onHide}>
             <ReactSVG src="/img/icons/close.svg" />
           </div>
-          <p className="modals-header mt-3">add email receipt</p>
+          <p className="modals-header mt-3">New Email Sender</p>
         </div>
         <Formik
           validateOnMount
@@ -320,6 +320,13 @@ function EmailSenderTable() {
     recordName: ["from_display", "from_email"],
     btnDownload: ".buttons-csv",
     module: "handler-setup",
+    showInfoDelete: true,
+    infoDelete: [
+      {
+        title: `Email Sender for 'Message Type`,
+        recordName: "message_type.message_type_name",
+      },
+    ],
   }
   return (
     <>
