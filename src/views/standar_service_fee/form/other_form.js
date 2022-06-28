@@ -228,7 +228,7 @@ const OtherModal = (props) => {
                     amountSuffixSelections={[
                       {
                         label: "/Unit",
-                        value: "de62950d-fbab-4e39-bd90-c2b6687c6b37",
+                        value: "4f1f8b74-673f-42ae-b7a8-577b0121cd3f",
                       },
                       {
                         label: "/Transaction",

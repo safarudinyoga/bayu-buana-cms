@@ -235,7 +235,7 @@ function HotelPolicy(props) {
         setFieldTouched,
       }) => (
         <Form onSubmit={handleSubmit} className="ml-2">
-          <div className="row">
+          <div className="col">
             <div className="d-flex">
               <div>
                 Destination<span className="form-label-required">*</span>
@@ -277,11 +277,13 @@ function HotelPolicy(props) {
               </FastField>
             </div>
             <div className="row align-item-center">
-              <div>
+              <div className="d-flex">
                 <ReactSVG src="/img/icons/price.svg" className="price-icon" />
-                <h5>PRICE</h5>
-                <h6>Maximum Nightly Rate (IDR)</h6>
-                <span>(Include Tax & Service charge)</span>
+                <div className="d-flex flex-column hotel-price">
+                  <h5>PRICE</h5>
+                  <h6>Maximum Nightly Rate (IDR)</h6>
+                  <span>(Include Tax & Service charge)</span>
+                </div>
               </div>
               <FormInputControl
                 required={false}

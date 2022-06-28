@@ -14,6 +14,7 @@ import { FeeTabs } from "./form//fee_tabs"
 import { useSnackbar } from "react-simple-snackbar"
 import useQuery from "lib/query"
 import { ReactSVG } from "react-svg"
+import "./style.sass"
 
 const endpoint = "/master/processing-fee-categories"
 const endpointFee = "/master/agent-processing-fee-categories"
@@ -524,7 +525,7 @@ const TaxFee = (props) => {
                 <div style={{ padding: "0 2px 2px" }}>
                 <h3 className="card-heading">Tax Fee</h3>
                 <div className="d-md-flex flex-row bd-highlight card-heading">&emsp;
-                    <ReactSVG className="tabs-icon" src="/img/icons/tabs/plane.svg" />
+                    <ReactSVG className="tabs-icon icon-tax-fee" src="/img/icons/tabs/plane.svg" />
                     <span className="ml-md-2 tabs-text">FLIGHT</span>
                 </div>
                   <FeeTabs
@@ -596,7 +597,7 @@ const TaxFee = (props) => {
               <Card.Body>
                 <div style={{ padding: "0 2px 2px" }}>
                   <div className="d-md-flex flex-row bd-highlight card-heading">&emsp;
-                        <ReactSVG className="tabs-icon" src="/img/icons/tabs/hotel.svg" />
+                        <ReactSVG className="tabs-icon icon-tax-fee" src="/img/icons/tabs/hotel.svg" />
                         <span className="ml-md-2 tabs-text">HOTEL</span>
                   </div>
                   <FeeTabs
@@ -662,7 +663,7 @@ const TaxFee = (props) => {
               <Card.Body>
                 <div style={{ padding: "0 2px 2px" }}>
                   <div className="d-md-flex flex-row bd-highlight card-heading">&emsp;
-                    <ReactSVG className="tabs-icon" src="/img/icons/tabs/other.svg" />
+                    <ReactSVG className="tabs-icon icon-tax-fee" src="/img/icons/tabs/other.svg" />
                     <span className="ml-md-2 tabs-text">OTHER</span>
                   </div>
                   <FeeTabs

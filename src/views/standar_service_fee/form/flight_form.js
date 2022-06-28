@@ -13,6 +13,7 @@ import SelectAsync from "components/form/select-async"
 import createIcon from "assets/icons/create.svg"
 import { useDispatch } from "react-redux"
 import { setAlert, setCreateModal, setUIParams } from "redux/ui-store"
+import FormInputSelectAjax from "components/form/input-select-ajax"
 
 const backUrl = "/master/standard-service-fee"
 const endpoint = "/master/agent-service-fee-categories/1"
@@ -21,6 +22,7 @@ const endpoint = "/master/agent-service-fee-categories/1"
 const ModalOverrideServiceFee = (props) => {
   let api = new Api()
   let dispatch = useDispatch()
+  const [parentDivisionTypeData, setParentDivisionTypeData] = useState([])
 
   //get Fee tax
   const [taxTypeServiceFee, setTaxTypeServiceFee] = useState([])
@@ -119,6 +121,7 @@ const ModalOverrideServiceFee = (props) => {
       }
       let res = await api.putOrPost(endpoint, form)
       console.log(res)
+      props.handleSelectTab("flight")
       dispatch(setCreateModal({ show: false, id: null, disabled_form: false }))
       dispatch(
         setAlert({
@@ -151,6 +154,27 @@ const ModalOverrideServiceFee = (props) => {
               Add Flight Override Service Fee
             </p>
           </div>
+          <div className="col-6">
+            <FormInputSelectAjax
+              // label="Parent Division"
+              // value={form.parent_division_id}
+              name="parent_division_id"
+              endpoint="/master/corporate-divisions"
+              column="division_name"
+              // filter={
+              //   formId
+              //     ? `[["id","!=","${formId}"],["and"],[["parent_division_id","!=","${formId}"],["or"],["parent_division_id","is",null]]]`
+              //     : ``
+              // }
+              // onChange={(e) =>
+              //   setForm({ ...form, parent_division_id: e.target.value || null })
+              // }
+              data={parentDivisionTypeData}
+              // disabled={isView || loading}
+              type="select"
+              placeholder="Select Parent Division"
+            />
+          </div>
           <Formik
             validateOnMount
             enableReinitialize
@@ -177,8 +201,9 @@ const ModalOverrideServiceFee = (props) => {
                     Destination
                     <span className="form-label-required">*</span>
                   </Form.Label>
+
                   <Col md={9} sm={9} lg={9}>
-                    <FastField name="destination">
+                    {/* <FastField name="destination">
                       {({ field, form }) => (
                         <div style={{ maxWidth: 600 }}>
                           <SelectAsync
@@ -207,7 +232,26 @@ const ModalOverrideServiceFee = (props) => {
                             )}
                         </div>
                       )}
-                    </FastField>
+                    </FastField> */}
+                    <FormInputSelectAjax
+                      // label="Parent Division"
+                      // value={form.parent_division_id}
+                      name="parent_division_id"
+                      endpoint="/master/corporate-divisions"
+                      column="division_name"
+                      // filter={
+                      //   formId
+                      //     ? `[["id","!=","${formId}"],["and"],[["parent_division_id","!=","${formId}"],["or"],["parent_division_id","is",null]]]`
+                      //     : ``
+                      // }
+                      // onChange={(e) =>
+                      //   setForm({ ...form, parent_division_id: e.target.value || null })
+                      // }
+                      data={parentDivisionTypeData}
+                      // disabled={isView || loading}
+                      type="select"
+                      placeholder="Select Parent Division"
+                    />
                   </Col>
                 </Form.Group>
                 <Form.Group as={Row} className="mb-3">
@@ -425,7 +469,6 @@ const FlightForm = (props) => {
 
   const [initialForm, setInitialForm] = useState({
     service_fee_category_name: "",
-    service_fee_category_code: "",
     description: "",
     domestic_flight_service: "",
     domestic_flight_service_fee_tax_id: "",
@@ -465,7 +508,7 @@ const FlightForm = (props) => {
     domestic_flight_service_amount_type: Yup.string().when(
       "domestic_flight_service",
       {
-        is: (value) => value === "amount",
+        is: (value) => value === "charge_type",
         then: Yup.string().required(`Please select charge type.`),
       },
     ),
@@ -558,7 +601,7 @@ const FlightForm = (props) => {
         description: values.description,
         service_fee_category_name: values.service_fee_category_name,
         domestic_flight_service: {
-          charge_type: taxIdDomesticFlight,
+          currency_id: taxIdDomesticFlight,
           amount:
             values.domestic_flight_service === "amount"
               ? removeSeparator(values.domestic_flight_service_amount)
@@ -567,17 +610,16 @@ const FlightForm = (props) => {
             values.domestic_flight_service === "amount"
               ? 0
               : parseFloat(values.domestic_flight_service_percent),
-          charge_type_id:
-            values.domestic_flight_service === "amount"
+          charge_type:
+            values.domestic_flight_service_amount_type === "amount"
               ? values.domestic_flight_service_amount_type
               : "00000000-0000-0000-0000-000000000000",
-          is_tax_inclusive:
-            values.domestic_flight_service === "amount"
-              ? false
-              : values.domestic_flight_service_tax_include,
+          is_tax_inclusive: values.domestic_flight_service
+            ? false
+            : values.domestic_flight_service_tax_include,
         },
         international_flight_service: {
-          charge_type: taxIdInternationalFlight,
+          currency_id: taxIdInternationalFlight,
           amount:
             values.international_flight_service === "amount"
               ? removeSeparator(values.international_flight_service_amount)
@@ -586,8 +628,8 @@ const FlightForm = (props) => {
             values.international_flight_service === "amount"
               ? 0
               : parseFloat(values.international_flight_service_percent),
-          charge_type_id:
-            values.international_flight_service === "amount"
+          charge_type:
+            values.international_flight_service === "charge_type"
               ? values.international_flight_service_amount_type
               : "00000000-0000-0000-0000-000000000000",
           is_tax_inclusive:
