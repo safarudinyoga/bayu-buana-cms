@@ -37,7 +37,7 @@ import SelfServices from "./self-services"
         },
       ],
       emptyTable: "No Partner Credentials found",
-      recordName: ["Company/ Branch Name", "office.office_name"],
+      recordName: ["Company/ Branch Name", "corporate_group_name"],
       btnDownload: ".buttons-csv",
       module: "partner_credentials",
       searchText: "Search",
