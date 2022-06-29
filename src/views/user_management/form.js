@@ -103,17 +103,19 @@ const UserManagementForm = (props) => {
             let res = await api.get(
               `${env.API_URL}/user/user-type-users?filters=["user_account_id","=","${value.value}"]`,
             )
-
-            if (formId) {
-              return (
-                res.data.items.length === 0 ||
-                value.label === initialForm.user_account_id
-              )
-            } else {
-              return res.data.items.length === 0
+            if (res.data.items) {
+              if (formId) {
+                return (
+                  res.data.items.length === 0 ||
+                  value.label === initialForm.user_account_id
+                )
+              } else {
+                return res.data.items.length === 0
+              }
             }
+            return false
           } catch (e) {
-            console.log('e', e)
+            console.log("e", e)
             return false
           }
         },
