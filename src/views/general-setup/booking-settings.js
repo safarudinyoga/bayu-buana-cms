@@ -3,6 +3,12 @@ import removeIcon from "assets/icons/remove.svg"
 import { Form, Button} from "react-bootstrap"
 import { Formik } from "formik"
 import * as Yup from "yup"
+import DatePicker, { DateObject } from "react-multi-date-picker";
+import TimePicker from "react-multi-date-picker/plugins/time_picker";
+import { ReactSVG } from "react-svg"
+import "./style.scss"
+
+
 // import Form from "./form";
 
 export default function BookingSetting() {
@@ -21,11 +27,19 @@ export default function BookingSetting() {
       paddingLeft: 20
   };
 
+const [initialForm, setForm] = useState({
+    ticketing_time_limit_notice_period: "",
+    ticketing_time_limit_offset: "",
+    afterOfficeHoursData: {}
+})
+
 const [countId, setCountId] = useState(1)
+const [timeStart, setTimeStart] = useState('00:00');
+const [timeEnd, setTimeEnd] = useState('00:00')
 
 const [afterOfficeHoursData, setAfterOfficeHoursData] = useState([
     {
-        id: 1,
+        id: countId,
         day: [
             {
                 label: "Mon",
@@ -78,7 +92,7 @@ const [afterOfficeHoursData, setAfterOfficeHoursData] = useState([
   })
 
   const onSubmit = async (values, a) => {
-    console.log("Values", values)
+    // console.log("Values", values)
   }
 
   const handleAddOfficeHour = () => {
@@ -117,18 +131,25 @@ const [afterOfficeHoursData, setAfterOfficeHoursData] = useState([
         ],
         time: [
             {
-                timeStart: 0
+                timeStart: "00:00"
             },
             {
-                timeEnd: 0
+                timeEnd: "00:00"
             },
         ]
     };
     setAfterOfficeHoursData([...afterOfficeHoursData, obj])
+
 };
 
+const handleDeleteOfficeHour = () => {
+    setCountId(countId - 1)
+}
+
+// console.log(afterOfficeHoursData, 'cek afterOfficeHoursData')
+
   return (
-      <Formik initialValues={afterOfficeHoursData} onSubmit={onSubmit} validationSchem={validationSchema} >
+      <Formik initialValues={setForm} onSubmit={onSubmit} validationSchem={validationSchema} >
         {({setFieldValue, values, handleSubmit}) =>(
       <Form onSsubmit={handleSubmit} className="">
         <div className="border" style={borderFeeTax}>
@@ -136,23 +157,22 @@ const [afterOfficeHoursData, setAfterOfficeHoursData] = useState([
             <hr />
             <div className="row">
                 <div style={{width: 300, marginLeft: 20}}>
-                    <p>Ticketing Time Limit Offset</p>
-                    <p style={{paddingTop: 5}}>Ticketing Time Limit Notice Period</p>
-                    <p>After Office Hours</p>
+                    <div className="booking-wrapper"><p>Ticketing Time Limit Offset</p><ReactSVG src="/img/icons/info.svg" className="booking-icon-info" /></div>
+                    <div className="booking-wrapper"><p style={{paddingTop: 5}}>Ticketing Time Limit Notice Period</p><ReactSVG src="/img/icons/info.svg" className="booking-icon-info" /></div>
+                    <div className="booking-wrapper"><p>After Office Hours</p><ReactSVG src="/img/icons/info.svg" className="booking-icon-info" /></div>
                 </div>
                 <div>
                     <div className="row">
                         <div className="border" style={{width: 60, height: 34, borderRadius: 8,}} >
-                            <p style={{textAlign: 'end', width: 45, paddingTop: 2}} >180</p>
                             <Form.Control 
                                 type="text"
                                 minLength={0}
                                 maxLength={4}
-                                onChange={(value) => {
+                                onChange={(values) => {
                                     let pattern = /^\d+$/
-                                    if (pattern.text(value.target.value)) {
-                                        if (value.target.value <= 9999) {
-                                            setFieldValue("ticketingTimeLimitOffset", value.target.value)
+                                    if (pattern.text(values.target.values)) {
+                                        if (values.target.values <= 9999) {
+                                            setFieldValue("ticketingTimeLimitOffset", values.target.value)
                                         }
                                     }
                                 }}
@@ -162,10 +182,25 @@ const [afterOfficeHoursData, setAfterOfficeHoursData] = useState([
                     </div>
                     <div className="row">
                         <div className="border" style={{width: 60, height: 34, borderRadius: 8,}} >
-                            <p style={{textAlign: 'end', width: 45, paddingTop: 2}} >240</p>
+                            <Form.Control 
+                                type="text"
+                                minLength={0}
+                                maxLength={4}
+                                onInput={(value) => {
+                                    let pattern = /^\d+$/
+                                    if (pattern.text(value.target.value)) {
+                                        if (value.target.value <= 9999) {
+                                            // {console.log(value.target.value,'cek value')}
+                                            // setFieldValue("ticketingTimeLimitOffset", value.target.value)
+                                        }
+                                    }
+                                }}
+                            />
                         </div>
+
                         <p style={{paddingLeft: 5, paddingTop: 2}}>Minutes</p>
                     </div>
+                    {/* {console.log(timeStart, 'cek timeStart')} */}
                     <div>
                         {
                             afterOfficeHoursData.map((el, idx) => {
@@ -196,19 +231,33 @@ const [afterOfficeHoursData, setAfterOfficeHoursData] = useState([
                                                       {
                                                         index === 0 ?
                                                         <div style={{}}>
-                                                          <div className="border" style={{width: 60, height: 34, borderRadius: 8,}} >
-                                                              <p style={{textAlign: 'end', width: 45, paddingTop: 2}} >{item.timeStart}</p>
-                                                          </div> 
+                                                            <DatePicker
+                                                                value={timeStart}
+                                                                onChange={setTimeStart}
+                                                                format="HH:mm"
+                                                                disableDayPicker
+                                                                style={{width: 60, height: 34, borderRadius: 8, marginLeft: 10}}
+                                                                plugins={[
+                                                                    <TimePicker hideSeconds />,
+                                                                ]}
+                                                            />
                                                         </div> 
                                                         :null
                                                       }
                                                       {
                                                         index === 1 ?
-                                                        <div style={{display: 'flex'}}>
-                                                          <div className="border" style={{width: 60, height: 34, borderRadius: 8, marginLeft: 10}} >
-                                                              <p style={{textAlign: 'end', width: 45, paddingTop: 2}} >{item.timeEnd}</p>
-                                                          </div>
-                                                          <img src={removeIcon} style={{color: '#ebebeb', width: 15, height: 17, marginLeft: 10, marginTop: 6}} />
+                                                        <div style={{display:"flex"}}>
+                                                            <DatePicker
+                                                                value={timeEnd}
+                                                                onChange={setTimeEnd}
+                                                                format="HH:mm"
+                                                                disableDayPicker
+                                                                style={{width: 60, height: 34, borderRadius: 8, marginLeft: 10}}
+                                                                plugins={[
+                                                                    <TimePicker hideSeconds />,
+                                                                ]}
+                                                            />
+                                                          <img src={removeIcon} style={{color: '#ebebeb', width: 15, height: 17, marginLeft: 10, marginTop: 6}} onClick={handleDeleteOfficeHour} alt="" />
                                                         </div>
                                                          :null
                                                       }
