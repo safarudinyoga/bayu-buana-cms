@@ -2,12 +2,12 @@ import React from 'react';
 import { Editor } from "react-draft-wysiwyg"
 import {withRouter} from "react-router"
 import { stateToHTML } from "draft-js-export-html"
+import { EditorState } from 'draft-js';
 import FormInputControl from "components/form/input-control"
 
 const DataMember = (props) => {
-    console.log(props, 'props');
     const [, forceUpdate] = React.useReducer(x => x + 1, 0);
-
+    const MAX_LENGTH = 4000;
     let corporateTab = {}
     console.log(corporateTab);
     const wrapperStyle = {
@@ -145,6 +145,36 @@ const DataMember = (props) => {
         // console.log(html);
         // props.match.params.name = html
     };
+
+    const _handleBeforeInput = () => {
+        const currentContent = editorImportantNoticeState.getCurrentContent();
+        const currentContentLength = currentContent.getPlainText('').length;
+        const selectedTextLength = _getLengthOfSelectedText();
+    
+        if (currentContentLength - selectedTextLength > MAX_LENGTH - 1) {
+          console.log('you can type max ten characters');
+    
+          return 'handled';
+        }
+    }
+    
+    const _handlePastedText = (pastedText) => {
+        const currentContent = editorImportantNoticeState.getCurrentContent();
+        const currentContentLength = currentContent.getPlainText('').length;
+        const selectedTextLength = _getLengthOfSelectedText();
+    
+        if (currentContentLength + pastedText.length - selectedTextLength > MAX_LENGTH) {
+          console.log('you can type max ten characters');
+    
+          return 'handled';
+        }
+    }
+    
+    const _handleChange = (editorState) => {
+        console.log('berubah');
+        setImportantNoticeState(editorState)
+    }
+
     return (
         <div>
             {

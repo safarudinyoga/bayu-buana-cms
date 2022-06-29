@@ -1,17 +1,22 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Editor } from "react-draft-wysiwyg"
 import {withRouter} from "react-router"
 import { stateToHTML } from "draft-js-export-html"
 import FormInputControl from "components/form/input-control"
 import { useDispatch, useSelector } from 'react-redux';
+import { EditorState } from 'draft-js';
 import Hints from "assets/icons/hint.svg"
 import { setCorporateClient } from 'redux/ui-store';
 
 
 const Data = (props) => {
     console.log(props, 'props');
+    const MAX_LENGTH = 4000;
     let dispatch = useDispatch()
-    const a = useSelector((a) => a.ui.corporateClient)
+    const a = useSelector((a) => a.ui.corporateClient);
+    const [editorImportantNoticeState, setImportantNoticeState] = useState(
+        EditorState.createEmpty()
+    );
     console.log(a, '<<');
     const initialState = JSON.parse('{"entityMap":{},"blocks":[{"key":"1ljs","text":"Initializing from content state","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}]}')
     let corporateTab = {}
@@ -151,6 +156,74 @@ const Data = (props) => {
         // console.log(html);
         // props.match.params.name = html
     };
+
+    const _getLengthOfSelectedText = () => {
+        const currentSelection = editorImportantNoticeState.getSelection();
+        const isCollapsed = currentSelection.isCollapsed();
+    
+        let length = 0;
+    
+        if (!isCollapsed) {
+          const currentContent = editorImportantNoticeState.getCurrentContent();
+          const startKey = currentSelection.getStartKey();
+          const endKey = currentSelection.getEndKey();
+          const startBlock = currentContent.getBlockForKey(startKey);
+          const isStartAndEndBlockAreTheSame = startKey === endKey;
+          const startBlockTextLength = startBlock.getLength();
+          const startSelectedTextLength = startBlockTextLength - currentSelection.getStartOffset();
+          const endSelectedTextLength = currentSelection.getEndOffset();
+          const keyAfterEnd = currentContent.getKeyAfter(endKey);
+          console.log(currentSelection)
+          if (isStartAndEndBlockAreTheSame) {
+            length += currentSelection.getEndOffset() - currentSelection.getStartOffset();
+          } else {
+            let currentKey = startKey;
+    
+            while (currentKey && currentKey !== keyAfterEnd) {
+              if (currentKey === startKey) {
+                length += startSelectedTextLength + 1;
+              } else if (currentKey === endKey) {
+                length += endSelectedTextLength;
+              } else {
+                length += currentContent.getBlockForKey(currentKey).getLength() + 1;
+              }
+    
+              currentKey = currentContent.getKeyAfter(currentKey);
+            };
+          }
+        }
+    
+        return length;
+    }
+    
+    const _handleBeforeInput = () => {
+        const currentContent = editorImportantNoticeState.getCurrentContent();
+        const currentContentLength = currentContent.getPlainText('').length;
+        const selectedTextLength = _getLengthOfSelectedText();
+    
+        if (currentContentLength - selectedTextLength > MAX_LENGTH - 1) {
+          console.log('you can type max ten characters');
+    
+          return 'handled';
+        }
+    }
+    
+    const _handlePastedText = (pastedText) => {
+        const currentContent = editorImportantNoticeState.getCurrentContent();
+        const currentContentLength = currentContent.getPlainText('').length;
+        const selectedTextLength = _getLengthOfSelectedText();
+    
+        if (currentContentLength + pastedText.length - selectedTextLength > MAX_LENGTH) {
+          console.log('you can type max ten characters');
+    
+          return 'handled';
+        }
+    }
+    
+    const _handleChange = (editorState) => {
+        console.log('berubah');
+        setImportantNoticeState(editorState)
+    }
     return (
         <div>
             {
@@ -165,10 +238,14 @@ const Data = (props) => {
                             <Editor
                                 // editorState={editorState}
                                 // value="asdasda"
-                                contentState={el.code === a.name ? a.name : ""}
+                                // initialContentState="asdasddas"
+                                // contentState={"asdasda"}
                                 toolbarClassName="toolbarClassName"
                                 wrapperClassName="wrapperClassName"
                                 editorClassName="editorClassName"
+                                handleBeforeInput={_handleBeforeInput}
+                                handlePastedText={_handlePastedText}
+                                // onEditorStateChange={_handleChange}
                                 wrapperStyle={wrapperStyle}
                                 editorStyle={editorStyle} 
                                 onEditorStateChange={(editorState) => handleEditorState(editorState, el)}
