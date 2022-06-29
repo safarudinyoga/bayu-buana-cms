@@ -9,6 +9,7 @@ import useQuery from "lib/query"
 
 // components & styles
 import GeneralInformation from './general-information'
+import BranchOffice from './branch-offices'
 import CorporateFare from './corporate-fare'
 import AncillaryFee from './ancillary-fee'
 import CreditLimit from './credit-limit'
@@ -16,6 +17,7 @@ import ImportDatabaseEmployee from "views/manage_corporate/form/import-database-
 import InvoiceSettings from "views/manage_corporate/form/invoice-settings"
 import MarkUp from "views/manage_corporate/form/mark-up"
 import ServiceFee from "views/manage_corporate/form/service-fee"
+import SystemAdministrator from "views/manage_corporate/form/system-administrator"
 import Api from "config/api"
 import '../manage_corporate.css'
 
@@ -43,7 +45,7 @@ const ManageCorporateForm = ({ match }) => {
   const isView = useQuery().get("action") === "view"
 
   const [tabKey, setTabKey] = useState("general-information")
-  // const [tabKey, setTabKey] = useState("service-fee")
+  // const [tabKey, setTabKey] = useState("system-administrator")
   const [data, setData] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
 
@@ -115,7 +117,15 @@ const ManageCorporateForm = ({ match }) => {
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
-                    <Nav.Link eventKey="mark-up">
+                    <Nav.Link eventKey="branch-office">
+                      <div>
+                        <ReactSVG src="/img/icons/corporate-branch-office.svg" />
+                        <span>Branch Offices</span>
+                      </div>
+                    </Nav.Link>
+                  </Nav.Item>
+                  <Nav.Item>
+                    <Nav.Link eventKey="system-administrator">
                       <div>
                         <ReactSVG src="/img/icons/corporate-system-administrator.svg" />
                         <span>System Administrator</span>
@@ -123,7 +133,7 @@ const ManageCorporateForm = ({ match }) => {
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
-                    <Nav.Link eventKey="mark-up">
+                    <Nav.Link eventKey="setting">
                       <div>
                         <ReactSVG src="/img/icons/corporate-setting.svg" />
                         <span>Settings</span>
@@ -155,7 +165,7 @@ const ManageCorporateForm = ({ match }) => {
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
-                    <Nav.Link eventKey="ancillary-fee">
+                    <Nav.Link eventKey="assign-team">
                       <div>
                         <ReactSVG src="/img/icons/corporate-assign-team.svg" />
                         <span>Assign Team</span>
@@ -179,7 +189,7 @@ const ManageCorporateForm = ({ match }) => {
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
-                    <Nav.Link eventKey="invoice-settings">
+                    <Nav.Link eventKey="corporate-rating">
                       <div>
                         <ReactSVG src="/img/icons/corporate-corporate-rating.svg" />
                         <span>Corporate Rating</span>
@@ -195,7 +205,7 @@ const ManageCorporateForm = ({ match }) => {
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
-                    <Nav.Link eventKey="corporate-fare">
+                    <Nav.Link eventKey="upload-document">
                       <div>
                         <ReactSVG src="/img/icons/corporate-upload-document.svg" />
                         <span>Upload Document</span>
@@ -216,6 +226,12 @@ const ManageCorporateForm = ({ match }) => {
                 <Tab.Content>
                   <Tab.Pane eventKey="general-information">
                     <GeneralInformation data={data != null ? data.general_information : ""} />
+                  </Tab.Pane>
+                  <Tab.Pane eventKey="branch-office">
+                    <BranchOffice />
+                  </Tab.Pane>
+                  <Tab.Pane eventKey="system-administrator">
+                    <SystemAdministrator />
                   </Tab.Pane>
                   <Tab.Pane eventKey="mark-up">
                     <MarkUp />

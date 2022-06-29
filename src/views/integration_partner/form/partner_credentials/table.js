@@ -21,11 +21,11 @@ import SelfServices from "./self-services"
       columns: [
         {
           title: "Company/Branch Name",
-          data: "office.office_name",
+          data: "corporate_group_name",
         },
         {
           title: "Address",
-          data: "office.address_line",
+          data: "address.address_line",
         },
         {
           title: "PCC",
@@ -37,7 +37,7 @@ import SelfServices from "./self-services"
         },
       ],
       emptyTable: "No Partner Credentials found",
-      recordName: ["Company/ Branch Name", "office.office_name"],
+      recordName: ["Company/ Branch Name", "corporate_group_name"],
       btnDownload: ".buttons-csv",
       module: "partner_credentials",
       searchText: "Search",

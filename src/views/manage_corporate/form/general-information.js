@@ -6,7 +6,6 @@ import DatePicker from 'react-datepicker'
 import { debounce } from 'lodash'
 import { useDispatch } from "react-redux"
 import { ReactSVG } from "react-svg"
-import '../../../'
 
 // components & styles
 import Select from "components/form/select"
@@ -433,6 +432,9 @@ const GeneralInfomation = (props) => {
     return years
   }
 
+  const calendarStartRef= useRef(null)
+  const calendarEndRef= useRef(null)
+
   useEffect(() => {
     console.log({ values });
   }, [values])
@@ -615,6 +617,7 @@ const GeneralInfomation = (props) => {
                   <Col md={3} lg={9} className='row d-flex align-items-center'>
                     <Col lg={4}>
                       <DatePicker
+                        ref={calendarStartRef}
                         className="form-control text-center"
                         dateFormat="dd MMMM yyyy"
                         onChange={(date) => {
@@ -636,6 +639,10 @@ const GeneralInfomation = (props) => {
                             },
                           },
                         ]}
+                        shouldCloseOnSelect={false}
+                        onSelect={(e) => {
+                          console.log({e,calendarEndRef})
+                        }}
                         renderCustomHeader={({
                           date,
                           changeYear,
@@ -683,7 +690,30 @@ const GeneralInfomation = (props) => {
                             </button>
                           </div>
                         )}
-                      />
+                      >
+                        <div className='wrapper-helper-button'>
+                          <div className='wrapper_reset' onClick={() => {
+                            calendarStartRef.current.clear()
+                            calendarStartRef.current.setSelected(null)
+                          }}>
+                            <h5 className='reset'>Reset</h5>
+                            <ReactSVG src='/img/icons/reset.svg' />
+                          </div>
+                          <Button
+                            variant="primary"
+                            type="button"
+                            className='button_apply'
+                            onClick={(e) => {
+                              console.log(e, 'button');
+                              calendarStartRef.current.setSelected(values.general_information.corporate_contract.date_start)
+                              calendarStartRef.current.setOpen(false)
+                              calendarEndRef.current.setOpen(true)
+                            }}
+                          >
+                            APPLY
+                          </Button>
+                        </div>
+                      </DatePicker>
                     </Col>
                       <span className="text-center">To</span>
                     <Col lg={4}>
@@ -694,13 +724,96 @@ const GeneralInfomation = (props) => {
                           setFieldValue('general_information.corporate_contract.date_end', date)
                         }}
                         selected={values.general_information.corporate_contract.date_end}
-                        // selectsEnd
-                        // startDate={values.general_information.corporate_contract.date_start}
-                        // endDate={values.general_information.corporate_contract.date_end}
-                        // minDate={values.general_information.corporate_contract.date_start}
-                        // maxDate={handleYears(10, new Date(), 'add')}
-                        // monthsShown={2}
-                      />
+                        ref={calendarEndRef}
+                        selectsEnd
+                        startDate={values.general_information.corporate_contract.date_start}
+                        endDate={values.general_information.corporate_contract.date_end}
+                        minDate={values.general_information.corporate_contract.date_start}
+                        maxDate={handleYears(10, new Date(), 'add')}
+                        monthsShown={2}
+                        popperClassName='manage_corporate_date'
+                        popperModifiers={[
+                          {
+                            name: "offset",
+                            options: {
+                              offset: [-180, 0],
+                            },
+                          },
+                        ]}
+                        shouldCloseOnSelect={false}
+                        onSelect={(e) => {
+                          // calendarEndRef.current.setSelected(e)
+                        }}
+                        renderCustomHeader={({
+                          date,
+                          changeYear,
+                          monthDate,
+                          customHeaderCount,
+                          decreaseMonth,
+                          increaseMonth,
+                        }) => (
+                          <div>
+                            <button
+                              aria-label="Previous Month"
+                              className={
+                                "react-datepicker__navigation react-datepicker__navigation--previous"
+                              }
+                              style={customHeaderCount === 1 ? { visibility: "hidden" } : null}
+                              onClick={decreaseMonth}
+                            >
+                            </button>
+                            <span className="react-datepicker__current-month">
+                              {monthDate.toLocaleString("en-US", {
+                                month: "long",
+                                // year: "numeric",
+                              })}
+                              <select
+                                value={moment(date).year()}
+                                onChange={({ target: { value } }) => changeYear(value)}
+                                className='select_year'
+                              >
+                                {generateArrayOfYears().map((option) => (
+                                  <option key={option} value={option}>
+                                    {option}
+                                  </option>
+                                ))}
+                              </select>
+                            </span>
+                            <button
+                              aria-label="Next Month"
+                              className={
+                                "react-datepicker__navigation react-datepicker__navigation--next"
+                              }
+                              style={customHeaderCount === 0 ? { visibility: "hidden" } : null}
+                              onClick={increaseMonth}
+                            >
+                              <span className="react-datepicker__navigation-icon--next"></span>
+                            </button>
+                          </div>
+                        )}
+                      >
+                        <div className='wrapper-helper-button'>
+                          <div className='wrapper_reset' onClick={() => {
+                            calendarEndRef.current.clear()
+                            calendarEndRef.current.setSelected(null)
+                          }}>
+                            <h5 className='reset'>Reset</h5>
+                            <ReactSVG src='/img/icons/reset.svg' />
+                          </div>
+                          <Button
+                            variant="primary"
+                            type="button"
+                            className='button_apply'
+                            onClick={(e) => {
+                              console.log(e, 'button');
+                              calendarEndRef.current.setSelected(values.general_information.corporate_contract.date_end)
+                              calendarEndRef.current.setOpen(false)
+                            }}
+                          >
+                            APPLY
+                          </Button>
+                        </div>
+                      </DatePicker>
                     </Col>
                     {/* {touched?.general_information?.corporate_npwp && errors?.general_information?.corporate_npwp && (
                       <TextError>

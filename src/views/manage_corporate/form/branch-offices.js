@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react'
-import PropTypes from 'prop-types'
-import { Form, Row, Col, Card, Button } from "react-bootstrap"
+import { Form, Card, Button } from "react-bootstrap"
 import { useFormik } from "formik"
 import * as Yup from "yup"
 
 // components
 import BbDataTable from 'components/table/bb-data-table'
+import FormModal from './branch-offices/index'
 import './_form.sass'
 
 // utils
 import rowStatus from "lib/row-status"
 import Api from "config/api"
 
-const CorporateFare = ({
+const BranchOffices = ({
   isMobile
 }) => {
   let api = new Api()
@@ -28,34 +28,40 @@ const CorporateFare = ({
   })
 
   const [params, setParams] = useState({
-    title: "Corporate Fare",
+    title: "Branch Offices",
+    titleModal: "Company/ Branch Office",
+    createOnModal: true,
+    modalSize: 'lg',
+    modalClassName: 'corporate_branch_office_modal',
     showAdvancedOptions: false,
     responsiveTablet: true,
+    isOpenNewTab: false,
+    isHideSearch: true,
     isHidePrintLogo: true,
     isHideDownloadLogo: true,
     isShowColumnAction: false,
     isCheckbox: false,
     baseRoute: "/master/manage-corporate/form",
-    endpoint: "/master/corporate-fare",
+    endpoint: "/master/branch-offices",
     columns: [
       {
-        title: "Airlines",
+        title: "Company/Branch Name",
         data: ""
       },
       {
-        title: "Account Code",
+        title: "Address",
         data: ""
       },
       {
-        title: "Negotiated Fare Code",
+        title: "Phone Number",
         data: ""
       },
       {
-        title: "Period",
+        title: "Geo Location",
         data: ""
       },
     ],
-    emptyTable: "No Corporate Fare found",
+    emptyTable: "No Corporates found",
   })
 
   const onReset = () => {
@@ -66,9 +72,9 @@ const CorporateFare = ({
     <Form onSubmit={handleSubmit}>
       <Card style={{marginBotton: 0}}>
         <Card.Body>
-          {isMobile ? "" : <h3 className="card-heading">Corporate Fare</h3>}
-          <div style={isMobile ? {padding: "0"} : { padding: "15px" }}>
-            <BbDataTable {...params} onReset={onReset} />
+          <h3 className="card-heading">Branch Offices</h3>
+          <div style={{ padding: "15px" }}>
+            <BbDataTable {...params} onReset={onReset} modalContent={FormModal} />
           </div>
         </Card.Body>
       </Card>
@@ -92,6 +98,4 @@ const CorporateFare = ({
   )
 }
 
-CorporateFare.propTypes = {}
-
-export default CorporateFare
+export default BranchOffices

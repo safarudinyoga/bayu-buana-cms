@@ -5,7 +5,8 @@ import upIcon from "assets/icons/double-up.svg"
 import arrowLeft from "assets/icons/arrow-left.svg"
 import arrowRight from "assets/icons/arrow-right.svg"
 import xCircle from "assets/icons/x-circle.svg"
-import flightTicket from "assets/icons/flight-ticket.svg"
+import peopleCheck from "assets/icons/people-check.svg"
+import ticketDetailed from "assets/icons/ticket-detailed.svg"
 import FormInputSelectAjax from "components/form/input-select-ajax"
 import FormikControl from "components/formik/formikControl"
 import "./add-or-remove-list.css"
@@ -68,12 +69,18 @@ const AddOrRemoveList = ({
     const newData = rightData.filter((item) => item !== e)
     setRightData((rightdata) => newData)
     setLeftData((leftdata) => [...leftdata, e])
+    setFormValues((formValues) => [
+      ...leftData.map((item) => ({
+        agent_id: item.agent_id,
+        employee_id: item.employee_id,
+      })),
+    ])
   }
 
   const handleSelectAssignmentLeader = (e) => {
     console.log("e: ", e)
     console.log("form: ")
-    setFormValues("aaaa")
+    // setFormValues("aaaa")
     // setFormValues((data) => [
     //   ...data.map((item) => ({
     //     can_issue_tickets:
@@ -108,8 +115,8 @@ const AddOrRemoveList = ({
                 >
                   {canRemoveIndex ? (
                     <div className="w-100 d-flex justify-content-between align-items-center">
-                      {item.given_name} {item.middle_name} {item.surname} (
-                      {item?.office_name})
+                      {item.given_name} {item.middle_name} {item.surname}{" "}
+                      {item.office_name && `(${item?.office_name})`}
                       <FieldArray
                         name="employee"
                         render={(arr) => (
@@ -160,7 +167,7 @@ const AddOrRemoveList = ({
                             // }
                             className="add-remove-cb"
                           />
-                          <img src={flightTicket} alt="flight-ticket" />
+                          <img src={onModal ? peopleCheck : ticketDetailed} alt="flight-ticket" />
                         </label>
                       </div>
                       {onModal && (
@@ -182,7 +189,7 @@ const AddOrRemoveList = ({
                               }
                               className="add-remove-cb"
                             />
-                            <img src={flightTicket} alt="flight-ticket" />
+                            <img src={ticketDetailed} alt="flight-ticket" />
                           </label>
                         </div>
                       )}
@@ -225,10 +232,10 @@ const AddOrRemoveList = ({
                 className="label-flight-ticket"
                 style={{ backgroundColor: "#027F71", padding: "1px 8px 3px" }}
               >
-                <img src={flightTicket} alt="flight-ticket" />
+                <img src={peopleCheck} alt="flight-ticket" />
               </div>
               <span style={{ fontSize: "12px", paddingLeft: "8px" }}>
-                Click to assign/remove assignment as leader.
+                Click to allow/ forbid travel consultant to issue flight ticket.
               </span>
             </div>
             {onModal && (
@@ -237,7 +244,7 @@ const AddOrRemoveList = ({
                   className="label-flight-ticket"
                   style={{ backgroundColor: "#027F71", padding: "1px 8px 3px" }}
                 >
-                  <img src={flightTicket} alt="flight-ticket" />
+                  <img src={ticketDetailed} alt="flight-ticket" />
                 </div>
                 <span style={{ fontSize: "12px", paddingLeft: "8px" }}>
                   Click to assign/forbid travel consultant to issue flight
@@ -396,7 +403,9 @@ const AddOrRemoveList = ({
                     </svg>
                     <div className="w-100 d-flex justify-content-between">
                       {item.given_name} {item.middle_name} {item.surname}
-                      <span>({item?.office_name})</span>
+                      <span>
+                        {item.office_name && `(${item?.office_name})`}
+                      </span>
                     </div>
                   </div>
                 </li>

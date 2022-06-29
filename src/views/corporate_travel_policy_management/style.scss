@@ -146,8 +146,19 @@
   }
 }
 .hotel-class-modal {
-  max-width: 200px;
+  width: 50%;
   padding-left: 25%;
+}
+.hotel-price {
+  h5 {
+    margin: 0;
+  }
+  h6 {
+    margin: 0;
+  }
+  span {
+    margin: 0;
+  }
 }
 .staff-and-manager-tooltip {
   display: flex;

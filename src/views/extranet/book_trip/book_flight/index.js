@@ -6,7 +6,7 @@ import Api from "config/api"
 import './book_flight.css'
 import Select, {components} from "react-select"
 // import {OverlayTrigger, Tooltip} from "react-bootstrap"
-import FlightList from './step/select-flight'
+import FlightList from './step/select_flight'
 import Passenger from './step/passengers'
 import SelectSeat from './step/select_seats'
 import AddOn from './step/add_ons'

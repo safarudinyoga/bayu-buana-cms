@@ -111,7 +111,7 @@ Yup.addMethod(Yup.string, 'uniqueValueString', function (fieldName, message) {
       if(feeTaxId){
         let res = await api.put(endpoint + "/" + id + "/fee-taxes/" + feeTaxId, formatted);
       }else{
-          let res = await api.post(endpoint + "/" + id + "/fee-taxes", formatted);
+          let res = await api.post(endpoint + "/" + id + "/fee-taxes/", formatted);
       }
       dispatch(setCreateModal({ show: false, id: null, disabled_form: false }));
       dispatch(

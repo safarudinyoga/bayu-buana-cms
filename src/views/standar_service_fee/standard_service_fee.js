@@ -7,7 +7,7 @@ import HotelTable from "./table/hotel_table"
 import OtherTable from "./table/other_table"
 import { ReactSVG } from "react-svg"
 
-const ControlledTabs = () => {
+const ControlledTabs = (props) => {
   const [key, setKey] = useState("flight")
 
   return (
@@ -30,7 +30,7 @@ const ControlledTabs = () => {
             </div>
           }
         >
-          <FlightTable />
+          <FlightTable history={props.history} />
         </TabPane>
         <TabPane
           className="m-3"
