@@ -15,6 +15,7 @@ const endpoint = "/master/corporate-rating-type-levels"
 const backUrl = "/master/corporate-rating"
 
 function CorporateRatingForm(props) {
+  let api = new Api()
   let dispatch = useDispatch()
   let formId = props.match.params.id
 
@@ -22,6 +23,7 @@ function CorporateRatingForm(props) {
   const [formBuilder, setFormBuilder] = useState(null)
   const [loading, setLoading] = useState(true)
   const [translations, setTranslations] = useState([])
+  const [RatingTranslations, setRatingTranslations] = useState([])
   const [id, setId] = useState(null)
   const [corporateRatingId, setCorporateRatingId] = useState(null)
   const [form, setForm] = useState({
@@ -35,6 +37,7 @@ function CorporateRatingForm(props) {
       label: "Rating Name",
       name: "corporate_rating_type_level_name",
       type: "text",
+      unique: true
     },   
   ]
 
@@ -66,7 +69,51 @@ function CorporateRatingForm(props) {
     corporate_rating_type_level_code: {
       required: "Rating Code is required",
     },
+  } 
+
+  useEffect(async() => {
+    try {
+      let {data} = await api.get("/master/agent-languages", { size: -1, sort: "sort,language_name" })
+      let valRules = {}
+      for (let lang of data.items) {
+        valRules["corporate_rating_type_level_name_"+lang.language_code] = { checkLangName: true }
+      }
+    } catch (e) {
+
+    }
+  }, [])
+
+  const fetchTranslation = async () => {
+    let translationData = []
+    let api = new Api()
+    let res  = await api.get(endpoint)
+    // console.log(res, "data endpoint")
+    // res.data.items.map(async(value, key) => {
+    //   console.log(value)
+    //   let dataTranslation = await api.get(endpoint + "/" + value.id + "/translations")
+    //   translationData.push(dataTranslation.data.items)
+    //   translationData = [...translationData, ...dataTranslation.data.items]
+    //   console.log(translationData, "hahaha")
+    //   setRatingTranslations([...translationData, ...dataTranslation.data.items])
+    //   return translationData
+    // })
+    
+  // console.log(RatingTranslations, "xixixi")
+    for(let i = 0; i < res.data.items.length; i++) {
+      let corporateRatingId = res.data.items[i].id  
+      // console.log(corporateRatingId)
+      let dataTranslation = await api.get(endpoint + "/" + corporateRatingId + "/translations")
+      translationData = [...translationData, ...dataTranslation.data.items]
+    }
+    setRatingTranslations(translationData)
   }
+
+  // console.log(RatingTranslations)
+  useEffect(async () => {
+    fetchTranslation()
+    
+  })
+
 
   useEffect(async () => {
     let api = new Api()
@@ -107,7 +154,14 @@ function CorporateRatingForm(props) {
           let currentName = res.data.corporate_rating_type_level_name
           let rating = res.data.rating
 
-          
+          $.validator.addMethod(
+            "checkLangName",
+            function (value, element) {
+              //ambil array yang sudah diset sebelumnya
+              console.log(value)
+            },
+            "Rating Name already exists",
+          )
           $.validator.addMethod(
             "checkName",
             function (value, element) {
@@ -197,7 +251,42 @@ function CorporateRatingForm(props) {
       } catch (e) { }
       setLoading(false)
     } else {
-      
+      // $.validator.addMethod(
+      //   "checkLangName",
+      //   function (value, element) {
+      //     let req = false
+      //     let lang_code = element.name.slice(12)
+      //     let filters = JSON.stringify(["corporate_rating_type_level_name","=",element.value])
+      //     // let filters = JSON.stringify([["language_code", "=", lang_code], ["AND"], ["office_name","=",element.value]])
+      //     $.ajax({
+      //       type: "GET",
+      //       async: false,
+      //       url: `${env.API_URL}/master/corporate-rating-type-levels?filters=${encodeURIComponent(filters)}`,
+      //       success: function (res) {
+      //         if (res.items.length !== 0) {
+      //           if (currentName === element.value) {
+      //             req = true
+      //           } else {
+      //             req = false
+      //           }
+      //         } else {
+      //           req = true
+      //         }
+      //       },
+      //     })
+
+      //     return req
+      //   },
+      //   "Rating Name already exists",
+      // )
+      $.validator.addMethod(
+        "checkLangName",
+        function (value, element) {
+          //ambil array yang sudah diset sebelumnya
+          console.log(value)
+        },
+        "Rating Name already exists",
+      )
       $.validator.addMethod(
         "checkName",
         function (value, element) {

@@ -17,7 +17,8 @@ export default class TranslationForm extends Component {
       languages: [],
       loading: true,
       translated: {},
-      showList: false
+      showList: false,
+      translationData: []
     }
 
     this.translated = {}
