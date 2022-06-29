@@ -10,11 +10,9 @@ import shieldIC from 'assets/icons/shield.svg'
 import moment from 'moment'
 import ThousandSeparator from 'lib/thousand-separator'
 
-function FlightCard({data, handleSelectTab, tripType}) {
-  const dispatch = useDispatch()
+function FlightCard({data, handleSelectTab, tripType, viewBy}) {
 	const [Flight, setFlight] = useState({})
 	const [activeCabinDesc, setActiveCabinDesc] = useState("")
-	const [fullCondition, setFullCondition] = useState(false)
 	const [selectedCabin, setSelectedCabin] = useState(null)
 
 
@@ -24,11 +22,11 @@ function FlightCard({data, handleSelectTab, tripType}) {
 		} catch(e) {}
 	}, [])
 
-	const FlightInfo = ({showDetailTxt=true, airline}) => {
+	const FlightInfo = ({showDetailTxt=true, airline, visible}) => {
 		const { routes } = airline
 		return (
-			<>
-				<Row className='flight-details-header'>
+			<div className={`${!visible && "d-none"}`}>
+				<Row className={`flight-details-header`}>
 					<Col sm={6} className="d-flex justify-content-between card-flight-h">
 						<div className="d-flex align-items-start">
 							<img src={airline?.airline_logo || ""} width={20}/>
@@ -93,7 +91,7 @@ function FlightCard({data, handleSelectTab, tripType}) {
 						</div>
 					</Col>
 				</Row>
-			</>
+			</div>
 		)
 	}
 
@@ -123,34 +121,37 @@ function FlightCard({data, handleSelectTab, tripType}) {
 						setSelectedCabin(cabin)
 					}
 				}} 
-				className="flight-card-right d-flex flex-column align-content-center align-items-center justify-content-center"
+				className={`flight-card-right d-flex flex-column align-content-center align-items-center justify-content-center 
+				${(activeCabinDesc !== "" && activeCabinDesc === cabin.name) ? setBackground(cabin.name) : ""}`}
 			>
 				{
 					cabin.name &&
-					<div className='header-flight-card-right' style={{}}>
+					<div className={`header-flight-card-right ${setBackground(cabin.name)}`}>
 						<p>{cabin.name}</p>
 					</div>
 				}
-				
-				<p>{fares[0]?.currency_code} <b>{ThousandSeparator(fares[0]?.price)}</b></p>
-				<p className='flight-type'>{fares[0]?.trip_type_name}</p>
-				{
-					(cabin.name !== activeCabinDesc && tripType !== "SQ") &&
-						<Button 
-						onClick={(e) => onSelectFlight(e, selectedCabin.fares[0])}
-						className="btn-flight-select"
-						>Select</Button>
-				}
-				{
-					tripType !== "SQ" && <>
-						<p className='lowest-fare'><i class="fas fa-circle"></i> Lowest Fare</p>
-						<p className='travel-policy'><i className="fas fa-exclamation-triangle"></i> Travel Policy</p>
-					</>
-				}
-				<div className='pt-4'>
-					{fares[0]?.available_seats <= 2 && <p className='rest-seat'>Only {fares[0].available_seats} seat left</p>}
+				<div className=' d-flex flex-column align-content-center align-items-center justify-content-center' style={{flex: 1}}>
+					<p>{fares[0]?.currency_code} <b>{ThousandSeparator(fares[0]?.price)}</b></p>
+					<p className='flight-type'>{fares[0]?.trip_type_name}</p>
+					{
+						(cabin.name !== activeCabinDesc && tripType !== "SQ") &&
+							<Button 
+							onClick={(e) => onSelectFlight(e, selectedCabin.fares[0])}
+							className="btn-flight-select"
+							>Select</Button>
+					}
+					{
+						tripType !== "SQ" && <>
+							<p className='lowest-fare'><i class="fas fa-circle"></i> Lowest Fare</p>
+							<p className='travel-policy'><i className="fas fa-exclamation-triangle"></i> Travel Policy</p>
+						</>
+					}
+					<div className='pt-4'>
+						{fares[0]?.available_seats <= 2 && <p className='rest-seat'>Only {fares[0].available_seats} seat left</p>}
+					</div>
+					<i className={`fas fa-angle-${cabin.name === activeCabinDesc ? "up" : "down"}`}></i>
 				</div>
-				<i className={`fas fa-angle-${cabin.name === activeCabinDesc ? "up" : "down"}`}></i>
+				
 			</Col>
 		)
 	}
@@ -169,8 +170,6 @@ function FlightCard({data, handleSelectTab, tripType}) {
 		handleSelectTab("2")
 	}
 
-
-  
   return (
     <Card className='flight-card'>
 			<Row style={{marginLeft: 0, marginRight:0}}>
@@ -182,6 +181,8 @@ function FlightCard({data, handleSelectTab, tripType}) {
 								key={idx} 
 								airline={airline}
 								showDetailTxt={idx === 0}
+								viewBy={viewBy}
+								visible={viewBy === "fares" ? true : idx < 1}
 							/>
 							{idx < Flight.airlines?.length-1 ? 
 							<div className='middle-border'></div> : <></>}

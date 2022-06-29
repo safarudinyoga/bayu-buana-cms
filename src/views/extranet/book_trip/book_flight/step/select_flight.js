@@ -13,7 +13,7 @@ function FlightList({handleSelectTab}) {
   const dispatch = useDispatch()
 	let flightType = useQuery().get("trip-type") || "without-ndc"
 	
-	const [viewBy, setViewBy] = useState('trip-type')
+	const [viewBy, setViewBy] = useState('fares')
 	const [flightInfo, setFlightInfo] = useState({
 		plane: "Singapore Airlines",
 		time_estimation: "7h 3m",

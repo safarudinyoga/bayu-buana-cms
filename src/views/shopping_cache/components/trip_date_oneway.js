@@ -41,8 +41,16 @@ function TripDateOneway(props) {
             dateFormat="dd MMMM yyyy"
             onChange={(date) => {
               setDepartTime(new Date(date))
+              props.formik.setFieldValue("departure_datetime", new Date(date))
             }}
           />
+          {
+            props.formik && props.formik.errors.departure_datetime ? (
+              <div className="route-invalid">
+                {props.formik.touched.departure_datetime ? props.formik.errors.departure_datetime : null}
+              </div>
+            ) : null
+          }
         </div>
         
         {/* <DatePicker 
