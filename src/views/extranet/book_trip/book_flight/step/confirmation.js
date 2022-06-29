@@ -11,19 +11,21 @@ const Confirmation = () => {
 
 	const [Flight, setFlight] = useState({})
   const [Passengers, setPassengers] = useState([])
+  let selectedFlight = localStorage.getItem("selectedFlight")
+  let passengers = localStorage.getItem("psg")
 
   useEffect(async() => {
-		let selectedFlight = localStorage.getItem("selectedFlight")
-    let passengers = localStorage.getItem("psg")
-    passengers = decrypt(passengers)
-    passengers = JSON.parse(passengers)
-    setPassengers(passengers)
+    if(passengers) {
+      passengers = decrypt(passengers)
+      passengers = JSON.parse(passengers)
+      setPassengers(passengers)
+    }
 
 		if(selectedFlight) {
 			selectedFlight = JSON.parse(selectedFlight)
 			setFlight(selectedFlight)
 		}
-	}, [])
+	}, [selectedFlight, passengers])
 
   function padTo2Digits(num) {
 		return num.toString().padStart(2, '0');
@@ -106,7 +108,7 @@ const Confirmation = () => {
 		</Row>
 	)
 
-  const FlightDetail = ({footer, airline}) => (
+  const FlightSummary = ({footer, airline}) => (
     <div>
       <Row>
         <Col sm={11}>
@@ -248,7 +250,7 @@ const Confirmation = () => {
               {
                 Flight?.airlines?.map((airline, idx) => (
                   <div key={idx}>
-                    <FlightDetail key={idx} airline={airline} footer={idx === Flight.airlines?.length-1}/>
+                    <FlightSummary key={idx} airline={airline} footer={idx === Flight.airlines?.length-1}/>
                     {idx < Flight.airlines?.length-1 ? 
                     <div className='middle-border'></div> : <></>}
                   </div>

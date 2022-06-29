@@ -181,12 +181,12 @@
 }
 .flight-card-right {
   border-left: 1px solid #00000029;
-  padding: 17px 0;
+  padding: 0;
   cursor: pointer;
 }
 .header-flight-card-right {
-  position: absolute;
-  top: 0;
+  /* position: absolute;
+  top: 0; */
   background-color: #333333;
   color: white;
   width: 100%;
@@ -395,9 +395,6 @@
   color: #333333;
   font-weight: 600;
 }
-.bg-header-black {
-
-}
 .bg-header-grey {
   background-color: #B4B4B4;
   color: #FFFFFF;
@@ -410,7 +407,7 @@
 }
 .bg-header-green-2 {
   background-color: #12533F;
-  color: #FFFFFF;
+  color: #FFFFFF !important;
   text-transform: uppercase;
 }
 .bg-header-green-3 {
@@ -418,12 +415,15 @@
   color: #FFFFFF;
   text-transform: uppercase;
 }
-.fare-section>p {
-  text-align: center;
-}
 .bg-header-dark {
   background-color: #435151 !important;
   color: #FFFFFF !important;
+}
+.bg-header-green-2 p, .bg-header-grey p, .bg-header-green-1 p, .bg-header-green-3 p, .bg-header-dark p {
+  color: #FFFFFF;
+}
+.fare-section>p {
+  text-align: center;
 }
 
 /* New Tabs */

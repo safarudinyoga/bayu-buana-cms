@@ -306,6 +306,7 @@ class TableHeader extends Component {
                     onClick={this.handleClick.bind(this)}
                     className="btn btn-warning float-right button-new"
                   >
+                  {console.log(pathname)}
                     <img src={createIcon} className="mr-1" alt="new" />
                     {pathname === "/master/general-setup"
                       ? "Create New"
