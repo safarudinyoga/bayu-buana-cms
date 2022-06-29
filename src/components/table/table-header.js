@@ -134,7 +134,7 @@ class TableHeader extends Component {
     } else if (this.props.createNewModal) {
       this.props.setCreateNewModal({ show: true, disabled_form: false, })
     } else if (this.props.isReplaceTable) {
-      this.props.setId(null)
+      // this.props.setId(null)
       this.props.handleReplaceTable(!this.props.isReplaceTable)
     } else {
       this.props.history.push(this.props.baseRoute || "/master/aircraft/form")

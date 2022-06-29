@@ -2,13 +2,19 @@ import React, {useReducer} from 'react'
 import removeIcon from "assets/icons/remove.svg"
 import FormInputControl from "components/form/input-control"
 import { Form, Button} from "react-bootstrap"
+import { useSnackbar } from "react-simple-snackbar"
 import Hints from "assets/icons/hint.svg"
 // import Form from "./form";
 
-export default function BookingSetting() {
+const options = {
+    position: "bottom-right",
+}
+
+export default function BookingSetting(props) {
   const [, forceUpdate] = useReducer(x => x + 1, 0);
   const [limitOffset, setLimitOffset] = React.useState(180)
   const [limitPeriod, setLimitPeriod] = React.useState(240)
+  const [openSnackbar] = useSnackbar(options);
   const borderFeeTax = {
       borderRadius: 10,
       width: '100%'
@@ -170,6 +176,14 @@ export default function BookingSetting() {
         forceUpdate()
     }
 
+    const onSubmit = (e) => {
+        console.log(e, 'onsubmit');
+        openSnackbar(
+            // `Ancillary Fee has been successfully ${id ? "updated" : "saved"}.`,
+          )
+          props.handleSelectTab("invoice-settings")
+    }
+
   return (
       <div className="">
         <div className="border" style={borderFeeTax}>
@@ -307,6 +321,7 @@ export default function BookingSetting() {
             type="submit"
             // disabled={isSubmitting || !dirty}
             style={{ marginRight: 15, marginLeft: 10 }}
+            onClick={(e) => onSubmit(e)}
           >
             SAVE & NEXT
           </Button>
