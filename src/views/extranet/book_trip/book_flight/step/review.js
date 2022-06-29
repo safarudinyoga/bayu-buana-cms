@@ -11,21 +11,23 @@ const Review = ({handleSelectTab}) => {
   const [Passengers, setPassengers] = useState([])
 	const [show, setShow] = useState(false)
 	const handleShow = () => setShow(true)
+  let selectedFlight = localStorage.getItem("selectedFlight")
+  let passengers = localStorage.getItem("psg")
   
   useEffect(async() => {
 
     window.scrollTo({top: 0, behavior: 'smooth'});
 
-		let selectedFlight = localStorage.getItem("selectedFlight")
-		let passengers = localStorage.getItem("psg")
-    passengers = decrypt(passengers)
-    passengers = JSON.parse(passengers)
-    setPassengers(passengers)
+    if(passengers) {
+      passengers = decrypt(passengers)
+      passengers = JSON.parse(passengers)
+      setPassengers(passengers)
+    }
 		if(selectedFlight) {
 			selectedFlight = JSON.parse(selectedFlight)
 			setFlight(selectedFlight)
 		}
-	}, [])
+	}, [selectedFlight, passengers])
 
 	function padTo2Digits(num) {
 		return num.toString().padStart(2, '0');

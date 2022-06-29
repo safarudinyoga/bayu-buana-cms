@@ -11,19 +11,21 @@ const Confirmation = () => {
 
 	const [Flight, setFlight] = useState({})
   const [Passengers, setPassengers] = useState([])
+  let selectedFlight = localStorage.getItem("selectedFlight")
+  let passengers = localStorage.getItem("psg")
 
   useEffect(async() => {
-		let selectedFlight = localStorage.getItem("selectedFlight")
-    let passengers = localStorage.getItem("psg")
-    passengers = decrypt(passengers)
-    passengers = JSON.parse(passengers)
-    setPassengers(passengers)
+    if(passengers) {
+      passengers = decrypt(passengers)
+      passengers = JSON.parse(passengers)
+      setPassengers(passengers)
+    }
 
 		if(selectedFlight) {
 			selectedFlight = JSON.parse(selectedFlight)
 			setFlight(selectedFlight)
 		}
-	}, [])
+	}, [selectedFlight, passengers])
 
   function padTo2Digits(num) {
 		return num.toString().padStart(2, '0');

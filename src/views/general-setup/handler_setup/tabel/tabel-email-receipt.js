@@ -25,6 +25,39 @@ const EmailReceiptModal = (props) => {
   const API = new Api()
   const dispatch = useDispatch()
   const [inputFields, setInputFields] = useState([{ name: "", email: "" }])
+  const [name, setName] = useState([])
+  const [email, setEmail] = useState([])
+
+  const initialForm = {
+    sender_name: "",
+    sender_email: "",
+  }
+
+  console.log("tes", name)
+
+  useEffect(async () => {
+    try {
+      let res = await API.get("/master/employees?size=-1")
+      let senderName = []
+      let senderEmail = []
+
+      res.data.items.map(async (item, i) => {
+        let nameData = {}
+        let emailData = {}
+        if (item) {
+          nameData = {
+            given_name: item.given_name,
+            middle_name: item.middle_name,
+            surname: item.surname,
+            email: item.contact ? item.contact.email : "",
+          }
+          senderName.push(nameData)
+        }
+      })
+      setName(senderName)
+      setEmail(senderEmail)
+    } catch (error) {}
+  }, [])
 
   //example 2
 
@@ -71,6 +104,8 @@ const EmailReceiptModal = (props) => {
       .max(256)
       .email("Recipient Email is not valid"),
     // .required("Recipient Email is required."),
+    sender_name: Yup.object().required("Sender Name is required."),
+    sender_email: Yup.object().required("Sender Email is required."),
   })
 
   const onSubmit = async (values, a) => {
