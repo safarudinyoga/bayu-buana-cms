@@ -180,7 +180,7 @@ function ShoppingCacheCreate(props) {
                 <div className="d-flex flex-wrap">
                   {
                     item.trip_type_code === "roundtrip" ? (<TripRoundtrip airports={airports} handleCacheData={handleCacheData} />) : 
-                    item.trip_type_code === "oneway" ? (<TripOneway airports={airports} handleCacheData={handleCacheData} />) : <TripMultitrip  airports={airports}/>
+                    item.trip_type_code === "oneway" ? (<TripOneway airports={airports} handleCacheData={handleCacheData} />) : <TripMultitrip  airports={airports} handleCacheData={handleCacheData}/>
                   }
                 </div>
               </Tab>

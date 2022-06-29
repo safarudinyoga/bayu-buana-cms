@@ -85,12 +85,12 @@ export default function ShoppingCache() {
     title: "Team Assignment",
     titleModal: "Team Assignment",
     baseRoute: "/master/general-team-assignment/form",
-    endpoint: "/master/cache-criterias",
+    endpoint: "/master/cache-criterias/flights",
     deleteEndpoint: "",
     columns: [
       {
         title: "Trip Type",
-        data: "hotel_supplier_code",
+        data: "trip_type.trip_type_name",
       },
       {
         title: "From",
