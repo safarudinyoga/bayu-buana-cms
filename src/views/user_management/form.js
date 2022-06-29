@@ -90,36 +90,27 @@ const UserManagementForm = (props) => {
     }
   }, [])
 
+  const duplicateValue = async(fieldName, value) => {
+    let filters = encodeURIComponent(JSON.stringify([[fieldName,"=",value]]))
+    let res = await api.get(endpoint + `?filters=${filters}`)
+
+    if(formId) {
+      return res.data.items.length === 0 || value === initialForm['employee'].value
+    } else {
+      return res.data.items.length === 0
+    }
+  }
+
+  Yup.addMethod(Yup.object, 'uniqueValueObject', function (fieldName, message) {
+      return this.test('unique', message, function(field) {
+          if(field) return duplicateValue(fieldName, field.value)
+          return true
+      })
+  })
+
   // Schema for yup
   const validationSchema = Yup.object().shape({
-    employee: Yup.object()
-      .required("Employee is required.")
-      .test(
-        "Unique Employee Name",
-        "User already exists",
-        async (value, ctx) => {
-          let formId = props.match.params.id
-          try {
-            let res = await api.get(
-              `${env.API_URL}/user/user-type-users?filters=["user_account_id","=","${value.value}"]`,
-            )
-            if (res.data.items) {
-              if (formId) {
-                return (
-                  res.data.items.length === 0 ||
-                  value.label === initialForm.user_account_id
-                )
-              } else {
-                return res.data.items.length === 0
-              }
-            }
-            return false
-          } catch (e) {
-            console.log("e", e)
-            return false
-          }
-        },
-      ),
+    employee: Yup.object().required("Employee is required.").uniqueValueObject("user_account_id","User already exists"),
     user_type: Yup.object().required("User Type is required."),
   })
 
