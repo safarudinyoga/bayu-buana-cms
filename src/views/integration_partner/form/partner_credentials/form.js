@@ -38,13 +38,16 @@ function CreatePartnerCredential(props) {
     if (formId) {
       try {
         let res = await API.get(endpoint + "/" + formId);
+        console.log(res.data, "haha")
         setFormValues({
           ...res.data,
           office_id: {
-            value: res.data.office?.id || "",
-            label:res.data.office?.office_name || "",
+            value: res.data.corporate_group_id || "",
+            label: res.data.corporate_group_name || "",
           }
+         
         });
+      
       } catch (e) {
         console.log(e);
       }
@@ -98,13 +101,15 @@ function CreatePartnerCredential(props) {
   };
 
   const duplicateValue = async(fieldName, value) => {
-    let filters = encodeURIComponent(JSON.stringify([[fieldName,"=",value],["AND"],["integration_partner_id",partner_integration_id],["AND"],["status",1]]))
+    let filters = encodeURIComponent(JSON.stringify([[fieldName,"=",value],["AND"],["integration_partner_id",id],["AND"],["status",1]]))
     let res = await API.get(endpoint + "?" + `filters=${filters}`)
-    let sameId = res.data.items.find((v) => v.id === id)
-    if(!sameId) return res.data.items.length === 0 
 
-    return true
-  }
+    if(id){
+      return res.data.items.length === 0 || value === formValues[fieldName] || formValues[fieldName].value
+    } else {
+      return res.data.items.length === 0
+    }
+}
 
   Yup.addMethod(Yup.object, 'uniqueValueObject', function (fieldName, message) {
     return this.test('unique', message, function(field) {
@@ -131,7 +136,7 @@ function CreatePartnerCredential(props) {
     organization: Yup.string()
       .required(`${integration_partner_code === 16 ? "Grant Type" :"Organization"} is required`),
     domain: Yup.string()
-      .required(`${integration_partner_code === 16 
+      .required(`${integration_partner_code ===  16 
         ? "Scope" 
         : (integration_partner_code === 7 || integration_partner_code === 9) 
         ? "Duty Code" 
@@ -174,11 +179,12 @@ function CreatePartnerCredential(props) {
       try {
         let form = {
           ...values,
-          "office_id": values.office_id.value,
+          office_id: values.office_id.value,
           agency_id: values.agency_id,
           system_id: values.system_id,
         };
         let res = await API.putOrPost(endpoint, id, form);
+        console.log(res, "hihih")
 
         dispatch(setCreateModal({ show: false, id: null, disabled_form: false }));
         dispatch(
@@ -205,7 +211,13 @@ function CreatePartnerCredential(props) {
     },
   };
   return (
-    <Formik initialValues={formValues || initialValues} validationSchema={validationSchema} onSubmit={onSubmit} validateOnMount enableReinitialize>
+    <Formik 
+      initialValues={formValues || initialValues} 
+      validationSchema={validationSchema} 
+      onSubmit={onSubmit} 
+      validateOnMount 
+      enableReinitialize
+    >
         {({ dirty, handleSubmit, isSubmitting, setFieldValue, values, isValid }) => (
             <Form onSubmit={handleSubmit} className="ml-2">
                 <FormikControl
@@ -228,7 +240,6 @@ function CreatePartnerCredential(props) {
                           }
                         : null
                     }
-                    // isDisabled={isView|| loading}
                     size={formSize}
                     status={`"!=", 0`}
                   />

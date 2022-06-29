@@ -311,14 +311,39 @@ function FormIntegrationPartner(props) {
               </Form.Group>
               : null : null}
               {
-                data ? (data.integration_partner_code == 2 || data.integration_partner_code == 3 || data.integration_partner_code == 4 || data.integration_partner_code == 5 || data.integration_partner_code == 6 || data.integration_partner_code == 12 || data.integration_partner_code == 13 || data.integration_partner_code == 14 || data.integration_partner_code == 15 || data.integration_partner_code == 17 || data.integration_partner_code == 18) ?
+                data ? (
+                  data.integration_partner_code == 2 || 
+                  data.integration_partner_code == 3 || 
+                  data.integration_partner_code == 4 || 
+                  data.integration_partner_code == 5 || 
+                  data.integration_partner_code == 6 || 
+                  data.integration_partner_code == 12 || 
+                  data.integration_partner_code == 13 || 
+                  data.integration_partner_code == 14 || 
+                  data.integration_partner_code == 15 || 
+                  data.integration_partner_code == 17 || 
+                  data.integration_partner_code == 18
+                ) ?
               <Form.Group as={Row} className="form-group">
                 <Form.Label column md={3} lg={4}>
-                  {data.integration_partner_code == 3 ? "Access Token" : (data.integration_partner_code == 5 || data.integration_partner_code == 6 || data.integration_partner_code == 12 || data.integration_partner_code == 13 || data.integration_partner_code == 14 || data.integration_partner_code == 15 || data.integration_partner_code == 17) ? "API Key" : data.integration_partner_code == 18 ? "Partner Sub Username" : "Partner Password"}
+                  {
+                    data.integration_partner_code == 3 ? "Access Token" : 
+                  (
+                    data.integration_partner_code == 5 || 
+                    data.integration_partner_code == 6 || 
+                    data.integration_partner_code == 12 || 
+                    data.integration_partner_code == 13 || 
+                    data.integration_partner_code == 14 || 
+                    data.integration_partner_code == 15 || 
+                    data.integration_partner_code == 17
+                  ) ? "API Key" : 
+                    data.integration_partner_code == 18 ? 
+                    "Partner Sub Username" : "Partner Password"
+                  }
                 </Form.Label>
                 <Col md={9} lg={8}>
                 <InputGroup>
-                  <FastField name="partner_password" disabled>
+                  <FastField name="partner_password">
                     {({ field, form }) => (
                       <>
                         <Form.Control
