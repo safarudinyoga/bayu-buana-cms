@@ -11,52 +11,7 @@ import CancelButton from "components/button/cancel"
 import CardAddOrRemove from "components/card/add-or-remove-list"
 import FormikControl from "components/formik/formikControl"
 
-const dummy1 = [
-  {
-    given_name: "Tiffany Young",
-    category: "BCD",
-    checked: false,
-  },
-  {
-    given_name: "Dhani Doel",
-    category: "BCD",
-    checked: false,
-  },
-  {
-    given_name: "Jhon Bill",
-    category: "NCD",
-    checked: false,
-  },
-]
-
-const dummy2 = [
-  {
-    given_name: "Tamara Ling",
-    category: "NCD",
-  },
-  {
-    given_name: "Margot Roe",
-    category: "NCD",
-  },
-  {
-    given_name: "Betty Jhon",
-    category: "NCD",
-  },
-  {
-    given_name: "Miando Nael",
-    category: "BCD",
-  },
-  {
-    given_name: "Bel Nuts",
-    category: "BCD",
-  },
-  {
-    given_name: "Tamara Ling",
-    category: "NCD",
-  },
-]
-
-const endpoint = ""
+const endpoint = "/master/configurations/team-assignments"
 function TeamAssignmentForm(props) {
   const dispatch = useDispatch()
   const showCreateModal = useSelector((state) => state.ui.showCreateModal)
@@ -65,6 +20,8 @@ function TeamAssignmentForm(props) {
   const [id, setId] = useState(null)
   const [loading, setLoading] = useState(true)
   const [formValues, setFormValues] = useState(null)
+  const [listTravelConsultant, setListTravelConsultant] = useState([])
+  const [travelConsultant, setTravelConsultant] = useState([])
 
   useEffect(async () => {
     let formId = showCreateModal.id || props.id
@@ -84,24 +41,51 @@ function TeamAssignmentForm(props) {
 
     dispatch(setModalTitle(docTitle))
 
-    // if (formId) {
-    //   try {
-    //     let { data } = await API.get(endpoint + "/" + formId)
-    //     setFormValues({
-    //       ...data,
-    //       currency_id: {
-    //         value: data.currency_id,
-    //         label: data.currency_id,
-    //       },
-    //       bank_id: {
-    //         value: data.bank_id,
-    //         label: data.bank_id,
-    //       },
-    //     })
-    //   } catch (e) {
-    //     console.log(e)
-    //   }
-    // }
+    if (showCreateModal.id) {
+      try {
+        let { data } = await API.get(endpoint + "/" + showCreateModal.id)
+        setFormValues({
+          team_name: data.team_name,
+          employee: data.team_members.map((item) => [
+            {
+              agend_id: "",
+              employee_id: item?.employee_id,
+              given_name: item.given_name,
+              middle_name: item.middle_name,
+              surname: item.surname,
+              office_name: null,
+              can_issue_ticket: item.is_can_issue_ticket,
+              is_leader: item.is_leader,
+            },
+          ]),
+        })
+      } catch (e) {
+        console.log(e)
+      }
+    }
+  }, [])
+
+  const getListTravelConsultant = async () => {
+    try {
+      let res = await API.get(`/master/configurations/travel-consultants`)
+      setListTravelConsultant(
+        res.data.items.map((item) => ({
+          agent_id: item?.agent_employee?.agent_id,
+          employee_id: item?.employee_id,
+          given_name: item.person.given_name,
+          middle_name: item.person.middle_name,
+          surname: item.person.surname,
+          office_name: item.office.office_name,
+          // can_issue_ticket: false,
+        })),
+      )
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  useEffect(async () => {
+    getListTravelConsultant()
   }, [])
 
   useEffect(() => {
@@ -120,12 +104,16 @@ function TeamAssignmentForm(props) {
     console.log("submit: ", values)
   }
 
+  console.log("formValues: ", formValues)
+
   const initialValues = {
     team_name: "",
-    agent_id: [""],
-    employee_id: [""],
+    employee: [],
   }
 
+  const validationSchema = Yup.object().shape({
+    team_name: Yup.string().required("Team Name is required."),
+  })
   const formSize = {
     label: {
       md: 5,
@@ -139,8 +127,9 @@ function TeamAssignmentForm(props) {
 
   return (
     <Formik
-      initialValues={initialValues}
+      initialValues={formValues || initialValues}
       onSubmit={onSubmit}
+      validationSchema={validationSchema}
       validateOnMount
       enableReinitialize
     >
@@ -159,8 +148,8 @@ function TeamAssignmentForm(props) {
             />
           </div>
           <CardAddOrRemove
-            firstData={dummy1}
-            secondData={dummy2}
+            firstData={[]}
+            secondData={listTravelConsultant}
             firstCardTitle="team members"
             secondCardTitle="travel consultant name"
             onModal

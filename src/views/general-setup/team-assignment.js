@@ -21,25 +21,25 @@ const TravelAdvice = (props) => {
     isHideDownloadLogo: true,
     title: "Team Assignment",
     titleModal: "Team Assignment",
-    baseRoute: "/master/configurations/team-assignments",
-    endpoint: "",
+    baseRoute: "",
+    endpoint: "/master/configurations/team-assignments",
     deleteEndpoint: "",
     columns: [
       {
         title: "Team Name",
-        data: "",
+        data: "team_name",
       },
       {
         title: "Team Leader",
-        data: "",
+        data: "team_leader",
       },
       {
         title: "Number of Members",
-        data: "",
+        data: "number_of_members",
       },
     ],
-    emptyTable: "No Payment Gateways found",
-    recordName: ["channel_code", "channel_code"],
+    emptyTable: "No Teams found",
+    recordName: ["team_name", "team_leader", "number_of_members"],
   })
 
   return (
