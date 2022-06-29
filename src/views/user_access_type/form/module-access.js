@@ -10,7 +10,7 @@ import * as Yup from "yup"
 import "../user-access-type.css"
 import DataTable from "react-data-table-component"
 import { useSnackbar } from "react-simple-snackbar"
-import BootstrapTable from 'react-bootstrap-table-next';
+import { ReactSVG } from "react-svg"
 
 const backUrl = "/master/user-access-type"
 const options = {
@@ -29,15 +29,8 @@ function ModuleAccess(props) {
   const [userTypeName, setUserTypeName] = useState(null)
   const allowedModule = useRef([])
   const [openSnackbar] = useSnackbar(options)
-  const [tableColumns, setTableColumns] = useState([])
-  const [tableHeader, setTableHeader] = useState([{
-    dataField: 'module_name',
-    text: "Module Name",
-    sort: true
-  }, {
-    dataField: 'category',
-    text: 'Category'
-  }])
+  const [moduleNameSortAsc, setModuleNameSortAsc] = useState(false)
+  const [categorySortAsc, setCategorySortAsc] = useState(false)
 
   const api = new Api()
   useEffect(() => {
@@ -77,16 +70,6 @@ function ModuleAccess(props) {
       const cap = []
 
       resCap.data.items.forEach((data) => {
-        setTableHeader(tableHeader => [
-          ...tableHeader,
-          {
-            dataField: data.capability_code,
-            text: data.capability_name, 
-            formatter: switchFormatter,
-            formatExtraData: `${data.capability_code}`
-          }
-        ])
-
         cap.push(
           <th>{data.capability_name}</th>
         )
@@ -99,35 +82,6 @@ function ModuleAccess(props) {
     }
   }, [])
 
-  useEffect(() => {
-    console.log("TABLE HEADER",tableHeader)
-  }, [tableHeader])
-  
-
-  // useEffect(async () => {
-  //   try {
-  //     let resCap = await api.get('/master/capabilities')
-  //     const cap = []
-
-  //     cap.push(
-  //       { name: "Module Name", selector: row => row.module_name }, 
-  //       { name: "Category", selector: row => row.module_package_name }
-  //     )
-
-  //     resCap.data.items.forEach((data) => {
-  //       cap.push(
-  //         { name: data.capability_name }
-  //         // <th>{data.capability_name}</th>
-  //       )
-  //     })
-  //     setCapabilitiesHeader(cap)
-      
-  //   } catch (e) {
-  //     console.log(e)
-  //     throw e
-  //   }
-  // }, [])
-
   const sendAllowedModuleData = (index) => {
     if(Object.keys(index).length > 0) {
       if(allowedModule.current.some(e => e.id === index.id)){
@@ -138,25 +92,90 @@ function ModuleAccess(props) {
       }
     }
   }
-  
-  // useEffect(async () => {
-  //   try {
-  //     if(id){
-  //       let resModule = await api.get(`/user/user-types/${id}/modules`)
-  //       let dataModule = []
 
-  //       resModule.data.items.forEach((data) => {
-  //         dataModule.push({
-  //           id: data.id,
-  //           module_name: data.module_name
-  //         })
-  //       })
-  //     }
-  //   } catch (error) {
+  const handleModuleNameClick = async () => {
+    setModules([])
+    try {
+      if(id){
+        let res = await api.get(`/user/user-types/${id}`)
+        setUserTypeName(res.data.user_type_name)
+
+        setModuleNameSortAsc(!moduleNameSortAsc)
+
+        let resModule = await api.get(moduleNameSortAsc ? `/user/user-types/${id}/modules?sort=module_name` : `/user/user-types/${id}/modules?sort=-module_name`)
+
+        const modules = []
+        resModule.data.items.forEach((data) => {
+          allowedModule.current.push({
+            id: data.id,
+            capabilities: data.capabilities
+          })
+          setCapabilities([...capabilities, {
+            id: data.id,
+            capabilities: data.capabilities
+          }])
+
+          modules.push(
+            <AccessManagerRow 
+              moduleName={data.module_name} 
+              category={data.module_package_name} 
+              capabilities={data.capabilities}
+              moduleId={data.id}
+              sendAllowedModuleData={sendAllowedModuleData}
+            />
+          )
+          
+        })
+        setModules(modules)
+      }
       
-  //   }
-  // }, [id])
+    } catch(e) {
+      console.log(e)
+      throw e
+    }
+  }
   
+  const handleCategoryClick = async () => {
+    setModules([])
+    try {
+      if(id){
+        let res = await api.get(`/user/user-types/${id}`)
+        setUserTypeName(res.data.user_type_name)
+
+        setCategorySortAsc(!categorySortAsc)
+
+        let resModule = await api.get(categorySortAsc ? `/user/user-types/${id}/modules?sort=module_package_name` : `/user/user-types/${id}/modules?sort=-module_package_name`)
+
+        const modules = []
+        resModule.data.items.forEach((data) => {
+          allowedModule.current.push({
+            id: data.id,
+            capabilities: data.capabilities
+          })
+          setCapabilities([...capabilities, {
+            id: data.id,
+            capabilities: data.capabilities
+          }])
+
+          modules.push(
+            <AccessManagerRow 
+              moduleName={data.module_name} 
+              category={data.module_package_name} 
+              capabilities={data.capabilities}
+              moduleId={data.id}
+              sendAllowedModuleData={sendAllowedModuleData}
+            />
+          )
+          
+        })
+        setModules(modules)
+      }
+      
+    } catch(e) {
+      console.log(e)
+      throw e
+    }
+  }
 
   useEffect(async () => {
     let userTypeId = props.match.params.id
@@ -179,37 +198,14 @@ function ModuleAccess(props) {
             capabilities: data.capabilities
           }])
 
-          console.log("TableData",data)
-
-          let userAccessData = {
-            id: data.id,
-            module_name: data.module_name,
-            category: data.module_package_name,
-            activate: data.capabilities.allow_activate,
-            bulk_update: data.capabilities.allow_bulk_update,
-            create: data.capabilities.allow_create,
-            delete: data.capabilities.allow_delete,
-            edit: data.capabilities.allow_edit,
-            export: data.capabilities.allow_export,
-            publish: data.capabilities.allow_publish,
-            view: data.capabilities.allow_view
-          }
-
-          setTableColumns(tableColumns => [
-            ...tableColumns,
-            userAccessData
-          ])
-
           modules.push(
-            <tr>
-              <td>{data.module_name}</td>
-              <td>{data.module_package_name}</td>
-              <AccessManagerRow 
-                capabilities={data.capabilities}
-                moduleId={data.id}
-                sendAllowedModuleData={sendAllowedModuleData}
-              />
-            </tr>
+            <AccessManagerRow 
+              moduleName={data.module_name} 
+              category={data.module_package_name} 
+              capabilities={data.capabilities}
+              moduleId={data.id}
+              sendAllowedModuleData={sendAllowedModuleData}
+            />
           )
           
         })
@@ -221,25 +217,6 @@ function ModuleAccess(props) {
       throw e
     }
   }, [id])
-
-  const handleChange = (v, cell, row) => {
-    let currentValue = !cell
-    console.log(v)
-  }
-
-  function switchFormatter(cell, row, rowIndex, formatExtraData){
-    return (
-      <Form.Check 
-        type="switch"
-        id={`${formatExtraData}-${row.id}`}
-        defaultChecked={cell}
-        className="custom-switch-bb"
-        onChange={(v) => {
-          handleChange(v, cell, row)
-        }}
-      />
-    )
-  }
   
   return (
     <>
@@ -280,19 +257,28 @@ function ModuleAccess(props) {
                         columns={capabilitiesHeader}
                         data={modules}
                       /> */}
-                      {/* <Table striped className="table-module">
+                      <Table striped className="table-module">
                         <thead>
                           <tr>
-                            <th>Module Name</th>
-                            <th>Category</th>
+                            <th className="cursor-pointer" onClick={handleModuleNameClick}>
+                              Module Name
+                              {
+                                moduleNameSortAsc ? <i className="fas fa-angle-up float-right" style={{marginTop: "0.3rem"}}></i> : <i className="fas fa-angle-down float-right" style={{marginTop: "0.3rem"}}></i>
+                              }
+                            </th>
+                            <th className="cursor-pointer" onClick={handleCategoryClick}>
+                              Category
+                              {
+                                categorySortAsc ? <i className="fas fa-angle-up float-right" style={{marginTop: "0.3rem"}}></i> : <i className="fas fa-angle-down float-right" style={{marginTop: "0.3rem"}}></i>
+                              }
+                            </th>
                             {capabilitiesHeader}
                           </tr>
                         </thead>
                         <tbody>
                           {modules}
                         </tbody>
-                      </Table> */}
-                      <BootstrapTable keyField='module_name' columns={tableHeader} data={tableColumns}/>
+                      </Table>
                     </div>
                   </Card.Body>
                 </Card>
