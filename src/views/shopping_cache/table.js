@@ -9,6 +9,7 @@ import { ReactSVG } from "react-svg"
 import FormInputSelectAjax from 'components/form/input-select-ajax'
 import FormCreate from "./form"
 import FormCreateHotel from "./hotel_form"
+import { format } from "date-fns"
 
 export default function ShoppingCache() {
   const [key, setKey] = useState("CORPORATE CLIENT");
@@ -82,11 +83,11 @@ export default function ShoppingCache() {
     createOnModal: true,
     modalTitle: "test",
     hideDetail: true,
-    title: "Team Assignment",
-    titleModal: "Team Assignment",
+    title: "Shopping Cache",
+    titleModal: "Shopping Cache",
     baseRoute: "/master/general-team-assignment/form",
     endpoint: "/master/cache-criterias/flights",
-    deleteEndpoint: "",
+    deleteEndpoint: "/master/batch-actions/delete/cache-criterias/flights",
     columns: [
       {
         title: "Trip Type",
@@ -94,29 +95,42 @@ export default function ShoppingCache() {
       },
       {
         title: "From",
-        data: "hotel_supplier_name",
-        render: renderColumn("hotel_supplier", "hotel_supplier_name"),
+        data: "cache_air_origin_destination_criteria.origin_city.city_name",
       },
       {
         title: "To",
-        data: "supplier_type.supplier_type_name",
-        render: (val) => !val ? "" : val,
+        data: "cache_air_origin_destination_criteria.destination_city.city_name",
       },
       {
         title: "Depart",
-        data: "hotel_supplier_code",
+        data: "cache_air_origin_destination_criteria.departure_datetime",
+        render: (val) => {
+          if(val){
+            return format(new Date(val), "d MMM yyyy")
+          }
+        }
       },
       {
         title: "Return",
-        data: "hotel_supplier_code",
+        data: "cache_air_origin_destination_criteria.arrival_datetime",
+        render: (val) => {
+          if(val){
+            return format(new Date(val), "d MMM yyyy")
+          }
+        }
       },
       {
         title: "Travelers",
-        data: "hotel_supplier_code",
+        data: "cache_air_travel_preference_criteria",
+        render: (val) => {
+          if(val){
+            return (val.number_of_adults+val.number_of_children+val.number_of_infants)
+          }
+        }
       },
       {
         title: "Flight Class",
-        data: "hotel_supplier_code",
+        data: "cache_air_travel_preference_criteria.cabin_type.cabin_type_name"
       },
       {
         title: "Corporate",

@@ -11,6 +11,7 @@ function Routes(props) {
   const [suggestions, setSuggestions] = useState([]);
 
   function getSuggestions(data, value) {
+    console.log("get suggestion", value)
     const inputValue = value.trim().toLowerCase();
     const inputLength = inputValue.length;
 
@@ -40,18 +41,23 @@ function Routes(props) {
     )
   }
 
-  useEffect(() => {
-    console.log(departureValue)
-    if((departureValue == "" || departureValue == null) && props.formik ){
-      console.log("KOSONG INI")
-      props.formik.setFieldValue(`trips[${props.index}].departure_data`, "")
-    }
-  }, [departureValue])
+  // useEffect(() => {
+  //   console.log(departureValue)
+  //   if((departureValue == "" || departureValue == null) && props.formik ){
+  //     console.log("KOSONG INI")
+  //     props.formik.setFieldValue(`trips[${props.index}].departure_data`, "")
+  //   }
+  // }, [departureValue])
   
   useEffect(() => {
     // console.log(props.formik.errors)
     console.log(getIn(props.formik.errors), "Errors")
   }, [props.formik])
+
+  useEffect(() => {
+    console.log(`index ${props.index}`,departureValue)
+  }, [departureValue])
+  
   
   
 

@@ -50,7 +50,7 @@ function Travellers(props) {
     if(props.formik){
       props.formik.setFieldValue("number_of_adults", adultCount)
       props.formik.setFieldValue("number_of_children", childrenCount)
-      props.fomrik.setFieldValue("number_of_infants", infantCount)
+      props.formik.setFieldValue("number_of_infants", infantCount)
     }
     
     document.body.click()
@@ -198,9 +198,12 @@ function Travellers(props) {
                     onClick={() => setChildrenCount(childrenCount + 1)} />
             }
           </div>
-          <div className='row w-100'>
-            <ChildrenDiv />
-          </div>
+          {props.shoppingCache ? "" : (
+            <div className='row w-100'>
+              <ChildrenDiv />
+            </div>
+          )}
+          
           
           
         </div>
@@ -236,15 +239,21 @@ function Travellers(props) {
             }
             
           </div>
-          <div className='row w-100'>
-            <InfantDiv />
-          </div>
+          {props.shoppingCache ? "" : (
+            <div className='row w-100'>
+              <InfantDiv />
+            </div>
+          )}
+          
         </div>
-        <Form.Check 
-          label="SELECT TRAVELERS"
-          onChange={() => setTravelerCheckbox(!travelerCheckbox)} 
-          checked={travelerCheckbox}
-        />
+        {props.shoppingCache ? "" : (
+          <Form.Check 
+            label="SELECT TRAVELERS"
+            onChange={() => setTravelerCheckbox(!travelerCheckbox)} 
+            checked={travelerCheckbox}
+          />
+        )}
+        
         <Button onClick={onTravelerClick} className='mt-3 w-100'>DONE</Button>
       </Popover.Content>
     </Popover>
@@ -299,7 +308,7 @@ function Travellers(props) {
         <h4 className='form-with-label__title'> TRAVELERS <span className='label-required'></span></h4>
         <ReactSVG src='/img/icons/people.svg' className='form-with-label__suggest-icon' />
         <OverlayTrigger trigger="click" placement='bottom' overlay={popover} rootClose={true}>
-          <input type="text" className='form-control rounded-0 form-with-label' name="travelers" id="travelers" value={travelerValue} />
+          <input type="text" className='form-control rounded-0 form-with-label' name="travelers" id="travelers" value={travelerValue} autoComplete="off" />
         </OverlayTrigger>
       </div>
     </>

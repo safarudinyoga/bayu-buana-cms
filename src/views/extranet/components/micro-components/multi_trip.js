@@ -24,6 +24,8 @@ const MultiTrip = (props) => {
   }
 
   const [departTime, setDepartTime] = useState({ 0: new Date() })
+  const [departureValue, setDepartureValue] = useState({ 0: ""})
+  const [arrivalValue, setArrivalValue] = useState({0: ""})
 
   const [travelerCheckboxConfirm, setTravelerCheckboxConfirm] = useState(false)
   const [travelerCount, setTravelerCount] = useState(0)
@@ -84,7 +86,15 @@ const MultiTrip = (props) => {
                   values.trips.map((trip, index) => (
                     <>
                       <div key={index} className="d-flex flex-wrap mb-2">
-                        <Routes index={index} airports={airports} formik={{errors, touched, setFieldValue, values}} />
+                        <Routes 
+                          index={index} 
+                          airports={airports} 
+                          formik={{errors, touched, setFieldValue, values}} 
+                          departureValue={departureValue}
+                          setDepartureValue={setDepartureValue}
+                          arrivalValue={arrivalValue}
+                          setArrivalValue={setArrivalValue}
+                        />
 
                         <div className="mr-4">
                           <div className="d-flex">
@@ -128,6 +138,11 @@ const MultiTrip = (props) => {
                             <Button
                               onClick={() => {
                                 arrayHelpers.remove(index)
+                                setDepartTime({
+                                  ...departTime,
+                                  [index]: ""
+                                })
+                                
                               }}
                             >
                               REMOVE {index}
