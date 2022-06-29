@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, { useState, useEffect } from 'react'
 import removeIcon from "assets/icons/remove.svg"
 import { Form, Button} from "react-bootstrap"
 import { Formik } from "formik"
@@ -6,12 +6,15 @@ import * as Yup from "yup"
 import DatePicker, { DateObject } from "react-multi-date-picker";
 import TimePicker from "react-multi-date-picker/plugins/time_picker";
 import { ReactSVG } from "react-svg"
+import Api from 'config/api'
 import "./style.scss"
 
 
 // import Form from "./form";
 
 export default function BookingSetting() {
+let api = new Api()
+
   const borderFeeTax = {
       borderRadius: 10,
       width: '100%'
@@ -146,6 +149,22 @@ const handleDeleteOfficeHour = () => {
     setCountId(countId - 1)
 }
 
+const getBookingSetting = async(code, setData, setId) => {
+    try {
+      let res = await api.get(`/master/configurations/booking`)
+      let data = res.data.items[0];
+    //   console.log(data, 'cek data')
+      setData(data)
+      setId(data.id)
+    } catch(e) {
+      console.log(e)
+    }
+  }
+
+useEffect(() => {
+    getBookingSetting()
+}, [])
+
 // console.log(afterOfficeHoursData, 'cek afterOfficeHoursData')
 
   return (
@@ -156,12 +175,14 @@ const handleDeleteOfficeHour = () => {
             <h1 style={titleText}>Booking Settings</h1>
             <hr />
             <div className="row">
-                <div style={{width: 300, marginLeft: 20}}>
-                    <div className="booking-wrapper"><p>Ticketing Time Limit Offset</p><ReactSVG src="/img/icons/info.svg" className="booking-icon-info" /></div>
-                    <div className="booking-wrapper"><p style={{paddingTop: 5}}>Ticketing Time Limit Notice Period</p><ReactSVG src="/img/icons/info.svg" className="booking-icon-info" /></div>
+                <div lg={12} className="ml-4">
+                    <div className="booking-wrapper"><p>Ticketing Time Limit Offset</p><span className="form-label-required">*</span><ReactSVG src="/img/icons/info.svg" className="booking-icon-info" /></div>
+                    <div className="booking-wrapper"><p>Ticketing Time Limit Notice Period</p><span className="form-label-required">*</span><ReactSVG src="/img/icons/info.svg" className="booking-icon-info" /></div>
+                    <div className="booking-wrapper"><p>Cancellation Deadline Offset</p><span className="form-label-required">*</span><ReactSVG src="/img/icons/info.svg" className="booking-icon-info" /></div>
+                    <div className="booking-wrapper"><p>Cancellation Deadline Notice Period</p><span className="form-label-required">*</span><ReactSVG src="/img/icons/info.svg" className="booking-icon-info" /></div>
                     <div className="booking-wrapper"><p>After Office Hours</p><ReactSVG src="/img/icons/info.svg" className="booking-icon-info" /></div>
                 </div>
-                <div>
+                <div className="ml-4">
                     <div className="row">
                         <div className="border" style={{width: 60, height: 34, borderRadius: 8,}} >
                             <Form.Control 
@@ -198,6 +219,42 @@ const handleDeleteOfficeHour = () => {
                             />
                         </div>
 
+                        <p style={{paddingLeft: 5, paddingTop: 2}}>Minutes</p>
+                    </div>
+                    <div className="row">
+                        <div className="border" style={{width: 60, height: 34, borderRadius: 8,}} >
+                            <Form.Control 
+                                type="text"
+                                minLength={0}
+                                maxLength={4}
+                                onChange={(values) => {
+                                    let pattern = /^\d+$/
+                                    if (pattern.text(values.target.values)) {
+                                        if (values.target.values <= 9999) {
+                                            setFieldValue("ticketingTimeLimitOffset", values.target.value)
+                                        }
+                                    }
+                                }}
+                            />
+                        </div>
+                        <p style={{paddingLeft: 5, paddingTop: 2}}>Minutes</p>
+                    </div>
+                    <div className="row">
+                        <div className="border" style={{width: 60, height: 34, borderRadius: 8,}} >
+                            <Form.Control 
+                                type="text"
+                                minLength={0}
+                                maxLength={4}
+                                onChange={(values) => {
+                                    let pattern = /^\d+$/
+                                    if (pattern.text(values.target.values)) {
+                                        if (values.target.values <= 9999) {
+                                            setFieldValue("ticketingTimeLimitOffset", values.target.value)
+                                        }
+                                    }
+                                }}
+                            />
+                        </div>
                         <p style={{paddingLeft: 5, paddingTop: 2}}>Minutes</p>
                     </div>
                     {/* {console.log(timeStart, 'cek timeStart')} */}
