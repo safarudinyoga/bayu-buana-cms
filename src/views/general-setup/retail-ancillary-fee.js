@@ -627,10 +627,11 @@ const RetailAncillaryFee = (props) => {
         openSnackbar(
           `Ancillary Fee has been successfully saved.`,
         )
-        history.goBack()
+        props.handleSelectTab("other-ancillary-fee")
       }
     } catch(e) {
       console.log(e)
+      openSnackbar(`Failed to save this record.`)
     }
   }
 
