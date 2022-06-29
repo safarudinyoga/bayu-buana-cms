@@ -8,7 +8,7 @@ import FormWrapper from "./wrapper"
 
 class FormBuilder extends Component {
   constructor(props) {
-    console.log(props);
+    console.log(props, 'builder');
     super(props)
     this.translationForm = React.createRef()
   }

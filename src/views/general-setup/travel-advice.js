@@ -12,6 +12,7 @@ import { Editor } from "react-draft-wysiwyg"
 import { Col, OverlayTrigger, Tooltip, Button } from "react-bootstrap"
 import BBDataTable from "components/table/bb-data-table"
 import createIcon from "assets/icons/create.svg"
+import { EditorState } from 'draft-js';
 import FormInputSelectAjax from "components/form/input-select-ajax"
 import { Alert } from "bootstrap"
 
@@ -21,8 +22,14 @@ const backUrl = "master/configurations/travel-advice"
 function TravelAdvice(props) {
   let dispatch = useDispatch()
   let formId = props.match.params.id
+  const MAX_LENGTH = 4000;
 
   const isView = useQuery().get("action") === "view"
+  const [editorImportantNoticeState, setImportantNoticeState] = useState(
+    EditorState.createEmpty()
+  );
+
+  
   const [formBuilder, setFormBuilder] = useState(null)
   const [loading, setLoading] = useState(true)
   const [translations, setTranslations] = useState([])
@@ -227,7 +234,9 @@ function TravelAdvice(props) {
         )
       }
     }
-  }
+  };
+
+  
 
   const fetchData = async() => {
       let api = new Api()
@@ -283,19 +292,74 @@ function TravelAdvice(props) {
             paddingTop: 20,
             fontWeight: 600,
             paddingLeft: 10
-        };
+    };
 
-        // const handleBeforeInput = () => {val => {
-        //   const textLength = editorValue.getCurrentContent().getPlainText().length;
-        //   if (val && textLength >= maxLength) {
-        //       return 'handled';
-        //    }
-        //    return 'not-handled';
-        //  }}
-        // const handlePastedText = () => {val => {
-        //    const textLength = editorValue.getCurrentContent().getPlainText().length;
-        //    return ((val.length + textLength) >= maxLength);
-        //   }}
+    const _getLengthOfSelectedText = () => {
+      const currentSelection = editorImportantNoticeState.getSelection();
+      const isCollapsed = currentSelection.isCollapsed();
+  
+      let length = 0;
+  
+      if (!isCollapsed) {
+        const currentContent = editorImportantNoticeState.getCurrentContent();
+        const startKey = currentSelection.getStartKey();
+        const endKey = currentSelection.getEndKey();
+        const startBlock = currentContent.getBlockForKey(startKey);
+        const isStartAndEndBlockAreTheSame = startKey === endKey;
+        const startBlockTextLength = startBlock.getLength();
+        const startSelectedTextLength = startBlockTextLength - currentSelection.getStartOffset();
+        const endSelectedTextLength = currentSelection.getEndOffset();
+        const keyAfterEnd = currentContent.getKeyAfter(endKey);
+        console.log(currentSelection)
+        if (isStartAndEndBlockAreTheSame) {
+          length += currentSelection.getEndOffset() - currentSelection.getStartOffset();
+        } else {
+          let currentKey = startKey;
+  
+          while (currentKey && currentKey !== keyAfterEnd) {
+            if (currentKey === startKey) {
+              length += startSelectedTextLength + 1;
+            } else if (currentKey === endKey) {
+              length += endSelectedTextLength;
+            } else {
+              length += currentContent.getBlockForKey(currentKey).getLength() + 1;
+            }
+  
+            currentKey = currentContent.getKeyAfter(currentKey);
+          };
+        }
+      }
+  
+      return length;
+  }
+  
+  const _handleBeforeInput = () => {
+      const currentContent = editorImportantNoticeState.getCurrentContent();
+      const currentContentLength = currentContent.getPlainText('').length;
+      const selectedTextLength = _getLengthOfSelectedText();
+  
+      if (currentContentLength - selectedTextLength > MAX_LENGTH - 1) {
+        console.log('you can type max ten characters');
+  
+        return 'handled';
+      }
+  }
+  
+  const _handlePastedText = (pastedText) => {
+      const currentContent = editorImportantNoticeState.getCurrentContent();
+      const currentContentLength = currentContent.getPlainText('').length;
+      const selectedTextLength = _getLengthOfSelectedText();
+  
+      if (currentContentLength + pastedText.length - selectedTextLength > MAX_LENGTH) {
+        console.log('you can type max ten characters');
+  
+        return 'handled';
+      }
+  }
+  
+  const _handleChange = (editorState) => {
+      setImportantNoticeState(editorState)
+  }
 
   return (
       <div className="border" style={borderFeeTax}>
@@ -416,6 +480,9 @@ function TravelAdvice(props) {
                                         column="country_name"
                                         editorStyle={editorStyle} 
                                         editorClassName="editorClassName"
+                                        handleBeforeInput={_handleBeforeInput}
+                                        handlePastedText={_handlePastedText}
+                                        onEditorStateChange={_handleChange}
                                         // onEditorStateChange={(e) => setDescription(e.target.value)}
                                         toolbarStyle={{background: '#ECECEC 0% 0% no-repeat padding-box'}}
                                         onChange={(e) => {

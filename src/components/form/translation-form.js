@@ -10,6 +10,7 @@ import arrowdownIcon from 'assets/icons/arrow-down.svg';
 
 export default class TranslationForm extends Component {
   constructor(props) {
+    console.log(props, 'translation');
     super(props)
     this.state = {
       pillStyle: {},
@@ -86,6 +87,7 @@ export default class TranslationForm extends Component {
   }
 
   onValueChange(lang, name, e) {
+    console.log(lang, 'name', e.target.value, 'e');
     if (!this.translated[lang]) {
       this.translated[lang] = { language_code: lang }
     }
@@ -94,7 +96,11 @@ export default class TranslationForm extends Component {
     this.props.fields.map((field, index) => {
       let id = "trans-" + lang + "-" + field.name
       let elem = document.getElementById(id)
-      inField.push(elem.value)
+      if (elem) {
+        inField.push(elem.value)
+      } else {
+        console.log(elem, 'gagal', id);
+      }
       return field
     })
     this.translated[lang][name] = e.target.value
@@ -202,18 +208,19 @@ export default class TranslationForm extends Component {
                         </Col>
                     </div>
                   )
-                } if (field.type === "Description") {
+                } 
+                if (field.type === "Description") {
                     return (
                       <FormInputControl
                         wrapperAlign="start"
                         disabled={this.props.isView || this.state.loading}
                         key={index}
                         id={"trans-" + lang.language_code + "-" + field.name}
-                        // onChange={this.onValueChange.bind(
-                        //   this,
-                        //   lang.language_code,
-                        //   field.name,
-                        // )}
+                        onChange={this.onValueChange.bind(
+                          this,
+                          lang.language_code,
+                          field.name,
+                        )}
                         name={field.name + "_" + lang.language_code}
                         type={field.type}
                         label={field.label}
@@ -222,25 +229,26 @@ export default class TranslationForm extends Component {
                         maxLength={field?.maxLength || "256"}
                       />
                     )
+                } else {
+                  return (
+                    <FormInputControl
+                      wrapperAlign="start"
+                      disabled={this.props.isView || this.state.loading}
+                      key={index}
+                      id={"trans-" + lang.language_code + "-" + field.name}
+                      onChange={this.onValueChange.bind(
+                        this,
+                        lang.language_code,
+                        field.name,
+                      )}
+                      name={field.name + "_" + lang.language_code}
+                      type={field.type}
+                      label={field.label}
+                      cl={{ lg: 5 }}
+                      maxLength={field?.maxLength || "256"}
+                    />
+                  )
                 }
-                return (
-                  <FormInputControl
-                    wrapperAlign="start"
-                    disabled={this.props.isView || this.state.loading}
-                    key={index}
-                    id={"trans-" + lang.language_code + "-" + field.name}
-                    onChange={this.onValueChange.bind(
-                      this,
-                      lang.language_code,
-                      field.name,
-                    )}
-                    name={field.name + "_" + lang.language_code}
-                    type={field.type}
-                    label={field.label}
-                    cl={{ lg: 5 }}
-                    maxLength={field?.maxLength || "256"}
-                  />
-                )
               })}
             </FormHorizontal>
           </div>
