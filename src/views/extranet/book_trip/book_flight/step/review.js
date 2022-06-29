@@ -76,7 +76,7 @@ const Review = ({handleSelectTab}) => {
 		</Modal>
 	)
 
-  const FlightDetail = ({footer, airline}) => (
+  const FlightSummary = ({footer, airline}) => (
     <div>
       <Row>
         <Col sm={11}>
@@ -206,7 +206,7 @@ const Review = ({handleSelectTab}) => {
           {
             Flight?.airlines?.map((airline, idx) => (
               <div key={idx}>
-                <FlightDetail key={idx} airline={airline} footer={idx === Flight.airlines?.length-1}/>
+                <FlightSummary key={idx} airline={airline} footer={idx === Flight.airlines?.length-1}/>
                 {idx < Flight.airlines?.length-1 ? 
                 <div className='middle-border'></div> : <></>}
               </div>

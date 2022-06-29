@@ -58,7 +58,7 @@ function Passenger({handleSelectTab}) {
 		</div>
 	)
 
-	const FlightDetail = ({airline, footer}) => (
+	const FlightSummary = ({airline, footer}) => (
 		<div>
 			<Row>
 				<Col sm={11}>
@@ -205,7 +205,7 @@ function Passenger({handleSelectTab}) {
 				{
 					Flight?.airlines?.map((airline, idx) => (
 						<div key={idx}>
-							<FlightDetail key={idx} airline={airline} footer={idx === Flight.airlines?.length-1}/>
+							<FlightSummary key={idx} airline={airline} footer={idx === Flight.airlines?.length-1}/>
 							{idx < Flight.airlines?.length-1 ? 
 							<div className='middle-border'></div> : <></>}
 						</div>
