@@ -10,7 +10,7 @@ import removeIcon from "assets/icons/remove.svg"
 import {
   Formik,
   FastField,
-  FormFormik as form,
+  Form as FormFormik,
   FieldArray,
   Field,
   ErrorMessage,
@@ -18,44 +18,74 @@ import {
 import FormEmailReceipt from "../form/form-email-receipt"
 import SelectAsync from "components/form/select-async"
 import createIcon from "assets/icons/create.svg"
+import { Typeahead } from "react-bootstrap-typeahead"
 
 const endpoint = "/master/configurations/email-recipients"
+var options = [
+  { id: 1, name: "John" },
+  { id: 2, name: "Miles" },
+  { id: 3, name: "Charles" },
+  { id: 4, name: "Herbie" },
+]
 
 const EmailReceiptModal = (props) => {
   const API = new Api()
   const dispatch = useDispatch()
   const [inputFields, setInputFields] = useState([{ name: "", email: "" }])
-  const [name, setName] = useState([])
-  const [email, setEmail] = useState([])
+  const [selectName, setSelectName] = useState([])
+  const [selectEmail, setSelectEmail] = useState([])
+  const [SelectionsName, setSelectionsName] = useState([])
+  const [selectionsEmail, setSelectionEmail] = useState([])
 
   const initialForm = {
     sender_name: "",
     sender_email: "",
   }
 
-  console.log("tes", name)
-
   useEffect(async () => {
     try {
       let res = await API.get("/master/employees?size=-1")
-      let senderName = []
-      let senderEmail = []
+      const optionsName = []
 
-      res.data.items.map(async (item, i) => {
-        let nameData = {}
-        let emailData = {}
-        if (item) {
-          nameData = {
-            given_name: item.given_name,
-            middle_name: item.middle_name,
-            surname: item.surname,
-            email: item.contact ? item.contact.email : "",
-          }
-          senderName.push(nameData)
-        }
-      })
-      setName(senderName)
-      setEmail(senderEmail)
+      if (res.data.items.length > 0) {
+        res.data.items.forEach((data) => {
+          optionsName.push(
+            {
+              label: data.given_name,
+              value: data.id,
+            },
+            {
+              label: data.middle_name,
+              value: data.id,
+            },
+            {
+              label: data.surname,
+              value: data.id,
+            },
+            {
+              label: data.surname,
+              value: data.id,
+            },
+          )
+          setSelectName(optionsName)
+        })
+      } else {
+        setSelectName([])
+      }
+      let res2 = await API.get("/master/employees?size=-1")
+      const optionsEmail = []
+      if (res2.data.items.length > 0) {
+        res2.data.items.forEach((data) => {
+          optionsEmail.push({
+            label: data.contact.email,
+            value: data.id,
+          })
+
+          setSelectEmail(optionsEmail)
+        })
+      } else {
+        setSelectEmail([])
+      }
     } catch (error) {}
   }, [])
 
@@ -88,6 +118,13 @@ const EmailReceiptModal = (props) => {
       message_type: "",
       recipient_name: "",
       recipient_email: "",
+      people: [
+        {
+          id: Math.random(),
+          firstName: "",
+          lastName: "",
+        },
+      ],
     },
   ])
 
@@ -106,6 +143,12 @@ const EmailReceiptModal = (props) => {
     // .required("Recipient Email is required."),
     sender_name: Yup.object().required("Sender Name is required."),
     sender_email: Yup.object().required("Sender Email is required."),
+    people: Yup.array().of(
+      Yup.object().shape({
+        firstName: Yup.string().required("First name is required"),
+        lastName: Yup.string().required("Last name is required"),
+      }),
+    ),
   })
 
   const onSubmit = async (values, a) => {
@@ -250,7 +293,7 @@ const EmailReceiptModal = (props) => {
                         <FastField name="recipient_name" disabled>
                           {({ field, form }) => (
                             <>
-                              <Form.Control
+                              {/* <Form.Control
                                 type="text"
                                 isInvalid={
                                   form.touched.recipient_name &&
@@ -270,14 +313,24 @@ const EmailReceiptModal = (props) => {
                                       ? form.errors.recipient_name
                                       : null}
                                   </Form.Control.Feedback>
-                                )}
+                                )} */}
                             </>
                           )}
                         </FastField>
+                        <Typeahead
+                          id="basic-typeahead-single"
+                          onChange={(v) => {
+                            setFieldValue("recipient_name", v)
+                          }}
+                          options={selectName}
+                          newSelectionPrefix=""
+                          allowNew
+                          placeholder="Choose a state..."
+                        />
                       </Col>
 
-                      <Col md={9} lg={3}>
-                        <FastField name="lastName" disabled>
+                      <Col md={9} lg={4}>
+                        {/* <FastField name="lastName" disabled>
                           {({ field, form }) => (
                             <>
                               <Form.Control
@@ -303,7 +356,15 @@ const EmailReceiptModal = (props) => {
                                 )}
                             </>
                           )}
-                        </FastField>
+                        </FastField> */}
+                        <Typeahead
+                          id="basic"
+                          onChange={(v) => {
+                            setFieldValue("recipient_email", v)
+                          }}
+                          options={selectEmail}
+                          placeholder="Choose a state..."
+                        />
                       </Col>
                       <Col md={9} lg={1}>
                         {initialValues.length !== 1 && (
@@ -404,6 +465,7 @@ export default function EmailReceiptTable() {
     isHideDownloadLogo: true,
     title: "Handler Setup",
     titleModal: "Handler Setup",
+    customSort: ["message_type_name"],
     baseRoute: "/master/configurations/email-recipients/form",
     endpoint: "/master/configurations/email-recipients",
     deleteEndpoint:
