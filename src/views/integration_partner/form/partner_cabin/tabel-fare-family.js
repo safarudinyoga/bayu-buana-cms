@@ -1,13 +1,18 @@
 import BBDataTable from "components/table/bb-data-table"
-import { Card} from "react-bootstrap"
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import FareFamilyModal from "./form/form-fare-family"
 
 
 
 export default function IntegrationPartnerCabinTypesTable(props) {
 
-  const { partnerId, partnerCabinId } = props
+  const { partnerId, partnerCabinId, isView } = props
+  const [showActions, setShowAction] = useState(true)
+
+  useEffect(() => {
+    setShowAction(isView)
+  }, [isView])
+
   const onReset = () => {
     setParams({ ...params, filters: [] })
   }
@@ -19,7 +24,7 @@ export default function IntegrationPartnerCabinTypesTable(props) {
     showAdvancedOptions: false,
     baseRoute: "/master/form",
     endpoint: `/master/integration-partners/${partnerId}/cabin-types/${partnerCabinId}/fare-families`,
-    deleteEndpoint: "/master/batch-actions/delete/fare-families",
+    deleteEndpoint:`/master/integration-partners/${partnerId}/cabin-types/${partnerCabinId}/fare-families`,
     activationEndpoint: "/master/batch-actions/activate/fare-families",
     deactivationEndpoint: "/master/batch-actions/deactivate/fare-families",
     columns: [
@@ -41,6 +46,7 @@ export default function IntegrationPartnerCabinTypesTable(props) {
     module:"fare-types",
     recordName: ["fare_type_name"],
     createOnModal: true,
+    isShowColumnAction: showActions,
   })
 
   return <>
