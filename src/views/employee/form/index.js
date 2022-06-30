@@ -40,7 +40,6 @@ const UserProfile = (props) => {
   useEffect(async () => {
     let api = new Api()
     let formId = props.match.params.id
-    console.log({formId, isView});
 
     let docTitle = "Edit Employee"
     let breadcrumbTitle = "Edit Employee"

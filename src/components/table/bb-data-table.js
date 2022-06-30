@@ -1082,6 +1082,7 @@ class BBDataTable extends Component {
     const { showCreateModal, modalTitle, modalTitleNew, showModalDelete, showCreateNewModal, createNewModal, createOnModal, deleteEndpoint, showModalHeader = true} = this.props
 
     let infoFromState = this.state.info
+    // let addText = this.state.text
     infoFromState = infoFromState ? infoFromState.split(",") : []
 
     return (
@@ -1103,7 +1104,7 @@ class BBDataTable extends Component {
             this.state.selected.length > 0 || infoFromState.length === 0
             ? <p>Are you sure want to delete this?</p>
             : this.props.isPartner ?
-            `Are you sure want to delete '${infoFromState}' ?`
+            `Are you sure want to delete ${this.props.extraText ||  ""} '${infoFromState}' ?` 
             :
             (
               <>
@@ -1111,7 +1112,6 @@ class BBDataTable extends Component {
               {infoFromState.map((d) => (<><br/>{d}</>))}
             </>
             )
-
           }
           </ModalBody>
 

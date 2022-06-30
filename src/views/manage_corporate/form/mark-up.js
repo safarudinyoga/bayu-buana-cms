@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { Row, Col, Card, Form, Button } from "react-bootstrap"
 import Select from "components/form/select"
+import { useParams } from "react-router-dom"
 
 // components & style
 import BbDataTable from 'components/table/bb-data-table'
@@ -10,7 +11,7 @@ import BbDataTable from 'components/table/bb-data-table'
 
 
 const MarkUp = props => {
-
+  const { id } = useParams()
   const [isFieldSelected, setisFieldSelected] = useState({
     flight: false,
     hotel: false,
@@ -28,7 +29,7 @@ const MarkUp = props => {
     hideCreate: true,
     isShowColumnAction: false,
     baseRoute: "/master/manage-corporate/form",
-    endpoint: "/master/ancillary-fee",
+    endpoint: `/master/agent-corporates/${id}/markup`,
     columns: [
       {
         title: "Destination",
@@ -61,7 +62,7 @@ const MarkUp = props => {
     hideCreate: true,
     isShowColumnAction: false,
     baseRoute: "/master/manage-corporate/form",
-    endpoint: "/master/ancillary-fee",
+    endpoint: `/master/agent-corporates/${id}/markup`,
     columns: [
       {
         title: "Destination",
@@ -90,7 +91,7 @@ const MarkUp = props => {
     isCheckbox: false,
     isShowColumnAction: false,
     baseRoute: "/master/manage-corporate/form",
-    endpoint: "/master/ancillary-fee",
+    endpoint: `/master/agent-corporates/${id}/markup`,
     columns: [
       {
         title: "Type of Service",

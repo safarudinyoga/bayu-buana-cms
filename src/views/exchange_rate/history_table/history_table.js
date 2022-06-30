@@ -135,7 +135,7 @@ function HistoryTable(props) {
 												<td className="text-center">{"Andrew Griffits"}</td>
 												<td className="text-center">
 													<Badge className="badge-bb">
-														{d.status === 1 ? "Changed" : ""}
+														{d.event? d.event.event_name : ""}
 													</Badge>
 												</td>
 												<td className="text-center">
@@ -145,7 +145,8 @@ function HistoryTable(props) {
 												</td>
 												<td className="text-center">{moment(d.created_at).format("DD MMM ")} at {moment(d.created_at).format("HH.MM")}</td>
 											</tr>
-											))
+											)
+											)
 										}
 								</tbody>
 							</Table>
