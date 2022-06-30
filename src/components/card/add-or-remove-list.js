@@ -78,9 +78,7 @@ const AddOrRemoveList = ({
   }
 
   const handleSelectAssignmentLeader = (e) => {
-    console.log("e: ", e)
-    console.log("form: ")
-    // setFormValues("aaaa")
+    console.log("handleSelectAssignmentLeader: ", e)
     // setFormValues((data) => [
     //   ...data.map((item) => ({
     //     can_issue_tickets:
@@ -145,54 +143,49 @@ const AddOrRemoveList = ({
                     </div>
                   ) : (
                     <div className="d-flex align-items-center">
+                      {onModal && (
+                        <div
+                          style={{
+                            backgroundColor: item.can_issue_ticket
+                              ? "#027F71"
+                              : "#D3D3D3",
+                            padding: "2px 10px 2px",
+                          }}
+                        >
+                          <label className="label-flight-ticket">
+                            <Field
+                              type="checkbox"
+                              name="is_leader"
+                              // onChange={() =>
+                              //   handleSelectAssignmentLeader(
+                              //   )
+                              // }
+                              className="add-remove-cb"
+                            />
+                            <img
+                              src={peopleCheck}
+                              alt="flight-ticket"
+                            />
+                          </label>
+                        </div>
+                      )}
                       <div
                         style={{
-                          backgroundColor: item.can_issue_ticket
-                            ? "#027F71"
-                            : "#D3D3D3",
+                          backgroundColor: item.checked ? "#027F71" : "#D3D3D3",
                           padding: "2px 10px 2px",
+                          marginLeft: "2px",
                         }}
                       >
                         <label className="label-flight-ticket">
                           <Field
                             type="checkbox"
                             name="can_issue_ticket"
-                            value={item.given_name}
-                            // onChange={() =>
-                            //   handleSelectAssignmentLeader(
-                            //     item.given_name +
-                            //       item.middle_name +
-                            //       item.surname,
-                            //   )
-                            // }
                             className="add-remove-cb"
                           />
-                          <img src={onModal ? peopleCheck : ticketDetailed} alt="flight-ticket" />
+                          <img src={ticketDetailed} alt="flight-ticket" />
                         </label>
                       </div>
-                      {onModal && (
-                        <div
-                          style={{
-                            backgroundColor: item.checked
-                              ? "#027F71"
-                              : "#D3D3D3",
-                            padding: "2px 10px 2px",
-                            marginLeft: "2px",
-                          }}
-                        >
-                          <label className="label-flight-ticket">
-                            <Field
-                              type="checkbox"
-                              name="check"
-                              onChange={() =>
-                                handleSelectAssignmentLeader(item.employee_id)
-                              }
-                              className="add-remove-cb"
-                            />
-                            <img src={ticketDetailed} alt="flight-ticket" />
-                          </label>
-                        </div>
-                      )}
+
                       <div
                         className="w-100 d-flex justify-content-between align-items-center"
                         style={{ paddingLeft: 13, paddingRight: 15 }}
@@ -227,31 +220,30 @@ const AddOrRemoveList = ({
         </Card>
         {!canRemoveIndex && (
           <>
-            <div className="d-flex align-items-center">
-              <div
-                className="label-flight-ticket"
-                style={{ backgroundColor: "#027F71", padding: "1px 8px 3px" }}
-              >
-                <img src={peopleCheck} alt="flight-ticket" />
-              </div>
-              <span style={{ fontSize: "12px", paddingLeft: "8px" }}>
-                Click to allow/ forbid travel consultant to issue flight ticket.
-              </span>
-            </div>
             {onModal && (
-              <div className="d-flex align-items-center pt-2">
+              <div className="d-flex align-items-center">
                 <div
                   className="label-flight-ticket"
                   style={{ backgroundColor: "#027F71", padding: "1px 8px 3px" }}
                 >
-                  <img src={ticketDetailed} alt="flight-ticket" />
+                  <img src={peopleCheck} alt="flight-ticket" />
                 </div>
                 <span style={{ fontSize: "12px", paddingLeft: "8px" }}>
-                  Click to assign/forbid travel consultant to issue flight
-                  ticket.
+                  Click to assign/remove assignment as leader.
                 </span>
               </div>
             )}
+            <div className="d-flex align-items-center pt-2">
+              <div
+                className="label-flight-ticket"
+                style={{ backgroundColor: "#027F71", padding: "1px 8px 3px" }}
+              >
+                <img src={ticketDetailed} alt="flight-ticket" />
+              </div>
+              <span style={{ fontSize: "12px", paddingLeft: "8px" }}>
+                Click to assign/forbid travel consultant to issue flight ticket.
+              </span>
+            </div>
           </>
         )}
       </Col>
@@ -292,11 +284,11 @@ const AddOrRemoveList = ({
           >
             {secondCardTitle}
           </Card.Header>
-          <div className="col-xs-12 col-sm-12 col-md-4 col-lg-5 col-xl-5 padding-0 align-middle">
+          <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 padding-0">
             <button
               onClick={() => setShowFilter(!showFilter)}
               type="button"
-              className="btn btn-link advanced-options-btn float-right float-md-left"
+              className="btn btn-link advanced-options-btn pl-3"
             >
               <span className="mr-2">Advanced Options</span>{" "}
               {showFilter ? (
