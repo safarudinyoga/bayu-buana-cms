@@ -92,7 +92,6 @@ Yup.addMethod(Yup.string, 'uniqueValueString', function (fieldName, message) {
           meal_plan_type_name: res.data.meal_plan_type_name ? res.data.meal_plan_type_name : ""
         })
       } catch (e) {
-        console.log(e)
       }
     }
     

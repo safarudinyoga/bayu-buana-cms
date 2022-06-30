@@ -1,20 +1,20 @@
-import React, { useState, useEffect } from 'react'
+import React, {useReducer} from 'react'
 import removeIcon from "assets/icons/remove.svg"
+import FormInputControl from "components/form/input-control"
 import { Form, Button} from "react-bootstrap"
-import { Formik } from "formik"
-import * as Yup from "yup"
-import DatePicker, { DateObject } from "react-multi-date-picker";
-import TimePicker from "react-multi-date-picker/plugins/time_picker";
-import { ReactSVG } from "react-svg"
-import Api from 'config/api'
-import "./style.scss"
-
-
+import { useSnackbar } from "react-simple-snackbar"
+import Hints from "assets/icons/hint.svg"
 // import Form from "./form";
 
-export default function BookingSetting() {
-let api = new Api()
+const options = {
+    position: "bottom-right",
+}
 
+export default function BookingSetting(props) {
+  const [, forceUpdate] = useReducer(x => x + 1, 0);
+  const [limitOffset, setLimitOffset] = React.useState(180)
+  const [limitPeriod, setLimitPeriod] = React.useState(240)
+  const [openSnackbar] = useSnackbar(options);
   const borderFeeTax = {
       borderRadius: 10,
       width: '100%'
@@ -30,237 +30,232 @@ let api = new Api()
       paddingLeft: 20
   };
 
-const [initialForm, setForm] = useState({
-    ticketing_time_limit_notice_period: "",
-    ticketing_time_limit_offset: "",
-    afterOfficeHoursData: {}
-})
+  const [data, setData] = React.useState({
+    field: [
+        {
+            day: [
+                {
+                    label: "Mon",
+                    value: true,
+                },
+                {
+                    label: "Tue",
+                    value: true,
+                },
+                {
+                    label: "Wed",
+                    value: true,
+                },
+                {
+                    label: "Thu",
+                    value: true,
+                },
+                {
+                    label: "Fri",
+                    value: true,
+                },
+                {
+                    label: "Sat",
+                    value: false,
+                },
+                {
+                    label: "Sun",
+                    value: false,
+                },
+            ],
+            time: [
+                {
+                    timeStart: "17:00",
+                },
+                {
+                    timeEnd: "07:00"
+                },
+            ]
+        }]
+    });
 
-const [countId, setCountId] = useState(1)
-const [timeStart, setTimeStart] = useState('00:00');
-const [timeEnd, setTimeEnd] = useState('00:00')
+//   const [data, setData] = React.useState([
+//     {
+//         day: [
+//             {
+//                 label: "Mon",
+//                 value: true,
+//             },
+//             {
+//                 label: "Tue",
+//                 value: true,
+//             },
+//             {
+//                 label: "Wed",
+//                 value: true,
+//             },
+//             {
+//                 label: "Thu",
+//                 value: true,
+//             },
+//             {
+//                 label: "Fri",
+//                 value: true,
+//             },
+//             {
+//                 label: "Sat",
+//                 value: false,
+//             },
+//             {
+//                 label: "Sun",
+//                 value: false,
+//             },
+//         ],
+//         time: [
+//             {
+//                 timeStart: "17:00",
+//             },
+//             {
+//                 timeEnd: "07:00"
+//             },
+//         ]
+//     },
+//   ])
 
-const [afterOfficeHoursData, setAfterOfficeHoursData] = useState([
-    {
-        id: countId,
-        day: [
-            {
-                label: "Mon",
-                value: false,
-            },
-            {
-                label: "Tue",
-                value: false,
-            },
-            {
-                label: "Wed",
-                value: false,
-            },
-            {
-                label: "Thu",
-                value: false,
-            },
-            {
-                label: "Fri",
-                value: false,
-            },
-            {
-                label: "Sat",
-                value: false,
-            },
-            {
-                label: "Sun",
-                value: false,
-            },
-        ],
-        time: [
-            {
-                timeStart: "00:00",
-            },
-            {
-                timeEnd: "00:00"
-            },
-        ]
+    const handleAdd = () => {
+        data.field.push({
+            day: [
+                {
+                    label: "Mon",
+                    value: false,
+                },
+                {
+                    label: "Tue",
+                    value: false,
+                },
+                {
+                    label: "Wed",
+                    value: false,
+                },
+                {
+                    label: "Thu",
+                    value: false,
+                },
+                {
+                    label: "Fri",
+                    value: false,
+                },
+                {
+                    label: "Sat",
+                    value: false,
+                },
+                {
+                    label: "Sun",
+                    value: false,
+                },
+            ],
+            time: [
+                {
+                    timeStart: "17:00",
+                },
+                {
+                    timeEnd: "07:00"
+                },
+            ]
+        })
+        forceUpdate()
     }
-])
 
-  const validationSchema = Yup.object().shape({
-    trips: Yup.array().of(
-      Yup.object().shape({
-        depart_time: Yup.string().required("Depart Time is required"),
-        departure_data: Yup.object().required("Departing from city or airport is required."),
-        arrival_data: Yup.object().required("Arriving to city or airport is required."),
-      })
-    )
-  })
-
-  const onSubmit = async (values, a) => {
-    // console.log("Values", values)
-  }
-
-  const handleAddOfficeHour = () => {
-    setCountId(countId + 1)
-    let obj = {
-        id: countId,
-        day: [
-            {
-                label: "Mon",
-                value: false,
-            },
-            {
-                label: "Tue",
-                value: false,
-            },
-            {
-                label: "Wed",
-                value: false,
-            },
-            {
-                label: "Thu",
-                value: false,
-            },
-            {
-                label: "Fri",
-                value: false,
-            },
-            {
-                label: "Sat",
-                value: false,
-            },
-            {
-                label: "Sun",
-                value: false,
-            },
-        ],
-        time: [
-            {
-                timeStart: "00:00"
-            },
-            {
-                timeEnd: "00:00"
-            },
-        ]
-    };
-    setAfterOfficeHoursData([...afterOfficeHoursData, obj])
-
-};
-
-const handleDeleteOfficeHour = () => {
-    setCountId(countId - 1)
-}
-
-const getBookingSetting = async(code, setData, setId) => {
-    try {
-      let res = await api.get(`/master/configurations/booking`)
-      let data = res.data.items[0];
-    //   console.log(data, 'cek data')
-      setData(data)
-      setId(data.id)
-    } catch(e) {
-      console.log(e)
+    const handleDelete = (index, idx) => {
+        data.field.splice(index)
+        forceUpdate()
     }
-  }
 
-useEffect(() => {
-    getBookingSetting()
-}, [])
+    const handleUpdate = (idx, index) => {
+        // console.log(data.field[idx].day[index].value);
+        if (data.field[idx].day[index].value === true) {
+            data.field[idx].day[index].value = false
+        } else {
+            data.field[idx].day[index].value = true
+        }
+        forceUpdate()
+    }
 
-// console.log(afterOfficeHoursData, 'cek afterOfficeHoursData')
+    const onSubmit = (e) => {
+        console.log(e, 'onsubmit');
+        openSnackbar(
+            // `Ancillary Fee has been successfully ${id ? "updated" : "saved"}.`,
+          )
+          props.handleSelectTab("invoice-settings")
+    }
 
   return (
-      <Formik initialValues={setForm} onSubmit={onSubmit} validationSchem={validationSchema} >
-        {({setFieldValue, values, handleSubmit}) =>(
-      <Form onSsubmit={handleSubmit} className="">
+      <div className="">
         <div className="border" style={borderFeeTax}>
             <h1 style={titleText}>Booking Settings</h1>
             <hr />
             <div className="row">
-                <div lg={12} className="ml-4">
-                    <div className="booking-wrapper"><p>Ticketing Time Limit Offset</p><span className="form-label-required">*</span><ReactSVG src="/img/icons/info.svg" className="booking-icon-info" /></div>
-                    <div className="booking-wrapper"><p>Ticketing Time Limit Notice Period</p><span className="form-label-required">*</span><ReactSVG src="/img/icons/info.svg" className="booking-icon-info" /></div>
-                    <div className="booking-wrapper"><p>Cancellation Deadline Offset</p><span className="form-label-required">*</span><ReactSVG src="/img/icons/info.svg" className="booking-icon-info" /></div>
-                    <div className="booking-wrapper"><p>Cancellation Deadline Notice Period</p><span className="form-label-required">*</span><ReactSVG src="/img/icons/info.svg" className="booking-icon-info" /></div>
-                    <div className="booking-wrapper"><p>After Office Hours</p><ReactSVG src="/img/icons/info.svg" className="booking-icon-info" /></div>
+                <div style={{width: 300, marginLeft: 20}}>
+                    <p>Ticketing Time Limit Offset 
+                        <span className={"text-label-input label-required"} style={{color: 'red', marginLeft: 3}}>*</span>  
+                        <span>
+                            <img src={Hints} alt="hint" className="ml-1 mb-2" title={"ticketing"}/>
+                        </span> 
+                    </p>
+                    <p style={{paddingTop: 5}}>Ticketing Time Limit Notice Period
+                        <span className={"text-label-input label-required"} style={{color: 'red', marginLeft: 3}}>*</span>  
+                        <span>
+                            <img src={Hints} alt="hint" className="ml-1 mb-2" title={"ticketing"}/>
+                        </span> 
+                    </p>
+                    <p>After Office Hours
+                        <span className={"text-label-input label-required"} style={{color: 'red', marginLeft: 3}}>*</span>  
+                        <span>
+                            <img src={Hints} alt="hint" className="ml-1 mb-2" title={"ticketing"}/>
+                        </span> 
+                    </p>
                 </div>
-                <div className="ml-4">
+                <div>
                     <div className="row">
-                        <div className="border" style={{width: 60, height: 34, borderRadius: 8,}} >
-                            <Form.Control 
-                                type="text"
-                                minLength={0}
-                                maxLength={4}
-                                onChange={(values) => {
-                                    let pattern = /^\d+$/
-                                    if (pattern.text(values.target.values)) {
-                                        if (values.target.values <= 9999) {
-                                            setFieldValue("ticketingTimeLimitOffset", values.target.value)
-                                        }
-                                    }
-                                }}
+                        <div style={{width: 100, height: 30, borderRadius: 8, marginLeft: -38}} >
+                            {/* <p style={{textAlign: 'end', width: 45, paddingTop: 2}} >180</p> */}
+                            <FormInputControl
+                                // label="Age Qualifying Type Code"
+                                // required={true}
+                                value={limitOffset}
+                                name="age_qualifying_type_code"
+                                cl={{md:"8"}}
+                                style={{width: 70}}
+                                cr="10"
+                                onChange={(e) =>
+                                    setLimitOffset(e.target.value)
+                                }
+                                // disabled={isView || loading}
+                                type="number"
                             />
                         </div>
-                        <p style={{paddingLeft: 5, paddingTop: 2}}>Minutes</p>
+                        <p style={{paddingLeft: 15, paddingTop: 2}}>Minutes</p>
                     </div>
                     <div className="row">
-                        <div className="border" style={{width: 60, height: 34, borderRadius: 8,}} >
-                            <Form.Control 
-                                type="text"
-                                minLength={0}
-                                maxLength={4}
-                                onInput={(value) => {
-                                    let pattern = /^\d+$/
-                                    if (pattern.text(value.target.value)) {
-                                        if (value.target.value <= 9999) {
-                                            // {console.log(value.target.value,'cek value')}
-                                            // setFieldValue("ticketingTimeLimitOffset", value.target.value)
-                                        }
-                                    }
-                                }}
+                        <div style={{width: 100, height: 30, borderRadius: 8, marginLeft: -38}} >
+                            {/* <p style={{textAlign: 'end', width: 45, paddingTop: 2}} >240</p>
+                             */}
+                             <FormInputControl
+                                // label="Age Qualifying Type Code"
+                                // required={true}
+                                value={limitPeriod}
+                                name="age_qualifying_type_code"
+                                cl={{md:"8"}}
+                                style={{width: 70}}
+                                cr="10"
+                                onChange={(e) =>
+                                    setLimitPeriod(e.target.value)
+                                }
+                                // disabled={isView || loading}
+                                type="number"
                             />
                         </div>
-
-                        <p style={{paddingLeft: 5, paddingTop: 2}}>Minutes</p>
+                        <p style={{paddingLeft: 15, paddingTop: 2}}>Minutes</p>
                     </div>
-                    <div className="row">
-                        <div className="border" style={{width: 60, height: 34, borderRadius: 8,}} >
-                            <Form.Control 
-                                type="text"
-                                minLength={0}
-                                maxLength={4}
-                                onChange={(values) => {
-                                    let pattern = /^\d+$/
-                                    if (pattern.text(values.target.values)) {
-                                        if (values.target.values <= 9999) {
-                                            setFieldValue("ticketingTimeLimitOffset", values.target.value)
-                                        }
-                                    }
-                                }}
-                            />
-                        </div>
-                        <p style={{paddingLeft: 5, paddingTop: 2}}>Minutes</p>
-                    </div>
-                    <div className="row">
-                        <div className="border" style={{width: 60, height: 34, borderRadius: 8,}} >
-                            <Form.Control 
-                                type="text"
-                                minLength={0}
-                                maxLength={4}
-                                onChange={(values) => {
-                                    let pattern = /^\d+$/
-                                    if (pattern.text(values.target.values)) {
-                                        if (values.target.values <= 9999) {
-                                            setFieldValue("ticketingTimeLimitOffset", values.target.value)
-                                        }
-                                    }
-                                }}
-                            />
-                        </div>
-                        <p style={{paddingLeft: 5, paddingTop: 2}}>Minutes</p>
-                    </div>
-                    {/* {console.log(timeStart, 'cek timeStart')} */}
                     <div>
                         {
-                            afterOfficeHoursData.map((el, idx) => {
+                            data.field.map((el, idx) => {
+                                console.log(el);
                                 return (
                                     <div key={idx} className="row" style={{borderBottom: '1px solid #D3D3D3', marginBottom: 10}} >
                                         {
@@ -273,6 +268,7 @@ useEffect(() => {
                                                                 <Form.Check
                                                                     type="checkbox"
                                                                     checked={item.value}
+                                                                    onChange={() => handleUpdate(idx, index)}
                                                                 />
                                                             </Form.Group>
                                                         </Form>
@@ -288,33 +284,19 @@ useEffect(() => {
                                                       {
                                                         index === 0 ?
                                                         <div style={{}}>
-                                                            <DatePicker
-                                                                value={timeStart}
-                                                                onChange={setTimeStart}
-                                                                format="HH:mm"
-                                                                disableDayPicker
-                                                                style={{width: 60, height: 34, borderRadius: 8, marginLeft: 10}}
-                                                                plugins={[
-                                                                    <TimePicker hideSeconds />,
-                                                                ]}
-                                                            />
+                                                          <div className="border" style={{width: 60, height: 34, borderRadius: 8,}} >
+                                                              <p style={{textAlign: 'end', width: 45, paddingTop: 2}} >{item.timeStart}</p>
+                                                          </div> 
                                                         </div> 
                                                         :null
                                                       }
                                                       {
                                                         index === 1 ?
-                                                        <div style={{display:"flex"}}>
-                                                            <DatePicker
-                                                                value={timeEnd}
-                                                                onChange={setTimeEnd}
-                                                                format="HH:mm"
-                                                                disableDayPicker
-                                                                style={{width: 60, height: 34, borderRadius: 8, marginLeft: 10}}
-                                                                plugins={[
-                                                                    <TimePicker hideSeconds />,
-                                                                ]}
-                                                            />
-                                                          <img src={removeIcon} style={{color: '#ebebeb', width: 15, height: 17, marginLeft: 10, marginTop: 6}} onClick={handleDeleteOfficeHour} alt="" />
+                                                        <div style={{display: 'flex'}}>
+                                                          <div className="border" style={{width: 60, height: 34, borderRadius: 8, marginLeft: 10}} >
+                                                              <p style={{textAlign: 'end', width: 45, paddingTop: 2}} >{item.timeEnd}</p>
+                                                          </div>
+                                                          <img onClick={() => handleDelete(idx, index)} src={removeIcon} style={{color: '#ebebeb', width: 15, height: 17, marginLeft: 10, marginTop: 6, cursor: 'pointer'}} />
                                                         </div>
                                                          :null
                                                       }
@@ -328,30 +310,28 @@ useEffect(() => {
                                 )
                             })
                         }
-                        {afterOfficeHoursData.id}
-                        <p style={{color: '#1103C4', fontSize: 14, textAlign: 'end'}} onClick={handleAddOfficeHour}>Add After Office Hours</p>
-                    </div>
-                        </div>
+                        <p onClick={() => handleAdd()} style={{color: '#1103C4', fontSize: 14, textAlign: 'end', cursor: 'pointer'}}>Add After Office Hours</p>
                     </div>
                 </div>
-                <div className="row" style={{marginTop: 10}}>
-                <Button
-                    variant="primary"
-                    type="submit"
-                    // disabled={isSubmitting || !dirty}
-                    style={{ marginRight: 15, marginLeft: 10 }}
-                >
-                    SAVE & NEXT
-                </Button>
-                <Button
-                    variant="secondary"
-                    // onClick={() => props.history.push(props.backUrl)}
-                >
-                    CANCEL
-                </Button>
-                </div>
-            </Form>
-            )}
-    </Formik>
+            </div>
+        </div>
+        <div className="row" style={{marginTop: 10}}>
+          <Button
+            variant="primary"
+            type="submit"
+            // disabled={isSubmitting || !dirty}
+            style={{ marginRight: 15, marginLeft: 10 }}
+            onClick={(e) => onSubmit(e)}
+          >
+            SAVE & NEXT
+          </Button>
+          <Button
+            variant="secondary"
+            // onClick={() => props.history.push(props.backUrl)}
+          >
+            CANCEL
+          </Button>
+        </div>
+      </div>
   )
 }

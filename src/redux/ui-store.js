@@ -12,7 +12,8 @@ export const uiStore = createSlice({
     reloadTable: false,
     modalTitle: "",
     modalTitleNew: "",
-    contentTitle: ""
+    contentTitle: "",
+    corporateClient: []
   },
   reducers: {
     setUIParams(state, action) {
@@ -57,6 +58,11 @@ export const uiStore = createSlice({
     setContentTitle: (state, action) => {
       state.contentTitle = action.payload
     },
+    setCorporateClient: (state, action) => {
+      console.log(action);
+      state.corporateClient = {...state.corporateClient, ...action.payload.data}
+      // state.corporateClient = action.payload.data
+    }
   },
 })
 
@@ -71,7 +77,8 @@ export const {
   setModalTitle,
   setModalTitleNew,
   setModalDelete,
-  setContentTitle
+  setContentTitle,
+  setCorporateClient
 } = uiStore.actions
 
 export default uiStore.reducer

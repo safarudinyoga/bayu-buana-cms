@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { Form, Row, Col, Card, Button, Tabs, TabPane, } from "react-bootstrap"
 import { useFormik } from "formik"
 import * as Yup from "yup"
+import { ReactSVG } from 'react-svg'
 
 // components & styles
 
@@ -27,7 +28,7 @@ const ImportDatabaseEmployee = props => {
           <h3 className="card-heading">Import Database Employee</h3>
           <Row className='mb-3 ml-2 d-flex align-items-center'>
             <Card.Text className='m-0 mr-4'>Download Employee Database Template</Card.Text>
-            <div className='icon_download' />
+            <ReactSVG src="/img/icons/download-with-arrow.svg" />
           </Row>
           <Row className='d-flex mb-3 ml-2 align-items-center'>
             <Card.Text className='m-0 mr-4'>Select a CSV file and upload the employee data that you would like to import</Card.Text>
@@ -37,7 +38,7 @@ const ImportDatabaseEmployee = props => {
               disabled={false}
               style={{ minWidth: '150px' }}
             >
-              <div className='icon_download mr-3' />
+              <ReactSVG src="/img/icons/upload_manage_corporate.svg" className='mr-2' />
               UPLOAD FILE
             </Button>
           </Row>

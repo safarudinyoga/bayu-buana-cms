@@ -18,6 +18,10 @@ import InvoiceSettings from "views/manage_corporate/form/invoice-settings"
 import MarkUp from "views/manage_corporate/form/mark-up"
 import ServiceFee from "views/manage_corporate/form/service-fee"
 import SystemAdministrator from "views/manage_corporate/form/system-administrator"
+import AssignTeam from "views/manage_corporate/form/assign-team"
+import Settings from "views/manage_corporate/form/settings"
+import CorporateRating from "views/manage_corporate/form/corporate-rating"
+import UploadDocument from "views/manage_corporate/form/upload-document"
 import Api from "config/api"
 import '../manage_corporate.css'
 
@@ -45,7 +49,7 @@ const ManageCorporateForm = ({ match }) => {
   const isView = useQuery().get("action") === "view"
 
   const [tabKey, setTabKey] = useState("general-information")
-  // const [tabKey, setTabKey] = useState("system-administrator")
+  // const [tabKey, setTabKey] = useState("upload-document")
   const [data, setData] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
 
@@ -225,34 +229,46 @@ const ManageCorporateForm = ({ match }) => {
               <Col sm={9}>
                 <Tab.Content>
                   <Tab.Pane eventKey="general-information">
-                    <GeneralInformation data={data != null ? data.general_information : ""} />
+                    {tabKey === 'general-information' && <GeneralInformation data={data != null ? data.general_information : ""} />}
                   </Tab.Pane>
                   <Tab.Pane eventKey="branch-office">
-                    <BranchOffice />
+                    {tabKey === 'branch-office' && <BranchOffice />}
                   </Tab.Pane>
                   <Tab.Pane eventKey="system-administrator">
-                    <SystemAdministrator />
+                    {tabKey === 'system-administrator' && <SystemAdministrator />}
+                  </Tab.Pane>
+                  <Tab.Pane eventKey="setting">
+                    {tabKey === 'setting' && <Settings />}
                   </Tab.Pane>
                   <Tab.Pane eventKey="mark-up">
-                    <MarkUp />
+                    {tabKey === 'mark-up' && <MarkUp />}
                   </Tab.Pane>
                   <Tab.Pane eventKey="service-fee">
-                    <ServiceFee />
+                    {tabKey === 'service-fee' && <ServiceFee />}
                   </Tab.Pane>
                   <Tab.Pane eventKey="ancillary-fee">
-                    <AncillaryFee />
+                    {tabKey === 'ancillary-fee' && <AncillaryFee />}
+                  </Tab.Pane>
+                  <Tab.Pane eventKey="assign-team">
+                    {tabKey === 'assign-team' && <AssignTeam />}
                   </Tab.Pane>
                   <Tab.Pane eventKey="credit-limit">
-                    <CreditLimit />
+                    {tabKey === 'credit-limit' && <CreditLimit />}
                   </Tab.Pane>
                   <Tab.Pane eventKey="invoice-settings">
-                    <InvoiceSettings />
+                    {tabKey === 'invoice-settings' && <InvoiceSettings />}
+                  </Tab.Pane>
+                  <Tab.Pane eventKey="corporate-rating">
+                    {tabKey === 'corporate-rating' && <CorporateRating />}
                   </Tab.Pane>
                   <Tab.Pane eventKey="corporate-fare">
-                    <CorporateFare />
+                    {tabKey === 'corporate-fare' && <CorporateFare />}
+                  </Tab.Pane>
+                  <Tab.Pane eventKey="upload-document">
+                    {tabKey === 'upload-document' && <UploadDocument />}
                   </Tab.Pane>
                   <Tab.Pane eventKey="import-database-employee">
-                    <ImportDatabaseEmployee />
+                    {tabKey === 'import-database-employee' && <ImportDatabaseEmployee />}
                   </Tab.Pane>
                 </Tab.Content>
               </Col>

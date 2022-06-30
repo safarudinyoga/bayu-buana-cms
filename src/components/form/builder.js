@@ -8,6 +8,7 @@ import FormWrapper from "./wrapper"
 
 class FormBuilder extends Component {
   constructor(props) {
+    console.log(props, 'builder');
     super(props)
     this.translationForm = React.createRef()
   }
@@ -23,9 +24,16 @@ class FormBuilder extends Component {
   }
 
   onBack() {
+    
     if (this.props.back) {
       // this.props.history.push(this.props.back)
-      this.props.history.goBack()
+      if (this.props.back === "master/configurations/travel-advice") {
+        console.log("ok", this.props);
+        this.props.history.push("/master/general-setup?sort=sort")
+        this.props.visibleAdd(false)
+      } else {
+        this.props.history.goBack()
+      }
     }
   }
 

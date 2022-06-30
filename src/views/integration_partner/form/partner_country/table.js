@@ -49,6 +49,7 @@ export default function IntegrationPartnerCountriesTable() {
       {title: "Partner Country Name", recordName: "country_name"}, 
     ],
     showModalHeader: false,
+    isPartner: true
   })
 
   return <><Card>
