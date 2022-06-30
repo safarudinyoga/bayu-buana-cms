@@ -28,11 +28,11 @@ export default function IntegrasiPartnerHotels() {
     columns: [
       {
         title: "Hotel",
-        data: "hotel_name",
+        data: "hotel.hotel_name",
       },
       {
         title: "Address",
-        data: "address",
+        data: "hotel.address",
       },
       {
         title: "Partner Hotel Code",
@@ -78,7 +78,7 @@ export default function IntegrasiPartnerHotels() {
   return(
     <Card>
       <Card.Body>
-        <h3 className="card-heading">Partner Hotelss</h3>
+        <h3 className="card-heading">Partner Hotels</h3>
         {
           isReplaceTable ? <PartnerHotelForm isReplaceTable={isReplaceTable} handleReplaceTable={handleReplaceTable} /> :
           <BBDataTable {...params} handleReplaceTable={handleReplaceTable}/>

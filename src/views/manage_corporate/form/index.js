@@ -1,4 +1,4 @@
-import { withRouter } from "react-router"
+import { withRouter, useHistory } from 'react-router';
 import React, { useState, useEffect } from 'react'
 import { Row, Col, Tab, Nav } from "react-bootstrap"
 import { useDispatch } from 'react-redux'
@@ -34,6 +34,7 @@ const staticWarding = {
   linkSub: '/master/manage-corporate'
 }
 const endpoint = '/master/agent-corporates'
+const backUrl = "/master/manage-corporate"
 const options = {
   position: "bottom-right",
 }
@@ -42,6 +43,7 @@ const Spinner = () => <div className="spinner"></div>
 
 const ManageCorporateForm = ({ match }) => {
   let dispatch = useDispatch()
+  const history = useHistory()
   const api = new Api()
   const formId = match?.params?.id
   const [openSnackbar] = useSnackbar(options)
@@ -50,6 +52,7 @@ const ManageCorporateForm = ({ match }) => {
 
   const [tabKey, setTabKey] = useState("general-information")
   // const [tabKey, setTabKey] = useState("upload-document")
+  const [finishStep, setStep] = useState(0)
   const [data, setData] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
 
@@ -102,9 +105,96 @@ const ManageCorporateForm = ({ match }) => {
     }
   }, [])
 
+  const handleSelectTab = async (key) => {
+    setTabKey(key)
+  }
 
+  const onSubmit = async(values) => {
+      if(formId) {
+
+      } else{
+        if(tabKey === "general-information") {
+          setTabKey("branch-office")
+          console.log('values', values)
+          await onSave(values)
+          if(finishStep < 1) setStep(1)
+        } else if(tabKey === "branch-office") {
+          setTabKey("system-administrator")
+          console.log('values', values)
+          if(finishStep < 2) setStep(2)
+        } else if(tabKey === "system-administrator") {
+          setTabKey("setting")
+          console.log('values', values)
+          if(finishStep < 3) setStep(3)
+        }else if(tabKey === "setting") {
+          setTabKey("mark-up")
+          console.log('values', values)
+          if(finishStep < 4) setStep(4)
+        }else if(tabKey === "mark-up") {
+          setTabKey("service-fee")
+          console.log('values', values)
+          if(finishStep < 5) setStep(5)
+        }else if(tabKey === "service-fee") {
+          setTabKey("ancillary-fee")
+          console.log('values', values)
+          if(finishStep < 6) setStep(6)
+        }else if(tabKey === "ancillary-fee") {
+          setTabKey("assign-team")
+          console.log('values', values)
+          if(finishStep < 7) setStep(7)
+        }else if(tabKey === "assign-team") {
+          setTabKey("credit-limit")
+          console.log('values', values)
+          if(finishStep < 8) setStep(8)
+        }else if(tabKey === "credit-limit") {
+          setTabKey("invoice-settings")
+          console.log('values', values)
+          if(finishStep < 9) setStep(9)
+        }else if(tabKey === "invoice-settings") {
+          setTabKey("corporate-rating")
+          console.log('values', values)
+          if(finishStep < 10) setStep(10)
+        }else if(tabKey === "corporate-rating") {
+          setTabKey("corporate-fare")
+          console.log('values', values)
+          if(finishStep < 11) setStep(11)
+        }else if(tabKey === "corporate-fare") {
+          setTabKey("upload-document")
+          console.log('values', values)
+          if(finishStep < 12) setStep(12)
+        }else if(tabKey === "upload-document") {
+          console.log('values', values)
+        }
+      }
+  }
+
+  const onSave = async(values) => {
+    try {
+      if (!formId) {
+        //ProsesCreateData
+          let res = await api.post("master/agent-corporates", values)
+          openSnackbar(
+            `Record 'Corporate: ${
+              values.corporate.corporate_name
+            } ' has been successfully saved.`,
+          )
+          history.goBack()
+      } else {
+        //ProsesUpdateData
+          let res = await api.put(`master/master/agent-corporates/${formId}`, values)
+          openSnackbar(
+            `Record 'Corporate: ${
+              values.corporate.corporate_name
+            } ' has been successfully update.`,
+          )
+          if(tabKey === "employment") history.goBack()
+      }
+    } catch(e) {
+      openSnackbar(`error: ${e}`)
+    }
+  }
   return (
-    <Tab.Container activeKey={tabKey} onSelect={(key) => setTabKey(key)}>
+    <Tab.Container activeKey={tabKey} onSelect={handleSelectTab}>
       <Row>
         {isLoading ? <Spinner />
           :
@@ -121,7 +211,7 @@ const ManageCorporateForm = ({ match }) => {
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
-                    <Nav.Link eventKey="branch-office">
+                    <Nav.Link eventKey="branch-office" disabled={finishStep < 1 && !data?.id}>
                       <div>
                         <ReactSVG src="/img/icons/corporate-branch-office.svg" />
                         <span>Branch Offices</span>
@@ -129,7 +219,7 @@ const ManageCorporateForm = ({ match }) => {
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
-                    <Nav.Link eventKey="system-administrator">
+                    <Nav.Link eventKey="system-administrator" disabled={finishStep < 2 && !data?.id}>
                       <div>
                         <ReactSVG src="/img/icons/corporate-system-administrator.svg" />
                         <span>System Administrator</span>
@@ -137,7 +227,7 @@ const ManageCorporateForm = ({ match }) => {
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
-                    <Nav.Link eventKey="setting">
+                    <Nav.Link eventKey="setting" disabled={finishStep < 3 && !data?.id}>
                       <div>
                         <ReactSVG src="/img/icons/corporate-setting.svg" />
                         <span>Settings</span>
@@ -145,7 +235,7 @@ const ManageCorporateForm = ({ match }) => {
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
-                    <Nav.Link eventKey="mark-up">
+                    <Nav.Link eventKey="mark-up" disabled={finishStep < 4 && !data?.id}>
                       <div>
                         <ReactSVG src="/img/icons/corporate-markup.svg" />
                         <span>Mark Up</span>
@@ -153,7 +243,7 @@ const ManageCorporateForm = ({ match }) => {
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
-                    <Nav.Link eventKey="service-fee">
+                    <Nav.Link eventKey="service-fee" disabled={finishStep < 5 && !data?.id}>
                       <div>
                         <ReactSVG src="/img/icons/corporate-service-fee.svg" />
                         <span>Service Fee</span>
@@ -161,7 +251,7 @@ const ManageCorporateForm = ({ match }) => {
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
-                    <Nav.Link eventKey="ancillary-fee">
+                    <Nav.Link eventKey="ancillary-fee" disabled={finishStep < 6 && !data?.id}>
                       <div>
                         <ReactSVG src="/img/icons/corporate-ancillary-fee.svg" />
                         <span>Ancillary Fee</span>
@@ -169,7 +259,7 @@ const ManageCorporateForm = ({ match }) => {
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
-                    <Nav.Link eventKey="assign-team">
+                    <Nav.Link eventKey="assign-team" disabled={finishStep < 7 && !data?.id}>
                       <div>
                         <ReactSVG src="/img/icons/corporate-assign-team.svg" />
                         <span>Assign Team</span>
@@ -177,7 +267,7 @@ const ManageCorporateForm = ({ match }) => {
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
-                    <Nav.Link eventKey="credit-limit">
+                    <Nav.Link eventKey="credit-limit" disabled={finishStep < 8 && !data?.id}>
                       <div>
                         <ReactSVG src="/img/icons/corporate-credit-limit.svg" />
                         <span>Credit Limit</span>
@@ -185,7 +275,7 @@ const ManageCorporateForm = ({ match }) => {
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
-                    <Nav.Link eventKey="invoice-settings">
+                    <Nav.Link eventKey="invoice-settings" disabled={finishStep < 9 && !data?.id}>
                       <div>
                         <ReactSVG src="/img/icons/corporate-invoice-setting.svg" />
                         <span>Invoice Settings</span>
@@ -193,7 +283,7 @@ const ManageCorporateForm = ({ match }) => {
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
-                    <Nav.Link eventKey="corporate-rating">
+                    <Nav.Link eventKey="corporate-rating" disabled={finishStep < 10 && !data?.id}>
                       <div>
                         <ReactSVG src="/img/icons/corporate-corporate-rating.svg" />
                         <span>Corporate Rating</span>
@@ -201,7 +291,7 @@ const ManageCorporateForm = ({ match }) => {
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
-                    <Nav.Link eventKey="corporate-fare">
+                    <Nav.Link eventKey="corporate-fare" disabled={finishStep < 11 && !data?.id}>
                       <div>
                         <ReactSVG src="/img/icons/corporate-corporate-fare.svg" />
                         <span>Corporate Fare</span>
@@ -209,7 +299,7 @@ const ManageCorporateForm = ({ match }) => {
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
-                    <Nav.Link eventKey="upload-document">
+                    <Nav.Link eventKey="upload-document" disabled={finishStep < 12 && !data?.id}>
                       <div>
                         <ReactSVG src="/img/icons/corporate-upload-document.svg" />
                         <span>Upload Document</span>
@@ -217,7 +307,7 @@ const ManageCorporateForm = ({ match }) => {
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
-                    <Nav.Link eventKey="import-database-employee">
+                    <Nav.Link eventKey="import-database-employee" disabled={finishStep < 13 && !data?.id}>
                       <div>
                         <ReactSVG src="/img/icons/corporate-import-db.svg" />
                         <span>Import Database Employee</span>
@@ -229,7 +319,15 @@ const ManageCorporateForm = ({ match }) => {
               <Col sm={9}>
                 <Tab.Content>
                   <Tab.Pane eventKey="general-information">
-                    {tabKey === 'general-information' && <GeneralInformation data={data != null ? data.general_information : ""} />}
+                    {tabKey === 'general-information' && 
+                    <GeneralInformation 
+                      history={history}
+                      backUrl={backUrl}
+                      handleSelectTab={(v) => handleSelectTab(v)}
+                      onSubmit={onSubmit}
+                      finishStep={finishStep}
+                      data={data != null ? data.general_information : ""} />
+                    }
                   </Tab.Pane>
                   <Tab.Pane eventKey="branch-office">
                     {tabKey === 'branch-office' && <BranchOffice />}
