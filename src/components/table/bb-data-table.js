@@ -566,7 +566,7 @@ class BBDataTable extends Component {
           },
           {
             targets: [1, 2],
-            className: !this.state.isCheckbox ? module === "employee" || module === "ancillary" ? "" : "custom-col-width": "cstm-col-width",
+            className: !this.state.isCheckbox ? module === "employee" || module === "ancillary" ? "" : module === "branch-office"? "cstm-col-width": "custom-col-width": "cstm-col-width",
           },
           {
             targets: [3],
@@ -581,12 +581,19 @@ class BBDataTable extends Component {
               // this case `data: 0`.
               "render": function ( data, type, row ) {
                 var datas = data;
+
                 if(module === 'employee' || module === 'user-management' ){
                   datas = data +' '+ row.middle_name + ' ' + row.surname;
+                }else if(module === 'branch-office'){
+                  let city = row.city? row.city.city_name:''
+                  let postal_code = row.postal_code? row.postal_code:''
+                  let province = row.state_province? row.state_province.state_province_name:''
+                  let country = row.country? row.country.country_name:''
+                  datas = data + ' - ' + city + ' ' + postal_code + ' - ' + province + ' - ' + country
                 }
                   return datas
               },
-              "targets": module === 'employee' ? 3 : module === 'user-management' ? 2 : ''
+              "targets": module === 'employee' ? 3 : (module === 'user-management' || module === 'branch-office') ? 2 : ''
           },
           {
               // The `data` parameter refers to the data for the cell (defined by the

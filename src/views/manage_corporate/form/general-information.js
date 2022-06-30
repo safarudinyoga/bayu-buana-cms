@@ -156,63 +156,50 @@ const GeneralInfomation = (props) => {
       }),
     }),
     validateOnChange: false,
-    onSubmit: (val) => {
+    onSubmit: async (val) => {
       const payload = {
-        general_information: {
-          "corporate_general_information": {
+          "corporate": {
             "corporate_code": val.corporate_code,
             "corporate_name": val.corporate_name,
-            "parent_corporate_id": val.general_information.parent_company?.value || null
+            "parent_corporate_id": val.general_information.parent_company?.value || "00000000-0000-0000-0000-000000000000",
+            "corporate_type_id": val.general_information.corporate_type.value || "",
+            "corporate_asset" : {
+              "multimedia_description_id" : val.other_information.logo.data?.id || ''
+            },
           },
-          "contact_general_information": {
+          "contact": {
               "email": val.contact_information.corporate_email,
               "phone_number": val.contact_information.corporate_phone,
               "fax": val.contact_information.corporate_fax,
           },
           "correspondence_address": {
               "address_line": val.correspondence_address.address,
-              "country_id": val.correspondence_address.country.value || null,
-              "state_province_id": val.correspondence_address.province?.value || null,
-              "city_id": val.correspondence_address.city?.value || null,
+              "country_id": val.correspondence_address.country.value || "",
+              "state_province_id": val.correspondence_address.province?.value || "",
+              "city_id": val.correspondence_address.city?.value || "",
               "postal_code": val.correspondence_address.zipcode,
               "latitude": Number(val.correspondence_address.geo_location.lat),
               "longitude": Number(val.correspondence_address.geo_location.lng)
           },
           "billing_address": {
               "address_line": val.billing_address.address,
-              "country_id": val.billing_address.country.value || null,
-              "state_province_id": val.billing_address.province?.value || null,
-              "city_id": val.billing_address.city?.value || null,
+              "country_id": val.billing_address.country.value || "",
+              "state_province_id": val.billing_address.province?.value || "",
+              "city_id": val.billing_address.city?.value || "",
               "postal_code": val.billing_address.zipcode,
               "latitude": Number(val.billing_address.geo_location.lat),
               "longitude": Number(val.billing_address.geo_location.lng)
           },
-          "corporate_asset" : {
-              "multimedia_description" : val.other_information.logo.data?.id || ''
-          },
-          "industry_id": val.general_information.corporate_type.value || null,
           "website": val.other_information.website,
           "internal_remark": val.other_information.internal_remark,
           "npwp": val.general_information.corporate_npwp,
           "effective_date": val.general_information.corporate_contract.date_start,
           "expire_date": val.general_information.corporate_contract.date_end
         }
-      }
 
-      submit(payload)
+      await props.onSubmit(payload)
     }
   })
-
-  const submit = async (payload) => {
-    console.log(payload);
-
-    try {
-      // const res = await api.post('/master/agent-corporates', payload)
-      // console.log(res);
-    } catch (error) {
-
-    }
-  }
 
   const [optionProvince, setOptionProvince] = useState({
     correspondence: [],
@@ -552,13 +539,25 @@ const GeneralInfomation = (props) => {
                       placeholder="Please choose type company"
                       options={[
                         {
-                          value: 'selected 1',
-                          label: 'Hotel Markup 1'
+                          value: 'ed627a99-c679-41c2-95bb-6b31c2b6562e',
+                          label: 'Agriculture'
                         },
                         {
-                          value: 'selected 1',
-                          label: 'Hotel Markup 2'
+                          value: '1ad5c67d-d2ea-4625-b311-7f8e47fa7d12',
+                          label: 'Chemical'
                         },
+                        {
+                          value: 'dc93441c-6d7f-4b1a-9de8-aaf2bdd8c455',
+                          label: 'Manufacturing'
+                        },
+                        {
+                          value: 'af469874-49d1-4e06-9e5a-ece7b2dfb525',
+                          label: 'Oil and Gas'
+                        },
+                        {
+                          value: '227fec57-34fb-4eed-b2bd-c92672240130',
+                          label: 'Technology'
+                        }
                       ]}
                       width={'400px'}
                       name='general_information.corporate_type'
@@ -1447,7 +1446,7 @@ const GeneralInfomation = (props) => {
         <Button
           variant="secondary"
           onClick={() => {
-            // console.log(props.history);
+            props.history.goBack()
           }}
           style={{ padding: '0 21px' }}
         >

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { Form, Row, Col, Card, Button, Tabs, TabPane, } from "react-bootstrap"
 import { useFormik } from "formik"
 import * as Yup from "yup"
+import { useParams } from "react-router-dom"
 
 // components & styles
 import Select from "components/form/select"
@@ -27,6 +28,7 @@ const AncillaryFee = ({
     }
   })
 
+  const { id } = useParams()
   const [key, setKey] = useState('domestic')
   const [paramsFlight, setParamsFlight] = useState({
     title: "Ancillary Fee",
@@ -39,7 +41,7 @@ const AncillaryFee = ({
     isShowColumnAction: false,
     hideCreate: true,
     baseRoute: "/master/manage-corporate/form",
-    endpoint: "/master/ancillary-fee",
+    endpoint: `/master/agent-corporates/${id}/ancillary-fee`,
     columns: [
       {
         title: "Fee Type",
@@ -64,7 +66,7 @@ const AncillaryFee = ({
     isShowColumnAction: false,
     hideCreate: true,
     baseRoute: "/master/manage-corporate/form",
-    endpoint: "/master/ancillary-fee",
+    endpoint: `/master/agent-corporates/${id}/ancillary-fee`,
     columns: [
       {
         title: "Fee Type",
