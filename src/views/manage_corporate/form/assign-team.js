@@ -1,65 +1,57 @@
 import React, { useState } from 'react'
 import { Form, Card, Button } from "react-bootstrap"
 
-// components
+// components & styles
+import AssignTeamModal from './assign-team/index'
 import BbDataTable from 'components/table/bb-data-table'
-import FormModal from './branch-offices/index'
 import './_form.sass'
 
-// utils
-
-const BranchOffices = ({
-  isMobile
-}) => {
+const AssignTeam = () => {
 
   const [params, setParams] = useState({
-    title: "Branch Offices",
-    titleModal: "Company/ Branch Office",
+    title: "Assign Team",
+    titleModal: "SELECT TRAVEL CONSULTANT TEAM",
     createOnModal: true,
     modalSize: 'lg',
-    modalClassName: 'corporate_branch_office_modal',
+    modalClassName: 'assign_team_modal',
     showAdvancedOptions: false,
     responsiveTablet: true,
-    isOpenNewTab: false,
-    isHideSearch: true,
     isHidePrintLogo: true,
     isHideDownloadLogo: true,
     isShowColumnAction: false,
+    isOpenNewTab: false,
+    isHideSearch: true,
     isCheckbox: false,
     baseRoute: "/master/manage-corporate/form",
-    endpoint: "/master/branch-offices",
+    endpoint: "/master/assign-team",
     columns: [
       {
-        title: "Company/Branch Name",
+        title: "Team Name",
         data: ""
       },
       {
-        title: "Address",
-        data: ""
-      },
-      {
-        title: "Phone Number",
-        data: ""
-      },
-      {
-        title: "Geo Location",
+        title: "Number of Travel Consultants",
         data: ""
       },
     ],
-    emptyTable: "No Corporates found",
+    emptyTable: "No Team found",
+    module: 'corporate_assign_team'
   })
-
-  const onReset = () => {
-    setParams({...params, filters: []})
-  }
 
   return (
     <Form>
-      <Card style={{marginBotton: 0}}>
+      <Card>
         <Card.Body>
-          <h3 className="card-heading">Branch Offices</h3>
-          <div style={{ padding: "15px" }}>
-            <BbDataTable {...params} onReset={onReset} modalContent={FormModal} />
+          <h3 className="card-heading">Assign Team</h3>
+          <div className='assign-team manage_corporate_card pl-2 pr-2'>
+            <Card>
+              <Card.Header className='header_card_corporate uppercase title'>BY TEAM</Card.Header>
+              <Card.Body>
+                <div style={{ padding: "15px" }}>
+                  <BbDataTable {...params} modalContent={AssignTeamModal} />
+                </div>
+              </Card.Body>
+            </Card>
           </div>
         </Card.Body>
       </Card>
@@ -83,4 +75,4 @@ const BranchOffices = ({
   )
 }
 
-export default BranchOffices
+export default AssignTeam
