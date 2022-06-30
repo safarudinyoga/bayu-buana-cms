@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { Form, Row, Col, Card, Button, Tabs, TabPane, Modal, ModalBody } from "react-bootstrap"
-
+import { useParams } from "react-router-dom"
 // components & styles
 import Select from "components/form/select"
 import BbDataTable from 'components/table/bb-data-table'
@@ -13,7 +13,7 @@ import ModalCustomServiceFee from 'views/manage_corporate/form/service-fee/modal
 const TravelConsultantAssistant = ({ handleChangeModal  }) => {
   const [isSelectedOne, setisSelectedOne] = useState(false)
   const [isSelectedTwo, setisSelectedTwo] = useState(false)
-
+  const { id } = useParams()
   // dropdown
   const [isFieldSelected, setisFieldSelected] = useState({
     flight: {
@@ -50,7 +50,7 @@ const TravelConsultantAssistant = ({ handleChangeModal  }) => {
     isShowColumnAction: false,
     hideCreate: true,
     baseRoute: "/master/manage-corporate/form",
-    endpoint: "/master/ancillary-fee",
+    endpoint: `/master/agent-corporates/${id}/service-fee`,
     columns: [
       {
         title: "Destination",
@@ -114,7 +114,7 @@ const TravelConsultantAssistant = ({ handleChangeModal  }) => {
       isHideDownloadLogo: true,
       isShowColumnAction: true,
       baseRoute: "/master/manage-corporate/form",
-      endpoint: "/master/ancillary-fee",
+      endpoint: `/master/agent-corporates/${id}/service-fee`,
       columns: [
         {
           title: "Type Of Service",
@@ -137,7 +137,7 @@ const TravelConsultantAssistant = ({ handleChangeModal  }) => {
       isShowColumnAction: false,
       hideCreate: true,
       baseRoute: "/master/manage-corporate/form",
-      endpoint: "/master/ancillary-fee",
+      endpoint: `/master/agent-corporates/${id}/service-fee`,
       columns: [
         {
           title: "Destination",
