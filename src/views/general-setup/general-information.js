@@ -11,7 +11,8 @@ const GeneralInformation = (props) => {
   const [editorImportantNoticeState, setImportantNoticeState] = useState(
     EditorState.createEmpty()
   );
-  const MAX_LENGTH = 10;
+  const [inputData, setInputData] = useState({})
+  const MAX_LENGTH = 4000;
     const titleText = {
         fontSize: 16,
         color: '#333333',
@@ -67,13 +68,13 @@ const GeneralInformation = (props) => {
     ];
 
     const _getLengthOfSelectedText = () => {
-        const currentSelection = importantNoticeRef.current.getSelection();
+        const currentSelection = editorImportantNoticeState.getSelection();
         const isCollapsed = currentSelection.isCollapsed();
     
         let length = 0;
     
         if (!isCollapsed) {
-          const currentContent = importantNoticeRef.current.getCurrentContent();
+          const currentContent = editorImportantNoticeState.getCurrentContent();
           const startKey = currentSelection.getStartKey();
           const endKey = currentSelection.getEndKey();
           const startBlock = currentContent.getBlockForKey(startKey);
@@ -104,9 +105,9 @@ const GeneralInformation = (props) => {
     
         return length;
     }
-
+    
     const _handleBeforeInput = () => {
-        const currentContent = importantNoticeRef.current.getCurrentContent();
+        const currentContent = editorImportantNoticeState.getCurrentContent();
         const currentContentLength = currentContent.getPlainText('').length;
         const selectedTextLength = _getLengthOfSelectedText();
     
@@ -116,9 +117,9 @@ const GeneralInformation = (props) => {
           return 'handled';
         }
     }
-
+    
     const _handlePastedText = (pastedText) => {
-        const currentContent = importantNoticeRef.current.getCurrentContent();
+        const currentContent = editorImportantNoticeState.getCurrentContent();
         const currentContentLength = currentContent.getPlainText('').length;
         const selectedTextLength = _getLengthOfSelectedText();
     
@@ -128,9 +129,9 @@ const GeneralInformation = (props) => {
           return 'handled';
         }
     }
+    
     const _handleChange = (editorState) => {
         setImportantNoticeState(editorState)
-        console.log('handle', editorState)
     }
   return (
     <div className="row">

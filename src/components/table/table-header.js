@@ -134,7 +134,7 @@ class TableHeader extends Component {
     } else if (this.props.createNewModal) {
       this.props.setCreateNewModal({ show: true, disabled_form: false, })
     } else if (this.props.isReplaceTable) {
-      this.props.setId(null)
+      // this.props.setId(null)
       this.props.handleReplaceTable(!this.props.isReplaceTable)
     } else {
       this.props.history.push(this.props.baseRoute || "/master/aircraft/form")
@@ -226,12 +226,13 @@ class TableHeader extends Component {
     const ExtraFilter = this.props.extraFilter
     const { customFilterStatus, hideCreate, isHidePrintLogo, module } = this.props
     const { pathname } = this.props.location
+    console.log(this.props.location);
 
     return (
       <div className="container-fluid pl-0">
         <div className="row">
           <div className="col-xs-12 col-sm-12 col-md-4 col-lg-3 col-xl-3">
-            {!this.props.isHideSearch && pathname !== "/master/general-setup" && (
+            {!this.props.isHideSearch && (
               <div className="input-group input-group-with-text">
                 <input
                   value={this.state.searchValue}
@@ -306,6 +307,7 @@ class TableHeader extends Component {
                     onClick={this.handleClick.bind(this)}
                     className="btn btn-warning float-right button-new"
                   >
+                  {console.log(pathname)}
                     <img src={createIcon} className="mr-1" alt="new" />
                     {pathname === "/master/general-setup"
                       ? "Create New"

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { Form, Row, Col, Card, Button } from "react-bootstrap"
+import { withRouter } from "react-router"
+import { Form, Row, Col, Button } from "react-bootstrap"
 import { useFormik } from "formik"
 import * as Yup from "yup"
 import { setUIParams } from "redux/ui-store"
@@ -52,7 +53,7 @@ const BranchOfficeForm = ({ match }) => {
         let { data } = await api.get(staticWarding.endpoint + "/" + formId)
         // setFormValues({
         //   ...data,
-        //   from_currency_id: {
+        //   from_currency_id: {modalContent
         //     value: data.from_currency.id,
         //     label: data.from_currency.currency_name,
         //   },
@@ -171,7 +172,7 @@ const BranchOfficeForm = ({ match }) => {
   }
 
   return (
-    <Form style={{ padding: '0 47px' }}>
+    <Form style={{ padding: '0 47px' }} onSubmit={handleSubmit}>
       <Row>
         <Col lg={12}>
           <Form.Group as={Row} className='form-group'>
@@ -469,6 +470,4 @@ const BranchOfficeForm = ({ match }) => {
   )
 }
 
-BranchOfficeForm.propTypes = {}
-
-export default BranchOfficeForm
+export default withRouter(BranchOfficeForm)

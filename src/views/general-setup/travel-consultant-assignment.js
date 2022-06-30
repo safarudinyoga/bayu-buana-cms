@@ -35,7 +35,7 @@ function TravelConsultantAssignment({ setTabKey }) {
     }
   }
 
-  const getLisTravelConsultant = async () => {
+  const getListTravelConsultant = async () => {
     try {
       let res = await api.get(`/master/configurations/travel-consultants`)
       setListTravelConsultant(
@@ -55,7 +55,7 @@ function TravelConsultantAssignment({ setTabKey }) {
   }
 
   useEffect(async () => {
-    getLisTravelConsultant()
+    getListTravelConsultant()
     getEmployee()
   }, [])
 

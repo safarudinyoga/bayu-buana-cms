@@ -1,6 +1,6 @@
 import { withRouter } from "react-router";
 import React, { useState, useEffect } from "react";
-import { Form, Button } from "react-bootstrap";
+import { Form, Button, Col, Modal, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import Api from "config/api";
@@ -9,15 +9,21 @@ import { setAlert, setCreateModal, setModalTitle } from "redux/ui-store";
 import CancelButton from "components/button/cancel";
 import FormikControl from "../../../../components/formik/formikControl"
 import { useParams } from "react-router-dom"
+import createIcon from "assets/icons/create.svg";
+import ModalCreate from 'components/Modal/bb-modal';
+import ModalForm from './modalCreate'
 const endpoint = "/master/integration-partners";
 
 function PartnerHotelForm(props) {
+    console.log(props, 'ini props');
     const dispatch = useDispatch();
     const { id } = useParams()
+    console.log(id, 'id');
     const showCreateModal = useSelector((state) => state.ui.showCreateModal);
     const API = new Api();
     const isView = showCreateModal.disabled_form || props.isView;
     const [hotelId, setHotelId] = useState(null);
+    const [visibleRoomModal, setVisibleRoomModal] = React.useState(false);
     const [loading, setLoading] = useState(true);
     const [formValues, setFormValues] = useState(null);
 
@@ -26,6 +32,7 @@ function PartnerHotelForm(props) {
         if(formId){
             try {
                 let res = await API.get(endpoint + "/" + id + "/hotels/" + formId);
+                console.log(res, 'ini res');
                 setFormValues(res.data);
             } catch (e) {}
         }
@@ -49,7 +56,8 @@ function PartnerHotelForm(props) {
         hotel_name: "",
         hotel_id: "",
         integration_partner_id: "00000000-0000-0000-0000-000000000000",
-        is_enabled: false
+        is_enabled: false,
+        isSubmitting: true
     };
 
     const duplicateValue = async(fieldName, value) => {
@@ -127,12 +135,15 @@ function PartnerHotelForm(props) {
         },
     };
     return (
+        <div>
         <Formik initialValues={formValues || initialValues} validationSchema={validationSchema} onSubmit={onSubmit} validateOnMount enableReinitialize>
-            {({ dirty, handleSubmit, isSubmitting, setFieldValue, handleChange, values }) => (
+            {({ dirty, handleSubmit, isSubmitting, setFieldValue, handleChange, values }) => {
+                console.log(dirty);
+                return(
                 <Form onSubmit={handleSubmit} className="ml-2">
                     <FormikControl
                         control="selectAsync"
-                        required={isView ? "" : "label-required"}
+                        // required={isView ? "" : "label-required"}
                         label="Hotel"
                         name="hotel_id"
                         placeholder={values.hotel_name || "Please Choose."}
@@ -191,6 +202,54 @@ function PartnerHotelForm(props) {
                       size={formSize}
                       disabled={isView || loading}
                     />
+                    {
+                        values.is_enabled ?
+                        <div style={{width: '90%', display: 'flex', justifyContent: 'space-around'}}>
+                            <div style={{width: '100%'}}>
+
+                            </div>
+                            <div style={{width: '100%'}}>
+                                <Col>
+                                    <Form.Check
+                                        inline
+                                        // label={isHotelCode || ""}
+                                        label="Hotel Code"
+                                        type={"checkbox"}
+                                        id="custom-inline-checkbox-remember"
+                                        // onChange={() => setIsHotelCodeBool(isHotelCodeBool ? false : true)}
+                                        // checked={isHotelCodeBool}
+                                    />
+                                </Col>
+                                <Col sm={8}>
+                                    <Form.Check
+                                        inline
+                                        label="Hotel Information"
+                                        // label={isHotelInformation || ""}
+                                        type={"checkbox"}
+                                        id="custom-inline-checkbox-remember"
+                                        // onChange={() => setIsHotelInformationBool(isHotelInformationBool ? false : true)}
+                                        // checked={isHotelInformationBool}
+                                    />
+                                </Col>
+                            </div>
+                        </div>
+                        :null
+                    }
+                    <Modal.Footer>
+                        <OverlayTrigger
+                            placement="top"
+                            overlay={<Tooltip>Click to create</Tooltip>}
+                            >
+                            <button
+                                type="button"
+                                onClick={() => setVisibleRoomModal(true)}
+                                className="btn btn-warning float-right button-new"
+                            >
+                                <img src={createIcon} className="mr-1" alt="new" />
+                                Add Partner Room Type
+                            </button>
+                        </OverlayTrigger>
+                    </Modal.Footer>
 
                     {!props.hideButton && (
                         <div
@@ -201,7 +260,9 @@ function PartnerHotelForm(props) {
                             }}
                         >
                             {!isView && (
-                                <Button variant="primary" type="submit" disabled={isSubmitting} style={{ marginRight: 15 }}>
+                                <Button
+                                 variant="primary" type="submit" disabled={!dirty} style={{ marginRight: 15 }}
+                                >
                                     SAVE
                                 </Button>
                             )}
@@ -209,8 +270,20 @@ function PartnerHotelForm(props) {
                         </div>
                     )}
                 </Form>
-            )}
+            )}}
         </Formik>
+        {
+        visibleRoomModal ?
+            <ModalCreate
+                show={visibleRoomModal}
+                onClick={() => setVisibleRoomModal(false)}
+                modalTitle={"CREATE ROOM TYPE"}
+                modalContent={ModalForm}
+                handleSubmit={() => console.log("ok")}
+            />
+            :null
+        }
+        </div>
     );
 }
 

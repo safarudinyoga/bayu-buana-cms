@@ -30,10 +30,12 @@ function TripDateRoundtrip(props) {
         <ReactDatePicker 
           className='form-control rounded-0 form-with-label'
           selected={title === "DEPART" ? departTime : returnTime}
-          dateFormat="dd MMMM yyyy"
+          dateFormat="MMMM dd yyyy"
+          minDate={new Date()}
           onChange={(date) => {
             if(title === "DEPART") {
               setDepartTime(new Date(date))
+              setReturnTime(new Date(date))
               props.formik.setFieldValue("departure_datetime", new Date(date))
             } else if (title === "RETURN") {
               setReturnTime(new Date(date))

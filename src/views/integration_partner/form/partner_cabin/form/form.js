@@ -9,7 +9,7 @@ import {
 import { Formik, FastField, Field, yupToFormErrors } from "formik"
 import * as Yup from "yup"
 import { useDispatch, useSelector } from "react-redux"
-import { setAlert, setModalTitle, setCreateModal } from "redux/ui-store"
+import { setAlert, setReloadTable, setCreateModal } from "redux/ui-store"
 import Api from "config/api"
 import _ from "lodash"
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css"
@@ -44,31 +44,27 @@ const FareFamilyModal = (props) => {
     booking_class_8: "",
   }
 
-  Yup.addMethod(Yup.object, "optional", function(
-    isOptional = true,
-    defaultValue = ""
-  ) {
-    return this.transform(function(value){
-      if(!isOptional) return value
+  let duplicateValue = async(fieldName, value) => {
+    let res = await api.get(`${endpoint}/${id}/cabin-types/${cabinId}/fare-families?filters=["fare_type_id","=","${value.value}"]`)
+    if(!cabinId) {
+      return res.data.items.length === 0
+    } else {
+      return res.data.items.length === 0 || value === fareFormValues[fieldName] || value === fareFormValues[fieldName].value
+    }
+  }
 
-      if (
-        value &&
-        Object.values(value).some(v => !(v === null || v === undefined || v === ""))
-      ) {
-        return value;
-      }
-
-      return defaultValue
-    }).default(defaultValue)
+  Yup.addMethod(Yup.object, 'uniqueValueObject', function (fieldName, message) {
+      return this.test('unique', message, function(field) {
+          if(field) return duplicateValue(fieldName, field.value)
+          return true
+      })
   })
+
 
   const validationSchemaFare = Yup.object().shape( {
     fare_type_id: Yup.object()
-      .shape({
-        value: Yup.string(),
-        label: Yup.string(),
-      })
       .required("Fare Family is required.")
+      .uniqueValueObject("fare_type_id","Cabin already exists")
       .test(
         "unique-fare-family",
         "Fare Family already exists",
@@ -104,16 +100,19 @@ const FareFamilyModal = (props) => {
     }
 
     try {
+      let res={}
       if(fareFamilyId){
-        let res = await api.put(endpoint + "/" + id + "/cabin-types/" + cabinId + "/fare-families/" + fareFamilyId, formatted)
+        res = await api.put(endpoint + "/" + id + "/cabin-types/" + cabinId + "/fare-families/" + fareFamilyId, formatted)
       } else {
-        let res = await api.post(endpoint + "/" + id + "/cabin-types/" + cabinId + "/fare-families/", formatted)
+        res = await api.post(endpoint + "/" + id + "/cabin-types/" + cabinId + "/fare-families/", formatted)
       }
+      dispatch(setReloadTable(true))
       dispatch(
         setAlert({
-
+          message: `Record 'Fare Family: ${values.fare_type_id.label}' has been successfully saved.`
         })
       )
+      props.onHide()
       
     } catch (error) {
       dispatch(
@@ -158,8 +157,9 @@ const FareFamilyModal = (props) => {
             enableReinitialize
             validateOnMount
           >
-            {({ dirty, handleSubmit, isSubmitting, setFieldValue, handleChange, values }) =>(
+            {({ dirty, handleSubmit, isSubmitting, setFieldValue, handleChange, values, errors }) =>(
               <Form onSubmit={handleSubmit}>
+              {console.log(errors)}
                 <FormikControl
                     control="selectAsync"
                     required={props.isView ? "" : "label-required"}
@@ -196,6 +196,7 @@ const FareFamilyModal = (props) => {
                           style={{ maxWidth: "120px" }}
                           onChange={handleChange}
                           name="booking_class_1"
+                          maxLength={2}
                         />
                       </Col>
                       <Col>
@@ -203,6 +204,7 @@ const FareFamilyModal = (props) => {
                           style={{ maxWidth: "120px" }} 
                           onChange={handleChange}
                           name="booking_class_2"
+                          maxLength={2}
                         />
                       </Col>
                       <Col>
@@ -210,6 +212,7 @@ const FareFamilyModal = (props) => {
                           style={{ maxWidth: "120px" }} 
                           onChange={handleChange}
                           name="booking_class_3"
+                          maxLength={2}
                         />
                       </Col>
                       <Col>
@@ -217,6 +220,7 @@ const FareFamilyModal = (props) => {
                           style={{ maxWidth: "120px" }} 
                           onChange={handleChange}
                           name="booking_class_4"
+                          maxLength={2}
                         />
                       </Col>
                       <Col>
@@ -224,6 +228,7 @@ const FareFamilyModal = (props) => {
                           style={{ maxWidth: "120px" }} 
                           onChange={handleChange}
                           name="booking_class_5"
+                          maxLength={2}
                         />
                       </Col>
                       <Col>
@@ -231,6 +236,7 @@ const FareFamilyModal = (props) => {
                           style={{ maxWidth: "120px" }} 
                           onChange={handleChange}
                           name="booking_class_6"  
+                          maxLength={2}
                         />
                       </Col>
                       <Col>
@@ -238,6 +244,7 @@ const FareFamilyModal = (props) => {
                           style={{ maxWidth: "120px" }} 
                           onChange={handleChange}
                           name="booking_class_7"
+                          maxLength={2}
                         />
                       </Col>
                       <Col>
@@ -245,6 +252,7 @@ const FareFamilyModal = (props) => {
                           style={{ maxWidth: "120px" }} 
                           onChange={handleChange}
                           name="booking_class_8"
+                          maxLength={2}
                         />
                       </Col>
                     </Row>
@@ -318,12 +326,7 @@ Yup.addMethod(Yup.string, 'uniqueValueString', function (fieldName, message) {
 
   // Schema for yup
   const validationSchema = Yup.object().shape({
-    cabin_type_id: Yup.object()
-    .shape({
-      value: Yup.string(),
-      label: Yup.string(),
-    })
-    .required("Cabin is required.")
+    cabin_type_id: Yup.object().required("Cabin is required.")
     .uniqueValueObject("cabin_type_id","Cabin already exists"),
     cabin_type_code: Yup.string()
     .required("Partner Cabin Code is required")
@@ -486,7 +489,7 @@ Yup.addMethod(Yup.string, 'uniqueValueString', function (fieldName, message) {
                 }}
                 maxLength={256}
             />
-            {isView ? <h3 className="card-heading"></h3> : 
+            {isView || !cabinId ? <h3 className="card-heading"></h3> : 
               <>
                 <h3 className="card-heading"></h3>
                 <Col sm={12}>
@@ -515,9 +518,8 @@ Yup.addMethod(Yup.string, 'uniqueValueString', function (fieldName, message) {
                 </Col>  
               </>
             }
-
-
-            {props.partnerCabinId && <TabelFareFamily isView={isView} partnerCabinId={props.partnerCabinId} partnerId={id} FareFamilyModal={FareFamilyModal}/>}
+            {console.log(props.isDetail)}
+            {props.partnerCabinId && <TabelFareFamily isView={props.isDetail} partnerCabinId={props.partnerCabinId} partnerId={id} FareFamilyModal={FareFamilyModal}/>}
 
             {!props.hideButton && (
                 <div

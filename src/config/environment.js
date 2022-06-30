@@ -7,7 +7,7 @@ let environments = {
 }
 
 environments.endpoint = (path) => {
-  return environments.API_URL + "/" + path.replace(/^\/+/, "")
+  return environments.API_URL + "/" + path?.replace(/^\/+/, "")
 }
 
 export default environments

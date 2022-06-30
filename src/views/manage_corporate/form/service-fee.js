@@ -780,7 +780,7 @@ const ServiceFee = props => {
   return (
     <div className='service_fee'>
       <Form>
-        <Card>
+        <Card style={{ border: '1px solid #d3d3d3' }}>
           <Card.Body>
             <h3 className="card-heading">Service Fee</h3>
             <Form.Group as={Row} className='align-items-center form-group ml-2'>
@@ -850,6 +850,22 @@ const ServiceFee = props => {
             </div>
           </Card.Body>
         </Card>
+        <div className="ml-1 mt-3 row justify-content-md-start justify-content-center">
+          <Button
+            variant="primary"
+            type="submit"
+            style={{ marginRight: 15, marginBottom: 50, padding: '0 24px' }}
+          >
+            SAVE
+          </Button>
+          <Button
+            variant="secondary"
+            // onClick={() => props.history.goBack()}
+            style={{ padding: '0 21px' }}
+          >
+            CANCEL
+          </Button>
+        </div>
       </Form>
 
       {/* flight */}
