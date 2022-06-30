@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import PropTypes from 'prop-types'
 import { Form, Row, Col, Card, Button } from "react-bootstrap"
 import { useFormik } from "formik"
 import * as Yup from "yup"
@@ -36,7 +35,7 @@ const CorporateFare = ({
     isShowColumnAction: false,
     isCheckbox: false,
     baseRoute: "/master/manage-corporate/form",
-    endpoint: "/master/corporate-fare",
+    // endpoint: "/master/corporate-fare",
     columns: [
       {
         title: "Airlines",
@@ -91,7 +90,5 @@ const CorporateFare = ({
     </Form>
   )
 }
-
-CorporateFare.propTypes = {}
 
 export default CorporateFare

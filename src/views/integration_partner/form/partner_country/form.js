@@ -124,7 +124,7 @@ function ExchangeRateCreate(props) {
 
             if(countriesId){
                 let res = await API.put(endpoint + "/" + id + "/countries/" + countriesId, form);
-              }else{
+              } else{
                   let res = await API.post(endpoint + "/" + id + "/countries/", form);
               }
 

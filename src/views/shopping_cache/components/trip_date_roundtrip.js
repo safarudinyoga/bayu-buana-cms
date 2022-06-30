@@ -41,6 +41,7 @@ function TripDateRoundtrip(props) {
           onChange={(date) => {
             if(title === "DEPART") {
               setDepartTime(new Date(date))
+              setReturnTime(new Date(date))
               props.formik.setFieldValue("departure_datetime", new Date(date))
             } else if (title === "RETURN") {
               setReturnTime(new Date(date))

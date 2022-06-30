@@ -9,6 +9,7 @@ import TripRoundtrip from './components/trip_roundtrip'
 import TripOneway from './components/trip_oneway'
 
 function ShoppingCacheCreate(props) {
+  console.log("shopping cache");
   const dispatch = useDispatch()
   const [flightType, setFlightType] = useState(null)
   const [airports, setAirports] = useState([])
@@ -102,10 +103,16 @@ function ShoppingCacheCreate(props) {
       >
         {
           tripTypes ? (
-            tripTypes.map((item) => (
+            tripTypes.map((item) => {
+              console.log(item, 'item');
+              return (
               <Tab
                 eventKey={item.id}
                 title={item.trip_type_name}
+                
+                // onSelect={(k) => {
+                //   console.log(k);
+                // }}
               >
                 <div className="d-flex flex-wrap">
                   {
@@ -114,7 +121,7 @@ function ShoppingCacheCreate(props) {
                   }
                 </div>
               </Tab>
-            ))
+            )})
           ) : ""
         }
       </Tabs>

@@ -24,14 +24,15 @@ export default function IntegrasiPartnerHotels() {
     showAdvancedOptions: false,
     searchText:"Search",
     isOpenNewTab: false,
+    createOnModal: false,
     columns: [
       {
         title: "Hotel",
-        data: "hotel_name",
+        data: "hotel.hotel_name",
       },
       {
         title: "Address",
-        data: "address",
+        data: "hotel.address",
       },
       {
         title: "Partner Hotel Code",
@@ -58,7 +59,8 @@ export default function IntegrasiPartnerHotels() {
       ]
     },
     statusLabel: "Status",
-    isOpenNewTab: false
+    isOpenNewTab: false,
+    isPartner: true
   })
   const borderFeeTax = {
     borderRadius: 10,

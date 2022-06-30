@@ -12,7 +12,9 @@ import Data from "./data"
 // import "./flight_book.css"
 
 const GeneralInformation = (props) => {
+    console.log(props, "data");
   const [key, setKey] = useState("CORPORATE CLIENT");
+  const [data, setData] = useState([]);
   console.log(key, 'key');
 
     const titleText = {
@@ -68,6 +70,10 @@ const GeneralInformation = (props) => {
         },
     ];
 
+    const handleData = () => {
+        console.log("ok");
+    }
+
     
 
   return (
@@ -107,7 +113,10 @@ const GeneralInformation = (props) => {
                             </div>
                         }
                         >
-                            <Data />
+                            <Data
+                                tab="corporate"
+                                data={handleData}
+                            />
                         </TabPane>
                         <TabPane
                         className="m-3"
@@ -118,7 +127,9 @@ const GeneralInformation = (props) => {
                             </div>
                         }
                         >
-                        <Data />
+                        <Data
+                            tab="member"
+                        />
                         </TabPane>
                         <TabPane
                         className="m-3"
@@ -129,7 +140,9 @@ const GeneralInformation = (props) => {
                             </div>
                         }
                         >
-                        <Data />
+                        <Data
+                            params="data"
+                        />
                         </TabPane>
                     </Tabs>
                 </div>

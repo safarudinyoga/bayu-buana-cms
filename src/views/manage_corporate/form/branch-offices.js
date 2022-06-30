@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Form, Card, Button } from "react-bootstrap"
-import { useFormik } from "formik"
-import * as Yup from "yup"
 
 // components
 import BbDataTable from 'components/table/bb-data-table'
@@ -9,23 +7,10 @@ import FormModal from './branch-offices/index'
 import './_form.sass'
 
 // utils
-import rowStatus from "lib/row-status"
-import Api from "config/api"
 
 const BranchOffices = ({
   isMobile
 }) => {
-  let api = new Api()
-
-  const { handleSubmit, handleChange, values, errors, touched } = useFormik({
-    initialValues: {
-    },
-    validationSchema: Yup.object({
-    }),
-    onSubmit: (val) => {
-      console.log(val);
-    }
-  })
 
   const [params, setParams] = useState({
     title: "Branch Offices",
@@ -69,7 +54,7 @@ const BranchOffices = ({
   }
 
   return (
-    <Form onSubmit={handleSubmit}>
+    <Form>
       <Card style={{marginBotton: 0}}>
         <Card.Body>
           <h3 className="card-heading">Branch Offices</h3>

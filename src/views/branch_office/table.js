@@ -46,6 +46,26 @@ export default function OfficeTable() {
         data: "address_line",
       },
       {
+        title: "",
+        data: "city.city_name",
+        visible: false
+      },
+      {
+        title: "",
+        data: "postal_code",
+        visible: false
+      },
+      {
+        title: "",
+        data: "state_province.state_province_name",
+        visible: false
+      },
+      {
+        title: "",
+        data: "country.country_name",
+        visible: false
+      },
+      {
         title: "Phone Number",
         data: "phone_number",
       },
@@ -67,6 +87,8 @@ export default function OfficeTable() {
       {title: "Company/ Branch Office Name", recordName: "office_name"}, 
     ],
     isOpenNewTab: false,
+    isPartner:true,
+    btnDownload: ".buttons-csv",
     // actionWidthClass: "custom-action",
   })
 

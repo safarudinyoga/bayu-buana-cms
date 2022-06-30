@@ -72,7 +72,8 @@ export default function IntegrationPartnerCabinTypesTable(props) {
     ],
     searchText: "Search",
     showModalHeader: false,
-    customSort:['sort']
+    customSort:['sort'],
+    isPartner: true
   })
 
   return (

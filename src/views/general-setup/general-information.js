@@ -11,6 +11,7 @@ const GeneralInformation = (props) => {
   const [editorImportantNoticeState, setImportantNoticeState] = useState(
     EditorState.createEmpty()
   );
+  const [inputData, setInputData] = useState({})
   const MAX_LENGTH = 4000;
     const titleText = {
         fontSize: 16,

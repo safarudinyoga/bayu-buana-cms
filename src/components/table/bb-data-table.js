@@ -34,6 +34,7 @@ window.JSZip = JSZip
 
 class BBDataTable extends Component {
   constructor(props) {
+    console.log(props);
     super(props)
     this.table = React.createRef()
     this.wrapper = React.createRef()
@@ -565,7 +566,7 @@ class BBDataTable extends Component {
           },
           {
             targets: [1, 2],
-            className: !this.state.isCheckbox ? module === "employee" || module === "ancillary" ? "" : "custom-col-width": "cstm-col-width",
+            className: !this.state.isCheckbox ? module === "employee" || module === "ancillary" ? "" : module === "branch-office"? "cstm-col-width": "custom-col-width": "cstm-col-width",
           },
           {
             targets: [3],
@@ -580,12 +581,19 @@ class BBDataTable extends Component {
               // this case `data: 0`.
               "render": function ( data, type, row ) {
                 var datas = data;
+
                 if(module === 'employee' || module === 'user-management' ){
                   datas = data +' '+ row.middle_name + ' ' + row.surname;
+                }else if(module === 'branch-office'){
+                  let city = row.city? row.city.city_name:''
+                  let postal_code = row.postal_code? row.postal_code:''
+                  let province = row.state_province? row.state_province.state_province_name:''
+                  let country = row.country? row.country.country_name:''
+                  datas = data + ' - ' + city + ' ' + postal_code + ' - ' + province + ' - ' + country
                 }
                   return datas
               },
-              "targets": module === 'employee' ? 3 : module === 'user-management' ? 2 : ''
+              "targets": module === 'employee' ? 3 : (module === 'user-management' || module === 'branch-office') ? 2 : ''
           },
           {
               // The `data` parameter refers to the data for the cell (defined by the
@@ -1084,6 +1092,7 @@ class BBDataTable extends Component {
     const { showCreateModal, modalTitle, modalTitleNew, showModalDelete, showCreateNewModal, createNewModal, createOnModal, deleteEndpoint, showModalHeader = true} = this.props
 
     let infoFromState = this.state.info
+    // let addText = this.state.text
     infoFromState = infoFromState ? infoFromState.split(",") : []
 
     return (
@@ -1105,7 +1114,7 @@ class BBDataTable extends Component {
             this.state.selected.length > 0 || infoFromState.length === 0
             ? <p>Are you sure want to delete this?</p>
             : this.props.isPartner ?
-            `Are you sure want to delete '${infoFromState}' ?`
+            `Are you sure want to delete ${this.props.extraText ||  ""} '${infoFromState}' ?` 
             :
             (
               <>
@@ -1113,7 +1122,6 @@ class BBDataTable extends Component {
               {infoFromState.map((d) => (<><br/>{d}</>))}
             </>
             )
-
           }
           </ModalBody>
 

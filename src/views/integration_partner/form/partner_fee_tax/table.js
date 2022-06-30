@@ -47,6 +47,7 @@ export default function IntegrationFeeTaxes() {
     module: "partner-fee-taxes",
     isOpenNewTab:false,
     showModalHeader: false,
+    isPartner: true
   });
 
   return (
