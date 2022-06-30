@@ -78,7 +78,8 @@ export default function ManageCorporateTable() {
       {title: "Corporate Code", recordName: "agent_corporate.corporate.corporate_code"},
       {title: "Corporate Name", recordName: "agent_corporate.corporate.corporate_name"},
     ],
-    id: 'agent_corporate.id'
+    id: 'agent_corporate.id',
+    customSort:[""]
   }
 
   return <BbDataTable {...params} />
