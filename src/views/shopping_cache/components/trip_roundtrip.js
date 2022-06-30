@@ -12,6 +12,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setModalTitle, setCreateModal } from "redux/ui-store"
 import Api from "config/api"
 import _ from 'lodash'
+import TripTraveler from './trip_traveler'
+import TripRoutes from './trip_routes'
 
 
 const TripRoundtrip = (props) => {
@@ -19,6 +21,7 @@ const TripRoundtrip = (props) => {
   let api = new Api()
   const showCreateModal = useSelector((state) => state.ui.showCreateModal);
   const [formValues, setFormValues] = useState(null);
+  const [id, setId] = useState(null)
 
   const initialValues = {
     departure_data: "",
@@ -28,7 +31,7 @@ const TripRoundtrip = (props) => {
     number_of_adults: 1,
     number_of_children: 0,
     number_of_infants: 0,
-    cabin_type_id: "",
+    cabin_type: "",
     corporate_id: "",
   }
 
@@ -40,7 +43,7 @@ const TripRoundtrip = (props) => {
     number_of_adults: Yup.number().required(),
     number_of_children: Yup.number().required(),
     number_of_infants: Yup.number().required(),
-    cabin_type_id: Yup.string().notRequired(),
+    cabin_type: Yup.object().notRequired(),
     corporate_id: Yup.string().notRequired(),
   })
 
@@ -54,22 +57,21 @@ const TripRoundtrip = (props) => {
 
     dispatch(setModalTitle(docTitle));
 
-    if(formId) {
+    if(props.flightData) {
       try {
-        let res = await api.get(`master/cache-criterias/flights/${formId}`);
         setFormValues({
-          ...res.data,
-          departure_data: res.data.cache_air_origin_destination_criteria.origin_city.city_name,
-          arrival_data: res.data.cache_air_origin_destination_criteria.destination_city.city_name,
-          departure_datetime: new Date(res.data.cache_air_origin_destination_criteria.departure_datetime),
-          arrival_datetime: new Date(res.data.cache_air_origin_destination_criteria.arrival_datetime),
-          number_of_adults: res.data.cache_air_travel_preference_criteria.number_of_adults,
-          number_of_children: res.data.cache_air_travel_preference_criteria.number_of_children,
-          number_of_infants: res.data.cache_air_travel_preference_criteria.number_of_infants,
-          cabin_type_id: _.isEmpty(res.data.cache_air_travel_preference_criteria.cabin_type) ? '' 
+          ...props.flightData,
+          departure_data: props.flightData.cache_air_origin_destination_criteria.origin_city,
+          arrival_data: props.flightData.cache_air_origin_destination_criteria.destination_city,
+          departure_datetime: new Date(props.flightData.cache_air_origin_destination_criteria.departure_datetime),
+          arrival_datetime: props.flightData.cache_air_origin_destination_criteria.arrival_datetime ? new Date(props.flightData.cache_air_origin_destination_criteria.arrival_datetime) : "",
+          number_of_adults: props.flightData.cache_air_travel_preference_criteria.number_of_adults,
+          number_of_children: props.flightData.cache_air_travel_preference_criteria.number_of_children,
+          number_of_infants: props.flightData.cache_air_travel_preference_criteria.number_of_infants,
+          cabin_type: _.isEmpty(props.flightData.cache_air_travel_preference_criteria.cabin_type) ? '' 
           : {
-              value: res.data.cache_air_travel_preference_criteria.cabin_type.id,
-              label: res.data.cache_air_travel_preference_criteria.cabin_type.cabin_type_name
+              value: props.flightData.cache_air_travel_preference_criteria.cabin_type.id,
+              label: props.flightData.cache_air_travel_preference_criteria.cabin_type.cabin_type_name
             },
           corporate_id: ""
         })
@@ -77,7 +79,12 @@ const TripRoundtrip = (props) => {
 
       }
     }
-  }, [])
+  }, [props.flight])
+
+  useEffect(() => {
+    console.log("EDIT", formValues)
+  }, [formValues])
+  
   
   
   const onSubmit = async (values, a) => {
@@ -86,8 +93,8 @@ const TripRoundtrip = (props) => {
     let payload = {
       cache_air_origin_destination_criteria: [
         {
-          arrival_datetime: values.arrival_datetime,
-          departure_datetime: values.departure_datetime,
+          arrival_datetime: values.arrival_datetime ? values.arrival_datetime : "",
+          departure_datetime: values.departure_datetime ? values.departure_datetime : " ",
           destination_city_id: values.arrival_data.city_id,
           destination_location: values.arrival_data.city,
           index_number: 1,
@@ -96,7 +103,7 @@ const TripRoundtrip = (props) => {
         }
       ],
       cache_air_travel_preference_criteria: {
-        cabin_type_id: values.cabin_type_id ? values.cabin_type_id : "",
+        cabin_type_id: values.cabin_type ? values.cabin_type.value : "",
         number_of_adults: values.number_of_adults,
         number_of_children: values.number_of_children,
         number_of_infants: values.number_of_infants,
@@ -111,12 +118,13 @@ const TripRoundtrip = (props) => {
       trip_type_id: "3234761b-3fd2-4fd0-ba48-3742ffd3e7cb",
     }
 
-    let res = await api.post("master/cache-criterias/flights", payload)
+    let res = await api.putOrPost("master/cache-criterias/flights", id, payload)
     if(res){
       dispatch(setCreateModal({show: false, id: null, disabled_form: false}))
     }
     console.log(res)
   }
+  
 
   return (
     <>
@@ -124,6 +132,7 @@ const TripRoundtrip = (props) => {
         initialValues={formValues || initialValues}
         validationSchema={validationSchema}
         onSubmit={onSubmit}
+        enableReinitialize
       >
         {({
           errors,
@@ -135,15 +144,16 @@ const TripRoundtrip = (props) => {
         }) => (
           <Form onSubmit={handleSubmit}>
             <div className="d-flex flex-wrap">
-              <Routes 
+              <TripRoutes 
                 smallSize={true} 
                 airports={props.airports} 
-                formik={{errors, touched, setFieldValue}} 
+                formik={{errors, touched, setFieldValue, values}} 
               />
-              <TripDateRoundtrip smallSize={true} formik={{errors, touched, setFieldValue}} />
-              <Travellers smallSize={true} formik={{errors, touched, setFieldValue}} shoppingCache={true} />
-              <TripFlightClass smallSize={true} formik={{errors, touched, setFieldValue}} />
-              <TripCorporate smallSize={true} formik={{errors, touched, setFieldValue}} />                                                    
+              <TripDateRoundtrip smallSize={true} formik={{errors, touched, setFieldValue, values}} />
+              {/* <Travellers smallSize={true} formik={{errors, touched, setFieldValue}} shoppingCache={true} /> */}
+              <TripTraveler formik={{errors, touched, setFieldValue, values}} />
+              <TripFlightClass smallSize={true} formik={{errors, touched, setFieldValue, values}} />
+              <TripCorporate smallSize={true} formik={{errors, touched, setFieldValue, values}} />                                                    
             </div>
 
             <div className="mt-4 mb-5 ml-1 row justify-content-md-start justify-content-center">

@@ -149,7 +149,11 @@
 }
 
 .traveller-sm .form-with-label, .trip-date-sm .form-with-label {
-  font-size: 0.8rem;
+  font-size: 0.7rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  padding-right: 50px;
 }
 
 .traveller-sm .form-with-label__title, .trip-date-sm .form-with-label__title, .room-container .form-with-label__title {

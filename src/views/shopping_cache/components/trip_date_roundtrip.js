@@ -22,6 +22,12 @@ function TripDateRoundtrip(props) {
     )
   }
 
+  useEffect(() => {
+    setDepartTime(new Date(props.formik.values.departure_datetime))
+    setReturnTime(props.formik.values.arrival_datetime ? new Date(props.formik.values.arrival_datetime) : "")
+  }, [props.formik.values])
+  
+
   function RenderReactDatepicker({title}) {
     return (
       <div className={`position-relative ${props.smallSize ? "trip-date-sm" : ""}`} style={{zIndex: 3000}}>
@@ -31,6 +37,7 @@ function TripDateRoundtrip(props) {
           className='form-control rounded-0 form-with-label'
           selected={title === "DEPART" ? departTime : returnTime}
           dateFormat="dd MMMM yyyy"
+          name={title === "DEPART" ? "departure_datetime" : "arrival_datetime"}
           onChange={(date) => {
             if(title === "DEPART") {
               setDepartTime(new Date(date))
