@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react"
 import { withRouter } from "react-router"
-import { Form, FormGroup, InputGroup, Button } from "react-bootstrap"
-import { Formik, FastField } from "formik"
+import { Form, Button } from "react-bootstrap"
+import { Formik } from "formik"
 import * as Yup from "yup"
 import { useParams } from "react-router-dom"
-import useQuery from "lib/query"
 import Api from "config/api"
 import { useDispatch, useSelector } from "react-redux"
 import { setAlert, setCreateModal, setModalTitle } from "redux/ui-store"
 import CancelButton from "components/button/cancel"
 import FormikControl from "../../../../components/formik/formikControl"
+import _ from "lodash"
 
 
 function MessageCreate(props) {
@@ -18,6 +18,7 @@ function MessageCreate(props) {
   const API = new Api()
   const isView = showCreateModal.disabled_form || props.isView
   const [id, setId] = useState(null)
+  const [eventId, setEventId] = useState(null)
   const [loading, setLoading] = useState(true)
   const [formValues, setFormValues] = useState(null)
   const param = useParams()
@@ -37,8 +38,13 @@ function MessageCreate(props) {
     if (formId) {
       try {
         let { data } = await API.get(endpoint + "/" + formId)
+        console.log('data', data)
         setFormValues({
           ...data,
+          event: _.isEmpty(data.event) ? '' : {
+            value: data.event.id,
+            label: data.event.event_name,
+          },
         })
       } catch (e) {
         console.log(e)
@@ -55,32 +61,53 @@ function MessageCreate(props) {
       setLoading(false)
     }
 
+    setEventId(showCreateModal.id)
     setId(showCreateModal.id)
   }, [showCreateModal.id, formValues])
 
   const initialValues = {
-    message: "",
-    message_code: "",
-    message_name: "",
+    event: "",
+    event_code: "",
+    event_name: "",
     short_description: "",
     description: "",
     integration_partner_id: param.id,
   }
 
+  const duplicateValue = async(fieldName, value) => {
+    let filters = encodeURIComponent(JSON.stringify([[fieldName,"=",value],["AND"],["integration_partner_id",param.id],["AND"],["status",1]]))
+    let res = await API.get(endpoint + `?filters=${filters}`)
+    let sameId = res.data.items.find((v) => v.id === eventId)
+    if(!sameId) return res.data.items.length === 0 
+
+    return true
+  }
+
+  Yup.addMethod(Yup.object, 'uniqueValueObject', function (fieldName, message) {
+      return this.test('unique', message, function(field) {
+          if(field) return duplicateValue(fieldName, field.value)
+          return true
+      })
+  })
+
+  Yup.addMethod(Yup.string, 'uniqueValueString', function (fieldName, message) {
+      return this.test('unique', message, function(field) {
+          if(field) return duplicateValue(fieldName, field)
+          return true
+      })
+  })
   const validationSchema = Yup.object().shape({
-    message: Yup.object().required("Message is required."),
-    message_code: Yup.string().required("Message Code is required."),
-    message_name: Yup.string().required("Message Name is required."),
+    event: Yup.object().required("Message is required.").uniqueValueObject("event_id","Message Type already exists"),
+    event_code: Yup.string().required("Message Code is required.").uniqueValueString('event_code', 'Message Code already exists'),
+    event_name: Yup.string().required("Message Name is required.").uniqueValueString('event_name', 'Message Name already exists'),
   })
 
   const onSubmit = async (values, a) => {
-    console.log("hehe", values)
-
       try {
         let form = {
-          event_id: values.message.value,
-          event_code: values.message_code,
-          event_name: values.message_name,
+          event_id: values.event.value,
+          event_code: values.event_code,
+          event_name: values.event_name,
           short_description: values.short_description,
           description: values.description,
           integration_partner_id: param.id,
@@ -91,7 +118,7 @@ function MessageCreate(props) {
         dispatch(setCreateModal({ show: false, id: null, disabled_form: false }));
         dispatch(
             setAlert({
-                message: `Record 'Partner Messages Name: ${values.message_name}' has been successfully saved.`,
+                message: `Record 'Partner Messages Name: ${values.event_name}' has been successfully saved.`,
             })
         );
     } catch (e) {
@@ -129,12 +156,12 @@ function MessageCreate(props) {
             control="selectAsync"
             required="label-required"
             label="Message"
-            name="message"
+            name="event"
             placeholder={"Please choose"}
             url={`master/events`}
             fieldName={"event_name"}
             onChange={(v) => {
-              setFieldValue("message", v)
+              setFieldValue("event", v)
             }}
             urlFilter={`["event_code", "=", "1"],["OR"],["event_code", "=", "2"],["OR"],["event_code", "=", "3"],["OR"],["event_code", "=", "15"]`}
             style={{ maxWidth: 250 }}
@@ -146,7 +173,7 @@ function MessageCreate(props) {
             control="input"
             required="label-required"
             label="Partner Message Code"
-            name="message_code"
+            name="event_code"
             style={{ maxWidth: 250 / 2 }}
             size={formSize}
             disabled={isView || loading}
@@ -156,7 +183,7 @@ function MessageCreate(props) {
             control="input"
             required="label-required"
             label="Partner Message Name"
-            name="message_name"
+            name="event_name"
             style={{ maxWidth: 250 }}
             size={formSize}
             disabled={isView || loading}

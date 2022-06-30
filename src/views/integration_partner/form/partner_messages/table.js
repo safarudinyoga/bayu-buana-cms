@@ -21,7 +21,7 @@ export default function IntegrationMessageTable() {
     columns: [
       {
         title: "Messages",
-        data: "event_name",
+        data: "event.event_name",
       },
       {
         title: "Partner Messages Code",
@@ -37,6 +37,7 @@ export default function IntegrationMessageTable() {
     searchText: "Search",
     customSort: ["event_name"],
     showModalHeader: false,
+    module: "partner-message",
   })
 
   return (
