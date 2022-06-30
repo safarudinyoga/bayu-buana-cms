@@ -212,7 +212,11 @@ function BookFlight() {
 							<Select
 								defaultValue={selectLanguage}
 								options={selectLanguage}
-								components={{ MenuList: MenuListLanguage }}
+								components={{
+									MenuList: MenuListLanguage,
+									DropdownIndicator: () => null,
+									IndicatorSeparator: () => null,
+								}}
 								formatOptionLabel={(language, opt) => (
 									<div className="selectLanguage">
 									  <img 
@@ -243,7 +247,11 @@ function BookFlight() {
 							<Select
 								defaultValue={selectCurrencies}
 								options={selectCurrencies}
-								components={{ MenuList: MenuListCurrency }}
+								components={{
+									MenuList: MenuListLanguage,
+									DropdownIndicator: () => null,
+									IndicatorSeparator: () => null,
+								}}
 								label="Currency"
 								className="selectCurrencies"
 								formatOptionLabel={(currency, opt) => (

@@ -51,7 +51,8 @@ export default function IntegrasiPartnerHotelSupplier() {
     },
     statusLabel: "Status",
     isOpenNewTab: false,
-    module: "partner-hotel-suppliers"
+    module: "partner-hotel-suppliers",
+    isPartner: true
   })
   const borderFeeTax = {
     borderRadius: 10,
