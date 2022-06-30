@@ -46,6 +46,7 @@ export default function PartnerCityTable(props) {
     module: "partner-city",
     searchText: "Search",
     showModalHeader: false,
+    isPartner: true
   }
   return <>
     <Card>

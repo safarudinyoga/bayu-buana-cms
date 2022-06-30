@@ -41,7 +41,8 @@ export default function IntegrationPartnerPaymentGatewayTable() {
     ],
     searchText: "Search",
     showModalHeader: false,
-    customSort:["sort"]
+    customSort:["sort"],
+    isPartner: true
   })
 
   return (

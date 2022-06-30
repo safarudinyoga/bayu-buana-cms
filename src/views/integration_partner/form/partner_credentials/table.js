@@ -44,6 +44,11 @@ import SelfServices from "./self-services"
       isOpenNewTab: false,
       customSort: ["id"],
       showModalHeader: false,
+      infoDelete: [
+        {title: "Company/ Branch Name", recordName: "corporate_group_name"}, 
+      ],
+      isPartner: true,
+      extraText: "credentials for"
     }
   
     return (

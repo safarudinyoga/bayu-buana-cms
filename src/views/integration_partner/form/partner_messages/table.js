@@ -37,6 +37,7 @@ export default function IntegrationMessageTable() {
     searchText: "Search",
     customSort: ["event_name"],
     showModalHeader: false,
+    isPartner: true
   })
 
   return (

@@ -41,26 +41,28 @@ function CorporateRatingForm(props) {
     },   
   ]
 
-  const validationRules = {
-    corporate_rating_type_level_code: {
-      required: true,
-      min: 1,
-      max: 32767,
-      checkCode: true,
-    },
-    corporate_rating_type_level_name: {
-      required: true,
-      minlength: 1,
-      maxlength: 256,
-      checkName: true,
-    },
-    rating: {
-      required: false,
-      min: 1,
-      max: 9999,
-      checkRating: true,
-    },
-  }
+  const [validationRules, setValidationRules] = useState(
+    {
+     corporate_rating_type_level_code: {
+       required: true,
+       min: 1,
+       max: 32767,
+       checkCode: true,
+     },
+     corporate_rating_type_level_name: {
+       required: true,
+       minlength: 1,
+       maxlength: 256,
+       checkName: true,
+     },
+     rating: {
+       required: false,
+       min: 1,
+       max: 9999,
+       checkRating: true,
+     },
+   }
+  )
 
   const validationMessages = {
     corporate_rating_type_level_name: {
@@ -78,6 +80,8 @@ function CorporateRatingForm(props) {
       for (let lang of data.items) {
         valRules["corporate_rating_type_level_name_"+lang.language_code] = { checkLangName: true }
       }
+      setValidationRules({...validationRules, ...valRules})
+      console.log(valRules)
     } catch (e) {
 
     }
@@ -87,31 +91,17 @@ function CorporateRatingForm(props) {
     let translationData = []
     let api = new Api()
     let res  = await api.get(endpoint)
-    // console.log(res, "data endpoint")
-    // res.data.items.map(async(value, key) => {
-    //   console.log(value)
-    //   let dataTranslation = await api.get(endpoint + "/" + value.id + "/translations")
-    //   translationData.push(dataTranslation.data.items)
-    //   translationData = [...translationData, ...dataTranslation.data.items]
-    //   console.log(translationData, "hahaha")
-    //   setRatingTranslations([...translationData, ...dataTranslation.data.items])
-    //   return translationData
-    // })
-    
-  // console.log(RatingTranslations, "xixixi")
     for(let i = 0; i < res.data.items.length; i++) {
       let corporateRatingId = res.data.items[i].id  
-      // console.log(corporateRatingId)
       let dataTranslation = await api.get(endpoint + "/" + corporateRatingId + "/translations")
       translationData = [...translationData, ...dataTranslation.data.items]
     }
     setRatingTranslations(translationData)
+    console.log(RatingTranslations)
   }
 
-  // console.log(RatingTranslations)
   useEffect(async () => {
     fetchTranslation()
-    
   })
 
 
@@ -157,8 +147,17 @@ function CorporateRatingForm(props) {
           $.validator.addMethod(
             "checkLangName",
             function (value, element) {
-              //ambil array yang sudah diset sebelumnya
-              console.log(value)
+              // fetchTranslation(value)
+              // //ambil array yang sudah diset sebelumnya
+              // console.log(value)
+              // console.log(RatingTranslations)
+              // let checkDuplicateName = RatingTranslations.filter(element => {
+              //   console.log(element, value, "hahhaa lucu")
+              //   // return element.corporate_rating_type_level_name === value
+              //   return "hahahaasdhashdahsh"
+              // })
+              // let checkDuplicateName = "sbdafaf"
+              // console.log(checkDuplicateName, "hahahhaa")
             },
             "Rating Name already exists",
           )
