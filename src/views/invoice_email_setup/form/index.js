@@ -34,8 +34,6 @@ import PhoneIcon from "assets/icons/ic_phone_notif.svg"
 import VariableIcon from "assets/icons/ic_bubble_chart.svg"
 import WidgetIcon from "assets/icons/ic_puzzle.svg"
 
-const endpoint = "/master/employees"
-
 const listLanguages = [
   {
     value: "DEFAULT (ENGLISH)",
@@ -54,7 +52,7 @@ const InvoiceEmailSetupForm = (props) => {
   const backToEmailSetup = "/master/invoice-email-setup"
   const backToEmailTemplate = `/master/invoice-email-setup/${routeParams.template_id}`
 
-  let api = new Api()
+  const API = new Api()
 
   const isView = useQuery().get("action") === "view"
   const [loading, setLoading] = useState(true)
@@ -64,6 +62,13 @@ const InvoiceEmailSetupForm = (props) => {
   const [showSentModal, setShowSentModal] = useState(false)
   const [sentModalMsg, setSentModalMsg] = useState("")
   const [sentModalIc, setSentModalIc] = useState("email")
+  const [Languages, setLanguages] = useState([{
+    language_name: "DEFAULT (ENGLISH)",
+  }])
+  const [content, setContent] = useState(["Email Content", "Push Notification"])
+
+  // api https://bbdev.monstercode.net/api/v1/master/agent-languages?size=-1&sort=sort,language_name
+  const [firstLanguage, setFirstLanguage] = useState({})
 
   // const [editorState, setEditorState] = useState(() =>
   //   EditorState.createEmpty(),
@@ -115,7 +120,11 @@ const InvoiceEmailSetupForm = (props) => {
   }
 
   useEffect(async () => {
-    let api = new Api()
+    let {data} = await API.get("/master/agent-languages")
+    console.log(data.items)
+  }, [])
+
+  useEffect(async () => {
     let formId = props.match.params.id
 
     let docTitle = "${'Email Category Name'} - Edit ${'Email Template Name'}"
@@ -151,8 +160,8 @@ const InvoiceEmailSetupForm = (props) => {
     )
     if (formId) {
       try {
-        let res = await api.get(endpoint + "/" + formId)
-        setFormValues(res.data)
+        // let res = await api.get(endpoint + "/" + formId)
+        // setFormValues(res.data)
       } catch (e) {}
       setLoading(false)
     }
@@ -165,26 +174,10 @@ const InvoiceEmailSetupForm = (props) => {
     setId(props.match.params.id)
   }, [props.match.params.id])
 
-  const [content, setContent] = useState(["Email Content", "Push Notification"])
-
-  // api https://bbdev.monstercode.net/api/v1/master/agent-languages?size=-1&sort=sort,language_name
-  const [languages, setLanguages] = useState(listLanguages)
-  const [firstLanguage, setFirstLanguage] = useState({})
-
-  useEffect(async () => {
-    let api = new Api()
-    api
-      .get("/master/agent-languages?size=-1&sort=sort,language_name")
-      .then((res) => {
-        // setLanguages(res.data.items)
-        setLanguages(listLanguages)
-      })
-  }, [])
-
   const initialValues = {
-    invoice_email_name: 'abc',
-    invoice_email_type: 'acb',
-    invoice_email_subject: 'acb'
+    invoice_email_name: '',
+    invoice_email_type: '',
+    invoice_email_subject: ''
   }
 
   const validationSchema = Yup.object().shape({
@@ -411,10 +404,10 @@ const InvoiceEmailSetupForm = (props) => {
             </Col>
             <Col md={11}>
               <Card>
-                <Tabs defaultActiveKey={languages[0]?.value} className="mb-3">
-                  {languages.map((item, index) => {
+                <Tabs defaultActiveKey={Languages[0]?.language_name} className="mb-3">
+                  {Languages.map((item, index) => {
                     return (
-                      <Tab eventKey={item.value} title={item.value} key={index}>
+                      <Tab eventKey={item.language_name} title={item.language_name} key={index}>
                         <Row style={{ border: 1, borderColor: "#ccc" }}>
                           <Col md={6} style={{ padding: "10px 45px" }}>
                             <FormikControl

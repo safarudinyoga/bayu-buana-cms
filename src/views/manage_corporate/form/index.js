@@ -55,6 +55,7 @@ const ManageCorporateForm = ({ match }) => {
   const [finishStep, setStep] = useState(0)
   const [data, setData] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
+  const [corporateId , setCorporateId] = useState(null)
 
   const wardingGenerator = () => {
     if (!formId) {
@@ -115,84 +116,72 @@ const ManageCorporateForm = ({ match }) => {
       } else{
         if(tabKey === "general-information") {
           setTabKey("branch-office")
-          console.log('values', values)
-          await onSave(values)
+          // await onSave(values)
           if(finishStep < 1) setStep(1)
         } else if(tabKey === "branch-office") {
           setTabKey("system-administrator")
-          console.log('values', values)
           if(finishStep < 2) setStep(2)
         } else if(tabKey === "system-administrator") {
           setTabKey("setting")
-          console.log('values', values)
           if(finishStep < 3) setStep(3)
         }else if(tabKey === "setting") {
           setTabKey("mark-up")
-          console.log('values', values)
           if(finishStep < 4) setStep(4)
         }else if(tabKey === "mark-up") {
           setTabKey("service-fee")
-          console.log('values', values)
           if(finishStep < 5) setStep(5)
         }else if(tabKey === "service-fee") {
           setTabKey("ancillary-fee")
-          console.log('values', values)
           if(finishStep < 6) setStep(6)
         }else if(tabKey === "ancillary-fee") {
           setTabKey("assign-team")
-          console.log('values', values)
           if(finishStep < 7) setStep(7)
         }else if(tabKey === "assign-team") {
           setTabKey("credit-limit")
-          console.log('values', values)
           if(finishStep < 8) setStep(8)
         }else if(tabKey === "credit-limit") {
           setTabKey("invoice-settings")
-          console.log('values', values)
           if(finishStep < 9) setStep(9)
         }else if(tabKey === "invoice-settings") {
           setTabKey("corporate-rating")
-          console.log('values', values)
           if(finishStep < 10) setStep(10)
         }else if(tabKey === "corporate-rating") {
           setTabKey("corporate-fare")
-          console.log('values', values)
           if(finishStep < 11) setStep(11)
         }else if(tabKey === "corporate-fare") {
           setTabKey("upload-document")
-          console.log('values', values)
           if(finishStep < 12) setStep(12)
         }else if(tabKey === "upload-document") {
-          console.log('values', values)
         }
       }
   }
 
-  const onSave = async(values) => {
-    try {
-      if (!formId) {
-        //ProsesCreateData
-          let res = await api.post("master/agent-corporates", values)
-          openSnackbar(
-            `Record 'Corporate: ${
-              values.corporate.corporate_name
-            } ' has been successfully saved.`,
-          )
-          history.goBack()
-      } else {
-        //ProsesUpdateData
-          let res = await api.put(`master/master/agent-corporates/${formId}`, values)
-          openSnackbar(
-            `Record 'Corporate: ${
-              values.corporate.corporate_name
-            } ' has been successfully update.`,
-          )
-          if(tabKey === "employment") history.goBack()
-      }
-    } catch(e) {
-      openSnackbar(`error: ${e}`)
-    }
-  }
+  // const onSave = async(values) => {
+  //   try {
+  //     if (!formId) {
+  //       //ProsesCreateData
+  //         let res = await api.post("master/agent-corporates", values)
+  //         openSnackbar(
+  //           `Record 'Corporate: ${
+  //             values.corporate.corporate_name
+  //           } ' has been successfully saved.`,
+  //         )
+  //         history.goBack()
+  //     } else {
+  //       //ProsesUpdateData
+  //         let res = await api.put(`master/master/agent-corporates/${formId}`, values)
+  //         openSnackbar(
+  //           `Record 'Corporate: ${
+  //             values.corporate.corporate_name
+  //           } ' has been successfully update.`,
+  //         )
+  //         if(tabKey === "employment") history.goBack()
+  //     }
+  //   } catch(e) {
+  //     openSnackbar(`error: ${e}`)
+  //   }
+  // }
+
   return (
     <Tab.Container activeKey={tabKey} onSelect={handleSelectTab}>
       <Row>
@@ -326,6 +315,8 @@ const ManageCorporateForm = ({ match }) => {
                       handleSelectTab={(v) => handleSelectTab(v)}
                       onSubmit={onSubmit}
                       finishStep={finishStep}
+                      corporateId={corporateId}
+                      setCorporateId={setCorporateId}
                       data={data != null ? data.general_information : ""} />
                     }
                   </Tab.Pane>

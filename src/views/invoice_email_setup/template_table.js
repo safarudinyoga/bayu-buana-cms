@@ -12,10 +12,17 @@ export default function InvoiceEmailSetupTable() {
 
   const API = new Api()
     useEffect(async() => {
-        let {data} = await API.get("/master/configurations/agent-email-categories/" + routeParams.template_id)
+        let {data} = await API.get(`/master/configurations/agent-email-categories?filters=["id","=", ${routeParams.template_id}]`)
+        let pageTitle = "${'Email Category Name'}"
+        
+        try{
+            if(data.items.length > 0) pageTitle = data.items[0].email_category_name
+        } catch (e) { console.log(e)}
+
+        console.log(data, "email categories data")
         dispatch(
             setUIParams({
-                title: data?.email_category_name || "${'Email Category Name'}",
+                title: pageTitle || "${'Email Category Name'}",
                 breadcrumbs: [
                     {
                         text: "Setup and Configurations",
@@ -25,7 +32,7 @@ export default function InvoiceEmailSetupTable() {
                         link: backUrl,
                     },
                     {
-                        text: data?.email_category_name || "${'Email Category Name'}",
+                        text: pageTitle || "${'Email Category Name'}",
                     },
                 ],
             }),

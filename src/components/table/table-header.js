@@ -226,7 +226,6 @@ class TableHeader extends Component {
     const ExtraFilter = this.props.extraFilter
     const { customFilterStatus, hideCreate, isHidePrintLogo, module } = this.props
     const { pathname } = this.props.location
-    console.log(this.props.location);
 
     return (
       <div className="container-fluid pl-0">
@@ -307,7 +306,6 @@ class TableHeader extends Component {
                     onClick={this.handleClick.bind(this)}
                     className="btn btn-warning float-right button-new"
                   >
-                  {console.log(pathname)}
                     <img src={createIcon} className="mr-1" alt="new" />
                     {pathname === "/master/general-setup"
                       ? "Create New"

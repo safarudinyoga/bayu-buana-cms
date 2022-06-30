@@ -34,7 +34,6 @@ window.JSZip = JSZip
 
 class BBDataTable extends Component {
   constructor(props) {
-    console.log(props);
     super(props)
     this.table = React.createRef()
     this.wrapper = React.createRef()
@@ -205,7 +204,6 @@ class BBDataTable extends Component {
           : module === 'fare-types'
           ? row.fare_type_id
           : row.id
-          console.log(row, module, "ALALLALALL")
         const showDelete = module !== "integration-partner" && module !== "identity-rules" && module !== "email-setup-template"
 
         return (
@@ -1081,7 +1079,6 @@ class BBDataTable extends Component {
             if(me.props.modalDelete) {
               me.props.setModalDelete({show: true, id, disabled_form: false})
             }else{
-              console.log(id)
               me.deleteAction.bind(me)(id, name, info)
             }
             break
@@ -1183,7 +1180,7 @@ class BBDataTable extends Component {
           </ModalFooter>
         </Modal>
 
-        {createOnModal && <ModalCreate
+        {(createOnModal || showCreateModal.show) && <ModalCreate
           modalTitle={modalTitle}
           show={showCreateModal.show}
           onClick={() => this.props.setCreateModal({show: false, id: null, disabled_form: false})}
