@@ -16,6 +16,7 @@ import TripOneway from './components/trip_oneway'
 import CancelButton from 'components/button/cancel'
 
 function ShoppingCacheCreate(props) {
+  console.log("shopping cache");
   const dispatch = useDispatch()
   const [flightType, setFlightType] = useState("3234761b-3fd2-4fd0-ba48-3742ffd3e7cb")
   const [airports, setAirports] = useState([])
@@ -172,10 +173,16 @@ function ShoppingCacheCreate(props) {
       >
         {
           tripTypes ? (
-            tripTypes.map((item) => (
+            tripTypes.map((item) => {
+              console.log(item, 'item');
+              return (
               <Tab
                 eventKey={item.id}
                 title={item.trip_type_name}
+                
+                // onSelect={(k) => {
+                //   console.log(k);
+                // }}
               >
                 <div className="d-flex flex-wrap">
                   {
@@ -184,7 +191,7 @@ function ShoppingCacheCreate(props) {
                   }
                 </div>
               </Tab>
-            ))
+            )})
           ) : ""
         }
         {/* <Tab

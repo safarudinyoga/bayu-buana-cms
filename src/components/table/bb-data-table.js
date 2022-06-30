@@ -34,6 +34,7 @@ window.JSZip = JSZip
 
 class BBDataTable extends Component {
   constructor(props) {
+    console.log(props);
     super(props)
     this.table = React.createRef()
     this.wrapper = React.createRef()

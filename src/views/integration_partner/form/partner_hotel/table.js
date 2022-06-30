@@ -24,6 +24,7 @@ export default function IntegrasiPartnerHotels() {
     showAdvancedOptions: false,
     searchText:"Search",
     isOpenNewTab: false,
+    createOnModal: false,
     columns: [
       {
         title: "Hotel",
@@ -77,7 +78,7 @@ export default function IntegrasiPartnerHotels() {
   return(
     <Card>
       <Card.Body>
-        <h3 className="card-heading">Partner Hotels</h3>
+        <h3 className="card-heading">Partner Hotelss</h3>
         {
           isReplaceTable ? <PartnerHotelForm isReplaceTable={isReplaceTable} handleReplaceTable={handleReplaceTable} /> :
           <BBDataTable {...params} handleReplaceTable={handleReplaceTable}/>
