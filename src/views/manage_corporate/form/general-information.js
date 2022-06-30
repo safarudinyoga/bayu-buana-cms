@@ -32,10 +32,16 @@ const slugDictionary = {
   country: 'Country'
 }
 
+const endpoint = "/master/agent-corporates"
 const GeneralInfomation = (props) => {
   let api = new Api()
   let dispatch = useDispatch()
   const isView = useQuery().get("action") === "view"
+  const [DataId, setDataId] = useState(null)
+
+  useEffect(()=>{
+    if(props.corporateId) setDataId(props.corporateId)
+  },[props.corporateId])
 
   const { handleSubmit, handleChange, values, errors, touched, setFieldTouched, setFieldValue, setValues, validateField, isSubmitting} = useFormik({
     initialValues: {
@@ -162,9 +168,9 @@ const GeneralInfomation = (props) => {
             "corporate_code": val.corporate_code,
             "corporate_name": val.corporate_name,
             "parent_corporate_id": val.general_information.parent_company?.value || "00000000-0000-0000-0000-000000000000",
-            "corporate_type_id": val.general_information.corporate_type.value || "",
+            "corporate_type_id": val.general_information.corporate_type.value || "00000000-0000-0000-0000-000000000000",
             "corporate_asset" : {
-              "multimedia_description_id" : val.other_information.logo.data?.id || ''
+              "multimedia_description_id" : val.other_information.logo.data?.id || "00000000-0000-0000-0000-000000000000"
             },
           },
           "contact": {
@@ -174,18 +180,18 @@ const GeneralInfomation = (props) => {
           },
           "correspondence_address": {
               "address_line": val.correspondence_address.address,
-              "country_id": val.correspondence_address.country.value || "",
-              "state_province_id": val.correspondence_address.province?.value || "",
-              "city_id": val.correspondence_address.city?.value || "",
+              "country_id": val.correspondence_address.country.value || "00000000-0000-0000-0000-000000000000",
+              "state_province_id": val.correspondence_address.province?.value || "00000000-0000-0000-0000-000000000000",
+              "city_id": val.correspondence_address.city?.value || "00000000-0000-0000-0000-000000000000",
               "postal_code": val.correspondence_address.zipcode,
               "latitude": Number(val.correspondence_address.geo_location.lat),
               "longitude": Number(val.correspondence_address.geo_location.lng)
           },
           "billing_address": {
               "address_line": val.billing_address.address,
-              "country_id": val.billing_address.country.value || "",
-              "state_province_id": val.billing_address.province?.value || "",
-              "city_id": val.billing_address.city?.value || "",
+              "country_id": val.billing_address.country.value || "00000000-0000-0000-0000-000000000000",
+              "state_province_id": val.billing_address.province?.value || "00000000-0000-0000-0000-000000000000",
+              "city_id": val.billing_address.city?.value || "00000000-0000-0000-0000-000000000000",
               "postal_code": val.billing_address.zipcode,
               "latitude": Number(val.billing_address.geo_location.lat),
               "longitude": Number(val.billing_address.geo_location.lng)
@@ -197,7 +203,10 @@ const GeneralInfomation = (props) => {
           "expire_date": val.general_information.corporate_contract.date_end
         }
 
-      await props.onSubmit(payload)
+      let postCorporate = await api.putOrPost(endpoint, DataId, payload)
+      console.log(postCorporate)
+
+      // await props.onSubmit(payload)
     }
   })
 
