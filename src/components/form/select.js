@@ -6,7 +6,8 @@ const Select = (props) => {
     option: (provided, state) => ({
       ...provided,
       color: "black",
-      backgroundColor: state.isSelected ? "white" : "white",
+      backgroundColor: state.isDisabled ? '#f9fafb' : state.isSelected && '#fff',
+      cursor: state.isDisabled ? 'not-allowed' : 'default',
       fontFamily: "Segoe UI, Tahoma, Geneva, Verdana, sans-serif",
       fontSize: 13,
       "&:hover": {
@@ -18,12 +19,13 @@ const Select = (props) => {
       ...base,
       border: props.invalid ? "1px solid #dc3545" : "1px solid #DADEDF",
       fontSize: 13,
-      backgroundColor: "white",
+      backgroundColor: state.isDisabled ? '#f9fafb' : "#fff",
+      cursor: state.isDisabled ? 'not-allowed' : 'default',
       boxShadow: state.isFocused ? 0 : 0,
       "&:hover": {
         border: "1px solid #DADEDF",
       },
-      width: props.width
+      width: props.width,
     }),
     singleValue: (provided, state) => {
       const opacity = state.isDisabled ? 0.5 : 1
