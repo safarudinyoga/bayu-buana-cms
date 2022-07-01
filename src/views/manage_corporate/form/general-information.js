@@ -205,7 +205,8 @@ const GeneralInfomation = ({
         industry_id: val.general_information.corporate_type.value || "00000000-0000-0000-0000-000000000000", //! corporate type
         internal_remark: val.other_information.internal_remark,
         npwp: val.general_information.corporate_npwp,
-        website: val.other_information.website
+        website: val.other_information.website,
+        corporate_id: "00000000-0000-0000-0000-000000000000",
       }
       // !please ask mas firman agam still got caught in 502 response
       console.log(payload)
@@ -539,9 +540,9 @@ const GeneralInfomation = ({
   const calendarStartRef= useRef(null)
   const calendarEndRef= useRef(null)
 
-  useEffect(() => {
-    console.log({ values });
-  }, [values])
+  // useEffect(() => {
+  //   console.log({ values });
+  // }, [values])
 
   return (
     <Form onSubmit={handleSubmit} ref={ref} className='general_information'>
@@ -605,11 +606,50 @@ const GeneralInfomation = ({
                   </Col>
                 </Form.Group>
                 <Form.Group as={Row} className='form-group'>
+                
                   <Form.Label column sm={3} className='mb-2'>
                     Parent Company
                   </Form.Label>
                   <Col md={3} lg={9}>
-                    <Select
+                    <div style={{ maxWidth: 300 }}>
+                      <SelectAsync
+                        isClearable
+                        name="general_information.parent_company"
+                        url={"master/agent-corporates"}
+                        id='general_information.parent_company'
+                        value={values.general_information.parent_company}
+                        placeholder="Please choose"
+                        fieldName="agent_corporate.corporate.corporate_name"
+                        sort={""}
+                        className={`react-select ${
+                          touched?.correspondence_address?.country &&
+                          errors?.correspondence_address?.country
+                            ? "is-invalid"
+                            : null
+                        }`}
+                        onChange={(v) => {
+                          setFieldValue('general_information.parent_company', v)
+                        }}
+                        onBlur={setFieldTouched}
+                        components={
+                          isView
+                            ? {
+                                DropdownIndicator: () => null,
+                                IndicatorSeparator: () => null,
+                              }
+                            : null
+                        }
+                        isDisabled={isLoading || isView}
+                        readOnly={isView}
+                        invalid={touched?.correspondence_address?.country?.value && errors?.correspondence_address?.country?.value}
+                      />
+                      {touched?.correspondence_address?.country?.value && errors?.correspondence_address?.country?.value && (
+                        <TextError>
+                          {errors.correspondence_address?.country?.value}
+                        </TextError>
+                      )}
+                    </div>
+                    {/* <Select
                       isClearable
                       placeholder="Please choose parent company"
                       options={[
@@ -638,7 +678,7 @@ const GeneralInfomation = ({
                           : null
                       }
                       isDisabled={isLoading || isView}
-                    />
+                    /> */}
                     {touched?.general_information?.parent_company && errors?.general_information?.parent_company && (
                       <TextError>
                         {errors.general_information.parent_company}
