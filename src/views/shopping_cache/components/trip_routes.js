@@ -1,10 +1,9 @@
-import { ErrorMessage, Field, getIn } from 'formik';
 import React, { useEffect, useState } from 'react'
 import AutoSuggest from "react-autosuggest";
 import { ReactSVG } from "react-svg"
 
-function Routes(props) {
-  const { airports, smallSize } = props
+const TripRoutes = (props) => {
+  const { airports } = props
 
   const [departureValue, setDepartureValue] = useState("");
   const [arrivalValue, setArrivalValue] = useState("");
@@ -17,10 +16,11 @@ function Routes(props) {
 
     return inputLength === 0 ? [] : data.filter(airport =>
       airport.name.toLowerCase().slice(0, inputLength) === inputValue ||
-      airport.city.toLowerCase().slice(0, inputLength) === inputValue 
+      airport.city.toLowerCase().slice(0, inputLength) === inputValue ||
+      airport.code.toLowerCase().slice(0, inputLength) === inputValue
     )
   }
-  
+
   function renderSuggestion(suggestion, {query}) {
     console.log("render suggest",suggestion)
     return (
@@ -41,31 +41,18 @@ function Routes(props) {
     )
   }
 
-  // useEffect(() => {
-  //   console.log(departureValue)
-  //   if((departureValue == "" || departureValue == null) && props.formik ){
-  //     console.log("KOSONG INI")
-  //     props.formik.setFieldValue(`trips[${props.index}].departure_data`, "")
-  //   }
-  // }, [departureValue])
-  
   useEffect(() => {
-    // console.log(props.formik.errors)
-    console.log(getIn(props.formik.errors), "Errors")
-  }, [props.formik])
-
-  useEffect(() => {
-    console.log(`index ${props.index}`,departureValue)
-  }, [departureValue])
-  
-  
+    console.log("FROM TRIP ROUTES", props.formik.values)
+    
+    // setDepartureValue(props.formik.values.departure_data ? props.formik.values.departure_data.city_name : "")
+    // setArrivalValue(props.formik.values.arrival_data ? props.formik.values.arrival_data.city_name : "")
+  }, [props.formik.values])
   
 
   return (
     <>
-      <div className={`d-flex ${smallSize ? "mr-2" : "mr-4"}`}>
-        {/* <Field name={props.formik && props.index >= 0 ? `trips[${props.index}].departure_data` : } */}
-        <div className={`form-group required position-relative departure-box mb-4 ${smallSize ? "routes-sm" : ""}`} >
+      <div className='d-flex mr-2'>
+        <div className="form-group required position-relative departure-box mb-4 routes-sm">
           <label htmlFor="departure" className='form-with-label__title'>FROM <span className='label-required'></span></label>
           <ReactSVG src='/img/icons/flight-takeoff.svg' className='form-with-label__suggest-icon'/>
           <AutoSuggest
@@ -76,9 +63,6 @@ function Routes(props) {
               setSuggestions(getSuggestions(airports,value));
             }}
             onSuggestionSelected={(_, { suggestion, suggestionValue }) => {
-              console.log("Selected",suggestion)
-              console.log("PROPS FORMIK", props.formik)
-
               if(props.formik && props.index >= 0){
                 props.formik.setFieldValue(`trips[${props.index}].departure_data`, suggestion)
               }
@@ -86,16 +70,8 @@ function Routes(props) {
               else if(props.formik){
                 props.formik.setFieldValue("departure_data", suggestion)
               }
-
-              if(props.handleCriteriaChange) {
-                props.handleCriteriaChange("origin_airport_id", suggestion.airport_id, "origin_city_id", suggestion.city_id)
-              }
-              
-              
-            }
-              
-            }
-            getSuggestionValue={suggestion => suggestion.name}
+            }}
+            getSuggestionValue={suggestion => `${suggestion.city}, ${suggestion.code}`}
             renderSuggestion={renderSuggestion}
             inputProps={{
               placeholder: "Departure city, airport",
@@ -134,14 +110,13 @@ function Routes(props) {
           }
           {/* tampilan untuk error departure data multitrip END */}
         </div>
-        <div className={`form-group required position-relative arrival-box mb-4 ${smallSize ? "routes-sm" : ""}`} > 
+        <div className="form-group required position-relative departure-box mb-4 routes-sm">
           <label htmlFor="arrival" className='form-with-label__title'>TO <span className='label-required'></span></label>
           <ReactSVG src='/img/icons/flight-land.svg' className='form-with-label__suggest-icon'/>
           <AutoSuggest
             suggestions={suggestions}
             onSuggestionsClearRequested={() => setSuggestions([])}
             onSuggestionsFetchRequested={({ value }) => {
-              console.log(value);
               setArrivalValue(value);
               setSuggestions(getSuggestions(airports,value));
             }}
@@ -154,14 +129,10 @@ function Routes(props) {
               else if(props.formik){
                 props.formik.setFieldValue("arrival_data", suggestion)
               }
-              if(props.handleCriteriaChange) {
-                props.handleCriteriaChange("destination_airport_id", suggestion.airport_id, "destination_city_id", suggestion.city_id)
-              }
-              
             }
               
             }
-            getSuggestionValue={suggestion => suggestion.name}
+            getSuggestionValue={suggestion => `${suggestion.city}, ${suggestion.code}`}
             renderSuggestion={renderSuggestion}
             inputProps={{
               placeholder: "Arrival city, airport",
@@ -201,4 +172,4 @@ function Routes(props) {
   )
 }
 
-export default Routes
+export default TripRoutes

@@ -3,19 +3,12 @@ import { ReactSVG } from "react-svg"
 import { Form, Popover, OverlayTrigger, Button } from 'react-bootstrap'
 import Select from 'components/form/select';
 
-function Travellers(props) {
+const TripTraveler = (props) => {
   const [adultCount, setAdultCount] = useState(1)
   const [childrenCount, setChildrenCount] = useState(0)
   const [infantCount, setInfantCount] = useState(0)
 
   const [travelerValue, setTravelerValue] = useState("1 Adult")
-  const [travelerCheckbox, setTravelerCheckbox] = useState(false)
-  const [travelerCacheData, setTravelerCacheData] = useState({
-    number_of_adults: 1,
-    number_of_children: 0,
-    number_of_infants: 0
-  })
-
 
   const regex = /^[0-9\b]+$/;
   const onChangeAdult = (e) => {
@@ -39,13 +32,6 @@ function Travellers(props) {
 
     setTravelerValue(valueText)
     let count = adultCount+childrenCount+infantCount
-    if(props.onConfirm){
-      props.onConfirm(travelerCheckbox, count)
-    }
-
-    if(props.handleCacheData){
-      props.handleCacheData("cache_air_travel_preference_criteria", travelerCacheData, "cache_air_traveler_criteria", travelerCacheData)
-    }
 
     if(props.formik){
       props.formik.setFieldValue("number_of_adults", adultCount)
@@ -54,89 +40,6 @@ function Travellers(props) {
     }
     
     document.body.click()
-  }
-
-  const travelerAgeStyle = {
-    option: (provided, state) => ({
-      ...provided,
-      borderBottom: '1px dashed #ccc',
-      color: state.isSelected ? 'white' : 'gray',
-      padding: 2,
-      fontSize: '20px',
-     }),
-     control: () => ({
-      // none of react-select's styles are passed to <Control />
-      width: 500,
-      background: 'white',
-      height: 50,
-      radius: 40,
-      borderRadius: 5,
-      display: 'flex', 
-     }),
-     singleValue: (provided, state) => {
-      const opacity = state.isDisabled ? 0.5 : 1;
-      const transition = 'opacity 300ms';
-     
-      return { ...provided, opacity, transition };
-     }
-  }
-
-  const selectChildAge = () => {
-    const options = []
-  
-    for (let i = 2; i <= 11; i++) {
-      options.push({
-        value: i,
-        label: i,
-      })
-    }
-  
-    return options
-  }
-
-  const infantAgeOptions = [
-    {
-      value: 0,
-      label: "Under 1",
-    },
-    {
-      value: 1,
-      label: 1,
-    }
-  ]
-
-  function ChildrenDiv(){
-    let divs = []
-
-    for (let i = 0; i < childrenCount; i++) {
-      divs.push(
-        <div className='col-6'>
-          <span className='traveler-title-detail'>Child {i+1} age</span>
-          <Select
-            options={selectChildAge()}
-            styles={travelerAgeStyle}
-          />
-        </div>
-      )
-    }
-    return divs
-  }
-
-  function InfantDiv(){
-    let divs = []
-
-    for (let i = 0; i < infantCount; i++) {
-      divs.push(
-        <div className='col-6'>
-          <span className='traveler-title-detail'>Infant {i+1} age</span>
-          <Select
-            options={infantAgeOptions}
-            styles={travelerAgeStyle}
-          />
-        </div>
-      )
-    }
-    return divs
   }
 
   const popover = (
@@ -198,14 +101,6 @@ function Travellers(props) {
                     onClick={() => setChildrenCount(childrenCount + 1)} />
             }
           </div>
-          {props.shoppingCache ? "" : (
-            <div className='row w-100'>
-              <ChildrenDiv />
-            </div>
-          )}
-          
-          
-          
         </div>
         <div className="d-flex row mb-2">
           <div className='col-md-6'>
@@ -239,72 +134,26 @@ function Travellers(props) {
             }
             
           </div>
-          {props.shoppingCache ? "" : (
-            <div className='row w-100'>
-              <InfantDiv />
-            </div>
-          )}
-          
         </div>
-        {props.shoppingCache ? "" : (
-          <Form.Check 
-            label="SELECT TRAVELERS"
-            onChange={() => setTravelerCheckbox(!travelerCheckbox)} 
-            checked={travelerCheckbox}
-          />
-        )}
-        
         <Button onClick={onTravelerClick} className='mt-3 w-100'>DONE</Button>
       </Popover.Content>
     </Popover>
   )
 
   useEffect(() => {
+    let adultValue = `${props.formik.values.number_of_adults} ${props.formik.values.number_of_adults > 1 ? "Adults" : "Adult" }`
+    let childrenValue = props.formik.values.number_of_children > 0 ? `${props.formik.values.number_of_children} ${props.formik.values.number_of_children > 1 ? "Children" : "Child" }` : ""
+    let infantValue =  props.formik.values.number_of_infants > 0 ? `${props.formik.values.number_of_infants} ${props.formik.values.number_of_infants > 1 ? "Infants" : "Infant" }` : ""
 
-    if(props.handleTrip){
-      props.handleTrip("adult_count", adultCount)
-    }
+    let valueText = `${adultValue} ${childrenValue} ${infantValue}`
 
-    if(props.handleCacheData){
-      let travelerCache = {...travelerCacheData}
-      travelerCache.number_of_adults = adultCount
-      setTravelerCacheData(travelerCache)
-    }
-    
-  }, [adultCount])
-
-  useEffect(() => {
-
-    if(props.handleTrip){
-      props.handleTrip("children_count", childrenCount)
-    }
-
-    if(props.handleCacheData){
-      let travelerCache = {...travelerCacheData}
-      travelerCache.number_of_children = childrenCount
-      setTravelerCacheData(travelerCache)
-    }
-    
-  }, [childrenCount])
-
-  useEffect(() => {
-
-    if(props.handleTrip){
-      props.handleTrip("infant_count", infantCount)
-    }
-
-    if(props.handleCacheData){
-      let travelerCache = {...travelerCacheData}
-      travelerCache.number_of_infants = infantCount
-      setTravelerCacheData(travelerCache)
-    }
-    
-  }, [infantCount])
+    setTravelerValue(valueText)
+  }, [props.formik.values])
   
 
   return (
     <>
-      <div className={`position-relative traveller-container ${props.smallSize ? "traveller-sm mr-2" : ""}`}>
+      <div className={`position-relative traveller-container traveller-sm mr-2`}>
         <h4 className='form-with-label__title'> TRAVELERS <span className='label-required'></span></h4>
         <ReactSVG src='/img/icons/people.svg' className='form-with-label__suggest-icon' />
         <OverlayTrigger trigger="click" placement='bottom' overlay={popover} rootClose={true}>
@@ -315,4 +164,4 @@ function Travellers(props) {
   )
 }
 
-export default Travellers
+export default TripTraveler

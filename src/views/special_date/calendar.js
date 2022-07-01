@@ -11,6 +11,7 @@ import Api from "config/api"
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 import Year from './components/year';
 import { event } from 'jquery';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 const backUrl = "/master/special-date"
 
@@ -70,7 +71,7 @@ function SpecialDateCalendar() {
 
   const _renderDay = (day) => {
     const date = new Date(day)
-
+    console.log("EVENTS", events)
     let eventDay = events.find((v) => moment(v.startDate).isSame(moment(date), 'day'))
     console.log(eventDay)
     if(eventDay){
@@ -82,6 +83,29 @@ function SpecialDateCalendar() {
   }
 
   const currentYear = new Date().getFullYear();
+
+  const handleDayEnter = (e) => {
+
+    if (e.events.length > 0) {
+      let tooltipContent = '';
+      
+      for(var i in e.events){
+        tooltipContent = 
+          <div>{e.events[i].name}</div>
+      }
+    }
+  }
+
+  const renderTooltip = (props) => {
+    <Tooltip {...props}>
+      Hello World Tooltip
+    </Tooltip>
+  }
+
+  const handleCustomRender = (e, date) => {
+    
+    console.log("DATE", date)
+  }
 
   return (
     <>
@@ -113,13 +137,13 @@ function SpecialDateCalendar() {
         /> */}
         {
           mode.value === "year" ? (
-            <Calendar dataSource={events} />
+            <Calendar dataSource={events} onDayEnter={handleDayEnter} customDayRenderer={handleCustomRender} style="custom" />
           ) : (
             <CalendarMonthView width="100%" renderDay={_renderDay}/>
           )
         }
       </div>
-      <div className='mt-4 inline-flex'>
+      <div className='mt-4 d-flex'>
         <div className='special-date-color-box mr-2'></div>
         <span>Special Date</span>
       </div>

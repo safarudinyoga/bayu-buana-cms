@@ -13,6 +13,9 @@ import CancelButton from 'components/button/cancel'
 import { setModalTitle, setCreateModal } from "redux/ui-store"
 import { useDispatch } from 'react-redux'
 import Api from 'config/api'
+import TripRoutes from './trip_routes'
+import TripTraveler from './trip_traveler'
+import TripDateMultitrip from './trip_date_multitrip'
 
 function TripMultitrip(props) {
   const { airports, handleTrip  } = props
@@ -31,23 +34,33 @@ function TripMultitrip(props) {
   const initialValues = {
     trips: [
       {
-        depart_time: new Date(),
-        return_time: new Date(),
+        departure_datetime: new Date(),
+        arrival_datetime: new Date(),
         departure_data: "",
-        arrival_data: ""
+        arrival_data: "",
       }
-    ]
+    ],
+    cabin_type: "",
+    number_of_adults: 1,
+    number_of_children: 0,
+    number_of_infants: 0,
+    corporate_id: "",
   }
 
   const validationSchema = Yup.object().shape({
     trips: Yup.array().of(
       Yup.object().shape({
-        depart_time: Yup.string().required("Depart Time is required"),
-        return_time: Yup.string().required("Return Time is required"),
+        departure_datetime: Yup.string().required("Depart Time is required"),
+        arrival_datetime: Yup.string().required("Return Time is required"),
         departure_data: Yup.object().required("Departing from city or airport is required."),
         arrival_data: Yup.object().required("Arriving to city or airport is required."),
       })
-    )
+    ),
+    number_of_adults: Yup.number().required(),
+    number_of_children: Yup.number().required(),
+    number_of_infants: Yup.number().required(),
+    cabin_type: Yup.object().notRequired(),
+    corporate_id: Yup.string().notRequired(),
   })
 
   const [departTime, setDepartTime] = useState({ 0: new Date() })
@@ -60,7 +73,19 @@ function TripMultitrip(props) {
 
     if(values.trips && values.trips.length > 0) {
       values.trips.map((trip, index) => (
-        console.log("TRIP", trip)
+        cacheAirCriteria.push(
+          {
+            arrival_datetime: trip.arrival_datetime,
+            departure_datetime: trip.departure_datetime,
+            destination_city_id: trip.arrival_data.city_id,
+            destination_location: trip.arrival_data.city,
+            destination_airport_id: trip.arrival_data.airport_id,
+            index_number: index,
+            origin_city_id: trip.departure_data.city_id,
+            origin_location: trip.departure_data.city,
+            origin_airport_id: trip.departure_data.airport_id,
+          }
+        )
         // cacheAirCriteria.push(
         //   {
         //     administrative_city_id: trip.departure_data.city_id,
@@ -88,7 +113,7 @@ function TripMultitrip(props) {
     let payload = {
       cache_air_origin_destination_criteria: cacheAirCriteria,
       cache_air_travel_preference_criteria: {
-        cabin_type_id: "00000000-0000-0000-0000-000000000000",
+        cabin_type_id: values.cabin_type ? values.cabin_type.value : "",
         number_of_adults: values.number_of_adults,
         number_of_children: values.number_of_children,
         number_of_infants: values.number_of_infants,
@@ -97,36 +122,16 @@ function TripMultitrip(props) {
         number_of_adults: values.number_of_adults,
         number_of_children: values.number_of_children,
         number_of_infants: values.number_of_infants,
+        seats_requested: values.number_of_adults,
       },
-      cache_guest_criteria: {
-        number_of_adults: values.number_of_adults,
-        number_of_children: values.number_of_children,
-        number_of_infants: values.number_of_infants,
-      },
-      cache_room_stay_criteria: {
-        administrative_city_id: values.departure_data.city_id,
-        airport_id: values.departure_data.airport_id,
-        attraction_id: "00000000-0000-0000-0000-000000000000",
-        checkin: "",
-        checkout: "",
-        city_id: values.departure_data.city_id,
-        destination_city_id: values.arrival_data.city_id,
-        destination_hotel_id: "00000000-0000-0000-0000-000000000000",
-        destination_id: "00000000-0000-0000-0000-000000000000",
-        destination_location: "",
-        hotel_id: "00000000-0000-0000-0000-000000000000",
-        index_number: 1,
-        zone_id: "00000000-0000-0000-0000-000000000000"
-      },
-      corporate_id: "00000000-0000-0000-0000-000000000000",
-      currency_id: "00000000-0000-0000-0000-000000000000",
-      language_id: "00000000-0000-0000-0000-000000000000",
-      trip_type_id: "dd3254b3-719b-43f4-b45c-11a99727cf06",
+      trip_type_id: props.tripType,
     }
 
-    // let res = await api.post("master/cache-criterias/flights", payload)
-    // console.log(res)
+    let res = await api.post("master/cache-criterias/flights", payload)
+    console.log(res)
   }
+  
+  
   
 
   return (
@@ -147,11 +152,29 @@ function TripMultitrip(props) {
                       values.trips.map((trip, index) => (
                         <>
                           <div key={index} className="d-flex flex-wrap mb-2 col-12">
-                            <Routes index={index} airports={airports} formik={{errors, touched, setFieldValue, values}} />
+                            <TripRoutes index={index} airports={airports} formik={{errors, touched, setFieldValue, values}} />
 
                             <div className="mr-4">
-                              <TripDateRoundtrip smallSize={true} formik={{errors, touched, setFieldValue}} />
+                              <TripDateMultitrip index={index} smallSize={true} formik={{errors, touched, setFieldValue, values}} />
                             </div>
+
+                            {
+                              index > 0 ? (
+                                <Button
+                                  onClick={() => {
+                                    arrayHelpers.remove(index)
+                                    setDepartTime({
+                                      ...departTime,
+                                      [index]: ""
+                                    })
+                                    
+                                  }}
+                                  className="mt-2"
+                                >
+                                  REMOVE
+                                </Button>
+                              ) : ""
+                            }
                           </div>
                         </>
                       ))
@@ -159,15 +182,15 @@ function TripMultitrip(props) {
                     
                   }
                   <Button
-                    onClick={() => arrayHelpers.push({depart_time: "", departure_data: "", arrival_data: ""})}
+                    onClick={() => arrayHelpers.push({departure_datetime: "", arrival_datetime: "", departure_data: "", arrival_data: ""})}
                     className="mb-4"
                   >
                     Add New
                   </Button>
                   <div className='d-flex'>
-                    <Travellers smallSize={true} formik={{errors, touched, setFieldValue}} />
-                    <TripFlightClass smallSize={true} formik={{errors, touched, setFieldValue}} />
-                    <TripCorporate smallSize={true} formik={{errors, touched, setFieldValue}} />
+                    <TripTraveler smallSize={true} formik={{errors, touched, setFieldValue, values}} />
+                    <TripFlightClass smallSize={true} formik={{errors, touched, setFieldValue, values}} />
+                    <TripCorporate smallSize={true} formik={{errors, touched, setFieldValue, values}} />
                   </div>
                   <div className="mt-4 mb-5 ml-1 row justify-content-md-start justify-content-center">
                     <Button
