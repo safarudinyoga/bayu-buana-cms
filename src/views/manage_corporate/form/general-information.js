@@ -6,6 +6,7 @@ import DatePicker from 'react-datepicker'
 import { debounce } from 'lodash'
 import { useDispatch } from "react-redux"
 import { ReactSVG } from "react-svg"
+import PropTypes from 'prop-types'
 
 // components & styles
 import Select from "components/form/select"
@@ -21,6 +22,7 @@ import useQuery from "lib/query"
 import { errorMessage } from 'lib/errorMessageHandler'
 import { setAlert } from "redux/ui-store"
 import moment from 'moment'
+import { SUCCESS_RESPONSE_STATUS } from 'lib/constants'
 
 const slugDictionary = {
   corporate_code: 'Corporate Code',
@@ -33,15 +35,17 @@ const slugDictionary = {
 }
 
 const endpoint = "/master/agent-corporates"
-const GeneralInfomation = (props) => {
+const GeneralInfomation = ({
+  history,
+  backUrl,
+  corporateId,
+  handleChangeTabKey,
+  data
+}) => {
   let api = new Api()
   let dispatch = useDispatch()
   const isView = useQuery().get("action") === "view"
-  const [DataId, setDataId] = useState(null)
-
-  useEffect(()=>{
-    if(props.corporateId) setDataId(props.corporateId)
-  },[props.corporateId])
+  const [isLoading, setIsLoading] = useState(false)
 
   const { handleSubmit, handleChange, values, errors, touched, setFieldTouched, setFieldValue, setValues, validateField, isSubmitting} = useFormik({
     initialValues: {
@@ -102,7 +106,7 @@ const GeneralInfomation = (props) => {
       corporate_code: Yup.string().required(errorMessage(slugDictionary['corporate_code'])).test('uniqueCorporateCode', '', async function(val) {
         try {
           if (val !== undefined && val) {
-            const { status, data } = await api.get(`/master/agent-corporates?filters=${encodeURIComponent(JSON.stringify(['corporate_code','=',`${val}`]))}`)
+            const { status, data } = await api.get(`${endpoint}?filters=${encodeURIComponent(JSON.stringify(['corporate_code','=',`${val}`]))}`)
 
             if ([200, 201].includes(status)) {
               if (data.items && data.items.length) {
@@ -123,7 +127,7 @@ const GeneralInfomation = (props) => {
       corporate_name: Yup.string().required(errorMessage(slugDictionary['corporate_name'])).test('uniqueCorporateName', '', async function(val) {
         try {
           if (val !== undefined && val) {
-            const { status, data } = await api.get(`/master/agent-corporates?filters=${encodeURIComponent(JSON.stringify(['corporate_name','=',`${val}`]))}`)
+            const { status, data } = await api.get(`${endpoint}?filters=${encodeURIComponent(JSON.stringify(['corporate_name','=',`${val}`]))}`)
 
             if ([200, 201].includes(status)) {
               if (data.items && data.items.length) {
@@ -162,53 +166,158 @@ const GeneralInfomation = (props) => {
       }),
     }),
     validateOnChange: false,
-    onSubmit: async (val) => {
+    //! dont put async here, causing re-render formik
+    onSubmit: (val) => {
       const payload = {
-          "corporate": {
-            "corporate_code": val.corporate_code,
-            "corporate_name": val.corporate_name,
-            "parent_corporate_id": val.general_information.parent_company?.value || "00000000-0000-0000-0000-000000000000",
-            "corporate_type_id": val.general_information.corporate_type.value || "00000000-0000-0000-0000-000000000000",
-            "corporate_asset" : {
-              "multimedia_description_id" : val.other_information.logo.data?.id || "00000000-0000-0000-0000-000000000000"
-            },
+        corporate: {
+          corporate_code: val.corporate_code,
+          corporate_name: val.corporate_name,
+          parent_corporate_id: val.general_information.parent_company?.value || "00000000-0000-0000-0000-000000000000",
+          corporate_asset : {
+            multimedia_description_id : val.other_information.logo.data?.id || "00000000-0000-0000-0000-000000000000"
           },
-          "contact": {
-              "email": val.contact_information.corporate_email,
-              "phone_number": val.contact_information.corporate_phone,
-              "fax": val.contact_information.corporate_fax,
-          },
-          "correspondence_address": {
-              "address_line": val.correspondence_address.address,
-              "country_id": val.correspondence_address.country.value || "00000000-0000-0000-0000-000000000000",
-              "state_province_id": val.correspondence_address.province?.value || "00000000-0000-0000-0000-000000000000",
-              "city_id": val.correspondence_address.city?.value || "00000000-0000-0000-0000-000000000000",
-              "postal_code": val.correspondence_address.zipcode,
-              "latitude": Number(val.correspondence_address.geo_location.lat),
-              "longitude": Number(val.correspondence_address.geo_location.lng)
-          },
-          "billing_address": {
-              "address_line": val.billing_address.address,
-              "country_id": val.billing_address.country.value || "00000000-0000-0000-0000-000000000000",
-              "state_province_id": val.billing_address.province?.value || "00000000-0000-0000-0000-000000000000",
-              "city_id": val.billing_address.city?.value || "00000000-0000-0000-0000-000000000000",
-              "postal_code": val.billing_address.zipcode,
-              "latitude": Number(val.billing_address.geo_location.lat),
-              "longitude": Number(val.billing_address.geo_location.lng)
-          },
-          "website": val.other_information.website,
-          "internal_remark": val.other_information.internal_remark,
-          "npwp": val.general_information.corporate_npwp,
-          "effective_date": val.general_information.corporate_contract.date_start,
-          "expire_date": val.general_information.corporate_contract.date_end
-        }
-
-      let postCorporate = await api.putOrPost(endpoint, DataId, payload)
-      console.log(postCorporate)
-
-      // await props.onSubmit(payload)
+        },
+        contact: {
+          email: val.contact_information.corporate_email,
+          phone_number: val.contact_information.corporate_phone,
+          fax: val.contact_information.corporate_fax,
+        },
+        correspondence_address: {
+          address_line: val.correspondence_address.address,
+          country_id: val.correspondence_address.country.value || "00000000-0000-0000-0000-000000000000",
+          state_province_id: val.correspondence_address.province?.value || "00000000-0000-0000-0000-000000000000",
+          city_id: val.correspondence_address.city?.value || "00000000-0000-0000-0000-000000000000",
+          postal_code: val.correspondence_address.zipcode,
+          latitude: Number(val.correspondence_address.geo_location.lat),
+          longitude: Number(val.correspondence_address.geo_location.lng)
+        },
+        billing_address: {
+          address_line: val.billing_address.address,
+          country_id: val.billing_address.country.value || "00000000-0000-0000-0000-000000000000",
+          state_province_id: val.billing_address.province?.value || "00000000-0000-0000-0000-000000000000",
+          city_id: val.billing_address.city?.value || "00000000-0000-0000-0000-000000000000",
+          postal_code: val.billing_address.zipcode,
+          latitude: Number(val.billing_address.geo_location.lat),
+          longitude: Number(val.billing_address.geo_location.lng)
+        },
+        effective_date: val.general_information.corporate_contract.date_start, // "2003-09-13T18:03:43.295Z",
+        expire_date: val.general_information.corporate_contract.date_end, //"1992-06-25T14:37:11.733Z",
+        industry_id: val.general_information.corporate_type.value || "00000000-0000-0000-0000-000000000000", //! corporate type
+        internal_remark: val.other_information.internal_remark,
+        npwp: val.general_information.corporate_npwp,
+        website: val.other_information.website
+      }
+      // !please ask mas firman agam still got caught in 502 response
+      console.log(payload)
+      postCorporateGeneralInformation(payload)
     }
   })
+
+  const postCorporateGeneralInformation = async (payload) => {
+    setIsLoading(true)
+
+    try {
+      let { status, data } = await api.putOrPost(endpoint, corporateId, payload)
+      console.log(data);
+
+      if (SUCCESS_RESPONSE_STATUS.includes(status)) {
+        setIsLoading(false)
+        dispatch(
+          setAlert({
+            message: `Record 'Corporate: {${payload.corporate.corporate_name}}' has been successfully updated.`,
+          }),
+        )
+        handleChangeTabKey('handleChangeTabKey', 1)
+      }
+    } catch (error) {
+      setIsLoading(false)
+      dispatch(
+        setAlert({
+          message: 'Failed to save this record.',
+        }),
+      )
+    }
+  }
+
+  const getCountry = async (value) => {
+    try {
+      let { status, data: { items } } = await api.get(
+        `master/countries`,
+      )
+
+      if (SUCCESS_RESPONSE_STATUS.includes(status)) {
+        const filteredCountry = items.find(res => res.id === value ) || {}
+        if (Object.keys(filteredCountry).length) {
+          return {
+            value,
+            label: filteredCountry.country_name
+          }
+        }
+
+        return {
+          value: '',
+        }
+      }
+    } catch (error) {
+
+    }
+  }
+
+  useEffect(async () => {
+    if (data && Object.keys(data).length) {
+      const { agent_corporate, billing_address, corporate, correspondence_address } = data
+      setValues({
+        corporate_code: agent_corporate.corporate_code || '',
+        corporate_name: agent_corporate.corporate_name || '',
+        general_information: {
+          parent_company: '', //??
+          corporate_type: {
+            value: '', //??
+          },
+          corporate_npwp: '', //??
+          corporate_contract: {
+            date_start: '', //??
+            date_end: '' //??
+          }
+        },
+        contact_information: {
+          corporate_email: '', //??
+          corporate_phone: '', //??
+          corporate_fax: '' //??
+        },
+        correspondence_address: {
+          address: correspondence_address.address_line || '',
+          country: await getCountry(correspondence_address.country_id),
+          province: correspondence_address.state_province_id || '',
+          city: correspondence_address.city_id || '',
+          zipcode: correspondence_address.postal_code || '',
+          geo_location: {
+            lat: '', //??
+            lng: '' //??
+          }
+        },
+        billing_address: {
+          address: billing_address.address_line || '',
+          country: await getCountry(billing_address.country_id),
+          province: billing_address.state_province_id || '',
+          city: billing_address.city_id || '',
+          zipcode: billing_address.postal_code || '',
+          geo_location: {
+            lat: '',
+            lng: ''
+          }
+        },
+        other_information: {
+          website: '',
+          internal_remark: '',
+          logo: {
+            img: Object.keys(corporate.corporate_asset).length ? corporate.corporate_asset : '',
+            data: corporate.corporate_asset || {}
+          }
+        }
+      })
+    }
+  }, [data])
 
   const [optionProvince, setOptionProvince] = useState({
     correspondence: [],
@@ -409,7 +518,6 @@ const GeneralInfomation = (props) => {
   };
 
   useEffect(() => {
-    console.log({errors});
     if (errors && isSubmitting) {
       goTo()
     }
@@ -436,7 +544,7 @@ const GeneralInfomation = (props) => {
   }, [values])
 
   return (
-    <Form onSubmit={handleSubmit} ref={ref}>
+    <Form onSubmit={handleSubmit} ref={ref} className='general_information'>
       <Card style={{marginBotton: 0}}>
         <Card.Body>
           {/* general information */}
@@ -458,8 +566,8 @@ const GeneralInfomation = (props) => {
                       minLength={1}
                       maxLength={128}
                       placeholder=""
-                      disabled={isView}
-                      // disabled={isView || loading}
+                      disabled={isLoading}
+                      readOnly={isView}
                       style={{ maxWidth: 150 }}
                       className={errors?.corporate_code && 'is-invalid'}
                     />
@@ -484,8 +592,8 @@ const GeneralInfomation = (props) => {
                       minLength={1}
                       maxLength={256}
                       placeholder=""
-                      disabled={isView}
-                      // disabled={isView || loading}
+                      disabled={isLoading}
+                      readOnly={isView}
                       style={{ maxWidth: 400 }}
                       className={errors?.corporate_name && 'is-invalid'}
                     />
@@ -506,11 +614,11 @@ const GeneralInfomation = (props) => {
                       placeholder="Please choose parent company"
                       options={[
                         {
-                          value: 'selected 1',
+                          value: '"00000000-0000-0000-0000-000000000000"',
                           label: 'Hotel Markup 1'
                         },
                         {
-                          value: 'selected 1',
+                          value: '"00000000-0000-0000-0000-000000000000"',
                           label: 'Hotel Markup 2'
                         },
                       ]}
@@ -529,7 +637,7 @@ const GeneralInfomation = (props) => {
                             }
                           : null
                       }
-                      isDisabled={isView}
+                      isDisabled={isLoading || isView}
                     />
                     {touched?.general_information?.parent_company && errors?.general_information?.parent_company && (
                       <TextError>
@@ -582,7 +690,7 @@ const GeneralInfomation = (props) => {
                             }
                           : null
                       }
-                      isDisabled={isView}
+                      isDisabled={isLoading || isView}
                       invalid={touched?.general_information?.corporate_type?.value && errors?.general_information?.corporate_type?.value}
                     />
                     {touched?.general_information?.corporate_type?.value && errors?.general_information?.corporate_type?.value && (
@@ -606,8 +714,8 @@ const GeneralInfomation = (props) => {
                       minLength={1}
                       maxLength={36}
                       placeholder=""
-                      disabled={isView}
-                      // disabled={isView || loading}
+                      disabled={isLoading}
+                      readOnly={isView}
                       style={{ maxWidth: 320 }}
                       className={touched?.general_information?.corporate_npwp && errors?.general_information?.corporate_npwp && 'is-invalid'}
                     />
@@ -631,6 +739,8 @@ const GeneralInfomation = (props) => {
                         onChange={(date) => {
                           setFieldValue('general_information.corporate_contract.date_start', date)
                         }}
+                        disabled={isLoading}
+                        readOnly={isView}
                         selected={values.general_information.corporate_contract.date_start}
                         startDate={values.general_information.corporate_contract.date_start}
                         endDate={values.general_information.corporate_contract.date_end}
@@ -731,6 +841,8 @@ const GeneralInfomation = (props) => {
                         onChange={(date) => {
                           setFieldValue('general_information.corporate_contract.date_end', date)
                         }}
+                        disabled={isLoading}
+                        readOnly={isView}
                         selected={values.general_information.corporate_contract.date_end}
                         ref={calendarEndRef}
                         selectsEnd
@@ -853,8 +965,8 @@ const GeneralInfomation = (props) => {
                       minLength={1}
                       maxLength={256}
                       placeholder=""
-                      disabled={isView}
-                      // disabled={isView || loading}
+                      disabled={isLoading}
+                      readOnly={isView}
                       style={{ maxWidth: 300 }}
                       className={touched?.contact_information?.corporate_email && errors?.contact_information?.corporate_email && 'is-invalid'}
                     />
@@ -879,8 +991,8 @@ const GeneralInfomation = (props) => {
                       minLength={1}
                       maxLength={36}
                       placeholder=""
-                      disabled={isView}
-                      // disabled={isView || loading}
+                      disabled={isLoading}
+                      readOnly={isView}
                       style={{ maxWidth: 200 }}
                       className={touched?.contact_information?.corporate_phone && errors?.contact_information?.corporate_phone && 'is-invalid'}
                     />
@@ -905,8 +1017,8 @@ const GeneralInfomation = (props) => {
                       minLength={1}
                       maxLength={36}
                       placeholder=""
-                      disabled={isView}
-                      // disabled={isView || loading}
+                      disabled={isLoading}
+                      readOnly={isView}
                       style={{ maxWidth: 200 }}
                       className={touched?.contact_information?.corporate_fax && errors?.contact_information?.corporate_fax && 'is-invalid'}
                     />
@@ -939,8 +1051,8 @@ const GeneralInfomation = (props) => {
                       minLength={1}
                       maxLength={512}
                       placeholder=""
-                      disabled={isView}
-                      // disabled={isView || loading}
+                      disabled={isLoading}
+                      readOnly={isView}
                       style={{ resize: 'none', maxWidth: 400 }}
                       className={`form-control mb-2 ${touched?.correspondence_address?.address && errors?.correspondence_address?.address && 'is-invalid'}`}
                     />
@@ -994,7 +1106,8 @@ const GeneralInfomation = (props) => {
                               }
                             : null
                         }
-                        isDisabled={isView}
+                        isDisabled={isLoading || isView}
+                        readOnly={isView}
                         invalid={touched?.correspondence_address?.country?.value && errors?.correspondence_address?.country?.value}
                       />
                       {touched?.correspondence_address?.country?.value && errors?.correspondence_address?.country?.value && (
@@ -1031,7 +1144,8 @@ const GeneralInfomation = (props) => {
                               }
                             : null
                         }
-                        isDisabled={isView}
+                        isDisabled={isLoading || isView}
+                        readOnly={isView}
                       />
                     </div>
                   </Col>
@@ -1060,7 +1174,8 @@ const GeneralInfomation = (props) => {
                               }
                             : null
                         }
-                        isDisabled={isView}
+                        isDisabled={isLoading || isView}
+                        readOnly={isView}
                       />
                     </div>
                   </Col>
@@ -1079,8 +1194,8 @@ const GeneralInfomation = (props) => {
                       minLength={1}
                       maxLength={16}
                       placeholder=""
-                      disabled={isView}
-                      // disabled={isView || loading}
+                      disabled={isLoading}
+                      readOnly={isView}
                       style={{ maxWidth: 100 }}
                       className={touched?.correspondence_address?.zipcode && errors?.correspondence_address?.zipcode && 'is-invalid'}
                     />
@@ -1107,7 +1222,8 @@ const GeneralInfomation = (props) => {
                         onChange={handleChange}
                         name='correspondence_address.geo_location.lat'
                         id='correspondence_address.geo_location.lat'
-                        disabled={isView}
+                        disabled={isLoading}
+                        readOnly={isView}
                         value={values.correspondence_address.geo_location.lat}
                       />
                     </div>
@@ -1121,7 +1237,8 @@ const GeneralInfomation = (props) => {
                         onChange={handleChange}
                         name='correspondence_address.geo_location.lng'
                         id='correspondence_address.geo_location.lng'
-                        disabled={isView}
+                        disabled={isLoading}
+                        readOnly={isView}
                         value={values.correspondence_address.geo_location.lng}
                       />
                     </div>
@@ -1150,8 +1267,8 @@ const GeneralInfomation = (props) => {
                       minLength={1}
                       maxLength={512}
                       placeholder=""
-                      disabled={isView}
-                      // disabled={isView || loading}
+                      disabled={isLoading}
+                      readOnly={isView}
                       style={{ resize: 'none', maxWidth: 400 }}
                       className={`form-control mb-2 ${touched?.correspondence_address?.address && errors?.correspondence_address?.address && 'is-invalid'}`}
                     />
@@ -1205,7 +1322,8 @@ const GeneralInfomation = (props) => {
                               }
                             : null
                         }
-                        isDisabled={isView}
+                        isDisabled={isLoading || isView}
+                        readOnly={isView}
                         invalid={touched?.billing_address?.country?.value && errors?.billing_address?.country?.value}
                       />
                       {touched?.billing_address?.country?.value && errors?.billing_address?.country?.value && (
@@ -1242,7 +1360,8 @@ const GeneralInfomation = (props) => {
                               }
                             : null
                         }
-                        isDisabled={isView}
+                        isDisabled={isLoading || isView}
+                        readOnly={isView}
                       />
                     </div>
                   </Col>
@@ -1271,7 +1390,8 @@ const GeneralInfomation = (props) => {
                               }
                             : null
                         }
-                        isDisabled={isView}
+                        isDisabled={isLoading || isView}
+                        readOnly={isView}
                       />
                     </div>
                   </Col>
@@ -1290,8 +1410,8 @@ const GeneralInfomation = (props) => {
                       minLength={1}
                       maxLength={16}
                       placeholder=""
-                      disabled={isView}
-                      // disabled={isView || loading}
+                      disabled={isLoading}
+                      readOnly={isView}
                       style={{ maxWidth: 100 }}
                       className={touched?.billing_address?.zipcode && errors?.billing_address?.zipcode && 'is-invalid'}
                     />
@@ -1318,7 +1438,8 @@ const GeneralInfomation = (props) => {
                         onChange={handleChange}
                         name='billing_address.geo_location.lat'
                         id='billing_address.geo_location.lat'
-                        disabled={isView}
+                        disabled={isLoading}
+                        readOnly={isView}
                         value={values.billing_address.geo_location.lat}
                       />
                     </div>
@@ -1332,7 +1453,8 @@ const GeneralInfomation = (props) => {
                         onChange={handleChange}
                         name='billing_address.geo_location.lng'
                         id='billing_address.geo_location.lng'
-                        disabled={isView}
+                        disabled={isLoading}
+                        readOnly={isView}
                         value={values.billing_address.geo_location.lng}
                       />
                     </div>
@@ -1362,8 +1484,8 @@ const GeneralInfomation = (props) => {
                       minLength={1}
                       maxLength={256}
                       placeholder=""
-                      disabled={isView}
-                      // disabled={isView || loading}
+                      disabled={isLoading}
+                      readOnly={isView}
                       style={{ maxWidth: 300 }}
                       className={touched?.other_information?.website && errors?.other_information?.website && 'is-invalid'}
                     />
@@ -1382,8 +1504,8 @@ const GeneralInfomation = (props) => {
                       minLength={1}
                       maxLength={4000}
                       placeholder=""
-                      disabled={isView}
-                      // disabled={isView || loading}
+                      disabled={isLoading}
+                      readOnly={isView}
                       style={{ resize: 'none', maxWidth: 400 }}
                       className={`form-control mb-2 ${touched?.other_information?.internal_remark && errors?.other_information?.internal_remark && 'is-invalid'}`}
                     />
@@ -1409,6 +1531,7 @@ const GeneralInfomation = (props) => {
                       data-rule-required="true"
                       data-msg-accept="Only .png, .jpg, .jpeg file supported"
                       ref={uploadRef}
+                      disabled={isView}
                     />
                     {values.other_information.logo.img ? (
                       <img src={values.other_information.logo.img || NoImage} className="image_wrapper" alt="up-img" />
@@ -1429,9 +1552,12 @@ const GeneralInfomation = (props) => {
                         fontWeight: '400',
                         color: '#333333',
                         textTransform: 'uppercase',
-                        cursor: 'pointer'
+                        cursor: 'pointer',
+                        visibility: isView && 'hidden'
                       }}
                       className='button'
+                      disabled={isLoading}
+                      readOnly={isView}
                       onClick={() => uploadRef.current.click()}
                     >
                       UPLOAD PHOTO
@@ -1447,17 +1573,26 @@ const GeneralInfomation = (props) => {
       <div className="ml-1 mt-3 row justify-content-md-start justify-content-center">
         <Button
           variant="primary"
-          type="submit"
+          type={isView ? 'button' : 'submit'}
           style={{ marginRight: 15, marginBottom: 50, padding: '0 24px' }}
+          disabled={isLoading}
+          readOnly={isView}
+          onClick={() => {
+            if (!isView) return
+
+            handleChangeTabKey()
+          }}
         >
           SAVE & NEXT
         </Button>
         <Button
           variant="secondary"
           onClick={() => {
-            props.history.goBack()
+            history.goBack()
           }}
           style={{ padding: '0 21px' }}
+          disabled={isLoading}
+          readOnly={isView}
         >
           CANCEL
         </Button>
@@ -1466,6 +1601,12 @@ const GeneralInfomation = (props) => {
   )
 }
 
-GeneralInfomation.propTypes = {}
+GeneralInfomation.propTypes = {
+  history: PropTypes.object.isRequired,
+  backUrl: PropTypes.string.isRequired,
+  handleChangeTabKey: PropTypes.func.isRequired,
+  corporateId: PropTypes.string,
+  data: PropTypes.object
+}
 
 export default GeneralInfomation

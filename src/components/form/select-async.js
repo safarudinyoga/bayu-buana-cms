@@ -8,7 +8,8 @@ const customStyles = {
   option: (provided, state) => ({
     ...provided,
     color: "black",
-    backgroundColor: state.isSelected ? "white" : "white",
+    backgroundColor: state.isDisabled ? '#f9fafb' : state.isSelected && '#fff',
+    cursor: state.isDisabled ? 'not-allowed' : 'default',
     fontFamily: "Segoe UI, Tahoma, Geneva, Verdana, sans-serif",
     fontSize: 13,
     "&:hover": {
@@ -20,7 +21,8 @@ const customStyles = {
     ...base,
     border: "1px solid #DADEDF",
     fontSize: 13,
-    backgroundColor: "white",
+    backgroundColor: state.isDisabled ? '#f9fafb' : "#fff",
+    cursor: state.isDisabled ? 'not-allowed' : 'default',
     boxShadow: state.isFocused ? 0 : 0,
     "&:hover": {
       border: "1px solid #DADEDF",
