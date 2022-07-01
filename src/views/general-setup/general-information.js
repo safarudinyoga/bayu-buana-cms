@@ -1,11 +1,20 @@
 import React, { useRef, useState } from "react"
-import { Tabs, TabPane } from "react-bootstrap"
+import { Form, Tabs, TabPane, Button } from "react-bootstrap"
 import { Editor } from "react-draft-wysiwyg"
 import { EditorState } from 'draft-js';
+import CancelButton from "components/button/cancel"
 import Data from "../general_information/data";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import { Formik } from "formik"
+import { setAlert } from "redux/ui-store"
+import { useDispatch } from "react-redux"
+import Api from "config/api"
+// const [formValues, setFormValues] = useState(null)
 
 const GeneralInformation = (props) => {
+  let api = new Api()
+  const dispatch = useDispatch()
+  const endpoint = `/master/configurations/general-infos`
   const [key, setKey] = useState("CORPORATE CLIENT");
   const importantNoticeRef = useRef(null);
   const [editorImportantNoticeState, setImportantNoticeState] = useState(
@@ -66,6 +75,27 @@ const GeneralInformation = (props) => {
             url: true,
         },
     ];
+
+    const onSubmit = async (values, a) => {
+        console.log("submit: ", values)
+        try {
+          for (let i in values) {
+            let oca = values[i]
+            await api.put(endpoint, false, oca)
+          }
+          dispatch(
+            setAlert({
+              message: `General Information has been successfully updated.`,
+            }),
+          )
+        } catch (e) {
+          dispatch(
+            setAlert({
+              message: "Failed to save this record.",
+            }),
+          )
+        }
+      }
 
     const _getLengthOfSelectedText = () => {
         const currentSelection = editorImportantNoticeState.getSelection();
@@ -133,76 +163,111 @@ const GeneralInformation = (props) => {
     const _handleChange = (editorState) => {
         setImportantNoticeState(editorState)
     }
+
+    // const initialValues = {
+       
+    // }
+    
+    //   console.log("formValues: ", formValues)
+      
   return (
-    <div className="row">
-        <div className=" border">
-            <h1 style={titleText}>General Information</h1>
-            <hr />
-            <div style={{width: '90%', margin: 'auto'}}>
-                <div>
-                    <p>Important Notice</p>
-                    <Editor
-                        ref={importantNoticeRef}
-                        editorState={editorImportantNoticeState}
-                        toolbarClassName="toolbarClassName"
-                        wrapperClassName="wrapperClassName"
-                        editorClassName="editorClassName"
-                        handleBeforeInput={_handleBeforeInput}
-                        handlePastedText={_handlePastedText}
-                        onEditorStateChange={_handleChange}
-                        wrapperStyle={wrapperStyle}
-                        editorStyle={editorStyle} 
-                        toolbarStyle={{background: '#ECECEC 0% 0% no-repeat padding-box'}}
-                    />
-                </div>
-                <div>
-                    <Tabs
-                        id={props.id}
-                        activeKey={key}
-                        onSelect={(k) => setKey(k)}
-                        className={`mb-2`}
-                        mountOnEnter={true}
-                        unmountOnExit={true}
-                    >
-                        <TabPane
-                        className="m-3"
-                        eventKey="CORPORATE CLIENT"
-                        title={
-                            <div className="d-md-flex flex-row bd-highlight">
-                                <span className="ml-md-2 tabs-text" style={{color: key === "CORPORATE CLIENT" ? '#027F71' : '#818181'}} >CORPORATE CLIENT</span>
-                            </div>
-                        }
+    <Formik
+        // initialValues={formValues || initialValues}
+        onSubmit={onSubmit}
+    >
+    {({ dirty, handleSubmit, isSubmitting, setFieldValue, values }) => (
+    <Form onSubmit={handleSubmit}>
+    <div>  
+        <div className="row">
+            <div className=" border">
+                <h1 style={titleText}>General Information</h1>
+                <hr />
+                <div style={{width: '90%', margin: 'auto'}}>
+                    <div>
+                        <p>Important Notice</p>
+                        <Editor
+                            ref={importantNoticeRef}
+                            editorState={editorImportantNoticeState}
+                            toolbarClassName="toolbarClassName"
+                            wrapperClassName="wrapperClassName"
+                            editorClassName="editorClassName"
+                            handleBeforeInput={_handleBeforeInput}
+                            handlePastedText={_handlePastedText}
+                            onEditorStateChange={_handleChange}
+                            wrapperStyle={wrapperStyle}
+                            editorStyle={editorStyle} 
+                            toolbarStyle={{background: '#ECECEC 0% 0% no-repeat padding-box'}}
+                            // setFormValues={setFormValues}
+                        />
+                    </div>
+                    <div>
+                        <Tabs
+                            id={props.id}
+                            activeKey={key}
+                            onSelect={(k) => setKey(k)}
+                            className={`mb-2`}
+                            mountOnEnter={true}
+                            unmountOnExit={true}
                         >
+                            <TabPane
+                            className="m-3"
+                            eventKey="CORPORATE CLIENT"
+                            title={
+                                <div className="d-md-flex flex-row bd-highlight">
+                                    <span className="ml-md-2 tabs-text" style={{color: key === "CORPORATE CLIENT" ? '#027F71' : '#818181'}} >CORPORATE CLIENT</span>
+                                </div>
+                            }
+                            >
+                                <Data />
+                            </TabPane>
+                            <TabPane
+                            className="m-3"
+                            eventKey="MEMBER"
+                            title={
+                                <div className="d-md-flex flex-row">
+                                    <span className="ml-md-2 tabs-text" style={{color: key === "MEMBER" ? '#027F71' : '#818181'}} >MEMBER</span>
+                                </div>
+                            }
+                            >
                             <Data />
-                        </TabPane>
-                        <TabPane
-                        className="m-3"
-                        eventKey="MEMBER"
-                        title={
-                            <div className="d-md-flex flex-row">
-                                <span className="ml-md-2 tabs-text" style={{color: key === "MEMBER" ? '#027F71' : '#818181'}} >MEMBER</span>
-                            </div>
-                        }
-                        >
-                        <Data />
-                        </TabPane>
-                        <TabPane
-                        className="m-3"
-                        eventKey="PUBLIC"
-                        title={
-                            <div className="d-md-flex flex-row">
-                                <span className="ml-md-2 tabs-text" style={{color: key === "PUBLIC" ? '#027F71' : '#818181'}} >PUBLIC</span>
-                            </div>
-                        }
-                        >
-                        <Data />
-                        </TabPane>
-                    </Tabs>
+                            </TabPane>
+                            <TabPane
+                            className="m-3"
+                            eventKey="PUBLIC"
+                            title={
+                                <div className="d-md-flex flex-row">
+                                    <span className="ml-md-2 tabs-text" style={{color: key === "PUBLIC" ? '#027F71' : '#818181'}} >PUBLIC</span>
+                                </div>
+                            }
+                            >
+                            <Data />
+                            </TabPane>
+                        </Tabs>
+                    </div>
                 </div>
             </div>
+           
         </div>
-
+        <div
+            style={{
+            marginBottom: 30,
+            marginTop: 30,
+            display: "flex",
+            }}
+        >
+        <Button
+            variant="primary"
+            type="submit"
+            style={{ marginRight: 15 }}
+            >
+            SAVE & NEXT
+        </Button>
+        <CancelButton />
+        </div>
     </div>
+    </Form>
+        )}
+    </Formik>
   )
 }
 

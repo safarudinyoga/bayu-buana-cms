@@ -251,7 +251,7 @@ const AncillaryFee = ({
     },
     other: {
       key: '',
-      isSelected: true
+      isSelected: false
     }
   })
 
@@ -296,12 +296,37 @@ const AncillaryFee = ({
             {isFieldSelected.flight.isSelected && isFieldSelected.flight.key === 'selected' && <div className='mb-3'>
               <BbDataTable {...paramsFlight} onReset={() => handleReset('flight')} />
             </div>}
+            {isFieldSelected.flight.isSelected && isFieldSelected.flight.key === 'custom' && <div className='card mt-4'>
+              <Tabs
+                id='ancillary-fee'
+                activeKey={key}
+                onSelect={(key) => setKey(key)}
+                className='tabs mb-2'
+                mountOnEnter
+                unmountOnExit
+              >
+                {tabList.map((res, i) =>
+                  <TabPane
+                    key={i}
+                    className="m-3 pl-2 pr-2"
+                    eventKey={res.key}
+                    title={
+                      <div className="d-md-flex flex-row bd-highlight">
+                        <span className="tabs-text uppercase">{res.key}</span>
+                      </div>
+                    }
+                  >
+                    {res.children}
+                  </TabPane>
+                )}
+              </Tabs>
+            </div>}
             <div className='wrapper_header'>
               <Card.Text className='uppercase margin-0'>
                 Hotel
               </Card.Text>
               <div className='wrapper_select'>
-                <Card.Text className='margin-0'>Select Hotel Ancillary Fee</Card.Text>
+                <Card.Text className='margin-0'>Select Flight Ancillary Fee</Card.Text>
                 <Select
                   isClearable
                   placeholder="Please Choose"
@@ -375,10 +400,45 @@ const AncillaryFee = ({
                       label: 'Selected'
                     },
                   ]}
+                  onChange={(selected) => setisFieldSelected({
+                    ...isFieldSelected,
+                    other: {
+                      key: selected.value,
+                      isSelected: true
+                    }
+                  })}
                 />
               </div>
             </div>
             <div className='divider mb-2 mt-2' />
+            {isFieldSelected.other.isSelected && isFieldSelected.other.key === 'selected' && <div className='mb-3'>
+              <BbDataTable {...paramsHotel} onReset={() => handleReset('hotel')} />
+            </div>}
+            {isFieldSelected.other.isSelected && isFieldSelected.other.key === 'custom' && <div className='card mt-4'>
+              <Tabs
+                id='ancillary-fee'
+                activeKey={key}
+                onSelect={(key) => setKey(key)}
+                className='tabs mb-2'
+                mountOnEnter
+                unmountOnExit
+              >
+                {tabList.map((res, i) =>
+                  <TabPane
+                    key={i}
+                    className="m-3 pl-2 pr-2"
+                    eventKey={res.key}
+                    title={
+                      <div className="d-md-flex flex-row bd-highlight">
+                        <span className="tabs-text uppercase">{res.key}</span>
+                      </div>
+                    }
+                  >
+                    {res.children}
+                  </TabPane>
+                )}
+              </Tabs>
+            </div>}
           </div>
         </Card.Body>
       </Card>
