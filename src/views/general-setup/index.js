@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
-import { useDispatch } from 'react-redux';
-import { withRouter } from 'react-router';
+import { useDispatch } from "react-redux"
+import { withRouter } from "react-router"
 import { ReactSVG } from "react-svg"
 import { Row, Col, Tab, Nav } from "react-bootstrap"
 import { setUIParams } from "redux/ui-store"
@@ -16,7 +16,7 @@ import OtherAncillaryFee from "./other-ancillary-fee"
 import TaxFee from "./tax-fee"
 import BookingSettings from "./booking-settings"
 import InvoiceSettings from "./invoice-settings"
-import TravelAdvice from "./travel-advice"
+import TravelAdvice from "./travel-advice/travel-advice"
 
 // const endpoint = "/user/profile"
 const backUrl = "/master/general-setup"
@@ -186,7 +186,7 @@ const GeneralSetup = (props) => {
                   backUrl={backUrl}
                   handleSelectTab={(v) => handleSelectTab(v)}
                 />
-                ) : null}
+              ) : null}
             </Tab.Pane>
             <Tab.Pane eventKey="identity-rule">
               {tabKey === "identity-rule" ? (
@@ -195,7 +195,7 @@ const GeneralSetup = (props) => {
                   backUrl={backUrl}
                   handleSelectTab={(v) => handleSelectTab(v)}
                 />
-                ) : null}
+              ) : null}
             </Tab.Pane>
             <Tab.Pane eventKey="standard-service">
               {tabKey === "standard-service" ? (
@@ -204,7 +204,7 @@ const GeneralSetup = (props) => {
                   backUrl={backUrl}
                   handleSelectTab={(v) => handleSelectTab(v)}
                 />
-                ) : null}
+              ) : null}
             </Tab.Pane>
             <Tab.Pane eventKey="over-credit-approver-assignment">
               {tabKey === "over-credit-approver-assignment" ? (
@@ -214,7 +214,7 @@ const GeneralSetup = (props) => {
                   handleSelectTab={(v) => handleSelectTab(v)}
                   setTabKey={setTabKey}
                 />
-                ) : null}
+              ) : null}
             </Tab.Pane>
             <Tab.Pane eventKey="travel-consultant-assignment">
               {tabKey === "travel-consultant-assignment" ? (
@@ -224,7 +224,7 @@ const GeneralSetup = (props) => {
                   handleSelectTab={(v) => handleSelectTab(v)}
                   setTabKey={setTabKey}
                 />
-                ) : null}
+              ) : null}
             </Tab.Pane>
             <Tab.Pane eventKey="team-assignment">
               {tabKey === "team-assignment" ? (
@@ -233,7 +233,7 @@ const GeneralSetup = (props) => {
                   backUrl={backUrl}
                   handleSelectTab={(v) => handleSelectTab(v)}
                 />
-                ) : null}
+              ) : null}
             </Tab.Pane>
             <Tab.Pane eventKey="retail-ancillary-fee">
               {tabKey === "retail-ancillary-fee" ? (
@@ -242,7 +242,7 @@ const GeneralSetup = (props) => {
                   backUrl={backUrl}
                   handleSelectTab={(v) => handleSelectTab(v)}
                 />
-                ) : null}
+              ) : null}
             </Tab.Pane>
             <Tab.Pane eventKey="other-ancillary-fee">
               {tabKey === "other-ancillary-fee" ? (
@@ -251,7 +251,7 @@ const GeneralSetup = (props) => {
                   backUrl={backUrl}
                   handleSelectTab={(v) => handleSelectTab(v)}
                 />
-                ) : null}
+              ) : null}
             </Tab.Pane>
             <Tab.Pane eventKey="tax-fee">
               {tabKey === "tax-fee" ? (
@@ -260,7 +260,7 @@ const GeneralSetup = (props) => {
                   backUrl={backUrl}
                   handleSelectTab={(v) => handleSelectTab(v)}
                 />
-                ) : null}
+              ) : null}
             </Tab.Pane>
             <Tab.Pane eventKey="booking-settings">
               {tabKey === "booking-settings" ? (
@@ -269,7 +269,7 @@ const GeneralSetup = (props) => {
                   backUrl={backUrl}
                   handleSelectTab={(v) => handleSelectTab(v)}
                 />
-                ) : null}
+              ) : null}
             </Tab.Pane>
             <Tab.Pane eventKey="invoice-settings">
               {tabKey === "invoice-settings" ? (
@@ -278,7 +278,7 @@ const GeneralSetup = (props) => {
                   backUrl={backUrl}
                   handleSelectTab={(v) => handleSelectTab(v)}
                 />
-                ) : null}
+              ) : null}
             </Tab.Pane>
             <Tab.Pane eventKey="travel-advice">
               {tabKey === "travel-advice" ? (
