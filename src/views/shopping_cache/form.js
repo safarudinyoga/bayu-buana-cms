@@ -38,10 +38,14 @@ function ShoppingCacheCreate(props) {
   useEffect(async () => {
     let formId = showCreateModal.id || props.id
 
+    let docTitle = "Select Trip Type";
+
+    dispatch(setModalTitle(docTitle));
+
     if(formId){
       try {
         let res = await api.get(`master/cache-criterias/flights/${formId}`);
-        setFlightType(res.data.trip_type.id)
+        setFlightType(res.data.trip_type.code)
         setFlightData(res.data)
 
       } catch (error) {
@@ -49,6 +53,11 @@ function ShoppingCacheCreate(props) {
       }
     }
   }, [])
+
+  useEffect(() => {
+    console.log("flightdata", flightData)
+  }, [flightData])
+  
 
   useEffect(async () => {
     try {
@@ -94,7 +103,7 @@ function ShoppingCacheCreate(props) {
       <Tabs 
         id='shopping-cache-trip-types'
         activeKey={flightType}
-        onSelect={(k) => {
+        onSelect={async (k) => {
           setFlightType(k)
         }}
         className={`mb-4 flight-book-tabs`}
@@ -107,7 +116,7 @@ function ShoppingCacheCreate(props) {
               console.log(item, 'item');
               return (
               <Tab
-                eventKey={item.id}
+                eventKey={item.trip_type_code}
                 title={item.trip_type_name}
                 
                 // onSelect={(k) => {
@@ -116,8 +125,8 @@ function ShoppingCacheCreate(props) {
               >
                 <div className="d-flex flex-wrap">
                   {
-                    item.trip_type_code === "roundtrip" ? (<TripRoundtrip airports={airports} flightData={flightData} handleCacheData={handleCacheData} />) : 
-                    item.trip_type_code === "oneway" ? (<TripOneway airports={airports} flightData={flightData} handleCacheData={handleCacheData} />) : <TripMultitrip  airports={airports} handleCacheData={handleCacheData}/>
+                    item.trip_type_code === "roundtrip" ? (<TripRoundtrip airports={airports} flightData={flightData} tripType={item.id} handleCacheData={handleCacheData} />) : 
+                    item.trip_type_code === "oneway" ? (<TripOneway airports={airports} flightData={flightData} tripType={item.id} handleCacheData={handleCacheData} />) : <TripMultitrip  airports={airports} handleCacheData={handleCacheData} tripType={item.id}/>
                   }
                 </div>
               </Tab>

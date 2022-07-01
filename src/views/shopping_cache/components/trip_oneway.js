@@ -60,7 +60,6 @@ const TripOneway = (props) => {
           departure_data: props.flightData.cache_air_origin_destination_criteria.origin_city.city_name,
           arrival_data: props.flightData.cache_air_origin_destination_criteria.destination_city.city_name,
           departure_datetime: new Date(props.flightData.cache_air_origin_destination_criteria.departure_datetime),
-          arrival_datetime: "",
           number_of_adults: props.flightData.cache_air_travel_preference_criteria.number_of_adults,
           number_of_children: props.flightData.cache_air_travel_preference_criteria.number_of_children,
           number_of_infants: props.flightData.cache_air_travel_preference_criteria.number_of_infants,
@@ -83,13 +82,15 @@ const TripOneway = (props) => {
     let payload = {
       cache_air_origin_destination_criteria: [
         {
-          arrival_datetime: values.arrival_datetime ? values.arrival_datetime : "",
+          // arrival_datetime: values.arrival_datetime ? values.arrival_datetime : "",
           departure_datetime: values.departure_datetime,
           destination_city_id: values.arrival_data.city_id,
           destination_location: values.arrival_data.city,
+          destination_airport_id: values.arrival_data.airport_id,
           index_number: 1,
           origin_city_id: values.departure_data.city_id,
           origin_location: values.departure_data.city,
+          origin_airport_id: values.departure_data.airport_id,
         }
       ],
       cache_air_travel_preference_criteria: {
@@ -105,7 +106,7 @@ const TripOneway = (props) => {
         number_of_infants: values.number_of_infants,
         seats_requested: values.number_of_adults,
       },
-      trip_type_id: "dd3254b3-719b-43f4-b45c-11a99727cf06",
+      trip_type_id: props.tripType,
     }
 
     let res = await api.post("master/cache-criterias/flights", payload)

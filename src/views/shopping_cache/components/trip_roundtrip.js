@@ -82,8 +82,8 @@ const TripRoundtrip = (props) => {
   }, [props.flight])
 
   useEffect(() => {
-    console.log("EDIT", formValues)
-  }, [formValues])
+    console.log("Trip Type",props.tripType)
+  }, [props.tripType])
   
   
   
@@ -97,9 +97,11 @@ const TripRoundtrip = (props) => {
           departure_datetime: values.departure_datetime ? values.departure_datetime : " ",
           destination_city_id: values.arrival_data.city_id,
           destination_location: values.arrival_data.city,
+          destination_airport_id: values.arrival_data.airport_id,
           index_number: 1,
           origin_city_id: values.departure_data.city_id,
           origin_location: values.departure_data.city,
+          origin_airport_id: values.departure_data.airport_id,
         }
       ],
       cache_air_travel_preference_criteria: {
@@ -115,7 +117,7 @@ const TripRoundtrip = (props) => {
         number_of_infants: values.number_of_infants,
         seats_requested: values.number_of_adults,
       },
-      trip_type_id: "3234761b-3fd2-4fd0-ba48-3742ffd3e7cb",
+      trip_type_id: props.tripType,
     }
 
     let res = await api.putOrPost("master/cache-criterias/flights", id, payload)

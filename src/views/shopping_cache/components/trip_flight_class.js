@@ -12,7 +12,8 @@ function TripFlightClass(props) {
   let api = new Api()
   
   useEffect(() => {
-    setFlightClass(props.formik.values.cabin_type)
+    console.log("trigger formik values",props.formik.values)
+    setFlightClass(props.formik.values ? props.formik.values.cabin_type : "")
   }, [props.formik.values])
   
 

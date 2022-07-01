@@ -95,11 +95,17 @@ export default function ShoppingCache() {
       },
       {
         title: "From",
-        data: "cache_air_origin_destination_criteria.origin_city.city_name",
+        data: "cache_air_origin_destination_criteria",
+        render: (val, type) => {
+          return `${val.origin_city.city_name}, ${val.origin_airport.airport_code}`
+        }
       },
       {
         title: "To",
-        data: "cache_air_origin_destination_criteria.destination_city.city_name",
+        data: "cache_air_origin_destination_criteria",
+        render: (val, type) => {
+          return `${val.destination_city.city_name}, ${val.destination_airport.airport_code}`
+        }
       },
       {
         title: "Depart",

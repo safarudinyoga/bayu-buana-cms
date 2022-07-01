@@ -145,7 +145,7 @@ const MultiTrip = (props) => {
                                 
                               }}
                             >
-                              REMOVE {index}
+                              REMOVE
                             </Button>
                           ) : (
                             <Travellers handleTrip={handleTrip} onConfirm={handleTravellerCheckboxConfirm} />
