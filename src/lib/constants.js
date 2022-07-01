@@ -1,0 +1,1 @@
+export const SUCCESS_RESPONSE_STATUS = [200, 201]

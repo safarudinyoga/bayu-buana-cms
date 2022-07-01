@@ -4,13 +4,15 @@ import { Form, Card, Button } from "react-bootstrap"
 // components
 import BbDataTable from 'components/table/bb-data-table'
 import FormModal from './branch-offices/index'
+import useQuery from "lib/query"
 import './_form.sass'
 
 // utils
 
 const BranchOffices = ({
-  isMobile
+  handleChangeTabKey
 }) => {
+  const isView = useQuery().get("action") === "view"
 
   const [params, setParams] = useState({
     title: "Branch Offices",
@@ -66,8 +68,15 @@ const BranchOffices = ({
       <div className="ml-1 mt-3 row justify-content-md-start justify-content-center">
         <Button
           variant="primary"
-          type="submit"
+          type={isView ? 'button' : 'submit'}
           style={{ marginRight: 15, marginBottom: 50, padding: '0 24px' }}
+          onClick={() => {
+            if (!isView) return
+
+            handleChangeTabKey()
+            // ! for OnSubmit
+            // handleChangeTabKey('system-administrator', 2)
+          }}
         >
           SAVE & NEXT
         </Button>
