@@ -894,17 +894,7 @@ const FlightForm = (props) => {
               </Card.Body>
             </Card>
             <div style={{ marginBottom: 30, marginTop: 30, display: "flex" }}>
-              {
-                errors 
-                ? <Button
-                variant="primary"
-                onClick={() => console.log(errors)}
-                disabled={isSubmitting || !dirty}
-                style={{ marginRight: 15 }}
-              >
-                SAVE
-              </Button>
-                : <Button
+              <Button
                 variant="primary"
                 type="submit"
                 disabled={isSubmitting || !dirty}
@@ -912,7 +902,6 @@ const FlightForm = (props) => {
               >
                 SAVE
               </Button>
-              }
               <Button variant="secondary" onClick={() => history.goBack()}>
                 CANCEL
               </Button>

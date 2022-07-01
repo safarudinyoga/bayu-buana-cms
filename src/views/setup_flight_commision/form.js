@@ -55,6 +55,8 @@ const FlightCommisionForm = (props) => {
     departure_from: {},
     arrival_at: {},
     percent: "",
+    specifyPeriodIssue: false,
+    specifyPeriodDeparture: false,
   })
   const [specifyPeriodIssue, setSpecifyPeriodIssue] = useState(false)
   const [specifyPeriodDeparture, setSpecifyPeriodDeparture] = useState(false)
@@ -133,7 +135,9 @@ const FlightCommisionForm = (props) => {
             : data.commission_claim_original_destination.arrival_city_code
             ? "city"
             :"",
-          }
+          },
+          specifyPeriodIssue: data.commission_claim_issue_date.start_date,
+          specifyPeriodDeparture: data.commission_claim_departure_date.start_date,
         })
         setSpecifyPeriodDeparture(data.commission_claim_departure_date.start_date)
         setSpecifyPeriodIssue(data.commission_claim_issue_date.start_date)
@@ -176,15 +180,6 @@ const FlightCommisionForm = (props) => {
     }
     setOptionRoute(options)
   }, [])
-  
-  const subYears = (event, num) => {
-    event.setFullYear(event.getFullYear() - num)
-    return event
-  }
-  const addYears = (event, num) => {
-    event.setFullYear(event.getFullYear() + num)
-    return event
-  }
 
   const percentNumber = /^100(\.0{0,2})? *%?$|^\d{1,2}(\.\d{1,2})? *%?$/
 
@@ -208,7 +203,31 @@ const FlightCommisionForm = (props) => {
     departure_from: Yup.object().pairRoutes("Origin and Destination must be different."),
     arrival_at: Yup.object().pairRoutes("Origin and Destination must be different."),
 
-    percent: Yup.string().matches(percentNumber, "Commision Percentage can only between 0.00 - 100.00").required("Commission Percentage is required.")
+    percent: Yup.string().matches(percentNumber, "Commision Percentage can only between 0.00 - 100.00").required("Commission Percentage is required."),
+
+
+    specifyPeriodIssue: Yup.boolean(),
+    specifyPeriodDeparture: Yup.boolean(),
+    // commission_claim_original_destination: Yup.object({
+    //   start_date: Yup.string().when('specifyPeriodDeparture', {
+    //     is: true,
+    //     then: Yup.string().required('Start Date is required.')
+    //   }),
+    //   end_date: Yup.string().when('specifyPeriodDeparture', {
+    //     is: true,
+    //     then: Yup.string().required('End Date is required.')
+    //   }),
+    // }),
+    // commission_claim_issue_date: Yup.object({
+    //   start_date: Yup.string().when('specifyPeriodIssue', {
+    //     is: true,
+    //     then: Yup.string().required('Start Date is required.')
+    //   }),
+    //   end_date: Yup.string().when('specifyPeriodIssue', {
+    //     is: true,
+    //     then: Yup.string().required('End Date is required.')
+    //   }),
+    // }),
   })
 
   return (
@@ -353,9 +372,9 @@ const FlightCommisionForm = (props) => {
                           <Col md={9} lg={8}>
                             <BSForm.Check
                               type="radio"
-                              checked={!specifyPeriodIssue}
-                              onClick={(e) => setSpecifyPeriodIssue(false)}
-                              onChange={(e) => setSpecifyPeriodIssue(false)}
+                              checked={!formik.values.specifyPeriodIssue}
+                              onClick={(e) =>  formik.setFieldValue("specifyPeriodIssue", false)}
+                              onChange={(e) => formik.setFieldValue("specifyPeriodIssue", false)}
                               id={`issue-period-false`}
                               name={`issue-period`}
                               label={`Not Specified`}
@@ -364,15 +383,15 @@ const FlightCommisionForm = (props) => {
                               <Col md={2}>
                                 <BSForm.Check
                                   type="radio"
-                                  checked={specifyPeriodIssue}
-                                  onClick={(e) => setSpecifyPeriodIssue(true)}
-                                  onChange={(e) => setSpecifyPeriodIssue(true)}
+                                  checked={formik.values.specifyPeriodIssue}
+                                  onClick={(e) => formik.setFieldValue("specifyPeriodIssue", true)}
+                                  onChange={(e) => formik.setFieldValue("specifyPeriodIssue", true)}
                                   id={`issue-period-true`}
                                   name={`issue-period`}
                                   label={`Specify Period`}
                                 />
                               </Col>
-                              {specifyPeriodIssue ? (
+                              {formik.values.specifyPeriodIssue ? (
                                 <Col>
                                   <DateRangePicker
                                     minDate={10}
@@ -397,7 +416,7 @@ const FlightCommisionForm = (props) => {
                               ) : ""}
                             </Row>
                             
-                            
+                            {console.log(formik.errors, formik.values.specifyPeriodDeparture, formik.values.specifyPeriodIssue, "<<<<")}
                           </Col>
                         </Row>
 
@@ -412,9 +431,9 @@ const FlightCommisionForm = (props) => {
                           <Col md={9} lg={8}>
                             <BSForm.Check
                               type="radio"
-                              checked={!specifyPeriodDeparture}
-                              onClick={(e) => setSpecifyPeriodDeparture(false)}
-                              onChange={(e) => setSpecifyPeriodDeparture(false)}
+                              checked={!formik.values.specifyPeriodDeparture}
+                              onClick={(e) => formik.setFieldValue("specifyPeriodDeparture", false)}
+                              onChange={(e) => formik.setFieldValue("specifyPeriodDeparture", false)}
                               id={`departure-period-false`}
                               name={`departure-period`}
                               label={`Not Specified`}
@@ -423,15 +442,15 @@ const FlightCommisionForm = (props) => {
                               <Col md={2}>
                                 <BSForm.Check
                                   type="radio"
-                                  checked={specifyPeriodDeparture}
-                                  onClick={(e) => setSpecifyPeriodDeparture(true)}
-                                  onChange={(e) => setSpecifyPeriodDeparture(true)}
+                                  checked={formik.values.specifyPeriodDeparture}
+                                  onClick={(e) => formik.setFieldValue("specifyPeriodDeparture", true)}
+                                  onChange={(e) => formik.setFieldValue("specifyPeriodDeparture", true)}
                                   id={`departure-period-true`}
                                   name={`departure-period`}
                                   label={`Specify Period`}
                                 />
                               </Col>
-                              {specifyPeriodDeparture ? (
+                              {formik.values.specifyPeriodDeparture ? (
                               <>
                                 <Col>
                                   <DateRangePicker
