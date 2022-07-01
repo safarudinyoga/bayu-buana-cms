@@ -8,7 +8,8 @@ const customStyles = {
   option: (provided, state) => ({
     ...provided,
     color: "black",
-    backgroundColor: state.isSelected ? "white" : "white",
+    backgroundColor: state.isDisabled ? '#f9fafb' : state.isSelected && '#fff',
+    cursor: state.isDisabled ? 'not-allowed' : 'default',
     fontFamily: "Segoe UI, Tahoma, Geneva, Verdana, sans-serif",
     fontSize: 13,
     "&:hover": {
@@ -20,7 +21,8 @@ const customStyles = {
     ...base,
     border: "1px solid #DADEDF",
     fontSize: 13,
-    backgroundColor: "white",
+    backgroundColor: state.isDisabled ? '#f9fafb' : "#fff",
+    cursor: state.isDisabled ? 'not-allowed' : 'default',
     boxShadow: state.isFocused ? 0 : 0,
     "&:hover": {
       border: "1px solid #DADEDF",
@@ -34,7 +36,7 @@ const customStyles = {
 }
 
 const Select = (props) => {
-  const { fieldName, urlFilter, status=1, sort, cstmValue } = props
+  const { fieldName, urlFilter=[], status=1, sort, cstmValue } = props
   const Icon = ({ innerRef, innerProps }) => (
     <img
       src="/img/icons/arrow-down.svg"
@@ -62,14 +64,13 @@ const Select = (props) => {
 
   const get = async (url, params) => {
     const { search, offset, limit, page } = params
-
+    let encodeFilter = encodeURIComponent([["status",status],["AND"],[fieldName,"like",search],...urlFilter])
+    console.log(sort !== undefined || sort !== null ? sort : fieldName)
     const response = await axios
       .get(
         `${
           env.API_URL
-        }/${url}?sort=${sort? sort :fieldName}&filters=${encodeURIComponent(`[["status",${status}],["AND"],["${fieldName}","like","${search}"]${
-          urlFilter !== undefined ? `,["AND"],${urlFilter}` : ""
-        }]`)}&size=10&page=${page - 1}`,{ headers: { Authorization: `Bearer ${localStorage.getItem("ut")}` } },
+        }/${url}?sort=${sort !== undefined ? sort : fieldName}&filters=${encodeFilter}&size=10&page=${page - 1}`,{ headers: { Authorization: `Bearer ${localStorage.getItem("ut")}` } },
       )
       .then(function (response) {
         return response.data

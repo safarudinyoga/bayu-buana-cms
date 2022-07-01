@@ -14,7 +14,7 @@ import { FeeTabs } from "./form//fee_tabs"
 import { useSnackbar } from "react-simple-snackbar"
 import useQuery from "lib/query"
 import { ReactSVG } from "react-svg"
-import "./style.sass"
+import "./style.scss"
 
 const endpoint = "/master/processing-fee-categories"
 const endpointFee = "/master/agent-processing-fee-categories"

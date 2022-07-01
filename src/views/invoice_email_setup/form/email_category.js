@@ -27,21 +27,6 @@ function FormEmailCategory(props) {
     let docTitle = "create email category"
 
     dispatch(setModalTitle(docTitle))
-
-    if(formId) {
-      try {
-        let {data} = await API.get(endpoint + "/" + formId)
-        setFormValues({
-          ...data,
-          email_category_name: {
-            value: data.email_category.id,
-            label: data.email_category.email_category_name,
-          },
-        })
-      } catch(e) {
-        console.log(e)
-      }
-    }
   }, [])
 
   useEffect(() => {
@@ -74,11 +59,12 @@ function FormEmailCategory(props) {
 	const onSubmit = async (values, a) => {
 		try {
       let form = {
-        category_name: values.category_name.value,
+        category_name: values.category_name,
         email_category_name: values.email_category_name.value || "00000000-0000-0000-0000-000000000000",
         description: values.description,
+        is_default: true,
       }
-      let res = await API.putOrPost("/master/configurations/agent-email-categories", id, form)
+      let res = await API.post("/master/configurations/agent-email-categories", form)
       
       dispatch(setCreateModal({show: false, id: null, disabled_form: false}))
       dispatch(
@@ -147,12 +133,12 @@ function FormEmailCategory(props) {
                 control="selectAsync"
                 required="label-required"
                 label="Copy Email Template From"
-                name="category_name"
+                name="email_category_name"
                 placeholder={"Please choose"}
-                url={`/master/configurations/agent-email-categories`}
-                fieldName={"currency_name"}
+                url={`master/configurations/agent-email-categories`}
+                fieldName={"email_category_name"}
                 onChange={(v) => {
-                  setFieldValue("category_name", v)
+                  setFieldValue("email_category_name", v)
                 }}
                 style={{ maxWidth: 250 }}
                 size={formSize}

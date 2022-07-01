@@ -34,7 +34,6 @@ window.JSZip = JSZip
 
 class BBDataTable extends Component {
   constructor(props) {
-    console.log(props);
     super(props)
     this.table = React.createRef()
     this.wrapper = React.createRef()
@@ -205,7 +204,6 @@ class BBDataTable extends Component {
           : module === 'fare-types'
           ? row.fare_type_id
           : row.id
-          console.log(row, module, "ALALLALALL")
         const showDelete = module !== "integration-partner" && module !== "identity-rules" && module !== "email-setup-template"
 
         return (
@@ -566,7 +564,7 @@ class BBDataTable extends Component {
           },
           {
             targets: [1, 2],
-            className: !this.state.isCheckbox ? module === "employee" || module === "ancillary" ? "" : "custom-col-width": "cstm-col-width",
+            className: !this.state.isCheckbox ? module === "employee" || module === "ancillary" ? "" : module === "branch-office"? "cstm-col-width": "custom-col-width": "cstm-col-width",
           },
           {
             targets: [3],
@@ -581,12 +579,19 @@ class BBDataTable extends Component {
               // this case `data: 0`.
               "render": function ( data, type, row ) {
                 var datas = data;
+
                 if(module === 'employee' || module === 'user-management' ){
                   datas = data +' '+ row.middle_name + ' ' + row.surname;
+                }else if(module === 'branch-office'){
+                  let city = row.city? row.city.city_name:''
+                  let postal_code = row.postal_code? row.postal_code:''
+                  let province = row.state_province? row.state_province.state_province_name:''
+                  let country = row.country? row.country.country_name:''
+                  datas = data + ' - ' + city + ' ' + postal_code + ' - ' + province + ' - ' + country
                 }
                   return datas
               },
-              "targets": module === 'employee' ? 3 : module === 'user-management' ? 2 : ''
+              "targets": module === 'employee' ? 3 : (module === 'user-management' || module === 'branch-office') ? 2 : ''
           },
           {
               // The `data` parameter refers to the data for the cell (defined by the
@@ -1074,7 +1079,6 @@ class BBDataTable extends Component {
             if(me.props.modalDelete) {
               me.props.setModalDelete({show: true, id, disabled_form: false})
             }else{
-              console.log(id)
               me.deleteAction.bind(me)(id, name, info)
             }
             break
@@ -1176,7 +1180,7 @@ class BBDataTable extends Component {
           </ModalFooter>
         </Modal>
 
-        {createOnModal && <ModalCreate
+        {(createOnModal || showCreateModal.show) && <ModalCreate
           modalTitle={modalTitle}
           show={showCreateModal.show}
           onClick={() => this.props.setCreateModal({show: false, id: null, disabled_form: false})}

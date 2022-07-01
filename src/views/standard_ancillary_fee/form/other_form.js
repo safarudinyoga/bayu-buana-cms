@@ -48,9 +48,9 @@ const FlightForm = (props) => {
   useEffect(async () => {
     let api = new Api()
     let formId = props.match.params.id
-    let docTitle = "Edit Standard Other Ancillary Fee"
+    let docTitle = "Edit Other Standard Ancillary Fee"
     if (!formId) {
-      docTitle = "Create Standard Other Ancillary Fee"
+      docTitle = "Create Other Standard Ancillary Fee"
     }
     dispatch(
       setUIParams({
