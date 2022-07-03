@@ -55,7 +55,6 @@ const ManageCorporateForm = ({ match }) => {
   const [finishStep, setStep] = useState(0)
   const [data, setData] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
-  const [corporateId , setCorporateId] = useState(formId)
 
   const wardingGenerator = () => {
     if (!formId) {
@@ -359,7 +358,7 @@ const ManageCorporateForm = ({ match }) => {
                         history={history}
                         backUrl={backUrl}
                         handleChangeTabKey={handleChangeTabKey}
-                        corporateId={corporateId}
+                        corporateId={formId}
                         data={data}
                       />
                     }

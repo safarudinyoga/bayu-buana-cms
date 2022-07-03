@@ -540,10 +540,6 @@ const GeneralInfomation = ({
   const calendarStartRef= useRef(null)
   const calendarEndRef= useRef(null)
 
-  // useEffect(() => {
-  //   console.log({ values });
-  // }, [values])
-
   return (
     <Form onSubmit={handleSubmit} ref={ref} className='general_information'>
       <Card style={{marginBotton: 0}}>
@@ -606,7 +602,7 @@ const GeneralInfomation = ({
                   </Col>
                 </Form.Group>
                 <Form.Group as={Row} className='form-group'>
-                
+
                   <Form.Label column sm={3} className='mb-2'>
                     Parent Company
                   </Form.Label>
