@@ -58,8 +58,6 @@ const FlightCommisionForm = (props) => {
     specifyPeriodIssue: false,
     specifyPeriodDeparture: false,
   })
-  const [specifyPeriodIssue, setSpecifyPeriodIssue] = useState(false)
-  const [specifyPeriodDeparture, setSpecifyPeriodDeparture] = useState(false)
 
   const [optionRoute, setOptionRoute] = useState([])
 
@@ -136,12 +134,12 @@ const FlightCommisionForm = (props) => {
             ? "city"
             :"",
           },
-          specifyPeriodIssue: data.commission_claim_issue_date.start_date,
-          specifyPeriodDeparture: data.commission_claim_departure_date.start_date,
+          specifyPeriodIssue: _.isEmpty(!data.commission_claim_issue_date.start_date || !data.commission_claim_issue_date.end_date),
+          specifyPeriodDeparture: _.isEmpty(!data.commission_claim_departure_date.start_date ||!data.commission_claim_departure_date.end_date),
         })
-        setSpecifyPeriodDeparture(data.commission_claim_departure_date.start_date)
-        setSpecifyPeriodIssue(data.commission_claim_issue_date.start_date)
+        console.log(!!data.commission_claim_issue_date.start_date|| !!data.commission_claim_issue_date.end_date)
       }
+
     } catch (e) {
       console.log(e)
     }
@@ -247,11 +245,11 @@ const FlightCommisionForm = (props) => {
                 departure_city_code: values.departure_from && values.departure_from?.source === 'city' ? values.departure_from.value : null,
                 arrival_city_code: values.arrival_at && values.arrival_at?.source === 'city' ? values.arrival_at.value : null,
               },
-              commission_claim_departure_date: !specifyPeriodDeparture ? {} : {
+              commission_claim_departure_date: !values.specifyPeriodDeparture ? {} : {
                 start_date: values.commission_claim_departure_date.start_date ? new Date(values.commission_claim_departure_date.start_date) : [],
                 end_date: values.commission_claim_departure_date.end_date ? new Date(values.commission_claim_departure_date.end_date) : [],
               },
-              commission_claim_issue_date: !specifyPeriodIssue ? {} : {
+              commission_claim_issue_date: !values.specifyPeriodIssue ? {} : {
                 start_date: values.commission_claim_issue_date.start_date ? new Date(values.commission_claim_issue_date.start_date) : [],
                 end_date: values.commission_claim_issue_date.end_date ? new Date(values.commission_claim_issue_date.end_date) : [],
               },
@@ -361,6 +359,7 @@ const FlightCommisionForm = (props) => {
                             </Row>
                           </Col>
                         </Row>
+
                         {/* issue period */}
                         <Row className="form-group">
                           <Col md={3} lg={3}>
@@ -416,7 +415,6 @@ const FlightCommisionForm = (props) => {
                               ) : ""}
                             </Row>
                             
-                            {console.log(formik.errors, formik.values.specifyPeriodDeparture, formik.values.specifyPeriodIssue, "<<<<")}
                           </Col>
                         </Row>
 
@@ -478,28 +476,26 @@ const FlightCommisionForm = (props) => {
                             </Row>
                           </Col>
                         </Row>
-                        {/* <Col xs={3} md={3} lg={3} className="ml-md-0"> */}
-                          <Row className="form-group mb-0">
-                            <Col className="ml-0">
-                                <FormikControl 
-                                  control="input"
-                                  label="Commission Percentage"
-                                  name="percent"
-                                  required="label-required"
-                                  className
-                                  style={{ maxWidth: 60 }}
-                                  // isDisabled={isView}
-                                  size= {{
-                                    label:{ md: 3, lg: 3},
-                                    value:{ md: 4, lg: 3}
-                                  }}
-                                />
-                            </Col>
-                            <span className="text-lg ml-0 percent">%</span>
-                          </Row>
-                        </Col>
                         
-                      {/* </Col> */}
+                        <Row className="form-group mb-0">
+                          <Col className="ml-0">
+                              <FormikControl 
+                                control="input"
+                                label="Commission Percentage"
+                                name="percent"
+                                required="label-required"
+                                className
+                                style={{ maxWidth: 60 }}
+                                // isDisabled={isView}
+                                size= {{
+                                  label:{ md: 3, lg: 3},
+                                  value:{ md: 4, lg: 3}
+                                }}
+                              />
+                          </Col>
+                          <span className="text-lg ml-0 percent">%</span>
+                        </Row>
+                      </Col>
                     </Row>
                   </Card.Body>
                 </Card>

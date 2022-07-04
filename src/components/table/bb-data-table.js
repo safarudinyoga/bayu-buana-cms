@@ -569,7 +569,7 @@ class BBDataTable extends Component {
           {
             targets: [3],
             className: !module === "loyalty-programs" ? "" : "cstm-col-width-2",
-            visible: module ? module === "standard-ancillary-fee" || module === "email-setup" ? false : true : true
+            visible: module ? module === "standard-ancillary-fee" || module === "email-setup" || module === "ancillary-fee-flight" || module === "ancillary-fee-hotel" || module === "ancillary-fee-other" ? false : true : true
           },
           { responsivePriority: 1, targets: 1 },
           { responsivePriority: 2, targets: 2 },
@@ -1109,13 +1109,13 @@ class BBDataTable extends Component {
           <ModalBody>
           {
             this.state.selected.length > 0 || infoFromState.length === 0
-            ? <p>Are you sure want to delete this?</p>
+            ? <p>Are you sure you want to delete this?</p>
             : this.props.isPartner ?
             `Are you sure want to delete ${this.props.extraText ||  ""} '${infoFromState}' ?` 
             :
             (
               <>
-              <>Are you sure want to delete this?</>
+              <>Are you sure you want to delete this?</>
               {infoFromState.map((d) => (<><br/>{d}</>))}
             </>
             )
