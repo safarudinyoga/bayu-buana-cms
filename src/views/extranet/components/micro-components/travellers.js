@@ -8,6 +8,8 @@ function Travellers(props) {
   const [childrenCount, setChildrenCount] = useState(0)
   const [infantCount, setInfantCount] = useState(0)
 
+  const [infantError, setInfantError] = useState(false)
+
   const [travelerValue, setTravelerValue] = useState("1 Adult")
   const [travelerCheckbox, setTravelerCheckbox] = useState(false)
   const [travelerCacheData, setTravelerCacheData] = useState({
@@ -37,6 +39,7 @@ function Travellers(props) {
   const onTravelerClick = (e) => {
     let valueText = `${adultCount > 0 ? adultCount+" Adults" : ""} ${childrenCount > 0 ? childrenCount+" Children":""} ${infantCount > 0 ? infantCount+" Infants" : ""}`
 
+    setInfantError(false)
     setTravelerValue(valueText)
     let count = adultCount+childrenCount+infantCount
     if(props.onConfirm){
@@ -142,6 +145,11 @@ function Travellers(props) {
   const popover = (
     <Popover id="passenger-popover" className='passenger-popover'>
       <Popover.Content>
+        {infantError ? (
+          <div className='traveler-invalid'>
+            You can only book for 1 infant per adult
+          </div>
+        ) : ""}
         <div className="d-flex row mb-2">
           <div className='col-md-6'>ADULTS</div>
           <div className='d-flex col-md-6'>
@@ -154,6 +162,7 @@ function Travellers(props) {
                     src="/img/icons/minus-circle-active.svg" 
                     onClick={() => {
                       setAdultCount(adultCount - 1)
+                      setInfantError(false)
                     }} />
             }
             <input className='text-right' value={adultCount} style={{width: 40}} onChange={onChangeAdult}></input>
@@ -164,7 +173,10 @@ function Travellers(props) {
                     className='ml-2' 
                     role="button" 
                     src="/img/icons/plus-circle.svg" 
-                    onClick={() => setAdultCount(adultCount + 1)} />
+                    onClick={() => {
+                      setAdultCount(adultCount + 1)
+                      setInfantError(false)
+                    }} />
             }
             
           </div>
@@ -184,6 +196,7 @@ function Travellers(props) {
                     src="/img/icons/minus-circle-active.svg" 
                     onClick={() => {
                       setChildrenCount(childrenCount - 1)
+                      setInfantError(false)
                     }}
                   />
             }
@@ -195,15 +208,15 @@ function Travellers(props) {
                     className='ml-2' 
                     role="button" 
                     src="/img/icons/plus-circle.svg" 
-                    onClick={() => setChildrenCount(childrenCount + 1)} />
+                    onClick={() => {
+                      setChildrenCount(childrenCount + 1)
+                      setInfantError(false)
+                    }} />
             }
           </div>
-          {props.shoppingCache ? "" : (
-            <div className='row w-100'>
-              <ChildrenDiv />
-            </div>
-          )}
-          
+          <div className='row w-100'>
+            <ChildrenDiv />
+          </div>
           
           
         </div>
@@ -222,6 +235,7 @@ function Travellers(props) {
                     src="/img/icons/minus-circle-active.svg"
                     onClick={() => {
                       setInfantCount(infantCount - 1)
+                      setInfantError(false)
                     }}
                     />
             }
@@ -229,7 +243,11 @@ function Travellers(props) {
             <input className='text-right' value={infantCount} style={{width: 40}} onChange={onChangeInfant}></input>
             {
               infantCount === adultCount || infantCount === 8 ?
-                <ReactSVG className='ml-2' src="/img/icons/plus-circle-inactive.svg" />
+                <ReactSVG 
+                  className='ml-2' 
+                  src="/img/icons/plus-circle-inactive.svg" 
+                  onClick={() => setInfantError(true)}
+                />
                 : <ReactSVG 
                     className='ml-2' 
                     role="button" 
@@ -239,21 +257,18 @@ function Travellers(props) {
             }
             
           </div>
-          {props.shoppingCache ? "" : (
-            <div className='row w-100'>
-              <InfantDiv />
-            </div>
-          )}
-          
+          <div className='row w-100'>
+            <InfantDiv />
+          </div>
         </div>
-        {props.shoppingCache ? "" : (
-          <Form.Check 
-            label="SELECT TRAVELERS"
-            onChange={() => setTravelerCheckbox(!travelerCheckbox)} 
-            checked={travelerCheckbox}
-          />
-        )}
-        
+        <Form.Check 
+          label="SELECT TRAVELERS"
+          onChange={() => {
+            setTravelerCheckbox(!travelerCheckbox)
+            setInfantError(false)
+          }} 
+          checked={travelerCheckbox}
+        />
         <Button onClick={onTravelerClick} className='mt-3 w-100'>DONE</Button>
       </Popover.Content>
     </Popover>
