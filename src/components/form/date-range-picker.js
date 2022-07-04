@@ -3,6 +3,7 @@ import Icon from "react-multi-date-picker/components/icon"
 import { useStateWithCallbackLazy } from 'use-state-with-callback';
 import React, { useEffect, useRef, useState } from "react"
 import { Col, Row, Button } from 'react-bootstrap';
+import ResetIC from 'assets/icons/reset.svg'
 
 const DateRangePicker = ({value, onChange= ()=>{}, minDate, maxDate, placeholder="", id="" }) => {
 
@@ -89,13 +90,14 @@ const DateRangePicker = ({value, onChange= ()=>{}, minDate, maxDate, placeholder
     >
       <div className="d-flex justify-content-end p-4">
         <button
-          className="pt-1"
-          style={{color: "#1E83DC", background: "none", border: 'none'}}
+          className="pt-1 d-flex justify-content-start align-items-center"
+          style={{color: "#1E83DC", background: "none", border: 'none', fontSize: 13}}
           onClick={() => {
             onChange([])
           }}
         >
           Reset
+          <img src={ResetIC} style={{width: 10, marginLeft: 10}} />
         </button>    
         <Button 
           className="btn btn-primary ml-4 px-4 py-2"
