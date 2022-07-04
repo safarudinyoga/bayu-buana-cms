@@ -20,8 +20,8 @@ export default function BookingSetting(props) {
   const [limitPeriod, setLimitPeriod] = React.useState(0)
   const [cancelLimitOffset, setCancelLimitOffset] = useState(0)
   const [cancelLimitPeriod, setCancelLimitPeriod] = useState(0)
-  const [countBtnOfficeHour, setCountBtnOfficeHour] = useState(1)
-  const [hideBtnOfficeHour, setHideBtnOfficeHour] = useState(true)
+  const [countBtnOfficeHour, setCountBtnOfficeHour] = useState(0)
+  const [hideBtnOfficeHour, setHideBtnOfficeHour] = useState(false)
   const [openSnackbar] = useSnackbar(options);
   const [valuesTimeStart, setValuesTimeStart] = useState(
     [1].map((number) =>
@@ -61,30 +61,37 @@ export default function BookingSetting(props) {
                 {
                     label: "Mon",
                     value: false,
+                    key: "monday"
                 },
                 {
                     label: "Tue",
                     value: false,
+                    key: "tuesday"
                 },
                 {
                     label: "Wed",
                     value: false,
+                    key: "wednesday"
                 },
                 {
                     label: "Thu",
                     value: false,
+                    key: "thursday"
                 },
                 {
                     label: "Fri",
                     value: false,
+                    key: "friday"
                 },
                 {
                     label: "Sat",
                     value: false,
+                    key: "saturday"
                 },
                 {
                     label: "Sun",
                     value: false,
+                    key: "sunday"
                 },
             ],
             time: [
@@ -147,30 +154,38 @@ export default function BookingSetting(props) {
                 {
                     label: "Mon",
                     value: false,
+                    key: "monday"
                 },
                 {
                     label: "Tue",
                     value: false,
+                    key: "tuesday"
                 },
                 {
                     label: "Wed",
                     value: false,
+                    key: "wednesday"
                 },
                 {
                     label: "Thu",
                     value: false,
+                    key: "thursday"
                 },
                 {
                     label: "Fri",
                     value: false,
+                    key: "friday"
                 },
                 {
                     label: "Sat",
                     value: false,
+                    key: "saturday"
                 },
                 {
                     label: "Sun",
                     value: false,
+                    key: "sunday"
+
                 },
             ],
             time: [
@@ -188,8 +203,10 @@ export default function BookingSetting(props) {
     }
 
     const handleDelete = (index, idx) => {
-        data.field.splice(index)
+        data.field.splice(index )
         forceUpdate()
+        handleHideBtnOfficeHours()
+        setCountBtnOfficeHour(countBtnOfficeHour === index)
     }
 
     const handleUpdate = (idx, index) => {
@@ -204,9 +221,9 @@ export default function BookingSetting(props) {
 
     const handleHideBtnOfficeHours = () => {
         if (countBtnOfficeHour === 9) {
-            setHideBtnOfficeHour(false);
+            setHideBtnOfficeHour(true);
         } else {
-            setHideBtnOfficeHour(true)
+            setHideBtnOfficeHour(false)
         }
     }
 
@@ -223,6 +240,23 @@ export default function BookingSetting(props) {
         //   console.log(e)
         }
       }
+    
+    const convertDataPost = (dataOT) => {
+        return dataOT.map((oprTime, i) => {
+            let objOT = {}
+            oprTime.day.map((day, id) => {
+                objOT[day.key]= day.value
+            })
+            oprTime.time.map((time, idx) => {
+                if (idx === 0 ) {
+                    objOT["time_start"] = time.timeStart
+                } else if (idx === 1) {
+                    objOT["time_end"] = time.timeEnd
+                }
+            })
+            return objOT
+        })
+    }
 
     const onSubmit = (e) => {
         let payload = {
@@ -230,9 +264,7 @@ export default function BookingSetting(props) {
             "ticketing_time_limit_notice_period": Number(limitPeriod),
             "cancellation_deadline_offset": Number(cancelLimitOffset),
             "cancellation_deadline_notice_period": Number(cancelLimitPeriod),
-            "operation_time": [
-                {...data.field}
-            ]
+            "operation_time": convertDataPost(data.field)
         }
         submit(payload)
         openSnackbar(
@@ -448,7 +480,9 @@ export default function BookingSetting(props) {
                                                                     <TimePicker hideSeconds />,
                                                                 ]}
                                                                 />
-                                                          <img onClick={() => handleDelete(idx, index)} src={removeIcon} style={{color: '#ebebeb', width: 15, height: 17, marginLeft: 10, marginTop: 6, cursor: 'pointer'}} alt="" />
+                                                                {idx >= 1 &&
+                                                                    <img onClick={() => handleDelete(idx, index)} src={removeIcon} style={{color: '#ebebeb', width: 15, height: 17, marginLeft: 10, marginTop: 6, cursor: 'pointer'}} alt="" />
+                                                                 }
                                                         </div>
                                                          :null
                                                       }
@@ -462,7 +496,7 @@ export default function BookingSetting(props) {
                                 )
                             })
                         }
-                        {hideBtnOfficeHour && 
+                        { !hideBtnOfficeHour && 
                             <p onClick={() => handleAdd()} style={{color: '#1103C4', fontSize: 14, textAlign: 'end', cursor: 'pointer'}}>Add After Office Hours</p>
                         }
                     </div>
@@ -481,7 +515,7 @@ export default function BookingSetting(props) {
           </Button>
           <Button
             variant="secondary"
-            // onClick={() => props.history.push(props.backUrl)}
+            onClick={() => props.history.push(props.handleSelectTab("general-information"))}
           >
             CANCEL
           </Button>
