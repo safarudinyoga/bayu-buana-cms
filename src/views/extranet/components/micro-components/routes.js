@@ -65,7 +65,7 @@ function Routes(props) {
     <>
       <div className={`d-flex ${smallSize ? "mr-2" : "mr-4"}`}>
         {/* <Field name={props.formik && props.index >= 0 ? `trips[${props.index}].departure_data` : } */}
-        <div className={`form-group required position-relative departure-box mb-4 ${smallSize ? "routes-sm" : ""}`} >
+        <div className={`form-group required position-relative departure-box mb-0 ${smallSize ? "routes-sm" : ""}`} >
           <label htmlFor="departure" className='form-with-label__title'>FROM <span className='label-required'></span></label>
           <ReactSVG src='/img/icons/flight-takeoff.svg' className='form-with-label__suggest-icon'/>
           <AutoSuggest
@@ -134,7 +134,7 @@ function Routes(props) {
           }
           {/* tampilan untuk error departure data multitrip END */}
         </div>
-        <div className={`form-group required position-relative arrival-box mb-4 ${smallSize ? "routes-sm" : ""}`} > 
+        <div className={`form-group required position-relative arrival-box mb-0 ${smallSize ? "routes-sm" : ""}`} > 
           <label htmlFor="arrival" className='form-with-label__title'>TO <span className='label-required'></span></label>
           <ReactSVG src='/img/icons/flight-land.svg' className='form-with-label__suggest-icon'/>
           <AutoSuggest

@@ -20,6 +20,7 @@ const TripOneway = (props) => {
   let api = new Api
   const showCreateModal = useSelector((state) => state.ui.showCreateModal);
   const [formValues, setFormValues] = useState(null);
+  const [id, setId] = useState(null)
 
   const initialValues = {
     departure_data: "",
@@ -45,6 +46,7 @@ const TripOneway = (props) => {
 
   useEffect(async () => {
     let formId = showCreateModal.id || props.id
+    setId(formId)
 
     let docTitle = "Edit Shopping Criteria";
     if(!formId) {
@@ -109,7 +111,7 @@ const TripOneway = (props) => {
       trip_type_id: props.tripType,
     }
 
-    let res = await api.post("master/cache-criterias/flights", payload)
+    let res = await api.putOrPost("master/cache-criterias/flights", id, payload)
     if(res){
       dispatch(setCreateModal({show: false, id: null, disabled_form: false}))
     }
@@ -138,6 +140,7 @@ const TripOneway = (props) => {
                 smallSize={true} 
                 airports={props.airports} 
                 formik={{errors, touched, setFieldValue, values}} 
+                flightData={props.flightData}
               />
               <TripDateOneway smallSize={true} formik={{errors, touched, setFieldValue, values}} />
               <TripTraveler smallSize={true} formik={{errors, touched, setFieldValue, values}} />

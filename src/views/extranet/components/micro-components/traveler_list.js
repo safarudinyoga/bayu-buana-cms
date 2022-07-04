@@ -11,9 +11,9 @@ function TravelerList(props) {
   }
 
   return (
-    <>
+    <div className='my-4'>
       {travelers}
-    </>
+    </div>
     
   )
 }

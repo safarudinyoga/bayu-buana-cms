@@ -49,7 +49,7 @@ const Roundtrip = (props) => {
 
   return (
     <>
-      <div className='d-flex flex-wrap'>
+      <div className='d-flex flex-wrap mb-3'>
         <Routes formik={formik} airports={airports} />
         
         <div className='mr-4'>
@@ -89,9 +89,9 @@ const Roundtrip = (props) => {
         travelerCheckboxConfirm ? <TravelerList handleTrip={handleTrip} travelerCount={travelerCount}/> : ""
       }
       
-      <div className='my-3 ml-2'>
+      {/* <div className='my-3 ml-2'>
         <Form.Check label="Add a hotel" />
-      </div>
+      </div> */}
     </>
   )
 }
