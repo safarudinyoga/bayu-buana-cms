@@ -10,6 +10,12 @@ import env from "config/environment"
 function TripFlightClass(props) {
   const [flightClass, setFlightClass] = useState()
   let api = new Api()
+  
+  useEffect(() => {
+    console.log("trigger formik values",props.formik.values)
+    setFlightClass(props.formik.values ? props.formik.values.cabin_type : "")
+  }, [props.formik.values])
+  
 
 
   return (
@@ -27,7 +33,7 @@ function TripFlightClass(props) {
         value={flightClass}
         onChange={(v) => {
           setFlightClass(v)
-          props.formik.setFieldValue("cabin_type_id", v.value)
+          props.formik.setFieldValue("cabin_type", v)
         }}
         components={{
           DropdownIndicator: () => null,

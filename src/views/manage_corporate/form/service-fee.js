@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { Form, Row, Col, Card, Button, Tabs, TabPane, Modal, ModalBody } from "react-bootstrap"
 import { useParams } from "react-router-dom"
+import '../manage_corporate.css'
+
 // components & styles
 import Select from "components/form/select"
 import BbDataTable from 'components/table/bb-data-table'
@@ -47,7 +49,8 @@ const TravelConsultantAssistant = ({ handleChangeModal  }) => {
     isHideSearch: true,
     isHideDownloadLogo: true,
     isCheckbox: false,
-    isShowColumnAction: false,
+    // isShowColumnAction: true,
+    hideDetail: true,
     hideCreate: true,
     baseRoute: "/master/manage-corporate/form",
     endpoint: `/master/agent-corporates/${id}/service-fee`,
@@ -108,11 +111,12 @@ const TravelConsultantAssistant = ({ handleChangeModal  }) => {
       titleModal: "Other Service Fee",
       title: "other-custom-service-fee",
       showAdvancedOptions: false,
+      hideDetail: true,
       isHidePrintLogo: true,
       isHideSearch: false,
       isCheckbox: false,
       isHideDownloadLogo: true,
-      isShowColumnAction: true,
+      // isShowColumnAction: true,
       baseRoute: "/master/manage-corporate/form",
       endpoint: `/master/agent-corporates/${id}/service-fee`,
       columns: [
@@ -134,7 +138,8 @@ const TravelConsultantAssistant = ({ handleChangeModal  }) => {
       isHidePrintLogo: true,
       isHideSearch: true,
       isHideDownloadLogo: true,
-      isShowColumnAction: false,
+      // isShowColumnAction: false,
+      hideDetail: true,
       hideCreate: true,
       baseRoute: "/master/manage-corporate/form",
       endpoint: `/master/agent-corporates/${id}/service-fee`,

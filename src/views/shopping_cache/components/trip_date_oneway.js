@@ -22,10 +22,8 @@ function TripDateOneway(props) {
   }
 
   useEffect(() => {
-    if(props.handleCriteriaChange){
-      props.handleCriteriaChange("departure_datetime", departTime)
-    }
-  }, [departTime])
+    setDepartTime(new Date(props.formik.values.departure_datetime))
+  }, [props.formik.values])
   
 
   return (

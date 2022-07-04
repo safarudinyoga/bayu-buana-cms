@@ -1,7 +1,7 @@
 import Api from 'config/api'
 import { Formik } from 'formik'
 import React, { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import Routes from 'views/extranet/components/micro-components/routes'
 import Travellers from 'views/extranet/components/micro-components/travellers'
 import TripCorporate from './trip_corporate'
@@ -11,18 +11,15 @@ import { Form, Button } from 'react-bootstrap'
 import * as Yup from "yup"
 import CancelButton from 'components/button/cancel'
 import { setModalTitle, setCreateModal } from "redux/ui-store"
+import _ from 'lodash'
+import TripRoutes from './trip_routes'
+import TripTraveler from './trip_traveler'
 
 const TripOneway = (props) => {
   const dispatch = useDispatch()
   let api = new Api
-
-  const [criteria, setCriteria] = useState({
-    departure_datetime: "",
-    destination_airport_id: "",
-    destination_city_id: "",
-    origin_airport_id: "",
-    origin_city_id: "",
-  })
+  const showCreateModal = useSelector((state) => state.ui.showCreateModal);
+  const [formValues, setFormValues] = useState(null);
 
   const initialValues = {
     departure_data: "",
@@ -31,7 +28,7 @@ const TripOneway = (props) => {
     number_of_adults: 1,
     number_of_children: 0,
     number_of_infants: 0,
-    cabin_type_id: "",
+    cabin_type: "",
     corporate_id: "",
   }
 
@@ -42,16 +39,42 @@ const TripOneway = (props) => {
     number_of_adults: Yup.number().required(),
     number_of_children: Yup.number().required(),
     number_of_infants: Yup.number().required(),
-    cabin_type_id: Yup.string().notRequired(),
+    cabin_type: Yup.object().notRequired(),
     corporate_id: Yup.string().notRequired(),
   })
 
-  useEffect(() => {
-    console.log(criteria)
-    if (props.handleCacheData){
-      props.handleCacheData("cache_air_origin_destination_criteria",[criteria])
+  useEffect(async () => {
+    let formId = showCreateModal.id || props.id
+
+    let docTitle = "Edit Shopping Criteria";
+    if(!formId) {
+      docTitle = "Add Shopping Criteria"
     }
-  }, [criteria])
+
+    dispatch(setModalTitle(docTitle));
+
+    if(props.flightData) {
+      try {
+        setFormValues({
+          ...props.flightData,
+          departure_data: props.flightData.cache_air_origin_destination_criteria.origin_city.city_name,
+          arrival_data: props.flightData.cache_air_origin_destination_criteria.destination_city.city_name,
+          departure_datetime: new Date(props.flightData.cache_air_origin_destination_criteria.departure_datetime),
+          number_of_adults: props.flightData.cache_air_travel_preference_criteria.number_of_adults,
+          number_of_children: props.flightData.cache_air_travel_preference_criteria.number_of_children,
+          number_of_infants: props.flightData.cache_air_travel_preference_criteria.number_of_infants,
+          cabin_type: _.isEmpty(props.flightData.cache_air_travel_preference_criteria.cabin_type) ? '' 
+          : {
+              value: props.flightData.cache_air_travel_preference_criteria.cabin_type.id,
+              label: props.flightData.cache_air_travel_preference_criteria.cabin_type.cabin_type_name
+            },
+          corporate_id: ""
+        })
+      } catch(e){
+
+      }
+    }
+  }, [props.flightData])
 
   const onSubmit = async (values, a) => {
     console.log("VALUES", values)
@@ -59,72 +82,47 @@ const TripOneway = (props) => {
     let payload = {
       cache_air_origin_destination_criteria: [
         {
-          administrative_city_id: values.departure_data.city_id,
-          airport_id: values.departure_data.airport_id,
-          arrival_datetime: values.arrival_datetime,
-          city_id: values.departure_data.city_id,
+          // arrival_datetime: values.arrival_datetime ? values.arrival_datetime : "",
           departure_datetime: values.departure_datetime,
-          dest_administrative_city_id: "00000000-0000-0000-0000-000000000000",
-          dest_airport_id: values.arrival_data.airport_id,
-          dest_city_id: values.arrival_data.city_id,
-          dest_zone_id: "00000000-0000-0000-0000-000000000000",
-          destination_airport_id: values.arrival_data.airport_id,
           destination_city_id: values.arrival_data.city_id,
           destination_location: values.arrival_data.city,
+          destination_airport_id: values.arrival_data.airport_id,
           index_number: 1,
-          origin_airport_id: values.departure_data.airport_id,
           origin_city_id: values.departure_data.city_id,
           origin_location: values.departure_data.city,
-          zone_id: "00000000-0000-0000-0000-000000000000",
+          origin_airport_id: values.departure_data.airport_id,
         }
       ],
       cache_air_travel_preference_criteria: {
-        cabin_type_id: "00000000-0000-0000-0000-000000000000",
+        cabin_type_id: values.cabin_type ? values.cabin_type.value : "",
         number_of_adults: values.number_of_adults,
         number_of_children: values.number_of_children,
         number_of_infants: values.number_of_infants,
+        seats_requested: values.number_of_adults,
       },
       cache_air_travel_criteria: {
         number_of_adults: values.number_of_adults,
         number_of_children: values.number_of_children,
         number_of_infants: values.number_of_infants,
+        seats_requested: values.number_of_adults,
       },
-      cache_guest_criteria: {
-        number_of_adults: values.number_of_adults,
-        number_of_children: values.number_of_children,
-        number_of_infants: values.number_of_infants,
-      },
-      cache_room_stay_criteria: {
-        administrative_city_id: values.departure_data.city_id,
-        airport_id: values.departure_data.airport_id,
-        attraction_id: "00000000-0000-0000-0000-000000000000",
-        checkin: "",
-        checkout: "",
-        city_id: values.departure_data.city_id,
-        destination_city_id: values.arrival_data.city_id,
-        destination_hotel_id: "00000000-0000-0000-0000-000000000000",
-        destination_id: "00000000-0000-0000-0000-000000000000",
-        destination_location: "",
-        hotel_id: "00000000-0000-0000-0000-000000000000",
-        index_number: 1,
-        zone_id: "00000000-0000-0000-0000-000000000000"
-      },
-      corporate_id: "00000000-0000-0000-0000-000000000000",
-      currency_id: "00000000-0000-0000-0000-000000000000",
-      language_id: "00000000-0000-0000-0000-000000000000",
-      trip_type_id: "dd3254b3-719b-43f4-b45c-11a99727cf06",
+      trip_type_id: props.tripType,
     }
 
     let res = await api.post("master/cache-criterias/flights", payload)
-    console.log(res)
+    if(res){
+      dispatch(setCreateModal({show: false, id: null, disabled_form: false}))
+    }
   }
+  
   
   return (
     <>
       <Formik
-        initialValues={initialValues}
+        initialValues={formValues || initialValues}
         validationSchema={validationSchema}
         onSubmit={onSubmit}
+        enableReinitialize
       >
         {({
           errors,
@@ -136,15 +134,15 @@ const TripOneway = (props) => {
         }) => (
           <Form onSubmit={handleSubmit}>
             <div className="d-flex flex-wrap">
-              <Routes 
+              <TripRoutes 
                 smallSize={true} 
                 airports={props.airports} 
-                formik={{errors, touched, setFieldValue}} 
+                formik={{errors, touched, setFieldValue, values}} 
               />
-              <TripDateOneway smallSize={true} formik={{errors, touched, setFieldValue}} />
-              <Travellers smallSize={true} formik={{errors, touched, setFieldValue}} />
-              <TripFlightClass smallSize={true} formik={{errors, touched, setFieldValue}} />
-              <TripCorporate smallSize={true} formik={{errors, touched, setFieldValue}} />
+              <TripDateOneway smallSize={true} formik={{errors, touched, setFieldValue, values}} />
+              <TripTraveler smallSize={true} formik={{errors, touched, setFieldValue, values}} />
+              <TripFlightClass smallSize={true} formik={{errors, touched, setFieldValue, values}} />
+              <TripCorporate smallSize={true} formik={{errors, touched, setFieldValue, values}} />
             </div>
 
             <div className="mt-4 mb-5 ml-1 row justify-content-md-start justify-content-center">

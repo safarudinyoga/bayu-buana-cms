@@ -5,9 +5,9 @@ import { useDispatch } from 'react-redux'
 import { ReactSVG } from "react-svg"
 import { setUIParams } from "redux/ui-store"
 import { useSnackbar } from "react-simple-snackbar"
-import useQuery from "lib/query"
 
 // components & styles
+import useQuery from "lib/query"
 import GeneralInformation from './general-information'
 import BranchOffice from './branch-offices'
 import CorporateFare from './corporate-fare'
@@ -52,11 +52,10 @@ const ManageCorporateForm = ({ match }) => {
   const isView = useQuery().get("action") === "view"
 
   // const [tabKey, setTabKey] = useState("general-information")
-  const [tabKey, setTabKey] = useState("branch-office")
-  const [finishStep, setStep] = useState(0)
+  const [tabKey, setTabKey] = useState("credit-limit")
+  const [finishStep, setStep] = useState(13)
   const [data, setData] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
-  const [corporateId , setCorporateId] = useState(formId)
 
   const wardingGenerator = () => {
     if (!formId) {
@@ -360,7 +359,7 @@ const ManageCorporateForm = ({ match }) => {
                         history={history}
                         backUrl={backUrl}
                         handleChangeTabKey={handleChangeTabKey}
-                        corporateId={corporateId}
+                        corporateId={formId}
                         data={data}
                       />
                     }
@@ -391,7 +390,15 @@ const ManageCorporateForm = ({ match }) => {
                     {tabKey === 'assign-team' && <AssignTeam />}
                   </Tab.Pane>
                   <Tab.Pane eventKey="credit-limit">
-                    {tabKey === 'credit-limit' && <CreditLimit />}
+                    {tabKey === 'credit-limit' &&
+                      <CreditLimit
+                        history={history}
+                        backUrl={backUrl}
+                        handleChangeTabKey={handleChangeTabKey}
+                        corporateId={formId}
+                        endpoint={endpoint}
+                      />
+                    }
                   </Tab.Pane>
                   <Tab.Pane eventKey="invoice-settings">
                     {tabKey === 'invoice-settings' && <InvoiceSettings />}

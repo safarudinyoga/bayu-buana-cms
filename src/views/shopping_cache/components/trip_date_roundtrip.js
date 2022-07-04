@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import DatePicker from 'react-multi-date-picker'
 import ReactDatePicker from 'react-datepicker'
 import { ReactSVG } from "react-svg"
 
@@ -7,20 +6,11 @@ function TripDateRoundtrip(props) {
   const [departTime, setDepartTime] = useState(new Date())
   const [returnTime, setReturnTime] = useState(new Date())
 
-  function RenderDatepicker({ openCalendar, value, handleValueChange, title }){
-    return (
-      <div className={`position-relative ${props.smallSize ? "trip-date-sm" : ""}`} style={{zIndex: 3000}}>
-        <h4 className='form-with-label__title'> {title} <span className='label-required'></span></h4>
-        <ReactSVG src='/img/icons/date-range.svg' className='form-with-label__suggest-icon'/>
-        <input type="text" 
-          className='form-control rounded-0 form-with-label' 
-          onFocus={openCalendar} 
-          value={value} 
-          onChange={handleValueChange}
-          />
-      </div>
-    )
-  }
+  useEffect(() => {
+    setDepartTime(props.formik.values.departure_datetime ? new Date(props.formik.values.departure_datetime) : new Date())
+    setReturnTime(props.formik.values.arrival_datetime ? new Date(props.formik.values.arrival_datetime) : new Date())
+  }, [props.formik.values])
+  
 
   function RenderReactDatepicker({title}) {
     return (
@@ -30,8 +20,8 @@ function TripDateRoundtrip(props) {
         <ReactDatePicker 
           className='form-control rounded-0 form-with-label'
           selected={title === "DEPART" ? departTime : returnTime}
-          dateFormat="MMMM dd yyyy"
-          minDate={new Date()}
+          dateFormat="dd MMMM yyyy"
+          name={title === "DEPART" ? "departure_datetime" : "arrival_datetime"}
           onChange={(date) => {
             if(title === "DEPART") {
               setDepartTime(new Date(date))

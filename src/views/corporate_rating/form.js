@@ -97,7 +97,7 @@ function CorporateRatingForm(props) {
       translationData = [...translationData, ...dataTranslation.data.items]
     }
     setRatingTranslations(translationData)
-    console.log(RatingTranslations)
+    // console.log(RatingTranslations)
   }
 
   useEffect(async () => {
