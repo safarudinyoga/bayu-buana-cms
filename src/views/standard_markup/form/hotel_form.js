@@ -14,6 +14,7 @@ import env from "config/environment"
 import Select from "components/form/select-async"
 import HotelTabel from "../table/hotel_table"
 import NumberFormat from "react-number-format"
+import SelectAsync from "components/form/select-async"
 
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css"
 import "react-dropzone-uploader/dist/styles.css"
@@ -45,15 +46,33 @@ function HotelModal(props) {
                 <span className="form-label-required">*</span>
               </Form.Label>
               <Col sm={7}>
-                <FastField name="hotelBrand">
+              <FastField name="destination">
                   {({ field, form }) => (
                     <div style={{ maxWidth: 600 }}>
-                      <Select
+                      <SelectAsync
                         {...field}
-                        url={`master/destinations`}
-                        fieldName="destination_name"
+                        isClearable
+                        isMulti
+                        url={`master/destination-groups`}
+                        fieldName="destination_group_name"
+                        // onChange={(v) => {
+                        //   setFieldValue("destination", v)
+                        // }}
                         placeholder="Please choose"
+                        className={`react-select ${
+                          form.touched.destination && form.errors.destination
+                            ? "is-invalid"
+                            : null
+                        }`}
                       />
+
+                      {form.touched.destination && form.errors.destination && (
+                        <Form.Control.Feedback type="invalid">
+                          {form.touched.destination
+                            ? form.errors.destination
+                            : null}
+                        </Form.Control.Feedback>
+                      )}
                     </div>
                   )}
                 </FastField>
@@ -65,15 +84,33 @@ function HotelModal(props) {
                 Airline Service Type
               </Form.Label>
               <Col sm={7}>
-                <FastField name="hotelBrand">
+              <FastField name="airline_service_type">
                   {({ field, form }) => (
-                    <div style={{ maxWidth: 600 }}>
-                      <Select
+                    <div style={{ maxWidth: 500 }}>
+                      <SelectAsync
                         {...field}
-                        url={`master/airlines`}
-                        fieldName="airline_name"
+                        isClearable
+                        url={`master/airline-categories`}
+                        fieldName="airline_category_name"
+                        // onChange={(v) => {
+                        //   setFieldValue("airline_service_type", v)
+                        // }}
                         placeholder="Please choose"
+                        className={`react-select ${
+                          form.touched.airline_service_type &&
+                          form.errors.airline_service_type
+                            ? "is-invalid"
+                            : null
+                        }`}
                       />
+                      {form.touched.airline_service_type &&
+                        form.errors.airline_service_type && (
+                          <Form.Control.Feedback type="invalid">
+                            {form.touched.airline_service_type
+                              ? form.errors.airline_service_type
+                              : null}
+                          </Form.Control.Feedback>
+                        )}
                     </div>
                   )}
                 </FastField>
@@ -85,13 +122,36 @@ function HotelModal(props) {
                 Specified Airline
               </Form.Label>
               <Col sm={7}>
-                <FastField name="hotelBrand">
-                  {({ field, form }) => (
-                    <div style={{ maxWidth: 600 }}>
-                      <Select {...field} placeholder="Please choose" />
-                    </div>
-                  )}
-                </FastField>
+              <FastField name="specified_airline">
+                {({ field, form }) => (
+                  <div style={{ maxWidth: 600 }}>
+                    <SelectAsync
+                      {...field}
+                      isClearable
+                      url={`master/airlines`}
+                      fieldName="airline_name"
+                      // onChange={(v) => {
+                      //   setFieldValue("specified_airline", v)
+                      // }}
+                      placeholder="Please choose"
+                      className={`react-select ${
+                        form.touched.specified_airline &&
+                        form.errors.specified_airline
+                          ? "is-invalid"
+                          : null
+                      }`}
+                    />
+                    {form.touched.specified_airline &&
+                      form.errors.specified_airline && (
+                        <Form.Control.Feedback type="invalid">
+                          {form.touched.specified_airline
+                            ? form.errors.specified_airline
+                            : null}
+                        </Form.Control.Feedback>
+                      )}
+                  </div>
+                )}
+              </FastField>
               </Col>
             </Form.Group>
             <Form.Group as={Row} className="form-group">
@@ -99,13 +159,36 @@ function HotelModal(props) {
                 Specified Source
               </Form.Label>
               <Col sm={7}>
-                <FastField name="hotelBrand">
-                  {({ field, form }) => (
-                    <div style={{ maxWidth: 600 }}>
-                      <Select {...field} placeholder="Please choose" />
-                    </div>
-                  )}
-                </FastField>
+              <FastField name="specified_source">
+                {({ field, form }) => (
+                  <div style={{ maxWidth: 600 }}>
+                    <SelectAsync
+                      {...field}
+                      isClearable
+                      url={`master/supplier-types`}
+                      fieldName="supplier_type_name"
+                      // onChange={(v) => {
+                      //   setFieldValue("specified_source", v)
+                      // }}
+                      placeholder="Please choose"
+                      className={`react-select ${
+                        form.touched.specified_source &&
+                        form.errors.specified_source
+                          ? "is-invalid"
+                          : null
+                      }`}
+                    />
+                    {form.touched.specified_source &&
+                      form.errors.specified_source && (
+                        <Form.Control.Feedback type="invalid">
+                          {form.touched.specified_source
+                            ? form.errors.specified_source
+                            : null}
+                        </Form.Control.Feedback>
+                      )}
+                  </div>
+                )}
+              </FastField>
               </Col>
             </Form.Group>
             <Form.Group as={Row} className="mb-3">
@@ -379,11 +462,11 @@ const HotelForm = (props) => {
               <Card.Body>
                 <div style={{ padding: "0 2px 2px" }}>
                   <Form.Group as={Row} className="mb-3">
-                    <Form.Label column md={2}>
+                    <Form.Label column md={3} lg={3} xl={2}>
                       Preset Name
                       <span className="form-label-required">*</span>
                     </Form.Label>
-                    <Col sm={10}>
+                    <Col md={9} lg={9} xl={10}>
                       <Field
                         className={
                           errors.markup_category_name
@@ -402,10 +485,10 @@ const HotelForm = (props) => {
                     </Col>
                   </Form.Group>
                   <Form.Group as={Row} className="mb-3">
-                    <Form.Label column md={2}>
+                    <Form.Label column md={3} lg={3} xl={2}>
                       Description
                     </Form.Label>
-                    <Col sm={10}>
+                    <Col md={9} lg={9} xl={10}>
                       <Field
                         as="textarea"
                         minLength={1}
@@ -417,13 +500,13 @@ const HotelForm = (props) => {
                     </Col>
                   </Form.Group>
                   <Form.Group as={Row} className="mb-3">
-                    <Form.Label column md={2}>
+                    <Form.Label column md={3} lg={3} xl={2}>
                       Domestic Flight Mark-up
                       <span className="form-label-required">*</span>
                     </Form.Label>
-                    <Col md={10}>
+                    <Col md={9} lg={9} xl={10}>
                       <Row className="mt-md-2">
-                        <Col lg={6}>
+                        <Col lg={7} xl={6}>
                           <Row>
                             <Col sm={12} md={3} lg={12}>
                               <Form.Group>
@@ -546,7 +629,7 @@ const HotelForm = (props) => {
                             </div>
                           </Row>
                         </Col>
-                        <Col lg={6}>
+                        <Col lg={5} xl={6}>
                           <Row>
                             <Col sm={12} md={3} lg={12}>
                               <Form.Group>
@@ -560,7 +643,7 @@ const HotelForm = (props) => {
                                 </label>
                               </Form.Group>
                             </Col>
-                            <Col xs={3} md={2} lg={3} className="ml-4 ml-md-0">
+                            <Col xs={3} md={2} lg={3} xl={3} className="ml-4 ml-md-0">
                               <Form.Group as={Row} className="mb-3">
                                 <Col>
                                   <NumberFormat
@@ -625,13 +708,13 @@ const HotelForm = (props) => {
                     </Col>
                   </Form.Group>
                   <Form.Group as={Row} className="mb-3">
-                    <Form.Label column md={2}>
+                    <Form.Label column md={3} lg={3} xl={2}>
                       International Flight Mark-up
                       <span className="form-label-required">*</span>
                     </Form.Label>
-                    <Col md={10}>
+                    <Col md={9} lg={9} xl={10}>
                       <Row className="mt-md-2">
-                        <Col lg={6}>
+                        <Col lg={7} xl={6}>
                           <Row>
                             <Col sm={12} md={3} lg={12}>
                               <Form.Group>
@@ -752,7 +835,7 @@ const HotelForm = (props) => {
                             </Col>
                           </Row>
                         </Col>
-                        <Col lg={6}>
+                        <Col lg={5} xl={6}>
                           <Row>
                             <Col sm={12} md={3} lg={12}>
                               <Form.Group>
@@ -766,7 +849,7 @@ const HotelForm = (props) => {
                                 </label>
                               </Form.Group>
                             </Col>
-                            <Col xs={3} md={2} lg={3} className="ml-4 ml-md-0">
+                            <Col xs={3} md={2} lg={3} xl={3} className="ml-4 ml-md-0">
                               <Form.Group as={Row} className="mb-3">
                                 <Col>
                                   <NumberFormat

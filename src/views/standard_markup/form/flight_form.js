@@ -24,7 +24,7 @@ import Api from "config/api"
 import env from "config/environment"
 import Select from "components/form/select-async"
 import NumberFormat from "react-number-format"
-import FormikControl from "components/formik/formikControl"
+import SelectAsync from "components/form/select-async"
 
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css"
 import "react-dropzone-uploader/dist/styles.css"
@@ -32,10 +32,11 @@ import "react-dropzone-uploader/dist/styles.css"
 const endpoint = "/master/agent-markup-categories/1"
 const backUrl = "/master/standard-markup"
 
-const FlightModal = (props) => {
+const FlightModal = ({ show, onHide, setFieldValue }) => {
   return (
     <Modal
-      {...props}
+      show={show}
+      onHide={onHide}
       size="md"
       aria-labelledby="contained-modal-title-vcenter"
       centered
@@ -43,7 +44,7 @@ const FlightModal = (props) => {
       <Modal.Body>
         <div style={{ padding: "0 2px 2px" }}>
           <div className="mb-5">
-            <div className="modal-button-close" onClick={props.onHide}>
+            <div className="modal-button-close" onClick={onHide}>
               <ReactSVG src="/img/icons/close.svg" />
             </div>
             <p className="modals-header mt-3">ADD FLIGHT OVERRIDE MARKUP</p>
@@ -56,10 +57,33 @@ const FlightModal = (props) => {
                 <span className="form-label-required">*</span>
               </Form.Label>
               <Col sm={7}>
-                <FastField name="hotelBrand">
+                <FastField name="destination">
                   {({ field, form }) => (
                     <div style={{ maxWidth: 600 }}>
-                      <Select {...field} placeholder="Please choose" />
+                      <SelectAsync
+                        {...field}
+                        isClearable
+                        isMulti
+                        url={`master/destination-groups`}
+                        fieldName="destination_group_name"
+                        // onChange={(v) => {
+                        //   setFieldValue("destination", v)
+                        // }}
+                        placeholder="Please choose"
+                        className={`react-select ${
+                          form.touched.destination && form.errors.destination
+                            ? "is-invalid"
+                            : null
+                        }`}
+                      />
+
+                      {form.touched.destination && form.errors.destination && (
+                        <Form.Control.Feedback type="invalid">
+                          {form.touched.destination
+                            ? form.errors.destination
+                            : null}
+                        </Form.Control.Feedback>
+                      )}
                     </div>
                   )}
                 </FastField>
@@ -71,10 +95,33 @@ const FlightModal = (props) => {
                 Airline Service Type
               </Form.Label>
               <Col sm={7}>
-                <FastField name="hotelBrand">
+                <FastField name="airline_service_type">
                   {({ field, form }) => (
-                    <div style={{ maxWidth: 600 }}>
-                      <Select {...field} placeholder="Please choose" />
+                    <div style={{ maxWidth: 500 }}>
+                      <SelectAsync
+                        {...field}
+                        isClearable
+                        url={`master/airline-categories`}
+                        fieldName="airline_category_name"
+                        // onChange={(v) => {
+                        //   setFieldValue("airline_service_type", v)
+                        // }}
+                        placeholder="Please choose"
+                        className={`react-select ${
+                          form.touched.airline_service_type &&
+                          form.errors.airline_service_type
+                            ? "is-invalid"
+                            : null
+                        }`}
+                      />
+                      {form.touched.airline_service_type &&
+                        form.errors.airline_service_type && (
+                          <Form.Control.Feedback type="invalid">
+                            {form.touched.airline_service_type
+                              ? form.errors.airline_service_type
+                              : null}
+                          </Form.Control.Feedback>
+                        )}
                     </div>
                   )}
                 </FastField>
@@ -86,13 +133,36 @@ const FlightModal = (props) => {
                 Specified Airline
               </Form.Label>
               <Col sm={7}>
-                <FastField name="hotelBrand">
-                  {({ field, form }) => (
-                    <div style={{ maxWidth: 600 }}>
-                      <Select {...field} placeholder="Please choose" />
-                    </div>
-                  )}
-                </FastField>
+              <FastField name="specified_airline">
+                {({ field, form }) => (
+                  <div style={{ maxWidth: 600 }}>
+                    <SelectAsync
+                      {...field}
+                      isClearable
+                      url={`master/airlines`}
+                      fieldName="airline_name"
+                      // onChange={(v) => {
+                      //   setFieldValue("specified_airline", v)
+                      // }}
+                      placeholder="Please choose"
+                      className={`react-select ${
+                        form.touched.specified_airline &&
+                        form.errors.specified_airline
+                          ? "is-invalid"
+                          : null
+                      }`}
+                    />
+                    {form.touched.specified_airline &&
+                      form.errors.specified_airline && (
+                        <Form.Control.Feedback type="invalid">
+                          {form.touched.specified_airline
+                            ? form.errors.specified_airline
+                            : null}
+                        </Form.Control.Feedback>
+                      )}
+                  </div>
+                )}
+              </FastField>
               </Col>
             </Form.Group>
             <Form.Group as={Row} className="form-group">
@@ -100,13 +170,36 @@ const FlightModal = (props) => {
                 Specified Source
               </Form.Label>
               <Col sm={7}>
-                <FastField name="hotelBrand">
-                  {({ field, form }) => (
-                    <div style={{ maxWidth: 600 }}>
-                      <Select {...field} placeholder="Please choose" />
-                    </div>
-                  )}
-                </FastField>
+              <FastField name="specified_source">
+                {({ field, form }) => (
+                  <div style={{ maxWidth: 600 }}>
+                    <SelectAsync
+                      {...field}
+                      isClearable
+                      url={`master/supplier-types`}
+                      fieldName="supplier_type_name"
+                      // onChange={(v) => {
+                      //   setFieldValue("specified_source", v)
+                      // }}
+                      placeholder="Please choose"
+                      className={`react-select ${
+                        form.touched.specified_source &&
+                        form.errors.specified_source
+                          ? "is-invalid"
+                          : null
+                      }`}
+                    />
+                    {form.touched.specified_source &&
+                      form.errors.specified_source && (
+                        <Form.Control.Feedback type="invalid">
+                          {form.touched.specified_source
+                            ? form.errors.specified_source
+                            : null}
+                        </Form.Control.Feedback>
+                      )}
+                  </div>
+                )}
+              </FastField>
               </Col>
             </Form.Group>
             <Form.Group as={Row} className="mb-3">
@@ -184,7 +277,7 @@ const FlightModal = (props) => {
               >
                 SAVE
               </Button>
-              <Button variant="secondary" onClick={props.onHide}>
+              <Button variant="secondary" onClick={onHide}>
                 CANCEL
               </Button>
             </div>
@@ -340,25 +433,28 @@ const FlightForm = (props) => {
               description: values.description,
               domestic_flight_markup: {
                 amount: parseInt(values.domestic_amount) || 0,
-                charge_type_id: values.domestic_charge_type_id === ""
-                ? "c93288b6-29d3-4e20-aa83-5ee6261f64ff"
-                : values.domestic_charge_type_id,
+                charge_type_id:
+                  values.domestic_charge_type_id === ""
+                    ? "c93288b6-29d3-4e20-aa83-5ee6261f64ff"
+                    : values.domestic_charge_type_id,
                 is_tax_inclusive: true,
                 percent: 10,
               },
               domestic_hotel_markup: {
                 amount: 0,
-                charge_type_id: values.domestic_charge_type_id === ""
-                ? "c93288b6-29d3-4e20-aa83-5ee6261f64ff"
-                : values.domestic_charge_type_id,
+                charge_type_id:
+                  values.domestic_charge_type_id === ""
+                    ? "c93288b6-29d3-4e20-aa83-5ee6261f64ff"
+                    : values.domestic_charge_type_id,
                 is_tax_inclusive: false,
                 percent: 0,
               },
               international_flight_markup: {
                 amount: parseInt(values.international_amount) || 0,
-                charge_type_id: values.international_charge_type_id === ""
-                ? "c93288b6-29d3-4e20-aa83-5ee6261f64ff"
-                : values.international_charge_type_id,
+                charge_type_id:
+                  values.international_charge_type_id === ""
+                    ? "c93288b6-29d3-4e20-aa83-5ee6261f64ff"
+                    : values.international_charge_type_id,
                 is_tax_inclusive: false,
                 percent: 0,
               },
@@ -406,11 +502,11 @@ const FlightForm = (props) => {
               <Card.Body>
                 <div style={{ padding: "0 2px 2px" }}>
                   <Form.Group as={Row} className="mb-3">
-                    <Form.Label column md={2}>
+                    <Form.Label column md={3} lg={3} xl={2}>
                       Preset Name
                       <span className="form-label-required">*</span>
                     </Form.Label>
-                    <Col sm={10}>
+                    <Col md={9} lg={9} xl={10}>
                       <Field
                         className={
                           errors.markup_category_name
@@ -430,10 +526,10 @@ const FlightForm = (props) => {
                     </Col>
                   </Form.Group>
                   <Form.Group as={Row} className="mb-3">
-                    <Form.Label column md={2}>
+                    <Form.Label column md={3} lg={3} xl={2}>
                       Description
                     </Form.Label>
-                    <Col sm={10}>
+                    <Col md={9} lg={9} xl={10}>
                       <Field
                         as="textarea"
                         minLength={1}
@@ -445,15 +541,15 @@ const FlightForm = (props) => {
                     </Col>
                   </Form.Group>
                   <Form.Group as={Row} className="mb-3">
-                    <Form.Label column md={2}>
+                    <Form.Label column md={3} lg={3} xl={2}>
                       Domestic Flight Mark-up
                       <span className="form-label-required">*</span>
                     </Form.Label>
-                    <Col md={10}>
+                    <Col md={9} lg={9} xl={10}>
                       <Row className="mt-md-2">
-                        <Col lg={6}>
+                        <Col lg={7} xl={6}>
                           <Row>
-                            <Col sm={12} md={3} lg={12}>
+                            <Col sm={12} md={12} lg={12}>
                               <Form.Group>
                                 <label>
                                   <Field
@@ -516,7 +612,7 @@ const FlightForm = (props) => {
                                 </div>
                               </Form.Group>
                             </Col>
-                            <Col sm={12} md={4}>
+                            <Col sm={12} md={5}>
                               <Form.Group className="mb-3 ml-5 ml-md-0">
                                 <Col className="d-flex flex-column">
                                   <label>
@@ -568,7 +664,7 @@ const FlightForm = (props) => {
                             </Col>
                           </Row>
                         </Col>
-                        <Col lg={6}>
+                        <Col lg={5} xl={6}>
                           <Row>
                             <Col sm={12} md={3} lg={12}>
                               <Form.Group>
@@ -582,7 +678,13 @@ const FlightForm = (props) => {
                                 </label>
                               </Form.Group>
                             </Col>
-                            <Col xs={3} md={2} lg={3} className="ml-4 ml-md-0">
+                            <Col
+                              xs={3}
+                              md={3}
+                              lg={4}
+                              xl={3}
+                              className="ml-4 ml-md-0"
+                            >
                               <Form.Group as={Row} className="mb-3">
                                 <Col>
                                   <NumberFormat
@@ -624,7 +726,7 @@ const FlightForm = (props) => {
                                 <p className="text-lg mt-1">%</p>
                               </Form.Group>
                             </Col>
-                            <Col xs={7} md={6} lg={9}>
+                            <Col xs={7} md={6} lg={8}>
                               <Form.Group className="">
                                 <Col>
                                   <label>
@@ -650,15 +752,15 @@ const FlightForm = (props) => {
                     </Col>
                   </Form.Group>
                   <Form.Group as={Row} className="mb-3">
-                    <Form.Label column md={2}>
+                    <Form.Label column md={3} lg={3} xl={2}>
                       International Flight Mark-up
                       <span className="form-label-required">*</span>
                     </Form.Label>
-                    <Col md={10}>
+                    <Col md={9} lg={9} xl={10}>
                       <Row className="mt-md-2">
-                        <Col lg={6}>
+                        <Col lg={7} xl={6}>
                           <Row>
-                            <Col sm={12} md={3} lg={12}>
+                            <Col sm={12} md={12} lg={12}>
                               <Form.Group>
                                 <label>
                                   <Field
@@ -722,7 +824,7 @@ const FlightForm = (props) => {
                                 </div>
                               </Form.Group>
                             </Col>
-                            <Col sm={12} md={4}>
+                            <Col sm={12} md={5}>
                               <Form.Group className="mb-3 ml-5 ml-md-0">
                                 <Col className="d-flex flex-column">
                                   <label>
@@ -774,7 +876,7 @@ const FlightForm = (props) => {
                             </Col>
                           </Row>
                         </Col>
-                        <Col lg={6}>
+                        <Col lg={5} xl={6}>
                           <Row>
                             <Col sm={12} md={3} lg={12}>
                               <Form.Group>
@@ -788,7 +890,13 @@ const FlightForm = (props) => {
                                 </label>
                               </Form.Group>
                             </Col>
-                            <Col xs={3} md={2} lg={3} className="ml-4 ml-md-0">
+                            <Col
+                              xs={3}
+                              md={3}
+                              lg={4}
+                              xl={3}
+                              className="ml-4 ml-md-0"
+                            >
                               <Form.Group as={Row} className="mb-3">
                                 <Col>
                                   <NumberFormat
@@ -831,7 +939,7 @@ const FlightForm = (props) => {
                                 <p className="text-lg mt-1">%</p>
                               </Form.Group>
                             </Col>
-                            <Col xs={7} md={6} lg={9}>
+                            <Col xs={7} md={6} lg={8}>
                               <Form.Group className="">
                                 <Col>
                                   <label>
@@ -869,6 +977,7 @@ const FlightForm = (props) => {
                   <FlightModal
                     show={modalShow}
                     onHide={() => setModalShow(false)}
+                    setFieldValue={setFieldValue}
                   />
                 </div>
               </Card.Body>
