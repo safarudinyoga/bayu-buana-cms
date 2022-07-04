@@ -40,6 +40,7 @@ const AncillaryFee = ({
     isHideDownloadLogo: true,
     isShowColumnAction: false,
     hideCreate: true,
+    module:"ancillary-fee-flight",
     baseRoute: "/master/manage-corporate/form",
     endpoint: `/master/agent-corporates/${id}/ancillary-fee`,
     columns: [
@@ -65,6 +66,33 @@ const AncillaryFee = ({
     isHideDownloadLogo: true,
     isShowColumnAction: false,
     hideCreate: true,
+    module:"ancillary-fee-hotel",
+    baseRoute: "/master/manage-corporate/form",
+    endpoint: `/master/agent-corporates/${id}/ancillary-fee`,
+    columns: [
+      {
+        title: "Fee Type",
+        data: ""
+      },
+      {
+        title: "Processing Fee",
+        data: ""
+      },
+    ],
+    emptyTable: "No Corporate Fare found",
+  })
+
+  const [paramsOther, setParamsOther] = useState({
+    title: "Ancillary Fee",
+    isCheckbox: false,
+    showAdvancedOptions: false,
+    responsiveTablet: true,
+    isHidePrintLogo: true,
+    isHideSearch: true,
+    isHideDownloadLogo: true,
+    isShowColumnAction: false,
+    hideCreate: true,
+    module:"ancillary-fee-other",
     baseRoute: "/master/manage-corporate/form",
     endpoint: `/master/agent-corporates/${id}/ancillary-fee`,
     columns: [
@@ -90,9 +118,9 @@ const AncillaryFee = ({
         setParamsHotel({...paramsHotel, filters: []})
         break;
 
-      // case 'other':
-      //   setparamsOther({...paramsOther, filters: []})
-      //   break;
+      case 'other':
+        setParamsOther({...paramsOther, filters: []})
+        break;
 
       default:
         break;
@@ -102,8 +130,15 @@ const AncillaryFee = ({
   const Domestic = () => (
     <>
       <Card.Text className='mb-2 pl-1 mt-4'>Modify Hotel Fee</Card.Text>
-      <div className='pl-5'>
-        <Card.Text className='mb-2'>Fixed Amount</Card.Text>
+      <Row className="ml-3"> 
+      <Col sm={12} md={6}>
+        <Form.Check 
+          value="amount" 
+          type="radio" 
+          label="Fixed Amount" 
+          // disabled={props.isView}
+        />
+        
         <div className='d-flex align-items-center justify-content-start'>
           <Card.Text className='uppercase mb-0'>idr</Card.Text>
           <Form.Control
@@ -115,11 +150,15 @@ const AncillaryFee = ({
           />
           <Card.Text className='mb-0'>/Room</Card.Text>
         </div>
-      </div>
-      <div className='divider mb-4 mt-4' />
-      <Card.Text className='mb-2 pl-1 mt-4'>Hotel Refund Fee</Card.Text>
-      <div className='pl-5'>
-        <Card.Text className='mb-2'>Percentage</Card.Text>
+      </Col>
+     
+      <Col sm={12} md={6}>
+        <Form.Check 
+            value="percentage" 
+            type="radio" 
+            label="Percentage" 
+            // disabled={props.isView}
+          />
         <div className='d-flex align-items-center justify-content-start'>
           <Form.Control
             type='text'
@@ -129,13 +168,26 @@ const AncillaryFee = ({
             style={{ width: '50px', margin: '0 10px 0 0' }}
           />
           <Card.Text className='m-0 mr-2'>%</Card.Text>
-          <Card.Text className='m-0'>Include Taxes</Card.Text>
+          <Form.Check 
+            type="checkbox" 
+            className="mt-2" 
+            label="Include Taxes" 
+            // disabled={props.isView} 
+          />
         </div>
-      </div>
+      </Col>
+      </Row>
       <div className='divider mb-4 mt-4' />
-      <Card.Text className='mb-2 pl-1 mt-4'>Non-GDS Hotel Booking Process Fee</Card.Text>
-      <div className='pl-5'>
-        <Card.Text className='mb-2'>Fixed Amount</Card.Text>
+      <Card.Text className='mb-2 pl-1 mt-4'>Hotel Refund Fee</Card.Text>
+      <Row className="ml-3"> 
+      <Col sm={12} md={6}>
+        <Form.Check 
+          value="amount" 
+          type="radio" 
+          label="Fixed Amount" 
+          // disabled={props.isView}
+        />
+        
         <div className='d-flex align-items-center justify-content-start'>
           <Card.Text className='uppercase mb-0'>idr</Card.Text>
           <Form.Control
@@ -147,7 +199,83 @@ const AncillaryFee = ({
           />
           <Card.Text className='mb-0'>/Room</Card.Text>
         </div>
-      </div>
+      </Col>
+     
+      <Col sm={12} md={6}>
+        <Form.Check 
+            value="percentage" 
+            type="radio" 
+            label="Percentage" 
+            // disabled={props.isView}
+          />
+        <div className='d-flex align-items-center justify-content-start'>
+          <Form.Control
+            type='text'
+            minLength={1}
+            maxLength={16}
+            placeholder=''
+            style={{ width: '50px', margin: '0 10px 0 0' }}
+          />
+          <Card.Text className='m-0 mr-2'>%</Card.Text>
+          <Form.Check 
+            type="checkbox" 
+            className="mt-2" 
+            label="Include Taxes" 
+            // disabled={props.isView} 
+          />
+        </div>
+      </Col>
+      </Row>
+
+      <div className='divider mb-4 mt-4' />
+      <Card.Text className='mb-2 pl-1 mt-4'>Non-GDS Hotel Booking Process Fee</Card.Text>
+      <Row className="ml-3"> 
+      <Col sm={12} md={6}>
+        <Form.Check 
+          value="amount" 
+          type="radio" 
+          label="Fixed Amount" 
+          // disabled={props.isView}
+        />
+        
+        <div className='d-flex align-items-center justify-content-start'>
+          <Card.Text className='uppercase mb-0'>idr</Card.Text>
+          <Form.Control
+            type='text'
+            minLength={1}
+            maxLength={16}
+            placeholder=''
+            style={{ width: '120px', margin: '0 11px' }}
+          />
+          <Card.Text className='mb-0'>/Room</Card.Text>
+        </div>
+      </Col>
+     
+      <Col sm={12} md={6}>
+        <Form.Check 
+            value="percentage" 
+            type="radio" 
+            label="Percentage" 
+            // disabled={props.isView}
+          />
+        <div className='d-flex align-items-center justify-content-start'>
+          <Form.Control
+            type='text'
+            minLength={1}
+            maxLength={16}
+            placeholder=''
+            style={{ width: '50px', margin: '0 10px 0 0' }}
+          />
+          <Card.Text className='m-0 mr-2'>%</Card.Text>
+          <Form.Check 
+            type="checkbox" 
+            className="mt-2" 
+            label="Include Taxes" 
+            // disabled={props.isView} 
+          />
+        </div>
+      </Col>
+      </Row>
       <div className='divider mb-4 mt-4' />
     </>
   )
@@ -155,24 +283,35 @@ const AncillaryFee = ({
   const International = () => (
     <>
       <Card.Text className='mb-2 pl-1'>Modify Hotel Fee</Card.Text>
-      <div className='pl-5'>
-        <Card.Text className='mb-1'>Fixed Amount</Card.Text>
+      <Row className="ml-3"> 
+      <Col sm={12} md={6}>
+        <Form.Check 
+          value="amount" 
+          type="radio" 
+          label="Fixed Amount" 
+          // disabled={props.isView}
+        />
+        
         <div className='d-flex align-items-center justify-content-start'>
           <Card.Text className='uppercase mb-0'>idr</Card.Text>
           <Form.Control
             type='text'
             minLength={1}
             maxLength={16}
-            placeholder='Hotel Fee'
+            placeholder=''
             style={{ width: '120px', margin: '0 11px' }}
           />
           <Card.Text className='mb-0'>/Room</Card.Text>
         </div>
-      </div>
-      <div className='divider mb-4 mt-4' />
-      <Card.Text className='mb-2 pl-1 mt-4'>Hotel Refund Fee</Card.Text>
-      <div className='pl-5'>
-        <Card.Text className='mb-2'>Percentage</Card.Text>
+      </Col>
+     
+      <Col sm={12} md={6}>
+        <Form.Check 
+            value="percentage" 
+            type="radio" 
+            label="Percentage" 
+            // disabled={props.isView}
+          />
         <div className='d-flex align-items-center justify-content-start'>
           <Form.Control
             type='text'
@@ -182,13 +321,26 @@ const AncillaryFee = ({
             style={{ width: '50px', margin: '0 10px 0 0' }}
           />
           <Card.Text className='m-0 mr-2'>%</Card.Text>
-          <Card.Text className='m-0'>Include Taxes</Card.Text>
+          <Form.Check 
+            type="checkbox" 
+            className="mt-2" 
+            label="Include Taxes" 
+            // disabled={props.isView} 
+          />
         </div>
-      </div>
+      </Col>
+      </Row>
       <div className='divider mb-4 mt-4' />
-      <Card.Text className='mb-2 pl-1 mt-4'>Non-GDS Hotel Booking Process Fee</Card.Text>
-      <div className='pl-5'>
-        <Card.Text className='mb-2'>Fixed Amount</Card.Text>
+      <Card.Text className='mb-2 pl-1 mt-4'>Hotel Refund Fee</Card.Text>
+      <Row className="ml-3"> 
+      <Col sm={12} md={6}>
+        <Form.Check 
+          value="amount" 
+          type="radio" 
+          label="Fixed Amount" 
+          // disabled={props.isView}
+        />
+        
         <div className='d-flex align-items-center justify-content-start'>
           <Card.Text className='uppercase mb-0'>idr</Card.Text>
           <Form.Control
@@ -200,7 +352,83 @@ const AncillaryFee = ({
           />
           <Card.Text className='mb-0'>/Room</Card.Text>
         </div>
-      </div>
+      </Col>
+     
+      <Col sm={12} md={6}>
+        <Form.Check 
+            value="percentage" 
+            type="radio" 
+            label="Percentage" 
+            // disabled={props.isView}
+          />
+        <div className='d-flex align-items-center justify-content-start'>
+          <Form.Control
+            type='text'
+            minLength={1}
+            maxLength={16}
+            placeholder=''
+            style={{ width: '50px', margin: '0 10px 0 0' }}
+          />
+          <Card.Text className='m-0 mr-2'>%</Card.Text>
+          <Form.Check 
+            type="checkbox" 
+            className="mt-2" 
+            label="Include Taxes" 
+            // disabled={props.isView} 
+          />
+        </div>
+      </Col>
+      </Row>
+
+      <div className='divider mb-4 mt-4' />
+      <Card.Text className='mb-2 pl-1 mt-4'>Non-GDS Hotel Booking Process Fee</Card.Text>
+      <Row className="ml-3"> 
+      <Col sm={12} md={6}>
+        <Form.Check 
+          value="amount" 
+          type="radio" 
+          label="Fixed Amount" 
+          // disabled={props.isView}
+        />
+        
+        <div className='d-flex align-items-center justify-content-start'>
+          <Card.Text className='uppercase mb-0'>idr</Card.Text>
+          <Form.Control
+            type='text'
+            minLength={1}
+            maxLength={16}
+            placeholder=''
+            style={{ width: '120px', margin: '0 11px' }}
+          />
+          <Card.Text className='mb-0'>/Room</Card.Text>
+        </div>
+      </Col>
+     
+      <Col sm={12} md={6}>
+        <Form.Check 
+            value="percentage" 
+            type="radio" 
+            label="Percentage" 
+            // disabled={props.isView}
+          />
+        <div className='d-flex align-items-center justify-content-start'>
+          <Form.Control
+            type='text'
+            minLength={1}
+            maxLength={16}
+            placeholder=''
+            style={{ width: '50px', margin: '0 10px 0 0' }}
+          />
+          <Card.Text className='m-0 mr-2'>%</Card.Text>
+          <Form.Check 
+            type="checkbox" 
+            className="mt-2" 
+            label="Include Taxes" 
+            // disabled={props.isView} 
+          />
+        </div>
+      </Col>
+      </Row>
       <div className='divider mb-4 mt-4' />
     </>
   )
@@ -208,20 +436,152 @@ const AncillaryFee = ({
   const Other = () => (
     <>
       <Card.Text className='mb-2 pl-1'>Modify Hotel Fee</Card.Text>
-      <div className='pl-5'>
-        <Card.Text className='mb-1'>Fixed Amount</Card.Text>
+      <Row className="ml-3"> 
+      <Col sm={12} md={6}>
+        <Form.Check 
+          value="amount" 
+          type="radio" 
+          label="Fixed Amount" 
+          // disabled={props.isView}
+        />
+        
         <div className='d-flex align-items-center justify-content-start'>
           <Card.Text className='uppercase mb-0'>idr</Card.Text>
           <Form.Control
             type='text'
             minLength={1}
             maxLength={16}
-            placeholder='Hotel Fee'
+            placeholder=''
             style={{ width: '120px', margin: '0 11px' }}
           />
           <Card.Text className='mb-0'>/Room</Card.Text>
         </div>
-      </div>
+      </Col>
+     
+      <Col sm={12} md={6}>
+        <Form.Check 
+            value="percentage" 
+            type="radio" 
+            label="Percentage" 
+            // disabled={props.isView}
+          />
+        <div className='d-flex align-items-center justify-content-start'>
+          <Form.Control
+            type='text'
+            minLength={1}
+            maxLength={16}
+            placeholder=''
+            style={{ width: '50px', margin: '0 10px 0 0' }}
+          />
+          <Card.Text className='m-0 mr-2'>%</Card.Text>
+          <Form.Check 
+            type="checkbox" 
+            className="mt-2" 
+            label="Include Taxes" 
+            // disabled={props.isView} 
+          />
+        </div>
+      </Col>
+      </Row>
+      <div className='divider mb-4 mt-4' />
+      <Card.Text className='mb-2 pl-1 mt-4'>Hotel Refund Fee</Card.Text>
+      <Row className="ml-3"> 
+      <Col sm={12} md={6}>
+        <Form.Check 
+          value="amount" 
+          type="radio" 
+          label="Fixed Amount" 
+          // disabled={props.isView}
+        />
+        
+        <div className='d-flex align-items-center justify-content-start'>
+          <Card.Text className='uppercase mb-0'>idr</Card.Text>
+          <Form.Control
+            type='text'
+            minLength={1}
+            maxLength={16}
+            placeholder=''
+            style={{ width: '120px', margin: '0 11px' }}
+          />
+          <Card.Text className='mb-0'>/Room</Card.Text>
+        </div>
+      </Col>
+     
+      <Col sm={12} md={6}>
+        <Form.Check 
+            value="percentage" 
+            type="radio" 
+            label="Percentage" 
+            // disabled={props.isView}
+          />
+        <div className='d-flex align-items-center justify-content-start'>
+          <Form.Control
+            type='text'
+            minLength={1}
+            maxLength={16}
+            placeholder=''
+            style={{ width: '50px', margin: '0 10px 0 0' }}
+          />
+          <Card.Text className='m-0 mr-2'>%</Card.Text>
+          <Form.Check 
+            type="checkbox" 
+            className="mt-2" 
+            label="Include Taxes" 
+            // disabled={props.isView} 
+          />
+        </div>
+      </Col>
+      </Row>
+
+      <div className='divider mb-4 mt-4' />
+      <Card.Text className='mb-2 pl-1 mt-4'>Non-GDS Hotel Booking Process Fee</Card.Text>
+      <Row className="ml-3"> 
+      <Col sm={12} md={6}>
+        <Form.Check 
+          value="amount" 
+          type="radio" 
+          label="Fixed Amount" 
+          // disabled={props.isView}
+        />
+        
+        <div className='d-flex align-items-center justify-content-start'>
+          <Card.Text className='uppercase mb-0'>idr</Card.Text>
+          <Form.Control
+            type='text'
+            minLength={1}
+            maxLength={16}
+            placeholder=''
+            style={{ width: '120px', margin: '0 11px' }}
+          />
+          <Card.Text className='mb-0'>/Room</Card.Text>
+        </div>
+      </Col>
+     
+      <Col sm={12} md={6}>
+        <Form.Check 
+            value="percentage" 
+            type="radio" 
+            label="Percentage" 
+            // disabled={props.isView}
+          />
+        <div className='d-flex align-items-center justify-content-start'>
+          <Form.Control
+            type='text'
+            minLength={1}
+            maxLength={16}
+            placeholder=''
+            style={{ width: '50px', margin: '0 10px 0 0' }}
+          />
+          <Card.Text className='m-0 mr-2'>%</Card.Text>
+          <Form.Check 
+            type="checkbox" 
+            className="mt-2" 
+            label="Include Taxes" 
+            // disabled={props.isView} 
+          />
+        </div>
+      </Col>
+      </Row>
     </>
   )
 
@@ -326,7 +686,7 @@ const AncillaryFee = ({
                 Hotel
               </Card.Text>
               <div className='wrapper_select'>
-                <Card.Text className='margin-0'>Select Flight Ancillary Fee</Card.Text>
+                <Card.Text className='margin-0'>Select Hotel Ancillary Fee</Card.Text>
                 <Select
                   isClearable
                   placeholder="Please Choose"
@@ -412,7 +772,7 @@ const AncillaryFee = ({
             </div>
             <div className='divider mb-2 mt-2' />
             {isFieldSelected.other.isSelected && isFieldSelected.other.key === 'selected' && <div className='mb-3'>
-              <BbDataTable {...paramsHotel} onReset={() => handleReset('hotel')} />
+              <BbDataTable {...paramsOther} onReset={() => handleReset('hotel')} />
             </div>}
             {isFieldSelected.other.isSelected && isFieldSelected.other.key === 'custom' && <div className='card mt-4'>
               <Tabs
