@@ -3,9 +3,7 @@ import React, { useEffect, useState } from 'react'
 import Routes from 'views/extranet/components/micro-components/routes'
 import Travellers from 'views/extranet/components/micro-components/travellers'
 import TripCorporate from './trip_corporate'
-import TripDateRoundtrip from './trip_date_roundtrip'
 import TripFlightClass from './trip_flight_class'
-import TripMultitripSingle from './trip_multitrip_single'
 import * as Yup from "yup"
 
 import { Form, Button } from 'react-bootstrap'

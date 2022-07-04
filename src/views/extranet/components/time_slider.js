@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Slider, Rail, Ticks, Handles, Tracks } from 'react-compound-slider'
 import { SliderRail, Handle, Track, Tick } from "./slider_components"
 
 function TimeSlider(props) {
-  const domain = [0, 24]
+  const domain = [0, 23]
   const defaultValues = [8, 17]
+  const [selectedTime, setSelectedTime] = useState(null)
 
   return (
     <Slider
@@ -12,6 +13,12 @@ function TimeSlider(props) {
       step={1}
       domain={domain}
       values={defaultValues}
+      onChange={
+        (val) => {
+          setSelectedTime(val)
+          console.log(val)
+        }
+      }
     >
       <Rail>
         {({ getRailProps }) => <SliderRail getRailProps={getRailProps} />}

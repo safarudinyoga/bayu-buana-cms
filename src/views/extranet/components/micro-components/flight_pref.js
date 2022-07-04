@@ -1,15 +1,45 @@
 import Select from 'components/form/select'
 import React, { useState } from 'react'
-import { Accordion, Card, Col, Container, Row } from 'react-bootstrap'
+import { Accordion, Card, Form, Col, Container, Row } from 'react-bootstrap'
 import { ReactSVG } from 'react-svg'
 import TimeSlider from '../time_slider'
+import { components, default as ReactSelect } from "react-select";
 
 const FlightPref = () => {
   const [collapsed, setCollapsed] = useState(true)
+  const [flightServiceSelected, setFlightServiceSelected] = useState(null)
+
+   const flightServices = [
+    { value: "SQ", label: "Singapore Airlines"},
+    { value: "GA", label: "Garuda Indonesia"},
+    { value: "CP", label: "Cathay Pacific"},
+    { value: "SC", label: "Scott"},
+    { value: "AA", label: "AirAsia with baggage"},
+    { value: "TA", label: "Tiger Airways"},
+  ]
+
+  const Option = (props) => {
+    return (
+      <div>
+        <components.Option {...props}>
+          <Form.Check 
+            type='checkbox'
+            checked={props.isSelected}
+            onChange={() => null}
+            label={props.label}
+          />
+        </components.Option>
+      </div>
+    )
+  }
+
+  const handleFlightServiceChange = (selected) => {
+    setFlightServiceSelected(selected)
+  }
 
   return (
     <div>
-      <Accordion>
+      <Accordion className='flight-pref-accordion'>
         <Card>
           <Accordion.Collapse eventKey='0'>
             <Card.Body>
@@ -47,14 +77,28 @@ const FlightPref = () => {
                   <ReactSVG src='/img/icons/info.svg' className='d-inline-block position-absolute ml-2' style={{bottom: 20}} />
                 </div>
                 <div className="col-md-4">
-                  <Select 
+                  <ReactSelect 
+                    options={flightServices}
+                    isMulti
+                    closeMenuOnSelect={false}
+                    hideSelectedOptions={false}
+                    components={{
+                      Option
+                    }}
+                    onChange={handleFlightServiceChange}
+                    allowSelectAll={true}
+                    value={flightServiceSelected}
+                    menuPortalTarget={document.body} 
+                    styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
+                  />
+                  {/* <Select 
                     options={[
                       { value: "SQ", label: "Singapore Airlines"},
                       { value: "SC", label: "Scott"}
                     ]}
                     menuPortalTarget={document.querySelector('body')}
                     isMulti={true}
-                  />
+                  /> */}
                 </div>
                 <div className="col-md-1 offset-md-1">Flight Class</div>
                 <div className="col-md-2">
