@@ -49,6 +49,7 @@ const TripRoundtrip = (props) => {
 
   useEffect(async () => {
     let formId = showCreateModal.id || props.id
+    setId(formId)
 
     let docTitle = "Edit Shopping Criteria";
     if(!formId) {
@@ -79,7 +80,7 @@ const TripRoundtrip = (props) => {
 
       }
     }
-  }, [props.flight])
+  }, [props.flightData])
 
   useEffect(() => {
     console.log("Trip Type",props.tripType)
@@ -95,13 +96,13 @@ const TripRoundtrip = (props) => {
         {
           arrival_datetime: values.arrival_datetime ? values.arrival_datetime : "",
           departure_datetime: values.departure_datetime ? values.departure_datetime : " ",
-          destination_city_id: values.arrival_data.city_id,
-          destination_location: values.arrival_data.city,
-          destination_airport_id: values.arrival_data.airport_id,
+          destination_city_id: values.arrival_data.city_id ? values.arrival_data.city_id : values.cache_air_origin_destination_criteria.destination_city_id,
+          destination_location: values.arrival_data.city ? values.arrival_data.city : values.cache_air_origin_destination_criteria.destination_location,
+          destination_airport_id: values.arrival_data.airport_id ? values.arrival_data.airport_id : values.cache_air_origin_destination_criteria.destination_airport_id,
           index_number: 1,
-          origin_city_id: values.departure_data.city_id,
-          origin_location: values.departure_data.city,
-          origin_airport_id: values.departure_data.airport_id,
+          origin_city_id: values.departure_data.city_id ? values.departure_data.city_id : values.cache_air_origin_destination_criteria.origin_city_id,
+          origin_location: values.departure_data.city ? values.departure_data.city : values.cache_air_origin_destination_criteria.origin_location,
+          origin_airport_id: values.departure_data.airport_id ? values.departure_data.airport_id : values.cache_air_origin_destination_criteria.origin_airport_id,
         }
       ],
       cache_air_travel_preference_criteria: {
@@ -149,7 +150,8 @@ const TripRoundtrip = (props) => {
               <TripRoutes 
                 smallSize={true} 
                 airports={props.airports} 
-                formik={{errors, touched, setFieldValue, values}} 
+                formik={{errors, touched, setFieldValue, values}}
+                flightData={props.flightData} 
               />
               <TripDateRoundtrip smallSize={true} formik={{errors, touched, setFieldValue, values}} />
               {/* <Travellers smallSize={true} formik={{errors, touched, setFieldValue}} shoppingCache={true} /> */}

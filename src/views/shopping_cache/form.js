@@ -45,7 +45,7 @@ function ShoppingCacheCreate(props) {
     if(formId){
       try {
         let res = await api.get(`master/cache-criterias/flights/${formId}`);
-        setFlightType(res.data.trip_type.code)
+        setFlightType(res.data.trip_type.trip_type_code)
         setFlightData(res.data)
 
       } catch (error) {
@@ -53,10 +53,6 @@ function ShoppingCacheCreate(props) {
       }
     }
   }, [])
-
-  useEffect(() => {
-    console.log("flightdata", flightData)
-  }, [flightData])
   
 
   useEffect(async () => {
@@ -106,6 +102,7 @@ function ShoppingCacheCreate(props) {
         onSelect={async (k) => {
           setFlightType(k)
         }}
+        
         className={`mb-4 flight-book-tabs`}
         mountOnEnter={true}
         unmountOnExit={true}
@@ -113,7 +110,6 @@ function ShoppingCacheCreate(props) {
         {
           tripTypes ? (
             tripTypes.map((item) => {
-              console.log(item, 'item');
               return (
               <Tab
                 eventKey={item.trip_type_code}
