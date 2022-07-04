@@ -540,10 +540,6 @@ const GeneralInfomation = ({
   const calendarStartRef= useRef(null)
   const calendarEndRef= useRef(null)
 
-  // useEffect(() => {
-  //   console.log({ values });
-  // }, [values])
-
   return (
     <Form onSubmit={handleSubmit} ref={ref} className='general_information'>
       <Card style={{marginBotton: 0}}>
@@ -606,7 +602,7 @@ const GeneralInfomation = ({
                   </Col>
                 </Form.Group>
                 <Form.Group as={Row} className='form-group'>
-                
+
                   <Form.Label column sm={3} className='mb-2'>
                     Parent Company
                   </Form.Label>
@@ -649,36 +645,6 @@ const GeneralInfomation = ({
                         </TextError>
                       )}
                     </div>
-                    {/* <Select
-                      isClearable
-                      placeholder="Please choose parent company"
-                      options={[
-                        {
-                          value: '"00000000-0000-0000-0000-000000000000"',
-                          label: 'Hotel Markup 1'
-                        },
-                        {
-                          value: '"00000000-0000-0000-0000-000000000000"',
-                          label: 'Hotel Markup 2'
-                        },
-                      ]}
-                      onChange={(e) => {
-                        setFieldValue('general_information.parent_company', e)
-                      }}
-                      width={'400px'}
-                      name='general_information.parent_company'
-                      id='general_information.parent_company'
-                      value={values.general_information.parent_company}
-                      components={
-                        isView
-                          ? {
-                              DropdownIndicator: () => null,
-                              IndicatorSeparator: () => null,
-                            }
-                          : null
-                      }
-                      isDisabled={isLoading || isView}
-                    /> */}
                     {touched?.general_information?.parent_company && errors?.general_information?.parent_company && (
                       <TextError>
                         {errors.general_information.parent_company}
