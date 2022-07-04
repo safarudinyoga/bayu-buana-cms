@@ -61,30 +61,37 @@ export default function BookingSetting(props) {
                 {
                     label: "Mon",
                     value: false,
+                    key: "monday"
                 },
                 {
                     label: "Tue",
                     value: false,
+                    key: "tuesday"
                 },
                 {
                     label: "Wed",
                     value: false,
+                    key: "wednesday"
                 },
                 {
                     label: "Thu",
                     value: false,
+                    key: "thursday"
                 },
                 {
                     label: "Fri",
                     value: false,
+                    key: "friday"
                 },
                 {
                     label: "Sat",
                     value: false,
+                    key: "saturday"
                 },
                 {
                     label: "Sun",
                     value: false,
+                    key: "sunday"
                 },
             ],
             time: [
@@ -147,30 +154,38 @@ export default function BookingSetting(props) {
                 {
                     label: "Mon",
                     value: false,
+                    key: "monday"
                 },
                 {
                     label: "Tue",
                     value: false,
+                    key: "tuesday"
                 },
                 {
                     label: "Wed",
                     value: false,
+                    key: "wednesday"
                 },
                 {
                     label: "Thu",
                     value: false,
+                    key: "thursday"
                 },
                 {
                     label: "Fri",
                     value: false,
+                    key: "friday"
                 },
                 {
                     label: "Sat",
                     value: false,
+                    key: "saturday"
                 },
                 {
                     label: "Sun",
                     value: false,
+                    key: "sunday"
+
                 },
             ],
             time: [
@@ -225,6 +240,23 @@ export default function BookingSetting(props) {
         //   console.log(e)
         }
       }
+    
+    const convertDataPost = (dataOT) => {
+        return dataOT.map((oprTime, i) => {
+            let objOT = {}
+            oprTime.day.map((day, id) => {
+                objOT[day.key]= day.value
+            })
+            oprTime.time.map((time, idx) => {
+                if (idx === 0 ) {
+                    objOT["time_start"] = time.timeStart
+                } else if (idx === 1) {
+                    objOT["time_end"] = time.timeEnd
+                }
+            })
+            return objOT
+        })
+    }
 
     const onSubmit = (e) => {
         let payload = {
@@ -232,9 +264,7 @@ export default function BookingSetting(props) {
             "ticketing_time_limit_notice_period": Number(limitPeriod),
             "cancellation_deadline_offset": Number(cancelLimitOffset),
             "cancellation_deadline_notice_period": Number(cancelLimitPeriod),
-            "operation_time": [
-                {...data.field}
-            ]
+            "operation_time": convertDataPost(data.field)
         }
         submit(payload)
         openSnackbar(
