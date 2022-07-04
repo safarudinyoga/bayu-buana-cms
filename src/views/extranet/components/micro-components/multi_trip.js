@@ -85,7 +85,7 @@ const MultiTrip = (props) => {
                 {values.trips && values.trips.length > 0 ? (
                   values.trips.map((trip, index) => (
                     <>
-                      <div key={index} className="d-flex flex-wrap mb-2">
+                      <div key={index} className="d-flex flex-wrap mb-3">
                         <Routes 
                           index={index} 
                           airports={airports} 
@@ -135,18 +135,29 @@ const MultiTrip = (props) => {
                         </div>
                         {
                           index > 0 ? (
-                            <Button
+                            <ReactSVG 
+                              src='/img/icons/bin.svg' 
                               onClick={() => {
                                 arrayHelpers.remove(index)
                                 setDepartTime({
                                   ...departTime,
                                   [index]: ""
                                 })
-                                
                               }}
-                            >
-                              REMOVE
-                            </Button>
+                              className="d-flex cursor-pointer align-items-center"
+                            />
+                            // <Button
+                            //   onClick={() => {
+                            //     arrayHelpers.remove(index)
+                            //     setDepartTime({
+                            //       ...departTime,
+                            //       [index]: ""
+                            //     })
+                                
+                            //   }}
+                            // >
+                            //   REMOVE
+                            // </Button>
                           ) : (
                             <Travellers handleTrip={handleTrip} onConfirm={handleTravellerCheckboxConfirm} />
                           )
@@ -156,12 +167,17 @@ const MultiTrip = (props) => {
                     
                   ))
                 ) : ""}
-                <Button
+                <div className="d-flex align-items-baseline">
+                  <ReactSVG src='/img/icons/add-circle.svg' className='mr-2 mb-4 cursor-pointer' onClick={() => arrayHelpers.push({depart_time: "", departure_data: "", arrival_data: ""})} />
+                  <span className='another-flight'>Add another flight</span>
+                </div>
+                
+                {/* <Button
                   onClick={() => arrayHelpers.push({depart_time: "", departure_data: "", arrival_data: ""})}
                   className="my-4"
                 >
                   Add New
-                </Button>
+                </Button> */}
               </>
             )}
           />

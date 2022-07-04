@@ -36,7 +36,7 @@ const ControlledTabs = (props) => {
         >
           <FlightBookSuggest personalTrip={props.personalTrip} />
         </TabPane>
-        <TabPane
+        {/* <TabPane
           className="m-3"
           eventKey="hotel"
           title={
@@ -60,7 +60,7 @@ const ControlledTabs = (props) => {
           }
         >
           Hello Flight+Hotel
-        </TabPane>
+        </TabPane> */}
       </Tabs>
     </div>
   )

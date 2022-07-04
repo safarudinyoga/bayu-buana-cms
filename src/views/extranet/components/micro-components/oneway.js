@@ -89,7 +89,7 @@ const Oneway = (props) => {
           setFieldTouched,
         }) => (
           <Form onSubmit={handleSubmit}>
-              <div className='d-flex flex-wrap' id={id}>
+              <div className='d-flex flex-wrap mb-3' id={id}>
                 <Routes airports={airports} formik={{errors, touched, setFieldValue}} />
 
                 <div className='mr-4'>
@@ -123,9 +123,9 @@ const Oneway = (props) => {
               {
                 multitrip ? "" : (
                   <>
-                    <div className='my-3'>
+                    {/* <div className='my-3'>
                       <Form.Check label="Add a hotel" />
-                    </div>
+                    </div> */}
                     <FlightPref />
 
                     <div className='my-3'>
