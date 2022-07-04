@@ -20,8 +20,8 @@ export default function BookingSetting(props) {
   const [limitPeriod, setLimitPeriod] = React.useState(0)
   const [cancelLimitOffset, setCancelLimitOffset] = useState(0)
   const [cancelLimitPeriod, setCancelLimitPeriod] = useState(0)
-  const [countBtnOfficeHour, setCountBtnOfficeHour] = useState(1)
-  const [hideBtnOfficeHour, setHideBtnOfficeHour] = useState(true)
+  const [countBtnOfficeHour, setCountBtnOfficeHour] = useState(0)
+  const [hideBtnOfficeHour, setHideBtnOfficeHour] = useState(false)
   const [openSnackbar] = useSnackbar(options);
   const [valuesTimeStart, setValuesTimeStart] = useState(
     [1].map((number) =>
@@ -188,8 +188,10 @@ export default function BookingSetting(props) {
     }
 
     const handleDelete = (index, idx) => {
-        data.field.splice(index)
+        data.field.splice(index )
         forceUpdate()
+        handleHideBtnOfficeHours()
+        setCountBtnOfficeHour(countBtnOfficeHour === index)
     }
 
     const handleUpdate = (idx, index) => {
@@ -204,9 +206,9 @@ export default function BookingSetting(props) {
 
     const handleHideBtnOfficeHours = () => {
         if (countBtnOfficeHour === 9) {
-            setHideBtnOfficeHour(false);
+            setHideBtnOfficeHour(true);
         } else {
-            setHideBtnOfficeHour(true)
+            setHideBtnOfficeHour(false)
         }
     }
 
@@ -448,7 +450,9 @@ export default function BookingSetting(props) {
                                                                     <TimePicker hideSeconds />,
                                                                 ]}
                                                                 />
-                                                          <img onClick={() => handleDelete(idx, index)} src={removeIcon} style={{color: '#ebebeb', width: 15, height: 17, marginLeft: 10, marginTop: 6, cursor: 'pointer'}} alt="" />
+                                                                {idx >= 1 &&
+                                                                    <img onClick={() => handleDelete(idx, index)} src={removeIcon} style={{color: '#ebebeb', width: 15, height: 17, marginLeft: 10, marginTop: 6, cursor: 'pointer'}} alt="" />
+                                                                 }
                                                         </div>
                                                          :null
                                                       }
@@ -462,7 +466,7 @@ export default function BookingSetting(props) {
                                 )
                             })
                         }
-                        {hideBtnOfficeHour && 
+                        { !hideBtnOfficeHour && 
                             <p onClick={() => handleAdd()} style={{color: '#1103C4', fontSize: 14, textAlign: 'end', cursor: 'pointer'}}>Add After Office Hours</p>
                         }
                     </div>
@@ -481,7 +485,7 @@ export default function BookingSetting(props) {
           </Button>
           <Button
             variant="secondary"
-            // onClick={() => props.history.push(props.backUrl)}
+            onClick={() => props.history.push(props.handleSelectTab("general-information"))}
           >
             CANCEL
           </Button>
