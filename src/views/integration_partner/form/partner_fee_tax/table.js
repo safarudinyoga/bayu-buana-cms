@@ -42,7 +42,7 @@ export default function IntegrationFeeTaxes() {
     searchText: "Search",
     showInfoDelete: true,
     infoDelete: [
-      {title: "Partner Fee Tax", recordName: "fee_tax_type_name"}, 
+      {title: "Partner Fee Tax Name", recordName: "fee_tax_type_name"}, 
     ],
     module: "partner-fee-taxes",
     isOpenNewTab:false,
