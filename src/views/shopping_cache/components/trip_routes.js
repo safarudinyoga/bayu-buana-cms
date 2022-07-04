@@ -42,11 +42,44 @@ const TripRoutes = (props) => {
   }
 
   useEffect(() => {
-    console.log("FROM TRIP ROUTES", props.formik.values)
-    
-    // setDepartureValue(props.formik.values.departure_data ? props.formik.values.departure_data.city_name : "")
-    // setArrivalValue(props.formik.values.arrival_data ? props.formik.values.arrival_data.city_name : "")
+    console.log("FROM TRIP ROUTES", props.flightData)
+    if(props.flightData){
+      let origin = `${props.flightData.cache_air_origin_destination_criteria.origin_city.city_name}, ${props.flightData.cache_air_origin_destination_criteria.origin_airport.airport_code}`
+      let destination = `${props.flightData.cache_air_origin_destination_criteria.destination_city.city_name}, ${props.flightData.cache_air_origin_destination_criteria.destination_airport.airport_code}`
+      setDepartureValue(origin)
+      setArrivalValue(destination)
+
+      if(props.formik){
+        let originValue = {
+          airport_id: props.flightData.cache_air_origin_destination_criteria.origin_airport.id,
+          city: props.flightData.cache_air_origin_destination_criteria.origin_city.city_name,
+          city_code: props.flightData.cache_air_origin_destination_criteria.origin_city.city_code,
+          city_id: props.flightData.cache_air_origin_destination_criteria.origin_city.id,
+          code: props.flightData.cache_air_origin_destination_criteria.origin_airport.airport_code,
+          country: props.flightData.cache_air_origin_destination_criteria.origin_city.country_id,
+          name: props.flightData.cache_air_origin_destination_criteria.origin_airport.airport_name
+        }
+
+        let destinationValue = {
+          airport_id: props.flightData.cache_air_origin_destination_criteria.destination_airport.id,
+          city: props.flightData.cache_air_origin_destination_criteria.destination_city.city_name,
+          city_code: props.flightData.cache_air_origin_destination_criteria.destination_city.city_code,
+          city_id: props.flightData.cache_air_origin_destination_criteria.destination_city.id,
+          code: props.flightData.cache_air_origin_destination_criteria.destination_airport.airport_code,
+          country: props.flightData.cache_air_origin_destination_criteria.destination_city.country_id,
+          name: props.flightData.cache_air_origin_destination_criteria.destination_airport.airport_name
+        }
+        props.formik.setFieldValue("departure_data", originValue)
+        props.formik.setFieldValue("arrival_data", destinationValue)
+      }
+    }
+  }, [props.flightData])
+
+  useEffect(() => {
+    console.log("Flight DAta",props.formik.values)
   }, [props.formik.values])
+  
+  
   
 
   return (
@@ -63,6 +96,7 @@ const TripRoutes = (props) => {
               setSuggestions(getSuggestions(airports,value));
             }}
             onSuggestionSelected={(_, { suggestion, suggestionValue }) => {
+              console.log("Suggestion selected", suggestion)
               if(props.formik && props.index >= 0){
                 props.formik.setFieldValue(`trips[${props.index}].departure_data`, suggestion)
               }
