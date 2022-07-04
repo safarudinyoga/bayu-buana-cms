@@ -10765,10 +10765,17 @@ react-bootstrap-table2-editor@^1.4.0:
   resolved "https://registry.yarnpkg.com/react-bootstrap-table2-editor/-/react-bootstrap-table2-editor-1.4.0.tgz#2d73de4a88d23865e966aeb164abf78d71b17e60"
   integrity sha512-18yDCwsVt3b5Fwy0jidNDAbUA6vC7k9JjQVmykazWSw8G115+mmZnhe9/7RO7jAu8X7lhmobwlNwECzwPu1nDg==
 
+<<<<<<< HEAD
 react-bootstrap-typeahead@^6.0.0-rc.3:
   version "6.0.0-rc.3"
   resolved "https://registry.yarnpkg.com/react-bootstrap-typeahead/-/react-bootstrap-typeahead-6.0.0-rc.3.tgz#a398ffd4431d27d62565ac0d8636e27fbb30af35"
   integrity sha512-vVAlloSJQbBpAfBHNRIeecJ91vN10/71cdHGuXBrqrIe7axCzxTzi+FjBt1qfgW2YFNFeGdYIe2IvSOMOEtPaA==
+=======
+react-bootstrap-typeahead@^6.0.0-rc.2:
+  version "6.0.0-rc.2"
+  resolved "https://registry.yarnpkg.com/react-bootstrap-typeahead/-/react-bootstrap-typeahead-6.0.0-rc.2.tgz#90cd8ce3b6b46dd7fcea970dedaf1486377aaf83"
+  integrity sha512-FHrDC9bdMOj6huqEthhLJwb5hmeFmE1+XgLD6WBPdx8DtIG4QXKplxgeGt3CgfibF1l0SwwOBiTPWK4mfGwMhw==
+>>>>>>> c309e75b7b91827d083369923ee7b625100334b3
   dependencies:
     "@babel/runtime" "^7.14.6"
     "@popperjs/core" "^2.10.2"
