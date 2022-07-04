@@ -16,7 +16,7 @@ import OtherAncillaryFee from "./other-ancillary-fee"
 import TaxFee from "./tax-fee"
 import BookingSettings from "./booking-settings"
 import InvoiceSettings from "./invoice-settings"
-import TravelAdvice from "./travel-advice/travel-advice"
+import TravelAdvice from "./travel-advice"
 
 // const endpoint = "/user/profile"
 const backUrl = "/master/general-setup"
