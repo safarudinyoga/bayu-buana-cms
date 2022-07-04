@@ -51,6 +51,7 @@
     "react-bootstrap": "1.6.4",
     "react-bootstrap-table-next": "^4.0.3",
     "react-bootstrap-table2-editor": "^1.4.0",
+    "react-bootstrap-typeahead": "^6.0.0-rc.3",
     "react-calendar": "^3.7.0",
     "react-calendar-month-view": "^0.7.0",
     "react-compound-slider": "^3.3.1",
