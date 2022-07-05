@@ -214,14 +214,7 @@ export default function EmployeeTable() {
       },
       {
         title: "Name",
-        data: "given_name",
-        render: (data) => {
-          if (data === undefined) {
-            return ""
-          } else {
-            return data
-          }
-        },
+        data: "given_name"
       },
       {
         title: "",
@@ -233,7 +226,11 @@ export default function EmployeeTable() {
         data: "surname",
         visible: false,
       },
-
+      {
+        title: "",
+        data: "employee_number",
+        visible: false,
+      },
       {
         title: "Job title",
         data: "job_title_name",
@@ -267,7 +264,7 @@ export default function EmployeeTable() {
         render: rowStatus,
       },
     ],
-    emptyTable: "No user management found",
+    emptyTable: "No user found",
     btnDownload: ".buttons-csv",
     module: "user-management",
     showInfoDelete: true,
