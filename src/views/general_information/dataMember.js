@@ -150,6 +150,10 @@ const DataMember = (props) => {
         const currentContent = editorImportantNoticeState.getCurrentContent();
         const currentContentLength = currentContent.getPlainText('').length;
         const selectedTextLength = _getLengthOfSelectedText();
+
+        if (currentContentLength > 4000) {
+            return 'handled';
+        }
     
         if (currentContentLength - selectedTextLength > MAX_LENGTH - 1) {
           console.log('you can type max ten characters');
