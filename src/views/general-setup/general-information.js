@@ -7,6 +7,7 @@ import Data from "../general_information/data";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { Formik } from "formik"
 import { setAlert } from "redux/ui-store"
+import Hints from "assets/icons/hint.svg"
 import { useDispatch } from "react-redux"
 import Api from "config/api"
 // const [formValues, setFormValues] = useState(null)
@@ -78,28 +79,29 @@ const GeneralInformation = (props) => {
 
     const onSubmit = async (values, a) => {
         console.log("submit: ", values)
-        try {
-          for (let i in values) {
-            let oca = values[i]
-            await api.put(endpoint, false, oca)
-          }
-          dispatch(
-            setAlert({
-              message: `General Information has been successfully updated.`,
-            }),
-          )
-        } catch (e) {
-          dispatch(
-            setAlert({
-              message: "Failed to save this record.",
-            }),
-          )
-        }
+        // try {
+        //   for (let i in values) {
+        //     let oca = values[i]
+        //     await api.put(endpoint, false, oca)
+        //   }
+        //   dispatch(
+        //     setAlert({
+        //       message: `General Information has been successfully updated.`,
+        //     }),
+        //   )
+        // } catch (e) {
+        //   dispatch(
+        //     setAlert({
+        //       message: "Failed to save this record.",
+        //     }),
+        //   )
+        // }
       }
 
     const _getLengthOfSelectedText = () => {
         const currentSelection = editorImportantNoticeState.getSelection();
         const isCollapsed = currentSelection.isCollapsed();
+        console.log(currentSelection, 'selection');
     
         let length = 0;
     
@@ -140,11 +142,14 @@ const GeneralInformation = (props) => {
         const currentContent = editorImportantNoticeState.getCurrentContent();
         const currentContentLength = currentContent.getPlainText('').length;
         const selectedTextLength = _getLengthOfSelectedText();
+        
+        if (currentContentLength > 4000) {
+            return 'handled';
+        }
     
         if (currentContentLength - selectedTextLength > MAX_LENGTH - 1) {
           console.log('you can type max ten characters');
     
-          return 'handled';
         }
     }
     
@@ -184,7 +189,11 @@ const GeneralInformation = (props) => {
                 <hr />
                 <div style={{width: '90%', margin: 'auto'}}>
                     <div>
-                        <p>Important Notice</p>
+                        <p>Important Notice
+                            <span>
+                                <img src={Hints} alt="hint" className="ml-1 mb-2" title={"ticketing"}/>
+                            </span> 
+                        </p>
                         <Editor
                             ref={importantNoticeRef}
                             editorState={editorImportantNoticeState}
