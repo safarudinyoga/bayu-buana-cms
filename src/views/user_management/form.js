@@ -186,7 +186,7 @@ const UserManagementForm = (props) => {
                           <SelectAsync
                             {...field}
                             isClearable
-                            isDisabled={values.given_name || isView}
+                            isDisabled={values.employee.value || isView}
                             url={`master/employees`}
                             fieldName="given_name"
                             onChange={(v) => {
@@ -237,6 +237,7 @@ const UserManagementForm = (props) => {
                           <SelectAsync
                             {...field}
                             isClearable
+                            isDisabled={values.user_type.value || isView}
                             url={`user/user-types`}
                             fieldName="user_type_name"
                             onChange={(v) => {
