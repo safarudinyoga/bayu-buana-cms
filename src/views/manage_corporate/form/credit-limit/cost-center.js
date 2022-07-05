@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { withRouter } from "react-router"
 import { Form, Row, Col, Button, Modal, ModalBody } from "react-bootstrap"
 import { useFormik } from "formik"
@@ -11,7 +11,17 @@ import TextError from 'components/formik/textError'
 import Api from "config/api"
 import useQuery from "lib/query"
 import { useDispatch, useSelector } from "react-redux"
-import { setModalTitle } from "redux/ui-store"
+import { setModalTitle, setCreateModal, setAlert } from "redux/ui-store"
+import { errorMessage } from 'lib/errorMessageHandler'
+import { SUCCESS_RESPONSE_STATUS } from 'lib/constants'
+
+const slugDictionary = {
+  name: 'Cost Center Name',
+  limit: 'Limit',
+  allocationType: 'Allocation Type'
+}
+
+const endpoint = '/master/agent-corporates'
 
 const CostCenterModal = ({ match }) => {
   let api = new Api()
@@ -19,8 +29,10 @@ const CostCenterModal = ({ match }) => {
   const isView = useQuery().get("action") === "view"
   const showCreateModal = useSelector((state) => state.ui.showCreateModal)
 
+  const [isLoading, setisLoading] = useState(false)
+  let formId = showCreateModal.id || match?.params?.id
+
   useEffect(async() => {
-    let formId = showCreateModal.id || match?.params?.id
 
     let docTitle = "Edit Cost Center"
     if (!formId) {
@@ -35,20 +47,51 @@ const CostCenterModal = ({ match }) => {
   }, [])
 
 
-  const { handleChange, values, errors, touched, setFieldValue, setFieldTouched }  = useFormik({
+  const { handleChange, values, errors, touched, setFieldValue, handleSubmit }  = useFormik({
     initialValues: {
-
+      name: '',
+      limit: '',
+      allocationType: ''
     },
     validationSchema: Yup.object({
-
+      name: Yup.string().required(errorMessage(slugDictionary['name'])),
+      limit: Yup.string().required(errorMessage(slugDictionary['limit'])),
+      allocationType: Yup.string().required(errorMessage(slugDictionary['allocationType']))
     }),
     onSubmit: (val) => {
-      console.log(val);
+      const payload = {
+
+      }
+
+      postCostCenter()
     }
   })
 
+  const postCostCenter = async (payload) => {
+    setisLoading(true)
+
+    try {
+      const { status, ...res } = await api.post(`${endpoint}/${formId}/credit-limit/cost-center`)
+      console.log(res);
+      if (SUCCESS_RESPONSE_STATUS.includes(status)) {
+        setisLoading(false)
+        dispatch(setAlert({
+          message: `Record 'Cost Center Name: {${payload.name}}' has been successfully saved.`,
+        }),)
+        dispatch(setCreateModal({show: false, id: null, disabled_form: false}))
+      }
+    } catch (error) {
+      setisLoading(false)
+      dispatch(
+        setAlert({
+          message: 'Failed to save this record.',
+        }),
+      )
+    }
+  }
+
   return (
-    <Form style={{ backgroundColor: 'transparent', padding: '0 30px 0px 20px' }}>
+    <Form style={{ backgroundColor: 'transparent', padding: '0 30px 0px 20px' }} onSubmit={handleSubmit}>
       <Row>
         <Col sm={12}>
           <Form.Group as={Row} className='form-group'>
@@ -57,12 +100,24 @@ const CostCenterModal = ({ match }) => {
             </Form.Label>
             <Col lg={8}>
               <Form.Control
+                name="name"
+                id="name"
+                value={values.name}
                 type="text"
                 minLength={1}
-                maxLength={16}
+                maxLength={128}
                 placeholder=""
                 style={{ width: '100%' }}
+                onChange={handleChange}
+                // disabled={isLoading}
+                readOnly={isView}
+                className={touched?.name && errors?.name && 'is-invalid'}
               />
+              {touched?.name && errors?.name && (
+                <TextError>
+                  {errors.name}
+                </TextError>
+              )}
             </Col>
           </Form.Group>
           <Form.Group as={Row} className='form-group'>
@@ -71,37 +126,59 @@ const CostCenterModal = ({ match }) => {
             </Form.Label>
             <Col lg={8}>
               <Form.Control
+                name="name"
+                id="name"
+                value={values.name}
                 type="text"
-                minLength={1}
-                maxLength={16}
+                minLength={0}
+                maxLength={15}
                 placeholder=""
+                onChange={handleChange}
                 style={{ width: 150 }}
+                readOnly={isView}
+                className={touched?.name && errors?.name && 'is-invalid'}
               />
+              {touched?.name && errors?.name && (
+                <TextError>
+                  {errors.name}
+                </TextError>
+              )}
             </Col>
           </Form.Group>
           <Form.Group as={Row} className='form-group'>
             <Form.Label column sm={4}>
               Allocation Type <span className="form-label-required">*</span>
             </Form.Label>
-            <Col className='d-flex align-items-center' md={3} lg={8}>
-              <Col lg={5}>
-                <Form.Check
-                  name='approval'
-                  checked
-                  type='radio'
-                  label="Shared"
-                  onChange={(e) => {}}
-                />
-              </Col>
-              <Col lg={7}>
-                <Form.Check
-                  name='approval'
-                  checked
-                  type='radio'
-                  label="Fixed"
-                  onChange={(e) => {}}
-                />
-              </Col>
+            <Col lg={8} className='d-flex flex-column justify-content-center'>
+              <div className='d-flex align-items-center'>
+                <Col lg={5} className='p-0'>
+                  <Form.Check
+                    name='allocationType_shared'
+                    id='allocationType_shared'
+                    type='radio'
+                    value='shared'
+                    label="Shared"
+                    onChange={() => setFieldValue('allocationType', 'shared')}
+                    checked={values.allocationType === 'shared'}
+                  />
+                </Col>
+                <Col lg={7} className='p-0'>
+                  <Form.Check
+                    name='allocationType_fixed'
+                    id='allocationType_fixed'
+                    type='radio'
+                    value='fixed'
+                    label="Fixed"
+                    onChange={() => setFieldValue('allocationType', 'fixed')}
+                    checked={values.allocationType === 'fixed'}
+                  />
+                </Col>
+              </div>
+              {touched?.allocationType && errors?.allocationType && (
+                <TextError>
+                  {errors.allocationType}
+                </TextError>
+              )}
             </Col>
           </Form.Group>
         </Col>
@@ -118,7 +195,7 @@ const CostCenterModal = ({ match }) => {
         <Button
           variant="secondary"
           onClick={() => {
-
+            dispatch(setCreateModal({show: false, id: null, disabled_form: false}))
           }}
         >
           CANCEL
