@@ -5,6 +5,13 @@ import FormHorizontal from "components/form/horizontal"
 import FormInputControl from "components/form/input-control"
 import FormBuilder from "components/form/builder"
 import useQuery from "lib/query"
+import {
+  EditorState,
+  ContentState,
+  convertFromHTML,
+  convertToRaw,
+} from "draft-js"
+import draftToHtml from "draftjs-to-html"
 import { useDispatch } from "react-redux"
 import { setAlert, setUIParams } from "redux/ui-store"
 import CheckDuplicateVal from "../../lib/validateForm"
@@ -12,7 +19,6 @@ import { Editor } from "react-draft-wysiwyg"
 import { Col, OverlayTrigger, Tooltip, Button, Form } from "react-bootstrap"
 import BBDataTable from "components/table/bb-data-table"
 import createIcon from "assets/icons/create.svg"
-import { EditorState } from "draft-js"
 import FormInputSelectAjax from "components/form/input-select-ajax"
 const endpoint = "master/configurations/travel-advice"
 const backUrl = "master/configurations/travel-advice"
@@ -65,26 +71,30 @@ function FormTravel(props) {
   let dispatch = useDispatch()
   let formId = props.travelAdviceId
 
-  console.log("ceid", formId)
   const [loading, setLoading] = useState(true)
   const [translations, setTranslations] = useState([])
   const [visibleAdd, setVisibleAdd] = useState(false)
   const [countryValue, setCountryvalue] = useState([])
   const [data, setData] = useState(null)
+  const [id, setId] = useState(null)
   const [title, setTitle] = React.useState("Travel Advice")
   const [selectedContry, setSelectedContry] = useState(null)
   const [errorDescription, setErrorDescription] = useState(false)
   const [isReplaceTable, setIsReplaceTable] = useState(false)
   const [isDetail, setIsDetail] = useState(false)
   const [travelAdviceId, setTravelAdviceId] = useState(null)
+  const [alertCountry, setAlertCountry] = useState([])
   const isView = useQuery().get("action") === "view"
   const MAX_LENGTH = 4000
 
+  console.log("country", alertCountry)
   const [form, setForm] = useState({
     selectedCountry: "",
     url: "",
     description: "",
+    country_name: "",
   })
+
   const translationFields = [
     {
       label: "URL",
@@ -117,6 +127,7 @@ function FormTravel(props) {
       return "handled"
     }
   }
+
   useEffect(async () => {
     let api = new Api()
     let formId = props.travelAdviceId
@@ -191,6 +202,28 @@ function FormTravel(props) {
   const _handleChange = (editorState) => {
     setImportantNoticeState(editorState)
   }
+
+  // const [editorState, setEditorState] = useState(
+  //   EditorState.createWithContent(
+  //     ContentState.createFromBlockArray(convertFromHTML("<p>test</P>")),
+  //   ),
+  // )
+  useEffect(() => {
+    if (!props.travelAdviceId) {
+      setLoading(false)
+    }
+    setId(props.travelAdviceId)
+  }, [props.travelAdviceId])
+
+  const [editorState, setEditorState] = useState(EditorState.createEmpty())
+
+  const onEditorStateChange = (editorState) => {
+    setEditorState(editorState)
+    const editor = draftToHtml(convertToRaw(editorState.getCurrentContent()))
+    console.log("tes", editor)
+    setForm({ ...form, description: editor })
+  }
+
   const validationRules = {
     country: {
       required: true,
@@ -214,60 +247,95 @@ function FormTravel(props) {
       required: "Country is required.",
       max: "Age Qualifying Type Code cannot be more than 32767",
     },
-    age_qualifying_type_name: {
-      required: "Country is required",
-      minlength: "Country must be at least 1 characters",
-      maxlength: "Country cannot be more than 256 characters",
-    },
   }
 
-  const onSave = async () => {
-    if (form.description === "") {
-      console.log("masuk sini")
-      setErrorDescription(true)
-    } else {
-      let translated = formBuilder.getTranslations()
-      setLoading(true)
-      let api = new Api()
-      console.log("ok", form)
-      // let endpoint = "master/configurations/travel-advice"
-      try {
-        let payload = {
-          content_description: {
-            description: form.description,
-            url: form.url,
-          },
-          content_description_id:
-            "urn:uuid:2aac2d26-81be-d35f-9d4d-38945cbed6f8",
-          country_id: form.selectedCountry,
-        }
-        let res = await api.post(endpoint, payload)
+  const onSave = async (values) => {
+    // if (form.description === "") {
+    //   console.log("masuk sini")
+    //   setErrorDescription(true)
+    // } else {
+    //   let translated = formBuilder.getTranslations()
+    //   setLoading(true)
+    //   let api = new Api()
+    //   console.log("ok", form)
+    //   let endpoint = "master/configurations/travel-advice"
+    //   try {
+    //     let payload = {
+    //       content_description: {
+    //         description: form.description,
+    //         url: form.url,
+    //       },
+    //       content_description_id:
+    //         "urn:uuid:2aac2d26-81be-d35f-9d4d-38945cbed6f8",
+    //       country_id: form.selectedCountry,
+    //       country_name: form.country_name,
+    //     }
+    //     let res = await api.post(endpoint, payload)
+    //     for (let i in translated) {
+    //       let tl = translated[i]
+    //       let path = endpoint + "/" + res.data.id + "/translations"
+    //       await api.putOrPost(path, tl.id, tl)
+    //     }
+    //   } catch (e) {
+    //     dispatch(
+    //       setAlert({
+    //         message: `Failed to ${formId ? "update" : "save"} this record.`,
+    //       }),
+    //     )
+    //   } finally {
+    //     setLoading(false)
+    //     //   props.history.goBack()
+    //     setVisibleAdd(false)
+    //     dispatch(
+    //       setAlert({
+    //         message: `Record Travel Advice for  ${
+    //           form.country_name
+    //         } has been successfully ${formId ? "updated" : "saved"}.`,
+    //       }),
+    //     )
+    //   }
+    // }
 
-        for (let i in translated) {
-          let tl = translated[i]
-          let path = endpoint + "/" + res.data.id + "/translations"
-          await api.putOrPost(path, tl.id, tl)
-        }
-      } catch (e) {
-        dispatch(
-          setAlert({
-            message: `Failed to ${formId ? "update" : "save"} this record.`,
-          }),
-        )
-      } finally {
-        setLoading(false)
-        //   props.history.goBack()
-        setVisibleAdd(false)
-        dispatch(
-          setAlert({
-            message: `Record Travel Advice for  ${
-              form.url
-            } has been successfully ${formId ? "updated" : "saved"}.`,
-          }),
-        )
+    let translated = formBuilder.getTranslations()
+    setLoading(true)
+    let api = new Api()
+
+    try {
+      let res = await api.putOrPost(endpoint, id, {
+        ...form,
+        content_description: {
+          description: form.description,
+          url: form.url,
+        },
+        content_description_id: "urn:uuid:2aac2d26-81be-d35f-9d4d-38945cbed6f8",
+        country_id: form.selectedCountry,
+      })
+      setId(res.data.id)
+      for (let i in translated) {
+        let tl = translated[i]
+        let path = endpoint + "/" + res.data.id + "/translations"
+        await api.putOrPost(path, tl.id, tl)
       }
+    } catch (e) {
+      dispatch(
+        setAlert({
+          message: `Failed to ${formId ? "update" : "save"} this record.`,
+        }),
+      )
+    } finally {
+      setLoading(false)
+      // props.history.goBack()
+      dispatch(
+        setAlert({
+          message: `Record ${form.country_id} - ${
+            form.country_id
+          } has been successfully ${formId ? "updated" : "saved"}.`,
+        }),
+      )
+      props.history.goBack()
     }
   }
+
   return (
     <FormBuilder
       onBuild={(el) => setFormBuilder(el)}
@@ -304,7 +372,7 @@ function FormTravel(props) {
         />
         <FormInputControl
           label="URL"
-          value={form.age_qualifying_type_name}
+          value={form.url}
           name="url"
           onChange={(e) => setForm({ ...form, url: e.target.value })}
           // disabled={isView || loading}
@@ -338,16 +406,19 @@ function FormTravel(props) {
                 editorClassName="editorClassName"
                 handleBeforeInput={_handleBeforeInput}
                 handlePastedText={_handlePastedText}
-                onEditorStateChange={_handleChange}
+                onEditorStateChange={onEditorStateChange}
+                // onEditorStateChange={onEditorStateChange}
                 // onEditorStateChange={(e) => setDescription(e.target.value)}
                 toolbarStyle={{
                   background: "#ECECEC 0% 0% no-repeat padding-box",
                 }}
-                onChange={(e) => {
-                  // setDescription(e.blocks[0].text)
-                  setForm({ ...form, description: e.blocks[0].text })
-                  setErrorDescription(false)
-                }}
+                editorState={editorState}
+                // onChange={(e) => {
+                //   setDescription(e.blocks[0].text)
+
+                //   setForm({ ...form, description: e.blocks[0].text })
+                //   setErrorDescription(false)
+                // }}
                 maxLength={4000}
               />
               {errorDescription ? (
@@ -428,6 +499,13 @@ function TravelAdvice() {
     recordName: ["from_display", "from_email"],
     btnDownload: ".buttons-csv",
     module: "travel-advice",
+    showInfoDelete: true,
+    infoDelete: [
+      {
+        title: "Travel Advice for",
+        recordName: "country.country_name",
+      },
+    ],
   }
 
   const borderFeeTax = {
