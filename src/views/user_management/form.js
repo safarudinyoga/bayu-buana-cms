@@ -70,7 +70,6 @@ const UserManagementForm = (props) => {
     try {
       if (formId) {
         let { data } = await api.get(endpoint + "/" + formId)
-
         setInitialForm({
           ...initialForm,
           employee: {
@@ -151,16 +150,10 @@ const UserManagementForm = (props) => {
     }
   }
 
-  const popoverBottom = (values) => {
-    return (
-      <Popover id="popover-positioned-bottom" title="Popover bottom">
-        <ModuleAccess userType={values} />
-      </Popover>
-    )
-  }
   return (
     <>
       <Formik
+        enableReinitialize
         initialValues={initialForm}
         validationSchema={validationSchema}
         validateOnChange={false}
