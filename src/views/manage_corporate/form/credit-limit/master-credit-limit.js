@@ -27,7 +27,7 @@ const Option = (props) => {
   );
 };
 
-const MasterCreditLimit = ({ setisModalVisible, formikState, paramsCostCenter }) => {
+const MasterCreditLimit = ({ formikState, paramsCostCenter }) => {
 
   const { handleChange, values, errors, touched, setFieldValue, setFieldTouched } = formikState
 
@@ -374,14 +374,6 @@ const MasterCreditLimit = ({ setisModalVisible, formikState, paramsCostCenter })
         <Card.Text className="uppercase card-heading mb-3" style={{ fontWeight: '500' }}>COST CENTER</Card.Text>
         <Card.Body style={{ padding: '0 0 30px' }}>
           <BbDataTable {...paramsCostCenter} modalContent={CostCenterModal} />
-          {/* <button
-            type="button"
-            onClick={() => setisModalVisible(true)}
-            className="btn btn-warning float-right button-new"
-          >
-            <img src={createIcon} className="mr-1" alt="new"  />
-            Create New
-          </button> */}
         </Card.Body>
       </Form>
     </>

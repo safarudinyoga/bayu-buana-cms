@@ -17,12 +17,14 @@ import createIcon from "assets/icons/create.svg"
 import Api from "config/api"
 import MasterCreditLimit from 'views/manage_corporate/form/credit-limit/master-credit-limit'
 import CreditLimitByProject from 'views/manage_corporate/form/credit-limit/credit-limit-by-project'
-import CostCenterModal from 'views/manage_corporate/form/credit-limit/cost-center'
 
 const slugDictionary = {
   is_share_credit_with_other_company: 'Share Credit Limit with Parent Company',
   allocation: 'Allocation',
-  total_limit: 'Total Limit Amount'
+  total_limit: 'Total Limit Amount',
+  project_name: 'Project Name',
+  total_limit_project: 'Total Limit Amount',
+  period_based_on: 'Period based on'
 }
 
 const CreditLimit = ({
@@ -34,10 +36,9 @@ const CreditLimit = ({
 }) => {
   const endpointCreditLimit = '/credit-limit'
   const api = new Api()
-  const [key, setKey] = useState('master-credit-limit')
-  // const [key, setKey] = useState('credit-limit-by-project')
-  const [isModalVisible, setisModalVisible] = useState(false)
-  const [isThereProject, setisThereProject] = useState(false)
+  // const [key, setKey] = useState('master-credit-limit')
+  const [key, setKey] = useState('credit-limit-by-project')
+  const [isThereProject, setisThereProject] = useState(true)
 
   const [paramsCostCenter, setParamsCostCenter] = useState({
     title: "Cost Center",
@@ -73,6 +74,7 @@ const CreditLimit = ({
 
   const masterCreditLimitStateFormik = useFormik({
     initialValues: {
+      // master-credit-limit
       is_share_credit_with_other_company: 'false',
       total_limit: '',
       sharing_option: null,
@@ -88,7 +90,7 @@ const CreditLimit = ({
         ask_approval: [],
         approver: '',
         approval_by: ''
-      }
+      },
     },
     validationSchema: Yup.object({
       allocation: Yup.string().when(
@@ -97,7 +99,7 @@ const CreditLimit = ({
           then: Yup.string().required(errorMessage(slugDictionary['allocation'])),
           otherwise: Yup.string()
         }
-      )
+      ),
     }),
     onSubmit: (val) => {
       console.log(val);
@@ -106,10 +108,19 @@ const CreditLimit = ({
 
   const creditLimitByProjectStateFormik = useFormik({
     initialValues: {
-
+      // credit-limit-by-project-state
+      project_name: '',
+      total_limit_project: '',
+      period: {
+        date_start: '',
+        date_end: ''
+      },
+      period_based_on: ''
     },
     validationSchema: Yup.object({
-
+      project_name: isThereProject ? Yup.string().required(errorMessage(slugDictionary['project_name'])) : Yup.string(),
+      total_limit_project: isThereProject ? Yup.string().required(errorMessage(slugDictionary['total_limit_project'])) : Yup.string(),
+      period_based_on: isThereProject ? Yup.string().required(errorMessage(slugDictionary['period_based_on'])) : Yup.string()
     }),
     onSubmit: (val) => {
       console.log(val);
@@ -168,7 +179,6 @@ const CreditLimit = ({
       title: 'MASTER CREDIT LIMIT',
       children: (
           <MasterCreditLimit
-            setisModalVisible={setisModalVisible}
             formikState={masterCreditLimitStateFormik}
             paramsCostCenter={paramsCostCenter}
           />
@@ -179,10 +189,10 @@ const CreditLimit = ({
       title: 'CREDIT LIMIT BY PROJECT',
       children: (
           <CreditLimitByProject
-            setisModalVisible={setisModalVisible}
             isThereProject={isThereProject}
             setisThereProject={setisThereProject}
             formikState={creditLimitByProjectStateFormik}
+            paramsCostCenter={paramsCostCenter}
           />
         )
     },
@@ -240,14 +250,6 @@ const CreditLimit = ({
           </Button>
         </div>
       </div>
-{/*
-      {isModalVisible && (
-        <CostCenterModal
-          setisModalVisible={setisModalVisible}
-          isModalVisible={isModalVisible}
-          formikState={creditLimitConstCenterStateFormik}
-        />
-      )} */}
     </>
   )
 }
