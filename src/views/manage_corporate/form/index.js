@@ -51,10 +51,10 @@ const ManageCorporateForm = ({ match }) => {
 
   const isView = useQuery().get("action") === "view"
 
-  const [tabKey, setTabKey] = useState("general-information")
-  // const [tabKey, setTabKey] = useState("credit-limit")
-  // const [finishStep, setStep] = useState(13)
-  const [finishStep, setStep] = useState(0)
+  // const [tabKey, setTabKey] = useState("general-information")
+  const [tabKey, setTabKey] = useState("upload-document")
+  const [finishStep, setStep] = useState(13)
+  // const [finishStep, setStep] = useState(0)
   const [data, setData] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
 
@@ -127,34 +127,34 @@ const ManageCorporateForm = ({ match }) => {
       } else if(tabKey === "system-administrator") {
         setTabKey("setting")
         setStep(3)
-      }else if(tabKey === "setting") {
+      } else if(tabKey === "setting") {
         setTabKey("mark-up")
         setStep(4)
-      }else if(tabKey === "mark-up") {
+      } else if(tabKey === "mark-up") {
         setTabKey("service-fee")
         setStep(5)
-      }else if(tabKey === "service-fee") {
+      } else if(tabKey === "service-fee") {
         setTabKey("ancillary-fee")
         setStep(6)
-      }else if(tabKey === "ancillary-fee") {
+      } else if(tabKey === "ancillary-fee") {
         setTabKey("assign-team")
         setStep(7)
-      }else if(tabKey === "assign-team") {
+      } else if(tabKey === "assign-team") {
         setTabKey("credit-limit")
         setStep(8)
-      }else if(tabKey === "credit-limit") {
+      } else if(tabKey === "credit-limit") {
         setTabKey("invoice-settings")
         setStep(9)
-      }else if(tabKey === "invoice-settings") {
+      } else if(tabKey === "invoice-settings") {
         setTabKey("corporate-rating")
         setStep(10)
-      }else if(tabKey === "corporate-rating") {
+      } else if(tabKey === "corporate-rating") {
         setTabKey("corporate-fare")
         setStep(11)
-      }else if(tabKey === "corporate-fare") {
+      } else if(tabKey === "corporate-fare") {
         setTabKey("upload-document")
         setStep(12)
-      }else if(tabKey === "upload-document") {
+      } else if(tabKey === "upload-document") {
         setTabKey('import-database-employee')
         setStep(13)
         // ! what should do if end form ???
@@ -411,7 +411,15 @@ const ManageCorporateForm = ({ match }) => {
                     {tabKey === 'corporate-fare' && <CorporateFare />}
                   </Tab.Pane>
                   <Tab.Pane eventKey="upload-document">
-                    {tabKey === 'upload-document' && <UploadDocument />}
+                    {tabKey === 'upload-document' &&
+                      <UploadDocument
+                        history={history}
+                        backUrl={backUrl}
+                        handleChangeTabKey={handleChangeTabKey}
+                        corporateId={formId}
+                        endpoint={endpoint}
+                      />
+                    }
                   </Tab.Pane>
                   <Tab.Pane eventKey="import-database-employee">
                     {tabKey === 'import-database-employee' && <ImportDatabaseEmployee />}

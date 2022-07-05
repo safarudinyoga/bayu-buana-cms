@@ -229,7 +229,7 @@ const GeneralInfomation = ({
             message: `Record 'Corporate: {${payload.corporate.corporate_name}}' has been successfully updated.`,
           }),
         )
-        handleChangeTabKey('handleChangeTabKey', 1)
+        handleChangeTabKey('branch-office', 1)
       }
     } catch (error) {
       setIsLoading(false)
