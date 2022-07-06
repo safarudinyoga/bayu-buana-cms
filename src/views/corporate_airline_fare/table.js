@@ -34,7 +34,7 @@ export default function ZoneTable() {
       }
     }
     if (ids.length > 0) {
-      setParams({ ...params, filters: [["destination_id", "in", ids]] })
+      setParams({ ...params, filters: [["airline_id", "in", ids]] })
     } else {
       setParams({ ...params, filters: [] })
     }
@@ -44,17 +44,33 @@ export default function ZoneTable() {
 
   const extraFilter = () => {
     return (
+      // <FormInputSelectAjax
+      //   label="Airlines"
+      //   onChange={onFilterChange}
+      //   endpoint="/master/airlines"
+      //   column="destination.airline_name"
+      //   sort="airline_name"
+      //   isGrouping={true}
+      //   fieldGroup="id"
+      //   value={selectedDestinationIds}
+      //   data={selectedDestinations}
+      //   filter={`["status", "=", 1]`}
+      //   placeholder="Airlines"
+      //   type="selectmultiple"
+      //   isFilter={true}
+      //   allowClear={false}
+      // />
       <FormInputSelectAjax
         label="Airlines"
         onChange={onFilterChange}
-        endpoint="/master/zones"
-        column="destination.destination_name"
-        sort="destination_id"
+        endpoint="/master/airlines"
+        column="airline_name"
+        sort="airline_name"
         isGrouping={true}
-        fieldGroup="destination_id"
+        fieldGroup="id"
         value={selectedDestinationIds}
         data={selectedDestinations}
-        filter={`["destination_id", "is not", null]`}
+        filter={`["status", "=", 1]`}
         placeholder="Airlines"
         type="selectmultiple"
         isFilter={true}
@@ -70,13 +86,13 @@ export default function ZoneTable() {
   }
 
   let [params, setParams] = useState({
-    title: "Zones",
-    titleModal: "Zone",
+    title: "Airline Fare",
+    titleModal: "Airline Fare",
     baseRoute: "/master/corporate-airline-fare/form",
-    endpoint: "",
-    deleteEndpoint: "",
-    activationEndpoint: "",
-    deactivationEndpoint: "",
+    endpoint: "/master/corporate-airline-fares",
+    deleteEndpoint: "/master/batch-actions/delete/corporate-airline-fares",
+    // activationEndpoint: "",
+    // deactivationEndpoint: "",
     columns: [
       {
         title: "Airlines",
@@ -96,7 +112,7 @@ export default function ZoneTable() {
         data: "destination.destination_name",
       },
     ],
-    emptyTable: "No airline fare found",
+    emptyTable: "No airline fares found",
     recordName: ["zone_code", "zone_name"],
     isShowStatus: false,
     isCheckbox: false,

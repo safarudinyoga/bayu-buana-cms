@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react"
 import { withRouter, useHistory } from "react-router"
 import FormikControl from "../../components/formik/formikControl"
-import { Row, Col, Tab, Nav, Card, Button } from "react-bootstrap"
+import { Row, Col, Card, Button } from "react-bootstrap"
 import useQuery from "lib/query"
 import Api from "config/api"
 import { Form, Formik } from "formik"
@@ -9,8 +9,9 @@ import * as Yup from "yup"
 import { useDispatch } from "react-redux"
 import { setUIParams } from "redux/ui-store"
 import "react-datepicker/dist/react-datepicker.css"
+import { useSnackbar } from "react-simple-snackbar"
 
-const endpoint = "/master/corporate-airline-fare"
+const endpoint = "/master/corporate-airline-fares"
 const backUrl = "/master/corporate-airline-fare"
 const options = {
   position: "bottom-right",
@@ -25,6 +26,9 @@ const CorporateAirlineFareForm = (props) => {
 
   const [loading, setLoading] = useState(true)
   const [id, setId] = useState(null)
+  const [openSnackbar, closeSnackbar] = useSnackbar({
+    position: "bottom-right",
+  })
 
   const [formValues, setFormValues] = useState({
     airline_id: "",
@@ -48,6 +52,7 @@ const CorporateAirlineFareForm = (props) => {
   })
 
   useEffect(async () => {
+
     let api = new Api()
     let docTitle = "Create Corporate Airline Fare"
     let breadcrumbTitle = docTitle
@@ -77,60 +82,23 @@ const CorporateAirlineFareForm = (props) => {
     )
   }, [])
 
-  // useEffect(async () => {
-  //   try {
-  //     if (formId) {
-  //       let { data } = await api.get(endpoint + "/" + formId)
-  //       setFormValues({
-  //         ...data,
-  //         airline_id: {
-  //           value: data.airline.id,
-  //           label: data.airline.airline_name
-  //         },
-  //         commission_claim_departure_date: data.commission_claim_departure_date.start_date
-  //           ? {
-  //             start_date: new Date(data.commission_claim_departure_date.start_date).toDateString(),
-  //             end_date: new Date(data.commission_claim_departure_date.end_date).toDateString(),
-  //           }
-  //           : {
-  //             start_date: null,
-  //             end_date: null,
-  //           },
-  //         commission_claim_issue_date: data.commission_claim_issue_date.start_date
-  //           ? {
-  //             start_date: new Date(data.commission_claim_issue_date.start_date).toDateString(),
-  //             end_date: new Date(data.commission_claim_issue_date.end_date).toDateString(),
-  //           }
-  //           : {
-  //             start_date: null,
-  //             end_date: null,
-  //           },
-  //         departure_from: {
-  //           label: data.departure_city?.city_name || data.departure_airport_location?.airport_name,
-  //           value: data.commission_claim_original_destination?.departure_airport_location_code || data.commission_claim_original_destination?.departure_city_code,
-  //           source: data.commission_claim_original_destination.departure_airport_location_code
-  //             ? "airport"
-  //             : data.commission_claim_original_destination.departure_city_code
-  //               ? "city"
-  //               : "",
-  //         },
-  //         arrival_at: {
-  //           label: data.arrival_city?.city_name || data.arrival_airport_location?.airport_name,
-  //           value: data.commission_claim_original_destination?.arrival_airport_location_code || data.commission_claim_original_destination?.arrival_city_code,
-  //           source: data.commission_claim_original_destination.arrival_airport_location_code
-  //             ? "airport"
-  //             : data.commission_claim_original_destination.arrival_city_code
-  //               ? "city"
-  //               : "",
-  //         }
-  //       })
-  //       setSpecifyPeriodDeparture(data.commission_claim_departure_date.start_date)
-  //       setSpecifyPeriodIssue(data.commission_claim_issue_date.start_date)
-  //     }
-  //   } catch (e) {
-  //     console.log(e)
-  //   }
-  // }, [])
+  useEffect(async () => {
+    try {
+      if (formId) {
+        let { data } = await api.get(endpoint + "/" + formId)
+        setFormValues({
+          ...data,
+          airline_id: {
+            value: data.airline.id,
+            label: data.airline.airline_name
+          },
+
+        })
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  }, [])
 
   useEffect(() => {
     if (!props.match.params.id) {
@@ -139,31 +107,6 @@ const CorporateAirlineFareForm = (props) => {
     setId(props.match.params.id)
   }, [props.match.params.id])
 
-  // useEffect(async () => {
-  //   const options = []
-  //   try {
-  //     let resAirport = await api.get(`/master/airports?size=-1&page=0&filter=["status", "=", 1]`)
-  //     let resCity = await api.get(`/master/cities?size=-1&page=0&filter=["status", "=", 1]`)
-  //     resAirport.data.items.forEach((data) => {
-  //       options.push({
-  //         label: data.airport_name,
-  //         value: data.airport_code,
-  //         source: "airport",
-  //       })
-  //     })
-  //     resCity.data.items.forEach((data) => {
-  //       options.push({
-  //         label: data.city_name,
-  //         value: data.city_code,
-  //         source: "city",
-  //       })
-  //     })
-  //   } catch (e) {
-  //     console.log("Error", e)
-
-  //   }
-  //   setOptionRoute(options)
-  // }, [])
   Yup.addMethod(Yup.object, 'optionalFields', function (message) {
     return this.test('unique', message, function (field, ctx) {
       const parent = ctx.parent
@@ -178,10 +121,8 @@ const CorporateAirlineFareForm = (props) => {
 
   const validationSchema = Yup.object().shape({
     airline_id: Yup.object().required("Airline is required"),
-    negotiated_fare_code: Yup.object().required("Negotiated Fare Code is required"),
-    account_code: Yup.object().required("Account Code is required"),
-    // negotiated_fare_code: Yup.object().optionalFields('Negotiated Fare Code is required').nullable(),
-    // account_code: Yup.object().optionalFields('Account Code is required').nullable(),
+    negotiated_fare_code: Yup.string().required("Negotiated Fare Code is required"),
+    account_code: Yup.string().required("Account Code is required"),
     start_date: Yup.object().required("Start Date is required"),
     end_date: Yup.object().required("End Date is required"),
   })
@@ -194,37 +135,24 @@ const CorporateAirlineFareForm = (props) => {
         enableReinitialize
         onSubmit={async (values, { setSubmitting }) => {
           try {
-            console.log('values submit', values)
-            // let formatted = {
-            //   airline_id: values.airline_id.value,
-            //   commission_claim_original_destination: {
-            //     departure_airport_location_code: values.departure_from && values.departure_from?.source === 'airport' ? values.departure_from.value : null,
-            //     arrival_airport_location_code: values.arrival_at && values.arrival_at?.source === 'airport' ? values.arrival_at.value : null,
-
-            //     departure_city_code: values.departure_from && values.departure_from?.source === 'city' ? values.departure_from.value : null,
-            //     arrival_city_code: values.arrival_at && values.arrival_at?.source === 'city' ? values.arrival_at.value : null,
-            //   },
-            //   commission_claim_departure_date: !specifyPeriodDeparture ? {} : {
-            //     start_date: values.commission_claim_departure_date.start_date ? new Date(values.commission_claim_departure_date.start_date) : [],
-            //     end_date: values.commission_claim_departure_date.end_date ? new Date(values.commission_claim_departure_date.end_date) : [],
-            //   },
-            //   commission_claim_issue_date: !specifyPeriodIssue ? {} : {
-            //     start_date: values.commission_claim_issue_date.start_date ? new Date(values.commission_claim_issue_date.start_date) : [],
-            //     end_date: values.commission_claim_issue_date.end_date ? new Date(values.commission_claim_issue_date.end_date) : [],
-            //   },
-            //   percent: parseFloat(values.percent)
-            // }
-
-            // let res = await api.putOrPost("master/commission-claims", formId, formatted)
+            let formatted = {
+              airline_id: values.airline_id.value,
+              account_code: values.account_code,
+              negotiated_fare_code: values.negotiated_fare_code,
+              effective_date: values.start_date ? new Date(values.start_date) : null,
+              expire_date: values.end_date ? new Date(values.end_date) : null,
+              corporate_id: 'f43826d5-95e6-4044-a65f-e26a03ad9ff9'
+            }
+            let res = await api.putOrPost(endpoint, formId, formatted)
+            console.log('response', res)
             // openSnackbar(`Record '${values.airline_id.label}' has been successfully saved.`)
             // props.history.goBack()
           } catch (e) {
-            console.log(e)
+            console.log('okee', e)
           }
         }}
       >
         {(formik) => {
-          // { console.log('data formik', formik) }
           return (
             <Form>
               <div className="commission-form">
@@ -261,7 +189,7 @@ const CorporateAirlineFareForm = (props) => {
                           control="input"
                           label="Account Code"
                           name="account_code"
-                          // isDisabled={isView}
+                          isDisabled={loading || isView}
                           size={{
                             label: { md: 3, lg: 3 },
                             value: { md: 4, lg: 3 }
@@ -273,7 +201,7 @@ const CorporateAirlineFareForm = (props) => {
                           control="input"
                           label="Negotiated Fare Code"
                           name="negotiated_fare_code"
-                          // isDisabled={isView}
+                          isDisabled={loading || isView}
                           size={{
                             label: { md: 3, lg: 3 },
                             value: { md: 4, lg: 3 }
@@ -293,9 +221,9 @@ const CorporateAirlineFareForm = (props) => {
                               label="Negotiated Fare Code"
                               name={['start_date', 'end_date']}
                               value={[formik.values.start_date, formik.values.end_date]}
-                              isDisabled={isView}
+                              isDisabled={loading || isView}
                               onChange={(date) => {
-                                { console.log('on change date', date) }
+                                // { console.log('on change date', date) }
                                 if (date.length > 0) {
                                   formik.setFieldValue("start_date", date[0])
                                   formik.setFieldValue("end_date", date[1])

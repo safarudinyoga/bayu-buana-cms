@@ -1,0 +1,3 @@
+.s-s-f-other-table table.dataTable.table-sm > thead > tr > th:not(.sorting_disabled):last-child {
+    display: none;
+}

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react"
 import BBDataTable from "components/table/bb-data-table"
+import './other_table.css'
 
 export default function OtherTable() {
   let [params, setParams] = useState({
@@ -17,11 +18,15 @@ export default function OtherTable() {
         title: "Preset Name",
         data: "service_fee_category_name",
       },
+      // {
+      //   title: "Preset Name",
+      //   data: "service_fee_category_name",
+      // },
     ],
     emptyTable: "No Service Fees found",
     recordName: "preset_name",
     module: "standard-fee-other",
   })
 
-  return <BBDataTable {...params} />
+  return <div className="s-s-f-other-table"><BBDataTable {...params} /></div>
 }
