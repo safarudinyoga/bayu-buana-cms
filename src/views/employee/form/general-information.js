@@ -55,7 +55,7 @@ const GeneralInformation = (props) => {
     middleName: "",
     lastName: "",
     birth_date: [],
-    gender: "db24d53c-7d36-4770-8598-dc36174750af",
+    gender: "",
     idCardNumber: "",
 
     // Contacts
@@ -1153,47 +1153,45 @@ const GeneralInformation = (props) => {
                           >
                             <FastField name="gender">
                               {({ field, form }) => (
-                                <Form.Check
-                                  {...field}
-                                  disabled={isView}
-                                  checked={values.gender === "db24d53c-7d36-4770-8598-dc36174750af"}
-                                  type="radio"
-                                  label="Male"
-                                  isInvalid={
-                                    form.touched.gender && form.errors.gender
-                                  }
-                                  style={{ marginRight: 30 }}
-                                  inline
-                                  onChange={(e) =>
-                                    setFieldValue("gender", "db24d53c-7d36-4770-8598-dc36174750af")
-                                  }
-                                />
+                                <>
+                                  <Form.Check
+                                    {...field}
+                                    disabled={isView}
+                                    checked={values.gender === "db24d53c-7d36-4770-8598-dc36174750af"}
+                                    type="radio"
+                                    label="Male"
+                                    isInvalid={
+                                      form.touched.gender && form.errors.gender
+                                    }
+                                    style={{ marginRight: 30 }}
+                                    inline
+                                    onChange={(e) =>
+                                      setFieldValue("gender", "db24d53c-7d36-4770-8598-dc36174750af")
+                                    }
+                                  />
+                                  <Form.Check
+                                    {...field}
+                                    disabled={isView}
+                                    checked={values.gender === "db24d53c-7d36-4770-8598-dc36174750ad"}
+                                    type="radio"
+                                    label="Female"
+                                    isInvalid={
+                                      form.touched.gender && form.errors.gender
+                                    }
+                                    inline
+                                    onChange={() =>
+                                      setFieldValue("gender", "db24d53c-7d36-4770-8598-dc36174750ad")
+                                    }
+                                  />
+                                </>
                               )}
                             </FastField>
-                            <FastField name="gender">
-                              {({ field, form }) => (
-                                <Form.Check
-                                  {...field}
-                                  disabled={isView}
-                                  checked={values.gender === "db24d53c-7d36-4770-8598-dc36174750ad"}
-                                  type="radio"
-                                  label="Female"
-                                  isInvalid={
-                                    form.touched.gender && form.errors.gender
-                                  }
-                                  inline
-                                  onChange={() =>
-                                    setFieldValue("gender", "db24d53c-7d36-4770-8598-dc36174750ad")
-                                  }
-                                />
-                              )}
-                            </FastField>
-                            {touched.gender && errors.gender && (
-                              <Form.Control.Feedback type="invalid">
-                                {touched.gender ? errors.gender : null}
-                              </Form.Control.Feedback>
-                            )}
                           </div>
+                          {touched.gender && errors.gender && (
+                            <div className={`invalid-feedback ${errors.gender&&"d-block"}`} >
+                              {touched.gender ? errors.gender : null}
+                            </div>
+                          )}
                         </Col>
                         }
                       </Form.Group>
