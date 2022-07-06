@@ -46,7 +46,7 @@ function HotelModal(props) {
                 <span className="form-label-required">*</span>
               </Form.Label>
               <Col sm={7}>
-              <FastField name="destination">
+                <FastField name="destination">
                   {({ field, form }) => (
                     <div style={{ maxWidth: 600 }}>
                       <SelectAsync
@@ -84,7 +84,7 @@ function HotelModal(props) {
                 Airline Service Type
               </Form.Label>
               <Col sm={7}>
-              <FastField name="airline_service_type">
+                <FastField name="airline_service_type">
                   {({ field, form }) => (
                     <div style={{ maxWidth: 500 }}>
                       <SelectAsync
@@ -122,36 +122,36 @@ function HotelModal(props) {
                 Specified Airline
               </Form.Label>
               <Col sm={7}>
-              <FastField name="specified_airline">
-                {({ field, form }) => (
-                  <div style={{ maxWidth: 600 }}>
-                    <SelectAsync
-                      {...field}
-                      isClearable
-                      url={`master/airlines`}
-                      fieldName="airline_name"
-                      // onChange={(v) => {
-                      //   setFieldValue("specified_airline", v)
-                      // }}
-                      placeholder="Please choose"
-                      className={`react-select ${
-                        form.touched.specified_airline &&
-                        form.errors.specified_airline
-                          ? "is-invalid"
-                          : null
-                      }`}
-                    />
-                    {form.touched.specified_airline &&
-                      form.errors.specified_airline && (
-                        <Form.Control.Feedback type="invalid">
-                          {form.touched.specified_airline
-                            ? form.errors.specified_airline
-                            : null}
-                        </Form.Control.Feedback>
-                      )}
-                  </div>
-                )}
-              </FastField>
+                <FastField name="specified_airline">
+                  {({ field, form }) => (
+                    <div style={{ maxWidth: 600 }}>
+                      <SelectAsync
+                        {...field}
+                        isClearable
+                        url={`master/airlines`}
+                        fieldName="airline_name"
+                        // onChange={(v) => {
+                        //   setFieldValue("specified_airline", v)
+                        // }}
+                        placeholder="Please choose"
+                        className={`react-select ${
+                          form.touched.specified_airline &&
+                          form.errors.specified_airline
+                            ? "is-invalid"
+                            : null
+                        }`}
+                      />
+                      {form.touched.specified_airline &&
+                        form.errors.specified_airline && (
+                          <Form.Control.Feedback type="invalid">
+                            {form.touched.specified_airline
+                              ? form.errors.specified_airline
+                              : null}
+                          </Form.Control.Feedback>
+                        )}
+                    </div>
+                  )}
+                </FastField>
               </Col>
             </Form.Group>
             <Form.Group as={Row} className="form-group">
@@ -159,36 +159,36 @@ function HotelModal(props) {
                 Specified Source
               </Form.Label>
               <Col sm={7}>
-              <FastField name="specified_source">
-                {({ field, form }) => (
-                  <div style={{ maxWidth: 600 }}>
-                    <SelectAsync
-                      {...field}
-                      isClearable
-                      url={`master/supplier-types`}
-                      fieldName="supplier_type_name"
-                      // onChange={(v) => {
-                      //   setFieldValue("specified_source", v)
-                      // }}
-                      placeholder="Please choose"
-                      className={`react-select ${
-                        form.touched.specified_source &&
-                        form.errors.specified_source
-                          ? "is-invalid"
-                          : null
-                      }`}
-                    />
-                    {form.touched.specified_source &&
-                      form.errors.specified_source && (
-                        <Form.Control.Feedback type="invalid">
-                          {form.touched.specified_source
-                            ? form.errors.specified_source
-                            : null}
-                        </Form.Control.Feedback>
-                      )}
-                  </div>
-                )}
-              </FastField>
+                <FastField name="specified_source">
+                  {({ field, form }) => (
+                    <div style={{ maxWidth: 600 }}>
+                      <SelectAsync
+                        {...field}
+                        isClearable
+                        url={`master/supplier-types`}
+                        fieldName="supplier_type_name"
+                        // onChange={(v) => {
+                        //   setFieldValue("specified_source", v)
+                        // }}
+                        placeholder="Please choose"
+                        className={`react-select ${
+                          form.touched.specified_source &&
+                          form.errors.specified_source
+                            ? "is-invalid"
+                            : null
+                        }`}
+                      />
+                      {form.touched.specified_source &&
+                        form.errors.specified_source && (
+                          <Form.Control.Feedback type="invalid">
+                            {form.touched.specified_source
+                              ? form.errors.specified_source
+                              : null}
+                          </Form.Control.Feedback>
+                        )}
+                    </div>
+                  )}
+                </FastField>
               </Col>
             </Form.Group>
             <Form.Group as={Row} className="mb-3">
@@ -291,6 +291,7 @@ const HotelForm = (props) => {
   let dispatch = useDispatch()
   const [loading, setLoading] = useState(true)
   const [id, setId] = useState(null)
+  const [formValues, setFormValues] = useState(null)
   const [modalShow, setModalShow] = useState(false)
   let api = new Api()
 
@@ -318,7 +319,39 @@ const HotelForm = (props) => {
         ],
       }),
     )
-  })
+
+    if (formId) {
+      try {
+        let { data } = await api.get(endpoint + "/" + formId)
+        setFormValues({
+          // ...data,
+          markup_category_name: data.markup_category_name,
+          description: data.description,
+          domestic:
+            data.domestic_hotel_markup.amount === 0
+              ? "domestic_percentage"
+              : "domestic_fixed_amount",
+          domestic_amount: data.domestic_hotel_markup.amount,
+          domestic_charge_type_id: data.domestic_hotel_markup.charge_type_id,
+          domestic_percent: data.domestic_hotel_markup.percent,
+          domestic_is_tax_inclusive:
+            data.domestic_hotel_markup.is_tax_inclusive,
+          international:
+            data.international_hotel_markup.amount === 0
+              ? "international_percentage"
+              : "international_fixed_amount",
+          international_amount: data.international_hotel_markup.amount,
+          international_charge_type_id:
+            data.international_hotel_markup.charge_type_id,
+          international_percent: data.international_hotel_markup.percent,
+          international_is_tax_inclusive:
+            data.international_hotel_markup.is_tax_inclusive,
+        })
+      } catch (e) {
+        console.log(e)
+      }
+    }
+  }, [])
 
   const initialForm = {
     markup_category_name: "",
@@ -327,7 +360,7 @@ const HotelForm = (props) => {
     domestic_amount: "",
     domestic_charge_type_id: "",
     domestic_percent: "",
-    domestic_is_tax_inclusive: "",
+    domestic_is_tax_inclusive: false,
     international: "",
     international_amount: "",
     international_charge_type_id: "",
@@ -378,9 +411,10 @@ const HotelForm = (props) => {
   return (
     <>
       <Formik
-        initialValues={initialForm}
+        initialValues={formValues || initialForm}
         validationSchema={validationSchema}
         validateOnChange={false}
+        enableReinitialize
         onSubmit={async (values, { setSubmitting, resetForm }) => {
           // console.log(values)
           // console.log(props)
@@ -388,6 +422,10 @@ const HotelForm = (props) => {
           setLoading(true)
           let api = new Api()
           try {
+            let formId =
+              props.match.params.id !== undefined
+                ? props.match.params.id
+                : false
             let form = {
               description: values.description,
               domestic_flight_markup: {
@@ -406,7 +444,7 @@ const HotelForm = (props) => {
                     ? "c93288b6-29d3-4e20-aa83-5ee6261f64ff"
                     : values.domestic_charge_type_id,
                 is_tax_inclusive: true,
-                percent: 10,
+                percent: parseInt(values.domestic_percent) || 0,
               },
               international_flight_markup: {
                 amount: 0,
@@ -424,12 +462,12 @@ const HotelForm = (props) => {
                     ? "c93288b6-29d3-4e20-aa83-5ee6261f64ff"
                     : values.international_charge_type_id,
                 is_tax_inclusive: false,
-                percent: 0,
+                percent: parseInt(values.international_percent) || 0,
               },
               markup_category_name: values.markup_category_name,
             }
-            console.log("form: ", form)
-            await api.putOrPost(endpoint, id, form)
+            // console.log("form submit: ", form)
+            await api.putOrPost(endpoint, formId, form)
 
             dispatch(
               setAlert({
@@ -545,6 +583,11 @@ const HotelForm = (props) => {
                                     type="text"
                                     thousandSeparator={true}
                                     allowNegative={false}
+                                    value={
+                                      values.domestic_amount === 0
+                                        ? ""
+                                        : values.domestic_amount
+                                    }
                                     onBlur={(v) => {
                                       setFieldValue(
                                         "domestic_amount",
@@ -643,7 +686,13 @@ const HotelForm = (props) => {
                                 </label>
                               </Form.Group>
                             </Col>
-                            <Col xs={3} md={2} lg={3} xl={3} className="ml-4 ml-md-0">
+                            <Col
+                              xs={3}
+                              md={2}
+                              lg={3}
+                              xl={3}
+                              className="ml-4 ml-md-0"
+                            >
                               <Form.Group as={Row} className="mb-3">
                                 <Col>
                                   <NumberFormat
@@ -657,6 +706,11 @@ const HotelForm = (props) => {
                                     displayType="input"
                                     type="text"
                                     allowNegative={false}
+                                    value={
+                                      values.domestic_percent === 0
+                                        ? ""
+                                        : values.domestic_percent
+                                    }
                                     onBlur={(v) => {
                                       setFieldValue(
                                         "domestic_percent",
@@ -754,6 +808,11 @@ const HotelForm = (props) => {
                                     type="text"
                                     thousandSeparator={true}
                                     allowNegative={false}
+                                    value={
+                                      values.international_amount === 0
+                                        ? ""
+                                        : values.international_amount
+                                    }
                                     onBlur={(v) => {
                                       setFieldValue(
                                         "international_amount",
@@ -849,7 +908,13 @@ const HotelForm = (props) => {
                                 </label>
                               </Form.Group>
                             </Col>
-                            <Col xs={3} md={2} lg={3} xl={3} className="ml-4 ml-md-0">
+                            <Col
+                              xs={3}
+                              md={2}
+                              lg={3}
+                              xl={3}
+                              className="ml-4 ml-md-0"
+                            >
                               <Form.Group as={Row} className="mb-3">
                                 <Col>
                                   <NumberFormat
@@ -863,6 +928,11 @@ const HotelForm = (props) => {
                                     displayType="input"
                                     type="text"
                                     allowNegative={false}
+                                    value={
+                                      values.international_percent === 0
+                                        ? ""
+                                        : values.international_percent
+                                    }
                                     onBlur={(v) => {
                                       setFieldValue(
                                         "international_percent",
