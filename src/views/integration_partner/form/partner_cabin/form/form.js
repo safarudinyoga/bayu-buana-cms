@@ -49,7 +49,7 @@ const FareFamilyModal = (props) => {
     if(!cabinId) {
       return res.data.items.length === 0
     } else {
-      return res.data.items.length === 0 || value === fareFormValues[fieldName] || value === fareFormValues[fieldName].value
+      return res.data.items.length === 0 || value === (fareFormValues[fieldName] || value === fareFormValues[fieldName].value)
     }
   }
 
@@ -297,7 +297,7 @@ const Cabins = (props) => {
     let res = await api.get(endpoint + "/" + id + "/cabin-types?" + `filters=${filters}`)
 
     if(cabinId) {
-      return res.data.items.length === 0 || value === formValues[fieldName] || value === formValues[fieldName].value
+      return res.data.items.length === 0 || value === (formValues[fieldName] || value === formValues[fieldName].value)
     } else {
       return res.data.items.length === 0
     }

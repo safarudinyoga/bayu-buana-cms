@@ -34,7 +34,7 @@ const Cities = (props) => {
     let res = await api.get(endpoint + "/" + id + "/cities?" + `filters=${filters}`)
 
     if(cityId){
-      return res.data.items.length === 0 || value === formValues[fieldName] || formValues[fieldName].value
+      return res.data.items.length === 0 || value === (formValues[fieldName] || formValues[fieldName].value)
     } else {
       return res.data.items.length === 0
     }
@@ -208,6 +208,7 @@ Yup.addMethod(Yup.string, 'uniqueValueString', function (fieldName, message) {
                         name="city_code"
                         style={{ maxWidth: 250 }}
                         size={formSize}
+                        maxLength={36}
                         disabled={isView || loading}
                         onChange={(e) => {
                             setFieldValue("city_code", e.target.value);
@@ -222,6 +223,7 @@ Yup.addMethod(Yup.string, 'uniqueValueString', function (fieldName, message) {
                         name="city_name"
                         style={{ maxWidth: 250 }}
                         size={formSize}
+                        maxLength={64}
                         disabled={isView || loading}
                         onChange={(e) => {
                             setFieldValue("city_name", e.target.value);

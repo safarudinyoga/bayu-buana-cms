@@ -14,7 +14,7 @@ class additionalInformationState {
   constructor() {
     this.text = ''
     this.type = ''
-    this.inputType = ''
+    this.inputType = 'mandatory'
   }
 }
 
@@ -28,7 +28,8 @@ const Settings = () => {
         //   type: '',
         //   inputType: ''
         // }
-      ]
+      ],
+      prefix_code: ''
     },
     validationSchema: Yup.object({
 
@@ -55,7 +56,8 @@ const Settings = () => {
                   <Form.Control
                     type="text"
                     minLength={1}
-                    maxLength={16}
+                    maxLength={32}
+                    value={values.prefix_code}
                     placeholder=""
                     style={{ width: '100px' }}
                     className='mr-2'
