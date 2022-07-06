@@ -64,8 +64,9 @@ const Select = (props) => {
 
   const get = async (url, params) => {
     const { search, offset, limit, page } = params
-    let encodeFilter = encodeURIComponent([["status",status],["AND"],[fieldName,"like",search],...urlFilter])
-    console.log(sort !== undefined || sort !== null ? sort : fieldName)
+    let encodeFilter = `${encodeURIComponent(`[["status",${status}],["AND"],["${fieldName}","like","${search}"]${
+      urlFilter !== undefined ? `,["AND"],${urlFilter}` : ""
+    }]`)}`
     const response = await axios
       .get(
         `${
