@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect } from "react"
 import { withRouter } from "react-router"
 import { Form, Row, Col, Button } from "react-bootstrap"
 import { useFormik } from "formik"
@@ -15,11 +15,11 @@ const Option = (props) => {
   return (
     <div>
       <components.Option {...props}>
-        <div className='d-flex justify-content-start align-items-center'>
+        <div className="d-flex justify-content-start align-items-center">
           <Form.Check
-            type='checkbox'
-            name='workingDays'
-            id='workingDays'
+            type="checkbox"
+            name="workingDays"
+            id="workingDays"
             label={props.label}
             onChange={(e) => console.log(e)}
             checked={props.isSelected}
@@ -27,23 +27,30 @@ const Option = (props) => {
         </div>
       </components.Option>
     </div>
-  );
-};
+  )
+}
 
 const AssignTeamModal = ({ match }) => {
   let dispatch = useDispatch()
   const isView = useQuery().get("action") === "view"
   const showCreateModal = useSelector((state) => state.ui.showCreateModal)
 
-  const { handleSubmit, handleChange, values, errors, touched, setFieldTouched, setFieldValue } = useFormik({
+  const {
+    handleSubmit,
+    handleChange,
+    values,
+    errors,
+    touched,
+    setFieldTouched,
+    setFieldValue,
+  } = useFormik({
     initialValues: {
-      team: ''
+      team: "",
     },
-    validationSchema: Yup.object({
-    }),
+    validationSchema: Yup.object({}),
     onSubmit: (val) => {
-      console.log(val);
-    }
+      console.log(val)
+    },
   })
 
   useEffect(async () => {
@@ -73,11 +80,11 @@ const AssignTeamModal = ({ match }) => {
   }, [])
 
   return (
-    <Form style={{ padding: '0 32px 25px' }}>
+    <Form style={{ padding: "0 32px 25px" }}>
       <Row>
-        <Col lg={12} style={{ padding: '0 0 25px' }}>
-          <Form.Group as={Row} className='form-group'>
-            <Form.Label column sm={4} className='mb-1'>
+        <Col lg={12} style={{ padding: "0 0 25px" }}>
+          <Form.Group as={Row} className="form-group">
+            <Form.Label column sm={4} className="mb-1">
               Select Team
             </Form.Label>
             <Col md={3} lg={8}>
@@ -87,28 +94,28 @@ const AssignTeamModal = ({ match }) => {
                 closeMenuOnSelect={false}
                 hideSelectedOptions={false}
                 components={{
-                  Option
+                  Option,
                 }}
                 name="team"
                 value={values.team}
-                placeholder="Please choose"
+                placeholder="Please Choose Team"
                 options={[
                   {
-                    label: 'Team EQTY (this is static)',
-                    value: 'eqty'
+                    label: "Team EQTY (this is static)",
+                    value: "eqty",
                   },
                   {
-                    label: 'Team NDC (this is static)',
-                    value: 'ndc'
+                    label: "Team NDC (this is static)",
+                    value: "ndc",
                   },
                   {
-                    label: 'Team MNC Corp (this is static)',
-                    value: 'mnc_corp'
+                    label: "Team MNC Corp (this is static)",
+                    value: "mnc_corp",
                   },
                 ]}
                 onChange={(selected) => {
-                  console.log({selected});
-                  setFieldValue('team', selected)
+                  console.log({ selected })
+                  setFieldValue("team", selected)
                 }}
                 allowSelectAll
                 onBlur={setFieldTouched}
@@ -118,7 +125,10 @@ const AssignTeamModal = ({ match }) => {
           </Form.Group>
         </Col>
       </Row>
-      <div className="mt-3 row justify-content-md-start justify-content-center" style={{ position: 'absolute', bottom: '30px' }}>
+      <div
+        className="mt-3 row justify-content-md-start justify-content-center"
+        style={{ position: "absolute", bottom: "30px" }}
+      >
         <Button
           variant="primary"
           type="submit"
@@ -127,14 +137,14 @@ const AssignTeamModal = ({ match }) => {
           //     ? !isValid || isSubmitting
           //     : !dirty || isSubmitting
           // }
-          style={{ marginRight: 15, padding: '0 24px' }}
+          style={{ marginRight: 15, padding: "0 24px" }}
         >
           SAVE
         </Button>
         <Button
           variant="secondary"
           // onClick={() => props.history.goBack()}
-          style={{ padding: '0 21px' }}
+          style={{ padding: "0 21px" }}
         >
           CANCEL
         </Button>
