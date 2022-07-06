@@ -77,7 +77,7 @@ function ExchangeRateCreate(props) {
         let res = await API.get(endpoint + "/" + id + "/countries?" + `filters=${filters}`)
     
         if(countriesId){
-          return res.data.items.length === 0 || value === formValues[fieldName] || formValues[fieldName].value
+          return res.data.items.length === 0 || value === (formValues[fieldName] || formValues[fieldName].value)
         } else {
           return res.data.items.length === 0
         }

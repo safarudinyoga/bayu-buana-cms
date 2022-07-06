@@ -35,7 +35,7 @@ const ModalCreate = (props) => {
     let res = await api.get(endpoint + "/" + id + "/cities?" + `filters=${filters}`)
 
     if(cityId){
-      return res.data.items.length === 0 || value === formValues[fieldName] || formValues[fieldName].value
+      return res.data.items.length === 0 || value === (formValues[fieldName] || formValues[fieldName].value)
     } else {
       return res.data.items.length === 0
     }
