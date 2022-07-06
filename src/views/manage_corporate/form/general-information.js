@@ -6,6 +6,7 @@ import DatePicker from 'react-datepicker'
 import { debounce } from 'lodash'
 import { useDispatch } from "react-redux"
 import { ReactSVG } from "react-svg"
+import moment from 'moment'
 import PropTypes from 'prop-types'
 
 // components & styles
@@ -21,8 +22,8 @@ import NoImage from "assets/no_image.png"
 import useQuery from "lib/query"
 import { errorMessage } from 'lib/errorMessageHandler'
 import { setAlert } from "redux/ui-store"
-import moment from 'moment'
 import { SUCCESS_RESPONSE_STATUS } from 'lib/constants'
+import { handleYears, generateArrayOfYears } from 'lib/defineYearsRange'
 
 const slugDictionary = {
   corporate_code: 'Corporate Code',
@@ -478,19 +479,6 @@ const GeneralInfomation = ({
     } catch (error) {}
   }
 
-  const handleYears = (numOfYears, date = new Date(), type) => {
-    const dateCopy = new Date(date.getTime());
-
-    if (type === 'add') {
-      dateCopy.setFullYear(dateCopy.getFullYear() + numOfYears);
-    } else {
-      dateCopy.setFullYear(dateCopy.getFullYear() - numOfYears);
-    }
-
-
-    return dateCopy;
-  }
-
   const debouncedValidateCode = useMemo(
     () => debounce(() => validateField('corporate_code'), 2000),
     [validateField],
@@ -524,18 +512,7 @@ const GeneralInfomation = ({
     }
   }, [errors])
 
-  const generateArrayOfYears = () => {
-    const yearNow = moment().year()
-    const max = yearNow + 10
-    const min = yearNow - 10
-    const years = []
 
-    for (let i = max; i >= min; i--) {
-      years.push(i)
-    }
-
-    return years
-  }
 
   const calendarStartRef= useRef(null)
   const calendarEndRef= useRef(null)
@@ -795,7 +772,7 @@ const GeneralInfomation = ({
                                 onChange={({ target: { value } }) => changeYear(value)}
                                 className='select_year'
                               >
-                                {generateArrayOfYears().map((option) => (
+                                {generateArrayOfYears(10, 10).map((option) => (
                                   <option key={option} value={option}>
                                     {option}
                                   </option>
@@ -898,7 +875,7 @@ const GeneralInfomation = ({
                                 onChange={({ target: { value } }) => changeYear(value)}
                                 className='select_year'
                               >
-                                {generateArrayOfYears().map((option) => (
+                                {generateArrayOfYears(10, 10).map((option) => (
                                   <option key={option} value={option}>
                                     {option}
                                   </option>
@@ -941,11 +918,6 @@ const GeneralInfomation = ({
                         </div>
                       </DatePicker>
                     </Col>
-                    {/* {touched?.general_information?.corporate_npwp && errors?.general_information?.corporate_npwp && (
-                      <TextError>
-                        {errors.general_information.corporate_npwp}
-                      </TextError>
-                    )} */}
                   </Col>
                 </Form.Group>
               </Col>

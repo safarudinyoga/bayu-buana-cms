@@ -564,7 +564,7 @@ class BBDataTable extends Component {
           },
           {
             targets: [1, 2],
-            className: !this.state.isCheckbox ? module === "employee" || module === "ancillary" ? "" : module === "branch-office"? "cstm-col-width": "custom-col-width": "cstm-col-width",
+            className: !this.state.isCheckbox ? module === "employee" || module === "ancillary" || module === "user-management" ? "" : module === "branch-office" ? "cstm-col-width": "custom-col-width": "cstm-col-width",
           },
           {
             targets: [3],
@@ -580,8 +580,14 @@ class BBDataTable extends Component {
               "render": function ( data, type, row ) {
                 var datas = data;
 
-                if(module === 'employee' || module === 'user-management' ){
+                if(module === 'employee'){
                   datas = data +' '+ row.middle_name + ' ' + row.surname;
+                }else if(module === 'user-management' ){
+                  let id = row.employee_number ? row.employee_number : ''
+                  let given_name = data ? data : ''
+                  let middle_name = row.middle_name ? row.middle_name : ''
+                  let surname = row.surname ? row.surname : ''
+                  datas = given_name +' '+ middle_name + ' ' + surname + '<br/>ID:' + id
                 }else if(module === 'branch-office'){
                   let city = row.city? row.city.city_name:''
                   let postal_code = row.postal_code? row.postal_code:''

@@ -30,12 +30,16 @@
 }
 
 .Stars::before {
-  content: '★★★★★';
-    letter-spacing: 3px;
-    background: linear-gradient(90deg, var(--star-background) var(--percent), var(--star-color) var(--percent));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    -webkit-text-stroke-width: 0.2px
+  content: "★★★★★";
+  letter-spacing: 3px;
+  background: linear-gradient(
+    90deg,
+    var(--star-background) var(--percent),
+    var(--star-color) var(--percent)
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke-width: 0.2px;
 }
 
 .spinner {
@@ -46,7 +50,8 @@
   animation: spin var(--duration) steps(8) infinite;
 }
 
-.spinner,.spinner::before {
+.spinner,
+.spinner::before {
   --gradient: linear-gradient(var(--accent) 0 0);
   background: var(--gradient) 50%/34% 8% space no-repeat,
     var(--gradient) 50%/8% 34% no-repeat space;
@@ -61,4 +66,12 @@
   to {
     transform: rotate(1turn);
   }
+}
+
+.assign_team_modal .modal-dialog .modal-content {
+  height: auto !important;
+}
+
+.assign_team_modal .modal-dialog {
+  width: auto;
 }

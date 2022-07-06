@@ -70,7 +70,6 @@ const UserManagementForm = (props) => {
     try {
       if (formId) {
         let { data } = await api.get(endpoint + "/" + formId)
-
         setInitialForm({
           ...initialForm,
           employee: {
@@ -151,16 +150,10 @@ const UserManagementForm = (props) => {
     }
   }
 
-  const popoverBottom = (values) => {
-    return (
-      <Popover id="popover-positioned-bottom" title="Popover bottom">
-        <ModuleAccess userType={values} />
-      </Popover>
-    )
-  }
   return (
     <>
       <Formik
+        enableReinitialize
         initialValues={initialForm}
         validationSchema={validationSchema}
         validateOnChange={false}
@@ -193,7 +186,7 @@ const UserManagementForm = (props) => {
                           <SelectAsync
                             {...field}
                             isClearable
-                            isDisabled={values.given_name || isView}
+                            isDisabled={isView}
                             url={`master/employees`}
                             fieldName="given_name"
                             onChange={(v) => {
@@ -244,6 +237,7 @@ const UserManagementForm = (props) => {
                           <SelectAsync
                             {...field}
                             isClearable
+                            isDisabled={isView}
                             url={`user/user-types`}
                             fieldName="user_type_name"
                             onChange={(v) => {
@@ -322,16 +316,16 @@ const UserManagementForm = (props) => {
               </Card.Body>
             </Card>
             <div style={{ marginBottom: 30, marginTop: 30, display: "flex" }}>
-              <Button
+              {isView ? null : <Button
                 variant="primary"
                 type="submit"
                 disabled={isSubmitting || !dirty}
                 style={{ marginRight: 15 }}
               >
                 SAVE
-              </Button>
+              </Button> }
               <Button variant="secondary" onClick={() => history.goBack()}>
-                CANCEL
+              {isView ? "BACK" : "CANCEL"}
               </Button>
             </div>
             <div></div>
