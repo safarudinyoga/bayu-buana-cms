@@ -32,11 +32,10 @@ import "react-dropzone-uploader/dist/styles.css"
 const endpoint = "/master/agent-markup-categories/1"
 const backUrl = "/master/standard-markup"
 
-const FlightModal = ({ show, onHide, setFieldValue }) => {
+const FlightModal = (props) => {
   return (
     <Modal
-      show={show}
-      onHide={onHide}
+      {...props}
       size="md"
       aria-labelledby="contained-modal-title-vcenter"
       centered
@@ -44,12 +43,11 @@ const FlightModal = ({ show, onHide, setFieldValue }) => {
       <Modal.Body>
         <div style={{ padding: "0 2px 2px" }}>
           <div className="mb-5">
-            <div className="modal-button-close" onClick={onHide}>
+            <div className="modal-button-close" onClick={props.onHide}>
               <ReactSVG src="/img/icons/close.svg" />
             </div>
             <p className="modals-header mt-3">ADD FLIGHT OVERRIDE MARKUP</p>
           </div>
-
           <Form>
             <Form.Group as={Row} className="mb-3">
               <Form.Label column sm={4}>
@@ -89,7 +87,6 @@ const FlightModal = ({ show, onHide, setFieldValue }) => {
                 </FastField>
               </Col>
             </Form.Group>
-
             <Form.Group as={Row} className="form-group">
               <Form.Label column sm={4}>
                 Airline Service Type
@@ -127,42 +124,41 @@ const FlightModal = ({ show, onHide, setFieldValue }) => {
                 </FastField>
               </Col>
             </Form.Group>
-
             <Form.Group as={Row} className="form-group">
               <Form.Label column sm={4}>
                 Specified Airline
               </Form.Label>
               <Col sm={7}>
-              <FastField name="specified_airline">
-                {({ field, form }) => (
-                  <div style={{ maxWidth: 600 }}>
-                    <SelectAsync
-                      {...field}
-                      isClearable
-                      url={`master/airlines`}
-                      fieldName="airline_name"
-                      // onChange={(v) => {
-                      //   setFieldValue("specified_airline", v)
-                      // }}
-                      placeholder="Please choose"
-                      className={`react-select ${
-                        form.touched.specified_airline &&
-                        form.errors.specified_airline
-                          ? "is-invalid"
-                          : null
-                      }`}
-                    />
-                    {form.touched.specified_airline &&
-                      form.errors.specified_airline && (
-                        <Form.Control.Feedback type="invalid">
-                          {form.touched.specified_airline
-                            ? form.errors.specified_airline
-                            : null}
-                        </Form.Control.Feedback>
-                      )}
-                  </div>
-                )}
-              </FastField>
+                <FastField name="specified_airline">
+                  {({ field, form }) => (
+                    <div style={{ maxWidth: 600 }}>
+                      <SelectAsync
+                        {...field}
+                        isClearable
+                        url={`master/airlines`}
+                        fieldName="airline_name"
+                        // onChange={(v) => {
+                        //   setFieldValue("specified_airline", v)
+                        // }}
+                        placeholder="Please choose"
+                        className={`react-select ${
+                          form.touched.specified_airline &&
+                          form.errors.specified_airline
+                            ? "is-invalid"
+                            : null
+                        }`}
+                      />
+                      {form.touched.specified_airline &&
+                        form.errors.specified_airline && (
+                          <Form.Control.Feedback type="invalid">
+                            {form.touched.specified_airline
+                              ? form.errors.specified_airline
+                              : null}
+                          </Form.Control.Feedback>
+                        )}
+                    </div>
+                  )}
+                </FastField>
               </Col>
             </Form.Group>
             <Form.Group as={Row} className="form-group">
@@ -170,36 +166,36 @@ const FlightModal = ({ show, onHide, setFieldValue }) => {
                 Specified Source
               </Form.Label>
               <Col sm={7}>
-              <FastField name="specified_source">
-                {({ field, form }) => (
-                  <div style={{ maxWidth: 600 }}>
-                    <SelectAsync
-                      {...field}
-                      isClearable
-                      url={`master/supplier-types`}
-                      fieldName="supplier_type_name"
-                      // onChange={(v) => {
-                      //   setFieldValue("specified_source", v)
-                      // }}
-                      placeholder="Please choose"
-                      className={`react-select ${
-                        form.touched.specified_source &&
-                        form.errors.specified_source
-                          ? "is-invalid"
-                          : null
-                      }`}
-                    />
-                    {form.touched.specified_source &&
-                      form.errors.specified_source && (
-                        <Form.Control.Feedback type="invalid">
-                          {form.touched.specified_source
-                            ? form.errors.specified_source
-                            : null}
-                        </Form.Control.Feedback>
-                      )}
-                  </div>
-                )}
-              </FastField>
+                <FastField name="specified_source">
+                  {({ field, form }) => (
+                    <div style={{ maxWidth: 600 }}>
+                      <SelectAsync
+                        {...field}
+                        isClearable
+                        url={`master/supplier-types`}
+                        fieldName="supplier_type_name"
+                        // onChange={(v) => {
+                        //   setFieldValue("specified_source", v)
+                        // }}
+                        placeholder="Please choose"
+                        className={`react-select ${
+                          form.touched.specified_source &&
+                          form.errors.specified_source
+                            ? "is-invalid"
+                            : null
+                        }`}
+                      />
+                      {form.touched.specified_source &&
+                        form.errors.specified_source && (
+                          <Form.Control.Feedback type="invalid">
+                            {form.touched.specified_source
+                              ? form.errors.specified_source
+                              : null}
+                          </Form.Control.Feedback>
+                        )}
+                    </div>
+                  )}
+                </FastField>
               </Col>
             </Form.Group>
             <Form.Group as={Row} className="mb-3">
@@ -268,7 +264,6 @@ const FlightModal = ({ show, onHide, setFieldValue }) => {
                 </Row>
               </Col>
             </Form.Group>
-
             <div style={{ marginBottom: 30, marginTop: 30, display: "flex" }}>
               <Button
                 variant="primary"
@@ -277,7 +272,7 @@ const FlightModal = ({ show, onHide, setFieldValue }) => {
               >
                 SAVE
               </Button>
-              <Button variant="secondary" onClick={onHide}>
+              <Button variant="secondary" onClick={props.onHide}>
                 CANCEL
               </Button>
             </div>
@@ -294,6 +289,7 @@ const FlightForm = (props) => {
   const [loading, setLoading] = useState(true)
   const [id, setId] = useState(null)
   const [formValues, setFormValues] = useState(null)
+  const [formModalValues, setFormModalValues] = useState(null)
   const [modalShow, setModalShow] = useState(false)
   const api = new Api()
 
@@ -329,13 +325,19 @@ const FlightForm = (props) => {
           // ...data,
           markup_category_name: data.markup_category_name,
           description: data.description,
-          domestic: "",
+          domestic:
+            data.domestic_flight_markup.amount === 0
+              ? "domestic_percentage"
+              : "domestic_fixed_amount",
           domestic_amount: data.domestic_flight_markup.amount,
           domestic_charge_type_id: data.domestic_flight_markup.charge_type_id,
           domestic_percent: data.domestic_flight_markup.percent,
           domestic_is_tax_inclusive:
             data.domestic_flight_markup.is_tax_inclusive,
-          international: "",
+          international:
+            data.international_flight_markup.amount === 0
+              ? "international_percentage"
+              : "international_fixed_amount",
           international_amount: data.international_flight_markup.amount,
           international_charge_type_id:
             data.international_flight_markup.charge_type_id,
@@ -347,6 +349,17 @@ const FlightForm = (props) => {
         console.log(e)
       }
     }
+
+    // if (modalShow && formId) {
+    //   try {
+    //     let { data } = await api.get(endpoint + "/" + formId)
+    //     setFormModalValues({
+    //       ...data,
+    //     })
+    //   } catch (e) {
+    //     console.log(e)
+    //   }
+    // }
   }, [])
 
   console.log("form values : ", formValues)
@@ -365,7 +378,7 @@ const FlightForm = (props) => {
     domestic_amount: "",
     domestic_charge_type_id: "",
     domestic_percent: "",
-    domestic_is_tax_inclusive: "",
+    domestic_is_tax_inclusive: false,
     international: "",
     international_amount: "",
     international_charge_type_id: "",
@@ -378,7 +391,6 @@ const FlightForm = (props) => {
     image: "",
   }
 
-  // Schema for yup
   const validationSchema = Yup.object().shape({
     markup_category_name: Yup.string().required("Please enter Preset Name."),
     description: Yup.string(),
@@ -418,17 +430,24 @@ const FlightForm = (props) => {
 
   const validationSchemaModalAddMap = Yup.object().shape({})
 
+  console.log("id: ", props.match.params.id)
+
   return (
     <>
       <Formik
         initialValues={formValues || initialValues}
         validationSchema={validationSchema}
         validateOnChange={false}
+        enableReinitialize
         onSubmit={async (values, { setSubmitting, resetForm }) => {
           console.log("submit: ", values)
           setLoading(true)
           let api = new Api()
           try {
+            let formId =
+              props.match.params.id !== undefined
+                ? props.match.params.id
+                : false
             let form = {
               description: values.description,
               domestic_flight_markup: {
@@ -437,8 +456,8 @@ const FlightForm = (props) => {
                   values.domestic_charge_type_id === ""
                     ? "c93288b6-29d3-4e20-aa83-5ee6261f64ff"
                     : values.domestic_charge_type_id,
-                is_tax_inclusive: true,
-                percent: 10,
+                is_tax_inclusive: values.domestic_is_tax_inclusive,
+                percent: parseInt(values.domestic_percent) || 0,
               },
               domestic_hotel_markup: {
                 amount: 0,
@@ -455,8 +474,8 @@ const FlightForm = (props) => {
                   values.international_charge_type_id === ""
                     ? "c93288b6-29d3-4e20-aa83-5ee6261f64ff"
                     : values.international_charge_type_id,
-                is_tax_inclusive: false,
-                percent: 0,
+                is_tax_inclusive: values.international_is_tax_inclusive,
+                percent: parseInt(values.international_percent) || 0,
               },
               international_hotel_markup: {
                 amount: 0,
@@ -469,7 +488,8 @@ const FlightForm = (props) => {
               },
               markup_category_name: values.markup_category_name,
             }
-            await api.putOrPost(endpoint, id, form)
+
+            await api.putOrPost(endpoint, formId, form)
 
             dispatch(
               setAlert({
@@ -586,6 +606,11 @@ const FlightForm = (props) => {
                                     type="text"
                                     thousandSeparator={true}
                                     allowNegative={true}
+                                    value={
+                                      values.domestic_amount === 0
+                                        ? ""
+                                        : values.domestic_amount
+                                    }
                                     onBlur={(v) => {
                                       setFieldValue(
                                         "domestic_amount",
@@ -600,7 +625,7 @@ const FlightForm = (props) => {
                                       )
                                     }}
                                     disabled={
-                                      values.domestic !==
+                                      values?.domestic !==
                                       "domestic_fixed_amount"
                                     }
                                   />
@@ -621,7 +646,7 @@ const FlightForm = (props) => {
                                       name="domestic_charge_type_id"
                                       value="c93288b6-29d3-4e20-aa83-5ee6261f64ff"
                                       disabled={
-                                        values.domestic !==
+                                        values?.domestic !==
                                         "domestic_fixed_amount"
                                       }
                                     />
@@ -633,7 +658,7 @@ const FlightForm = (props) => {
                                       name="domestic_charge_type_id"
                                       value="de03bf84-4bd8-4cdf-9348-00246f04bcad"
                                       disabled={
-                                        values.domestic !==
+                                        values?.domestic !==
                                         "domestic_fixed_amount"
                                       }
                                     />
@@ -645,7 +670,7 @@ const FlightForm = (props) => {
                                       name="domestic_charge_type_id"
                                       value="5123b121-4f6a-4871-bef1-65408d663e19"
                                       disabled={
-                                        values.domestic !==
+                                        values?.domestic !==
                                         "domestic_fixed_amount"
                                       }
                                     />
@@ -698,6 +723,11 @@ const FlightForm = (props) => {
                                     displayType="input"
                                     type="text"
                                     allowNegative={true}
+                                    value={
+                                      values.domestic_percent === 0
+                                        ? ""
+                                        : values.domestic_percent
+                                    }
                                     onBlur={(v) => {
                                       setFieldValue(
                                         "domestic_percent",
@@ -711,7 +741,7 @@ const FlightForm = (props) => {
                                       )
                                     }}
                                     disabled={
-                                      values.domestic !== "domestic_percentage"
+                                      values?.domestic !== "domestic_percentage"
                                     }
                                   />
                                   <div
@@ -734,7 +764,7 @@ const FlightForm = (props) => {
                                       type="checkbox"
                                       name="domestic_is_tax_inclusive"
                                       disabled={
-                                        values.domestic !==
+                                        values?.domestic !==
                                         "domestic_percentage"
                                       }
                                     />
@@ -770,7 +800,6 @@ const FlightForm = (props) => {
                                   />
                                   <span className="ml-2">Fixed Amount</span>
                                 </label>
-                                {/* <Form.Check type="radio" label="Fixed Amount" /> */}
                               </Form.Group>
                             </Col>
                             <Col sm={12} md={5} className="ml-lg-4">
@@ -798,6 +827,11 @@ const FlightForm = (props) => {
                                     type="text"
                                     thousandSeparator={true}
                                     allowNegative={false}
+                                    value={
+                                      values.international_amount === 0
+                                        ? ""
+                                        : values.international_amount
+                                    }
                                     onBlur={(v) => {
                                       setFieldValue(
                                         "international_amount",
@@ -812,7 +846,7 @@ const FlightForm = (props) => {
                                       )
                                     }}
                                     disabled={
-                                      values.international !==
+                                      values?.international !==
                                       "international_fixed_amount"
                                     }
                                   />
@@ -833,7 +867,7 @@ const FlightForm = (props) => {
                                       name="international_charge_type_id"
                                       value="c93288b6-29d3-4e20-aa83-5ee6261f64ff"
                                       disabled={
-                                        values.international !==
+                                        values?.international !==
                                         "international_fixed_amount"
                                       }
                                     />
@@ -845,7 +879,7 @@ const FlightForm = (props) => {
                                       name="international_charge_type_id"
                                       value="de03bf84-4bd8-4cdf-9348-00246f04bcad"
                                       disabled={
-                                        values.international !==
+                                        values?.international !==
                                         "international_fixed_amount"
                                       }
                                     />
@@ -857,7 +891,7 @@ const FlightForm = (props) => {
                                       name="international_charge_type_id"
                                       value="5123b121-4f6a-4871-bef1-65408d663e19"
                                       disabled={
-                                        values.international !==
+                                        values?.international !==
                                         "international_fixed_amount"
                                       }
                                     />
@@ -910,6 +944,11 @@ const FlightForm = (props) => {
                                     displayType="input"
                                     type="text"
                                     allowNegative={false}
+                                    value={
+                                      values.international_percent === 0
+                                        ? ""
+                                        : values.international_percent
+                                    }
                                     onBlur={(v) => {
                                       setFieldValue(
                                         "international_percent",
@@ -923,7 +962,7 @@ const FlightForm = (props) => {
                                       )
                                     }}
                                     disabled={
-                                      values.international !==
+                                      values?.international !==
                                       "international_percentage"
                                     }
                                   />
@@ -947,7 +986,7 @@ const FlightForm = (props) => {
                                       type="checkbox"
                                       name="international_is_tax_inclusive"
                                       disabled={
-                                        values.international !==
+                                        values?.international !==
                                         "international_percentage"
                                       }
                                     />
