@@ -809,7 +809,7 @@ const DashboardRoutes = () => {
         <Route exact path="/master/corporate-airline-fare">
           <CorporateAirlineFareTable />
         </Route>
-        <Route path="/master/corporate-airline-fare/:id?">
+        <Route path="/master/corporate-airline-fare/form/:id?">
           <CorporateAirlineFareForm />
         </Route>
 

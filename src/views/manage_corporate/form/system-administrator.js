@@ -30,15 +30,18 @@ const SystemAdministrator = () => {
       email: '',
       phone: '',
       address: '',
-      country: {
-        value: ''
-      },
+      country: '',
       city: '',
       province: '',
       zipcode: '',
     },
     validationSchema: Yup.object({
-
+      title: Yup.object().required("Title is required"),
+      first_name: Yup.string().required('First Name is required'),
+      last_name: Yup.string().required('Last Name is required'),
+      email: Yup.string().required('Email is required').email('Email is not valid'),
+      phone: Yup.string().required('Phone is required'),
+      country: Yup.object().required('Country is required')
     }),
     onSubmit: (val) => {
       console.log(val);
@@ -58,7 +61,7 @@ const SystemAdministrator = () => {
         setOptionProvince([])
       }
 
-      if(res.data.items.length > 0){
+      if (res.data.items.length > 0) {
         res.data.items.forEach((data) => {
           options.push({
             label: data.state_province_name,
@@ -79,7 +82,7 @@ const SystemAdministrator = () => {
         setOptionCity([])
       }
 
-      if(res2.data.items.length > 0){
+      if (res2.data.items.length > 0) {
         res2.data.items.forEach((data) => {
           optionsCity.push({
             label: data.city_name,
@@ -90,7 +93,7 @@ const SystemAdministrator = () => {
         })
       }
 
-    } catch (e) {}
+    } catch (e) { }
   }
 
   // Current Province state
@@ -98,7 +101,7 @@ const SystemAdministrator = () => {
     try {
       let filters = `[["country_id","=","${country_id}"],["AND"],["status","=",1]]`
 
-      if(province_id && province_id !== "00000000-0000-0000-0000-000000000000") {
+      if (province_id && province_id !== "00000000-0000-0000-0000-000000000000") {
         filters = `[["state_province_id","=","${province_id}"],["AND"],["country_id","=","${country_id}"],["AND"],["status","=",1]]`
       }
 
@@ -112,7 +115,7 @@ const SystemAdministrator = () => {
         setOptionCity(options)
       }
 
-      if(res.data.items.length > 0){
+      if (res.data.items.length > 0) {
         res.data.items.forEach((data) => {
           options.push({
             label: data.city_name,
@@ -121,12 +124,12 @@ const SystemAdministrator = () => {
         })
         setOptionCity(options)
       }
-    } catch (e) {}
+    } catch (e) { }
   }
 
   return (
     <Form onSubmit={handleSubmit}>
-      <Card style={{marginBotton: 0}}>
+      <Card style={{ marginBotton: 0 }}>
         <Card.Body>
           <h3 className="card-heading">System Administrator</h3>
           <div style={{ padding: "0 15px 15px 15px" }}>
@@ -138,9 +141,9 @@ const SystemAdministrator = () => {
                   </Form.Label>
                   <Col md={3} lg={9}>
                     <Select
-                     isClearable
-                     placeholder=''
-                     options={[
+                      isClearable
+                      placeholder=''
+                      options={[
                         {
                           value: 'mr',
                           label: 'Mr.'
@@ -151,21 +154,23 @@ const SystemAdministrator = () => {
                         },
                       ]}
                       onChange={(e) => {
+                        console.log('on change', e)
                         setFieldValue('title', e)
                       }}
-                      width={'80px'}
+                      width={'150px'}
                       name='title'
                       id='title'
                       value={values.title}
                       components={
                         isView
                           ? {
-                              DropdownIndicator: () => null,
-                              IndicatorSeparator: () => null,
-                            }
+                            DropdownIndicator: () => null,
+                            IndicatorSeparator: () => null,
+                          }
                           : null
                       }
                       isDisabled={isView}
+                      className={`react-select ${errors?.title && 'is-invalid'}`}
                     />
                     {errors?.title && (
                       <TextError>
@@ -258,7 +263,7 @@ const SystemAdministrator = () => {
                       onChange={handleChange}
                       type="text"
                       minLength={1}
-                      maxLength={128}
+                      maxLength={256}
                       placeholder=""
                       disabled={isView}
                       // disabled={isView || loading}
@@ -277,14 +282,14 @@ const SystemAdministrator = () => {
                     Phone <span className="form-label-required">*</span>
                   </Form.Label>
                   <Col md={3} lg={9}>
-                  <Form.Control
+                    <Form.Control
                       value={values.phone}
                       name="phone"
                       id="phone"
                       onChange={handleChange}
                       type="text"
                       minLength={1}
-                      maxLength={128}
+                      maxLength={32}
                       placeholder=""
                       disabled={isView}
                       // disabled={isView || loading}
@@ -305,6 +310,7 @@ const SystemAdministrator = () => {
                   <Col md={3} lg={9}>
                     <textarea
                       value={values.address}
+                      className="form-control"
                       name="address"
                       id="address"
                       onChange={handleChange}
@@ -330,39 +336,58 @@ const SystemAdministrator = () => {
                         value={!values.country.value ? null : values.country}
                         placeholder="Please choose"
                         fieldName="country_name"
-                        className={`react-select ${
-                          touched?.country &&
+                        className={`react-select ${touched?.country &&
                           errors?.country
-                            ? "is-invalid"
-                            : null
-                        }`}
+                          ? "is-invalid"
+                          : null
+                          }`}
                         onChange={(v) => {
-                          if (v) handleChangeCountry(v.value)
-                          setValues({
-                            ...values,
-                            country: {
-                              value: v.value,
-                              label: v.label
-                            },
-                            province: null,
-                            city: null
-                          })
+                          console.log('on Chnage', v)
+                          if (v) {
+                            handleChangeCountry(v.value)
+                            setValues({
+                              ...values,
+                              country: {
+                                value: v.value,
+                                label: v.label
+                              },
+                              province: null,
+                              city: null
+                            })
+                          } else {
+                            setValues({
+                              ...values,
+                              country: {
+                                value: null,
+                                label: null
+                              },
+                              province: null,
+                              city: null
+                            })
+                            setOptionProvince([])
+                            setOptionCity([])
+                          }
                         }}
                         onBlur={setFieldTouched}
                         components={
                           isView
                             ? {
-                                DropdownIndicator: () => null,
-                                IndicatorSeparator: () => null,
-                              }
+                              DropdownIndicator: () => null,
+                              IndicatorSeparator: () => null,
+                            }
                             : null
                         }
                         isDisabled={isView}
                         invalid={touched?.country?.value && errors?.country?.value}
                       />
-                      {touched?.country?.value && errors?.country?.value && (
+                      {/* {touched?.country?.value && errors?.country?.value && (
                         <TextError>
                           {errors.country?.value}
+                        </TextError>
+                      )} */}
+                      {errors?.country && (
+                        <TextError>
+                          {errors.country}
                         </TextError>
                       )}
                     </div>
@@ -386,12 +411,13 @@ const SystemAdministrator = () => {
                           handleChangeProvince(v?.value, values.country?.value)
                         }}
                         onBlur={setFieldTouched}
+                        className="react-select"
                         components={
                           isView
                             ? {
-                                DropdownIndicator: () => null,
-                                IndicatorSeparator: () => null,
-                              }
+                              DropdownIndicator: () => null,
+                              IndicatorSeparator: () => null,
+                            }
                             : null
                         }
                         isDisabled={isView}
@@ -407,6 +433,7 @@ const SystemAdministrator = () => {
                     <div style={{ maxWidth: 200 }}>
                       <Select
                         isClearable
+                        className="react-select"
                         name="city"
                         value={values.city}
                         placeholder="Please choose"
@@ -418,9 +445,9 @@ const SystemAdministrator = () => {
                         components={
                           isView
                             ? {
-                                DropdownIndicator: () => null,
-                                IndicatorSeparator: () => null,
-                              }
+                              DropdownIndicator: () => null,
+                              IndicatorSeparator: () => null,
+                            }
                             : null
                         }
                         isDisabled={isView}

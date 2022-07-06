@@ -252,12 +252,11 @@ const ModalOverrideServiceFee = (props) => {
                                 setFieldValue("airline_service_type", v)
                               }}
                               placeholder="Please choose"
-                              className={`react-select ${
-                                form.touched.airline_service_type &&
-                                form.errors.airline_service_type
+                              className={`react-select ${form.touched.airline_service_type &&
+                                  form.errors.airline_service_type
                                   ? "is-invalid"
                                   : null
-                              }`}
+                                }`}
                             />
                             {form.touched.airline_service_type &&
                               form.errors.airline_service_type && (
@@ -290,12 +289,11 @@ const ModalOverrideServiceFee = (props) => {
                               setFieldValue("specified_airline", v)
                             }}
                             placeholder="Please choose"
-                            className={`react-select ${
-                              form.touched.specified_airline &&
-                              form.errors.specified_airline
+                            className={`react-select ${form.touched.specified_airline &&
+                                form.errors.specified_airline
                                 ? "is-invalid"
                                 : null
-                            }`}
+                              }`}
                           />
                           {form.touched.specified_airline &&
                             form.errors.specified_airline && (
@@ -327,12 +325,11 @@ const ModalOverrideServiceFee = (props) => {
                               setFieldValue("specified_source", v)
                             }}
                             placeholder="Please choose"
-                            className={`react-select ${
-                              form.touched.specified_source &&
-                              form.errors.specified_source
+                            className={`react-select ${form.touched.specified_source &&
+                                form.errors.specified_source
                                 ? "is-invalid"
                                 : null
-                            }`}
+                              }`}
                           />
                           {form.touched.specified_source &&
                             form.errors.specified_source && (
@@ -619,12 +616,10 @@ const FlightForm = (props) => {
         },
       }
       let res = await api.putOrPost(endpoint, formId, form)
-      console.log(res)
-
       dispatch(setCreateModal({ show: false, id: null, disabled_form: false }))
       dispatch(
         setAlert({
-          message: `Service Fee has been successfully saved.`,
+          message: `${formId ? 'Service Fee has been successfully updated.' : 'Service Fee has been successfully saved.'}`,
         }),
       )
       props.history.goBack()
