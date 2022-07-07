@@ -8,6 +8,9 @@ import { Editor } from "react-draft-wysiwyg"
 import "./translation-form.css"
 import arrowdownIcon from "assets/icons/arrow-down.svg"
 
+import draftToHtml from "draftjs-to-html"
+import { convertToRaw } from "draft-js"
+
 export default class TranslationForm extends Component {
   constructor(props) {
     console.log(props, "translation")
@@ -20,6 +23,7 @@ export default class TranslationForm extends Component {
       translated: {},
       showList: false,
       translationData: [],
+      url: "",
     }
 
     this.translated = {}
@@ -109,7 +113,30 @@ export default class TranslationForm extends Component {
       translated: this.translated,
     })
   }
+  onEditorStateChange = (editorState, lang, name) => {
+    const editor = draftToHtml(convertToRaw(editorState.getCurrentContent()))
+    console.log("tes editor", editor)
+    if (!this.translated[lang]) {
+      this.translated[lang] = { language_code: lang }
+    }
 
+    let inField = []
+    this.props.fields.map((field, index) => {
+      let id = "rdw-wrapper-trans-" + lang + "-" + name
+      let elem = document.getElementById(id)
+      if (elem) {
+        inField.push(elem.value)
+      } else {
+        console.log(elem, "gagal2", id)
+      }
+      return field
+    })
+    this.translated[lang][name] = editor
+
+    this.setState({
+      translated: this.translated,
+    })
+  }
   getKeyByValue(object, value) {
     return Object.keys(object).find((key) => object[key] === value)
   }
@@ -206,12 +233,21 @@ export default class TranslationForm extends Component {
                           }}
                         >
                           <Editor
-                            // editorState={editorState}
+                            // editorState={this.state.editorState}
+                            wrapperId={
+                              "trans-" + lang.language_code + "-" + field.name
+                            }
                             toolbarClassName="toolbarClassName"
                             wrapperClassName="wrapperClassName"
                             editorClassName="editorClassName"
                             wrapperStyle={{ border: "1px solid #D3D3D3" }}
-                            onEditorStateChange={this.onEditorStateChange}
+                            onEditorStateChange={(e) => {
+                              this.onEditorStateChange(
+                                e,
+                                lang.language_code,
+                                field.name,
+                              )
+                            }}
                             toolbarStyle={{
                               background: "#ECECEC 0% 0% no-repeat padding-box",
                             }}
