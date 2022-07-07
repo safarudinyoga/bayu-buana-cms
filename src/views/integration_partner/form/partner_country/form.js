@@ -77,10 +77,13 @@ function ExchangeRateCreate(props) {
         let res = await API.get(endpoint + "/" + id + "/countries?" + `filters=${filters}`)
     
         if(countriesId){
-          return res.data.items.length === 0 || value === (formValues[fieldName] || formValues[fieldName].value)
+          if(res.data.items.length > 0) {
+            return value === formValues[fieldName] || value === formValues[fieldName].value
+          }
         } else {
           return res.data.items.length === 0
         }
+        return true
     }
 
     Yup.addMethod(Yup.object, 'uniqueValueObject', function (fieldName, message) {

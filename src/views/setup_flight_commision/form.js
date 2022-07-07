@@ -134,10 +134,9 @@ const FlightCommisionForm = (props) => {
             ? "city"
             :"",
           },
-          specifyPeriodIssue: _.isEmpty(!data.commission_claim_issue_date.start_date || !data.commission_claim_issue_date.end_date),
-          specifyPeriodDeparture: _.isEmpty(!data.commission_claim_departure_date.start_date ||!data.commission_claim_departure_date.end_date),
+          specifyPeriodIssue: data.commission_claim_issue_date.start_date && data.commission_claim_issue_date.end_date?true:false,
+          specifyPeriodDeparture: data.commission_claim_departure_date.start_date && data.commission_claim_departure_date.end_date?true:false,
         })
-        console.log(!!data.commission_claim_issue_date.start_date|| !!data.commission_claim_issue_date.end_date)
       }
 
     } catch (e) {
