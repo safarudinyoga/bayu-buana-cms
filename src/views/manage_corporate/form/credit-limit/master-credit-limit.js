@@ -1,7 +1,6 @@
 import React from 'react'
 import { Form, Col, Card } from "react-bootstrap"
 import Select from "components/form/select"
-import createIcon from "assets/icons/create.svg"
 import { formatRupiah } from 'lib/formatRupiah'
 import TextError from 'components/formik/textError'
 import { components } from "react-select"
