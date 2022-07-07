@@ -16,7 +16,7 @@ import useQuery from "lib/query"
 import { ReactSVG } from "react-svg"
 
 const endpoint = "/master/processing-fee-categories"
-const endpointFee = "/master/agent-processing-fee-categories"
+const endpointFee = "/master/configurations/retail-ancillary-fee"
 const backUrl = "/master/retail-ancillary-fee"
 const options = {
   position: "bottom-right",
@@ -34,13 +34,13 @@ const RetailAncillaryFee = (props) => {
   const [taxTypeDomesticRevalidate, setTaxTypeDomesticRevalidate] = useState([])
   const [taxTypeDomesticRefund, setTaxTypeDomesticRefund] = useState([])
   const [taxTypeDomesticVoid, setTaxTypeDomesticVoid] = useState([])
-  const [taxTypeDomesticRfp, setTaxTypeDomesticRfp] = useState([])
+  const [taxTypeDomesticFrp, setTaxTypeDomesticFrp] = useState([])
   const [taxTypeDomesticNonGds, setTaxTypeDomesticNonGds] = useState([])
   const [taxTypeInternationalReissue, setTaxTypeInternationalReissue] = useState([])
   const [taxTypeInternationalRevalidate, setTaxTypeInternationalRevalidate] = useState([])
   const [taxTypeInternationalRefund, setTaxTypeInternationalRefund] = useState([])
   const [taxTypeInternationalVoid, setTaxTypeInternationalVoid] = useState([])
-  const [taxTypeInternationalRfp, setTaxTypeInternationalRfp] = useState([])
+  const [taxTypeInternationalFrp, setTaxTypeInternationalFrp] = useState([])
   const [taxTypeInternationalNonGds, setTaxTypeInternationalNonGds] = useState([])
   const [taxTypeOtherEmergency, setTaxTypeOtherEmergency] = useState([])
   
@@ -48,13 +48,13 @@ const RetailAncillaryFee = (props) => {
   const [taxIdDomesticRevalidate, setTaxIdDomesticRevalidate] = useState("")
   const [taxIdDomesticRefund, setTaxIdDomesticRefund] = useState("")
   const [taxIdDomesticVoid, setTaxIdDomesticVoid] = useState("")
-  const [taxIdDomesticRfp, setTaxIdDomesticRfp] = useState("")
+  const [taxIdDomesticFrp, setTaxIdDomesticFrp] = useState("")
   const [taxIdDomesticNonGds, setTaxIdDomesticNonGds] = useState("")
   const [taxIdInternationalReissue, setTaxIdInternationalReissue] = useState("")
   const [taxIdInternationalRevalidate, setTaxIdInternationalRevalidate] = useState("")
   const [taxIdInternationalRefund, setTaxIdInternationalRefund] = useState("")
   const [taxIdInternationalVoid, setTaxIdInternationalVoid] = useState("")
-  const [taxIdInternationalRfp, setTaxIdInternationalRfp] = useState("")
+  const [taxIdInternationalFrp, setTaxIdInternationalFrp] = useState("")
   const [taxIdInternationalNonGds, setTaxIdInternationalNonGds] = useState("")
   const [taxIdOtherEmergency, setTaxIdOtherEmergency] = useState("")
 
@@ -62,17 +62,21 @@ const RetailAncillaryFee = (props) => {
   const [taxTypeDomesticHotel, setTaxTypeDomesticHotel] = useState([])
   const [taxTypeDomesticNonGdsHotel, setTaxTypeDomesticNonGdsHotel] = useState([])
   const [taxTypeDomesticRefundHotel, setTaxTypeDomesticRefundHotel] = useState([])
+  const [taxTypeDomesticFrpHotel, setTaxTypeDomesticFrpHotel] = useState([])
   const [taxTypeInternationalHotel, setTaxTypeInternationalHotel] = useState([])
   const [taxTypeInternationalNonGdsHotel, setTaxTypeInternationalNonGdsHotel] = useState([])
   const [taxTypeInternationalRefundHotel, setTaxTypeInternationalRefundHotel] = useState([])
+  const [taxTypeInternationalFrpHotel, setTaxTypeInternationalFrpHotel] = useState([])
   const [taxTypeOtherEmergencyHotel, setTaxTypeOtherEmergencyHotel] = useState([])
   
   const [taxIdDomesticHotel, setTaxIdDomesticHotel] = useState("")
   const [taxIdDomesticNonGdsHotel, setTaxIdDomesticNonGdsHotel] = useState("")
   const [taxIdDomesticRefundHotel, setTaxIdDomesticRefundHotel] = useState("")
+  const [taxIdDomesticFrpHotel, setTaxIdDomesticFrpHotel] = useState("")
   const [taxIdInternationalHotel, setTaxIdInternationalHotel] = useState("")
   const [taxIdInternationalNonGdsHotel, setTaxIdInternationalNonGdsHotel] = useState("")
   const [taxIdInternationalRefundHotel, setTaxIdInternationalRefundHotel] = useState("")
+  const [taxIdInternationalFrpHotel, setTaxIdInternationalFrpHotel] = useState("")
   const [taxIdOtherEmergencyHotel, setTaxIdOtherEmergencyHotel] = useState("")
   
 
@@ -86,22 +90,24 @@ const RetailAncillaryFee = (props) => {
     getFeeTaxType("49", setTaxTypeDomesticRevalidate, setTaxIdDomesticRevalidate)
     getFeeTaxType("35", setTaxTypeDomesticRefund, setTaxIdDomesticRefund)
     getFeeTaxType("37", setTaxTypeDomesticVoid, setTaxIdDomesticVoid)
-    getFeeTaxType("39", setTaxTypeDomesticRfp, setTaxIdDomesticRfp)
     getFeeTaxType("41", setTaxTypeDomesticNonGds, setTaxIdDomesticNonGds)
+    getFeeTaxType("39", setTaxTypeDomesticFrp, setTaxIdDomesticFrp)
     getFeeTaxType("34", setTaxTypeInternationalReissue, setTaxIdInternationalReissue)
     getFeeTaxType("50", setTaxTypeInternationalRevalidate, setTaxIdInternationalRevalidate)
     getFeeTaxType("36", setTaxTypeInternationalRefund, setTaxIdInternationalRefund)
     getFeeTaxType("38", setTaxTypeInternationalVoid, setTaxIdInternationalVoid)
-    getFeeTaxType("40", setTaxTypeInternationalRfp, setTaxIdInternationalRfp)
+    getFeeTaxType("40", setTaxTypeInternationalFrp, setTaxIdInternationalFrp)
     getFeeTaxType("42", setTaxTypeInternationalNonGds, setTaxIdInternationalNonGds)
     getFeeTaxType("6", setTaxTypeOtherEmergency, setTaxIdOtherEmergency)
     // Hotel
     getFeeTaxType("43", setTaxTypeDomesticHotel, setTaxIdDomesticHotel)
     getFeeTaxType("45", setTaxTypeDomesticRefundHotel, setTaxIdDomesticRefundHotel)
     getFeeTaxType("47", setTaxTypeDomesticNonGdsHotel, setTaxIdDomesticNonGdsHotel)
+    getFeeTaxType("39", setTaxTypeDomesticFrpHotel, setTaxIdDomesticFrpHotel)
     getFeeTaxType("44", setTaxTypeInternationalHotel, setTaxIdInternationalHotel)
     getFeeTaxType("46", setTaxTypeInternationalRefundHotel, setTaxIdInternationalRefundHotel)
     getFeeTaxType("48", setTaxTypeInternationalNonGdsHotel, setTaxIdInternationalNonGdsHotel)
+    getFeeTaxType("40", setTaxTypeInternationalFrpHotel, setTaxIdInternationalFrpHotel)
     getFeeTaxType("6", setTaxTypeOtherEmergencyHotel, setTaxIdOtherEmergencyHotel)
   }, [props.match.params.id])
   
@@ -134,12 +140,12 @@ const RetailAncillaryFee = (props) => {
     domestic_void_amount_type: "",
     domestic_void_percent: "",
     domestic_void_tax_include: false,
-    domestic_rfp: "",
-    domestic_rfp_fee_tax_id: "",
-    domestic_rfp_amount: "",
-    domestic_rfp_amount_type: "",
-    domestic_rfp_percent: "",
-    domestic_rfp_tax_include: false,
+    domestic_frp: "",
+    domestic_frp_fee_tax_id: "",
+    domestic_frp_amount: "",
+    domestic_frp_amount_type: "",
+    domestic_frp_percent: "",
+    domestic_frp_tax_include: false,
     domestic_non_gds: "",
     domestic_non_gds_fee_tax_id: "",
     domestic_non_gds_amount: "",
@@ -170,12 +176,12 @@ const RetailAncillaryFee = (props) => {
     international_void_amount_type: "",
     international_void_percent: "",
     international_void_tax_include: false,
-    international_rfp: "",
-    international_rfp_fee_tax_id: "",
-    international_rfp_amount: "",
-    international_rfp_amount_type: "",
-    international_rfp_percent: "",
-    international_rfp_tax_include: false,
+    international_frp: "",
+    international_frp_fee_tax_id: "",
+    international_frp_amount: "",
+    international_frp_amount_type: "",
+    international_frp_percent: "",
+    international_frp_tax_include: false,
     international_non_gds: "",
     international_non_gds_fee_tax_id: "",
     international_non_gds_amount: "",
@@ -202,13 +208,19 @@ const RetailAncillaryFee = (props) => {
     hotel_domestic_refund_fee_amount_type: "",
     hotel_domestic_refund_fee_percent: "",
     hotel_domestic_refund_fee_tax_include: false,
+    hotel_domestic_domestic_frp: "",
+    hotel_domestic_domestic_frp_fee_tax_id: "",
+    hotel_domestic_domestic_frp_amount: "",
+    hotel_domestic_domestic_frp_amount_type: "",
+    hotel_domestic_domestic_frp_percent: "",
+    hotel_domestic_domestic_frp_tax_include: false,
     hotel_domestic_non_gds: "",
     hotel_domestic_non_gds_fee_tax_id: "",
     hotel_domestic_non_gds_amount: "",
     hotel_domestic_non_gds_amount_type: "",
     hotel_domestic_non_gds_percent: "",
     hotel_domestic_non_gds_tax_include: false,
-    hotel_international_modify_fee: "",
+    hotel_international_modify: "",
     hotel_international_modify_fee_tax_id: "",
     hotel_international_modify_amount: "",
     hotel_international_modify_amount_type: "",
@@ -220,6 +232,12 @@ const RetailAncillaryFee = (props) => {
     hotel_international_refund_fee_amount_type: "",
     hotel_international_refund_fee_percent: "",
     hotel_international_refund_fee_tax_include: false,
+    hotel_international_frp: "",
+    hotel_international_frp_fee_tax_id: "",
+    hotel_international_frp_amount: "",
+    hotel_international_frp_amount_type: "",
+    hotel_international_frp_percent: "",
+    hotel_international_frp_tax_include: false,
     hotel_international_non_gds: "",
     hotel_international_non_gds_fee_tax_id: "",
     hotel_international_non_gds_amount: "",
@@ -309,23 +327,23 @@ const RetailAncillaryFee = (props) => {
         is: value => value === "percent",
         then: Yup.string().required(`Please enter percentage for ${taxTypeDomesticVoid.fee_tax_type_name}.`)
       }),
-    domestic_rfp: Yup
+    domestic_frp: Yup
       .string()
-      .required(`Please enter fixed amount or percentage for ${taxTypeDomesticRfp.fee_tax_type_name}.`),
-    domestic_rfp_amount: Yup
-      .string().when('domestic_rfp', {
+      .required(`Please enter fixed amount or percentage for ${taxTypeDomesticFrp.fee_tax_type_name}.`),
+    domestic_frp_amount: Yup
+      .string().when('domestic_frp', {
         is: value => value === "amount",
-        then: Yup.string().required(`Please enter fixed amount for ${taxTypeDomesticRfp.fee_tax_type_name}.`)
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeDomesticFrp.fee_tax_type_name}.`)
       }),
-    domestic_rfp_amount_type: Yup
-      .string().when('domestic_rfp', {
+    domestic_frp_amount_type: Yup
+      .string().when('domestic_frp', {
         is: value => value === "amount",
         then: Yup.string().required(`Please select charge type.`)
       }),
-    domestic_rfp_percent: Yup
-      .string().when('domestic_rfp', {
+    domestic_frp_percent: Yup
+      .string().when('domestic_frp', {
         is: value => value === "percent",
-        then: Yup.string().required(`Please enter percentage for ${taxTypeDomesticRfp.fee_tax_type_name}.`)
+        then: Yup.string().required(`Please enter percentage for ${taxTypeDomesticFrp.fee_tax_type_name}.`)
       }),
     domestic_non_gds: Yup
       .string()
@@ -417,23 +435,23 @@ const RetailAncillaryFee = (props) => {
         is: value => value === "percent",
         then: Yup.string().required(`Please enter percentage for ${taxTypeInternationalVoid.fee_tax_type_name}.`)
       }), 
-    international_rfp: Yup
+    international_frp: Yup
       .string()
-      .required(`Please enter fixed amount or percentage for ${taxTypeInternationalRfp.fee_tax_type_name}.`),
-    international_rfp_amount: Yup
-      .string().when('international_rfp', {
+      .required(`Please enter fixed amount or percentage for ${taxTypeInternationalFrp.fee_tax_type_name}.`),
+    international_frp_amount: Yup
+      .string().when('international_frp', {
         is: value => value === "amount",
-        then: Yup.string().required(`Please enter fixed amount for ${taxTypeInternationalRfp.fee_tax_type_name}.`)
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeInternationalFrp.fee_tax_type_name}.`)
       }),
-    international_rfp_amount_type: Yup
-      .string().when('international_rfp', {
+    international_frp_amount_type: Yup
+      .string().when('international_frp', {
         is: value => value === "amount",
         then: Yup.string().required(`Please select charge type.`)
       }),
-    international_rfp_percent: Yup
-      .string().when('international_rfp', {
+    international_frp_percent: Yup
+      .string().when('international_frp', {
         is: value => value === "percent",
-        then: Yup.string().required(`Please enter percentage for ${taxTypeInternationalRfp.fee_tax_type_name}.`)
+        then: Yup.string().required(`Please enter percentage for ${taxTypeInternationalFrp.fee_tax_type_name}.`)
       }), 
     international_non_gds: Yup
       .string()
@@ -527,6 +545,24 @@ const RetailAncillaryFee = (props) => {
         is: value => value === "percent",
         then: Yup.string().required(`Please enter percentage for ${taxTypeDomesticNonGdsHotel.fee_tax_type_name}.`)
       }), 
+    hotel_domestic_frp: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeDomesticFrpHotel.fee_tax_type_name}.`),
+    hotel_domestic_frp_amount: Yup
+      .string().when('hotel_domestic_frp', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeDomesticFrpHotel.fee_tax_type_name}.`)
+      }),
+    hotel_domestic_frp_amount_type: Yup
+      .string().when('hotel_domestic_frp', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    hotel_domestic_frp_percent: Yup
+      .string().when('hotel_domestic_frp', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeDomesticFrpHotel.fee_tax_type_name}.`)
+      }),
     hotel_international_modify: Yup
       .string()
       .required(`Please enter fixed amount or percentage for ${taxTypeInternationalHotel.fee_tax_type_name}.`),
@@ -562,6 +598,24 @@ const RetailAncillaryFee = (props) => {
       .string().when('hotel_international_refund_fee', {
         is: value => value === "percent",
         then: Yup.string().required(`Please enter percentage for ${taxTypeInternationalRefundHotel.fee_tax_type_name}.`)
+      }), 
+    hotel_international_frp: Yup
+      .string()
+      .required(`Please enter fixed amount or percentage for ${taxTypeInternationalFrpHotel.fee_tax_type_name}.`),
+    hotel_international_frp_amount: Yup
+      .string().when('hotel_international_frp', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please enter fixed amount for ${taxTypeInternationalFrpHotel.fee_tax_type_name}.`)
+      }),
+    hotel_international_frp_amount_type: Yup
+      .string().when('hotel_international_frp', {
+        is: value => value === "amount",
+        then: Yup.string().required(`Please select charge type.`)
+      }),
+    hotel_international_frp_percent: Yup
+      .string().when('hotel_international_frp', {
+        is: value => value === "percent",
+        then: Yup.string().required(`Please enter percentage for ${taxTypeInternationalFrpHotel.fee_tax_type_name}.`)
       }), 
     hotel_international_non_gds: Yup
       .string()
@@ -601,18 +655,94 @@ const RetailAncillaryFee = (props) => {
       }), 
 
   })
-
+  const checkprocessingType = (value) => value !== "00000000-0000-0000-0000-000000000000" ? "amount" : "percent"
+  const checkChargeType = value => value === "00000000-0000-0000-0000-000000000000" ? "" : value
   useEffect(async() => {
     try {
-      if(formId) {
-        let res = await api.get(endpoint + "/" + formId)
         // let agent_res = await api.get(`endpointFee+ "/1/" + res.data.id)
+        let {data} = await api.get(endpointFee+ "/1")
         setInitialForm({
           ...initialForm, 
-          ...res.data,
-          // ...agent_res.data
+          ...data,
+          domestic_reissue: checkprocessingType(data.domestic_reissue.charge_type_id),
+          domestic_reissue_fee_tax_id: data.domestic_reissue.fee_tax_type_id,
+          domestic_reissue_amount: data.domestic_reissue.amount,
+          // domestic_reissue_amount_type: checkChargeType(data.domestic_reissue.charge_type_id),
+          domestic_reissue_percent: data.domestic_reissue.percent,
+          domestic_reissue_tax_include: data.domestic_reissue.is_tax_inclusive,
+          domestic_revalidate: checkprocessingType(data.domestic_revalidate.charge_type_id),
+          domestic_revalidate_fee_tax_id: data.domestic_revalidate.fee_tax_type_id,
+          domestic_revalidate_amount: data.domestic_revalidate.amount,
+          // domestic_revalidate_amount_type: checkChargeType(data.domestic_revalidate.charge_type_id),
+          domestic_revalidate_percent: data.domestic_revalidate.percent,
+          domestic_revalidate_tax_include: data.domestic_revalidate.is_tax_inclusive,
+          domestic_refund: checkprocessingType(data.domestic_refund.charge_type_id),
+          domestic_refund_fee_tax_id: data.domestic_refund.fee_tax_type_id,
+          domestic_refund_amount: data.domestic_refund.amount,
+          // domestic_refund_amount_type: checkChargeType(data.domestic_refund.charge_type_id),
+          domestic_refund_percent: data.domestic_refund.percent,
+          domestic_refund_tax_include: data.domestic_refund.is_tax_inclusive,
+          domestic_void: checkprocessingType(data.domestic_void.charge_type_id),
+          domestic_void_fee_tax_id: data.domestic_void.fee_tax_type_id,
+          domestic_void_amount: data.domestic_void.amount,
+          // domestic_void_amount_type: checkChargeType(data.domestic_void.charge_type_id),
+          domestic_void_percent: data.domestic_void.percent,
+          domestic_void_tax_include: data.domestic_void.is_tax_inclusive,
+          domestic_frp: checkprocessingType(data.domestic_rfp.charge_type_id),
+          domestic_frp_fee_tax_id: data.domestic_rfp.fee_tax_type_id,
+          domestic_frp_amount: data.domestic_rfp.amount,
+          // domestic_frp_amount_type: checkChargeType(data.domestic_rfp.charge_type_id),
+          domestic_frp_percent: data.domestic_rfp.percent,
+          domestic_frp_tax_include: data.domestic_rfp.is_tax_inclusive,
+          domestic_non_gds: checkprocessingType(data.domestic_non_gds.charge_type_id),
+          domestic_non_gds_fee_tax_id: data.domestic_non_gds.fee_tax_type_id,
+          domestic_non_gds_amount: data.domestic_non_gds.amount,
+          // domestic_non_gds_amount_type: checkChargeType(data.domestic_non_gds.charge_type_id),
+          domestic_non_gds_percent: data.domestic_non_gds.percent,
+          domestic_non_gds_tax_include: data.domestic_non_gds.is_tax_inclusive,
+          international_reissue: checkprocessingType(data.international_reissue.charge_type_id),
+          international_reissue_fee_tax_id: data.international_reissue.fee_tax_type_id,
+          international_reissue_amount: data.international_reissue.amount,
+          // international_reissue_amount_type: checkChargeType(data.international_reissue.charge_type_id),
+          international_reissue_percent: data.international_reissue.percent,
+          international_reissue_tax_include: data.international_reissue.is_tax_inclusive,
+          international_revalidate: checkprocessingType(data.international_revalidate.charge_type_id),
+          international_revalidate_fee_tax_id: data.international_revalidate.fee_tax_type_id,
+          international_revalidate_amount: data.international_revalidate.amount,
+          // international_revalidate_amount_type: checkChargeType(data.international_revalidate.charge_type_id),
+          international_revalidate_percent: data.international_revalidate.percent,
+          international_revalidate_tax_include: data.international_revalidate.is_tax_inclusive,
+          international_refund: checkprocessingType(data.international_refund.charge_type_id),
+          international_refund_fee_tax_id: data.international_refund.fee_tax_type_id,
+          international_refund_amount: data.international_refund.amount,
+          // international_refund_amount_type: checkChargeType(data.international_refund.charge_type_id),
+          international_refund_percent: data.international_refund.percent,
+          international_refund_tax_include: data.international_refund.is_tax_inclusive,
+          international_void: checkprocessingType(data.international_void.charge_type_id),
+          international_void_fee_tax_id: data.international_void.fee_tax_type_id,
+          international_void_amount: data.international_void.amount,
+          // international_void_amount_type: checkChargeType(data.international_void.charge_type_id),
+          international_void_percent: data.international_void.percent,
+          international_void_tax_include: data.international_void.is_tax_inclusive,
+          international_frp: checkprocessingType(data.international_rfp.charge_type_id),
+          international_frp_fee_tax_id: data.international_rfp.fee_tax_type_id,
+          international_frp_amount: data.international_rfp.amount,
+          // international_frp_amount_type: checkChargeType(data.international_rfp.charge_type_id),
+          international_frp_percent: data.international_rfp.percent,
+          international_frp_tax_include: data.international_rfp.is_tax_inclusive,
+          international_non_gds: checkprocessingType(data.international_non_gds.charge_type_id),
+          international_non_gds_fee_tax_id: data.international_non_gds.fee_tax_type_id,
+          international_non_gds_amount: data.international_non_gds.amount,
+          // international_non_gds_amount_type: checkChargeType(data.international_non_gds.charge_type_id),
+          international_non_gds_percent: data.international_non_gds.percent,
+          international_non_gds_tax_include: data.international_non_gds.is_tax_inclusive,
+          // other_emergency: checkprocessingType(data.other_emergency_service.charge_type_id),
+          // other_emergency_fee_tax_id: data.other_emergency_service.fee_tax_type_id,
+          // other_emergency_amount: data.other_emergency_service.amount,
+          // other_emergency_amount_type: checkChargeType(data.other_emergency_service.charge_type_id),
+          // other_emergency_percent: data.other_emergency_service.percent,
+          // other_emergency_tax_include: data.other_emergency_service.is_tax_inclusive
         })
-      }
     } catch (e) { console.log(e) }
   }, [])
 
@@ -621,9 +751,7 @@ const RetailAncillaryFee = (props) => {
       if(formId) {
         
       } else {
-        let res = await api.post(endpoint, payload)
-        let idFee = res.data.id;
-        onSubmitFee(values, idFee)
+        onSubmitFee(values)
         openSnackbar(
           `Ancillary Fee has been successfully saved.`,
         )
@@ -651,9 +779,8 @@ const RetailAncillaryFee = (props) => {
     return parseInt(value)
   }
 
-  const onSubmitFee = (values, id) => {
+  const onSubmitFee = (values) => {
       let payloadDomestic = {
-        processing_fee_category_id: id,
         domestic_reissue: {
           fee_tax_type_id: taxIdDomesticReissue,
           currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
@@ -695,12 +822,12 @@ const RetailAncillaryFee = (props) => {
           is_included: false,
         },
         domestic_frp: {
-          fee_tax_type_id: taxIdDomesticRfp,
+          fee_tax_type_id: taxIdDomesticFrp,
           currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
-          amount: values.domestic_rfp == "amount" ? removeSeparator(values.domestic_rfp_amount) : null,
-          percent:values.domestic_rfp == "amount" ? null : values.domestic_rfp_percent,
-          charge_type_id:values.domestic_rfp == "amount" ? values.domestic_rfp_amount_type : null,
-          is_tax_inclusive:values.domestic_rfp == "amount" ? null : values.domestic_rfp_tax_include,
+          amount: values.domestic_frp == "amount" ? removeSeparator(values.domestic_frp_amount) : null,
+          percent:values.domestic_frp == "amount" ? null : values.domestic_frp_percent,
+          charge_type_id:values.domestic_frp == "amount" ? values.domestic_frp_amount_type : null,
+          is_tax_inclusive:values.domestic_frp == "amount" ? null : values.domestic_frp_tax_include,
           is_hidden: true,
           is_included: false,
         },
@@ -755,12 +882,12 @@ const RetailAncillaryFee = (props) => {
           is_included: false,
         },
         international_frp: {
-          fee_tax_type_id: taxIdInternationalRfp,
+          fee_tax_type_id: taxIdInternationalFrp,
           currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
-          amount: values.international_rfp == "amount" ? removeSeparator(values.international_rfp_amount) : null,
-          percent:values.international_rfp == "amount" ? null : values.international_rfp_percent,
-          charge_type_id:values.international_rfp == "amount" ? values.international_rfp_amount_type : null,
-          is_tax_inclusive:values.international_rfp == "amount" ? null : values.international_rfp_tax_include,
+          amount: values.international_frp == "amount" ? removeSeparator(values.international_frp_amount) : null,
+          percent:values.international_frp == "amount" ? null : values.international_frp_percent,
+          charge_type_id:values.international_frp == "amount" ? values.international_frp_amount_type : null,
+          is_tax_inclusive:values.international_frp == "amount" ? null : values.international_frp_tax_include,
           is_hidden: true,
           is_included: false,
         },
@@ -814,6 +941,16 @@ const RetailAncillaryFee = (props) => {
           is_hidden: true,
           is_included: false,
         },
+        hotel_domestic_frp: {
+          fee_tax_type_id: taxIdDomesticFrpHotel,
+          currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
+          amount: values.hotel_domestic_frp == "amount" ? removeSeparator(values.hotel_domestic_frp_amount) : null,
+          percent:values.hotel_domestic_frp == "amount" ? null : values.hotel_domestic_frp_percent,
+          charge_type_id:values.hotel_domestic_frp == "amount" ? values.hotel_domestic_frp_amount_type : null,
+          is_tax_inclusive:values.hotel_domestic_frp == "amount" ? null : values.hotel_domestic_frp_tax_include,
+          is_hidden: true,
+          is_included: false,
+        },
         hotel_international_modify: {
           fee_tax_type_id: taxIdInternationalHotel,
           currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
@@ -844,6 +981,16 @@ const RetailAncillaryFee = (props) => {
           is_hidden: true,
           is_included: false,
         },
+        hotel_international_frp: {
+          fee_tax_type_id: taxIdInternationalFrpHotel,
+          currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
+          amount: values.hotel_international_frp == "amount" ? removeSeparator(values.hotel_international_frp_amount) : null,
+          percent:values.hotel_international_frp == "amount" ? null : values.hotel_international_frp_percent,
+          charge_type_id:values.hotel_international_frp == "amount" ? values.hotel_international_frp_amount_type : null,
+          is_tax_inclusive:values.hotel_international_frp == "amount" ? null : values.hotel_international_frp_tax_include,
+          is_hidden: true,
+          is_included: false,
+        },
         hotel_other_emergency_service: {
           fee_tax_type_id: taxIdOtherEmergencyHotel,
           currency_id:"ccd96b44-3053-4469-9c55-0b7163a01d34",
@@ -856,13 +1003,13 @@ const RetailAncillaryFee = (props) => {
         }
 
       }
-      onSaveFee(payloadDomestic, 1)
+      onSaveFee(payloadDomestic)
   }
 
-  const onSaveFee = async(payload, productTypeCode) => {
+  const onSaveFee = async(payload) => {
     try {
     console.log('payload', payload)
-      let res = await api.post(endpointFee + "/"+ productTypeCode, payload)
+      let res = await api.post(endpointFee, payload)
       console.log(res)
     } catch(e) {
       console.log(e)
@@ -949,13 +1096,13 @@ const RetailAncillaryFee = (props) => {
                         },
                         {
                           title:"RFP Fee (Contact Fee)",
-                          taxType:taxTypeDomesticRfp,
-                          fieldFeeTaxId:"domestic_rfp_fee_tax_id",
-                          fieldRadio:"domestic_rfp",
-                          fieldAmount:"domestic_rfp_amount",
-                          fieldAmountType:"domestic_rfp_amount_type",
-                          fieldPercent:"domestic_rfp_percent",
-                          fieldIncludeTax:"domestic_rfp_tax_include"
+                          taxType:taxTypeDomesticFrp,
+                          fieldFeeTaxId:"domestic_frp_fee_tax_id",
+                          fieldRadio:"domestic_frp",
+                          fieldAmount:"domestic_frp_amount",
+                          fieldAmountType:"domestic_frp_amount_type",
+                          fieldPercent:"domestic_frp_percent",
+                          fieldIncludeTax:"domestic_frp_tax_include"
                         },
                         {
                           title:"Non-GDS Hotel Booking Process Fee",
@@ -1011,13 +1158,13 @@ const RetailAncillaryFee = (props) => {
                         },
                         {
                           title:"RFP Fee (Contact Fee)",
-                          taxType:taxTypeInternationalRfp,
-                          fieldFeeTaxId:"international_rfp_fee_tax_id",
-                          fieldRadio:"international_rfp",
-                          fieldAmount:"international_rfp_amount",
-                          fieldAmountType:"international_rfp_amount_type",
-                          fieldPercent:"international_rfp_percent",
-                          fieldIncludeTax:"international_rfp_tax_include"
+                          taxType:taxTypeInternationalFrp,
+                          fieldFeeTaxId:"international_frp_fee_tax_id",
+                          fieldRadio:"international_frp",
+                          fieldAmount:"international_frp_amount",
+                          fieldAmountType:"international_frp_amount_type",
+                          fieldPercent:"international_frp_percent",
+                          fieldIncludeTax:"international_frp_tax_include"
                         },
                         {
                           title:"Non-GDS Hotel Booking Process Fee",
@@ -1097,6 +1244,16 @@ const RetailAncillaryFee = (props) => {
                           fieldIncludeTax:"hotel_domestic_refund_fee_tax_include"
                         },
                         {
+                          title:"Domestic FRP Fee (Contact Fee)",
+                          taxType:taxTypeDomesticFrpHotel,
+                          fieldFeeTaxId:"hotel_domestic_frp_fee_tax_id",
+                          fieldRadio:"hotel_domestic_frp",
+                          fieldAmount:"hotel_domestic_frp_amount",
+                          fieldAmountType:"hotel_domestic_frp_amount_type",
+                          fieldPercent:"hotel_domestic_frp_percent",
+                          fieldIncludeTax:"hotel_domestic_frp_tax_include"
+                        },
+                        {
                           title:"Domestic Non-GDS Hotel Booking Process Fee",
                           taxType:taxTypeDomesticNonGdsHotel,
                           fieldFeeTaxId:"hotel_domestic_non_gds_fee_tax_id",
@@ -1127,6 +1284,16 @@ const RetailAncillaryFee = (props) => {
                           fieldAmountType:"hotel_international_refund_fee_amount_type",
                           fieldPercent:"hotel_international_refund_fee_percent",
                           fieldIncludeTax:"hotel_international_refund_fee_tax_include"
+                        },
+                        {
+                          title:"International FRP Fee (Contact Fee)",
+                          taxType:taxTypeInternationalFrpHotel,
+                          fieldFeeTaxId:"hotel_international_frp_fee_tax_id",
+                          fieldRadio:"hotel_international_frp",
+                          fieldAmount:"hotel_international_frp_amount",
+                          fieldAmountType:"hotel_international_frp_amount_type",
+                          fieldPercent:"hotel_international_frp_percent",
+                          fieldIncludeTax:"hotel_international_frp_tax_include"
                         },
                         {
                           title:"International Non-GDS Hotel Booking Process Fee",
