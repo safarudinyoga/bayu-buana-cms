@@ -31,6 +31,7 @@ class FormBuilder extends Component {
 
         // this.props.history.push("/master/general-setup?sort=sort")
         this.props.visibleAdd(false)
+        this.props.handleReplaceTable(true)
       } else {
         this.props.history.goBack()
       }
