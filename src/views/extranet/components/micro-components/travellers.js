@@ -9,6 +9,7 @@ function Travellers(props) {
   const [infantCount, setInfantCount] = useState(0)
 
   const [infantError, setInfantError] = useState(false)
+  const [ageData, setAgeData] = useState([])
 
   const [travelerValue, setTravelerValue] = useState("1 Adult")
   const [travelerCheckbox, setTravelerCheckbox] = useState(false)
@@ -108,9 +109,16 @@ function Travellers(props) {
     }
   ]
 
+  const updateAge = (v, index)=> {
+    let newAgeData = [...ageData]
+    newAgeData[index] = {
+      label: v.value,
+      value: v.value
+    }
+    setAgeData(newAgeData);
+  }
   function ChildrenDiv(){
     let divs = []
-
     for (let i = 0; i < childrenCount; i++) {
       divs.push(
         <div className='col-6'>
@@ -118,6 +126,10 @@ function Travellers(props) {
           <Select
             options={selectChildAge()}
             styles={travelerAgeStyle}
+            value={ageData[i]}
+            onChange={(v) => {
+              updateAge(v, i)
+            }}
           />
         </div>
       )
@@ -195,6 +207,7 @@ function Travellers(props) {
                     role="button"
                     src="/img/icons/minus-circle-active.svg" 
                     onClick={() => {
+                      
                       setChildrenCount(childrenCount - 1)
                       setInfantError(false)
                     }}
