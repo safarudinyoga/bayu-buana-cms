@@ -20,15 +20,15 @@ export default function IntegrationMessageTable() {
     btnDownload: ".buttons-csv",
     columns: [
       {
-        title: "Messages",
+        title: "Message",
         data: "event.event_name",
       },
       {
-        title: "Partner Messages Code",
+        title: "Partner Message Code",
         data: "event_code",
       },
       {
-        title: "Partner Messages Name",
+        title: "Partner Message Name",
         data: "event_name",
       },
     ],

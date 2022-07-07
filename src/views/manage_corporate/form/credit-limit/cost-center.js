@@ -59,11 +59,39 @@ const CostCenterModal = ({ match }) => {
       allocationType: Yup.string().required(errorMessage(slugDictionary['allocationType']))
     }),
     onSubmit: (val) => {
+      /*
+        ! example payload
+        {
+          "cost_center": {
+            "cost_center_code": "Cost Center Code",
+            "cost_center_name": "Cost Center Name"
+          },
+          "corporate_credit_limit": {
+            "corporate_id": "ffd3bc84-8e73-4f93-a063-602932e6d92b",
+            "currency_id": "c051b8d6-dafa-4396-8437-8e6e7acb437b",
+            "credit_limit": 25000,
+            "is_primary": true,
+            "is_tolerance": true,
+            "tolerance_level": 1
+          }
+        }
+      */
       const payload = {
-
+        cost_center: {
+          cost_center_code: '',
+          cost_center_name: val.name
+        },
+        corporate_credit_limit: {
+          corporate_id: formId || "00000000-0000-0000-0000-000000000000",
+          currency_id: '',
+          credit_limit: val.limit,
+          is_primary: true,
+          is_tolerance: true,
+          tolerance_level: 1
+        }
       }
 
-      postCostCenter()
+      postCostCenter(payload)
     }
   })
 
@@ -71,7 +99,7 @@ const CostCenterModal = ({ match }) => {
     setisLoading(true)
 
     try {
-      const { status, ...res } = await api.post(`${endpoint}/${formId}/credit-limit/cost-center`)
+      const { status, ...res } = await api.post(`${endpoint}/${formId}/credit-limit/cost-center`, formId, payload)
       console.log(res);
       if (SUCCESS_RESPONSE_STATUS.includes(status)) {
         setisLoading(false)
@@ -187,7 +215,7 @@ const CostCenterModal = ({ match }) => {
         <Button
           variant="primary"
           type="submit"
-          // disabled={isSubmitting || !dirty}
+          disabled={isLoading}
           style={{ marginRight: 15, padding: '0 25px' }}
         >
           SAVE
@@ -197,6 +225,7 @@ const CostCenterModal = ({ match }) => {
           onClick={() => {
             dispatch(setCreateModal({show: false, id: null, disabled_form: false}))
           }}
+          disabled={isLoading}
         >
           CANCEL
         </Button>

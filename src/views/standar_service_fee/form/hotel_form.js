@@ -15,7 +15,7 @@ import { useDispatch } from "react-redux"
 import { setAlert, setCreateModal, setUIParams } from "redux/ui-store"
 
 const backUrl = "/master/standard-service-fee"
-const endpoint = "/master/service-fee-categories"
+const endpoint = "/master/agent-service-fee-categories/2"
 
 //modal service fee
 const ModalOverrideServiceFee = (props) => {
@@ -488,7 +488,7 @@ const HotelForm = (props) => {
       let form = {
         description: values.description,
         service_fee_category_name: values.service_fee_category_name,
-        domestic_reissue: {
+        international_flight_service: {
           fee_tax_type_id: taxIdDomesticHotel,
           amount:
             values.domestic_reissue === "amount"
@@ -507,7 +507,7 @@ const HotelForm = (props) => {
               ? false
               : values.domestic_reissue_tax_include,
         },
-        domestic_revalidate: {
+        domestic_flight_service: {
           fee_tax_type_id: taxIdInternationalHotel,
           amount:
             values.domestic_revalidate === "amount"

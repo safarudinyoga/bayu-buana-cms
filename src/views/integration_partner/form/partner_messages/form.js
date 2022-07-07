@@ -77,9 +77,12 @@ function MessageCreate(props) {
   const duplicateValue = async(fieldName, value) => {
     let filters = encodeURIComponent(JSON.stringify([[fieldName,"=",value],["AND"],["integration_partner_id",param.id],["AND"],["status",1]]))
     let res = await API.get(endpoint + `?filters=${filters}`)
-    let sameId = res.data.items.find((v) => v.id === eventId)
-    if(!sameId) return res.data.items.length === 0 
-
+    if(eventId){
+      return res.data.items.length === 0 || value === (formValues[fieldName] || formValues[fieldName].value)
+    } else {
+      return res.data.items.length === 0
+    }
+    
     return true
   }
 
@@ -97,9 +100,9 @@ function MessageCreate(props) {
       })
   })
   const validationSchema = Yup.object().shape({
-    event: Yup.object().required("Message is required.").uniqueValueObject("event_id","Message Type already exists"),
-    event_code: Yup.string().required("Message Code is required.").uniqueValueString('event_code', 'Message Code already exists'),
-    event_name: Yup.string().required("Message Name is required.").uniqueValueString('event_name', 'Message Name already exists'),
+    event: Yup.object().required("Messages is required.").uniqueValueObject("event_id","Message already exists"),
+    event_code: Yup.string().required("Partner Message Code is required.").uniqueValueString('event_code', 'Partner Message Code already exists'),
+    event_name: Yup.string().required("Partner Message Name is required.").uniqueValueString('event_name', 'Partner Message Name already exists'),
   })
 
   const onSubmit = async (values, a) => {
@@ -157,7 +160,7 @@ function MessageCreate(props) {
             required="label-required"
             label="Message"
             name="event"
-            placeholder={"Please choose"}
+            placeholder={""}
             url={`master/events`}
             fieldName={"event_name"}
             onChange={(v) => {
@@ -187,7 +190,7 @@ function MessageCreate(props) {
             style={{ maxWidth: 250 }}
             size={formSize}
             disabled={isView || loading}
-            maxLength={36}
+            maxLength={64}
           />
           <FormikControl
             control="textarea"
@@ -197,7 +200,7 @@ function MessageCreate(props) {
             style={{ maxWidth: 250 }}
             size={formSize}
             disabled={isView || loading}
-            maxLength={36}
+            maxLength={4000}
           />
           <FormikControl
             control="textarea"
@@ -207,7 +210,7 @@ function MessageCreate(props) {
             style={{ maxWidth: 250 }}
             size={formSize}
             disabled={isView || loading}
-            maxLength={36}
+            maxLength={4000}
           />
 
           {!props.hideButton && (

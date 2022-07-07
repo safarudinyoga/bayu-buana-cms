@@ -105,7 +105,7 @@ function CreatePartnerCredential(props) {
     let res = await API.get(endpoint + "?" + `filters=${filters}`)
 
     if(id){
-      return res.data.items.length === 0 || value === formValues[fieldName] || formValues[fieldName].value
+      return res.data.items.length === 0 || value === (formValues[fieldName] || formValues[fieldName].value)
     } else {
       return res.data.items.length === 0
     }

@@ -1,19 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import PropTypes from 'prop-types'
-import { Form, Row, Col, Card, Button, Tabs, TabPane, Modal, ModalBody } from "react-bootstrap"
+import { Card, Button, Tabs, TabPane } from "react-bootstrap"
 import { useFormik } from "formik"
 import * as Yup from "yup"
-import { useSnackbar } from "react-simple-snackbar"
+import PropTypes from 'prop-types'
 
 // components & styles
-import ModalCreate from 'components/Modal/bb-modal'
-import Select from "components/form/select"
 import './_form.sass'
 
 // utils
-import useQuery from "lib/query"
 import { errorMessage } from 'lib/errorMessageHandler'
-import createIcon from "assets/icons/create.svg"
 import Api from "config/api"
 import MasterCreditLimit from 'views/manage_corporate/form/credit-limit/master-credit-limit'
 import CreditLimitByProject from 'views/manage_corporate/form/credit-limit/credit-limit-by-project'
@@ -36,8 +31,8 @@ const CreditLimit = ({
 }) => {
   const endpointCreditLimit = '/credit-limit'
   const api = new Api()
-  // const [key, setKey] = useState('master-credit-limit')
-  const [key, setKey] = useState('credit-limit-by-project')
+  const [key, setKey] = useState('master-credit-limit')
+  // const [key, setKey] = useState('credit-limit-by-project')
   const [isThereProject, setisThereProject] = useState(true)
 
   const [paramsCostCenter, setParamsCostCenter] = useState({
@@ -243,7 +238,7 @@ const CreditLimit = ({
           </Button>
           <Button
             variant="secondary"
-            // onClick={() => props.history.goBack()}
+            onClick={() => handleChangeTabKey('assign-team', 7)}
             style={{ padding: '0 21px' }}
           >
             CANCEL
@@ -254,6 +249,12 @@ const CreditLimit = ({
   )
 }
 
-CreditLimit.propTypes = {}
+CreditLimit.propTypes = {
+  history: PropTypes.object.isRequired,
+  backUrl: PropTypes.string.isRequired,
+  handleChangeTabKey: PropTypes.func.isRequired,
+  corporateId: PropTypes.string.isRequired,
+  endpoint: PropTypes.string.isRequired
+}
 
 export default CreditLimit

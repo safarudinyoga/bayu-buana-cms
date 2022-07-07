@@ -186,7 +186,7 @@ const UserManagementForm = (props) => {
                           <SelectAsync
                             {...field}
                             isClearable
-                            isDisabled={values.employee.value || isView}
+                            isDisabled={isView}
                             url={`master/employees`}
                             fieldName="given_name"
                             onChange={(v) => {
@@ -237,7 +237,7 @@ const UserManagementForm = (props) => {
                           <SelectAsync
                             {...field}
                             isClearable
-                            isDisabled={values.user_type.value || isView}
+                            isDisabled={isView}
                             url={`user/user-types`}
                             fieldName="user_type_name"
                             onChange={(v) => {
@@ -316,16 +316,16 @@ const UserManagementForm = (props) => {
               </Card.Body>
             </Card>
             <div style={{ marginBottom: 30, marginTop: 30, display: "flex" }}>
-              <Button
+              {isView ? null : <Button
                 variant="primary"
                 type="submit"
                 disabled={isSubmitting || !dirty}
                 style={{ marginRight: 15 }}
               >
                 SAVE
-              </Button>
+              </Button> }
               <Button variant="secondary" onClick={() => history.goBack()}>
-                CANCEL
+              {isView ? "BACK" : "CANCEL"}
               </Button>
             </div>
             <div></div>
