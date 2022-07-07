@@ -17,6 +17,7 @@ import TaxFee from "./tax-fee"
 import BookingSettings from "./booking-settings"
 import InvoiceSettings from "./invoice-settings"
 import TravelAdvice from "./travel-advice"
+import Translations from "./translations"
 
 // const endpoint = "/user/profile"
 const backUrl = "/master/general-setup"
@@ -166,6 +167,15 @@ const GeneralSetup = (props) => {
                 </div>
               </Nav.Link>
             </Nav.Item>
+
+            <Nav.Item>
+              <Nav.Link eventKey="translations">
+                <div>
+                  <ReactSVG src="/img/icons/setup-travel-advice.svg" />
+                  <span>Translations</span>
+                </div>
+              </Nav.Link>
+            </Nav.Item>
           </Nav>
         </Col>
         <Col sm={9}>
@@ -283,6 +293,15 @@ const GeneralSetup = (props) => {
             <Tab.Pane eventKey="travel-advice">
               {tabKey === "travel-advice" ? (
                 <TravelAdvice
+                  history={props.history}
+                  backUrl={backUrl}
+                  handleSelectTab={(v) => handleSelectTab(v)}
+                />
+              ) : null}
+            </Tab.Pane>
+            <Tab.Pane eventKey="translations">
+              {tabKey === "translations" ? (
+                <Translations
                   history={props.history}
                   backUrl={backUrl}
                   handleSelectTab={(v) => handleSelectTab(v)}
